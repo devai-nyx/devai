@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-025",
+  "term": "Agent-run",
+  "definition": "A record of what an automated agent action read, wrote, and ran. AR-<UUIDv7> id with prev_hash + manifest_hash hash chain. Persisted under .devai/state/agent-runs/. Phase 10.I.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "aliases": [
+    "AR-record"
+  ],
+  "see_also": [
+    "GE-021"
+  ],
+  "provenance": [
+    "ex-GE-025@devai-original"
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-DEVAI-002",
+  "domain": "DEVAI",
+  "severity": "hard-fail",
+  "type": "data_contract",
+  "title": "Every emitted SensorReading conforms to its schema",
+  "statement": "Every SensorReading emitted by any devai sense command \u2014 and by the buildSensorReading helper used to construct one \u2014 MUST validate against sensor-reading.schema.json before leaving the emitting process.",
+  "rationale": "The SensorReading envelope is the uniform interface every downstream consumer (scorecard, triage, skills) depends on. Article 32 makes the envelope the contract; silent drift in shape would mean Phase 6 + 8 receive payloads they think they understand but don't. Schema-invalid emit is a hard-gate failure (Article 17).",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "unit",
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-32-sensor-adapter-uniformity"
+      },
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-17-hard-gate"
+      }
+    ]
+  },
+  "scope": {
+    "components": [
+      "sensors",
+      "cli"
+    ],
+    "code_areas": [
+      "packages/sensors/src/**",
+      "packages/cli/src/commands/sense/**"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "phase-4",
+    "sensors",
+    "schema-contract"
+  ],
+  "measurable_via": [
+    "sense inventory api",
+    "sense build",
+    "sense inventory coverage",
+    "sense inventory data handling",
+    "sense inventory data model",
+    "sense inventory dep graph",
+    "sense docs drift",
+    "sense harness coherence",
+    "sense harness coverage",
+    "sense harness depth",
+    "sense harness green main",
+    "sense harness idiomaticity",
+    "sense harness invariant alignment",
+    "sense harness performance",
+    "sense harness robustness",
+    "sense harness security",
+    "sense inventory adherence",
+    "sense inventory determinism",
+    "sense inventory performance",
+    "sense judge",
+    "sense lint",
+    "sense run",
+    "sense migrate check",
+    "sense perf test",
+    "sense plant coherence",
+    "sense plant coverage",
+    "sense plant depth",
+    "sense inventory rbac",
+    "sense readings rebuild",
+    "sense inventory routes",
+    "sense runtime api",
+    "sense runtime auth",
+    "sense runtime data",
+    "sense security scan",
+    "sense spec alignment",
+    "sense spec depth",
+    "sense spec freshness",
+    "sense spec idiomaticity",
+    "sense spec performance targets",
+    "sense spec robustness targets",
+    "sense spec security coverage",
+    "sense test",
+    "sense test coherence",
+    "sense test coverage depth",
+    "sense test idiomaticity",
+    "sense test invariant alignment",
+    "sense test performance coverage",
+    "sense test robustness coverage",
+    "sense test security coverage",
+    "sense test weakening",
+    "sense trace resolve",
+    "sense type check"
+  ],
+  "provenance": [
+    "ex-INV-DEVAI-002@devai-original"
+  ]
+}

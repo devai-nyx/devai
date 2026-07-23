@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-016",
+  "term": "Backlog",
+  "definition": "The ordered list of tasks the autonomous loop will execute next. Each entry references a failing sensor reading and the invariant it violated. Managed via devai work backlog add / list / next / complete / compact.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "see_also": [
+    "GE-017"
+  ],
+  "provenance": [
+    "ex-GE-016@devai-original",
+    "REV-0006 signal: definition carries unqualified autonomy framing; needs the experimental caveat (W01 vocabulary pass)"
+  ]
+}

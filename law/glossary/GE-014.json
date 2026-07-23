@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-014",
+  "term": "Scorecard",
+  "definition": "The 5x9 grid (5 substrates x 9 transversal properties) aggregating sensor evidence into a single readiness signal. Two cells are NA (Inventory x Security, Harness x Performance); the remaining 43 are scored green/yellow/red. Computed by devai govern score compute.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "see_also": [
+    "GE-015"
+  ],
+  "provenance": [
+    "ex-GE-014@devai-original"
+  ]
+}

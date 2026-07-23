@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/forbidden-actions.schema.json",
+  "title": "Forbidden Actions Registry",
+  "description": "Canonical list of actions an automated agent MUST NOT perform without explicit per-action human authorisation. Absorbs LAW-12.FORBID.1 from the stech-law predecessor draft (D-38). The default registry ships with DEVAI at .devai/config/forbidden-actions.json; clients may extend (never relax) it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "actions"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "waivers": {
+      "type": "array",
+      "description": "D-123 (item 6): explicit, reasoned exceptions for canonical entries this repo intentionally does not carry. A canonical id absent from `actions` AND absent from `waivers` is reported by `devai policy check forbidden actions`'s coverage check as an unwaived gap \u2014 extend the registry, never silently drop protections it ships with.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "reason"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^FORBID-[A-Z][A-Z0-9_-]*$",
+            "description": "The canonical FORBID-* id being waived."
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 8,
+            "description": "Why this repo does not carry this canonical protection. Forensic trail, not a rubber stamp."
+          }
+        }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "action",
+          "rationale",
+          "severity"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^FORBID-[A-Z][A-Z0-9_-]*$"
+          },
+          "action": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Short imperative description, e.g. 'force-push to any branch'."
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "enum": [
+              "critical",
+              "high",
+              "medium"
+            ]
+          },
+          "detect_patterns": {
+            "type": "array",
+            "description": "Regex patterns (as strings) the scanner uses to detect violations in commit messages, recent commands, or reflog entries.",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "safer_alternative": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "schema_version": "1.0.0"
+}

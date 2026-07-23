@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-010",
+  "term": "F5",
+  "definition": "Harness substrate: the .devai/ governance state (evidence chain, counters, locks, worktree registry, sensor readings, agent-runs). Framework-owned; clients should not hand-edit.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "aliases": [
+    "Substrate F5",
+    "Harness"
+  ],
+  "see_also": [
+    "GE-021"
+  ],
+  "provenance": [
+    "ex-GE-010@devai-original"
+  ]
+}

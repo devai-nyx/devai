@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "JNY-010",
+  "title": "Maintainer publishes documentation from merged main",
+  "summary": "A supervised documentation publication accepts only the exact clean merged main subject and records immutable source provenance.",
+  "lifecycle": "supported",
+  "persona": {
+    "role": "Release maintainer",
+    "permissions_required": [
+      "Declared publication authority",
+      "Remote repository access"
+    ]
+  },
+  "preconditions": [
+    "The intended source commit is available from origin",
+    "The publication is explicitly initiated by a human maintainer"
+  ],
+  "steps": [
+    {
+      "seq": 1,
+      "actor": "DEVAI",
+      "action": "Verify the source checkout is clean and exactly equals merged main and origin/main",
+      "expected_outcome": "Every branch-only, dirty, detached, stale, or unmerged subject is refused"
+    },
+    {
+      "seq": 2,
+      "actor": "Release maintainer",
+      "action": "Authorize publication of the verified source subject",
+      "expected_outcome": "Published output records the exact source commit and tree"
+    }
+  ],
+  "postconditions": [
+    "Publication provenance resolves to an exact merged-main commit and tree"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "statement": "Publication refuses every source subject other than the exact clean merged main and origin/main commit.",
+      "measurable_via": [
+        "INV-DEVAI-016"
+      ]
+    },
+    {
+      "id": "AC-002",
+      "statement": "A successful supervised publication records source provenance bound to the merged-main commit and tree.",
+      "measurable_via": [
+        "INV-DEVAI-018"
+      ]
+    }
+  ],
+  "related_invariants": [
+    "INV-DEVAI-016",
+    "INV-DEVAI-018"
+  ],
+  "status": "active",
+  "tags": [
+    "r28-c2",
+    "publication",
+    "provenance",
+    "merged-main"
+  ],
+  "provenance": [
+    "ex-JNY-010@devai-original"
+  ]
+}

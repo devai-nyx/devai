@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-BLUEPRINT-003",
+  "domain": "BLUEPRINT",
+  "severity": "gate",
+  "type": "rbac",
+  "title": "Every blueprint API operation maps to at least one RBAC permission",
+  "statement": "For any operation listed in a module-blueprint's api.resources[].operations[] (list / get / create / update / delete), there MUST exist at least one entry in auth.rbac.permissions[] whose allow[] array either names that exact operation OR contains the 'manage' alias OR contains the '*' wildcard. A blueprint declaring an API operation that no role can call is a spec defect \u2014 generating an unreachable endpoint is the wrong default.",
+  "rationale": "Per D-59. The Phase-18 scaffolders emit endpoints from api.resources[].operations[]; if an operation has no matching permission, the generated endpoint is unreachable behind RBAC guards. Severity gate: blocks scaffolding (the scaffolder won't emit dead endpoints), but the spec author can fix by either adding a permission or removing the operation. INV-INVENTORY-003 is the brownfield-side analog (every endpoint must have at least one role binding); -003 (blueprint side) and INV-INVENTORY-003 (inventory side) form a discipline pair that prevents unbound endpoints at both layers.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "DESIGN-DECISIONS.md",
+        "anchor": "d-59-codex-is-a-convergent-peer-that-devai-absorbs-as-the-forward-generation-substrate-buckets-abcd-land-bucket-e-porm-only-drops-on-deletion-locked"
+      }
+    ]
+  },
+  "scope": {
+    "components": [
+      "core",
+      "cli"
+    ],
+    "code_areas": [
+      "packages/core/src/blueprint/index.ts",
+      "packages/cli/src/commands/blueprint/validate.ts"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "test_update"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": false
+  },
+  "tags": [
+    "phase-18",
+    "phase-18-D",
+    "blueprint",
+    "greenfield",
+    "rbac",
+    "authz"
+  ],
+  "measurable_via": [
+    "spec blueprint validate"
+  ],
+  "provenance": [
+    "ex-INV-BLUEPRINT-003@devai-original"
+  ]
+}

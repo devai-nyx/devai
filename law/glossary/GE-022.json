@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-022",
+  "term": "ADR",
+  "definition": "Architecture Decision Record. Lives under docs/adr/. Records decisions; the constraints that emerge from a decision are captured as invariants. Validated against adr.schema.json (Phase 10.F).",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "see_also": [
+    "GE-019"
+  ],
+  "provenance": [
+    "ex-GE-022@devai-original",
+    "REV-0006 signal: adopter-side path unmarked"
+  ]
+}

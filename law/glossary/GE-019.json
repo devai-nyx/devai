@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-019",
+  "term": "Invariant",
+  "definition": "The atomic unit of Architect-authored specification. ID INV-<DOMAIN>-NNN with structured fields: severity (5-tier ladder), type, scope, change_policy, verification, authority. Validates against invariant.schema.json. Per D-6.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "see_also": [
+    "GE-026",
+    "GE-002"
+  ],
+  "provenance": [
+    "ex-GE-019@devai-original"
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "JNY-009",
+  "title": "Adopter completes the documented tier-1 bootstrap",
+  "summary": "A clean adopter follows the supported tier-1 bootstrap using factual released-tool instructions and reaches the documented doctor checkpoint without hidden prerequisites.",
+  "lifecycle": "supported",
+  "persona": {
+    "role": "Adopter maintainer",
+    "permissions_required": [
+      "Local repository write access",
+      "Declared DEVAI roles for bootstrap steps"
+    ]
+  },
+  "preconditions": [
+    "The adopter starts from a clean supported repository fixture",
+    "Only released package and package-manager versions documented by DEVAI are used"
+  ],
+  "steps": [
+    {
+      "seq": 1,
+      "actor": "Adopter maintainer",
+      "action": "Follow the documented tier-1 initialization, role-separated apply, and upgrade sequence",
+      "expected_outcome": "Every prerequisite for the documented doctor checkpoint is materialized or explicitly scheduled before that checkpoint"
+    },
+    {
+      "seq": 2,
+      "actor": "Adopter maintainer",
+      "action": "Run doctor at the exact checkpoint shown in the supported journey",
+      "expected_outcome": "Doctor exits successfully without undocumented agent-law, repository-kind, or docs-builder prerequisites"
+    }
+  ],
+  "postconditions": [
+    "The adopter has a valid supported DEVAI bootstrap",
+    "The journey contains no stale released-tool or package-manager claim"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "statement": "A clean supported adopter fixture reaches a successful doctor result at the documented checkpoint.",
+      "measurable_via": [
+        "INV-DEVAI-009"
+      ]
+    },
+    {
+      "id": "AC-002",
+      "statement": "Documented released package and package-manager versions match the repository's supported declarations.",
+      "measurable_via": [
+        "INV-DEVAI-016"
+      ]
+    }
+  ],
+  "related_invariants": [
+    "INV-DEVAI-009",
+    "INV-DEVAI-016"
+  ],
+  "status": "active",
+  "tags": [
+    "r28-c1",
+    "adoption",
+    "bootstrap",
+    "documentation-truth"
+  ],
+  "provenance": [
+    "ex-JNY-009@devai-original"
+  ]
+}

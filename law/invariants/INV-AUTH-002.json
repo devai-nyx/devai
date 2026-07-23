@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-AUTH-002",
+  "domain": "AUTH",
+  "lifecycle": "supported",
+  "severity": "constitutional",
+  "type": "governance",
+  "title": "Authority policy is version-bound, additive, deterministic, and fail-closed",
+  "statement": "Every governed resource MUST resolve against a trusted materialized policy bound to package, Constitution, immutable source, additive extensions, and resolved digests; protected narrow rules MUST outrank broad rules, including Inspector tests inside package source and Auditor output inside Architect working papers, the glossary MUST resolve as one joint Owner-Architect authority set, and unknown or conflicting highest-precedence matches MUST deny before dispatch.",
+  "rationale": "A broad first-match rule or stale materialized policy can silently invert Article 6. Explicit precedence and digest provenance make the mapping deterministic and auditable.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "unit",
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-6-substrate-authority-by-path"
+      },
+      {
+        "doc": "docs/meta/adr/ADR-003-runtime-authority-enforcement.md",
+        "anchor": "5-deterministic-precedence"
+      }
+    ],
+    "decisions": [
+      "D-135",
+      "ADR-003"
+    ]
+  },
+  "scope": {
+    "components": [
+      "authority-policy",
+      "resource-classification",
+      "self-adoption"
+    ],
+    "code_areas": [
+      "docs/framework/schemas/authority-policy.schema.json",
+      "packages/core/src/authority/**",
+      ".devai/config/authority-policy.json"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "trace_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "authority",
+    "policy",
+    "provenance",
+    "precedence",
+    "test-over-source",
+    "joint-glossary",
+    "deny-unknown"
+  ],
+  "provenance": [
+    "ex-INV-AUTH-002@devai-original"
+  ]
+}

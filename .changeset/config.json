@@ -1,0 +1,19 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [
+    [
+      "@devai-nyx/cli",
+      "@devai-nyx/core",
+      "@devai-nyx/effects-check",
+      "@devai-nyx/schemas",
+      "@devai-nyx/sensors",
+      "@devai-nyx/utils"
+    ]
+  ],
+  "access": "restricted",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}

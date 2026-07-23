@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "JNY-014",
+  "title": "Maintainer governs a round from local declaration through sealed archive",
+  "summary": "A maintainer uses deterministic, role-bounded round commands to create disposable local working state, observe its declared status, and archive a fully closed round as durable governance history.",
+  "lifecycle": "supported",
+  "lifecycle_reason": "The round lifecycle is deterministic, human-directed governance; it does not invoke the experimental autonomous controller.",
+  "promotion_criteria": [],
+  "persona": {
+    "role": "DEVAI maintainer",
+    "permissions_required": [
+      "Local repository access",
+      "The constitutional role required by each round transition",
+      "Explicit write consent for mutations"
+    ]
+  },
+  "preconditions": [
+    "DEVAI adoption has seeded the local and durable round directories",
+    "The maintainer has selected an unused round identifier",
+    "The repository has a materialized binding authority policy"
+  ],
+  "steps": [
+    {
+      "seq": 1,
+      "actor": "DEVAI maintainer",
+      "action": "Scaffold the selected round in disposable local state",
+      "expected_outcome": "A deterministic conforming skeleton is created under the gitignored local round workspace without creating durable governance claims"
+    },
+    {
+      "seq": 2,
+      "actor": "DEVAI maintainer",
+      "action": "Declare the round under the required role and inspect its status",
+      "expected_outcome": "The declaration and status are schema-valid, role-attributed, and report only the state actually present"
+    },
+    {
+      "seq": 3,
+      "actor": "Round participants",
+      "action": "Complete the declared waves, gates, close decision, and phase-closure evidence",
+      "expected_outcome": "The local workspace contains the complete attributable inputs, prompts, audit observations, and closure evidence required for archival"
+    },
+    {
+      "seq": 4,
+      "actor": "DEVAI maintainer",
+      "action": "Archive the closed round with Architect authority and explicit write consent",
+      "expected_outcome": "DEVAI refuses every incomplete close; otherwise it seals the record, moves the whole local workspace to the durable round ledger, pins hashes, and leaves a reviewable post-close change"
+    }
+  ],
+  "postconditions": [
+    "The closed round has one schema-valid immutable durable record",
+    "The local round workspace is absent after successful archival",
+    "No supported round command invokes or promotes experimental autonomous execution"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "statement": "Scaffold, declare, and status are deterministic and preserve the disposable-local versus durable-archive boundary.",
+      "measurable_via": [
+        "INV-DEVAI-001"
+      ]
+    },
+    {
+      "id": "AC-002",
+      "statement": "Archive fails closed until the binding gates, close decision, phase closure, and complete round record are present.",
+      "measurable_via": [
+        "INV-DEVAI-001"
+      ]
+    },
+    {
+      "id": "AC-003",
+      "statement": "The supported round lifecycle remains human-directed and does not widen the experimental autonomous controller.",
+      "measurable_via": [
+        "INV-DEVAI-015"
+      ]
+    },
+    {
+      "id": "AC-004",
+      "statement": "A fresh or upgraded adopter receives the scratch/archive layout and ignore boundary needed to execute the journey.",
+      "measurable_via": [
+        "INV-DEVAI-001"
+      ]
+    }
+  ],
+  "related_invariants": [
+    "INV-DEVAI-001",
+    "INV-DEVAI-015"
+  ],
+  "status": "active",
+  "tags": [
+    "r30",
+    "round-lifecycle",
+    "governance-ledger",
+    "archive",
+    "supported"
+  ],
+  "provenance": [
+    "ex-JNY-014@devai-original"
+  ]
+}

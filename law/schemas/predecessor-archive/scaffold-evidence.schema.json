@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.dev/schemas/scaffold-evidence.schema.json",
+  "$comment": "CODEX-derived per D-59 (Phase 18.B): output shape of every SKILL-scaffold-* run. Mirrors codex's SCAFFOLDER_DESIGN.md 'summary report (JSON) of generated artifacts' surface but reshaped as canonical DEVAI evidence (additionalProperties:false, semver, explicit pattern for skill_id).",
+  "title": "Scaffold Evidence",
+  "description": "Required output of any SKILL-scaffold-* skill (Phase 18.F). Records what was generated, from what blueprint, with which template ids and token substitutions. INV-SCAFFOLD-001 requires every scaffolded artifact's generated header to match this record's blueprint_id + blueprint_version + blueprint_sha256 trio. Per D-59; per Article 32 (evidence schema discipline).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "skill_id",
+    "blueprint_id",
+    "blueprint_version",
+    "blueprint_sha256",
+    "files_created",
+    "files_modified",
+    "files_skipped",
+    "templates_used",
+    "idempotency"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "skill_id": {
+      "type": "string",
+      "pattern": "^SKILL-scaffold-[a-z][a-z0-9-]*$",
+      "description": "Producer skill id (e.g. SKILL-scaffold-db, SKILL-scaffold-api)."
+    },
+    "blueprint_id": {
+      "type": "string",
+      "pattern": "^BP-[A-Z][A-Z0-9]*(-[A-Z][A-Z0-9]*)*-[0-9]{3,}$",
+      "description": "Module blueprint id consumed (matches module-blueprint.schema.json#/properties/id)."
+    },
+    "blueprint_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "SemVer from blueprint.module.version. Headers emitted into scaffolded files cite this; drift between header and current blueprint version is hard-fail under INV-SCAFFOLD-001."
+    },
+    "blueprint_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Canonical-JSON SHA-256 of the blueprint at scaffold time. Anchors INV-SCAFFOLD-001 drift detection."
+    },
+    "stack_adapter_pack": {
+      "type": ["string", "null"],
+      "description": "Matched stack-adapter pack id (e.g. redox-pack-nestjs-postgres-react), or null when no pack matched (manual scaffolding path)."
+    },
+    "files_created": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Repo-relative paths created by this scaffolder run."
+    },
+    "files_modified": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Repo-relative paths modified by this scaffolder run. Distinct from files_created so idempotency analysis is unambiguous."
+    },
+    "files_skipped": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "reason"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "already_exists_no_template_change",
+              "drift_detected_no_overwrite",
+              "no_template_in_pack",
+              "scope_excluded"
+            ]
+          },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "templates_used": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["template_id", "rendered_to"],
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9._-]*$",
+            "description": "Template registry id from the pack's templates field (e.g. 'db.migration', 'api.controller')."
+          },
+          "rendered_to": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Repo-relative path the template rendered to."
+          },
+          "rendered_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "description": "SHA-256 of the rendered output (post token-substitution). Enables byte-identity idempotency checks across re-runs."
+          }
+        }
+      }
+    },
+    "token_map": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "The token → value map applied during rendering (e.g. __NAMESPACE__ → 'demo', __MODULE__ → 'Greeter'). Forensic; lets a reader reconstruct what generated each file."
+    },
+    "idempotency": {
+      "type": "string",
+      "enum": ["fresh", "no-op", "drift-detected"],
+      "description": "fresh: first generation; no-op: re-run with same blueprint version and matching content hashes (no writes); drift-detected: re-run with bumped version or non-matching hashes (writes a diff report instead of overwriting)."
+    },
+    "drift_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["differing_files"],
+      "properties": {
+        "differing_files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "expected_sha256", "actual_sha256"],
+            "properties": {
+              "path": { "type": "string" },
+              "expected_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "actual_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+            }
+          }
+        }
+      },
+      "description": "Populated only when idempotency=drift-detected. Each entry names a file whose on-disk content disagrees with what the template engine would render now."
+    }
+  }
+}

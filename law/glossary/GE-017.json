@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-017",
+  "term": "Task",
+  "definition": "A unit of agentic work with a lifecycle: queued -> ready -> in_progress -> checkpoint -> pre_merge -> merging -> completed | escalated | rgr_pending | cancelled. Each task gets a worktree and (optionally) a database. Persisted under .devai/state/tasks/.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "see_also": [
+    "GE-016",
+    "GE-018"
+  ],
+  "related_invariants": [
+    "INV-DEVAI-005"
+  ],
+  "provenance": [
+    "ex-GE-017@devai-original"
+  ]
+}

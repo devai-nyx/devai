@@ -1,0 +1,14 @@
+{
+  "name": "@devai-nyx/schemas",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DEVAI-II schema roster, lazy validators, meta-gate, canon linter (wireframe)",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "ajv": "^8.17.0",
+    "ajv-formats": "^3.0.0"
+  }
+}

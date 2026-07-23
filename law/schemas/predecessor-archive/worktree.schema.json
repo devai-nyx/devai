@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.dev/schemas/worktree.schema.json",
+  "title": "Worktree",
+  "description": "Per-task worktree record. Tracks filesystem location, branch, DB isolation, cache linkage, and lifecycle. Per Constitution Article 27.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "task_id",
+    "branch",
+    "path",
+    "created_at",
+    "db_isolation",
+    "status",
+    "counts_against_cap"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "id": {
+      "type": "string",
+      "pattern": "^WT-[A-Za-z0-9_-]+$",
+      "description": "Typically WT-<task-id> for agent worktrees; WT-_inventory, WT-_softgate, WT-_review-<task-id> for harness worktrees."
+    },
+    "task_id": {
+      "type": ["string", "null"],
+      "pattern": "^TASK-",
+      "description": "Null for permanent harness worktrees (inventory, soft-gate evaluator)."
+    },
+    "kind": {
+      "enum": [
+        "agent_task",
+        "inventory_persistent",
+        "softgate_evaluator",
+        "human_review",
+        "human_adopted_escalated",
+        "human_adopted_rgr"
+      ]
+    },
+    "branch": { "type": "string", "minLength": 1 },
+    "path": {
+      "type": "string",
+      "description": "Filesystem path, conventionally under .devai/worktrees/."
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "destroyed_at": { "type": ["string", "null"], "format": "date-time" },
+    "db_isolation": {
+      "enum": ["database", "cluster", "none"],
+      "description": "none for worktrees that don't need a DB (e.g., docs-only Architect tasks)."
+    },
+    "db_name": {
+      "type": ["string", "null"],
+      "description": "For database isolation: name of the TEMPLATE-cloned DB (e.g., devai_task_0123)."
+    },
+    "db_port": {
+      "type": ["integer", "null"],
+      "minimum": 1024,
+      "maximum": 65535,
+      "description": "For cluster isolation: port of the dedicated container."
+    },
+    "db_container_name": {
+      "type": ["string", "null"],
+      "description": "For cluster isolation: Docker container name."
+    },
+    "cache_links": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Symlinked cache directories from the integration HEAD checkout.",
+      "properties": {
+        "node_modules": { "type": "boolean" },
+        "tsbuildinfo": { "type": "boolean" },
+        "jest_cache": { "type": "boolean" },
+        "eslint_cache": { "type": "boolean" },
+        "angular_cache": { "type": "boolean" }
+      }
+    },
+    "lockfile_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of package-lock.json at worktree creation. If different from integration HEAD, cache links are skipped."
+    },
+    "status": {
+      "enum": ["provisioning", "active", "destroying", "destroyed", "orphaned"]
+    },
+    "counts_against_cap": {
+      "type": "boolean",
+      "description": "False for harness-owned and human-adopted worktrees (Article 27 cap applies only to active agent worktrees)."
+    }
+  }
+}

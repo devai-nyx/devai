@@ -1,0 +1,364 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/sensor-input-spec.schema.json",
+  "title": "Sensor Input Spec Registry",
+  "description": "Architect-authored declarations of the repository inputs read by the hermetic sensor kinds admitted to R26 measurement. The registry is report-only in R26 and cannot authorize cache population, sensor persistence, or replay.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "source_authority",
+    "materialization",
+    "specs"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "const": "sensor-inputs"
+    },
+    "source_authority": {
+      "const": "F1-architect"
+    },
+    "materialization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target",
+        "allowed_verbs",
+        "authority_and_consent_required",
+        "byte_identity_required",
+        "adopter_upgrade_path_required",
+        "direct_writes_forbidden"
+      ],
+      "properties": {
+        "target": {
+          "const": ".devai/config/sensor-inputs.json"
+        },
+        "allowed_verbs": {
+          "const": [
+            "devai adopt upgrade --sensor-inputs"
+          ]
+        },
+        "authority_and_consent_required": {
+          "const": true
+        },
+        "byte_identity_required": {
+          "const": true
+        },
+        "adopter_upgrade_path_required": {
+          "const": true
+        },
+        "direct_writes_forbidden": {
+          "const": true
+        }
+      }
+    },
+    "specs": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/spec"
+      },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "build"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "lint"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "type_check"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "inventory_api"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "inventory_routes"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "inventory_data_model"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "inventory_rbac"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "inventory_data_handling"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "inventory_dep_graph"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "spec_depth"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "inputPattern": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pattern"
+      ],
+      "properties": {
+        "pattern": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Git-tracked minimatch pattern, relative to the repository root."
+        },
+        "min_matches": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 1,
+          "description": "Minimum matches required by the derived glob check. Zero is legal only with a reason."
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Required justification when min_matches is zero."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "min_matches": {
+                "const": 0
+              }
+            },
+            "required": [
+              "min_matches"
+            ]
+          },
+          "then": {
+            "properties": {
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "reason"
+            ]
+          }
+        }
+      ]
+    },
+    "alternativeGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "group_id",
+        "any_of"
+      ],
+      "properties": {
+        "group_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "any_of": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Alternative git-tracked minimatch patterns; at least one member must match."
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "spec_version",
+        "file_inputs",
+        "tool_inputs",
+        "env_inputs",
+        "hermetic"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "build",
+            "lint",
+            "type_check",
+            "inventory_api",
+            "inventory_routes",
+            "inventory_data_model",
+            "inventory_rbac",
+            "inventory_data_handling",
+            "inventory_dep_graph",
+            "spec_depth"
+          ]
+        },
+        "spec_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "file_inputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/inputPattern"
+              },
+              {
+                "$ref": "#/$defs/alternativeGroup"
+              }
+            ]
+          }
+        },
+        "tool_inputs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9@/._+-]+$"
+          }
+        },
+        "env_inputs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z_][A-Z0-9_]*$"
+          }
+        },
+        "hermetic": {
+          "const": true
+        }
+      }
+    }
+  },
+  "schema_version": "1.0.0"
+}

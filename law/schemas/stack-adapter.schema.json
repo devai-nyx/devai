@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/stack-adapter.schema.json",
+  "$comment": "DEVAI-native (Phase 17.G): stack-adapter pack manifest. Composes through the --seeds plumbing (Phase 11) and the law-pack precedent (Phase 10.K, D-53). Per D-57.",
+  "title": "Stack Adapter Pack Manifest",
+  "description": "Manifest record at the root of a stack-adapter pack (e.g. examples/redox-pack-nestjs-postgres-react/stack-adapter.json). Declares detection heuristics, inventory-sensor parameter overrides, writer-skill prompt overlays, and seed invariants. Loaded by the seed-merge plumbing (Phase 11) when the adopter passes `--seeds <path>` or when auto-detection picks the pack. Per Constitution Article 6 (authority); per D-57 (brownfield-adoption substrate); per D-53 (examples/ is integral to DEVAI).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "version",
+    "stack",
+    "detect"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^redox-pack-[a-z0-9][a-z0-9-]*$",
+      "description": "Pack id (kebab-case). Prefix 'redox-pack-' is the canonical convention for packs absorbed from / inspired by redox's stack-adapter taxonomy; non-redox-derived packs MAY use a different prefix once the prefix taxonomy is formalized (deferred)."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "stack": {
+      "type": "object",
+      "description": "Triple naming the (backend, frontend, db) the pack targets. Used by the detector and by writer prompt overlays.",
+      "additionalProperties": false,
+      "required": [
+        "backend",
+        "frontend",
+        "db"
+      ],
+      "properties": {
+        "backend": {
+          "type": "string",
+          "minLength": 1
+        },
+        "frontend": {
+          "type": "string",
+          "minLength": 1
+        },
+        "db": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cloud": {
+          "type": "string"
+        }
+      }
+    },
+    "detect": {
+      "type": "object",
+      "description": "Heuristics that mark a repo as matching this stack. Detection MAY combine signals; the pack matches when ANY of `signals[]` matches (OR semantics). Phase 17.G ships only filesystem-presence + package.json-dep signals; future signals (composer.json deps, Gemfile, go.mod) ride the same shape.",
+      "additionalProperties": false,
+      "required": [
+        "signals"
+      ],
+      "properties": {
+        "signals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/DetectSignal"
+          }
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 50,
+          "description": "When multiple packs match the same repo, the highest-priority pack wins. Ties surface as a scorecard ambiguity and defer to Architect (Article 19)."
+        }
+      }
+    },
+    "extractor_params": {
+      "type": "object",
+      "description": "Per-sensor parameter overrides. Each key is an inventory sensor kind (inventory_api / inventory_routes / inventory_data_model / inventory_rbac / inventory_data_handling / inventory_dep_graph / inventory_coverage); each value is an opaque parameter object passed to the sensor at run time. Sensor adapters that read these fields validate them per-sensor (this schema does not constrain the shape).",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "prompt_overlays": {
+      "type": "object",
+      "description": "Per-writer-skill prompt-component appendages. Each key is a SKILL-write-* id; each value is an array of additional PromptComponentInput records that the writer composes onto the default writer composition (global + role + task? + payload + overlay). Each overlay item carries an optional `mode`: `append` (default) adds the component; `replace_layer` replaces the writer's own namespaced component for that layer (the `${skill_id}.${layer}` entry) \u2014 shared components like `writer.output-contract` and per-writer word-budget survive. The `replace_layer` form lets server-rendered packs (e.g. Laravel-Blade) override stack-incompatible guidance baked into the default global, rather than only appending to it (P3.10).",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "layer",
+            "name",
+            "body"
+          ],
+          "properties": {
+            "layer": {
+              "type": "string",
+              "enum": [
+                "global",
+                "role",
+                "task",
+                "payload",
+                "overlay"
+              ]
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[a-z0-9][a-z0-9.-]*$",
+              "description": "Slug identifier for the component. Convention: <pack-id>.<short-purpose> (e.g. 'redox-pack-nestjs-postgres-react.api-map'). Enforced as a kebab/dot slug so typos and free-text names surface at schema-validate time (P3.12)."
+            },
+            "body": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000,
+              "description": "Component body, in plain text. Capped at 4000 chars so a pack cannot silently bloat the writer prompt past the per-writer budget. Compose multiple overlay items if more is genuinely needed."
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "append",
+                "replace_layer"
+              ],
+              "default": "append",
+              "description": "P3.10: `append` (default) appends the component alongside the writer's own; `replace_layer` removes the writer's namespaced contribution for `layer` (the `${skill_id}.${layer}` component) before appending. Shared components (writer.output-contract, ${skill_id}.word-budget) survive regardless. Use `replace_layer` only when the writer's default global is structurally wrong for the stack (e.g. 'group endpoints by controller class' is wrong for a Laravel-Blade web monolith)."
+            }
+          }
+        }
+      }
+    },
+    "templates": {
+      "type": "object",
+      "description": "Per-stack template registry consumed by SKILL-scaffold-* (Phase 18.F). Each key is a template id (kebab/dot slug, e.g. 'db.migration', 'api.controller'); each value declares the relative path under the pack directory and the consumer scaffolder skill id. Empty / absent = pack provides no scaffolding for this stack (manual scaffolding required). Templates are token-bearing source files (`__NAMESPACE__`, `__MODULE__`, `__kebabEntity__`, etc.) consumed by the deterministic template engine in packages/core/src/templates/. Per D-59 18.C.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "consumed_by"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Relative path from the pack directory to the template file (e.g. 'templates/db/migration.sql.tpl')."
+          },
+          "consumed_by": {
+            "type": "string",
+            "pattern": "^SKILL-scaffold-[a-z][a-z0-9-]*$",
+            "description": "Producer-consumer link: which Phase-18 scaffolder skill consumes this template."
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "seed_invariants": {
+      "type": "array",
+      "description": "Relative paths (from this manifest) to INV-CLIENT-*.json files the pack seeds. Each must validate against invariant.schema.json when copied into the adopter's docs/framework/arch/invariants/.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "DetectSignal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "file_present",
+            "dir_present",
+            "package_dep_present",
+            "composer_dep_present",
+            "gemfile_dep_present"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "description": "Relative path under the adopter repo root. Required for file_present + dir_present."
+        },
+        "package": {
+          "type": "string",
+          "description": "Package name. Required for *_dep_present signals."
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1.0,
+          "description": "Optional weight (future: weighted-OR detection). Phase 17.G uses OR semantics regardless."
+        }
+      }
+    }
+  },
+  "schema_version": "1.0.0"
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-031",
+  "term": "Runtime probe",
+  "definition": "A sensor that exercises a deployed runtime under a charter. Three kinds: api (HTTP/RPC), auth (RBAC/protected-surface), data (DB/state). The charter declares mission, target, in-scope invariants, allowed credentials, probes with expectations. Use devai sense runtime api, devai sense runtime auth, or devai sense runtime data. Phase 11.A.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "see_also": [
+    "GE-011"
+  ],
+  "provenance": [
+    "ex-GE-031@devai-original"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "JNY-006",
+  "title": "Client extends DEVAI with the law-pack invariant scaffold",
+  "summary": "An adopter who has already installed DEVAI (JNY-001) copies the law-pack invariant scaffold into their repo, customizes a subset of cluster-level invariants for their stack, and adds inv-override entries for transitional exceptions. Their substantive invariants now enforce alongside DEVAI's meta-invariants.",
+  "persona": {
+    "role": "Adopter-Architect",
+    "permissions_required": [
+      "docs.architecture.write",
+      "config.write"
+    ]
+  },
+  "preconditions": [
+    "JNY-001 has been completed; .devai/ scaffold present",
+    "Client's domains.json includes the client-side domain codes (STACK, LAYERS, DB, RLS, AUDIT, HTTP, JWT, SESS, RBAC, SECRETS, ENV, TEST, CICD, DOCS, STYLE, AGENT)",
+    "Client repo's AGENTS.md (or equivalent authority anchor file) exists at the citation paths the law-pack invariants reference"
+  ],
+  "steps": [
+    {
+      "seq": 1,
+      "actor": "Adopter-Architect",
+      "action": "Copy `examples/law-pack/docs/arch/invariants/INV-*.json` into the client repo's docs/arch/invariants/",
+      "expected_outcome": "15 cluster-level invariants present: STACK, LAYERS, DB, RLS, AUDIT, JWT, SESS, RBAC, HTTP, SECRETS, ENV, TEST, CICD, DOCS, AGENT"
+    },
+    {
+      "seq": 2,
+      "actor": "Adopter-Architect",
+      "action": "Customize project-specific clusters: edit INV-CICD-001.json (deploy gate specifics), INV-RLS-001.json (tenant model), INV-JWT-001.json (token format), etc.",
+      "expected_outcome": "Substantive client invariants reflect this project's stack; statement / rationale / verification updated; LAW-XX.YY.Z tags preserved for forensic grep"
+    },
+    {
+      "seq": 3,
+      "actor": "Adopter-Architect",
+      "action": "Run `devai spec validate invariants --strict-cnl` to verify both schema-correctness AND CNL discipline (modal verbs in every statement)",
+      "expected_outcome": "All 15 + 10 DEVAI-meta invariants validate; cnl-warn findings are zero or have known reasons"
+    },
+    {
+      "seq": 4,
+      "actor": "Adopter-Architect",
+      "action": "For any inherited rule the client cannot satisfy yet, add an `// inv-override: INV-XX-NNN` annotation in source with `reason / ticket / expires / approver`",
+      "expected_outcome": "`devai policy check overrides` lists every active override, including expiry; constitutional + hard-fail severity invariants are NOT overridable (override fails)"
+    },
+    {
+      "seq": 5,
+      "actor": "Adopter-Architect",
+      "action": "Run `devai spec rtd bundle --strict` to confirm the entire spec-bundle is readiness=ok",
+      "expected_outcome": "RTM-NNNN persisted; readiness.ok=true; manifest_hash is the citable handle for this spec version",
+      "alternative_paths": [
+        "If a tombstoned rule id is reused, the tombstone-enforcement gate hard-fails (Phase 10.D)",
+        "If an invariant's authority anchor (AGENTS.md section) is missing, validate-invariants reports `cannot resolve anchor`"
+      ]
+    }
+  ],
+  "postconditions": [
+    "Client repo now carries both DEVAI-meta invariants (INV-DEVAI-*) AND substantive client invariants (15 cluster-level)",
+    "rtd bundle produces a stable manifest_hash that the client can cite in their ADRs",
+    "Any inv-override entries are time-bounded and visible to audit"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "statement": "Client's spec validate-all is green: 25+ invariants, trace clean, glossary clean, all actions claimed.",
+      "measurable_via": [
+        "INV-DEVAI-001"
+      ]
+    },
+    {
+      "id": "AC-002",
+      "statement": "Every active inv-override carries a future-dated `expires` value; expired overrides are reported as findings (Phase 10.B discipline).",
+      "measurable_via": [
+        "INV-DEVAI-001"
+      ]
+    }
+  ],
+  "related_invariants": [
+    "INV-DEVAI-001"
+  ],
+  "compliance_refs": [
+    "D-39 (law-pack provenance)",
+    "Article 36"
+  ],
+  "status": "active",
+  "tags": [
+    "law-pack",
+    "client-adoption",
+    "extension",
+    "self-application"
+  ],
+  "provenance": [
+    "ex-JNY-006@devai-original"
+  ]
+}

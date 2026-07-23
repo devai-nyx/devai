@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "JNY-004",
+  "title": "Reference-gap report routes a spec ambiguity to the Architect",
+  "summary": "A Constructor-tier agent encounters an underspecified or contradictory invariant, emits an RGR, pauses the originating task, the Architect revises the invariant (new version), and the task resumes on the new integration HEAD.",
+  "persona": {
+    "role": "Engineer (or LLM agent in Engineer authority)",
+    "permissions_required": [
+      "rgr.emit",
+      "task.pause"
+    ]
+  },
+  "preconditions": [
+    "Task is in_progress",
+    "Sensor evidence shows a hard-gate failure that triage classifies as `reference-gap`",
+    "The cited invariant exists in the catalog at a known version"
+  ],
+  "steps": [
+    {
+      "seq": 1,
+      "actor": "Engineer",
+      "action": "Run `devai govern rgr emit --task-id <id> --discipline engineer --summary <text> --ambiguity <text> --evidence <EV-id> --invariant <INV-id> --question <text>` capturing the gap",
+      "expected_outcome": "RGR-NNNN.json persisted under .devai/state/rgr/; emitter-side record is `status: open`"
+    },
+    {
+      "seq": 2,
+      "actor": "Engineer",
+      "action": "Run `devai work task pause rgr <task-id> --rgr-id RGR-NNNN`",
+      "expected_outcome": "Task transitions to `rgr_pending`; branch renamed `rgr/<original-branch>`; locks held but no further loop iterations attempted"
+    },
+    {
+      "seq": 3,
+      "actor": "Architect",
+      "action": "Review the RGR: read problem.ambiguity, problem.invariants_impacted, suggested questions, proposed_resolution",
+      "expected_outcome": "Architect decides whether the gap is real and what the clarification should be"
+    },
+    {
+      "seq": 4,
+      "actor": "Architect",
+      "action": "Revise the cited invariant: edit `docs/arch/invariants/<INV-id>.json` (statement / rationale / verification), bump its `version` field, update `docs/arch/trace.json` if needed",
+      "expected_outcome": "Invariant version goes from X.Y.Z to X.(Y+1).0 (or X.Y.Z to (X+1).0.0 if the statement changes substantively)"
+    },
+    {
+      "seq": 5,
+      "actor": "Architect",
+      "action": "Run `devai govern rgr resolve RGR-NNNN --resolver <name> --answer Q1=<text> --resulting-commit <sha> --resumed-task-id <new-task-id>`",
+      "expected_outcome": "RGR transitions to `resolved`; resolution.resumed_task_id is set"
+    },
+    {
+      "seq": 6,
+      "actor": "Operator",
+      "action": "Run `devai work task resume rgr RGR-NNNN` to relaunch the suspended task on the new integration HEAD",
+      "expected_outcome": "Task moves from `rgr_pending` back to `ready` (then `in_progress`); the loop runs anew against the revised invariant",
+      "alternative_paths": [
+        "If Architect determines the gap is not real, mark RGR `rejected` with rationale; task remains suspended; Operator addresses via JNY-003 escalation flow instead"
+      ]
+    }
+  ],
+  "postconditions": [
+    "Cited invariant has a newer `version` than at the time of RGR emission",
+    "Task originally paused is now `completed` (or has progressed further along the lifecycle)",
+    "The RGR record's resolution.resulting_commits[] is non-empty"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "statement": "A paused task does NOT transition back to in_progress until a superseding invariant version exists (Article 22 spec-revision discipline).",
+      "measurable_via": [
+        "INV-DEVAI-005"
+      ]
+    },
+    {
+      "id": "AC-002",
+      "statement": "The RGR record's emitting_discipline is engineer | inspector | auditor (not architect or owner); Architects and Owners set the reference, they don't emit RGRs against themselves.",
+      "measurable_via": [
+        "INV-DEVAI-005"
+      ]
+    }
+  ],
+  "related_invariants": [
+    "INV-DEVAI-005"
+  ],
+  "status": "active",
+  "tags": [
+    "rgr",
+    "spec-revision",
+    "reference-gap",
+    "self-application"
+  ],
+  "provenance": [
+    "ex-JNY-004@devai-original"
+  ]
+}

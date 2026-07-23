@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-021",
+  "term": "Evidence chain",
+  "definition": "The hash-chained log under .devai/state/evidence-chain.json. Each record carries prev_hash + manifest_hash, making the chain tamper-evident. Verified by devai evidence chain verify per Article 32-33.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "see_also": [
+    "GE-010"
+  ],
+  "provenance": [
+    "ex-GE-021@devai-original"
+  ]
+}

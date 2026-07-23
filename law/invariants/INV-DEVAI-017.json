@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-DEVAI-017",
+  "domain": "DEVAI",
+  "lifecycle": "supported",
+  "severity": "constitutional",
+  "type": "governance",
+  "title": "Observation is state-clean and root gates isolate managed worktrees",
+  "statement": "Every supported diagnostic, score, validation, verification, doctor, and policy-check observation MUST be non-recording and MUST leave tracked repository state byte-identical; canonical SensorReading or evidence persistence MUST be a distinct registered role-declared write-consented mutation over the exact emitted artifact; a root gate MUST exclude every discovered nested managed worktree and MUST validate any candidate worktree only when invoked from that worktree's own root.",
+  "rationale": "A read action that appends state contradicts the fail-closed action registry, while a root gate that traverses another checkout makes its result depend on unrelated work rather than the evaluated tree.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "unit",
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "docs/meta/adr/ADR-004-published-truth-operational-self-adoption.md",
+        "anchor": "decision-5-observation-is-pure-persistence-is-a-separate-mutation"
+      },
+      {
+        "doc": "docs/meta/adr/ADR-004-published-truth-operational-self-adoption.md",
+        "anchor": "decision-6-managed-worktree-isolation"
+      }
+    ],
+    "decisions": [
+      "D-139",
+      "ADR-004"
+    ]
+  },
+  "scope": {
+    "components": [
+      "cli-observation",
+      "sensor-readings",
+      "evidence-chain",
+      "root-gates"
+    ],
+    "code_areas": [
+      "packages/cli/src/commands/sense/**",
+      "packages/cli/src/commands/phase6/**",
+      "packages/core/src/evidence/**",
+      "eslint.config.mjs",
+      ".prettierignore",
+      "scripts/**"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "trace_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "measurable_via": [
+    "sense readings record"
+  ],
+  "tags": [
+    "state-hygiene",
+    "explicit-consent",
+    "worktree-isolation",
+    "authority",
+    "article-6",
+    "article-36"
+  ],
+  "provenance": [
+    "ex-INV-DEVAI-017@devai-original"
+  ]
+}

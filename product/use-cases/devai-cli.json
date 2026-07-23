@@ -1,0 +1,204 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-05-18T05:30:00.000Z",
+  "roles": [
+    "operator",
+    "architect",
+    "engineer",
+    "inspector",
+    "auditor",
+    "owner"
+  ],
+  "cases": [
+    {
+      "id": "UC-devai-doctor",
+      "title": "Operator runs doctor to verify repo health (self or adopter)",
+      "mainFlow": [
+        {
+          "action": "Operator runs `devai doctor --self|--adopter|--auto --format human` (Phase 21.B)",
+          "actorRole": "operator"
+        },
+        {
+          "action": "Doctor walks the workspace, F1 substrate paths, schemas, constitution pointer, agent sync, chain dir, evidence chain, LLM bridges",
+          "actorRole": "operator"
+        },
+        {
+          "action": "Operator reads the OK/FAIL summary and acts on flagged checks",
+          "actorRole": "operator"
+        }
+      ]
+    },
+    {
+      "id": "UC-devai-init",
+      "title": "Operator bootstraps DEVAI under a target repo",
+      "mainFlow": [
+        {
+          "action": "Operator runs `devai init plan` to build the role-separated bootstrap plan (deny-by-default on existing files)",
+          "actorRole": "operator"
+        },
+        {
+          "action": "Owner and Architect review the plan, invoke their separate `devai init apply-* --as-role <role> --write` segments, then the Architect materializes policy with `devai adopt upgrade --write`",
+          "actorRole": "operator"
+        }
+      ]
+    },
+    {
+      "id": "UC-devai-pack-resolve",
+      "title": "Architect resolves which stack-adapter pack matches the adopter repo",
+      "mainFlow": [
+        {
+          "action": "Architect runs `devai adopt pack resolve --adopter-root <repo>` and reads the matched pack id",
+          "actorRole": "architect"
+        },
+        {
+          "action": "Architect tunes `extractor_params` in the matched pack to fit the adopter's directory shape",
+          "actorRole": "architect"
+        }
+      ]
+    },
+    {
+      "id": "UC-devai-introspect",
+      "title": "Architect runs first-introspection on a brownfield adopter",
+      "mainFlow": [
+        {
+          "action": "Architect runs each sense verb in turn: `sense api`, `sense routes`, `sense data-model`, `sense data-handling`, `sense dep-graph`, `sense rbac`, `sense coverage`",
+          "actorRole": "architect"
+        },
+        {
+          "action": "Architect calls `inv suggest --from-inventory` to propose INV-CANDIDATE records bridging brownfield to spec",
+          "actorRole": "architect"
+        },
+        {
+          "action": "Architect graduates candidates to invariants under `docs/arch/invariants/`",
+          "actorRole": "architect"
+        }
+      ]
+    },
+    {
+      "id": "UC-devai-blueprint",
+      "title": "Owner authors a module-blueprint; Engineer scaffolds it",
+      "mainFlow": [
+        {
+          "action": "Owner authors a `module-blueprint.json` under `docs/arch/blueprints/`",
+          "actorRole": "owner"
+        },
+        {
+          "action": "Architect validates: `devai spec blueprint validate <path>`",
+          "actorRole": "architect"
+        },
+        {
+          "action": "Architect plans: `devai spec blueprint plan <path>` (deterministic scaffold plan, no file writes)",
+          "actorRole": "architect"
+        },
+        {
+          "action": "Engineer scaffolds via `skill run SKILL-scaffold-<axis>` and reviews the rendered output",
+          "actorRole": "engineer"
+        }
+      ]
+    },
+    {
+      "id": "UC-devai-scorecard",
+      "title": "Auditor computes the F\u00d7T scorecard and assesses repo state",
+      "mainFlow": [
+        {
+          "action": "Auditor runs `devai govern score compute --readings-dir .devai/state/sensor-readings/ --format human` to compute the scorecard",
+          "actorRole": "auditor"
+        },
+        {
+          "action": "Auditor optionally passes `--scorecard-na <path>` to apply per-repo N/A carve-outs (Phase 34.B)",
+          "actorRole": "auditor"
+        },
+        {
+          "action": "Auditor runs `devai govern score assess <scorecard-file>` to generate a narrative assessment with per-cell-class advice (Phase 22.F / 23.I)",
+          "actorRole": "auditor"
+        }
+      ]
+    },
+    {
+      "id": "UC-devai-loop",
+      "title": "Engineer drives an autonomous loop iteration end-to-end",
+      "mainFlow": [
+        {
+          "action": "Engineer adds a backlog entry: `devai work backlog add ...`",
+          "actorRole": "engineer"
+        },
+        {
+          "action": "Engineer runs `devai experimental loop run --max-iterations 1 --llm-timeout-ms <ms>` (Phase 24.C / 25.C)",
+          "actorRole": "engineer"
+        },
+        {
+          "action": "Loop acquires locks, spawns a worktree, provisions a per-task DB, runs SKILL-feedback-iteration via the LLM bridge",
+          "actorRole": "engineer"
+        },
+        {
+          "action": "Engineer reviews the iteration's evidence, completes or escalates the task",
+          "actorRole": "engineer"
+        }
+      ]
+    },
+    {
+      "id": "UC-devai-evidence",
+      "title": "Auditor verifies the hash-chained evidence ledger",
+      "mainFlow": [
+        {
+          "action": "Auditor runs `devai evidence chain verify` to confirm chain integrity (Article 32)",
+          "actorRole": "auditor"
+        },
+        {
+          "action": "Auditor runs `devai evidence chain head` to record the current head hash",
+          "actorRole": "auditor"
+        }
+      ]
+    },
+    {
+      "id": "UC-devai-release-gate",
+      "title": "Operator gates a release on scorecard + invariant state",
+      "mainFlow": [
+        {
+          "action": "Operator runs `devai release gate --scorecard <path>` to compute a deploy-gate decision (Phase 11.B)",
+          "actorRole": "operator"
+        },
+        {
+          "action": "On PASS: deploy; on FAIL: gate rejects, operator addresses the failing cell(s)",
+          "actorRole": "operator"
+        }
+      ]
+    },
+    {
+      "id": "UC-devai-test-weakening",
+      "title": "Inspector audits a PR for unjustified test weakening",
+      "mainFlow": [
+        {
+          "action": "Inspector runs `devai sense test weakening --base-ref main` against the PR's changed test files",
+          "actorRole": "inspector"
+        },
+        {
+          "action": "Inspector reviews the SensorReading findings: assertion drops, .skip additions, INV-* removals",
+          "actorRole": "inspector"
+        }
+      ]
+    },
+    {
+      "id": "UC-devai-sensor-perf",
+      "title": "Operator monitors sensor wall-clock latency against the framework p95 SLO",
+      "mainFlow": [
+        {
+          "action": "Operator runs `pnpm test:perf` (or `node scripts/perf-bench.mjs`) to benchmark the 7 L0 inventory sensors against a synthetic fixture across 5 samples after warm-up; emits a JSON metrics line with p50_ms + p95_ms.",
+          "actorRole": "operator"
+        },
+        {
+          "action": "Operator inspects the emitted `perf_test` SensorReading; the cell is graded PASS / REVIEW / FAIL against the latency thresholds (default pass: p95_ms \u2264 1500ms; review: p95_ms \u2264 3000ms). The 1500ms p95 SLO derives from the Phase 19.C / 26.L performance smoke baseline (stynx-class adopter repos: ~17 packages, ~10k LOC).",
+          "actorRole": "operator"
+        },
+        {
+          "action": "If p95 exceeds the threshold, operator investigates the slow sensor's evidence (sensor `duration_ms` per sample, hashed input, configuration drift) and either tunes thresholds in pack config or files a perf-class invariant against the regressed sensor.",
+          "actorRole": "operator"
+        }
+      ]
+    }
+  ],
+  "provenance": [
+    "ex-use-cases/devai-cli.json@devai-original",
+    "REV-0006 signals pending Owner ratification: stale generatedAt (2026-05-18 vs content), 0 endpoint refs (coverage sensor sees all-unmapped)"
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-DEVAI-001",
+  "domain": "DEVAI",
+  "severity": "constitutional",
+  "type": "governance",
+  "title": "DEVAI applies to itself",
+  "statement": "Every DEVAI tool that exists at a given phase MUST be exercised on the DEVAI repository itself in that phase's CI run; F5 (the harness) MUST be scored by the same scorecard machinery that scores F1\u2013F4.",
+  "rationale": "A framework that cannot apply to itself cannot be trusted to apply elsewhere. Phase-0 minimum: F5 schemas validate. Each subsequent phase ratchets self-application up another rung.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "unit",
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-36-devai-applies-to-itself"
+      }
+    ]
+  },
+  "scope": {
+    "components": [
+      "harness"
+    ],
+    "code_areas": [
+      ".devai/**",
+      "packages/**",
+      ".github/workflows/**"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "self-application",
+    "article-36"
+  ],
+  "measurable_via": [
+    "catalog actions",
+    "policy check adrs",
+    "policy check ci economy",
+    "policy check forbidden actions",
+    "policy check overrides",
+    "policy check pr compliance",
+    "policy check prompt overlays",
+    "policy check sensor integrity",
+    "evidence coverage aggregate",
+    "docs cli",
+    "docs links",
+    "docs publish",
+    "docs render mermaid",
+    "docs synthesize",
+    "docs synthesize all",
+    "doctor",
+    "evidence chain head",
+    "evidence actions verify",
+    "evidence local collect",
+    "evidence emit",
+    "evidence redact",
+    "evidence chain verify",
+    "evidence local verify",
+    "inventory adherence",
+    "inventory components",
+    "inventory contracts",
+    "inventory coverage",
+    "inventory dependencies",
+    "inventory glossary",
+    "inventory modules",
+    "inventory regen",
+    "inventory routes",
+    "inventory schemas",
+    "inventory suggest",
+    "inventory tests",
+    "agent llm probe",
+    "sense mutation run",
+    "sense mutation verify",
+    "adopt pack graduate",
+    "adopt pack resolve",
+    "evidence test record",
+    "release gate",
+    "release list",
+    "release postdeploy verify",
+    "release runtime drift",
+    "evidence test matrix",
+    "spec rtd bundle",
+    "spec validate action coverage",
+    "spec validate all",
+    "spec validate glossary",
+    "spec validate invariants",
+    "spec validate journeys",
+    "spec validate trace",
+    "spec validate test trace",
+    "work state prune"
+  ],
+  "provenance": [
+    "ex-INV-DEVAI-001@devai-original"
+  ]
+}

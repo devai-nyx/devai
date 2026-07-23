@@ -1,0 +1,248 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/inventory.schema.json",
+  "title": "Inventory",
+  "description": "F4 manifest. Deterministic derivation from F1+F2+F3 at a given integration HEAD. Plant-identification subsystem output. Per Constitution Article 4 (F4).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "generated_at",
+    "integration_head",
+    "modules",
+    "routes",
+    "schemas",
+    "components",
+    "test_inventory",
+    "dependency_graph_hash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "integration_head": {
+      "type": "string",
+      "description": "Git SHA at which this inventory was regenerated."
+    },
+    "modules": {
+      "type": "array",
+      "description": "Modules in the repo. Pre-22.G this was an array of MOD-* ids (strings); Phase 22.G (D-A-17) widens items to also accept an object form carrying {id, file} so computeReverseAdherence can read per-surface file paths without a second pass through the module-extractor. Back-compat: the string form is still accepted.",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string",
+            "pattern": "^MOD-"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "file"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^MOD-"
+              },
+              "file": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "method",
+          "path",
+          "module"
+        ],
+        "properties": {
+          "method": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "module": {
+            "type": "string",
+            "pattern": "^MOD-"
+          },
+          "auth": {
+            "type": "string"
+          },
+          "protected": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string",
+            "description": "Phase 22.G (D-A-17): stable per-route id used by computeReverseAdherence. Format: `ROUTE-<sha256_hex_8>` derived from (method, path, module)."
+          },
+          "file": {
+            "type": "string",
+            "description": "Phase 22.G (D-A-17): source file the route declaration was extracted from. Used by computeReverseAdherence to match against trace.invariants[*].code_areas globs."
+          }
+        }
+      }
+    },
+    "schemas": {
+      "type": "array",
+      "description": "Database schemas/tables and DTO/JSON schemas.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "name"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "db_table",
+              "db_view",
+              "dto",
+              "openapi",
+              "json_schema"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "module": {
+            "type": "string",
+            "pattern": "^MOD-"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "description": "Angular components, NestJS services, etc.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "name",
+          "module"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "module": {
+            "type": "string",
+            "pattern": "^MOD-"
+          },
+          "path": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "Phase 22.G (D-A-17): stable per-component id used by computeReverseAdherence. Format: `COMP-<sha256_hex_8>` derived from (kind, name, module)."
+          },
+          "file": {
+            "type": "string",
+            "description": "Phase 22.G (D-A-17): source file the component declaration was extracted from. Equal to `path` when `path` is the component's source file (most cases); kept as a separate field so adherence-reverse can read it via the same shape as the other surface kinds."
+          }
+        }
+      }
+    },
+    "test_inventory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "suite",
+          "invariants"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "suite": {
+            "enum": [
+              "unit",
+              "api",
+              "int",
+              "e2e",
+              "sec",
+              "perf",
+              "journey",
+              "db"
+            ]
+          },
+          "invariants": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^INV-"
+            }
+          },
+          "module": {
+            "type": "string",
+            "pattern": "^MOD-"
+          }
+        }
+      }
+    },
+    "dependency_graph_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of the canonical-form module dependency graph. Drift indicates structural change."
+    },
+    "dependency_graph": {
+      "type": "array",
+      "description": "Phase 22.G (D-A-17): per-node dependency-graph surfaces. Each entry carries an id + file so computeReverseAdherence can read this slice with the same shape as routes/modules/components. The full edge list is recoverable only via a fresh extractDependencies() pass; this array is the surface-pass that adherence-reverse needs.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "file"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^DEP-"
+          },
+          "file": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "feature_matrix": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Client-specific feature\u00d7module coverage matrix, populated by configured projection skills."
+    },
+    "checksums": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "description": "SHA-256 hashes of all governance artifacts, for drift detection. Per F5 self-application (Article 36)."
+    }
+  },
+  "schema_version": "1.0.0"
+}

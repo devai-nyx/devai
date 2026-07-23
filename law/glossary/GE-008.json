@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-008",
+  "term": "F3",
+  "definition": "Test substrate: test files at all suites (unit, integration, e2e, sec, perf). Sensors per D-1. Inspector-authored.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "aliases": [
+    "Substrate F3"
+  ],
+  "see_also": [
+    "GE-011",
+    "GE-012"
+  ],
+  "provenance": [
+    "ex-GE-008@devai-original"
+  ]
+}

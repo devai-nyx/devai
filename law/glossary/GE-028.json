@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-028",
+  "term": "Project type",
+  "definition": "Substrate classification recorded in .devai/config/project.json. One of: runtime-host, platform-package, docs-archive, framework. Filters which invariants apply. Phase 10.J.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "examples": [
+    "runtime-host",
+    "platform-package",
+    "docs-archive",
+    "framework"
+  ],
+  "provenance": [
+    "ex-GE-028@devai-original"
+  ]
+}

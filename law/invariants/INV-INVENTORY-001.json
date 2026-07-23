@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-INVENTORY-001",
+  "domain": "INVENTORY",
+  "severity": "gate",
+  "type": "data_contract",
+  "title": "Every route and endpoint is covered by at least one use-case",
+  "statement": "For any repo whose inventory_coverage sensor reading is non-empty (routes[] or endpoints[] is non-empty), every route id in coverage-matrix.routes[] and every endpoint id in coverage-matrix.endpoints[] MUST appear in at least one links[] triad. Equivalently, coverage-matrix.unmapped.routes and coverage-matrix.unmapped.endpoints MUST both be empty arrays. Adopters with no frontend (endpoints-only) or no backend (routes-only) still apply: any route or endpoint that exists must be claimed by a use-case.",
+  "rationale": "Brownfield adoption begins with surface inventories. An unmapped route or endpoint means a user-facing flow exists with no traceable specification \u2014 the inverse of the Architect's job, and the single highest signal that documentation is lagging code. Per Phase 17.D and D-57, this invariant gates the brownfield substrate: 17.C ships the sensors that produce the coverage matrix; 17.D requires the matrix to be fully bound. The 'gate' severity (Phase 10.A) blocks promotion without blocking development \u2014 adopters can land changes that introduce new routes/endpoints, but they cannot promote a release without first closing the use-case gap.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-17-hard-gate"
+      },
+      {
+        "doc": "DESIGN-DECISIONS.md",
+        "anchor": "d-57-redox-is-a-convergent-peer-that-devai-absorbs-the-framework-framing-extends-to-brownfield-reverse-documentation-locked-supersedes-d-51"
+      }
+    ]
+  },
+  "scope": {
+    "components": [
+      "sensors",
+      "cli"
+    ],
+    "code_areas": [
+      "packages/sensors/src/inventory-coverage.ts",
+      "packages/sensors/src/inventory-api.ts",
+      "packages/sensors/src/inventory-routes.ts",
+      "packages/cli/src/commands/sense/inventory-coverage.ts"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "test_update",
+      "human_approval"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "phase-17",
+    "phase-17-D",
+    "inventory",
+    "brownfield",
+    "coverage"
+  ],
+  "measurable_via": [
+    "sense inventory api",
+    "sense inventory routes",
+    "sense inventory coverage"
+  ],
+  "provenance": [
+    "ex-INV-INVENTORY-001@devai-original"
+  ]
+}

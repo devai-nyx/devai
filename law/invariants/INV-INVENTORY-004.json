@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-INVENTORY-004",
+  "domain": "INVENTORY",
+  "severity": "hard-fail",
+  "type": "data_contract",
+  "title": "No module imports a peer's internal/ subpath",
+  "statement": "For any repo whose inventory_dep_graph sensor reading is non-empty, no edge in dep-graph.graph[fromFile] MAY reference a target path that traverses into a peer module's `internal/`, `_internal/`, `private/`, or `lib/internal/` subpath. Specifically: an edge from `packages/X/src/foo.ts` to `packages/Y/src/internal/bar.ts` (any X \u2260 Y) is forbidden. Same-package imports of own `internal/` are allowed. Imports via the package's public entry (e.g. `@scope/Y` resolving through Y's exports map) are allowed because they are name-routed, not subpath-routed.",
+  "rationale": "Per D-57's brownfield-adoption argument and Phase 10.H (forbidden actions) precedent: the `internal/` convention is a soft-gate boundary that codifies the package author's intent to not expose certain modules. Code that reaches across packages into another package's internal subpath couples to implementation details rather than published contracts, creating brittleness that the dep-graph sensor can now detect deterministically. Severity hard-fail (Phase 10.A) blocks merge: cross-package internal-subpath coupling is a layering violation that compounds with every dependent change.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-17-hard-gate"
+      },
+      {
+        "doc": "DESIGN-DECISIONS.md",
+        "anchor": "d-57-redox-is-a-convergent-peer-that-devai-absorbs-the-framework-framing-extends-to-brownfield-reverse-documentation-locked-supersedes-d-51"
+      }
+    ]
+  },
+  "scope": {
+    "components": [
+      "sensors",
+      "cli"
+    ],
+    "code_areas": [
+      "packages/sensors/src/inventory-dep-graph.ts",
+      "packages/cli/src/commands/sense/inventory-dep-graph.ts"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "test_update",
+      "human_approval"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "phase-17",
+    "phase-17-D",
+    "inventory",
+    "brownfield",
+    "dep-graph",
+    "layering"
+  ],
+  "measurable_via": [
+    "sense inventory dep graph"
+  ],
+  "provenance": [
+    "ex-INV-INVENTORY-004@devai-original"
+  ]
+}

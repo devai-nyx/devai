@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-INVENTORY-002",
+  "domain": "INVENTORY",
+  "severity": "hard-fail",
+  "type": "data_contract",
+  "title": "Every PII-flagged column has legal_basis and retention",
+  "statement": "For any column in a data-model-inventory body (Phase 17.C3) whose pii_class field is non-empty (set by inventory_data_handling's heuristics or by hand-curated stack-adapter pack overrides), both legal_basis and retention fields MUST also be non-empty strings. A column that has been classified as PII without an associated legal basis under LGPD / GDPR / HIPAA / CCPA and without a retention policy is a compliance defect by definition.",
+  "rationale": "Per D-57 and the brownfield-adoption argument, DEVAI absorbs redox's LGPD compliance discipline as a core capability (Phase 17 OQ2). The inventory_data_handling sensor seeds pii_class; the Architect or stack-adapter pack supplies legal_basis + retention. This invariant makes the seeding actionable: once a PII column is flagged, the trio (pii_class + legal_basis + retention) MUST be complete before release. Severity hard-fail (Phase 10.A) reflects that this is a compliance-floor item: shipping unlabeled PII handling is a regulatory exposure, not a quality concern.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-17-hard-gate"
+      },
+      {
+        "doc": "DESIGN-DECISIONS.md",
+        "anchor": "d-57-redox-is-a-convergent-peer-that-devai-absorbs-the-framework-framing-extends-to-brownfield-reverse-documentation-locked-supersedes-d-51"
+      }
+    ]
+  },
+  "scope": {
+    "components": [
+      "sensors",
+      "cli"
+    ],
+    "code_areas": [
+      "packages/sensors/src/inventory-data-handling.ts",
+      "packages/sensors/src/inventory-data-model.ts",
+      "packages/cli/src/commands/sense/inventory-data-handling.ts",
+      "packages/cli/src/commands/sense/inventory-data-model.ts"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "phase-17",
+    "phase-17-D",
+    "inventory",
+    "brownfield",
+    "pii",
+    "lgpd",
+    "compliance"
+  ],
+  "measurable_via": [
+    "sense inventory data model",
+    "sense inventory data handling"
+  ],
+  "provenance": [
+    "ex-INV-INVENTORY-002@devai-original"
+  ]
+}

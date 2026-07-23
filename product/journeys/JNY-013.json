@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "JNY-013",
+  "title": "Maintainer receives routed score diagnostics for missing readings",
+  "summary": "Score computation reports missing reading inputs through the typed command router without a raw stack while preserving valid score results.",
+  "lifecycle": "supported",
+  "persona": {
+    "role": "DEVAI maintainer",
+    "permissions_required": [
+      "Local repository read access"
+    ]
+  },
+  "preconditions": [
+    "The score command is available",
+    "A valid reading fixture and a missing-readings fixture are available"
+  ],
+  "steps": [
+    {
+      "seq": 1,
+      "actor": "DEVAI maintainer",
+      "action": "Run score computation with the required readings absent",
+      "expected_outcome": "The command returns a typed actionable diagnostic and no raw stack trace"
+    },
+    {
+      "seq": 2,
+      "actor": "DEVAI maintainer",
+      "action": "Run score computation with a valid fixed reading set",
+      "expected_outcome": "The deterministic score result remains unchanged"
+    }
+  ],
+  "postconditions": [
+    "Missing-input and valid-input outcomes are stable and separately testable"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "statement": "Missing readings produce a typed actionable router diagnostic without a raw stack trace.",
+      "measurable_via": [
+        "INV-DEVAI-012"
+      ]
+    },
+    {
+      "id": "AC-002",
+      "statement": "Valid score computation remains deterministic and bounded.",
+      "measurable_via": [
+        "INV-DEVAI-006",
+        "INV-DEVAI-011"
+      ]
+    }
+  ],
+  "related_invariants": [
+    "INV-DEVAI-006",
+    "INV-DEVAI-011",
+    "INV-DEVAI-012"
+  ],
+  "status": "active",
+  "tags": [
+    "r28-c5",
+    "scorecard",
+    "diagnostics",
+    "error-semantics"
+  ],
+  "provenance": [
+    "ex-JNY-013@devai-original"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-BLUEPRINT-002",
+  "domain": "BLUEPRINT",
+  "severity": "hard-fail",
+  "type": "compliance",
+  "title": "Every PII-flagged blueprint field declares retention",
+  "statement": "For any field in a module-blueprint's database.entities[].fields[] whose pii field is set to a value other than 'none' (i.e., 'low' or 'high'), the field's retention field MUST be set to a value other than 'default' (i.e., one of '90d', '1y', 'forever'). A blueprint declaring PII collection without an explicit retention policy is a compliance defect by definition \u2014 the spec-layer analog of INV-INVENTORY-002 at the inventory layer.",
+  "rationale": "Per D-59. INV-INVENTORY-002 enforces the PII discipline on brownfield inventory bodies (every PII-classified column has legal_basis + retention); INV-BLUEPRINT-002 enforces it on greenfield specs BEFORE generation. Together they make the discipline composable: a scaffolded module produces inventory that satisfies INV-INVENTORY-002 because the blueprint already enforced retention at the spec layer. Brownfield + greenfield converge on one rule, cited as the meeting point in D-59 consequence #8. Severity hard-fail (Phase 10.A) mirrors INV-INVENTORY-002: shipping unlabeled PII handling \u2014 at either layer \u2014 is a regulatory exposure under LGPD / GDPR / CCPA / HIPAA, not a quality concern.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-17-hard-gate"
+      },
+      {
+        "doc": "DESIGN-DECISIONS.md",
+        "anchor": "d-59-codex-is-a-convergent-peer-that-devai-absorbs-as-the-forward-generation-substrate-buckets-abcd-land-bucket-e-porm-only-drops-on-deletion-locked"
+      }
+    ]
+  },
+  "scope": {
+    "components": [
+      "core",
+      "cli"
+    ],
+    "code_areas": [
+      "packages/core/src/blueprint/index.ts",
+      "packages/cli/src/commands/blueprint/validate.ts"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "phase-18",
+    "phase-18-D",
+    "blueprint",
+    "greenfield",
+    "pii",
+    "compliance",
+    "lgpd",
+    "gdpr",
+    "ccpa"
+  ],
+  "measurable_via": [
+    "spec blueprint validate"
+  ],
+  "provenance": [
+    "ex-INV-BLUEPRINT-002@devai-original"
+  ]
+}

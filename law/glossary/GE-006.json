@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-006",
+  "term": "F1",
+  "definition": "Architecture-spec substrate: docs/arch/ (invariants, trace, journeys, glossary). Reference signal for the development loop. Architect-authored.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "aliases": [
+    "Substrate F1"
+  ],
+  "see_also": [
+    "GE-019",
+    "GE-020"
+  ],
+  "provenance": [
+    "ex-GE-006@devai-original",
+    "REV-0006 signal: adopter-side path unmarked"
+  ]
+}

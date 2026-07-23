@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-DEVAI-014",
+  "domain": "DEVAI",
+  "severity": "hard-fail",
+  "type": "audit",
+  "title": "Glob guards correctly distinguish zero/under-threshold matches from healthy coverage, including literal and recursive patterns",
+  "statement": "devai policy check glob guards MUST report a guard as failing when its pattern's match count is below its declared min_matches (default 1), including when the pattern's base directory does not exist at all. It MUST report a guard as passing when the match count meets or exceeds min_matches. Literal (glob-metacharacter-free) patterns MUST be evaluated as a direct file-existence check, not as a directory walk. The evaluator MUST NOT descend into node_modules or .git when resolving matches.",
+  "rationale": "The tool exists specifically to catch config drift where a glob silently degrades to matching nothing (or less than expected) while whatever consumes it keeps reporting green \u2014 found via stynx's devai-gates.yml (docs/architecture/invariants/*.json went to zero matches after a rename, guarded by a defensive `[ -f ... ] || continue` that made the whole validation step a silent no-op) and pec's generate-test-obligations.mjs (an .md-only, non-recursive scan silently dropped invariants already migrated to devai's canonical .json format). A glob-guard checker that itself gets these classification boundaries wrong (zero vs. under-threshold vs. healthy, literal vs. glob, or that walks into node_modules and reports false-positive matches) would fail to catch the exact bug class it was built for.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "unit",
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "DESIGN-DECISIONS.md",
+        "anchor": "d-124-glob-guards-a-declarative-registry-plus-check-for-config-drift-that-silently-degrades-a-load-bearing-glob-to-zero-or-fewer-matches-locked-governance-roadmap-item-7-part-1"
+      }
+    ]
+  },
+  "scope": {
+    "components": [
+      "core",
+      "cli"
+    ],
+    "code_areas": [
+      "packages/core/src/glob-guards/**",
+      "packages/cli/src/commands/check/glob-guards.ts"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "test_update",
+      "human_approval"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "d-124",
+    "glob-guards",
+    "governance-roadmap"
+  ],
+  "measurable_via": [
+    "policy check glob guards"
+  ],
+  "provenance": [
+    "ex-INV-DEVAI-014@devai-original"
+  ]
+}

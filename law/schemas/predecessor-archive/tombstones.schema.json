@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.dev/schemas/tombstones.schema.json",
+  "title": "Invariant Tombstones",
+  "description": "Registry of retired invariant ids. Once an id appears here, it MUST NOT be reused by a new active invariant. Absorbs the LAW-00.AMENDMENT.2 tombstone rule from the stech-law predecessor draft (D-38). The file lives at docs/framework/arch/invariants/tombstones.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "tombstones"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "tombstones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "tombstoned_at", "reason"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^INV-[A-Z][A-Z0-9]{1,15}-[0-9]{3}$"
+          },
+          "tombstoned_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "adr": {
+            "type": "string",
+            "pattern": "^ADR-",
+            "description": "Optional ADR id justifying the retirement."
+          },
+          "replaced_by": {
+            "type": "string",
+            "pattern": "^INV-",
+            "description": "Optional successor invariant id."
+          }
+        }
+      }
+    }
+  }
+}

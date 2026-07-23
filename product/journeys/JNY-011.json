@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "JNY-011",
+  "title": "Maintainer reproduces exact-subject self-application evidence",
+  "summary": "DEVAI self-application state is regenerated from tracked inputs for one exact subject, and every currentness projection derives from the same canonical mappings and readings.",
+  "lifecycle": "supported",
+  "persona": {
+    "role": "DEVAI maintainer",
+    "permissions_required": [
+      "Local repository read access",
+      "Explicit evidence-persistence consent"
+    ]
+  },
+  "preconditions": [
+    "The exact source commit and tree are known",
+    "Canonical inventory and score mappings are available"
+  ],
+  "steps": [
+    {
+      "seq": 1,
+      "actor": "DEVAI maintainer",
+      "action": "Regenerate inventory, readings, and scorecard twice from the same exact subject and tracked inputs",
+      "expected_outcome": "Both runs produce content-identical exact-subject results"
+    },
+    {
+      "seq": 2,
+      "actor": "DEVAI",
+      "action": "Evaluate dashboard currentness and render the aspect grid",
+      "expected_outcome": "Missing or stale inputs fail currentness, and the grid derives from canonical runtime mapping plus the declared N/A overlay"
+    }
+  ],
+  "postconditions": [
+    "Tracked self-application evidence is reproducible and bound to one exact subject"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "statement": "Inventory, readings, and scorecard are reproducible from tracked inputs for the exact source commit and tree.",
+      "measurable_via": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-006"
+      ]
+    },
+    {
+      "id": "AC-002",
+      "statement": "Dashboard currentness fails on missing, stale, or differently bound evidence.",
+      "measurable_via": [
+        "INV-DEVAI-016"
+      ]
+    },
+    {
+      "id": "AC-003",
+      "statement": "The aspect grid derives from the canonical runtime sensor mapping and the repository N/A overlay.",
+      "measurable_via": [
+        "INV-DEVAI-019"
+      ]
+    }
+  ],
+  "related_invariants": [
+    "INV-DEVAI-001",
+    "INV-DEVAI-006",
+    "INV-DEVAI-016",
+    "INV-DEVAI-019"
+  ],
+  "status": "active",
+  "tags": [
+    "r28-c3",
+    "self-application",
+    "reproducibility",
+    "scorecard"
+  ],
+  "provenance": [
+    "ex-JNY-011@devai-original"
+  ]
+}

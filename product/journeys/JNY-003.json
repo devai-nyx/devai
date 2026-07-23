@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "JNY-003",
+  "title": "Convergence failure escalates cleanly to human",
+  "summary": "An autonomous loop hits the iteration cap (or persistent tie-break disagreement) and emits an escalation. The branch is preserved, the worktree destroyed, the locks released, and a human-resolvable escalation record persists.",
+  "lifecycle": "experimental",
+  "lifecycle_reason": "Automatic escalation remains experimental; 0.4.0 preserves recoverable work and returns control to a human.",
+  "promotion_criteria": [
+    "Branch preservation and real rename behavior are proven end to end",
+    "Interruption cannot discard uncommitted or unintegrated work",
+    "Live-adopter escalation evidence passes independent audit"
+  ],
+  "persona": {
+    "role": "Operator",
+    "permissions_required": [
+      "task.escalate"
+    ]
+  },
+  "preconditions": [
+    "Task is in `in_progress` and has exhausted `max_iterations` or has Article-23 ladder failure",
+    "Branch and worktree exist for the task"
+  ],
+  "steps": [
+    {
+      "seq": 1,
+      "actor": "Loop",
+      "action": "Detect convergence failure (hard gate still red after max_iterations, OR tie-break ladder persistently inconclusive)",
+      "expected_outcome": "Loop transitions task into the escalation flow rather than retry indefinitely"
+    },
+    {
+      "seq": 2,
+      "actor": "Loop",
+      "action": "Run `devai work task escalate <task-id> --failure-class iteration_cap_exhausted` (or tie_breaker_unresolved)",
+      "expected_outcome": "Escalation record persisted to .devai/state/escalations/; task status moves to `escalated`"
+    },
+    {
+      "seq": 3,
+      "actor": "Operator",
+      "action": "Branch is renamed `escalated/<task-id>` (preserved, not deleted); worktree destroyed; module locks released",
+      "expected_outcome": "Branch preservation per Article 21; the failed work is auditable, not lost"
+    },
+    {
+      "seq": 4,
+      "actor": "Human",
+      "action": "Review the escalation: read iteration_summary, evidence_chain_head, model_tiers_tried; decide path",
+      "expected_outcome": "Path is one of: adopt_branch_and_fix | edit_spec_and_requeue | cancel | rollback_task",
+      "alternative_paths": [
+        "If the gap is semantic (RTD underspecified), emit an RGR instead \u2014 see JNY-004"
+      ]
+    },
+    {
+      "seq": 5,
+      "actor": "Human",
+      "action": "Apply the chosen resolution; mark escalation human_resolution.path_taken; status transitions to `resolved` or `human_adopted`",
+      "expected_outcome": "Escalation closed; downstream backlog items unblocked"
+    }
+  ],
+  "postconditions": [
+    "Branch `escalated/<task-id>` exists in git; auditor can inspect what the loop tried",
+    "Escalation record's status field is non-`open`",
+    "No leaked locks, no orphaned worktree"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "statement": "The task's state field follows the documented transitions and never jumps from in_progress directly to completed without passing escalation when convergence fails.",
+      "measurable_via": [
+        "INV-DEVAI-005"
+      ]
+    },
+    {
+      "id": "AC-002",
+      "statement": "Module locks held by the failed task are released atomically with the escalation; subsequent tasks targeting the same modules can acquire them.",
+      "measurable_via": [
+        "INV-DEVAI-004"
+      ]
+    }
+  ],
+  "related_invariants": [
+    "INV-DEVAI-004",
+    "INV-DEVAI-005"
+  ],
+  "status": "active",
+  "tags": [
+    "escalation",
+    "convergence-failure",
+    "self-application"
+  ],
+  "provenance": [
+    "ex-JNY-003@devai-original"
+  ]
+}

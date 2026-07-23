@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/scorecard-na-config.schema.json",
+  "title": "Scorecard N/A Override Config",
+  "description": "Per-repo override file declaring which F\u00d7T scorecard cells are degenerate for THIS repo's substrate (Phase 34, D-91). Lives at `.devai/config/scorecard-na.json` (optional; absence is a no-op). Extends Article 5 (degenerate cells) from a global structural claim to a per-repo substrate-shape claim. Each listed cell is forced to verdict 'N/A' as an overlay AFTER global DEGENERATE_CELLS and BEFORE reading-driven verdicts \u2014 so a stray SR cannot silently flip an N/A carve-out. Each cell MUST carry a `reason` so the carve-out is justified in writing.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "cells"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "cells": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "cell",
+          "reason"
+        ],
+        "properties": {
+          "cell": {
+            "type": "string",
+            "pattern": "^F[1-5]:T[1-9]$",
+            "description": "Cell coordinate in `Fx:Ty` form. F1-F5 substrate, T1-T9 property. Validation rejects coordinates outside the 5\u00d79 grid."
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 8,
+            "description": "Human-readable justification for declaring this cell N/A on this repo. REQUIRED so the carve-out is auditable; silent N/A is the failure mode this schema exists to prevent."
+          },
+          "constitution_anchor": {
+            "type": "string",
+            "description": "Optional but recommended: cite the constitutional article that anchors the carve-out (typically Article 5 for substrate-shape mismatches)."
+          }
+        }
+      }
+    }
+  },
+  "schema_version": "1.0.0"
+}

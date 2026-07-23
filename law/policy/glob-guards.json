@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "guards": [
+    {
+      "id": "INVARIANTS_DIR",
+      "pattern": "docs/framework/arch/invariants/*.json",
+      "min_matches": 23,
+      "description": "spec validate-invariants, spec validate-trace, and spec validate-action-coverage all silently report 0 file(s)/OK if this glob ever went to zero — exactly the class of bug D-124 exists to catch, applied to devai's own self-application surface.",
+      "source": "packages/core/src/spec/invariant-validator.ts"
+    },
+    {
+      "id": "SCHEMAS_DIR",
+      "pattern": "docs/framework/schemas/*.json",
+      "min_matches": 52,
+      "description": "packages/schemas/scripts/gen-types.mjs and copy-schemas.mjs both walk this directory; a silently-empty result would ship a package with no generated types and no bundled schemas.",
+      "source": "packages/schemas/scripts/gen-types.mjs"
+    },
+    {
+      "id": "CLI_REFERENCE_DOCS",
+      "pattern": "docs/reference/cli/*.md",
+      "min_matches": 16,
+      "description": "devai docs cli regenerates this directory from the action catalog; a collapse here would mean the domain-page generator stopped discovering registered commands. The floor must move with `devai docs cli --write` output: R16's reorg produced one page per domain (16 incl. README) where 0.4 produced 36+ noun pages, and this guard sat red at HEAD undetected until the R17 audit (D-131) because the value was stale and the check was not in CI.",
+      "source": "packages/cli/src/commands/docs/cli.ts"
+    }
+  ]
+}

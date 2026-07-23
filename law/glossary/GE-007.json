@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-007",
+  "term": "F2",
+  "definition": "Application-code substrate: source code under packages/ or the client repo source roots. Plant under control. Engineer-authored.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "aliases": [
+    "Substrate F2",
+    "Plant"
+  ],
+  "provenance": [
+    "ex-GE-007@devai-original"
+  ]
+}

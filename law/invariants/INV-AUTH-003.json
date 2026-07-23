@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-AUTH-003",
+  "domain": "AUTH",
+  "lifecycle": "supported",
+  "severity": "constitutional",
+  "type": "security",
+  "title": "Final mutation boundaries require authentic non-replayable decisions",
+  "statement": "Every governed filesystem, Git-ref, database, or remote side effect MUST be represented by an exact plan or exact independently authorized bounded batch and MUST be re-verified immediately before mutation by its final adapter using a single-use capability issued by the active process-local authority issuer; structural clones, correctly rehashed reconstructions, foreign-issuer values, expired values, changed targets, and replays MUST refuse without side effects.",
+  "rationale": "Public decision fields and hashes prove consistency, not origin. Final-boundary issuer membership is required to make the authority decision load-bearing against direct imports and replay.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "unit",
+      "int",
+      "sec",
+      "e2e"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-6-substrate-authority-by-path"
+      },
+      {
+        "doc": "docs/meta/adr/ADR-003-runtime-authority-enforcement.md",
+        "anchor": "10-evidence-contract-and-issuer-authenticity"
+      }
+    ],
+    "decisions": [
+      "D-135",
+      "ADR-003"
+    ]
+  },
+  "scope": {
+    "components": [
+      "authority-issuer",
+      "mutation-planner",
+      "mutation-boundaries"
+    ],
+    "code_areas": [
+      "packages/core/src/authority/**",
+      "packages/cli/src/**"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "trace_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "authority",
+    "issuer-authenticity",
+    "non-replay",
+    "final-boundary",
+    "exact-plan",
+    "security"
+  ],
+  "provenance": [
+    "ex-INV-AUTH-003@devai-original"
+  ]
+}

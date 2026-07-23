@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/agent-run.schema.json",
+  "title": "Agent Run Evidence",
+  "description": "Per-invocation evidence record for an automated agent action (skill run, sense run, etc.). Absorbs LAW-12.EVIDENCE.1 from the stech-law predecessor draft (D-38). Persisted under .devai/state/agent-runs/<run-id>.json; participates in the evidence hash chain via prev_hash + manifest_hash.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "run_id",
+    "started_at",
+    "ended_at",
+    "caller",
+    "files_read",
+    "files_written",
+    "commands_run",
+    "compliance",
+    "prev_hash",
+    "manifest_hash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^AR-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "AR- prefix + UUID v7. The v7 variant ensures lexicographic sort matches chronological order."
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ended_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "caller": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "name"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "skill",
+            "sense",
+            "loop",
+            "cli",
+            "subagent"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "files_read": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Repo-relative paths the agent read during the run."
+    },
+    "files_written": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "commands_run": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "argv",
+          "exit_code",
+          "duration_ms"
+        ],
+        "properties": {
+          "argv": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "exit_code": {
+            "type": "integer"
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "subagent_invocations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "agent_type",
+          "prompt_pc_id"
+        ],
+        "properties": {
+          "agent_type": {
+            "type": "string"
+          },
+          "prompt_pc_id": {
+            "type": "string",
+            "pattern": "^PC-"
+          },
+          "returned_summary": {
+            "type": "string"
+          },
+          "parent_verification": {
+            "enum": [
+              "pass",
+              "fail",
+              "skipped"
+            ]
+          }
+        }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "invariant_ids"
+      ],
+      "properties": {
+        "invariant_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^INV-"
+          }
+        },
+        "overrides_in_play": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^OVR-"
+          }
+        }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "review",
+            "skipped"
+          ]
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "prev_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^([a-f0-9]{64}|GENESIS)$"
+    },
+    "manifest_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "hash_algo_version": {
+      "enum": [
+        "1.0",
+        "2.0"
+      ],
+      "description": "Algorithm version under which `manifest_hash` was computed (Phase 16.G). '1.0' = shallow-sort (legacy, pre-Phase-16.G writes). '2.0' = deep-sort recursive canonicalisation (current default for new writes). Absent means '1.0' for backward-compatible read. Verifiers dispatch by this field per-record."
+    }
+  },
+  "schema_version": "1.0.0"
+}

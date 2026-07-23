@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-002",
+  "term": "Architect",
+  "definition": "The role with authority over engineering specifications: invariants, trace, ADRs, schemas, contracts, operations and security specs. The Architect distills Owner intent into machine-checkable invariants and owns the substrate that the framework enforces.",
+  "authority": "joint",
+  "category": "technical",
+  "status": "active",
+  "see_also": [
+    "GE-001",
+    "GE-019",
+    "GE-020",
+    "GE-022"
+  ],
+  "related_invariants": [
+    "INV-DEVAI-001"
+  ],
+  "provenance": [
+    "ex-GE-002@devai-original"
+  ]
+}

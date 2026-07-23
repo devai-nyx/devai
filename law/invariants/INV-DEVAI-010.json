@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-DEVAI-010",
+  "domain": "DEVAI",
+  "severity": "hard-fail",
+  "type": "audit",
+  "title": "Skills persist evidence on every non-skipped run",
+  "statement": "Every devai agent skill run X invocation whose result has status in {pass, fail, review} MUST persist an evidence record at .devai/state/skills/<X>/<ISO-timestamp>.json containing at minimum the skill_id, status, and the result.evidence payload. status=skipped runs are exempt. The persisted file MUST be what the CLI reports as evidence_path.",
+  "rationale": "Article 33 makes the auditor the state estimator of the loop, and Article 35 makes the backlog the only work queue: both depend on every skill outcome being a recoverable artifact. A skill that runs without leaving a trace is invisible to the auditor and to every downstream tool. The persistence is best-effort: persistence failure must surface in the result but never block emit; the skill's `evidence_path` field is the link the rest of the framework follows.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-33-auditor-as-state-estimator"
+      },
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-35-backlog-as-the-only-work-queue"
+      }
+    ]
+  },
+  "scope": {
+    "components": [
+      "core",
+      "cli"
+    ],
+    "code_areas": [
+      "packages/core/src/skills/**",
+      "packages/cli/src/commands/skill/**"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "phase-8",
+    "skills",
+    "evidence"
+  ],
+  "measurable_via": [
+    "agent skill list",
+    "agent skill run"
+  ],
+  "provenance": [
+    "ex-INV-DEVAI-010@devai-original"
+  ]
+}

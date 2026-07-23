@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.dev/schemas/trace-resolution.schema.json",
+  "title": "Trace Resolution",
+  "description": "Deterministic measurement of whether trace declarations actually resolve to real test files containing the correct invariant markers. Auditor-regenerated; lives in F4. Tri-state verdict per Constitution Article 18.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "generated_at",
+    "integration_head",
+    "verdict",
+    "checked",
+    "resolved",
+    "unresolved",
+    "missing_files",
+    "missing_invariant_markers"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "id": {
+      "type": "string",
+      "pattern": "^TRES-[a-f0-9]{16}$"
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "integration_head": {
+      "type": "string",
+      "description": "Git SHA of the integration HEAD this resolution was computed against."
+    },
+    "verdict": {
+      "enum": ["PASS", "REVIEW", "FAIL"]
+    },
+    "checked": { "type": "integer", "minimum": 0 },
+    "resolved": { "type": "integer", "minimum": 0 },
+    "unresolved": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "missing_files": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "missing_invariant_markers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "completeness_ratio": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "all_invariants": { "type": "number", "minimum": 0, "maximum": 1 },
+        "must_invariants": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["invariant_id", "reason"],
+      "properties": {
+        "invariant_id": { "type": "string", "pattern": "^INV-" },
+        "suite": { "type": "string" },
+        "path": { "type": "string" },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

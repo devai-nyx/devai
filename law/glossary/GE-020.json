@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-020",
+  "term": "Trace",
+  "definition": "The mapping from invariants to docs, tests, and code areas. Lives at docs/arch/trace.json. Architect authority only; Inspector consumes but cannot edit (D-8).",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "see_also": [
+    "GE-019"
+  ],
+  "provenance": [
+    "ex-GE-020@devai-original",
+    "REV-0006 signal: adopter-side path unmarked"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-BLUEPRINT-001",
+  "domain": "BLUEPRINT",
+  "severity": "gate",
+  "type": "data_contract",
+  "title": "Every module blueprint declares at least one primary entity with PK",
+  "statement": "For any module-blueprint.schema.json instance under docs/product/blueprints/ (or under an adopter's equivalent path), the blueprint MUST declare database.entities[] with length >= 1 AND every entity in that array MUST declare primaryKey with length >= 1. A blueprint without a primary entity cannot drive scaffolding: there is nothing for SKILL-scaffold-db / SKILL-scaffold-api / SKILL-scaffold-ui to anchor against.",
+  "rationale": "Per D-59. The Phase-18 scaffolder family requires a primary entity (with explicit PK fields) to anchor every output: the generated DB schema's PRIMARY KEY clause, the API resource's path + RESTful operation set, the UI list/detail pages' default key column, and the audit fields' row-identity anchor. A blueprint that omits this is a spec defect \u2014 devai spec blueprint validate surfaces it before any scaffolder runs. Severity gate (Phase 10.A): blocks the scaffold step, but doesn't fail brownfield evaluation if no blueprint is present.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "DESIGN-DECISIONS.md",
+        "anchor": "d-59-codex-is-a-convergent-peer-that-devai-absorbs-as-the-forward-generation-substrate-buckets-abcd-land-bucket-e-porm-only-drops-on-deletion-locked"
+      }
+    ]
+  },
+  "scope": {
+    "components": [
+      "core",
+      "cli"
+    ],
+    "code_areas": [
+      "packages/core/src/blueprint/index.ts",
+      "packages/cli/src/commands/blueprint/validate.ts"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "test_update"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": false
+  },
+  "tags": [
+    "phase-18",
+    "phase-18-D",
+    "blueprint",
+    "greenfield"
+  ],
+  "measurable_via": [
+    "spec blueprint validate",
+    "spec blueprint plan"
+  ],
+  "provenance": [
+    "ex-INV-BLUEPRINT-001@devai-original"
+  ]
+}

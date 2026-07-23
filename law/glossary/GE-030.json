@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-030",
+  "term": "Adherence-reverse",
+  "definition": "The reverse-direction adherence audit. For each plant surface (route/module/component) discovered by the inventory, check whether any invariant in trace.json claims it via code_areas. Orphans are triage candidates. devai inventory adherence. Phase 11.F.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "aliases": [
+    "Reverse adherence"
+  ],
+  "see_also": [
+    "GE-020"
+  ],
+  "provenance": [
+    "ex-GE-030@devai-original"
+  ]
+}

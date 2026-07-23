@@ -1,0 +1,351 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/local-evidence-manifest.schema.json",
+  "title": "DEVAI CI Evidence Manifest",
+  "description": "Manifest claiming that the heavy CI tiers ran against an exact committed value. Absent origin or origin=local preserves the D-117 local-evidence contract; origin=actions-run carries provisional GitHub Actions evidence under D-146 and ADR-005. Local evidence is consumed by `devai evidence local verify`; Actions evidence is consumed by `devai evidence actions verify`. Verification binds both variants through sourceHash and the declared policy/jobs. A claimed-but-invalid manifest hard-fails the gate (never-silently-open).",
+  "type": "object",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "origin"
+        ],
+        "properties": {
+          "origin": {
+            "const": "actions-run"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "actionsRun"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "actionsRun"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "sourceHash",
+    "policy",
+    "tools",
+    "platforms",
+    "jobs"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "origin": {
+      "enum": [
+        "local",
+        "actions-run"
+      ],
+      "description": "Evidence producer. Omission is the backward-compatible local form."
+    },
+    "actionsRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "workflowRef",
+        "eventName",
+        "runId",
+        "runAttempt",
+        "actor",
+        "headSha",
+        "baseSha",
+        "mergeBaseSha",
+        "testedCommitSha",
+        "testedTree",
+        "digests"
+      ],
+      "description": "Identity and invalidation contract for provisional GitHub Actions evidence. Every caller-provided member is data to verify, never an authority selector.",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "workflowRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eventName": {
+          "enum": [
+            "pull_request",
+            "merge_group"
+          ]
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "runAttempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "actor": {
+          "type": "string",
+          "minLength": 1
+        },
+        "headSha": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "baseSha": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "mergeBaseSha": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "testedCommitSha": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "testedTree": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "algorithm",
+                "value"
+              ],
+              "properties": {
+                "algorithm": {
+                  "const": "sha1"
+                },
+                "value": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{40}$"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "algorithm",
+                "value"
+              ],
+              "properties": {
+                "algorithm": {
+                  "const": "sha256"
+                },
+                "value": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            }
+          ]
+        },
+        "digests": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "workflowPolicySha256",
+            "lockfileSha256",
+            "toolchainContractSha256",
+            "testContractSha256",
+            "serviceContractSha256"
+          ],
+          "properties": {
+            "workflowPolicySha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "lockfileSha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "toolchainContractSha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "testContractSha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "serviceContractSha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        }
+      }
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the manifest was collected. Verification rejects manifests older than policy.maxAgeHours or timestamped in the future (beyond a 5-minute clock-skew allowance)."
+    },
+    "sourceHash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "value",
+        "fileCount"
+      ],
+      "description": "Deterministic digest over every git-tracked file (path, byte length, per-file sha256), excluding the manifest's own directory. Binds the evidence claim to the exact tree it was produced from.",
+      "properties": {
+        "algorithm": {
+          "const": "sha256"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "fileCount": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxAgeHours",
+        "requiredJobs",
+        "allowedPlatforms"
+      ],
+      "description": "The policy the manifest claims to satisfy. Verification cross-checks these values against the adopter's declared `ci_economy.local_evidence` config (project-config.schema.json); a manifest carrying a laxer policy than the repo declares is rejected.",
+      "properties": {
+        "maxAgeHours": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 168
+        },
+        "requiredJobs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "allowedPlatforms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(linux|darwin)/(amd64|arm64)$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "tools": {
+      "type": "object",
+      "description": "Observed toolchain versions per tool (node, the declared package manager, docker, ...). Verification checks `node` against engines.node's major and the package manager against the packageManager field when declared.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "observed"
+        ],
+        "properties": {
+          "expected": {
+            "type": "string"
+          },
+          "observed": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "platforms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Distinct platforms observed across the collected jobs."
+    },
+    "jobs": {
+      "type": "object",
+      "minProperties": 1,
+      "description": "One entry per collected local job, keyed by job name. Every policy.requiredJobs entry must be present with result=success.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "result",
+          "metadata",
+          "artifactChecksum"
+        ],
+        "properties": {
+          "result": {
+            "enum": [
+              "success"
+            ]
+          },
+          "artifactDir": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "required": [
+              "job",
+              "platform"
+            ],
+            "properties": {
+              "job": {
+                "type": "string",
+                "minLength": 1
+              },
+              "platform": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "artifactChecksum": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "algorithm",
+              "value",
+              "fileCount"
+            ],
+            "properties": {
+              "algorithm": {
+                "const": "sha256"
+              },
+              "value": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "fileCount": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "schema_version": "1.0.0"
+}

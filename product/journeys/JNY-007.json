@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "JNY-007",
+  "title": "DEVAI ratchets a new BUILD-PLAN phase",
+  "summary": "The Architect drafts a new phase, the Engineer/Inspector execute it batch-by-batch with per-commit gates, the closeout sweep ratifies the phase in BUILD-PLAN.md. The meta-application of the framework to its own development (Article 36).",
+  "persona": {
+    "role": "Architect (then Engineer, then Inspector)",
+    "permissions_required": [
+      "docs.architecture.write",
+      "packages.write",
+      "test.write"
+    ]
+  },
+  "preconditions": [
+    "Previous phase is in its closeout state (BUILD-PLAN Status reflects last Phase shipped)",
+    "All gates currently green: lint, typecheck, unit tests, integration tests, spec validate-all",
+    "No leaked task records or open RGRs"
+  ],
+  "steps": [
+    {
+      "seq": 1,
+      "actor": "Architect",
+      "action": "Draft a new Phase entry in BUILD-PLAN.md with a per-batch table (typically A through Z); cite a triggering D-N decision or audit",
+      "expected_outcome": "BUILD-PLAN Status updated with `Current phase: Phase N in progress`; per-batch slots seeded"
+    },
+    {
+      "seq": 2,
+      "actor": "Engineer",
+      "action": "Execute Batch N.A: write the smallest cohesive unit (typically one schema OR one CLI verb OR one set of docs); commit at the end of the batch",
+      "expected_outcome": "Single commit titled `Batch N.A: <headline>` with a body explaining schema/code/test changes and gate results"
+    },
+    {
+      "seq": 3,
+      "actor": "Inspector",
+      "action": "Inside each batch, add/update tests (unit + integration) for the new surface; ensure existing tests still pass",
+      "expected_outcome": "pnpm test + pnpm test:integration both green; test count grows commensurately"
+    },
+    {
+      "seq": 4,
+      "actor": "Engineer",
+      "action": "Run per-commit gates: `pnpm run lint`, `pnpm run typecheck`, both test suites, `devai spec validate all`, `devai docs links` if docs changed",
+      "expected_outcome": "All gates exit 0; commit allowed"
+    },
+    {
+      "seq": 5,
+      "actor": "Architect",
+      "action": "Iterate batches A \u2192 B \u2192 C \u2192 \u2026 as defined in the BUILD-PLAN phase entry; reorder batches if dependency analysis surfaces a better path",
+      "expected_outcome": "Each batch lands independently; commits read as a coherent story; per-batch revert possible without poisoning downstream batches"
+    },
+    {
+      "seq": 6,
+      "actor": "Architect",
+      "action": "Execute Batch N.Z (closeout): run the full sweep (`pnpm test`, `pnpm test:integration`, `pnpm test:regression`, `devai spec validate all`, `devai docs cli --check`, `devai docs links`), update BUILD-PLAN Status to `Phase N shipped`, write phase-summary CHANGELOG entry",
+      "expected_outcome": "All sweep checks pass; BUILD-PLAN Status reflects `Phases 0\u2013N complete`; next phase ready to open",
+      "alternative_paths": [
+        "If sweep finds a regression, fix in a Batch N.Z' before declaring Phase N shipped",
+        "If a parallel session was running, reconcile conflicts; the per-batch commit discipline minimizes blast radius"
+      ]
+    }
+  ],
+  "postconditions": [
+    "BUILD-PLAN.md Status section lists Phase N in the shipped table with a `(this)` commit reference",
+    "CHANGELOG.md has a new entry under `## Phase N \u2014 <title> (YYYY-MM)`",
+    "All gates green at HEAD; next Architect-driven phase can open cleanly"
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "statement": "DEVAI applies its own discipline to itself across the phase: per-batch commits, per-batch gates, BUILD-PLAN ratification at closeout (Article 36).",
+      "measurable_via": [
+        "INV-DEVAI-001"
+      ]
+    },
+    {
+      "id": "AC-002",
+      "statement": "Every sense* command emitted during the phase produces a SensorReading conformant to the schema (the substrate-level discipline holds throughout phase execution).",
+      "measurable_via": [
+        "INV-DEVAI-002"
+      ]
+    }
+  ],
+  "related_invariants": [
+    "INV-DEVAI-001",
+    "INV-DEVAI-002"
+  ],
+  "compliance_refs": [
+    "Article 36 (DEVAI applies to itself)"
+  ],
+  "status": "active",
+  "tags": [
+    "self-application",
+    "phase-discipline",
+    "meta"
+  ],
+  "provenance": [
+    "ex-JNY-007@devai-original"
+  ]
+}

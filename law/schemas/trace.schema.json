@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/trace.schema.json",
+  "title": "Trace",
+  "description": "Architect-authored mapping from invariants to documents, tests, and code areas. Declares intent: which tests are supposed to probe which invariants. Per Constitution Article 13. The corresponding measurement output is trace-resolution.schema.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "version",
+    "invariants",
+    "test_corpus"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "version": {
+      "type": "string",
+      "description": "Trace artifact's own semver; bumped on Architect commits to this file."
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "last_updated": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completeness": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "min_invariants_with_tests_ratio": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "min_must_invariants_with_tests_ratio": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "require_doc_links": {
+              "type": "boolean"
+            },
+            "require_test_links": {
+              "type": "boolean"
+            }
+          }
+        },
+        "provenance": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Absorption/regeneration provenance per the record meta-structure (\u00a75.1)."
+        }
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "tests"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "common-defs.schema.json#/$defs/id_invariant"
+          },
+          "docs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "doc",
+                "anchor"
+              ],
+              "properties": {
+                "doc": {
+                  "type": "string"
+                },
+                "anchor": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "tests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "suite",
+                "path"
+              ],
+              "properties": {
+                "suite": {
+                  "enum": [
+                    "unit",
+                    "api",
+                    "int",
+                    "e2e",
+                    "sec",
+                    "perf",
+                    "journey",
+                    "db"
+                  ]
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "target_type": {
+                  "enum": [
+                    "test",
+                    "config-attestation",
+                    "script"
+                  ],
+                  "default": "test",
+                  "description": "D-123 (item 10): what kind of evidence `path` actually is. 'test' (default, back-compat: absent means test) \u2014 an executable test the named `suite`'s runner discovers and asserts against; the strongest evidence class. 'config-attestation' \u2014 a config file whose presence/content stands in for active verification (e.g. a policy file consumed at runtime, not exercised by a test), weaker evidence than an executing assertion. 'script' \u2014 an executable script that is not part of a test suite's discovery (a standalone verifier). `trace-resolve` tracks attestation-only invariants separately so trace completeness doesn't overstate how many invariants are actively test-verified."
+                },
+                "names": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Test name patterns (typically referencing the invariant ID via marker convention)."
+                },
+                "assertions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Human-readable list of what the test should assert."
+                },
+                "mode": {
+                  "enum": [
+                    "black_box",
+                    "gray_box",
+                    "white_box"
+                  ],
+                  "description": "Information regime for runtime/integration tests."
+                },
+                "reliability": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "flaky": {
+                      "type": "boolean"
+                    },
+                    "quarantine": {
+                      "type": "boolean"
+                    },
+                    "quarantine_ticket": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "runtime": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "typical_ms": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "timeout_ms": {
+                      "type": "number",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "code_areas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "test_corpus": {
+      "type": "array",
+      "description": "Complete canonical mapping for every discovered test file. Detailed invariant entries may retain richer representative assertions.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "suite",
+          "invariant_ids",
+          "lifecycle"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "suite": {
+            "enum": [
+              "unit",
+              "int",
+              "e2e",
+              "sec",
+              "smoke",
+              "contract",
+              "regression"
+            ]
+          },
+          "invariant_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^INV-"
+            }
+          },
+          "lifecycle": {
+            "enum": [
+              "supported",
+              "experimental"
+            ]
+          }
+        }
+      }
+    },
+    "suites": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-z][a-z0-9_]*$": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "command": {
+              "type": "string"
+            },
+            "max_minutes": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    }
+  },
+  "schema_version": "1.0.0",
+  "$comment": "Entry ids ref common-defs id_invariant (was loose '^INV-'). Trace is a single Architect-owned F1 artifact (Article 13); Inspector/Engineer consume, never edit. W02 continues rewiring test_corpus/suites shapes as common defs grow."
+}

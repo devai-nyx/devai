@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-005",
+  "term": "Auditor",
+  "definition": "The read-only role. Produces scorecards, backlogs, assessments, post-hoc reports. The Auditor sits outside the loop (no actuation), which makes its observation structurally trustworthy.",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "see_also": [
+    "GE-014",
+    "GE-015",
+    "GE-016"
+  ],
+  "provenance": [
+    "ex-GE-005@devai-original"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sort -t- -k2 -n)",
+      "Bash(python3)",
+      "Bash(pnpm typecheck *)",
+      "Bash(pnpm test *)",
+      "Bash(pnpm --filter @devai/cli build)",
+      "Bash(node packages/cli/dist/index.js docs links --repo-root .)",
+      "Bash(python3 -c \"import sys, json; d=json.loads\\(sys.stdin.read\\(\\)\\); print\\('broken_count:', d.get\\('broken_count'\\)\\); [print\\(b\\) for b in d.get\\('broken', []\\)[:30]]\")",
+      "Bash(git push origin main:*)"
+    ]
+  }
+}

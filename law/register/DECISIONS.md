@@ -1,0 +1,589 @@
+---
+id: DECISIONS
+title: DEVAI-II decision register
+type: register
+status: draft
+date: 2026-07-23
+authority: Architect (DII numbering binds at BR-1/W03; ratification at W01/W03)
+supersedes: null
+superseded_by: null
+provenance: regenerated from REV-0002; record-meta fields applied per entry 2026-07-23 (provisional DII ids, W03 ratifies)
+---
+
+# DEVAI-II decision register
+
+**WIREFRAME DRAFT — regenerated from the pre-W01 review draft (REV-0002). Nothing here
+carries authority until ratified under a declared Architect session in the real BR-1.
+Entries are unnumbered; `[ex-D-nn]` suffixes are provenance shorthand pending DII ids (W03).
+Evidence values are cited to the frozen predecessor, never restated.**
+
+### DII-1. DEVAI-II is founded by absorption from devai-original under the terminal decision (locked; founding record)
+
+**Decision.** DEVAI-II exists as the successor authorized by devai-original's terminal
+decision, provisionally drafted as D-196 pending the human-run R-Ω close. Its law derives
+exclusively from the absorption manifest bound there; its evidence standing starts at zero
+except as enumerated in `genesis-attestation.json`, which is the single authoritative
+crossing point between the two repositories. The attestation currently binds the
+predecessor's pre-freeze HEAD and is explicitly provisional; it must be re-bound to the
+frozen values after R-Ω. It is immutable once ratified: correcting it means a new numbered
+decision, never an edit. Constitution 1.0.0, the seed register, and ADR-001..N are authored
+against it. Nothing in this record or the attestation establishes readiness, autonomy, or
+completion of anything.
+
+Owner authorization (verbatim):
+
+> As Owner, I authorize the succession of DEVAI into the successor repository under the
+> terminal decision: the successor is bootstrapped by absorption per the dossier's
+> manifest and instruments; evidence standing does not transfer; the predecessor closes,
+> freezes, and is archived whole as the evidence archive. I confirm item 9: the pending
+> in-place v1.0 ceremony is supplanted — the succession is the v1.0 ceremony, and the
+> successor's founding release is DEVAI 1.0.0.
+>
+> — aarusso, Owner. Approved verbatim in session chat, 2026-07-23.
+
+## 0. Register meta-rules
+
+### DII-002 — Revisions are append-only
+`type: meta-rule · status: draft · authority: Architect · provenance: ex-Reconciliations; ex-D-131 numbering note`
+
+Revisions are append-only: a decision changes only by a new numbered entry superseding it, never by edit. Entry numbers are identity, not position.
+
+### DII-003 — Retired identifiers are never re-minted (tombstone rule)
+`type: meta-rule · status: draft · authority: Architect · provenance: ex-D-38`
+
+Retired identifiers are never re-minted (tombstone rule): D-1..D-189, PC-0001.., REJ-1.., predecessor INV ids where retired.
+
+### DII-004 — Canonical decisions live in this register
+`type: meta-rule · status: draft · authority: Architect · provenance: ex-D-47`
+
+Canonical decisions live in this register; ADRs are the client-facing architectural capability. Migrating content between them is an explicit decision.
+
+### DII-005 — Operational reference docs are canonical for their subject
+`type: meta-rule · status: draft · authority: Architect · provenance: ex-D-76`
+
+Operational reference docs are canonical for their subject; changing behavior requires updating the doc AND a superseding register entry.
+
+### DII-006 — Counts (schemas, CLI actions, tests) never live in register prose — only mechanical gua...
+`type: meta-rule · status: draft · authority: Architect · provenance: closes the ex-D-31/D-36 drift class`
+
+Counts (schemas, CLI actions, tests) never live in register prose — only mechanical guards carry counts.
+
+### DII-007 — Every append-able artifact family adopts the ADR meta-structure
+`type: meta-rule · status: draft · authority: Architect · provenance: generalizes ex-adr.schema.json discipline; dossier Part IX §5.1`
+
+Every append-able artifact family adopts the ADR meta-structure: schema-fronted front-matter (id, status, authority, supersedes/superseded_by, provenance), mandatory skeleton, status lifecycle, gapless ids — validated by a generic `check records` over the population registry. Register entries themselves carry it once DII numbering binds (W03).
+
+### DII-008 — The product/ family (journeys, use-cases, stories, rules, mandates) is explicitly included
+`type: meta-rule · status: draft · authority: Architect · provenance: dossier Part IX §5.1; ex-D-57 ergonomics lesson; Article 12 seam`
+
+The product/ family (journeys, use-cases, stories, rules, mandates) is explicitly included: JSON artifacts carry the fragment as schema fields, markdown as front-matter; the meta-structure is scaffolded by authoring skills, never hand-typed by the Owner. Cross-tier guard: no active invariant may anchor solely on a superseded/tombstoned product artifact.
+
+
+## 0.1 Record shape
+
+Entries below carry the §5.1 fragment inline: a heading `### <id> — <title>` followed by a
+meta line (`type · status · authority · provenance`). File-level front-matter carries `date`;
+`supersedes`/`superseded_by` are null until successor-internal supersession begins (predecessor
+supersession lives in provenance). **Ids are provisional wireframe assignments — W03 ratifies or
+renumbers under declared authority.** A `check records` prototype validates every entry against
+`record-meta.schema.json` (see packages/schemas tests).
+## 1. Frame and stack
+
+### DII-009 — DEVAI-II is a grounded framework, not a product
+`type: decision · status: draft · authority: Architect · provenance: ex-D-51, ex-D-57`
+
+DEVAI-II is a grounded framework, not a product: no hosted offering, no SaaS surface, no end-user product UI. Scope includes the brownfield reverse-documentation substrate.
+
+### DII-010 — One declared stack per adopter repository, exploited deeply
+`type: decision · status: draft · authority: Architect · provenance: ex-D-5; Constitution Art 1`
+
+One declared stack per adopter repository, exploited deeply; primary NestJS/Angular/Postgres, others via stack-adapter packs.
+
+### DII-011 — Runtime stack
+`type: decision · status: draft · authority: Architect · provenance: ex-D-29, ex-D-16`
+
+Runtime stack: TypeScript strict ESM, pnpm workspaces, Vitest, cac, ajv(+formats), json-schema-to-typescript; Postgres 15+, raw SQL migrations, no ORM.
+
+### DII-012 — Hybrid invariant domain taxonomy (soft, revisitable)
+`type: decision · status: draft · authority: Architect · provenance: ex-D-9`
+
+Hybrid invariant domain taxonomy (soft, revisitable).
+
+### DII-013 — Hybrid ID scheme
+`type: decision · status: draft · authority: Architect · provenance: ex-D-32`
+
+Hybrid ID scheme: sequential for human-authored, date-stamped for rounds, content-hash for machine records.
+
+### DII-014 — The examples tree is integral to the framework and is never split out
+`type: decision · status: draft · authority: Architect · provenance: ex-D-53`
+
+The examples tree is integral to the framework and is never split out.
+
+### DII-015 — The theory corpus is one maintained document with SVG-canonical figures and a provenanc...
+`type: decision · status: draft · authority: Architect · provenance: ex-D-166, supersedes ex-D-75`
+
+The theory corpus is one maintained document with SVG-canonical figures and a provenance appendix; snapshot papers are retired.
+
+
+## 2. Specification and reference signal
+
+### DII-016 — Schema canon
+`type: decision · status: draft · authority: Architect · provenance: ex-D-31 extract`
+
+Schema canon: JSON Schema 2020-12, `additionalProperties: false`, tri-state verdict enums, one file per contract.
+
+### DII-017 — trace.json is Architect-only
+`type: decision · status: draft · authority: Architect · provenance: ex-D-8`
+
+trace.json is Architect-only; Inspector and Engineer consume, never edit.
+
+### DII-018 — Prompts version with the skills that use them — same commit, same release
+`type: decision · status: draft · authority: Architect · provenance: ex-D-35`
+
+Prompts version with the skills that use them — same commit, same release.
+
+### DII-019 — The rtd-manifest + `devai rtd bundle` aggregate signed view stands
+`type: decision · status: draft · authority: Architect · provenance: ex-D-41`
+
+The rtd-manifest + `devai rtd bundle` aggregate signed view stands.
+
+### DII-020 — `check prompt-overlays` is a discrete validator
+`type: decision · status: draft · authority: Architect · provenance: ex-D-42`
+
+`check prompt-overlays` is a discrete validator; the firewall verdict stays unified.
+
+### DII-021 — There is no policy-pack schema
+`type: decision · status: draft · authority: Architect · provenance: ex-D-45`
+
+There is no policy-pack schema; law-pack + inv-override + config cover the surface (standing rejection, soft).
+
+### DII-022 — Exactly one constitution exists in the substrate
+`type: decision · status: draft · authority: Architect · provenance: ex-D-38 extract`
+
+Exactly one constitution exists in the substrate; no npm dependency on any predecessor law repo.
+
+### DII-023 — Provenance tags on absorbed artifacts (REDOX-*, CODEX-*, and successor equivalents) are...
+`type: decision · status: draft · authority: Architect · provenance: ex-D-57 extract`
+
+Provenance tags on absorbed artifacts (REDOX-*, CODEX-*, and successor equivalents) are preserved.
+
+
+## 3. Concurrency and loop
+
+### DII-024 — Worktree cap
+`type: decision · status: draft · authority: Architect · provenance: ex-D-52, supersedes ex-D-11`
+
+Worktree cap: 3.
+
+### DII-025 — Checkpoint-based downstream rebase within coupled triplets
+`type: decision · status: draft · authority: Architect · provenance: ex-D-13`
+
+Checkpoint-based downstream rebase within coupled triplets.
+
+### DII-026 — Single integration branch
+`type: decision · status: draft · authority: Architect · provenance: ex-D-14`
+
+Single integration branch; direct task-branch merges.
+
+### DII-027 — Database-per-task via TEMPLATE clone is the default isolation
+`type: decision · status: draft · authority: Architect · provenance: ex-D-15`
+
+Database-per-task via TEMPLATE clone is the default isolation.
+
+### DII-028 — Triage (four classes) is the mandatory loop entry before any remediation dispatch
+`type: decision · status: draft · authority: Architect · provenance: ex-D-17`
+
+Triage (four classes) is the mandatory loop entry before any remediation dispatch.
+
+### DII-029 — Cycles A/B/C with a 3-iteration cap on B
+`type: decision · status: draft · authority: Architect · provenance: ex-D-18`
+
+Cycles A/B/C with a 3-iteration cap on B.
+
+### DII-030 — Escalation
+`type: decision · status: draft · authority: Architect · provenance: ex-D-19`
+
+Escalation: bump model tier once, then human; never automatic revert.
+
+### DII-031 — Tri-state verdicts (PASS/REVIEW/FAIL) everywhere
+`type: decision · status: draft · authority: Architect · provenance: ex-D-20`
+
+Tri-state verdicts (PASS/REVIEW/FAIL) everywhere; no boolean gates.
+
+### DII-032 — Flaky tests are quarantined with standing Auditor pressure, never silently retried into...
+`type: decision · status: draft · authority: Architect · provenance: ex-D-22`
+
+Flaky tests are quarantined with standing Auditor pressure, never silently retried into green.
+
+### DII-033 — The soft-gate evaluator is a different model/instance from the working agent
+`type: decision · status: draft · authority: Architect · provenance: ex-D-25`
+
+The soft-gate evaluator is a different model/instance from the working agent.
+
+### DII-034 — No task replay
+`type: decision · status: draft · authority: Architect · provenance: ex-D-49, supersedes ex-D-43`
+
+No task replay; no construction-session bundling. Reopening requires a new evidence-driven entry.
+
+### DII-035 — Cross-repo edits in one session are a category mistake
+`type: decision · status: draft · authority: Architect · provenance: ex-D-63..74 ritual rule`
+
+Cross-repo edits in one session are a category mistake.
+
+
+## 4. Sensors and observation
+
+### DII-036 — Every sensor emits the uniform SensorReading contract
+`type: decision · status: draft · authority: Architect · provenance: ex-D-23`
+
+Every sensor emits the uniform SensorReading contract.
+
+### DII-037 — Sensor tiers (L0/L1/L2/semantic) + cycle (A/B/C) fields are substrate
+`type: decision · status: draft · authority: Architect · provenance: ex-D-50`
+
+Sensor tiers (L0/L1/L2/semantic) + cycle (A/B/C) fields are substrate; `--cycle` filtering binds.
+
+### DII-038 — Every new sensor kind ships with a design note under the architecture tree
+`type: decision · status: draft · authority: Architect · provenance: ex-D-79 extract`
+
+Every new sensor kind ships with a design note under the architecture tree.
+
+### DII-039 — Locked framework threshold defaults
+`type: decision · status: draft · authority: Architect · provenance: ex-D-77 extract`
+
+Locked framework threshold defaults: spec_freshness_days=90; test_coverage_thresholds {pass:80, review:50}; inventory_adherence.max_orphans=50; harness_green_main.threshold_pct {pass:95, review:80} over last 50 runs. Adopters override via pack config.
+
+### DII-040 — `harness_green_main.since` is adopter-specific and never declared in pack defaults
+`type: decision · status: draft · authority: Architect · provenance: ex-D-88 extract`
+
+`harness_green_main.since` is adopter-specific and never declared in pack defaults.
+
+### DII-041 — Anti-gaming
+`type: decision · status: draft · authority: Architect · provenance: ex-D-96/97/98 extracts`
+
+Anti-gaming: never retro-tune `harness_green_main.since` for optics; never lower `test_coverage_depth.thresholds` to flip a cell; no retroactive outcome reclassification against an unchanged methodology.
+
+### DII-042 — Scorecard N/A: never derived from a reading
+`type: decision · status: draft · authority: Architect · provenance: ex-D-120, ex-D-91 extract`
+
+Scorecard N/A: never derived from a reading; anti-relabel check binds; per-repo overrides apply as an overlay AFTER global degenerate cells and BEFORE readings; schema-invalid override files hard-fail, absent files are no-ops.
+
+### DII-043 — The framework's own F4×T1/F4×T2 carve-outs never enter the global DEGENERATE_CELLS set
+`type: decision · status: draft · authority: Architect · provenance: ex-D-92 extract`
+
+The framework's own F4×T1/F4×T2 carve-outs never enter the global DEGENERATE_CELLS set.
+
+### DII-044 — Diagnostics are non-recording observations
+`type: decision · status: draft · authority: Architect · provenance: ex-D-139 extract, narrowing ex-D-120`
+
+Diagnostics are non-recording observations; canonical SensorReading persistence is a registered, role-declared, write-consented mutation. Root gates exclude discovered nested worktrees.
+
+### DII-045 — The two scorecard skills remain separate
+`type: decision · status: draft · authority: Architect · provenance: ex-D-73 extract`
+
+The two scorecard skills remain separate; unification is a future decision on its own evidence.
+
+### DII-046 — The docs-links sensor stays narrow (no cross-repo exclusion config)
+`type: decision · status: draft · authority: Architect · provenance: ex-D-100 extract`
+
+The docs-links sensor stays narrow (no cross-repo exclusion config); `--latest-per-kind` stays opt-in; the per-batch verification checklist may extend, never weaken.
+
+
+## 5. Testing and verification
+
+### DII-047 — Test-weakening thresholds
+`type: decision · status: draft · authority: Architect · provenance: ex-D-56 + ex-D-21`
+
+Test-weakening thresholds: per-project config; framework defaults apply on absence; values clamp on load.
+
+### DII-048 — DB-gated integration tests are opt-in via env flag
+`type: decision · status: draft · authority: Architect · provenance: ex-D-54`
+
+DB-gated integration tests are opt-in via env flag; a gate set without DB errors by intent.
+
+### DII-049 — CI runs the mock LLM provider
+`type: decision · status: draft · authority: Architect · provenance: ex-D-55`
+
+CI runs the mock LLM provider; real providers are opt-in with budget cap.
+
+### DII-050 — Full-production release evidence is real-by-default
+`type: decision · status: draft · authority: Architect · provenance: ex-D-105, supersedes ex-D-54/55 for release lane`
+
+Full-production release evidence is real-by-default: natural DB + LLM credentials; mock/DB-less runs cannot support a full-production claim.
+
+### DII-051 — CI verifies, Inspector measures
+`type: decision · status: draft · authority: Architect · provenance: ex-D-101`
+
+CI verifies, Inspector measures: coverage is local-Inspector evidence, not a CI gate; the Inspector-produced scorecard is canonical.
+
+### DII-052 — CI is a freshness check, not a value producer — the canonical CI-scope discipline
+`type: decision · status: draft · authority: Architect · provenance: ex-D-103 + ex-D-104 extract`
+
+CI is a freshness check, not a value producer — the canonical CI-scope discipline. Reintroducing CI-side comprehensive sensor/scorecard work requires explicit supersession of this entry and rebuttal of REJ-3/REJ-4; the discipline may extend but never weaken.
+
+### DII-053 — Integration-gate reliability contract
+`type: decision · status: draft · authority: Architect · provenance: ex-D-144 extract`
+
+Integration-gate reliability contract: bounded worker oversubscription (maxWorkers 50%) + resilient schema re-read; reverting re-opens the flake.
+
+### DII-054 — Scaffolders are deterministic (template + token substitution)
+`type: decision · status: draft · authority: Architect · provenance: ex-D-59 extract`
+
+Scaffolders are deterministic (template + token substitution); generators run from data, not prose. The only LLM-backed planning skill is review-class, output-only.
+
+
+## 6. Evidence, CI economy, and promotion
+
+### DII-055 — Hash-chained evidence with exact identity
+`type: decision · status: draft · authority: Architect · provenance: Constitution Arts 32–33; ex-D-24`
+
+Hash-chained evidence with exact identity; the Article-32 chain is the sole durable authority.
+
+### DII-056 — ADR-CI-ECONOMY law
+`type: decision · status: draft · authority: Architect · provenance: ex-D-115`
+
+ADR-CI-ECONOMY law: hard/advisory rule split; the reusable evidence gate never silently opens on failure.
+
+### DII-057 — `ci_economy.profile
+`type: decision · status: draft · authority: Architect · provenance: ex-D-116`
+
+`ci_economy.profile: gate-staged` downgrades only rule 4 to advisory; absence = full strictness.
+
+### DII-058 — Local CI evidence
+`type: decision · status: draft · authority: Architect · provenance: ex-D-117`
+
+Local CI evidence: manifest schema + collect-local/verify-local verbs; the forbidden-paths floor never shrinks; PR events are never evidence_mode.
+
+### DII-059 — Root build materializes its own publish artifacts
+`type: decision · status: draft · authority: Architect · provenance: ex-D-121`
+
+Root build materializes its own publish artifacts; the reusable gate defaults to sibling-checkout build (zero-new-secrets); collect/verify source-hash exclusion is symmetric.
+
+### DII-060 — Actions-evidence promotion contract (the twelve boundaries, register-carried until the ...
+`type: decision · status: draft · authority: Architect · provenance: ex-D-164/165/167 extracts; ex-D-146/ADR-005`
+
+Actions-evidence promotion contract (the twelve boundaries, register-carried until the ADR successor absorbs them — see adrs.md): one authority; exact two-parent merge identity; reuse boundary with "source PRs always run full"; fail-closed dispositions (required-check aggregation may never translate an unjustified skip into green); first-parent authorization resolved only via `git show <base-sha>:` of the authorization record — a head-only record cannot authorize its own merge; revocation set including malformed authorization and explicit revocation, restoring full execution until a new complete green streak; weekly audit runs with promotion ignored; no manufactured pushes/dispatches to advance a soak or graduation window; promoted post-gate runs never count as qualifying evidence runs. **Standing in DEVAI-II: void pending re-earning (genesis must-re-earn).**
+
+### DII-061 — Effect gate
+`type: decision · status: draft · authority: Architect · provenance: ex-D-158 extract, ex-D-157`
+
+Effect gate: fail-closed after build/contracts, before merged coverage; under-declaration, unregistered subprocesses, and undispositioned edges exit fail; conservative over-declaration is advisory. Path-domain assertions bind the final adapter's canonical target, never a caller-selected module.
+
+### DII-062 — Capability doctrine
+`type: decision · status: draft · authority: Architect · provenance: ex-D-156; Constitution Art 11/INV-020 lineage`
+
+Capability doctrine: declared ⊇ inferred fails closed; capability is necessary, never sufficient — it grants no authority; the consent scalar is never an internal authorization model.
+
+### DII-063 — fs:worktree-admin derives harness-write consent
+`type: decision · status: draft · authority: Architect · provenance: ex-D-151`
+
+fs:worktree-admin derives harness-write consent; changing user-facing consent semantics requires an explicit Owner decision.
+
+### DII-064 — The effects-check package ships in the fixed publish group, experimental, loaded only v...
+`type: decision · status: draft · authority: Architect · provenance: ex-D-154`
+
+The effects-check package ships in the fixed publish group, experimental, loaded only via the explicit sensor/check path.
+
+### DII-065 — Subprocess-effects registry
+`type: decision · status: draft · authority: Architect · provenance: ex-D-150/148 extracts`
+
+Subprocess-effects registry: single Architect-owned F1 source, materialized only by registered upgrade under authority/consent, byte-identical; no checker synthesizes or persists declarations — a checker never writes its own inputs.
+
+### DII-066 — F5 configuration materialization is a forward contract
+`type: decision · status: draft · authority: Architect · provenance: ex-D-148 extract`
+
+F5 configuration materialization is a forward contract: every registry has one Architect-owned canonical source; only registered upgrade verbs materialize it.
+
+### DII-067 — CI dispatch policy
+`type: decision · status: draft · authority: Architect · provenance: ex-D-148 extract`
+
+CI dispatch policy: trailing window 50, ≥20 qualifying runs, dispatch floor 80%, green target 95%; the floor is an entry precondition for binding rounds, not a scorecard relabel.
+
+
+## 7. Authority and governance process
+
+### DII-068 — Runtime authority enforcement per the fail-closed boundary
+`type: decision · status: draft · authority: Architect · provenance: ex-D-136 extract; ADR-003 successor`
+
+Runtime authority enforcement per the fail-closed boundary: no implicit roles, no caller-selected machine principals, no replayable decisions, no router-only checks, no permissive unknown targets, no unbounded batches, no wildcard mutator exemptions, no false host-enforcement claims. `cli-only` claims nothing about external editors/shells without a verified host adapter.
+
+### DII-069 — The mutator source gate
+`type: decision · status: draft · authority: Architect · provenance: ex-D-136 sole-carried clause`
+
+The mutator source gate: the call-site denominator is mechanically derived; zero unauthorized sites and zero exemptions, demonstrably failing on stale fixtures.
+
+### DII-070 — Weakening any fail-closed authority property requires a new explicit decision
+`type: decision · status: draft · authority: Architect · provenance: ex-D-136 sole-carried clause`
+
+Weakening any fail-closed authority property requires a new explicit decision; where it changes Articles 6–10, constitutional amendment.
+
+### DII-071 — Only constitutional role names appear in substrate and docs
+`type: decision · status: draft · authority: Architect · provenance: ex-D-40`
+
+Only constitutional role names appear in substrate and docs; no imported role taxonomies.
+
+### DII-072 — Closure ceremony
+`type: decision · status: draft · authority: Architect · provenance: ex-D-110 + ex-D-134 extract`
+
+Closure ceremony: PC records in the proofs tree; `govern phase close` runs at or after the shipping merge and refuses drafts without merged_as + release_disposition; records are append-only; ledger streaks are machine-computed; closing register entries are short-form.
+
+### DII-073 — Closeout shapes
+`type: decision · status: draft · authority: Architect · provenance: ex-D-68 extract`
+
+Closeout shapes: absorption rounds use the deletion-gate pattern; alignment rounds use the no-deletion shape.
+
+### DII-074 — Skills architecture
+`type: decision · status: draft · authority: Architect · provenance: ex-D-138`
+
+Skills architecture: re-export-only façade for the skills index; complete registry ordering; prompts as data assets; zero-cycle and parity gates; recombining is forbidden.
+
+### DII-075 — Registry-derived hierarchical CLI: noun-verb grammar, fail-closed exit-2 routing, --wri...
+`type: decision · status: draft · authority: Architect · provenance: ex-D-129, ex-D-26, ex-D-27`
+
+Registry-derived hierarchical CLI: noun-verb grammar, fail-closed exit-2 routing, --write / --allow-publish consent, no legacy aliases.
+
+### DII-076 — Node 24 floor across development, package, template, installed-tarball, and CI contracts
+`type: decision · status: draft · authority: Architect · provenance: ex-D-147 extract`
+
+Node 24 floor across development, package, template, installed-tarball, and CI contracts.
+
+
+## 8. Packaging, publication, and adoption
+
+### DII-077 — @devai-nyx/* scope on GitHub Packages is the canonical consumption model
+`type: decision · status: draft · authority: Architect · provenance: ex-D-114`
+
+@devai-nyx/* scope on GitHub Packages is the canonical consumption model; fixed Changesets publish group; dereferenced-schema packaging; external-ADR citations must name their repo.
+
+### DII-078 — devai_version is machine-managed
+`type: decision · status: draft · authority: Architect · provenance: ex-D-118, ex-D-122`
+
+devai_version is machine-managed; doctor version-match is tier3-binding; sibling checkout is dev-only convenience; CLI provenance is tracked; devai_consumption absent = npm-package; pointer-only cannot satisfy tier3.
+
+### DII-079 — Constitution binding
+`type: decision · status: draft · authority: Architect · provenance: ex-D-119`
+
+Constitution binding: vendored copy + checksum pin is canonical; core ships its own constitution text.
+
+### DII-080 — Canonical stack-adapter packs ship inside the core tarball via prepack staging — one au...
+`type: decision · status: draft · authority: Architect · provenance: ex-D-127`
+
+Canonical stack-adapter packs ship inside the core tarball via prepack staging — one authored source, no duplicate tree.
+
+### DII-081 — Raw JSON Schemas are public package subpaths
+`type: decision · status: draft · authority: Architect · provenance: ex-D-128`
+
+Raw JSON Schemas are public package subpaths; root API + subpaths are stable consumer contracts.
+
+### DII-082 — Adoption profiles
+`type: decision · status: draft · authority: Architect · provenance: ex-D-112`
+
+Adoption profiles: tier1 (gates+evidence) / tier2 (+reference signal) / tier3 (full loop); absent key = tier3; floor-not-cage advisory semantics; the framework itself is tier3.
+
+### DII-083 — Glob guards
+`type: decision · status: draft · authority: Architect · provenance: ex-D-124; Part VII §8`
+
+Glob guards: declarative min-match registry + check; literal-vs-glob classification; node_modules/.git hard-excluded; plus the DEVAI-II root-entry ceiling.
+
+### DII-084 — docs.ia path overrides remap F1 checks after a binding relocation ADR; absence = strict
+`type: decision · status: draft · authority: Architect · provenance: ex-D-125`
+
+docs.ia path overrides remap F1 checks after a binding relocation ADR; absence = strict.
+
+### DII-085 — hooks install / ci scaffold verbs
+`type: decision · status: draft · authority: Architect · provenance: ex-D-123`
+
+hooks install / ci scaffold verbs; forbidden-actions waivers extend-never-replace over the canonical set; trace target_type enum is closed.
+
+
+## 9. LLM skills and the R28 boundary set
+
+### DII-086 — The production authority boundary for `agent skill run`: only local claude/codex CLIs v...
+`type: decision · status: draft · authority: Architect · provenance: ex-D-174`
+
+The production authority boundary for `agent skill run`: only local claude/codex CLIs via the bounded host adapter (local-llm / invoke / publication=false). No shell, arbitrary executable, network endpoint, credential read, push, or PR-creation scope.
+
+### DII-087 — Structured output at the local-CLI bridge
+`type: decision · status: draft · authority: Architect · provenance: ex-D-175`
+
+Structured output at the local-CLI bridge: caller-typed closed schemas, no post-hoc coercion, provider output is untrusted, completion-only instruction-free envelope.
+
+### DII-088 — The truthful recorder path is the only supported path for every mutating LLM skill (llm...
+`type: decision · status: draft · authority: Architect · provenance: ex-D-173 extract`
+
+The truthful recorder path is the only supported path for every mutating LLM skill (llm_backed ∧ write_requires_flag); candidate outputs are report-only evidence, never merged as fixes; caller-supplied provenance is invalid input.
+
+### DII-089 — Feedback-iteration writer contract
+`type: decision · status: draft · authority: Architect · provenance: ex-D-184`
+
+Feedback-iteration writer contract: exact bounded {path,find,replace} replacements, atomic batch, no whole-file overwrites; experimental opt-in + write consent required.
+
+### DII-090 — Skill-scoped local-validation allowance
+`type: decision · status: draft · authority: Architect · provenance: ex-D-185`
+
+Skill-scoped local-validation allowance: exact lint/typecheck/unit-test/acceptance shapes only, for the declared skill only, with the explicit non-authorization list.
+
+### DII-091 — semantic-review can never PASS; a future deterministic PASS requires a separate Archite...
+`type: decision · status: draft · authority: Architect · provenance: ex-D-171 extract`
+
+semantic-review can never PASS; a future deterministic PASS requires a separate Architect decision and a closed registry of trusted adapters.
+
+### DII-092 — The mutating-skill denominator is mechanically derived from the registry predicate, nev...
+`type: decision · status: draft · authority: Architect · provenance: ex-D-176 extract; ADR-006 successor`
+
+The mutating-skill denominator is mechanically derived from the registry predicate, never a maintained constant.
+
+### DII-093 — R28 non-promotion prohibitions
+`type: decision · status: draft · authority: Architect · provenance: ex-D-187 extract — attested history`
+
+R28 non-promotion prohibitions: campaign candidates remain report-only and unmerged in the predecessor; acceptance established no readiness or autonomy; the report-only mechanism is not bound as a future assurance gate; native macOS results stay REVIEW.
+
+### DII-094 — Round serialization inherited if those rounds move here
+`type: decision · status: draft · authority: Architect · provenance: ex-D-176 extract`
+
+Round serialization inherited if those rounds move here: supervised-LLM promotion (ex-R30 shape) publishes only after the accepted dossier + prior round's factual result exist and runtime overlaps reconcile; successors serial after.
+
+
+## 10. Standing rejections (REJ registry, re-minted once each)
+
+### DII-REJ-A — No backend-aware LLM timeout multiplier
+`type: rejection · status: draft · authority: Architect · provenance: ex-REJ-1, ex-D-83`
+
+Rejected; per-pack config is the outlet. Re-proposal requires strong new adopter evidence.
+
+### DII-REJ-B — No migration-runner integration for sense-migrate-check
+`type: rejection · status: draft · authority: Architect · provenance: ex-REJ-2, ex-D-87`
+
+Rejected as a layering violation; --pre-seed is the canonical abstraction.
+
+### DII-REJ-C — No comprehensive coverage on CI
+`type: rejection · status: draft · authority: Architect · provenance: ex-REJ-3, ex-D-101`
+
+Rejected; the Inspector measures locally (see §5 CI-scope discipline).
+
+### DII-REJ-D — No CI-side digest verifier
+`type: rejection · status: draft · authority: Architect · provenance: ex-REJ-4, ex-D-103`
+
+Rejected; one verification authority only.
+
+## 11. Resolved ambiguity defaults (carried verbatim)
+
+### DII-095 — `--role-bootstrap` is opt-in (default false)
+`type: decision · status: draft · authority: Architect · provenance: ex-D-85`
+
+`--role-bootstrap` is opt-in (default false).
+
+### DII-096 — `pnpm audit` wins when both audit tools are present
+`type: decision · status: draft · authority: Architect · provenance: ex-D-85`
+
+`pnpm audit` wins when both audit tools are present.
+
+### DII-097 — Missing perf script yields UNKNOWN, never N/A
+`type: decision · status: draft · authority: Architect · provenance: ex-D-85`
+
+Missing perf script yields UNKNOWN, never N/A.
+
+
+## 12. Register-consistency guard
+
+A mechanical check (CI + doctor) asserts no entry above contradicts constitutional text, and that every entry's provenance resolves into the frozen predecessor or this register. This entry authorizes the guard; the guard protects the rest. [closes the ex-Article-27 "six vs three" drift class]

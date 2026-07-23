@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-DEVAI-009",
+  "domain": "DEVAI",
+  "severity": "hard-fail",
+  "type": "lifecycle",
+  "title": "Bootstrap plan is deny-by-default and preserves provenance",
+  "statement": "Each devai init apply-* mutation MUST NOT overwrite existing files unless --force is set, and even with --force the provenance-critical files (.devai/state/evidence-chain.json and .devai/state/counters.json) MUST be preserved when they contain real data (chain.records non-empty or any counter > 0). Each ExecuteResult MUST surface preserved paths separately from overwritten ones.",
+  "rationale": "Article 36 makes the framework's ability to apply to itself a binding constraint; the evidence chain is the framework's auditable substrate. A `--force` flag that silently clobbers the chain or counters destroys the very provenance that proves self-application. Every role-separated bootstrap apply path must be deny-by-default for existing files and explicitly preserve the provenance-critical subset even under --force.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "unit",
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-36-devai-applies-to-itself"
+      }
+    ]
+  },
+  "scope": {
+    "components": [
+      "core",
+      "cli"
+    ],
+    "code_areas": [
+      "packages/core/src/bootstrap/**",
+      "packages/cli/src/commands/init/**"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "phase-7",
+    "bootstrap",
+    "provenance"
+  ],
+  "measurable_via": [
+    "init plan",
+    "init apply-owner",
+    "init apply-architect",
+    "init apply-f5",
+    "adopt upgrade"
+  ],
+  "provenance": [
+    "ex-INV-DEVAI-009@devai-original"
+  ]
+}

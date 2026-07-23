@@ -1,0 +1,23 @@
+{
+  "record": "GEN-0001",
+  "ratified": null,
+  "_status": "PROVISIONAL pre-freeze binding; re-bind after R-\u03a9. Retrieved from read-only predecessor at 2026-07-23T23:47:53Z.",
+  "predecessor": {
+    "repo_url": "https://github.com/devai-nyx/devai",
+    "final_commit_sha": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d",
+    "final_tree_sha": "386cbb500a795f17624442ebb2c416ed5f16b15d",
+    "evidence_chain_head_sha256": "8ae98775e373617f814e2e7bd3d2616f7664a90f761442b45d5b205537984fb1",
+    "closing_decision": null,
+    "closing_pc_record": null,
+    "frozen": false
+  },
+  "imported_evidence": [],
+  "non_claims": [
+    "no-readiness",
+    "no-autonomy",
+    "no-task-completion",
+    "no-product-candidate",
+    "r28-candidates-remain-report-only-in-predecessor",
+    "successor-standing-starts-at-zero"
+  ]
+}

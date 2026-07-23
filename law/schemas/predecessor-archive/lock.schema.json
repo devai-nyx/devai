@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.dev/schemas/lock.schema.json",
+  "title": "Lock",
+  "description": "Module-level semantic lock record. Acquired before worktree provisioning; released on merge, escalation, or RGR pause. Per Constitution Article 25.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "held_by_task_id",
+    "targets",
+    "acquired_at",
+    "ttl_seconds",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "id": {
+      "type": "string",
+      "pattern": "^LOCK-[a-f0-9]{16}$",
+      "description": "Content-hash derived from sorted targets + held_by_task_id."
+    },
+    "held_by_task_id": {
+      "type": "string",
+      "pattern": "^TASK-"
+    },
+    "targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["substrate", "module_id"],
+        "properties": {
+          "substrate": { "enum": ["F1", "F2", "F3", "F4", "F5"] },
+          "module_id": { "type": "string", "pattern": "^MOD-" }
+        }
+      }
+    },
+    "acquired_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "ttl_seconds": {
+      "type": "integer",
+      "minimum": 60,
+      "description": "Time to live; janitor reaps locks past TTL with no active task."
+    },
+    "status": {
+      "enum": ["held", "released", "expired", "force_released"]
+    },
+    "released_at": { "type": ["string", "null"], "format": "date-time" },
+    "release_reason": {
+      "enum": [
+        "task_merged",
+        "task_escalated",
+        "task_rgr_paused",
+        "task_cancelled",
+        "ttl_expired",
+        "janitor_orphan",
+        "human_override"
+      ]
+    }
+  }
+}

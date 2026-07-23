@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-DEVAI-018",
+  "domain": "DEVAI",
+  "lifecycle": "supported",
+  "severity": "constitutional",
+  "type": "governance",
+  "title": "Post-merge and dependency gates are contained, attributable, and fail-closed",
+  "statement": "Every integration merge covered by a declared healthy host adapter MUST produce exactly one merge-SHA-bound, locked, idempotent Article-33 observation in the persistent inventory worktree through an issuer-authentic harness post-merge transition, without fabricating a human role, mutating tracked source, reverting, merging, pushing, publishing, dispatching an agent, or destroying state; dependency security MUST bind a pinned full-lockfile scan to the exact lockfile digest and MUST block high or critical advisories, invalid waivers, malformed output, unavailable or stale scanners, and unknown provenance; workflow concurrency MUST apply semantic cancellation groups to supersedable work and serialization groups to release or scheduled work, and DEVAI's own CI MUST consume the exported reusable evidence gate while retaining repository-specific full verification.",
+  "rationale": "Article 34 automation is safe only when its origin and effects are narrower than a general writer. Dependency and merge observations that fail open turn missing evidence into false green governance.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "unit",
+      "int",
+      "e2e",
+      "sec"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "measurable_via": [
+    "govern auditor post-merge",
+    "policy check dependencies"
+  ],
+  "measurable_via_mode": "all",
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-34-auditor-spawn-cadence"
+      },
+      {
+        "doc": "docs/meta/adr/ADR-004-published-truth-operational-self-adoption.md",
+        "anchor": "decision-7-article-34-post-merge-implementation"
+      },
+      {
+        "doc": "docs/meta/adr/ADR-004-published-truth-operational-self-adoption.md",
+        "anchor": "decision-8-dependency-security-result-contract"
+      }
+    ],
+    "decisions": [
+      "D-139",
+      "ADR-004"
+    ]
+  },
+  "scope": {
+    "components": [
+      "hooks",
+      "post-merge-auditor",
+      "host-adapter",
+      "dependency-security",
+      "workflow-concurrency"
+    ],
+    "code_areas": [
+      "packages/core/src/hooks-install/**",
+      "packages/cli/src/commands/hooks/**",
+      "packages/cli/src/commands/govern/**",
+      "packages/cli/src/commands/check/**",
+      ".github/workflows/**"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "trace_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "post-merge",
+    "article-34",
+    "host-adapter",
+    "dependency-security",
+    "fail-closed",
+    "no-agent-dispatch"
+  ],
+  "provenance": [
+    "ex-INV-DEVAI-018@devai-original"
+  ]
+}

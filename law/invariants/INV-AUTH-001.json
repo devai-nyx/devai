@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-AUTH-001",
+  "domain": "AUTH",
+  "lifecycle": "supported",
+  "severity": "constitutional",
+  "type": "governance",
+  "title": "Human authority is explicit and machine authority is derived without elevation",
+  "statement": "Every human-principal mutation performed through DEVAI MUST identify exactly one caller-declarable constitutional role through an invocation flag or explicit valid authority-session reference and MUST ignore ambient role/session state for authorization; a derived machine contract MUST declare its non-empty allowed initiator-role set, runtime MUST bind exactly one actual role from that set matching the invocation/declaration, and derivation MUST preserve and MUST NOT erase, substitute for, widen, or elevate that initiator or consent; the bootstrap identity MAY plan or orchestrate but MUST NOT authorize mutation, and cross-role bootstrap apply batches MUST use distinct invocation/declaration boundaries, each using either a direct flag or valid authority session.",
+  "rationale": "Articles 6-10 make role declaration and separation load-bearing. An implicit role or caller-selected machine actor would turn the authority boundary into advisory metadata.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "unit",
+      "int",
+      "e2e"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-7-human-roles"
+      },
+      {
+        "doc": "docs/meta/adr/ADR-003-runtime-authority-enforcement.md",
+        "anchor": "2-human-declarations-and-sessions"
+      }
+    ],
+    "decisions": [
+      "D-135",
+      "ADR-003"
+    ]
+  },
+  "scope": {
+    "components": [
+      "authority-runtime",
+      "authority-sessions",
+      "machine-principals"
+    ],
+    "code_areas": [
+      "packages/core/src/authority/**",
+      "packages/cli/src/command-router.ts",
+      "packages/cli/src/commands/work/**"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "trace_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "authority",
+    "explicit-role",
+    "session",
+    "machine-principal",
+    "non-elevation",
+    "article-7"
+  ],
+  "measurable_via": [
+    "work session start",
+    "work session end"
+  ],
+  "provenance": [
+    "ex-INV-AUTH-001@devai-original"
+  ]
+}

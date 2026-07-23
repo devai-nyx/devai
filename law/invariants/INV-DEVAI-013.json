@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-DEVAI-013",
+  "domain": "DEVAI",
+  "severity": "hard-fail",
+  "type": "lifecycle",
+  "title": "Local-tooling scaffolders (hooks install, ci scaffold) are idempotent and deny-by-default",
+  "statement": "devai adopt hooks install MUST be idempotent: re-running against an already-installed hook file MUST update the marker-delimited block in place rather than duplicating it, and MUST preserve any surrounding hook content (e.g. lint-staged invocations) untouched. devai adopt ci scaffold MUST be deny-by-default: with --write and no --force, an existing file at the target path MUST NOT be overwritten. Both verbs MUST be plan-only (no filesystem writes) unless --write is passed.",
+  "rationale": "Both verbs write into artifacts a human or another tool may already be maintaining (a git hook file, a CI workflow file). Per Article 36 and the D-99 per-batch verification discipline, a scaffolder that silently duplicates content on re-run or silently clobbers an adopter's hand-edited CI workflow would corrupt exactly the local tooling it exists to help set up \u2014 the plan/--write split and the deny-by-default/idempotent-update guarantees are what make repeated invocation safe.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "unit",
+      "int"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "DESIGN-DECISIONS.md",
+        "anchor": "d-123-second-governance-roadmap-closure-round-local-hook-ci-scaffolding-verbs-forbidden-actions-extend-not-replace-coverage-trace-target-typing-and-the-esc-nnnndecisionsjsonl-relationship-clarified-locked-items-5-6-10-locked-items-911-soft"
+      }
+    ]
+  },
+  "scope": {
+    "components": [
+      "core",
+      "cli"
+    ],
+    "code_areas": [
+      "packages/core/src/hooks-install/**",
+      "packages/core/src/ci-scaffold/**",
+      "packages/cli/src/commands/hooks/**",
+      "packages/cli/src/commands/ci/**"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "test_update",
+      "human_approval"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "d-123",
+    "hooks",
+    "ci-scaffold",
+    "governance-roadmap"
+  ],
+  "measurable_via": [
+    "adopt hooks install",
+    "adopt ci scaffold"
+  ],
+  "provenance": [
+    "ex-INV-DEVAI-013@devai-original"
+  ]
+}

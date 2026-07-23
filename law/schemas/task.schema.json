@@ -1,0 +1,322 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/task.schema.json",
+  "title": "Task",
+  "description": "The atomic work unit. Spawned from the backlog, executes in a worktree, merges or escalates. Carries intent/actual/iteration-trail for post-hoc audit (lighter version of the archive's constructor-replay concept).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "status",
+    "discipline",
+    "title",
+    "target_modules",
+    "target_substrates",
+    "created_at",
+    "db_isolation",
+    "iteration_count"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^TASK-[0-9]{4,}$"
+    },
+    "status": {
+      "enum": [
+        "queued",
+        "ready",
+        "lock_denied",
+        "in_progress",
+        "checkpoint",
+        "pre_merge",
+        "merging",
+        "completed",
+        "awaiting_human_review",
+        "experimental_blocked",
+        "escalated",
+        "rgr_pending",
+        "cancelled"
+      ]
+    },
+    "discipline": {
+      "enum": [
+        "owner",
+        "architect",
+        "inspector",
+        "engineer",
+        "auditor"
+      ]
+    },
+    "discipline_specialization": {
+      "type": "string",
+      "description": "Optional specialization within discipline (e.g., 'backend', 'frontend', 'dba', 'ui_ux')."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "description": {
+      "type": "string"
+    },
+    "lifecycle": {
+      "enum": [
+        "supported",
+        "experimental"
+      ],
+      "default": "supported"
+    },
+    "acceptance_commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "description": "Explicit argv arrays run without a shell to evaluate task-specific acceptance."
+    },
+    "coupled_task_group": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^CTG-[0-9]{4,}$",
+      "description": "If non-null, identifies a coupled triplet group. Tasks sharing a CTG merge in authority-chain order."
+    },
+    "coupled_pipeline_position": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        null,
+        "architect",
+        "inspector",
+        "engineer"
+      ],
+      "description": "Position in the coupled triplet pipeline. Null if not part of a triplet."
+    },
+    "upstream_task_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^TASK-[0-9]{4,}$",
+      "description": "Upstream task in the pipeline (e.g., Inspector's upstream is Architect)."
+    },
+    "target_substrates": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "F5"
+        ]
+      },
+      "minItems": 1
+    },
+    "target_modules": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^MOD-"
+      },
+      "description": "Modules this task will modify. Lock acquisition keys (Article 25)."
+    },
+    "target_invariants": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^INV-"
+      },
+      "description": "Invariants this task aims to affect (introduce, modify, satisfy, retire)."
+    },
+    "db_isolation": {
+      "enum": [
+        "database",
+        "cluster"
+      ],
+      "description": "database = TEMPLATE-cloned DB on shared server (default). cluster = dedicated Postgres container."
+    },
+    "model_tier": {
+      "enum": [
+        "default",
+        "bumped",
+        "fallback"
+      ],
+      "description": "default = first attempt. bumped = larger model after iteration cap. fallback = cross-family per tie-breaker ladder (Article 23)."
+    },
+    "iteration_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_iterations": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Human-authorized bound. Supported mutation defaults to 1; experimental policy may explicitly authorize more."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "spawned_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "branch": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "worktree_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^WT-"
+    },
+    "prompt_composition_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^PC-[a-f0-9]{16}$"
+    },
+    "intent_diff": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Agent's declared intended change set at spawn.",
+      "properties": {
+        "summary": {
+          "type": "string"
+        },
+        "planned_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "planned_steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "actual_diff": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Computed at completion from the task branch vs its base.",
+      "properties": {
+        "files_changed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "additions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "deletions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "diff_evidence_ref": {
+          "type": "string",
+          "pattern": "^EV-"
+        }
+      }
+    },
+    "iteration_trail": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "iteration",
+          "started_at",
+          "verdict"
+        ],
+        "properties": {
+          "iteration": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ended_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "verdict": {
+            "enum": [
+              "PASS",
+              "REVIEW",
+              "FAIL",
+              "RGR",
+              "ESCALATED"
+            ]
+          },
+          "hard_gate_failures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "soft_gate_failures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^EV-"
+            }
+          }
+        }
+      }
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "0 = lowest, 100 = highest. RGR-spawned tasks default to 90+."
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "schema_version": "1.0.0"
+}

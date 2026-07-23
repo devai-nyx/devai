@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-DEVAI-015",
+  "domain": "DEVAI",
+  "lifecycle": "experimental",
+  "severity": "hard-fail",
+  "type": "lifecycle",
+  "title": "Experimental autonomous execution is contained",
+  "statement": "Experimental autonomous execution MUST require project opt-in and invocation-level experimental and write consent, MUST execute task-specific acceptance, and MUST preserve recoverable work at a human-review boundary without promoting supported readiness.",
+  "rationale": "An experimental controller is useful only when it cannot silently acquire supported authority, treat a green baseline as task completion, or destroy unreviewed work.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "int",
+      "e2e"
+    ],
+    "oracle": "tests"
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "CONSTITUTION.md",
+        "anchor": "article-3-operating-mode"
+      }
+    ],
+    "decisions": [
+      "D-126",
+      "docs/meta/adr/ADR-HUMAN-SUPERVISED-EXPERIMENTAL-LOOP.md"
+    ]
+  },
+  "scope": {
+    "components": [
+      "harness",
+      "experimental-controller"
+    ],
+    "code_areas": [
+      "packages/cli/src/commands/loop-run/**",
+      "packages/cli/src/runtime-policy.ts",
+      "packages/core/src/skills/index.ts"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "trace_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "tags": [
+    "experimental",
+    "autonomous-loop",
+    "human-review",
+    "recoverability"
+  ],
+  "provenance": [
+    "ex-INV-DEVAI-015@devai-original"
+  ]
+}

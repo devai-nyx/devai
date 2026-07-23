@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "id": "INV-DEVAI-016",
+  "domain": "DEVAI",
+  "lifecycle": "supported",
+  "severity": "hard-fail",
+  "type": "governance",
+  "title": "Current and published truth is exact-subject, fresh, renderer-valid, and deployment-proven",
+  "statement": "A current DEVAI scorecard projection MUST consume one explicit schema-valid non-synthetic scorecard whose integration_head equals the declared full scorecard_subject_sha and whose generated_at is within the declared maximum age; scorecard_subject_sha, render_source_sha, and deployed_source_sha MUST remain separate and joined by a mechanically observation-only projection diff plus exact gh-pages provenance; current public claims and stable/current version labels MUST agree with machine truth, adopter guides MUST have one canonical docs/adopters location with no active stale inbound path, and invalid, stale, missing, placeholder, experimental, renderer-broken, deployment-unreachable, provenance-ambiguous, or false-current inputs MUST NOT overwrite current output or promote supported readiness.",
+  "rationale": "A generated page changes HEAD and a deployed site has another source identity. Conflating those identities or selecting evidence by filename, mtime, or fallback creates false-current self-application evidence.",
+  "status": "active",
+  "verification": {
+    "required_suites": [
+      "unit",
+      "int",
+      "e2e"
+    ],
+    "oracle": "tests",
+    "strategy": {
+      "primary": "regression",
+      "deterministic_check_available": true,
+      "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
+    }
+  },
+  "authority": {
+    "docs": [
+      {
+        "doc": "docs/meta/adr/ADR-004-published-truth-operational-self-adoption.md",
+        "anchor": "decision-2-exact-current-scorecard-contract"
+      },
+      {
+        "doc": "docs/meta/adr/ADR-004-published-truth-operational-self-adoption.md",
+        "anchor": "decision-3-renderer-truth-and-deployed-truth-are-separate"
+      }
+    ],
+    "decisions": [
+      "D-139",
+      "ADR-004"
+    ]
+  },
+  "scope": {
+    "components": [
+      "self-scorecard",
+      "docs-site",
+      "site-drift",
+      "release-preflight"
+    ],
+    "code_areas": [
+      "scripts/gen-self-scorecard.mjs",
+      "scripts/check-site-links.mjs",
+      "docs/site/**",
+      "packages/sensors/src/**",
+      "packages/cli/src/commands/sense/**",
+      "scripts/check-changeset-contract.mjs"
+    ]
+  },
+  "change_policy": {
+    "breaking_change_requires": [
+      "doc_update",
+      "trace_update",
+      "test_update",
+      "human_approval",
+      "adr"
+    ],
+    "test_weakening_allowed": false,
+    "human_approval_required": true
+  },
+  "measurable_via": [
+    "sense site drift"
+  ],
+  "tags": [
+    "published-truth",
+    "exact-head",
+    "scorecard",
+    "docusaurus",
+    "gh-pages",
+    "article-36",
+    "article-39"
+  ],
+  "provenance": [
+    "ex-INV-DEVAI-016@devai-original"
+  ]
+}

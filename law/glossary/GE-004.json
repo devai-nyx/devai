@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "GE-004",
+  "term": "Inspector",
+  "definition": "The role with authority over tests at all levels (unit, integration, e2e, sec, perf). Tests are sensors per D-1; the Inspector is the sensor calibrator. The Inspector cannot weaken tests to hide plant failure (Article 39).",
+  "authority": "architect",
+  "category": "technical",
+  "status": "active",
+  "see_also": [
+    "GE-011",
+    "GE-012"
+  ],
+  "related_invariants": [
+    "INV-DEVAI-002"
+  ],
+  "provenance": [
+    "ex-GE-004@devai-original"
+  ]
+}
