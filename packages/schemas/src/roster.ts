@@ -1,6 +1,6 @@
 // The explicit schema roster (W02.c: explicitness is a feature; laziness is the mechanic).
-// 49 contract schemas + 3 infrastructure (common-defs, record-meta, meta).
-// Guarded: the roster-dir bijection is a T2 contract test; count guard 52.
+// 51 contract schemas + 3 infrastructure (common-defs, record-meta, meta).
+// Guarded: the roster-dir bijection is a T2 contract test; count guard 54.
 export const ROSTER = [
   'actions-evidence-gate-authorization.schema.json',
   'actions-list-output.schema.json',
@@ -14,6 +14,7 @@ export const ROSTER = [
   'coverage-matrix.schema.json',
   'data-model-inventory.schema.json',
   'dep-graph.schema.json',
+  'error.schema.json',
   'evidence.schema.json',
   'forbidden-actions.schema.json',
   'genesis-attestation.schema.json',
@@ -43,6 +44,7 @@ export const ROSTER = [
   'scorecard-na-config.schema.json',
   'scorecard.schema.json',
   'sensor-input-spec.schema.json',
+  'sensor-registry.schema.json',
   'sensor-reading.schema.json',
   'skill-manifest.schema.json',
   'stack-adapter.schema.json',
@@ -57,5 +59,7 @@ export const ROSTER = [
 ] as const;
 export type SchemaName = (typeof ROSTER)[number];
 export const INFRASTRUCTURE: readonly SchemaName[] = [
-  'common-defs.schema.json', 'record-meta.schema.json', 'meta.schema.json',
+  'common-defs.schema.json',
+  'record-meta.schema.json',
+  'meta.schema.json',
 ];
