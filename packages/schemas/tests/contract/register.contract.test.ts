@@ -13,7 +13,7 @@ describe('register records', () => {
   const entryRe =
     /^### (DII-[A-Z0-9-]+) — (.+)\n`type: (\S+) · status: (\S+) · authority: ([^·]+) · provenance: (.+)`$/gm;
   const entries = [...md.matchAll(entryRe)].map((m) => ({
-    id: m[1],
+    id: m[1] ?? '',
     title: m[2],
     type: m[3],
     status: m[4],
