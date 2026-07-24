@@ -126,24 +126,24 @@
       "id": "sensor-kinds",
       "title": "Sensor kind registry",
       "path": "law/policy/sensor-registry.json",
-      "record_schema": null,
+      "record_schema": "sensor-registry.schema.json",
       "count_guard": {
-        "state": "backlogged",
-        "mechanism": "Registry-derived roster parity",
-        "source": null,
-        "backlog_ref": "post-bootstrap/W05"
+        "state": "declared",
+        "mechanism": "Active emitter-backed entries and archived compatibility dispositions are counted in the schema-backed registry; runtime roster derivation is pending",
+        "source": "law/policy/sensor-registry.json",
+        "backlog_ref": "R-0001/P4"
       },
       "liveness_guard": {
-        "state": "backlogged",
-        "mechanism": "Every kind has an emitter and feeds a cell or is explicitly diagnostic",
-        "source": null,
-        "backlog_ref": "post-bootstrap/W05"
+        "state": "declared",
+        "mechanism": "Every active entry names an emitter module and has nonempty cells or diagnostic=true; emitter and consumer parity enforcement is pending",
+        "source": "law/schemas/sensor-registry.schema.json",
+        "backlog_ref": "R-0001/P4"
       },
       "tombstone_guard": {
-        "state": "backlogged",
-        "mechanism": "Retired sensor kinds remain reserved with cell disposition",
-        "source": null,
-        "backlog_ref": "post-bootstrap/W05"
+        "state": "declared",
+        "mechanism": "Enum-only predecessor compatibility kinds have explicit archive dispositions; mechanical non-remint enforcement is pending",
+        "source": "law/policy/sensor-registry.json#archived_kinds",
+        "backlog_ref": "R-0001/P4-P5"
       }
     },
     {

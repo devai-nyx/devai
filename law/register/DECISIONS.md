@@ -614,6 +614,29 @@ Every append-able population declares count, liveness, and tombstone guards in
 guard from a declared-but-not-fully-enforced guard and a backlogged guard; the registry
 must never translate a planned guard into current green standing.
 
+### DII-102 — One schema-backed registry is the source of sensor-kind truth
+`type: decision · status: draft · authority: Architect · provenance: CTX-05; dossier Part IX §2 item 1; ex-D-77, ex-D-79, ex-D-91, ex-D-92, ex-D-96–98, ex-D-120`
+
+Sensor kinds are derived from one schema-backed registry consumed by emitters,
+scorecard reachability, tier scheduling, documentation, and tests. A separately
+maintained enum or map is not an authority source. Compatibility kinds without an
+emitter at the attested predecessor pin are archived with an explicit disposition,
+not imported as live kinds.
+
+### DII-103 — FAIL readings persist until newer same-kind evidence supersedes them
+`type: decision · status: draft · authority: Architect · provenance: CTX-05 §2; dossier Part IX §2 item 2; ex-D-120`
+
+A FAIL reading remains current until a newer reading of the same kind supersedes it.
+Stale FAIL evidence becomes REVIEW-stale rather than disappearing, and UNKNOWN never
+overwrites FAIL. Reading compaction and presentation must preserve that ordering rule.
+
+### DII-104 — Every scorecard cell is scheduled-reachable or honestly not applicable
+`type: decision · status: draft · authority: Architect · provenance: CTX-05 §3; dossier Part IX §2 item 3; ex-D-120`
+
+Every nondegenerate scorecard cell has at least one registered sensor scheduled in a
+declared execution tier. A cell with no reachable scheduled sensor is represented
+honestly as N/A; a diagnostic sensor does not silently imply cell coverage.
+
 
 ## 12. Register-consistency guard
 

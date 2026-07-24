@@ -1,0 +1,316 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/sensor-registry.schema.json",
+  "title": "DEVAI sensor registry",
+  "description": "The single schema-backed registry of emitter-backed sensor kinds, scorecard reachability, execution tiers, design-note state, and archived compatibility kinds.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "attested_predecessor_pin",
+    "entries",
+    "archived_kinds"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "const": "sensor-registry"
+    },
+    "attested_predecessor_pin": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    },
+    "archived_kinds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/archivedKind"
+      }
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "type",
+        "status",
+        "date",
+        "authority",
+        "supersedes",
+        "superseded_by",
+        "provenance",
+        "kind",
+        "emitter_module",
+        "tiers",
+        "design_note"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "sensor-registry-entry"
+        },
+        "status": {
+          "const": "draft"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "authority": {
+          "const": "Architect"
+        },
+        "supersedes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "superseded_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "provenance": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "kind": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "emitter_module": {
+          "type": "string",
+          "pattern": "^packages/[A-Za-z0-9._/-]+\\.ts$"
+        },
+        "cells": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "substrate",
+              "property"
+            ],
+            "properties": {
+              "substrate": {
+                "$ref": "common-defs.schema.json#/$defs/substrate"
+              },
+              "property": {
+                "$ref": "common-defs.schema.json#/$defs/transversal"
+              }
+            }
+          }
+        },
+        "diagnostic": {
+          "const": true
+        },
+        "tiers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "contains": {
+            "const": "SWEEP"
+          },
+          "items": {
+            "enum": [
+              "BASELINE",
+              "TIER2",
+              "TIER3",
+              "SWEEP"
+            ]
+          }
+        },
+        "design_note": {
+          "$ref": "#/$defs/designNote"
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "cells"
+          ],
+          "not": {
+            "required": [
+              "diagnostic"
+            ]
+          }
+        },
+        {
+          "required": [
+            "diagnostic"
+          ],
+          "not": {
+            "required": [
+              "cells"
+            ]
+          }
+        }
+      ]
+    },
+    "designNote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "path",
+        "backlog_ref"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "present",
+            "backlogged"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "backlog_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "state": {
+              "const": "present"
+            },
+            "path": {
+              "type": "string"
+            },
+            "backlog_ref": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "properties": {
+            "state": {
+              "const": "backlogged"
+            },
+            "path": {
+              "type": "null"
+            },
+            "backlog_ref": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "archivedKind": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "reason",
+        "provenance",
+        "replacement"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "reason": {
+          "const": "no-emitter-at-attested-pin"
+        },
+        "provenance": {
+          "type": "string",
+          "minLength": 1
+        },
+        "replacement": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "sensor-registry",
+      "attested_predecessor_pin": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d",
+      "entries": [
+        {
+          "id": "runtime_probe_api",
+          "title": "Runtime Probe Api",
+          "type": "sensor-registry-entry",
+          "status": "draft",
+          "date": "2026-07-23",
+          "authority": "Architect",
+          "supersedes": [
+            "predecessor:runtime_probe_api@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+          ],
+          "superseded_by": null,
+          "provenance": [
+            "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts"
+          ],
+          "kind": "runtime_probe_api",
+          "emitter_module": "packages/sensors/src/runtime-probe.ts",
+          "diagnostic": true,
+          "tiers": [
+            "SWEEP"
+          ],
+          "design_note": {
+            "state": "backlogged",
+            "path": null,
+            "backlog_ref": "post-bootstrap/W05-design-notes"
+          }
+        }
+      ],
+      "archived_kinds": [
+        {
+          "kind": "api_test",
+          "reason": "no-emitter-at-attested-pin",
+          "provenance": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+          "replacement": null
+        }
+      ]
+    }
+  ]
+}

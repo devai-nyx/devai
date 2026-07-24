@@ -1,0 +1,1989 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "sensor-registry",
+  "attested_predecessor_pin": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d",
+  "entries": [
+    {
+      "id": "type_check",
+      "title": "Type Check",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:type_check@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "type_check",
+      "emitter_module": "packages/sensors/src/type-check.ts",
+      "cells": [
+        {
+          "substrate": "F2",
+          "property": "T8"
+        }
+      ],
+      "tiers": [
+        "BASELINE",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "lint",
+      "title": "Lint",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:lint@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "lint",
+      "emitter_module": "packages/sensors/src/lint.ts",
+      "cells": [
+        {
+          "substrate": "F2",
+          "property": "T5"
+        }
+      ],
+      "tiers": [
+        "BASELINE",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "build",
+      "title": "Build",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:build@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "build",
+      "emitter_module": "packages/sensors/src/build.ts",
+      "cells": [
+        {
+          "substrate": "F2",
+          "property": "T9"
+        }
+      ],
+      "tiers": [
+        "BASELINE",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "unit_test",
+      "title": "Unit Test",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:unit_test@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "unit_test",
+      "emitter_module": "packages/sensors/src/test.ts",
+      "cells": [
+        {
+          "substrate": "F3",
+          "property": "T1"
+        }
+      ],
+      "tiers": [
+        "BASELINE",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "integration_test",
+      "title": "Integration Test",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:integration_test@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "integration_test",
+      "emitter_module": "packages/sensors/src/test.ts",
+      "cells": [
+        {
+          "substrate": "F3",
+          "property": "T1"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "e2e_test",
+      "title": "E2e Test",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:e2e_test@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "e2e_test",
+      "emitter_module": "packages/sensors/src/test.ts",
+      "cells": [
+        {
+          "substrate": "F3",
+          "property": "T1"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "migration_check",
+      "title": "Migration Check",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:migration_check@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "migration_check",
+      "emitter_module": "packages/sensors/src/migrate-check.ts",
+      "cells": [
+        {
+          "substrate": "F2",
+          "property": "T4"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "inventory_regeneration",
+      "title": "Inventory Regeneration",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:inventory_regeneration@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "inventory_regeneration",
+      "emitter_module": "packages/cli/src/commands/sense/readings-rebuild.ts",
+      "cells": [
+        {
+          "substrate": "F4",
+          "property": "T9"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "test_weakening_review",
+      "title": "Test Weakening Review",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:test_weakening_review@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "test_weakening_review",
+      "emitter_module": "packages/sensors/src/test-weakening.ts",
+      "cells": [
+        {
+          "substrate": "F3",
+          "property": "T9"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "trace_resolution",
+      "title": "Trace Resolution",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:trace_resolution@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "trace_resolution",
+      "emitter_module": "packages/sensors/src/trace-resolve.ts",
+      "cells": [
+        {
+          "substrate": "F1",
+          "property": "T3"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "security_scan",
+      "title": "Security Scan",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:security_scan@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "security_scan",
+      "emitter_module": "packages/sensors/src/security-scan.ts",
+      "cells": [
+        {
+          "substrate": "F2",
+          "property": "T6"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "perf_test",
+      "title": "Perf Test",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:perf_test@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "perf_test",
+      "emitter_module": "packages/sensors/src/perf-test.ts",
+      "cells": [
+        {
+          "substrate": "F2",
+          "property": "T7"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "llm_judge",
+      "title": "Llm Judge",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:llm_judge@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "llm_judge",
+      "emitter_module": "packages/sensors/src/judge.ts",
+      "cells": [
+        {
+          "substrate": "F1",
+          "property": "T3"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "runtime_probe_api",
+      "title": "Runtime Probe Api",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:runtime_probe_api@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "runtime_probe_api",
+      "emitter_module": "packages/sensors/src/runtime-probe.ts",
+      "diagnostic": true,
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "runtime_probe_auth",
+      "title": "Runtime Probe Auth",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:runtime_probe_auth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "runtime_probe_auth",
+      "emitter_module": "packages/sensors/src/runtime-probe.ts",
+      "diagnostic": true,
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "runtime_probe_data",
+      "title": "Runtime Probe Data",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:runtime_probe_data@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "runtime_probe_data",
+      "emitter_module": "packages/sensors/src/runtime-probe-data.ts",
+      "diagnostic": true,
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "inventory_api",
+      "title": "Inventory Api",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:inventory_api@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "inventory_api",
+      "emitter_module": "packages/sensors/src/inventory-api.ts",
+      "cells": [
+        {
+          "substrate": "F4",
+          "property": "T1"
+        },
+        {
+          "substrate": "F4",
+          "property": "T2"
+        }
+      ],
+      "tiers": [
+        "TIER2",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "inventory_routes",
+      "title": "Inventory Routes",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:inventory_routes@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "inventory_routes",
+      "emitter_module": "packages/sensors/src/inventory-routes.ts",
+      "cells": [
+        {
+          "substrate": "F4",
+          "property": "T1"
+        },
+        {
+          "substrate": "F4",
+          "property": "T2"
+        }
+      ],
+      "tiers": [
+        "TIER2",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "inventory_data_model",
+      "title": "Inventory Data Model",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:inventory_data_model@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "inventory_data_model",
+      "emitter_module": "packages/sensors/src/inventory-data-model.ts",
+      "cells": [
+        {
+          "substrate": "F4",
+          "property": "T1"
+        },
+        {
+          "substrate": "F4",
+          "property": "T2"
+        }
+      ],
+      "tiers": [
+        "TIER2",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "inventory_rbac",
+      "title": "Inventory Rbac",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:inventory_rbac@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "inventory_rbac",
+      "emitter_module": "packages/sensors/src/inventory-rbac.ts",
+      "cells": [
+        {
+          "substrate": "F4",
+          "property": "T1"
+        },
+        {
+          "substrate": "F4",
+          "property": "T6"
+        }
+      ],
+      "tiers": [
+        "TIER2",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "inventory_data_handling",
+      "title": "Inventory Data Handling",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:inventory_data_handling@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "inventory_data_handling",
+      "emitter_module": "packages/sensors/src/inventory-data-handling.ts",
+      "cells": [
+        {
+          "substrate": "F4",
+          "property": "T1"
+        },
+        {
+          "substrate": "F4",
+          "property": "T6"
+        }
+      ],
+      "tiers": [
+        "TIER2",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "inventory_dep_graph",
+      "title": "Inventory Dep Graph",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:inventory_dep_graph@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "inventory_dep_graph",
+      "emitter_module": "packages/sensors/src/inventory-dep-graph.ts",
+      "cells": [
+        {
+          "substrate": "F4",
+          "property": "T1"
+        },
+        {
+          "substrate": "F4",
+          "property": "T3"
+        }
+      ],
+      "tiers": [
+        "TIER2",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "inventory_coverage",
+      "title": "Inventory Coverage",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:inventory_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "inventory_coverage",
+      "emitter_module": "packages/sensors/src/inventory-coverage.ts",
+      "cells": [
+        {
+          "substrate": "F4",
+          "property": "T1"
+        },
+        {
+          "substrate": "F4",
+          "property": "T2"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "spec_depth",
+      "title": "Spec Depth",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:spec_depth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "spec_depth",
+      "emitter_module": "packages/sensors/src/spec-depth.ts",
+      "cells": [
+        {
+          "substrate": "F1",
+          "property": "T2"
+        }
+      ],
+      "tiers": [
+        "TIER2",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "spec_idiomaticity",
+      "title": "Spec Idiomaticity",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:spec_idiomaticity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "spec_idiomaticity",
+      "emitter_module": "packages/sensors/src/spec-idiomaticity.ts",
+      "cells": [
+        {
+          "substrate": "F1",
+          "property": "T5"
+        }
+      ],
+      "tiers": [
+        "TIER3",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "spec_freshness",
+      "title": "Spec Freshness",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:spec_freshness@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "spec_freshness",
+      "emitter_module": "packages/sensors/src/spec-freshness.ts",
+      "cells": [
+        {
+          "substrate": "F1",
+          "property": "T9"
+        }
+      ],
+      "tiers": [
+        "TIER3",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "plant_coverage",
+      "title": "Plant Coverage",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:plant_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "plant_coverage",
+      "emitter_module": "packages/sensors/src/plant-coverage.ts",
+      "cells": [
+        {
+          "substrate": "F2",
+          "property": "T1"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "test_coverage_depth",
+      "title": "Test Coverage Depth",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:test_coverage_depth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "test_coverage_depth",
+      "emitter_module": "packages/sensors/src/test-coverage-depth.ts",
+      "cells": [
+        {
+          "substrate": "F3",
+          "property": "T2"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "test_invariant_alignment",
+      "title": "Test Invariant Alignment",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:test_invariant_alignment@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "test_invariant_alignment",
+      "emitter_module": "packages/sensors/src/test-invariant-alignment.ts",
+      "cells": [
+        {
+          "substrate": "F3",
+          "property": "T4"
+        }
+      ],
+      "tiers": [
+        "TIER3",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "inventory_adherence",
+      "title": "Inventory Adherence",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:inventory_adherence@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "inventory_adherence",
+      "emitter_module": "packages/sensors/src/inventory-adherence.ts",
+      "cells": [
+        {
+          "substrate": "F4",
+          "property": "T4"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "inventory_determinism",
+      "title": "Inventory Determinism",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:inventory_determinism@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "inventory_determinism",
+      "emitter_module": "packages/sensors/src/inventory-determinism.ts",
+      "cells": [
+        {
+          "substrate": "F4",
+          "property": "T8"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "harness_security",
+      "title": "Harness Security",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:harness_security@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "harness_security",
+      "emitter_module": "packages/sensors/src/harness-security.ts",
+      "cells": [
+        {
+          "substrate": "F5",
+          "property": "T6"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "harness_green_main",
+      "title": "Harness Green Main",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:harness_green_main@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "harness_green_main",
+      "emitter_module": "packages/sensors/src/harness-green-main.ts",
+      "cells": [
+        {
+          "substrate": "F5",
+          "property": "T9"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "spec_alignment",
+      "title": "Spec Alignment",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:spec_alignment@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "spec_alignment",
+      "emitter_module": "packages/sensors/src/spec-alignment.ts",
+      "cells": [
+        {
+          "substrate": "F1",
+          "property": "T4"
+        }
+      ],
+      "tiers": [
+        "TIER2",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "spec_security_coverage",
+      "title": "Spec Security Coverage",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:spec_security_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "spec_security_coverage",
+      "emitter_module": "packages/sensors/src/spec-security-coverage.ts",
+      "cells": [
+        {
+          "substrate": "F1",
+          "property": "T6"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "spec_performance_targets",
+      "title": "Spec Performance Targets",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:spec_performance_targets@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "spec_performance_targets",
+      "emitter_module": "packages/sensors/src/spec-performance-targets.ts",
+      "cells": [
+        {
+          "substrate": "F1",
+          "property": "T7"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "spec_robustness_targets",
+      "title": "Spec Robustness Targets",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:spec_robustness_targets@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "spec_robustness_targets",
+      "emitter_module": "packages/sensors/src/spec-robustness-targets.ts",
+      "cells": [
+        {
+          "substrate": "F1",
+          "property": "T8"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "plant_depth",
+      "title": "Plant Depth",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:plant_depth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "plant_depth",
+      "emitter_module": "packages/sensors/src/plant-depth.ts",
+      "cells": [
+        {
+          "substrate": "F2",
+          "property": "T2"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "plant_coherence",
+      "title": "Plant Coherence",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:plant_coherence@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "plant_coherence",
+      "emitter_module": "packages/sensors/src/plant-coherence.ts",
+      "cells": [
+        {
+          "substrate": "F2",
+          "property": "T3"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "test_coherence",
+      "title": "Test Coherence",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:test_coherence@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "test_coherence",
+      "emitter_module": "packages/sensors/src/test-coherence.ts",
+      "cells": [
+        {
+          "substrate": "F3",
+          "property": "T3"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "test_idiomaticity",
+      "title": "Test Idiomaticity",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:test_idiomaticity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "test_idiomaticity",
+      "emitter_module": "packages/sensors/src/test-idiomaticity.ts",
+      "cells": [
+        {
+          "substrate": "F3",
+          "property": "T5"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "test_security_coverage",
+      "title": "Test Security Coverage",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:test_security_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "test_security_coverage",
+      "emitter_module": "packages/sensors/src/test-security-coverage.ts",
+      "cells": [
+        {
+          "substrate": "F3",
+          "property": "T6"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "test_performance_coverage",
+      "title": "Test Performance Coverage",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:test_performance_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "test_performance_coverage",
+      "emitter_module": "packages/sensors/src/test-performance-coverage.ts",
+      "cells": [
+        {
+          "substrate": "F3",
+          "property": "T7"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "test_robustness_coverage",
+      "title": "Test Robustness Coverage",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:test_robustness_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "test_robustness_coverage",
+      "emitter_module": "packages/sensors/src/test-robustness-coverage.ts",
+      "cells": [
+        {
+          "substrate": "F3",
+          "property": "T8"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "harness_coverage",
+      "title": "Harness Coverage",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:harness_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "harness_coverage",
+      "emitter_module": "packages/sensors/src/harness-coverage.ts",
+      "cells": [
+        {
+          "substrate": "F5",
+          "property": "T1"
+        }
+      ],
+      "tiers": [
+        "TIER3",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "harness_depth",
+      "title": "Harness Depth",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:harness_depth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "harness_depth",
+      "emitter_module": "packages/sensors/src/harness-depth.ts",
+      "cells": [
+        {
+          "substrate": "F5",
+          "property": "T2"
+        }
+      ],
+      "tiers": [
+        "TIER3",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "harness_coherence",
+      "title": "Harness Coherence",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:harness_coherence@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "harness_coherence",
+      "emitter_module": "packages/sensors/src/harness-coherence.ts",
+      "cells": [
+        {
+          "substrate": "F5",
+          "property": "T3"
+        }
+      ],
+      "tiers": [
+        "TIER3",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "harness_invariant_alignment",
+      "title": "Harness Invariant Alignment",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:harness_invariant_alignment@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "harness_invariant_alignment",
+      "emitter_module": "packages/sensors/src/harness-invariant-alignment.ts",
+      "cells": [
+        {
+          "substrate": "F5",
+          "property": "T4"
+        }
+      ],
+      "tiers": [
+        "TIER3",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "harness_idiomaticity",
+      "title": "Harness Idiomaticity",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:harness_idiomaticity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "harness_idiomaticity",
+      "emitter_module": "packages/sensors/src/harness-idiomaticity.ts",
+      "cells": [
+        {
+          "substrate": "F5",
+          "property": "T5"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "harness_performance",
+      "title": "Harness Performance",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:harness_performance@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "harness_performance",
+      "emitter_module": "packages/sensors/src/harness-performance.ts",
+      "cells": [
+        {
+          "substrate": "F5",
+          "property": "T7"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "harness_robustness",
+      "title": "Harness Robustness",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:harness_robustness@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "harness_robustness",
+      "emitter_module": "packages/sensors/src/harness-robustness.ts",
+      "cells": [
+        {
+          "substrate": "F5",
+          "property": "T8"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "inventory_performance",
+      "title": "Inventory Performance",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:inventory_performance@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "inventory_performance",
+      "emitter_module": "packages/sensors/src/inventory-performance.ts",
+      "cells": [
+        {
+          "substrate": "F4",
+          "property": "T7"
+        }
+      ],
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "decision_record_integrity",
+      "title": "Decision Record Integrity",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:decision_record_integrity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "decision_record_integrity",
+      "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
+      "diagnostic": true,
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "decision_citation_resolution",
+      "title": "Decision Citation Resolution",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:decision_citation_resolution@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "decision_citation_resolution",
+      "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
+      "diagnostic": true,
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "archive_immutability",
+      "title": "Archive Immutability",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:archive_immutability@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "archive_immutability",
+      "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
+      "diagnostic": true,
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "round_record_integrity",
+      "title": "Round Record Integrity",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:round_record_integrity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "round_record_integrity",
+      "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
+      "diagnostic": true,
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "docs_drift",
+      "title": "Docs Drift",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:docs_drift@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "docs_drift",
+      "emitter_module": "packages/sensors/src/docs-drift.ts",
+      "cells": [
+        {
+          "substrate": "F5",
+          "property": "T3"
+        }
+      ],
+      "tiers": [
+        "TIER3",
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "site_drift",
+      "title": "Site Drift",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:site_drift@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "site_drift",
+      "emitter_module": "packages/sensors/src/site-drift.ts",
+      "diagnostic": true,
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    },
+    {
+      "id": "action_effect_inference",
+      "title": "Action Effect Inference",
+      "type": "sensor-registry-entry",
+      "status": "draft",
+      "date": "2026-07-23",
+      "authority": "Architect",
+      "supersedes": [
+        "predecessor:action_effect_inference@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+      ],
+      "superseded_by": null,
+      "provenance": [
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/core/src/loop/scorecard.ts",
+        "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/cli/src/commands/sense/run-set.ts"
+      ],
+      "kind": "action_effect_inference",
+      "emitter_module": "packages/sensors/src/action-effect-inference.ts",
+      "diagnostic": true,
+      "tiers": [
+        "SWEEP"
+      ],
+      "design_note": {
+        "state": "backlogged",
+        "path": null,
+        "backlog_ref": "post-bootstrap/W05-design-notes"
+      }
+    }
+  ],
+  "archived_kinds": [
+    {
+      "kind": "api_test",
+      "reason": "no-emitter-at-attested-pin",
+      "provenance": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+      "replacement": null
+    },
+    {
+      "kind": "db_test",
+      "reason": "no-emitter-at-attested-pin",
+      "provenance": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+      "replacement": null
+    },
+    {
+      "kind": "journey_test",
+      "reason": "no-emitter-at-attested-pin",
+      "provenance": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+      "replacement": null
+    },
+    {
+      "kind": "contract_validation",
+      "reason": "no-emitter-at-attested-pin",
+      "provenance": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+      "replacement": null
+    },
+    {
+      "kind": "mutation_test",
+      "reason": "no-emitter-at-attested-pin",
+      "provenance": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+      "replacement": null
+    }
+  ]
+}
