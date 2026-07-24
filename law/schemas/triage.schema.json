@@ -127,5 +127,21 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "TRG-0123456789abcdef",
+      "generated_at": "2026-07-23T00:00:00.000Z",
+      "subject_evidence_ref": "EV-abcdef01",
+      "classification": "plant_bug",
+      "confidence": {
+        "score": 1
+      },
+      "summary": "Plant behavior contradicts the invariant.",
+      "recommended_route": {
+        "discipline": "engineer"
+      }
+    }
+  ]
 }

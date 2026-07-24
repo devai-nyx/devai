@@ -147,5 +147,19 @@
       "description": "Free-form observations the detector wants to surface (ambiguity, multiple frameworks, monorepo signal, etc.)."
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "target_root": ".",
+      "generated_at": "2026-07-23T00:00:00.000Z",
+      "package_manager": "pnpm",
+      "languages": [],
+      "frameworks": [],
+      "source_globs": [],
+      "test_globs": [],
+      "protected_surfaces": [],
+      "existing_devai_config": false
+    }
+  ]
 }

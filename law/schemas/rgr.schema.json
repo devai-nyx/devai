@@ -220,5 +220,28 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "RGR-0001",
+      "emitting_task_id": "TASK-0042",
+      "emitting_discipline": "engineer",
+      "created_at": "2026-07-23T00:00:00.000Z",
+      "problem": {
+        "summary": "Authorization specification is silent on refresh.",
+        "ambiguity": "Whether stale refresh tokens are rejected."
+      },
+      "questions": [
+        {
+          "qid": "Q1",
+          "question": "Must stale refresh tokens be rejected?"
+        }
+      ],
+      "evidence_refs": [
+        "EV-abcdef01"
+      ],
+      "status": "open"
+    }
+  ]
 }

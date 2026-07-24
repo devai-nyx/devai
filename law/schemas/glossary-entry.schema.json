@@ -39,11 +39,7 @@
       "description": "Single, unambiguous, closed-world definition. No 'usually' or 'typically'."
     },
     "authority": {
-      "enum": [
-        "owner",
-        "architect",
-        "joint"
-      ],
+      "$ref": "common-defs.schema.json#/$defs/role",
       "description": "joint entries require dual sign-off in merge protocol."
     },
     "category": {
@@ -132,5 +128,5 @@
       ]
     }
   ],
-  "$comment": "W02 OPEN (better-shaped than the invariant collision): glossary authority is already a per-term role enum (owner|architect|joint) \u2014 semantically the record-meta authority field at term granularity. Reconciliation is alignment, not renaming: extend common-defs role vocabulary with a joint token and $ref it here, making this the first native full record-meta embedding."
+  "$comment": "W02 RESOLVED: glossary authority uses the shared role vocabulary, including the joint token required by Constitution Article 6."
 }

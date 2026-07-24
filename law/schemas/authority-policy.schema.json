@@ -852,5 +852,91 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "additive_extensions": [],
+      "constitution": {
+        "digest_sha256": "6459c2ff660bfa36841307a488a26121cf7627ca61f14eb31bbd23d667eaaca3",
+        "version": "0.6.0"
+      },
+      "enforcement": {
+        "mode": "binding"
+      },
+      "framework_package": {
+        "name": "@devai-nyx/cli",
+        "version": "0.7.0"
+      },
+      "host_enforcement": {
+        "mode": "cli-only"
+      },
+      "materialization": {
+        "action_id": "adopt upgrade",
+        "consent": {
+          "write": true
+        },
+        "initiated_by": {
+          "declaration_source": "cli-flag",
+          "kind": "human",
+          "role": "architect"
+        },
+        "invocation_id": "cli-82807-ee100589-8c88-4bd6-92f7-8e64436ecbc6",
+        "machine_principal": {
+          "actor": "upgrade",
+          "context_digest_sha256": "307a0dd590681d4447d231450ff24ed3f8c7caf98186393068dd7b02383f91a5",
+          "kind": "machine",
+          "transition": "upgrade",
+          "trusted_adapter_id": "devai-cli-authority"
+        },
+        "materialization_digest_sha256": "3d4bf9df60890fe05459d4af6dce79a386fa17596e1cc08a9094c11b9f4d84a2"
+      },
+      "materialized_at": "2026-07-22T15:39:08.398Z",
+      "policy_id": "devai-authority",
+      "policy_version": "0.7.0",
+      "repository_id": "devai-self",
+      "resolved_digest_sha256": "f9cd53741be54eb361441db85f8f30b3693695dc89e270823b89612b267ec1fc",
+      "rules": [
+        {
+          "action_ids": [
+            "agent skill run"
+          ],
+          "constitutional_anchors": [
+            6
+          ],
+          "effect": "allow",
+          "origin": "immutable-core",
+          "precedence": 650,
+          "rationale": "Article 6 Owner product directory authority.",
+          "required_consent": {
+            "allow_publish": false,
+            "experimental": false,
+            "write": true
+          },
+          "rule_id": "core-owner-product-root",
+          "selector": {
+            "canonical_relative_path_glob": "docs/framework/product",
+            "kind": "fs",
+            "operations": [
+              "create"
+            ],
+            "repository_id": "devai-self"
+          },
+          "subjects": [
+            {
+              "kind": "human",
+              "roles": [
+                "owner"
+              ]
+            }
+          ]
+        }
+      ],
+      "schemaVersion": "1.0.0",
+      "source_policy": {
+        "digest_sha256": "31fe73f70c0130798789601d42f00d3bae4a2aa4509bb546e9387a739d293517",
+        "policy_id": "devai-core-authority",
+        "policy_version": "1.0.0"
+      }
+    }
+  ]
 }

@@ -192,5 +192,19 @@
       "default": []
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "INV-CANDIDATE-01ARZ3NDEKTSV4RRFFQ69G5FAV",
+      "generated_at": "2026-07-23T00:00:00.000Z",
+      "category": "unmapped_endpoint",
+      "source_sensor": "inventory_api",
+      "target": {
+        "kind": "endpoint",
+        "identifier": "GET /health"
+      },
+      "status": "proposed"
+    }
+  ]
 }

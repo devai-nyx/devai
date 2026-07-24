@@ -113,7 +113,7 @@
     },
     "source_repo_deleted": {
       "type": "boolean",
-      "description": "Whether the phase/round deleted an absorbed source repo. The consecutive no-deletion streak is computed from this field by `devai govern phase ledger` \u2014 never hand-narrated."
+      "description": "Whether the phase/round deleted an absorbed source repo. The consecutive no-deletion streak is computed from this field by `devai govern phase ledger` — never hand-narrated."
     },
     "validation_criteria": {
       "type": "array",
@@ -164,11 +164,42 @@
         "none-needed",
         "missing"
       ],
-      "description": "Whether the round's package changes have a release path: 'published' (release cut), 'changeset-pending' (changeset recorded, publish pending), 'none-needed' (no package-visible changes), 'missing' (package changes shipped with no changeset \u2014 a recorded defect, never a silent one). Added at R18 (D-133); required by the ceremony from PC-0007 onward."
+      "description": "Whether the round's package changes have a release path: 'published' (release cut), 'changeset-pending' (changeset recorded, publish pending), 'none-needed' (no package-visible changes), 'missing' (package changes shipped with no changeset — a recorded defect, never a silent one). Added at R18 (D-133); required by the ceremony from PC-0007 onward."
     },
     "notes": {
       "type": "string"
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "PC-0001",
+      "closed_at": "2026-06-10T03:30:00.000Z",
+      "round_id": "drift-remediation",
+      "declaring_decision": "D-108",
+      "closing_decision": "D-109",
+      "batches": [
+        {
+          "id": "DR.A",
+          "roles": [
+            "Architect"
+          ],
+          "headline": "Constitution 0.2.0 -> 0.3.0 (Articles 1, 23, 27); BUILD-PLAN history frozen to archive; README/CLAUDE refresh; docs_drift schema enum; D-108"
+        }
+      ],
+      "gates": {
+        "sense-docs-drift": {
+          "status": "pass"
+        }
+      },
+      "source_repo_deleted": false,
+      "validation_criteria": [
+        {
+          "criterion": "four CI-equivalent gates green",
+          "verdict": "pass"
+        }
+      ]
+    }
+  ]
 }

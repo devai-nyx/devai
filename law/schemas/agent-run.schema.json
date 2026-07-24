@@ -196,5 +196,25 @@
       "description": "Algorithm version under which `manifest_hash` was computed (Phase 16.G). '1.0' = shallow-sort (legacy, pre-Phase-16.G writes). '2.0' = deep-sort recursive canonicalisation (current default for new writes). Absent means '1.0' for backward-compatible read. Verifiers dispatch by this field per-record."
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "run_id": "AR-019e384d-257c-7fde-ba4f-5ccb7243843f",
+      "started_at": "2026-05-17T23:37:20.487Z",
+      "ended_at": "2026-05-17T23:37:20.508Z",
+      "caller": {
+        "kind": "skill",
+        "name": "SKILL-compute-scorecard"
+      },
+      "files_read": [],
+      "files_written": [],
+      "commands_run": [],
+      "compliance": {
+        "invariant_ids": []
+      },
+      "prev_hash": "GENESIS",
+      "manifest_hash": "359ae1fb4a9fee1283e84f415630634811be616415366cffe34f7ce2da67c997"
+    }
+  ]
 }

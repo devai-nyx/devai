@@ -230,7 +230,7 @@
             ]
           },
           "status": {
-            "$ref": "common-defs.schema.json#/$defs/verdict_upper"
+            "$ref": "common-defs.schema.json#/$defs/verdict_core"
           },
           "evidence_refs": {
             "type": "array",
@@ -326,7 +326,7 @@
       }
     },
     "verdict": {
-      "$ref": "common-defs.schema.json#/$defs/verdict_upper"
+      "$ref": "common-defs.schema.json#/$defs/verdict_core"
     },
     "report_only": {
       "const": true
@@ -562,5 +562,52 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "VR-0123456789abcdef",
+      "witness_id": "TW-0123456789abcdef",
+      "task_id": "TASK-0028",
+      "skill_id": "SKILL-feedback-iteration",
+      "base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "candidate_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "strategy": "regression",
+      "environment_digest_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "started_at": "2026-07-20T20:00:00.000Z",
+      "completed_at": "2026-07-20T20:01:00.000Z",
+      "isolation": {
+        "mode": "linux-container-no-network",
+        "network_egress": "denied",
+        "database": "per-task-database",
+        "readiness_eligible": true
+      },
+      "executions": [],
+      "frames": [
+        {
+          "name": "red-proof",
+          "status": "PASS",
+          "evidence_refs": []
+        }
+      ],
+      "expected_diff": {
+        "manifest_digest_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "expected": [],
+        "observed": [],
+        "unexpected": []
+      },
+      "cleanup": {
+        "lease_id": "TVL-0123456789abcdef",
+        "worktree": "removed",
+        "database": "removed",
+        "recovery_scan": "clean"
+      },
+      "verdict": "PASS",
+      "report_only": true,
+      "readiness_eligible": false,
+      "evidence_chain_refs": [
+        "EV-0123456789abcdef"
+      ]
+    }
+  ]
 }

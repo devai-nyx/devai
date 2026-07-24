@@ -347,5 +347,65 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": 1,
+      "generatedAt": "2026-07-18T06:02:06.771Z",
+      "origin": "actions-run",
+      "sourceHash": {
+        "algorithm": "sha256",
+        "value": "97d19c8c98a871e3eddd12ea338c8281ff0ba353a07462eeb2bee0255e100993",
+        "fileCount": 1935
+      },
+      "policy": {
+        "maxAgeHours": 24,
+        "requiredJobs": [
+          "merged-coverage"
+        ],
+        "allowedPlatforms": [
+          "linux/amd64"
+        ]
+      },
+      "tools": {},
+      "platforms": [],
+      "jobs": {
+        "inventory-spec-self-application": {
+          "result": "success",
+          "metadata": {
+            "job": "inventory-spec-self-application",
+            "platform": "linux/amd64"
+          },
+          "artifactChecksum": {
+            "algorithm": "sha256",
+            "value": "73e9ba5b5766f7b445c10778f03fa35ecec7bf0a35504c3d8a3fe8af44224b97",
+            "fileCount": 0
+          }
+        }
+      },
+      "actionsRun": {
+        "repository": "devai-nyx/devai",
+        "workflowRef": "devai-nyx/devai/.github/workflows/ci.yml@refs/pull/46/merge",
+        "eventName": "pull_request",
+        "runId": "29632550731",
+        "runAttempt": 1,
+        "actor": "aarusso-nyx",
+        "headSha": "f74c617100220d0adbffd3281ed79b1498edfba7",
+        "baseSha": "400bcf70181874108d6a0152626d1f85b53c03e0",
+        "mergeBaseSha": "400bcf70181874108d6a0152626d1f85b53c03e0",
+        "testedCommitSha": "bafdaf27de19fe1e03d3e6fdc0b62f043cb8a308",
+        "testedTree": {
+          "algorithm": "sha1",
+          "value": "3376e906ec36322b76607501e2330225b8fd0f2d"
+        },
+        "digests": {
+          "workflowPolicySha256": "3a7a18bda8f63e5669da31904fca015cced3629558f2d2cc4a4bc58f7475512d",
+          "lockfileSha256": "1edd5e009e83c9eb639406e135ed50d7dbe025af78b780a42c0c56c3a712610b",
+          "toolchainContractSha256": "259eb0b4967883225c85e4eb7a4b68c12879e7f254596025164d04ff26ddccc8",
+          "testContractSha256": "6f41247644e309b986793280d736ead486db6c4af6a673258e66eb7512fa44ba",
+          "serviceContractSha256": "fe8c37f5da91dc678c604f44941966d0b15493e2f83516e74ed571c81fb8ac2e"
+        }
+      }
+    }
+  ]
 }

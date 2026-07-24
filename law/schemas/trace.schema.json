@@ -54,7 +54,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Absorption/regeneration provenance per the record meta-structure (\u00a75.1)."
+          "description": "Absorption/regeneration provenance per the record meta-structure (§5.1)."
         }
       }
     },
@@ -123,7 +123,7 @@
                     "script"
                   ],
                   "default": "test",
-                  "description": "D-123 (item 10): what kind of evidence `path` actually is. 'test' (default, back-compat: absent means test) \u2014 an executable test the named `suite`'s runner discovers and asserts against; the strongest evidence class. 'config-attestation' \u2014 a config file whose presence/content stands in for active verification (e.g. a policy file consumed at runtime, not exercised by a test), weaker evidence than an executing assertion. 'script' \u2014 an executable script that is not part of a test suite's discovery (a standalone verifier). `trace-resolve` tracks attestation-only invariants separately so trace completeness doesn't overstate how many invariants are actively test-verified."
+                  "description": "D-123 (item 10): what kind of evidence `path` actually is. 'test' (default, back-compat: absent means test) — an executable test the named `suite`'s runner discovers and asserts against; the strongest evidence class. 'config-attestation' — a config file whose presence/content stands in for active verification (e.g. a policy file consumed at runtime, not exercised by a test), weaker evidence than an executing assertion. 'script' — an executable script that is not part of a test suite's discovery (a standalone verifier). `trace-resolve` tracks attestation-only invariants separately so trace completeness doesn't overstate how many invariants are actively test-verified."
                 },
                 "names": {
                   "type": "array",
@@ -255,5 +255,13 @@
     }
   },
   "schema_version": "1.0.0",
-  "$comment": "Entry ids ref common-defs id_invariant (was loose '^INV-'). Trace is a single Architect-owned F1 artifact (Article 13); Inspector/Engineer consume, never edit. W02 continues rewiring test_corpus/suites shapes as common defs grow."
+  "$comment": "Entry ids ref common-defs id_invariant (was loose '^INV-'). Trace is a single Architect-owned F1 artifact (Article 13); Inspector/Engineer consume, never edit. W02 continues rewiring test_corpus/suites shapes as common defs grow.",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "version": "0.19.0",
+      "invariants": [],
+      "test_corpus": []
+    }
+  ]
 }

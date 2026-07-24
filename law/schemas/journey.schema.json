@@ -182,7 +182,7 @@
       "items": {
         "type": "string"
       },
-      "description": "Absorption/supersession provenance per the record meta-structure (\u00a75.1)."
+      "description": "Absorption/supersession provenance per the record meta-structure (§5.1)."
     },
     "supersedes": {
       "type": [
@@ -200,5 +200,31 @@
       ]
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "JNY-001",
+      "title": "Adopt DEVAI in a fresh client repository",
+      "persona": {
+        "role": "Adopter"
+      },
+      "preconditions": [],
+      "steps": [
+        {
+          "seq": 1,
+          "action": "Run `devai init plan --target .` and review the Owner, Architect, and F5 bootstrap segments"
+        }
+      ],
+      "postconditions": [],
+      "acceptance_criteria": [
+        {
+          "id": "AC-001",
+          "statement": "After step 5, `devai spec validate all` exits 0 and `devai spec rtd bundle` produces a manifest whose readiness.ok is true."
+        }
+      ],
+      "related_invariants": [],
+      "status": "active"
+    }
+  ]
 }

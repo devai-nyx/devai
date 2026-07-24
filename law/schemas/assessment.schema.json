@@ -277,5 +277,22 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "AS-20260518T065029-001",
+      "generated_at": "2026-05-18T06:50:29.114Z",
+      "scorecard_id": "SC-20260518T065029-001",
+      "previous_assessment_id": null,
+      "narrative": "Overall: RED. 36/45 cells passing. 2 cell(s) failing. 5 cell(s) in review. 1 cell(s) unknown (sensor coverage gap). Per-cell signals:\n  - F1×T6 REVIEW: SPEC_SECURITY_NO_PII_REGISTRY\n  - F3×T2 FAIL: test_coverage_depth → TEST_COVERAGE_BELOW_THRESHOLD: Lines coverage 20.4% is below review threshold (50%).\n  - F4×T1 REVIEW: COVERAGE_PARTIAL_USE_CASE_LINKING, DATA_HANDLING_NO_PII_DETECTED, DATA_MODEL_EMPTY, ROUTES_INVENTORY_EMPTY\n  - F4×T2 REVIEW: COVERAGE_PARTIAL_USE_CASE_LINKING, DATA_MODEL_EMPTY, ROUTES_INVENTORY_EMPTY\n  - F4×T6 REVIEW: DATA_HANDLING_NO_PII_DETECTED\n  - F5×T5 REVIEW: HARNESS_IDIOMATICITY_NO_REUSABLE_WORKFLOWS\n  - F5×T9 FAIL: harness_green_main → HARNESS_GREEN_MAIN_BELOW_THRESHOLD: Main branch success rate 19.4% (over last 31 runs) is below review threshold 80%.",
+      "deltas": [],
+      "backlog_actions": {
+        "additions": [],
+        "completions": [],
+        "deprioritizations": []
+      },
+      "recommended_priorities": []
+    }
+  ]
 }

@@ -40,5 +40,14 @@
       "description": "UTC instant when the Architect materialized the authorization."
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": 1,
+      "kind": "actions-evidence-gate-authorization",
+      "status": "active",
+      "decisionId": "D-165",
+      "authorizedAt": "2026-07-20T15:49:16Z"
+    }
+  ]
 }

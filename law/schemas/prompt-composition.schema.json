@@ -139,5 +139,21 @@
       "description": "True if any component's hash differs from the frozen reference."
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "PC-0123456789abcdef",
+      "generated_at": "2026-07-23T00:00:00.000Z",
+      "task_id": "TASK-0001",
+      "components": [
+        {
+          "layer": "global",
+          "name": "global",
+          "body_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "stack_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+    }
+  ]
 }

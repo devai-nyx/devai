@@ -139,5 +139,19 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "RTM-0001",
+      "generated_at": "2026-05-13T05:13:10.858Z",
+      "integration_head": "98804f3c1b4f12af52239b37554bed0c6f6b2d15",
+      "components": {},
+      "readiness": {
+        "ok": true,
+        "sub_verdicts": []
+      },
+      "manifest_hash": "e01c22941a7fabd3c23b67cf94edd66e1bd438fdb3a7ed3018609cba83be1657"
+    }
+  ]
 }

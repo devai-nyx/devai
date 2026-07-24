@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/scorecard.schema.json",
   "title": "Scorecard",
-  "description": "F \u00d7 T aspect grid scoring of the repository state. Computed by the Auditor on every integration merge and on demand. Cells marked N/A for degenerate aspects (Constitution Article 5).",
+  "description": "F × T aspect grid scoring of the repository state. Computed by the Auditor on every integration merge and on demand. Cells marked N/A for degenerate aspects (Constitution Article 5).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -223,7 +223,7 @@
     "quarantine_count": {
       "type": "integer",
       "minimum": 0,
-      "description": "Number of tests currently in quarantine (Article 31). Scored as Observation \u00d7 Discipline."
+      "description": "Number of tests currently in quarantine (Article 31). Scored as Observation × Discipline."
     },
     "overall": {
       "type": "object",
@@ -251,5 +251,29 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "SC-20260517T233720-001",
+      "generated_at": "2026-05-17T23:37:20.491Z",
+      "integration_head": "000000000000000000000000000000000000000f",
+      "thresholds_used": {
+        "source": "defaults"
+      },
+      "cells": [
+        {
+          "substrate": "F1",
+          "property": "T1",
+          "verdict": "PASS",
+          "deterministic": true
+        }
+      ],
+      "substrate_aggregates": {},
+      "invariant_rollups": [],
+      "overall": {
+        "verdict": "FAIL"
+      }
+    }
+  ]
 }

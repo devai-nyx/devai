@@ -63,5 +63,16 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "adr_id": "ADR-001",
+      "title": "Autonomous loop",
+      "status": "accepted",
+      "date": "2026-05-11",
+      "authors": [
+        "@aarusso"
+      ]
+    }
+  ]
 }

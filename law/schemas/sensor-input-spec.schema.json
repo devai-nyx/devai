@@ -360,5 +360,144 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "sensor-inputs",
+      "source_authority": "F1-architect",
+      "materialization": {
+        "target": ".devai/config/sensor-inputs.json",
+        "allowed_verbs": [
+          "devai adopt upgrade --sensor-inputs"
+        ],
+        "authority_and_consent_required": true,
+        "byte_identity_required": true,
+        "adopter_upgrade_path_required": true,
+        "direct_writes_forbidden": true
+      },
+      "specs": [
+        {
+          "kind": "build",
+          "spec_version": 1,
+          "file_inputs": [
+            {
+              "pattern": "package.json"
+            }
+          ],
+          "tool_inputs": [],
+          "env_inputs": [],
+          "hermetic": true
+        },
+        {
+          "kind": "lint",
+          "spec_version": 1,
+          "file_inputs": [
+            {
+              "pattern": "eslint.config.mjs"
+            }
+          ],
+          "tool_inputs": [],
+          "env_inputs": [],
+          "hermetic": true
+        },
+        {
+          "kind": "type_check",
+          "spec_version": 1,
+          "file_inputs": [
+            {
+              "pattern": "package.json"
+            }
+          ],
+          "tool_inputs": [],
+          "env_inputs": [],
+          "hermetic": true
+        },
+        {
+          "kind": "inventory_api",
+          "spec_version": 1,
+          "file_inputs": [
+            {
+              "pattern": "**/*.ts"
+            }
+          ],
+          "tool_inputs": [],
+          "env_inputs": [],
+          "hermetic": true
+        },
+        {
+          "kind": "inventory_routes",
+          "spec_version": 1,
+          "file_inputs": [
+            {
+              "pattern": "**/*.ts"
+            }
+          ],
+          "tool_inputs": [],
+          "env_inputs": [],
+          "hermetic": true
+        },
+        {
+          "kind": "inventory_data_model",
+          "spec_version": 1,
+          "file_inputs": [
+            {
+              "pattern": "**/*.ts"
+            }
+          ],
+          "tool_inputs": [],
+          "env_inputs": [],
+          "hermetic": true
+        },
+        {
+          "kind": "inventory_rbac",
+          "spec_version": 1,
+          "file_inputs": [
+            {
+              "pattern": "**/*.ts"
+            }
+          ],
+          "tool_inputs": [],
+          "env_inputs": [],
+          "hermetic": true
+        },
+        {
+          "kind": "inventory_data_handling",
+          "spec_version": 1,
+          "file_inputs": [
+            {
+              "pattern": "**/*.ts"
+            }
+          ],
+          "tool_inputs": [],
+          "env_inputs": [],
+          "hermetic": true
+        },
+        {
+          "kind": "inventory_dep_graph",
+          "spec_version": 1,
+          "file_inputs": [
+            {
+              "pattern": "package.json"
+            }
+          ],
+          "tool_inputs": [],
+          "env_inputs": [],
+          "hermetic": true
+        },
+        {
+          "kind": "spec_depth",
+          "spec_version": 1,
+          "file_inputs": [
+            {
+              "pattern": "docs/framework/arch/invariants/*.json"
+            }
+          ],
+          "tool_inputs": [],
+          "env_inputs": [],
+          "hermetic": true
+        }
+      ]
+    }
+  ]
 }

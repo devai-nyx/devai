@@ -202,5 +202,13 @@
       ]
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "generatedAt": "2026-07-14T23:48:57.145Z",
+      "framework": "react",
+      "routes": []
+    }
+  ]
 }

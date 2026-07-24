@@ -254,5 +254,20 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "SR-89f7974460e256a3",
+      "sensor": {
+        "name": "build",
+        "kind": "build"
+      },
+      "timestamp": "2026-07-14T23:48:45.669Z",
+      "status": "pass",
+      "deterministic": true,
+      "command": "pnpm run build",
+      "command_hash": "ce4dccceab6682814be8785fab6f7cc4c874a7a03ce125006766123b57dee5c8"
+    }
+  ]
 }

@@ -114,7 +114,7 @@
           "pid": {
             "type": "string",
             "pattern": "^P[0-9]+$",
-            "description": "Probe id within this charter (P1, P2, \u2026). Stable across charter revisions."
+            "description": "Probe id within this charter (P1, P2, …). Stable across charter revisions."
           },
           "name": {
             "type": "string",
@@ -195,5 +195,23 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "RPC-health",
+      "kind": "api",
+      "mission": "Verify the deployed health endpoint.",
+      "target": {
+        "base_url": "https://example.invalid"
+      },
+      "probes": [
+        {
+          "pid": "P1",
+          "name": "Health responds",
+          "expect": {}
+        }
+      ]
+    }
+  ]
 }

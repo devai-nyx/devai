@@ -49,7 +49,7 @@
         "npm-package",
         "sibling-checkout"
       ],
-      "description": "D-122 (item 2b): an explicit declaration of how this repo consumes the devai CLI, so sibling-checkout linking stops being a silent default. Absent means `npm-package` is assumed (the canonical model, D-118). `devai doctor`'s `devai-consumption-declared` check (adopter posture; binding at tier3, advisory below) compares this against the running CLI's actual resolved provenance (`devai-version-match` check's `info.provenance`) and fails on mismatch \u2014 most commonly an undeclared sibling-checkout consumer. Declare `sibling-checkout` only for the same-portfolio C-4-style reference-adopter pattern; it is a dev convenience, not a second canonical path."
+      "description": "D-122 (item 2b): an explicit declaration of how this repo consumes the devai CLI, so sibling-checkout linking stops being a silent default. Absent means `npm-package` is assumed (the canonical model, D-118). `devai doctor`'s `devai-consumption-declared` check (adopter posture; binding at tier3, advisory below) compares this against the running CLI's actual resolved provenance (`devai-version-match` check's `info.provenance`) and fails on mismatch — most commonly an undeclared sibling-checkout consumer. Declare `sibling-checkout` only for the same-portfolio C-4-style reference-adopter pattern; it is a dev convenience, not a second canonical path."
     },
     "constitution": {
       "type": "object",
@@ -225,7 +225,7 @@
             "full",
             "gate-staged"
           ],
-          "description": "Enforcement profile for `devai policy check ci economy` rule 4 (ci-economy.evidence-gate-wired). full (default when absent): all four mechanical rules are hard. gate-staged: rule 4 downgrades to ADVISORY \u2014 still evaluated and reported on every run, never silently dropped \u2014 for repos on the incremental-adoption path that have not yet wired the evidence gate; rules 1-3 stay hard. gate-staged is a visible staging declaration, not an exemption: graduating to full is expected once the gate is wired (adopter guide step 2)."
+          "description": "Enforcement profile for `devai policy check ci economy` rule 4 (ci-economy.evidence-gate-wired). full (default when absent): all four mechanical rules are hard. gate-staged: rule 4 downgrades to ADVISORY — still evaluated and reported on every run, never silently dropped — for repos on the incremental-adoption path that have not yet wired the evidence gate; rules 1-3 stay hard. gate-staged is a visible staging declaration, not an exemption: graduating to full is expected once the gate is wired (adopter guide step 2)."
         },
         "local_evidence": {
           "type": "object",
@@ -283,5 +283,11 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "project_type": "runtime-host"
+    }
+  ]
 }

@@ -471,5 +471,5 @@
       ]
     }
   ],
-  "$comment": "W02 OPEN (naming collision): invariant `authority` = anchor docs object; record-meta `authority` = authoring role string. Full record-meta embedding blocked until one side renames (candidates: invariant field -> `authority_docs`, or record-meta field -> `authored_by`)."
+  "$comment": "W02 DECIDED, DEFERRED: invariant `authority` (anchor-docs object) will be renamed to `authority_docs`; execution is deferred because it re-anchors trace and requires coordinated consumer migration. Record-meta `authority` remains the authoring-role field."
 }

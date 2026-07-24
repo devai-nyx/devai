@@ -353,5 +353,27 @@
       ]
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "generatedAt": "2026-07-14T23:48:56.619Z",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/users",
+          "controller": {
+            "file": "examples/sample-nest-angular/apps/api/src/users/users.controller.ts"
+          },
+          "evidence": [
+            {
+              "path": "examples/sample-nest-angular/apps/api/src/users/users.controller.ts",
+              "startLine": 10,
+              "endLine": 13
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

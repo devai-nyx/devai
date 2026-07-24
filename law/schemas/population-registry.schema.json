@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/population-registry.schema.json",
+  "title": "Append-able population registry",
+  "description": "Authoritative inventory of append-able populations and the present enforcement state of their count, liveness, and tombstone guards.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "populations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "const": "population-registry"
+    },
+    "populations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/population"
+      }
+    }
+  },
+  "$defs": {
+    "guard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "mechanism",
+        "source",
+        "backlog_ref"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "implemented",
+            "declared",
+            "backlogged"
+          ]
+        },
+        "mechanism": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "backlog_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "path",
+        "record_schema",
+        "count_guard",
+        "liveness_guard",
+        "tombstone_guard"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "record_schema": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "count_guard": {
+          "$ref": "#/$defs/guard"
+        },
+        "liveness_guard": {
+          "$ref": "#/$defs/guard"
+        },
+        "tombstone_guard": {
+          "$ref": "#/$defs/guard"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "population-registry",
+      "populations": [
+        {
+          "id": "schemas",
+          "title": "Contract schemas",
+          "path": "law/schemas/*.schema.json",
+          "record_schema": null,
+          "count_guard": {
+            "state": "implemented",
+            "mechanism": "Roster-directory bijection",
+            "source": "packages/schemas/tests/contract/roster.contract.test.ts",
+            "backlog_ref": null
+          },
+          "liveness_guard": {
+            "state": "backlogged",
+            "mechanism": "Every roster schema must retain a production consumer",
+            "source": null,
+            "backlog_ref": "R-0001/P5"
+          },
+          "tombstone_guard": {
+            "state": "backlogged",
+            "mechanism": "Retired schema identifiers remain reserved",
+            "source": null,
+            "backlog_ref": "post-bootstrap/W02"
+          }
+        }
+      ]
+    }
+  ]
+}

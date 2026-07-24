@@ -233,7 +233,7 @@
     "feature_matrix": {
       "type": "object",
       "additionalProperties": true,
-      "description": "Client-specific feature\u00d7module coverage matrix, populated by configured projection skills."
+      "description": "Client-specific feature×module coverage matrix, populated by configured projection skills."
     },
     "checksums": {
       "type": "object",
@@ -244,5 +244,18 @@
       "description": "SHA-256 hashes of all governance artifacts, for drift detection. Per F5 self-application (Article 36)."
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "generated_at": "2026-05-17T22:18:48.691Z",
+      "integration_head": "9f0a4dd26d81ef2cc009074820c767f7be3c9682",
+      "modules": [],
+      "routes": [],
+      "schemas": [],
+      "components": [],
+      "test_inventory": [],
+      "dependency_graph_hash": "7a4f762c34ee000f2d806468755ea30d08f032d3055913a11a3f92dda8f18d53"
+    }
+  ]
 }

@@ -53,7 +53,7 @@
       "items": {
         "type": "string"
       },
-      "description": "Absorption/supersession provenance per the record meta-structure (\u00a75.1)."
+      "description": "Absorption/supersession provenance per the record meta-structure (§5.1)."
     },
     "supersedes": {
       "type": [
@@ -280,5 +280,25 @@
       ]
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "generatedAt": "2026-05-18T05:30:00.000Z",
+      "roles": [
+        "operator"
+      ],
+      "cases": [
+        {
+          "id": "UC-devai-doctor",
+          "title": "Operator runs doctor to verify repo health (self or adopter)",
+          "mainFlow": [
+            {
+              "action": "Operator runs `devai doctor --self|--adopter|--auto --format human` (Phase 21.B)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

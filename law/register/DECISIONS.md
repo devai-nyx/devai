@@ -583,6 +583,37 @@ Rejected; one verification authority only.
 
 Missing perf script yields UNKNOWN, never N/A.
 
+### DII-098 — Article 42 remains in Part XI
+`type: decision · status: draft · authority: Architect · provenance: dossier Part IX; Constitution W01 Annex item 6; R-0001/P1 altitude sweep`
+
+Article 42 remains in Part XI. Evidence is a distinct constitutional concern, and moving
+the article into Parts VII or VIII would change numbering and anchors without improving
+the doctrine. The placement decision preserves meaning and minimizes anchor churn.
+
+### DII-099 — Invariant anchor documents will use `authority_docs`
+`type: decision · status: draft · authority: Architect · provenance: dossier Part IX §5.1; R-0001/P1 schema alignment`
+
+The invariant schema's anchor-documents object will be renamed from `authority` to
+`authority_docs`; record-meta `authority` remains the authoring-role field. Execution is
+deferred to a coordinated migration because the rename changes every invariant instance,
+trace anchoring, generated types, and consumers.
+
+### DII-100 — Shared execution-status, judgment-verdict, and joint-role vocabulary
+`type: decision · status: draft · authority: Architect · provenance: dossier Part VIII W02.f; CTX-06; R-0001/P1 schema alignment`
+
+The lowercase tri-state definition is `execution_status_core`; the uppercase tri-state
+definition is `verdict_core`. They are distinct vocabularies, not casing aliases.
+`joint` is part of the shared role vocabulary and glossary-entry authority references
+that vocabulary directly.
+
+### DII-101 — Population guard declarations report implementation state honestly
+`type: decision · status: draft · authority: Architect · provenance: dossier Part IX §5; CTX-02; R-0001/P1 population registry`
+
+Every append-able population declares count, liveness, and tombstone guards in
+`law/policy/population-registry.json`. Each declaration distinguishes an implemented
+guard from a declared-but-not-fully-enforced guard and a backlogged guard; the registry
+must never translate a planned guard into current green standing.
+
 
 ## 12. Register-consistency guard
 

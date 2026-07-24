@@ -139,7 +139,7 @@
         "properties": {
           "surface": {
             "type": "string",
-            "description": "What drifted (route, table, env var, \u2026)."
+            "description": "What drifted (route, table, env var, …)."
           },
           "delta": {
             "type": "string",
@@ -149,5 +149,15 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "REL-0001",
+      "kind": "gate",
+      "decided_at": "2026-07-14T03:48:10.569Z",
+      "verdict": "pass",
+      "inputs": {}
+    }
+  ]
 }

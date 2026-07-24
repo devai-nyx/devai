@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/inv-override.schema.json",
   "title": "Invariant Override",
-  "description": "In-source override of a non-constitutional, non-hard-fail invariant. Parsed from `// inv-override:` annotation blocks in source files. Absorbs the LAW-00.OVERRIDE.1 mechanism from the stech-law predecessor draft (D-38). Constitutional and hard-fail invariants cannot be overridden \u2014 they require an Architect amendment.",
+  "description": "In-source override of a non-constitutional, non-hard-fail invariant. Parsed from `// inv-override:` annotation blocks in source files. Absorbs the LAW-00.OVERRIDE.1 mechanism from the stech-law predecessor draft (D-38). Constitutional and hard-fail invariants cannot be overridden — they require an Architect amendment.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -72,5 +72,19 @@
       "description": "Timestamp the override was scanned."
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "OVR-9da3c05a4300318b",
+      "invariant_id": "INV-DEVAI-005",
+      "file": "packages/cli/test/skill-fix-overrides-r11.integration.test.ts",
+      "line": 73,
+      "reason": "temporary exception for sample widget while refactor lands",
+      "ticket": "ENG-1234",
+      "expires": "2099-12-31",
+      "approver": "@testuser",
+      "detected_at": "2026-05-25T06:25:29.132Z"
+    }
+  ]
 }

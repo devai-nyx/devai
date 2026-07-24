@@ -1,0 +1,270 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "population-registry",
+  "populations": [
+    {
+      "id": "decisions",
+      "title": "Decision register entries",
+      "path": "law/register/DECISIONS.md#DII-*",
+      "record_schema": "record-meta.schema.json",
+      "count_guard": {
+        "state": "implemented",
+        "mechanism": "Parsed entry count, identifier uniqueness, and rejection-family completeness",
+        "source": "packages/schemas/tests/contract/register.contract.test.ts",
+        "backlog_ref": null
+      },
+      "liveness_guard": {
+        "state": "backlogged",
+        "mechanism": "Lifecycle and supersession graph checks over every entry",
+        "source": null,
+        "backlog_ref": "R-0001/P5"
+      },
+      "tombstone_guard": {
+        "state": "declared",
+        "mechanism": "DII-003 reserves retired identifiers; mechanical non-remint enforcement is pending",
+        "source": "law/register/DECISIONS.md#DII-003",
+        "backlog_ref": "R-0001/P5"
+      }
+    },
+    {
+      "id": "actions",
+      "title": "CLI action registry",
+      "path": "packages/core/src/actions/**",
+      "record_schema": "actions-list-output.schema.json",
+      "count_guard": {
+        "state": "backlogged",
+        "mechanism": "Roster ceiling and floor",
+        "source": null,
+        "backlog_ref": "R-0001/P4-P5"
+      },
+      "liveness_guard": {
+        "state": "backlogged",
+        "mechanism": "Every supported action retains a production invoker or explicit porcelain standing",
+        "source": null,
+        "backlog_ref": "post-bootstrap/W05"
+      },
+      "tombstone_guard": {
+        "state": "backlogged",
+        "mechanism": "Retired verbs resolve to a migration disposition for one major",
+        "source": null,
+        "backlog_ref": "post-bootstrap/W05"
+      }
+    },
+    {
+      "id": "skills",
+      "title": "Skill manifests",
+      "path": "packages/core/src/skills/**",
+      "record_schema": "skill-manifest.schema.json",
+      "count_guard": {
+        "state": "backlogged",
+        "mechanism": "Manifest roster parity",
+        "source": null,
+        "backlog_ref": "R-0001/P4-P5"
+      },
+      "liveness_guard": {
+        "state": "backlogged",
+        "mechanism": "Every supported skill retains a registry consumer and executable entry",
+        "source": null,
+        "backlog_ref": "R-0001/P5"
+      },
+      "tombstone_guard": {
+        "state": "backlogged",
+        "mechanism": "Retired skill ids remain reserved with successor guidance",
+        "source": null,
+        "backlog_ref": "post-bootstrap/W04"
+      }
+    },
+    {
+      "id": "schemas",
+      "title": "Contract schemas",
+      "path": "law/schemas/*.schema.json",
+      "record_schema": null,
+      "count_guard": {
+        "state": "implemented",
+        "mechanism": "Explicit roster bijects with the canonical schema directory",
+        "source": "packages/schemas/tests/contract/roster.contract.test.ts",
+        "backlog_ref": null
+      },
+      "liveness_guard": {
+        "state": "backlogged",
+        "mechanism": "Every roster schema retains a production validator, parser, or type consumer",
+        "source": null,
+        "backlog_ref": "R-0001/P5"
+      },
+      "tombstone_guard": {
+        "state": "declared",
+        "mechanism": "Archived predecessor schemas are segregated; successor tombstone enforcement is pending",
+        "source": "law/schemas/predecessor-archive/",
+        "backlog_ref": "R-0001/P5"
+      }
+    },
+    {
+      "id": "invariants",
+      "title": "Invariant records",
+      "path": "law/invariants/INV-*.json",
+      "record_schema": "invariant.schema.json",
+      "count_guard": {
+        "state": "implemented",
+        "mechanism": "Exact corpus count and per-record validation",
+        "source": "packages/schemas/tests/contract/roster.contract.test.ts",
+        "backlog_ref": null
+      },
+      "liveness_guard": {
+        "state": "declared",
+        "mechanism": "Each record declares lifecycle; active-consumer and dormancy enforcement are pending",
+        "source": "law/schemas/invariant.schema.json",
+        "backlog_ref": "R-0001/P5"
+      },
+      "tombstone_guard": {
+        "state": "backlogged",
+        "mechanism": "Retired invariant ids remain reserved in a successor tombstone record",
+        "source": null,
+        "backlog_ref": "R-0001/P5"
+      }
+    },
+    {
+      "id": "sensor-kinds",
+      "title": "Sensor kind registry",
+      "path": "law/policy/sensor-registry.json",
+      "record_schema": null,
+      "count_guard": {
+        "state": "backlogged",
+        "mechanism": "Registry-derived roster parity",
+        "source": null,
+        "backlog_ref": "post-bootstrap/W05"
+      },
+      "liveness_guard": {
+        "state": "backlogged",
+        "mechanism": "Every kind has an emitter and feeds a cell or is explicitly diagnostic",
+        "source": null,
+        "backlog_ref": "post-bootstrap/W05"
+      },
+      "tombstone_guard": {
+        "state": "backlogged",
+        "mechanism": "Retired sensor kinds remain reserved with cell disposition",
+        "source": null,
+        "backlog_ref": "post-bootstrap/W05"
+      }
+    },
+    {
+      "id": "adrs",
+      "title": "Architecture decision records",
+      "path": "law/adr/ADR-NNN-*.md",
+      "record_schema": "adr.schema.json",
+      "count_guard": {
+        "state": "implemented",
+        "mechanism": "Gapless filename-bound ADR roster",
+        "source": "packages/schemas/tests/contract/adr.contract.test.ts",
+        "backlog_ref": null
+      },
+      "liveness_guard": {
+        "state": "declared",
+        "mechanism": "Record status and supersession fields validate; stale-active detection is pending",
+        "source": "packages/schemas/tests/contract/adr.contract.test.ts",
+        "backlog_ref": "R-0001/P5"
+      },
+      "tombstone_guard": {
+        "state": "backlogged",
+        "mechanism": "Retired ADR ids remain reserved and resolve to successors",
+        "source": null,
+        "backlog_ref": "R-0001/P5"
+      }
+    },
+    {
+      "id": "workflows",
+      "title": "CI workflows",
+      "path": ".github/workflows/*.yml",
+      "record_schema": null,
+      "count_guard": {
+        "state": "backlogged",
+        "mechanism": "Workflow roster parity",
+        "source": null,
+        "backlog_ref": "R-0001/P7"
+      },
+      "liveness_guard": {
+        "state": "backlogged",
+        "mechanism": "Every workflow retains a declared trigger and live script target",
+        "source": null,
+        "backlog_ref": "R-0001/P7"
+      },
+      "tombstone_guard": {
+        "state": "backlogged",
+        "mechanism": "Retired workflow identities remain in migration history",
+        "source": null,
+        "backlog_ref": "post-bootstrap/W06"
+      }
+    },
+    {
+      "id": "examples",
+      "title": "Adopter example projects",
+      "path": "examples/**",
+      "record_schema": null,
+      "count_guard": {
+        "state": "backlogged",
+        "mechanism": "Example roster parity",
+        "source": null,
+        "backlog_ref": "R-0001/P4-P5"
+      },
+      "liveness_guard": {
+        "state": "backlogged",
+        "mechanism": "Every example builds and exercises a supported path",
+        "source": null,
+        "backlog_ref": "R-0001/P5"
+      },
+      "tombstone_guard": {
+        "state": "backlogged",
+        "mechanism": "Retired example ids remain documented with replacement guidance",
+        "source": null,
+        "backlog_ref": "post-bootstrap/W06"
+      }
+    },
+    {
+      "id": "docs-pages",
+      "title": "Published documentation pages",
+      "path": "docs/**/*.md",
+      "record_schema": null,
+      "count_guard": {
+        "state": "backlogged",
+        "mechanism": "Generated documentation index parity",
+        "source": null,
+        "backlog_ref": "R-0001/P3-P5"
+      },
+      "liveness_guard": {
+        "state": "backlogged",
+        "mechanism": "Every page is reachable and free of stale currency claims",
+        "source": null,
+        "backlog_ref": "R-0001/P3-P5"
+      },
+      "tombstone_guard": {
+        "state": "backlogged",
+        "mechanism": "Retired canonical pages preserve redirects or explicit successor pointers",
+        "source": null,
+        "backlog_ref": "post-bootstrap/W06"
+      }
+    },
+    {
+      "id": "proof-epochs",
+      "title": "Proof epoch appenders",
+      "path": "record/proofs/**/*.jsonl",
+      "record_schema": null,
+      "count_guard": {
+        "state": "backlogged",
+        "mechanism": "Proof file growth is bounded by epoch and kind rather than execution count",
+        "source": null,
+        "backlog_ref": "R-0001/P4-P5"
+      },
+      "liveness_guard": {
+        "state": "backlogged",
+        "mechanism": "Every open epoch closes into the chain with a terminal hash",
+        "source": null,
+        "backlog_ref": "R-0001/P4-P5"
+      },
+      "tombstone_guard": {
+        "state": "declared",
+        "mechanism": "Proof records are never deleted; correction is an appended erratum bound by the chain",
+        "source": "law/constitution.md#article-42-evidence",
+        "backlog_ref": "R-0001/P5"
+      }
+    }
+  ]
+}

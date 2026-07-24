@@ -38,5 +38,15 @@
       "description": "Glob patterns for test files exempt from weakening checks. Useful for legitimate test deprecations (e.g., a feature being removed). Each ignored path SHOULD have a corresponding entry in the project's CHANGELOG explaining the deprecation."
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "threshold_ratio": 0.2,
+      "absolute_decrease_floor": 1,
+      "skip_added_threshold": 1,
+      "invariant_reference_removed_threshold": 1,
+      "ignored_paths": []
+    }
+  ]
 }

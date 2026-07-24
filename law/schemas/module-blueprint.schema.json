@@ -252,7 +252,7 @@
             "high"
           ],
           "default": "none",
-          "description": "PII classification at the spec layer. Drives INV-BLUEPRINT-002 (every pii\u2260none field must declare retention). The discrete enum (codex convention) is more constrained than data-model-inventory's free-form pii_class (which intentionally supports per-jurisdiction taxonomies); a scaffolded module's data-model-inventory will lift its pii_class from this field per a documented mapping."
+          "description": "PII classification at the spec layer. Drives INV-BLUEPRINT-002 (every pii≠none field must declare retention). The discrete enum (codex convention) is more constrained than data-model-inventory's free-form pii_class (which intentionally supports per-jurisdiction taxonomies); a scaffolded module's data-model-inventory will lift its pii_class from this field per a documented mapping."
         },
         "retention": {
           "type": "string",
@@ -263,7 +263,7 @@
             "forever"
           ],
           "default": "default",
-          "description": "Retention policy. INV-BLUEPRINT-002: any field with pii\u2260none MUST declare retention as something other than 'default'."
+          "description": "Retention policy. INV-BLUEPRINT-002: any field with pii≠none MUST declare retention as something other than 'default'."
         }
       }
     },
@@ -656,5 +656,29 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "BP-DEMO-BOOKMARK-001",
+      "module": {
+        "name": "Bookmark",
+        "namespace": "demo",
+        "version": "1.0.0"
+      },
+      "database": {
+        "entities": [
+          {
+            "name": "Bookmark",
+            "fields": [
+              {
+                "name": "id",
+                "type": "uuid"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

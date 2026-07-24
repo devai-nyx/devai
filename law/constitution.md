@@ -14,9 +14,9 @@ provenance: REV-0001 + W01-annex deltas applied 2026-07-23 (Arts 1/6/9 amended i
 
 **WIREFRAME DRAFT — regenerated from the pre-W01 review draft (REV-0001). This text
 carries no authority until the founding ratification (BR-1/W01) authored under a declared
-Architect session with the ratified genesis attestation. The forty articles below are the
-predecessor's live 0.6.0 text transposed mechanically; Article 41 and the W01 annex are
-new. The predecessor's amendment history (0.1.0-0.6.0) is NOT carried here — it remains,
+Architect session with the ratified genesis attestation. The first forty articles below
+are the predecessor's live 0.6.0 text transposed mechanically; Articles 41–42 and the W01
+annex are new. The predecessor's amendment history (0.1.0-0.6.0) is NOT carried here — it remains,
 frozen, in the archived predecessor; this constitution's own amendment history begins
 empty at 1.0.0 with a genesis pointer.**
 
@@ -122,7 +122,7 @@ A human user of DEVAI declares one of five roles at session start. The declarati
 - **Architect.** Engineering authority. Authors and modifies engineering specifications, invariants, trace, and ADRs under F1 Architect-authority paths.
 - **Inspector.** Sensor authority. Authors and modifies tests under F3 paths.
 - **Engineer.** Plant authority. Authors and modifies code under F2 paths.
-- **Auditor.** Observer authority. Read-only on all substrates. Produces reports, scorecards, backlogs, and status assessments, written only to the designated Auditor observation path (Article 6: `docs/work/*/audit/`); runtime-recorded F5 state produced by verbs it executes is attributed to those verbs (Article 6, F5 state paths). Outside those designated outputs, the Auditor role makes no commits that modify F1, F2, F3, or F5. Observation output carries no authority over the reference signal: an Auditor report may recommend, never ratify.
+- **Auditor.** Observer authority. Read-only on all substrates. Produces reports, scorecards, backlogs, and status assessments, written only to the designated Auditor observation path (Article 6: `work/audit/`); runtime-recorded F5 state produced by verbs it executes is attributed to those verbs (Article 6, F5 state paths). Outside those designated outputs, the Auditor role makes no commits that modify F1, F2, F3, or F5. Observation output carries no authority over the reference signal: an Auditor report may recommend, never ratify.
 
 ### Article 8. Agent disciplines
 
@@ -172,7 +172,7 @@ Trace is the F1 artifact that maps each invariant to:
 - The tests that probe it (test references with reliability metadata).
 - The code areas that implement it (path globs).
 
-Trace lives at `docs/framework/arch/trace.json` under Architect authority. Inspector and Engineer consume trace but never edit it. Trace completeness ratios are deterministic gate inputs.
+Trace lives at `law/trace.json` under Architect authority. Inspector and Engineer consume trace but never edit it. Trace completeness ratios are deterministic gate inputs.
 
 ### Article 14. Per-invariant change policy
 
@@ -451,9 +451,13 @@ The six annex deltas are now IN the article text above, each marked with a brack
 3. **Zero-exemption mutator gate → APPLIED** in Article 6; full precision remains ADR-001 delta A1.1.
 4. **Universal uncheckable-evidence rule → APPLIED via new Article 42 (Part XI — Evidence)**, which also closes a defect this application discovered: the live predecessor text had NO evidence article — the manifest's "Articles 32–33 cover D-24" verification was wrong, and the corpus's "Article-32 chain" citations are a numbering fossil. Article 42 also constitutionalizes error-is-never-a-verdict and FAIL-persistence (CTX-05/07 candidates, promoted).
 5. **PROMOTE-residue absorption → APPLIED to Article 1** (framework-not-product ex-D-51/57; embedded-package ex-D-4). Verified already covered: D-12 coupled triplets = Article 24 (read and confirmed); D-146/D-164 evidence-promotion contract deliberately stays ADR-tier (ADR-003 successor).
-6. **Altitude sweep → PENDING W01**: a full no-operational-values pass over all 42 articles, plus the ordering question — whether Article 42 relocates into Parts VII/VIII (renumbering + re-anchoring cost) or Part XI stands.
+6. **Altitude sweep → APPLIED in R-0001/P1.** The sweep findings and policy-routing
+   backlog are recorded in `work/rounds/R-0001/law-altitude-sweep.md`. Article 42 remains
+   in Part XI: it is a constitutional evidence doctrine, while relocation would create
+   needless anchor churn without changing meaning.
 
-W01's remaining authoring work: the sweep (item 6), the crosswalk table (article ↔ source for all 42), and ratification itself. Nothing here binds until then.
+W01's remaining authoring work: the crosswalk table (article ↔ source for all 42) and
+ratification itself. Nothing here binds until then.
 
 ## Part XI — Evidence
 
@@ -463,4 +467,4 @@ Evidence is hash-chained and append-only. Every claim the framework makes about 
 
 Judge-only or otherwise independently uncheckable evidence never establishes readiness. An error is never a verdict: a crash, timeout, missing input, or infrastructure failure is a failure to observe, and a failure to observe never manufactures a PASS, a FAIL, or a readiness claim. A recorded FAIL is superseded only by a newer observation of the same kind, never by absence from a computation subset.
 
-[1.0.0 placement note: appended as Article 42 because the live predecessor text had no evidence article — the manifest's "Articles 32–33 cover D-24" verification was wrong (those are sensor uniformity and the Auditor), and the corpus's "Article-32 chain" citations are a numbering fossil from an earlier constitution version. W01 may reorder this into Part VII/VIII at the cost of renumbering and re-anchoring; the wireframe appends to preserve the 34 imported invariants' anchors.]
+[1.0.0 placement note: retained as Article 42 in Part XI by R-0001/P1 because the live predecessor text had no evidence article — the manifest's "Articles 32–33 cover D-24" verification was wrong (those are sensor uniformity and the Auditor), and the corpus's "Article-32 chain" citations are a numbering fossil from an earlier constitution version. Retention preserves existing article anchors without changing the doctrine.]

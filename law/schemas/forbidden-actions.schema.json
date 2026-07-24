@@ -15,7 +15,7 @@
     },
     "waivers": {
       "type": "array",
-      "description": "D-123 (item 6): explicit, reasoned exceptions for canonical entries this repo intentionally does not carry. A canonical id absent from `actions` AND absent from `waivers` is reported by `devai policy check forbidden actions`'s coverage check as an unwaived gap \u2014 extend the registry, never silently drop protections it ships with.",
+      "description": "D-123 (item 6): explicit, reasoned exceptions for canonical entries this repo intentionally does not carry. A canonical id absent from `actions` AND absent from `waivers` is reported by `devai policy check forbidden actions`'s coverage check as an unwaived gap — extend the registry, never silently drop protections it ships with.",
       "items": {
         "type": "object",
         "additionalProperties": false,
@@ -85,5 +85,18 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "actions": [
+        {
+          "id": "FORBID-FORCE-PUSH",
+          "action": "Force-push to any branch",
+          "rationale": "Overwrites history",
+          "severity": "critical"
+        }
+      ]
+    }
+  ]
 }

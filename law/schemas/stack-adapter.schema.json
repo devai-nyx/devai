@@ -92,7 +92,7 @@
     },
     "prompt_overlays": {
       "type": "object",
-      "description": "Per-writer-skill prompt-component appendages. Each key is a SKILL-write-* id; each value is an array of additional PromptComponentInput records that the writer composes onto the default writer composition (global + role + task? + payload + overlay). Each overlay item carries an optional `mode`: `append` (default) adds the component; `replace_layer` replaces the writer's own namespaced component for that layer (the `${skill_id}.${layer}` entry) \u2014 shared components like `writer.output-contract` and per-writer word-budget survive. The `replace_layer` form lets server-rendered packs (e.g. Laravel-Blade) override stack-incompatible guidance baked into the default global, rather than only appending to it (P3.10).",
+      "description": "Per-writer-skill prompt-component appendages. Each key is a SKILL-write-* id; each value is an array of additional PromptComponentInput records that the writer composes onto the default writer composition (global + role + task? + payload + overlay). Each overlay item carries an optional `mode`: `append` (default) adds the component; `replace_layer` replaces the writer's own namespaced component for that layer (the `${skill_id}.${layer}` entry) — shared components like `writer.output-contract` and per-writer word-budget survive. The `replace_layer` form lets server-rendered packs (e.g. Laravel-Blade) override stack-incompatible guidance baked into the default global, rather than only appending to it (P3.10).",
       "additionalProperties": {
         "type": "array",
         "items": {
@@ -217,11 +217,31 @@
           "type": "number",
           "minimum": 0,
           "maximum": 1,
-          "default": 1.0,
+          "default": 1,
           "description": "Optional weight (future: weighted-OR detection). Phase 17.G uses OR semantics regardless."
         }
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "redox-pack-express-knex-postgres-angular",
+      "name": "Express + Knex + Postgres + Angular",
+      "version": "1.0.0",
+      "stack": {
+        "backend": "express",
+        "frontend": "angular",
+        "db": "postgres"
+      },
+      "detect": {
+        "signals": [
+          {
+            "kind": "package_dep_present"
+          }
+        ]
+      }
+    }
+  ]
 }

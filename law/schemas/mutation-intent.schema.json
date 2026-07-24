@@ -389,5 +389,41 @@
       ]
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "MI-0123456789abcdef",
+      "trust": "untrusted-intent",
+      "task_id": "TASK-0028",
+      "skill_id": "SKILL-feedback-iteration",
+      "stage": "invariants-tests-to-code",
+      "base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "submitted_at": "2026-07-21T12:01:00.000Z",
+      "authority_role": "engineer",
+      "strategy": "semantic-review",
+      "implements": [
+        {
+          "invariant_id": "INV-DEVAI-021",
+          "criteria": [
+            {
+              "claim": "The attributed run produced the candidate bytes.",
+              "demonstrated_by": [
+                {
+                  "kind": "semantic-review",
+                  "rubric_ref": "docs/rubric.md"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "declared_touched": [
+        "packages/core/src/example.ts"
+      ],
+      "effects_permitted": [
+        "fs:plant"
+      ]
+    }
+  ]
 }

@@ -10,10 +10,10 @@ provenance: [CTX-06, dossier Part VIII W02.a-f, schema audits 2026-07-23]
 
 # Schema regeneration status
 
-Roster: **51 files** = 47 imported contract schemas (CORE 26 + ADOPTER 10 + INTERNAL 9
-+ the 2 bind-never-ghost edge cases) + genesis-attestation + 3 infrastructure schemas
-(common-defs, record-meta, meta). Archived: 15 under predecessor-archive/ (excluded from
-count, gate, exports).
+Canonical corpus after R-0001/P1: **52 files** = the 51-file imported roster plus
+`population-registry.schema.json`. The package roster/count guard wiring is a
+role-separated P1 handoff. Archived: 15 under predecessor-archive/ (excluded from count,
+gate, exports).
 
 **COUNT CORRECTION vs earlier drafts**: CTX-06/Part VIII said "45+1=46" while also ruling
 the two edge cases import-with-bindings. Correct figures: 48 contract schemas + 3
@@ -21,13 +21,13 @@ infrastructure = 51 roster files. Corpus figures updated.
 
 | Improvement | Status |
 |---|---|
-| 1. common-defs layer | File written (verdict both-casings pending the W02 one-enum-vs-two-fields determination; severity/roles/substrates/lifecycles/patterns single-sourced). $ref rewiring: DEMONSTRATIVE ONLY (invariant.severity). Full rewiring = W02 (must not prejudge casing decision). |
+| 1. common-defs layer | Execution-status and judgment-verdict definitions are separately named; validation-result consumers are rewired; glossary authority references the shared role vocabulary including `joint`. Broader vocabulary rewiring remains W02. |
 | 2. registry-derived enums | NOT applied (requires the sensor/action registries, W05 artifacts). Marker convention reserved. |
 | 3. record-meta fragment | Written, exampled, $refs common-defs. |
 | 4. schema_version | ALL 51/51 versioned 1.0.0; $schema + $id normalized to the devai.nyxk.com.br namespace. |
-| 5. validated examples | 6/51 have examples (genesis, record-meta, common-defs, meta, invariant [real INV-AUTH-001 instance], glossary-entry [real GE-001]). Remaining 45: W02 authoring work — the meta-schema gate is RED over them by design until then. |
-| 6. meta-schema + linter | meta.schema.json written (thin gate, self-compliant). `check schemas` linter: NOT implemented (W02/W05 code). |
+| 5. validated examples | 52/52 canonical schemas have validated examples. Existing examples were preserved; new examples use current/predecessor instances where available and minimal authored fixtures only where no valid instance was found. |
+| 6. meta-schema + linter | `meta.schema.json` is written and the package implements the current recursive canon checks. R-0001/P1 gate: zero meta noncompliance and zero canon findings after roster wiring. |
 
-Honest state: improvements 3/4/6-declarative are fully applied; 1/5 demonstratively;
-2/6-linter await their registries and code. The red examples gap is deliberate — fake
-examples would violate the canon harder than missing ones.
+Honest state: improvements 1 (named core vocabularies), 3, 4, 5, and the current slice of
+6 are applied. Registry-derived enums and broader common-vocabulary rewiring remain
+later work; population liveness/tombstone enforcement remains explicitly backlogged.

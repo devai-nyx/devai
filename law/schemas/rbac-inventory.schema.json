@@ -3,7 +3,7 @@
   "$id": "https://devai.nyxk.com.br/schemas/rbac-inventory.schema.json",
   "$comment": "REDOX-RBAC: absorbed from /Users/aarusso/Development/tools/redox/src/schemas/Rbac.schema.json in Phase 17.B (D-57).",
   "title": "RBAC Inventory",
-  "description": "Inventory of roles, permissions, and bindings (endpoint / route / entity) discovered by deterministic static introspection of RBAC-like tables, decorators, and guard wiring. Emitted as a SensorReading body at tier L0 by inventory_rbac sensors (Phase 17.C). Feeds INV-INVENTORY-003 (every endpoint has \u22651 role binding). Per Constitution Article 17 (sensors); per D-57 (brownfield-adoption substrate).",
+  "description": "Inventory of roles, permissions, and bindings (endpoint / route / entity) discovered by deterministic static introspection of RBAC-like tables, decorators, and guard wiring. Emitted as a SensorReading body at tier L0 by inventory_rbac sensors (Phase 17.C). Feeds INV-INVENTORY-003 (every endpoint has ≥1 role binding). Per Constitution Article 17 (sensors); per D-57 (brownfield-adoption substrate).",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -58,7 +58,7 @@
       "minItems": 1
     },
     "roleBindings": {
-      "description": "Direct role\u2192permission bindings (effective permissions may also come from inheritance).",
+      "description": "Direct role→permission bindings (effective permissions may also come from inheritance).",
       "type": "array",
       "items": {
         "$ref": "#/$defs/RoleBinding"
@@ -429,5 +429,32 @@
       ]
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "generatedAt": "2026-07-14T23:48:58.526Z",
+      "roles": [
+        {
+          "id": "__placeholder"
+        }
+      ],
+      "permissions": [
+        {
+          "id": "guard:AuthGuard"
+        }
+      ],
+      "bindings": {
+        "endpointBindings": [],
+        "routeBindings": [],
+        "entityBindings": []
+      },
+      "unmapped": {
+        "rolesWithoutPermissions": [],
+        "permissionsWithoutBindings": [],
+        "endpointsWithoutRole": [],
+        "routesWithoutRole": []
+      }
+    }
+  ]
 }

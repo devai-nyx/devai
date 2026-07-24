@@ -109,5 +109,26 @@
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.0.0",
+  "examples": [
+    [
+      {
+        "name": "doctor",
+        "previous_name": "doctor",
+        "path": [
+          "doctor"
+        ],
+        "description": "Run repository health checks.",
+        "authority": "sensor",
+        "lifecycle": "supported",
+        "lifecycle_reason": "Primary health-check surface.",
+        "promotion_criteria": [],
+        "visibility": "common",
+        "profiles": [
+          "tier1"
+        ],
+        "effects": "read"
+      }
+    ]
+  ]
 }
