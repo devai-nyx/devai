@@ -1,0 +1,88 @@
+{
+  "_family": "scaffold + commit-push + fix-lint + emit-rgr — 9 skills",
+  "_blueprint_source": "examples/redox-pack-nestjs-postgres-angular/fixtures/BP-DEMO-BOOKMARK-001.json (copied into each fixture repo by the runner as blueprint.json)",
+  "_pack_signals": "each scaffolder fixture repo gets nestjs-postgres-angular detect signals: package.json deps @nestjs/core+@nestjs/common+@angular/core, angular.json, turbo.json, pnpm-workspace.yaml, apps/api/src/, apps/web/src/",
+  "skills": [
+    {
+      "skill_id": "SKILL-scaffold-api",
+      "strategy": "main-path",
+      "inputs": { "blueprint_path": "<FIXTURE>/blueprint.json" },
+      "files": { "_pack_signals": "true" },
+      "ctx": {}
+    },
+    {
+      "skill_id": "SKILL-scaffold-ci",
+      "strategy": "main-path",
+      "inputs": { "blueprint_path": "<FIXTURE>/blueprint.json" },
+      "files": { "_pack_signals": "true" },
+      "ctx": {}
+    },
+    {
+      "skill_id": "SKILL-scaffold-db",
+      "strategy": "main-path",
+      "inputs": { "blueprint_path": "<FIXTURE>/blueprint.json" },
+      "files": { "_pack_signals": "true" },
+      "ctx": {}
+    },
+    {
+      "skill_id": "SKILL-scaffold-docs",
+      "strategy": "main-path",
+      "inputs": { "blueprint_path": "<FIXTURE>/blueprint.json" },
+      "files": { "_pack_signals": "true" },
+      "ctx": {}
+    },
+    {
+      "skill_id": "SKILL-scaffold-tests",
+      "strategy": "main-path",
+      "inputs": { "blueprint_path": "<FIXTURE>/blueprint.json" },
+      "files": { "_pack_signals": "true" },
+      "ctx": {}
+    },
+    {
+      "skill_id": "SKILL-scaffold-ui",
+      "strategy": "main-path",
+      "inputs": { "blueprint_path": "<FIXTURE>/blueprint.json" },
+      "files": { "_pack_signals": "true" },
+      "ctx": {}
+    },
+    {
+      "skill_id": "SKILL-fix-lint",
+      "strategy": "main-path",
+      "inputs": {},
+      "files": {
+        "package.json": "{\"name\":\"r20-lint-fixture\",\"type\":\"module\",\"packageManager\":\"pnpm@10.0.0\"}",
+        "eslint.config.mjs": "export default [];\n",
+        "clean.mjs": "export const ok = 1;\n"
+      },
+      "ctx": {},
+      "notes": "empty flat config lints zero files -> clean early return; harness resolves the lockfile-installed workspace eslint"
+    },
+    {
+      "skill_id": "SKILL-emit-rgr",
+      "strategy": "main-path",
+      "inputs": {
+        "reading": { "id": "SR-fixture0001" },
+        "summary": "reference gap",
+        "ambiguity": "spec ambiguity in fixture",
+        "emitting_task_id": "TASK-0001",
+        "emitting_discipline": "engineer",
+        "evidence_refs": ["EV-fixture0001"]
+      },
+      "files": {},
+      "ctx": { "timestamp": "2026-01-01T00:00:00.000Z" },
+      "notes": "fresh counter file per run -> RGR-0001 deterministic"
+    },
+    {
+      "skill_id": "SKILL-commit-push",
+      "strategy": "main-path",
+      "inputs": {
+        "files": ["README.md"],
+        "message": "devai: characterization commit",
+        "dry_run": true
+      },
+      "files": { "README.md": "# fixture\n" },
+      "ctx": {},
+      "notes": "dry_run tape: subprocess-free, structurally incapable of pushing (all execFileSync guarded by !dryRun)"
+    }
+  ]
+}

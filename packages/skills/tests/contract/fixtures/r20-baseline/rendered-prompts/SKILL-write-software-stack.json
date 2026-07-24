@@ -1,0 +1,62 @@
+{
+  "calls": [
+    {
+      "messages": {
+        "system": "Document the software stack of a brownfield repository. Inputs: repo-introspection (languages, frameworks, package managers) and the api / routes / data-model summaries. Sections: Languages, Frameworks, Package managers, Database (dialect + table count), Runtime assumptions, Notable absences (e.g. \"no migrations found\"). Cite concrete versions where the inputs supply them.\n\n---\n\nOutput ONLY JSON: { \"markdown\": \"<doc body>\", \"citations\": [{\"kind\": \"endpoint\"|\"route\"|\"table\"|\"column\"|\"role\"|\"file\", \"ref\": \"<concrete identifier from inputs>\"}], \"inferred_fields\": [\"<short phrase for each value you marked (inferred)>\"], \"gaps\": [\"<short phrase per input element that was missing>\"] }. The citations / inferred_fields / gaps arrays may be empty but the keys MUST be present. Do not invent endpoints, routes, tables, columns, edges, roles, or files not present in the inputs. Mark any value not directly supported by the inputs as \"(inferred)\" inline in the markdown AND list it in inferred_fields. When the inputs are silent on a section, write a short \"Gaps\" note in the markdown AND list the missing element in gaps. Do not write the response as anything other than the specified JSON object.\n\n---\n\nConstraints: ≤ 400 words for the markdown body. Bullet-heavy is fine.\n\n---\n\nYou are a staff engineer writing developer-facing brownfield documentation. Be concrete and citation-first: every claim should map back to an input element (controller, route, table, file). Mark any value not directly supported by the inputs as \"(inferred)\" and list it in inferred_fields.",
+        "user": "{\n  \"introspection\": {\n    \"languages\": [\n      \"ts\"\n    ],\n    \"frameworks\": [\n      \"nestjs\"\n    ],\n    \"packageManager\": \"pnpm\"\n  },\n  \"api\": {\n    \"endpoint_count\": 1,\n    \"sample_endpoints\": [\n      {\n        \"method\": \"GET\",\n        \"path\": \"/health\"\n      }\n    ]\n  },\n  \"data_model\": {\n    \"dialect\": \"postgres\",\n    \"table_count\": 1,\n    \"column_count\": 1,\n    \"foreign_key_count\": 0,\n    \"tables\": [\n      {\n        \"name\": \"users\",\n        \"column_names\": [\n          \"id\"\n        ]\n      }\n    ]\n  }\n}"
+      },
+      "meta": {
+        "caller": "SKILL-write-software-stack",
+        "prompt_pc_id": "PC-c2014bb46f64be0e",
+        "stack_sha256": "c2014bb46f64be0e334e1b78efe931c209420951708b8be07c42350065608e00"
+      },
+      "opts": {
+        "max_output_tokens": 4096,
+        "response_format_json": true,
+        "response_json_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "citations": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "ref": {
+                    "type": "string"
+                  }
+                },
+                "required": ["kind", "ref"],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "gaps": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "inferred_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "markdown": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": ["markdown", "citations", "inferred_fields", "gaps"],
+          "type": "object"
+        },
+        "temperature": 0.2
+      },
+      "seq": 0
+    }
+  ],
+  "classification": "prompt-bearing",
+  "skill_id": "SKILL-write-software-stack"
+}

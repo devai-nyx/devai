@@ -1,0 +1,62 @@
+{
+  "calls": [
+    {
+      "messages": {
+        "system": "Document the schema. Inputs: data-model-inventory body (tables with columns, PKs, FKs, unique constraints). For every table in the inputs, write a section with: name, schema (default public), column list (name | type | nullable | default), primary key, foreign keys (with on_delete/on_update where given), unique constraints, evidence citation (migration file:line where the inputs supply it).\n\n---\n\nOutput ONLY JSON: { \"markdown\": \"<doc body>\", \"citations\": [{\"kind\": \"endpoint\"|\"route\"|\"table\"|\"column\"|\"role\"|\"file\", \"ref\": \"<concrete identifier from inputs>\"}], \"inferred_fields\": [\"<short phrase for each value you marked (inferred)>\"], \"gaps\": [\"<short phrase per input element that was missing>\"] }. The citations / inferred_fields / gaps arrays may be empty but the keys MUST be present. Do not invent endpoints, routes, tables, columns, edges, roles, or files not present in the inputs. Mark any value not directly supported by the inputs as \"(inferred)\" inline in the markdown AND list it in inferred_fields. When the inputs are silent on a section, write a short \"Gaps\" note in the markdown AND list the missing element in gaps. Do not write the response as anything other than the specified JSON object.\n\n---\n\nConstraints: ≤ 1500 words for the markdown body. Bullet-heavy is fine.\n\n---\n\nYou are a database engineer. Your audience is engineers about to touch the schema. Be schema-faithful: do not collapse columns, do not abbreviate type names, do not omit nullability. Cite migration filenames where the inputs supply them. When data-model is missing a field that a real DB always has (e.g., default values), say so honestly rather than guessing.",
+        "user": "{\n  \"data_model\": {\n    \"dialect\": \"postgres\",\n    \"table_count\": 1,\n    \"column_count\": 2,\n    \"foreign_key_count\": 0,\n    \"tables\": [\n      {\n        \"name\": \"users\",\n        \"column_names\": [\n          \"id\",\n          \"email\"\n        ]\n      }\n    ]\n  }\n}"
+      },
+      "meta": {
+        "caller": "SKILL-write-database-reference",
+        "prompt_pc_id": "PC-39f20001de119bfe",
+        "stack_sha256": "39f20001de119bfe04d499229c03eba49e8d7b1157f21f2db696a0838c9549db"
+      },
+      "opts": {
+        "max_output_tokens": 4096,
+        "response_format_json": true,
+        "response_json_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "citations": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "ref": {
+                    "type": "string"
+                  }
+                },
+                "required": ["kind", "ref"],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "gaps": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "inferred_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "markdown": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": ["markdown", "citations", "inferred_fields", "gaps"],
+          "type": "object"
+        },
+        "temperature": 0.2
+      },
+      "seq": 0
+    }
+  ],
+  "classification": "prompt-bearing",
+  "skill_id": "SKILL-write-database-reference"
+}

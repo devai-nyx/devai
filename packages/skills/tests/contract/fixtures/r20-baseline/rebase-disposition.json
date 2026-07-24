@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0.0",
+  "pre_rebase_r22_head": "83b0c21bce38fe11e6eebdbc85cab3b7fcff3960",
+  "r20_candidate_head": "0a669bba9a6605513ae59d43b411a81781317027",
+  "changed_fixtures": {
+    "api-surface.json": {
+      "upstream_commits": ["ab7d92395f28386fa48e176cdb0ec3e1acc733c7"],
+      "explained_delta": "adds the accepted skillAllowsWritePath public value export"
+    },
+    "manifest-corpus.json": {
+      "upstream_commits": [
+        "0a36785bfc2386b6bc3f12694d6de5aaa4106518",
+        "52b9f5acbdaada9f8a66a42e1d34fb9d00d3227e"
+      ],
+      "explained_delta": "preserves Architect ownership of docs-links and ADR fixes, the Auditor-only audit path, and experimental lifecycle metadata for cross-role round controllers"
+    },
+    "fingerprint-behavior.json": {
+      "upstream_commits": ["c2225b635b94683282d63c9faf599c76e74e315c"],
+      "explained_delta": "updates only SKILL-scaffold-ci rendered and filesystem hashes for the accepted Node-24 module workflow template"
+    }
+  },
+  "unchanged_fixtures": [
+    "bounded-writer-corpus.json",
+    "ledger-corpus.json",
+    "ledger-verdict-table.json",
+    "prompt-inventory.json",
+    "rendered-prompts/**",
+    "round-corpus-backlog-audit.json",
+    "round-corpus-orchestrate.json"
+  ]
+}

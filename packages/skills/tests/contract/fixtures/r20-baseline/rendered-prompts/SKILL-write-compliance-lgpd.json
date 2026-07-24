@@ -1,0 +1,62 @@
+{
+  "calls": [
+    {
+      "messages": {
+        "system": "Produce an LGPD-aligned (Lei Geral de Proteção de Dados — Brazil) data inventory. Inputs: data-handling body (data-model-inventory with pii_class set per heuristics). For every column with pii_class set, output a row: table.column | pii_class | legal_basis (or \"MISSING — required by INV-INVENTORY-002\") | retention (or \"MISSING — required by INV-INVENTORY-002\"). Top section: counts (total PII columns, columns missing legal_basis, columns missing retention). Per-category subsection: group rows by pii_class (contact / identity / credentials / financial / location / personal / health / ip / other). LGPD-specific posture: Article 7 bases (consent / contract / legal obligation / vital interests / public administration / legitimate interest / credit protection / health protection / research) — record the legal_basis verbatim from inputs.\n\n---\n\nOutput ONLY JSON: { \"markdown\": \"<doc body>\", \"citations\": [{\"kind\": \"endpoint\"|\"route\"|\"table\"|\"column\"|\"role\"|\"file\", \"ref\": \"<concrete identifier from inputs>\"}], \"inferred_fields\": [\"<short phrase for each value you marked (inferred)>\"], \"gaps\": [\"<short phrase per input element that was missing>\"] }. The citations / inferred_fields / gaps arrays may be empty but the keys MUST be present. Do not invent endpoints, routes, tables, columns, edges, roles, or files not present in the inputs. Mark any value not directly supported by the inputs as \"(inferred)\" inline in the markdown AND list it in inferred_fields. When the inputs are silent on a section, write a short \"Gaps\" note in the markdown AND list the missing element in gaps. Do not write the response as anything other than the specified JSON object.\n\n---\n\nConstraints: ≤ 1500 words for the markdown body. Bullet-heavy is fine.\n\n---\n\nYou are a privacy / data-protection engineer. Audience: DPO + legal review + engineers responsible for the data. Treat missing legal_basis or missing retention as compliance findings (cite INV-INVENTORY-002), not blanks to fill with plausible defaults. Never guess at retention periods, lawful bases, or data-subject categories.",
+        "user": "{\n  \"data_handling\": {\n    \"pii_column_count\": 2,\n    \"pii_columns\": [\n      {\n        \"table\": \"users\",\n        \"column\": \"email\",\n        \"pii_class\": \"contact\",\n        \"missing\": []\n      },\n      {\n        \"table\": \"users\",\n        \"column\": \"cpf\",\n        \"pii_class\": \"identity\",\n        \"missing\": [\n          \"legal_basis\",\n          \"retention\"\n        ]\n      }\n    ]\n  }\n}"
+      },
+      "meta": {
+        "caller": "SKILL-write-compliance-lgpd",
+        "prompt_pc_id": "PC-d678a334f3289d63",
+        "stack_sha256": "d678a334f3289d63c7a6a2dd8513d0f0480069c4d8ad695b3d206b61e40d404e"
+      },
+      "opts": {
+        "max_output_tokens": 4096,
+        "response_format_json": true,
+        "response_json_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "citations": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "ref": {
+                    "type": "string"
+                  }
+                },
+                "required": ["kind", "ref"],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "gaps": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "inferred_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "markdown": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": ["markdown", "citations", "inferred_fields", "gaps"],
+          "type": "object"
+        },
+        "temperature": 0.2
+      },
+      "seq": 0
+    }
+  ],
+  "classification": "prompt-bearing",
+  "skill_id": "SKILL-write-compliance-lgpd"
+}

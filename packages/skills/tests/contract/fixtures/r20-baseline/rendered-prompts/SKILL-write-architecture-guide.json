@@ -1,0 +1,62 @@
+{
+  "calls": [
+    {
+      "messages": {
+        "system": "Write an Architecture Guide for a brownfield repository. Inputs: dep-graph (node/edge counts), api map (controller files), routes inventory (component files), data-model (tables), repo-introspection (paths). Sections: Top-level layout, Module boundaries (with rough fan-in/fan-out), Cross-cutting concerns (auth/rbac, persistence, frontend↔backend), Notable cross-package imports, Where the unmapped routes/endpoints concentrate. Cite real directories from the inputs.\n\n---\n\nOutput ONLY JSON: { \"markdown\": \"<doc body>\", \"citations\": [{\"kind\": \"endpoint\"|\"route\"|\"table\"|\"column\"|\"role\"|\"file\", \"ref\": \"<concrete identifier from inputs>\"}], \"inferred_fields\": [\"<short phrase for each value you marked (inferred)>\"], \"gaps\": [\"<short phrase per input element that was missing>\"] }. The citations / inferred_fields / gaps arrays may be empty but the keys MUST be present. Do not invent endpoints, routes, tables, columns, edges, roles, or files not present in the inputs. Mark any value not directly supported by the inputs as \"(inferred)\" inline in the markdown AND list it in inferred_fields. When the inputs are silent on a section, write a short \"Gaps\" note in the markdown AND list the missing element in gaps. Do not write the response as anything other than the specified JSON object.\n\n---\n\nConstraints: ≤ 800 words for the markdown body. Bullet-heavy is fine.\n\n---\n\nYou are a staff engineer writing developer-facing brownfield documentation. Be concrete and citation-first: every claim should map back to an input element (controller, route, table, file). Mark any value not directly supported by the inputs as \"(inferred)\" and list it in inferred_fields.",
+        "user": "{\n  \"introspection\": {\n    \"languages\": [\n      \"ts\"\n    ]\n  },\n  \"api\": {\n    \"endpoint_count\": 1,\n    \"sample_endpoints\": [\n      {\n        \"method\": \"GET\",\n        \"path\": \"/users\",\n        \"controller\": \"UsersController\"\n      }\n    ]\n  },\n  \"routes\": {\n    \"framework\": \"react-router\",\n    \"route_count\": 1,\n    \"sample_routes\": [\n      {\n        \"path\": \"/users\",\n        \"component\": \"UsersPage\"\n      }\n    ]\n  },\n  \"data_model\": {\n    \"dialect\": \"postgres\",\n    \"table_count\": 1,\n    \"column_count\": 1,\n    \"foreign_key_count\": 0,\n    \"tables\": [\n      {\n        \"name\": \"users\",\n        \"column_names\": [\n          \"id\"\n        ]\n      }\n    ]\n  },\n  \"dep_graph\": {\n    \"node_count\": 2,\n    \"edge_count\": 1\n  }\n}"
+      },
+      "meta": {
+        "caller": "SKILL-write-architecture-guide",
+        "prompt_pc_id": "PC-1adbe1fc0fd9270f",
+        "stack_sha256": "1adbe1fc0fd9270f1616d84829ba336ee28d8e780190006e1876408220caf5a4"
+      },
+      "opts": {
+        "max_output_tokens": 4096,
+        "response_format_json": true,
+        "response_json_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "citations": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "ref": {
+                    "type": "string"
+                  }
+                },
+                "required": ["kind", "ref"],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "gaps": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "inferred_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "markdown": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": ["markdown", "citations", "inferred_fields", "gaps"],
+          "type": "object"
+        },
+        "temperature": 0.2
+      },
+      "seq": 0
+    }
+  ],
+  "classification": "prompt-bearing",
+  "skill_id": "SKILL-write-architecture-guide"
+}

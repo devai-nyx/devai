@@ -1,0 +1,171 @@
+{
+  "count": 16,
+  "records": [
+    {
+      "char_count": 120,
+      "file": "skills/index.ts",
+      "placeholder_names": ["String(i)", "String(maxIterations)"],
+      "sha256": "5dbbd5576e44c1e22336ec36cd37e8273a77ca7ea02a0f461e3afec8356b0c92",
+      "skill_id": "SKILL-feedback-iteration"
+    },
+    {
+      "char_count": 144,
+      "file": "skills/index.ts",
+      "placeholder_names": [],
+      "sha256": "929e9bf3ebb98c116d83a71cf6610a9281e70ce70a659f966f4c50ad52ec2289",
+      "skill_id": "SKILL-review-dry"
+    },
+    {
+      "char_count": 729,
+      "file": "skills/index.ts",
+      "placeholder_names": ["roundDirRel", "ts", "failingTable"],
+      "sha256": "37665ca3bb5f3789cb726f75c8a77dc2c0a7abd3ae3cb1ab7ed8ea49cd9edc06",
+      "skill_id": "SKILL-fix-overrides"
+    },
+    {
+      "char_count": 473,
+      "file": "skills/index.ts",
+      "placeholder_names": ["roundDirRel", "ts", "String(items.length)", "itemsBlock"],
+      "sha256": "0de8613282b8b822f267f961908d47290d4f18f263150595f6ea7ff3d33784c3",
+      "skill_id": "SKILL-fix-overrides"
+    },
+    {
+      "char_count": 936,
+      "file": "skills/index.ts",
+      "placeholder_names": [
+        "String(roundN)",
+        "String(waveN)",
+        "slug",
+        "item.title ?? item.description ?? '(TODO: name the goal in one sentence)'",
+        "item.id ?? '?'",
+        "item.cell ?? '?'",
+        "String(item.priority ?? '?')",
+        "String(waveN).padStart(2, '0')",
+        "slug"
+      ],
+      "sha256": "339a71f661174959911a7fc0260e7796be2e586c04d8db115f0d08c01dcadd25",
+      "skill_id": "SKILL-fix-overrides"
+    },
+    {
+      "char_count": 124,
+      "file": "skills/index.ts",
+      "placeholder_names": [
+        "String(waveN).padStart(2, '0')",
+        "slug",
+        "goal",
+        "origin",
+        "String(waveN - 1)"
+      ],
+      "sha256": "8711e469bbea39640e343737be0c144b37d6d06cdef0f7d71a30efdf797012d4",
+      "skill_id": "SKILL-fix-overrides"
+    },
+    {
+      "char_count": 204,
+      "file": "skills/index.ts",
+      "placeholder_names": ["catalogRows"],
+      "sha256": "fba0b0c5276602d46aeb0893a7b0d5e0e0c845acfab6502e86fd12308c64f5db",
+      "skill_id": "SKILL-fix-overrides"
+    },
+    {
+      "char_count": 2322,
+      "file": "skills/index.ts",
+      "placeholder_names": ["String(roundN)", "catalogBlock"],
+      "sha256": "8dbdd8c3aae3d88707d2e272f65df9adce02c7541100960afe1c9f3cc11abb50",
+      "skill_id": "SKILL-fix-overrides"
+    },
+    {
+      "char_count": 350,
+      "file": "skills/index.ts",
+      "placeholder_names": [
+        "String(opts.roundN)",
+        "String(opts.waveNum)",
+        "opts.slug",
+        "ts",
+        "opts.status",
+        "opts.summary ?? '_Minimal log written by SKILL-round-orchestrate. Agents executing prompt-only waves SHOULD overwrite this with the full per-wave log template from docs/adopters/round-break.md §7 when they update status to clean._'"
+      ],
+      "sha256": "f19a67833bfed61776a551d8ccf124894ba420b37adebb1a08ab92b6ef8b41a1",
+      "skill_id": "SKILL-round-backlog"
+    },
+    {
+      "char_count": 122,
+      "file": "skills/index.ts",
+      "placeholder_names": ["String(entry.num)", "entry.slug", "promptsDir"],
+      "sha256": "502dd0a53dde40f0bdbbfe554063507ebf912f177f786aab0dc20f7eee06cf01",
+      "skill_id": "SKILL-round-orchestrate"
+    },
+    {
+      "char_count": 168,
+      "file": "skills/index.ts",
+      "placeholder_names": ["String(entry.num)", "entry.slug", "waveStatus", "mode"],
+      "sha256": "da4e0a64a053257e878127bb962ec8ec96576e60c45ec75067d3f8a2c8c1ddd6",
+      "skill_id": "SKILL-round-orchestrate"
+    },
+    {
+      "char_count": 245,
+      "file": "skills/index.ts",
+      "placeholder_names": [
+        "String(entry.num)",
+        "entry.slug",
+        "gate",
+        "gate",
+        "String(fixSkill.manifest.auto_fix_capable)",
+        "String(iter)"
+      ],
+      "sha256": "a6dd6cdde7a8043fe5bba8930c4c465694335e502ccf6c1ce7acc0e7f57f2468",
+      "skill_id": "SKILL-round-orchestrate"
+    },
+    {
+      "char_count": 215,
+      "file": "skills/index.ts",
+      "placeholder_names": [
+        "String(entry.num)",
+        "entry.slug",
+        "gate",
+        "fixSkill === null ? `No SKILL-fix-${gate} registered.` : `SKILL-fix-${gate} has auto_fix_capable=none.`"
+      ],
+      "sha256": "502d4b5ccee9dda1fbe73929e68933ad3475bb0344356ea33a9f7a786c3eb3df",
+      "skill_id": "SKILL-round-orchestrate"
+    },
+    {
+      "char_count": 845,
+      "file": "skills/index.ts",
+      "placeholder_names": [
+        "String(opts.roundN)",
+        "opts.goal",
+        "ts",
+        "opts.verdict",
+        "closingCommitsLine",
+        "opts.goal",
+        "gateSummary",
+        "gateTable",
+        "String(opts.scorecardDelta.before_count)",
+        "String(opts.scorecardDelta.after_count)",
+        "String(opts.scorecardDelta.flipped.length)",
+        "deltaTable",
+        "waveTable",
+        "blockerList"
+      ],
+      "sha256": "89dc81d6ec708cf9fee57d254660733eebb4938cedb6efafeb568f8832a9b9e4",
+      "skill_id": "SKILL-round-orchestrate"
+    },
+    {
+      "char_count": 121,
+      "file": "skills/index.ts",
+      "placeholder_names": [
+        "String(gatePassCount)",
+        "String(gateFailCount)",
+        "String(gateNotConfiguredCount)"
+      ],
+      "sha256": "51e09dab293aaaf3b33597720a2a9d6a9b174ae66648eb87905d4fc1540f26ba",
+      "skill_id": "SKILL-round-verify-publish"
+    },
+    {
+      "char_count": 127,
+      "file": "skills/writers/write-helper.ts",
+      "placeholder_names": ["frozen.id", "composition.id", "frozenPath"],
+      "sha256": "63734a20e5aa2c6f9a78b49d8699e91d8a032310e9bb77f26b9f0861b4776b42",
+      "skill_id": null
+    }
+  ]
+}

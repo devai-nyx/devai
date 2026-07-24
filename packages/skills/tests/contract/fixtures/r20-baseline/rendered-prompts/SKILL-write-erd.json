@@ -1,0 +1,62 @@
+{
+  "calls": [
+    {
+      "messages": {
+        "system": "Produce an ERD. Inputs: data-model-inventory body. The markdown MUST contain exactly one fenced Mermaid block tagged `mermaid` with an erDiagram declaring every table from the inputs, its columns (PK / FK / type), and FK relationships. Outside the Mermaid block: one short paragraph naming the dialect (per inputs.data_model.dialect) and the table/column counts.\n\n---\n\nOutput ONLY JSON: { \"markdown\": \"<doc body>\", \"citations\": [{\"kind\": \"endpoint\"|\"route\"|\"table\"|\"column\"|\"role\"|\"file\", \"ref\": \"<concrete identifier from inputs>\"}], \"inferred_fields\": [\"<short phrase for each value you marked (inferred)>\"], \"gaps\": [\"<short phrase per input element that was missing>\"] }. The citations / inferred_fields / gaps arrays may be empty but the keys MUST be present. Do not invent endpoints, routes, tables, columns, edges, roles, or files not present in the inputs. Mark any value not directly supported by the inputs as \"(inferred)\" inline in the markdown AND list it in inferred_fields. When the inputs are silent on a section, write a short \"Gaps\" note in the markdown AND list the missing element in gaps. Do not write the response as anything other than the specified JSON object.\n\n---\n\nConstraints: ≤ 300 words for the markdown body. Bullet-heavy is fine.\n\n---\n\nYou are a database engineer. Your audience is engineers about to touch the schema. Be schema-faithful: do not collapse columns, do not abbreviate type names, do not omit nullability. Cite migration filenames where the inputs supply them. When data-model is missing a field that a real DB always has (e.g., default values), say so honestly rather than guessing.",
+        "user": "{\n  \"data_model\": {\n    \"dialect\": \"postgres\",\n    \"table_count\": 2,\n    \"column_count\": 3,\n    \"foreign_key_count\": 1,\n    \"tables\": [\n      {\n        \"name\": \"users\",\n        \"column_names\": [\n          \"id\"\n        ]\n      },\n      {\n        \"name\": \"orders\",\n        \"column_names\": [\n          \"id\",\n          \"user_id\"\n        ]\n      }\n    ]\n  }\n}"
+      },
+      "meta": {
+        "caller": "SKILL-write-erd",
+        "prompt_pc_id": "PC-12dc652bcb7e299a",
+        "stack_sha256": "12dc652bcb7e299a4266f5e90716469f1e52ae40e455e139da1b7b2dd3300193"
+      },
+      "opts": {
+        "max_output_tokens": 4096,
+        "response_format_json": true,
+        "response_json_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "citations": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "ref": {
+                    "type": "string"
+                  }
+                },
+                "required": ["kind", "ref"],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "gaps": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "inferred_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "markdown": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": ["markdown", "citations", "inferred_fields", "gaps"],
+          "type": "object"
+        },
+        "temperature": 0.2
+      },
+      "seq": 0
+    }
+  ],
+  "classification": "prompt-bearing",
+  "skill_id": "SKILL-write-erd"
+}

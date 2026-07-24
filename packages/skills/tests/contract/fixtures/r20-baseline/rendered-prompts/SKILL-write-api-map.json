@@ -1,0 +1,62 @@
+{
+  "calls": [
+    {
+      "messages": {
+        "system": "Inputs: api-map body with endpoints[]. Group endpoints by controller class (from controller.class) for OO-framework stacks; for procedural stacks (Express / Laravel-web), group by route file. For each endpoint show: METHOD path (auth.guards if any) — controller.methodName at controller.file:startLine. At the top: total endpoint count + unique-controller-file count.\n\n---\n\nOutput ONLY JSON: { \"markdown\": \"<doc body>\", \"citations\": [{\"kind\": \"endpoint\"|\"route\"|\"table\"|\"column\"|\"role\"|\"file\", \"ref\": \"<concrete identifier from inputs>\"}], \"inferred_fields\": [\"<short phrase for each value you marked (inferred)>\"], \"gaps\": [\"<short phrase per input element that was missing>\"] }. The citations / inferred_fields / gaps arrays may be empty but the keys MUST be present. Do not invent endpoints, routes, tables, columns, edges, roles, or files not present in the inputs. Mark any value not directly supported by the inputs as \"(inferred)\" inline in the markdown AND list it in inferred_fields. When the inputs are silent on a section, write a short \"Gaps\" note in the markdown AND list the missing element in gaps. Do not write the response as anything other than the specified JSON object.\n\n---\n\nConstraints: ≤ 1200 words for the markdown body. Bullet-heavy is fine.\n\n---\n\nYou are an API documentarian. Your audience is engineers integrating against these endpoints. Group as the framework idiom dictates (controller class for OO frameworks; route file for procedural). Surface auth posture (guards, middleware, public/protected) prominently — readers consult this doc to know what is reachable without authentication.",
+        "user": "{\n  \"api\": {\n    \"endpoint_count\": 1,\n    \"sample_endpoints\": [\n      {\n        \"method\": \"GET\",\n        \"path\": \"/users\",\n        \"controller\": \"UsersController\"\n      }\n    ],\n    \"stack\": {\n      \"framework\": \"nestjs\"\n    }\n  }\n}"
+      },
+      "meta": {
+        "caller": "SKILL-write-api-map",
+        "prompt_pc_id": "PC-e8595e4f4fc495aa",
+        "stack_sha256": "e8595e4f4fc495aa84eab86d2dcbd0d7de0de39766ddb04493462388b06a2fb6"
+      },
+      "opts": {
+        "max_output_tokens": 4096,
+        "response_format_json": true,
+        "response_json_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "citations": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "ref": {
+                    "type": "string"
+                  }
+                },
+                "required": ["kind", "ref"],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "gaps": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "inferred_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "markdown": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": ["markdown", "citations", "inferred_fields", "gaps"],
+          "type": "object"
+        },
+        "temperature": 0.2
+      },
+      "seq": 0
+    }
+  ],
+  "classification": "prompt-bearing",
+  "skill_id": "SKILL-write-api-map"
+}

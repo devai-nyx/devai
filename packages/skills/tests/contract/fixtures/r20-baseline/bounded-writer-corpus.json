@@ -1,0 +1,54 @@
+{
+  "table": [
+    {
+      "label": "in-scope simple write",
+      "rejected": [],
+      "written": ["src/ok.ts"]
+    },
+    {
+      "label": "out-of-scope reject",
+      "rejected": ["lib/no.ts"],
+      "written": []
+    },
+    {
+      "label": "dotdot traversal reject",
+      "rejected": ["../escape.ts"],
+      "written": []
+    },
+    {
+      "label": "absolute path reject",
+      "rejected": ["/tmp/abs.ts"],
+      "written": []
+    },
+    {
+      "label": "empty path reject",
+      "rejected": [""],
+      "written": []
+    },
+    {
+      "label": "dash-prefix reject",
+      "rejected": ["-rf"],
+      "written": []
+    },
+    {
+      "label": "symlink escape reject",
+      "rejected": ["src/vendor/pwned.txt"],
+      "written": []
+    },
+    {
+      "label": "star-star allows everything in tree",
+      "rejected": [],
+      "written": ["anywhere/file.md"]
+    },
+    {
+      "label": "mixed batch: authorized written, unauthorized rejected",
+      "rejected": ["lib/b.ts", "src/vendor/c.ts"],
+      "written": ["src/a.ts", "src/d.ts"]
+    },
+    {
+      "label": "literal-prefix scope match",
+      "rejected": [],
+      "written": ["docs/x.md"]
+    }
+  ]
+}

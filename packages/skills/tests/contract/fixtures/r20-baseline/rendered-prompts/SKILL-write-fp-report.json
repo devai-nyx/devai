@@ -1,0 +1,62 @@
+{
+  "calls": [
+    {
+      "messages": {
+        "system": "Inputs: api-map endpoints, routes-inventory routes, data-model tables (treated as candidate ILFs). Sections: Summary (UFP estimate, AFP if VAF supplied, sensitivity bounds), ILF inventory (tables → ILFs with rough complexity), EI/EO/EQ inventory (endpoints → transactions, classified by HTTP method), AFP calculation, Caveats (mark every inferred classification \"(inferred)\"). Show your arithmetic.\n\n---\n\nOutput ONLY JSON: { \"markdown\": \"<doc body>\", \"citations\": [{\"kind\": \"endpoint\"|\"route\"|\"table\"|\"column\"|\"role\"|\"file\", \"ref\": \"<concrete identifier from inputs>\"}], \"inferred_fields\": [\"<short phrase for each value you marked (inferred)>\"], \"gaps\": [\"<short phrase per input element that was missing>\"] }. The citations / inferred_fields / gaps arrays may be empty but the keys MUST be present. Do not invent endpoints, routes, tables, columns, edges, roles, or files not present in the inputs. Mark any value not directly supported by the inputs as \"(inferred)\" inline in the markdown AND list it in inferred_fields. When the inputs are silent on a section, write a short \"Gaps\" note in the markdown AND list the missing element in gaps. Do not write the response as anything other than the specified JSON object.\n\n---\n\nConstraints: ≤ 2000 words for the markdown body. Bullet-heavy is fine.\n\n---\n\nYou are an IFPUG-trained function-point counter. Your audience reviews your reasoning, not just your total. Show every classification (ILF / EIF / EI / EO / EQ), state the complexity bucket (low/avg/high) and weight, and run the arithmetic. Generous-counting policy: when classification is ambiguous, prefer the more inclusive bucket and call out the ambiguity in caveats.",
+        "user": "{\n  \"api\": {\n    \"endpoint_count\": 2,\n    \"sample_endpoints\": [\n      {\n        \"method\": \"POST\",\n        \"path\": \"/users\"\n      },\n      {\n        \"method\": \"GET\",\n        \"path\": \"/users\"\n      }\n    ]\n  },\n  \"routes\": {\n    \"framework\": \"react-router\",\n    \"route_count\": 1,\n    \"sample_routes\": [\n      {\n        \"path\": \"/users\",\n        \"component\": \"UsersPage\"\n      }\n    ]\n  },\n  \"data_model\": {\n    \"dialect\": \"postgres\",\n    \"table_count\": 1,\n    \"column_count\": 1,\n    \"foreign_key_count\": 0,\n    \"tables\": [\n      {\n        \"name\": \"users\",\n        \"column_names\": [\n          \"id\"\n        ]\n      }\n    ]\n  }\n}"
+      },
+      "meta": {
+        "caller": "SKILL-write-fp-report",
+        "prompt_pc_id": "PC-74225e05a5f1e138",
+        "stack_sha256": "74225e05a5f1e1387d8807a30e06ccfba4c746c256a841be8e81e6e0f13c7ebc"
+      },
+      "opts": {
+        "max_output_tokens": 4096,
+        "response_format_json": true,
+        "response_json_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "citations": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "ref": {
+                    "type": "string"
+                  }
+                },
+                "required": ["kind", "ref"],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "gaps": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "inferred_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "markdown": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": ["markdown", "citations", "inferred_fields", "gaps"],
+          "type": "object"
+        },
+        "temperature": 0.2
+      },
+      "seq": 0
+    }
+  ],
+  "classification": "prompt-bearing",
+  "skill_id": "SKILL-write-fp-report"
+}

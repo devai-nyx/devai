@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["plan", "stub_path", "language"],
+  "properties": {
+    "plan": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["test_name", "assertion"],
+        "properties": { "test_name": { "type": "string" }, "assertion": { "type": "string" } }
+      }
+    },
+    "stub_path": { "type": "string" },
+    "language": { "type": "string" }
+  }
+}

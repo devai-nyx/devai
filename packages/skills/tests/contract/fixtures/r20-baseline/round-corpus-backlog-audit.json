@@ -1,0 +1,103 @@
+{
+  "audit": {
+    "evidence": {
+      "executed_artifacts": {
+        "audit_dir": ".devai/local/rounds/round-777/audit",
+        "files": [
+          ".devai/local/rounds/round-777/audit/assessment.json",
+          ".devai/local/rounds/round-777/audit/scorecard.baseline.json",
+          ".devai/local/rounds/round-777/audit/scratch.md"
+        ],
+        "round_dir": ".devai/local/rounds/round-777",
+        "sub_skill_results": {
+          "SKILL-assess-state": "pass",
+          "SKILL-compute-scorecard": "pass"
+        }
+      },
+      "next_phase": "backlog",
+      "phase": "audit",
+      "references": {
+        "prompts_library": "docs/adopters/round-prompts/B0-audit.md",
+        "skills": ["SKILL-assess-state", "SKILL-compute-scorecard"]
+      },
+      "round_dir": ".devai/local/rounds/round-777",
+      "steps": [
+        {
+          "description": "Run SKILL-assess-state to compute the current scorecard.",
+          "id": "audit.1"
+        },
+        {
+          "description": "Run SKILL-compute-scorecard for the per-cell verdict matrix.",
+          "id": "audit.2"
+        },
+        {
+          "description": "Materialize .devai/local/rounds/round-777/audit/scratch.md with findings, open questions, and prior-round carryovers.",
+          "id": "audit.3"
+        },
+        {
+          "description": "Snapshot relevant gov/audit/ docs into .devai/local/rounds/round-777/audit/inputs/.",
+          "id": "audit.4"
+        }
+      ]
+    },
+    "status": "pass"
+  },
+  "backlog": {
+    "evidence": {
+      "executed_artifacts": {
+        "backlog_item_count": 3,
+        "files": [
+          ".devai/local/rounds/round-777/backlog.json",
+          ".devai/local/rounds/round-777/backlog.md",
+          ".devai/local/rounds/round-777/prompts/01-f1-t6-fail.md",
+          ".devai/local/rounds/round-777/prompts/02-f3-t9-review.md",
+          ".devai/local/rounds/round-777/prompts/03-f5-t4-fail.md",
+          ".devai/local/rounds/round-777/prompts/00-orchestrator.md"
+        ],
+        "prompts_dir": ".devai/local/rounds/round-777/prompts",
+        "round_dir": ".devai/local/rounds/round-777"
+      },
+      "next_phase": "orchestrate",
+      "phase": "backlog",
+      "references": {
+        "prompts_library": "docs/adopters/round-prompts/B1-backlog.md",
+        "skills": ["SKILL-compile-backlog"]
+      },
+      "round_dir": ".devai/local/rounds/round-777",
+      "steps": [
+        {
+          "description": "Read .devai/local/rounds/round-777/audit/scratch.md and run SKILL-compile-backlog for the failing-cell list.",
+          "id": "backlog.1"
+        },
+        {
+          "description": "Group items into waves; assign Model effort hints (low/medium/high).",
+          "id": "backlog.2"
+        },
+        {
+          "description": "Materialize .devai/local/rounds/round-777/prompts/00-orchestrator.md from B3 template.",
+          "id": "backlog.3"
+        },
+        {
+          "description": "Materialize .devai/local/rounds/round-777/prompts/NN-<slug>.md per backlog item from B1/B2 templates.",
+          "id": "backlog.4"
+        },
+        {
+          "description": "Each worker prompt MUST carry Goal / Inputs / Deliverable / Acceptance / Logging / Model headings.",
+          "id": "backlog.5"
+        }
+      ]
+    },
+    "status": "pass"
+  },
+  "files": {
+    "/.devai/local/rounds/round-777/audit/assessment.json": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"id\": \"AS-<TSC>-001\",\n  \"generated_at\": \"<TS>\",\n  \"scorecard_id\": \"SC-<TSC>-001\",\n  \"previous_assessment_id\": null,\n  \"narrative\": \"Overall: YELLOW. 0/45 cells passing. 44 cell(s) unknown (sensor coverage gap). Your scorecard is heavily UNKNOWN. This usually means correctness sensors (sense-lint, sense-test, sense-build, sense-type-check) aren't emitting SensorReadings yet. To populate the cell matrix, wrap your existing test/lint/build scripts as `devai sense-* --emit-reading` invocations (one per kind) and re-run this assessment. See docs/adopters/first-introspection.md#correctness-sensors for the recommended wrapper pattern.\",\n  \"deltas\": [],\n  \"backlog_actions\": {\n    \"additions\": [],\n    \"completions\": [],\n    \"deprioritizations\": []\n  },\n  \"recommended_priorities\": []\n}",
+    "/.devai/local/rounds/round-777/audit/scorecard.baseline.json": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"id\": \"SC-<TSC>-001\",\n  \"generated_at\": \"<TS>\",\n  \"integration_head\": \"000000000000000000000000000000000000000f\",\n  \"thresholds_used\": {\n    \"source\": \"defaults\"\n  },\n  \"cells\": [\n    {\n      \"substrate\": \"F1\",\n      \"property\": \"T1\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F1\",\n      \"property\": \"T2\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F1\",\n      \"property\": \"T3\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F1\",\n      \"property\": \"T4\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F1\",\n      \"property\": \"T5\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F1\",\n      \"property\": \"T6\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F1\",\n      \"property\": \"T7\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F1\",\n      \"property\": \"T8\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F1\",\n      \"property\": \"T9\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F2\",\n      \"property\": \"T1\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F2\",\n      \"property\": \"T2\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F2\",\n      \"property\": \"T3\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F2\",\n      \"property\": \"T4\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F2\",\n      \"property\": \"T5\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F2\",\n      \"property\": \"T6\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F2\",\n      \"property\": \"T7\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F2\",\n      \"property\": \"T8\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F2\",\n      \"property\": \"T9\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F3\",\n      \"property\": \"T1\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F3\",\n      \"property\": \"T2\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F3\",\n      \"property\": \"T3\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F3\",\n      \"property\": \"T4\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F3\",\n      \"property\": \"T5\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F3\",\n      \"property\": \"T6\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F3\",\n      \"property\": \"T7\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F3\",\n      \"property\": \"T8\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F3\",\n      \"property\": \"T9\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F4\",\n      \"property\": \"T1\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F4\",\n      \"property\": \"T2\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F4\",\n      \"property\": \"T3\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F4\",\n      \"property\": \"T4\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F4\",\n      \"property\": \"T5\",\n      \"verdict\": \"N/A\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F4\",\n      \"property\": \"T6\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F4\",\n      \"property\": \"T7\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F4\",\n      \"property\": \"T8\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F4\",\n      \"property\": \"T9\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F5\",\n      \"property\": \"T1\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F5\",\n      \"property\": \"T2\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F5\",\n      \"property\": \"T3\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F5\",\n      \"property\": \"T4\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F5\",\n      \"property\": \"T5\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F5\",\n      \"property\": \"T6\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F5\",\n      \"property\": \"T7\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F5\",\n      \"property\": \"T8\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    },\n    {\n      \"substrate\": \"F5\",\n      \"property\": \"T9\",\n      \"verdict\": \"UNKNOWN\",\n      \"deterministic\": true\n    }\n  ],\n  \"substrate_aggregates\": {\n    \"F1\": {\n      \"verdict\": \"UNKNOWN\"\n    },\n    \"F2\": {\n      \"verdict\": \"UNKNOWN\"\n    },\n    \"F3\": {\n      \"verdict\": \"UNKNOWN\"\n    },\n    \"F4\": {\n      \"verdict\": \"UNKNOWN\"\n    },\n    \"F5\": {\n      \"verdict\": \"UNKNOWN\"\n    }\n  },\n  \"invariant_rollups\": [],\n  \"overall\": {\n    \"verdict\": \"UNKNOWN\"\n  }\n}",
+    "/.devai/local/rounds/round-777/audit/scratch.md": "# .devai/local/rounds/round-777 — audit scratch\n\n**Generated:** <TS>\n**Status:** auto-materialized by SKILL-round-audit (R4-W3 real execution).\n\n## Current state\n\nSee `audit/assessment.json` (full assess-state evidence) and\n`audit/scorecard.baseline.json` (per-cell verdict matrix).\n\n## Failing cells\n\n_None observed in the current scorecard._\n\n## Open questions\n\n_(populate via human review; auto-detection is out of scope this round)_\n\n## Carryovers from prior rounds\n\n_(scan `.devai/state/decisions.jsonl` for kind=defer + status=open records)_\n\n## Notes\n\n- This file is REGENERATED on every `SKILL-round-audit` invocation.\n- Human-authored additions will be overwritten; copy them to a sibling\n  file (e.g., `audit/notes.md`) if persistence is desired.\n",
+    "/.devai/local/rounds/round-777/backlog.json": "{\n  \"items\": [\n    {\n      \"id\": \"BL-F1-T6\",\n      \"title\": \"F1 × T6 → FAIL\",\n      \"priority\": 80,\n      \"cell\": \"F1×T6\",\n      \"verdict\": \"FAIL\"\n    },\n    {\n      \"id\": \"BL-F3-T9\",\n      \"title\": \"F3 × T9 → REVIEW\",\n      \"priority\": 50,\n      \"cell\": \"F3×T9\",\n      \"verdict\": \"REVIEW\"\n    },\n    {\n      \"id\": \"BL-F5-T4\",\n      \"title\": \"F5 × T4 → FAIL\",\n      \"priority\": 80,\n      \"cell\": \"F5×T4\",\n      \"verdict\": \"FAIL\"\n    }\n  ],\n  \"generated_at\": \"<TS>\"\n}",
+    "/.devai/local/rounds/round-777/backlog.md": "# .devai/local/rounds/round-777 — backlog\n\n**Generated:** <TS>\n**Status:** auto-materialized by SKILL-round-backlog (R4-W3 real execution).\n**Item count:** 3\n\n## Items (priority order)\n\n1. **F1 × T6 → FAIL** (id: `BL-F1-T6`, priority: 80, cell: F1×T6)\n2. **F3 × T9 → REVIEW** (id: `BL-F3-T9`, priority: 50, cell: F3×T9)\n3. **F5 × T4 → FAIL** (id: `BL-F5-T4`, priority: 80, cell: F5×T4)\n\n## Wave assignment\n\n_(auto-wave one-per-item is the templated default — see prompts/01-*.md\nthrough prompts/NN-*.md. Grouping multiple items per wave is human or\nLLM-driven and out of scope this round.)_\n\n## Source\n\nRaw items: `backlog.json` (this directory).\n",
+    "/.devai/local/rounds/round-777/prompts/00-orchestrator.md": "---\nrole: architect\neffort: low\n---\n\n# R777 — Orchestrator (auto-generated)\n\n**Round goal:** _(operator should author `../Plan.md` and add a concise goal here)_\n\n**Orchestrator role:** non-worker. Declares waves, dispatches workers, runs gates between waves and at close, escalates blockers, writes `Closeout.md`. Edits no source files directly.\n\n> **Auto-generated by SKILL-round-backlog (R6-W1 / F-1 fix; R6-close template hardening).**\n> This scaffold has one wave per backlog item with stub effort and dependency.\n> The operator SHOULD hand-edit before dispatch — adjust goals, group/re-order\n> waves, refine effort estimates, declare real dependencies. Then re-invoke\n> SKILL-round-execute to dispatch.\n>\n> The template intentionally uses bare path references (e.g., `../Plan.md`)\n> rather than markdown links, so the docs-links gate doesn't flag the\n> auto-generated state. Once the operator authors Plan.md and edits this\n> file, the references can be converted to links.\n\n## Wave catalog\n\n| # | Slug | Goal | Role | Effort | Depends on |\n|---|------|------|------|--------|------------|\n| 00 | (this orchestrator) | declare + dispatch + gate + close | architect | low | — |\n| 01 | `f1-t6-fail` | F1 × T6 → FAIL (origin: F1×T6) | engineer | low | W0 |\n| 02 | `f3-t9-review` | F3 × T9 → REVIEW (origin: F3×T9) | engineer | low | W1 |\n| 03 | `f5-t4-fail` | F5 × T4 → FAIL (origin: F5×T4) | engineer | low | W2 |\n\n## Gate declarations\n\n### Mandatory minimum (re-run at every wave close + round close)\n\n- `lint` → `pnpm lint`\n- `typecheck` → `pnpm typecheck`\n- `test` (unit) → `pnpm test`\n- `docs-links` → `node <devai-cli-bin> docs-links --repo-root .`\n- `action-coverage` → `node <devai-cli-bin> spec-validate-action-coverage --repo-root .`\n\n### Scope-conditional (re-run at round close)\n\n- `test-integration` → `pnpm test:integration` (waves touching CLI source)\n- `prompt-overlays` → `node <devai-cli-bin> check-prompt-overlays` (waves touching skill manifests)\n\n## Dispatch sequencing\n\nSerial: W0 → W1 → ... → close. Override per-wave if real dependency analysis shows\nsome waves are scope-disjoint and could parallelize.\n\n## Round close procedure\n\n1. Confirm every wave log carries `status: clean` or `status: blocked`.\n2. Run mandatory minimum gate set against the final tree.\n3. Run scope-conditional gates per the declarations above.\n4. For each red gate: invoke matching `SKILL-fix-<gate-id>` (up to `max_iterations=3` if the skill's `auto_fix_capable != 'none'`); on final red, capture as blocker.\n5. Write `../Closeout.md` with verdict, gate results, scorecard delta, backlog disposition, ledger-record disposition, and SHA list of closing commits.\n",
+    "/.devai/local/rounds/round-777/prompts/01-f1-t6-fail.md": "---\nrole: engineer\neffort: low\n---\n\n# R777-W1 — f1-t6-fail\n\n**Goal:** F1 × T6 → FAIL\n\n## Inputs\n\n- Round audit context: `../audit/scratch.md`, `../audit/scorecard.baseline.json`.\n- Origin: backlog item `BL-F1-T6`, cell `F1×T6`, priority `80`.\n\n## Deliverables\n\n(TODO: name specific files this wave produces.)\n\n## Acceptance\n\n(TODO: gate command + verification rule.)\n\n## Logging\n\n`01-f1-t6-fail.log` on completion per the round-break canon.\n\n## Notes\n\nAuto-generated by SKILL-round-backlog (R4-W3 templated default).\nThe TODOs above need authoring before dispatch — the templated wave-prompt\nis a scaffold, not a complete prompt. LLM-driven authoring is deferred\nto a successor round (see `.devai/state/decisions.jsonl` for any related\ndefer records).\n",
+    "/.devai/local/rounds/round-777/prompts/02-f3-t9-review.md": "---\nrole: engineer\neffort: low\n---\n\n# R777-W2 — f3-t9-review\n\n**Goal:** F3 × T9 → REVIEW\n\n## Inputs\n\n- Round audit context: `../audit/scratch.md`, `../audit/scorecard.baseline.json`.\n- Origin: backlog item `BL-F3-T9`, cell `F3×T9`, priority `50`.\n\n## Deliverables\n\n(TODO: name specific files this wave produces.)\n\n## Acceptance\n\n(TODO: gate command + verification rule.)\n\n## Logging\n\n`02-f3-t9-review.log` on completion per the round-break canon.\n\n## Notes\n\nAuto-generated by SKILL-round-backlog (R4-W3 templated default).\nThe TODOs above need authoring before dispatch — the templated wave-prompt\nis a scaffold, not a complete prompt. LLM-driven authoring is deferred\nto a successor round (see `.devai/state/decisions.jsonl` for any related\ndefer records).\n",
+    "/.devai/local/rounds/round-777/prompts/03-f5-t4-fail.md": "---\nrole: engineer\neffort: low\n---\n\n# R777-W3 — f5-t4-fail\n\n**Goal:** F5 × T4 → FAIL\n\n## Inputs\n\n- Round audit context: `../audit/scratch.md`, `../audit/scorecard.baseline.json`.\n- Origin: backlog item `BL-F5-T4`, cell `F5×T4`, priority `80`.\n\n## Deliverables\n\n(TODO: name specific files this wave produces.)\n\n## Acceptance\n\n(TODO: gate command + verification rule.)\n\n## Logging\n\n`03-f5-t4-fail.log` on completion per the round-break canon.\n\n## Notes\n\nAuto-generated by SKILL-round-backlog (R4-W3 templated default).\nThe TODOs above need authoring before dispatch — the templated wave-prompt\nis a scaffold, not a complete prompt. LLM-driven authoring is deferred\nto a successor round (see `.devai/state/decisions.jsonl` for any related\ndefer records).\n"
+  }
+}

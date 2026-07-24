@@ -1,0 +1,100 @@
+{
+  "steps": {
+    "close_decision": "DEC-0002-resolution",
+    "close_from_round": ["DEC-0003-resolution"],
+    "ledger_file_after": [
+      {
+        "context": {
+          "round_id": "R3"
+        },
+        "created_at": "<TS>",
+        "id": "DEC-0001",
+        "kind": "decision",
+        "schemaVersion": "1.0.0",
+        "title": "a"
+      },
+      {
+        "context": {
+          "round_id": "R3-W1"
+        },
+        "created_at": "<TS>",
+        "id": "DEC-0002",
+        "kind": "decision",
+        "schemaVersion": "1.0.0",
+        "title": "b"
+      },
+      {
+        "context": {
+          "round_id": "R4"
+        },
+        "created_at": "<TS>",
+        "id": "DEC-0003",
+        "kind": "escalate",
+        "schemaVersion": "1.0.0",
+        "title": "c"
+      },
+      {
+        "disposition": "closed",
+        "evidence_ref": "EV-test",
+        "id": "DEC-0001-resolution",
+        "kind": "resolution",
+        "resolved_at": "<TS>",
+        "resolved_by": "r20-fixture",
+        "resolves_dec_id": "DEC-0001",
+        "schemaVersion": "1.0.0"
+      },
+      {
+        "disposition": "superseded",
+        "id": "DEC-0002-resolution",
+        "kind": "resolution",
+        "resolved_at": "<TS>",
+        "resolved_by": "r20-fixture",
+        "resolves_dec_id": "DEC-0002",
+        "schemaVersion": "1.0.0"
+      },
+      {
+        "disposition": "closed",
+        "id": "DEC-0003-resolution",
+        "kind": "resolution",
+        "resolved_at": "<TS>",
+        "resolved_by": "r20-fixture",
+        "resolves_dec_id": "DEC-0003",
+        "schemaVersion": "1.0.0"
+      }
+    ],
+    "read_all": [
+      {
+        "context": {
+          "round_id": "R3"
+        },
+        "created_at": "<TS>",
+        "id": "DEC-0001",
+        "kind": "decision",
+        "schemaVersion": "1.0.0",
+        "title": "a"
+      },
+      {
+        "context": {
+          "round_id": "R3-W1"
+        },
+        "created_at": "<TS>",
+        "id": "DEC-0002",
+        "kind": "decision",
+        "schemaVersion": "1.0.0",
+        "title": "b"
+      },
+      {
+        "context": {
+          "round_id": "R4"
+        },
+        "created_at": "<TS>",
+        "id": "DEC-0003",
+        "kind": "escalate",
+        "schemaVersion": "1.0.0",
+        "title": "c"
+      }
+    ],
+    "resolved_after_append": ["DEC-0001"],
+    "resolved_before": []
+  }
+}

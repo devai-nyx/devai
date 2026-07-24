@@ -1,0 +1,62 @@
+{
+  "calls": [
+    {
+      "messages": {
+        "system": "Produce a CCPA / CPRA-aligned (California Consumer Privacy Act, as amended by the California Privacy Rights Act) data inventory. Inputs: data-handling body (data-model-inventory with pii_class set per heuristics). For every column with pii_class set, output a row: table.column | pii_class | ccpa_category (INFERRED from pii_class — map to CCPA §1798.140(v) categories: A=identifiers, B=customer records / contact / financial, C=protected classification, D=commercial info, E=biometric, F=internet activity / ip, G=geolocation, H=sensory, I=professional / employment, J=education, K=inferences) | sensitive_pi? (CPRA — INFERRED: credentials / health / financial-account / precise-geolocation / racial-ethnic-origin → \"yes\"; otherwise \"no\") | retention (or \"MISSING — required by INV-INVENTORY-002\"). Top section: counts (total PII columns, columns missing retention, columns mapped to CCPA \"sensitive PI\"). Per-category subsection: group rows by inferred CCPA category letter (A through K). Gaps section (cite as gaps, NOT as inferred values): the data-model-inventory schema does not capture sources of collection (directly from consumer / from third parties / publicly available), business purposes (CCPA §1798.140(e)), third-party disclosures / sales / sharing for cross-context behavioral advertising, opt-out mechanisms (Do Not Sell or Share / Limit Use of Sensitive PI), or retention disclosures — these MUST be surfaced as \"not in inputs\" rather than fabricated.\n\n---\n\nOutput ONLY JSON: { \"markdown\": \"<doc body>\", \"citations\": [{\"kind\": \"endpoint\"|\"route\"|\"table\"|\"column\"|\"role\"|\"file\", \"ref\": \"<concrete identifier from inputs>\"}], \"inferred_fields\": [\"<short phrase for each value you marked (inferred)>\"], \"gaps\": [\"<short phrase per input element that was missing>\"] }. The citations / inferred_fields / gaps arrays may be empty but the keys MUST be present. Do not invent endpoints, routes, tables, columns, edges, roles, or files not present in the inputs. Mark any value not directly supported by the inputs as \"(inferred)\" inline in the markdown AND list it in inferred_fields. When the inputs are silent on a section, write a short \"Gaps\" note in the markdown AND list the missing element in gaps. Do not write the response as anything other than the specified JSON object.\n\n---\n\nConstraints: ≤ 1800 words for the markdown body. Bullet-heavy is fine.\n\n---\n\nYou are a privacy / data-protection engineer. Audience: DPO + legal review + engineers responsible for the data. Treat missing legal_basis or missing retention as compliance findings (cite INV-INVENTORY-002), not blanks to fill with plausible defaults. Never guess at retention periods, lawful bases, or data-subject categories.",
+        "user": "{\n  \"data_handling\": {\n    \"pii_column_count\": 2,\n    \"pii_columns\": [\n      {\n        \"table\": \"customers\",\n        \"column\": \"email\",\n        \"pii_class\": \"contact\",\n        \"missing\": [\n          \"legal_basis\"\n        ]\n      },\n      {\n        \"table\": \"customers\",\n        \"column\": \"ssn\",\n        \"pii_class\": \"identity\",\n        \"missing\": [\n          \"legal_basis\",\n          \"retention\"\n        ]\n      }\n    ]\n  }\n}"
+      },
+      "meta": {
+        "caller": "SKILL-write-compliance-ccpa",
+        "prompt_pc_id": "PC-f1e3fd659c08bfd1",
+        "stack_sha256": "f1e3fd659c08bfd1d1f8ff1e73496518bb9ce563eb147a0965a202664d6e8a12"
+      },
+      "opts": {
+        "max_output_tokens": 4096,
+        "response_format_json": true,
+        "response_json_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "citations": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "ref": {
+                    "type": "string"
+                  }
+                },
+                "required": ["kind", "ref"],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "gaps": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "inferred_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "markdown": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": ["markdown", "citations", "inferred_fields", "gaps"],
+          "type": "object"
+        },
+        "temperature": 0.2
+      },
+      "seq": 0
+    }
+  ],
+  "classification": "prompt-bearing",
+  "skill_id": "SKILL-write-compliance-ccpa"
+}

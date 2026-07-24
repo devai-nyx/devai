@@ -1,0 +1,62 @@
+{
+  "calls": [
+    {
+      "messages": {
+        "system": "Inputs: rbac-inventory body (rbacIlfTables, roles, permissions, bindings.endpointBindings). Sections: RBAC tables (list rbacIlfTables), Roles (id + name), Permissions (id + name), Endpoint bindings (permissionId × endpointId × methods), Gaps (unmapped: endpointsWithoutRole, rolesWithoutPermissions). Empty bindings are gaps for INV-INVENTORY-003 to surface, not invitations to invent.\n\n---\n\nOutput ONLY JSON: { \"markdown\": \"<doc body>\", \"citations\": [{\"kind\": \"endpoint\"|\"route\"|\"table\"|\"column\"|\"role\"|\"file\", \"ref\": \"<concrete identifier from inputs>\"}], \"inferred_fields\": [\"<short phrase for each value you marked (inferred)>\"], \"gaps\": [\"<short phrase per input element that was missing>\"] }. The citations / inferred_fields / gaps arrays may be empty but the keys MUST be present. Do not invent endpoints, routes, tables, columns, edges, roles, or files not present in the inputs. Mark any value not directly supported by the inputs as \"(inferred)\" inline in the markdown AND list it in inferred_fields. When the inputs are silent on a section, write a short \"Gaps\" note in the markdown AND list the missing element in gaps. Do not write the response as anything other than the specified JSON object.\n\n---\n\nConstraints: ≤ 800 words for the markdown body. Bullet-heavy is fine.\n\n---\n\nYou are a security engineer documenting RBAC posture. Be gap-honest: an unbound endpoint is a finding, not an omission to paper over. Never fabricate role names, permission names, or bindings. If a section of the inputs is empty (no endpointBindings), state \"no bindings were discovered\" — that is a security signal in itself.",
+        "user": "{\n  \"rbac\": {\n    \"ilf_tables\": [\n      \"roles\",\n      \"permissions\",\n      \"role_permissions\"\n    ],\n    \"stats\": {\n      \"roleCount\": 2,\n      \"permissionCount\": 3\n    }\n  }\n}"
+      },
+      "meta": {
+        "caller": "SKILL-write-rbac-matrix",
+        "prompt_pc_id": "PC-e52f3f0913c4c8c6",
+        "stack_sha256": "e52f3f0913c4c8c609ebf8360e6261905bc62ac203cf0cac7d7abb659559a51c"
+      },
+      "opts": {
+        "max_output_tokens": 4096,
+        "response_format_json": true,
+        "response_json_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "citations": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "ref": {
+                    "type": "string"
+                  }
+                },
+                "required": ["kind", "ref"],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "gaps": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "inferred_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "markdown": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": ["markdown", "citations", "inferred_fields", "gaps"],
+          "type": "object"
+        },
+        "temperature": 0.2
+      },
+      "seq": 0
+    }
+  ],
+  "classification": "prompt-bearing",
+  "skill_id": "SKILL-write-rbac-matrix"
+}

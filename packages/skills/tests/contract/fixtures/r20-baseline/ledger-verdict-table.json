@@ -1,0 +1,169 @@
+{
+  "table": [
+    {
+      "inputs": {
+        "blockersCount": 0,
+        "deferredCount": 0,
+        "gateFailCount": 0,
+        "waveStatuses": [
+          {
+            "status": "clean"
+          }
+        ]
+      },
+      "verdict": "clean"
+    },
+    {
+      "inputs": {
+        "blockersCount": 0,
+        "deferredCount": 0,
+        "gateFailCount": 0,
+        "waveStatuses": [
+          {
+            "status": "clean"
+          },
+          {
+            "status": "clean"
+          }
+        ]
+      },
+      "verdict": "clean"
+    },
+    {
+      "inputs": {
+        "blockersCount": 0,
+        "deferredCount": 0,
+        "gateFailCount": 1,
+        "waveStatuses": [
+          {
+            "status": "clean"
+          }
+        ]
+      },
+      "verdict": "with-blockers"
+    },
+    {
+      "inputs": {
+        "blockersCount": 2,
+        "deferredCount": 0,
+        "gateFailCount": 0,
+        "waveStatuses": [
+          {
+            "status": "clean"
+          }
+        ]
+      },
+      "verdict": "with-blockers"
+    },
+    {
+      "inputs": {
+        "blockersCount": 0,
+        "deferredCount": 0,
+        "gateFailCount": 0,
+        "waveStatuses": [
+          {
+            "status": "clean"
+          },
+          {
+            "status": "aborted"
+          }
+        ]
+      },
+      "verdict": "aborted"
+    },
+    {
+      "inputs": {
+        "blockersCount": 0,
+        "deferredCount": 0,
+        "gateFailCount": 0,
+        "waveStatuses": [
+          {
+            "status": "clean"
+          },
+          {
+            "status": "blocked"
+          }
+        ]
+      },
+      "verdict": "partial"
+    },
+    {
+      "inputs": {
+        "blockersCount": 0,
+        "deferredCount": 3,
+        "gateFailCount": 0,
+        "waveStatuses": [
+          {
+            "status": "clean"
+          }
+        ]
+      },
+      "verdict": "partial"
+    },
+    {
+      "inputs": {
+        "blockersCount": 0,
+        "deferredCount": 0,
+        "gateFailCount": 0,
+        "waveStatuses": [
+          {
+            "status": "clean"
+          },
+          {
+            "status": "skipped"
+          }
+        ]
+      },
+      "verdict": "clean"
+    },
+    {
+      "inputs": {
+        "blockersCount": 0,
+        "deferredCount": 0,
+        "gateFailCount": 0,
+        "waveStatuses": [
+          {
+            "status": "skipped"
+          }
+        ]
+      },
+      "verdict": "clean"
+    },
+    {
+      "inputs": {
+        "blockersCount": 1,
+        "deferredCount": 1,
+        "gateFailCount": 5,
+        "waveStatuses": [
+          {
+            "status": "aborted"
+          }
+        ]
+      },
+      "verdict": "aborted"
+    },
+    {
+      "inputs": {
+        "blockersCount": 0,
+        "deferredCount": 0,
+        "gateFailCount": 0,
+        "waveStatuses": []
+      },
+      "verdict": "clean"
+    },
+    {
+      "inputs": {
+        "blockersCount": 0,
+        "deferredCount": 0,
+        "failedExecution": true,
+        "gateFailCount": 0,
+        "waveStatuses": [
+          {
+            "status": "clean"
+          }
+        ]
+      },
+      "verdict": "failed"
+    }
+  ]
+}
