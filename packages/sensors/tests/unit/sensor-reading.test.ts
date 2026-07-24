@@ -25,7 +25,6 @@ describe('buildSensorReading', () => {
     expect(() =>
       buildSensorReading({
         sensorName: 'tsc',
-        // @ts-expect-error: intentionally invalid kind for this test
         sensorKind: 'bogus_kind',
         command: ['true'],
         status: 'pass',

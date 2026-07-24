@@ -1,5 +1,53 @@
 {
-  "calls": [],
-  "classification": "non-prompt-bearing",
+  "calls": [
+    {
+      "messages": {
+        "system": "You are an Inspector authoring test scaffolding for a DEVAI invariant. Emit a structured plan, NOT executable assertions. Output ONLY JSON: { plan: [{ test_name, assertion }], stub_path, language }. The stub_path should follow the project test layout (e.g. packages/<pkg>/tests/contract/inv-<id>.test.ts).\n\n---\n\nYou write the smallest test set that fully constrains the invariant. Each assertion is one sentence in plain English; no code. Test names use the convention \"INV-<id>: <short statement>\".",
+        "user": "{\"id\":\"INV-0001\",\"title\":\"fixture invariant\",\"statement\":\"the fixture MUST hold\",\"severity\":\"must\"}"
+      },
+      "meta": {
+        "caller": "SKILL-compile-tests-from-docs",
+        "prompt_pc_id": "PC-0c6e7204e0f7c67a",
+        "stack_sha256": "0c6e7204e0f7c67ab882f705d525d5e2894c122493baabd32090d5c7bbe153d0"
+      },
+      "opts": {
+        "max_output_tokens": 2048,
+        "response_format_json": true,
+        "response_json_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "language": {
+              "type": "string"
+            },
+            "plan": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "assertion": {
+                    "type": "string"
+                  },
+                  "test_name": {
+                    "type": "string"
+                  }
+                },
+                "required": ["test_name", "assertion"],
+                "type": "object"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "stub_path": {
+              "type": "string"
+            }
+          },
+          "required": ["plan", "stub_path", "language"],
+          "type": "object"
+        },
+        "temperature": 0.1
+      },
+      "seq": 0
+    }
+  ],
+  "classification": "prompt-bearing",
   "skill_id": "SKILL-compile-tests-from-docs"
 }

@@ -13,11 +13,13 @@ function frontMatter(file: string): Record<string, unknown> {
   const t = readFileSync(join(DIR, file), 'utf8');
   const m = t.match(/^---\n([\s\S]*?)\n---\n/);
   expect(m, `${file} has front-matter`).toBeTruthy();
-  return parse(m![1]) as Record<string, unknown>;
+  return parse(m?.[1] ?? '') as Record<string, unknown>;
 }
 
 describe('ADR roster records', () => {
-  const files = readdirSync(DIR).filter((f) => /^ADR-\d{3}-.+\.md$/.test(f)).sort();
+  const files = readdirSync(DIR)
+    .filter((f) => /^ADR-\d{3}-.+\.md$/.test(f))
+    .sort();
 
   it('roster is gapless ADR-001..012', () => {
     const nums = files.map((f) => Number(f.slice(4, 7)));
@@ -33,9 +35,10 @@ describe('ADR roster records', () => {
   });
 
   it('id matches the common-defs id_adr pattern AND the filename prefix', () => {
-    const pattern = new RegExp(
-      ((loadSchema('common-defs.schema.json') as any).$defs.id_adr.pattern) as string,
-    );
+    const commonDefs = loadSchema('common-defs.schema.json') as {
+      $defs: { id_adr: { pattern: string } };
+    };
+    const pattern = new RegExp(commonDefs.$defs.id_adr.pattern);
     for (const f of files) {
       const id = String(frontMatter(f).id);
       expect(id, f).toMatch(pattern);
@@ -48,7 +51,10 @@ describe('ADR roster records', () => {
       const fm = frontMatter(f);
       expect(fm.status, f).toBe('draft');
       expect(fm.superseded_by, f).toBeNull();
-      expect(Array.isArray(fm.supersedes) && (fm.supersedes as unknown[]).length > 0, `${f} names what it absorbs`).toBe(true);
+      expect(
+        Array.isArray(fm.supersedes) && (fm.supersedes as unknown[]).length > 0,
+        `${f} names what it absorbs`,
+      ).toBe(true);
       expect(fm.provenance, f).toBeTruthy();
     }
   });

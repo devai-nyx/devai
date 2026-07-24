@@ -33,7 +33,7 @@ export interface SkillSpec {
 }
 
 const INPUTS_DIR = join(HERE, 'fixtures/r20-baseline/inputs');
-const WORKSPACE_BIN = join(HERE, '../../../node_modules/.bin');
+const WORKSPACE_BIN = join(HERE, '../../../../node_modules/.bin');
 
 function writeHermeticNpx(binDir: string): void {
   mkdirSync(binDir, { recursive: true });
@@ -59,9 +59,10 @@ process.exit(result.status === null ? 1 : result.status);
   writeFileSync(path, script);
   chmodSync(path, 0o755);
 }
-const BLUEPRINT_SRC = join(
+const BLUEPRINT_SRC = join(HERE, 'fixtures/r20-baseline/BP-DEMO-BOOKMARK-001.json');
+const STACK_ADAPTER_PACK_SRC = join(
   HERE,
-  '../../../examples/redox-pack-nestjs-postgres-angular/fixtures/BP-DEMO-BOOKMARK-001.json',
+  'fixtures/r20-baseline/redox-pack-nestjs-postgres-angular',
 );
 
 export function loadSpecs(): SkillSpec[] {
@@ -92,6 +93,9 @@ function writePackSignals(root: string): void {
   mkdirSync(join(root, 'apps/api/src'), { recursive: true });
   mkdirSync(join(root, 'apps/web/src'), { recursive: true });
   cpSync(BLUEPRINT_SRC, join(root, 'blueprint.json'));
+  cpSync(STACK_ADAPTER_PACK_SRC, join(root, 'examples/redox-pack-nestjs-postgres-angular'), {
+    recursive: true,
+  });
 }
 
 function substituteFixture(value: unknown, root: string): unknown {
@@ -118,14 +122,15 @@ export interface SkillRunCapture {
 
 // Owner-approved narrow runtime-noise disposition (W1 closure ruling item 3):
 // the ONLY exempted product contents are feedback-iteration's per-iteration
-// sensor snapshots at the exact generated relative paths, and only for that
+// sensor snapshots under record/proofs/work/skill-runs at the exact generated
+// relative paths, and only for that
 // skill. Both paths stay present in fs_products; their content digest is
 // replaced by an explicit sentinel — never silently omitted. Everything else
 // (including other JSON, and any new feedback-iteration product) stays
 // normalized-content hashed. This is parity-characterization noise, never
 // readiness evidence, and NOT a general sensor-output exemption.
 const FEEDBACK_ITERATION_NOISE =
-  /(^|\/)\.devai\/state\/skills\/SKILL-feedback-iteration\/[^/]+\/iter-\d+\/readings-(before|after)\.json$/;
+  /(^|\/)record\/proofs\/work\/skill-runs\/SKILL-feedback-iteration\/[^/]+\/iter-\d+\/readings-(before|after)\.json$/;
 
 export function isDeclaredRuntimeNoise(skillId: string, rel: string): boolean {
   return skillId === 'SKILL-feedback-iteration' && FEEDBACK_ITERATION_NOISE.test(rel);

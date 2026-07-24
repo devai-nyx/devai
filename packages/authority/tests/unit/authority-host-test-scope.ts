@@ -33,10 +33,38 @@ const READ_PROCESS_VERBS: Readonly<Record<string, readonly string[]>> = {
   sh: ['-lc'],
 };
 
-function processIsReadOnly(request: AuthorityHostEffectRequest): boolean {
+const MUTATION_CANDIDATE_GIT_VERBS = new Set([
+  'add',
+  'cat-file',
+  'clean',
+  'commit-tree',
+  'diff',
+  'diff-tree',
+  'for-each-ref',
+  'ls-files',
+  'read-tree',
+  'rev-parse',
+  'show-ref',
+  'symbolic-ref',
+  'update-ref',
+  'write-tree',
+]);
+
+function processIsAllowed(
+  request: AuthorityHostEffectRequest,
+  allowMutationCandidateGit: boolean,
+): boolean {
   const executable = request.arguments[0];
   const args = request.arguments[1];
   if (typeof executable !== 'string' || !Array.isArray(args)) return false;
+  if (
+    allowMutationCandidateGit &&
+    executable === 'git' &&
+    typeof args[0] === 'string' &&
+    MUTATION_CANDIDATE_GIT_VERBS.has(args[0])
+  ) {
+    return true;
+  }
   if (args.length === 1 && args[0] === '--version') return true;
   if (
     (executable === 'node' || executable === process.execPath) &&
@@ -154,7 +182,10 @@ function targetFor(
  * real declaration/context, policy allow, issuer receipt, exact plan, prepare,
  * final re-verification, and one-shot apply.
  */
-export async function withAuthorityHostTestScope<T>(callback: () => T | Promise<T>): Promise<T> {
+export async function withAuthorityHostTestScope<T>(
+  callback: () => T | Promise<T>,
+  options: { readonly allowMutationCandidateGit?: boolean } = {},
+): Promise<T> {
   let ordinal = 0;
   const issuer = createAuthorityDecisionIssuer({
     issuer_id: 'legacy-core-test-authority',
@@ -173,7 +204,9 @@ export async function withAuthorityHostTestScope<T>(callback: () => T | Promise<
     receipt_store: issuer,
     apply_effect: (request, apply) => {
       if (request.kind === 'process') {
-        if (!processIsReadOnly(request)) throw new Error('AUTHORITY_TEST_PROCESS_NOT_READ_ONLY');
+        if (!processIsAllowed(request, options.allowMutationCandidateGit === true)) {
+          throw new Error('AUTHORITY_TEST_PROCESS_NOT_READ_ONLY');
+        }
         return apply();
       }
       const { target, repositoryRoot } = targetFor(request, descriptors);

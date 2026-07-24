@@ -124,17 +124,43 @@
       "strategy": "main-path"
     },
     "SKILL-compile-tests-from-docs": {
-      "a37": {
-        "na": true,
-        "reason": "no LLM composition path: deterministic skill (llm_backed=false), behavior signature is the parity authority"
-      },
+      "a37": [
+        {
+          "caller": "SKILL-compile-tests-from-docs",
+          "component_hashes": {
+            "na": true,
+            "reason": "not threaded through LlmPromptMeta at the call boundary; stack_sha256/prompt_pc_id carry the composition identity (derived over component-body SHA-256s in loop/prompts.ts)"
+          },
+          "payload_sha256": "f733ff85b645bc13041477cb2288cbd922883a149ea1631041452a19d6229143",
+          "prompt_pc_id": "PC-0c6e7204e0f7c67a",
+          "stack_sha256": "0c6e7204e0f7c67ab882f705d525d5e2894c122493baabd32090d5c7bbe153d0"
+        }
+      ],
       "behavior": {
-        "evidence": null,
-        "notes": ["invariant file not found: docs/framework/arch/invariants/INV-0001.json"],
-        "status": "fail"
+        "evidence": {
+          "invariant_id": "INV-0001",
+          "language": "ts",
+          "llm": {
+            "cost_usd": "<N>",
+            "family": "claude",
+            "model": "mock-deterministic"
+          },
+          "plan": [
+            {
+              "assertion": "expect(fixture).toBe(true)",
+              "test_name": "holds"
+            }
+          ],
+          "proposed_stub_path": "packages/skills/tests/contract/generated/inv-0001.candidate.test.ts",
+          "stub_path": "packages/skills/tests/contract/generated/inv-0001.candidate.test.ts"
+        },
+        "notes": [],
+        "status": "pass"
       },
       "fs_products": {
-        "created": {},
+        "created": {
+          "packages/skills/tests/contract/generated/inv-0001.candidate.test.ts": "a5668b177a510021b2f1059e0b0de32b8fa1366a8f1decb563fad32bfb163eee"
+        },
         "modified": {}
       },
       "strategy": "main-path"
@@ -245,6 +271,7 @@
             },
             {
               "deterministic": true,
+              "notes": "latest type_check failure at undefined",
               "property": "T8",
               "sensor_readings": ["SR-2"],
               "substrate": "F2",
@@ -480,7 +507,7 @@
             "family": "claude",
             "model": "mock-deterministic"
           },
-          "out_path": "docs/framework/product/draft/invariants/TASK-0001.json",
+          "out_path": "product/draft/invariants/TASK-0001.json",
           "topic": "user password reset flow"
         },
         "notes": [],
@@ -488,7 +515,7 @@
       },
       "fs_products": {
         "created": {
-          "docs/framework/product/draft/invariants/TASK-0001.json": "eccf3b6ab5758e7ed180080db169fef264a849a90987e38c19a0d073f8c95718"
+          "product/draft/invariants/TASK-0001.json": "eccf3b6ab5758e7ed180080db169fef264a849a90987e38c19a0d073f8c95718"
         },
         "modified": {}
       },
@@ -603,17 +630,17 @@
       },
       "fs_products": {
         "created": {
-          ".devai/state/skills/SKILL-feedback-iteration/TASK-FIXTURE-1/iter-1/edits.json": "e591aecf0600d4a6b5eaf59cc7a25073c6748d468b3c0571292959030909bdeb",
-          ".devai/state/skills/SKILL-feedback-iteration/TASK-FIXTURE-1/iter-1/prompt.json": "e4ea03bc4f758d337bf4bbd5ce0c58a83694c0ff4f32741c42a5fd5ff62ddc78",
-          ".devai/state/skills/SKILL-feedback-iteration/TASK-FIXTURE-1/iter-1/readings-after.json": {
+          "record/proofs/work/skill-runs/SKILL-feedback-iteration/TASK-FIXTURE-1/iter-1/edits.json": "e591aecf0600d4a6b5eaf59cc7a25073c6748d468b3c0571292959030909bdeb",
+          "record/proofs/work/skill-runs/SKILL-feedback-iteration/TASK-FIXTURE-1/iter-1/prompt.json": "e4ea03bc4f758d337bf4bbd5ce0c58a83694c0ff4f32741c42a5fd5ff62ddc78",
+          "record/proofs/work/skill-runs/SKILL-feedback-iteration/TASK-FIXTURE-1/iter-1/readings-after.json": {
             "classification": "declared-runtime-noise",
             "reason": "readings-before/after.json embed live sense-lint / sense-type-check / sense-test output captured during the in-worktree iteration — durations, tool stdout/stderr heads, and tool versions — nondeterministic by construction"
           },
-          ".devai/state/skills/SKILL-feedback-iteration/TASK-FIXTURE-1/iter-1/readings-before.json": {
+          "record/proofs/work/skill-runs/SKILL-feedback-iteration/TASK-FIXTURE-1/iter-1/readings-before.json": {
             "classification": "declared-runtime-noise",
             "reason": "readings-before/after.json embed live sense-lint / sense-type-check / sense-test output captured during the in-worktree iteration — durations, tool stdout/stderr heads, and tool versions — nondeterministic by construction"
           },
-          ".devai/state/skills/SKILL-feedback-iteration/TASK-FIXTURE-1/iter-1/response.json": "886a7a920e50b09f440a9a93d11e0523287f5e095cce70eaa12c3fddac467ac9"
+          "record/proofs/work/skill-runs/SKILL-feedback-iteration/TASK-FIXTURE-1/iter-1/response.json": "886a7a920e50b09f440a9a93d11e0523287f5e095cce70eaa12c3fddac467ac9"
         },
         "modified": {
           "wt/packages/fix.ts": "8fae4b594eb9c8601258974b9be0441d3c83d2886faa2b147af8244824f7ca1c"
@@ -628,7 +655,7 @@
       },
       "behavior": {
         "evidence": {
-          "stderr": "devai: unknown or incomplete command 'spec-validate-action-coverage'; did you mean 'devai spec validate action coverage'?\n",
+          "stderr": "devai: Unknown or incomplete command 'spec-validate-action-coverage'. Remediation: Did you mean 'devai spec validate action coverage'?\n",
           "stdout": ""
         },
         "notes": [],
@@ -651,20 +678,8 @@
             "adrs": [],
             "errors": [
               {
-                "file": "<FIXTURE>/docs/meta/adr/ADR-001-fixture.md",
+                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
                 "message": "must have required property 'adr_id' (required)"
-              },
-              {
-                "file": "<FIXTURE>/docs/meta/adr/ADR-001-fixture.md",
-                "message": "must have required property 'date' (required)"
-              },
-              {
-                "file": "<FIXTURE>/docs/meta/adr/ADR-001-fixture.md",
-                "message": "must have required property 'authors' (required)"
-              },
-              {
-                "file": "<FIXTURE>/docs/meta/adr/ADR-001-fixture.md",
-                "message": "must NOT have additional properties (additionalProperties)"
               }
             ],
             "files_scanned": 1,
@@ -674,20 +689,8 @@
             "adrs": [],
             "errors": [
               {
-                "file": "<FIXTURE>/docs/meta/adr/ADR-001-fixture.md",
+                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
                 "message": "must have required property 'adr_id' (required)"
-              },
-              {
-                "file": "<FIXTURE>/docs/meta/adr/ADR-001-fixture.md",
-                "message": "must have required property 'date' (required)"
-              },
-              {
-                "file": "<FIXTURE>/docs/meta/adr/ADR-001-fixture.md",
-                "message": "must have required property 'authors' (required)"
-              },
-              {
-                "file": "<FIXTURE>/docs/meta/adr/ADR-001-fixture.md",
-                "message": "must NOT have additional properties (additionalProperties)"
               }
             ],
             "files_scanned": 1,
@@ -696,23 +699,8 @@
           "fix_log": [
             {
               "detail": "must have required property 'adr_id' (required)",
-              "file": "<FIXTURE>/docs/meta/adr/ADR-001-fixture.md",
+              "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
               "outcome": "escalate-missing-adr-id"
-            },
-            {
-              "detail": "must have required property 'date' (required)",
-              "file": "<FIXTURE>/docs/meta/adr/ADR-001-fixture.md",
-              "outcome": "escalate-missing-adr-id"
-            },
-            {
-              "detail": "must have required property 'authors' (required)",
-              "file": "<FIXTURE>/docs/meta/adr/ADR-001-fixture.md",
-              "outcome": "escalate-missing-adr-id"
-            },
-            {
-              "detail": "must NOT have additional properties (additionalProperties)",
-              "file": "<FIXTURE>/docs/meta/adr/ADR-001-fixture.md",
-              "outcome": "escalate-schema-violation"
             }
           ],
           "iteration": {
@@ -942,12 +930,229 @@
       },
       "behavior": {
         "evidence": {
-          "findings": [],
+          "findings": [
+            {
+              "code": "READ_TIER_WITH_WRITE_SCOPES",
+              "message": "skill 'SKILL-triage' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
+              "offending_scope": "record/proofs/work/skill-runs/**",
+              "reserved_to": "architect",
+              "severity": "error",
+              "skill_id": "SKILL-triage"
+            },
+            {
+              "code": "READ_TIER_WITH_WRITE_SCOPES",
+              "message": "skill 'SKILL-materialize-prompt' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
+              "offending_scope": "record/proofs/work/skill-runs/**",
+              "reserved_to": "architect",
+              "severity": "error",
+              "skill_id": "SKILL-materialize-prompt"
+            },
+            {
+              "code": "READ_TIER_WITH_WRITE_SCOPES",
+              "message": "skill 'SKILL-compute-scorecard' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
+              "offending_scope": "record/proofs/work/skill-runs/**",
+              "reserved_to": "architect",
+              "severity": "error",
+              "skill_id": "SKILL-compute-scorecard"
+            },
+            {
+              "code": "READ_TIER_WITH_WRITE_SCOPES",
+              "message": "skill 'SKILL-compile-backlog' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
+              "offending_scope": "record/proofs/work/skill-runs/**",
+              "reserved_to": "architect",
+              "severity": "error",
+              "skill_id": "SKILL-compile-backlog"
+            },
+            {
+              "code": "READ_TIER_WITH_WRITE_SCOPES",
+              "message": "skill 'SKILL-emit-rgr' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
+              "offending_scope": "record/proofs/work/skill-runs/**",
+              "reserved_to": "architect",
+              "severity": "error",
+              "skill_id": "SKILL-emit-rgr"
+            },
+            {
+              "code": "READ_TIER_WITH_WRITE_SCOPES",
+              "message": "skill 'SKILL-emit-rgr' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/rgr/**'",
+              "offending_scope": "record/proofs/work/rgr/**",
+              "reserved_to": "architect",
+              "severity": "error",
+              "skill_id": "SKILL-emit-rgr"
+            },
+            {
+              "code": "READ_TIER_WITH_WRITE_SCOPES",
+              "message": "skill 'SKILL-assess-state' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
+              "offending_scope": "record/proofs/work/skill-runs/**",
+              "reserved_to": "architect",
+              "severity": "error",
+              "skill_id": "SKILL-assess-state"
+            },
+            {
+              "code": "READ_TIER_WITH_WRITE_SCOPES",
+              "message": "skill 'SKILL-review-dry' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
+              "offending_scope": "record/proofs/work/skill-runs/**",
+              "reserved_to": "architect",
+              "severity": "error",
+              "skill_id": "SKILL-review-dry"
+            },
+            {
+              "code": "READ_TIER_WITH_WRITE_SCOPES",
+              "message": "skill 'SKILL-mutation-test' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
+              "offending_scope": "record/proofs/work/skill-runs/**",
+              "reserved_to": "architect",
+              "severity": "error",
+              "skill_id": "SKILL-mutation-test"
+            },
+            {
+              "code": "READ_TIER_WITH_WRITE_SCOPES",
+              "message": "skill 'SKILL-align-docs' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
+              "offending_scope": "record/proofs/work/skill-runs/**",
+              "reserved_to": "architect",
+              "severity": "error",
+              "skill_id": "SKILL-align-docs"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-overview' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Overview.md'",
+              "offending_scope": "docs/Overview.md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-overview"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-software-stack' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Software Stack.md'",
+              "offending_scope": "docs/Software Stack.md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-software-stack"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-architecture-guide' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Architecture Guide.md'",
+              "offending_scope": "docs/Architecture Guide.md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-architecture-guide"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-database-reference' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Database Reference.md'",
+              "offending_scope": "docs/Database Reference.md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-database-reference"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-erd' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/ERD.md'",
+              "offending_scope": "docs/ERD.md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-erd"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-api-map' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/API Map.md'",
+              "offending_scope": "docs/API Map.md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-api-map"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-frontend-routes-map' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Frontend Routes Map.md'",
+              "offending_scope": "docs/Frontend Routes Map.md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-frontend-routes-map"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-rbac-matrix' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/RBAC Matrix.md'",
+              "offending_scope": "docs/RBAC Matrix.md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-rbac-matrix"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-compliance-lgpd' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Compliance (LGPD).md'",
+              "offending_scope": "docs/Compliance (LGPD).md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-compliance-lgpd"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-compliance-gdpr' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Compliance (GDPR).md'",
+              "offending_scope": "docs/Compliance (GDPR).md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-compliance-gdpr"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-compliance-ccpa' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Compliance (CCPA).md'",
+              "offending_scope": "docs/Compliance (CCPA).md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-compliance-ccpa"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-fp-report' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Function Point Report.md'",
+              "offending_scope": "docs/Function Point Report.md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-fp-report"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-threat-model' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Security Threat Model.md'",
+              "offending_scope": "docs/Security Threat Model.md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-threat-model"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-write-onboarding' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Onboarding Quickstart.md'",
+              "offending_scope": "docs/Onboarding Quickstart.md",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-write-onboarding"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-round-orchestrate' (agent_class=coding-agent, tier=write) names Architect-reserved path 'work/rounds/' via scope 'work/rounds/R-*/**'",
+              "offending_scope": "work/rounds/R-*/**",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-round-orchestrate"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-round-verify-publish' (agent_class=coding-agent, tier=write) names Architect-reserved path 'work/rounds/' via scope 'work/rounds/R-*/**'",
+              "offending_scope": "work/rounds/R-*/**",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-round-verify-publish"
+            },
+            {
+              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
+              "message": "skill 'SKILL-round-execute' (agent_class=coding-agent, tier=write) names Architect-reserved path 'work/rounds/' via scope 'work/rounds/R-*/**'",
+              "offending_scope": "work/rounds/R-*/**",
+              "reserved_to": "architect",
+              "severity": "critical",
+              "skill_id": "SKILL-round-execute"
+            }
+          ],
           "manifests_checked": 52,
-          "ok": true
+          "ok": false
         },
         "notes": [],
-        "status": "pass"
+        "status": "fail"
       },
       "fs_products": {
         "created": {},
@@ -962,7 +1167,7 @@
       },
       "behavior": {
         "evidence": {
-          "stderr": "devai: unknown or incomplete command 'spec validate-all'; did you mean 'devai spec validate all'?\n",
+          "stderr": "devai: Unknown or incomplete command 'spec validate-all'. Remediation: Did you mean 'devai spec validate all'?\n",
           "stdout": ""
         },
         "notes": [],
@@ -1141,7 +1346,7 @@
             "family": "claude",
             "model": "mock-deterministic"
           },
-          "out_path": "docs/framework/product/draft/blueprints/TASK-0001.json",
+          "out_path": "product/draft/blueprints/TASK-0001.json",
           "topic": "invoicing module"
         },
         "notes": [],
@@ -1149,7 +1354,7 @@
       },
       "fs_products": {
         "created": {
-          "docs/framework/product/draft/blueprints/TASK-0001.json": "086128d39b61253440499bc8a22427ba81595514e34fad9687c4b3f9b14cf688"
+          "product/draft/blueprints/TASK-0001.json": "086128d39b61253440499bc8a22427ba81595514e34fad9687c4b3f9b14cf688"
         },
         "modified": {}
       },
@@ -1196,13 +1401,13 @@
       "behavior": {
         "evidence": {
           "executed_artifacts": {
-            "audit_dir": ".devai/local/rounds/round-999/audit",
+            "audit_dir": "work/audit/R-0999",
             "files": [
-              ".devai/local/rounds/round-999/audit/assessment.json",
-              ".devai/local/rounds/round-999/audit/scorecard.baseline.json",
-              ".devai/local/rounds/round-999/audit/scratch.md"
+              "work/audit/R-0999/assessment.json",
+              "work/audit/R-0999/scorecard.baseline.json",
+              "work/audit/R-0999/scratch.md"
             ],
-            "round_dir": ".devai/local/rounds/round-999",
+            "round_dir": "work/rounds/R-0999",
             "sub_skill_results": {
               "SKILL-assess-state": "pass",
               "SKILL-compute-scorecard": "pass"
@@ -1214,7 +1419,7 @@
             "prompts_library": "docs/adopters/round-prompts/B0-audit.md",
             "skills": ["SKILL-assess-state", "SKILL-compute-scorecard"]
           },
-          "round_dir": ".devai/local/rounds/round-999",
+          "round_dir": "work/rounds/R-0999",
           "steps": [
             {
               "description": "Run SKILL-assess-state to compute the current scorecard.",
@@ -1225,11 +1430,11 @@
               "id": "audit.2"
             },
             {
-              "description": "Materialize .devai/local/rounds/round-999/audit/scratch.md with findings, open questions, and prior-round carryovers.",
+              "description": "Materialize work/audit/R-0999/scratch.md with findings, open questions, and prior-round carryovers.",
               "id": "audit.3"
             },
             {
-              "description": "Snapshot relevant gov/audit/ docs into .devai/local/rounds/round-999/audit/inputs/.",
+              "description": "Snapshot relevant governance inputs into work/audit/R-0999/inputs/.",
               "id": "audit.4"
             }
           ]
@@ -1239,9 +1444,9 @@
       },
       "fs_products": {
         "created": {
-          ".devai/local/rounds/round-999/audit/assessment.json": "418b29602be9e4f7b111ed9bf5f8175a35a13a8139ab4c9752573cdd99751feb",
-          ".devai/local/rounds/round-999/audit/scorecard.baseline.json": "9c99a71a16e4d188c6da3e0b2fdbdc58173d4a5b6f5ab59d279f7a8ebe0e3578",
-          ".devai/local/rounds/round-999/audit/scratch.md": "63f7b5a9001d6146d2352a3bca5743d72fab2a0f810c48f68979b0b68726c5fb"
+          "work/audit/R-0999/assessment.json": "418b29602be9e4f7b111ed9bf5f8175a35a13a8139ab4c9752573cdd99751feb",
+          "work/audit/R-0999/scorecard.baseline.json": "9c99a71a16e4d188c6da3e0b2fdbdc58173d4a5b6f5ab59d279f7a8ebe0e3578",
+          "work/audit/R-0999/scratch.md": "f8fc81401d1fc4a4fe67531360acdcc07dab89f41652b42af6af539342fb93fd"
         },
         "modified": {}
       },
@@ -1257,14 +1462,14 @@
           "executed_artifacts": {
             "backlog_item_count": 2,
             "files": [
-              ".devai/local/rounds/round-999/backlog.json",
-              ".devai/local/rounds/round-999/backlog.md",
-              ".devai/local/rounds/round-999/prompts/01-f1-t6-fail.md",
-              ".devai/local/rounds/round-999/prompts/02-f3-t9-review.md",
-              ".devai/local/rounds/round-999/prompts/00-orchestrator.md"
+              "work/rounds/R-0999/backlog.json",
+              "work/rounds/R-0999/backlog.md",
+              "work/rounds/R-0999/prompts/01-f1-t6-fail.md",
+              "work/rounds/R-0999/prompts/02-f3-t9-review.md",
+              "work/rounds/R-0999/prompts/00-orchestrator.md"
             ],
-            "prompts_dir": ".devai/local/rounds/round-999/prompts",
-            "round_dir": ".devai/local/rounds/round-999"
+            "prompts_dir": "work/rounds/R-0999/prompts",
+            "round_dir": "work/rounds/R-0999"
           },
           "next_phase": "orchestrate",
           "phase": "backlog",
@@ -1272,10 +1477,10 @@
             "prompts_library": "docs/adopters/round-prompts/B1-backlog.md",
             "skills": ["SKILL-compile-backlog"]
           },
-          "round_dir": ".devai/local/rounds/round-999",
+          "round_dir": "work/rounds/R-0999",
           "steps": [
             {
-              "description": "Read .devai/local/rounds/round-999/audit/scratch.md and run SKILL-compile-backlog for the failing-cell list.",
+              "description": "Read work/rounds/R-0999/audit/scratch.md and run SKILL-compile-backlog for the failing-cell list.",
               "id": "backlog.1"
             },
             {
@@ -1283,11 +1488,11 @@
               "id": "backlog.2"
             },
             {
-              "description": "Materialize .devai/local/rounds/round-999/prompts/00-orchestrator.md from B3 template.",
+              "description": "Materialize work/rounds/R-0999/prompts/00-orchestrator.md from B3 template.",
               "id": "backlog.3"
             },
             {
-              "description": "Materialize .devai/local/rounds/round-999/prompts/NN-<slug>.md per backlog item from B1/B2 templates.",
+              "description": "Materialize work/rounds/R-0999/prompts/NN-<slug>.md per backlog item from B1/B2 templates.",
               "id": "backlog.4"
             },
             {
@@ -1301,11 +1506,11 @@
       },
       "fs_products": {
         "created": {
-          ".devai/local/rounds/round-999/backlog.json": "ade4b839df15d9e213e10226d80eb2fd4d3325564408881b261a7016482ee2ac",
-          ".devai/local/rounds/round-999/backlog.md": "aec70585a035703ba900d7f9851430578a98c8530080c99861e485bccb71ab4d",
-          ".devai/local/rounds/round-999/prompts/00-orchestrator.md": "734f47d3f142e5877d4b93dcc460a6bcfe37eb5d4ec0c7d426b63ba86eae45ed",
-          ".devai/local/rounds/round-999/prompts/01-f1-t6-fail.md": "5eead139bcae9414bd4155aacbf7e87c819d671896ab942e0545f9d2b175ec22",
-          ".devai/local/rounds/round-999/prompts/02-f3-t9-review.md": "bd9ff709fa2576c950095622fb385d6e2baf11a08fc3e32681c4d0264c272892"
+          "work/rounds/R-0999/backlog.json": "ade4b839df15d9e213e10226d80eb2fd4d3325564408881b261a7016482ee2ac",
+          "work/rounds/R-0999/backlog.md": "65d50cdf64bae45e181fce77573e663ad12b633448934098ee3bad30175f63a0",
+          "work/rounds/R-0999/prompts/00-orchestrator.md": "734f47d3f142e5877d4b93dcc460a6bcfe37eb5d4ec0c7d426b63ba86eae45ed",
+          "work/rounds/R-0999/prompts/01-f1-t6-fail.md": "5eead139bcae9414bd4155aacbf7e87c819d671896ab942e0545f9d2b175ec22",
+          "work/rounds/R-0999/prompts/02-f3-t9-review.md": "bd9ff709fa2576c950095622fb385d6e2baf11a08fc3e32681c4d0264c272892"
         },
         "modified": {}
       },
@@ -1320,7 +1525,7 @@
         "evidence": {
           "executed_artifacts": {
             "mode": "plan",
-            "round_dir": ".devai/local/rounds/round-999",
+            "round_dir": "work/rounds/R-0999",
             "round_n": 999,
             "sub_results": {}
           },
@@ -1335,10 +1540,10 @@
               "SKILL-round-verify-publish"
             ]
           },
-          "round_dir": ".devai/local/rounds/round-999",
+          "round_dir": "work/rounds/R-0999",
           "steps": [
             {
-              "description": "Pick or create .devai/local/rounds/round-999 (N = next free integer from .devai/local/rounds/round-*).",
+              "description": "Pick or create work/rounds/R-0999 (N = next free integer from work/rounds/R-*).",
               "id": "loop.1"
             },
             {
@@ -1386,7 +1591,7 @@
               }
             ],
             "gate_runs": [],
-            "round_dir": ".devai/local/rounds/round-999",
+            "round_dir": "work/rounds/R-0999",
             "skip_unbacked_waves": true,
             "unbacked_wave_timeout_ms": 180000,
             "wave_timeout_ms": 3600000
@@ -1397,10 +1602,10 @@
             "prompts_library": "docs/adopters/round-prompts/B3-orchestrate.md",
             "skills": ["SKILL-fix-lint", "SKILL-fix-build", "SKILL-fix-test"]
           },
-          "round_dir": ".devai/local/rounds/round-999",
+          "round_dir": "work/rounds/R-0999",
           "steps": [
             {
-              "description": "Read .devai/local/rounds/round-999/prompts/00-orchestrator.md (wave fan-out + gates).",
+              "description": "Read work/rounds/R-0999/prompts/00-orchestrator.md (wave fan-out + gates).",
               "id": "orch.1"
             },
             {
@@ -1416,7 +1621,7 @@
               "id": "orch.4"
             },
             {
-              "description": "Maintain .devai/local/rounds/round-999/blockers.md for human-input items.",
+              "description": "Maintain work/rounds/R-0999/blockers.md for human-input items.",
               "id": "orch.5"
             }
           ]
@@ -1426,7 +1631,7 @@
       },
       "fs_products": {
         "created": {
-          ".devai/local/rounds/round-999/prompts/01-fixture-wave.log": "783abb038282ccb4f4a127142ec8a85175ac0e9fbc325c7d3113ae99b434821c"
+          "work/rounds/R-0999/prompts/01-fixture-wave.log": "783abb038282ccb4f4a127142ec8a85175ac0e9fbc325c7d3113ae99b434821c"
         },
         "modified": {}
       },
@@ -1442,25 +1647,25 @@
           "executed_artifacts": {
             "mode": "dry-run",
             "reason": "round_dir_absent",
-            "round_dir": ".devai/local/rounds/round-999"
+            "round_dir": "work/rounds/R-0999"
           },
           "next_phase": "done",
           "phase": "verify-publish",
           "references": {
             "prompts_library": "docs/adopters/round-prompts/B4-verify-publish.md"
           },
-          "round_dir": ".devai/local/rounds/round-999",
+          "round_dir": "work/rounds/R-0999",
           "steps": [
             {
               "description": "Re-run all gates declared by the round-orchestrator (lint, typecheck, tests, scorecard).",
               "id": "verify.1"
             },
             {
-              "description": "Diff current scorecard vs .devai/local/rounds/round-999/audit/scorecard.baseline.json — flag regressions.",
+              "description": "Diff current scorecard vs work/rounds/R-0999/audit/scorecard.baseline.json — flag regressions.",
               "id": "verify.2"
             },
             {
-              "description": "Write .devai/local/rounds/round-999/closeout.md with verdict + scorecard delta + outstanding blockers.",
+              "description": "Write work/rounds/R-0999/closeout.md with verdict + scorecard delta + outstanding blockers.",
               "id": "verify.3"
             },
             {
@@ -1470,7 +1675,7 @@
           ]
         },
         "notes": [
-          "Round dir not present (.devai/local/rounds/round-999); dry-run mode — no gates re-run, no Closeout written."
+          "Round dir not present (work/rounds/R-0999); dry-run mode — no gates re-run, no Closeout written."
         ],
         "status": "pass"
       },

@@ -2,14 +2,21 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { ROSTER, INFRASTRUCTURE } from '../../src/roster.js';
-import { getValidator, loadSchema, listSchemaFiles, metaGate, checkSchema, checkSchemas } from '../../src/index.js';
+import {
+  getValidator,
+  listSchemaFiles,
+  metaGate,
+  checkSchema,
+  checkSchemas,
+} from '../../src/index.js';
 
 const R = join(import.meta.dirname, '..', '..', '..', '..');
 
 describe('roster', () => {
-  it('bijects with law/schemas (count guard: 52)', () => {
-    expect(ROSTER.length).toBe(52);
-    expect(listSchemaFiles()).toEqual([...ROSTER]);
+  it('bijects with law/schemas (count guard: 54)', () => {
+    expect(ROSTER.length).toBe(54);
+    expect(new Set(ROSTER).size).toBe(ROSTER.length);
+    expect(listSchemaFiles()).toEqual([...ROSTER].sort());
   });
   it('every roster schema parses and lazily compiles', () => {
     for (const name of ROSTER) expect(getValidator(name)).toBeTypeOf('function');
@@ -36,7 +43,9 @@ describe('live instances validate (the W02 recipe, proven)', () => {
   });
   it('genesis attestation stub green', () => {
     const v = getValidator('genesis-attestation.schema.json');
-    const inst = JSON.parse(readFileSync(join(R, 'law', 'register', 'attestation', 'genesis-attestation.json'), 'utf8'));
+    const inst = JSON.parse(
+      readFileSync(join(R, 'law', 'register', 'attestation', 'genesis-attestation.json'), 'utf8'),
+    );
     // wireframe stub carries a non-schema _status marker; strip before validating
     delete (inst as Record<string, unknown>)['_status'];
     const ok = v(inst);

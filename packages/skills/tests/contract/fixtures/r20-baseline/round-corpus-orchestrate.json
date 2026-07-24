@@ -23,7 +23,7 @@
         }
       ],
       "gate_runs": [],
-      "round_dir": ".devai/local/rounds/round-777",
+      "round_dir": "work/rounds/R-0777",
       "skip_unbacked_waves": true,
       "unbacked_wave_timeout_ms": 180000,
       "wave_timeout_ms": 3600000
@@ -34,10 +34,10 @@
       "prompts_library": "docs/adopters/round-prompts/B3-orchestrate.md",
       "skills": ["SKILL-fix-lint", "SKILL-fix-build", "SKILL-fix-test"]
     },
-    "round_dir": ".devai/local/rounds/round-777",
+    "round_dir": "work/rounds/R-0777",
     "steps": [
       {
-        "description": "Read .devai/local/rounds/round-777/prompts/00-orchestrator.md (wave fan-out + gates).",
+        "description": "Read work/rounds/R-0777/prompts/00-orchestrator.md (wave fan-out + gates).",
         "id": "orch.1"
       },
       {
@@ -53,17 +53,17 @@
         "id": "orch.4"
       },
       {
-        "description": "Maintain .devai/local/rounds/round-777/blockers.md for human-input items.",
+        "description": "Maintain work/rounds/R-0777/blockers.md for human-input items.",
         "id": "orch.5"
       }
     ]
   },
   "files": {
-    "/.devai/local/rounds/round-777/prompts/00-orchestrator.md": "# Orchestrator\n\n## Wave catalog\n\n| # | slug | goal | role | effort | dependsOn |\n|---|---|---|---|---|---|\n| 1 | `alpha` | first | engineer | low | - |\n| 2 | `beta` | second | inspector | medium | 1 |\n| 3 | `gamma` | third (prompt file missing) | auditor | low | 2 |\n",
-    "/.devai/local/rounds/round-777/prompts/01-alpha.log": "# R777-W1 — alpha\n\n**Closed:** <TS>\n**Status:** not-dispatched\n\nNOTE (R11 R6-F-4): wave has no dispatch:/skill_id:/agent_cli: header and no SKILL-* body reference — classified as auto-generated/unbacked. skip_unbacked_waves=true; skipping poll. To force a full poll on this wave, set skip_unbacked_waves=false or add a dispatch: header.\n",
-    "/.devai/local/rounds/round-777/prompts/01-alpha.md": "# Wave 1 — alpha\n\nProse only.\n",
-    "/.devai/local/rounds/round-777/prompts/02-beta.log": "# R777-W2 — beta\n\n**Closed:** <TS>\n**Status:** not-dispatched\n\nNOTE (R11 R6-F-4): wave has no dispatch:/skill_id:/agent_cli: header and no SKILL-* body reference — classified as auto-generated/unbacked. skip_unbacked_waves=true; skipping poll. To force a full poll on this wave, set skip_unbacked_waves=false or add a dispatch: header.\n",
-    "/.devai/local/rounds/round-777/prompts/02-beta.md": "# Wave 2 — beta\n\nProse only.\n"
+    "/work/rounds/R-0777/prompts/00-orchestrator.md": "# Orchestrator\n\n## Wave catalog\n\n| # | slug | goal | role | effort | dependsOn |\n|---|---|---|---|---|---|\n| 1 | `alpha` | first | engineer | low | - |\n| 2 | `beta` | second | inspector | medium | 1 |\n| 3 | `gamma` | third (prompt file missing) | auditor | low | 2 |\n",
+    "/work/rounds/R-0777/prompts/01-alpha.log": "# R777-W1 — alpha\n\n**Closed:** <TS>\n**Status:** not-dispatched\n\nNOTE (R11 R6-F-4): wave has no dispatch:/skill_id:/agent_cli: header and no SKILL-* body reference — classified as auto-generated/unbacked. skip_unbacked_waves=true; skipping poll. To force a full poll on this wave, set skip_unbacked_waves=false or add a dispatch: header.\n",
+    "/work/rounds/R-0777/prompts/01-alpha.md": "# Wave 1 — alpha\n\nProse only.\n",
+    "/work/rounds/R-0777/prompts/02-beta.log": "# R777-W2 — beta\n\n**Closed:** <TS>\n**Status:** not-dispatched\n\nNOTE (R11 R6-F-4): wave has no dispatch:/skill_id:/agent_cli: header and no SKILL-* body reference — classified as auto-generated/unbacked. skip_unbacked_waves=true; skipping poll. To force a full poll on this wave, set skip_unbacked_waves=false or add a dispatch: header.\n",
+    "/work/rounds/R-0777/prompts/02-beta.md": "# Wave 2 — beta\n\nProse only.\n"
   },
   "ledger": [
     {
@@ -71,7 +71,7 @@
         "round_id": "R777-W3"
       },
       "created_at": "<TS>",
-      "description": "Orchestrator catalog declared wave 3 (gamma) but no matching prompt file under <FIXTURE>/.devai/local/rounds/round-777/prompts.",
+      "description": "Orchestrator catalog declared wave 3 (gamma) but no matching prompt file under <FIXTURE>/work/rounds/R-0777/prompts.",
       "id": "DEC-0001",
       "kind": "escalate",
       "owner": "agent:orchestrator",

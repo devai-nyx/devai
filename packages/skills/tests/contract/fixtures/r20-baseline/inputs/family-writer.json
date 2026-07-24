@@ -10,10 +10,10 @@
       "strategy": "main-path",
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/Overview.md" },
       "files": {
-        ".devai/state/sensors/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"GET\",\"path\":\"/users\",\"controller\":{\"class\":\"UsersController\",\"file\":\"src/users.controller.ts\",\"startLine\":10,\"methodName\":\"list\"}}]}",
-        ".devai/state/sensors/inventory_routes/routes-react.json": "{\"framework\":\"react-router\",\"routes\":[{\"path\":\"/users\",\"component\":{\"name\":\"UsersPage\"}}]}",
-        ".devai/state/sensors/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"}],\"foreign_keys\":[]}]}",
-        ".devai/state/sensors/inventory_coverage/coverage-matrix.json": "{\"stats\":{},\"unmapped\":{\"routes\":[],\"endpoints\":[]}}",
+        "record/derived/inventory/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"GET\",\"path\":\"/users\",\"controller\":{\"class\":\"UsersController\",\"file\":\"src/users.controller.ts\",\"startLine\":10,\"methodName\":\"list\"}}]}",
+        "record/derived/inventory/inventory_routes/routes-react.json": "{\"framework\":\"react-router\",\"routes\":[{\"path\":\"/users\",\"component\":{\"name\":\"UsersPage\"}}]}",
+        "record/derived/inventory/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"}],\"foreign_keys\":[]}]}",
+        "record/derived/inventory/inventory_coverage/coverage-matrix.json": "{\"stats\":{},\"unmapped\":{\"routes\":[],\"endpoints\":[]}}",
         ".devai/state/init-introspection.json": "{\"languages\":[\"ts\"],\"packageManager\":\"pnpm\"}"
       },
       "ctx": {}
@@ -24,8 +24,8 @@
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/Software Stack.md" },
       "files": {
         ".devai/state/init-introspection.json": "{\"languages\":[\"ts\"],\"frameworks\":[\"nestjs\"],\"packageManager\":\"pnpm\"}",
-        ".devai/state/sensors/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"GET\",\"path\":\"/health\"}]}",
-        ".devai/state/sensors/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"}]}]}"
+        "record/derived/inventory/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"GET\",\"path\":\"/health\"}]}",
+        "record/derived/inventory/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"}]}]}"
       },
       "ctx": {}
     },
@@ -34,10 +34,10 @@
       "strategy": "main-path",
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/Architecture Guide.md" },
       "files": {
-        ".devai/state/sensors/inventory_dep_graph/dep-graph.json": "{\"graph\":{\"packages/core\":[\"packages/schemas\"],\"packages/schemas\":[]}}",
-        ".devai/state/sensors/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"GET\",\"path\":\"/users\",\"controller\":{\"class\":\"UsersController\"}}]}",
-        ".devai/state/sensors/inventory_routes/routes-react.json": "{\"framework\":\"react-router\",\"routes\":[{\"path\":\"/users\",\"component\":{\"name\":\"UsersPage\"}}]}",
-        ".devai/state/sensors/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"}]}]}",
+        "record/derived/inventory/inventory_dep_graph/dep-graph.json": "{\"graph\":{\"packages/core\":[\"packages/schemas\"],\"packages/schemas\":[]}}",
+        "record/derived/inventory/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"GET\",\"path\":\"/users\",\"controller\":{\"class\":\"UsersController\"}}]}",
+        "record/derived/inventory/inventory_routes/routes-react.json": "{\"framework\":\"react-router\",\"routes\":[{\"path\":\"/users\",\"component\":{\"name\":\"UsersPage\"}}]}",
+        "record/derived/inventory/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"}]}]}",
         ".devai/state/init-introspection.json": "{\"languages\":[\"ts\"]}"
       },
       "ctx": {}
@@ -47,7 +47,7 @@
       "strategy": "main-path",
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/Database Reference.md" },
       "files": {
-        ".devai/state/sensors/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"},{\"name\":\"email\",\"type\":\"text\"}],\"foreign_keys\":[]}]}"
+        "record/derived/inventory/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"},{\"name\":\"email\",\"type\":\"text\"}],\"foreign_keys\":[]}]}"
       },
       "ctx": {}
     },
@@ -56,7 +56,7 @@
       "strategy": "main-path",
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/ERD.md" },
       "files": {
-        ".devai/state/sensors/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"}],\"foreign_keys\":[]},{\"name\":\"orders\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"},{\"name\":\"user_id\",\"type\":\"uuid\"}],\"foreign_keys\":[{\"column\":\"user_id\",\"references\":\"users.id\"}]}]}"
+        "record/derived/inventory/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"}],\"foreign_keys\":[]},{\"name\":\"orders\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"},{\"name\":\"user_id\",\"type\":\"uuid\"}],\"foreign_keys\":[{\"column\":\"user_id\",\"references\":\"users.id\"}]}]}"
       },
       "ctx": {}
     },
@@ -65,7 +65,7 @@
       "strategy": "main-path",
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/API Map.md" },
       "files": {
-        ".devai/state/sensors/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"GET\",\"path\":\"/users\",\"controller\":{\"class\":\"UsersController\",\"file\":\"src/users.controller.ts\",\"startLine\":12,\"methodName\":\"list\"},\"auth\":{\"guards\":[\"JwtAuthGuard\"]}}],\"stack\":{\"framework\":\"nestjs\"}}"
+        "record/derived/inventory/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"GET\",\"path\":\"/users\",\"controller\":{\"class\":\"UsersController\",\"file\":\"src/users.controller.ts\",\"startLine\":12,\"methodName\":\"list\"},\"auth\":{\"guards\":[\"JwtAuthGuard\"]}}],\"stack\":{\"framework\":\"nestjs\"}}"
       },
       "ctx": {}
     },
@@ -74,7 +74,7 @@
       "strategy": "main-path",
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/Frontend Routes Map.md" },
       "files": {
-        ".devai/state/sensors/inventory_routes/routes-react.json": "{\"framework\":\"react-router\",\"routes\":[{\"path\":\"/users\",\"component\":{\"name\":\"UsersPage\"}},{\"path\":\"/users/:id\",\"parentId\":\"/users\",\"component\":{\"name\":\"UserDetail\"}}]}"
+        "record/derived/inventory/inventory_routes/routes-react.json": "{\"framework\":\"react-router\",\"routes\":[{\"path\":\"/users\",\"component\":{\"name\":\"UsersPage\"}},{\"path\":\"/users/:id\",\"parentId\":\"/users\",\"component\":{\"name\":\"UserDetail\"}}]}"
       },
       "ctx": {}
     },
@@ -83,7 +83,7 @@
       "strategy": "main-path",
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/RBAC Matrix.md" },
       "files": {
-        ".devai/state/sensors/inventory_rbac/rbac.json": "{\"rbacIlfTables\":[\"roles\",\"permissions\",\"role_permissions\"],\"stats\":{\"roleCount\":2,\"permissionCount\":3}}"
+        "record/derived/inventory/inventory_rbac/rbac.json": "{\"rbacIlfTables\":[\"roles\",\"permissions\",\"role_permissions\"],\"stats\":{\"roleCount\":2,\"permissionCount\":3}}"
       },
       "ctx": {}
     },
@@ -92,7 +92,7 @@
       "strategy": "main-path",
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/Compliance (LGPD).md" },
       "files": {
-        ".devai/state/sensors/inventory_data_handling/data-model-pii.json": "{\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"email\",\"pii_class\":\"contact\",\"legal_basis\":\"consent\",\"retention\":\"5y\"},{\"name\":\"cpf\",\"pii_class\":\"identity\"}]}]}"
+        "record/derived/inventory/inventory_data_handling/data-model-pii.json": "{\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"email\",\"pii_class\":\"contact\",\"legal_basis\":\"consent\",\"retention\":\"5y\"},{\"name\":\"cpf\",\"pii_class\":\"identity\"}]}]}"
       },
       "ctx": {}
     },
@@ -101,7 +101,7 @@
       "strategy": "main-path",
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/Compliance (GDPR).md" },
       "files": {
-        ".devai/state/sensors/inventory_data_handling/data-model-pii.json": "{\"tables\":[{\"name\":\"patients\",\"columns\":[{\"name\":\"email\",\"pii_class\":\"contact\",\"legal_basis\":\"consent\",\"retention\":\"3y\"},{\"name\":\"diagnosis\",\"pii_class\":\"health\"}]}]}"
+        "record/derived/inventory/inventory_data_handling/data-model-pii.json": "{\"tables\":[{\"name\":\"patients\",\"columns\":[{\"name\":\"email\",\"pii_class\":\"contact\",\"legal_basis\":\"consent\",\"retention\":\"3y\"},{\"name\":\"diagnosis\",\"pii_class\":\"health\"}]}]}"
       },
       "ctx": {}
     },
@@ -110,7 +110,7 @@
       "strategy": "main-path",
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/Compliance (CCPA).md" },
       "files": {
-        ".devai/state/sensors/inventory_data_handling/data-model-pii.json": "{\"tables\":[{\"name\":\"customers\",\"columns\":[{\"name\":\"email\",\"pii_class\":\"contact\",\"retention\":\"2y\"},{\"name\":\"ssn\",\"pii_class\":\"identity\"}]}]}"
+        "record/derived/inventory/inventory_data_handling/data-model-pii.json": "{\"tables\":[{\"name\":\"customers\",\"columns\":[{\"name\":\"email\",\"pii_class\":\"contact\",\"retention\":\"2y\"},{\"name\":\"ssn\",\"pii_class\":\"identity\"}]}]}"
       },
       "ctx": {}
     },
@@ -119,9 +119,9 @@
       "strategy": "main-path",
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/Function Point Report.md" },
       "files": {
-        ".devai/state/sensors/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"POST\",\"path\":\"/users\"},{\"method\":\"GET\",\"path\":\"/users\"}]}",
-        ".devai/state/sensors/inventory_routes/routes-react.json": "{\"framework\":\"react-router\",\"routes\":[{\"path\":\"/users\",\"component\":{\"name\":\"UsersPage\"}}]}",
-        ".devai/state/sensors/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"}]}]}"
+        "record/derived/inventory/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"POST\",\"path\":\"/users\"},{\"method\":\"GET\",\"path\":\"/users\"}]}",
+        "record/derived/inventory/inventory_routes/routes-react.json": "{\"framework\":\"react-router\",\"routes\":[{\"path\":\"/users\",\"component\":{\"name\":\"UsersPage\"}}]}",
+        "record/derived/inventory/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"}]}]}"
       },
       "ctx": {}
     },
@@ -130,10 +130,10 @@
       "strategy": "main-path",
       "inputs": { "task_id": "TASK-0001", "out_path": "docs/Security Threat Model.md" },
       "files": {
-        ".devai/state/sensors/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"POST\",\"path\":\"/transfers\",\"auth\":{\"guards\":[]}}]}",
-        ".devai/state/sensors/inventory_rbac/rbac.json": "{\"rbacIlfTables\":[\"roles\"],\"stats\":{}}",
-        ".devai/state/sensors/inventory_data_handling/data-model-pii.json": "{\"tables\":[{\"name\":\"accounts\",\"columns\":[{\"name\":\"balance\",\"pii_class\":\"financial\"}]}]}",
-        ".devai/state/sensors/inventory_dep_graph/dep-graph.json": "{\"graph\":{\"api\":[\"db\"]}}"
+        "record/derived/inventory/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"POST\",\"path\":\"/transfers\",\"auth\":{\"guards\":[]}}]}",
+        "record/derived/inventory/inventory_rbac/rbac.json": "{\"rbacIlfTables\":[\"roles\"],\"stats\":{}}",
+        "record/derived/inventory/inventory_data_handling/data-model-pii.json": "{\"tables\":[{\"name\":\"accounts\",\"columns\":[{\"name\":\"balance\",\"pii_class\":\"financial\"}]}]}",
+        "record/derived/inventory/inventory_dep_graph/dep-graph.json": "{\"graph\":{\"api\":[\"db\"]}}"
       },
       "ctx": {}
     },
@@ -144,8 +144,8 @@
       "files": {
         ".devai/state/init-introspection.json": "{\"packageManager\":\"pnpm\",\"language\":\"ts\",\"testCommand\":\"pnpm test\"}",
         ".devai/config/project.json": "{\"name\":\"acme\"}",
-        ".devai/state/sensors/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"GET\",\"path\":\"/health\"}]}",
-        ".devai/state/sensors/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"}]}]}"
+        "record/derived/inventory/inventory_api/api-map.json": "{\"endpoints\":[{\"method\":\"GET\",\"path\":\"/health\"}]}",
+        "record/derived/inventory/inventory_data_model/data-model.json": "{\"dialect\":\"postgres\",\"tables\":[{\"name\":\"users\",\"columns\":[{\"name\":\"id\",\"type\":\"uuid\"}]}]}"
       },
       "ctx": {}
     },

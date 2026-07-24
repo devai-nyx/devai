@@ -1,16 +1,16 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import pg from 'pg';
-import { runDataProbeBatch } from '../../src/runtime-probe-data.js';
-import type { RuntimeProbeCharter } from '../../src/runtime-probe.js';
+import { createRequire } from 'node:module';
+import { resolve } from 'node:path';
+import { runDataProbeBatch } from '../../packages/sensors/src/runtime-probe-data.js';
+import type { RuntimeProbeCharter } from '../../packages/sensors/src/runtime-probe.js';
 
 /**
  * Full-production integration test for the data-kind runtime-probe driver
- * (T3.1 closure). Runs by default against the natural local trust-auth
- * Postgres database. Set DEVAI_DB_TESTS=0 to skip in explicitly hermetic
- * contexts.
+ * (T3.1 closure). The database-backed cases are opt-in under DII-048:
+ * set DEVAI_DB_TESTS=1 and optionally DEVAI_DB_URL.
  */
 
-const DB_TESTS = process.env.DEVAI_DB_TESTS !== '0';
+const DB_TESTS = process.env.DEVAI_DB_TESTS === '1';
 const DB_URL =
   process.env.DEVAI_DB_URL ??
   `postgresql://${process.env.USER ?? 'postgres'}@localhost:5432/devai_test`;
@@ -18,7 +18,17 @@ const itDb = DB_TESTS ? it : it.skip;
 
 const SCHEMA = 'devai_runtime_probe_test';
 
-async function withClient<T>(fn: (c: pg.Client) => Promise<T>): Promise<T> {
+interface TestDbClient {
+  connect(): Promise<void>;
+  end(): Promise<void>;
+  query(sql: string): Promise<{ rows: unknown[] }>;
+}
+
+async function withClient<T>(fn: (c: TestDbClient) => Promise<T>): Promise<T> {
+  const requireFromSensors = createRequire(resolve('packages/sensors/package.json'));
+  const pg = requireFromSensors('pg') as {
+    Client: new (options: { connectionString: string }) => TestDbClient;
+  };
   const client = new pg.Client({ connectionString: DB_URL });
   await client.connect();
   try {

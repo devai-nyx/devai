@@ -57,8 +57,23 @@ function processIsReadOnly(request: AuthorityHostEffectRequest): boolean {
   }
   if (
     executable === 'pnpm' &&
-    args.length === 1 &&
-    ['test:coverage', 'test:mutation'].includes(String(args[0]))
+    ((args.length === 1 &&
+      [
+        'test',
+        'test:coverage',
+        'test:integration',
+        'test:mutation',
+        'test:regression',
+        'test:e2e',
+      ].includes(String(args[0]))) ||
+      (args.length === 2 && args[0] === 'run' && ['build', 'test'].includes(String(args[1]))))
+  ) {
+    return true;
+  }
+  if (
+    executable === 'npx' &&
+    ((args[0] === 'tsc' && args[1] === '--noEmit') ||
+      (args[0] === 'eslint' && args[1] === '--format=json' && !args.includes('--fix')))
   ) {
     return true;
   }

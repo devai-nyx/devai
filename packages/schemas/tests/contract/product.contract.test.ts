@@ -14,13 +14,17 @@ function fm(path: string): Record<string, unknown> {
   const t = readFileSync(path, 'utf8');
   const m = t.match(/^---\n([\s\S]*?)\n---\n/);
   expect(m, `${path} has front-matter`).toBeTruthy();
-  return parse(m![1]) as Record<string, unknown>;
+  return parse(m?.[1] ?? '') as Record<string, unknown>;
 }
 
 describe('product tier records', () => {
-  const journeyFiles = readdirSync(join(P, 'journeys')).filter((f) => f.startsWith('JNY-')).sort();
+  const journeyFiles = readdirSync(join(P, 'journeys'))
+    .filter((f) => f.startsWith('JNY-'))
+    .sort();
   const invariantIds = new Set(
-    readdirSync(join(R, 'law', 'invariants')).filter((f) => f.startsWith('INV-')).map((f) => f.replace('.json', '')),
+    readdirSync(join(R, 'law', 'invariants'))
+      .filter((f) => f.startsWith('INV-'))
+      .map((f) => f.replace('.json', '')),
   );
 
   it('all 14 journeys validate with provenance applied', () => {
@@ -34,20 +38,62 @@ describe('product tier records', () => {
   });
 
   it('Article-12 seam: every related_invariants id resolves to a live invariant', () => {
-    for (const f of journeyFiles) {
-      const j = JSON.parse(readFileSync(join(P, 'journeys', f), 'utf8'));
+    const journeys = journeyFiles.map((f) => ({
+      file: f,
+      record: JSON.parse(readFileSync(join(P, 'journeys', f), 'utf8')) as {
+        id: string;
+        status: string;
+        supersedes: string[] | null;
+        superseded_by: string | null;
+        related_invariants: string[];
+      },
+    }));
+    const activeJourneys = journeys.filter(({ record }) => record.status === 'active');
+    expect(activeJourneys).toHaveLength(13);
+    for (const { file, record: j } of activeJourneys) {
       for (const id of j.related_invariants as string[]) {
-        expect(invariantIds.has(id), `${f} -> ${id} must exist in law/invariants`).toBe(true);
+        expect(invariantIds.has(id), `${file} -> ${id} must exist in law/invariants`).toBe(true);
       }
-      expect((j.related_invariants as string[]).length, `${f} has a non-empty seam`).toBeGreaterThan(0);
+      expect(j.related_invariants.length, `${file} has a non-empty seam`).toBeGreaterThan(0);
     }
+    const retired = journeys.find(({ record }) => record.id === 'JNY-007')?.record;
+    const successor = journeys.find(({ record }) => record.id === 'JNY-014')?.record;
+    expect(retired?.status).toBe('retired');
+    expect(retired?.superseded_by).toBe('JNY-014');
+    expect(successor?.supersedes).toEqual(['JNY-007']);
   });
 
-  it('use-cases bundle validates and carries its ratification-pending signals', () => {
+  it('use-cases bundle validates and carries the applied Owner mappings', () => {
     const v = getValidator('use-cases.schema.json');
-    const u = JSON.parse(readFileSync(join(P, 'use-cases', 'devai-cli.json'), 'utf8'));
+    const u = JSON.parse(readFileSync(join(P, 'use-cases', 'devai-cli.json'), 'utf8')) as {
+      generatedAt?: unknown;
+      provenance?: string[];
+      cases: Array<{
+        mainFlow: Array<{ refs: { actionRefs: Array<{ id: string; provisional?: boolean }> } }>;
+        alternateFlows?: Array<{
+          steps: Array<{ refs: { actionRefs: Array<{ id: string; provisional?: boolean }> } }>;
+        }>;
+      }>;
+    };
     expect(v(u), JSON.stringify(v.errors)).toBe(true);
-    expect(String(u.provenance?.[1] ?? ''), 'signals recorded').toMatch(/REV-0006/);
+    expect(u.cases).toHaveLength(12);
+    expect(Object.hasOwn(u, 'generatedAt')).toBe(false);
+    for (const useCase of u.cases) {
+      const steps = [
+        ...useCase.mainFlow,
+        ...(useCase.alternateFlows ?? []).flatMap((flow) => flow.steps),
+      ];
+      for (const step of steps) {
+        expect(step.refs.actionRefs.length).toBeGreaterThan(0);
+        for (const ref of step.refs.actionRefs) {
+          expect(ref.id.trim().length).toBeGreaterThan(0);
+          if ('provisional' in ref) expect(ref.provisional).toBe(true);
+        }
+      }
+    }
+    expect(u.provenance).toContain(
+      'REV-0006 Owner marks applied 2026-07-23: stale hand-maintained generatedAt removed; all 12 imported use cases mapped to successor or explicitly provisional predecessor CLI action identifiers',
+    );
   });
 
   it('markdown artifacts (mandate, README, compilation) validate against record-meta', () => {
@@ -67,27 +113,40 @@ describe('product tier records', () => {
 
 describe('glossary records (joint tier)', () => {
   const G = join(R, 'law', 'glossary');
-  const files = readdirSync(G).filter((f) => f.startsWith('GE-')).sort();
+  const files = readdirSync(G)
+    .filter((f) => f.startsWith('GE-'))
+    .sort();
   const geIds = new Set(files.map((f) => f.replace('.json', '')));
   const invariantIds = new Set(
-    readdirSync(join(R, 'law', 'invariants')).filter((f) => f.startsWith('INV-')).map((f) => f.replace('.json', '')),
+    readdirSync(join(R, 'law', 'invariants'))
+      .filter((f) => f.startsWith('INV-'))
+      .map((f) => f.replace('.json', '')),
   );
 
-  it('all 37 entries validate with provenance applied', () => {
-    expect(files.length).toBe(37);
+  it('all 44 entries validate with imported or rider provenance applied', () => {
+    expect(files.length).toBe(44);
     const v = getValidator('glossary-entry.schema.json');
     for (const f of files) {
       const g = JSON.parse(readFileSync(join(G, f), 'utf8'));
       expect(v(g), `${f}: ${JSON.stringify(v.errors)}`).toBe(true);
-      expect(g.provenance?.[0], f).toMatch(/^ex-GE-\d+@devai-original$/);
+      const id = Number(f.slice(3, 6));
+      if (id <= 37) {
+        expect(g.provenance?.[0], f).toMatch(/^ex-GE-\d+@devai-original$/);
+      } else {
+        expect(g.status, f).toBe('draft');
+        expect(g.authority, f).toBe('joint');
+        expect(g.provenance?.[0], f).toMatch(/REV-0006 vocabulary rider.*Owner 2026-07-23/);
+      }
     }
   });
 
   it('the intra-glossary graph resolves: see_also -> existing GE ids; related_invariants -> live invariants', () => {
     for (const f of files) {
       const g = JSON.parse(readFileSync(join(G, f), 'utf8'));
-      for (const ref of (g.see_also ?? []) as string[]) expect(geIds.has(ref), `${f} see_also ${ref}`).toBe(true);
-      for (const id of (g.related_invariants ?? []) as string[]) expect(invariantIds.has(id), `${f} -> ${id}`).toBe(true);
+      for (const ref of (g.see_also ?? []) as string[])
+        expect(geIds.has(ref), `${f} see_also ${ref}`).toBe(true);
+      for (const id of (g.related_invariants ?? []) as string[])
+        expect(invariantIds.has(id), `${f} -> ${id}`).toBe(true);
     }
   });
 

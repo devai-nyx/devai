@@ -1,0 +1,230 @@
+import { describe, expect, it } from 'vitest';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { getValidator } from '../../src/index.js';
+
+const ROOT = join(import.meta.dirname, '..', '..', '..', '..');
+
+function json(path: string): unknown {
+  return JSON.parse(readFileSync(join(ROOT, path), 'utf8')) as unknown;
+}
+
+describe('governed population count guards', () => {
+  it('guards the 54-schema canonical roster', () => {
+    const files = readdirSync(join(ROOT, 'law', 'schemas'))
+      .filter((file) => file.endsWith('.schema.json'))
+      .sort();
+    expect(files).toHaveLength(54);
+  });
+
+  it('guards the 34-invariant roster', () => {
+    const files = readdirSync(join(ROOT, 'law', 'invariants'))
+      .filter((file) => /^INV-.+\.json$/.test(file))
+      .sort();
+    expect(files).toHaveLength(34);
+  });
+
+  it('guards the 14 physical and 13 active journey records', () => {
+    const records = readdirSync(join(ROOT, 'product', 'journeys'))
+      .filter((file) => /^JNY-.+\.json$/.test(file))
+      .map((file) => json(`product/journeys/${file}`) as { status: string });
+    expect(records).toHaveLength(14);
+    expect(records.filter((record) => record.status === 'active')).toHaveLength(13);
+  });
+
+  it('guards the 44-entry glossary roster', () => {
+    const files = readdirSync(join(ROOT, 'law', 'glossary')).filter((file) =>
+      /^GE-\d{3}\.json$/.test(file),
+    );
+    expect(files).toHaveLength(44);
+  });
+
+  it('guards the gapless 12-record successor ADR roster', () => {
+    const files = readdirSync(join(ROOT, 'law', 'adr'))
+      .filter((file) => /^ADR-\d{3}-.+\.md$/.test(file))
+      .sort();
+    expect(files).toHaveLength(12);
+    expect(files.map((file) => Number(file.slice(4, 7)))).toEqual(
+      Array.from({ length: 12 }, (_, index) => index + 1),
+    );
+  });
+
+  it('guards the 107-entry decision register roster', () => {
+    const register = readFileSync(join(ROOT, 'law', 'register', 'DECISIONS.md'), 'utf8');
+    expect(register.match(/^### DII-[A-Z0-9-]+ — /gm) ?? []).toHaveLength(107);
+  });
+
+  it('guards the 59-live and 5-archived sensor roster', () => {
+    const registry = json('law/policy/sensor-registry.json') as {
+      entries: unknown[];
+      archived_kinds: unknown[];
+    };
+    expect(registry.entries).toHaveLength(59);
+    expect(registry.archived_kinds).toHaveLength(5);
+  });
+});
+
+describe('population-registry honesty', () => {
+  const registry = json('law/policy/population-registry.json') as {
+    populations: Array<{
+      id: string;
+      count_guard: { state: string; source: string | null; backlog_ref: string | null };
+      liveness_guard: { state: string; source: string | null; backlog_ref: string | null };
+      tombstone_guard: { state: string; source: string | null; backlog_ref: string | null };
+    }>;
+  };
+
+  it('validates the population registry against its schema', () => {
+    const validate = getValidator('population-registry.schema.json');
+    expect(validate(registry), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it('requires implemented guards to resolve and deferred guards to retain pointers', () => {
+    for (const population of registry.populations) {
+      for (const guard of [
+        population.count_guard,
+        population.liveness_guard,
+        population.tombstone_guard,
+      ]) {
+        if (guard.state === 'implemented') {
+          expect(guard.source, `${population.id}: implemented guard source`).toBeTruthy();
+          const file = guard.source?.split('#')[0];
+          expect(
+            file !== undefined && existsSync(join(ROOT, file)),
+            `${population.id}: ${guard.source ?? 'missing source'} resolves`,
+          ).toBe(true);
+        } else {
+          expect(
+            guard.backlog_ref,
+            `${population.id}: ${guard.state} guard has a backlog pointer`,
+          ).toBeTruthy();
+        }
+      }
+    }
+  });
+});
+
+describe('register-to-Constitution consistency guard', () => {
+  const constitution = readFileSync(join(ROOT, 'law', 'constitution.md'), 'utf8');
+  const register = readFileSync(join(ROOT, 'law', 'register', 'DECISIONS.md'), 'utf8');
+  const articleNumbers = new Set(
+    [...constitution.matchAll(/^### Article (\d+)\./gm)].map((match) => Number(match[1])),
+  );
+
+  it('resolves every explicit constitutional article anchor', () => {
+    const cited = [...register.matchAll(/(?:Constitution (?:Article|Art)|Article) (\d+)/g)].map(
+      (match) => Number(match[1]),
+    );
+    expect(cited.length).toBeGreaterThan(0);
+    for (const article of cited) {
+      expect(articleNumbers.has(article), `register cites existing Article ${article}`).toBe(true);
+    }
+  });
+
+  it('contains no direct constitutional override or contradiction marker', () => {
+    expect(register).not.toMatch(
+      /\b(?:override|contradict|supersede|ignore)s? (?:the )?Constitution\b/i,
+    );
+    expect(register).not.toMatch(/\bcontrary to (?:Constitution )?Article \d+\b/i);
+  });
+});
+
+describe('structured error class-to-exit closure', () => {
+  const validate = getValidator('error.schema.json');
+  const pairs = [
+    ['routing-authority', 2],
+    ['gate-fail', 3],
+    ['invalid-input', 4],
+    ['precondition', 5],
+    ['infrastructure', 6],
+    ['contract-violation', 7],
+  ] as const;
+
+  function envelope(errorClass: string, exit: number): Record<string, unknown> {
+    return {
+      schemaVersion: '1.0.0',
+      code: 'TEST_ERROR',
+      class: errorClass,
+      exit,
+      message: 'fixture',
+    };
+  }
+
+  it.each(pairs)('accepts the exact %s -> %i pair', (errorClass, exit) => {
+    expect(validate(envelope(errorClass, exit)), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it('rejects every mismatched class-to-exit pair', () => {
+    for (const [errorClass, exit] of pairs) {
+      const mismatchedExit = exit === 7 ? 2 : exit + 1;
+      expect(
+        validate(envelope(errorClass, mismatchedExit)),
+        `${errorClass}/${mismatchedExit}`,
+      ).toBe(false);
+    }
+  });
+
+  it('rejects undeclared root properties', () => {
+    expect(validate({ ...envelope('routing-authority', 2), undeclared: true })).toBe(false);
+  });
+});
+
+describe('sensor-registry liveness and reachability', () => {
+  const registry = json('law/policy/sensor-registry.json') as {
+    entries: Array<{
+      id: string;
+      kind: string;
+      emitter_module: string;
+      cells?: Array<{ substrate: string; property: string }>;
+      diagnostic?: true;
+      tiers: string[];
+    }>;
+    archived_kinds: Array<{ kind: string }>;
+  };
+
+  it('validates against the canonical sensor-registry schema', () => {
+    const validate = getValidator('sensor-registry.schema.json');
+    expect(validate(registry), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it('keeps live ids and kinds unique and disjoint from archived kinds', () => {
+    const ids = registry.entries.map((entry) => entry.id);
+    const kinds = registry.entries.map((entry) => entry.kind);
+    const archived = new Set(registry.archived_kinds.map((entry) => entry.kind));
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(new Set(kinds).size).toBe(kinds.length);
+    for (const kind of kinds) expect(archived.has(kind), `${kind} is not archived`).toBe(false);
+  });
+
+  it('requires every live entry to resolve an emitter and be scorecard-backed or diagnostic', () => {
+    for (const entry of registry.entries) {
+      expect(existsSync(join(ROOT, entry.emitter_module)), `${entry.kind} emitter resolves`).toBe(
+        true,
+      );
+      const hasCells = (entry.cells?.length ?? 0) > 0;
+      expect(
+        hasCells !== (entry.diagnostic === true),
+        `${entry.kind} has exactly one of cells or diagnostic standing`,
+      ).toBe(true);
+      expect(entry.tiers).toContain('SWEEP');
+    }
+  });
+
+  it('pins the sole scheduled-reachability known-red to F1:T1', () => {
+    const reachable = new Set(
+      registry.entries.flatMap((entry) =>
+        entry.tiers.length > 0
+          ? (entry.cells ?? []).map((cell) => `${cell.substrate}:${cell.property}`)
+          : [],
+      ),
+    );
+    const unreachable: string[] = [];
+    for (const substrate of ['F1', 'F2', 'F3', 'F4', 'F5']) {
+      for (let property = 1; property <= 9; property += 1) {
+        const cell = `${substrate}:T${String(property)}`;
+        if (cell !== 'F4:T5' && !reachable.has(cell)) unreachable.push(cell);
+      }
+    }
+    expect(unreachable).toEqual(['F1:T1']);
+  });
+});

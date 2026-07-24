@@ -3,8 +3,8 @@ import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync, existsSync 
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, aroundEach, beforeEach, describe, expect, it } from 'vitest';
-import * as skills from '../../src/skills/index.js';
-import { withAuthorityHostTestScope } from '../unit/authority-host-test-scope.js';
+import * as skills from '../../packages/skills/src/skills/index.js';
+import { withAuthorityHostTestScope } from '../../packages/skills/tests/unit/authority-host-test-scope.js';
 
 aroundEach((runTest) => withAuthorityHostTestScope(runTest));
 
@@ -46,8 +46,7 @@ describe('applyEditsBounded realpath containment (R18.B.2)', () => {
 
   it('rejects a scoped relative path that traverses a symlink out of the worktree', () => {
     const fn = (skills as Record<string, unknown>)['applyEditsBounded'] as
-      | ApplyEditsBounded
-      | undefined;
+      ApplyEditsBounded | undefined;
     expect(fn, 'applyEditsBounded must be exported (R18.C.2)').toBeTypeOf('function');
     if (fn === undefined) return;
 
@@ -67,8 +66,7 @@ describe('applyEditsBounded realpath containment (R18.B.2)', () => {
 
   it('still writes an ordinary in-scope path (guard against over-tightening)', () => {
     const fn = (skills as Record<string, unknown>)['applyEditsBounded'] as
-      | ApplyEditsBounded
-      | undefined;
+      ApplyEditsBounded | undefined;
     expect(fn, 'applyEditsBounded must be exported (R18.C.2)').toBeTypeOf('function');
     if (fn === undefined) return;
 

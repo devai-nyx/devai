@@ -206,7 +206,7 @@
       "strategy": "main-path",
       "inputs": {},
       "files": {
-        "docs/meta/adr/ADR-001-fixture.md": "---\nid: ADR-001\ntitle: Fixture\nstatus: accepted\n---\n\n# ADR-001 — Fixture\n\n## Context\n\nx\n"
+        "law/adr/ADR-001-fixture.md": "---\nid: ADR-001\ntitle: Fixture\nstatus: accepted\n---\n\n# ADR-001 — Fixture\n\n## Context\n\nx\n"
       },
       "ctx": { "iteration": 1 },
       "notes": "non-git fixture: rename branches take stable rename-skipped-not-git; missing mandatory sections exercise the section-scaffold branch"

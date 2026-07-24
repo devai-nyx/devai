@@ -16,7 +16,7 @@ describe('constitution structure', () => {
     expect(nums).toEqual(Array.from({ length: 42 }, (_, i) => i + 1));
   });
   it('front-matter validates against record-meta', () => {
-    const fm = parse(text.match(/^---\n([\s\S]*?)\n---\n/)![1]) as Record<string, unknown>;
+    const fm = parse(text.match(/^---\n([\s\S]*?)\n---\n/)?.[1] ?? '') as Record<string, unknown>;
     expect(getValidator('record-meta.schema.json')(fm), 'constitution front-matter').toBe(true);
     expect(fm.status).toBe('draft');
   });

@@ -10,7 +10,7 @@ import {
   senseInventoryDepGraph,
   senseInventoryRbac,
   senseInventoryRoutes,
-} from '../../src/index.js';
+} from '../../packages/sensors/src/index.js';
 
 /**
  * Phase 19.C (D-61): performance smoke for the 7 L0 inventory sensors

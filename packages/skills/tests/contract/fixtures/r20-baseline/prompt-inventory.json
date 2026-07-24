@@ -1,5 +1,15 @@
 {
   "count": 16,
+  "non_prompt_literal_dispositions": [
+    {
+      "char_count": 127,
+      "file": "skills/impl/round.ts",
+      "placeholder_names": ["auditDir.replace(`${ctx.repoRoot}/`, '')"],
+      "rationale": "round-plan artifact description; it is returned as deterministic evidence and is never sent to an LLM",
+      "sha256": "5d0285608713dffb47acf28b56f0c4fc97c77b16ecb44d8cc9770d9b698d4148",
+      "skill_id": "SKILL-compute-scorecard"
+    }
+  ],
   "records": [
     {
       "char_count": 120,

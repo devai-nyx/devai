@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { buildCatalog, resolveAll, type XrefCheck } from '../../src/spec/xref-resolver.js';
+import {
+  buildCatalog,
+  resolveAll,
+  type XrefCheck,
+} from '../../packages/spec/src/spec/xref-resolver.js';
 
 // Absorbed Phase-2 validation criterion:
 //   "Cross-reference resolver handles a graph of 100+ invariants with

@@ -3,7 +3,6 @@
     "SKILL-assess-state",
     "SKILL-commit-push",
     "SKILL-compile-backlog",
-    "SKILL-compile-tests-from-docs",
     "SKILL-compute-scorecard",
     "SKILL-emit-rgr",
     "SKILL-fix-action-coverage",
@@ -36,6 +35,7 @@
   ],
   "prompt_bearing": [
     "SKILL-align-docs",
+    "SKILL-compile-tests-from-docs",
     "SKILL-elicit",
     "SKILL-feedback-iteration",
     "SKILL-plan-blueprint",

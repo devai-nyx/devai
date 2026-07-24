@@ -10,8 +10,8 @@ import {
   verifyChain,
   type DraftEvidence,
   type EvidenceContext,
-} from '../../src/evidence/index.js';
-import { withAuthorityHostTestScope } from '../../../authority/tests/unit/authority-host-test-scope.js';
+} from '../../packages/evidence/src/evidence/index.js';
+import { withAuthorityHostTestScope } from '../../packages/authority/tests/unit/authority-host-test-scope.js';
 
 aroundEach((runTest) => withAuthorityHostTestScope(runTest));
 
@@ -116,7 +116,7 @@ describe('100-event soak', () => {
     // Redact a middle record's actor (which IS in the canonical hash).
     const target = ids[42];
     if (!target) throw new Error('expected ids[42] to exist');
-    const { redactRecord } = await import('../../src/evidence/redact.js');
+    const { redactRecord } = await import('../../packages/evidence/src/evidence/redact.js');
     const result = redactRecord({
       chainPath,
       targetId: target,
