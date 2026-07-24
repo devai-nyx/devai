@@ -20,15 +20,15 @@ session in BR-1/W04. Source texts: ADR-006-independent-completion-evidence.md.
 
 ## Context
 
-⟦TODO at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
-reference, never restate SHAs/run-IDs.⟧
+TODO (BL-005) at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
+reference, never restate SHAs/run-IDs.
 
 **Scope (from the disposition map):** Trust split (untrusted witness / independent validator), typed strategies with non-vacuity, container-scoped isolation, recovery leases, frame checks, mechanically derived mutating-skill denominator, expected-diff manifests. Campaign ledger sections (predecessor sections 24-25) remain history, cited never copied.
 
 ## Decision
 
-⟦TODO at minting — the binding contract, transposed from source(s) with the deltas below
-integrated.⟧
+TODO (BL-005) at minting — the binding contract, transposed from source(s) with the deltas below
+integrated.
 
 **Verified amendment deltas (dossier Part II — must not be lost):**
 
@@ -38,12 +38,12 @@ integrated.⟧
 
 ## Consequences
 
-⟦TODO at minting.⟧
+TODO (BL-005) at minting.
 
 ## Alternatives Considered
 
-⟦TODO at minting — carry forward the predecessor's rejected alternatives where still relevant.⟧
+TODO (BL-005) at minting — carry forward the predecessor's rejected alternatives where still relevant.
 
 ## Affected Rules
 
-⟦TODO at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).⟧
+TODO (BL-005) at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).

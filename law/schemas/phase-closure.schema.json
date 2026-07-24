@@ -37,12 +37,12 @@
     },
     "declaring_decision": {
       "type": "string",
-      "pattern": "^D-[0-9]+$",
+      "pattern": "^(?:D-[0-9]+|DII-[0-9]+)$",
       "description": "The D-entry that declared the phase/round."
     },
     "closing_decision": {
       "type": "string",
-      "pattern": "^D-[0-9]+$",
+      "pattern": "^(?:D-[0-9]+|DII-[0-9]+)$",
       "description": "The D-entry that records the closing judgment."
     },
     "batches": {
@@ -161,10 +161,29 @@
       "enum": [
         "published",
         "changeset-pending",
+        "none-preratification",
         "none-needed",
         "missing"
       ],
-      "description": "Whether the round's package changes have a release path: 'published' (release cut), 'changeset-pending' (changeset recorded, publish pending), 'none-needed' (no package-visible changes), 'missing' (package changes shipped with no changeset — a recorded defect, never a silent one). Added at R18 (D-133); required by the ceremony from PC-0007 onward."
+      "description": "Whether the round's package changes have a release path: 'published' (release cut), 'changeset-pending' (changeset recorded, publish pending), 'none-preratification' (package-visible changes intentionally withheld until ratification), 'none-needed' (no package-visible changes), or 'missing' (package changes shipped with no changeset — a recorded defect, never a silent one). Added at R18 (D-133); required by the ceremony from PC-0007 onward."
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proof_epoch",
+        "terminal_sha256"
+      ],
+      "properties": {
+        "proof_epoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "terminal_sha256": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        }
+      },
+      "description": "Machine-evidence epoch bound by this closure. The terminal hash commits to the complete line-hash chain."
     },
     "notes": {
       "type": "string"

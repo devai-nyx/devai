@@ -16,8 +16,7 @@ Recommend, never ratify.
 
 1. **Verify the whole**: full tier ladder green; `git -C ../devai status` clean;
    every commit role-attributed (`git log --format='%an'` contains only DEVAI <Role>
-   names); backlog validates; zero ⟦unresolved⟧ markers outside scratch/ and the two
-   authorization-bound slots that belong to the human.
+   names); backlog validates; zero unresolved placeholder markers outside scratch/.
 2. **Closure record**: if the ported CLI's `govern phase close`-equivalent runs, use it;
    otherwise hand-author `record/proofs/compliance/closures/PC-0001.json` against
    `phase-closure.schema.json` (validate!): round R-0001, merged_as = the closing commit,

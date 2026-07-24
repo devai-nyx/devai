@@ -1,6 +1,9 @@
 # DEVAI-II bootstrap round plan — draft
 
-**Status: DRAFT, speculative session output. Not a declared round.** Companion to the D-189/genesis drafts, the classification report, and the verification addendum (collectively "the manifest"). Execution requires the D-189 Owner authorization and declared per-batch role sessions. Bracketed `⟦…⟧` values bind at execution.
+**Status: DRAFT execution record.** Appendix A's successor-side P0–P8 sequence was
+executed under the granted Owner authorization; the older W00–W09 text below remains
+historical design context where Appendix A superseded it. R-Ω was not executed and every
+explicit `PENDING_R_OMEGA_*` token is governed by BL-001 or BL-003.
 
 Shape: one predecessor-side closing round (**R-Ω**, in devai-original) and one successor-side bootstrap round (**BR-1**, in DEVAI-II), ten waves W00–W09. Waves are serial unless marked; each wave is one or more role-pure sessions with a commit boundary at every role change. The manifest is the scope control throughout: work not derivable from it is out of scope and requires a new decision.
 
@@ -10,7 +13,7 @@ Shape: one predecessor-side closing round (**R-Ω**, in devai-original) and one 
 
 - P1. In-flight state resolved — **Owner-decided 2026-07-23**: R29 is closed; R30 is in flight and closes factually in devai-original before R-Ω opens. No abandonment path; no open round at succession.
 - P2. D-189 adopted: Owner authorization quoted verbatim; Architect session appends it as the final substantive record.
-- P3. Manifest frozen: classification report + verification addendum committed under `docs/work/⟦round⟧/audit/` in devai-original, SHA-256s recorded in D-189 item 1. (These are currently scratchpad drafts; committing them is itself Auditor-output work under Article 7's designated path.)
+- P3. Manifest frozen: classification report + verification addendum committed under `docs/work/R-Omega pending BL-001/audit/` in devai-original, SHA-256s recorded in D-189 item 1. (These are currently scratchpad drafts; committing them is itself Auditor-output work under Article 7's designated path.)
 - P4. Green predecessor: the four CI gates pass at the intended final commit.
 
 ---
@@ -19,10 +22,10 @@ Shape: one predecessor-side closing round (**R-Ω**, in devai-original) and one 
 
 | Batch | Role | Work | Validation |
 |---|---|---|---|
-| Ω.A | Auditor | Commit the manifest under `docs/work/⟦round⟧/audit/`; final read-only state survey | Files at declared paths; hashes match D-189 |
-| Ω.B | Architect | Append D-189; update BUILD-PLAN Status to terminal ("this repository closes under D-189; successor: ⟦DEVAI-II URL⟧"); README banner pointing at successor | Four gates; `sense docs drift` green; `docs links` zero broken |
+| Ω.A | Auditor | Commit the manifest under `docs/work/R-Omega pending BL-001/audit/`; final read-only state survey | Files at declared paths; hashes match D-189 |
+| Ω.B | Architect | Append D-189; update BUILD-PLAN Status to terminal ("this repository closes under D-189; successor: successor URL pending BL-003"); README banner pointing at successor | Four gates; `sense docs drift` green; `docs links` zero broken |
 | Ω.C | Owner + Architect | Merge the closing PR; post-merge `devai govern phase close` → terminal PC record with `merged_as` + `release_disposition` (per D-110/D-134); final `devai evidence` chain verification | PC record schema-valid; chain verifies; final tree SHA + chain head + manifest hashes published — the three genesis-binding values |
-| Ω.D | Auditor | Final freeze audit: confirm repo state matches D-189 items 7 and 10 (errata unfixed, R28 candidates unmerged, no readiness claims) | Read-only report in `docs/work/⟦round⟧/audit/` |
+| Ω.D | Auditor | Final freeze audit: confirm repo state matches D-189 items 7 and 10 (errata unfixed, R28 candidates unmerged, no readiness claims) | Read-only report in `docs/work/R-Omega pending BL-001/audit/` |
 | Ω.E | Owner (host action) | Archive the repository read-only at the host (GitHub archive flag) | Repo flagged archived; no further commits possible |
 
 R-Ω makes no successor claims. If BR-1 is later aborted, R-Ω stands on its own as a valid closure and the archive flag is simply lifted by Owner decision.
@@ -38,7 +41,7 @@ New repository, **empty history — Owner-decided 2026-07-23: tabula rasa, clean
 1. `genesis-attestation.schema.json` — the successor's first schema.
 2. `genesis-attestation.json` — binding Ω.C's three published values; `imported_evidence` exhaustive; `identifier_map` generated mechanically from the manifest's classification table (189 rows) by a throwaway script whose output is reviewed, not trusted.
 3. `DECISIONS.md` opened with DII-1 (founding record) as its only entry.
-4. Import commit: `packages/`, `examples/`, `.github/` at exactly ⟦final-commit SHA⟧, unmodified. The predecessor's root governance files are **not** imported; `CONSTITUTION.md`, `BUILD-PLAN.md` (as `BOOTSTRAP-PLAN.md` → later `BUILD-PLAN.md`), README, CLAUDE.md/AGENTS.md are authored fresh in later waves. Until W05 rebinds them, imported checks that read root files run against a vendored `predecessor/` snapshot directory declared temporary in DII-1.
+4. Import commit: `packages/`, `examples/`, `.github/` at exactly final frozen predecessor SHA pending BL-001, unmodified. The predecessor's root governance files are **not** imported; `CONSTITUTION.md`, `BUILD-PLAN.md` (as `BOOTSTRAP-PLAN.md` → later `BUILD-PLAN.md`), README, CLAUDE.md/AGENTS.md are authored fresh in later waves. Until W05 rebinds them, imported checks that read root files run against a vendored `predecessor/` snapshot directory declared temporary in DII-1.
 
 Validation: attestation validates against its schema; identifier map covers D-1..D-189 with no gaps beyond the three tombstoned unminted IDs; `pnpm install && pnpm build` succeeds on the import.
 
@@ -105,7 +108,7 @@ New evidence chain genesis; PC numbering fresh from PC-0001 (backfill = genesis 
 
 ### W09 — Closure and first release (Owner + Architect)
 
-BR-1 closes per the imported D-110/D-134 ceremony: merge, post-merge phase close, PC record with `merged_as` + `release_disposition`. First successor release ⟦1.0.0⟧ ships through the continued `@devai-nyx` publish path — package continuity proven by a consumer (stynx) resolving the new version. Closing DII-record states the non-claims verbatim: bootstrap complete; zero readiness-bearing standing; every `must-re-earn` item still open.
+BR-1 closes per the imported D-110/D-134 ceremony: merge, post-merge phase close, PC record with `merged_as` + `release_disposition`. First successor release 1.0.0 after ratification under BL-020 ships through the continued `@devai-nyx` publish path — package continuity proven by a consumer (stynx) resolving the new version. Closing DII-record states the non-claims verbatim: bootstrap complete; zero readiness-bearing standing; every `must-re-earn` item still open.
 
 ---
 

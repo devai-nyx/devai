@@ -20,24 +20,24 @@ session in BR-1/W04. Source texts: ADR-002-real-publish-path.md; ADR-LOCAL-PUBLI
 
 ## Context
 
-⟦TODO at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
-reference, never restate SHAs/run-IDs.⟧
+TODO (BL-005) at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
+reference, never restate SHAs/run-IDs.
 
 **Scope (from the disposition map):** GitHub Packages canonical, @devai-nyx scope continuity through succession, fixed Changesets group, prepack staging (packs + schemas), local publish workflow, machine-managed devai_version, vendored-constitution checksum pin. Ex-D-114/118/119/121/122/127/128. Add: npm provenance attestation at first release (W09).
 
 ## Decision
 
-⟦TODO at minting — the binding contract, transposed from source(s) with the deltas below
-integrated.⟧
+TODO (BL-005) at minting — the binding contract, transposed from source(s) with the deltas below
+integrated.
 
 ## Consequences
 
-⟦TODO at minting.⟧
+TODO (BL-005) at minting.
 
 ## Alternatives Considered
 
-⟦TODO at minting — carry forward the predecessor's rejected alternatives where still relevant.⟧
+TODO (BL-005) at minting — carry forward the predecessor's rejected alternatives where still relevant.
 
 ## Affected Rules
 
-⟦TODO at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).⟧
+TODO (BL-005) at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).

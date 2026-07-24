@@ -20,24 +20,24 @@ session in BR-1/W04. Source texts: ADR-MUTATION-SCENARIOS.md; ADR-EFFECTS conten
 
 ## Context
 
-⟦TODO at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
-reference, never restate SHAs/run-IDs.⟧
+TODO (BL-005) at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
+reference, never restate SHAs/run-IDs.
 
 **Scope (from the disposition map):** Declared superset-of-inferred fails closed; capability necessary-never-sufficient; single Architect-owned effects registry, materialized only by registered upgrade; fail-closed effect gate after build/contracts; path-domain assertions bind the final adapter's canonical target; consent derivation (fs:worktree-admin -> harness-write).
 
 ## Decision
 
-⟦TODO at minting — the binding contract, transposed from source(s) with the deltas below
-integrated.⟧
+TODO (BL-005) at minting — the binding contract, transposed from source(s) with the deltas below
+integrated.
 
 ## Consequences
 
-⟦TODO at minting.⟧
+TODO (BL-005) at minting.
 
 ## Alternatives Considered
 
-⟦TODO at minting — carry forward the predecessor's rejected alternatives where still relevant.⟧
+TODO (BL-005) at minting — carry forward the predecessor's rejected alternatives where still relevant.
 
 ## Affected Rules
 
-⟦TODO at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).⟧
+TODO (BL-005) at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).

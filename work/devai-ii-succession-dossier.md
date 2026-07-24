@@ -1,9 +1,9 @@
 # DEVAI Succession Dossier — operative edition
 
-**Status (2026-07-23, post-R30): the program is EXECUTION-READY pending one human act.**
-R30 is **verified closed** in devai-original (PC-0018, D-194/D-195, merge `1993f2ca`, exact-main CI `30036181989`, Release `30036181927`, closeout self-archived `d76cd12d`; rounds ≤30 archived under `docs/meta/rounds/`). **DS-01 is closed and REV-0006 ratified** (Owner marks in session) — REV-0006 is now the W03 product import list. **The terminal decision is drafted in the predecessor's own per-record canon** (`devaii/scratch/pre-plan/D-terminal-draft.md`, provisional **D-196/round-31**), with two ⟦slots⟧ open: the verbatim Owner authorization and the item-9 confirmation (the succession supplants the predecessor's pending in-place v1.0 ceremony). Nothing in devai-original has been modified by this program.
+**Status (2026-07-24, post-bootstrap): the successor-side R-0001 bootstrap is complete under a provisional predecessor binding; R-Ω, re-binding, ratification, and release remain open.**
+R30 is **verified closed** in devai-original (PC-0018, D-194/D-195, merge `1993f2ca`, exact-main CI `30036181989`, Release `30036181927`, closeout self-archived `d76cd12d`; rounds ≤30 archived under `docs/meta/rounds/`). **DS-01 is closed, REV-0006 ratified, and the Owner authorization granted verbatim.** The successor clean genesis is `14439b05`; its attestation provisionally binds predecessor tip `d76cd12d` and remains `frozen: false`. The predecessor-side terminal decision remains drafted as provisional **D-196/round-31** and must be executed by the human R-Ω ceremony before BL-001 re-binds and ratifies the attestation. Nothing in devai-original was modified by R-0001.
 
-**The wireframe at `../devaii` is the rehearsal result**: 18 commits, every `law/` + `product/` population §5.1-governed, **27 contract tests green**, seven defects caught and graduated to guards (Part X). Pre-plan corpus in `devaii/scratch/`: review drafts REV-0001..0007 (0006 ratified), context packs CTX-01..12, OWNER-DECISIONS.md (closed), D-terminal-draft.md.
+**The former wireframe was discarded into the clean genesis and transposed through P8.** The local six-tier ladder is green (812 tests pass, 8 explicit skips); 54 schemas, 107 register entries, 44 glossary entries, 59 live sensor kinds, 34 invariants, 14 journey records, and 12 ADR stubs are governed. Coverage remains honestly red at 29.2% lines / 26.81% branches / 31.09% functions / 28.22% statements against 70/60/70/70 and is tracked by BL-017. The complete 43-item queue and claims boundary are in `work/rounds/R-0001/backlog.md` and `work/audit/R-0001/as-built.md`.
 
 ## Owner dispositions (all recorded)
 
@@ -427,7 +427,7 @@ No CI `paths:` filter names any of the four artifacts — every coupling flows t
 
 # Succession decision + genesis record — drafts
 
-**Status: DRAFT, speculative session output. Nothing committed; no authority claimed.** Adopting these requires: the succession D-record — Owner authorization + a declared Architect session in devai-original; the genesis pair — Architect authorship in the successor repository. Bracketed `⟦…⟧` values are to be bound at execution time.
+**Status: DRAFT, speculative session output. Nothing committed; no authority claimed.** Adopting these requires: the succession D-record — Owner authorization + a declared Architect session in devai-original; the genesis pair — Architect authorship in the successor repository. Bracketed `PENDING_R_OMEGA_VALUE_BL_001` values are to be bound at execution time.
 
 ---
 
@@ -441,17 +441,17 @@ Drafted in the house style of `DESIGN-DECISIONS.md`, for appendment as the final
 
 **Decision.** DEVAI's governance corpus is re-founded in a successor repository, **DEVAI-II**, by the same absorb-and-close pattern this framework applied to its own predecessors (stech-law D-38, tools/devai D-46, redox D-58, codex D-60). devai-original becomes the fifth and final predecessor: its law is distilled, its code absorbed at an exact pin, its record frozen. Article 40 governs amendment, not succession; like the pre-Phase-0 manual version bump (0.1.0 → 0.1.1), this record is the mechanism-of-necessity, exercised once, under explicit Owner authorization recorded verbatim below.
 
-Owner authorization: ⟦verbatim Owner statement, date⟧.
+Owner authorization: granted verbatim in R-0001 AUTHORIZATION.md on 2026-07-23.
 
-1. **Absorption manifest.** The successor imports law only through the audited manifest: the D-record classification report and its verification addendum at ⟦docs/work/round-N/audit/ paths⟧, bound by SHA-256 ⟦manifest hashes⟧. Final tallies: 65 LIVE register-seeding records, 33 extract-bearing archive records (including the D-88 and D-104 constraints recovered by adversarial sampling), 16 PROMOTE records absorbed into the successor constitution and ADRs, 14 SUPERSEDED and 90 JOURNAL records remaining here. Anything a bootstrap batch wants that is not in the manifest is a new successor decision, never a silent import.
+1. **Absorption manifest.** The successor imports law only through the audited manifest: the D-record classification report and its verification addendum at predecessor audit paths pending R-Omega under BL-001, bound by SHA-256 manifest hashes pending R-Omega under BL-001. Final tallies: 65 LIVE register-seeding records, 33 extract-bearing archive records (including the D-88 and D-104 constraints recovered by adversarial sampling), 16 PROMOTE records absorbed into the successor constitution and ADRs, 14 SUPERSEDED and 90 JOURNAL records remaining here. Anything a bootstrap batch wants that is not in the manifest is a new successor decision, never a silent import.
 
 2. **Law transfers; evidence standing does not.** Decisions, invariants, schemas, and doctrine import freely through the manifest. Evidence-earned standings are void in the successor by default. Specifically and non-exhaustively: the D-165 Actions-evidence promotion graduation and its authorization record do not transfer — promotion in DEVAI-II requires a new complete green streak under the D-164 boundaries as re-ratified there; the R25 soak maturation (D-167) and the R28 accepted dossier (D-187) may be cited only as attested predecessor history, never as successor readiness input. The genesis record's `imported_evidence` list is the exhaustive enumeration; each entry carries `attested-historical` (citable, non-load-bearing) or `must-re-earn` (void until re-established). Absence from the list means void.
 
 3. **Numbering tombstone.** Per the D-38 tombstone rule, identifiers D-1 through D-188 are retired with this record as D-189, never reused, and never re-minted in the successor. Reserved-but-unminted D-102, D-141, D-142 are retired unminted. The successor opens a fresh namespace (`DII-N`); its genesis record carries the only authoritative mapping from retired identifiers to successor artifacts. PC-0001 through PC-0016 and all ESC/REJ/INV identifiers are likewise retired; the successor re-mints REJ and INV content under new identifiers via the manifest.
 
-4. **Code absorbs at a pin; it is not rewritten.** DEVAI-II imports `packages/`, `examples/`, and `.github/` machinery at exactly ⟦final-commit SHA⟧ and rebinds them to the successor corpus in role-separated batches (invariant authority anchors, the `gate-authorization.ts` D-165 heading resolution, the vendored-constitution digest, authority-policy path rules, doctor constants, sync allowlists — the full rebind list is the coupling inventory in the manifest). Until a binding is rebound, its check runs against vendored predecessor text; no binding is deleted without a replacement in the same batch.
+4. **Code absorbs at a pin; it is not rewritten.** DEVAI-II imports `packages/`, `examples/`, and `.github/` machinery at exactly final frozen predecessor SHA pending BL-001 and rebinds them to the successor corpus in role-separated batches (invariant authority anchors, the `gate-authorization.ts` D-165 heading resolution, the vendored-constitution digest, authority-policy path rules, doctor constants, sync allowlists — the full rebind list is the coupling inventory in the manifest). Until a binding is rebound, its check runs against vendored predecessor text; no binding is deleted without a replacement in the same batch.
 
-5. **Package continuity.** The `@devai-nyx/*` scope, the GitHub Packages publish path, the Changesets fixed group, and the semver lineage continue unbroken into DEVAI-II (next release ⟦1.0.0⟧). Consumers (stynx) observe a repository move, not a supply-chain break. `devai_version` machine management (D-118) and the vendored-constitution checksum shape (D-119) carry forward; the checksum re-binds to the successor constitution at its ratification.
+5. **Package continuity.** The `@devai-nyx/*` scope, the GitHub Packages publish path, the Changesets fixed group, and the semver lineage continue unbroken into DEVAI-II (next release 1.0.0 after ratification under BL-020). Consumers (stynx) observe a repository move, not a supply-chain break. `devai_version` machine management (D-118) and the vendored-constitution checksum shape (D-119) carry forward; the checksum re-binds to the successor constitution at its ratification.
 
 6. **The successor constitution is a founding ratification.** DEVAI-II authors CONSTITUTION 1.0.0 fresh: the forty articles with all six devai-original amendments integrated into article text, plus promotions from the manifest's 16 PROMOTE records (with the verified coverage gaps closed: the D-136 mutator source gate and change-control clause; D-168's universal uncheckable-evidence quantifier, dossier-content obligation, and deferral list; the six D-164 boundaries absent from ADR-005). The 0.1.0–0.6.0 lineage remains here, frozen; the successor's amendment history begins at 1.0.0 with a genesis pointer, and the successor constitution adds a succession article so this mechanism-of-necessity is never needed twice.
 
@@ -473,7 +473,7 @@ Two artifacts, per the imported D-33/Article 38 doctrine (prose for judgment, JS
 
 ### DII-1. DEVAI-II is founded by absorption from devai-original under D-189 (locked; founding record)
 
-**Decision.** DEVAI-II exists as the successor authorized by devai-original's D-189 ⟦link/commit⟧. Its law derives exclusively from the absorption manifest bound there; its evidence standing starts at zero except as enumerated in `genesis-attestation.json`, which is the single authoritative crossing point between the two repositories. The attestation is immutable once ratified: correcting it means a new numbered decision, never an edit. Constitution 1.0.0, the seed register, and ADR-001..N are authored against it. Nothing in this record or the attestation establishes readiness, autonomy, or completion of anything.
+**Decision.** DEVAI-II exists as the successor authorized by devai-original's D-189 terminal link and commit pending R-Omega under BL-001. Its law derives exclusively from the absorption manifest bound there; its evidence standing starts at zero except as enumerated in `genesis-attestation.json`, which is the single authoritative crossing point between the two repositories. The attestation is immutable once ratified: correcting it means a new numbered decision, never an edit. Constitution 1.0.0, the seed register, and ADR-001..N are authored against it. Nothing in this record or the attestation establishes readiness, autonomy, or completion of anything.
 
 ### `genesis-attestation.schema.json` — shape sketch
 
@@ -493,20 +493,20 @@ Draft 2020-12, `additionalProperties: false` throughout, per imported schema can
 ```json
 {
   "record": "GEN-0001",
-  "ratified": "⟦date⟧",
+  "ratified": "PENDING_RATIFICATION_BL_004",
   "predecessor": {
-    "repo_url": "⟦devai-original URL⟧",
-    "final_commit_sha": "⟦…⟧",
-    "final_tree_sha": "⟦…⟧",
-    "evidence_chain_head_sha256": "⟦…⟧",
+    "repo_url": "https://github.com/devai-nyx/devai",
+    "final_commit_sha": "PENDING_R_OMEGA_VALUE_BL_001",
+    "final_tree_sha": "PENDING_R_OMEGA_VALUE_BL_001",
+    "evidence_chain_head_sha256": "PENDING_R_OMEGA_VALUE_BL_001",
     "closing_decision": "D-189",
-    "closing_pc_record": "⟦PC-0017?⟧",
+    "closing_pc_record": "PENDING_R_OMEGA_PC_BL_001",
     "frozen": true
   },
   "absorption_manifest": {
     "documents": [
-      { "path": "docs/work/⟦round⟧/audit/d-record-classification.md", "sha256": "⟦…⟧" },
-      { "path": "docs/work/⟦round⟧/audit/verification-addendum.md", "sha256": "⟦…⟧" }
+      { "path": "docs/work/R-Omega pending BL-001/audit/d-record-classification.md", "sha256": "PENDING_R_OMEGA_VALUE_BL_001" },
+      { "path": "docs/work/R-Omega pending BL-001/audit/verification-addendum.md", "sha256": "PENDING_R_OMEGA_VALUE_BL_001" }
     ]
   },
   "imported_evidence": [
@@ -556,7 +556,7 @@ Draft 2020-12, `additionalProperties: false` throughout, per imported schema can
 
 # DEVAI-II bootstrap round plan — draft
 
-**Status: DRAFT, speculative session output. Not a declared round.** Companion to the D-189/genesis drafts, the classification report, and the verification addendum (collectively "the manifest"). Execution requires the D-189 Owner authorization and declared per-batch role sessions. Bracketed `⟦…⟧` values bind at execution.
+**Status: DRAFT, speculative session output. Not a declared round.** Companion to the D-189/genesis drafts, the classification report, and the verification addendum (collectively "the manifest"). Execution requires the D-189 Owner authorization and declared per-batch role sessions. Bracketed `PENDING_R_OMEGA_VALUE_BL_001` values bind at execution.
 
 Shape: one predecessor-side closing round (**R-Ω**, in devai-original) and one successor-side bootstrap round (**BR-1**, in DEVAI-II), ten waves W00–W09. Waves are serial unless marked; each wave is one or more role-pure sessions with a commit boundary at every role change. The manifest is the scope control throughout: work not derivable from it is out of scope and requires a new decision.
 
@@ -566,7 +566,7 @@ Shape: one predecessor-side closing round (**R-Ω**, in devai-original) and one 
 
 - P1. In-flight state resolved — **VERIFIED SATISFIED 2026-07-23**: R30 closed in devai-original at 19:36:47Z as PC-0018 ("Sealed per-record governance canon and supported governed-round lifecycle"), declaring D-194 / closing D-195, merged_as 1993f2ca (#106), closeout self-archived at d76cd12d (#107), round archived to docs/meta/rounds/round-30/. Residual: release_disposition is `changeset-pending` — R-Ω confirms the release ships (or rides the Ω changeset). R29 likewise archived. See Part X §6 for the post-R30 predecessor deltas this verification surfaced.
 - P2. D-189 adopted: Owner authorization quoted verbatim; Architect session appends it as the final substantive record.
-- P3. Manifest frozen: classification report + verification addendum committed under `docs/work/⟦round⟧/audit/` in devai-original, SHA-256s recorded in D-189 item 1. (These are currently scratchpad drafts; committing them is itself Auditor-output work under Article 7's designated path.)
+- P3. Manifest frozen: classification report + verification addendum committed under `docs/work/R-Omega pending BL-001/audit/` in devai-original, SHA-256s recorded in D-189 item 1. (These are currently scratchpad drafts; committing them is itself Auditor-output work under Article 7's designated path.)
 - P4. Green predecessor: the four CI gates pass at the intended final commit.
 
 ---
@@ -575,10 +575,10 @@ Shape: one predecessor-side closing round (**R-Ω**, in devai-original) and one 
 
 | Batch | Role | Work | Validation |
 |---|---|---|---|
-| Ω.A | Auditor | Commit the manifest under `docs/work/⟦round⟧/audit/`; final read-only state survey | Files at declared paths; hashes match D-189 |
-| Ω.B | Architect | Append D-189; update BUILD-PLAN Status to terminal ("this repository closes under D-189; successor: ⟦DEVAI-II URL⟧"); README banner pointing at successor | Four gates; `sense docs drift` green; `docs links` zero broken |
+| Ω.A | Auditor | Commit the manifest under `docs/work/R-Omega pending BL-001/audit/`; final read-only state survey | Files at declared paths; hashes match D-189 |
+| Ω.B | Architect | Append D-189; update BUILD-PLAN Status to terminal ("this repository closes under D-189; successor: successor URL pending BL-003"); README banner pointing at successor | Four gates; `sense docs drift` green; `docs links` zero broken |
 | Ω.C | Owner + Architect | Merge the closing PR; post-merge `devai govern phase close` → terminal PC record with `merged_as` + `release_disposition` (per D-110/D-134); final `devai evidence` chain verification | PC record schema-valid; chain verifies; final tree SHA + chain head + manifest hashes published — the three genesis-binding values |
-| Ω.D | Auditor | Final freeze audit: confirm repo state matches D-189 items 7 and 10 (errata unfixed, R28 candidates unmerged, no readiness claims) | Read-only report in `docs/work/⟦round⟧/audit/` |
+| Ω.D | Auditor | Final freeze audit: confirm repo state matches D-189 items 7 and 10 (errata unfixed, R28 candidates unmerged, no readiness claims) | Read-only report in `docs/work/R-Omega pending BL-001/audit/` |
 | Ω.E | Owner (host action) | Archive the repository read-only at the host (GitHub archive flag) | Repo flagged archived; no further commits possible |
 
 R-Ω makes no successor claims. If BR-1 is later aborted, R-Ω stands on its own as a valid closure and the archive flag is simply lifted by Owner decision.
@@ -594,7 +594,7 @@ New repository, **empty history — Owner-decided 2026-07-23: tabula rasa, clean
 1. `genesis-attestation.schema.json` — the successor's first schema.
 2. `genesis-attestation.json` — binding Ω.C's three published values; `imported_evidence` exhaustive; `identifier_map` generated mechanically from the manifest's classification table (189 rows) by a throwaway script whose output is reviewed, not trusted.
 3. `DECISIONS.md` opened with DII-1 (founding record) as its only entry.
-4. Import commit: `packages/`, `examples/`, `.github/` at exactly ⟦final-commit SHA⟧, unmodified. The predecessor's root governance files are **not** imported; `CONSTITUTION.md`, `BUILD-PLAN.md` (as `BOOTSTRAP-PLAN.md` → later `BUILD-PLAN.md`), README, CLAUDE.md/AGENTS.md are authored fresh in later waves. Until W05 rebinds them, imported checks that read root files run against a vendored `predecessor/` snapshot directory declared temporary in DII-1.
+4. Import commit: `packages/`, `examples/`, `.github/` at exactly final frozen predecessor SHA pending BL-001, unmodified. The predecessor's root governance files are **not** imported; `CONSTITUTION.md`, `BUILD-PLAN.md` (as `BOOTSTRAP-PLAN.md` → later `BUILD-PLAN.md`), README, CLAUDE.md/AGENTS.md are authored fresh in later waves. Until W05 rebinds them, imported checks that read root files run against a vendored `predecessor/` snapshot directory declared temporary in DII-1.
 
 Validation: attestation validates against its schema; identifier map covers D-1..D-189 with no gaps beyond the three tombstoned unminted IDs; `pnpm install && pnpm build` succeeds on the import.
 
@@ -661,7 +661,7 @@ New evidence chain genesis; PC numbering fresh from PC-0001 (backfill = genesis 
 
 ### W09 — Closure and first release (Owner + Architect)
 
-BR-1 closes per the imported D-110/D-134 ceremony: merge, post-merge phase close, PC record with `merged_as` + `release_disposition`. First successor release ⟦1.0.0⟧ ships through the continued `@devai-nyx` publish path — package continuity proven by a consumer (stynx) resolving the new version. Closing DII-record states the non-claims verbatim: bootstrap complete; zero readiness-bearing standing; every `must-re-earn` item still open.
+BR-1 closes per the imported D-110/D-134 ceremony: merge, post-merge phase close, PC record with `merged_as` + `release_disposition`. First successor release 1.0.0 after ratification under BL-020 ships through the continued `@devai-nyx` publish path — package continuity proven by a consumer (stynx) resolving the new version. Closing DII-record states the non-claims verbatim: bootstrap complete; zero readiness-bearing standing; every `must-re-earn` item still open.
 
 ---
 
@@ -1297,7 +1297,7 @@ W00–W04 are no longer designs; they are a once-executed recipe with the mistak
 
 ## 5. Still deliberately red / open
 
-The meta-gate examples gap (45/51 — fake examples would violate the canon harder than missing ones); registry-derived enums and the full check-schemas linter (await W05 registries/code); the Article-42 placement question; the altitude sweep; DS-01 and REV-0006 ⟦marks⟧; glossary content touch-ups (GE-016, GE-006/020/022) held for the W01 vocabulary pass.
+The meta-gate examples gap (45/51 — fake examples would violate the canon harder than missing ones); registry-derived enums and the full check-schemas linter (await W05 registries/code); the Article-42 placement question; the altitude sweep; DS-01 and REV-0006 recorded marks; glossary content touch-ups (GE-016, GE-006/020/022) held for the W01 vocabulary pass.
 
 ## 6. Post-R30 verification addendum (registered 2026-07-23; P1 satisfied)
 

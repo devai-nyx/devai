@@ -20,15 +20,15 @@ session in BR-1/W04. Source texts: ADR-005-actions-run-evidence-promotion.md; D-
 
 ## Context
 
-⟦TODO at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
-reference, never restate SHAs/run-IDs.⟧
+TODO (BL-005) at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
+reference, never restate SHAs/run-IDs.
 
 **Scope (from the disposition map):** The CI evidence-promotion contract: one authority, exact two-parent merge identity, bounded reuse, fail-closed dispositions, first-parent authorization, revocation, containment. STANDING IN DEVAI-II: VOID PENDING RE-EARNING (genesis must-re-earn) — the mechanism is law; the graduation standing is not inherited.
 
 ## Decision
 
-⟦TODO at minting — the binding contract, transposed from source(s) with the deltas below
-integrated.⟧
+TODO (BL-005) at minting — the binding contract, transposed from source(s) with the deltas below
+integrated.
 
 **Verified amendment deltas (dossier Part II — must not be lost):**
 
@@ -42,12 +42,12 @@ integrated.⟧
 
 ## Consequences
 
-⟦TODO at minting.⟧
+TODO (BL-005) at minting.
 
 ## Alternatives Considered
 
-⟦TODO at minting — carry forward the predecessor's rejected alternatives where still relevant.⟧
+TODO (BL-005) at minting — carry forward the predecessor's rejected alternatives where still relevant.
 
 ## Affected Rules
 
-⟦TODO at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).⟧
+TODO (BL-005) at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).

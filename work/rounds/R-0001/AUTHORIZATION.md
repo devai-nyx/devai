@@ -2,11 +2,10 @@
 
 **STATUS: GRANTED** (Owner approval, verbatim, in session chat, 2026-07-23)
 
-When the Owner approves the sentence below (or supplies their own wording in chat), this
-file is updated: status → GRANTED, the verbatim text frozen in the block, and the same
-text is bound into `scratch/pre-plan/D-terminal-draft.md` (both ⟦slots⟧) and quoted into
-DII-1 at P0. The wording covers BOTH open slots: the succession authorization and the
-item-9 confirmation (supplanting the predecessor's pending in-place v1.0 ceremony).
+The approved sentence below is frozen verbatim, bound into both former authorization
+fields in `scratch/pre-plan/D-terminal-draft.md`, and quoted into DII-1 at P0. It covers
+both the succession authorization and the item-9 confirmation (supplanting the
+predecessor's pending in-place v1.0 ceremony).
 
 ## Granted text (verbatim — quote exactly, never paraphrase)
 
