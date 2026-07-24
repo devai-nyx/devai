@@ -64,7 +64,7 @@ export function loadTestWeakeningConfig(repoRoot: string): {
   }
   let cfg: TestWeakeningConfig;
   try {
-    cfg = parsers.testWeakeningConfig.parseJson(readFileSync(path, 'utf8'));
+    cfg = parsers.testWeakeningConfig.parseJson<TestWeakeningConfig>(readFileSync(path, 'utf8'));
   } catch (err) {
     if (err instanceof SchemaParseError && err.kind === 'schema-validation') {
       throw new Error(

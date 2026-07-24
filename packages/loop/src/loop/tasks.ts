@@ -123,7 +123,7 @@ export function saveTask(repoRoot: string, task: TaskRecord): void {
 export function loadTask(repoRoot: string, id: string): TaskRecord {
   const path = taskPath(repoRoot, id);
   if (!existsSync(path)) throw new Error(`task ${id} not found at ${path}`);
-  return parsers.task.parseJson(readFileSync(path, 'utf8'));
+  return parsers.task.parseJson<TaskRecord>(readFileSync(path, 'utf8'));
 }
 
 export function listTasks(repoRoot: string): readonly TaskRecord[] {
@@ -133,7 +133,7 @@ export function listTasks(repoRoot: string): readonly TaskRecord[] {
   for (const name of readdirSync(dir)) {
     if (!name.endsWith('.json')) continue;
     try {
-      records.push(parsers.task.parseJson(readFileSync(join(dir, name), 'utf8')));
+      records.push(parsers.task.parseJson<TaskRecord>(readFileSync(join(dir, name), 'utf8')));
     } catch {
       // skip
     }

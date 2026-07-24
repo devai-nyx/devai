@@ -31,3 +31,21 @@ P5 dispositions:
 
 These are stale census assertions, not schema-validation failures. The same run
 confirmed the remaining 25 contract cases green.
+
+The root lint route is live and reaches ESLint through `devai sense lint`.
+After P4 removed the two source-only lint defects, five Inspector-owned test
+findings remain:
+
+- `tests/contract/adr.contract.test.ts:16`:
+  `@typescript-eslint/no-non-null-assertion`
+- `tests/contract/adr.contract.test.ts:37`:
+  `@typescript-eslint/no-explicit-any`
+- `tests/contract/constitution.contract.test.ts:19`:
+  `@typescript-eslint/no-non-null-assertion`
+- `tests/contract/product.contract.test.ts:17`:
+  `@typescript-eslint/no-non-null-assertion`
+- `tests/contract/roster.contract.test.ts:5`:
+  `@typescript-eslint/no-unused-vars` for `loadSchema`
+
+P5 should repair these test sources rather than weakening the workspace lint
+configuration. No non-test lint findings remain after the P4 source cleanup.

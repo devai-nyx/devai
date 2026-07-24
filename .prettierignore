@@ -1,1 +1,7 @@
+node_modules/
+dist/
+coverage/
 record/
+scratch/
+.devai/worktrees/
+.claude/worktrees/

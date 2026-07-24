@@ -379,6 +379,30 @@ function readOnlyProcess(
   const args = request.arguments[1];
   if (typeof executable !== 'string' || !Array.isArray(args)) return false;
   if (readOnlyDevaiChild(executable, args, entries, parentAction)) return true;
+  if (
+    parentAction === 'sense lint' &&
+    basename(executable) === 'npx' &&
+    args.length === 3 &&
+    args[0] === 'eslint' &&
+    args[1] === '--format=json' &&
+    typeof args[2] === 'string'
+  ) {
+    return true;
+  }
+  if (
+    parentAction === 'sense type check' &&
+    basename(executable) === 'npx' &&
+    args[0] === 'tsc' &&
+    args[1] === '--noEmit' &&
+    (args.length === 2 ||
+      (args.length === 4 &&
+        args[2] === '-p' &&
+        typeof args[3] === 'string' &&
+        !isAbsolute(args[3]) &&
+        !args[3].split(/[\\/]/u).includes('..')))
+  ) {
+    return true;
+  }
   if (['true', 'false'].includes(basename(executable)) && args.length === 0) return true;
   if (
     basename(executable) === 'node' &&

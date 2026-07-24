@@ -1,24 +1,32 @@
 {
   "name": "devaii",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
-  "description": "DEVAI-II layout wireframe (not the genesis)",
+  "description": "DEVAI-II governance and agentic-harness workspace.",
+  "license": "Apache-2.0",
+  "author": "Antonio Augusto Russo <aarusso@nyxk.com.br>",
+  "packageManager": "pnpm@9.15.0",
   "engines": {
     "node": ">=24"
   },
   "scripts": {
-    "lint": "eslint .",
-    "typecheck": "tsc -b",
+    "devai:prepare": "pnpm --filter @devai-nyx/cli build",
+    "build": "pnpm -r build",
+    "lint": "pnpm devai:prepare && node packages/cli/dist/bin.js sense lint --repo-root . --no-emit-reading",
+    "typecheck": "pnpm devai:prepare && node packages/cli/dist/bin.js sense type check --repo-root . --project tsconfig.json --no-emit-reading",
     "test": "vitest run"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
     "@types/node": "^26.1.1",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
-    "eslint": "^10.7.0",
+    "eslint": "^9.0.0",
+    "globals": "^17.4.0",
     "prettier": "^3.9.6",
-    "typescript": "^7.0.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.0",
     "vitest": "^4.1.10",
     "yaml": "^2.9.0"
   }

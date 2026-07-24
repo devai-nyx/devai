@@ -110,8 +110,8 @@ export function resolveScorecardInputs(opts: ScorecardInputs): ResolvedScorecard
 }
 
 /**
- * Phase 25.B: extracted from `packages/core/src/skills/index.ts`
- * (where it lived pre-25.B as a private helper). Walks `<dir>` for
+ * Phase 25.B: extracted from the predecessor's skills implementation,
+ * where it lived as a private helper. Walks `<dir>` for
  * `*.json` and one level into `<dir>/<kind>/*.json` subdirectories
  * — the canonical shape `persistSensorReading` writes since 21.E.
  * Both skills now use the same loader.

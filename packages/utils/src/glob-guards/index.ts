@@ -11,7 +11,7 @@ import { minimatch } from 'minimatch';
  *
  * Found via two real bugs: stynx's devai-gates.yml referenced
  * `docs/architecture/invariants/*.json` after the directory had been
- * renamed to `docs/framework/arch/invariants/`, so its "validate
+ * renamed within the predecessor documentation tree, so its "validate
  * invariants against the schema" step had been silently validating
  * zero files (guarded by `[ -f "$f" ] || continue`) on every PR while
  * still reporting green; pec's `generate-test-obligations.mjs`

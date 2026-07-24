@@ -138,16 +138,16 @@ export class SchemaParseError extends Error {
   }
 }
 
-export type SchemaParseResult<T> =
+export type SchemaParseResult<T = unknown> =
   | { readonly ok: true; readonly value: T }
   | { readonly ok: false; readonly error: SchemaParseError };
 
-export interface SchemaParser<T> {
+export interface SchemaParser {
   readonly schema: string;
-  parse(value: unknown): T;
-  safeParse(value: unknown): SchemaParseResult<T>;
-  parseJson(text: string): T;
-  safeParseJson(text: string): SchemaParseResult<T>;
+  parse<T = unknown>(value: unknown): T;
+  safeParse<T = unknown>(value: unknown): SchemaParseResult<T>;
+  parseJson<T = unknown>(text: string): T;
+  safeParseJson<T = unknown>(text: string): SchemaParseResult<T>;
 }
 
 function snapshotIssues(errors: readonly ErrorObject[] | null | undefined): readonly SchemaIssue[] {
@@ -160,8 +160,8 @@ function snapshotIssues(errors: readonly ErrorObject[] | null | undefined): read
   }));
 }
 
-function makeParser<T = unknown>(schema: string, validator: ValidateFunction): SchemaParser<T> {
-  const parse = (value: unknown): T => {
+function makeParser(schema: string, validator: ValidateFunction): SchemaParser {
+  const parse = <T = unknown>(value: unknown): T => {
     if (validator(value)) return value as T;
     throw new SchemaParseError(
       schema,
@@ -170,7 +170,7 @@ function makeParser<T = unknown>(schema: string, validator: ValidateFunction): S
       snapshotIssues(validator.errors),
     );
   };
-  const parseJson = (source: string): T => {
+  const parseJson = <T = unknown>(source: string): T => {
     let value: unknown;
     try {
       value = JSON.parse(source) as unknown;
@@ -180,7 +180,10 @@ function makeParser<T = unknown>(schema: string, validator: ValidateFunction): S
     }
     return parse(value);
   };
-  const safe = (operation: () => T, fallbackKind: SchemaParseFailureKind): SchemaParseResult<T> => {
+  const safe = <T = unknown>(
+    operation: () => T,
+    fallbackKind: SchemaParseFailureKind,
+  ): SchemaParseResult<T> => {
     try {
       return { ok: true, value: operation() };
     } catch (error) {
@@ -210,7 +213,7 @@ export const parsers = Object.freeze(
     ]),
   ),
 ) as {
-  readonly [Key in ValidatorKey]: SchemaParser<unknown>;
+  readonly [Key in ValidatorKey]: SchemaParser;
 };
 
 export function listSchemaFiles(): string[] {

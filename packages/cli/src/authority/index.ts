@@ -118,14 +118,6 @@ function canonicalSha256(value: unknown): string {
   return createHash('sha256').update(canonical(value)).digest('hex');
 }
 
-function redact(value: string): string {
-  return value
-    .replaceAll(/\/(?:Users|home)\/[^\s"']+/gu, '<redacted-path>')
-    .replaceAll(/[a-z]+:\/\/[^\s"']+/giu, '<redacted-url>')
-    .replaceAll(/(?:token|password|secret)=[^\s"']+/giu, '<redacted-secret>')
-    .replaceAll(/gh[pousr]_[A-Za-z0-9_]+/gu, '<redacted-token>');
-}
-
 function taggedFailure(category: FailureCategory, code: string): TaggedFailure {
   return Object.freeze({ ok: false, category, code, reasons: Object.freeze([code]) });
 }

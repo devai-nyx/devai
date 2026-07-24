@@ -104,7 +104,7 @@ export function validateInvariants(opts: ValidateInvariantsOptions): InvariantsR
   const tombstoned = loadTombstonedIds(opts.invariantsDir);
 
   for (const file of files) {
-    const parsed = parsers.invariant.safeParseJson(readFileSync(file, 'utf8'));
+    const parsed = parsers.invariant.safeParseJson<InvariantRecord>(readFileSync(file, 'utf8'));
     if (!parsed.ok && parsed.error.kind === 'json-syntax') {
       errors.push({ file, message: `JSON parse error: ${parsed.error.message}` });
       continue;

@@ -1,14 +1,10 @@
-import {
-  mkdirSync,
-  spawnSync,
-  writeFileSync,
-} from '@devai-nyx/authority';
+import { mkdirSync, spawnSync, writeFileSync } from '@devai-nyx/authority';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { GateEvidence } from '../types.js';
 
-export function resolveDevaiCliBin(cwd: string): string | undefined {
+export function resolveDevaiCliBin(_cwd: string): string | undefined {
   // D-A-39: explicit env override — always wins when set.
   const envOverride = process.env['DEVAI_CLI_BIN'];
   if (typeof envOverride === 'string' && envOverride.length > 0 && existsSync(envOverride)) {
@@ -196,12 +192,7 @@ export function readWaveLogStatus(
     const captured = m === null ? undefined : m[1];
     if (captured !== undefined) {
       return captured.toLowerCase() as
-        | 'clean'
-        | 'blocked'
-        | 'aborted'
-        | 'dispatched'
-        | 'in_progress'
-        | 'not-dispatched';
+        'clean' | 'blocked' | 'aborted' | 'dispatched' | 'in_progress' | 'not-dispatched';
     }
     return 'in_progress';
   } catch {

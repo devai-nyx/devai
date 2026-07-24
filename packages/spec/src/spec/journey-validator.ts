@@ -41,7 +41,7 @@ export function validateJourneys(opts: ValidateJourneysOptions): JourneysResult 
   const xrefs: XrefCheck[] = [];
 
   for (const file of files) {
-    const parsed = parsers.journey.safeParseJson(readFileSync(file, 'utf8'));
+    const parsed = parsers.journey.safeParseJson<JourneyRecord>(readFileSync(file, 'utf8'));
     if (!parsed.ok && parsed.error.kind === 'json-syntax') {
       errors.push({ file, message: `JSON parse error: ${parsed.error.message}` });
       continue;

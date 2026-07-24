@@ -1,9 +1,6 @@
 import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import { rootGateIgnorePatterns } from './scripts/managed-worktree-paths.mjs';
-
-const managedRootIgnores = rootGateIgnorePatterns(process.cwd());
 
 export default tseslint.config(
   {
@@ -15,8 +12,8 @@ export default tseslint.config(
       'docs/**',
       '.devai/**',
       '.claude/**',
+      'scratch/**',
       'examples/**',
-      ...managedRootIgnores,
     ],
   },
   js.configs.recommended,

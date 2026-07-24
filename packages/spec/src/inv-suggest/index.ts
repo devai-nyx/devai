@@ -142,7 +142,7 @@ function readJson<T>(path: string): T | null {
 
 function packageOf(filePath: string): string | null {
   // Extract a "package" identifier from a repo-relative path.
-  // packages/core/src/foo.ts → packages/core
+  // packages/spec/src/foo.ts → packages/spec
   // src/foo.ts → src
   // apps/api/src/x.ts → apps/api
   const m = filePath.match(/^(packages\/[^/]+|apps\/[^/]+|src)/);
