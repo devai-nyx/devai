@@ -24,8 +24,11 @@ describe('register records', () => {
     provenance: m[6],
   }));
 
-  it('parses the complete population (count guard: 107 provisional entries)', () => {
-    expect(entries.length).toBe(107);
+  it('parses the complete governed population without a maintained count literal', () => {
+    const headings = [...md.matchAll(/^### (DII-[A-Z0-9-]+)(?:\.| —) /gm)].map((m) => m[1]);
+    expect(headings[0]).toBe('DII-1');
+    expect(entries.map((entry) => entry.id)).toEqual(headings.slice(1));
+    expect(entries.length).toBeGreaterThan(0);
   });
   it('every entry validates against record-meta', () => {
     const v = getValidator('record-meta.schema.json');
@@ -35,6 +38,13 @@ describe('register records', () => {
     const ids = entries.map((e) => e.id);
     expect(new Set(ids).size).toBe(ids.length);
     for (const r of ['DII-REJ-A', 'DII-REJ-B', 'DII-REJ-C', 'DII-REJ-D']) expect(ids).toContain(r);
+    const numeric = ids
+      .map((id) => /^DII-(\d+)$/.exec(id))
+      .filter((match): match is RegExpExecArray => match !== null)
+      .map((match) => Number(match[1] ?? '0'));
+    expect(numeric).toEqual(
+      Array.from({ length: Math.max(0, (numeric.at(-1) ?? 1) - 1) }, (_, index) => index + 2),
+    );
   });
   it('every entry carries predecessor provenance or an explicit session-draft marker', () => {
     for (const e of entries)

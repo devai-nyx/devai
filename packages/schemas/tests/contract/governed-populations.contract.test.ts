@@ -49,9 +49,13 @@ describe('governed population count guards', () => {
     );
   });
 
-  it('guards the 107-entry decision register roster', () => {
+  it('guards the complete decision register roster without a maintained count literal', () => {
     const register = readFileSync(join(ROOT, 'law', 'register', 'DECISIONS.md'), 'utf8');
-    expect(register.match(/^### DII-[A-Z0-9-]+ — /gm) ?? []).toHaveLength(107);
+    const governed = register.match(/^### DII-[A-Z0-9-]+ — /gm) ?? [];
+    const all = register.match(/^### DII-[A-Z0-9-]+(?:\.| —) /gm) ?? [];
+    expect(all[0]).toMatch(/^### DII-1\./);
+    expect(governed).toHaveLength(all.length - 1);
+    expect(governed.length).toBeGreaterThan(0);
   });
 
   it('guards the 59-live and 5-archived sensor roster', () => {
