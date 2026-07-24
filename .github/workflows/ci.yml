@@ -38,6 +38,7 @@ jobs:
         with:
           node-version-file: .node-version
       - run: corepack enable
+      - run: node scripts/prewarm-package-managers.mjs
       - run: pnpm install --frozen-lockfile
       - run: pnpm run ci:stage1
 
@@ -51,6 +52,7 @@ jobs:
         with:
           node-version-file: .node-version
       - run: corepack enable
+      - run: node scripts/prewarm-package-managers.mjs
       - run: pnpm install --frozen-lockfile
       - run: pnpm run ci:stage2
 
@@ -64,6 +66,7 @@ jobs:
         with:
           node-version-file: .node-version
       - run: corepack enable
+      - run: node scripts/prewarm-package-managers.mjs
       - run: pnpm install --frozen-lockfile
       - run: pnpm run ci:changesets
 
@@ -96,5 +99,6 @@ jobs:
         with:
           node-version-file: .node-version
       - run: corepack enable
+      - run: node scripts/prewarm-package-managers.mjs
       - run: pnpm install --frozen-lockfile
       - run: pnpm run ci:stage3

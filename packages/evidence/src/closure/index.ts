@@ -56,7 +56,8 @@ export interface PhaseClosureDraft {
   // R18 (D-133/H1): the shipped-state fields. Optional in the schema for
   // pre-R18 record validity; the ceremony requires both from PC-0007 on.
   readonly merged_as?: string;
-  readonly release_disposition?: 'published' | 'changeset-pending' | 'none-needed' | 'missing';
+  readonly release_disposition?:
+    'published' | 'changeset-pending' | 'none-preratification' | 'none-needed' | 'missing';
   readonly notes?: string;
 }
 
@@ -92,8 +93,19 @@ function nextClosureId(existing: readonly PhaseClosureRecord[]): string {
   return `PC-${String(max + 1).padStart(4, '0')}`;
 }
 
-function decisionNumber(d: string): number {
-  return Number(d.slice(2));
+interface ParsedDecisionId {
+  readonly namespace: 'D' | 'DII';
+  readonly number: number;
+}
+
+function parseDecisionId(value: string): ParsedDecisionId {
+  const match = /^(D|DII)-([0-9]+)$/.exec(value);
+  if (match === null) throw new Error(`phase close: malformed decision id '${value}'`);
+  const number = Number(match[2]);
+  if (!Number.isSafeInteger(number)) {
+    throw new Error(`phase close: malformed decision id '${value}'`);
+  }
+  return { namespace: match[1] as ParsedDecisionId['namespace'], number };
 }
 
 export interface ClosePhaseResult {
@@ -125,9 +137,16 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
       `phase close: draft does not validate against phase-closure.schema.json: ${errors}`,
     );
   }
-  if (decisionNumber(record.closing_decision) < decisionNumber(record.declaring_decision)) {
+  const declaring = parseDecisionId(record.declaring_decision);
+  const closing = parseDecisionId(record.closing_decision);
+  if (declaring.namespace !== closing.namespace) {
     throw new Error(
-      `phase close: closing decision ${record.closing_decision} precedes declaring decision ${record.declaring_decision}`,
+      `phase close: declaring decision ${record.declaring_decision} and closing decision ${record.closing_decision} use different namespaces`,
+    );
+  }
+  if (closing.number <= declaring.number) {
+    throw new Error(
+      `phase close: closing decision ${record.closing_decision} must strictly follow declaring decision ${record.declaring_decision}`,
     );
   }
   const dup = existing.find((r) => r.round_id === record.round_id);
@@ -154,7 +173,7 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
     }
     if (record.release_disposition === undefined) {
       throw new Error(
-        'phase close: release_disposition is required from PC-0007 onward (published | changeset-pending | none-needed | missing)',
+        'phase close: release_disposition is required from PC-0007 onward (published | changeset-pending | none-preratification | none-needed | missing)',
       );
     }
   }
