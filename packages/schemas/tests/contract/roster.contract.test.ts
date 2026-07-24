@@ -2,13 +2,13 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { ROSTER, INFRASTRUCTURE } from '../../src/roster.js';
-import { getValidator, loadSchema, listSchemaFiles, metaGate, checkSchemas } from '../../src/index.js';
+import { getValidator, loadSchema, listSchemaFiles, metaGate, checkSchema, checkSchemas } from '../../src/index.js';
 
 const R = join(import.meta.dirname, '..', '..', '..', '..');
 
 describe('roster', () => {
-  it('bijects with law/schemas (count guard: 51)', () => {
-    expect(ROSTER.length).toBe(51);
+  it('bijects with law/schemas (count guard: 52)', () => {
+    expect(ROSTER.length).toBe(52);
     expect(listSchemaFiles()).toEqual([...ROSTER]);
   });
   it('every roster schema parses and lazily compiles', () => {
@@ -44,17 +44,61 @@ describe('live instances validate (the W02 recipe, proven)', () => {
   });
 });
 
-describe('meta-gate and canon linter (honest-red assertions)', () => {
-  it('meta-gate: the 6 exampled schemas comply; the examples gap is the only failure class', () => {
+describe('meta-gate and canon linter', () => {
+  it('meta-gate: every roster schema complies', () => {
     const gate = metaGate();
-    expect(gate.compliant.length).toBeGreaterThanOrEqual(6);
-    for (const nc of gate.noncompliant) {
-      expect(nc.errors.join(' '), `${nc.name} fails for a non-examples reason`).toMatch(/examples/);
-    }
+    expect(gate.compliant).toHaveLength(ROSTER.length);
+    expect(gate.noncompliant).toEqual([]);
   });
-  it('canon linter: ZERO restated verdict enums (the pass/PASS determination landed: two vocabularies, extensions legitimate, bare restatements rewired)', () => {
-    const findings = checkSchemas();
-    const verdicts = findings.filter((f) => f.rule === 'restated-verdict-enum');
-    expect(verdicts).toEqual([]);
+  it('canon linter: the complete roster has zero findings', () => {
+    expect(checkSchemas()).toEqual([]);
+  });
+  it('canon linter: open complete shapes fail while predicate fragments do not', () => {
+    const completeShape = {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        open: {
+          type: 'object',
+          properties: { value: { type: 'string' } },
+        },
+      },
+    };
+    expect(checkSchema('complete-shape.schema.json', completeShape)).toEqual([
+      {
+        schema: 'complete-shape.schema.json',
+        rule: 'open-world-object',
+        path: '$root/properties/open',
+      },
+    ]);
+
+    const predicateFragments = {
+      type: 'object',
+      additionalProperties: false,
+      properties: {},
+      allOf: [
+        {
+          if: { properties: { kind: { const: 'conditional' } } },
+          then: { properties: { value: { type: 'string' } } },
+          else: { properties: { fallback: { type: 'string' } } },
+        },
+        {
+          additionalProperties: false,
+          properties: {
+            values: {
+              type: 'array',
+              contains: { properties: { selected: { const: true } } },
+            },
+          },
+        },
+        {
+          oneOf: [
+            { properties: { mode: { const: 'first' } } },
+            { properties: { mode: { const: 'second' } } },
+          ],
+        },
+      ],
+    };
+    expect(checkSchema('predicate-fragments.schema.json', predicateFragments)).toEqual([]);
   });
 });

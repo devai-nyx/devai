@@ -16,8 +16,8 @@ describe('register records', () => {
     authority: m[5].trim(), supersedes: null, superseded_by: null, provenance: m[6],
   }));
 
-  it('parses a non-trivial population (count guard: 96 provisional entries)', () => {
-    expect(entries.length).toBe(100);
+  it('parses a non-trivial population (count guard: 104 provisional entries)', () => {
+    expect(entries.length).toBe(104);
   });
   it('every entry validates against record-meta', () => {
     const v = getValidator('record-meta.schema.json');

@@ -70,14 +70,20 @@ const VERDICT_SETS = [
   JSON.stringify(['PASS', 'REVIEW', 'FAIL']),
 ];
 export interface CanonFinding { schema: string; rule: string; path: string }
-export function checkSchemas(): CanonFinding[] {
+const PREDICATE_KEYWORDS = new Set(['if', 'then', 'else', 'contains', 'oneOf']);
+
+export function checkSchema(name: string, schema: unknown): CanonFinding[] {
   const findings: CanonFinding[] = [];
-  const walk = (name: string, node: unknown, path: string): void => {
-    if (Array.isArray(node)) { node.forEach((v, i) => walk(name, v, `${path}[${i}]`)); return; }
+  const walk = (node: unknown, path: string, predicateFragment: boolean): void => {
+    if (Array.isArray(node)) {
+      node.forEach((v, i) => walk(v, `${path}[${i}]`, predicateFragment));
+      return;
+    }
     if (node === null || typeof node !== 'object') return;
     const o = node as Record<string, unknown>;
-    // rule: closed-world — any schema node declaring properties must close additionalProperties
-    if (o['properties'] !== undefined && o['additionalProperties'] === undefined && path !== '$root') {
+    // Predicate fragments intentionally match part of a containing object. Only
+    // complete object shapes must declare their additional-properties policy.
+    if (!predicateFragment && o['properties'] !== undefined && o['additionalProperties'] === undefined && path !== '$root') {
       findings.push({ schema: name, rule: 'open-world-object', path });
     }
     // rule: no restated verdict vocabulary outside common-defs
@@ -85,11 +91,19 @@ export function checkSchemas(): CanonFinding[] {
       const e = JSON.stringify([...(o['enum'] as unknown[])].sort());
       if (VERDICT_SETS.includes(e)) findings.push({ schema: name, rule: 'restated-verdict-enum', path });
     }
-    for (const [k, v] of Object.entries(o)) walk(name, v, `${path}/${k}`);
+    for (const [k, v] of Object.entries(o)) {
+      walk(v, `${path}/${k}`, predicateFragment || PREDICATE_KEYWORDS.has(k));
+    }
   };
+  walk(schema, '$root', false);
+  return findings;
+}
+
+export function checkSchemas(): CanonFinding[] {
+  const findings: CanonFinding[] = [];
   for (const name of ROSTER) {
     if (name === 'common-defs.schema.json') continue;
-    walk(name, loadSchema(name), '$root');
+    findings.push(...checkSchema(name, loadSchema(name)));
   }
   return findings;
 }
