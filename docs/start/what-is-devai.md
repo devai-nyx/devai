@@ -23,7 +23,7 @@ measured by tests (sensors). Humans set the reference and authorize actuation.
 
 ## The control-theoretic frame
 
-[Constitution Articles 1-3](../framework/constitution.md) bind the vocabulary literally:
+[Constitution Articles 1-3](../reference/law.md) bind the vocabulary literally:
 
 - **Specification** (F1) is the reference signal — what the framework is trying to achieve.
 - **Code** (F2) is the plant — the system under control.
@@ -31,7 +31,7 @@ measured by tests (sensors). Humans set the reference and authorize actuation.
 - **Inventory** (F4) is plant identification — a derived model of the plant used by the controller.
 - **Harness** (F5) is the controller infrastructure — DEVAI itself, as instantiated in the client repo.
 
-This is not metaphorical. The framing dictates how authority is allocated, how concurrency is mediated, how failures are routed, and how convergence is gated. See [§2 Theory](../theory/) for the full metaphor map and the unified theory document.
+This is not metaphorical. The framing dictates how authority is allocated, how concurrency is mediated, how failures are routed, and how convergence is gated. See [§2 Theory](../theory) for the full metaphor map and the unified theory document.
 
 ## Five substrates, five roles
 
@@ -43,7 +43,7 @@ DEVAI partitions every artifact into one of five fundamental substrates (F1-F5),
 - **Engineer** authors code under F2.
 - **Auditor** is read-only; produces reports, scorecards, backlogs.
 
-[Article 6](../framework/constitution.md) is mechanically enforced for mutations
+[Article 6](../reference/law.md) is mechanically enforced for mutations
 performed through DEVAI's CLI/runtime. Arbitrary shell, editor, or host-agent
 writes require a separately verified host adapter; repository instructions
 alone are advisory for those unrestricted surfaces.
@@ -57,11 +57,15 @@ alone are advisory for those unrestricted surfaces.
    Role-declared, consented recording actions persist readings and append the
    hash chain when durable evidence is required.
 4. **Scorecard-driven progress.** A 5×9 aspect grid (substrates × transversals) gives a single, audit-able view of where the framework's regulation is succeeding and where it's failing.
-5. **Self-application.** [Article 36](../framework/constitution.md) requires DEVAI to apply itself to its own development. The [self-scorecard](../meta/self-scorecard.md) is the framework's accountability surface; if DEVAI cannot run on itself, it has not earned the right to run on anything else.
+5. **Self-application.** [Article 36](../reference/law.md) requires DEVAI to apply itself to its own development. The [self-scorecard](./status.md) is the framework's accountability surface; if DEVAI cannot run on itself, it has not earned the right to run on anything else.
 
 ## Where to go next
 
 - For the architectural argument in long form: synthesis paper (under §2 Theory).
 - For the formal control-theoretic treatment: control-engineering paper (under §2 Theory).
 - For the adopter walk-through: [`devai init plan` and role-separated apply commands](../adopters/adoption.md).
-- For the per-role view: [Roles](../roles/).
+- For the per-role view: [Roles](../roles).
+
+---
+
+> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/start/what-is-devai.md (classification CURRENT).

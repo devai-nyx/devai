@@ -13,14 +13,14 @@ A 30-minute walk-through to get oriented before installing.
 
 | Step | Read | Time | Why |
 |---|---|---|---|
-| 1 | [What is DEVAI?](what-is-devai.md) | 5 min | One-paragraph framing + the five substrates and five roles |
-| 2 | [Theory — the metaphor map](../theory/) | 10 min | The control-theoretic vocabulary made literal; routes to the unified theory document |
+| 1 | [What is DEVAI?](./what-is-devai.md) | 5 min | One-paragraph framing + the five substrates and five roles |
+| 2 | [Theory — the metaphor map](../theory) | 10 min | The control-theoretic vocabulary made literal; routes to the unified theory document |
 | 3 | [Adopters — install](../adopters/install.md) | 5 min | Clone DEVAI, install the CLI, verify gates green |
 | 4 | [Adopters — role declaration](../adopters/role-declaration.md) | 5 min | The five-role authority model from an adopter's perspective |
 | 5 | [Adopters — first introspection](../adopters/first-introspection.md) | 5 min | The brownfield path: role-separated bootstrap, `init apply-f5 --introspect`, and the seven L0 inventory sensors |
 | 6 | [Adopters — pack resolution](../adopters/pack-resolution.md) | 5 min | How `devai adopt pack resolve` matches your repo to a stack-adapter pack |
 
-After this, the rest of [§5 Adopters](../adopters/) is reference material — read what you need when you need it.
+After this, the rest of [§5 Adopters](../adopters) is reference material — read what you need when you need it.
 
 ## For role-holders
 
@@ -40,31 +40,35 @@ The control-theoretic framing is binding on every later artifact. Read in this o
 
 | Read | Time | Why |
 |---|---|---|
-| [Theory landing — the metaphor map](../theory/) | 10 min | One-screen mapping of DEVAI vocabulary to control-theory vocabulary, with Constitution-article anchors |
+| [Theory landing — the metaphor map](../theory) | 10 min | One-screen mapping of DEVAI vocabulary to control-theory vocabulary, with Constitution-article anchors |
 | Synthesis paper (under §2 Theory) | ~30 min | Long-form architectural argument citing the decision log; the recommended long-form read |
 | Control-engineering paper (under §2 Theory) | ~45 min | Formal-model companion with Mermaid diagrams + LaTeX math; the preferred read for control engineers |
-| [Constitution](../framework/constitution.md) | ~30 min | Forty immutable axioms; cite by article number |
+| [Constitution](../reference/law.md) | ~30 min | Forty immutable axioms; cite by article number |
 
 ## For contributors and auditors of DEVAI itself
 
-DEVAI applies to itself per [Article 36](../framework/constitution.md). Reading [§7 Meta](../meta/) is how you understand what DEVAI does *with* itself:
+DEVAI applies to itself per [Article 36](../reference/law.md). Reading [§7 Meta](../dev) is how you understand what DEVAI does *with* itself:
 
 | Read | Why |
 |---|---|
-| [Meta landing](../meta/) | Article-36 framing; what's in §7 and why it's separate from §3 Framework |
-| [Self-scorecard](../meta/self-scorecard.md) | The exact-input projection contract; treat it as current only when its subject/render/freshness provenance matches the active candidate |
-| [Test matrix](../meta/test-matrix.md) | Suite structure and what each suite probes; fresh round evidence carries current pass/fail status |
+| [Meta landing](../dev) | Article-36 framing; what's in §7 and why it's separate from §3 Framework |
+| [Self-scorecard](./status.md) | The exact-input projection contract; treat it as current only when its subject/render/freshness provenance matches the active candidate |
+| [Test matrix](../dev/index.md) | Suite structure and what each suite probes; fresh round evidence carries current pass/fail status |
 | Dev process (under §7 Meta) | Session boundary, round-break canon, per-batch verification |
-| [Build plan](../meta/build-plan.md) | Per-phase implementation plan with prefix-index navigation |
-| [Decision log](../meta/decisions.md) | D-1 through current; one rationale per decision |
+| [Build plan](../dev/round-ledger.md) | Per-phase implementation plan with prefix-index navigation |
+| [Decision log](../reference/decisions-index.md) | D-1 through current; one rationale per decision |
 
 ## For everyone else (the CLI/skills/schemas reference)
 
-[§6 Reference](../reference/) is auto-generated:
+[§6 Reference](../reference) is auto-generated:
 
-- [CLI](../reference/cli/) — every verb, with authority tag, description, and per-action options
-- [Skills](../reference/skills/) — skill manifests with inputs / outputs / authorship
-- [Schemas](../framework/schemas/) — every JSON Schema browsable inline (under Framework because contracts are framework-tier)
+- [CLI](../reference/cli.md) — every verb, with authority tag, description, and per-action options
+- [Skills](../reference/skills) — skill manifests with inputs / outputs / authorship
+- [Schemas](../../law/schemas) — every JSON Schema browsable inline (under Framework because contracts are framework-tier)
 - Scripts (under §6 Reference) — `pnpm` scripts and `scripts/*.mjs` utilities
 - Sensors quick-ref (under §6 Reference) — sensor kinds organised by substrate and transversal
 - Examples (under §6 Reference) — packs and fixtures under `examples/`
+
+---
+
+> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/start/reading-order.md (classification CURRENT).

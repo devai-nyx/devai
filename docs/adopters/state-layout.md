@@ -1,0 +1,80 @@
+# `record/proofs/` — adopter layout guide
+
+**Authority:** Architect (cross-repo). Contract counterpart at [`../docs/reference/contracts/state-extensions.md`](../reference/contracts/state-extensions.md).
+**Audience:** any DEVAI adopter authoring or operating against `record/proofs/`.
+
+## Purpose
+
+`record/proofs/` is the per-repo runtime-state directory. DEVAI's machinery writes here at runtime (sensor readings, scorecards, evidence chain, agent runs, etc.); CI regenerates the contents each build (the entire tree is gitignored except for a few stable bootstrap files).
+
+## Lifecycle
+
+| Aspect | Convention |
+|--------|-----------|
+| Default tracking | gitignored (per [`.gitignore`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/.gitignore)) — runtime state is regenerable, not source |
+| Bootstrap state | `counters.json` + `evidence-chain.json` may be tracked in repos that want the chain to persist across sessions |
+| Retention | persistent only for the working session; refreshed by the applicable role-separated `devai init apply-*` segment or by CI fresh builds |
+| Per-worktree | per [Constitution Article 25](../../law/constitution.md), each task's worktree gets its own `record/proofs/` slice |
+
+## Canonical layout
+
+### Baseline (required for any DEVAI-enabled repo)
+
+| Path | Schema | Who writes | Notes |
+|------|--------|-----------|-------|
+| `record/proofs/counters.json` | (inline JSON object) | every CLI verb that emits a counter-derived id (RTM, EV, TASK, …) | persists across sessions. **Monotonic id allocator, not a live count** (D-123): each key holds the *last-issued* sequence number for that prefix (`ESC: 4` means `ESC-0001`…`ESC-0004` have been minted, not "4 currently open"). Closing/resolving a record never decrements it. A repo whose `ESC` counter stays `0` has simply never minted an `ESC-NNNN` task-escalation record through `nextCounterId` — see [`decisions-ledger.md`](./decisions-ledger.md#relationship-to-esc-nnnn-task-escalations) for how that differs from `decisions.jsonl`'s `escalate` kind. |
+| `record/proofs/chain.json` | [`evidence.schema.json`](../../law/schemas/evidence.schema.json) + [`../docs/reference/contracts/evidence-chain.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/evidence-chain.schema.json) | `devai evidence emit`, `devai evidence test record --chain` | hash-chained; append-only |
+| `record/proofs/sensor-readings/<kind>/<id>.json` | [`sensor-reading.schema.json`](../../law/schemas/sensor-reading.schema.json) | every `devai sense <kind>` verb | one file per reading; subdirs per kind |
+| `record/derived/inventory/inventory.json` | strict [`inventory.schema.json`](../../law/schemas/inventory.schema.json) + loose [`cross-repo-inventory.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/cross-repo-inventory.schema.json) | explicit `devai inventory regen > record/derived/inventory/inventory.json` host redirection | repo's module/dep snapshot; the read-only command itself writes only stdout |
+| `record/proofs/skills/<skill-id>/<ts>.json` | (skill-specific; manifest declares evidence schema) | every `devai agent skill run` invocation | one per execution |
+| `record/proofs/agent-runs/<AR-id>.json` | [`agent-run.schema.json`](../../law/schemas/agent-run.schema.json) | `devai experimental loop run`, `devai agent skill run`, agent-driven verbs | full agent-run envelope |
+| `record/proofs/sensors/<reading-id>.json` | [`sensor-reading.schema.json`](../../law/schemas/sensor-reading.schema.json) | legacy flat sensor emissions (Phase 21.E migrated to per-kind subdirs) | back-compat |
+| `record/proofs/llm-usage.jsonl` | (one line per LLM call: `{ts, family, model, tokens, cost_usd, ...}`) | `createLlmClient` instrumentation | append-only |
+| `record/proofs/rtd-manifests/<RTD-id>.json` | [`rtd-manifest.schema.json`](../../law/schemas/rtd-manifest.schema.json) | `devai spec rtd bundle` | release-time-data manifests |
+
+### Optional extensions (canonized R3-W4, absorbed from STYNX)
+
+| Path | Schema | Who writes | Notes |
+|------|--------|-----------|-------|
+| `record/proofs/inv-candidates/INV-CANDIDATE-<ulid>.json` | [`inv-candidate.schema.json`](../../law/schemas/inv-candidate.schema.json) | `inventory_coverage` and other discovery sensors | bridges unmapped surfaces to Architect-curated `INV-CLIENT-*` |
+| `record/proofs/locks/<substrate>~<module>.json` | [`lock.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/schemas/lock.schema.json) | `devai work lock acquire`, `devai work task spawn` | per Constitution Article 25 |
+| `record/proofs/tasks/<TASK-id>.json` | [`task.schema.json`](../../law/schemas/task.schema.json) | `devai work task spawn`, `devai work task complete`, `devai work task escalate` | one file per task lifecycle |
+| `record/proofs/worktrees.json` | [`worktree.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/schemas/worktree.schema.json) (array form) | `devai work worktree create / destroy / list` | aggregate of active worktrees |
+| `record/proofs/backlog.jsonl` | [`backlog.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/schemas/backlog.schema.json) (one record per line) | `devai work backlog add / next / complete` + `devai govern score backlog refresh` | append-only event log |
+| `record/proofs/decisions.jsonl` | [`decisions.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/decisions.schema.json) (one record per line) | human, `SKILL-round-verify-publish` (R5+ integration), audit waves | append-only deferred-decision ledger; see [decisions-ledger.md](./decisions-ledger.md) |
+
+### Adopter-private (allowed; not canonized)
+
+Adopters may add subdirs/files for their own purposes without coordination. Examples observed in the wild:
+
+- `init-introspection.json` (STYNX, TEAT) — adopter's introspection cache from `devai init apply-f5 --introspect`.
+- `coverage/` (PEC) — PEC-internal coverage artifact staging.
+- `obligations.json` (PEC) — PEC compliance ledger.
+- `rtd/` (PEC) — PEC's variant of `rtd-manifests/` from before that subdir was canonized.
+
+**Convention:** adopter-private paths MUST NOT collide with baseline or canonical-extension names. Promotion to canon requires an Architect-tier ADR + a wave updating this doc and the contract.
+
+## What NOT to put in `record/proofs/`
+
+- Source code (belongs in `packages/`, `src/`, `apps/`, etc.).
+- Secrets (belongs in environment, not the filesystem).
+- Anything the build needs to consume — `record/proofs/` is downstream of code, not upstream.
+- Anything an external system needs read access to (the directory is gitignored; external systems can't see it).
+
+## Migration checklist (for adopters adding the optional extensions)
+
+1. **Create the subdir lazily.** Don't pre-create empty `tasks/` or `locks/` — let the relevant verb create on first use.
+2. **Validate with `devai inventory contracts`.** Files under canonical paths must validate against their cited schemas; the gate catches drift.
+3. **Decide retention.** If your repo wants `tasks/` or `worktrees.json` to persist across sessions, remove them from your `.gitignore` and commit deliberately.
+4. **Don't import STYNX's content directly.** Each adopter's state is its own; the canon is the *shape*, not the data.
+
+## Cross-references
+
+- Canonical state contract: [`../docs/reference/contracts/state-extensions.md`](../reference/contracts/state-extensions.md).
+- Schema catalog: [`../law/schemas/`](../../law/schemas).
+- `.devai/` overall structure: [`CONVENTIONS.md §4`](./CONVENTIONS.md#4-canonical-devai-directory).
+- Article 25 (locks + per-worktree DBs): [`law/constitution.md`](../../law/constitution.md).
+
+---
+
+> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/state-layout.md (classification CURRENT).
