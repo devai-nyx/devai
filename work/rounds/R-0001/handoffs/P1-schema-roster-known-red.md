@@ -1,12 +1,12 @@
 ---
 id: R-0001-P1-SCHEMA-ROSTER-KNOWN-RED
-title: P1 schema-roster role handoff
+title: P1 schema-roster role handoff (closed)
 type: round-handoff
-status: draft
+status: superseded
 date: 2026-07-23
 authority: Architect
 supersedes: null
-superseded_by: null
+superseded_by: 9f9f5a2134cd3823015ede8e4b097829c07ed932
 provenance: R-0001/P1 role-pure dependency; Constitution Article 6
 ---
 
@@ -48,3 +48,27 @@ Required role-separated changes:
 After both changes, P1 must rerun the full suite, assert meta-gate zero noncompliant,
 assert `checkSchemas()` zero findings, and replace this known-red handoff with a closure
 note or mark it superseded. No package or test file is Architect-authorized.
+
+## Closure
+
+Closed by Engineer commit `9f9f5a2134cd3823015ede8e4b097829c07ed932`.
+The roster contains 52 schemas, the register count guard expects 104 parsed entries,
+the canon linter distinguishes complete shapes from predicate fragments, and its
+regression preserves detection of a genuinely open complete object shape.
+
+Architect re-verification after that commit:
+
+- full contract suite: 5 files, 28 tests, all green;
+- meta-gate: all 52 roster schemas compliant, zero noncompliant;
+- canon linter: zero findings;
+- all 52 schemas compile and every declared example validates;
+- population registry validates with 11 declared populations;
+- predecessor worktree remains clean.
+
+Two repository-wide bootstrap baselines remain outside P1 and are routed to P7:
+
+- `pnpm typecheck` cannot resolve Node built-ins/`ImportMeta` types because the TypeScript
+  configuration does not load the installed Node type definitions; the failed build also
+  emits JavaScript, declarations, maps, and `tsconfig.tsbuildinfo` into source paths.
+- `pnpm lint` cannot start because `eslint.config.mjs` imports undeclared package
+  `@eslint/js`.
