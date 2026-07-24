@@ -1,7 +1,68 @@
 {
   "name": "@devai-nyx/cli",
-  "version": "0.0.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "DEVAI registry-derived governed command-line surface.",
+  "license": "Apache-2.0",
+  "author": "Antonio Augusto Russo <aarusso@nyxk.com.br>",
   "type": "module",
-  "description": "wireframe stub"
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "imports": {
+    "#core-compat": {
+      "types": "./src/core-compat.ts",
+      "development": "./src/core-compat.ts",
+      "default": "./dist/core-compat.js"
+    }
+  },
+  "bin": {
+    "devai": "./dist/bin.js"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "tsc -b --clean",
+    "test": "vitest run tests/unit tests/contract"
+  },
+  "dependencies": {
+    "@devai-nyx/authority": "workspace:*",
+    "@devai-nyx/effects-check": "workspace:*",
+    "@devai-nyx/evidence": "workspace:*",
+    "@devai-nyx/loop": "workspace:*",
+    "@devai-nyx/schemas": "workspace:*",
+    "@devai-nyx/sensors": "workspace:*",
+    "@devai-nyx/skills": "workspace:*",
+    "@devai-nyx/spec": "workspace:*",
+    "@devai-nyx/utils": "workspace:*",
+    "ajv": "^8.17.0",
+    "ajv-formats": "^3.0.1",
+    "cac": "^6.7.0",
+    "istanbul-lib-coverage": "^3.2.2"
+  },
+  "devDependencies": {
+    "@types/istanbul-lib-coverage": "^2.0.6",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^4.0.18"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devai-nyx/devaii.git",
+    "directory": "packages/cli"
+  }
 }

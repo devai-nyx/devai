@@ -1,0 +1,451 @@
+import { existsSync, readdirSync, readFileSync, statSync, type Stats } from 'node:fs';
+import { join } from 'node:path';
+import type { CAC } from 'cac';
+import { loadDomains, validateInvariants } from '#core-compat';
+import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
+import { defineCommand, getActionsList, type ActionAuthority } from '../../define-command.js';
+import { DEFAULT_DOMAINS_PATH, DEFAULT_INVARIANTS_DIR, DEFAULT_REPO_ROOT } from './shared.js';
+// D-A-36: pack-tune resolution for adopter-facing authority override.
+import { maybeResolvePackParams } from '../sense/shared.js';
+
+// ---------------------------------------------------------------------------
+// Shared action-coverage check — D-A-38
+// ---------------------------------------------------------------------------
+
+export interface ActionCoverageCheckOptions {
+  readonly repoRoot: string;
+  readonly invariantsDir: string;
+  readonly domains: ReturnType<typeof loadDomains>;
+  readonly scope?: string;
+  readonly coverageAuthorities?: string;
+  readonly adopterRoot?: string;
+  readonly packTune?: boolean;
+  readonly packId?: string;
+  readonly packsRoot?: string;
+}
+
+export interface ActionCoverageCheckResult {
+  readonly ok: boolean;
+  readonly scope: 'self' | 'adopter';
+  readonly unclaimed: string[];
+  readonly orphanClaims: string[];
+  readonly registeredCount: number;
+  readonly inScopeCount: number;
+  readonly claimedCount: number;
+  readonly adopterFacingAuthorities?: string[];
+}
+
+/**
+ * D-A-38 — shared implementation for the scope-aware action-coverage gate.
+ *
+ * Used by both `spec-validate-action-coverage` (standalone) and
+ * `spec-validate-all` (aggregator). Extracts the pure check logic so both
+ * commands stay in sync with D-A-36's scope-aware filter.
+ */
+export function runActionCoverageCheck(
+  opts: ActionCoverageCheckOptions,
+): ActionCoverageCheckResult {
+  const result = validateInvariants({
+    invariantsDir: opts.invariantsDir,
+    domains: opts.domains,
+    repoRoot: opts.repoRoot,
+  });
+  const claimed = new Set<string>();
+  for (const inv of result.invariants) {
+    let parsed: { measurable_via?: readonly string[] };
+    try {
+      parsed = JSON.parse(readFileSync(inv.file, 'utf8')) as {
+        measurable_via?: readonly string[];
+      };
+    } catch {
+      continue;
+    }
+    const mv = parsed.measurable_via;
+    if (mv === undefined) continue;
+    for (const action of mv) claimed.add(action);
+  }
+
+  const registry = getActionsList();
+
+  const explicitScope = opts.scope;
+  let scope: 'self' | 'adopter';
+  if (explicitScope === 'self' || explicitScope === 'adopter') {
+    scope = explicitScope;
+  } else {
+    scope = detectSelfPosture(opts.repoRoot) ? 'self' : 'adopter';
+  }
+
+  const adopterRoot = opts.adopterRoot ?? opts.repoRoot;
+  const packParams =
+    scope === 'adopter'
+      ? maybeResolvePackParams('action_coverage', adopterRoot, {
+          ...(opts.packTune !== undefined && { packTune: opts.packTune }),
+          ...(opts.packId !== undefined && { packId: opts.packId }),
+          ...(opts.packsRoot !== undefined && { packsRoot: opts.packsRoot }),
+        })
+      : {};
+  const adopterFacingAuthorities = resolveAdopterFacingAuthorities(
+    opts.coverageAuthorities,
+    packParams,
+  );
+
+  let inScopeActions: ReadonlySet<string>;
+  if (scope === 'adopter') {
+    inScopeActions = discoverAdopterActions(opts.repoRoot, claimed, adopterFacingAuthorities);
+  } else {
+    inScopeActions = new Set(registry.map((a) => a.name));
+  }
+
+  const unclaimed: string[] = [];
+  for (const action of registry) {
+    if (claimed.has(action.name)) continue;
+    if (DELIBERATELY_UNCOVERED.has(action.name)) continue;
+    if (!inScopeActions.has(action.name)) continue;
+    unclaimed.push(action.name);
+  }
+  const orphanClaims: string[] = [];
+  for (const claim of claimed) {
+    if (!registry.some((a) => a.name === claim)) orphanClaims.push(claim);
+  }
+
+  return {
+    ok: unclaimed.length === 0,
+    scope,
+    unclaimed,
+    orphanClaims,
+    registeredCount: registry.length,
+    inScopeCount: inScopeActions.size,
+    claimedCount: claimed.size,
+    ...(scope === 'adopter' && {
+      adopterFacingAuthorities: Array.from(adopterFacingAuthorities).sort(),
+    }),
+  };
+}
+
+/**
+ * D-A-36 — adopter-facing authorities for the action-coverage check.
+ * Adopter invariants are expected to claim sensor + specifier actions
+ * (sense-*, spec-*, inv-*, etc.) that observe their product. The five
+ * framework-internal authorities (mesh_controller, release_controller,
+ * policy_firewall, agent_runtime, host_tooling) are DEVAI infrastructure
+ * — adopters have no business claiming them.
+ *
+ * Substring matches against framework-internal authorities are dropped
+ * from the adopter-scope `inScopeActions` set. Adopters who explicitly
+ * claim a framework-internal action via `measurable_via` are NOT
+ * filtered (their explicit declaration overrides the default).
+ *
+ * Override via `--coverage-authorities <comma-list>` CLI flag or pack-tune
+ * `extractor_params.action_coverage.authorities`.
+ */
+const DEFAULT_ADOPTER_FACING_AUTHORITIES: ReadonlySet<ActionAuthority> = new Set<ActionAuthority>([
+  'sensor',
+  'specifier',
+]);
+
+const ALL_AUTHORITIES: ReadonlySet<string> = new Set<string>([
+  'mesh_controller',
+  'specifier',
+  'constructor',
+  'sensor',
+  'policy_firewall',
+  'release_controller',
+  'agent_runtime',
+  'host_tooling',
+]);
+
+function safeStat(p: string): Stats | null {
+  try {
+    return statSync(p);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Phase 29.G (closes R-2): detect whether the repo is DEVAI itself
+ * or an adopter. Matches the doctor --self heuristic: presence of
+ * the canonical workspace markers (packages/cli/src/bin.ts +
+ * examples/redox-pack-* directories).
+ */
+function detectSelfPosture(repoRoot: string): boolean {
+  const binPath = join(repoRoot, 'packages/cli/src/bin.ts');
+  if (!existsSync(binPath)) return false;
+  // Look for any examples/redox-pack-* dir.
+  let entries: string[];
+  try {
+    entries = readdirSync(join(repoRoot, 'examples'));
+  } catch {
+    return false;
+  }
+  return entries.some((e) => e.startsWith('redox-pack-'));
+}
+
+function walkSink(dir: string, sink: string[]): void {
+  const st = safeStat(dir);
+  if (st === null) return;
+  if (st.isFile()) {
+    sink.push(dir);
+    return;
+  }
+  if (!st.isDirectory()) return;
+  let entries: string[];
+  try {
+    entries = readdirSync(dir);
+  } catch {
+    return;
+  }
+  for (const e of entries) {
+    if (e === 'node_modules' || e === '.git' || e === 'dist' || e === 'build') continue;
+    walkSink(join(dir, e), sink);
+  }
+}
+
+/**
+ * Phase 29.G adopter-scope referenced-action discovery: the set of
+ * actions an adopter actually uses, computed as:
+ * 1. Substring matches in CI workflow run: scripts (.github/workflows/*.yml{,.yaml})
+ * 2. Substring matches in scripts/**.{sh,mjs,js,cjs}
+ * 3. The union of every invariant's measurable_via[] (adopters with
+ *    one invariant get a one-action minimum).
+ *
+ * An action name normalizes via " " → "-" so "sense rbac" matches
+ * "devai sense inventory rbac".
+ */
+function discoverAdopterActions(
+  repoRoot: string,
+  claimedFromInvariants: ReadonlySet<string>,
+  adopterFacingAuthorities: ReadonlySet<ActionAuthority>,
+): Set<string> {
+  const referenced = new Set<string>();
+  const allActions = getActionsList();
+  // D-A-36: build a substring-eligible subset filtered by authority.
+  // Adopter-claimed actions (via measurable_via) always count regardless
+  // of authority — explicit declaration overrides the default filter.
+  const substringEligible = allActions.filter(
+    (a) => a.authority === undefined || adopterFacingAuthorities.has(a.authority),
+  );
+  const normalisedNames: Array<{ name: string; tokens: readonly string[] }> = substringEligible.map(
+    (a) => ({
+      name: a.name,
+      tokens: [a.name, a.name.replace(/\s+/g, '-')],
+    }),
+  );
+
+  // Walk workflow files for run: bodies (and any other reference).
+  const corpus: string[] = [];
+  const workflowDir = join(repoRoot, '.github/workflows');
+  if (safeStat(workflowDir) !== null) {
+    let entries: string[];
+    try {
+      entries = readdirSync(workflowDir);
+    } catch {
+      entries = [];
+    }
+    for (const e of entries) {
+      if (!(e.endsWith('.yml') || e.endsWith('.yaml'))) continue;
+      try {
+        corpus.push(readFileSync(join(workflowDir, e), 'utf8'));
+      } catch {
+        /* skip */
+      }
+    }
+  }
+
+  // Walk scripts/**/* for shell/node references.
+  const scriptsDir = join(repoRoot, 'scripts');
+  const scriptFiles: string[] = [];
+  walkSink(scriptsDir, scriptFiles);
+  for (const f of scriptFiles) {
+    if (!/\.(sh|mjs|js|cjs)$/.test(f)) continue;
+    try {
+      corpus.push(readFileSync(f, 'utf8'));
+    } catch {
+      /* skip */
+    }
+  }
+  const joined = corpus.join('\n').toLowerCase();
+
+  for (const { name, tokens } of normalisedNames) {
+    if (tokens.some((t) => joined.includes(t.toLowerCase()))) referenced.add(name);
+  }
+  // Explicit invariant claims always count — adopters who DO declare
+  // framework-internal actions in measurable_via opt-in to those checks.
+  for (const claim of claimedFromInvariants) referenced.add(claim);
+  return referenced;
+}
+
+/**
+ * D-A-36 — parse adopter-facing authorities from CLI flag or pack-tune.
+ * Returns the configured set or `DEFAULT_ADOPTER_FACING_AUTHORITIES` when
+ * unset. Invalid authority strings are logged to stderr but don't fail
+ * the check (graceful degradation).
+ */
+function resolveAdopterFacingAuthorities(
+  cliFlag: string | undefined,
+  packParams: Readonly<Record<string, unknown>>,
+): ReadonlySet<ActionAuthority> {
+  const raw =
+    cliFlag !== undefined
+      ? cliFlag
+      : typeof packParams['authorities'] === 'string'
+        ? (packParams['authorities'] as string)
+        : Array.isArray(packParams['authorities'])
+          ? (packParams['authorities'] as unknown[])
+              .filter((v): v is string => typeof v === 'string')
+              .join(',')
+          : undefined;
+  if (raw === undefined || raw.trim().length === 0) {
+    return DEFAULT_ADOPTER_FACING_AUTHORITIES;
+  }
+  const parts = raw
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  const out = new Set<ActionAuthority>();
+  for (const p of parts) {
+    if (ALL_AUTHORITIES.has(p)) {
+      out.add(p as ActionAuthority);
+    } else {
+      process.stderr.write(
+        `spec validate-action-coverage: ignoring unknown authority '${p}' in --coverage-authorities (D-A-36)\n`,
+      );
+    }
+  }
+  return out.size > 0 ? out : DEFAULT_ADOPTER_FACING_AUTHORITIES;
+}
+
+/**
+ * Phase-9 Batch 9.A.3 gate. Every registered Layer-1 action (Phase-9
+ * reservations included) must appear in at least one invariant's
+ * `measurable_via` list. This catches the failure mode "we shipped a
+ * new action but didn't link it to an invariant" before it pins
+ * scorecard cells at UNKNOWN forever.
+ *
+ * Actions explicitly NOT covered (yet) — see DELIBERATELY_UNCOVERED
+ * below — emit a warning but don't fail the gate. Empty by default;
+ * use it as an escape hatch when an action's coverage is intentionally
+ * deferred.
+ */
+const DELIBERATELY_UNCOVERED: ReadonlySet<string> = new Set([
+  // (empty for now; populate with rationale comments when adding entries)
+]);
+
+export const specValidateActionCoverage = defineCommand({
+  name: 'spec validate-action-coverage',
+  description:
+    'Gate: every registered action is claimed by at least one invariant.measurable_via. Closes Batch 9.A.3.',
+  authority: 'specifier',
+  register(cli: CAC): void {
+    cli
+      .command(
+        'spec-validate-action-coverage',
+        'Verify every registered action is claimed by an invariant',
+      )
+      .option('--repo-root <path>', `Repo root (default: ${DEFAULT_REPO_ROOT})`)
+      .option(
+        '--invariants-dir <path>',
+        `Invariants directory (default: ${DEFAULT_INVARIANTS_DIR})`,
+      )
+      .option('--domains <path>', `Domains taxonomy (default: ${DEFAULT_DOMAINS_PATH})`)
+      .option(
+        '--scope <s>',
+        'self | adopter (default: auto-detect). self → every registered action must be claimed; adopter → only actions referenced by the adopter (CI workflows / scripts / invariants) need claims. Phase 29.G / R-2.',
+      )
+      .option(
+        '--coverage-authorities <list>',
+        "Comma-separated list of authority owners (sensor, specifier, mesh_controller, etc.) considered adopter-facing for the substring-match scope discovery. Default: 'sensor,specifier'. Pack-tuneable via extractor_params.action_coverage.authorities. Adopter-claimed actions override this filter regardless. D-A-36.",
+      )
+      .option(
+        '--adopter-root <path>',
+        'Adopter project root for pack-tune resolution (default: --repo-root). D-A-36.',
+      )
+      .option(
+        '--pack-tune',
+        'Resolve the matched stack-adapter pack and apply its extractor_params for action_coverage as defaults (CLI flags win). D-A-36.',
+      )
+      .option('--pack-id <id>', 'Explicit pack id (skips fingerprint matching). D-A-36.')
+      .option('--packs-root <path>', 'Override packs directory for pack discovery. D-A-36.')
+      .option('--human', 'Human-readable output')
+      .action(
+        (options: {
+          repoRoot?: string;
+          invariantsDir?: string;
+          domains?: string;
+          scope?: string;
+          coverageAuthorities?: string;
+          adopterRoot?: string;
+          packTune?: boolean;
+          packId?: string;
+          packsRoot?: string;
+          human?: boolean;
+        }) => {
+          try {
+            const repoRoot = options.repoRoot ?? DEFAULT_REPO_ROOT;
+            const invariantsDir = options.invariantsDir ?? join(repoRoot, DEFAULT_INVARIANTS_DIR);
+            const domainsPath = options.domains ?? join(repoRoot, DEFAULT_DOMAINS_PATH);
+            const domains = loadDomains(domainsPath);
+            // D-A-38: delegate to shared scope-aware check (also used by validate-all).
+            const checked = runActionCoverageCheck({
+              repoRoot,
+              invariantsDir,
+              domains,
+              scope: options.scope,
+              coverageAuthorities: options.coverageAuthorities,
+              adopterRoot: options.adopterRoot,
+              packTune: options.packTune,
+              packId: options.packId,
+              packsRoot: options.packsRoot,
+            });
+            const {
+              ok,
+              scope,
+              unclaimed,
+              orphanClaims: orphans,
+              registeredCount,
+              inScopeCount,
+              claimedCount,
+            } = checked;
+            const summary = {
+              ok,
+              scope,
+              registered_count: registeredCount,
+              in_scope_count: inScopeCount,
+              claimed_count: claimedCount,
+              unclaimed,
+              orphan_claims: orphans,
+              ...(scope === 'adopter' &&
+                checked.adopterFacingAuthorities !== undefined && {
+                  adopter_facing_authorities: checked.adopterFacingAuthorities,
+                }),
+            };
+            if (options.human === true) {
+              const lines: string[] = [];
+              lines.push(`spec validate-action-coverage: ${ok ? 'OK' : 'FAIL'} (scope=${scope})`);
+              lines.push(
+                `  ${String(registeredCount)} action(s) registered, ${String(inScopeCount)} in scope, ${String(claimedCount)} claimed by invariants`,
+              );
+              if (unclaimed.length > 0) {
+                lines.push(`  ${String(unclaimed.length)} unclaimed action(s):`);
+                for (const u of unclaimed.sort()) lines.push(`    - ${u}`);
+              }
+              if (orphans.length > 0) {
+                lines.push(
+                  `  ${String(orphans.length)} orphan claim(s) (invariant.measurable_via references unknown action):`,
+                );
+                for (const o of orphans.sort()) lines.push(`    - ${o}`);
+              }
+              process.stdout.write(lines.join('\n') + '\n');
+            } else {
+              process.stdout.write(JSON.stringify(summary) + '\n');
+            }
+            process.exit(ok ? EXIT_PASS : EXIT_FAIL);
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            process.stderr.write(`devai spec validate action coverage: ${msg}\n`);
+            process.exit(EXIT_FAIL);
+          }
+        },
+      );
+  },
+});
