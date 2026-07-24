@@ -224,7 +224,9 @@ from `scratch/worktrees` to `.devai/worktrees` and retain the registry under mut
 Acceptance: close never moves or rewrites committed intent; incomplete rounds fail;
 appendices are attributable; derived indexes reproduce from sources; worktree create,
 adopt, list, destroy, and reap agree on `.devai/worktrees`; authority and cleanup tests
-fail on path divergence; JNY-014, law, runtime, CLI help, and docs agree.
+fail on path divergence; `.devai/config/` and `.devai/pin/` remain committed
+materializations, while `.devai/state/` and `.devai/worktrees/` ignore runtime contents
+except tracked `.gitkeep` sentinels; JNY-014, law, runtime, CLI help, and docs agree.
 
 ## Carried guard map
 
