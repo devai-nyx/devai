@@ -21,3 +21,4 @@ export class __classEntity__DetailComponent implements OnInit {
     this.svc.get(id).subscribe((res) => (this.item = res));
   }
 }
+

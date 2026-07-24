@@ -18,3 +18,4 @@ export class __classEntity__ListComponent implements OnInit {
     this.svc.list().subscribe((res) => (this.items = res));
   }
 }
+

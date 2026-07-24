@@ -3,3 +3,4 @@ import { PartialType } from '@nestjs/mapped-types';
 import { Create__classEntity__Dto } from './create-__kebabEntity__.dto';
 
 export class Update__classEntity__Dto extends PartialType(Create__classEntity__Dto) {}
+

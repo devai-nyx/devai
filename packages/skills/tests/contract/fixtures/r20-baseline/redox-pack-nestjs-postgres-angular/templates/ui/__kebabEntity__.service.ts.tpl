@@ -22,3 +22,4 @@ export class __classEntity__Service {
     return this.http.delete(`${this.base}/${id}`);
   }
 }
+

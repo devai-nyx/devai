@@ -12,3 +12,4 @@ describe('__classEntity__Service', () => {
     expect(svc).toBeTruthy();
   });
 });
+

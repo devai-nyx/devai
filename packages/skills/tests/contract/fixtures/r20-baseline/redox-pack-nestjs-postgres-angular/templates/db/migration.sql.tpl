@@ -15,3 +15,4 @@ create table if not exists __NAMESPACE__.__snake_table__ (
 
 -- indexes (example)
 -- create index if not exists ix___snake_table____field on __NAMESPACE__.__snake_table__ (__field);
+

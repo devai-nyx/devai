@@ -13,3 +13,4 @@ describe('__classEntity__Controller', () => {
     expect(ctrl).toBeTruthy();
   });
 });
+

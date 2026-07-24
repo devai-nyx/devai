@@ -5,3 +5,4 @@ insert into __NAMESPACE__.__snake_table__ (/* fields */)
 values -- scaffolder expands concrete rows from spec.seed
   -- (__field1__, __field2__, ...)
 ;
+

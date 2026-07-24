@@ -12,3 +12,4 @@ export class CognitoGuard implements CanActivate {
     return isAuthenticated;
   }
 }
+
