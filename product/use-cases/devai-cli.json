@@ -1,6 +1,5 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-05-18T05:30:00.000Z",
   "roles": [
     "operator",
     "architect",
@@ -16,15 +15,36 @@
       "mainFlow": [
         {
           "action": "Operator runs `devai doctor --self|--adopter|--auto --format human` (Phase 21.B)",
-          "actorRole": "operator"
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "doctor"
+              }
+            ]
+          }
         },
         {
           "action": "Doctor walks the workspace, F1 substrate paths, schemas, constitution pointer, agent sync, chain dir, evidence chain, LLM bridges",
-          "actorRole": "operator"
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "doctor"
+              }
+            ]
+          }
         },
         {
           "action": "Operator reads the OK/FAIL summary and acts on flagged checks",
-          "actorRole": "operator"
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "doctor"
+              }
+            ]
+          }
         }
       ]
     },
@@ -34,11 +54,34 @@
       "mainFlow": [
         {
           "action": "Operator runs `devai init plan` to build the role-separated bootstrap plan (deny-by-default on existing files)",
-          "actorRole": "operator"
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "init plan",
+                "provisional": true
+              }
+            ]
+          }
         },
         {
           "action": "Owner and Architect review the plan, invoke their separate `devai init apply-* --as-role <role> --write` segments, then the Architect materializes policy with `devai adopt upgrade --write`",
-          "actorRole": "operator"
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "init apply-owner",
+                "provisional": true
+              },
+              {
+                "id": "init apply-architect",
+                "provisional": true
+              },
+              {
+                "id": "adopt upgrade"
+              }
+            ]
+          }
         }
       ]
     },
@@ -48,11 +91,25 @@
       "mainFlow": [
         {
           "action": "Architect runs `devai adopt pack resolve --adopter-root <repo>` and reads the matched pack id",
-          "actorRole": "architect"
+          "actorRole": "architect",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "adopt pack resolve"
+              }
+            ]
+          }
         },
         {
           "action": "Architect tunes `extractor_params` in the matched pack to fit the adopter's directory shape",
-          "actorRole": "architect"
+          "actorRole": "architect",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "adopt pack resolve"
+              }
+            ]
+          }
         }
       ]
     },
@@ -62,15 +119,63 @@
       "mainFlow": [
         {
           "action": "Architect runs each sense verb in turn: `sense api`, `sense routes`, `sense data-model`, `sense data-handling`, `sense dep-graph`, `sense rbac`, `sense coverage`",
-          "actorRole": "architect"
+          "actorRole": "architect",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "sense inventory api",
+                "provisional": true
+              },
+              {
+                "id": "sense inventory routes",
+                "provisional": true
+              },
+              {
+                "id": "sense inventory data model",
+                "provisional": true
+              },
+              {
+                "id": "sense inventory data handling",
+                "provisional": true
+              },
+              {
+                "id": "sense inventory dep graph",
+                "provisional": true
+              },
+              {
+                "id": "sense inventory rbac",
+                "provisional": true
+              },
+              {
+                "id": "sense inventory coverage",
+                "provisional": true
+              }
+            ]
+          }
         },
         {
           "action": "Architect calls `inv suggest --from-inventory` to propose INV-CANDIDATE records bridging brownfield to spec",
-          "actorRole": "architect"
+          "actorRole": "architect",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "inventory suggest",
+                "provisional": true
+              }
+            ]
+          }
         },
         {
           "action": "Architect graduates candidates to invariants under `docs/arch/invariants/`",
-          "actorRole": "architect"
+          "actorRole": "architect",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "inventory suggest",
+                "provisional": true
+              }
+            ]
+          }
         }
       ]
     },
@@ -80,19 +185,50 @@
       "mainFlow": [
         {
           "action": "Owner authors a `module-blueprint.json` under `docs/arch/blueprints/`",
-          "actorRole": "owner"
+          "actorRole": "owner",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "spec blueprint validate",
+                "provisional": true
+              }
+            ]
+          }
         },
         {
           "action": "Architect validates: `devai spec blueprint validate <path>`",
-          "actorRole": "architect"
+          "actorRole": "architect",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "spec blueprint validate",
+                "provisional": true
+              }
+            ]
+          }
         },
         {
           "action": "Architect plans: `devai spec blueprint plan <path>` (deterministic scaffold plan, no file writes)",
-          "actorRole": "architect"
+          "actorRole": "architect",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "spec blueprint plan",
+                "provisional": true
+              }
+            ]
+          }
         },
         {
           "action": "Engineer scaffolds via `skill run SKILL-scaffold-<axis>` and reviews the rendered output",
-          "actorRole": "engineer"
+          "actorRole": "engineer",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "agent skill run"
+              }
+            ]
+          }
         }
       ]
     },
@@ -102,15 +238,37 @@
       "mainFlow": [
         {
           "action": "Auditor runs `devai govern score compute --readings-dir .devai/state/sensor-readings/ --format human` to compute the scorecard",
-          "actorRole": "auditor"
+          "actorRole": "auditor",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "govern score compute"
+              }
+            ]
+          }
         },
         {
           "action": "Auditor optionally passes `--scorecard-na <path>` to apply per-repo N/A carve-outs (Phase 34.B)",
-          "actorRole": "auditor"
+          "actorRole": "auditor",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "govern score compute"
+              }
+            ]
+          }
         },
         {
           "action": "Auditor runs `devai govern score assess <scorecard-file>` to generate a narrative assessment with per-cell-class advice (Phase 22.F / 23.I)",
-          "actorRole": "auditor"
+          "actorRole": "auditor",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "govern score assess",
+                "provisional": true
+              }
+            ]
+          }
         }
       ]
     },
@@ -120,19 +278,51 @@
       "mainFlow": [
         {
           "action": "Engineer adds a backlog entry: `devai work backlog add ...`",
-          "actorRole": "engineer"
+          "actorRole": "engineer",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "work backlog add",
+                "provisional": true
+              }
+            ]
+          }
         },
         {
           "action": "Engineer runs `devai experimental loop run --max-iterations 1 --llm-timeout-ms <ms>` (Phase 24.C / 25.C)",
-          "actorRole": "engineer"
+          "actorRole": "engineer",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "experimental loop run",
+                "provisional": true
+              }
+            ]
+          }
         },
         {
           "action": "Loop acquires locks, spawns a worktree, provisions a per-task DB, runs SKILL-feedback-iteration via the LLM bridge",
-          "actorRole": "engineer"
+          "actorRole": "engineer",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "experimental loop run",
+                "provisional": true
+              }
+            ]
+          }
         },
         {
           "action": "Engineer reviews the iteration's evidence, completes or escalates the task",
-          "actorRole": "engineer"
+          "actorRole": "engineer",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "experimental loop run",
+                "provisional": true
+              }
+            ]
+          }
         }
       ]
     },
@@ -142,11 +332,26 @@
       "mainFlow": [
         {
           "action": "Auditor runs `devai evidence chain verify` to confirm chain integrity (Article 32)",
-          "actorRole": "auditor"
+          "actorRole": "auditor",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "evidence chain verify"
+              }
+            ]
+          }
         },
         {
           "action": "Auditor runs `devai evidence chain head` to record the current head hash",
-          "actorRole": "auditor"
+          "actorRole": "auditor",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "evidence chain head",
+                "provisional": true
+              }
+            ]
+          }
         }
       ]
     },
@@ -156,11 +361,27 @@
       "mainFlow": [
         {
           "action": "Operator runs `devai release gate --scorecard <path>` to compute a deploy-gate decision (Phase 11.B)",
-          "actorRole": "operator"
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "release gate",
+                "provisional": true
+              }
+            ]
+          }
         },
         {
           "action": "On PASS: deploy; on FAIL: gate rejects, operator addresses the failing cell(s)",
-          "actorRole": "operator"
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "release gate",
+                "provisional": true
+              }
+            ]
+          }
         }
       ]
     },
@@ -170,11 +391,27 @@
       "mainFlow": [
         {
           "action": "Inspector runs `devai sense test weakening --base-ref main` against the PR's changed test files",
-          "actorRole": "inspector"
+          "actorRole": "inspector",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "sense test weakening",
+                "provisional": true
+              }
+            ]
+          }
         },
         {
           "action": "Inspector reviews the SensorReading findings: assertion drops, .skip additions, INV-* removals",
-          "actorRole": "inspector"
+          "actorRole": "inspector",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "sense test weakening",
+                "provisional": true
+              }
+            ]
+          }
         }
       ]
     },
@@ -184,21 +421,165 @@
       "mainFlow": [
         {
           "action": "Operator runs `pnpm test:perf` (or `node scripts/perf-bench.mjs`) to benchmark the 7 L0 inventory sensors against a synthetic fixture across 5 samples after warm-up; emits a JSON metrics line with p50_ms + p95_ms.",
-          "actorRole": "operator"
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "sense run inventory performance"
+              }
+            ]
+          }
         },
         {
           "action": "Operator inspects the emitted `perf_test` SensorReading; the cell is graded PASS / REVIEW / FAIL against the latency thresholds (default pass: p95_ms \u2264 1500ms; review: p95_ms \u2264 3000ms). The 1500ms p95 SLO derives from the Phase 19.C / 26.L performance smoke baseline (stynx-class adopter repos: ~17 packages, ~10k LOC).",
-          "actorRole": "operator"
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "sense run inventory performance"
+              }
+            ]
+          }
         },
         {
           "action": "If p95 exceeds the threshold, operator investigates the slow sensor's evidence (sensor `duration_ms` per sample, hashed input, configuration drift) and either tunes thresholds in pack config or files a perf-class invariant against the regressed sensor.",
-          "actorRole": "operator"
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "sense run inventory performance"
+              }
+            ]
+          }
         }
+      ]
+    },
+    {
+      "id": "UC-devai-round-lifecycle",
+      "title": "Maintainer opens, observes, and archives a governed round",
+      "goal": "Carry one human-directed round from disposable local planning state to an immutable durable record without crossing into experimental autonomy.",
+      "actors": [
+        "owner",
+        "architect",
+        "inspector",
+        "engineer",
+        "auditor"
+      ],
+      "preconditions": [
+        "DEVAI adoption has seeded the local and durable round directories",
+        "The repository has a binding authority policy"
+      ],
+      "triggers": [
+        "A maintainer is authorized to open a reserved governance round"
+      ],
+      "mainFlow": [
+        {
+          "id": "round-scaffold",
+          "action": "Maintainer runs `devai round scaffold` with explicit write consent to create a deterministic gitignored local skeleton",
+          "actorRole": "owner",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round scaffold",
+                "provisional": true
+              }
+            ]
+          }
+        },
+        {
+          "id": "round-declare",
+          "action": "Owner runs `devai round declare` to bind the approved goal, role-separated waves, gates, and worktree identity",
+          "actorRole": "owner",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round declare",
+                "provisional": true
+              }
+            ]
+          }
+        },
+        {
+          "id": "round-status",
+          "action": "Any participant runs `devai round status` to observe the schema-valid current state without mutation",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round status",
+                "provisional": true
+              }
+            ]
+          }
+        },
+        {
+          "id": "round-close-work",
+          "action": "Role-separated participants complete the declared work, binding gates, close decision, phase closure, audit observations, and prompt logs",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "govern phase close"
+              }
+            ]
+          }
+        },
+        {
+          "id": "round-archive",
+          "action": "Architect runs `devai round archive` with explicit write consent; incomplete closure is refused, while a complete round is sealed and moved to `docs/meta/rounds/round-NN/`",
+          "actorRole": "architect",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round archive",
+                "provisional": true
+              }
+            ]
+          }
+        }
+      ],
+      "alternateFlows": [
+        {
+          "id": "round-resume",
+          "when": "Status reports an incomplete wave or gate",
+          "steps": [
+            {
+              "action": "Maintainer leaves the round in local state, completes the named gap, and checks status again",
+              "actorRole": "operator",
+              "refs": {
+                "actionRefs": [
+                  {
+                    "id": "round status",
+                    "provisional": true
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "exceptions": [
+        {
+          "id": "round-archive-refused",
+          "when": "A binding gate, close decision, phase closure, record field, or required attributable artifact is missing",
+          "handling": "Archive exits nonzero with the specific missing precondition and does not partially move or seal the round"
+        }
+      ],
+      "postconditions": [
+        "The round is either intact in disposable local state or fully sealed in the durable ledger",
+        "Supported round commands have not invoked the experimental autonomous loop"
+      ],
+      "acceptanceCriteria": [
+        "Scaffold, declaration, and status are deterministic and schema-valid",
+        "Archive is atomic and fail-closed over every closure precondition",
+        "Init and adoption seed the scratch/archive layout and gitignore boundary",
+        "Supported round commands remain separate from experimental autonomous execution"
       ]
     }
   ],
   "provenance": [
     "ex-use-cases/devai-cli.json@devai-original",
-    "REV-0006 signals pending Owner ratification: stale generatedAt (2026-05-18 vs content), 0 endpoint refs (coverage sensor sees all-unmapped)"
+    "REV-0006 Owner marks applied 2026-07-23: stale hand-maintained generatedAt removed; all 12 imported use cases mapped to successor or explicitly provisional predecessor CLI action identifiers",
+    "UC-devai-round-lifecycle absorbed from devai-original after successor rehearsal seed; source re-read 2026-07-23"
   ]
 }

@@ -7,7 +7,7 @@ date: 2026-07-23
 authority: Owner + Architect (joint — the single declared authority exception inside law/)
 supersedes: null
 superseded_by: null
-provenance: [ex-glossary@devai-original (37 entries, all schema-valid per REV-0006); W01 vocabulary pass pending — successor terms (work/, record/, epochs, DII) to be added, retired terms tombstoned, GE-016 autonomy caveat, GE-006/020/022 path markings]
+provenance: [ex-glossary@devai-original (37 entries, all schema-valid per REV-0006), REV-0006 Owner marks applied 2026-07-23 (GE-006/016/020/022 touch-ups and GE-038..044 vocabulary rider)]
 ---
 
 # Glossary
@@ -16,9 +16,10 @@ provenance: [ex-glossary@devai-original (37 entries, all schema-valid per REV-00
 
 This directory holds glossary entries — canonical terms with definitions, cross-references, and the Owner or Architect anchor that introduces each term. Glossary entries are validated by `devai spec validate glossary` (Phase 2) for duplicate terms and undefined cross-references. The Phase-3 `devai inventory glossary` tool measures term coverage across F1 and F2.
 
-## Index (Phase 13.B)
+## Index
 
-37 entries shipped as part of Phase 13.B (the self-application closure: DEVAI ships a glossary validator and finally eats its own dogfood).
+The predecessor vocabulary imported at GE-001..037. The successor vocabulary rider is
+draft at GE-038..044 pending the ratification round.
 
 | Group | IDs | Terms |
 |---|---|---|
@@ -30,6 +31,7 @@ This directory holds glossary entries — canonical terms with definitions, cros
 | Phase-11 mechanisms | GE-029..033 | CNL, Adherence-reverse, Runtime probe, Release gate, Release control record |
 | Phase-12 mechanism | GE-034 | RTD manifest |
 | Bonus governance terms | GE-035..037 | Forbidden action, Skill manifest, Prompt firewall |
+| DEVAI-II vocabulary rider | GE-038..044 | work/, record/, Proofs epoch, Genesis attestation, Population registry, DII namespace, Record meta-structure |
 
 Each entry validates against `glossary-entry.schema.json`. Cross-references in `see_also` and `related_invariants` are checked at validation time.
 

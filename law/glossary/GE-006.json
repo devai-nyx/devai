@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "id": "GE-006",
   "term": "F1",
-  "definition": "Architecture-spec substrate: docs/arch/ (invariants, trace, journeys, glossary). Reference signal for the development loop. Architect-authored.",
+  "definition": "Architecture-spec substrate in an adopter repository: docs/arch/ (invariants, trace, journeys, glossary). Reference signal for the development loop. The path is adopter-side; DEVAI-II's own canonical specification lives under law/ and product/. Architect-authored.",
   "authority": "architect",
   "category": "technical",
   "status": "active",
@@ -15,6 +15,7 @@
   ],
   "provenance": [
     "ex-GE-006@devai-original",
-    "REV-0006 signal: adopter-side path unmarked"
+    "REV-0006 signal: adopter-side path unmarked",
+    "adopter-path marking applied per Owner ratification 2026-07-23"
   ]
 }

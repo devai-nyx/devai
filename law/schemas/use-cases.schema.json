@@ -13,7 +13,8 @@
     },
     "generatedAt": {
       "type": "string",
-      "format": "date-time"
+      "format": "date-time",
+      "description": "Optional machine timestamp. Hand-authored bundles omit this field rather than maintaining a freshness claim manually."
     },
     "roles": {
       "type": "array",
@@ -73,7 +74,6 @@
   },
   "required": [
     "schemaVersion",
-    "generatedAt",
     "roles",
     "cases"
   ],
@@ -108,6 +108,14 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "actionRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ActionRef"
+          },
+          "uniqueItems": true,
+          "description": "Canonical CLI action identifiers associated with this use-case step."
+        },
         "routeIds": {
           "type": "array",
           "items": {
@@ -123,6 +131,24 @@
           "uniqueItems": true
         }
       }
+    },
+    "ActionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Space-separated canonical CLI action path."
+        },
+        "provisional": {
+          "const": true,
+          "description": "Present only when id preserves the predecessor canonical path pending successor CLI binding."
+        }
+      },
+      "required": [
+        "id"
+      ]
     },
     "Step": {
       "type": "object",

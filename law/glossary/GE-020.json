@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "id": "GE-020",
   "term": "Trace",
-  "definition": "The mapping from invariants to docs, tests, and code areas. Lives at docs/arch/trace.json. Architect authority only; Inspector consumes but cannot edit (D-8).",
+  "definition": "The mapping from invariants to docs, tests, and code areas. In an adopter repository it lives at docs/arch/trace.json; DEVAI-II's own canonical trace lives at law/trace.json. Architect authority only; Inspector consumes but cannot edit.",
   "authority": "architect",
   "category": "technical",
   "status": "active",
@@ -11,6 +11,7 @@
   ],
   "provenance": [
     "ex-GE-020@devai-original",
-    "REV-0006 signal: adopter-side path unmarked"
+    "REV-0006 signal: adopter-side path unmarked",
+    "adopter-path marking applied per Owner ratification 2026-07-23"
   ]
 }

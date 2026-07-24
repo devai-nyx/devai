@@ -7,7 +7,7 @@ date: 2026-07-23
 authority: Owner
 supersedes: null
 superseded_by: null
-provenance: [rewrite of the predecessor stub per REV-0006 ("Content is deferred" above 14 journeys was stale)]
+provenance: [rewrite of the predecessor stub per REV-0006 ("Content is deferred" above 14 journeys was stale), REV-0006 Owner marks applied 2026-07-23 (JNY-007 supersession; OM-001 attested-historical; use-case refs mapped)]
 ---
 
 # Product tier (F1-business, Owner authority)
@@ -16,9 +16,9 @@ The Owner's setpoints: what the framework must do for whom, in structured natura
 language. Not invariants — this tier binds only through explicit compilation to
 Architect-tier law (Article 12; see compilation.md).
 
-- `journeys/` — 14 operator journeys (JNY-001..014; JNY-002/003 lifecycle: experimental)
+- `journeys/` — journey records JNY-001..014 (JNY-007 is superseded by JNY-014; JNY-002/003 lifecycle: experimental)
 - `use-cases/` — sensor-consumed CLI use-case bundle (inventory-coverage input)
-- `owner-mandates/` — standing Owner mandates (OM-*)
+- `owner-mandates/` — Owner mandate records (OM-001 is an attested-historical predecessor reference, not an active successor mandate)
 - `stories/`, `rules/` — reserved, empty at genesis
 
 Every artifact carries §5.1 record fields natively (JSON: schema fields; markdown:

@@ -93,6 +93,10 @@
     "supported"
   ],
   "provenance": [
-    "ex-JNY-014@devai-original"
+    "ex-JNY-014@devai-original",
+    "supersedes JNY-007 (Owner mark 2026-07-23): round governance is the successor process"
+  ],
+  "supersedes": [
+    "JNY-007"
   ]
 }

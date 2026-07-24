@@ -86,13 +86,15 @@
   "compliance_refs": [
     "Article 36 (DEVAI applies to itself)"
   ],
-  "status": "active",
+  "status": "retired",
   "tags": [
     "self-application",
     "phase-discipline",
     "meta"
   ],
   "provenance": [
-    "ex-JNY-007@devai-original"
-  ]
+    "ex-JNY-007@devai-original",
+    "superseded by JNY-014 (Owner mark 2026-07-23): phase-era governance is predecessor history; successor governance uses rounds"
+  ],
+  "superseded_by": "JNY-014"
 }
