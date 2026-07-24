@@ -637,6 +637,27 @@ Every nondegenerate scorecard cell has at least one registered sensor scheduled 
 declared execution tier. A cell with no reachable scheduled sensor is represented
 honestly as N/A; a diagnostic sensor does not silently imply cell coverage.
 
+### DII-105 — R-0002 declares the frozen re-bind and operational-law repair
+`type: declaration · status: draft · authority: Architect · provenance: session-draft R-0002; OM-002; BL-001–003, BL-007, BL-012–014, BL-023, BL-046–049`
+
+R-0002 executes from successor source base
+`cc0084ba38fb6d583f79fddd38554524714c4fa4`, which equals its live `origin/main`
+merge-base, through the Owner-directed prepared execution head
+`5afdbfea99368d917c1ed9bc9e19404fcf3d7cc1`. Its plan digest is
+`4db25005ab7adc0fff3ca0e9a332870d709aa7c4343830ca5dc0dfca62c6b568`.
+The round may re-bind immutable predecessor truth, repair the named operational-law,
+closure, CI, and reference-classification defects, and append an honest machine
+correction to PC-0001. It may not ratify, release, deploy, transfer standing, mutate the
+predecessor, or write to real stynx.
+
+The opening known-red posture is explicit: BL-046 is reproduced by exact PR run
+`30133847762` and an isolated cold Corepack cache; BL-017 remains below the unchanged
+70/60/70/70 floors; successor ADR, glob-guard, and trace production checks remain red
+under BL-007/BL-014. Appending this declaration also advances the parsed decision
+population beyond two Inspector-owned fixed-count guards; that exact temporary count
+red is governed by BL-007 and must be replaced by a gapless derived guard in B2, never
+hidden by removing this declaration or restating a new maintained count.
+
 
 ## 12. Register-consistency guard
 
