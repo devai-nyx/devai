@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { detectRelabeledSensors } from '../../src/loop/sensor-integrity.js';
 import type { SensorReading } from '@devai-nyx/sensors';
+import './triage-cases.js';
 
 /**
  * Minimal fixture builder — `detectRelabeledSensors` reads only
