@@ -306,6 +306,30 @@ schema; existing closures remain byte-identical; a human-only batch remains vali
 the production closure verb accepts a disposable R-0002-shaped draft containing both
 Machine and Inspector B6 entries.
 
+### BL-055 — Re-materialize authority policy after Constitution byte changes
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: R-0002 disposable production closure prevalidation; DII-110 formatting sequence; authority policy binding refusal`
+
+Priority: P0 before PC-0003. Primary round: R-0002 post-review correction.
+
+The active Constitution hashes to
+`d1dd4858cf48ca14597d3a0d9f70fe8fbda01cc69a019c7e210b46e40bda3763`,
+while the committed authority policy still binds
+`e2ebe98eae91cb91e7868dda84309bd61c5d86d7b0b1a94f7bdacfb3ce6c2dd8`.
+The DII-110 formatting sequence changed Constitution bytes but re-materialized only the
+forbidden-action policy. Read-only checks remained green, while a production write
+preflight failed closed with `AUTHORITY_POLICY_BINDING_MISMATCH`; PC-0003 therefore
+cannot yet be emitted.
+
+Acceptance: an Inspector contract first pins raw Constitution digest equality across
+`law/constitution.md`, `.devai/pin/constitution.md`, and both authority-policy
+materializations; an Architect decision confirms that formatting is still a byte change
+for binding purposes; an Engineer session executes `devai adopt upgrade --target .
+--as-role architect --write` and commits only the verb-produced materializations; the
+production write broker then accepts a disposable R-0002-shaped Machine-attributed
+closure; no authority rule or constitutional meaning changes; and the full R-0002
+ladder is rerun.
+
 ## Carried guard map
 
 The original known-red mapping remains:
