@@ -128,6 +128,34 @@ describe('phase-closure failed-gate acknowledgment', () => {
   });
 });
 
+describe('phase-closure machine attribution', () => {
+  it('records a machine-verb batch without relabeling it as a human role', () => {
+    const result = closePhase(
+      repoRoot(),
+      draft('DII-105', 'DII-112', {
+        batches: [
+          {
+            id: 'B6-machine',
+            // @ts-expect-error BL-054: ClosureRole omits truthful Machine attribution.
+            roles: ['Machine'],
+            commit: 'bec810bb38e74ebdf0bd31ec3ee90aa0b186d1ed',
+            headline: 'Emitted the append-only PC-0002 correction through the production verb',
+          },
+          {
+            id: 'B6-inspector',
+            roles: ['Inspector'],
+            commit: 'ab1ef5a2338f76d04fa2af383e51839ecc9a4d9f',
+            headline: 'Verified closure supersession and ledger selection',
+          },
+        ],
+      }),
+    );
+
+    expect(result.record.batches[0]?.roles).toEqual(['Machine']);
+    expect(result.record.batches[1]?.roles).toEqual(['Inspector']);
+  });
+});
+
 describe('PC-0002 append-only correction', () => {
   it('preserves PC-0001 and selects PC-0002 as the effective R-0001 closure', () => {
     const pc1 = readFileSync(join(ROOT, 'record/proofs/compliance/closures/PC-0001.json'));
