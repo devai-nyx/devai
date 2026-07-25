@@ -111,6 +111,21 @@ describe('loadForbiddenWaivers', () => {
 });
 
 describe('scanForbiddenActions', () => {
+  it('fails closed when committed history cannot be inspected', () => {
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions: CANONICAL_FORBIDDEN_ACTIONS }),
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBIDDEN-SCAN-UNAVAILABLE',
+        source: 'commit-change',
+      }),
+    );
+  });
+
   it('detects a forbidden law deletion hidden behind a neutral commit message', () => {
     mkdirSync(join(dir, '.devai/config'), { recursive: true });
     mkdirSync(join(dir, 'law'), { recursive: true });
