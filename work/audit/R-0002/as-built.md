@@ -851,6 +851,14 @@ merge tree equals one parent, novel merge-resolution evidence remains scanned, a
 new exact source SHA passes governed enforcement. Commit-message evidence and
 fail-closed Git inspection remain mandatory.
 
+Inspector `915d84a` proves the duplicate red while retaining the constituent feature
+commit finding. Engineer `b1e6c2a` reads parent identities from the bounded Git log and
+omits only aggregate change evidence when a merge tree equals one parent. Merge
+message evidence remains active, and the existing novel protected-deletion merge
+contract remains green. All 19 focused scanner tests and the affected package build
+pass. BL-117 is re-closed locally; a new exact source run must still pass governed
+enforcement before merge.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
