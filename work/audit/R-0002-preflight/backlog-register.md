@@ -23,10 +23,11 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-071. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-072. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
-record the second exact-candidate findings before remediation.
+record the second exact-candidate findings before remediation. BL-072 records the
+post-review exit-ladder lint failure.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -34,7 +35,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 
 | Primary round | Records                                                                                                               |
 | ------------- | --------------------------------------------------------------------------------------------------------------------- |
-| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-071 |
+| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-072 |
 | R-0003        | BL-004, BL-005, BL-006                                                                                                |
 | R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065                                        |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063                                                        |
@@ -573,6 +574,21 @@ Acceptance: malformed post-seal frontmatter becomes an integrity finding rather 
 exception; every schema-legal terminal transition has an explicit disposition; round
 scaffolding emits scalar-or-null `superseded_by`; red-first fixtures and the full floor
 pass without weakening sealed-history protection.
+
+### BL-072 — Restore lint-clean assertion-bearing Inspector tests
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0002 post-second-review exit ladder`
+
+Priority: P0 before third close review. Primary round: R-0002.
+
+Stage 1 reports 19 lint errors across five Inspector-owned test sources: unsafe
+non-null assertions and one unnecessary string escape. The assertions were introduced
+during governed coverage strengthening but cannot remain outside the repository’s
+lint contract.
+
+Acceptance: remove only the unsafe/nonessential syntax without weakening behavior
+assertions or changing production sources; the affected suites, full Vitest floor,
+trace freshness check, stage 1, and unchanged coverage floors pass.
 
 ## Carried guard map
 
