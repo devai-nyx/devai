@@ -375,6 +375,25 @@ append-only null-to-string supersession link with its matching terminal status, 
 rejects body or other frontmatter mutation; the ledger sensor and full R-0002 floor
 are green; no existing ADR standing changes.
 
+### BL-058 — Preserve SQL `NOT NULL` in data-model inventory
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: OM-005 coverage doubling; inventory-data-model behavior audit`
+
+Priority: P0 before the R-0002 source review. Primary round: R-0002
+coverage-doubling correction.
+
+The SQL column parser permits an unconstrained second identifier in a type name.
+For a declaration such as `email TEXT NOT NULL`, it therefore consumes `TEXT NOT` as
+the type and leaves only `NULL` for constraint inspection. The emitted inventory
+incorrectly marks the column nullable, weakening downstream data-handling and privacy
+analysis.
+
+Acceptance: an Inspector red first proves that ordinary one-word types retain a
+following `NOT NULL`; Architect law binds constraint keywords as boundaries while
+preserving supported multi-word SQL types; Engineer implementation parses both forms
+deterministically; focused and full sensor floors are green; the coverage source set,
+exclusions, and thresholds remain unchanged.
+
 ## Carried guard map
 
 The original known-red mapping remains:
