@@ -23,7 +23,7 @@ decision, source merge, exact-main observation, and machine closure record are p
 the two-PR close and therefore were not predicted by the initial B8 observation.
 Post-review corrections discovered by the literal shared exit floor are appended
 below through closure-validation candidate
-`26c200d813226510cc2dc4dd422333fa8c5ba613`.
+`ce549b6a02e3f71944b2e7d0eb95b97f57dab50d`.
 
 The round re-binds frozen predecessor truth and repairs the scoped operational
 contracts. It ratifies nothing, releases nothing, deploys nothing, and transfers no
@@ -85,6 +85,7 @@ The local predecessor checkout was observed clean at
 | BL-051 | Closed after final-gate discovery.                              | The first literal repository-wide Prettier execution exposed 352 imported baseline failures. DII-110 excludes only generated/canonical, parser-sensitive, and immutable historical paths; Owner, Architect, Engineer, and Inspector formatted every remaining active file separately; the changed forbidden-action policy was re-materialized through the production verb; and the literal global command is green.              |
 | BL-052 | Closed after closure-payload prevalidation.                     | An Inspector red-first contract proved that the production closure verb accepted failed gates with no matching failing validation criterion. The Engineer correction now requires every failed gate key to appear in the criterion or evidence of at least one `verdict: fail` criterion, while preserving all-pass and acknowledged-failure behavior.                                                                           |
 | BL-053 | Source correction closed; exact-candidate execution is a gate.  | OM-003 records the Owner’s quota pause and Opus-only narrowing. DII-111 and the active campaign instructions require `claude-opus-5`, prohibit fallback, and preserve historical Fable attribution. A 12-case Inspector contract rejects a missing rider, invalid metadata, any active Fable selector, and any active instruction lacking Opus 5. The required Opus review remains a pre-push merge gate, not a source deferral. |
+| BL-054 | Closed after PC-0003 draft prevalidation.                       | A red-first closure contract proved that Machine attribution was rejected. DII-113 admits `Machine` only as provenance for verb-produced record commits; the schema and `ClosureRole` type now agree; the production closure path records separate Machine and Inspector B6 entries; and byte-hash guards preserve both existing PC records.                                                                                     |
 
 There is no uncatalogued deferral. BL-007’s wider population program is explicitly
 bounded above; BL-045 remains the named R-0001 correction residual; BL-017 is the only
@@ -97,7 +98,7 @@ Fresh local execution at the audited candidate produced:
 
 - Stage 1: workflow lint, repository lint, and typecheck pass.
 - Stage 2: build passes; T1 passes 48 files / 591 tests; T2 passes 30 files /
-  174 tests with 1 declared skip.
+  175 tests with 1 declared skip.
 - T3 passes 9 files / 50 tests with 7 declared skips.
 - T4 passes 2 files / 4 tests.
 - T5 passes 6 files / 25 tests.
@@ -204,6 +205,30 @@ interaction occurred during the quota pause. Fresh stage 1, stage 2, and the glo
 formatting gate are green; stage 2 now contains 30 T2 files / 174 passes / 1 declared
 skip. The next independent review is performed only after quota recovery, on the exact
 source candidate, with `claude-opus-5`.
+
+## Closure-draft BL-054 correction
+
+PC-0003 draft prevalidation found that the phase-closure schema could not truthfully
+attribute the B6 production-verb commit to Machine. Auditor commit
+`d0b3098e1f54893e549c5df54d0901d1d5a11f43` governed BL-054 before repair.
+
+The correction remained red-first and role-pure:
+
+- Inspector commit `72f6f77c30ac4e41ab59336246645cc591676f0b` proved that a
+  Machine-attributed batch was rejected by the production closure path;
+- Architect commit `b0d5aed3d637122a83528c3b061310d90401ae55` recorded DII-113
+  and admitted `Machine` in the canonical schema only as provenance for verb-produced
+  record commits;
+- Engineer commit `a9b1386cab8d51081d7fcbd314bac57a16c5d421` mirrored that
+  vocabulary in the production `ClosureRole` type; and
+- Inspector commit `ce549b6a02e3f71944b2e7d0eb95b97f57dab50d` removed the
+  temporary type-red annotation, retained human-role acceptance, verified separate
+  Machine and Inspector B6 entries, and pinned PC-0001 and PC-0002 byte hashes.
+
+Fresh stage 2 passes 48 T1 files / 591 tests and 30 T2 files / 175 tests / 1 declared
+skip. The global formatting gate remains green. PC-0003 can now name the Machine commit
+without relabeling it as a human role; this representation grants no new mutation
+authority.
 
 ## PC-0002 correction
 
