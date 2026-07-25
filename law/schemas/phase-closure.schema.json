@@ -66,14 +66,31 @@
           },
           "commit": {
             "type": "string",
-            "pattern": "^[0-9a-f]{7,40}$",
+            "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$",
             "description": "Commit SHA the batch landed as. Optional for batches folded into the closing commit."
           },
           "headline": {
             "type": "string",
             "minLength": 1
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "roles": {
+                  "contains": {
+                    "const": "Machine"
+                  }
+                }
+              },
+              "required": ["roles"]
+            },
+            "then": {
+              "required": ["commit"]
+            }
+          }
+        ]
       }
     },
     "gates": {
@@ -136,7 +153,7 @@
     },
     "merged_as": {
       "type": "string",
-      "pattern": "^[0-9a-f]{7,40}$",
+      "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$",
       "description": "The integration-branch commit the closed round actually shipped as (merge commit or branch tip on main). Historical records remain schema-valid without this field, but every new successor record emitted by `devai govern phase close` requires it."
     },
     "release_disposition": {

@@ -14,7 +14,8 @@ provenance: regenerated from REV-0002; record-meta fields applied per entry 2026
 
 **WIREFRAME DRAFT — regenerated from the pre-W01 review draft (REV-0002). Nothing here
 carries authority until ratified under a declared Architect session in the real BR-1.
-Entries are unnumbered; `[ex-D-nn]` suffixes are provenance shorthand pending DII ids (W03).
+Entries carry provisional DII identifiers; `[ex-D-nn]` suffixes preserve predecessor
+provenance shorthand until W03 ratifies the register.
 Evidence values are cited to the frozen predecessor, never restated.**
 
 ### DII-1. DEVAI-II is founded by absorption from devai-original under the terminal decision (locked; founding record)
@@ -1034,6 +1035,20 @@ PC-0003 contains no failed gate and no failing validation criterion, and it requ
 `merged_as` plus `release_disposition: none-preratification`. R-0002 remains draft,
 ratifies nothing, releases nothing, deploys nothing, and transfers no readiness or
 evidence standing.
+
+### DII-127 — Closure identity and Machine attribution bind full Git objects
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 second Claude Opus 5 correction; DII-113; DII-124; BL-066; BL-067`
+
+The closure verb, not caller input, assigns the next `PC-NNNN` identity. A draft that
+supplies its own `id` is invalid and must be rejected before record construction; object
+spread order may never let caller data replace machine-assigned identity.
+
+Every `merged_as` value and every present closure-batch `commit` binds one full Git
+object id: exactly 40 lowercase hexadecimal characters for SHA-1 repositories or 64
+for SHA-256 repositories. Abbreviated identities cannot bind immutable compliance
+proof. When any batch attributes a write to `Machine`, that batch must carry such a
+full commit id. Human-only historical batches may omit a commit, and PC-0001 and
+PC-0002 remain byte-immutable.
 
 ## Appendix — Register-consistency guard
 
