@@ -733,6 +733,30 @@ rule by preserving PC-0001, its batches, gates, merged identity, release disposi
 and proof-epoch binding while replacing the false all-deferrals-reconciled criterion
 with the exact unmatched P7/BL-045 fact.
 
+### DII-110 — The formatting gate covers active authored sources and excludes only non-format authorities
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 final-gate correction; BL-051; R-0002-AS-BUILT`
+
+The repository-wide Prettier gate covers active human-authored source, law, product,
+tests, documentation, and current work records. Existing build, dependency, coverage,
+proof, scratch, and managed-worktree outputs remain excluded. Additional exclusions
+are exact and semantic:
+
+- `.devai/config/` and `.devai/pin/` are verb-produced materializations;
+- `pnpm-lock.yaml` is package-manager-produced;
+- `law/policy/authority-policy.json` and `law/trace.json` are canonical generated
+  artifacts with independent byte and schema guards;
+- `law/register/DECISIONS.md` is parsed under a register-specific byte shape that
+  Prettier does not preserve;
+- `law/adr/predecessor/`, `work/rounds/R-0001/`, `work/audit/R-0001/`, and
+  `work/devai-ii-succession-dossier.md` are immutable predecessor or completed
+  bootstrap history.
+
+No active path is excluded merely because it fails the formatter. Owner, Architect,
+Engineer, and Inspector format their remaining paths in separate commits. If an
+Architect-owned policy source changes, the Engineer re-materializes its `.devai`
+target through the production verb before the gate may pass. BL-051 closes only when
+the literal repository-wide command is green and the full R-0002 ladder is rerun.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
