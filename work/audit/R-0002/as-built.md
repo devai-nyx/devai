@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-105; OM-002; OM-005; R-0002-OPENING-AUDIT; R-0002-CLAUDE-OPUS-CLOSE-REVIEW; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-2; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-3; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-4; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-5; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-6; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-7; immutable predecessor objects at 05dd242bf72334bfd683096aed380e8240b6b9aa,
+    DII-105; DII-143; OM-002; OM-005; OM-007; R-0002-OPENING-AUDIT; R-0002-CLAUDE-OPUS-CLOSE-REVIEW; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-2; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-3; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-4; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-5; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-6; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-7; immutable predecessor objects at 05dd242bf72334bfd683096aed380e8240b6b9aa,
   ]
 ---
 
@@ -19,10 +19,10 @@ provenance:
 
 This report is chronological. The initial B8 observations and each correction snapshot
 are retained as historical evidence; they are not current-candidate claims. The
-authoritative current observation is **Seventh Opus PASS and final closure-path
-correction** below. One final independent review still precedes source push. The later
-Architect closing decision, source merge, exact-main observation, and machine closure
-record remain part of the two-PR close and are not predicted here.
+authoritative current observation is **Owner exception and continuous two-PR close**
+below. OM-007 replaces the additional final independent review for R-0002 only. The
+source merge, exact-main observation, and machine closure record remain part of the
+two-PR close and are not predicted here.
 
 The round re-binds frozen predecessor truth and repairs the scoped operational
 contracts. It ratifies nothing, releases nothing, deploys nothing, and transfers no
@@ -779,6 +779,33 @@ BL-113 through BL-116 are closed at this observation. BL-105 remains open only f
 fresh Architect decision, deterministic projections, exact full ladder, and final
 exact-candidate Opus PASS.
 
+## Owner exception and continuous two-PR close
+
+OM-007 records the Owner's explicit instruction to skip the additional final Opus
+review, trust the preserved seventh exact-candidate PASS, and proceed through source
+and PC-0003 PR/CI/merge. DII-143 applies that exception only to R-0002 without
+weakening any production, evidence, coverage, role, or exact-SHA gate.
+
+The seventh PASS remains bound to
+`d8c119910bf2a4ea755e1aa8d8b1d6f5ba98f965`. Its four residual findings were
+governed and repaired before the exception. The later pre-exception exact candidate
+`a1146322e5acf00e54d276ae2dcb4584e2e8c9d1` passed the complete local ladder:
+121 files / 1,093 tests with 8 declared skips; T1 809; T2 196 with one declared skip;
+merged coverage 70.57/60.94/77.23/72.84; governance, T4–T6, changesets, global
+formatting, 34-invariant / 121-test trace, 155 repository references, and both pnpm
+integrity identities all passed. After OM-007 and DII-143, the full 121-file / 1,093
+test floor passed again with the same eight declared skips.
+
+BL-105 is closed under the Owner's explicit replacement of its final-review condition,
+the fresh DII-143 binding, deterministic projections, actual green measurements, and
+the operational template's evidence placeholders. Those placeholders remain unusable
+until replaced by observed source merge and remote CI facts.
+
+The requested cycle collapse is possible only operationally. A single PR cannot bind
+PC-0003 to a source merge SHA that does not yet exist. The source PR and closure-only
+PR therefore remain separate proof boundaries but execute as one uninterrupted
+ceremony.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
@@ -788,11 +815,11 @@ production machine verb after BL-049 passed. Its source proof epoch is
 
 ## Residuals and closing posture
 
-The source PR may merge only after the final independent Claude Opus 5 review and exact
-candidate checks. After that merge, the closure-only branch must append the next
-machine PC record against the exact source merge SHA and verify final exact-main state.
-Every required source and exact-main workflow must be green; BL-017 is no longer an
-allowed red. External R-0008 release, R-0009 activation, and R-0010 observation remain
+The source PR may merge under OM-007 only after exact candidate GitHub checks pass.
+After that merge, the closure-only branch must append the next machine PC record
+against the exact source merge SHA and verify final exact-main state. Every required
+source, closure, and exact-main workflow must be green; BL-017 is no longer an allowed
+red. External R-0008 release, R-0009 activation, and R-0010 observation remain
 human-gated exactly as authorized.
 
 R-0003 must independently re-read the frozen bindings, this report, the source merge
