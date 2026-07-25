@@ -717,10 +717,12 @@ that executes the authorized verb. A source/materialization byte-identity gate d
 not transfer that path authority to the Architect. The Architect commit
 `95b1aaf747e8cde561f59e1fda977bb04632b8a4` incorrectly carried a regenerated
 authority-policy materialization while repairing the source vocabulary; R-0002
-records that attribution defect and corrects current state by a later Engineer
-execution and commit. Future source changes use an explicitly governed temporary red
-between the Architect source commit and Engineer materialization when atomic
-cross-role commit would otherwise be required.
+records that historical attribution defect rather than rewriting it. After this
+decision, an Engineer session re-executed the production operational-law verb under
+the Architect declaration; its deterministic output was already byte-identical and
+therefore produced no new commit. Future source changes use an explicitly governed
+temporary red between the Architect source commit and Engineer materialization when
+atomic cross-role commit would otherwise be required.
 
 A closure correction is a new immutable whole-record snapshot with `supersedes`; it
 does not edit or hide the earlier record. The correction may replace any fact or
