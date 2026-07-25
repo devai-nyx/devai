@@ -688,6 +688,26 @@ human preparation location and is not a supported governed-runtime target. Commi
 policy and documentation must preserve that distinction; runtime contents remain
 ignored except for the directory sentinels.
 
+### DII-108 — R-0002 closes its source scope without ratification or release
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 close; DII-105; R-0002-AS-BUILT; OM-002; BL-001–003, BL-007, BL-012–014, BL-023, BL-046–049`
+
+R-0002 closes the source scope declared by DII-105 at Auditor as-built commit
+`87e03032549f1dd28eb9abb969cdfb1ad83708fe`. The exact frozen predecessor bindings
+are re-materialized, the R-0002 operational-law slice is non-vacuous, PC-0002
+corrects PC-0001 append-only, and the scoped Corepack, closure, role, freshness,
+domain, attestation, and reference-classification defects have the dispositions
+recorded by the as-built audit. BL-007's wider population program remains explicitly
+governed by its named later-round items; BL-017 remains the sole allowed command and
+exact-main red through R-0005 at the unchanged 70/60/70/70 thresholds.
+
+The source PR may merge only under the shared exact-candidate review and check gates.
+After that merge, the production machine closure verb appends the next PC record on a
+closure-only branch, binding the source merge SHA and the honest BL-017 red with
+release disposition `none-preratification`. R-0002 ratifies nothing, releases nothing,
+deploys nothing, and transfers no readiness or evidence standing. R-0003 must
+independently re-verify the frozen bindings, source merge, machine closure, and
+exact-main state before any founding ratification.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
