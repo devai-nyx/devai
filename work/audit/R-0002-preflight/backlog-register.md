@@ -228,6 +228,27 @@ fail on path divergence; `.devai/config/` and `.devai/pin/` remain committed
 materializations, while `.devai/state/` and `.devai/worktrees/` ignore runtime contents
 except tracked `.gitkeep` sentinels; JNY-014, law, runtime, CLI help, and docs agree.
 
+### BL-051 — Restore the repository-wide formatting gate without rewriting governed history
+
+`type: backlog-item · status: draft · authority: Architect + Owner + Engineer + Inspector + Auditor · provenance: R-0002 final exit-floor execution`
+
+Priority: P0 R-0002 merge blocker. Primary round: R-0002 post-review correction.
+
+The shared exit floor requires `pnpm exec prettier --check .`, but the first exact
+R-0002 close candidate exposed 352 imported baseline files outside Prettier's declared
+format. The set spans every human role plus generated policy bytes, parser-sensitive
+register text, frozen predecessor records, historical round intent, and generated
+lock/trace artifacts. R-0001 reported formatting green without preserving a
+repository-wide command result, so its narrower observation cannot satisfy the new
+shared gate.
+
+Acceptance: define exact, reasoned exclusions only for generated/canonical,
+parser-sensitive, or immutable historical paths; format every remaining active file
+under its owning role; re-materialize any changed policy through the production verb;
+keep governed JSON semantics and all immutable records unchanged; make the literal
+repository-wide command green; and rerun the complete R-0002 exit ladder. A directory
+or file may not be excluded merely because it is inconvenient or currently red.
+
 ## Carried guard map
 
 The original known-red mapping remains:
