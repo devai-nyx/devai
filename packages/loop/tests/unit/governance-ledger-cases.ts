@@ -201,6 +201,8 @@ describe('governance record parsing and integrity', () => {
   it('fails sealed-history verification closed when Git is unavailable', () => {
     const root = fixtureRoot();
     writeRecord(root, 'ADR-001.md', recordSource({ status: 'active' }));
+    initGit(root);
+    commitAll(root, 'activate');
     const originalPath = process.env['PATH'];
     process.env['PATH'] = '';
     try {
