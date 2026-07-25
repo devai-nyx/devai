@@ -1,13 +1,20 @@
-import { mkdtempSync, rmSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, aroundEach, describe, expect, it } from 'vitest';
 import { withAuthorityHostTestScope } from '../../../authority/tests/unit/authority-host-test-scope.js';
-import { closePhase, type PhaseClosureDraft } from '../../src/closure/index.js';
+import {
+  closePhase,
+  computeLedger,
+  readClosures,
+  type PhaseClosureDraft,
+} from '../../src/closure/index.js';
 
 aroundEach((runTest) => withAuthorityHostTestScope(runTest));
 
 const roots: string[] = [];
+const ROOT = join(import.meta.dirname, '..', '..', '..', '..');
 
 afterEach(() => {
   for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
@@ -64,6 +71,42 @@ describe('phase-closure release disposition', () => {
     }) satisfies PhaseClosureDraft;
     expect(closePhase(repoRoot(), typedDraft).record.release_disposition).toBe(
       'none-preratification',
+    );
+  });
+});
+
+describe('PC-0002 append-only correction', () => {
+  it('preserves PC-0001 and selects PC-0002 as the effective R-0001 closure', () => {
+    const pc1 = readFileSync(
+      join(ROOT, 'record/proofs/compliance/closures/PC-0001.json'),
+    );
+    expect(createHash('sha256').update(pc1).digest('hex')).toBe(
+      '56f8d37868ec72ca9b16f22e3f1d74fd2098b2c050f73a230a9c147c250bfad9',
+    );
+    const records = readClosures(ROOT);
+    const original = records.find((record) => record.id === 'PC-0001');
+    const correction = records.find((record) => record.id === 'PC-0002');
+    const originalEvidence = (original as { readonly evidence?: unknown } | undefined)?.evidence;
+    const correctionEvidence = (correction as { readonly evidence?: unknown } | undefined)?.evidence;
+    expect(correction).toMatchObject({
+      round_id: 'R-0001',
+      supersedes: 'PC-0001',
+      release_disposition: 'none-preratification',
+    });
+    expect(correction?.batches).toEqual(original?.batches);
+    expect(correction?.gates).toEqual(original?.gates);
+    expect(correctionEvidence).toEqual(originalEvidence);
+    expect(correction?.validation_criteria).toContainEqual(
+      expect.objectContaining({
+        verdict: 'fail',
+        evidence: expect.stringContaining('BL-045'),
+      }),
+    );
+    const ledger = computeLedger(records);
+    expect(ledger.count).toBe(1);
+    expect(ledger.streak_basis).toContain('PC-0002');
+    expect(ledger.rounds.find((record) => record.id === 'PC-0001')?.superseded_by).toBe(
+      'PC-0002',
     );
   });
 });
