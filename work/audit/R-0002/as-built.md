@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-105; OM-002; OM-005; R-0002-OPENING-AUDIT; R-0002-CLAUDE-OPUS-CLOSE-REVIEW; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-2; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-3; immutable predecessor objects at 05dd242bf72334bfd683096aed380e8240b6b9aa,
+    DII-105; OM-002; OM-005; R-0002-OPENING-AUDIT; R-0002-CLAUDE-OPUS-CLOSE-REVIEW; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-2; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-3; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-4; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-5; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-6; immutable predecessor objects at 05dd242bf72334bfd683096aed380e8240b6b9aa,
   ]
 ---
 
@@ -19,8 +19,8 @@ provenance:
 
 This report is chronological. The initial B8 observations and each correction snapshot
 are retained as historical evidence; they are not current-candidate claims. The
-authoritative current observation is **Fourth Opus correction and fifth-review
-candidate re-close** below. A fifth independent review still precedes source push. The later
+authoritative current observation is **Sixth Opus exact-candidate FAIL and correction
+cycle** below. A seventh independent review still precedes source push. The later
 Architect closing decision, source merge, exact-main observation, and machine closure
 record remain part of the two-PR close and are not predicted here.
 
@@ -692,6 +692,28 @@ be rewritten and prospective enforcement is the accepted mitigation. BL-080/R-00
 and BL-081/R-0006 remain honest residuals; neither narrows the now-enforced executable
 trace-path contract into an assertion-depth claim.
 
+## Sixth Opus exact-candidate FAIL and correction cycle
+
+The sixth exact-candidate review ran read-only through literal `claude-opus-5` with no
+fallback against `d21a3f2c3345dfb1d235292562b6ad152110bfbf`. It returned
+**FAIL** and is preserved at
+`work/audit/R-0002/claude-opus-close-review-6.md`; the candidate did not advance to
+push.
+
+The review confirmed the fifth-review enforcement repairs but found six remaining
+defects, governed as BL-107 through BL-112: production phase-close did not resolve
+batch commit objects; one PC-0003 template identity was a fabricated full expansion;
+this report retained stale current-section and review-ordinal pointers; pnpm 10
+prewarm lacked recorded local execution; ordinary trace validation omitted the shared
+target primitive; one forbidden-rule authority exception was vacuous for an empty
+protected-path set; and CLI help described a weaker default than implementation.
+
+The audit-pointer and provenance defect is corrected in the same Auditor-owned cycle
+that preserves and governs the review. The remaining repairs require Inspector red
+contracts followed by Engineer implementation. DII-140 is reopened for a later
+Architect close after those repairs, exact checks, and deterministic reference
+regeneration. A seventh exact-candidate Opus PASS remains mandatory.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
@@ -701,7 +723,7 @@ production machine verb after BL-049 passed. Its source proof epoch is
 
 ## Residuals and closing posture
 
-The source PR may merge only after the fifth independent Claude Opus 5 review and exact
+The source PR may merge only after the seventh independent Claude Opus 5 review and exact
 candidate checks. After that merge, the closure-only branch must append the next
 machine PC record against the exact source merge SHA and verify final exact-main state.
 Every required source and exact-main workflow must be green; BL-017 is no longer an

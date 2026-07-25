@@ -23,38 +23,39 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-106. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-112. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
 post-review exit-ladder lint and formatting failures. BL-074 through BL-084 record the
 third exact-candidate findings. BL-085 through BL-093 record the fourth exact-candidate
 findings. BL-094 through BL-106 record the confirmed and bounded fifth exact-candidate
-findings.
+findings. BL-107 through BL-112 record the sixth exact-candidate findings.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
 ## Complete round ownership
 
-| Primary round | Records                                                                                                                                                                    |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105 |
-| R-0003        | BL-004, BL-005, BL-006                                                                                                                                                     |
-| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084                                                                             |
-| R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                     |
-| R-0006        | BL-026, BL-034, BL-035, BL-081                                                                                                                                             |
-| R-0007        | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                                                     |
-| R-0008        | BL-020, BL-024                                                                                                                                                             |
-| R-0009        | BL-022, BL-036                                                                                                                                                             |
-| R-0010        | BL-037, BL-038                                                                                                                                                             |
-| Carried N/A   | BL-040, BL-041, BL-042, BL-043                                                                                                                                             |
+| Primary round | Records                                                                                                                                                                                   |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-112 |
+| R-0003        | BL-004, BL-005, BL-006                                                                                                                                                                    |
+| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084                                                                                            |
+| R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
+| R-0006        | BL-026, BL-034, BL-035, BL-081                                                                                                                                                            |
+| R-0007        | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                                                                    |
+| R-0008        | BL-020, BL-024                                                                                                                                                                            |
+| R-0009        | BL-022, BL-036                                                                                                                                                                            |
+| R-0010        | BL-037, BL-038                                                                                                                                                                            |
+| Carried N/A   | BL-040, BL-041, BL-042, BL-043                                                                                                                                                            |
 
 ## Current disposition
 
 | Disposition                         | Governed records                                                                                                                     |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–104 |
-| Awaiting exact sixth review/close   | BL-105                                                                                                                               |
+| Awaiting exact seventh review/close | BL-105                                                                                                                               |
+| Open in sixth-review repair         | BL-107–112                                                                                                                           |
 | Open in prepared R-0003             | BL-004–006                                                                                                                           |
 | Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                       |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                   |
@@ -960,6 +961,67 @@ Acceptance: immutable R-0002 ordering exceptions are disclosed without rewritten
 history; future Machine record shapes are authorized before emission; substantive
 implementation fixes bind a prior failing Inspector contract or an explicit governed
 exception; the ledger detects sequence inversions mechanically.
+
+### BL-107 — Resolve closure batch commits before immutable emission
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector + Auditor · provenance: R-0002 sixth Claude Opus 5 exact-candidate review`
+
+Priority: P0 before seventh close review. Primary round: R-0002.
+
+Acceptance: every batch `commit` supplied to the production phase-close verb resolves
+to a Git commit in the target repository; missing or non-commit objects fail before
+record emission; the operational PC-0003 template derives exact full identities from
+Git and carries no fabricated expansion.
+
+### BL-108 — Keep the as-built current pointer and review gate current
+
+`type: backlog-item · status: draft · authority: Auditor · provenance: R-0002 sixth Claude Opus 5 exact-candidate review`
+
+Priority: P0 before seventh close review. Primary round: R-0002.
+
+Acceptance: as-built provenance includes every preserved review, its audit boundary
+points to the latest correction observation, and closing posture requires the next
+independent review rather than a superseded ordinal.
+
+### BL-109 — Prove every prepared package-manager integrity identity locally
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector + Auditor · provenance: BL-101; R-0002 sixth Claude Opus 5 exact-candidate review`
+
+Priority: P0 before push. Primary round: R-0002.
+
+Acceptance: the pnpm 10 integrity derives from recorded registry metadata; a local
+prewarm execution resolves every prepared identity successfully; a contract exercises
+the preparation path rather than only listing strings.
+
+### BL-110 — Apply shared trace-target validation to the ordinary trace validator
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector + Auditor · provenance: BL-098; R-0002 sixth Claude Opus 5 exact-candidate review`
+
+Priority: P1 before seventh close review. Primary round: R-0002.
+
+Acceptance: `validateTrace` rejects traversal, directories, missing targets, and
+non-test filenames through the same contained executable-test primitive used by the
+sensor and canonical test-trace validator.
+
+### BL-111 — Avoid vacuous authority-rule authorization
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector + Auditor · provenance: BL-095; R-0002 sixth Claude Opus 5 exact-candidate review`
+
+Priority: P1 before seventh close review. Primary round: R-0002.
+
+Acceptance: `FORBID-MUTATE-INVARIANTS` skips a commit only when at least one protected
+path was changed and every protected path is owned by the attributed role; an empty
+protected-path set cannot suppress message evidence.
+
+### BL-112 — Align forbidden-action CLI help with fail-closed behavior
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector + Auditor · provenance: BL-097; R-0002 sixth Claude Opus 5 exact-candidate review`
+
+Priority: P1 before seventh close review. Primary round: R-0002.
+
+Acceptance: help and implementation both state that any finding or unwaived coverage
+gap exits nonzero; `--strict` remains accepted for compatibility without advertising
+a weaker default.
 
 ## Carried guard map
 
