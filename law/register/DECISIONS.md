@@ -940,6 +940,22 @@ then emits PC-0003 against the exact source merge SHA, using DII-105 as declarat
 DII-121 as closing decision. R-0002 remains draft, ratifies nothing, releases nothing,
 deploys nothing, and transfers no readiness or evidence standing.
 
+### DII-122 — Coverage doubling uses exact unchanged-source readings
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 Owner-directed quota-window iteration; OM-004; OM-005; BL-017`
+
+The OM-005 coverage baseline is the exact merged T1+T3 run at source candidate
+`8b514ac62d1464608964fbb815ac81840075b3a5`: statements 31.61%, branches 29.88%,
+functions 35.29%, and lines 32.74%. R-0002 continues behavior-focused Inspector work
+until the same unchanged source set reports at least 63.22%, 59.76%, 70.58%, and
+65.48%, respectively.
+
+Every iteration preserves the canonical coverage provider, source selection,
+exclusions, and policy thresholds. Exact raw counts and denominators are retained in
+the audit; displayed rounding cannot satisfy a target before the underlying ratio does.
+Crossing the OM-005 target does not close BL-017 unless the separate unchanged
+70/60/70/70 policy also passes. The Opus 5 close review waits for the new exact
+candidate and remains subject to OM-003’s no-fallback rule.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

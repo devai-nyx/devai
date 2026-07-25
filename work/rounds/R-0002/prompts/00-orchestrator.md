@@ -8,13 +8,14 @@ repository-scoped round to completion; do not ratify or release.
 1. `product/owner-mandates/OM-002.md`
 2. `product/owner-mandates/OM-003.md`
 3. `product/owner-mandates/OM-004.md`
-4. `work/audit/R-0002-preflight/consolidated-audit.md`
-5. `work/audit/R-0002-preflight/backlog-register.md`
-6. `work/rounds/EXECUTION-CONTRACT.md`
-7. `work/rounds/R-0002/AUTHORIZATION.md`
-8. `work/rounds/R-0002/plan.md`
-9. R-0001 as-built, combined freshness audit, PC-0001, current attestation, law
-   regeneration status, and every known-red file named by the scoped items
+4. `product/owner-mandates/OM-005.md`
+5. `work/audit/R-0002-preflight/consolidated-audit.md`
+6. `work/audit/R-0002-preflight/backlog-register.md`
+7. `work/rounds/EXECUTION-CONTRACT.md`
+8. `work/rounds/R-0002/AUTHORIZATION.md`
+9. `work/rounds/R-0002/plan.md`
+10. R-0001 as-built, combined freshness audit, PC-0001, current attestation, law
+    regeneration status, and every known-red file named by the scoped items
 
 If authorization is not GRANTED or immutable R-Ω values do not re-derive, stop.
 
@@ -40,6 +41,11 @@ behavior-focused Inspector tests that improve measured coverage. Do not weaken a
 threshold, exclusion, source set, assertion, or production behavior; do not claim
 BL-017 closed; and preserve R-0006 ownership of the full 70/60/70/70 gate. Govern any
 production defect exposed by the tests before continuing.
+
+OM-005 extends that work until the fresh merged T1+T3 readings reach at least 63.22%
+statements, 59.76% branches, 70.58% functions, and 65.48% lines. Re-read raw covered
+counts and denominators on each iteration; no displayed-rounding shortcut satisfies
+the target. Keep the exact-candidate Claude review suspended until every target is met.
 
 After quota recovery, ask Claude Opus 5 through `claude-opus-5` for a read-only close
 review of the exact candidate. Do not fall back to Fable. Resolve its actionable
