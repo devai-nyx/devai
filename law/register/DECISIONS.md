@@ -1592,6 +1592,34 @@ The pre-ceremony Inspector contract that still requires twelve drafts is the exp
 BL-005 known-red until B6 replaces that obsolete lifecycle expectation with ratification
 contracts; the production ADR validator itself must be green in this batch.
 
+### DII-150 — Ratify the DEVAI-II founding law and genesis attestation
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 founding ceremony; OM-002; DII-148; DII-149; BL-004; BL-006; R-0003-CONSTITUTION-CROSSWALK; R-0003-GLOSSARY-OWNER-MARKS; GEN-0001`
+
+At `2026-07-25T22:08:05Z`, the Architect ratifies DEVAI-II Constitution 1.0.0 and
+the genesis attestation bound to it. The same timestamp is written in the Constitution
+ceremony marker and `GEN-0001.ratified`. The attestation's predecessor identities,
+manifest document hashes, empty imported-evidence set, and nonclaims remain unchanged;
+after this act it is immutable and any correction requires a new decision.
+
+The 42-article ledger in `work/rounds/R-0003/constitution-source-crosswalk.md` is total
+and DII-098's Part XI placement is final. The wrapper, version, Part X heading, and body
+now state 1.0.0/ratified; frontmatter uses the schema's binding `active` lifecycle.
+No unreviewed doctrine was introduced.
+
+The Owner marks in `product/glossary-ratification-marks.md` are applied jointly: all
+GE-001 through GE-044 records are active, none is deprecated, retired, or superseded,
+and the reviewed GE-006/016/020/022 corrections plus GE-038..044 successor rider retain
+their approved definitions and resolved graph.
+
+BL-004, BL-005, and BL-006 are substantively satisfied by DII-148 through DII-150, but
+round closure still requires materialization, Inspector contracts, independent audit,
+Opus review, exact-SHA CI, and PC-0004. Until B5 and B6, the stale authority digest and
+pre-ceremony draft/null expectations are explicit known-reds governed by BL-004 and
+BL-005; they are not waived or represented as green.
+
+This act establishes only founding law. It releases, deploys, publishes, promotes, and
+re-earns nothing and establishes no product or production readiness.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

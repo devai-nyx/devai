@@ -1,29 +1,28 @@
 ---
 id: CONSTITUTION
-title: DEVAI-II Constitution (1.0.0 candidate)
+title: DEVAI-II Constitution 1.0.0
 type: constitution
-status: draft
-date: 2026-07-23
-authority: Architect (founding ratification = R-0003, per Article 41 succession process)
+status: active
+date: 2026-07-25
+authority: Architect
 supersedes: null
 superseded_by: null
-provenance: REV-0001 + W01-annex deltas applied 2026-07-23 (Arts 1/6/9 amended in place, Art 42 added; see annex crosswalk)
+provenance: REV-0001 + R-0001 reviewed deltas + R-0003 crosswalk and DII-150 founding ceremony
 ---
 
-# DEVAI-II Constitution — 1.0.0 candidate
+# DEVAI-II Constitution — 1.0.0
 
-**WIREFRAME DRAFT — regenerated from the pre-W01 review draft (REV-0001). This text
-carries no authority until the founding ratification (BR-1/W01) authored under a declared
-Architect session with the ratified genesis attestation. The first forty articles below
-are the predecessor's live 0.6.0 text transposed mechanically; Articles 41–42 and the W01
-annex are new. The predecessor's amendment history (0.1.0-0.6.0) is NOT carried here — it remains,
-frozen, in the archived predecessor; this constitution's own amendment history begins
-empty at 1.0.0 with a genesis pointer.**
+**RATIFIED FOUNDING LAW — Articles 1–40 transpose the predecessor's live 0.6.0
+doctrine with only the reviewed 1.0.0 deltas identified in the founding annex. Articles
+41–42 are successor additions. The predecessor's amendment history (0.1.0–0.6.0)
+remains frozen in the archived predecessor; this Constitution's own amendment history
+begins at 1.0.0 with the genesis attestation.**
 
-# DEVAI Constitution
+## Status and scope
 
-**Candidate version:** 1.0.0
-**Status:** draft; founding ratification is reserved to R-0003
+**Version:** 1.0.0
+**Status:** ratified (active lifecycle)
+**Ratified:** 2026-07-25T22:08:05Z
 
 This is the immutable axiom set for DEVAI. Every other artifact in the framework — contracts, charters, skills, bootstrap layout, scorecard — derives from these axioms and may not contradict them.
 
@@ -414,7 +413,7 @@ When uncertainty remains after available checks, the framework records explicit 
 
 ---
 
-## Part X — Amendments
+## Part X — Amendments and succession
 
 ### Article 40. Amendment process
 
@@ -425,8 +424,6 @@ The constitution's history is preserved indefinitely. Every amendment records: t
 Clients may not amend the constitution locally. Client-specific rules go into policy artifacts under F5, not into the constitution.
 
 ---
-
-## Part X continued — Succession (new at 1.0.0; Part X retitled "Amendments and succession")
 
 ### Article 41. Succession
 
@@ -448,7 +445,7 @@ Every successor constitution ratified under this article must itself contain an 
 
 ---
 
-## W01 ANNEX — application crosswalk (deltas applied 2026-07-23; W01 ratifies)
+## Founding annex — application crosswalk
 
 The six annex deltas are now IN the article text above, each marked with a bracketed `[1.0.0: …]` provenance note at its application site. Status:
 
@@ -462,8 +459,9 @@ The six annex deltas are now IN the article text above, each marked with a brack
    in Part XI: it is a constitutional evidence doctrine, while relocation would create
    needless anchor churn without changing meaning.
 
-W01's remaining authoring work: the crosswalk table (article ↔ source for all 42) and
-ratification itself. Nothing here binds until then.
+The complete article-by-article source disposition is recorded in
+`work/rounds/R-0003/constitution-source-crosswalk.md`. DII-150 ratified this text and
+the bound genesis attestation without changing the reviewed doctrine.
 
 ## Part XI — Evidence
 

@@ -5,7 +5,7 @@
   "definition": "The single authoritative crossing record between the frozen predecessor and DEVAI-II. It binds the predecessor source identity and exhaustively classifies imported evidence as attested-historical or must-re-earn; it establishes no successor readiness standing.",
   "authority": "joint",
   "category": "regulatory",
-  "status": "draft",
+  "status": "active",
   "see_also": ["GE-039", "GE-040", "GE-043"],
   "provenance": [
     "REV-0006 vocabulary rider ratified by Owner 2026-07-23; definition derived from DII-1 and the genesis attestation contract"

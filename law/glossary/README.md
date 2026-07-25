@@ -2,17 +2,12 @@
 id: GLOSSARY-README
 title: Glossary — joint-tier vocabulary index
 type: index
-status: draft
-date: 2026-07-23
+status: active
+date: 2026-07-25
 authority: Owner + Architect (joint — the single declared authority exception inside law/)
 supersedes: null
 superseded_by: null
-provenance:
-  [
-    ex-glossary@devai-original (37 entries,
-    all schema-valid per REV-0006),
-    REV-0006 Owner marks applied 2026-07-23 (GE-006/016/020/022 touch-ups and GE-038..044 vocabulary rider),
-  ]
+provenance: [ex-glossary@devai-original; REV-0006; R-0003-GLOSSARY-OWNER-MARKS; DII-150]
 ---
 
 # Glossary
@@ -23,8 +18,9 @@ This directory holds glossary entries — canonical terms with definitions, cros
 
 ## Index
 
-The predecessor vocabulary imported at GE-001..037. The successor vocabulary rider is
-draft at GE-038..044 pending the ratification round.
+The predecessor vocabulary imported at GE-001..037. The successor vocabulary rider at
+GE-038..044 and the reviewed GE-006/016/020/022 touch-ups were jointly activated by the
+Owner marks and Architect ceremony in R-0003. All 44 entries are active.
 
 | Group                                     | IDs         | Terms                                                                                                        |
 | ----------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------ |

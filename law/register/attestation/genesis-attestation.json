@@ -1,7 +1,7 @@
 {
   "record": "GEN-0001",
-  "ratified": null,
-  "_status": "FROZEN predecessor binding prepared by R-0002; ratification remains reserved to R-0003.",
+  "ratified": "2026-07-25T22:08:05Z",
+  "_status": "RATIFIED by DII-150 in R-0003; immutable after this founding ceremony.",
   "predecessor": {
     "repo_url": "https://github.com/devai-nyx/devai-original",
     "final_commit_sha": "05dd242bf72334bfd683096aed380e8240b6b9aa",
