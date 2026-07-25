@@ -16,6 +16,14 @@ const ACTIVE_CAMPAIGN_INSTRUCTIONS = [
   ),
 ];
 
+const BL017_RETIREMENT_INSTRUCTIONS = [
+  'work/rounds/CAMPAIGN.md',
+  'work/rounds/EXECUTION-CONTRACT.md',
+  'work/rounds/R-0003/plan.md',
+  'work/rounds/R-0004/plan.md',
+  'work/rounds/R-0006/plan.md',
+];
+
 describe('Owner-selected Claude review model', () => {
   it('records the live Opus-only narrowing as an Owner mandate', () => {
     const mandate = readFileSync(join(ROOT, 'product/owner-mandates/OM-003.md'), 'utf8');
@@ -52,4 +60,21 @@ describe('Owner-selected Claude review model', () => {
       expect(instruction).not.toMatch(/(?:Claude )?Fable 5|claude-fable-5/iu);
     },
   );
+
+  it.each(BL017_RETIREMENT_INSTRUCTIONS)(
+    '%s contains no retired BL-017 red permission or R-0006 ownership',
+    (path) => {
+      const instruction = readFileSync(join(ROOT, path), 'utf8');
+      expect(instruction).not.toMatch(
+        /BL-017 (?:remains|red|remote red|release throttle)|continuing BL-017|Through R-0005/iu,
+      );
+    },
+  );
+
+  it('removes BL-017 from R-0006 ownership and campaign scope', () => {
+    const campaign = readFileSync(join(ROOT, 'work/rounds/CAMPAIGN.md'), 'utf8');
+    const roundSix = readFileSync(join(ROOT, 'work/rounds/R-0006/plan.md'), 'utf8');
+    expect(campaign).not.toMatch(/\| R-0006 \|[^|]*017/iu);
+    expect(roundSix).not.toContain('BL-017');
+  });
 });
