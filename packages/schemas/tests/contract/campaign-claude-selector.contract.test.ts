@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { parse } from 'yaml';
+import { getValidator } from '../../src/index.js';
 
 const ROOT = join(import.meta.dirname, '..', '..', '..', '..');
 
@@ -16,7 +18,18 @@ const ACTIVE_CAMPAIGN_INSTRUCTIONS = [
 describe('Owner-selected Claude review model', () => {
   it('records the live Opus-only narrowing as an Owner mandate', () => {
     const mandate = readFileSync(join(ROOT, 'product/owner-mandates/OM-003.md'), 'utf8');
+    const frontmatter = mandate.match(/^---\n([\s\S]*?)\n---\n/);
 
+    expect(frontmatter).toBeTruthy();
+    const metadata = parse(frontmatter?.[1] ?? '') as Record<string, unknown>;
+    const validate = getValidator('record-meta.schema.json');
+    expect(validate(metadata), JSON.stringify(validate.errors)).toBe(true);
+    expect(metadata).toMatchObject({
+      id: 'OM-003',
+      type: 'mandate-rider',
+      status: 'active',
+      authority: 'Owner',
+    });
     expect(mandate).toContain('Claude Opus 5');
     expect(mandate).toContain('claude-opus-5');
     expect(mandate).toContain('quota');
