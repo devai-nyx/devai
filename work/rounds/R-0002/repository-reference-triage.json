@@ -800,7 +800,7 @@
       "rationale": "Package and repository metadata remains bound to the active successor identity."
     },
     {
-      "locator": "packages/schemas/tests/contract/genesis-attestation-binding.contract.test.ts:27:37:devai-nyx/devai-original",
+      "locator": "packages/schemas/tests/contract/genesis-attestation-binding.contract.test.ts:28:37:devai-nyx/devai-original",
       "classification": "frozen-predecessor",
       "action": "retain",
       "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
