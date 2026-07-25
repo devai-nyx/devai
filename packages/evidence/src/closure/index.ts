@@ -113,6 +113,11 @@ export interface ClosePhaseResult {
   readonly path: string;
 }
 
+function mentionsExactGateIdentity(text: string, gate: string): boolean {
+  const escaped = gate.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(?<![A-Za-z0-9_-])${escaped}(?![A-Za-z0-9_-])`, 'u').test(text);
+}
+
 /**
  * Validate a draft, assign the next sequential id, and write the
  * record. Throws on schema violation, on closing-decision number
@@ -145,7 +150,10 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
         !record.validation_criteria.some(
           (criterion) =>
             criterion.verdict === 'fail' &&
-            `${criterion.criterion}\n${criterion.evidence ?? ''}`.includes(gate),
+            mentionsExactGateIdentity(
+              `${criterion.criterion}\n${criterion.evidence ?? ''}`,
+              gate,
+            ),
         ),
     );
   if (unacknowledgedFailedGates.length > 0) {
@@ -174,24 +182,19 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
   if (record.supersedes !== undefined && !existing.some((r) => r.id === record.supersedes)) {
     throw new Error(`phase close: supersedes ${record.supersedes} does not exist`);
   }
-  // R18.E (D-133/H1): from PC-0007 onward the ceremony attests SHIPPED
-  // state, not a pre-merge working tree — PC-0005 attested a SHA that was
-  // not the shipped tip, its first remote CI run failed, and no release
-  // disposition existed. merged_as and release_disposition are therefore
-  // mandatory (the schema keeps them optional so pre-R18 records stay
-  // valid); the ceremony runs at/after merge under the D-134 convention.
-  const numericId = Number(record.id.slice(3));
-  if (numericId >= 7) {
-    if (record.merged_as === undefined) {
-      throw new Error(
-        'phase close: merged_as is required from PC-0007 onward — run the ceremony at/after the merge that ships the round (D-134)',
-      );
-    }
-    if (record.release_disposition === undefined) {
-      throw new Error(
-        'phase close: release_disposition is required from PC-0007 onward (published | changeset-pending | none-preratification | none-needed | missing)',
-      );
-    }
+  // DII-124: the successor ledger restarted at PC-0001, so the predecessor-era
+  // PC-0007 cutoff cannot protect successor records. Keep the fields optional
+  // in the schema for immutable historical records, but require them on every
+  // newly emitted successor closure.
+  if (record.merged_as === undefined) {
+    throw new Error(
+      'phase close: merged_as is required for every successor closure — run the ceremony at/after the merge that ships the round (DII-124)',
+    );
+  }
+  if (record.release_disposition === undefined) {
+    throw new Error(
+      'phase close: release_disposition is required for every successor closure (published | changeset-pending | none-preratification | none-needed | missing)',
+    );
   }
 
   const dir = closuresDir(repoRoot);
