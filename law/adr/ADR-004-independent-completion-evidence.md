@@ -2,48 +2,66 @@
 id: ADR-004
 title: Independent completion evidence
 type: adr
-status: draft
-date: 2026-07-23
-authority: Architect (minting = BR-1/W04)
+status: active
+date: 2026-07-25
+authority: Architect
 supersedes: [ADR-006-independent-completion-evidence.md]
 superseded_by: null
-provenance: [REV-0003 disposition map; predecessor seeds in law/adr/predecessor/]
-affected_rules: []
+provenance:
+  - REV-0003 disposition map; predecessor ADR-006; Constitution Article 42; DII-120
+affected_rules:
+  - law/schemas/evidence.schema.json
+  - law/schemas/agent-run.schema.json
+  - law/schemas/phase-closure.schema.json
 ---
 
 # ADR-004. Independent completion evidence
 
 ## Status
 
-DRAFT (wireframe stub). Binds nothing until minted with `status: active` under a declared Architect
-session in BR-1/W04. Source texts: ADR-006-independent-completion-evidence.md.
+Accepted and active in R-0003. Historical predecessor campaign ledgers remain cited
+history and are not copied into successor standing.
 
 ## Context
 
-TODO (BL-005) at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
-reference, never restate SHAs/run-IDs.
-
-**Scope (from the disposition map):** Trust split (untrusted witness / independent validator), typed strategies with non-vacuity, container-scoped isolation, recovery leases, frame checks, mechanically derived mutating-skill denominator, expected-diff manifests. Campaign ledger sections (predecessor sections 24-25) remain history, cited never copied.
+A worker's claim that its own task completed is not independent evidence. Validation can
+also be vacuous when a strategy observes no meaningful target, shares the worker's
+mutable state, or cannot prove the expected change boundary.
 
 ## Decision
 
-TODO (BL-005) at minting — the binding contract, transposed from source(s) with the deltas below
-integrated.
+Completion separates an untrusted witness from an independent validator. Every accepted
+validation strategy is typed, non-vacuous, binds exact inputs and outcomes, and runs in a
+container- or worktree-scoped isolation boundary appropriate to its effects. Recovery
+leases prevent abandoned validators from holding resources indefinitely. Frame checks
+bind repository, tree, task, strategy, and expected-diff manifest before judgment.
 
-**Verified amendment deltas (dossier Part II — must not be lost):**
+The mutating-skill population is mechanically derived, not maintained by a hand-curated
+allowlist. Expected-diff manifests enumerate authorized result paths and reject missing
+or extra mutation. Judge-only or otherwise independently uncheckable evidence never
+establishes readiness. An Auditor closeout must state both that no readiness claim rests
+solely on uncheckable evidence and that the campaign makes no readiness or autonomy
+claim unless separately earned.
 
-- DELTA A3.1 — the universal rule: judge-only OR OTHERWISE independently uncheckable evidence never establishes readiness (generalize beyond the semantic-review instance).
-- DELTA A3.2 — the Auditor dossier's two mandatory assertions (no readiness claim rests solely on uncheckable evidence; the campaign makes no readiness/autonomy claim).
-- DELTA A3.3 — explicit deferral list: mutation-strength obligations and aggregation semantics are separate future decisions.
+Mutation-strength obligations beyond the current strategies and cross-strategy
+aggregation semantics remain separate future decisions; absence of those decisions
+cannot be represented as a PASS.
 
 ## Consequences
 
-TODO (BL-005) at minting.
+Completion costs an independent observation and explicit frame. Unavailable validation
+is an observation failure, never a verdict. Recovery and expected-diff evidence remain
+inspectable after failure.
 
 ## Alternatives Considered
 
-TODO (BL-005) at minting — carry forward the predecessor's rejected alternatives where still relevant.
+Worker self-attestation, semantic judge output as sole proof, shared mutable validation,
+and empty-success strategies were rejected as independently uncheckable. Treating all
+unimplemented strategies as failure was rejected in favor of explicit unknown or
+unavailable observation without a readiness claim.
 
 ## Affected Rules
 
-TODO (BL-005) at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).
+- `law/schemas/evidence.schema.json`
+- `law/schemas/agent-run.schema.json`
+- `law/schemas/phase-closure.schema.json`

@@ -2,42 +2,64 @@
 id: ADR-007
 title: Publication information architecture
 type: adr
-status: draft
-date: 2026-07-23
-authority: Architect (minting = BR-1/W04)
-supersedes: [ADR-DOCS-IA.md, ADR-DOCS-GOVERNANCE.md]
+status: active
+date: 2026-07-25
+authority: Architect
+supersedes: [ADR-DOCS-IA.md; ADR-DOCS-GOVERNANCE.md]
 superseded_by: null
-provenance: [REV-0003 disposition map; predecessor seeds in law/adr/predecessor/]
-affected_rules: []
+provenance:
+  - REV-0003 disposition map; predecessor docs ADRs; succession dossier Part VII; DII-120
+affected_rules:
+  - docs/
+  - law/
+  - product/
+  - work/
+  - record/
 ---
 
 # ADR-007. Publication information architecture
 
 ## Status
 
-DRAFT (wireframe stub). Binds nothing until minted with `status: active` under a declared Architect
-session in BR-1/W04. Source texts: ADR-DOCS-IA.md; ADR-DOCS-GOVERNANCE.md.
+Accepted and active in R-0003. It rewrites the predecessor documentation layout for the
+successor substrate instead of copying the old mixed-authority tree.
 
 ## Context
 
-TODO (BL-005) at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
-reference, never restate SHAs/run-IDs.
-
-**Scope (from the disposition map):** REWRITE against dossier Part VII: law/product/work/record extracted from docs/; sync layer publishes law and proofs as read-only views; History section = genesis attestation + frozen predecessor; versioned docs begin at 1.0.0; docs cluster canon (concepts in docs/, runbooks in docs/dev/, how-to in docs/adopters/, law only in law/). The predecessor seven-section IA survives only inside docs/.
+In the successor, law, product intent, round intent, Auditor observation, and machine
+proofs have distinct path authorities. Treating them all as authored documentation would
+erase those boundaries and create two canonical copies.
 
 ## Decision
 
-TODO (BL-005) at minting — the binding contract, transposed from source(s) with the deltas below
-integrated.
+Canonical law lives only in `law/`, Owner product intent only in `product/`, governed
+round intent and observation in their respective `work/` subtrees, and machine evidence
+only in `record/`. Publication may expose read-only synchronized views of law and proofs,
+but those views are never authoring sources.
+
+Human concepts live in `docs/`; developer runbooks in `docs/dev/`; adopter procedures in
+`docs/adopters/`. The predecessor seven-section information architecture may organize
+material inside `docs/` only. The public History surface begins with the genesis
+attestation and links to the frozen predecessor. Versioned successor documentation begins
+at 1.0.0 and does not relabel predecessor history as successor versions.
 
 ## Consequences
 
-TODO (BL-005) at minting.
+Every published page has a canonical source and authority class. Sync drift is detectable
+and repaired from the canonical tree. Historical material remains discoverable without
+becoming active successor law.
 
 ## Alternatives Considered
 
-TODO (BL-005) at minting — carry forward the predecessor's rejected alternatives where still relevant.
+Keeping all canonical material under `docs/`, authoring the published mirror, duplicating
+proofs, and continuing predecessor version numbering were rejected because they confuse
+authority or history. Hiding the predecessor entirely was rejected because succession
+requires an inspectable archive.
 
 ## Affected Rules
 
-TODO (BL-005) at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).
+- `docs/`
+- `law/`
+- `product/`
+- `work/`
+- `record/`

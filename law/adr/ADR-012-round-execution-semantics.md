@@ -2,42 +2,61 @@
 id: ADR-012
 title: Round execution semantics
 type: adr
-status: draft
-date: 2026-07-23
-authority: Architect (minting = BR-1/W04)
+status: active
+date: 2026-07-25
+authority: Architect
 supersedes: [ADR-ROUND-EXECUTE-SEMANTICS.md]
 superseded_by: null
-provenance: [REV-0003 disposition map; predecessor seeds in law/adr/predecessor/]
-affected_rules: []
+provenance:
+  - REV-0003 disposition map; predecessor round ADR; Constitution Article 42; DII-117; DII-120
+affected_rules:
+  - work/rounds/EXECUTION-CONTRACT.md
+  - law/schemas/phase-closure.schema.json
+  - law/policy/population-registry.json
 ---
 
 # ADR-012. Round execution semantics
 
 ## Status
 
-DRAFT (wireframe stub). Binds nothing until minted with `status: active` under a declared Architect
-session in BR-1/W04. Source texts: ADR-ROUND-EXECUTE-SEMANTICS.md.
+Accepted and active in R-0003.
 
 ## Context
 
-TODO (BL-005) at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
-reference, never restate SHAs/run-IDs.
-
-**Scope (from the disposition map):** Round lifecycle under the successor vocabulary: R-NNNN numbering, work/rounds plans (amend-by-appendix), work/audit observation, post-merge closure ceremony binding proofs epochs (Part IX §4), twin-numbering doctor check.
+A round combines authored intent, role-separated execution, independent observation,
+remote integration, and machine closure. Treating a plan edit or source merge alone as
+closure loses the exact proof boundary and can collide with historical numbering.
 
 ## Decision
 
-TODO (BL-005) at minting — the binding contract, transposed from source(s) with the deltas below
-integrated.
+Successor rounds use `R-NNNN` identifiers. Canonical plans and prompts live under
+`work/rounds/R-NNNN/`; plan changes append dated amendments rather than rewriting
+historical intent. Auditor observations live under `work/audit/R-NNNN/` and carry no
+authority over the reference signal.
+
+Execution is serial by authorized round and role-pure by path. Source changes merge only
+after the exact candidate passes local gates, independent review where required, and
+exact-SHA remote CI. A separate post-merge machine verb appends the immutable phase
+closure record binding the source merge, declaration, closing decision, gate results,
+validation criteria, release disposition, and proofs epoch. The closure-only PR and its
+final exact-main CI complete the round.
+
+Population and doctor checks prevent twin numbering, missing round records, reused
+closure IDs, or a closure whose round identity disagrees with its governed plan.
 
 ## Consequences
 
-TODO (BL-005) at minting.
+Source integration and compliance closure remain distinct, inspectable events. Historical
+plans are stable, corrections append, and an incomplete ceremony cannot claim closure.
 
 ## Alternatives Considered
 
-TODO (BL-005) at minting — carry forward the predecessor's rejected alternatives where still relevant.
+Editing plans in place, combining source and closure in one self-referential commit,
+closing from local CI, and carrying predecessor round numbers into the successor were
+rejected because they weaken chronology or identity.
 
 ## Affected Rules
 
-TODO (BL-005) at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).
+- `work/rounds/EXECUTION-CONTRACT.md`
+- `law/schemas/phase-closure.schema.json`
+- `law/policy/population-registry.json`

@@ -1570,6 +1570,28 @@ The exact wrapper/status transition is reserved to the later R-0003 ceremony dec
 after ADR and joint glossary dispositions pass their gates, and must be followed by the
 role-pure materialization batch.
 
+### DII-149 — Accept the gapless successor ADR roster
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0003 ADR disposition; BL-005; REV-0003; DII-106; DII-120; law/adr/predecessor/`
+
+ADR-001 through ADR-012 are accepted with `status: active` under the successor lifecycle.
+Each record names the predecessor inputs it supersedes, contains the six mandatory
+sections, resolves its provenance and affected rules, and has no successor replacement.
+The frozen predecessor source files remain historical input and are not active law.
+
+ADR-001 preserves the zero-exemption derived mutator denominator and constitutional
+change-control requirement. ADR-002 makes human-supervised operation the supported
+baseline. ADR-003 accepts the promotion mechanism while keeping all graduation standing
+void pending re-earning. ADR-004 generalizes the independent-checkability rule and names
+its deferred aggregation boundary. ADR-005 through ADR-012 bind the reviewed CI, CLI,
+publication, publish-path, self-adoption, effects, prompt-firewall, and round semantics
+without authorizing publication or importing predecessor evidence standing.
+
+This lifecycle act closes only the ADR disposition required by BL-005. It establishes no
+release, deployment, readiness, evidence promotion, or autonomous-operation claim.
+The pre-ceremony Inspector contract that still requires twelve drafts is the explicit
+BL-005 known-red until B6 replaces that obsolete lifecycle expectation with ratification
+contracts; the production ADR validator itself must be green in this batch.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
