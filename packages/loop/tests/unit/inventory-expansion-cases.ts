@@ -1,10 +1,4 @@
-import {
-  mkdirSync,
-  mkdtempSync,
-  rmSync,
-  symlinkSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -109,16 +103,28 @@ describe('inventory extraction expansion', () => {
     const parsed = parseSourceFile(sourcePath);
     const classDecorators = [...iterateClassDecorators(parsed)];
     const methodDecorators = [...iterateMethodDecorators(parsed)];
-    expect(className(classDecorators.at(-1)?.class!)).toBe('<anonymous>');
-    expect(methodName(methodDecorators.find(({ name }) => name === 'Head')?.method!)).toBe(
-      '<anonymous>',
-    );
-    expect(methodName(methodDecorators.find(({ name }) => name === 'All')?.method!)).toBe('quoted');
-    expect(decoratorName(methodDecorators.find(({ name }) => name === 'Custom')!.decorator)).toBe(
-      'Custom',
-    );
-    expect(decoratorStringArg(methodDecorators.find(({ name }) => name === 'Delete')!.decorator, 0)).toBeNull();
-    expect(decoratorStringArg(classDecorators[0]!.decorator, 99)).toBeNull();
+    const anonymousClass = classDecorators.at(-1);
+    const head = methodDecorators.find(({ name }) => name === 'Head');
+    const all = methodDecorators.find(({ name }) => name === 'All');
+    const custom = methodDecorators.find(({ name }) => name === 'Custom');
+    const deleted = methodDecorators.find(({ name }) => name === 'Delete');
+    const firstClass = classDecorators[0];
+    if (
+      anonymousClass === undefined ||
+      head === undefined ||
+      all === undefined ||
+      custom === undefined ||
+      deleted === undefined ||
+      firstClass === undefined
+    ) {
+      throw new Error('fixture decorators were not discovered');
+    }
+    expect(className(anonymousClass.class)).toBe('<anonymous>');
+    expect(methodName(head.method)).toBe('<anonymous>');
+    expect(methodName(all.method)).toBe('quoted');
+    expect(decoratorName(custom.decorator)).toBe('Custom');
+    expect(decoratorStringArg(deleted.decorator, 0)).toBeNull();
+    expect(decoratorStringArg(firstClass.decorator, 99)).toBeNull();
   });
 
   it('builds deterministic local, absolute, external, and re-export dependency edges', () => {
@@ -193,9 +199,9 @@ describe('inventory extraction expansion', () => {
 
     const found = discoverTests({ repoRoot: root });
     expect(found.map(({ path, suite }) => [path.split('/').at(-1), suite])).toEqual(cases);
-    expect(found.every(({ invariants }) => invariants.join(',') === 'INV-DEVAI-001,INV-LAW2-999')).toBe(
-      true,
-    );
+    expect(
+      found.every(({ invariants }) => invariants.join(',') === 'INV-DEVAI-001,INV-LAW2-999'),
+    ).toBe(true);
   });
 
   it('discovers file schemas without a database and sorts stable records', async () => {

@@ -151,7 +151,9 @@ describe('round lifecycle filesystem behavior', () => {
     await withAuthorityHostTestScope(() => {
       scaffoldGovernedRound({ repoRoot: repo, round: 3 });
       const unsupported = record('R-0003');
-      (unsupported['waves'] as Array<Record<string, unknown>>)[0]!['roles'] = [{}];
+      const firstWave = (unsupported['waves'] as Array<Record<string, unknown>>)[0];
+      if (firstWave === undefined) throw new Error('fixture requires a wave');
+      firstWave['roles'] = [{}];
       expect(() =>
         declareGovernedRound({
           repoRoot: repo,

@@ -641,7 +641,7 @@ jobs:
     write(
       root,
       'packages/demo/src/MixedCase.ts',
-      'export function demo(value: string) { if (!value) throw new Error(\"missing\"); return value; }',
+      'export function demo(value: string) { if (!value) throw new Error("missing"); return value; }',
     );
     write(root, 'packages/demo/src/mixed_case.ts', 'export const mixed = true;');
     write(

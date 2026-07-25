@@ -1,13 +1,6 @@
 // Invariants: INV-DEVAI-016, INV-DEVAI-018
 import { execFileSync } from 'node:child_process';
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  unlinkSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -47,10 +40,7 @@ function root(): string {
   return repo;
 }
 
-function policy(
-  repo: string,
-  overrides: Record<string, unknown> = {},
-): void {
+function policy(repo: string, overrides: Record<string, unknown> = {}): void {
   put(
     repo,
     '.devai/config/project.json',
@@ -227,14 +217,10 @@ describe('local evidence policy and collection', () => {
     const repo = root();
     initialize(repo);
     const first = await withAuthorityHostTestScope(() => computeSourceHash(repo, ['artifacts']));
-    const second = await withAuthorityHostTestScope(() =>
-      computeSourceHash(repo, ['artifacts/']),
-    );
+    const second = await withAuthorityHostTestScope(() => computeSourceHash(repo, ['artifacts/']));
     expect(second).toEqual(first);
     unlinkSync(join(repo, 'src/index.ts'));
-    const deleted = await withAuthorityHostTestScope(() =>
-      computeSourceHash(repo, ['artifacts']),
-    );
+    const deleted = await withAuthorityHostTestScope(() => computeSourceHash(repo, ['artifacts']));
     expect(deleted.fileCount).toBe(first.fileCount);
     expect(deleted.value).not.toBe(first.value);
   });
@@ -443,30 +429,38 @@ describe('local evidence verification', () => {
       },
       {
         name: 'job metadata',
-        mutate: (m) => ({
-          ...m,
-          jobs: {
-            ...m.jobs,
-            unit: {
-              ...m.jobs['unit']!,
-              metadata: { ...m.jobs['unit']!.metadata, job: 'other' },
+        mutate: (m) => {
+          const unit = m.jobs['unit'];
+          if (unit === undefined) throw new Error('fixture requires unit job');
+          return {
+            ...m,
+            jobs: {
+              ...m.jobs,
+              unit: {
+                ...unit,
+                metadata: { ...unit.metadata, job: 'other' },
+              },
             },
-          },
-        }),
+          };
+        },
         error: /metadata does not match/,
       },
       {
         name: 'job platform',
-        mutate: (m) => ({
-          ...m,
-          jobs: {
-            ...m.jobs,
-            unit: {
-              ...m.jobs['unit']!,
-              metadata: { ...m.jobs['unit']!.metadata, platform: 'darwin/arm64' },
+        mutate: (m) => {
+          const unit = m.jobs['unit'];
+          if (unit === undefined) throw new Error('fixture requires unit job');
+          return {
+            ...m,
+            jobs: {
+              ...m.jobs,
+              unit: {
+                ...unit,
+                metadata: { ...unit.metadata, platform: 'darwin/arm64' },
+              },
             },
-          },
-        }),
+          };
+        },
         error: /disallowed platform/,
       },
     ];

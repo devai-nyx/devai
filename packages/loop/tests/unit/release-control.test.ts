@@ -251,8 +251,10 @@ describe('release control records', () => {
     expect(records.map((record) => record.id)).toEqual(
       Array.from({ length: 8 }, (_, index) => `REL-${String(index + 1).padStart(4, '0')}`),
     );
-    expect(releaseContentHash(records[0]!)).toMatch(/^[0-9a-f]{64}$/);
-    expect(releaseContentHash(records[0]!)).toBe(releaseContentHash(records[0]!));
+    const first = records[0];
+    if (first === undefined) throw new Error('fixture requires a release record');
+    expect(releaseContentHash(first)).toMatch(/^[0-9a-f]{64}$/);
+    expect(releaseContentHash(first)).toBe(releaseContentHash(first));
   });
 
   it('lists release state fail-closed when absent, unreadable, or partially malformed', () => {
