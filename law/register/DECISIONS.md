@@ -1802,6 +1802,32 @@ exact-main CI establish the complete R-0003 close.
 R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
 promotes, re-earns, or declares ready nothing.
 
+### DII-156 — Rebind the R-0003 source close after the T2 exclusion guard
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 final exact-ladder source close; DII-155; BL-131; R-0003-FORMATTING-CONTRACT-FAILURE; R-0003-FORMATTING-CONTRACT-CORRECTION; Auditor 03b3931 and c8e1e21; Inspector 817c5f9`
+
+DII-156 supersedes DII-155 only as the R-0003 source-closing judgment. The restarted
+ladder passed Stage 1 and T1, then T2 correctly rejected the newly added immutable-review
+formatting exclusion because its exact boundary contract had not yet been updated.
+BL-131 governs and closes that bounded contract failure.
+
+Inspector `817c5f9` adds exactly `work/rounds/R-0003/reviews/` to the pinned exclusion
+sequence, retains every prior path in order, and passes alongside the exact review-byte
+hash contract. Auditor `c8e1e21` independently records the correction. No broader
+formatting exception or evidence mutation is authorized.
+
+The exact candidate containing DII-156 and a fresh repository-reference projection must
+restart the complete ladder from Stage 1 and then receive a read-only review through
+literal `claude-opus-5`, with no fallback. Any actionable finding reopens the governed
+repair cycle; only a PASS authorizes source push and exact-SHA CI.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-156 as the closing decision. Its release
+disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
+exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
