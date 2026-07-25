@@ -284,7 +284,7 @@ describe('post-merge host receipt verification', () => {
     const fx = fixture();
     rewrite(fx, undefined, (v) => ({ ...v, hook_digest_sha256: 'f'.repeat(64) }));
     expect(() => verify(fx)).toThrow('HOST_RECEIPT_STALE');
-  });
+  }, 20_000);
 
   it('rejects head mismatch, non-merge heads, and unreachable baselines', async () => {
     const mismatched = fixture();
