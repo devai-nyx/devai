@@ -1401,6 +1401,39 @@ observed source gate must pass, `release_disposition` is `none-preratification`,
 no failed criterion may be invented. R-0002 remains draft, ratifies nothing, releases
 nothing, deploys nothing, and transfers no readiness or evidence standing.
 
+### DII-143 — Apply the Owner's R-0002 final-review exception without weakening proof
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 Owner-exception source close; OM-007; DII-105; DII-137; DII-139–142; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-7@d8c119910bf2a4ea755e1aa8d8b1d6f5ba98f965; R-0002-LOCAL-EXIT-LADDER@a1146322e5acf00e54d276ae2dcb4584e2e8c9d1`
+
+DII-143 supersedes DII-142 only as the R-0002 source-closing judgment. OM-007
+explicitly replaces the additional post-repair Opus review with reliance on the
+preserved seventh exact-candidate PASS. That review's four residual findings were
+governed as BL-113 through BL-116 and repaired before this exception. The later exact
+candidate `a1146322e5acf00e54d276ae2dcb4584e2e8c9d1` passed the complete local
+floor, Stage 1 through Stage 3, governance, T1 through T6, changeset, formatting,
+trace, reference, and package-manager-integrity checks.
+
+The exception changes no production or evidence threshold. The source candidate that
+contains OM-007 and DII-143 must pass local source checks and every required GitHub
+check at its exact SHA. Its exact source merge must then pass exact-main checks before
+the production closure verb may append PC-0003. Every closure-branch and final-main
+check must also pass.
+
+OM-007's requested cycle collapse is implemented as one continuous ceremony, not one
+PR. A single PR cannot truthfully bind PC-0003 to a source merge commit that does not
+yet exist. The source PR therefore merges first; the closure-only PR immediately
+follows from that exact merge without a discretionary review pause.
+
+BL-105 is satisfied for source-close purposes by the explicit Owner replacement of
+the final-review condition, the exact green local evidence, the fresh deterministic
+projections, and the operational template's unresolved evidence placeholders. Those
+placeholders must be replaced only with observed source merge, CI, and closure facts.
+
+PC-0003 uses DII-105 as historical declaration, DII-137 as amended-plan binding, and
+DII-143 as closing decision. Its release disposition remains
+`none-preratification`. This exception is limited to R-0002; all later rounds retain
+their existing review and serial entry gates. Nothing is ratified, released,
+deployed, published, or declared ready by this decision.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
