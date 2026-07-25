@@ -71,6 +71,19 @@ function writeRecord(root: string, name: string, source = recordSource()): strin
   return path;
 }
 
+function initGit(root: string): void {
+  execFileSync('git', ['init', '-q'], { cwd: root });
+}
+
+function commitAll(root: string, message: string): void {
+  execFileSync('git', ['add', '.'], { cwd: root });
+  execFileSync(
+    'git',
+    ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', message],
+    { cwd: root },
+  );
+}
+
 describe('governance record parsing and integrity', () => {
   it('parses the supported YAML subset and rejects missing frontmatter', () => {
     const root = fixtureRoot();
@@ -122,32 +135,54 @@ describe('governance record parsing and integrity', () => {
       'ADR-001.md',
       recordSource({ status: 'active', body: '# ADR-001. Sealed' }),
     );
-    execFileSync('git', ['init', '-q'], { cwd: root });
-    execFileSync('git', ['add', '.'], { cwd: root });
-    execFileSync(
-      'git',
-      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'seal'],
-      { cwd: root },
-    );
+    initGit(root);
+    commitAll(root, 'seal');
     writeFileSync(path, recordSource({ status: 'active', body: '# ADR-001. Mutated' }));
-    execFileSync('git', ['add', '.'], { cwd: root });
-    execFileSync(
-      'git',
-      [
-        '-c',
-        'user.name=Fixture',
-        '-c',
-        'user.email=fixture@example.com',
-        'commit',
-        '-qm',
-        'mutate',
-      ],
-      { cwd: root },
-    );
+    commitAll(root, 'mutate');
 
     expect(decisionRecordIntegrity({ repoRoot: root }).findings).toContainEqual(
       expect.objectContaining({ code: 'DECISION_LOCKED_BODY_MUTATED' }),
     );
+  });
+
+  it('permits one active-to-superseded scalar replacement transition', () => {
+    const root = fixtureRoot();
+    const path = writeRecord(root, 'ADR-001.md', recordSource({ status: 'active' }));
+    initGit(root);
+    commitAll(root, 'activate');
+    writeFileSync(path, recordSource({ status: 'superseded', supersededBy: 'ADR-002' }));
+    writeRecord(root, 'ADR-002.md', recordSource({ id: 'ADR-002', supersedes: '[ADR-001]' }));
+    commitAll(root, 'supersede');
+
+    expect(decisionRecordIntegrity({ repoRoot: root })).toEqual({ ok: true, findings: [] });
+  });
+
+  it('rejects replacement changes after supersession and returns to draft', () => {
+    const supersededRoot = fixtureRoot();
+    const supersededPath = writeRecord(
+      supersededRoot,
+      'ADR-001.md',
+      recordSource({ status: 'active' }),
+    );
+    initGit(supersededRoot);
+    commitAll(supersededRoot, 'activate');
+    writeFileSync(supersededPath, recordSource({ status: 'superseded', supersededBy: 'ADR-002' }));
+    commitAll(supersededRoot, 'supersede');
+    writeFileSync(supersededPath, recordSource({ status: 'superseded', supersededBy: 'ADR-003' }));
+    commitAll(supersededRoot, 'replace-link');
+
+    const draftRoot = fixtureRoot();
+    const draftPath = writeRecord(draftRoot, 'ADR-001.md', recordSource({ status: 'active' }));
+    initGit(draftRoot);
+    commitAll(draftRoot, 'activate');
+    writeFileSync(draftPath, recordSource({ status: 'draft' }));
+    commitAll(draftRoot, 'return-to-draft');
+
+    for (const root of [supersededRoot, draftRoot]) {
+      expect(decisionRecordIntegrity({ repoRoot: root }).findings).toContainEqual(
+        expect.objectContaining({ code: 'DECISION_LOCKED_BODY_MUTATED' }),
+      );
+    }
   });
 });
 
