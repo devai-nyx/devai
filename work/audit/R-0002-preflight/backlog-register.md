@@ -23,9 +23,10 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-065. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-071. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
-record the independent Opus 5 exact-candidate findings before remediation.
+record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
+record the second exact-candidate findings before remediation.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -33,7 +34,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 
 | Primary round | Records                                                                                                               |
 | ------------- | --------------------------------------------------------------------------------------------------------------------- |
-| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064 |
+| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-071 |
 | R-0003        | BL-004, BL-005, BL-006                                                                                                |
 | R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065                                        |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063                                                        |
@@ -479,19 +480,20 @@ proves the approved three-tree lifecycle before activation.
 
 Priority: P1 before source push. Primary round: R-0002.
 
-The backlog census stops at BL-050, the as-built overstates several command/test claims
-and carries a stale correction boundary, and the decision-register introduction denies
-its DII numbering.
+The initial backlog census stopped at BL-050. Later close attempts retained false full
+SHAs, obsolete reference counts, stale command/closure instructions, a stale correction
+boundary, and a decision-register introduction that denied its DII numbering.
 
 Acceptance: census and ownership are gapless through the latest record; as-built claims
 name only metrics actually emitted by cited commands; historical Fable facts remain
 historical without overstating the selector test; correction boundaries and register
 description match committed history.
 
-Known-red transition: the Auditor census edit moves the committed
-`devai-nyx/devai` locator in this file. Until the following Architect regeneration,
-`repository-reference-triage.contract.test.ts` is red only for the old line 172 versus
-the newly observed line 174. BL-064 owns that exact transition.
+Known-red transition: each Auditor census edit can move committed
+`devai-nyx/devai` locators in this file. Until the immediately following Architect
+regeneration, `repository-reference-triage.contract.test.ts` may be red only for those
+exact shifted locators. BL-064 owns that bounded transition without freezing obsolete
+line numbers into the register.
 
 ### BL-065 — Complete package-manager and materialization reproducibility
 
@@ -507,6 +509,70 @@ Acceptance: R-0004 decides the reproducible representation, covers all canonical
 pairs in CI, replaces locale/insertion-order dependencies with byte-stable ordering,
 and extends cold package-manager proof to every required remote job. R-0002 records the
 deferral and makes no readiness claim.
+
+### BL-066 — Prevent caller-steered closure identity and abbreviated merge binding
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: R-0002 second Claude Opus 5 exact-candidate review`
+
+Priority: P0 before PC-0003. Primary round: R-0002.
+
+Acceptance: Inspector reds prove a caller-supplied `id` cannot replace the next
+machine-assigned PC id and abbreviated `merged_as` values fail; Architect law binds
+full Git object identity; Engineer rejects caller identity before record construction;
+historical PC bytes remain unchanged.
+
+### BL-067 — Require commit-bound Machine batch attribution
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: DII-113; R-0002 second Claude Opus 5 exact-candidate review`
+
+Priority: P0 before PC-0003. Primary round: R-0002.
+
+Acceptance: Machine in a closure batch requires a full commit id in schema and
+production validation; human-only historical batches remain valid; Inspector proves
+missing and abbreviated Machine commits fail and a full verb-produced commit passes.
+
+### BL-068 — Enforce the literal Opus selector in every active campaign instruction
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: OM-003; R-0002 second Claude Opus 5 exact-candidate review`
+
+Priority: P0 before any later Claude review. Primary round: R-0002.
+
+Acceptance: every active campaign instruction contains literal `claude-opus-5`, no
+literal or display-name Fable selector, and explicit no-fallback language; OM-002's
+superseded historical authorization remains byte-unchanged and OM-003 precedence is
+tested without overstating the guarded population.
+
+### BL-069 — Fail sealed-history checks closed when Git history is shallow
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: DII-120; R-0002 second Claude Opus 5 exact-candidate review`
+
+Priority: P0 before source CI. Primary round: R-0002.
+
+Acceptance: an Inspector red proves a depth-one history cannot pass sealed ADR history;
+production emits a deterministic finding rather than success; CI fetches sufficient
+history for the guard; full-history mutation behavior remains green.
+
+### BL-070 — Gate deterministic trace freshness and a fixed completeness floor
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: DII-125; R-0002 second Claude Opus 5 exact-candidate review`
+
+Priority: P0 before source push. Primary round: R-0002.
+
+Acceptance: a production package command regenerates to a temporary target or compares
+canonical bytes without writing checker inputs; CI invokes it; completeness cannot
+self-relax when an invariant loses its last test; current 34/34 and 114-test trace stays
+byte-identical under deterministic regeneration.
+
+### BL-071 — Make sealed-history parsing and lifecycle scaffolding fail closed
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: DII-120; R-0002 second Claude Opus 5 exact-candidate review`
+
+Priority: P0 before source push. Primary round: R-0002.
+
+Acceptance: malformed post-seal frontmatter becomes an integrity finding rather than an
+exception; every schema-legal terminal transition has an explicit disposition; round
+scaffolding emits scalar-or-null `superseded_by`; red-first fixtures and the full floor
+pass without weakening sealed-history protection.
 
 ## Carried guard map
 
