@@ -1368,6 +1368,39 @@ observed source gate must pass, `release_disposition` is `none-preratification`,
 no failed criterion may be invented. R-0002 remains draft, ratifies nothing, releases
 nothing, deploys nothing, and transfers no readiness or evidence standing.
 
+### DII-142 — R-0002 binds the seventh-review residual repairs for final exact review
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 final source close; DII-105; DII-137; DII-139–141; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-7@d8c119910bf2a4ea755e1aa8d8b1d6f5ba98f965; R-0002-SEVENTH-REVIEW-CORRECTIONS@ba47c335fdca893068dd711f30a96c68e620f672; BL-105; BL-113–116`
+
+DII-142 supersedes DII-141 only as the R-0002 source-closing judgment. The seventh
+Opus review PASS remains immutable evidence for exact candidate
+`d8c119910bf2a4ea755e1aa8d8b1d6f5ba98f965`. Its four residual findings were
+governed before further publication: Inspector `67f7081` proved the two behavior
+defects red-first; Engineer `3f7e5bc` made complete-draft validation precede batch
+property access and made `merged_as` resolve to a Git commit before emission;
+Inspector `49f9488` restored focused green; and Auditor `ba47c33` closed BL-113
+through BL-116 after correcting the active backlog posture and operational template.
+
+The seventh PASS is not represented as review of this later correction. The exact
+source candidate is the commit containing DII-142 plus deterministic trace and
+repository-reference regeneration. That exact candidate must pass the complete local
+ladder and then receive one final independent read-only review through literal
+`claude-opus-5` with no fallback. Only that final exact-candidate PASS authorizes
+source push and exact-SHA remote CI.
+
+BL-113 through BL-116 are closed. BL-105 closes only when the operational template
+binds DII-142, all batch identities resolve, current green measurements replace prior
+measurements, no review verdict is predeclared, deterministic projections are fresh,
+and the final exact review passes. BL-065 and BL-080/084 remain prepared in R-0004;
+BL-063 and prospective sequencing BL-106 remain prepared in R-0005; BL-081 remains
+prepared in R-0006.
+
+After the source PR merges, a closure-only branch may emit PC-0003 through the
+production verb against the exact source merge SHA, using DII-105 as historical
+declaration, DII-137 as amended-plan binding, and DII-142 as closing decision. Every
+observed source gate must pass, `release_disposition` is `none-preratification`, and
+no failed criterion may be invented. R-0002 remains draft, ratifies nothing, releases
+nothing, deploys nothing, and transfers no readiness or evidence standing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
