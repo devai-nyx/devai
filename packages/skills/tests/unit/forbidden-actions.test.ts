@@ -2,13 +2,16 @@ import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, aroundEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   CANONICAL_FORBIDDEN_ACTIONS,
   checkForbiddenRegistryCoverage,
   loadForbiddenWaivers,
   scanForbiddenActions,
 } from '../../src/forbidden-actions/index.js';
+import { withAuthorityHostTestScope } from './authority-host-test-scope.js';
+
+aroundEach((runTest) => withAuthorityHostTestScope(runTest));
 
 let dir = '';
 let registryPath = '';
