@@ -1702,6 +1702,41 @@ two-PR close.
 This correction establishes only **founding law ratified**. It releases, deploys,
 publishes, promotes, re-earns, or declares ready nothing.
 
+### DII-153 — Repair the sealed ADR lifecycle and rebind the R-0003 source close
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 ADR seal-integrity correction; DII-149; DII-152; BL-128; R-0003-EXIT-LADDER-ADR-SEAL-FAILURE; Inspector 726fe66 and 0ba2612; Engineer fa17a5c`
+
+DII-153 supersedes DII-152 only as the R-0003 source-closing judgment. A rejected local
+candidate correctly exposed post-seal body mutations in ADR-002, ADR-003, ADR-005,
+ADR-007, ADR-008, ADR-010, and ADR-011. BL-128 governs that blocker; no seal exception
+or waiver is created. The rejected branch is retained as red evidence and is not the
+source candidate.
+
+The clean source branch preserves the exact sealed bytes of the six multi-source ADRs.
+Their historic semicolon-delimited predecessor lists remain distinct sources, and the
+production parser now accepts that delimiter without rewriting active law. ADR-005's
+sealed body, including its historical workflow binding, is likewise preserved. Its only
+post-seal mutations are the canonical terminal lifecycle fields: `status: superseded`
+and `superseded_by: ADR-013`.
+
+ADR-013 is the gapless active replacement. It preserves ADR-005's CI-economy doctrine,
+supersedes ADR-005 explicitly, and binds the actual successor workflows
+`.github/workflows/ci.yml` and `.github/workflows/round-gates.yml`. The roster therefore
+contains thirteen records, twelve active and one terminally superseded; predecessor files
+under `law/adr/predecessor/` remain historical input only.
+
+Before source push, an independent correction audit and a fresh exact-candidate closing
+decision must bind the complete local ladder. A fresh read-only review through literal
+`claude-opus-5`, with no fallback, remains mandatory. Any actionable finding reopens the
+governed red-first repair cycle; only a PASS authorizes source push and exact-SHA CI.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and the final post-audit source-closing decision as
+its closing decision. Its release disposition remains `none-needed`. R-0004 remains
+dormant until PC-0004 and final exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
