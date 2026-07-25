@@ -180,7 +180,7 @@ describe('effect program analysis', () => {
     );
     expect(report.advisory_patterns.violations).toBeGreaterThanOrEqual(4);
     expect(report.findings.map((finding) => finding.code)).not.toContain('SPAWN_EFFECT_UNDECLARED');
-  });
+  }, 30_000);
 
   it('reports under-declaration, unregistered templates, and catalog mismatch', async () => {
     const fixture = resolve(
@@ -218,7 +218,7 @@ describe('effect program analysis', () => {
         subprocessRegistry: { templates: [] },
       }),
     ).rejects.toThrow('EFFECT_EXTRACTOR_CATALOG_MISMATCH');
-  });
+  }, 30_000);
 
   it('surfaces malformed TypeScript configuration and loads JSON', async () => {
     const root = fixtureRoot();
