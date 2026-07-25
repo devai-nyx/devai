@@ -173,7 +173,7 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
     rationale: 'Constitutional change',
     severity: 'critical',
     detect_patterns: [
-      '\\b(?:git\\s+(?:add|rm)|rm)\\s+[^\\n]*(?:law/(?:constitution|invariants|register|policy)|\\.devai/config)/',
+      '\\b(?:git\\s+(?:add|rm)|rm)\\s+[^\\n]*(?:law/|product/|work/(?:rounds|audit)/|record/|\\.devai/config/)',
     ],
     safer_alternative: 'Architect amendment via ADR + law/register/DECISIONS.md entry',
   },
@@ -272,7 +272,30 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     (existsSync(authoredRegistry)
       ? authoredRegistry
       : join(opts.repoRoot, '.devai/config/forbidden-actions.json'));
-  const registry = loadForbiddenRegistry(registryPath);
+  let registry: ForbiddenActionEntry[];
+  if (!existsSync(registryPath)) {
+    return { registry_entries: 0, findings };
+  }
+  try {
+    const parsed = JSON.parse(readFileSync(registryPath, 'utf8')) as {
+      actions?: ForbiddenActionEntry[];
+    };
+    if (!Array.isArray(parsed.actions)) throw new Error('actions must be an array');
+    registry = parsed.actions;
+  } catch {
+    return {
+      registry_entries: 0,
+      findings: [
+        {
+          forbidden_id: 'FORBIDDEN-REGISTRY-INVALID',
+          source: 'commit-change',
+          ref: registryPath,
+          matched: '',
+          message: 'forbidden-action registry bytes are malformed',
+        },
+      ],
+    };
+  }
   if (registry.length === 0) {
     return { registry_entries: 0, findings };
   }
@@ -331,7 +354,7 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     try {
       const nameStatus = execFileSync(
         'git',
-        ['show', '--format=', '--name-status', '--find-renames', sha],
+        ['diff-tree', '--root', '--no-commit-id', '--name-status', '-r', '-M', sha],
         {
           cwd: opts.repoRoot,
           encoding: 'utf8',
@@ -349,7 +372,7 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
         .join('\n');
       const patch = execFileSync(
         'git',
-        ['show', '--format=', '--no-ext-diff', '--unified=0', sha],
+        ['diff-tree', '--root', '--no-commit-id', '--no-ext-diff', '--unified=0', '-p', sha],
         {
           cwd: opts.repoRoot,
           encoding: 'utf8',

@@ -365,8 +365,8 @@ export function decisionRecordIntegrity(options: {
   const shallowState = hasGitMetadata
     ? git(options.repoRoot, ['rev-parse', '--is-shallow-repository'])
     : null;
-  const historyAvailable = !hasGitMetadata || shallowState !== null;
-  if (hasGitMetadata && shallowState === null) {
+  const historyAvailable = hasGitMetadata && shallowState !== null;
+  if (!hasGitMetadata || shallowState === null) {
     findings.push({
       code: 'DECISION_HISTORY_UNAVAILABLE',
       message: 'Sealed decision history requires Git, but repository state could not be queried.',
