@@ -907,6 +907,22 @@ actually passes. Any production defect exposed by the added tests requires its o
 gapless Auditor record and role-separated repair before the source candidate can
 advance.
 
+### DII-120 — Active ADRs seal under the successor lifecycle
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 OM-004 coverage correction; DII-106; BL-057`
+
+An ADR remains editable while `status: draft`. Its first schema-valid `active`,
+`superseded`, or `tombstoned` commit seals its body and every ordinary frontmatter
+field. A sealed `active` ADR may remain active, transition once to `superseded` while
+appending exactly one non-empty scalar `superseded_by` identifier, or transition once
+to `tombstoned` without inventing a replacement. `superseded` and `tombstoned` are
+terminal; no sealed record may return to `draft`.
+
+The history guard must use only the DII-106 lifecycle vocabulary. Its
+`superseded_by` comparison follows the canonical string-or-null schema: null may become
+one stable string only with the matching `active`-to-`superseded` transition; a string
+may not be removed, replaced, or treated as an array. Body mutation, other
+frontmatter mutation, and every unlisted lifecycle transition remain findings.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
