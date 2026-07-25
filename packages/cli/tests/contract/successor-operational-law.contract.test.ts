@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -60,6 +61,23 @@ describe('successor operational law', () => {
     expect(report.errors).toEqual([]);
     expect(report.files_scanned).toBeGreaterThan(0);
     expect(report.trace_invariants_count).toBeGreaterThan(0);
+  });
+
+  it('binds both authority-policy materializations to the exact Constitution bytes', () => {
+    const constitution = readFileSync(join(ROOT, 'law', 'constitution.md'));
+    const pinned = readFileSync(join(ROOT, '.devai', 'pin', 'constitution.md'));
+    const digest = createHash('sha256').update(constitution).digest('hex');
+
+    expect(pinned).toEqual(constitution);
+    for (const path of [
+      join(ROOT, 'law', 'policy', 'authority-policy.json'),
+      join(ROOT, '.devai', 'config', 'authority-policy.json'),
+    ]) {
+      const policy = JSON.parse(readFileSync(path, 'utf8')) as {
+        constitution: { digest_sha256: string };
+      };
+      expect(policy.constitution.digest_sha256, path).toBe(digest);
+    }
   });
 
   it('makes every declared forbidden action detectable and protects successor law paths', () => {
