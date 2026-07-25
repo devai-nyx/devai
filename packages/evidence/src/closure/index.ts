@@ -138,6 +138,17 @@ function mentionsExactGateIdentity(text: string, gate: string): boolean {
   return new RegExp(`(?<![A-Za-z0-9_-])${escaped}(?![A-Za-z0-9_-])`, 'u').test(text);
 }
 
+function requireGitCommit(repoRoot: string, identity: string, label: string): void {
+  try {
+    execFileSync('git', ['rev-parse', '--verify', `${identity}^{commit}`], {
+      cwd: repoRoot,
+      stdio: ['ignore', 'ignore', 'ignore'],
+    });
+  } catch {
+    throw new Error(`phase close: ${label} '${identity}' does not resolve to a Git commit`);
+  }
+}
+
 /**
  * Validate a draft, assign the next sequential id, and write the
  * record. Throws on schema violation, on closing-decision number
@@ -166,9 +177,7 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
       `phase close: draft does not validate against phase-closure.schema.json: ${errors}`,
     );
   };
-  if (!Array.isArray(draft.batches)) {
-    validateDraft();
-  }
+  validateDraft();
   const fullGitObject = /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/u;
   for (const batch of draft.batches) {
     if (
@@ -180,19 +189,9 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
       );
     }
   }
-  validateDraft();
   for (const batch of draft.batches) {
     if (batch.commit === undefined) continue;
-    try {
-      execFileSync('git', ['rev-parse', '--verify', `${batch.commit}^{commit}`], {
-        cwd: repoRoot,
-        stdio: ['ignore', 'ignore', 'ignore'],
-      });
-    } catch {
-      throw new Error(
-        `phase close: batch '${batch.id}' commit '${batch.commit}' does not resolve to a Git commit`,
-      );
-    }
+    requireGitCommit(repoRoot, batch.commit, `batch '${batch.id}' commit`);
   }
   const existing = readClosures(repoRoot);
   const record: PhaseClosureRecord = {
@@ -261,6 +260,7 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
       'phase close: release_disposition is required for every successor closure (published | changeset-pending | none-preratification | none-needed | missing)',
     );
   }
+  requireGitCommit(repoRoot, record.merged_as, 'merged_as');
 
   const dir = closuresDir(repoRoot);
   mkdirSync(dir, { recursive: true });
