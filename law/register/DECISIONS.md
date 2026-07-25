@@ -1178,6 +1178,33 @@ coverage claims are limited to the explicitly enumerated active campaign instruc
 set exercised by the contract; they do not imply discovery of every future prose
 surface.
 
+### DII-136 — R-0002 closes from the third-review repairs and exact green ladder
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 fourth-review source close; DII-105; DII-131–135; R-0002-AS-BUILT@6d653d2c801c7fb68adf79f9ff40185fbd4aa43c; BL-074–084`
+
+DII-136 supersedes DII-130 only as the final R-0002 source-closing decision. Earlier
+closing decisions and failed independent reviews remain chronological evidence. The
+current close reconciles BL-017 ownership, binds Constitution and sealed history
+fail-closed, scans forbidden committed changes, discloses PC-0002's historical
+nonconformance, pins Corepack integrity, and preserves a gapless current backlog
+disposition.
+
+BL-074 through BL-079 and BL-082 through BL-083 are closed. BL-080 and BL-084 remain
+prepared in R-0004; BL-081 remains prepared in R-0006. These residuals narrow future
+claims and cannot be treated as completed, but they are not failing R-0002 source
+gates. External R-0008 release, R-0009 activation, and R-0010 observation remain
+human-gated.
+
+The exact source candidate is the commit containing this decision and the final
+deterministic repository-reference check. It may advance only after a fourth
+independent read-only Claude Opus 5 review through literal `claude-opus-5` with no
+fallback, a clean worktree, and every required local and exact remote gate green.
+
+After the source PR merges, the closure-only branch emits PC-0003 against the exact
+source merge SHA using DII-105 as declaration and DII-136 as closing decision. Every
+source gate is pass, release disposition is `none-preratification`, and no failed gate
+or failing validation criterion is admitted. R-0002 remains draft, ratifies nothing,
+releases nothing, deploys nothing, and transfers no readiness or evidence standing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
