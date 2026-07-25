@@ -1,8 +1,10 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { authorityBindings } from '../../src/authority/policy.js';
 
 const PKG_ROOT = join(import.meta.dirname, '..', '..');
 const ROOT = join(PKG_ROOT, '..', '..');
@@ -77,6 +79,27 @@ describe('successor operational law', () => {
         constitution: { digest_sha256: string };
       };
       expect(policy.constitution.digest_sha256, path).toBe(digest);
+    }
+  });
+
+  it('fails authority binding closed when canonical Constitution bytes or version are absent', () => {
+    const root = mkdtempSync(join(tmpdir(), 'devai-constitution-binding-'));
+    try {
+      mkdirSync(join(root, 'law'), { recursive: true });
+      const candidate = '# DEVAI Constitution\n\n**Candidate version:** 1.0.0\n';
+      writeFileSync(join(root, 'law/constitution.md'), candidate);
+      expect(authorityBindings(root, '1.0.0').constitution_binding).toEqual({
+        version: '1.0.0',
+        digest_sha256: createHash('sha256').update(candidate).digest('hex'),
+      });
+
+      writeFileSync(join(root, 'law/constitution.md'), '# DEVAI Constitution\n');
+      expect(() => authorityBindings(root, '1.0.0')).toThrow(/version/i);
+
+      rmSync(join(root, 'law/constitution.md'));
+      expect(() => authorityBindings(root, '1.0.0')).toThrow(/constitution/i);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
     }
   });
 
