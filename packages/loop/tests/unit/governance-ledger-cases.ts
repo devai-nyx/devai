@@ -145,6 +145,65 @@ describe('governance record parsing and integrity', () => {
     );
   });
 
+  it('fails sealed-history verification closed in a shallow clone', () => {
+    const source = fixtureRoot();
+    writeRecord(source, 'ADR-001.md', recordSource({ status: 'active' }));
+    initGit(source);
+    commitAll(source, 'activate');
+
+    const cloneParent = fixtureRoot();
+    const shallow = join(cloneParent, 'shallow');
+    execFileSync('git', ['clone', '-q', '--depth', '1', `file://${source}`, shallow]);
+
+    expect(decisionRecordIntegrity({ repoRoot: shallow }).findings).toContainEqual(
+      expect.objectContaining({ code: 'DECISION_HISTORY_SHALLOW' }),
+    );
+  });
+
+  it('reports malformed post-seal history instead of throwing', () => {
+    const root = fixtureRoot();
+    const path = writeRecord(root, 'ADR-001.md', recordSource({ status: 'active' }));
+    initGit(root);
+    commitAll(root, 'activate');
+    writeFileSync(path, '---\nid: ADR-001\n# missing closing frontmatter\n');
+    commitAll(root, 'malformed');
+    writeFileSync(path, recordSource({ status: 'active' }));
+    commitAll(root, 'restore');
+
+    expect(() => decisionRecordIntegrity({ repoRoot: root })).not.toThrow();
+    expect(decisionRecordIntegrity({ repoRoot: root }).findings).toContainEqual(
+      expect.objectContaining({ code: 'DECISION_HISTORY_PARSE_INVALID' }),
+    );
+  });
+
+  it('treats superseded and tombstoned records as terminal', () => {
+    for (const terminal of ['superseded', 'tombstoned']) {
+      const root = fixtureRoot();
+      const path = writeRecord(
+        root,
+        'ADR-001.md',
+        recordSource({
+          status: terminal,
+          ...(terminal === 'superseded' && { supersededBy: 'ADR-002' }),
+        }),
+      );
+      initGit(root);
+      commitAll(root, terminal);
+      writeFileSync(
+        path,
+        recordSource({
+          status: terminal === 'superseded' ? 'tombstoned' : 'active',
+          ...(terminal === 'superseded' && { supersededBy: 'ADR-002' }),
+        }),
+      );
+      commitAll(root, 'illegal-terminal-transition');
+
+      expect(decisionRecordIntegrity({ repoRoot: root }).findings).toContainEqual(
+        expect.objectContaining({ code: 'DECISION_LOCKED_BODY_MUTATED' }),
+      );
+    }
+  });
+
   it('permits one active-to-superseded scalar replacement transition', () => {
     const root = fixtureRoot();
     const path = writeRecord(root, 'ADR-001.md', recordSource({ status: 'active' }));

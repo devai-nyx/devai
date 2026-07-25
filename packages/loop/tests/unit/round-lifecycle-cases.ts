@@ -1,4 +1,4 @@
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -186,6 +186,9 @@ describe('round lifecycle filesystem behavior', () => {
           now: '2026-07-24T12:00:00.000Z',
         }),
       ).toEqual({ ok: true, id: 'D-10', path: 'law/register/D-10.md' });
+      expect(readFileSync(join(repo, 'law/register/D-10.md'), 'utf8')).toContain(
+        'superseded_by: null',
+      );
       expect(
         scaffoldDecisionRecord({
           repoRoot: repo,
