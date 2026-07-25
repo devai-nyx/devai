@@ -31,15 +31,15 @@ function materializeSelfVersionPin(targetRoot: string): {
   const absoluteRoot = resolve(targetRoot);
   const constitutionPath = join(absoluteRoot, 'law/constitution.md');
   if (!existsSync(constitutionPath)) return null;
+  const path = '.devai/pin/versions.json';
+  const target = join(absoluteRoot, path);
+  if (!existsSync(target)) return null;
   const constitution = readFileSync(constitutionPath, 'utf8');
   const constitutionVersion = /^\*\*Version:\*\*\s+([^\s]+)$/m.exec(constitution)?.[1];
   if (constitutionVersion === undefined) {
     throw new Error('canonical self Constitution has no **Version:** binding');
   }
   const devaiVersion = resolveCliVersion();
-  const path = '.devai/pin/versions.json';
-  const target = join(absoluteRoot, path);
-  mkdirSync(dirname(target), { recursive: true });
   writeFileSync(
     target,
     `${JSON.stringify(
