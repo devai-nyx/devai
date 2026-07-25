@@ -50,30 +50,16 @@
     {
       "id": "AC-001",
       "statement": "Every mutation and integration decision is explicitly human initiated.",
-      "measurable_via": [
-        "INV-DEVAI-001"
-      ]
+      "measurable_via": ["INV-DEVAI-001"]
     },
     {
       "id": "AC-002",
       "statement": "DEVAI blocks a failed hard gate and reports the authority boundary honestly.",
-      "measurable_via": [
-        "INV-DEVAI-012"
-      ]
+      "measurable_via": ["INV-DEVAI-012"]
     }
   ],
-  "related_invariants": [
-    "INV-DEVAI-001",
-    "INV-DEVAI-012"
-  ],
+  "related_invariants": ["INV-DEVAI-001", "INV-DEVAI-012"],
   "status": "active",
-  "tags": [
-    "supported",
-    "human-supervised",
-    "governance",
-    "evidence"
-  ],
-  "provenance": [
-    "ex-JNY-008@devai-original"
-  ]
+  "tags": ["supported", "human-supervised", "governance", "evidence"],
+  "provenance": ["ex-JNY-008@devai-original"]
 }

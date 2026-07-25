@@ -6,10 +6,7 @@
   "lifecycle": "supported",
   "persona": {
     "role": "Release maintainer",
-    "permissions_required": [
-      "Declared publication authority",
-      "Remote repository access"
-    ]
+    "permissions_required": ["Declared publication authority", "Remote repository access"]
   },
   "preconditions": [
     "The intended source commit is available from origin",
@@ -29,37 +26,21 @@
       "expected_outcome": "Published output records the exact source commit and tree"
     }
   ],
-  "postconditions": [
-    "Publication provenance resolves to an exact merged-main commit and tree"
-  ],
+  "postconditions": ["Publication provenance resolves to an exact merged-main commit and tree"],
   "acceptance_criteria": [
     {
       "id": "AC-001",
       "statement": "Publication refuses every source subject other than the exact clean merged main and origin/main commit.",
-      "measurable_via": [
-        "INV-DEVAI-016"
-      ]
+      "measurable_via": ["INV-DEVAI-016"]
     },
     {
       "id": "AC-002",
       "statement": "A successful supervised publication records source provenance bound to the merged-main commit and tree.",
-      "measurable_via": [
-        "INV-DEVAI-018"
-      ]
+      "measurable_via": ["INV-DEVAI-018"]
     }
   ],
-  "related_invariants": [
-    "INV-DEVAI-016",
-    "INV-DEVAI-018"
-  ],
+  "related_invariants": ["INV-DEVAI-016", "INV-DEVAI-018"],
   "status": "active",
-  "tags": [
-    "r28-c2",
-    "publication",
-    "provenance",
-    "merged-main"
-  ],
-  "provenance": [
-    "ex-JNY-010@devai-original"
-  ]
+  "tags": ["r28-c2", "publication", "provenance", "merged-main"],
+  "provenance": ["ex-JNY-010@devai-original"]
 }

@@ -13,11 +13,7 @@
   ],
   "persona": {
     "role": "Operator",
-    "permissions_required": [
-      "loop.run",
-      "llm.invoke",
-      "repo.write"
-    ]
+    "permissions_required": ["loop.run", "llm.invoke", "repo.write"]
   },
   "preconditions": [
     ".devai/state/backlog.jsonl has at least one item with status=ready",
@@ -76,37 +72,21 @@
     {
       "id": "AC-001",
       "statement": "Every transition of the task's state field follows the documented state machine; intermediate writes are atomic per Article 27.",
-      "measurable_via": [
-        "INV-DEVAI-005"
-      ]
+      "measurable_via": ["INV-DEVAI-005"]
     },
     {
       "id": "AC-002",
       "statement": "Two runs of the same PromptComposition produce identical PC-<sha16> ids (content-addressable per Article 37).",
-      "measurable_via": [
-        "INV-DEVAI-007"
-      ]
+      "measurable_via": ["INV-DEVAI-007"]
     },
     {
       "id": "AC-003",
       "statement": "Every emitted SensorReading validates against sensor-reading.schema.json (uniform sensor adapter per Article 32).",
-      "measurable_via": [
-        "INV-DEVAI-002"
-      ]
+      "measurable_via": ["INV-DEVAI-002"]
     }
   ],
-  "related_invariants": [
-    "INV-DEVAI-002",
-    "INV-DEVAI-005",
-    "INV-DEVAI-007"
-  ],
+  "related_invariants": ["INV-DEVAI-002", "INV-DEVAI-005", "INV-DEVAI-007"],
   "status": "active",
-  "tags": [
-    "loop",
-    "autonomous",
-    "self-application"
-  ],
-  "provenance": [
-    "ex-JNY-002@devai-original"
-  ]
+  "tags": ["loop", "autonomous", "self-application"],
+  "provenance": ["ex-JNY-002@devai-original"]
 }

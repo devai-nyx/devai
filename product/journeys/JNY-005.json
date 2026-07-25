@@ -5,10 +5,7 @@
   "summary": "A change is gated against scorecard + invariant catalog + sensor evidence before deploy, then post-deploy verifies that the deployed runtime's audit-chain head matches the artifact-of-record. Drift triggers rollback recommendation.",
   "persona": {
     "role": "Release Controller",
-    "permissions_required": [
-      "release.gate",
-      "deploy"
-    ]
+    "permissions_required": ["release.gate", "deploy"]
   },
   "preconditions": [
     "Scorecard JSON exists at the configured path",
@@ -54,9 +51,7 @@
     {
       "id": "AC-001",
       "statement": "Every `release *` action persists a release-control record under .devai/state/releases/; the record is schema-valid.",
-      "measurable_via": [
-        "INV-DEVAI-003"
-      ]
+      "measurable_via": ["INV-DEVAI-003"]
     },
     {
       "id": "AC-002",
@@ -64,20 +59,9 @@
       "measurable_via": []
     }
   ],
-  "related_invariants": [
-    "INV-DEVAI-003"
-  ],
-  "compliance_refs": [
-    "Article 36 (DEVAI applies to itself)"
-  ],
+  "related_invariants": ["INV-DEVAI-003"],
+  "compliance_refs": ["Article 36 (DEVAI applies to itself)"],
   "status": "active",
-  "tags": [
-    "release",
-    "deploy",
-    "verification",
-    "self-application"
-  ],
-  "provenance": [
-    "ex-JNY-005@devai-original"
-  ]
+  "tags": ["release", "deploy", "verification", "self-application"],
+  "provenance": ["ex-JNY-005@devai-original"]
 }

@@ -37,30 +37,16 @@
     {
       "id": "AC-001",
       "statement": "A clean supported adopter fixture reaches a successful doctor result at the documented checkpoint.",
-      "measurable_via": [
-        "INV-DEVAI-009"
-      ]
+      "measurable_via": ["INV-DEVAI-009"]
     },
     {
       "id": "AC-002",
       "statement": "Documented released package and package-manager versions match the repository's supported declarations.",
-      "measurable_via": [
-        "INV-DEVAI-016"
-      ]
+      "measurable_via": ["INV-DEVAI-016"]
     }
   ],
-  "related_invariants": [
-    "INV-DEVAI-009",
-    "INV-DEVAI-016"
-  ],
+  "related_invariants": ["INV-DEVAI-009", "INV-DEVAI-016"],
   "status": "active",
-  "tags": [
-    "r28-c1",
-    "adoption",
-    "bootstrap",
-    "documentation-truth"
-  ],
-  "provenance": [
-    "ex-JNY-009@devai-original"
-  ]
+  "tags": ["r28-c1", "adoption", "bootstrap", "documentation-truth"],
+  "provenance": ["ex-JNY-009@devai-original"]
 }

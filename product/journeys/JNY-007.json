@@ -5,11 +5,7 @@
   "summary": "The Architect drafts a new phase, the Engineer/Inspector execute it batch-by-batch with per-commit gates, the closeout sweep ratifies the phase in BUILD-PLAN.md. The meta-application of the framework to its own development (Article 36).",
   "persona": {
     "role": "Architect (then Engineer, then Inspector)",
-    "permissions_required": [
-      "docs.architecture.write",
-      "packages.write",
-      "test.write"
-    ]
+    "permissions_required": ["docs.architecture.write", "packages.write", "test.write"]
   },
   "preconditions": [
     "Previous phase is in its closeout state (BUILD-PLAN Status reflects last Phase shipped)",
@@ -67,31 +63,18 @@
     {
       "id": "AC-001",
       "statement": "DEVAI applies its own discipline to itself across the phase: per-batch commits, per-batch gates, BUILD-PLAN ratification at closeout (Article 36).",
-      "measurable_via": [
-        "INV-DEVAI-001"
-      ]
+      "measurable_via": ["INV-DEVAI-001"]
     },
     {
       "id": "AC-002",
       "statement": "Every sense* command emitted during the phase produces a SensorReading conformant to the schema (the substrate-level discipline holds throughout phase execution).",
-      "measurable_via": [
-        "INV-DEVAI-002"
-      ]
+      "measurable_via": ["INV-DEVAI-002"]
     }
   ],
-  "related_invariants": [
-    "INV-DEVAI-001",
-    "INV-DEVAI-002"
-  ],
-  "compliance_refs": [
-    "Article 36 (DEVAI applies to itself)"
-  ],
+  "related_invariants": ["INV-DEVAI-001", "INV-DEVAI-002"],
+  "compliance_refs": ["Article 36 (DEVAI applies to itself)"],
   "status": "retired",
-  "tags": [
-    "self-application",
-    "phase-discipline",
-    "meta"
-  ],
+  "tags": ["self-application", "phase-discipline", "meta"],
   "provenance": [
     "ex-JNY-007@devai-original",
     "superseded by JNY-014 (Owner mark 2026-07-23): phase-era governance is predecessor history; successor governance uses rounds"

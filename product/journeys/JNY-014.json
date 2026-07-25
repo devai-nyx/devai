@@ -54,49 +54,30 @@
     {
       "id": "AC-001",
       "statement": "Scaffold, declare, and status are deterministic and preserve the disposable-local versus durable-archive boundary.",
-      "measurable_via": [
-        "INV-DEVAI-001"
-      ]
+      "measurable_via": ["INV-DEVAI-001"]
     },
     {
       "id": "AC-002",
       "statement": "Archive fails closed until the binding gates, close decision, phase closure, and complete round record are present.",
-      "measurable_via": [
-        "INV-DEVAI-001"
-      ]
+      "measurable_via": ["INV-DEVAI-001"]
     },
     {
       "id": "AC-003",
       "statement": "The supported round lifecycle remains human-directed and does not widen the experimental autonomous controller.",
-      "measurable_via": [
-        "INV-DEVAI-015"
-      ]
+      "measurable_via": ["INV-DEVAI-015"]
     },
     {
       "id": "AC-004",
       "statement": "A fresh or upgraded adopter receives the scratch/archive layout and ignore boundary needed to execute the journey.",
-      "measurable_via": [
-        "INV-DEVAI-001"
-      ]
+      "measurable_via": ["INV-DEVAI-001"]
     }
   ],
-  "related_invariants": [
-    "INV-DEVAI-001",
-    "INV-DEVAI-015"
-  ],
+  "related_invariants": ["INV-DEVAI-001", "INV-DEVAI-015"],
   "status": "active",
-  "tags": [
-    "r30",
-    "round-lifecycle",
-    "governance-ledger",
-    "archive",
-    "supported"
-  ],
+  "tags": ["r30", "round-lifecycle", "governance-ledger", "archive", "supported"],
   "provenance": [
     "ex-JNY-014@devai-original",
     "supersedes JNY-007 (Owner mark 2026-07-23): round governance is the successor process"
   ],
-  "supersedes": [
-    "JNY-007"
-  ]
+  "supersedes": ["JNY-007"]
 }

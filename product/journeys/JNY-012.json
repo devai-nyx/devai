@@ -6,13 +6,9 @@
   "lifecycle": "supported",
   "persona": {
     "role": "DEVAI maintainer",
-    "permissions_required": [
-      "Local repository read access"
-    ]
+    "permissions_required": ["Local repository read access"]
   },
-  "preconditions": [
-    "The canonical schema directories and contract schema directories are present"
-  ],
+  "preconditions": ["The canonical schema directories and contract schema directories are present"],
   "steps": [
     {
       "seq": 1,
@@ -34,30 +30,16 @@
     {
       "id": "AC-001",
       "statement": "Every canonical and contract schema has one collision-free registered identity.",
-      "measurable_via": [
-        "INV-DEVAI-002"
-      ]
+      "measurable_via": ["INV-DEVAI-002"]
     },
     {
       "id": "AC-002",
       "statement": "The generic validation route accepts valid instances and rejects invalid, unknown, or ambiguous schema identities.",
-      "measurable_via": [
-        "INV-DEVAI-019"
-      ]
+      "measurable_via": ["INV-DEVAI-019"]
     }
   ],
-  "related_invariants": [
-    "INV-DEVAI-002",
-    "INV-DEVAI-019"
-  ],
+  "related_invariants": ["INV-DEVAI-002", "INV-DEVAI-019"],
   "status": "active",
-  "tags": [
-    "r28-c4",
-    "schemas",
-    "contracts",
-    "validation"
-  ],
-  "provenance": [
-    "ex-JNY-012@devai-original"
-  ]
+  "tags": ["r28-c4", "schemas", "contracts", "validation"],
+  "provenance": ["ex-JNY-012@devai-original"]
 }
