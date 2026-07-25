@@ -1117,6 +1117,18 @@ coverage command as an all-green regression gate; no later plan may preserve an
 expected coverage red, an exception, or R-0006 ownership. Historical red readings and
 their then-current forecasts remain chronological evidence only.
 
+### DII-132 — Authority binding uses one fail-closed Constitution parser
+`type: decision · status: draft · authority: Architect · provenance: R-0002 third Claude Opus 5 correction; BL-075`
+
+Every authority-policy binding consumes the canonical
+`parseConstitutionVersion` implementation. Both `Version` and `Candidate version`
+headers are valid only in their exact bold header form. Missing Constitution bytes or
+a missing/malformed version marker is a hard binding error.
+
+No binding path may invent fallback Constitution text, a fallback version, or a digest
+of synthetic bytes. A repository without canonical self bytes may bind only an
+existing pinned Constitution whose exact bytes carry a valid version marker.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
