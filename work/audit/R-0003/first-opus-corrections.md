@@ -67,8 +67,8 @@ working tree:
 - the repository-reference projection verifies 157 locators in no-write mode;
 - focused founding, register, ADR, authority-policy, and review-repair implementation
   contracts pass;
-- the complete ordinary floor exposed five stale fixed-cardinality ADR assertions now
-  governed by BL-129; it must be rerun after the Inspector correction.
+- the complete ordinary floor first exposed five stale fixed-cardinality ADR assertions
+  governed by BL-129, then passed after Inspector `08025ba` aligned the contracts.
 
 The complete final exact candidate ladder, including coverage and T1 through T6, must be
 restarted after the final Architect closing decision. No result here predeclares that
