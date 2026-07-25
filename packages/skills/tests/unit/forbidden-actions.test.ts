@@ -1,4 +1,5 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -6,6 +7,7 @@ import {
   CANONICAL_FORBIDDEN_ACTIONS,
   checkForbiddenRegistryCoverage,
   loadForbiddenWaivers,
+  scanForbiddenActions,
 } from '../../src/forbidden-actions/index.js';
 
 let dir = '';
@@ -102,6 +104,44 @@ describe('loadForbiddenWaivers', () => {
   it('returns an empty array for an unparseable file rather than throwing', () => {
     writeFileSync(registryPath, '{ not valid json');
     expect(loadForbiddenWaivers(registryPath)).toEqual([]);
+  });
+});
+
+describe('scanForbiddenActions', () => {
+  it('detects a forbidden law deletion hidden behind a neutral commit message', () => {
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    mkdirSync(join(dir, 'law'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions: CANONICAL_FORBIDDEN_ACTIONS }),
+    );
+    writeFileSync(join(dir, 'law/constitution.md'), 'governed\n');
+    execFileSync('git', ['init', '-q'], { cwd: dir });
+    execFileSync('git', ['add', '.'], { cwd: dir });
+    execFileSync(
+      'git',
+      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'seed'],
+      { cwd: dir },
+    );
+    rmSync(join(dir, 'law/constitution.md'));
+    execFileSync('git', ['add', '-A'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=Fixture',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'chore: tidy',
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({ forbidden_id: 'FORBID-DELETE-AUTHORITY-DOCS' }),
+    );
   });
 });
 // Invariants: INV-DEVAI-001
