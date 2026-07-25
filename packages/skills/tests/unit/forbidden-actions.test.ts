@@ -474,5 +474,84 @@ describe('scanForbiddenActions', () => {
       ),
     ).toEqual([]);
   });
+
+  it('keeps message evidence active on an Inspector-authored test-only commit', () => {
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    mkdirSync(join(dir, 'tests'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions: CANONICAL_FORBIDDEN_ACTIONS }),
+    );
+    execFileSync('git', ['init', '-q'], { cwd: dir });
+    execFileSync('git', ['add', '.devai/config/forbidden-actions.json'], { cwd: dir });
+    execFileSync(
+      'git',
+      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'seed'],
+      { cwd: dir },
+    );
+    writeFileSync(join(dir, 'tests/example.test.ts'), 'export {};\n');
+    execFileSync('git', ['add', 'tests/example.test.ts'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Inspector',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        ['git', 'push', '--force'].join(' '),
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-FORCE-PUSH',
+        source: 'commit-message',
+      }),
+    );
+  });
+
+  it('keeps change evidence active on a mixed-path Inspector commit', () => {
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    mkdirSync(join(dir, 'packages/demo'), { recursive: true });
+    mkdirSync(join(dir, 'tests'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions: CANONICAL_FORBIDDEN_ACTIONS }),
+    );
+    execFileSync('git', ['init', '-q'], { cwd: dir });
+    execFileSync('git', ['add', '.devai/config/forbidden-actions.json'], { cwd: dir });
+    execFileSync(
+      'git',
+      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'seed'],
+      { cwd: dir },
+    );
+    const fixture = `${['git', 'push', '--force'].join(' ')} example\n`;
+    writeFileSync(join(dir, 'tests/example.test.ts'), fixture);
+    writeFileSync(join(dir, 'packages/demo/index.ts'), fixture);
+    execFileSync('git', ['add', 'tests/example.test.ts', 'packages/demo/index.ts'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Inspector',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'test: mixed fixture',
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-FORCE-PUSH',
+        source: 'commit-change',
+      }),
+    );
+  });
 });
 // Invariants: INV-DEVAI-001
