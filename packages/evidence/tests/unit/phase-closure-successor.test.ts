@@ -76,6 +76,19 @@ describe('successor phase-closure binding', () => {
     );
   });
 
+  it('validates every raw batch element before dereferencing its roles', () => {
+    const malformed = {
+      ...draft({
+        merged_as: fullCommit,
+        release_disposition: 'none-preratification',
+      }),
+      batches: [{ id: 'missing-roles', headline: 'malformed batch' }],
+    } as unknown as PhaseClosureDraft;
+    expect(() => closePhase(repoWithTwoClosures(), malformed)).toThrow(
+      /does not validate.*batches/i,
+    );
+  });
+
   it('reports malformed existing closure JSON deterministically', () => {
     const repo = mkdtempSync(join(tmpdir(), 'devai-malformed-closure-'));
     roots.push(repo);
@@ -146,6 +159,18 @@ describe('successor phase-closure binding', () => {
     ).toThrow(/merged_as/i);
   });
 
+  it('rejects a full-length merged_as identity that does not resolve to a commit object', () => {
+    expect(() =>
+      closePhase(
+        repoWithTwoClosures(),
+        draft({
+          merged_as: fullCommit,
+          release_disposition: 'none-preratification',
+        }),
+      ),
+    ).toThrow(/merged_as.*does not resolve/i);
+  });
+
   it('requires a full commit identity for Machine-attributed batches', () => {
     const machineBatch = (commit?: string) => ({
       id: 'close',
@@ -192,7 +217,7 @@ describe('successor phase-closure binding', () => {
             headline: 'machine successor close',
           },
         ],
-        merged_as: fullCommit,
+        merged_as: commit,
         release_disposition: 'none-preratification',
       }),
     );

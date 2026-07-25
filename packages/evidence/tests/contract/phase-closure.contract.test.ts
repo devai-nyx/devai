@@ -50,7 +50,7 @@ function draft(
     source_repo_deleted: false,
     validation_criteria: [{ criterion: 'contract fixture', verdict: 'pass' }],
     closed_at: '2026-07-24T00:00:00.000Z',
-    merged_as: '1234567890abcdef1234567890abcdef12345678',
+    merged_as: 'bec810bb38e74ebdf0bd31ec3ee90aa0b186d1ed',
     release_disposition: 'none-preratification',
     ...overrides,
   };
