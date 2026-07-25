@@ -42,4 +42,29 @@ describe('senseTraceResolve trace non-vacuity', () => {
       }),
     );
   });
+
+  it('fails when the invariant catalog is unavailable', () => {
+    const root = makeFixture([]);
+    rmSync(join(root, 'law/invariants'), { recursive: true });
+
+    const reading = senseTraceResolve({ repoRoot: root });
+    expect(reading.status).toBe('fail');
+    expect(reading.findings).toContainEqual(
+      expect.objectContaining({ severity: 'critical', code: 'invariant_catalog_unavailable' }),
+    );
+  });
+
+  it.each([
+    ['../../outside.test.ts', 'traversal'],
+    ['tests', 'directory'],
+  ])('fails for a %s trace target', (path, _kind) => {
+    const root = makeFixture([{ path }]);
+    mkdirSync(join(root, 'tests'), { recursive: true });
+    const reading = senseTraceResolve({ repoRoot: root });
+
+    expect(reading.status).toBe('fail');
+    expect(reading.findings).toContainEqual(
+      expect.objectContaining({ severity: 'error', code: 'invalid_test_path' }),
+    );
+  });
 });

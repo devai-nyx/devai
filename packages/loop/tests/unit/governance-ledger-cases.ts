@@ -295,8 +295,12 @@ describe('governance record parsing and integrity', () => {
 describe('citation and archive integrity', () => {
   it('resolves known decision citations and reports missing ones in explicit roots', () => {
     const root = fixtureRoot();
-    writeRecord(root, 'ADR-001.md');
-    write(join(root, 'docs/reference.md'), 'ADR-001 is valid; ADR-404 is missing.\n');
+    writeRecord(root, 'ADR-001-runtime-authority.md');
+    write(join(root, 'law/register/DECISIONS.md'), '### DII-101 — A registered decision\n');
+    write(
+      join(root, 'docs/reference.md'),
+      'ADR-001 and DII-101 are valid; ADR-404 and DII-999 are missing.\n',
+    );
 
     const report = decisionCitationResolution({ repoRoot: root, roots: ['docs'] });
     expect(report).toEqual({
@@ -305,6 +309,11 @@ describe('citation and archive integrity', () => {
         {
           code: 'DECISION_CITATION_UNRESOLVED',
           message: 'docs/reference.md cites missing ADR-404.',
+          path: 'docs/reference.md',
+        },
+        {
+          code: 'DECISION_CITATION_UNRESOLVED',
+          message: 'docs/reference.md cites missing DII-999.',
           path: 'docs/reference.md',
         },
       ],

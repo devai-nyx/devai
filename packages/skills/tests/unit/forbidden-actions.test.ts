@@ -111,6 +111,21 @@ describe('loadForbiddenWaivers', () => {
 });
 
 describe('scanForbiddenActions', () => {
+  it('fails closed when the registry is missing or has no executable patterns', () => {
+    expect(
+      scanForbiddenActions({ repoRoot: dir, registryPath: join(dir, 'missing.json') }).findings,
+    ).toContainEqual(expect.objectContaining({ forbidden_id: 'FORBIDDEN-REGISTRY-INVALID' }));
+
+    writeRegistry({
+      schemaVersion: '1.0.0',
+      actions: CANONICAL_FORBIDDEN_ACTIONS.map(({ detect_patterns: _patterns, ...entry }) => entry),
+    });
+    expect(
+      scanForbiddenActions({ repoRoot: dir, registryPath, maxCommits: 1 }).findings,
+    ).toContainEqual(expect.objectContaining({ forbidden_id: 'FORBIDDEN-REGISTRY-INVALID' }));
+    expect(checkForbiddenRegistryCoverage(registryPath).ok).toBe(false);
+  });
+
   it('fails closed when the registry bytes are malformed', () => {
     mkdirSync(join(dir, '.devai/config'), { recursive: true });
     writeFileSync(join(dir, '.devai/config/forbidden-actions.json'), '{ malformed');
@@ -207,6 +222,45 @@ describe('scanForbiddenActions', () => {
 
     expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
       expect.objectContaining({ source: 'commit-change' }),
+    );
+  });
+
+  it('detects a protected file renamed out of the governed tree', () => {
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    mkdirSync(join(dir, 'law'), { recursive: true });
+    mkdirSync(join(dir, 'scratch'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions: CANONICAL_FORBIDDEN_ACTIONS }),
+    );
+    writeFileSync(join(dir, 'law/constitution.md'), 'governed\n');
+    execFileSync('git', ['init', '-q'], { cwd: dir });
+    execFileSync('git', ['add', '.'], { cwd: dir });
+    execFileSync(
+      'git',
+      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'seed'],
+      { cwd: dir },
+    );
+    execFileSync('git', ['mv', 'law/constitution.md', 'scratch/constitution.md'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=Fixture',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'chore: reorganize',
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-DELETE-AUTHORITY-DOCS',
+        source: 'commit-change',
+      }),
     );
   });
 });

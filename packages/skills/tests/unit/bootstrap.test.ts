@@ -96,6 +96,18 @@ describe('executeBootstrapPlan --force preserves provenance', () => {
     expect(result.overwritten).toContain('product/README.md');
     expect(result.preserved).not.toContain('product/README.md');
   });
+
+  it('does not seed canonical policy from untrusted target policy bytes', () => {
+    mkdirSync(join(dir, 'law/policy'), { recursive: true });
+    writeFileSync(
+      join(dir, 'law/policy/thresholds.json'),
+      '{"schemaVersion":"1.0.0","freshness":{"scorecard_failure_max_age_hours":0.0001}}\n',
+    );
+
+    const plan = buildBootstrapPlan({ targetRoot: dir });
+    const thresholds = plan.entries.find((entry) => entry.path === '.devai/config/thresholds.json');
+    expect(thresholds?.content).not.toContain('0.0001');
+  });
 });
 
 describe('buildBootstrapPlan: .devai/constitution.md pointer (Phase 21.D, closes D-A-11)', () => {
