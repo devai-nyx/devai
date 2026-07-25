@@ -30,13 +30,7 @@ export interface RgrProblem {
   readonly journeys_impacted?: readonly string[];
   readonly surfaces?: readonly string[];
   readonly risk_class?:
-    | 'security'
-    | 'data_loss'
-    | 'compliance'
-    | 'ux'
-    | 'correctness'
-    | 'performance'
-    | 'none';
+    'security' | 'data_loss' | 'compliance' | 'ux' | 'correctness' | 'performance' | 'none';
 }
 
 export interface RgrQuestion {

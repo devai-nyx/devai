@@ -1,8 +1,4 @@
-import {
-  mkdirSync,
-  symlinkSync,
-  writeFileSync,
-} from '@devai-nyx/authority';
+import { mkdirSync, symlinkSync, writeFileSync } from '@devai-nyx/authority';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -164,10 +160,7 @@ export function buildBootstrapPlan(opts: {
           ['product', 'Owner'] as const,
         ]),
     ...(profile === 'tier3'
-      ? [
-          ['work/rounds', 'Architect'] as const,
-          ['work/audit', 'Auditor'] as const,
-        ]
+      ? [['work/rounds', 'Architect'] as const, ['work/audit', 'Auditor'] as const]
       : []),
   ];
   for (const [dir, authority] of f1Dirs) {

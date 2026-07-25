@@ -10,8 +10,4 @@ export const EXIT_USAGE = 2;
 export const EXIT_CONFIG = 65;
 
 export type ExitCode =
-  | typeof EXIT_PASS
-  | typeof EXIT_REVIEW
-  | typeof EXIT_FAIL
-  | typeof EXIT_USAGE
-  | typeof EXIT_CONFIG;
+  typeof EXIT_PASS | typeof EXIT_REVIEW | typeof EXIT_FAIL | typeof EXIT_USAGE | typeof EXIT_CONFIG;

@@ -1,7 +1,4 @@
-import {
-  mkdirSync,
-  writeFileSync,
-} from '@devai-nyx/authority';
+import { mkdirSync, writeFileSync } from '@devai-nyx/authority';
 import { existsSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { dirname, isAbsolute, join, sep } from 'node:path';
 

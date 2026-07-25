@@ -1,9 +1,4 @@
-import {
-  execFileSync,
-  mkdirSync,
-  spawnSync,
-  writeFileSync,
-} from '@devai-nyx/authority';
+import { execFileSync, mkdirSync, spawnSync, writeFileSync } from '@devai-nyx/authority';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, isAbsolute, join } from 'node:path';
 import { validators } from '@devai-nyx/schemas';
@@ -644,7 +639,10 @@ const skillFeedbackIteration: SkillEntry = {
     // sloppy authoring, not need. Callers can still pass an override
     // via inputs.allowed_write_scopes for niche cases. See
     // ADR-FIREWALL-OVERLAPS-GLOB-AWARE.
-    allowed_write_scopes: ['packages/**', 'record/proofs/work/skill-runs/SKILL-feedback-iteration/**'],
+    allowed_write_scopes: [
+      'packages/**',
+      'record/proofs/work/skill-runs/SKILL-feedback-iteration/**',
+    ],
     evidence_files: ['record/proofs/work/skill-runs/SKILL-feedback-iteration/**/*.json'],
     risk_level: 'high',
     tags: ['phase-9', 'engineer-loop', 'llm'],
@@ -1008,7 +1006,10 @@ const skillEmitRgr: SkillEntry = {
     permission_tier: 'read',
     host_mutation_policy: 'evidence_only',
     allowed_write_scopes: ['record/proofs/work/skill-runs/**', 'record/proofs/work/rgr/**'],
-    evidence_files: ['record/proofs/work/skill-runs/SKILL-emit-rgr/*.json', 'record/proofs/work/rgr/RGR-*.json'],
+    evidence_files: [
+      'record/proofs/work/skill-runs/SKILL-emit-rgr/*.json',
+      'record/proofs/work/rgr/RGR-*.json',
+    ],
     risk_level: 'low',
     tags: ['rgr', 'reference-gap'],
     entry: 'devai agent skill run SKILL-emit-rgr',
@@ -1096,8 +1097,7 @@ const skillCompileTestsFromDocs: SkillEntry = {
     }
     // Locate the invariant file. The caller can override the dir.
     const invariantsDir =
-      (ctx.inputs?.invariants_dir as string | undefined) ??
-      join(ctx.repoRoot, 'law/invariants');
+      (ctx.inputs?.invariants_dir as string | undefined) ?? join(ctx.repoRoot, 'law/invariants');
     const invariantPath = join(invariantsDir, `${invariantId}.json`);
     if (!existsSync(invariantPath)) {
       return {

@@ -62,10 +62,7 @@ export interface RepoIntrospection {
   readonly protected_surfaces: readonly string[];
   readonly existing_devai_config: boolean;
   readonly proposed_project_type?:
-    | 'runtime-host'
-    | 'platform-package'
-    | 'docs-archive'
-    | 'framework';
+    'runtime-host' | 'platform-package' | 'docs-archive' | 'framework';
   readonly notes?: readonly string[];
 }
 

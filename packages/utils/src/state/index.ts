@@ -71,10 +71,6 @@ export function pruneState(opts: PruneStateOptions): PruneStateResult {
     older_than_days: olderThanDays,
     candidates,
     deleted,
-    preserved_roots: [
-      '.devai/state/counters.json',
-      '.devai/state/leases',
-      '.devai/state/pointers',
-    ],
+    preserved_roots: ['.devai/state/counters.json', '.devai/state/leases', '.devai/state/pointers'],
   };
 }

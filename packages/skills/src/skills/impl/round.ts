@@ -1,7 +1,4 @@
-import {
-  mkdirSync,
-  writeFileSync,
-} from '@devai-nyx/authority';
+import { mkdirSync, writeFileSync } from '@devai-nyx/authority';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, isAbsolute, join } from 'node:path';
 import {
@@ -1370,8 +1367,7 @@ export function createRoundSkills(
       // can read it without traversing nested sub-results. Falls back to
       // 'failed' if verify-publish didn't run or didn't return a verdict.
       const vpEvidence = subResults['verify-publish']?.evidence as
-        | { executed_artifacts?: { verdict?: RoundVerdict } }
-        | undefined;
+        { executed_artifacts?: { verdict?: RoundVerdict } } | undefined;
       const verdict: RoundVerdict =
         vpEvidence?.executed_artifacts?.verdict ?? (anyFail ? 'failed' : 'clean');
 

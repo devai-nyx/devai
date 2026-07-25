@@ -300,10 +300,7 @@ export function decisionRecordIntegrity(options: {
       });
     }
     const id = String(record.frontmatter['id'] ?? '');
-    if (
-      basename(path, '.md') !== id &&
-      !basename(path, '.md').startsWith(`${id}-`)
-    ) {
+    if (basename(path, '.md') !== id && !basename(path, '.md').startsWith(`${id}-`)) {
       findings.push({
         code: 'DECISION_ID_FILENAME_MISMATCH',
         message: `${relative(options.repoRoot, path)} declares ${id || '(missing id)'}.`,

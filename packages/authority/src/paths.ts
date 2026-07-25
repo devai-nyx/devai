@@ -1,7 +1,6 @@
 export const AUTHORITY_CONSTITUTION_PATH = 'law/constitution.md' as const;
 export const AUTHORITY_POLICY_SOURCE_PATH = 'law/policy/authority-policy.json' as const;
-export const AUTHORITY_POLICY_MATERIALIZED_PATH =
-  '.devai/config/authority-policy.json' as const;
+export const AUTHORITY_POLICY_MATERIALIZED_PATH = '.devai/config/authority-policy.json' as const;
 
 export const STATIC_AUTHORITY_PREFIXES = [
   { prefix: 'law/glossary/', authority: ['owner', 'architect'] },

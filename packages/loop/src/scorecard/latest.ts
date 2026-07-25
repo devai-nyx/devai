@@ -5,9 +5,7 @@ function isUnknown(reading: SensorReading): boolean {
 }
 
 function isFailure(reading: SensorReading): boolean {
-  return (
-    reading.status === 'fail' || reading.status === 'error' || reading.status === 'killed'
-  );
+  return reading.status === 'fail' || reading.status === 'error' || reading.status === 'killed';
 }
 
 function isNewer(candidate: SensorReading, current: SensorReading): boolean {

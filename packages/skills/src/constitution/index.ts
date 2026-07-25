@@ -31,8 +31,7 @@ export interface ResolvedConstitution {
   readonly path: string;
 }
 
-const VERSION_PATTERN =
-  /^\*\*(?:Candidate version|Version):\*\*\s*([0-9]+\.[0-9]+\.[0-9]+)\s*$/mu;
+const VERSION_PATTERN = /^\*\*(?:Candidate version|Version):\*\*\s*([0-9]+\.[0-9]+\.[0-9]+)\s*$/mu;
 
 export function parseConstitutionVersion(text: string): string | null {
   return VERSION_PATTERN.exec(text)?.[1] ?? null;

@@ -3,10 +3,7 @@ import { dirname, resolve } from 'node:path';
 import ts from 'typescript';
 
 export type EffectCapability =
-  | 'fs:unknown-write'
-  | 'db:unclassified'
-  | `proc:${string}`
-  | `net:${string}`;
+  'fs:unknown-write' | 'db:unclassified' | `proc:${string}` | `net:${string}`;
 
 export interface EffectContract {
   readonly action_id: string;

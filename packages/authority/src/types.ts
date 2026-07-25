@@ -145,10 +145,7 @@ export interface RemoteResourceTarget extends ResourceTargetBase {
 }
 
 export type ResourceTarget =
-  | FsResourceTarget
-  | GitRefResourceTarget
-  | DbResourceTarget
-  | RemoteResourceTarget;
+  FsResourceTarget | GitRefResourceTarget | DbResourceTarget | RemoteResourceTarget;
 
 export type ResourceTargetSelector =
   | {

@@ -45,13 +45,7 @@ export interface SkillManifest {
   readonly promotion_criteria?: readonly string[];
   readonly kind: 'command' | 'workflow' | 'template' | 'elicitation';
   readonly authority_role:
-    | 'owner'
-    | 'architect'
-    | 'inspector'
-    | 'engineer'
-    | 'auditor'
-    | 'harness'
-    | 'orchestrator';
+    'owner' | 'architect' | 'inspector' | 'engineer' | 'auditor' | 'harness' | 'orchestrator';
   readonly deterministic: boolean;
   readonly llm_backed?: boolean;
   readonly default_family?: 'claude' | 'codex' | 'auto';
@@ -176,12 +170,7 @@ export interface GateEvidence {
  * that applies the precedence; its input contract is documented there.
  */
 export type RoundVerdict =
-  | 'clean'
-  | 'with-blockers'
-  | 'deferred'
-  | 'partial'
-  | 'aborted'
-  | 'failed';
+  'clean' | 'with-blockers' | 'deferred' | 'partial' | 'aborted' | 'failed';
 /**
  * D-A-42 — Resolution record (append-only closure).
  * Authored by `devai spec decision close` or by SKILL-round-verify-publish's

@@ -1,8 +1,4 @@
-import {
-  SENSOR_KINDS_BY_TIER,
-  sensorCellMap,
-  type SensorReading,
-} from '@devai-nyx/sensors';
+import { SENSOR_KINDS_BY_TIER, sensorCellMap, type SensorReading } from '@devai-nyx/sensors';
 import { filterLatestPerKind } from '../scorecard/latest.js';
 
 /** Verdict values per scorecard.schema.json (UPPERCASE). */
@@ -269,9 +265,7 @@ export function scheduledScorecardCells(): ReadonlyArray<{
     }
   }
   return [...cells.values()].sort((left, right) =>
-    `${left.substrate}:${left.property}`.localeCompare(
-      `${right.substrate}:${right.property}`,
-    ),
+    `${left.substrate}:${left.property}`.localeCompare(`${right.substrate}:${right.property}`),
   );
 }
 

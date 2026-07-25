@@ -6,9 +6,5 @@
     "types": ["node"]
   },
   "include": ["src/**/*"],
-  "references": [
-    { "path": "../utils" },
-    { "path": "../schemas" },
-    { "path": "../authority" }
-  ]
+  "references": [{ "path": "../utils" }, { "path": "../schemas" }, { "path": "../authority" }]
 }
