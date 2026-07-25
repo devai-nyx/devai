@@ -51,20 +51,19 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 
 ## Current disposition
 
-| Disposition                         | Governed records                                                                                                                                                     |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012, BL-014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–074, BL-076, BL-078, BL-083, BL-085, BL-087–091, BL-093 |
-| Reopened in R-0002                  | BL-075, BL-077, BL-079, BL-082, BL-086, BL-092                                                                                                                       |
-| Open in R-0002 fifth-review repair  | BL-094–105                                                                                                                                                           |
-| Open in prepared R-0003             | BL-004–006                                                                                                                                                           |
-| Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                                                       |
-| Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                   |
-| Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                                                           |
-| Open in prepared R-0007             | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                                               |
-| Prepared behind R-0008 human gate   | BL-020, BL-024                                                                                                                                                       |
-| Dormant behind published R-0008     | BL-022, BL-036                                                                                                                                                       |
-| Dormant behind fresh R-0010 mandate | BL-037–038                                                                                                                                                           |
-| Carried N/A                         | BL-040–043                                                                                                                                                           |
+| Disposition                         | Governed records                                                                                                                     |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–104 |
+| Awaiting exact sixth review/close   | BL-105                                                                                                                               |
+| Open in prepared R-0003             | BL-004–006                                                                                                                           |
+| Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                       |
+| Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                   |
+| Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                           |
+| Open in prepared R-0007             | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                               |
+| Prepared behind R-0008 human gate   | BL-020, BL-024                                                                                                                       |
+| Dormant behind published R-0008     | BL-022, BL-036                                                                                                                       |
+| Dormant behind fresh R-0010 mandate | BL-037–038                                                                                                                           |
+| Carried N/A                         | BL-040–043                                                                                                                           |
 
 ## Dependency spine
 
@@ -101,7 +100,7 @@ primary round and prevents that round’s closure.
 | BL-010 | Proof-epoch JSONL writers             | Active; R-0005                                                                          |
 | BL-011 | SWEEP at round close                  | Active; R-0005 after BL-010                                                             |
 | BL-012 | F1:T1 reachability orphan             | Closed in R-0002                                                                        |
-| BL-013 | Stale-reading threshold               | Reopened by BL-099 in R-0002                                                            |
+| BL-013 | Stale-reading threshold               | Closed in R-0002 by BL-099's canonical bounded policy and precedence repair             |
 | BL-014 | Successor domains policy              | Closed in R-0002                                                                        |
 | BL-015 | Prompt overlays and 27 findings       | Active; R-0005                                                                          |
 | BL-016 | Effect extractor binding              | Active; R-0004                                                                          |

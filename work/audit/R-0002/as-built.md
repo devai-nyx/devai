@@ -639,6 +639,59 @@ observation. The fourth review's locale-sensitive reference-generation advisory
 remains explicitly within BL-065/R-0004; it is not relabelled complete. A fifth
 exact-candidate Opus 5 PASS and the complete local/remote ceremony remain mandatory.
 
+## Fifth Opus correction and sixth-review candidate re-close
+
+The fifth exact-candidate Claude Opus 5 review ran read-only through literal
+`claude-opus-5` with no fallback against
+`a8849d5df4ab61bc284749e5508d2d8c10aa0ae8`. It returned **FAIL** and is
+preserved at `work/audit/R-0002/claude-opus-close-review-5.md`; the candidate did not
+advance to push. Auditor `1ffbde5` governed BL-094 through BL-106 and reopened
+BL-075, BL-077, BL-079, BL-082, BL-086, and BL-092 before repair.
+
+The P0 repair remained red-first and role-pure:
+
+- Inspector `2854075`, `6b12f09`, `81b5be4`, `3070199`, `0c81ce7`, `5635c50`,
+  and `dbe6b83` established failing contracts for Constitution parsing, committed
+  forbidden-history enforcement, decision resolution, automatic governance,
+  Corepack integrity, closure validation, ADR diagnostics, trace containment,
+  canonical bootstrap policy, backlog consistency, and exact close inputs.
+- Architect `a40c9bb` recorded DII-139's freshness boundary. Architect `9c4b718`,
+  `557e6c4`, and `f701c48` regenerated governed trace/reference projections after
+  the corresponding source changes.
+- Engineer `a1ce4d4` made governance and T4–T6 automatic, bound every Corepack
+  preparation to integrity, validated raw and existing closure inputs, aligned ADR
+  diagnostics, and repaired scanner operations. Engineer `1a1e0d5` then closed the
+  residual acceptance details: the sensor and spec validator use one contained
+  file-kind primitive, the sensor requires tracked targets and fails on an absent
+  trace, existing closure rows validate before sequencing, and bootstrap policy is
+  parsed and schema-validated from packaged canonical bytes only.
+
+Exact local execution at clean pre-audit source snapshot
+`7f1f84a31e4e99f8cf5463dd74cb8fd73ddd265f` reports:
+
+- the full Vitest floor passes 119 files / 1,084 tests with 8 declared skips;
+- Stage 1 passes workflow lint, 34-invariant/119-test no-write trace freshness, lint,
+  and typecheck;
+- the automatic governance lane passes strict forbidden actions, decision-record
+  integrity, decision-citation resolution, trace resolution, and docs drift;
+- Stage 2 passes the build, 68 T1 files / 801 tests, and 33 T2 files / 195 tests
+  with 1 declared skip;
+- Stage 3 passes 77 files / 857 tests with 7 declared skips at statements 70.53%
+  (10,480/14,857), branches 60.85% (7,590/12,472), functions 77.22%
+  (1,492/1,932), and lines 72.80% (9,672/13,285);
+- T4 passes 2 files / 4 tests, T5 passes 6 files / 25 tests, and T6 passes 1 file /
+  3 tests; and
+- changeset classification passes with zero pending changesets and the only literal
+  global Prettier defect was corrected in Engineer commit `7f1f84a`.
+
+BL-075, BL-077, BL-079, BL-082, BL-086, BL-092, and BL-094 through BL-104 are
+closed at this observation. BL-105 remains open until the final decision,
+repository-reference regeneration, and exact sixth Opus review bind the actual
+candidate. BL-106 remains assigned to R-0005 because immutable earlier ordering cannot
+be rewritten and prospective enforcement is the accepted mitigation. BL-080/R-0004
+and BL-081/R-0006 remain honest residuals; neither narrows the now-enforced executable
+trace-path contract into an assertion-depth claim.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
