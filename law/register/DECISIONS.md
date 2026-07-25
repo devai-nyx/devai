@@ -708,6 +708,29 @@ deploys nothing, and transfers no readiness or evidence standing. R-0003 must
 independently re-verify the frozen bindings, source merge, machine closure, and
 exact-main state before any founding ratification.
 
+### DII-109 — Generated policy bytes remain Engineer-attributed and closure corrections are explicit snapshots
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 Claude Fable 5 close-review disposition; OM-002; Constitution Articles 6 and 42; BL-048`
+
+Committed bytes under `.devai/config/` and `.devai/pin/` remain machine
+materializations of Architect-owned sources and are committed by the Engineer session
+that executes the authorized verb. A source/materialization byte-identity gate does
+not transfer that path authority to the Architect. The Architect commit
+`95b1aaf747e8cde561f59e1fda977bb04632b8a4` incorrectly carried a regenerated
+authority-policy materialization while repairing the source vocabulary; R-0002
+records that attribution defect and corrects current state by a later Engineer
+execution and commit. Future source changes use an explicitly governed temporary red
+between the Architect source commit and Engineer materialization when atomic
+cross-role commit would otherwise be required.
+
+A closure correction is a new immutable whole-record snapshot with `supersedes`; it
+does not edit or hide the earlier record. The correction may replace any fact or
+criterion needed to make the effective closure truthful, but its notes must enumerate
+the semantic correction, preserve every unaffected historical gate and source
+binding, and identify every changed failing or N/A criterion. PC-0002 satisfies this
+rule by preserving PC-0001, its batches, gates, merged identity, release disposition,
+and proof-epoch binding while replacing the false all-deferrals-reconciled criterion
+with the exact unmatched P7/BL-045 fact.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
