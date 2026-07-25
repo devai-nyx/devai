@@ -1008,6 +1008,33 @@ corpus entries, and projection files that merely re-execute another suite are
 prohibited rather than classified as coverage. The committed `law/trace.json` is
 generated from the tracked corpus, not hand-adjusted to satisfy completeness.
 
+### DII-126 — R-0002 closes from the exact post-Opus all-green source
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 post-Opus close; DII-105; DII-119–125; R-0002-AS-BUILT@9ee9fdd31a18ab3afc4b2f33defe3020eb124afa; OM-005; BL-017; BL-058–064`
+
+DII-126 supersedes DII-121 only as the final R-0002 source-closing decision. Earlier
+closing judgments and coverage readings remain immutable chronological evidence, but
+they do not describe the current candidate. The final Auditor re-close records the
+projection removal, exact successor-closure identity, non-vacuous regenerated trace,
+gapless census, and assertion-bearing coverage work. The unchanged merged T1+T3 command
+passes both OM-005 and the legal 70/60/70/70 policy; BL-017 is closed in R-0002 and is
+not an allowed source or exact-main red.
+
+The exact source candidate is the commit containing this decision and the final
+deterministic repository-reference regeneration. It may advance only after a fresh
+independent read-only Claude Opus 5 review through the literal `claude-opus-5` selector
+with no fallback, a clean worktree, and green local and exact remote gates. BL-063
+remains ring-fenced to R-0005 before round-archive activation, and BL-065 remains
+assigned to R-0004 before production-readiness claims; neither authorizes an R-0002
+skip or readiness statement.
+
+After the source PR merges, the closure-only branch emits PC-0003 against that exact
+source merge SHA using DII-105 as declaration and DII-126 as closing decision. Every
+observed gate is recorded with its actual status. With the current all-green source,
+PC-0003 contains no failed gate and no failing validation criterion, and it requires
+`merged_as` plus `release_disposition: none-preratification`. R-0002 remains draft,
+ratifies nothing, releases nothing, deploys nothing, and transfers no readiness or
+evidence standing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
