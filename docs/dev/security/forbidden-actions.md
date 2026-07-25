@@ -6,24 +6,24 @@
 
 The registry encodes commands that no agent (LLM-backed or otherwise) may execute. The 16 entries that ship out of the box:
 
-| # | Pattern | Why forbidden |
-|---|---|---|
-| 1 | `git push --force` (any branch) | History rewrite without explicit operator intent. |
-| 2 | `git push --force-with-lease` | Same class; explicit operator override required. |
-| 3 | `git push origin main` (or default branch) | Pushing directly to main bypasses PR review. |
-| 4 | `git push origin master` | Same. |
-| 5 | `--no-verify` on any git command | Skips pre-commit hooks, including the harness's own guards. |
-| 6 | `git commit -n` | Same as `--no-verify`. |
-| 7 | `rm -rf` against tracked paths | Catastrophic deletion with no audit trail. |
-| 8 | `DROP DATABASE` outside dev environments | Production data loss. |
-| 9 | `DROP TABLE` outside dev environments | Same. |
-| 10 | `TRUNCATE` against any audit/log/billing/users table | Data-protection class. |
-| 11 | `chmod 777` | Permissions widening to world-writable. |
-| 12 | `chown root` | Privilege change. |
-| 13 | `curl … \| sh` (piping remote content to a shell) | Arbitrary remote code execution. |
-| 14 | `wget … \| sh` | Same. |
-| 15 | `eval` (when applied to untrusted input) | Arbitrary code execution. |
-| 16 | `npm install --unsafe-perm` | Privilege escalation during install. |
+| #   | Pattern                                              | Why forbidden                                               |
+| --- | ---------------------------------------------------- | ----------------------------------------------------------- |
+| 1   | `git push --force` (any branch)                      | History rewrite without explicit operator intent.           |
+| 2   | `git push --force-with-lease`                        | Same class; explicit operator override required.            |
+| 3   | `git push origin main` (or default branch)           | Pushing directly to main bypasses PR review.                |
+| 4   | `git push origin master`                             | Same.                                                       |
+| 5   | `--no-verify` on any git command                     | Skips pre-commit hooks, including the harness's own guards. |
+| 6   | `git commit -n`                                      | Same as `--no-verify`.                                      |
+| 7   | `rm -rf` against tracked paths                       | Catastrophic deletion with no audit trail.                  |
+| 8   | `DROP DATABASE` outside dev environments             | Production data loss.                                       |
+| 9   | `DROP TABLE` outside dev environments                | Same.                                                       |
+| 10  | `TRUNCATE` against any audit/log/billing/users table | Data-protection class.                                      |
+| 11  | `chmod 777`                                          | Permissions widening to world-writable.                     |
+| 12  | `chown root`                                         | Privilege change.                                           |
+| 13  | `curl … \| sh` (piping remote content to a shell)    | Arbitrary remote code execution.                            |
+| 14  | `wget … \| sh`                                       | Same.                                                       |
+| 15  | `eval` (when applied to untrusted input)             | Arbitrary code execution.                                   |
+| 16  | `npm install --unsafe-perm`                          | Privilege escalation during install.                        |
 
 The registry is a JSON file under `.devai/config/forbidden-actions.json`; each entry has a pattern (string match or regex), a category, and a justification.
 
@@ -76,11 +76,11 @@ These conditions are encoded in the entry's `applies_when` field. The check is "
 
 ## Failure modes
 
-| Symptom | Cause | Action |
-|---|---|---|
-| Skill returns `status: fail` with `forbidden-action` finding | Tried to run a registered command | Either reformulate the command, or escalate to add a justified registry exception. |
-| `check forbidden-actions` exits 2 in CI | A past skill run executed a near-miss the runtime didn't catch | Investigate the specific finding; tighten the runtime check or split into two patterns. |
-| `check forbidden-actions` exits 64 | `.devai/config/forbidden-actions.json` malformed | Validate against `forbidden-actions.schema.json`; re-emit. |
+| Symptom                                                      | Cause                                                          | Action                                                                                  |
+| ------------------------------------------------------------ | -------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Skill returns `status: fail` with `forbidden-action` finding | Tried to run a registered command                              | Either reformulate the command, or escalate to add a justified registry exception.      |
+| `check forbidden-actions` exits 2 in CI                      | A past skill run executed a near-miss the runtime didn't catch | Investigate the specific finding; tighten the runtime check or split into two patterns. |
+| `check forbidden-actions` exits 64                           | `.devai/config/forbidden-actions.json` malformed               | Validate against `forbidden-actions.schema.json`; re-emit.                              |
 
 ## Residual risk
 

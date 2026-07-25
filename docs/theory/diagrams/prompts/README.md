@@ -20,18 +20,18 @@ docs/theory/out/devai-theory.pdf           (build/build-theory.sh — Pandoc →
 
 Every figure draws from a shared palette and shape kit defined in `svgkit.py`:
 
-| Substrate / role | Stroke | Fill | Used for |
-|---|---|---|---|
-| `ref` | `#1F4E79` | `#E8F0FF` | F1 specs · reference signal · invariants |
-| `plant` | `#AA5500` | `#FFF3E0` | F2 code · plant proper |
-| `sensor` | `#663388` | `#F5E8FF` | F3 tests · sensors |
-| `observer` | `#226666` | `#E8F8F0` | F4 inventory · observer |
-| `harness` | `#886600` | `#F8F0D8` | F5 evidence · audit trail |
-| `ctrl` | `#226622` | `#E8FDE8` | controller · loop primitives |
-| `sup` | `#AA8800` | `#FFF8D8` | supervisor · ladder · gating |
-| `human` | `#AA2222` | `#FFE8E8` | human / outermost / RGR escalation |
-| `forbidden` | `#AA2222` | `#FFE8E8` | forbidden edges (red dashed with ✕) |
-| `neutral` | `#374151` | `#F3F4F6` | exogenous inputs · unclassified |
+| Substrate / role | Stroke    | Fill      | Used for                                 |
+| ---------------- | --------- | --------- | ---------------------------------------- |
+| `ref`            | `#1F4E79` | `#E8F0FF` | F1 specs · reference signal · invariants |
+| `plant`          | `#AA5500` | `#FFF3E0` | F2 code · plant proper                   |
+| `sensor`         | `#663388` | `#F5E8FF` | F3 tests · sensors                       |
+| `observer`       | `#226666` | `#E8F8F0` | F4 inventory · observer                  |
+| `harness`        | `#886600` | `#F8F0D8` | F5 evidence · audit trail                |
+| `ctrl`           | `#226622` | `#E8FDE8` | controller · loop primitives             |
+| `sup`            | `#AA8800` | `#FFF8D8` | supervisor · ladder · gating             |
+| `human`          | `#AA2222` | `#FFE8E8` | human / outermost / RGR escalation       |
+| `forbidden`      | `#AA2222` | `#FFE8E8` | forbidden edges (red dashed with ✕)      |
+| `neutral`        | `#374151` | `#F3F4F6` | exogenous inputs · unclassified          |
 
 Common primitives:
 

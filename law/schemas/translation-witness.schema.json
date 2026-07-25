@@ -71,10 +71,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "invariant_id",
-          "criteria"
-        ],
+        "required": ["invariant_id", "criteria"],
         "properties": {
           "invariant_id": {
             "type": "string",
@@ -86,10 +83,7 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": [
-                "claim",
-                "demonstrated_by"
-              ],
+              "required": ["claim", "demonstrated_by"],
               "properties": {
                 "claim": {
                   "type": "string",
@@ -113,11 +107,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "test_ref",
-          "expected_at_base",
-          "expected_at_candidate"
-        ],
+        "required": ["test_ref", "expected_at_base", "expected_at_candidate"],
         "properties": {
           "test_ref": {
             "$ref": "#/$defs/testRef"
@@ -151,26 +141,14 @@
       ],
       "properties": {
         "authority_role": {
-          "enum": [
-            "owner",
-            "architect",
-            "inspector",
-            "engineer",
-            "auditor"
-          ],
+          "enum": ["owner", "architect", "inspector", "engineer", "auditor"],
           "description": "Attributed human role. Auditor witnesses remain observation-only and confer no actuation authority."
         },
         "spec_edits": {
-          "enum": [
-            "none",
-            "declared"
-          ]
+          "enum": ["none", "declared"]
         },
         "test_edits": {
-          "enum": [
-            "none",
-            "declared"
-          ]
+          "enum": ["none", "declared"]
         },
         "inventory_delta_confined_to": {
           "type": "array",
@@ -219,17 +197,12 @@
       "if": {
         "properties": {
           "strategy": {
-            "enum": [
-              "regression",
-              "feature-overlay"
-            ]
+            "enum": ["regression", "feature-overlay"]
           }
         }
       },
       "then": {
-        "required": [
-          "red_green"
-        ],
+        "required": ["red_green"],
         "properties": {
           "red_green": {
             "minItems": 1
@@ -246,16 +219,12 @@
         }
       },
       "then": {
-        "required": [
-          "test_overlay_sha"
-        ]
+        "required": ["test_overlay_sha"]
       }
     },
     {
       "if": {
-        "required": [
-          "test_overlay_sha"
-        ]
+        "required": ["test_overlay_sha"]
       },
       "then": {
         "properties": {
@@ -267,17 +236,12 @@
     },
     {
       "if": {
-        "required": [
-          "red_green"
-        ]
+        "required": ["red_green"]
       },
       "then": {
         "properties": {
           "strategy": {
-            "enum": [
-              "regression",
-              "feature-overlay"
-            ]
+            "enum": ["regression", "feature-overlay"]
           }
         }
       }
@@ -305,23 +269,10 @@
     "testRef": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "suite",
-        "path",
-        "names"
-      ],
+      "required": ["suite", "path", "names"],
       "properties": {
         "suite": {
-          "enum": [
-            "unit",
-            "api",
-            "int",
-            "e2e",
-            "sec",
-            "perf",
-            "journey",
-            "db"
-          ]
+          "enum": ["unit", "api", "int", "e2e", "sec", "perf", "journey", "db"]
         },
         "path": {
           "$ref": "#/$defs/repoPath"
@@ -341,10 +292,7 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "test_ref"
-          ],
+          "required": ["kind", "test_ref"],
           "properties": {
             "kind": {
               "const": "test"
@@ -357,10 +305,7 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "validator"
-          ],
+          "required": ["kind", "validator"],
           "properties": {
             "kind": {
               "const": "structural"
@@ -374,11 +319,7 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "baseline_ref",
-            "candidate_ref"
-          ],
+          "required": ["kind", "baseline_ref", "candidate_ref"],
           "properties": {
             "kind": {
               "const": "behavioral-equivalence"
@@ -396,10 +337,7 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "rubric_ref"
-          ],
+          "required": ["kind", "rubric_ref"],
           "properties": {
             "kind": {
               "const": "semantic-review"
@@ -437,9 +375,7 @@
                   "test_ref": {
                     "suite": "unit",
                     "path": "packages/core/test/example.test.ts",
-                    "names": [
-                      "requested behavior"
-                    ]
+                    "names": ["requested behavior"]
                   }
                 }
               ]
@@ -452,25 +388,19 @@
           "test_ref": {
             "suite": "unit",
             "path": "packages/core/test/example.test.ts",
-            "names": [
-              "requested behavior"
-            ]
+            "names": ["requested behavior"]
           },
           "expected_at_base": "assertion-fail",
           "expected_at_candidate": "pass"
         }
       ],
-      "touched": [
-        "packages/core/src/example.ts"
-      ],
+      "touched": ["packages/core/src/example.ts"],
       "frame": {
         "authority_role": "engineer",
         "spec_edits": "none",
         "test_edits": "none",
         "inventory_delta_confined_to": [],
-        "effects_claimed": [
-          "fs:plant"
-        ]
+        "effects_claimed": ["fs:plant"]
       }
     }
   ]

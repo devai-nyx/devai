@@ -62,54 +62,54 @@ The Auditor:
 
 ## Anti-patterns
 
-| Pattern | Why bad |
-|---|---|
-| Auditor editing a test to "demonstrate" a finding | Cross-role; defeats the Auditor's structural trust. |
-| Auditor authoring an invariant they think should exist | That's Architect work. Auditor surfaces the gap; Architect authors. |
-| Auditor running `devai experimental loop run` | Actuation. Forbidden. |
-| Reports without specific evidence references | Auditor's value is precision; "things seem off" doesn't help anyone. |
-| Reports that recommend specific code changes | Crosses into Architect/Engineer territory. Recommend the *finding*, not the fix. |
+| Pattern                                                | Why bad                                                                          |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------- |
+| Auditor editing a test to "demonstrate" a finding      | Cross-role; defeats the Auditor's structural trust.                              |
+| Auditor authoring an invariant they think should exist | That's Architect work. Auditor surfaces the gap; Architect authors.              |
+| Auditor running `devai experimental loop run`          | Actuation. Forbidden.                                                            |
+| Reports without specific evidence references           | Auditor's value is precision; "things seem off" doesn't help anyone.             |
+| Reports that recommend specific code changes           | Crosses into Architect/Engineer territory. Recommend the _finding_, not the fix. |
 
 ## Tools the Auditor uses
 
 Every read-only inspector. In rough order of routine use:
 
-| Command | When |
-|---|---|
-| `devai govern score compute` | Snapshot the scorecard. |
-| `devai govern score assess` | Get a gate decision. |
-| `devai govern score backlog refresh` | Sync the backlog from sensor evidence. |
-| `devai agent skill run SKILL-assess-state` | One-shot holistic snapshot. |
-| `devai inventory regen` | Latest inventory state. |
-| `devai inventory coverage` | Coverage breakdown. |
-| `devai inventory adherence` | Orphans report. |
-| `devai inventory glossary` | Glossary coverage. |
-| `devai evidence chain verify` | Audit chain integrity. |
-| `devai govern rgr list --status open` | Open spec gaps. |
-| `devai work backlog list` | Current backlog. |
-| `devai catalog actions --authority sensor` | All registered sensor verbs. |
-| `devai doctor` | Composite health check. |
-| `devai spec rtd bundle` | Build the signed manifest (read-only operation despite the verb). |
+| Command                                    | When                                                              |
+| ------------------------------------------ | ----------------------------------------------------------------- |
+| `devai govern score compute`               | Snapshot the scorecard.                                           |
+| `devai govern score assess`                | Get a gate decision.                                              |
+| `devai govern score backlog refresh`       | Sync the backlog from sensor evidence.                            |
+| `devai agent skill run SKILL-assess-state` | One-shot holistic snapshot.                                       |
+| `devai inventory regen`                    | Latest inventory state.                                           |
+| `devai inventory coverage`                 | Coverage breakdown.                                               |
+| `devai inventory adherence`                | Orphans report.                                                   |
+| `devai inventory glossary`                 | Glossary coverage.                                                |
+| `devai evidence chain verify`              | Audit chain integrity.                                            |
+| `devai govern rgr list --status open`      | Open spec gaps.                                                   |
+| `devai work backlog list`                  | Current backlog.                                                  |
+| `devai catalog actions --authority sensor` | All registered sensor verbs.                                      |
+| `devai doctor`                             | Composite health check.                                           |
+| `devai spec rtd bundle`                    | Build the signed manifest (read-only operation despite the verb). |
 
 The Auditor uses **none of**: `devai work task spawn`, `devai experimental loop run`, `devai work backlog complete`, `devai govern rgr emit / resolve`, `devai release gate`, `devai release postdeploy verify`, `devai evidence emit`, `devai evidence redact`, any `devai sense …` write paths.
 
 ## Hand-offs
 
-| To | When |
-|---|---|
-| Architect | Found a spec gap or a vague invariant. |
-| Engineer | Found a plant bug; Engineer takes the backlog item. |
-| Inspector | Found a test that doesn't measure what it claims. |
-| Owner | Found a journey whose `related_invariants` are stale. |
+| To        | When                                                  |
+| --------- | ----------------------------------------------------- |
+| Architect | Found a spec gap or a vague invariant.                |
+| Engineer  | Found a plant bug; Engineer takes the backlog item.   |
+| Inspector | Found a test that doesn't measure what it claims.     |
+| Owner     | Found a journey whose `related_invariants` are stale. |
 
 The Auditor's hand-off mechanism is **the backlog** plus the assessment report. The Auditor doesn't direct other roles; the Auditor surfaces what other roles should look at.
 
 ## Authority files
 
-| Path | Editable by Auditor? |
-|---|---|
+| Path                                 | Editable by Auditor?                             |
+| ------------------------------------ | ------------------------------------------------ |
 | `scratch/sessions/rounds/*/audit/**` | ✅ Yes (constitutional Auditor observation path) |
-| Everything else | ❌ No |
+| Everything else                      | ❌ No                                            |
 
 ## See also
 

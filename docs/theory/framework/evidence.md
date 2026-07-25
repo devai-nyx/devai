@@ -22,16 +22,16 @@ The chain's hash linkage means any retroactive modification surfaces immediately
 
 ## What gets evidenced
 
-| Event type | Source | Triggered by |
-|---|---|---|
-| `sensor-reading` | Any `sense-*` invocation | Per Cycle A / B / C run |
-| `scorecard-cell` | `score-compute` per cell | Cycle C; on-demand by Auditor or human |
-| `agent-run` | Any controller invocation | Task spawn → task close |
-| `decision` | `triage classify`, `triage tie-break`, RGR resolution | Per classification / break / resolution |
-| `merge` | Integration-branch merge | Per task merge |
-| `escalation` | Iteration cap exhaustion | Per Article 21 escalation |
-| `rgr-emission` | RGR emission | Per emitting task |
-| `rgr-resolution` | Spec update merged that closes an RGR | Per resolved RGR |
+| Event type       | Source                                                | Triggered by                            |
+| ---------------- | ----------------------------------------------------- | --------------------------------------- |
+| `sensor-reading` | Any `sense-*` invocation                              | Per Cycle A / B / C run                 |
+| `scorecard-cell` | `score-compute` per cell                              | Cycle C; on-demand by Auditor or human  |
+| `agent-run`      | Any controller invocation                             | Task spawn → task close                 |
+| `decision`       | `triage classify`, `triage tie-break`, RGR resolution | Per classification / break / resolution |
+| `merge`          | Integration-branch merge                              | Per task merge                          |
+| `escalation`     | Iteration cap exhaustion                              | Per Article 21 escalation               |
+| `rgr-emission`   | RGR emission                                          | Per emitting task                       |
+| `rgr-resolution` | Spec update merged that closes an RGR                 | Per resolved RGR                        |
 
 The list is **closed** — adding a new event type requires a contract change. The closed list is what makes the chain queryable by sensors, auditors, and clients without per-payload-type special-casing.
 
@@ -43,7 +43,7 @@ The list is **closed** — adding a new event type requires a contract change. T
 
 ## Redaction
 
-`devai evidence redact` is the **only** authorised mutation operation on the chain. Redaction removes a specific record's payload (replacing with `{"redacted": true, "reason": "<text>", "actor": "<who>"}`), bumps the record's hash, and re-walks downstream records to re-link. The chain stays continuous; the audit trail of *what was redacted, by whom, with what rationale* is itself an evidence record.
+`devai evidence redact` is the **only** authorised mutation operation on the chain. Redaction removes a specific record's payload (replacing with `{"redacted": true, "reason": "<text>", "actor": "<who>"}`), bumps the record's hash, and re-walks downstream records to re-link. The chain stays continuous; the audit trail of _what was redacted, by whom, with what rationale_ is itself an evidence record.
 
 Redaction targets are: PII that was accidentally captured in a sensor reading; credential leaks in agent run logs; legal compliance requirements. Redaction is **never** used to "fix" framework defects; defects are corrected via normal Engineer / Inspector flow with the original evidence preserved.
 

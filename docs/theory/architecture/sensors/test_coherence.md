@@ -2,7 +2,7 @@
 
 ## Property semantics
 
-**T3 Coherence** (Constitution Article 5): "the parts fit together — naming, structure, and layering are consistent." For F3 (Observation), this means the test suite obeys a single convention: test files use a uniform naming pattern; every package has *some* tests; the test/source ratio is roughly proportional across packages.
+**T3 Coherence** (Constitution Article 5): "the parts fit together — naming, structure, and layering are consistent." For F3 (Observation), this means the test suite obeys a single convention: test files use a uniform naming pattern; every package has _some_ tests; the test/source ratio is roughly proportional across packages.
 
 ## Operational definition
 
@@ -13,6 +13,7 @@ Walk a configured set of package roots (default `packages/*`). For each package:
 3. **Compute test/source ratio.** Zero source files → ratio = 1.0 (trivially coherent).
 
 Aggregate:
+
 - `naming_uses_test`: number of `.test.*` files across all packages.
 - `naming_uses_spec`: number of `.spec.*` files.
 - `naming_consistent`: 1 iff only one of the two is non-zero.
@@ -32,7 +33,7 @@ Aggregate:
 
 ## Out of scope
 
-- **Test quality.** This sensor measures *presence and distribution*, not whether tests actually cover meaningful behaviour.
+- **Test quality.** This sensor measures _presence and distribution_, not whether tests actually cover meaningful behaviour.
 - **Test-pattern coverage** (auth/perf/error tests). Those are F3×T6/T7/T8, covered by 27.J/K/L.
 
 ---

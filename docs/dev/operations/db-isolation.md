@@ -24,12 +24,12 @@ For tasks needing **cluster-level state** (Postgres extensions, replication, rol
 
 Four isolation modes were evaluated:
 
-| Mode | Verdict | Why |
-|---|---|---|
-| One shared DB | Rejected | Test pollution, migration races, no parallel work |
-| Container-per-task | Available as opt-in (`cluster`) | Right for cluster-state needs; wrong as default (startup + migration replay cost) |
-| Schema-per-task within one DB | Rejected | Database-level vs schema-level state mismatch; Postgres extension state isn't schema-isolatable; migrations don't naturally compose at schema level |
-| Filesystem snapshots (ZFS/Btrfs/Neon) | Rejected | macOS-unfriendly; operational complexity outweighs the marginal speedup over TEMPLATE |
+| Mode                                  | Verdict                         | Why                                                                                                                                                 |
+| ------------------------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| One shared DB                         | Rejected                        | Test pollution, migration races, no parallel work                                                                                                   |
+| Container-per-task                    | Available as opt-in (`cluster`) | Right for cluster-state needs; wrong as default (startup + migration replay cost)                                                                   |
+| Schema-per-task within one DB         | Rejected                        | Database-level vs schema-level state mismatch; Postgres extension state isn't schema-isolatable; migrations don't naturally compose at schema level |
+| Filesystem snapshots (ZFS/Btrfs/Neon) | Rejected                        | macOS-unfriendly; operational complexity outweighs the marginal speedup over TEMPLATE                                                               |
 
 `TEMPLATE` cloning won because:
 
@@ -60,24 +60,24 @@ Four isolation modes were evaluated:
 
 ## Operational hooks
 
-| Command | Purpose |
-|---|---|
-| `pnpm db:start-shared` | Bring up the shared dev cluster (single Postgres container) |
-| `pnpm db:template-rebuild` | Drop + recreate `devai_template`, replay all migrations, re-seed |
-| `devai work db provision <task-id>` | Clone the template into `devai_task_<task-id>` |
-| `devai work db drop <task-id>` | Drop the per-task DB (also runs on worktree destroy) |
-| `pnpm db:stop-shared` | Tear down the shared cluster |
+| Command                             | Purpose                                                          |
+| ----------------------------------- | ---------------------------------------------------------------- |
+| `pnpm db:start-shared`              | Bring up the shared dev cluster (single Postgres container)      |
+| `pnpm db:template-rebuild`          | Drop + recreate `devai_template`, replay all migrations, re-seed |
+| `devai work db provision <task-id>` | Clone the template into `devai_task_<task-id>`                   |
+| `devai work db drop <task-id>`      | Drop the per-task DB (also runs on worktree destroy)             |
+| `pnpm db:stop-shared`               | Tear down the shared cluster                                     |
 
 The shared cluster's lifecycle is managed by the operator; DEVAI's per-task verbs assume the cluster is up.
 
 ## Failure modes and recovery
 
-| Symptom | Likely cause | Recovery |
-|---|---|---|
-| `CREATE DATABASE … TEMPLATE` errors with `source database is being accessed` | Another connection has the template open | `pg_terminate_backend` the offending pid; retry |
-| Task DB exists but DDL is stale | Template was rebuilt mid-task | Drop and reprovision it with `devai work db drop <task-id> --write` followed by `devai work db provision <task-id> --write`, or accept the staleness for the in-flight task |
-| Disk fills with per-task DBs | Destroyed worktrees left DBs behind | Inspect with `devai work db status`, then explicitly remove orphan task DBs with `devai work db drop <task-id> --write` |
-| `cluster`-isolation container won't start | Port collision or resource limit | Check container logs; the cluster-isolation container picks a random high port to avoid the shared cluster's 5432 |
+| Symptom                                                                      | Likely cause                             | Recovery                                                                                                                                                                    |
+| ---------------------------------------------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CREATE DATABASE … TEMPLATE` errors with `source database is being accessed` | Another connection has the template open | `pg_terminate_backend` the offending pid; retry                                                                                                                             |
+| Task DB exists but DDL is stale                                              | Template was rebuilt mid-task            | Drop and reprovision it with `devai work db drop <task-id> --write` followed by `devai work db provision <task-id> --write`, or accept the staleness for the in-flight task |
+| Disk fills with per-task DBs                                                 | Destroyed worktrees left DBs behind      | Inspect with `devai work db status`, then explicitly remove orphan task DBs with `devai work db drop <task-id> --write`                                                     |
+| `cluster`-isolation container won't start                                    | Port collision or resource limit         | Check container logs; the cluster-isolation container picks a random high port to avoid the shared cluster's 5432                                                           |
 
 See [`incident-playbook.md`](./incident-playbook.md) for a wider catalog.
 

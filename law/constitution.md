@@ -291,6 +291,7 @@ The ladder applies to soft-gate scoring disputes, RGR ambiguity classification, 
 Work that spans the authority chain is grouped into human-coordinated coupled triplets: an Architect task that produces invariant changes, an Inspector task that produces tests for those invariants, and an Engineer task that produces code satisfying those tests. The three tasks share a `coupled_task_group` ID in the backlog.
 
 Triplet branches form a pipeline:
+
 - Architect branch is created from integration HEAD.
 - Inspector branch is created from Architect's HEAD.
 - Engineer branch is created from Inspector's HEAD.

@@ -4,7 +4,7 @@
 
 For most adopters this works out of the box: `devai sense migrate check --database-url postgres://localhost/devai_test --pack-tune` and the SensorReading flips F2×T4 to PASS once every migration applies cleanly.
 
-Two common patterns require extra setup *before* the migrations run. Both are role-related; both are flag-driven; both ship with DEVAI since Phase 30.F. This page documents when each is needed and which to reach for.
+Two common patterns require extra setup _before_ the migrations run. Both are role-related; both are flag-driven; both ship with DEVAI since Phase 30.F. This page documents when each is needed and which to reach for.
 
 ## The two flags
 
@@ -41,7 +41,7 @@ If you're unsure: try `--role-bootstrap` first. If migrations still fail with `p
 
 ## When `--pre-seed` is necessary
 
-The platform migration runner in many real-world apps does role + grant setup as a series of pre-migration steps that aren't themselves migrations: Helm hooks, Terraform-managed roles, startup scripts, `psql` wrappers in CI. `sense-migrate-check` deliberately applies migrations against a fresh DB via raw `psql` so the SensorReading reflects what the migration *files* can do, not what the surrounding infrastructure does. When the migrations assume infrastructure-installed roles + grants, `sense-migrate-check` needs a single bootstrap SQL file that replays that setup. That file is the `--pre-seed`.
+The platform migration runner in many real-world apps does role + grant setup as a series of pre-migration steps that aren't themselves migrations: Helm hooks, Terraform-managed roles, startup scripts, `psql` wrappers in CI. `sense-migrate-check` deliberately applies migrations against a fresh DB via raw `psql` so the SensorReading reflects what the migration _files_ can do, not what the surrounding infrastructure does. When the migrations assume infrastructure-installed roles + grants, `sense-migrate-check` needs a single bootstrap SQL file that replays that setup. That file is the `--pre-seed`.
 
 Typical pre-seed shape:
 
@@ -151,13 +151,13 @@ Read it once; adapt three things for your repo: (1) the role names; (2) the sche
 
 `sense-migrate-check` reports a SensorReading whose `status` reflects what actually happened:
 
-| Status    | When |
-|---|---|
-| `pass`    | All migrations exited 0 and any `--pre-seed` files also exited 0. |
-| `fail`    | At least one migration exited non-zero. The failing migration's filename + first stderr line is in `findings[]`. |
-| `unknown` | A `--pre-seed` file itself errored. **Migrations are not penalized for adopter-side pre-seed bugs.** Fix the pre-seed (or your pack config), then re-run. |
+| Status    | When                                                                                                                                                                                                                                            |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pass`    | All migrations exited 0 and any `--pre-seed` files also exited 0.                                                                                                                                                                               |
+| `fail`    | At least one migration exited non-zero. The failing migration's filename + first stderr line is in `findings[]`.                                                                                                                                |
+| `unknown` | A `--pre-seed` file itself errored. **Migrations are not penalized for adopter-side pre-seed bugs.** Fix the pre-seed (or your pack config), then re-run.                                                                                       |
 | `error`   | DEVAI couldn't run its own idempotent role-bootstrap DO block, or couldn't create the `devai_migrations` bookkeeping table, or the migrations directory itself doesn't exist. Reflects a DEVAI/environment problem, not your migration content. |
-| `skipped` | No `--database-url` was supplied. Useful for hostile environments (CI without a Postgres). |
+| `skipped` | No `--database-url` was supplied. Useful for hostile environments (CI without a Postgres).                                                                                                                                                      |
 
 Verdict mapping was formalized in D-87 (Phase 32.C). If your scorecard cell F2×T4 stays UNKNOWN after pre-seed work, check whether `--emit-reading` is on (default true since Phase 32; older DEVAI versions need explicit `--emit-reading` or `finishSenseCommand`).
 

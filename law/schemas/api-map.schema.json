@@ -36,11 +36,7 @@
           "minLength": 1
         }
       },
-      "required": [
-        "backend",
-        "frontend",
-        "db"
-      ]
+      "required": ["backend", "frontend", "db"]
     },
     "endpoints": {
       "type": "array",
@@ -50,23 +46,11 @@
       }
     }
   },
-  "required": [
-    "schemaVersion",
-    "generatedAt",
-    "endpoints"
-  ],
+  "required": ["schemaVersion", "generatedAt", "endpoints"],
   "$defs": {
     "HttpMethod": {
       "type": "string",
-      "enum": [
-        "GET",
-        "POST",
-        "PUT",
-        "PATCH",
-        "DELETE",
-        "HEAD",
-        "OPTIONS"
-      ]
+      "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
     },
     "HttpStatus": {
       "type": "integer",
@@ -101,11 +85,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "path",
-        "startLine",
-        "endLine"
-      ]
+      "required": ["path", "startLine", "endLine"]
     },
     "Param": {
       "type": "object",
@@ -117,12 +97,7 @@
         },
         "in": {
           "type": "string",
-          "enum": [
-            "path",
-            "query",
-            "header",
-            "cookie"
-          ]
+          "enum": ["path", "query", "header", "cookie"]
         },
         "required": {
           "type": "boolean"
@@ -132,10 +107,7 @@
         },
         "example": {}
       },
-      "required": [
-        "name",
-        "in"
-      ]
+      "required": ["name", "in"]
     },
     "ControllerRef": {
       "type": "object",
@@ -160,9 +132,7 @@
           "minimum": 1
         }
       },
-      "required": [
-        "file"
-      ]
+      "required": ["file"]
     },
     "PayloadShape": {
       "type": "object",
@@ -211,9 +181,7 @@
           "$ref": "#/$defs/PayloadShape"
         }
       },
-      "required": [
-        "status"
-      ]
+      "required": ["status"]
     },
     "Auth": {
       "type": "object",
@@ -327,11 +295,7 @@
         },
         "source": {
           "type": "string",
-          "enum": [
-            "openapi",
-            "routes",
-            "inferred"
-          ]
+          "enum": ["openapi", "routes", "inferred"]
         },
         "deprecated": {
           "type": "boolean",
@@ -345,12 +309,7 @@
           "minItems": 1
         }
       },
-      "required": [
-        "method",
-        "path",
-        "controller",
-        "evidence"
-      ]
+      "required": ["method", "path", "controller", "evidence"]
     }
   },
   "schema_version": "1.0.0",

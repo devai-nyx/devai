@@ -6,16 +6,7 @@
   "authority": "joint",
   "category": "technical",
   "status": "active",
-  "see_also": [
-    "GE-001",
-    "GE-019",
-    "GE-020",
-    "GE-022"
-  ],
-  "related_invariants": [
-    "INV-DEVAI-001"
-  ],
-  "provenance": [
-    "ex-GE-002@devai-original"
-  ]
+  "see_also": ["GE-001", "GE-019", "GE-020", "GE-022"],
+  "related_invariants": ["INV-DEVAI-001"],
+  "provenance": ["ex-GE-002@devai-original"]
 }

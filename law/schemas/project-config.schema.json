@@ -5,21 +5,13 @@
   "description": "Per-repo declaration of project type + opt-in toggles. Absorbs the LAW-00.SCOPE.4 project_type concept from the stech-law predecessor draft (D-38), reshaped as a DEVAI-native config. Lives at .devai/config/project.json.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "project_type"
-  ],
+  "required": ["schemaVersion", "project_type"],
   "properties": {
     "schemaVersion": {
       "const": "1.0.0"
     },
     "project_type": {
-      "enum": [
-        "runtime-host",
-        "platform-package",
-        "docs-archive",
-        "framework"
-      ],
+      "enum": ["runtime-host", "platform-package", "docs-archive", "framework"],
       "description": "runtime-host: business app running production traffic. platform-package: library consumed by other projects. docs-archive: documentation / reverse-engineering archive (no runtime). framework: DEVAI itself + sibling tooling repos (no client substrate)."
     },
     "name": {
@@ -27,11 +19,7 @@
       "minLength": 1
     },
     "profile": {
-      "enum": [
-        "tier1",
-        "tier2",
-        "tier3"
-      ],
+      "enum": ["tier1", "tier2", "tier3"],
       "description": "Adoption profile. tier1: deterministic gates + evidence. tier2: adds invariants, trace, weakening checks, and sensors. tier3: full human-supervised governance including soft gate, triage, and coupled work; autonomous execution remains separately experimental. Absent means tier3 for backward compatibility."
     },
     "adopted_at": {
@@ -45,18 +33,13 @@
       "description": "Machine-managed (D-118): stamped by `devai init` / `devai adopt upgrade` from the running CLI's own package version; never hand-edited. `devai doctor` compares it against the installed @devai-nyx/cli version (devai-version-match check: binding at tier3, advisory below). Canonical consumption is versioned GitHub Packages; sibling-checkout linking is a dev-only convenience and leaves this field meaningless."
     },
     "devai_consumption": {
-      "enum": [
-        "npm-package",
-        "sibling-checkout"
-      ],
+      "enum": ["npm-package", "sibling-checkout"],
       "description": "D-122 (item 2b): an explicit declaration of how this repo consumes the devai CLI, so sibling-checkout linking stops being a silent default. Absent means `npm-package` is assumed (the canonical model, D-118). `devai doctor`'s `devai-consumption-declared` check (adopter posture; binding at tier3, advisory below) compares this against the running CLI's actual resolved provenance (`devai-version-match` check's `info.provenance`) and fails on mismatch — most commonly an undeclared sibling-checkout consumer. Declare `sibling-checkout` only for the same-portfolio C-4-style reference-adopter pattern; it is a dev convenience, not a second canonical path."
     },
     "constitution": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "version"
-      ],
+      "required": ["version"],
       "description": "Constitution binding pin (D-119). The canonical binding shape is a vendored copy of CONSTITUTION.md at the adopter repo root plus a `.devai/constitution.md` stub pointing at it; this pin records which constitution text the repo is bound to. `devai doctor` verifies sha256 against the vendored copy (constitution-binding check: binding at tier3, advisory below); `devai adopt upgrade --constitution` refreshes copy + pin and appends a constitution.updated evidence record. Pointer-only binding (no vendored copy) is a dev-only convenience.",
       "properties": {
         "version": {
@@ -100,15 +83,10 @@
     "authority_enforcement": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "mode"
-      ],
+      "required": ["mode"],
       "properties": {
         "mode": {
-          "enum": [
-            "cli-only",
-            "host-integrated"
-          ],
+          "enum": ["cli-only", "host-integrated"],
           "description": "cli-only covers DEVAI runtime actions; host-integrated additionally declares external-tool enforcement."
         },
         "adapter_config": {
@@ -127,9 +105,7 @@
             }
           },
           "then": {
-            "required": [
-              "adapter_config"
-            ]
+            "required": ["adapter_config"]
           }
         }
       ]
@@ -138,15 +114,10 @@
       "type": "object",
       "additionalProperties": false,
       "description": "Repository classification metadata. Added in R13 per ADR-DOCS-GOVERNANCE Decision 1.",
-      "required": [
-        "kind"
-      ],
+      "required": ["kind"],
       "properties": {
         "kind": {
-          "enum": [
-            "library",
-            "application"
-          ],
+          "enum": ["library", "application"],
           "description": "library: package consumed by other projects (MUST use docusaurus). application: business app running production traffic."
         }
       }
@@ -155,15 +126,10 @@
       "type": "object",
       "additionalProperties": false,
       "description": "Documentation build and publish configuration. Added in R13 per ADR-DOCS-GOVERNANCE Decisions 2+4 and ADR-LOCAL-PUBLISH-WORKFLOW Decisions 2+4.",
-      "required": [
-        "builder"
-      ],
+      "required": ["builder"],
       "properties": {
         "builder": {
-          "enum": [
-            "docusaurus",
-            "jekyll"
-          ],
+          "enum": ["docusaurus", "jekyll"],
           "description": "Documentation builder. library repos MUST use docusaurus (ADR-DOCS-GOVERNANCE Decision 2)."
         },
         "build_command": {
@@ -177,10 +143,7 @@
           "description": "Relative path from repo root to the build output directory."
         },
         "custom_domain": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "description": "Custom domain for the published docs site. null or empty string means no custom domain (no CNAME file written)."
         },
         "ia": {
@@ -191,14 +154,7 @@
             "collapsed_sections": {
               "type": "array",
               "items": {
-                "enum": [
-                  "theory",
-                  "framework",
-                  "roles",
-                  "adopters",
-                  "reference",
-                  "meta"
-                ]
+                "enum": ["theory", "framework", "roles", "adopters", "reference", "meta"]
               },
               "uniqueItems": true,
               "description": "ADR-DOCS-IA Decision 11: sections an application-tier adopter with no downstream consumers collapses to a single stub page pointing upstream, instead of authoring in full. Recorded alongside an adopter-side ADR-DOCS-IA-COLLAPSE per Decision 11."
@@ -221,18 +177,13 @@
       "description": "CI-economy law configuration. Added per ADR-CI-ECONOMY Decision 8 as amended by D-116.",
       "properties": {
         "profile": {
-          "enum": [
-            "full",
-            "gate-staged"
-          ],
+          "enum": ["full", "gate-staged"],
           "description": "Enforcement profile for `devai policy check ci economy` rule 4 (ci-economy.evidence-gate-wired). full (default when absent): all four mechanical rules are hard. gate-staged: rule 4 downgrades to ADVISORY — still evaluated and reported on every run, never silently dropped — for repos on the incremental-adoption path that have not yet wired the evidence gate; rules 1-3 stay hard. gate-staged is a visible staging declaration, not an exemption: graduating to full is expected once the gate is wired (adopter guide step 2)."
         },
         "local_evidence": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "required_jobs"
-          ],
+          "required": ["required_jobs"],
           "description": "Local-CI-evidence policy (D-117; ADR-CI-ECONOMY Decisions 1-3 promoted from the stynx prototype). Declares what a local-evidence manifest must prove for `devai evidence local verify` to let the remote gate skip heavy tiers. Absent means the repo does not accept local evidence (the gate's fallback path always runs heavy tiers remotely).",
           "properties": {
             "manifest_path": {

@@ -6,14 +6,7 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "aliases": [
-    "Substrate F3"
-  ],
-  "see_also": [
-    "GE-011",
-    "GE-012"
-  ],
-  "provenance": [
-    "ex-GE-008@devai-original"
-  ]
+  "aliases": ["Substrate F3"],
+  "see_also": ["GE-011", "GE-012"],
+  "provenance": ["ex-GE-008@devai-original"]
 }

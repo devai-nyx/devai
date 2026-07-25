@@ -33,26 +33,17 @@
       "type": "string"
     },
     "previous_scorecard_id": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "pattern": "^SC-"
     },
     "cycle": {
-      "enum": [
-        "A",
-        "B",
-        "C"
-      ],
+      "enum": ["A", "B", "C"],
       "description": "Multi-cycle gate marker (Phase 16.D, D-50). A = local-dev checkpoint (L0 static only). B = branch-handoff / PR draft (L0 + L1 dynamic). C = merge / release / production deploy (all configured tiers including semantic). When the scorecard is computed via `devai govern score compute --cycle <A|B|C>`, the aggregator filters readings to those whose `tier` is appropriate for that cycle. Absent = aggregate across all tiers (current default, equivalent to Cycle C semantics)."
     },
     "thresholds_used": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "source"
-      ],
+      "required": ["source"],
       "properties": {
         "source": {
           "type": "string"
@@ -69,52 +60,22 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "substrate",
-          "property",
-          "verdict",
-          "deterministic"
-        ],
+        "required": ["substrate", "property", "verdict", "deterministic"],
         "properties": {
           "substrate": {
-            "enum": [
-              "F1",
-              "F2",
-              "F3",
-              "F4",
-              "F5"
-            ]
+            "enum": ["F1", "F2", "F3", "F4", "F5"]
           },
           "property": {
-            "enum": [
-              "T1",
-              "T2",
-              "T3",
-              "T4",
-              "T5",
-              "T6",
-              "T7",
-              "T8",
-              "T9"
-            ]
+            "enum": ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9"]
           },
           "verdict": {
-            "enum": [
-              "PASS",
-              "REVIEW",
-              "FAIL",
-              "N/A",
-              "UNKNOWN"
-            ]
+            "enum": ["PASS", "REVIEW", "FAIL", "N/A", "UNKNOWN"]
           },
           "deterministic": {
             "type": "boolean"
           },
           "score": {
-            "type": [
-              "number",
-              "null"
-            ],
+            "type": ["number", "null"],
             "minimum": 0,
             "maximum": 1,
             "description": "Normalized 0-1 score where applicable. Null for binary or N/A cells."
@@ -163,17 +124,10 @@
         "^F[1-5]$": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "verdict"
-          ],
+          "required": ["verdict"],
           "properties": {
             "verdict": {
-              "enum": [
-                "PASS",
-                "REVIEW",
-                "FAIL",
-                "UNKNOWN"
-              ]
+              "enum": ["PASS", "REVIEW", "FAIL", "UNKNOWN"]
             },
             "score": {
               "type": "number",
@@ -189,22 +143,14 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "invariant_id",
-          "verdict"
-        ],
+        "required": ["invariant_id", "verdict"],
         "properties": {
           "invariant_id": {
             "type": "string",
             "pattern": "^INV-"
           },
           "verdict": {
-            "enum": [
-              "PASS",
-              "REVIEW",
-              "FAIL",
-              "UNCOVERED"
-            ]
+            "enum": ["PASS", "REVIEW", "FAIL", "UNCOVERED"]
           },
           "test_pass_count": {
             "type": "integer",
@@ -228,17 +174,10 @@
     "overall": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "verdict"
-      ],
+      "required": ["verdict"],
       "properties": {
         "verdict": {
-          "enum": [
-            "PASS",
-            "REVIEW",
-            "FAIL",
-            "UNKNOWN"
-          ]
+          "enum": ["PASS", "REVIEW", "FAIL", "UNKNOWN"]
         },
         "score": {
           "type": "number",

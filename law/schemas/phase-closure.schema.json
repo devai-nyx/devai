@@ -51,11 +51,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "id",
-          "roles",
-          "headline"
-        ],
+        "required": ["id", "roles", "headline"],
         "properties": {
           "id": {
             "type": "string",
@@ -65,13 +61,7 @@
             "type": "array",
             "minItems": 1,
             "items": {
-              "enum": [
-                "Owner",
-                "Architect",
-                "Inspector",
-                "Engineer",
-                "Auditor"
-              ]
+              "enum": ["Owner", "Architect", "Inspector", "Engineer", "Auditor"]
             }
           },
           "commit": {
@@ -93,16 +83,10 @@
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "status"
-        ],
+        "required": ["status"],
         "properties": {
           "status": {
-            "enum": [
-              "pass",
-              "fail",
-              "skipped"
-            ]
+            "enum": ["pass", "fail", "skipped"]
           },
           "detail": {
             "type": "string",
@@ -121,21 +105,14 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "criterion",
-          "verdict"
-        ],
+        "required": ["criterion", "verdict"],
         "properties": {
           "criterion": {
             "type": "string",
             "minLength": 1
           },
           "verdict": {
-            "enum": [
-              "pass",
-              "fail",
-              "n/a"
-            ]
+            "enum": ["pass", "fail", "n/a"]
           },
           "evidence": {
             "type": "string"
@@ -158,22 +135,13 @@
       "description": "The integration-branch commit the closed round actually shipped as (merge commit or branch tip on main). Added at R18 (D-133) after PC-0005 attested gates at a SHA that was not the shipped tip; `devai govern phase close` requires this from PC-0007 onward."
     },
     "release_disposition": {
-      "enum": [
-        "published",
-        "changeset-pending",
-        "none-preratification",
-        "none-needed",
-        "missing"
-      ],
+      "enum": ["published", "changeset-pending", "none-preratification", "none-needed", "missing"],
       "description": "Whether the round's package changes have a release path: 'published' (release cut), 'changeset-pending' (changeset recorded, publish pending), 'none-preratification' (package-visible changes intentionally withheld until ratification), 'none-needed' (no package-visible changes), or 'missing' (package changes shipped with no changeset — a recorded defect, never a silent one). Added at R18 (D-133); required by the ceremony from PC-0007 onward."
     },
     "evidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "proof_epoch",
-        "terminal_sha256"
-      ],
+      "required": ["proof_epoch", "terminal_sha256"],
       "properties": {
         "proof_epoch": {
           "type": "string",
@@ -201,9 +169,7 @@
       "batches": [
         {
           "id": "DR.A",
-          "roles": [
-            "Architect"
-          ],
+          "roles": ["Architect"],
           "headline": "Constitution 0.2.0 -> 0.3.0 (Articles 1, 23, 27); BUILD-PLAN history frozen to archive; README/CLAUDE refresh; docs_drift schema enum; D-108"
         }
       ],

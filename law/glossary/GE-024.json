@@ -6,13 +6,7 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "aliases": [
-    "Inv-Compliance:"
-  ],
-  "see_also": [
-    "GE-019"
-  ],
-  "provenance": [
-    "ex-GE-024@devai-original"
-  ]
+  "aliases": ["Inv-Compliance:"],
+  "see_also": ["GE-019"],
+  "provenance": ["ex-GE-024@devai-original"]
 }

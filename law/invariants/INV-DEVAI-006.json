@@ -10,9 +10,7 @@
   "rationale": "Article 33 makes the scorecard the auditor's canonical state estimate of the framework. Non-determinism in composition undermines every downstream comparison: scorecard-over-time, regression detection, backlog refresh. The composition must be a pure function of explicit inputs. Article 39 (explicit uncertainty over false precision) further requires that scorecard verdicts honestly distinguish UNKNOWN from PASS.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -33,37 +31,20 @@
     ]
   },
   "scope": {
-    "components": [
-      "core",
-      "cli"
-    ],
-    "code_areas": [
-      "packages/core/src/loop/scorecard.ts",
-      "packages/cli/src/commands/phase6/**"
-    ]
+    "components": ["core", "cli"],
+    "code_areas": ["packages/core/src/loop/scorecard.ts", "packages/cli/src/commands/phase6/**"]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval",
-      "adr"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval", "adr"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-6",
-    "scorecard",
-    "determinism"
-  ],
+  "tags": ["phase-6", "scorecard", "determinism"],
   "measurable_via": [
     "govern score assess",
     "govern score backlog refresh",
     "govern score compute",
     "govern score view"
   ],
-  "provenance": [
-    "ex-INV-DEVAI-006@devai-original"
-  ]
+  "provenance": ["ex-INV-DEVAI-006@devai-original"]
 }

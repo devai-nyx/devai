@@ -29,10 +29,10 @@ The harness's path-based authority enforcement (see [`authority-enforcement.md`]
 
 The two layers are complementary:
 
-| Layer | When it fires | What it catches |
-|---|---|---|
-| Prompt firewall (12.B) | At prompt composition, before LLM call | An overlay that **asks** the LLM to do something forbidden |
-| Authority enforcement (Article 6, harness-level) | At Edit/Write tool invocation | An LLM that **tries** to do something forbidden anyway |
+| Layer                                            | When it fires                          | What it catches                                            |
+| ------------------------------------------------ | -------------------------------------- | ---------------------------------------------------------- |
+| Prompt firewall (12.B)                           | At prompt composition, before LLM call | An overlay that **asks** the LLM to do something forbidden |
+| Authority enforcement (Article 6, harness-level) | At Edit/Write tool invocation          | An LLM that **tries** to do something forbidden anyway     |
 
 The prompt firewall is the first line of defense; authority enforcement is the second. The defense-in-depth lets us tolerate some firewall false negatives without compromising the chain.
 
@@ -59,14 +59,14 @@ The firewall validates:
 
 ## What an overlay should NOT contain
 
-| Pattern | Why blocked |
-|---|---|
-| "Ignore the previous instructions" | Defeats the prompt stack's compositional discipline. |
-| "You may edit docs/arch" (for an Engineer overlay) | Cross-role authority claim. |
-| "Skip evidence emission" | Audit-trail tampering attempt. |
-| "Run this command without checking forbidden-actions" | Direct bypass of a defense. |
-| "Use this API key: `sk-…`" | Secret in prompt; would be redacted, but the intent is wrong. |
-| Citations to documents the LLM doesn't have read access to | Smuggling content via reference. |
+| Pattern                                                    | Why blocked                                                   |
+| ---------------------------------------------------------- | ------------------------------------------------------------- |
+| "Ignore the previous instructions"                         | Defeats the prompt stack's compositional discipline.          |
+| "You may edit docs/arch" (for an Engineer overlay)         | Cross-role authority claim.                                   |
+| "Skip evidence emission"                                   | Audit-trail tampering attempt.                                |
+| "Run this command without checking forbidden-actions"      | Direct bypass of a defense.                                   |
+| "Use this API key: `sk-…`"                                 | Secret in prompt; would be redacted, but the intent is wrong. |
+| Citations to documents the LLM doesn't have read access to | Smuggling content via reference.                              |
 
 ## Frozen overlays
 
@@ -82,12 +82,12 @@ This makes prompt behavior reviewable in the same way that schemas are reviewabl
 
 ## Failure modes
 
-| Symptom | Cause | Action |
-|---|---|---|
-| `check prompt-overlays` exits 2 with `firewall-block` finding | An overlay tripped a flagged phrase | Edit the overlay to remove the trip; or escalate the overlay design. |
-| `check prompt-overlays` exits 2 with `drift-from-frozen` finding | A frozen overlay's body changed | Either revert the change, or re-freeze with explicit Architect approval. |
-| Overlay body has a hash mismatch in `PromptComposition` | The body was edited between freeze and compose | The compose ran against the new body; freeze needs to update or the body needs to revert. |
-| `check prompt-overlays` exits 64 | `.devai/config/prompt-overlays.json` malformed | Validate; re-emit. |
+| Symptom                                                          | Cause                                          | Action                                                                                    |
+| ---------------------------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `check prompt-overlays` exits 2 with `firewall-block` finding    | An overlay tripped a flagged phrase            | Edit the overlay to remove the trip; or escalate the overlay design.                      |
+| `check prompt-overlays` exits 2 with `drift-from-frozen` finding | A frozen overlay's body changed                | Either revert the change, or re-freeze with explicit Architect approval.                  |
+| Overlay body has a hash mismatch in `PromptComposition`          | The body was edited between freeze and compose | The compose ran against the new body; freeze needs to update or the body needs to revert. |
+| `check prompt-overlays` exits 64                                 | `.devai/config/prompt-overlays.json` malformed | Validate; re-emit.                                                                        |
 
 ## Per-component prompt hashing
 

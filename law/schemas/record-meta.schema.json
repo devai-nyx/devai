@@ -30,38 +30,22 @@
       "minLength": 1
     },
     "supersedes": {
-      "type": [
-        "array",
-        "null"
-      ],
+      "type": ["array", "null"],
       "items": {
         "type": "string"
       }
     },
     "superseded_by": {
-      "type": [
-        "string",
-        "null"
-      ]
+      "type": ["string", "null"]
     },
     "provenance": {
-      "type": [
-        "array",
-        "string"
-      ],
+      "type": ["array", "string"],
       "items": {
         "type": "string"
       }
     }
   },
-  "required": [
-    "id",
-    "title",
-    "type",
-    "status",
-    "date",
-    "authority"
-  ],
+  "required": ["id", "title", "type", "status", "date", "authority"],
   "$comment": "additionalProperties deliberately absent here: extending schemas close their own world.",
   "examples": [
     {
@@ -73,10 +57,7 @@
       "authority": "Architect",
       "supersedes": null,
       "superseded_by": null,
-      "provenance": [
-        "ex-REJ-1",
-        "ex-D-83"
-      ]
+      "provenance": ["ex-REJ-1", "ex-D-83"]
     }
   ]
 }

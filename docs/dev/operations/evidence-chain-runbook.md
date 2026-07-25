@@ -93,12 +93,12 @@ In either case, the recovery itself emits an `evidence.recovery` event so the au
 
 ## Failure modes
 
-| Symptom | Cause | Action |
-|---|---|---|
-| `verify` exits non-zero on first record | Genesis record has wrong `prev_hash` (should be `'GENESIS'`) | Re-seed via `init apply-f5 --force --as-role architect --write`; check that no agent edited the chain by hand. |
-| `verify` exits non-zero on a recent record | A skill or sensor wrote the chain non-atomically (process crash mid-write) | Truncate to the last-verifying record + emit `evidence.recovery`. |
-| `evidence emit` rejects with `EXIT_FAIL` | Schema violation (the record doesn't match `evidence.schema.json`) | Check the `--kind`, `--actor`, `--refs` flags; non-empty required. |
-| File missing entirely | `record/proofs/` was cleaned without provenance preservation | Re-seed via `init apply-f5 --as-role architect --write`. **Provenance is lost** — note this in the recovery event. |
+| Symptom                                    | Cause                                                                      | Action                                                                                                             |
+| ------------------------------------------ | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `verify` exits non-zero on first record    | Genesis record has wrong `prev_hash` (should be `'GENESIS'`)               | Re-seed via `init apply-f5 --force --as-role architect --write`; check that no agent edited the chain by hand.     |
+| `verify` exits non-zero on a recent record | A skill or sensor wrote the chain non-atomically (process crash mid-write) | Truncate to the last-verifying record + emit `evidence.recovery`.                                                  |
+| `evidence emit` rejects with `EXIT_FAIL`   | Schema violation (the record doesn't match `evidence.schema.json`)         | Check the `--kind`, `--actor`, `--refs` flags; non-empty required.                                                 |
+| File missing entirely                      | `record/proofs/` was cleaned without provenance preservation               | Re-seed via `init apply-f5 --as-role architect --write`. **Provenance is lost** — note this in the recovery event. |
 
 ## See also
 

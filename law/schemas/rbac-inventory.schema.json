@@ -88,11 +88,7 @@
           }
         }
       },
-      "required": [
-        "endpointBindings",
-        "routeBindings",
-        "entityBindings"
-      ]
+      "required": ["endpointBindings", "routeBindings", "entityBindings"]
     },
     "defaults": {
       "type": "object",
@@ -100,17 +96,11 @@
       "properties": {
         "unknownEndpointPolicy": {
           "type": "string",
-          "enum": [
-            "deny",
-            "allow"
-          ]
+          "enum": ["deny", "allow"]
         },
         "unknownRoutePolicy": {
           "type": "string",
-          "enum": [
-            "deny",
-            "allow"
-          ]
+          "enum": ["deny", "allow"]
         }
       },
       "default": {
@@ -190,14 +180,7 @@
       }
     }
   },
-  "required": [
-    "schemaVersion",
-    "generatedAt",
-    "roles",
-    "permissions",
-    "bindings",
-    "unmapped"
-  ],
+  "required": ["schemaVersion", "generatedAt", "roles", "permissions", "bindings", "unmapped"],
   "$defs": {
     "Evidence": {
       "type": "object",
@@ -223,11 +206,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "path",
-        "startLine",
-        "endLine"
-      ]
+      "required": ["path", "startLine", "endLine"]
     },
     "Role": {
       "type": "object",
@@ -257,9 +236,7 @@
           }
         }
       },
-      "required": [
-        "id"
-      ]
+      "required": ["id"]
     },
     "Permission": {
       "type": "object",
@@ -296,9 +273,7 @@
           }
         }
       },
-      "required": [
-        "id"
-      ]
+      "required": ["id"]
     },
     "RoleBinding": {
       "type": "object",
@@ -312,10 +287,7 @@
         },
         "effect": {
           "type": "string",
-          "enum": [
-            "allow",
-            "deny"
-          ],
+          "enum": ["allow", "deny"],
           "default": "allow"
         },
         "evidence": {
@@ -325,10 +297,7 @@
           }
         }
       },
-      "required": [
-        "roleId",
-        "permissionId"
-      ]
+      "required": ["roleId", "permissionId"]
     },
     "EndpointBinding": {
       "type": "object",
@@ -344,15 +313,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [
-              "GET",
-              "POST",
-              "PUT",
-              "PATCH",
-              "DELETE",
-              "HEAD",
-              "OPTIONS"
-            ]
+            "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
           },
           "uniqueItems": true
         },
@@ -363,10 +324,7 @@
           }
         }
       },
-      "required": [
-        "permissionId",
-        "endpointId"
-      ]
+      "required": ["permissionId", "endpointId"]
     },
     "RouteBinding": {
       "type": "object",
@@ -385,10 +343,7 @@
           }
         }
       },
-      "required": [
-        "permissionId",
-        "routeId"
-      ]
+      "required": ["permissionId", "routeId"]
     },
     "EntityBinding": {
       "type": "object",
@@ -405,14 +360,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [
-              "create",
-              "read",
-              "update",
-              "delete",
-              "export",
-              "import"
-            ]
+            "enum": ["create", "read", "update", "delete", "export", "import"]
           },
           "uniqueItems": true
         },
@@ -423,10 +371,7 @@
           }
         }
       },
-      "required": [
-        "permissionId",
-        "entity"
-      ]
+      "required": ["permissionId", "entity"]
     }
   },
   "schema_version": "1.0.0",

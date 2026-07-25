@@ -18,13 +18,13 @@ Closer-to-code documents lose against higher-level documents when they contradic
 
 ## The five roles
 
-| Role | F-substrate authority | What you author | What you may NOT touch |
-|---|---|---|---|
-| [Owner](./owner.md) | F1 business tier | Journeys, use-cases, business rules, glossary terms (joint with Architect) | F1 engineering tier, F2 code, F3 tests, F5 harness |
-| [Architect](./architect.md) | F1 engineering tier | Invariants, contracts, ADRs, ops specs, security specs, glossary (joint with Owner), README, BUILD-PLAN | F1 business tier, F2 code, F3 tests, F5 harness (except via `devai adopt upgrade`) |
-| [Inspector](./inspector.md) | F3 tests | All `*.spec.ts` / `*.test.ts` / `tests/` / `e2e/` | F1 specs, F2 code, F5 harness |
-| [Engineer](./engineer.md) | F2 code | All source under `apps/`, `libs/`, `packages/`, `db/migrations/`, `db/seeds/`, `iac/`, root build scripts | F1 specs, F3 tests, F5 harness |
-| [Auditor](./auditor.md) | Read-only on all substrates | Reports, scorecards, backlogs, status assessments | Any commit that modifies F1, F2, F3, or F5 |
+| Role                        | F-substrate authority       | What you author                                                                                           | What you may NOT touch                                                             |
+| --------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [Owner](./owner.md)         | F1 business tier            | Journeys, use-cases, business rules, glossary terms (joint with Architect)                                | F1 engineering tier, F2 code, F3 tests, F5 harness                                 |
+| [Architect](./architect.md) | F1 engineering tier         | Invariants, contracts, ADRs, ops specs, security specs, glossary (joint with Owner), README, BUILD-PLAN   | F1 business tier, F2 code, F3 tests, F5 harness (except via `devai adopt upgrade`) |
+| [Inspector](./inspector.md) | F3 tests                    | All `*.spec.ts` / `*.test.ts` / `tests/` / `e2e/`                                                         | F1 specs, F2 code, F5 harness                                                      |
+| [Engineer](./engineer.md)   | F2 code                     | All source under `apps/`, `libs/`, `packages/`, `db/migrations/`, `db/seeds/`, `iac/`, root build scripts | F1 specs, F3 tests, F5 harness                                                     |
+| [Auditor](./auditor.md)     | Read-only on all substrates | Reports, scorecards, backlogs, status assessments                                                         | Any commit that modifies F1, F2, F3, or F5                                         |
 
 Each role's walkthrough page covers the operational details: what the role's session looks like, which CLI verbs are role-typical, common failure modes, and how the role interacts with the others.
 

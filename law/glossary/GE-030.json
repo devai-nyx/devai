@@ -6,13 +6,7 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "aliases": [
-    "Reverse adherence"
-  ],
-  "see_also": [
-    "GE-020"
-  ],
-  "provenance": [
-    "ex-GE-030@devai-original"
-  ]
+  "aliases": ["Reverse adherence"],
+  "see_also": ["GE-020"],
+  "provenance": ["ex-GE-030@devai-original"]
 }

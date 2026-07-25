@@ -20,13 +20,13 @@
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/blueprint-authoring.md:116:69:devai-nyx/devai",
+      "locator": "docs/adopters/blueprint-authoring.md:112:69:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/blueprint-authoring.md:117:69:devai-nyx/devai",
+      "locator": "docs/adopters/blueprint-authoring.md:113:69:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
@@ -74,13 +74,13 @@
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/index.md:38:46:devai-nyx/devai",
+      "locator": "docs/adopters/index.md:38:48:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/index.md:39:61:devai-nyx/devai",
+      "locator": "docs/adopters/index.md:39:63:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
@@ -92,25 +92,25 @@
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/mutation-scenarios.md:157:89:devai-nyx/devai",
+      "locator": "docs/adopters/mutation-scenarios.md:161:89:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/mutation-scenarios.md:158:100:devai-nyx/devai",
+      "locator": "docs/adopters/mutation-scenarios.md:162:100:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/mutation-scenarios.md:158:282:devai-nyx/devai",
+      "locator": "docs/adopters/mutation-scenarios.md:162:282:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/mutation-scenarios.md:158:473:devai-nyx/devai",
+      "locator": "docs/adopters/mutation-scenarios.md:162:473:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
@@ -122,7 +122,7 @@
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/prompt-header.md:151:103:devai-nyx/devai",
+      "locator": "docs/adopters/prompt-header.md:145:103:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
@@ -164,37 +164,37 @@
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/state-layout.md:26:177:devai-nyx/devai",
+      "locator": "docs/adopters/state-layout.md:26:199:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/state-layout.md:28:185:devai-nyx/devai",
+      "locator": "docs/adopters/state-layout.md:28:192:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/state-layout.md:40:93:devai-nyx/devai",
+      "locator": "docs/adopters/state-layout.md:40:102:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/state-layout.md:42:80:devai-nyx/devai",
+      "locator": "docs/adopters/state-layout.md:42:106:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/state-layout.md:43:78:devai-nyx/devai",
+      "locator": "docs/adopters/state-layout.md:43:105:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/adopters/state-layout.md:44:82:devai-nyx/devai",
+      "locator": "docs/adopters/state-layout.md:44:107:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
@@ -260,7 +260,7 @@
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/dev/operations/capacity.md:9:131:devai-nyx/devai",
+      "locator": "docs/dev/operations/capacity.md:9:202:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
@@ -320,43 +320,43 @@
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/reference/contracts/state-extensions.md:18:77:devai-nyx/devai",
+      "locator": "docs/reference/contracts/state-extensions.md:18:98:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/reference/contracts/state-extensions.md:20:88:devai-nyx/devai",
+      "locator": "docs/reference/contracts/state-extensions.md:20:104:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/reference/contracts/state-extensions.md:27:79:devai-nyx/devai",
+      "locator": "docs/reference/contracts/state-extensions.md:27:88:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/reference/contracts/state-extensions.md:29:66:devai-nyx/devai",
+      "locator": "docs/reference/contracts/state-extensions.md:29:92:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/reference/contracts/state-extensions.md:30:64:devai-nyx/devai",
+      "locator": "docs/reference/contracts/state-extensions.md:30:91:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/reference/contracts/state-extensions.md:31:68:devai-nyx/devai",
+      "locator": "docs/reference/contracts/state-extensions.md:31:93:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/reference/contracts/state-extensions.md:81:66:devai-nyx/devai",
+      "locator": "docs/reference/contracts/state-extensions.md:82:66:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
@@ -638,7 +638,7 @@
       "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
     },
     {
-      "locator": "law/register/attestation/genesis-attestation.schema.json:191:41:devai-nyx/devai-original",
+      "locator": "law/register/attestation/genesis-attestation.schema.json:174:41:devai-nyx/devai-original",
       "classification": "frozen-predecessor",
       "action": "retain",
       "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
@@ -650,7 +650,7 @@
       "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
     },
     {
-      "locator": "law/schemas/genesis-attestation.schema.json:191:41:devai-nyx/devai-original",
+      "locator": "law/schemas/genesis-attestation.schema.json:174:41:devai-nyx/devai-original",
       "classification": "frozen-predecessor",
       "action": "retain",
       "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
@@ -662,13 +662,13 @@
       "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
     },
     {
-      "locator": "law/schemas/local-evidence-manifest.schema.json:387:24:devai-nyx/devai",
+      "locator": "law/schemas/local-evidence-manifest.schema.json:342:24:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "law/schemas/local-evidence-manifest.schema.json:388:25:devai-nyx/devai",
+      "locator": "law/schemas/local-evidence-manifest.schema.json:343:25:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."

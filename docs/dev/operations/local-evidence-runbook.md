@@ -78,12 +78,12 @@ A trusted `gate`-mode verification (or a `strict`-mode local check) appends a `l
 
 ## Failure modes
 
-| Symptom | Cause | Action |
-|---|---|---|
-| `evidence_mode=false` on a trailer-carrying push | Policy not declared, or the manifest's `requiredJobs`/`allowedPlatforms` is laxer than the declared policy | Declare `ci_economy.local_evidence` in `project.json`; re-collect. |
-| `manifest source hash mismatch` | The tree changed since collection (a fixup commit, a rebase) | Re-run `evidence collect-local` against the current tree. |
-| `actor is not trusted for local evidence` | `LOCAL_EVIDENCE_TRUSTED_ACTORS` unset or missing the pusher | Set the repo/org variable; evidence mode never activates without it. |
-| `evidence mode cannot be used with policy-sensitive file changes` | The push touches `.github/workflows/`, `.devai/config/`, or a declared `forbidden_paths` entry | This is by design — policy-affecting changes always require full remote CI. |
+| Symptom                                                           | Cause                                                                                                      | Action                                                                      |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `evidence_mode=false` on a trailer-carrying push                  | Policy not declared, or the manifest's `requiredJobs`/`allowedPlatforms` is laxer than the declared policy | Declare `ci_economy.local_evidence` in `project.json`; re-collect.          |
+| `manifest source hash mismatch`                                   | The tree changed since collection (a fixup commit, a rebase)                                               | Re-run `evidence collect-local` against the current tree.                   |
+| `actor is not trusted for local evidence`                         | `LOCAL_EVIDENCE_TRUSTED_ACTORS` unset or missing the pusher                                                | Set the repo/org variable; evidence mode never activates without it.        |
+| `evidence mode cannot be used with policy-sensitive file changes` | The push touches `.github/workflows/`, `.devai/config/`, or a declared `forbidden_paths` entry             | This is by design — policy-affecting changes always require full remote CI. |
 
 ## See also
 

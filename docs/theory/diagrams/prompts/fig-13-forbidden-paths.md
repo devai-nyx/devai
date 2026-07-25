@@ -8,7 +8,7 @@ Central diagram for §9. Shows permitted (solid) and forbidden (red dashed × ma
 
 ## Visual structure
 
-- **Six nodes laid out in a roughly hexagonal arrangement**: *r(k) — F1 specs* (top center), *Plant — F2* (mid center), *Sensors — F3* (mid left), *Observer* (lower left), *Inner K* (mid right), *Evidence — F5* (lower right), *Auditor (read-only)* (below Evidence). A Σ summing junction sits between Observer and Inner K.
+- **Six nodes laid out in a roughly hexagonal arrangement**: _r(k) — F1 specs_ (top center), _Plant — F2_ (mid center), _Sensors — F3_ (mid left), _Observer_ (lower left), _Inner K_ (mid right), _Evidence — F5_ (lower right), _Auditor (read-only)_ (below Evidence). A Σ summing junction sits between Observer and Inner K.
 - **Permitted edges (solid arrows with labels)**: K → Plant labelled 'u(k) ∈ U_allowed'; Plant → Sens; Sens → Obs labelled 'y(k)'; Obs → Σ labelled 'x̂'; r → Σ labelled 'r'; Σ → K labelled 'e(k)'; K → Evid labelled 'emit'; Evid → Auditor labelled 'audit (read)'.
 - **Forbidden edges (red dashed with ✕ marker, label FORBIDDEN)**: Plant → r (vertical), Sens ↔ Plant (both directions), K → Evid retro-edit (slight curve to indicate it's the retro-direction, not the append direction).
 - **Aspect**: ~1100×580, square-ish.

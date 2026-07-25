@@ -16,7 +16,7 @@ The mechanics:
 
 ## Rationale
 
-Version-independent prompts were considered (prompts as a separate artifact bumped independently of skill code). Rejected because a prompt change *is* a behaviour change, and a behaviour change *is* a skill change. Treating them as independently versionable would mean:
+Version-independent prompts were considered (prompts as a separate artifact bumped independently of skill code). Rejected because a prompt change _is_ a behaviour change, and a behaviour change _is_ a skill change. Treating them as independently versionable would mean:
 
 - Two coupled commits to land any meaningful behavioural change.
 - A skill version that doesn't pin its prompt — making "what behaviour did SKILL-X@v1.2 actually have?" unanswerable without correlating timestamps.

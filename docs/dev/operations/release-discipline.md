@@ -8,11 +8,11 @@ Earlier versions of this page documented the records-only form as a deliberate c
 
 ## What each verb does — by form
 
-| Verb | Record form (operator-supplied) | Detector form (`--runtime-charter <path>`) |
-|---|---|---|
-| `release gate` | Reads scorecard JSON + invariants + sensor readings, aggregates verdict. | (no detector form — gates are about local artifacts, not runtime probes) |
+| Verb                        | Record form (operator-supplied)                                                                           | Detector form (`--runtime-charter <path>`)                                                                                                                                                                              |
+| --------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `release gate`              | Reads scorecard JSON + invariants + sensor readings, aggregates verdict.                                  | (no detector form — gates are about local artifacts, not runtime probes)                                                                                                                                                |
 | `release postdeploy-verify` | `--artifact-chain-head` + `--audit-chain-head`: records the comparison verdict + rollback recommendation. | Executes an api-kind charter against the deployed runtime; any probe fail/error → `block` + rollback_recommended. The charter's probes assert the deployed state (e.g. "chain-head endpoint returns the artifact SHA"). |
-| `release runtime-drift` | `--observation surface=delta` (repeatable): records operator-supplied observations. | Executes an api/auth-kind charter; each failed/errored probe is translated into a `surface = probe-name, delta = failed expectations` drift observation. |
+| `release runtime-drift`     | `--observation surface=delta` (repeatable): records operator-supplied observations.                       | Executes an api/auth-kind charter; each failed/errored probe is translated into a `surface = probe-name, delta = failed expectations` drift observation.                                                                |
 
 Both forms persist a record under `record/proofs/releases/REL-NNNN.json` validated against `release-control.schema.json`. The detector form additionally consumes the runtime-probe machinery (`packages/sensors/src/runtime-probe.ts`) — same HTTP driver, same credential resolution as `devai sense runtime api/auth`.
 
@@ -22,7 +22,7 @@ The two forms are mutually exclusive at the CLI level: `--runtime-charter` and `
 
 DEVAI's discipline is "evidence is governed; decisions are auditable." The release surface inherits that. Three pieces have to compose:
 
-1. **Evidence gathering.** The runtime's audit-chain head is an artifact of the *deployment infrastructure* — k8s annotations, container labels, an HTTP endpoint on the service itself, whatever convention the adopter uses. DEVAI is intentionally agnostic about that convention because adopter conventions differ.
+1. **Evidence gathering.** The runtime's audit-chain head is an artifact of the _deployment infrastructure_ — k8s annotations, container labels, an HTTP endpoint on the service itself, whatever convention the adopter uses. DEVAI is intentionally agnostic about that convention because adopter conventions differ.
 2. **Decision rendering.** Given the evidence, is the deploy go/no-go? This is what the `release *` verbs compute.
 3. **Persistence + audit.** The verdict, the inputs, the decision time — all need to live forever for compliance / replay / forensic walk. This is what `REL-NNNN.json` is.
 
@@ -52,7 +52,7 @@ The release flow today, with all parts named:
                                    ↳ persists REL-NNNN+2 with the observed deltas
 ```
 
-The middle column is what DEVAI owns. The left column is what *you* own.
+The middle column is what DEVAI owns. The left column is what _you_ own.
 
 ## What you should do as the operator
 
@@ -85,7 +85,7 @@ A `postdeploy-verify` charter is an `api`-kind runtime-charter where the probes 
 
 The operator's CI step is responsible for substituting `${ARTIFACT_CHAIN_HEAD}` (or whatever placeholder convention you use) before passing the charter to `release postdeploy-verify --runtime-charter <path>`. DEVAI itself does not template the charter — it executes whatever it loads. That keeps the substitution mechanism out of the harness substrate.
 
-A `runtime-drift` charter is an `api` or `auth`-kind charter where each probe encodes an *expected* runtime fact (a route returning 200, a header containing a value, an auth flow rejecting an unauth'd request). A non-pass outcome becomes a drift observation:
+A `runtime-drift` charter is an `api` or `auth`-kind charter where each probe encodes an _expected_ runtime fact (a route returning 200, a header containing a value, an auth flow rejecting an unauth'd request). A non-pass outcome becomes a drift observation:
 
 ```json
 {
@@ -95,8 +95,18 @@ A `runtime-drift` charter is an `api` or `auth`-kind charter where each probe en
   "mission": "drift surfaces vs artifact-of-record",
   "target": { "base_url": "https://prod.example.com/" },
   "probes": [
-    { "pid": "P1", "name": "feature flag X enabled", "path": "/api/flags/x", "expect": { "status": 200, "contains": ["\"enabled\":true"] } },
-    { "pid": "P2", "name": "deprecated route removed", "path": "/api/v1/legacy", "expect": { "status": 404 } }
+    {
+      "pid": "P1",
+      "name": "feature flag X enabled",
+      "path": "/api/flags/x",
+      "expect": { "status": 200, "contains": ["\"enabled\":true"] }
+    },
+    {
+      "pid": "P2",
+      "name": "deprecated route removed",
+      "path": "/api/v1/legacy",
+      "expect": { "status": 404 }
+    }
   ]
 }
 ```

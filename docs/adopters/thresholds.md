@@ -20,7 +20,7 @@ The shape is fixed by [`thresholds.schema.json`](https://github.com/devai-nyx/de
   "lint": { "max_errors": 0, "max_warnings": 0 },
   "typecheck": { "max_errors": 0 },
   "perf": { "p95_ms_max": 9000, "rps_min": 0.2 },
-  "freshness": { "default_max_age_hours": 168 }
+  "freshness": { "default_max_age_hours": 168 },
 }
 ```
 
@@ -39,12 +39,12 @@ All top-level sections are optional; the schema enforces only `schemaVersion`. A
 
 For MVP-readiness reviews, DEVAI treats coverage as local Inspector evidence, not a CI-produced value. The minimum acceptable evidence is:
 
-| Surface | Minimum line coverage | Required command |
-|---|---:|---|
-| CLI (`packages/cli/src`) | 70% | `pnpm test:coverage:integration` |
-| Core (`packages/core/src`) | 70% | `pnpm test:coverage:integration` |
-| Schemas (`packages/schemas/src` + `docs/schemas`) | 80% validator/source line coverage and 100% schema compile coverage | `pnpm test` + `pnpm test:integration` |
-| Sensors (`packages/sensors/src` and CLI `sense-*` adapters) | 70% | `pnpm test:coverage:integration` |
+| Surface                                                     |                                               Minimum line coverage | Required command                      |
+| ----------------------------------------------------------- | ------------------------------------------------------------------: | ------------------------------------- |
+| CLI (`packages/cli/src`)                                    |                                                                 70% | `pnpm test:coverage:integration`      |
+| Core (`packages/core/src`)                                  |                                                                 70% | `pnpm test:coverage:integration`      |
+| Schemas (`packages/schemas/src` + `docs/schemas`)           | 80% validator/source line coverage and 100% schema compile coverage | `pnpm test` + `pnpm test:integration` |
+| Sensors (`packages/sensors/src` and CLI `sense-*` adapters) |                                                                 70% | `pnpm test:coverage:integration`      |
 
 The MVP floor is intentionally below the long-term PASS target of 80% lines because Phase 37/38 established that DEVAI's unit-only coverage is a measurement artifact; subprocess integration coverage is the canonical local measurement. Falling below these floors is an Inspector blocker for release-readiness. Full-production readiness additionally requires the real DB and real LLM integration lanes to run green against natural credentials. Hermetic runs may set `DEVAI_DB_TESTS=0`, `DEVAI_LLM_TESTS=0`, or `DEVAI_LLM_BACKEND=mock`, but those runs are wiring evidence only and do not satisfy the full-production bar.
 

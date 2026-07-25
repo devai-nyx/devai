@@ -2,11 +2,11 @@
 
 Drop-in artifacts for adopter repos. Phase 20.E (closes the C-4 stynx-pilot retro findings D-A-4 + D-A-5).
 
-| File | Purpose | Closes |
-|---|---|---|
-| [`commitlint.config.cjs`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/adopters/templates/commitlint.config.cjs) | Accepts both DEVAI role-prefix subjects (`Architect: ...`) and Conventional Commits. Drop in or splice the rules into an existing config. | D-A-4 |
-| [`.gitattributes`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/adopters/templates/.gitattributes) | Marks `record/proofs/**` as `linguist-generated` + disables line-ending normalization so Git tooling doesn't rewrite hash-chained evidence records. | D-A-5 |
-| [`lint-staged-snippet.md`](./lint-staged-snippet.md) | `.prettierignore` + `lint-staged` config snippets that skip `record/proofs/**`. | D-A-5 |
+| File                                                                                                                                                      | Purpose                                                                                                                                             | Closes |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| [`commitlint.config.cjs`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/adopters/templates/commitlint.config.cjs) | Accepts both DEVAI role-prefix subjects (`Architect: ...`) and Conventional Commits. Drop in or splice the rules into an existing config.           | D-A-4  |
+| [`.gitattributes`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/adopters/templates/.gitattributes)               | Marks `record/proofs/**` as `linguist-generated` + disables line-ending normalization so Git tooling doesn't rewrite hash-chained evidence records. | D-A-5  |
+| [`lint-staged-snippet.md`](./lint-staged-snippet.md)                                                                                                      | `.prettierignore` + `lint-staged` config snippets that skip `record/proofs/**`.                                                                     | D-A-5  |
 
 ## Why these are templates and not committed defaults
 

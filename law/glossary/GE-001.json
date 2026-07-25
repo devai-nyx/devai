@@ -6,15 +6,7 @@
   "authority": "joint",
   "category": "business",
   "status": "active",
-  "see_also": [
-    "GE-004",
-    "GE-005",
-    "GE-019"
-  ],
-  "related_invariants": [
-    "INV-DEVAI-001"
-  ],
-  "provenance": [
-    "ex-GE-001@devai-original"
-  ]
+  "see_also": ["GE-004", "GE-005", "GE-019"],
+  "related_invariants": ["INV-DEVAI-001"],
+  "provenance": ["ex-GE-001@devai-original"]
 }

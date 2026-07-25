@@ -154,13 +154,13 @@ This is a pnpm setup quirk, not a DEVAI bug — but it's the first thing every a
 
 **Fix.** Phase 25.C raised the per-skill defaults and added a backend-aware multiplier that scales the per-skill default by 3x when the resolved LLM family is `claude-cli` or `codex-cli`. The new effective defaults:
 
-| Skill                       | claude-cli OAuth p95 | Direct-API (Sonnet) p95 | Base default (25.C) | claude-cli effective (3×) |
-| --------------------------- | -------------------- | ----------------------- | ------------------- | ------------------------- |
-| `SKILL-feedback-iteration`  | 25–35 min            | 3–8 min                 | **1800s** (30min)   | **5400s** (90min)         |
-| `SKILL-fix-lint` / `-build` / `-test` / `SKILL-triage` | 5–15 min | 1–3 min     | **900s** (15min)    | **2700s** (45min)         |
-| `SKILL-write-*` writers     | 5–12 min             | 1–3 min                 | **900s**            | **2700s**                 |
-| `SKILL-assess-state`        | 1–3 min              | 30–90s                  | **300s** (5min)     | **900s** (15min)          |
-| default (unknown skill)     | —                    | —                       | **300s**            | **300s** (not multiplied) |
+| Skill                                                  | claude-cli OAuth p95 | Direct-API (Sonnet) p95 | Base default (25.C) | claude-cli effective (3×) |
+| ------------------------------------------------------ | -------------------- | ----------------------- | ------------------- | ------------------------- |
+| `SKILL-feedback-iteration`                             | 25–35 min            | 3–8 min                 | **1800s** (30min)   | **5400s** (90min)         |
+| `SKILL-fix-lint` / `-build` / `-test` / `SKILL-triage` | 5–15 min             | 1–3 min                 | **900s** (15min)    | **2700s** (45min)         |
+| `SKILL-write-*` writers                                | 5–12 min             | 1–3 min                 | **900s**            | **2700s**                 |
+| `SKILL-assess-state`                                   | 1–3 min              | 30–90s                  | **300s** (5min)     | **900s** (15min)          |
+| default (unknown skill)                                | —                    | —                       | **300s**            | **300s** (not multiplied) |
 
 Latency numbers above are 95th-percentile observations against the stynx C-4 pilot's adoption arc (47 commits, 2026-05 timeframe). Your numbers will vary — measure against your own workload and override per-skill via the pack-config registry if needed.
 
@@ -200,8 +200,8 @@ If you're running against a fast direct-API backend (e.g. Sonnet 4.6 via `ANTHRO
 
 **Cause.** "Doesn't have an int suite" is doing two unrelated jobs at once:
 
-- **(a)** *concrete IO instantiation in src/* — `new Pool(...)`, `new CognitoIdentityProviderClient(...)`, `createClient(...)`, `new Redis(...)`. Mockable only by either spinning real infra (testcontainers / localstack / etc.) or wrapping each call site at test time. High effort.
-- **(b)** *interface-injected IO in src/* — every external dependency arrives via a small typed interface in the constructor (`PgQueryableClient`, `SqlExecutor`, `AuditSink`, `FlowDomainAdapter`, etc.). Mockable with a trivial in-test stub. Low effort.
+- **(a)** _concrete IO instantiation in src/_ — `new Pool(...)`, `new CognitoIdentityProviderClient(...)`, `createClient(...)`, `new Redis(...)`. Mockable only by either spinning real infra (testcontainers / localstack / etc.) or wrapping each call site at test time. High effort.
+- **(b)** _interface-injected IO in src/_ — every external dependency arrives via a small typed interface in the constructor (`PgQueryableClient`, `SqlExecutor`, `AuditSink`, `FlowDomainAdapter`, etc.). Mockable with a trivial in-test stub. Low effort.
 
 `sense-test-coverage-depth` measures the coverage percentage and the redox-pack tunes the threshold, but neither sensor nor pack distinguishes (a) from (b). Both get filed as "no int suite" and estimated as if (a).
 

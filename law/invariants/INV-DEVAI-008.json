@@ -10,9 +10,7 @@
   "rationale": "Article 37 governs the prompt stack as the auditable input to every LLM-backed loop step. Content-addressed IDs let two runs that share inputs share evidence; drift in any component surfaces in the top-level stack_sha256. The frozen_against field anchors governed loops to a specific prompt fingerprint.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -29,36 +27,15 @@
     ]
   },
   "scope": {
-    "components": [
-      "core",
-      "cli"
-    ],
-    "code_areas": [
-      "packages/core/src/loop/prompts.ts",
-      "packages/cli/src/commands/phase6/**"
-    ]
+    "components": ["core", "cli"],
+    "code_areas": ["packages/core/src/loop/prompts.ts", "packages/cli/src/commands/phase6/**"]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval",
-      "adr"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval", "adr"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-6",
-    "prompts",
-    "content-addressed"
-  ],
-  "measurable_via": [
-    "agent prompt compose",
-    "agent prompt diff",
-    "agent prompt freeze"
-  ],
-  "provenance": [
-    "ex-INV-DEVAI-008@devai-original"
-  ]
+  "tags": ["phase-6", "prompts", "content-addressed"],
+  "measurable_via": ["agent prompt compose", "agent prompt diff", "agent prompt freeze"],
+  "provenance": ["ex-INV-DEVAI-008@devai-original"]
 }

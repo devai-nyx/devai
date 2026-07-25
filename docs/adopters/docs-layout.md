@@ -25,31 +25,31 @@ docs/
 
 ## Per-subdir purpose
 
-| Dir | Purpose | Audience |
-|-----|---------|----------|
-| `eng/` | Engineering specs that describe the system as built: api-surface, target-stack, invariant catalogue, maturity rubric, inventory generators, stynx-boundary contracts. | Engineers, agents producing code. |
-| `arch/` | High-level architecture, system diagrams, the `invariants/` tree (one file per `INV-<DOMAIN>-<NNN>`), and `trace.json` (architecture-to-invariant trace). | Architects, anyone reasoning about the system. |
-| `adr/` | Architecture Decision Records. One file per decision, immutable once accepted. Template at [`adr/README.md`](./adr/README.md). | Anyone wanting to know *why* a structural choice was made. |
-| `contracts/` | Outward-facing contracts the adopter publishes to consumers: OpenAPI, JSON Schema, SQL DDL. Each contract authored per [`contracts/README.md`](./contracts/README.md). | Consumer engineers, integration partners. |
-| `schemas/` | Internal JSON Schemas (request/response shapes inside the service). Not the same surface as `contracts/`. | Internal developers. |
-| `ops/` | Operational runbooks: environment topology, release process, incident playbooks, SLA definitions. | Oncall, SRE, deploy operators. |
-| `user/` | User-facing material: personas, training, demo scripts, release notes. **Portuguese (pt-BR) is accepted** here per the language policy. | End users, customer success, training. |
-| `gov/` | Governance state and policies. **Adopter choice:** keep local OR delegate to a sibling DEVAI checkout (TEAT-style). Declare which in `AGENTS.md` / `CLAUDE.md`. | Auditor, Owner, Architect. |
-| `security/` | Threat models, security controls, audit-trail policies. | Security reviewers, auditor. |
-| `work/` | Transient working files. Git-tracked so the trail survives, but content is ephemeral. Don't link FROM stable docs INTO `work/` unless you've already promoted that material elsewhere. | Whoever is mid-task. |
-| `prototypes/` | Evidence chains from ports-from-prototype work. Otherwise empty. | Auditor, post-port reviewer. |
-| `glossary/` | Canonical terminology, one entry per term (`GE-<NNN>.json` or `.md`). | Anyone resolving naming questions. |
+| Dir           | Purpose                                                                                                                                                                                | Audience                                                   |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `eng/`        | Engineering specs that describe the system as built: api-surface, target-stack, invariant catalogue, maturity rubric, inventory generators, stynx-boundary contracts.                  | Engineers, agents producing code.                          |
+| `arch/`       | High-level architecture, system diagrams, the `invariants/` tree (one file per `INV-<DOMAIN>-<NNN>`), and `trace.json` (architecture-to-invariant trace).                              | Architects, anyone reasoning about the system.             |
+| `adr/`        | Architecture Decision Records. One file per decision, immutable once accepted. Template at [`adr/README.md`](./adr/README.md).                                                         | Anyone wanting to know _why_ a structural choice was made. |
+| `contracts/`  | Outward-facing contracts the adopter publishes to consumers: OpenAPI, JSON Schema, SQL DDL. Each contract authored per [`contracts/README.md`](./contracts/README.md).                 | Consumer engineers, integration partners.                  |
+| `schemas/`    | Internal JSON Schemas (request/response shapes inside the service). Not the same surface as `contracts/`.                                                                              | Internal developers.                                       |
+| `ops/`        | Operational runbooks: environment topology, release process, incident playbooks, SLA definitions.                                                                                      | Oncall, SRE, deploy operators.                             |
+| `user/`       | User-facing material: personas, training, demo scripts, release notes. **Portuguese (pt-BR) is accepted** here per the language policy.                                                | End users, customer success, training.                     |
+| `gov/`        | Governance state and policies. **Adopter choice:** keep local OR delegate to a sibling DEVAI checkout (TEAT-style). Declare which in `AGENTS.md` / `CLAUDE.md`.                        | Auditor, Owner, Architect.                                 |
+| `security/`   | Threat models, security controls, audit-trail policies.                                                                                                                                | Security reviewers, auditor.                               |
+| `work/`       | Transient working files. Git-tracked so the trail survives, but content is ephemeral. Don't link FROM stable docs INTO `work/` unless you've already promoted that material elsewhere. | Whoever is mid-task.                                       |
+| `prototypes/` | Evidence chains from ports-from-prototype work. Otherwise empty.                                                                                                                       | Auditor, post-port reviewer.                               |
+| `glossary/`   | Canonical terminology, one entry per term (`GE-<NNN>.json` or `.md`).                                                                                                                  | Anyone resolving naming questions.                         |
 
 ## Rename rule — short names only
 
 No long aliases. The following long forms are **violations** of the canon:
 
-| Long form (forbidden) | Canonical | Notes |
-|----------------------|-----------|-------|
-| `docs/engineering` | `docs/eng/` | trailing-slash form omitted to keep examples sed-safe |
-| `docs/architecture` | `docs/theory/architecture/` | |
-| `docs/operations` | `docs/dev/operations/` | |
-| `docs/governance` | `docs/gov/` | |
+| Long form (forbidden) | Canonical                   | Notes                                                 |
+| --------------------- | --------------------------- | ----------------------------------------------------- |
+| `docs/engineering`    | `docs/eng/`                 | trailing-slash form omitted to keep examples sed-safe |
+| `docs/architecture`   | `docs/theory/architecture/` |                                                       |
+| `docs/operations`     | `docs/dev/operations/`      |                                                       |
+| `docs/governance`     | `docs/gov/`                 |                                                       |
 
 Parallel forms are also violations — an adopter MUST NOT have both `docs/governance/` and `docs/gov/`. If you discover one mid-migration, the rename is incomplete; finish it before merging.
 

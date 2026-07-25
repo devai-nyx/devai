@@ -56,66 +56,39 @@
       "description": "Canonical action name: 'task.spawn', 'task.merge', 'rgr.emit', 'sensor.run', 'inventory.regenerate', etc."
     },
     "lifecycle": {
-      "enum": [
-        "supported",
-        "experimental"
-      ],
+      "enum": ["supported", "experimental"],
       "default": "supported",
       "description": "Experimental evidence is retained but cannot promote supported readiness."
     },
     "status": {
-      "enum": [
-        "started",
-        "completed",
-        "failed",
-        "escalated",
-        "paused"
-      ]
+      "enum": ["started", "completed", "failed", "escalated", "paused"]
     },
     "context": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "repo_root",
-        "git"
-      ],
+      "required": ["repo_root", "git"],
       "properties": {
         "repo_root": {
           "type": "string"
         },
         "task_id": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "pattern": "^TASK-[0-9]+$"
         },
         "worktree_id": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "pattern": "^WT-"
         },
         "branch": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "git": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "head_sha",
-            "dirty_files"
-          ],
+          "required": ["head_sha", "dirty_files"],
           "properties": {
             "head_sha": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": ["string", "null"]
             },
             "dirty_files": {
               "type": "array",
@@ -132,19 +105,13 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "path",
-          "sha256"
-        ],
+        "required": ["path", "sha256"],
         "properties": {
           "path": {
             "type": "string"
           },
           "sha256": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "pattern": "^[a-f0-9]{64}$"
           },
           "kind": {
@@ -223,10 +190,7 @@
       }
     },
     "previous_run_hash": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "pattern": "^[a-f0-9]{64}$",
       "description": "SHA-256 of the manifest_hash of the preceding evidence record. Null for chain genesis."
     },

@@ -114,16 +114,11 @@
                 "$ref": "common-defs.schema.json#/$defs/sha256"
               }
             },
-            "required": [
-              "path",
-              "sha256"
-            ]
+            "required": ["path", "sha256"]
           }
         }
       },
-      "required": [
-        "documents"
-      ]
+      "required": ["documents"]
     },
     "imported_law": {
       "type": "object"
@@ -144,20 +139,13 @@
             }
           },
           "status": {
-            "enum": [
-              "attested-historical",
-              "must-re-earn"
-            ]
+            "enum": ["attested-historical", "must-re-earn"]
           },
           "note": {
             "type": "string"
           }
         },
-        "required": [
-          "claim",
-          "predecessor_records",
-          "status"
-        ]
+        "required": ["claim", "predecessor_records", "status"]
       }
     },
     "tombstones": {
@@ -177,12 +165,7 @@
       }
     }
   },
-  "required": [
-    "record",
-    "predecessor",
-    "imported_evidence",
-    "non_claims"
-  ],
+  "required": ["record", "predecessor", "imported_evidence", "non_claims"],
   "examples": [
     {
       "record": "GEN-0001",
@@ -197,9 +180,7 @@
         "frozen": false
       },
       "imported_evidence": [],
-      "non_claims": [
-        "successor-standing-starts-at-zero"
-      ]
+      "non_claims": ["successor-standing-starts-at-zero"]
     }
   ]
 }

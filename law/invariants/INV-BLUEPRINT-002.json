@@ -10,9 +10,7 @@
   "rationale": "Per D-59. INV-INVENTORY-002 enforces the PII discipline on brownfield inventory bodies (every PII-classified column has legal_basis + retention); INV-BLUEPRINT-002 enforces it on greenfield specs BEFORE generation. Together they make the discipline composable: a scaffolded module produces inventory that satisfies INV-INVENTORY-002 because the blueprint already enforced retention at the spec layer. Brownfield + greenfield converge on one rule, cited as the meeting point in D-59 consequence #8. Severity hard-fail (Phase 10.A) mirrors INV-INVENTORY-002: shipping unlabeled PII handling \u2014 at either layer \u2014 is a regulatory exposure under LGPD / GDPR / CCPA / HIPAA, not a quality concern.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -33,22 +31,14 @@
     ]
   },
   "scope": {
-    "components": [
-      "core",
-      "cli"
-    ],
+    "components": ["core", "cli"],
     "code_areas": [
       "packages/core/src/blueprint/index.ts",
       "packages/cli/src/commands/blueprint/validate.ts"
     ]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval",
-      "adr"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval", "adr"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
@@ -63,10 +53,6 @@
     "gdpr",
     "ccpa"
   ],
-  "measurable_via": [
-    "spec blueprint validate"
-  ],
-  "provenance": [
-    "ex-INV-BLUEPRINT-002@devai-original"
-  ]
+  "measurable_via": ["spec blueprint validate"],
+  "provenance": ["ex-INV-BLUEPRINT-002@devai-original"]
 }

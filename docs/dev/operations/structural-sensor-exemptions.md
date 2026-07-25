@@ -20,13 +20,13 @@ cases existed is historical and is not an exemption rationale.
 
 ## Current N/A cells
 
-| Cell | Why it is structurally inapplicable to DEVAI-self | What remains applicable to adopters |
-|---|---|---|
-| `F2:T4` Plant × Alignment | DEVAI has no application migration substrate or database of record for `sense migrate check`. | Runtime-host repositories with migrations measure this cell. |
-| `F4:T1` Inventory × Coverage | The actual DEVAI product inventory is the CLI action registry; API/data inventory sensors otherwise observe fixtures rather than the product surface. | Repositories with controllers, routes, or data models measure presence normally. |
-| `F4:T2` Inventory × Depth | The same CLI-vs-fixture mismatch prevents API-oriented depth from representing DEVAI's product. | Runtime-host repositories measure inventory depth. |
-| `F4:T6` Inventory × Security | DEVAI has no customer PII/data-model inventory for the data-handling and product-RBAC sensors. CLI authority is verified through separate Article-6 invariants and tests. | Product repositories with data/RBAC surfaces measure this cell. |
-| `F1:T6` Specification × Security | The spec-security sensor's PII-registry leg has no application data substrate in this framework repository. Threat-model and authority signals remain separately binding. | Repositories with product data must provide the full security-spec substrate. |
+| Cell                             | Why it is structurally inapplicable to DEVAI-self                                                                                                                         | What remains applicable to adopters                                              |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `F2:T4` Plant × Alignment        | DEVAI has no application migration substrate or database of record for `sense migrate check`.                                                                             | Runtime-host repositories with migrations measure this cell.                     |
+| `F4:T1` Inventory × Coverage     | The actual DEVAI product inventory is the CLI action registry; API/data inventory sensors otherwise observe fixtures rather than the product surface.                     | Repositories with controllers, routes, or data models measure presence normally. |
+| `F4:T2` Inventory × Depth        | The same CLI-vs-fixture mismatch prevents API-oriented depth from representing DEVAI's product.                                                                           | Runtime-host repositories measure inventory depth.                               |
+| `F4:T6` Inventory × Security     | DEVAI has no customer PII/data-model inventory for the data-handling and product-RBAC sensors. CLI authority is verified through separate Article-6 invariants and tests. | Product repositories with data/RBAC surfaces measure this cell.                  |
+| `F1:T6` Specification × Security | The spec-security sensor's PII-registry leg has no application data substrate in this framework repository. Threat-model and authority signals remain separately binding. | Repositories with product data must provide the full security-spec substrate.    |
 
 `F2:T9` is **not** N/A: build readings map to Plant × Discipline. `F5:T5` is
 also applicable: R21 records the hybrid CI decision and DEVAI's `ci.yml`

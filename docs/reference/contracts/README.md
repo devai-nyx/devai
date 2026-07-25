@@ -8,8 +8,8 @@ This directory holds Architect-authored API contracts (OpenAPI), data contracts 
 
 There are two distinct contract surfaces in the repo:
 
-- **`docs/reference/contracts/`** (this directory) — Architect-authored *client-facing* contracts: the OpenAPI specs adopters publish to their consumers, the SQL DDL for adopter databases, and the JSON Schemas adopters expose at runtime. Content is deferred; this directory exists as the canonical home for that material when client work begins.
-- **`law/schemas/`** — the schema set governing DEVAI's *own machinery* (sensor readings, invariants, evidence chain, scorecard, task records, etc.). Distinct F1 path, distinct purpose.
+- **`docs/reference/contracts/`** (this directory) — Architect-authored _client-facing_ contracts: the OpenAPI specs adopters publish to their consumers, the SQL DDL for adopter databases, and the JSON Schemas adopters expose at runtime. Content is deferred; this directory exists as the canonical home for that material when client work begins.
+- **`law/schemas/`** — the schema set governing DEVAI's _own machinery_ (sensor readings, invariants, evidence chain, scorecard, task records, etc.). Distinct F1 path, distinct purpose.
 
 The rest of this doc covers the second tier — DEVAI's own schema canon — because that surface is large, stable, and load-bearing, and adopters reading these contracts need to know what shape the framework expects.
 
@@ -17,12 +17,12 @@ The rest of this doc covers the second tier — DEVAI's own schema canon — bec
 
 A growing set of schemas in this directory normalizes inputs/outputs at adopter boundaries (these are NOT part of the fixed `law/schemas/` canon — they govern adopter-authored data the framework consumes):
 
-| Schema | Companion adopter doc | ADR |
-|---|---|---|
-| [`decisions.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/decisions.schema.json) | [`../../adopters/decisions-ledger.md`](../../adopters/decisions-ledger.md) | (see D-A-42) |
-| [`test-result.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/test-result.schema.json) | — | (record-run/render-matrix) |
+| Schema                                                                                                                                                                     | Companion adopter doc                                                          | ADR                                                             |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------- |
+| [`decisions.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/decisions.schema.json)                 | [`../../adopters/decisions-ledger.md`](../../adopters/decisions-ledger.md)     | (see D-A-42)                                                    |
+| [`test-result.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/test-result.schema.json)             | —                                                                              | (record-run/render-matrix)                                      |
 | [`mutation-scenario.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/mutation-scenario.schema.json) | [`../../adopters/mutation-scenarios.md`](../../adopters/mutation-scenarios.md) | [`ADR-MUTATION-SCENARIOS`](../../../law/adr/README.md) (D-A-44) |
-| [`thresholds.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/thresholds.schema.json) | [`../../adopters/thresholds.md`](../../adopters/thresholds.md) | — |
+| [`thresholds.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/thresholds.schema.json)               | [`../../adopters/thresholds.md`](../../adopters/thresholds.md)                 | —                                                               |
 
 Examples for each schema live under [`examples/`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/examples/).
 
@@ -39,15 +39,15 @@ DEVAI ships a fixed set of JSON Schemas covering every machine-readable artifact
 
 ### Canon by concern
 
-| Concern | Schemas |
-|---|---|
-| Primitives | `sensor-reading`, `evidence` |
-| Specification | `invariant`, `journey`, `glossary-entry`, `trace` |
-| Inventory | `module`, `inventory`, `trace-resolution`, `test-weakening-config` |
-| Work units | `task`, `backlog`, `lock`, `worktree` |
-| Escalation | `rgr`, `escalation`, `triage-result`, `firewall-verdict` |
-| Assessment | `scorecard`, `assessment` |
-| Harness | `skill-manifest`, `prompt-composition`, `rtd-manifest` |
+| Concern       | Schemas                                                            |
+| ------------- | ------------------------------------------------------------------ |
+| Primitives    | `sensor-reading`, `evidence`                                       |
+| Specification | `invariant`, `journey`, `glossary-entry`, `trace`                  |
+| Inventory     | `module`, `inventory`, `trace-resolution`, `test-weakening-config` |
+| Work units    | `task`, `backlog`, `lock`, `worktree`                              |
+| Escalation    | `rgr`, `escalation`, `triage-result`, `firewall-verdict`           |
+| Assessment    | `scorecard`, `assessment`                                          |
+| Harness       | `skill-manifest`, `prompt-composition`, `rtd-manifest`             |
 
 The canonical list lives at [`../schemas/`](../../../law/schemas). The full schema catalog is enumerated and validated by `devai spec validate-schemas`.
 

@@ -5,14 +5,7 @@
   "description": "Output record for the `devai release gate`, `devai release postdeploy verify`, and `devai release runtime drift` commands (Phase 11.B / D-39). Records a deploy-gate decision and the inputs that drove it; persisted under .devai/state/releases/REL-<id>.json so the audit trail can be replayed.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "id",
-    "kind",
-    "decided_at",
-    "verdict",
-    "inputs"
-  ],
+  "required": ["schemaVersion", "id", "kind", "decided_at", "verdict", "inputs"],
   "properties": {
     "schemaVersion": {
       "const": "1.0.0"
@@ -23,11 +16,7 @@
       "description": "Stable id, monotonically allocated from the REL counter."
     },
     "kind": {
-      "enum": [
-        "gate",
-        "postdeploy-verify",
-        "runtime-drift"
-      ],
+      "enum": ["gate", "postdeploy-verify", "runtime-drift"],
       "description": "Which release verb produced the record."
     },
     "decided_at": {
@@ -39,23 +28,11 @@
       "description": "Optional immutable artifact identifier (digest, tag, container image, etc.) the gate decision applies to."
     },
     "environment": {
-      "enum": [
-        "dev",
-        "staging",
-        "stage",
-        "prod",
-        "preview",
-        "other"
-      ],
+      "enum": ["dev", "staging", "stage", "prod", "preview", "other"],
       "description": "Target environment for the gate decision."
     },
     "verdict": {
-      "enum": [
-        "pass",
-        "block",
-        "review",
-        "inconclusive"
-      ],
+      "enum": ["pass", "block", "review", "inconclusive"],
       "description": "Final gate decision. block = deploy not permitted; review = human attention required; inconclusive = inputs insufficient; pass = OK to proceed."
     },
     "reasons": {
@@ -99,23 +76,14 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name",
-          "verdict"
-        ],
+        "required": ["name", "verdict"],
         "properties": {
           "name": {
             "type": "string",
             "minLength": 1
           },
           "verdict": {
-            "enum": [
-              "pass",
-              "block",
-              "review",
-              "inconclusive",
-              "skipped"
-            ]
+            "enum": ["pass", "block", "review", "inconclusive", "skipped"]
           },
           "detail": {
             "type": "string"
@@ -132,10 +100,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "surface",
-          "delta"
-        ],
+        "required": ["surface", "delta"],
         "properties": {
           "surface": {
             "type": "string",

@@ -14,7 +14,7 @@ For each non-leaf source directory (default scan: `packages/*/src/**`), classify
 - **PascalCase:** `[A-Z][a-zA-Z0-9]*`
 - **other:** anything else.
 
-A directory is *coherent* if all classified files belong to the same case bucket (single-word lowercase files count as kebab-case). A directory is *incoherent* if ≥ 2 buckets each contain ≥ 1 file.
+A directory is _coherent_ if all classified files belong to the same case bucket (single-word lowercase files count as kebab-case). A directory is _incoherent_ if ≥ 2 buckets each contain ≥ 1 file.
 
 ## PASS / REVIEW / FAIL boundaries
 

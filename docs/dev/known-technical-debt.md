@@ -2,18 +2,19 @@
 
 **Authority:** Architect (Constitution Article 6).
 
-A living catalogue of debt items that are *intentionally not fixed*: each entry documents the smell, why we are leaving it in place today, and the migration sketch for when the trigger arrives. Items move to `CHANGELOG.md` (closed) or stay here (open) — they are never silently resolved.
+A living catalogue of debt items that are _intentionally not fixed_: each entry documents the smell, why we are leaving it in place today, and the migration sketch for when the trigger arrives. Items move to `CHANGELOG.md` (closed) or stay here (open) — they are never silently resolved.
 
 ## Index
 
-| Item | Status | Trigger to revisit |
-|---|---|---|
-| [Async parallelization of `buildRtdManifest`](#async-parallelization-of-buildrtdmanifest) | deferred | `rtd bundle` latency exceeds ~500 ms on a real client repo. |
-| [Non-NestJS inventory parsers](#non-nestjs-inventory-parsers) | deferred | A named adopter requires complete Laravel, Express, Spring, Blade, or AngularJS inventory; or one of those parsers is separately authorized. |
+| Item                                                                                      | Status   | Trigger to revisit                                                                                                                           |
+| ----------------------------------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Async parallelization of `buildRtdManifest`](#async-parallelization-of-buildrtdmanifest) | deferred | `rtd bundle` latency exceeds ~500 ms on a real client repo.                                                                                  |
+| [Non-NestJS inventory parsers](#non-nestjs-inventory-parsers)                             | deferred | A named adopter requires complete Laravel, Express, Spring, Blade, or AngularJS inventory; or one of those parsers is separately authorized. |
 
 Closed entries (forensic trail in `CHANGELOG.md`):
-- *Canonical-JSON hash algorithm divergence* — closed in Phase 16.G. `@devai-nyx/core/canonical-json` ships `canonicalSha256(value, version)` with `v1.0` (legacy shallow-sort) and `v2.0` (true deep-sort) dispatch. `agent-run` and `rtd-manifest` schemas grow an optional `hash_algo_version`; new writes stamp `'2.0'`, readers default to `'1.0'` on absence (matching the legacy algorithm those records were hashed under). `rgr` / `release-control` carry no stored hash field, so their `*ContentHash` helpers are utility-only and always use the current default. See CHANGELOG entry under Phase 16 for the full migration record.
-- *Coverage measurement was unit-only with no binding threshold* — closed in
+
+- _Canonical-JSON hash algorithm divergence_ — closed in Phase 16.G. `@devai-nyx/core/canonical-json` ships `canonicalSha256(value, version)` with `v1.0` (legacy shallow-sort) and `v2.0` (true deep-sort) dispatch. `agent-run` and `rtd-manifest` schemas grow an optional `hash_algo_version`; new writes stamp `'2.0'`, readers default to `'1.0'` on absence (matching the legacy algorithm those records were hashed under). `rgr` / `release-control` carry no stored hash field, so their `*ContentHash` helpers are utility-only and always use the current default. See CHANGELOG entry under Phase 16 for the full migration record.
+- _Coverage measurement was unit-only with no binding threshold_ — closed in
   R15. Deterministic unit and subprocess integration V8 output is merged and
   the repository gate enforces 70/60/70/70 lines/branches/functions/statements.
   The 80% line figure remains an improvement target, not the binding floor.
@@ -53,7 +54,7 @@ shows user-perceptible latency.
 
 ## How to use this document
 
-- **Adding an entry.** New tech-debt finding goes here, not into a comment in the source. Each entry MUST have a *trigger* — without one, it's not debt, it's just a complaint.
+- **Adding an entry.** New tech-debt finding goes here, not into a comment in the source. Each entry MUST have a _trigger_ — without one, it's not debt, it's just a complaint.
 - **Closing an entry.** When the trigger fires, execute the migration sketch, move the entry to `CHANGELOG.md` with a brief note on what changed, and delete it from here.
 - **Auditing.** This document is part of the Architect-authored security/governance surface. Items here are visible to anyone reading `docs/theory/architecture/`. Don't hide debt elsewhere.
 

@@ -6,15 +6,7 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "aliases": [
-    "RTM-record",
-    "Reference Traceability Document"
-  ],
-  "see_also": [
-    "GE-019",
-    "GE-020"
-  ],
-  "provenance": [
-    "ex-GE-034@devai-original"
-  ]
+  "aliases": ["RTM-record", "Reference Traceability Document"],
+  "see_also": ["GE-019", "GE-020"],
+  "provenance": ["ex-GE-034@devai-original"]
 }

@@ -5,14 +5,7 @@
   "description": "Charter that scopes a runtime probe run. The charter declares mission, target environment, in-scope invariants, allowed credentials, the probe sequence, expected evidence, and side-effect policy. Consumed by `devai sense runtime api / runtime-auth / runtime-data` (Phase 11.A, D-39).",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "id",
-    "kind",
-    "mission",
-    "target",
-    "probes"
-  ],
+  "required": ["schemaVersion", "id", "kind", "mission", "target", "probes"],
   "properties": {
     "schemaVersion": {
       "const": "1.0.0"
@@ -23,11 +16,7 @@
       "description": "Stable charter id. Free-form within the pattern; not minted from a counter (charters are authored artifacts, not generated)."
     },
     "kind": {
-      "enum": [
-        "api",
-        "auth",
-        "data"
-      ],
+      "enum": ["api", "auth", "data"],
       "description": "Which runtime-probe family executes this charter. api = HTTP/GraphQL/RPC; auth = RBAC/session/protected-surface; data = DB/state/consistency."
     },
     "mission": {
@@ -38,23 +27,14 @@
     "target": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "base_url"
-      ],
+      "required": ["base_url"],
       "properties": {
         "base_url": {
           "type": "string",
           "description": "Base URL for the deployed runtime under probe. For data-kind probes this may be a DB connection string instead."
         },
         "environment": {
-          "enum": [
-            "dev",
-            "staging",
-            "stage",
-            "prod",
-            "preview",
-            "other"
-          ]
+          "enum": ["dev", "staging", "stage", "prod", "preview", "other"]
         },
         "deployed_artifact_ref": {
           "type": "string",
@@ -79,10 +59,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name",
-          "role"
-        ],
+        "required": ["name", "role"],
         "properties": {
           "name": {
             "type": "string",
@@ -105,11 +82,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "pid",
-          "name",
-          "expect"
-        ],
+        "required": ["pid", "name", "expect"],
         "properties": {
           "pid": {
             "type": "string",
@@ -181,11 +154,7 @@
       "additionalProperties": false,
       "properties": {
         "policy": {
-          "enum": [
-            "read-only",
-            "idempotent_writes",
-            "destructive_with_isolation"
-          ],
+          "enum": ["read-only", "idempotent_writes", "destructive_with_isolation"],
           "description": "Default: read-only. Probes that write must declare so explicitly."
         },
         "isolation_note": {

@@ -8,13 +8,13 @@ Triage as the FDI block atop the observer: every failing reading is classified i
 
 ## Visual structure
 
-- **Input** on the left (sensor palette): *y(k): failing SensorReading*.
-- **Center** (observer palette): *Triage classifier* with subtitle 'FDI block'.
+- **Input** on the left (sensor palette): _y(k): failing SensorReading_.
+- **Center** (observer palette): _Triage classifier_ with subtitle 'FDI block'.
 - **Four outputs on the right**, color-coded by destination authority:
--   - 'plant-bug' → *Backlog (controller actuates next)* (ctrl-green)
--   - 'sensor-error' → *Inspector revisits (actuate F3, not F2)* (sensor-violet)
--   - 'policy-issue' → *Architect revisits (modify thresholds)* (ref-blue)
--   - 'reference-gap' → *Emit RGR (escalate, pause)* (human-red)
+- - 'plant-bug' → _Backlog (controller actuates next)_ (ctrl-green)
+- - 'sensor-error' → _Inspector revisits (actuate F3, not F2)_ (sensor-violet)
+- - 'policy-issue' → _Architect revisits (modify thresholds)_ (ref-blue)
+- - 'reference-gap' → _Emit RGR (escalate, pause)_ (human-red)
 - Each arrow curves toward its target and carries the classification label.
 - **Aspect**: ~1140×440.
 

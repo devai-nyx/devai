@@ -36,20 +36,20 @@ The bundle is also a useful diagnostic: comparing two manifests reveals exactly 
 
 `rtd-manifest.schema.json` declares:
 
-| Field | Purpose |
-|---|---|
-| `schemaVersion` | Schema version this manifest is encoded against |
-| `id` | `RTM-NNNN` sequential ID |
-| `integration_head` | Git SHA the manifest was bundled against |
-| `generated_at` | ISO-8601 timestamp |
-| `components.glossary_hash` | Hash of canonicalized glossary content |
-| `components.invariants_hash` | Hash of canonicalized invariant set |
-| `components.trace_hash` | Hash of canonicalized trace |
-| `components.rbac_hash` | (etc.) |
-| `components.prompt_hashes` | Map of prompt-component → content hash |
-| `readiness.ok` | Boolean — did every underlying `spec validate` verb pass? |
-| `readiness.sub_verdicts` | Per-validator verdicts feeding the rolled-up readiness |
-| `manifest_hash` | SHA-256 over the canonicalized whole |
+| Field                        | Purpose                                                   |
+| ---------------------------- | --------------------------------------------------------- |
+| `schemaVersion`              | Schema version this manifest is encoded against           |
+| `id`                         | `RTM-NNNN` sequential ID                                  |
+| `integration_head`           | Git SHA the manifest was bundled against                  |
+| `generated_at`               | ISO-8601 timestamp                                        |
+| `components.glossary_hash`   | Hash of canonicalized glossary content                    |
+| `components.invariants_hash` | Hash of canonicalized invariant set                       |
+| `components.trace_hash`      | Hash of canonicalized trace                               |
+| `components.rbac_hash`       | (etc.)                                                    |
+| `components.prompt_hashes`   | Map of prompt-component → content hash                    |
+| `readiness.ok`               | Boolean — did every underlying `spec validate` verb pass? |
+| `readiness.sub_verdicts`     | Per-validator verdicts feeding the rolled-up readiness    |
+| `manifest_hash`              | SHA-256 over the canonicalized whole                      |
 
 Manifests are persisted to `record/proofs/rtd-manifests/RTM-NNNN.json` and indexed by integration_head + generated_at for retrieval.
 

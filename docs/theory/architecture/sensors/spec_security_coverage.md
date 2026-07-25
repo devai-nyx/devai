@@ -32,7 +32,7 @@ The three are reported in `metrics`; the SR `findings` cite each absent signal e
 
 ## Out of scope
 
-- **Threat-model quality.** The sensor checks *presence*, not *content*. An LLM-judge variant could grade the threat-model's coverage of STRIDE/LINDDUN — deferred to a future `spec_security_coverage_judge` kind.
+- **Threat-model quality.** The sensor checks _presence_, not _content_. An LLM-judge variant could grade the threat-model's coverage of STRIDE/LINDDUN — deferred to a future `spec_security_coverage_judge` kind.
 - **PII completeness.** Whether every PII column is registered is an F4 concern, already covered by 26.H `inventory_adherence`.
 - **Authorization correctness.** Whether RBAC invariants are enforced is an F3 concern, covered by 27.J `test_security_coverage`.
 

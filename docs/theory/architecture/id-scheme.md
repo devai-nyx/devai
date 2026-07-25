@@ -7,11 +7,11 @@
 
 DEVAI uses three ID shapes, chosen by the primary reader of the ID:
 
-| Shape | Pattern | Examples | Primary reader |
-|---|---|---|---|
-| Sequential human-readable | `<KIND>-<DOMAIN>-NNN` or `<KIND>-NNNN` | `INV-AUTH-001`, `TASK-0042`, `RGR-0007`, `JNY-001` | Human (logs, PRs, conversations) |
-| Date-stamped | `<KIND>-YYYYMMDDTHHmmss-NNN` | `SC-20260511T143022-001` | Human (chronological audit) |
-| Content-hash | `<KIND>-<hex>` | `SR-a3f2b1c8…`, `EV-9d4e7a…`, `LOCK-…` | Machine (deduplication, integrity) |
+| Shape                     | Pattern                                | Examples                                           | Primary reader                     |
+| ------------------------- | -------------------------------------- | -------------------------------------------------- | ---------------------------------- |
+| Sequential human-readable | `<KIND>-<DOMAIN>-NNN` or `<KIND>-NNNN` | `INV-AUTH-001`, `TASK-0042`, `RGR-0007`, `JNY-001` | Human (logs, PRs, conversations)   |
+| Date-stamped              | `<KIND>-YYYYMMDDTHHmmss-NNN`           | `SC-20260511T143022-001`                           | Human (chronological audit)        |
+| Content-hash              | `<KIND>-<hex>`                         | `SR-a3f2b1c8…`, `EV-9d4e7a…`, `LOCK-…`             | Machine (deduplication, integrity) |
 
 Every ID-bearing schema declares which shape it uses via its `id` field's `pattern`.
 
@@ -21,7 +21,7 @@ A uniform scheme (all-sequential, all-UUID, or all-hash) was considered and reje
 
 - **All sequential** fails for entities generated in parallel by independent agents. Two agents racing to claim `EV-0009` would either need a central allocator (which serializes the agents) or collision detection (which makes IDs unstable).
 - **All UUID** is unreadable in logs. `INV-AUTH-001` carries semantic weight at a glance; `7f3a2b8c-…-…` does not. For artifacts humans cite in PRs, conversations, and ADRs, this readability matters.
-- **All content-hash** is collision-resistant and parallel-safe but loses any sense of *ordering* and is just as unreadable as UUIDs.
+- **All content-hash** is collision-resistant and parallel-safe but loses any sense of _ordering_ and is just as unreadable as UUIDs.
 
 The hybrid scheme matches each entity to its primary reader:
 

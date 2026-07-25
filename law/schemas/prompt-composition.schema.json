@@ -5,14 +5,7 @@
   "description": "Records the prompt stack composed for a task spawn. Deterministic: same registry + same overlays + same payload = identical stack_hash. Drift in any component is detectable and attributable. Per Constitution Article 37.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "id",
-    "generated_at",
-    "task_id",
-    "components",
-    "stack_sha256"
-  ],
+  "required": ["schemaVersion", "id", "generated_at", "task_id", "components", "stack_sha256"],
   "properties": {
     "schemaVersion": {
       "const": "1.0.0"
@@ -35,21 +28,13 @@
       "additionalProperties": false,
       "properties": {
         "family": {
-          "enum": [
-            "claude",
-            "codex",
-            "other"
-          ]
+          "enum": ["claude", "codex", "other"]
         },
         "model": {
           "type": "string"
         },
         "tier": {
-          "enum": [
-            "default",
-            "bumped",
-            "fallback"
-          ]
+          "enum": ["default", "bumped", "fallback"]
         }
       }
     },
@@ -59,21 +44,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "layer",
-          "name",
-          "body_sha256"
-        ],
+        "required": ["layer", "name", "body_sha256"],
         "properties": {
           "layer": {
-            "enum": [
-              "global",
-              "role",
-              "discipline",
-              "task",
-              "payload",
-              "overlay"
-            ]
+            "enum": ["global", "role", "discipline", "task", "payload", "overlay"]
           },
           "name": {
             "type": "string",
@@ -106,10 +80,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "code",
-          "message"
-        ],
+        "required": ["code", "message"],
         "properties": {
           "code": {
             "type": "string"
@@ -118,20 +89,13 @@
             "type": "string"
           },
           "severity": {
-            "enum": [
-              "info",
-              "warning",
-              "error"
-            ]
+            "enum": ["info", "warning", "error"]
           }
         }
       }
     },
     "frozen_against": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "description": "Reference to a prompt-hash freeze artifact when prompt behavior is part of a governed loop (Article 37)."
     },
     "drift_from_frozen": {

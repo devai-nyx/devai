@@ -2,6 +2,7 @@
 
 **Authority:** Architect (Constitution Article 6, F1).
 **Forensic anchors:**
+
 - [D-54](../../../law/adr/README.md) — "DB-gated integration tests stay opt-in (`DEVAI_DB_TESTS=1`) (locked)."
 - [D-55](../../../law/adr/README.md) — "CI runs the mock LLM provider; real providers are opt-in (locked)."
 - [D-126](../../../law/adr/README.md) — supported supervision and experimental autonomy are accounted separately.
@@ -73,10 +74,10 @@ That lane is the supported repository gate. Two explicitly gated integration fil
 
 ## Trigger conditions to flip
 
-| Rule | Flip triggers |
-|---|---|
-| DB default-on → hermetic-by-default | Only if local Postgres becomes unavailable as a natural DEVAI development substrate and the failure mode blocks more production evidence than it provides. |
-| Deterministic mock default → real-provider default | Requires a new Architect decision; ambient credentials must never silently create cost or nondeterminism. |
+| Rule                                               | Flip triggers                                                                                                                                              |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| DB default-on → hermetic-by-default                | Only if local Postgres becomes unavailable as a natural DEVAI development substrate and the failure mode blocks more production evidence than it provides. |
+| Deterministic mock default → real-provider default | Requires a new Architect decision; ambient credentials must never silently create cost or nondeterminism.                                                  |
 
 No current trigger fires for either rollback.
 

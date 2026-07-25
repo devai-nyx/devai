@@ -33,24 +33,13 @@
       "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
     },
     "role": {
-      "enum": [
-        "owner",
-        "architect",
-        "inspector",
-        "engineer",
-        "auditor"
-      ]
+      "enum": ["owner", "architect", "inspector", "engineer", "auditor"]
     },
     "declaration_source": {
       "const": "cli-flag"
     },
     "status": {
-      "enum": [
-        "active",
-        "revoked",
-        "expired",
-        "stale"
-      ]
+      "enum": ["active", "revoked", "expired", "stale"]
     },
     "created_at": {
       "type": "string",
@@ -68,11 +57,7 @@
     "policy_binding": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "policy_id",
-        "policy_version",
-        "resolved_digest_sha256"
-      ],
+      "required": ["policy_id", "policy_version", "resolved_digest_sha256"],
       "properties": {
         "policy_id": {
           "type": "string",
@@ -90,10 +75,7 @@
     "constitution_binding": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "version",
-        "digest_sha256"
-      ],
+      "required": ["version", "digest_sha256"],
       "properties": {
         "version": {
           "type": "string",
@@ -107,10 +89,7 @@
     "package_binding": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "name",
-        "version"
-      ],
+      "required": ["name", "version"],
       "properties": {
         "name": {
           "const": "@devai-nyx/cli"
@@ -124,11 +103,7 @@
     "revocation": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "revoked_at",
-        "revoked_by_invocation_id",
-        "reason"
-      ],
+      "required": ["revoked_at", "revoked_by_invocation_id", "reason"],
       "properties": {
         "revoked_at": {
           "type": "string",
@@ -146,12 +121,7 @@
       }
     },
     "stale_reason": {
-      "enum": [
-        "policy-changed",
-        "constitution-changed",
-        "package-changed",
-        "repository-mismatch"
-      ]
+      "enum": ["policy-changed", "constitution-changed", "package-changed", "repository-mismatch"]
     },
     "session_digest_sha256": {
       "$ref": "#/$defs/sha256",
@@ -166,20 +136,14 @@
             "const": "revoked"
           }
         },
-        "required": [
-          "status"
-        ]
+        "required": ["status"]
       },
       "then": {
-        "required": [
-          "revocation"
-        ]
+        "required": ["revocation"]
       },
       "else": {
         "not": {
-          "required": [
-            "revocation"
-          ]
+          "required": ["revocation"]
         }
       }
     },
@@ -190,20 +154,14 @@
             "const": "stale"
           }
         },
-        "required": [
-          "status"
-        ]
+        "required": ["status"]
       },
       "then": {
-        "required": [
-          "stale_reason"
-        ]
+        "required": ["stale_reason"]
       },
       "else": {
         "not": {
-          "required": [
-            "stale_reason"
-          ]
+          "required": ["stale_reason"]
         }
       }
     }

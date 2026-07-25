@@ -6,12 +6,12 @@ This library holds the operational templates that the [round-execute skill](../.
 
 ## Reading order
 
-| File | Phase | Skill | When to read |
-|---|---|---|---|
-| [B0-audit.md](./B0-audit.md) | measure | [`SKILL-round-audit`](../../reference/skills/round-audit.md) | Round opens. Snapshot the state. |
-| [B1-backlog.md](./B1-backlog.md) | plan | [`SKILL-round-backlog`](../../reference/skills/round-backlog.md) | Audit complete. Materialize the backlog. |
-| [B2-wave-plan.md](./B2-wave-plan.md) | plan | [`SKILL-round-backlog`](../../reference/skills/round-backlog.md) | Backlog drafted. Group into waves with effort hints. |
-| [B3-orchestrate.md](./B3-orchestrate.md) | execute | [`SKILL-round-orchestrate`](../../reference/skills/round-orchestrate.md) | Worker prompts materialized. Drive the wave loop. |
+| File                                           | Phase   | Skill                                                                          | When to read                                                            |
+| ---------------------------------------------- | ------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| [B0-audit.md](./B0-audit.md)                   | measure | [`SKILL-round-audit`](../../reference/skills/round-audit.md)                   | Round opens. Snapshot the state.                                        |
+| [B1-backlog.md](./B1-backlog.md)               | plan    | [`SKILL-round-backlog`](../../reference/skills/round-backlog.md)               | Audit complete. Materialize the backlog.                                |
+| [B2-wave-plan.md](./B2-wave-plan.md)           | plan    | [`SKILL-round-backlog`](../../reference/skills/round-backlog.md)               | Backlog drafted. Group into waves with effort hints.                    |
+| [B3-orchestrate.md](./B3-orchestrate.md)       | execute | [`SKILL-round-orchestrate`](../../reference/skills/round-orchestrate.md)       | Worker prompts materialized. Drive the wave loop.                       |
 | [B4-verify-publish.md](./B4-verify-publish.md) | compare | [`SKILL-round-verify-publish`](../../reference/skills/round-verify-publish.md) | Round work complete. Verify and close the disposable workspace locally. |
 
 ## How to import into an adopter
@@ -27,15 +27,15 @@ Either way, the templates' `{{placeholders}}` resolve from the adopter's `.devai
 
 The templates use `{{snake_case}}` for repo-specific identifiers. The canonical source of values is the adopter's `.devai/config/project.json`. Common placeholders:
 
-| Placeholder | Source | Example |
-|---|---|---|
-| `{{repo_name}}` | `project.name` | `stynx`, `pec`, `teat` |
-| `{{build_cmd}}` | `project.commands.build` | `pnpm build` |
-| `{{lint_cmd}}` | `project.commands.lint` | `pnpm lint` |
-| `{{typecheck_cmd}}` | `project.commands.typecheck` | `pnpm typecheck` |
-| `{{test_cmd}}` | `project.commands.test` | `pnpm test` |
-| `{{integration_test_cmd}}` | `project.commands.test_integration` | `pnpm test:integration` |
-| `{{round_n}}` | runtime input from `SKILL-round-execute` | `3` |
+| Placeholder                | Source                                   | Example                 |
+| -------------------------- | ---------------------------------------- | ----------------------- |
+| `{{repo_name}}`            | `project.name`                           | `stynx`, `pec`, `teat`  |
+| `{{build_cmd}}`            | `project.commands.build`                 | `pnpm build`            |
+| `{{lint_cmd}}`             | `project.commands.lint`                  | `pnpm lint`             |
+| `{{typecheck_cmd}}`        | `project.commands.typecheck`             | `pnpm typecheck`        |
+| `{{test_cmd}}`             | `project.commands.test`                  | `pnpm test`             |
+| `{{integration_test_cmd}}` | `project.commands.test_integration`      | `pnpm test:integration` |
+| `{{round_n}}`              | runtime input from `SKILL-round-execute` | `3`                     |
 
 If a placeholder is missing from `project.json`, the round-runner SHOULD halt and ask the operator rather than guessing a default.
 

@@ -33,26 +33,26 @@ anchored in the document's Appendix C.
 
 ## The metaphor map, at a glance
 
-| DEVAI term | Control-theory term | Legal term | Anchor |
-|---|---|---|---|
-| Specification (F1) | Reference signal *r(k)* | The statute book | Art. 2, 4 |
-| Code (F2) | Plant *P* | The governed conduct | Art. 2, 4 |
-| Test (F3) | Sensor *y(k)* | Evidence-gathering apparatus | Art. 29 |
-| Inventory (F4) | State estimate *x̂* | The public registry | Art. 4, 33 |
-| Harness (F5) | Controller infrastructure | The institutions and records | Art. 4 |
-| Five roles | Separated controllers | Separation of powers | Art. 7–10 |
-| Authority-by-path | Actuator authority limits | Jurisdiction | Art. 6 |
-| Declared effect sets | Certified actuation envelope | Enumerated powers / ultra-vires review | D-150–D-159 |
-| Hard gate | Deterministic error component | Strict-liability rule | Art. 17 |
-| Soft gate | Stochastic error, explicit uncertainty | Rubric-bound discretion | Art. 18, 39 |
-| Severity ladder | Weighting matrix **Q** | Hierarchy of norms | Art. 11 |
-| Triage | Fault detection & isolation | Jurisdictional assignment | Art. 15 |
-| RGR | Reference-disturbance request | Petition for clarification | Art. 22 |
-| Tie-breaker ladder | Gain-scheduled arbitration | Appellate review | Art. 23 |
-| Iteration cap | Anti-windup / saturation | Procedural retrial limit | Art. 19 |
-| Evidence chain | Flight recorder | Court record, chain of custody | Art. 32–33 |
-| Auditor | Estimator outside the loop | Independent judiciary | Art. 7, 33 |
-| Dark promotion | Shadow-mode commissioning | *Vacatio legis* | D-146, D-164–D-165 |
+| DEVAI term           | Control-theory term                    | Legal term                             | Anchor             |
+| -------------------- | -------------------------------------- | -------------------------------------- | ------------------ |
+| Specification (F1)   | Reference signal _r(k)_                | The statute book                       | Art. 2, 4          |
+| Code (F2)            | Plant _P_                              | The governed conduct                   | Art. 2, 4          |
+| Test (F3)            | Sensor _y(k)_                          | Evidence-gathering apparatus           | Art. 29            |
+| Inventory (F4)       | State estimate _x̂_                     | The public registry                    | Art. 4, 33         |
+| Harness (F5)         | Controller infrastructure              | The institutions and records           | Art. 4             |
+| Five roles           | Separated controllers                  | Separation of powers                   | Art. 7–10          |
+| Authority-by-path    | Actuator authority limits              | Jurisdiction                           | Art. 6             |
+| Declared effect sets | Certified actuation envelope           | Enumerated powers / ultra-vires review | D-150–D-159        |
+| Hard gate            | Deterministic error component          | Strict-liability rule                  | Art. 17            |
+| Soft gate            | Stochastic error, explicit uncertainty | Rubric-bound discretion                | Art. 18, 39        |
+| Severity ladder      | Weighting matrix **Q**                 | Hierarchy of norms                     | Art. 11            |
+| Triage               | Fault detection & isolation            | Jurisdictional assignment              | Art. 15            |
+| RGR                  | Reference-disturbance request          | Petition for clarification             | Art. 22            |
+| Tie-breaker ladder   | Gain-scheduled arbitration             | Appellate review                       | Art. 23            |
+| Iteration cap        | Anti-windup / saturation               | Procedural retrial limit               | Art. 19            |
+| Evidence chain       | Flight recorder                        | Court record, chain of custody         | Art. 32–33         |
+| Auditor              | Estimator outside the loop             | Independent judiciary                  | Art. 7, 33         |
+| Dark promotion       | Shadow-mode commissioning              | _Vacatio legis_                        | D-146, D-164–D-165 |
 
 ## Where to go next
 

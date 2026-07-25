@@ -6,17 +6,8 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "aliases": [
-    "Reference Gap Report"
-  ],
-  "see_also": [
-    "GE-013",
-    "GE-017"
-  ],
-  "related_invariants": [
-    "INV-DEVAI-005"
-  ],
-  "provenance": [
-    "ex-GE-018@devai-original"
-  ]
+  "aliases": ["Reference Gap Report"],
+  "see_also": ["GE-013", "GE-017"],
+  "related_invariants": ["INV-DEVAI-005"],
+  "provenance": ["ex-GE-018@devai-original"]
 }

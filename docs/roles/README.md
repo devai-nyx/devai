@@ -4,13 +4,13 @@ Five roles, declared at session start by the human user. Each governs which agen
 
 ## Quick map
 
-| Role | Authority over | Read [`docs/roles/<role>.md`] |
-|---|---|---|
-| **Owner** | Business and behavioral specs (`product/`); joint glossary | [`owner.md`](./owner.md) |
+| Role          | Authority over                                                            | Read [`docs/roles/<role>.md`]    |
+| ------------- | ------------------------------------------------------------------------- | -------------------------------- |
+| **Owner**     | Business and behavioral specs (`product/`); joint glossary                | [`owner.md`](./owner.md)         |
 | **Architect** | Engineering specs, invariants, trace, ADRs, schemas, ops + security specs | [`architect.md`](./architect.md) |
-| **Engineer** | Application code (`packages/**`) | [`engineer.md`](./engineer.md) |
-| **Inspector** | Tests at all levels (`packages/**/test/**`, `tests/**`) | [`inspector.md`](./inspector.md) |
-| **Auditor** | Read-only; produces scorecards, backlogs, assessments | [`auditor.md`](./auditor.md) |
+| **Engineer**  | Application code (`packages/**`)                                          | [`engineer.md`](./engineer.md)   |
+| **Inspector** | Tests at all levels (`packages/**/test/**`, `tests/**`)                   | [`inspector.md`](./inspector.md) |
+| **Auditor**   | Read-only; produces scorecards, backlogs, assessments                     | [`auditor.md`](./auditor.md)     |
 
 ## How to declare a role at session start
 

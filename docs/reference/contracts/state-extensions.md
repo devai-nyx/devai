@@ -12,25 +12,26 @@ The contract was authored by promoting five extensions that STYNX shipped ahead 
 
 ## Canonical layout
 
-| Path | Schema | Presence | Owner | File-naming |
-|------|--------|----------|-------|-------------|
-| `counters.json` | inline JSON | required | every counter-emitting verb | `counters.json` |
-| `evidence-chain.json` | [`evidence-chain.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/evidence-chain.schema.json) | required | `evidence emit`, `record run --chain` | single file |
-| `sensor-readings/<kind>/<id>.json` | [`sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json) | required | `sense <kind>` verbs | one file per reading |
-| `inventory/inventory.json` | [`cross-repo-inventory.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/cross-repo-inventory.schema.json) | required | `inv regen` | single file |
-| `skills/<skill-id>/<ts>.json` | per-skill evidence (manifest-declared) | required | `skill run` | one per execution |
-| `agent-runs/<AR-id>.json` | [`agent-run.schema.json`](../../../law/schemas/agent-run.schema.json) | required | agent-driven verbs | one per agent run |
-| `sensors/<reading-id>.json` | [`sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json) | recommended | legacy flat emission | back-compat path |
-| `llm-usage.jsonl` | inline `{ts, family, model, tokens, cost_usd, …}` | recommended | `createLlmClient` instrumentation | append-only JSONL |
-| `rtd-manifests/<RTD-id>.json` | [`rtd-manifest.schema.json`](../../../law/schemas/rtd-manifest.schema.json) | recommended | `rtd bundle` | one per bundle |
-| `inv-candidates/INV-CANDIDATE-<ulid>.json` | [`inv-candidate.schema.json`](../../../law/schemas/inv-candidate.schema.json) | optional | discovery sensors | one per candidate |
-| `locks/<substrate>~<module>.json` | [`lock.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/schemas/lock.schema.json) | optional | `lock acquire`, `task spawn` | substrate~module key |
-| `tasks/<TASK-id>.json` | [`task.schema.json`](../../../law/schemas/task.schema.json) | optional | `task spawn / complete / escalate` | one per task |
-| `worktrees.json` | [`worktree.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/schemas/worktree.schema.json) (array) | optional | `worktree create / destroy / list` | single file |
-| `backlog.jsonl` | [`backlog.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/schemas/backlog.schema.json) (JSONL) | optional | `backlog add / next / complete`, `score backlog-refresh` | append-only JSONL |
-| `decisions.jsonl` | [`decisions.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/decisions.schema.json) (JSONL) | optional | human, `SKILL-round-verify-publish` (R5+ integration), audit waves | append-only JSONL; R3-W6 canonized |
+| Path                                       | Schema                                                                                                                                                                           | Presence    | Owner                                                              | File-naming                        |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------ | ---------------------------------- |
+| `counters.json`                            | inline JSON                                                                                                                                                                      | required    | every counter-emitting verb                                        | `counters.json`                    |
+| `evidence-chain.json`                      | [`evidence-chain.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/evidence-chain.schema.json)             | required    | `evidence emit`, `record run --chain`                              | single file                        |
+| `sensor-readings/<kind>/<id>.json`         | [`sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json)                                                                                                  | required    | `sense <kind>` verbs                                               | one file per reading               |
+| `inventory/inventory.json`                 | [`cross-repo-inventory.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/cross-repo-inventory.schema.json) | required    | `inv regen`                                                        | single file                        |
+| `skills/<skill-id>/<ts>.json`              | per-skill evidence (manifest-declared)                                                                                                                                           | required    | `skill run`                                                        | one per execution                  |
+| `agent-runs/<AR-id>.json`                  | [`agent-run.schema.json`](../../../law/schemas/agent-run.schema.json)                                                                                                            | required    | agent-driven verbs                                                 | one per agent run                  |
+| `sensors/<reading-id>.json`                | [`sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json)                                                                                                  | recommended | legacy flat emission                                               | back-compat path                   |
+| `llm-usage.jsonl`                          | inline `{ts, family, model, tokens, cost_usd, …}`                                                                                                                                | recommended | `createLlmClient` instrumentation                                  | append-only JSONL                  |
+| `rtd-manifests/<RTD-id>.json`              | [`rtd-manifest.schema.json`](../../../law/schemas/rtd-manifest.schema.json)                                                                                                      | recommended | `rtd bundle`                                                       | one per bundle                     |
+| `inv-candidates/INV-CANDIDATE-<ulid>.json` | [`inv-candidate.schema.json`](../../../law/schemas/inv-candidate.schema.json)                                                                                                    | optional    | discovery sensors                                                  | one per candidate                  |
+| `locks/<substrate>~<module>.json`          | [`lock.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/schemas/lock.schema.json)                                   | optional    | `lock acquire`, `task spawn`                                       | substrate~module key               |
+| `tasks/<TASK-id>.json`                     | [`task.schema.json`](../../../law/schemas/task.schema.json)                                                                                                                      | optional    | `task spawn / complete / escalate`                                 | one per task                       |
+| `worktrees.json`                           | [`worktree.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/schemas/worktree.schema.json) (array)                   | optional    | `worktree create / destroy / list`                                 | single file                        |
+| `backlog.jsonl`                            | [`backlog.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/schemas/backlog.schema.json) (JSONL)                     | optional    | `backlog add / next / complete`, `score backlog-refresh`           | append-only JSONL                  |
+| `decisions.jsonl`                          | [`decisions.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/decisions.schema.json) (JSONL)               | optional    | human, `SKILL-round-verify-publish` (R5+ integration), audit waves | append-only JSONL; R3-W6 canonized |
 
 **Presence levels:**
+
 - **required** — baseline; any DEVAI-enabled repo MUST have the file/dir (may be empty bootstrap content).
 - **recommended** — present in most adopters; absent rounds typically just haven't exercised the relevant verb yet.
 - **optional** — opt-in; absent in many adopters without consequence.
@@ -41,11 +42,11 @@ Every file under a canonical path MUST validate against the cited schema. The va
 
 ## Cross-repo diff (R3-W4 survey)
 
-| Path | DEVAI | STYNX | TEAT | PEC |
-|------|-------|-------|------|-----|
-| Baseline (9 entries) | ✓ all | ✓ all (no `rtd-manifests/`) | ✓ all minus `llm-usage.jsonl`, `rtd-manifests/` | partial: `counters.json`, `inventory/`, `sensor-readings/` |
-| Optional ext. (5 entries) | none yet | ✓ all five | none yet | none |
-| Adopter-private | none | `init-introspection.json` | `init-introspection.json` | `coverage/`, `obligations.json`, `rtd/` |
+| Path                      | DEVAI    | STYNX                       | TEAT                                            | PEC                                                        |
+| ------------------------- | -------- | --------------------------- | ----------------------------------------------- | ---------------------------------------------------------- |
+| Baseline (9 entries)      | ✓ all    | ✓ all (no `rtd-manifests/`) | ✓ all minus `llm-usage.jsonl`, `rtd-manifests/` | partial: `counters.json`, `inventory/`, `sensor-readings/` |
+| Optional ext. (5 entries) | none yet | ✓ all five                  | none yet                                        | none                                                       |
+| Adopter-private           | none     | `init-introspection.json`   | `init-introspection.json`                       | `coverage/`, `obligations.json`, `rtd/`                    |
 
 **Observations:**
 

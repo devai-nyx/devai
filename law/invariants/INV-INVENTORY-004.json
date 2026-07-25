@@ -10,9 +10,7 @@
   "rationale": "Per D-57's brownfield-adoption argument and Phase 10.H (forbidden actions) precedent: the `internal/` convention is a soft-gate boundary that codifies the package author's intent to not expose certain modules. Code that reaches across packages into another package's internal subpath couples to implementation details rather than published contracts, creating brittleness that the dep-graph sensor can now detect deterministically. Severity hard-fail (Phase 10.A) blocks merge: cross-package internal-subpath coupling is a layering violation that compounds with every dependent change.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -33,36 +31,18 @@
     ]
   },
   "scope": {
-    "components": [
-      "sensors",
-      "cli"
-    ],
+    "components": ["sensors", "cli"],
     "code_areas": [
       "packages/sensors/src/inventory-dep-graph.ts",
       "packages/cli/src/commands/sense/inventory-dep-graph.ts"
     ]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-17",
-    "phase-17-D",
-    "inventory",
-    "brownfield",
-    "dep-graph",
-    "layering"
-  ],
-  "measurable_via": [
-    "sense inventory dep graph"
-  ],
-  "provenance": [
-    "ex-INV-INVENTORY-004@devai-original"
-  ]
+  "tags": ["phase-17", "phase-17-D", "inventory", "brownfield", "dep-graph", "layering"],
+  "measurable_via": ["sense inventory dep graph"],
+  "provenance": ["ex-INV-INVENTORY-004@devai-original"]
 }

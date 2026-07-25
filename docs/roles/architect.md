@@ -82,57 +82,57 @@ The Architect is the load-bearing role for governance. The Architect:
 
 ## Anti-patterns
 
-| Pattern | Why bad |
-|---|---|
-| Writing code to "show" what an invariant means | Cross-role; the invariant must stand alone as observable contract. |
-| Invariants without `code_areas` | Trace is broken; nothing's measurable. |
-| Invariants whose `statement` says "the system should be X" | Vague; rewrite in CNL form with named actor and observable. |
-| Bumping an invariant's `version` without an ADR for non-trivial changes | Decisions need records; bump-and-forget loses forensic value. |
-| Editing `tombstones.json` to "un-retire" an id | Retired ids never come back (Phase 10.D). Author a new id. |
+| Pattern                                                                 | Why bad                                                            |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Writing code to "show" what an invariant means                          | Cross-role; the invariant must stand alone as observable contract. |
+| Invariants without `code_areas`                                         | Trace is broken; nothing's measurable.                             |
+| Invariants whose `statement` says "the system should be X"              | Vague; rewrite in CNL form with named actor and observable.        |
+| Bumping an invariant's `version` without an ADR for non-trivial changes | Decisions need records; bump-and-forget loses forensic value.      |
+| Editing `tombstones.json` to "un-retire" an id                          | Retired ids never come back (Phase 10.D). Author a new id.         |
 
 ## Tools the Architect uses
 
-| Command | When |
-|---|---|
-| `devai spec validate invariants [--strict-cnl]` | Before committing invariant changes. |
-| `devai spec validate trace` | After trace edits. |
-| `devai spec validate all` | Full F1 validation before PR. |
-| `devai policy check adrs` | After ADR edits. |
-| `devai govern rgr list --status open` | Daily, to address open spec gaps. |
-| `devai govern rgr resolve <id>` | When resolving a gap. |
-| `devai spec rtd bundle --strict` | Periodically (or in CI), to verify the full RTD is sound. |
-| `devai inventory adherence --strict` | Check that every plant surface is claimed. |
-| `devai inventory glossary` | Coverage of glossary terms. |
-| `devai inventory suggest --from-inventory` | **Brownfield adoption (Phase 17.E).** Read every `INV-CANDIDATE-*.json` under `record/proofs/inv-candidates/`; graduate the accepted ones into `INV-CLIENT-*.json`. |
-| `devai adopt pack resolve [--seeds <csv>]` | **Brownfield adoption.** Confirm which stack-adapter pack the harness will apply to this repo (or check against an out-of-tree pack via `--seeds`). |
-| `devai adopt pack graduate [--pack-id …]` | **Brownfield adoption.** Copy a matched pack's `seed_invariants` into `law/invariants/`. Use `--dry-run` first; collision-skip is the default. |
-| `devai docs synthesize all` | **Brownfield adoption.** Synthesize the 12-doc brownfield doc set from current inventory bodies + matched-pack prompt overlays. Architect reviews the prose before merging. |
-| `devai docs render mermaid` | After `synthesize-all` writes ERD.md / Architecture Guide.md with Mermaid blocks. Best-effort: skips gracefully if `mmdc` is not on PATH. |
+| Command                                         | When                                                                                                                                                                        |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `devai spec validate invariants [--strict-cnl]` | Before committing invariant changes.                                                                                                                                        |
+| `devai spec validate trace`                     | After trace edits.                                                                                                                                                          |
+| `devai spec validate all`                       | Full F1 validation before PR.                                                                                                                                               |
+| `devai policy check adrs`                       | After ADR edits.                                                                                                                                                            |
+| `devai govern rgr list --status open`           | Daily, to address open spec gaps.                                                                                                                                           |
+| `devai govern rgr resolve <id>`                 | When resolving a gap.                                                                                                                                                       |
+| `devai spec rtd bundle --strict`                | Periodically (or in CI), to verify the full RTD is sound.                                                                                                                   |
+| `devai inventory adherence --strict`            | Check that every plant surface is claimed.                                                                                                                                  |
+| `devai inventory glossary`                      | Coverage of glossary terms.                                                                                                                                                 |
+| `devai inventory suggest --from-inventory`      | **Brownfield adoption (Phase 17.E).** Read every `INV-CANDIDATE-*.json` under `record/proofs/inv-candidates/`; graduate the accepted ones into `INV-CLIENT-*.json`.         |
+| `devai adopt pack resolve [--seeds <csv>]`      | **Brownfield adoption.** Confirm which stack-adapter pack the harness will apply to this repo (or check against an out-of-tree pack via `--seeds`).                         |
+| `devai adopt pack graduate [--pack-id …]`       | **Brownfield adoption.** Copy a matched pack's `seed_invariants` into `law/invariants/`. Use `--dry-run` first; collision-skip is the default.                              |
+| `devai docs synthesize all`                     | **Brownfield adoption.** Synthesize the 12-doc brownfield doc set from current inventory bodies + matched-pack prompt overlays. Architect reviews the prose before merging. |
+| `devai docs render mermaid`                     | After `synthesize-all` writes ERD.md / Architecture Guide.md with Mermaid blocks. Best-effort: skips gracefully if `mmdc` is not on PATH.                                   |
 
 ## Hand-offs
 
-| To | When |
-|---|---|
-| Owner | Need clarification on business intent. |
-| Engineer | After a new invariant is authored — Engineer satisfies it. |
+| To        | When                                                       |
+| --------- | ---------------------------------------------------------- |
+| Owner     | Need clarification on business intent.                     |
+| Engineer  | After a new invariant is authored — Engineer satisfies it. |
 | Inspector | After a new invariant — Inspector calibrates tests for it. |
-| Auditor | Reviewing scorecard health to identify spec gaps. |
+| Auditor   | Reviewing scorecard health to identify spec gaps.          |
 
 ## Authority files
 
-| Path | Editable by Architect? |
-|---|---|
-| `docs/theory/architecture/**` | ✅ Yes |
-| `law/schemas/**` | ✅ Yes |
-| `docs/reference/contracts/**` | ✅ Yes |
-| `law/adr/**` | ✅ Yes |
-| `docs/dev/operations/**` | ✅ Yes |
-| `docs/dev/security/**` | ✅ Yes |
-| `law/glossary/**` | ✅ Yes (jointly with Owner) |
-| `work/rounds/R-0001/plan.md`, `README.md`, `CHANGELOG.md` | ✅ Yes |
-| `law/constitution.md` | ⚠️ Only via Article 40 amendment |
-| `packages/**` source | ❌ No |
-| Tests | ❌ No |
+| Path                                                      | Editable by Architect?           |
+| --------------------------------------------------------- | -------------------------------- |
+| `docs/theory/architecture/**`                             | ✅ Yes                           |
+| `law/schemas/**`                                          | ✅ Yes                           |
+| `docs/reference/contracts/**`                             | ✅ Yes                           |
+| `law/adr/**`                                              | ✅ Yes                           |
+| `docs/dev/operations/**`                                  | ✅ Yes                           |
+| `docs/dev/security/**`                                    | ✅ Yes                           |
+| `law/glossary/**`                                         | ✅ Yes (jointly with Owner)      |
+| `work/rounds/R-0001/plan.md`, `README.md`, `CHANGELOG.md` | ✅ Yes                           |
+| `law/constitution.md`                                     | ⚠️ Only via Article 40 amendment |
+| `packages/**` source                                      | ❌ No                            |
+| Tests                                                     | ❌ No                            |
 
 ## See also
 

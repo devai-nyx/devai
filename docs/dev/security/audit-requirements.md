@@ -75,20 +75,20 @@ Why a separate chain: agent-runs are dense (every iteration) and would otherwise
 
 ## Retention
 
-| Stream | Retention | Notes |
-|---|---|---|
-| `evidence-chain.json` | All history; no built-in rotation | Grows ~bytes per action; budget < 10 MB / year for typical workloads |
-| `agent-runs/` | All history; reap dead runs per [`capacity.md`](../operations/capacity.md) | Each run is a separate file; deletion = lost provenance, emit `evidence.recovery` |
-| `sensor-readings/` | Last 1000 by default; older reaped on a sidecar | Per-reading provenance preserved in the primary chain via reference |
-| `loop-runs/` | Last 30 days by default | Each iteration links its agent-run by id |
+| Stream                | Retention                                                                  | Notes                                                                             |
+| --------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `evidence-chain.json` | All history; no built-in rotation                                          | Grows ~bytes per action; budget < 10 MB / year for typical workloads              |
+| `agent-runs/`         | All history; reap dead runs per [`capacity.md`](../operations/capacity.md) | Each run is a separate file; deletion = lost provenance, emit `evidence.recovery` |
+| `sensor-readings/`    | Last 1000 by default; older reaped on a sidecar                            | Per-reading provenance preserved in the primary chain via reference               |
+| `loop-runs/`          | Last 30 days by default                                                    | Each iteration links its agent-run by id                                          |
 
 ## Tamper-detection edge cases
 
-| Scenario | Detection |
-|---|---|
-| Single-byte edit in any record | `manifest_hash` mismatch on `verify`. |
-| Record deletion | `prev_hash` mismatch in the next record. |
-| Record insertion | `manifest_hash` of the inserted record probably won't match (collision negligible); even if it did, the subsequent records' `prev_hash` would not match the inserted record's `manifest_hash`. |
+| Scenario                                        | Detection                                                                                                                                                                                                                                              |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Single-byte edit in any record                  | `manifest_hash` mismatch on `verify`.                                                                                                                                                                                                                  |
+| Record deletion                                 | `prev_hash` mismatch in the next record.                                                                                                                                                                                                               |
+| Record insertion                                | `manifest_hash` of the inserted record probably won't match (collision negligible); even if it did, the subsequent records' `prev_hash` would not match the inserted record's `manifest_hash`.                                                         |
 | Wholesale chain replacement with a forged chain | `evidence verify` would pass against the forged chain. The defense is **off-chain attestation**: hashes published to a tamper-resistant external store (CI artifact log, GitHub commit, etc.). DEVAI does not currently do this; it's a residual risk. |
 
 ## Article 32: provenance preservation

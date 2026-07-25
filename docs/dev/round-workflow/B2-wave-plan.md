@@ -33,11 +33,11 @@ Materialize the orchestrator + worker prompts the execute phase reads. Output is
 
 ## Effort hint guide
 
-| Hint | Use for |
-|---|---|
-| `low` | Mechanical edits, single-file changes, renames, doc-rot fixes. |
+| Hint     | Use for                                                                               |
+| -------- | ------------------------------------------------------------------------------------- |
+| `low`    | Mechanical edits, single-file changes, renames, doc-rot fixes.                        |
 | `medium` | New schemas / verbs / adopter docs; multi-file refactors; non-trivial test additions. |
-| `high` | New skill compositions, cross-substrate work, architecturally novel code. |
+| `high`   | New skill compositions, cross-substrate work, architecturally novel code.             |
 
 ## Deliverables
 

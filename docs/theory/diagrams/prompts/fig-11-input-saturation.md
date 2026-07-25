@@ -8,8 +8,8 @@ Defense-in-depth for u ∈ U_allowed: each of three layers can independently rej
 
 ## Visual structure
 
-- **Five boxes in a horizontal chain**: *LLM proposes u_k* → *Layer 1 (prompt overlay)* → *Layer 2 (skill runtime)* → *Layer 3 (git pre-commit)* → *Apply to plant*.
-- **Below**, a *Refused* box (forbidden-red) — three dashed red arrows fall from L1, L2, L3 toward it, labelled 'violation' on one of them.
+- **Five boxes in a horizontal chain**: _LLM proposes u_k_ → _Layer 1 (prompt overlay)_ → _Layer 2 (skill runtime)_ → _Layer 3 (git pre-commit)_ → _Apply to plant_.
+- **Below**, a _Refused_ box (forbidden-red) — three dashed red arrows fall from L1, L2, L3 toward it, labelled 'violation' on one of them.
 - **Aspect**: ~1180×320.
 
 ## Authoring notes

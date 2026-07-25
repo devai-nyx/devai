@@ -17,13 +17,7 @@
     },
     "framework": {
       "type": "string",
-      "enum": [
-        "angular",
-        "react",
-        "angularjs",
-        "nextjs",
-        "remix"
-      ]
+      "enum": ["angular", "react", "angularjs", "nextjs", "remix"]
     },
     "routes": {
       "type": "array",
@@ -32,12 +26,7 @@
       }
     }
   },
-  "required": [
-    "schemaVersion",
-    "generatedAt",
-    "framework",
-    "routes"
-  ],
+  "required": ["schemaVersion", "generatedAt", "framework", "routes"],
   "$defs": {
     "Evidence": {
       "type": "object",
@@ -60,11 +49,7 @@
           "pattern": "^[a-f0-9]{64}$"
         }
       },
-      "required": [
-        "path",
-        "startLine",
-        "endLine"
-      ]
+      "required": ["path", "startLine", "endLine"]
     },
     "ComponentRef": {
       "type": "object",
@@ -86,9 +71,7 @@
           "minimum": 1
         }
       },
-      "required": [
-        "file"
-      ]
+      "required": ["file"]
     },
     "ApiCallRef": {
       "type": "object",
@@ -96,15 +79,7 @@
       "properties": {
         "method": {
           "type": "string",
-          "enum": [
-            "GET",
-            "POST",
-            "PUT",
-            "PATCH",
-            "DELETE",
-            "HEAD",
-            "OPTIONS"
-          ]
+          "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
         },
         "path": {
           "type": "string",
@@ -114,10 +89,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "method",
-        "path"
-      ]
+      "required": ["method", "path"]
     },
     "Route": {
       "type": "object",
@@ -195,11 +167,7 @@
           "minItems": 1
         }
       },
-      "required": [
-        "id",
-        "path",
-        "evidence"
-      ]
+      "required": ["id", "path", "evidence"]
     }
   },
   "schema_version": "1.0.0",

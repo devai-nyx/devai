@@ -11,12 +11,7 @@
   "rationale": "Article 34 automation is safe only when its origin and effects are narrower than a general writer. Dependency and merge observations that fail open turn missing evidence into false green governance.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int",
-      "e2e",
-      "sec"
-    ],
+    "required_suites": ["unit", "int", "e2e", "sec"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -24,10 +19,7 @@
       "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
     }
   },
-  "measurable_via": [
-    "govern auditor post-merge",
-    "policy check dependencies"
-  ],
+  "measurable_via": ["govern auditor post-merge", "policy check dependencies"],
   "measurable_via_mode": "all",
   "authority": {
     "docs": [
@@ -44,10 +36,7 @@
         "anchor": "decision-8-dependency-security-result-contract"
       }
     ],
-    "decisions": [
-      "D-139",
-      "ADR-004"
-    ]
+    "decisions": ["D-139", "ADR-004"]
   },
   "scope": {
     "components": [
@@ -84,7 +73,5 @@
     "fail-closed",
     "no-agent-dispatch"
   ],
-  "provenance": [
-    "ex-INV-DEVAI-018@devai-original"
-  ]
+  "provenance": ["ex-INV-DEVAI-018@devai-original"]
 }

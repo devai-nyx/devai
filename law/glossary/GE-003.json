@@ -6,11 +6,6 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "see_also": [
-    "GE-018",
-    "GE-019"
-  ],
-  "provenance": [
-    "ex-GE-003@devai-original"
-  ]
+  "see_also": ["GE-018", "GE-019"],
+  "provenance": ["ex-GE-003@devai-original"]
 }

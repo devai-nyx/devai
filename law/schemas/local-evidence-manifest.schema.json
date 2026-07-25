@@ -8,9 +8,7 @@
   "allOf": [
     {
       "if": {
-        "required": [
-          "origin"
-        ],
+        "required": ["origin"],
         "properties": {
           "origin": {
             "const": "actions-run"
@@ -18,15 +16,11 @@
         }
       },
       "then": {
-        "required": [
-          "actionsRun"
-        ]
+        "required": ["actionsRun"]
       },
       "else": {
         "not": {
-          "required": [
-            "actionsRun"
-          ]
+          "required": ["actionsRun"]
         }
       }
     }
@@ -48,10 +42,7 @@
       "const": 1
     },
     "origin": {
-      "enum": [
-        "local",
-        "actions-run"
-      ],
+      "enum": ["local", "actions-run"],
       "description": "Evidence producer. Omission is the backward-compatible local form."
     },
     "actionsRun": {
@@ -82,10 +73,7 @@
           "minLength": 1
         },
         "eventName": {
-          "enum": [
-            "pull_request",
-            "merge_group"
-          ]
+          "enum": ["pull_request", "merge_group"]
         },
         "runId": {
           "type": "string",
@@ -120,10 +108,7 @@
             {
               "type": "object",
               "additionalProperties": false,
-              "required": [
-                "algorithm",
-                "value"
-              ],
+              "required": ["algorithm", "value"],
               "properties": {
                 "algorithm": {
                   "const": "sha1"
@@ -137,10 +122,7 @@
             {
               "type": "object",
               "additionalProperties": false,
-              "required": [
-                "algorithm",
-                "value"
-              ],
+              "required": ["algorithm", "value"],
               "properties": {
                 "algorithm": {
                   "const": "sha256"
@@ -196,11 +178,7 @@
     "sourceHash": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "algorithm",
-        "value",
-        "fileCount"
-      ],
+      "required": ["algorithm", "value", "fileCount"],
       "description": "Deterministic digest over every git-tracked file (path, byte length, per-file sha256), excluding the manifest's own directory. Binds the evidence claim to the exact tree it was produced from.",
       "properties": {
         "algorithm": {
@@ -219,11 +197,7 @@
     "policy": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "maxAgeHours",
-        "requiredJobs",
-        "allowedPlatforms"
-      ],
+      "required": ["maxAgeHours", "requiredJobs", "allowedPlatforms"],
       "description": "The policy the manifest claims to satisfy. Verification cross-checks these values against the adopter's declared `ci_economy.local_evidence` config (project-config.schema.json); a manifest carrying a laxer policy than the repo declares is rejected.",
       "properties": {
         "maxAgeHours": {
@@ -257,9 +231,7 @@
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "observed"
-        ],
+        "required": ["observed"],
         "properties": {
           "expected": {
             "type": "string"
@@ -287,26 +259,17 @@
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "result",
-          "metadata",
-          "artifactChecksum"
-        ],
+        "required": ["result", "metadata", "artifactChecksum"],
         "properties": {
           "result": {
-            "enum": [
-              "success"
-            ]
+            "enum": ["success"]
           },
           "artifactDir": {
             "type": "string"
           },
           "metadata": {
             "type": "object",
-            "required": [
-              "job",
-              "platform"
-            ],
+            "required": ["job", "platform"],
             "properties": {
               "job": {
                 "type": "string",
@@ -324,11 +287,7 @@
           "artifactChecksum": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-              "algorithm",
-              "value",
-              "fileCount"
-            ],
+            "required": ["algorithm", "value", "fileCount"],
             "properties": {
               "algorithm": {
                 "const": "sha256"
@@ -360,12 +319,8 @@
       },
       "policy": {
         "maxAgeHours": 24,
-        "requiredJobs": [
-          "merged-coverage"
-        ],
-        "allowedPlatforms": [
-          "linux/amd64"
-        ]
+        "requiredJobs": ["merged-coverage"],
+        "allowedPlatforms": ["linux/amd64"]
       },
       "tools": {},
       "platforms": [],

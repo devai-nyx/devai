@@ -7,7 +7,12 @@ date: 2026-07-23
 authority: Owner + Architect (joint — the single declared authority exception inside law/)
 supersedes: null
 superseded_by: null
-provenance: [ex-glossary@devai-original (37 entries, all schema-valid per REV-0006), REV-0006 Owner marks applied 2026-07-23 (GE-006/016/020/022 touch-ups and GE-038..044 vocabulary rider)]
+provenance:
+  [
+    ex-glossary@devai-original (37 entries,
+    all schema-valid per REV-0006),
+    REV-0006 Owner marks applied 2026-07-23 (GE-006/016/020/022 touch-ups and GE-038..044 vocabulary rider),
+  ]
 ---
 
 # Glossary
@@ -21,17 +26,17 @@ This directory holds glossary entries — canonical terms with definitions, cros
 The predecessor vocabulary imported at GE-001..037. The successor vocabulary rider is
 draft at GE-038..044 pending the ratification round.
 
-| Group | IDs | Terms |
-|---|---|---|
-| Roles (Article 6 / D-3) | GE-001..005 | Owner, Architect, Engineer, Inspector, Auditor |
-| Substrates (D-2) | GE-006..010 | F1, F2, F3, F4, F5 |
-| Loop concepts | GE-011..018 | Sensor, SensorReading, Triage, Scorecard, Assessment, Backlog, Task, RGR |
-| Governance artifacts | GE-019..025 | Invariant, Trace, Evidence chain, ADR, Tombstone, Inv-Compliance trailer, Agent-run |
-| Severity ladder + override + project type | GE-026..028 | Severity ladder, inv-override, Project type |
-| Phase-11 mechanisms | GE-029..033 | CNL, Adherence-reverse, Runtime probe, Release gate, Release control record |
-| Phase-12 mechanism | GE-034 | RTD manifest |
-| Bonus governance terms | GE-035..037 | Forbidden action, Skill manifest, Prompt firewall |
-| DEVAI-II vocabulary rider | GE-038..044 | work/, record/, Proofs epoch, Genesis attestation, Population registry, DII namespace, Record meta-structure |
+| Group                                     | IDs         | Terms                                                                                                        |
+| ----------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------ |
+| Roles (Article 6 / D-3)                   | GE-001..005 | Owner, Architect, Engineer, Inspector, Auditor                                                               |
+| Substrates (D-2)                          | GE-006..010 | F1, F2, F3, F4, F5                                                                                           |
+| Loop concepts                             | GE-011..018 | Sensor, SensorReading, Triage, Scorecard, Assessment, Backlog, Task, RGR                                     |
+| Governance artifacts                      | GE-019..025 | Invariant, Trace, Evidence chain, ADR, Tombstone, Inv-Compliance trailer, Agent-run                          |
+| Severity ladder + override + project type | GE-026..028 | Severity ladder, inv-override, Project type                                                                  |
+| Phase-11 mechanisms                       | GE-029..033 | CNL, Adherence-reverse, Runtime probe, Release gate, Release control record                                  |
+| Phase-12 mechanism                        | GE-034      | RTD manifest                                                                                                 |
+| Bonus governance terms                    | GE-035..037 | Forbidden action, Skill manifest, Prompt firewall                                                            |
+| DEVAI-II vocabulary rider                 | GE-038..044 | work/, record/, Proofs epoch, Genesis attestation, Population registry, DII namespace, Record meta-structure |
 
 Each entry validates against `glossary-entry.schema.json`. Cross-references in `see_also` and `related_invariants` are checked at validation time.
 

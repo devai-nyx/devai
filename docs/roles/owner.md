@@ -9,7 +9,7 @@
 
 ## What the Owner does
 
-The Owner is the voice of *what the software is for*. The Owner writes in natural language, close to user intent. The Owner does **not** translate intent into machine-checkable invariants — that's the Architect's job (per D-7).
+The Owner is the voice of _what the software is for_. The Owner writes in natural language, close to user intent. The Owner does **not** translate intent into machine-checkable invariants — that's the Architect's job (per D-7).
 
 The compilation link from Owner to Architect is the `related_invariants` array on each Owner-authored artifact. The Owner says "this journey requires this invariant"; the Architect authors the invariant.
 
@@ -40,39 +40,39 @@ The compilation link from Owner to Architect is the `related_invariants` array o
 
 ## Anti-patterns
 
-| Pattern | Why bad |
-|---|---|
+| Pattern                                                      | Why bad                                                                                                 |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
 | Writing imperatives in Owner artifacts ("The system MUST X") | Owner uses Architect vocabulary; that's role-blur. Rephrase as user intent and reference the invariant. |
-| Editing invariants directly | Cross-role; the harness will refuse. Open an Architect session instead. |
-| Adding glossary entries without an authority anchor | Glossary entries need to cite the doc that introduces the term. |
-| Deleting a journey because it "doesn't apply anymore" | Journeys live until their related invariants are tombstoned. Mark `status: deprecated`, don't delete. |
+| Editing invariants directly                                  | Cross-role; the harness will refuse. Open an Architect session instead.                                 |
+| Adding glossary entries without an authority anchor          | Glossary entries need to cite the doc that introduces the term.                                         |
+| Deleting a journey because it "doesn't apply anymore"        | Journeys live until their related invariants are tombstoned. Mark `status: deprecated`, don't delete.   |
 
 ## Tools the Owner uses
 
-| Command | When |
-|---|---|
-| `devai spec validate journeys` | Before committing journey changes. |
-| `devai spec validate glossary` | Before committing glossary changes. |
-| `devai inventory glossary --format human` | See coverage of glossary terms across F1/F2. |
-| `devai work backlog list` | See what Architect/Engineer is working on. |
+| Command                                       | When                                                                             |
+| --------------------------------------------- | -------------------------------------------------------------------------------- |
+| `devai spec validate journeys`                | Before committing journey changes.                                               |
+| `devai spec validate glossary`                | Before committing glossary changes.                                              |
+| `devai inventory glossary --format human`     | See coverage of glossary terms across F1/F2.                                     |
+| `devai work backlog list`                     | See what Architect/Engineer is working on.                                       |
 | `devai catalog actions --authority specifier` | Filter the action catalog to Architect-tier verbs (Owner consumes their output). |
 
 ## Hand-offs
 
-| To | When |
-|---|---|
-| Architect | A journey reveals a new invariant is needed. |
-| Auditor | Question about whether a journey is being measurably advanced — Auditor produces the scorecard breakdown. |
+| To        | When                                                                                                      |
+| --------- | --------------------------------------------------------------------------------------------------------- |
+| Architect | A journey reveals a new invariant is needed.                                                              |
+| Auditor   | Question about whether a journey is being measurably advanced — Auditor produces the scorecard breakdown. |
 
 ## Authority files
 
-| Path | Editable by Owner? |
-|---|---|
-| `product/**` | ✅ Yes |
-| `law/glossary/**` | ✅ Yes (jointly with Architect) |
-| `docs/theory/architecture/**` | ❌ No |
-| `law/schemas/**` | ❌ No |
-| `packages/**` | ❌ No |
+| Path                          | Editable by Owner?              |
+| ----------------------------- | ------------------------------- |
+| `product/**`                  | ✅ Yes                          |
+| `law/glossary/**`             | ✅ Yes (jointly with Architect) |
+| `docs/theory/architecture/**` | ❌ No                           |
+| `law/schemas/**`              | ❌ No                           |
+| `packages/**`                 | ❌ No                           |
 
 ## See also
 

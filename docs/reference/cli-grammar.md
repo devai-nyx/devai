@@ -14,6 +14,7 @@ devai <noun> <verb> [args] [flags]
 ```
 
 Examples:
+
 - `devai inventory modules` (inventory the modules)
 - `devai sense test` (run the test sensor)
 - `devai work task spawn TASK-0042` (spawn a worktree for the task)
@@ -31,28 +32,28 @@ Flat verb-noun (`devai list-modules`, `devai run-tests`, `devai spawn-task`) was
 - **Cognitive clustering fails.** Verb-noun forces alphabetical ordering by verb, scattering related commands (`build-prompt` and `compose-prompt` would be far apart). Noun-noun grouping keeps the related commands adjacent.
 - **Typed-command length is worse.** `devai inventory suggest` is no longer than `devai inventory-suggest` once the top-level noun is learned, since tab completion handles the noun.
 
-The noun-verb pattern also matches DEVAI's substrate/aspect taxonomy from the scorecard. The nouns *are* the conceptual axes:
+The noun-verb pattern also matches DEVAI's substrate/aspect taxonomy from the scorecard. The nouns _are_ the conceptual axes:
 
-| Noun | Concept |
-|---|---|
-| `inv` | F4 inventory |
-| `sense` | Sensors emitting findings |
-| `spec` | F1 specification validators |
-| `task` | Task lifecycle |
-| `worktree` | Worktree lifecycle (F5) |
-| `db` | Database isolation |
-| `lock` | Module-level locks |
-| `score` | Scorecard computation |
-| `triage` | Triage classification |
-| `prompts` | Prompt composition (Article 37) |
-| `loop` | Autonomous loop control |
-| `check` | Discrete validators (auth, overlays, evidence chain) |
-| `docs` | Doc generation / link validation |
-| `rtd` | RTD manifest bundle |
-| `skill` | Layer-2 skill invocation |
-| `actions` | Self-describing action catalog |
-| `init` | Initialization (only top-level verb) |
-| `upgrade` | Framework upgrade (only top-level verb) |
+| Noun       | Concept                                              |
+| ---------- | ---------------------------------------------------- |
+| `inv`      | F4 inventory                                         |
+| `sense`    | Sensors emitting findings                            |
+| `spec`     | F1 specification validators                          |
+| `task`     | Task lifecycle                                       |
+| `worktree` | Worktree lifecycle (F5)                              |
+| `db`       | Database isolation                                   |
+| `lock`     | Module-level locks                                   |
+| `score`    | Scorecard computation                                |
+| `triage`   | Triage classification                                |
+| `prompts`  | Prompt composition (Article 37)                      |
+| `loop`     | Autonomous loop control                              |
+| `check`    | Discrete validators (auth, overlays, evidence chain) |
+| `docs`     | Doc generation / link validation                     |
+| `rtd`      | RTD manifest bundle                                  |
+| `skill`    | Layer-2 skill invocation                             |
+| `actions`  | Self-describing action catalog                       |
+| `init`     | Initialization (only top-level verb)                 |
+| `upgrade`  | Framework upgrade (only top-level verb)              |
 
 `init` and `upgrade` are the two exceptions — they're not nested under a noun because they apply at the repo level, not within a substrate.
 

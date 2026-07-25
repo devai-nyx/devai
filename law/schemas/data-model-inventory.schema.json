@@ -17,14 +17,7 @@
     },
     "dialect": {
       "type": "string",
-      "enum": [
-        "postgres",
-        "mysql",
-        "oracle",
-        "sqlite",
-        "mssql",
-        "unknown"
-      ]
+      "enum": ["postgres", "mysql", "oracle", "sqlite", "mssql", "unknown"]
     },
     "sourceRepo": {
       "type": "string",
@@ -51,12 +44,7 @@
       "default": []
     }
   },
-  "required": [
-    "schemaVersion",
-    "generatedAt",
-    "dialect",
-    "tables"
-  ],
+  "required": ["schemaVersion", "generatedAt", "dialect", "tables"],
   "$defs": {
     "Evidence": {
       "type": "object",
@@ -78,11 +66,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "path",
-        "startLine",
-        "endLine"
-      ]
+      "required": ["path", "startLine", "endLine"]
     },
     "Column": {
       "type": "object",
@@ -122,10 +106,7 @@
           "description": "Optional retention policy. Required for compliance gates (Phase 17.D INV-INVENTORY-002)."
         }
       },
-      "required": [
-        "name",
-        "type"
-      ]
+      "required": ["name", "type"]
     },
     "ForeignKey": {
       "type": "object",
@@ -151,30 +132,14 @@
         },
         "on_delete": {
           "type": "string",
-          "enum": [
-            "cascade",
-            "restrict",
-            "set null",
-            "set default",
-            "no action"
-          ]
+          "enum": ["cascade", "restrict", "set null", "set default", "no action"]
         },
         "on_update": {
           "type": "string",
-          "enum": [
-            "cascade",
-            "restrict",
-            "set null",
-            "set default",
-            "no action"
-          ]
+          "enum": ["cascade", "restrict", "set null", "set default", "no action"]
         }
       },
-      "required": [
-        "columns",
-        "references_table",
-        "references_columns"
-      ]
+      "required": ["columns", "references_table", "references_columns"]
     },
     "Table": {
       "type": "object",
@@ -227,11 +192,7 @@
           "minItems": 1
         }
       },
-      "required": [
-        "name",
-        "columns",
-        "evidence"
-      ]
+      "required": ["name", "columns", "evidence"]
     },
     "View": {
       "type": "object",
@@ -254,9 +215,7 @@
           }
         }
       },
-      "required": [
-        "name"
-      ]
+      "required": ["name"]
     },
     "Enum": {
       "type": "object",
@@ -280,10 +239,7 @@
           }
         }
       },
-      "required": [
-        "name",
-        "values"
-      ]
+      "required": ["name", "values"]
     }
   },
   "schema_version": "1.0.0",

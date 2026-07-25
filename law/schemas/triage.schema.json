@@ -33,28 +33,17 @@
       "description": "Evidence record being triaged (typically a failed sensor reading or test run)."
     },
     "subject_task_id": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "pattern": "^TASK-"
     },
     "classification": {
-      "enum": [
-        "plant_bug",
-        "sensor_error",
-        "policy_issue",
-        "reference_gap",
-        "inconclusive"
-      ],
+      "enum": ["plant_bug", "sensor_error", "policy_issue", "reference_gap", "inconclusive"],
       "description": "inconclusive routes to tie-breaker ladder; explicit uncertainty per Article 39."
     },
     "confidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "score"
-      ],
+      "required": ["score"],
       "properties": {
         "score": {
           "type": "number",
@@ -83,19 +72,10 @@
     "recommended_route": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "discipline"
-      ],
+      "required": ["discipline"],
       "properties": {
         "discipline": {
-          "enum": [
-            "engineer",
-            "inspector",
-            "auditor",
-            "architect",
-            "owner",
-            "harness_review"
-          ]
+          "enum": ["engineer", "inspector", "auditor", "architect", "owner", "harness_review"]
         },
         "action": {
           "enum": [

@@ -40,10 +40,7 @@
           {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-              "id",
-              "file"
-            ],
+            "required": ["id", "file"],
             "properties": {
               "id": {
                 "type": "string",
@@ -62,11 +59,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "method",
-          "path",
-          "module"
-        ],
+        "required": ["method", "path", "module"],
         "properties": {
           "method": {
             "type": "string"
@@ -101,19 +94,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "kind",
-          "name"
-        ],
+        "required": ["kind", "name"],
         "properties": {
           "kind": {
-            "enum": [
-              "db_table",
-              "db_view",
-              "dto",
-              "openapi",
-              "json_schema"
-            ]
+            "enum": ["db_table", "db_view", "dto", "openapi", "json_schema"]
           },
           "name": {
             "type": "string"
@@ -134,11 +118,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "kind",
-          "name",
-          "module"
-        ],
+        "required": ["kind", "name", "module"],
         "properties": {
           "kind": {
             "type": "string"
@@ -169,26 +149,13 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "path",
-          "suite",
-          "invariants"
-        ],
+        "required": ["path", "suite", "invariants"],
         "properties": {
           "path": {
             "type": "string"
           },
           "suite": {
-            "enum": [
-              "unit",
-              "api",
-              "int",
-              "e2e",
-              "sec",
-              "perf",
-              "journey",
-              "db"
-            ]
+            "enum": ["unit", "api", "int", "e2e", "sec", "perf", "journey", "db"]
           },
           "invariants": {
             "type": "array",
@@ -215,10 +182,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "id",
-          "file"
-        ],
+        "required": ["id", "file"],
         "properties": {
           "id": {
             "type": "string",

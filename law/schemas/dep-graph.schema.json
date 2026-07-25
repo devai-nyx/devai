@@ -19,9 +19,7 @@
       }
     }
   },
-  "required": [
-    "graph"
-  ],
+  "required": ["graph"],
   "schema_version": "1.0.0",
   "examples": [
     {

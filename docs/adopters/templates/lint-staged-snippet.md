@@ -23,10 +23,7 @@ If your repo uses `lint-staged` (typical with husky pre-commit hooks), filter `r
 ```json
 {
   "lint-staged": {
-    "*.{js,ts,tsx,json}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
+    "*.{js,ts,tsx,json}": ["eslint --fix", "prettier --write"],
     "!record/proofs/**/*.json": []
   }
 }
@@ -40,10 +37,7 @@ module.exports = {
   '**/*.{js,ts,tsx,json}': (files) => {
     const safe = files.filter((f) => !f.includes('/record/proofs/'));
     if (safe.length === 0) return [];
-    return [
-      `eslint --fix ${safe.join(' ')}`,
-      `prettier --write ${safe.join(' ')}`,
-    ];
+    return [`eslint --fix ${safe.join(' ')}`, `prettier --write ${safe.join(' ')}`];
   },
 };
 ```

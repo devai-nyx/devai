@@ -5,17 +5,17 @@ sidebar_position: 8
 
 # Cross-role coordination
 
-> No single discipline may both set its own reference and actuate against it ([Article 10](../reference/law.md)). Cross-substrate work is therefore impossible *within one task*. Coordinated multi-role work uses the **coupled-triplet pattern** ([Article 24](../reference/law.md)), which stages three tasks along the authority chain and synchronises them via checkpoints.
+> No single discipline may both set its own reference and actuate against it ([Article 10](../reference/law.md)). Cross-substrate work is therefore impossible _within one task_. Coordinated multi-role work uses the **coupled-triplet pattern** ([Article 24](../reference/law.md)), which stages three tasks along the authority chain and synchronises them via checkpoints.
 
 ## Coupled task triplets
 
 A coupled triplet groups three tasks that together advance a cross-substrate change:
 
-| Position | Role | Task type | Produces |
-|---|---|---|---|
-| 1 | Architect | spec-change | New / modified invariants, trace updates, ADR if cross-cutting |
-| 2 | Inspector | test-author | Tests probing the new / modified invariants |
-| 3 | Engineer | code-implement | Code satisfying the tests |
+| Position | Role      | Task type      | Produces                                                       |
+| -------- | --------- | -------------- | -------------------------------------------------------------- |
+| 1        | Architect | spec-change    | New / modified invariants, trace updates, ADR if cross-cutting |
+| 2        | Inspector | test-author    | Tests probing the new / modified invariants                    |
+| 3        | Engineer  | code-implement | Code satisfying the tests                                      |
 
 The three tasks share a `coupled_task_group` ID in the backlog. The orchestrator dispatches them as a unit; the human Architect approves the triplet's framing before it starts.
 

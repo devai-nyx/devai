@@ -11,8 +11,8 @@ Per-task linearizable state machine over the lifecycle. Reads bottom-to-top as a
 - **Main horizontal chain** at the top: queued → ready → in_progress → checkpoint → pre_merge (ctrl-green).
 - **Vertical chain** on the right: pre_merge → merging → completed.
 - **Self-loop** on checkpoint labelled 'iter continues'.
-- **Branch downward** from in_progress to *rgr_pending* (human-red), with two outgoing arrows: 'RGR resolved' curving back up to in_progress (ctrl-green); 'RGR rejected' to *cancelled*.
-- **Branch leftward** from in_progress to *escalated* (human-red) labelled 'ladder exhausted'.
+- **Branch downward** from in_progress to _rgr_pending_ (human-red), with two outgoing arrows: 'RGR resolved' curving back up to in_progress (ctrl-green); 'RGR rejected' to _cancelled_.
+- **Branch leftward** from in_progress to _escalated_ (human-red) labelled 'ladder exhausted'.
 - **Aspect**: ~1100×540.
 
 ## Authoring notes

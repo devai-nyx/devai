@@ -27,15 +27,15 @@ A **NestJS + Angular sample** that the inventory sensors run against in test sce
 
 The **stack-adapter packs** absorbed from the redox engine in Phase 17. Each pack targets a specific stack and provides detection signals, extractor params, and per-writer prompt overlays. `devai adopt pack resolve` matches a repo to one of these.
 
-| Pack | Stack |
-|---|---|
-| `redox-pack-nestjs-postgres-angular` | NestJS backend + Postgres + Angular frontend (the canonical DEVAI stack) |
-| `redox-pack-nestjs-postgres-react` | NestJS backend + Postgres + React frontend |
-| `redox-pack-express-knex-postgres-angular` | Express + Knex + Postgres + Angular |
-| `redox-pack-laravel-postgres-angular` | Laravel + Postgres + Angular |
-| `redox-pack-laravel-postgres-blade` | Laravel + Postgres + Blade templates |
-| `redox-pack-laravel-postgres-react-blade` | Laravel + Postgres + React + Blade |
-| `redox-pack-java-spring-oracle-angularjs` | Spring + Oracle + AngularJS (legacy/migration scenarios) |
+| Pack                                       | Stack                                                                    |
+| ------------------------------------------ | ------------------------------------------------------------------------ |
+| `redox-pack-nestjs-postgres-angular`       | NestJS backend + Postgres + Angular frontend (the canonical DEVAI stack) |
+| `redox-pack-nestjs-postgres-react`         | NestJS backend + Postgres + React frontend                               |
+| `redox-pack-express-knex-postgres-angular` | Express + Knex + Postgres + Angular                                      |
+| `redox-pack-laravel-postgres-angular`      | Laravel + Postgres + Angular                                             |
+| `redox-pack-laravel-postgres-blade`        | Laravel + Postgres + Blade templates                                     |
+| `redox-pack-laravel-postgres-react-blade`  | Laravel + Postgres + React + Blade                                       |
+| `redox-pack-java-spring-oracle-angularjs`  | Spring + Oracle + AngularJS (legacy/migration scenarios)                 |
 
 Each pack's `stack-adapter.json` declares:
 

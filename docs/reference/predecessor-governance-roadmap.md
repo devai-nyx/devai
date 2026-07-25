@@ -4,23 +4,23 @@
 
 The 2026-06-09 Auditor review produced six accepted recommendations. Status:
 
-| Item | Status | Where |
-|---|---|---|
-| 1–3 — drift sensor, constitutional amendments, BUILD-PLAN restructure | **shipped** | drift-remediation round (D-108 → D-109, closure PC-0001) |
-| 4 — mechanize the closure ceremony | **shipped** | GV round (D-110 → D-111, closure PC-0002): `phase-closure.schema.json`, `devai govern phase close` / `phase ledger`, `gen-closure-ledger.mjs` |
-| 5 — minimal adoption profile | **shipped** | AP round (D-112 → D-113, closure PC-0003): `project-config.profile`, profile-aware `doctor` / `init` / `upgrade` / `score compute`, [adoption-profiles guide](../adopters/adoption-profiles.md) |
-| 6 — second independent adopter + license | **license resolved; supervised pilot deferred to the next readiness round** | Apache-2.0 is current; R15 intentionally excludes the real-adopter exercise |
-| 7 — canonical adopter-guide placement | **complete in the R21 candidate** | Canonical sources are `docs/adopters/user-guide.md` and `docs/adopters/adoption.md`; W08 removed the former root copies and reconciled inbound links and generated references |
-| 8 — skills implementation decomposition | **R20 local candidate; not integrated or shipped** | R22 owns cross-audit, rebase, integration, and package release |
-| 9 — reusable evidence-gate self-adoption | **shipped in the R21 candidate** | ADR-004 records the hybrid posture; `ci.yml` consumes `reusable-evidence-gate.yml` while DEVAI-specific jobs retain full signal |
-| 10 — supervised 0.6 package publication | **complete** | Pre-round W0 published the fixed five-package 0.6.0 group; subsequent R19/R20 changes remain a separate future release |
+| Item                                                                  | Status                                                                      | Where                                                                                                                                                                                           |
+| --------------------------------------------------------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1–3 — drift sensor, constitutional amendments, BUILD-PLAN restructure | **shipped**                                                                 | drift-remediation round (D-108 → D-109, closure PC-0001)                                                                                                                                        |
+| 4 — mechanize the closure ceremony                                    | **shipped**                                                                 | GV round (D-110 → D-111, closure PC-0002): `phase-closure.schema.json`, `devai govern phase close` / `phase ledger`, `gen-closure-ledger.mjs`                                                   |
+| 5 — minimal adoption profile                                          | **shipped**                                                                 | AP round (D-112 → D-113, closure PC-0003): `project-config.profile`, profile-aware `doctor` / `init` / `upgrade` / `score compute`, [adoption-profiles guide](../adopters/adoption-profiles.md) |
+| 6 — second independent adopter + license                              | **license resolved; supervised pilot deferred to the next readiness round** | Apache-2.0 is current; R15 intentionally excludes the real-adopter exercise                                                                                                                     |
+| 7 — canonical adopter-guide placement                                 | **complete in the R21 candidate**                                           | Canonical sources are `docs/adopters/user-guide.md` and `docs/adopters/adoption.md`; W08 removed the former root copies and reconciled inbound links and generated references                   |
+| 8 — skills implementation decomposition                               | **R20 local candidate; not integrated or shipped**                          | R22 owns cross-audit, rebase, integration, and package release                                                                                                                                  |
+| 9 — reusable evidence-gate self-adoption                              | **shipped in the R21 candidate**                                            | ADR-004 records the hybrid posture; `ci.yml` consumes `reusable-evidence-gate.yml` while DEVAI-specific jobs retain full signal                                                                 |
+| 10 — supervised 0.6 package publication                               | **complete**                                                                | Pre-round W0 published the fixed five-package 0.6.0 group; subsequent R19/R20 changes remain a separate future release                                                                          |
 
 The sections below preserve the original rationale. The table above is the
 current disposition; historical trigger language below is not a current-status
 substitute. Item 6 remains the next production-applicability milestone after
 R21 truth closure and R22 integration.
 
-## Item 4 — Mechanize the closure ceremony *(shipped — D-110)*
+## Item 4 — Mechanize the closure ceremony _(shipped — D-110)_
 
 **Problem.** Every phase/round closes with a hand-written D-entry pair, and properties that are pure functions of the log (the "Nth consecutive no-deletion closure" streak, with its ever-growing bracketed list of prior D-numbers) are narrated manually in prose. The ceremony's cost grows linearly with history; its information content does not. The D-108 round already trimmed one side of this (BUILD-PLAN no longer accumulates recap paragraphs).
 
@@ -35,7 +35,7 @@ R21 truth closure and R22 integration.
 
 **Trigger.** Next phase/round closure after this roadmap ships — i.e., the first closure after D-109 should be the first machine-recorded one.
 
-## Item 5 — Minimal adoption profile (tiered on-ramp) *(shipped — D-112)*
+## Item 5 — Minimal adoption profile (tiered on-ramp) _(shipped — D-112)_
 
 **Problem.** Adoption is currently all-or-nothing: constitution + five roles + invariants + trace + 45-cell scorecard before the first green gate. The conceptual load is the framework's largest existential risk; one canonical adopter is the consequence.
 
@@ -45,13 +45,13 @@ R21 truth closure and R22 integration.
 - **Tier 2 — reference signal.** Adds invariants, trace, test-weakening checks, and the deterministic sensor battery; scorecard computed but advisory.
 - **Tier 3 — supervised control.** Adds the soft gate, triage, coupled triplets, worktree orchestration, and human-reviewed scorecard gates. The autonomous loop is an orthogonal experimental feature flag, never implied by a profile.
 
-Profile is a *floor declaration, not a cage*: `devai doctor` reports the declared profile, sensors outside it run in advisory mode rather than being absent, and `devai adopt upgrade --profile` walks a repo up one tier with a checklist. Adoption docs gain a per-tier path; the user guide's first chapter targets Tier 1 only.
+Profile is a _floor declaration, not a cage_: `devai doctor` reports the declared profile, sensors outside it run in advisory mode rather than being absent, and `devai adopt upgrade --profile` walks a repo up one tier with a checklist. Adoption docs gain a per-tier path; the user guide's first chapter targets Tier 1 only.
 
-**Touches.** `project-config.schema.json` widening (Architect), profile-aware gating in `doctor`/`score compute`/`init` (Engineer), per-tier adoption docs (Architect), tests (Inspector). Constitutionally clean: Articles 16–18 define the gates; a profile that runs fewer *sensors* is a client policy choice under Article 18's threshold-override clause, but Tier 1/2 repos must not claim Article 36-style full self-application.
+**Touches.** `project-config.schema.json` widening (Architect), profile-aware gating in `doctor`/`score compute`/`init` (Engineer), per-tier adoption docs (Architect), tests (Inspector). Constitutionally clean: Articles 16–18 define the gates; a profile that runs fewer _sensors_ is a client policy choice under Article 18's threshold-override clause, but Tier 1/2 repos must not claim Article 36-style full self-application.
 
 **Trigger.** Before any second-adopter onboarding (item 6) — the second adopter should land on Tier 1, by design.
 
-## Item 6 — Second independent adopter + license resolution *(license closed; pilot pending)*
+## Item 6 — Second independent adopter + license resolution _(license closed; pilot pending)_
 
 **Problem.** All convergence evidence comes from one adopter (stynx) and sibling repos by the same author; "framework + adopter have converged" remains unfalsifiable until someone outside the author's control adopts. The repository now uses Apache-2.0, so licensing no longer blocks that pilot.
 
@@ -79,12 +79,12 @@ readiness reassessment**. Autonomous promotion is not coupled to that pilot.
 The 2026-07-14 clean-room inspection deferred four items at R17 declaration.
 Their original scope and current disposition are:
 
-| Item | What | Who | Trigger |
-|---|---|---|---|
-| 7 | Canonicalize the adopter guides under `docs/adopters/`, updating generators and inbound links atomically. | Owner + Architect | **Closed in R21 W08:** `docs/adopters/user-guide.md` and `docs/adopters/adoption.md` are the singular canonical sources; close verifies that the former root paths are absent. |
-| 8 | Split the skills implementation and embedded prompts without changing manifests or behavior. | Engineer (own round, coverage-first) | **R20 local candidate**; R22 must cross-audit and integrate before any shipped claim. |
-| 9 | Decide whether DEVAI self-consumes the exported evidence-first reusable workflow. | Architect + Owner | **Closed by ADR-004/R21:** hybrid self-adoption, preserving DEVAI-specific full-signal jobs. |
-| 10 | Exercise the supervised package publication credential and fail-closed release contract. | Operator + Engineer | **Closed by W0:** 0.6.0 fixed group published and tagged. |
+| Item | What                                                                                                      | Who                                  | Trigger                                                                                                                                                                        |
+| ---- | --------------------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 7    | Canonicalize the adopter guides under `docs/adopters/`, updating generators and inbound links atomically. | Owner + Architect                    | **Closed in R21 W08:** `docs/adopters/user-guide.md` and `docs/adopters/adoption.md` are the singular canonical sources; close verifies that the former root paths are absent. |
+| 8    | Split the skills implementation and embedded prompts without changing manifests or behavior.              | Engineer (own round, coverage-first) | **R20 local candidate**; R22 must cross-audit and integrate before any shipped claim.                                                                                          |
+| 9    | Decide whether DEVAI self-consumes the exported evidence-first reusable workflow.                         | Architect + Owner                    | **Closed by ADR-004/R21:** hybrid self-adoption, preserving DEVAI-specific full-signal jobs.                                                                                   |
+| 10   | Exercise the supervised package publication credential and fail-closed release contract.                  | Operator + Engineer                  | **Closed by W0:** 0.6.0 fixed group published and tagged.                                                                                                                      |
 
 ---
 

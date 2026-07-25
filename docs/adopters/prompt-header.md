@@ -11,10 +11,9 @@ YAML front matter at the top of the file, between two `---` fences. No blank lin
 ---
 role: owner | architect | inspector | engineer | auditor
 effort: low | medium | high
-model: <id>     # optional
-vendor: <id>    # optional
+model: <id> # optional
+vendor: <id> # optional
 ---
-
 # R<n>-W<m> — <slug>
 
 ...prompt body...
@@ -24,16 +23,16 @@ vendor: <id>    # optional
 
 ### Required
 
-| Field | Type | Values |
-|-------|------|--------|
-| `role` | enum | `owner` \| `architect` \| `inspector` \| `engineer` \| `auditor` |
-| `effort` | enum | `low` \| `medium` \| `high` |
+| Field    | Type | Values                                                           |
+| -------- | ---- | ---------------------------------------------------------------- |
+| `role`   | enum | `owner` \| `architect` \| `inspector` \| `engineer` \| `auditor` |
+| `effort` | enum | `low` \| `medium` \| `high`                                      |
 
 ### Optional
 
-| Field | Type | Notes |
-|-------|------|-------|
-| `model` | string | A specific model identifier. **Use only when distinction matters.** |
+| Field    | Type   | Notes                                                                                               |
+| -------- | ------ | --------------------------------------------------------------------------------------------------- |
+| `model`  | string | A specific model identifier. **Use only when distinction matters.**                                 |
 | `vendor` | string | A specific provider identifier (e.g. `anthropic`, `openai`). **Use only when distinction matters.** |
 
 ## Semantics
@@ -54,11 +53,11 @@ Orchestrator prompts typically declare `role: architect` (coordinating + dispatc
 
 The agent execution effort level. Maps to how much reasoning depth, iteration, and tool-call budget the wave warrants:
 
-| Level | When to use |
-|-------|-------------|
-| `low` | Mechanical edits, single-file changes, renames, doc-rot fixes, scaffold-only work, retroactive bookkeeping. |
-| `medium` | New schemas / verbs / adopter docs; multi-file refactors; non-trivial test additions; catalog-filling families. |
-| `high` | New skill compositions, cross-substrate work, architecturally novel code, anything where the right answer isn't obvious from the prompt. |
+| Level    | When to use                                                                                                                              |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `low`    | Mechanical edits, single-file changes, renames, doc-rot fixes, scaffold-only work, retroactive bookkeeping.                              |
+| `medium` | New schemas / verbs / adopter docs; multi-file refactors; non-trivial test additions; catalog-filling families.                          |
+| `high`   | New skill compositions, cross-substrate work, architecturally novel code, anything where the right answer isn't obvious from the prompt. |
 
 **Authoring guidance: target the lowest reasonable effort.** Authoring earnest means naming the actual minimum, not the safe-maximum. A wave authored as `medium` when `low` would suffice wastes budget and signals the wrong urgency.
 
@@ -81,7 +80,6 @@ Default: omit both. The harness picks the appropriate model based on `role` + `e
 role: architect
 effort: low
 ---
-
 # R3 — Orchestrator
 ...
 ```
@@ -93,7 +91,6 @@ effort: low
 role: engineer
 effort: low
 ---
-
 # R3-W2 — rename SKILL-round-loop → SKILL-round-execute
 ...
 ```
@@ -105,7 +102,6 @@ effort: low
 role: architect
 effort: medium
 ---
-
 # R3-W4 — state-extensions contract + adopter doc
 ...
 ```
@@ -117,7 +113,6 @@ effort: medium
 role: engineer
 effort: high
 ---
-
 # R5-W3 — implement SKILL-round-execute real composition
 ...
 ```
@@ -131,7 +126,6 @@ effort: medium
 model: claude-opus-4-7
 vendor: anthropic
 ---
-
 # R7-W2 — verify prompt-caching behaviour against Opus 4.7 (regression suite)
 ...
 ```

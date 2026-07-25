@@ -10,9 +10,7 @@
   "rationale": "Article 21 makes the task lifecycle (including its escalation tail) the auditable trail of the loop. A reader that observes an out-of-order state would invalidate every downstream audit. Persistence uses write-then-replace on a single JSON file so the on-disk record is always a complete snapshot of a valid transition.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -33,29 +31,15 @@
     ]
   },
   "scope": {
-    "components": [
-      "core",
-      "cli"
-    ],
-    "code_areas": [
-      "packages/core/src/loop/tasks.ts",
-      "packages/cli/src/commands/loop/**"
-    ]
+    "components": ["core", "cli"],
+    "code_areas": ["packages/core/src/loop/tasks.ts", "packages/cli/src/commands/loop/**"]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval",
-      "adr"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval", "adr"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-5",
-    "task-lifecycle"
-  ],
+  "tags": ["phase-5", "task-lifecycle"],
   "measurable_via": [
     "work backlog add",
     "work backlog compact",
@@ -80,7 +64,5 @@
     "work worktree list",
     "work worktree reap"
   ],
-  "provenance": [
-    "ex-INV-DEVAI-005@devai-original"
-  ]
+  "provenance": ["ex-INV-DEVAI-005@devai-original"]
 }

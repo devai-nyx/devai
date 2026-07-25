@@ -10,9 +10,7 @@
   "rationale": "Brownfield adoption begins with surface inventories. An unmapped route or endpoint means a user-facing flow exists with no traceable specification \u2014 the inverse of the Architect's job, and the single highest signal that documentation is lagging code. Per Phase 17.D and D-57, this invariant gates the brownfield substrate: 17.C ships the sensors that produce the coverage matrix; 17.D requires the matrix to be fully bound. The 'gate' severity (Phase 10.A) blocks promotion without blocking development \u2014 adopters can land changes that introduce new routes/endpoints, but they cannot promote a release without first closing the use-case gap.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -33,10 +31,7 @@
     ]
   },
   "scope": {
-    "components": [
-      "sensors",
-      "cli"
-    ],
+    "components": ["sensors", "cli"],
     "code_areas": [
       "packages/sensors/src/inventory-coverage.ts",
       "packages/sensors/src/inventory-api.ts",
@@ -45,27 +40,11 @@
     ]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-17",
-    "phase-17-D",
-    "inventory",
-    "brownfield",
-    "coverage"
-  ],
-  "measurable_via": [
-    "sense inventory api",
-    "sense inventory routes",
-    "sense inventory coverage"
-  ],
-  "provenance": [
-    "ex-INV-INVENTORY-001@devai-original"
-  ]
+  "tags": ["phase-17", "phase-17-D", "inventory", "brownfield", "coverage"],
+  "measurable_via": ["sense inventory api", "sense inventory routes", "sense inventory coverage"],
+  "provenance": ["ex-INV-INVENTORY-001@devai-original"]
 }

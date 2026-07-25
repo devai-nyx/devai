@@ -2,7 +2,7 @@
 
 ## Property semantics
 
-**T8 Robustness** (Constitution Article 5): "the artifact addresses error paths, failure modes, retry behaviour, and degradation." For F1 (Spec), this means the spec substrate names *concrete* robustness/error-semantics targets — not "should handle errors" but "all writes are idempotent under retry" or "any GET on a missing resource returns 404 with code MISSING_RESOURCE."
+**T8 Robustness** (Constitution Article 5): "the artifact addresses error paths, failure modes, retry behaviour, and degradation." For F1 (Spec), this means the spec substrate names _concrete_ robustness/error-semantics targets — not "should handle errors" but "all writes are idempotent under retry" or "any GET on a missing resource returns 404 with code MISSING_RESOURCE."
 
 ## Operational definition
 

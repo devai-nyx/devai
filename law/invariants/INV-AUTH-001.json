@@ -11,11 +11,7 @@
   "rationale": "Articles 6-10 make role declaration and separation load-bearing. An implicit role or caller-selected machine actor would turn the authority boundary into advisory metadata.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int",
-      "e2e"
-    ],
+    "required_suites": ["unit", "int", "e2e"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -34,17 +30,10 @@
         "anchor": "2-human-declarations-and-sessions"
       }
     ],
-    "decisions": [
-      "D-135",
-      "ADR-003"
-    ]
+    "decisions": ["D-135", "ADR-003"]
   },
   "scope": {
-    "components": [
-      "authority-runtime",
-      "authority-sessions",
-      "machine-principals"
-    ],
+    "components": ["authority-runtime", "authority-sessions", "machine-principals"],
     "code_areas": [
       "packages/core/src/authority/**",
       "packages/cli/src/command-router.ts",
@@ -70,11 +59,6 @@
     "non-elevation",
     "article-7"
   ],
-  "measurable_via": [
-    "work session start",
-    "work session end"
-  ],
-  "provenance": [
-    "ex-INV-AUTH-001@devai-original"
-  ]
+  "measurable_via": ["work session start", "work session end"],
+  "provenance": ["ex-INV-AUTH-001@devai-original"]
 }

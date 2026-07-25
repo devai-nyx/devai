@@ -5,12 +5,7 @@
   "description": "Architect-authored mapping from invariants to documents, tests, and code areas. Declares intent: which tests are supposed to probe which invariants. Per Constitution Article 13. The corresponding measurement output is trace-resolution.schema.json.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "version",
-    "invariants",
-    "test_corpus"
-  ],
+  "required": ["schemaVersion", "version", "invariants", "test_corpus"],
   "properties": {
     "schemaVersion": {
       "const": "1.0.0"
@@ -63,10 +58,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "id",
-          "tests"
-        ],
+        "required": ["id", "tests"],
         "properties": {
           "id": {
             "$ref": "common-defs.schema.json#/$defs/id_invariant"
@@ -76,10 +68,7 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": [
-                "doc",
-                "anchor"
-              ],
+              "required": ["doc", "anchor"],
               "properties": {
                 "doc": {
                   "type": "string"
@@ -95,33 +84,17 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": [
-                "suite",
-                "path"
-              ],
+              "required": ["suite", "path"],
               "properties": {
                 "suite": {
-                  "enum": [
-                    "unit",
-                    "api",
-                    "int",
-                    "e2e",
-                    "sec",
-                    "perf",
-                    "journey",
-                    "db"
-                  ]
+                  "enum": ["unit", "api", "int", "e2e", "sec", "perf", "journey", "db"]
                 },
                 "path": {
                   "type": "string",
                   "minLength": 1
                 },
                 "target_type": {
-                  "enum": [
-                    "test",
-                    "config-attestation",
-                    "script"
-                  ],
+                  "enum": ["test", "config-attestation", "script"],
                   "default": "test",
                   "description": "D-123 (item 10): what kind of evidence `path` actually is. 'test' (default, back-compat: absent means test) — an executable test the named `suite`'s runner discovers and asserts against; the strongest evidence class. 'config-attestation' — a config file whose presence/content stands in for active verification (e.g. a policy file consumed at runtime, not exercised by a test), weaker evidence than an executing assertion. 'script' — an executable script that is not part of a test suite's discovery (a standalone verifier). `trace-resolve` tracks attestation-only invariants separately so trace completeness doesn't overstate how many invariants are actively test-verified."
                 },
@@ -140,11 +113,7 @@
                   "description": "Human-readable list of what the test should assert."
                 },
                 "mode": {
-                  "enum": [
-                    "black_box",
-                    "gray_box",
-                    "white_box"
-                  ],
+                  "enum": ["black_box", "gray_box", "white_box"],
                   "description": "Information regime for runtime/integration tests."
                 },
                 "reliability": {
@@ -194,27 +163,14 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "path",
-          "suite",
-          "invariant_ids",
-          "lifecycle"
-        ],
+        "required": ["path", "suite", "invariant_ids", "lifecycle"],
         "properties": {
           "path": {
             "type": "string",
             "minLength": 1
           },
           "suite": {
-            "enum": [
-              "unit",
-              "int",
-              "e2e",
-              "sec",
-              "smoke",
-              "contract",
-              "regression"
-            ]
+            "enum": ["unit", "int", "e2e", "sec", "smoke", "contract", "regression"]
           },
           "invariant_ids": {
             "type": "array",
@@ -226,10 +182,7 @@
             }
           },
           "lifecycle": {
-            "enum": [
-              "supported",
-              "experimental"
-            ]
+            "enum": ["supported", "experimental"]
           }
         }
       }

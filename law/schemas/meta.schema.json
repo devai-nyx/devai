@@ -30,14 +30,7 @@
       "minItems": 1
     }
   },
-  "required": [
-    "$schema",
-    "$id",
-    "title",
-    "description",
-    "schema_version",
-    "examples"
-  ],
+  "required": ["$schema", "$id", "title", "description", "schema_version", "examples"],
   "examples": [
     {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -45,9 +38,7 @@
       "title": "Example schema",
       "description": "Minimal meta-schema-conforming schema.",
       "schema_version": "1.0.0",
-      "examples": [
-        {}
-      ]
+      "examples": [{}]
     }
   ]
 }

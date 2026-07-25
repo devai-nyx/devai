@@ -85,46 +85,46 @@ When the spec is silent, contradictory, or unclear, the Engineer does **not** gu
 
 ## Anti-patterns
 
-| Pattern | Why bad |
-|---|---|
-| Editing a test file to make it pass | Sensor weakening. Tests are sensors (D-1, Article 39). Refused at the tool layer. |
-| Editing an invariant because the code is "obviously right" | Cross-role. The harness will refuse; if the harness somehow allowed it, the PR review will reject. |
-| Adding code without a named invariant claim | Code without a spec is plant without setpoint. Author the invariant first (escalate to Architect). |
-| Sprinkling `inv-override` annotations to silence findings | Override expires; tech debt accumulates. Fix the code or amend the invariant. |
-| Writing 10 commits then bundling the Inv-Compliance trailer once | Each commit's claim should be reviewable in isolation. Add the trailer per commit. |
+| Pattern                                                          | Why bad                                                                                            |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Editing a test file to make it pass                              | Sensor weakening. Tests are sensors (D-1, Article 39). Refused at the tool layer.                  |
+| Editing an invariant because the code is "obviously right"       | Cross-role. The harness will refuse; if the harness somehow allowed it, the PR review will reject. |
+| Adding code without a named invariant claim                      | Code without a spec is plant without setpoint. Author the invariant first (escalate to Architect). |
+| Sprinkling `inv-override` annotations to silence findings        | Override expires; tech debt accumulates. Fix the code or amend the invariant.                      |
+| Writing 10 commits then bundling the Inv-Compliance trailer once | Each commit's claim should be reviewable in isolation. Add the trailer per commit.                 |
 
 ## Tools the Engineer uses
 
-| Command | When |
-|---|---|
-| `devai work backlog next` | Get the next task. |
-| `devai work task spawn --with-worktree` | Start working. |
-| `devai sense {type-check, lint, build, test, judge}` | Continuously, while editing. |
-| `devai govern rgr emit` | Spec ambiguity. |
-| `devai work task pause rgr` / `resume-rgr` | Around an RGR cycle. |
-| `devai work task complete` | When the gate is green and you're ready to merge. |
-| `devai policy check overrides` | Before committing if you added an `inv-override`. |
-| `devai policy check forbidden actions` | If you scripted anything; auto-runs in CI. |
+| Command                                              | When                                              |
+| ---------------------------------------------------- | ------------------------------------------------- |
+| `devai work backlog next`                            | Get the next task.                                |
+| `devai work task spawn --with-worktree`              | Start working.                                    |
+| `devai sense {type-check, lint, build, test, judge}` | Continuously, while editing.                      |
+| `devai govern rgr emit`                              | Spec ambiguity.                                   |
+| `devai work task pause rgr` / `resume-rgr`           | Around an RGR cycle.                              |
+| `devai work task complete`                           | When the gate is green and you're ready to merge. |
+| `devai policy check overrides`                       | Before committing if you added an `inv-override`. |
+| `devai policy check forbidden actions`               | If you scripted anything; auto-runs in CI.        |
 
 ## Hand-offs
 
-| To | When |
-|---|---|
-| Architect | Spec ambiguity → RGR. |
-| Inspector | New behavior shipped → Inspector calibrates a test for it. |
-| Auditor | Question about whether your work advanced the invariant — Auditor scores it. |
+| To        | When                                                                         |
+| --------- | ---------------------------------------------------------------------------- |
+| Architect | Spec ambiguity → RGR.                                                        |
+| Inspector | New behavior shipped → Inspector calibrates a test for it.                   |
+| Auditor   | Question about whether your work advanced the invariant — Auditor scores it. |
 
 ## Authority files
 
-| Path | Editable by Engineer? |
-|---|---|
-| `packages/**` (source) | ✅ Yes |
-| `apps/**` (source globs) | ✅ Yes (configured) |
-| `tsconfig.json`, build configs | ✅ Yes |
-| `package.json` (deps) | ✅ Yes (with PR review) |
-| `packages/**/test/**` | ❌ No |
-| `docs/**` | ❌ No |
-| `record/proofs/**` | ❌ No |
+| Path                           | Editable by Engineer?   |
+| ------------------------------ | ----------------------- |
+| `packages/**` (source)         | ✅ Yes                  |
+| `apps/**` (source globs)       | ✅ Yes (configured)     |
+| `tsconfig.json`, build configs | ✅ Yes                  |
+| `package.json` (deps)          | ✅ Yes (with PR review) |
+| `packages/**/test/**`          | ❌ No                   |
+| `docs/**`                      | ❌ No                   |
+| `record/proofs/**`             | ❌ No                   |
 
 ## See also
 

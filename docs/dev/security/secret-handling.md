@@ -11,16 +11,16 @@
 
 ## Where secrets come from
 
-| Secret | Env var | Used by |
-|---|---|---|
-| Anthropic API key | `ANTHROPIC_API_KEY` | `@devai-nyx/core/llm/AnthropicLlmClient` |
-| OpenAI / Codex API key | `OPENAI_API_KEY` | `@devai-nyx/core/llm/CodexLlmClient` |
-| Host LLM CLI auth | `claude` / `codex` CLI session | `@devai-nyx/core/llm/CliLlmClient` |
-| Postgres URL (advisory locks) | `DEVAI_LOCK_PG_URL` | `@devai-nyx/core/loop/locks-pg` (Phase 9.G) |
-| Postgres URL (per-task DBs) | `DATABASE_URL` per task | `@devai-nyx/core/loop/db.ts` |
-| Shared development Postgres password | `DEVAI_DB_PASSWORD` | `devai work db start shared`; never accepted as a CLI flag and never printed in its URL |
-| GitHub Packages read token | package-manager environment / user npm config | Installing `@devai-nyx/*`; requires `read:packages`, including public-source packages |
-| DB test opt-out | `DEVAI_DB_TESTS=0` | Hermetic-only skip for Postgres-backed integration tests |
+| Secret                               | Env var                                       | Used by                                                                                 |
+| ------------------------------------ | --------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Anthropic API key                    | `ANTHROPIC_API_KEY`                           | `@devai-nyx/core/llm/AnthropicLlmClient`                                                |
+| OpenAI / Codex API key               | `OPENAI_API_KEY`                              | `@devai-nyx/core/llm/CodexLlmClient`                                                    |
+| Host LLM CLI auth                    | `claude` / `codex` CLI session                | `@devai-nyx/core/llm/CliLlmClient`                                                      |
+| Postgres URL (advisory locks)        | `DEVAI_LOCK_PG_URL`                           | `@devai-nyx/core/loop/locks-pg` (Phase 9.G)                                             |
+| Postgres URL (per-task DBs)          | `DATABASE_URL` per task                       | `@devai-nyx/core/loop/db.ts`                                                            |
+| Shared development Postgres password | `DEVAI_DB_PASSWORD`                           | `devai work db start shared`; never accepted as a CLI flag and never printed in its URL |
+| GitHub Packages read token           | package-manager environment / user npm config | Installing `@devai-nyx/*`; requires `read:packages`, including public-source packages   |
+| DB test opt-out                      | `DEVAI_DB_TESTS=0`                            | Hermetic-only skip for Postgres-backed integration tests                                |
 
 The LLM substrate refuses to start if the relevant env var is missing **and** the backend requires it. When no backend is set, DEVAI prefers logged-in host CLI bridges before falling back to `mock`; explicit `DEVAI_LLM_BACKEND=mock` is hermetic wiring mode, not full-production evidence.
 
@@ -95,13 +95,13 @@ Residual risk: a secret embedded in **encoded** form (base64-encoded fragment of
 
 ## Authority and access
 
-| Role | Access to env vars |
-|---|---|
-| Owner | Has whatever env vars the operator gave them. Not framework-enforced. |
-| Architect | Same. |
-| Engineer | Same. |
-| Inspector | Same. |
-| Auditor | Read-only on the repo; should not need secrets. |
+| Role      | Access to env vars                                                    |
+| --------- | --------------------------------------------------------------------- |
+| Owner     | Has whatever env vars the operator gave them. Not framework-enforced. |
+| Architect | Same.                                                                 |
+| Engineer  | Same.                                                                 |
+| Inspector | Same.                                                                 |
+| Auditor   | Read-only on the repo; should not need secrets.                       |
 
 DEVAI does not implement per-role secret access at the OS level — that's the operator's responsibility (Vault, KMS, GitHub secret store, etc.). DEVAI **does** ensure that secrets ingested into the harness's process never appear in the audit trail.
 

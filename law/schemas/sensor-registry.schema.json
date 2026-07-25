@@ -6,13 +6,7 @@
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "id",
-    "attested_predecessor_pin",
-    "entries",
-    "archived_kinds"
-  ],
+  "required": ["schemaVersion", "id", "attested_predecessor_pin", "entries", "archived_kinds"],
   "properties": {
     "schemaVersion": {
       "const": "1.0.0"
@@ -90,10 +84,7 @@
           }
         },
         "superseded_by": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "provenance": {
@@ -120,10 +111,7 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-              "substrate",
-              "property"
-            ],
+            "required": ["substrate", "property"],
             "properties": {
               "substrate": {
                 "$ref": "common-defs.schema.json#/$defs/substrate"
@@ -145,12 +133,7 @@
             "const": "SWEEP"
           },
           "items": {
-            "enum": [
-              "BASELINE",
-              "TIER2",
-              "TIER3",
-              "SWEEP"
-            ]
+            "enum": ["BASELINE", "TIER2", "TIER3", "SWEEP"]
           }
         },
         "design_note": {
@@ -159,23 +142,15 @@
       },
       "oneOf": [
         {
-          "required": [
-            "cells"
-          ],
+          "required": ["cells"],
           "not": {
-            "required": [
-              "diagnostic"
-            ]
+            "required": ["diagnostic"]
           }
         },
         {
-          "required": [
-            "diagnostic"
-          ],
+          "required": ["diagnostic"],
           "not": {
-            "required": [
-              "cells"
-            ]
+            "required": ["cells"]
           }
         }
       ]
@@ -183,30 +158,17 @@
     "designNote": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "state",
-        "path",
-        "backlog_ref"
-      ],
+      "required": ["state", "path", "backlog_ref"],
       "properties": {
         "state": {
-          "enum": [
-            "present",
-            "backlogged"
-          ]
+          "enum": ["present", "backlogged"]
         },
         "path": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         },
         "backlog_ref": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         }
       },
@@ -242,12 +204,7 @@
     "archivedKind": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "kind",
-        "reason",
-        "provenance",
-        "replacement"
-      ],
+      "required": ["kind", "reason", "provenance", "replacement"],
       "properties": {
         "kind": {
           "type": "string",
@@ -261,10 +218,7 @@
           "minLength": 1
         },
         "replacement": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "minLength": 1
         }
       }
@@ -283,9 +237,7 @@
           "status": "draft",
           "date": "2026-07-23",
           "authority": "Architect",
-          "supersedes": [
-            "predecessor:runtime_probe_api@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-          ],
+          "supersedes": ["predecessor:runtime_probe_api@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
           "superseded_by": null,
           "provenance": [
             "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts"
@@ -293,9 +245,7 @@
           "kind": "runtime_probe_api",
           "emitter_module": "packages/sensors/src/runtime-probe.ts",
           "diagnostic": true,
-          "tiers": [
-            "SWEEP"
-          ],
+          "tiers": ["SWEEP"],
           "design_note": {
             "state": "backlogged",
             "path": null,

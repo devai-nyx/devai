@@ -24,12 +24,12 @@ The framing is control-theoretic (per D-1): documents are the **reference signal
 
 This is not a metaphor. It governs:
 
-- *Which artifacts have authority* (the reference signal is binding; the plant is not).
-- *How concurrency is mediated* (worktrees + locks per task).
-- *How failures are routed* (triage classifies; backlog queues; loop acts).
-- *How convergence is gated* (the scorecard's verdict, not "looks good to me").
+- _Which artifacts have authority_ (the reference signal is binding; the plant is not).
+- _How concurrency is mediated_ (worktrees + locks per task).
+- _How failures are routed_ (triage classifies; backlog queues; loop acts).
+- _How convergence is gated_ (the scorecard's verdict, not "looks good to me").
 
-## 2. What DEVAI is *not*
+## 2. What DEVAI is _not_
 
 - **Not a replacement for CI tooling.** DEVAI wraps `tsc`, ESLint, vitest, Playwright; it does not reimplement them.
 - **Not a code generator.** DEVAI orchestrates feedback between specs, tests, and code; it does not bypass the need for any of them.
@@ -45,13 +45,13 @@ This is not a metaphor. It governs:
 
 Five roles, declared at session start (per D-3, Article 6):
 
-| Role | Owns | Cannot touch |
-|---|---|---|
-| **Owner** | Business specs (`product/`), joint glossary | Engineering specs, code, tests |
-| **Architect** | Engineering specs, invariants, trace, ADRs, schemas, ops + security specs | Code, tests |
-| **Engineer** | Application code (`packages/`, `apps/`) | Specs, tests, harness state |
-| **Inspector** | Tests at all levels (unit, int, e2e, sec, perf) | Code, specs |
-| **Auditor** | Read-only toward product/reference state; emits observations under `scratch/sessions/rounds/*/audit/` | Anything that actuates or ratifies reference state |
+| Role          | Owns                                                                                                  | Cannot touch                                       |
+| ------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| **Owner**     | Business specs (`product/`), joint glossary                                                           | Engineering specs, code, tests                     |
+| **Architect** | Engineering specs, invariants, trace, ADRs, schemas, ops + security specs                             | Code, tests                                        |
+| **Engineer**  | Application code (`packages/`, `apps/`)                                                               | Specs, tests, harness state                        |
+| **Inspector** | Tests at all levels (unit, int, e2e, sec, perf)                                                       | Code, specs                                        |
+| **Auditor**   | Read-only toward product/reference state; emits observations under `scratch/sessions/rounds/*/audit/` | Anything that actuates or ratifies reference state |
 
 The chain is enforced inside the **DEVAI CLI/runtime**. Arbitrary shell/editor enforcement requires a declared host adapter; instructions alone are advisory. See [`security/authority-enforcement.md`](../dev/security/authority-enforcement.md) for the boundary.
 
@@ -85,13 +85,13 @@ Joint Owner + Architect authority. Each entry `GE-NNN.json` defines a canonical 
 
 Per D-2, repository content partitions into five orthogonal substrates:
 
-| ID | Name | Authority | Examples |
-|---|---|---|---|
-| F1 | Architecture specs | Architect | `docs/theory/architecture/`, `law/schemas/` |
-| F2 | Application code (plant) | Engineer | `packages/*/src/`, `apps/*/` |
-| F3 | Tests (sensors) | Inspector | `test/`, `tests/`, `**/*.test.ts` |
-| F4 | Inventory (derived) | None (regenerated) | `record/derived/inventory/inventory.json` |
-| F5 | Harness state | Framework | `record/proofs/` chain, locks, worktrees |
+| ID  | Name                     | Authority          | Examples                                    |
+| --- | ------------------------ | ------------------ | ------------------------------------------- |
+| F1  | Architecture specs       | Architect          | `docs/theory/architecture/`, `law/schemas/` |
+| F2  | Application code (plant) | Engineer           | `packages/*/src/`, `apps/*/`                |
+| F3  | Tests (sensors)          | Inspector          | `test/`, `tests/`, `**/*.test.ts`           |
+| F4  | Inventory (derived)      | None (regenerated) | `record/derived/inventory/inventory.json`   |
+| F5  | Harness state            | Framework          | `record/proofs/` chain, locks, worktrees    |
 
 Each substrate is scored against 9 **transversal properties** (T1 Correctness, T2 Performance, T3 Lifecycle, T4 Concurrency, T5 Adherence, T6 Security & Privacy, T7 Observability, T8 Verifiability, T9 Maintainability). The 5×9 grid is the **scorecard** (`GE-014`).
 
@@ -216,11 +216,11 @@ See [`security/secret-handling.md`](../dev/security/secret-handling.md) for API-
 
 Phase 11.B added three verbs that close the deploy-time governance loop:
 
-| Verb | What |
-|---|---|
-| `devai release gate` | Aggregates scorecard + invariants + sensor freshness into a verdict. |
+| Verb                              | What                                                                                                     |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `devai release gate`              | Aggregates scorecard + invariants + sensor freshness into a verdict.                                     |
 | `devai release postdeploy verify` | Compares observed audit-chain head vs. artifact's claimed head. Mismatch → block + rollback recommended. |
-| `devai release runtime drift` | Records observation deltas between deployed runtime and artifact. |
+| `devai release runtime drift`     | Records observation deltas between deployed runtime and artifact.                                        |
 
 Each emits a `release-control` record (`GE-033`) at `record/proofs/releases/REL-NNNN.json`. Per Phase 11.B.
 
@@ -282,13 +282,13 @@ See `GE-034` (RTD manifest).
 
 ## 13. Examples in this repo
 
-| Path | What |
-|---|---|
-| [`examples/sample-f1/`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/examples/sample-f1/) | Minimal F1 fixture: 2 invariants, 1 journey, trace. Used by `spec validate-*` integration tests. |
-| [`examples/sample-nest-angular/`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/examples/sample-nest-angular/) | NestJS + Angular fixture: 3 modules, 3 routes, 3 components. Exercises the `inv` extractors. |
-| [`examples/law-pack/`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/examples/law-pack/) | 15-invariant scaffold pack distilled from the deleted `stech-law` predecessor. Adoptable wholesale into a NestJS+Angular+Postgres greenfield client. |
-| [`examples/redox-pack-*/`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/examples/) | 7 stack-adapter packs (Phase 17.G): NestJS+Postgres+React, NestJS+Postgres+Angular, 3 Laravel variants (Angular / Blade / React-Blade via Inertia), Express+Knex+Postgres+Angular, Java+Spring+Oracle+AngularJS. Each declares detection signals + per-writer-skill prompt overlays. Used by `devai adopt pack resolve` (auto-detect) and `devai adopt pack graduate` (curator pulls seed invariants). |
-| [`examples/devai-self-baseline/`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/examples/devai-self-baseline/) | DEVAI's own dep-graph captured by `devai sense inventory dep graph` (Article 36 dogfood). Regression anchor for the framework's own module structure. |
+| Path                                                                                                                                              | What                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [`examples/sample-f1/`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/examples/sample-f1/)                     | Minimal F1 fixture: 2 invariants, 1 journey, trace. Used by `spec validate-*` integration tests.                                                                                                                                                                                                                                                                                                       |
+| [`examples/sample-nest-angular/`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/examples/sample-nest-angular/) | NestJS + Angular fixture: 3 modules, 3 routes, 3 components. Exercises the `inv` extractors.                                                                                                                                                                                                                                                                                                           |
+| [`examples/law-pack/`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/examples/law-pack/)                       | 15-invariant scaffold pack distilled from the deleted `stech-law` predecessor. Adoptable wholesale into a NestJS+Angular+Postgres greenfield client.                                                                                                                                                                                                                                                   |
+| [`examples/redox-pack-*/`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/examples/)                            | 7 stack-adapter packs (Phase 17.G): NestJS+Postgres+React, NestJS+Postgres+Angular, 3 Laravel variants (Angular / Blade / React-Blade via Inertia), Express+Knex+Postgres+Angular, Java+Spring+Oracle+AngularJS. Each declares detection signals + per-writer-skill prompt overlays. Used by `devai adopt pack resolve` (auto-detect) and `devai adopt pack graduate` (curator pulls seed invariants). |
+| [`examples/devai-self-baseline/`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/examples/devai-self-baseline/) | DEVAI's own dep-graph captured by `devai sense inventory dep graph` (Article 36 dogfood). Regression anchor for the framework's own module structure.                                                                                                                                                                                                                                                  |
 
 Read each `README.md` to understand the role each fixture plays.
 
@@ -324,13 +324,13 @@ docs/diagrams/erd.png              # via `devai docs render mermaid` if mmdc on 
 
 The five candidate categories `inv suggest` flags:
 
-| Category | Source sensor | Suggested severity | Related invariant |
-|---|---|---|---|
-| `unmapped_route` | inventory_coverage | gate | INV-INVENTORY-001 |
-| `unmapped_endpoint` | inventory_coverage | gate | INV-INVENTORY-001 |
-| `unbound_endpoint` | inventory_rbac | gate | INV-INVENTORY-003 |
-| `unlabeled_pii_column` | inventory_data_handling | hard-fail | INV-INVENTORY-002 |
-| `forbidden_edge` | inventory_dep_graph | hard-fail | INV-INVENTORY-004 |
+| Category               | Source sensor           | Suggested severity | Related invariant |
+| ---------------------- | ----------------------- | ------------------ | ----------------- |
+| `unmapped_route`       | inventory_coverage      | gate               | INV-INVENTORY-001 |
+| `unmapped_endpoint`    | inventory_coverage      | gate               | INV-INVENTORY-001 |
+| `unbound_endpoint`     | inventory_rbac          | gate               | INV-INVENTORY-003 |
+| `unlabeled_pii_column` | inventory_data_handling | hard-fail          | INV-INVENTORY-002 |
+| `forbidden_edge`       | inventory_dep_graph     | hard-fail          | INV-INVENTORY-004 |
 
 Each `INV-CANDIDATE-*.json` carries a `suggested_invariant` skeleton (title, statement, severity_suggestion, measurable_via_suggestion, rationale) the Architect curates and graduates into a real `INV-CLIENT-*` record.
 
@@ -361,7 +361,7 @@ In rough order of how useful each will be on your first deep dive:
 
 ---
 
-*This guide is auto-tracked against the action catalog and glossary by the `devai docs links` audit (Phase 13.C). Broken cross-references fail CI.*
+_This guide is auto-tracked against the action catalog and glossary by the `devai docs links` audit (Phase 13.C). Broken cross-references fail CI._
 
 ---
 

@@ -12,6 +12,7 @@ Per-workflow via `workflow-parser`:
 - `matrix_combinations` per job (product of matrix dimension sizes; 0 if no matrix).
 
 Aggregate across all workflows:
+
 - `steps_p95` — 95th-percentile of per-job step counts.
 - `total_matrix_combinations` — sum of `matrix_combinations` across all jobs.
 - `jobs_count` — total job count.

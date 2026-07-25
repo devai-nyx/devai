@@ -60,13 +60,7 @@
       "format": "date-time"
     },
     "authority_role": {
-      "enum": [
-        "owner",
-        "architect",
-        "inspector",
-        "engineer",
-        "auditor"
-      ],
+      "enum": ["owner", "architect", "inspector", "engineer", "auditor"],
       "description": "Attributed human role. Auditor observations remain non-actuating and confer no mutation authority."
     },
     "strategy": {
@@ -78,10 +72,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "invariant_id",
-          "criteria"
-        ],
+        "required": ["invariant_id", "criteria"],
         "properties": {
           "invariant_id": {
             "type": "string",
@@ -93,10 +84,7 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": [
-                "claim",
-                "demonstrated_by"
-              ],
+              "required": ["claim", "demonstrated_by"],
               "properties": {
                 "claim": {
                   "type": "string",
@@ -120,11 +108,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "test_ref",
-          "expected_at_base",
-          "expected_at_candidate"
-        ],
+        "required": ["test_ref", "expected_at_base", "expected_at_candidate"],
         "properties": {
           "test_ref": {
             "$ref": "#/$defs/testRef"
@@ -147,16 +131,10 @@
       }
     },
     "spec_edits": {
-      "enum": [
-        "none",
-        "declared"
-      ]
+      "enum": ["none", "declared"]
     },
     "test_edits": {
-      "enum": [
-        "none",
-        "declared"
-      ]
+      "enum": ["none", "declared"]
     },
     "inventory_delta_confined_to": {
       "type": "array",
@@ -198,17 +176,12 @@
       "if": {
         "properties": {
           "strategy": {
-            "enum": [
-              "regression",
-              "feature-overlay"
-            ]
+            "enum": ["regression", "feature-overlay"]
           }
         }
       },
       "then": {
-        "required": [
-          "red_green"
-        ],
+        "required": ["red_green"],
         "properties": {
           "red_green": {
             "minItems": 1
@@ -225,16 +198,12 @@
         }
       },
       "then": {
-        "required": [
-          "test_overlay_sha"
-        ]
+        "required": ["test_overlay_sha"]
       }
     },
     {
       "if": {
-        "required": [
-          "test_overlay_sha"
-        ]
+        "required": ["test_overlay_sha"]
       },
       "then": {
         "properties": {
@@ -246,17 +215,12 @@
     },
     {
       "if": {
-        "required": [
-          "red_green"
-        ]
+        "required": ["red_green"]
       },
       "then": {
         "properties": {
           "strategy": {
-            "enum": [
-              "regression",
-              "feature-overlay"
-            ]
+            "enum": ["regression", "feature-overlay"]
           }
         }
       }
@@ -284,23 +248,10 @@
     "testRef": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "suite",
-        "path",
-        "names"
-      ],
+      "required": ["suite", "path", "names"],
       "properties": {
         "suite": {
-          "enum": [
-            "unit",
-            "api",
-            "int",
-            "e2e",
-            "sec",
-            "perf",
-            "journey",
-            "db"
-          ]
+          "enum": ["unit", "api", "int", "e2e", "sec", "perf", "journey", "db"]
         },
         "path": {
           "$ref": "#/$defs/repoPath"
@@ -320,10 +271,7 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "test_ref"
-          ],
+          "required": ["kind", "test_ref"],
           "properties": {
             "kind": {
               "const": "test"
@@ -336,10 +284,7 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "validator"
-          ],
+          "required": ["kind", "validator"],
           "properties": {
             "kind": {
               "const": "structural"
@@ -353,11 +298,7 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "baseline_ref",
-            "candidate_ref"
-          ],
+          "required": ["kind", "baseline_ref", "candidate_ref"],
           "properties": {
             "kind": {
               "const": "behavioral-equivalence"
@@ -375,10 +316,7 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "rubric_ref"
-          ],
+          "required": ["kind", "rubric_ref"],
           "properties": {
             "kind": {
               "const": "semantic-review"
@@ -420,12 +358,8 @@
           ]
         }
       ],
-      "declared_touched": [
-        "packages/core/src/example.ts"
-      ],
-      "effects_permitted": [
-        "fs:plant"
-      ]
+      "declared_touched": ["packages/core/src/example.ts"],
+      "effects_permitted": ["fs:plant"]
     }
   ]
 }

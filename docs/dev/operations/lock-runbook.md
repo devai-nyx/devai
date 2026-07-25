@@ -67,21 +67,21 @@ export DEVAI_LOCK_PG_URL=postgres://user:pass@host/db
 
 ## Routine maintenance
 
-| Cadence | Command | What it does |
-|---|---|---|
-| Every CI run | `devai work lock reap --write` | Clean expired file locks. |
+| Cadence          | Command                               | What it does                                      |
+| ---------------- | ------------------------------------- | ------------------------------------------------- |
+| Every CI run     | `devai work lock reap --write`        | Clean expired file locks.                         |
 | On task complete | `devai work lock release --id <held>` | Always release explicitly, even on failure paths. |
-| Weekly | `devai work lock list` (audit) | Confirm no stale locks accumulating. |
+| Weekly           | `devai work lock list` (audit)        | Confirm no stale locks accumulating.              |
 
 ## Failure modes
 
-| Symptom | Cause | Action |
-|---|---|---|
-| `lock acquire` denied repeatedly | Another holder genuinely owns the target | Either wait, escalate to that task's owner, or reap if expired. |
-| Lock file present but TTL passed | Crashed holder didn't release | Run `lock reap --write`. |
-| `LOCK-*.json` malformed | Concurrent crash during write | The file-lock implementation uses `O_EXCL`; corruption shouldn't happen. If it does, manually delete and emit `lock.recovery`. |
-| Postgres backend timing out | Network partition or DB overload | Fall back to file-lock backend temporarily (`unset DEVAI_LOCK_BACKEND`); investigate the DB. |
-| Two agents see different lock states | Some agents on file backend, others on Postgres | All agents in a workgroup must use the **same** backend. Audit env vars. |
+| Symptom                              | Cause                                           | Action                                                                                                                         |
+| ------------------------------------ | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `lock acquire` denied repeatedly     | Another holder genuinely owns the target        | Either wait, escalate to that task's owner, or reap if expired.                                                                |
+| Lock file present but TTL passed     | Crashed holder didn't release                   | Run `lock reap --write`.                                                                                                       |
+| `LOCK-*.json` malformed              | Concurrent crash during write                   | The file-lock implementation uses `O_EXCL`; corruption shouldn't happen. If it does, manually delete and emit `lock.recovery`. |
+| Postgres backend timing out          | Network partition or DB overload                | Fall back to file-lock backend temporarily (`unset DEVAI_LOCK_BACKEND`); investigate the DB.                                   |
+| Two agents see different lock states | Some agents on file backend, others on Postgres | All agents in a workgroup must use the **same** backend. Audit env vars.                                                       |
 
 ## Capacity
 

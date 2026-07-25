@@ -59,31 +59,18 @@
     },
     "confidence": {
       "type": "string",
-      "enum": [
-        "low",
-        "medium",
-        "high"
-      ],
+      "enum": ["low", "medium", "high"],
       "description": "Heuristic confidence in the candidate's relevance. high = direct schema mismatch; medium = pattern-matched; low = inferred / ambiguous.",
       "default": "medium"
     },
     "target": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "kind",
-        "identifier"
-      ],
+      "required": ["kind", "identifier"],
       "properties": {
         "kind": {
           "type": "string",
-          "enum": [
-            "endpoint",
-            "route",
-            "column",
-            "edge",
-            "table"
-          ]
+          "enum": ["endpoint", "route", "column", "edge", "table"]
         },
         "identifier": {
           "type": "string",
@@ -95,11 +82,7 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-              "path",
-              "startLine",
-              "endLine"
-            ],
+            "required": ["path", "startLine", "endLine"],
             "properties": {
               "path": {
                 "type": "string",
@@ -138,13 +121,7 @@
         },
         "severity_suggestion": {
           "type": "string",
-          "enum": [
-            "constitutional",
-            "hard-fail",
-            "gate",
-            "warn",
-            "advisory"
-          ]
+          "enum": ["constitutional", "hard-fail", "gate", "warn", "advisory"]
         },
         "measurable_via_suggestion": {
           "type": "array",
@@ -158,11 +135,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "title",
-        "statement",
-        "severity_suggestion"
-      ]
+      "required": ["title", "statement", "severity_suggestion"]
     },
     "related_invariants": {
       "type": "array",
@@ -175,12 +148,7 @@
     },
     "status": {
       "type": "string",
-      "enum": [
-        "proposed",
-        "accepted",
-        "rejected",
-        "converted"
-      ],
+      "enum": ["proposed", "accepted", "rejected", "converted"],
       "description": "Curation status. 'converted' = an INV-CLIENT-* file has been authored from this candidate.",
       "default": "proposed"
     },

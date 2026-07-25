@@ -5,10 +5,7 @@
   "description": "Canonical list of actions an automated agent MUST NOT perform without explicit per-action human authorisation. Absorbs LAW-12.FORBID.1 from the stech-law predecessor draft (D-38). The default registry ships with DEVAI at .devai/config/forbidden-actions.json; clients may extend (never relax) it.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "actions"
-  ],
+  "required": ["schemaVersion", "actions"],
   "properties": {
     "schemaVersion": {
       "const": "1.0.0"
@@ -19,10 +16,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "id",
-          "reason"
-        ],
+        "required": ["id", "reason"],
         "properties": {
           "id": {
             "type": "string",
@@ -43,12 +37,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "id",
-          "action",
-          "rationale",
-          "severity"
-        ],
+        "required": ["id", "action", "rationale", "severity"],
         "properties": {
           "id": {
             "type": "string",
@@ -64,11 +53,7 @@
             "minLength": 1
           },
           "severity": {
-            "enum": [
-              "critical",
-              "high",
-              "medium"
-            ]
+            "enum": ["critical", "high", "medium"]
           },
           "detect_patterns": {
             "type": "array",

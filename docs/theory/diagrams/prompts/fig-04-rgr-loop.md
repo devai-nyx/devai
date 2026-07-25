@@ -9,7 +9,7 @@ Establishes the RGR as the outermost-feedback path that modifies r, not u — th
 ## Visual structure
 
 - **Linear left-to-right chain** of controller-tier boxes, then a vertical split to a human node and a reference-update node, then a return chain.
-- Sequence: *Inner controller K* → *emit RGR* → *task paused*. Dashed arrow upward to *Human Architect* (red palette). Human → *Reference r(k)* (ref-blue), with arrow labelled 'Δr(k)'. Reference → *task resumes* → back to *Inner controller K*.
+- Sequence: _Inner controller K_ → _emit RGR_ → _task paused_. Dashed arrow upward to _Human Architect_ (red palette). Human → _Reference r(k)_ (ref-blue), with arrow labelled 'Δr(k)'. Reference → _task resumes_ → back to _Inner controller K_.
 - Label dashed wait-arrow 'wait for Δr'.
 - **Aspect**: ~1100×320 landscape.
 

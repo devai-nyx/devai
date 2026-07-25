@@ -27,22 +27,22 @@ The cost of need-driven ordering: the first few skills bear more risk because th
 
 ## The order, annotated
 
-| # | Skill | Why this slot |
-|---:|---|---|
-| 1 | `SKILL-triage` | The loop entry point per Article 17. Without triage, no other skill knows what to do. |
-| 2 | `SKILL-materialize-prompt` | Article 37 mandates prompt composition. The orchestrator can't dispatch any LLM-backed skill without it. |
-| 3 | `SKILL-commit-push` | The autonomous loop needs to write commits. Authority firewall lives here. |
-| 4 | `SKILL-compute-scorecard` | The 5×9 grid is the gate. Computing it deterministically unlocks the gate machinery. |
-| 5 | `SKILL-compile-backlog` | Once scoring exists, the failing cells become a backlog. |
-| 6 | `SKILL-feedback-iteration` | The inner RGR iteration loop. Unlocks autonomous remediation. |
-| 7 | `SKILL-fix-*` | A family. Each fix-* skill is a leaf the iteration loop dispatches to. Added as specific finding classes get common-enough to warrant skill-level treatment. |
-| 8 | `SKILL-emit-rgr` | When iteration caps trigger, escalation must emit an RGR. |
-| 9 | `SKILL-compile-tests-from-docs` | Once invariants stabilize, generating test scaffolds from them is high-leverage. |
-| 10 | `SKILL-assess-state` | Snapshots support the Architect's review work. |
-| 11 | `SKILL-review-dry` | Architectural review without mutation; depends on assess-state. |
-| 12 | `SKILL-mutation-test` | Mutation testing the Inspector substrate. Depends on the test suite being stable enough to mutate meaningfully. |
-| 13 | `SKILL-elicit` | Owner-facing elicitation. Requires the rest of the framework to be visibly useful before Owners engage. |
-| 14 | `SKILL-align-docs` | Doc alignment depends on a stable invariant catalog *and* stable prose conventions. Last. |
+|   # | Skill                           | Why this slot                                                                                                                                                |
+| --: | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+|   1 | `SKILL-triage`                  | The loop entry point per Article 17. Without triage, no other skill knows what to do.                                                                        |
+|   2 | `SKILL-materialize-prompt`      | Article 37 mandates prompt composition. The orchestrator can't dispatch any LLM-backed skill without it.                                                     |
+|   3 | `SKILL-commit-push`             | The autonomous loop needs to write commits. Authority firewall lives here.                                                                                   |
+|   4 | `SKILL-compute-scorecard`       | The 5×9 grid is the gate. Computing it deterministically unlocks the gate machinery.                                                                         |
+|   5 | `SKILL-compile-backlog`         | Once scoring exists, the failing cells become a backlog.                                                                                                     |
+|   6 | `SKILL-feedback-iteration`      | The inner RGR iteration loop. Unlocks autonomous remediation.                                                                                                |
+|   7 | `SKILL-fix-*`                   | A family. Each fix-* skill is a leaf the iteration loop dispatches to. Added as specific finding classes get common-enough to warrant skill-level treatment. |
+|   8 | `SKILL-emit-rgr`                | When iteration caps trigger, escalation must emit an RGR.                                                                                                    |
+|   9 | `SKILL-compile-tests-from-docs` | Once invariants stabilize, generating test scaffolds from them is high-leverage.                                                                             |
+|  10 | `SKILL-assess-state`            | Snapshots support the Architect's review work.                                                                                                               |
+|  11 | `SKILL-review-dry`              | Architectural review without mutation; depends on assess-state.                                                                                              |
+|  12 | `SKILL-mutation-test`           | Mutation testing the Inspector substrate. Depends on the test suite being stable enough to mutate meaningfully.                                              |
+|  13 | `SKILL-elicit`                  | Owner-facing elicitation. Requires the rest of the framework to be visibly useful before Owners engage.                                                      |
+|  14 | `SKILL-align-docs`              | Doc alignment depends on a stable invariant catalog _and_ stable prose conventions. Last.                                                                    |
 
 ## Practical consequences
 

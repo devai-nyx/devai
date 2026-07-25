@@ -152,7 +152,7 @@ Review each `INV-CANDIDATE-*.json` in `record/proofs/inv-candidates/`. For each 
 2. Runs `node "$DEVAI/packages/cli/dist/bin.js" spec validate-all` to confirm the invariant is well-formed.
 3. Commits the new invariant with `Architect:` in the subject line.
 
-This is where DEVAI starts to *govern* your repo: each promoted invariant becomes a gate the scorecard checks on every loop iteration.
+This is where DEVAI starts to _govern_ your repo: each promoted invariant becomes a gate the scorecard checks on every loop iteration.
 
 ## What the brownfield path doesn't do
 

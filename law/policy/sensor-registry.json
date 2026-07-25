@@ -10,9 +10,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:type_check@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:type_check@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -27,10 +25,7 @@
           "property": "T8"
         }
       ],
-      "tiers": [
-        "BASELINE",
-        "SWEEP"
-      ],
+      "tiers": ["BASELINE", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -44,9 +39,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:lint@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:lint@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -61,10 +54,7 @@
           "property": "T5"
         }
       ],
-      "tiers": [
-        "BASELINE",
-        "SWEEP"
-      ],
+      "tiers": ["BASELINE", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -78,9 +68,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:build@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:build@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -95,10 +83,7 @@
           "property": "T9"
         }
       ],
-      "tiers": [
-        "BASELINE",
-        "SWEEP"
-      ],
+      "tiers": ["BASELINE", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -112,9 +97,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:unit_test@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:unit_test@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -129,10 +112,7 @@
           "property": "T1"
         }
       ],
-      "tiers": [
-        "BASELINE",
-        "SWEEP"
-      ],
+      "tiers": ["BASELINE", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -146,9 +126,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:integration_test@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:integration_test@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -163,9 +141,7 @@
           "property": "T1"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -179,9 +155,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:e2e_test@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:e2e_test@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -196,9 +170,7 @@
           "property": "T1"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -212,9 +184,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:migration_check@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:migration_check@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -229,9 +199,7 @@
           "property": "T4"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -245,9 +213,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:inventory_regeneration@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:inventory_regeneration@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -262,9 +228,7 @@
           "property": "T9"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -278,9 +242,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:test_weakening_review@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:test_weakening_review@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -295,9 +257,7 @@
           "property": "T9"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -311,9 +271,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:trace_resolution@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:trace_resolution@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -328,9 +286,7 @@
           "property": "T3"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -344,9 +300,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:security_scan@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:security_scan@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -361,9 +315,7 @@
           "property": "T6"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -377,9 +329,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:perf_test@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:perf_test@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -394,9 +344,7 @@
           "property": "T7"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -410,9 +358,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:llm_judge@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:llm_judge@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -427,9 +373,7 @@
           "property": "T3"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -443,9 +387,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:runtime_probe_api@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:runtime_probe_api@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -455,9 +397,7 @@
       "kind": "runtime_probe_api",
       "emitter_module": "packages/sensors/src/runtime-probe.ts",
       "diagnostic": true,
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -471,9 +411,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:runtime_probe_auth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:runtime_probe_auth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -483,9 +421,7 @@
       "kind": "runtime_probe_auth",
       "emitter_module": "packages/sensors/src/runtime-probe.ts",
       "diagnostic": true,
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -499,9 +435,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:runtime_probe_data@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:runtime_probe_data@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -511,9 +445,7 @@
       "kind": "runtime_probe_data",
       "emitter_module": "packages/sensors/src/runtime-probe-data.ts",
       "diagnostic": true,
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -527,9 +459,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:inventory_api@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:inventory_api@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -548,10 +478,7 @@
           "property": "T2"
         }
       ],
-      "tiers": [
-        "TIER2",
-        "SWEEP"
-      ],
+      "tiers": ["TIER2", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -565,9 +492,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:inventory_routes@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:inventory_routes@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -586,10 +511,7 @@
           "property": "T2"
         }
       ],
-      "tiers": [
-        "TIER2",
-        "SWEEP"
-      ],
+      "tiers": ["TIER2", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -603,9 +525,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:inventory_data_model@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:inventory_data_model@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -624,10 +544,7 @@
           "property": "T2"
         }
       ],
-      "tiers": [
-        "TIER2",
-        "SWEEP"
-      ],
+      "tiers": ["TIER2", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -641,9 +558,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:inventory_rbac@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:inventory_rbac@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -662,10 +577,7 @@
           "property": "T6"
         }
       ],
-      "tiers": [
-        "TIER2",
-        "SWEEP"
-      ],
+      "tiers": ["TIER2", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -700,10 +612,7 @@
           "property": "T6"
         }
       ],
-      "tiers": [
-        "TIER2",
-        "SWEEP"
-      ],
+      "tiers": ["TIER2", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -717,9 +626,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:inventory_dep_graph@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:inventory_dep_graph@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -738,10 +645,7 @@
           "property": "T3"
         }
       ],
-      "tiers": [
-        "TIER2",
-        "SWEEP"
-      ],
+      "tiers": ["TIER2", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -755,9 +659,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:inventory_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:inventory_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -776,9 +678,7 @@
           "property": "T2"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -792,9 +692,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:spec_depth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:spec_depth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -809,10 +707,7 @@
           "property": "T2"
         }
       ],
-      "tiers": [
-        "TIER2",
-        "SWEEP"
-      ],
+      "tiers": ["TIER2", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -826,9 +721,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:spec_idiomaticity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:spec_idiomaticity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -843,10 +736,7 @@
           "property": "T5"
         }
       ],
-      "tiers": [
-        "TIER3",
-        "SWEEP"
-      ],
+      "tiers": ["TIER3", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -860,9 +750,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:spec_freshness@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:spec_freshness@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -877,10 +765,7 @@
           "property": "T9"
         }
       ],
-      "tiers": [
-        "TIER3",
-        "SWEEP"
-      ],
+      "tiers": ["TIER3", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -894,9 +779,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:plant_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:plant_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -911,9 +794,7 @@
           "property": "T1"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -927,9 +808,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:test_coverage_depth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:test_coverage_depth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -944,9 +823,7 @@
           "property": "T2"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -977,10 +854,7 @@
           "property": "T4"
         }
       ],
-      "tiers": [
-        "TIER3",
-        "SWEEP"
-      ],
+      "tiers": ["TIER3", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -994,9 +868,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:inventory_adherence@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:inventory_adherence@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1011,9 +883,7 @@
           "property": "T4"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1027,9 +897,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:inventory_determinism@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:inventory_determinism@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1044,9 +912,7 @@
           "property": "T8"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1060,9 +926,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:harness_security@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:harness_security@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1077,9 +941,7 @@
           "property": "T6"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1093,9 +955,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:harness_green_main@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:harness_green_main@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1110,9 +970,7 @@
           "property": "T9"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1126,9 +984,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:spec_alignment@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:spec_alignment@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1143,10 +999,7 @@
           "property": "T4"
         }
       ],
-      "tiers": [
-        "TIER2",
-        "SWEEP"
-      ],
+      "tiers": ["TIER2", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1160,9 +1013,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:spec_security_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:spec_security_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1177,9 +1028,7 @@
           "property": "T6"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1210,9 +1059,7 @@
           "property": "T7"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1243,9 +1090,7 @@
           "property": "T8"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1259,9 +1104,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:plant_depth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:plant_depth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1276,9 +1119,7 @@
           "property": "T2"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1292,9 +1133,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:plant_coherence@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:plant_coherence@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1309,9 +1148,7 @@
           "property": "T3"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1325,9 +1162,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:test_coherence@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:test_coherence@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1342,9 +1177,7 @@
           "property": "T3"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1358,9 +1191,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:test_idiomaticity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:test_idiomaticity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1375,9 +1206,7 @@
           "property": "T5"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1391,9 +1220,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:test_security_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:test_security_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1408,9 +1235,7 @@
           "property": "T6"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1441,9 +1266,7 @@
           "property": "T7"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1474,9 +1297,7 @@
           "property": "T8"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1490,9 +1311,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:harness_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:harness_coverage@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1507,10 +1326,7 @@
           "property": "T1"
         }
       ],
-      "tiers": [
-        "TIER3",
-        "SWEEP"
-      ],
+      "tiers": ["TIER3", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1524,9 +1340,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:harness_depth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:harness_depth@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1541,10 +1355,7 @@
           "property": "T2"
         }
       ],
-      "tiers": [
-        "TIER3",
-        "SWEEP"
-      ],
+      "tiers": ["TIER3", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1558,9 +1369,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:harness_coherence@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:harness_coherence@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1575,10 +1384,7 @@
           "property": "T3"
         }
       ],
-      "tiers": [
-        "TIER3",
-        "SWEEP"
-      ],
+      "tiers": ["TIER3", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1609,10 +1415,7 @@
           "property": "T4"
         }
       ],
-      "tiers": [
-        "TIER3",
-        "SWEEP"
-      ],
+      "tiers": ["TIER3", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1626,9 +1429,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:harness_idiomaticity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:harness_idiomaticity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1643,9 +1444,7 @@
           "property": "T5"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1659,9 +1458,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:harness_performance@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:harness_performance@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1676,9 +1473,7 @@
           "property": "T7"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1692,9 +1487,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:harness_robustness@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:harness_robustness@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1709,9 +1502,7 @@
           "property": "T8"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1725,9 +1516,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:inventory_performance@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:inventory_performance@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1742,9 +1531,7 @@
           "property": "T7"
         }
       ],
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1770,9 +1557,7 @@
       "kind": "decision_record_integrity",
       "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
       "diagnostic": true,
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1798,9 +1583,7 @@
       "kind": "decision_citation_resolution",
       "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
       "diagnostic": true,
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1814,9 +1597,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:archive_immutability@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:archive_immutability@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1826,9 +1607,7 @@
       "kind": "archive_immutability",
       "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
       "diagnostic": true,
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1842,9 +1621,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:round_record_integrity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:round_record_integrity@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1854,9 +1631,7 @@
       "kind": "round_record_integrity",
       "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
       "diagnostic": true,
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1870,9 +1645,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:docs_drift@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:docs_drift@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1887,10 +1660,7 @@
           "property": "T3"
         }
       ],
-      "tiers": [
-        "TIER3",
-        "SWEEP"
-      ],
+      "tiers": ["TIER3", "SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1904,9 +1674,7 @@
       "status": "draft",
       "date": "2026-07-23",
       "authority": "Architect",
-      "supersedes": [
-        "predecessor:site_drift@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
-      ],
+      "supersedes": ["predecessor:site_drift@d76cd12d2241a1a28a32a0fe629c6531da7fe74d"],
       "superseded_by": null,
       "provenance": [
         "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
@@ -1916,9 +1684,7 @@
       "kind": "site_drift",
       "emitter_module": "packages/sensors/src/site-drift.ts",
       "diagnostic": true,
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,
@@ -1944,9 +1710,7 @@
       "kind": "action_effect_inference",
       "emitter_module": "packages/sensors/src/action-effect-inference.ts",
       "diagnostic": true,
-      "tiers": [
-        "SWEEP"
-      ],
+      "tiers": ["SWEEP"],
       "design_note": {
         "state": "backlogged",
         "path": null,

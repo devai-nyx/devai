@@ -1,6 +1,6 @@
 # `scorecard-na.json` — per-repo N/A overrides
 
-Some F×T scorecard cells genuinely don't apply to a particular repo. A library with no UI can't measure F4×T1 inventory presence of routes; a CLI tool with no DB can't measure F2×T4 plant-migrate-check; a governance framework with no PII registry can't measure F4×T6 inventory-security. The framework's global `DEGENERATE_CELLS` set (in `packages/core/src/loop/scorecard.ts`, anchored on Article 5) handles only cells that are degenerate for *every* adopter — F4×T5 inventory-idiomaticity is the only canonical entry today. Cells that are degenerate only for *your repo's substrate shape* go in your own `.devai/config/scorecard-na.json` file.
+Some F×T scorecard cells genuinely don't apply to a particular repo. A library with no UI can't measure F4×T1 inventory presence of routes; a CLI tool with no DB can't measure F2×T4 plant-migrate-check; a governance framework with no PII registry can't measure F4×T6 inventory-security. The framework's global `DEGENERATE_CELLS` set (in `packages/core/src/loop/scorecard.ts`, anchored on Article 5) handles only cells that are degenerate for _every_ adopter — F4×T5 inventory-idiomaticity is the only canonical entry today. Cells that are degenerate only for _your repo's substrate shape_ go in your own `.devai/config/scorecard-na.json` file.
 
 This page covers when to use the override (and when not to), the schema and decision tree, and a worked example using DEVAI's own carve-out.
 

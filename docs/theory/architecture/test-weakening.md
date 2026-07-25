@@ -18,7 +18,7 @@ Each adopter project can override these defaults independently via `.devai/confi
 
 ## Rationale
 
-D-21 originally established the detector and noted thresholds were *intended* to be tunable. The Phase-16.F realization was that tunable-in-intent had to be tunable-in-fact: hardcoded defaults meant any adopter whose test culture differed from canonical DEVAI's hit either:
+D-21 originally established the detector and noted thresholds were _intended_ to be tunable. The Phase-16.F realization was that tunable-in-intent had to be tunable-in-fact: hardcoded defaults meant any adopter whose test culture differed from canonical DEVAI's hit either:
 
 - **False positives** if the defaults were stricter than the project's reality (mostly small projects with low assertion density).
 - **False negatives** if the defaults were looser than the project's reality (mostly governance-heavy projects with high assertion density and meaningful drift below the 20% threshold).
@@ -32,6 +32,7 @@ D-56 also locks in the **error semantics**: values clamp into safe ranges on loa
 1. **Loader entry point:** `loadTestWeakeningConfig(repoRoot)` in `packages/sensors/src/test-weakening-config.ts`. Reads `.devai/config/test-weakening.json` if present, returns canonical defaults otherwise.
 
 2. **Schema:** `law/schemas/test-weakening-config.schema.json` declares the shape:
+
    ```json
    {
      "threshold_ratio": { "type": "number", "minimum": 0, "maximum": 1 },
@@ -61,7 +62,7 @@ A `test-weakening-override` annotation in the test file can suppress an individu
 
 ## History
 
-D-21 established the detector with hardcoded thresholds and the *intent* of per-project tuning.
+D-21 established the detector with hardcoded thresholds and the _intent_ of per-project tuning.
 D-56 realized that intent: shipped the config surface, the loader, the clamping, and the absence-fallback.
 
 D-21 is preserved in `law/register/DECISIONS.md` as the originating record (with strikethrough on its "defaults-only" implication). The supersession is the standard pattern; D-21's reasoning about why the detector matters at all stays load-bearing.
@@ -71,7 +72,7 @@ D-21 is preserved in `law/register/DECISIONS.md` as the originating record (with
 A successor D-entry would be needed if:
 
 - Empirical evidence shows the default thresholds are wrong for the typical adopter shape (e.g., most adopters override `threshold_ratio` upward, suggesting `0.20` is too strict as a default).
-- A new dimension of weakening becomes important — e.g., reduction in assertion *type* (deep equality → shallow), or reduction in test runtime coverage. Either would extend the schema and likely warrant its own D-entry.
+- A new dimension of weakening becomes important — e.g., reduction in assertion _type_ (deep equality → shallow), or reduction in test runtime coverage. Either would extend the schema and likely warrant its own D-entry.
 - The clamping behaviour proves problematic in practice (a real config bug masked by silent clamping). Currently the log-and-continue posture has been correct.
 
 ---
