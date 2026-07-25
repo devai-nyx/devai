@@ -200,6 +200,8 @@ export interface ScanForbiddenResult {
   readonly findings: readonly ForbiddenActionFinding[];
 }
 
+const GIT_INSPECTION_MAX_BUFFER = 16 * 1024 * 1024;
+
 export function loadForbiddenRegistry(path: string): ForbiddenActionEntry[] {
   if (!existsSync(path)) return [];
   try {
@@ -415,6 +417,7 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
         {
           cwd: opts.repoRoot,
           encoding: 'utf8',
+          maxBuffer: GIT_INSPECTION_MAX_BUFFER,
           stdio: ['ignore', 'pipe', 'pipe'],
         },
       );
@@ -440,6 +443,7 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
         {
           cwd: opts.repoRoot,
           encoding: 'utf8',
+          maxBuffer: GIT_INSPECTION_MAX_BUFFER,
           stdio: ['ignore', 'pipe', 'pipe'],
         },
       );
