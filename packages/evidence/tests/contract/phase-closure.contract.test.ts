@@ -45,6 +45,17 @@ function draft(
   };
 }
 
+describe('phase-closure proof path', () => {
+  it('describes the immutable compliance-proof path instead of mutable runtime state', () => {
+    const schema = JSON.parse(
+      readFileSync(join(ROOT, 'law/schemas/phase-closure.schema.json'), 'utf8'),
+    ) as { readonly description?: string };
+
+    expect(schema.description).toContain('record/proofs/compliance/closures/PC-NNNN.json');
+    expect(schema.description).not.toContain('.devai/state/closures');
+  });
+});
+
 describe('phase-closure decision ordering', () => {
   it('accepts a strictly increasing DII decision pair', () => {
     const result = closePhase(repoRoot(), draft('DII-104', 'DII-105'));
