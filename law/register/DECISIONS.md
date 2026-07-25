@@ -970,6 +970,25 @@ For `email TEXT NOT NULL`, the canonical output is type `TEXT` and
 one-word and multi-word type declarations without changing the inventory schema,
 coverage inputs, exclusions, or thresholds.
 
+### DII-124 — Successor closures bind the exact shipped subject and exact failed gates
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 Claude Opus 5 correction; BL-060`
+
+Every new closure emitted by the successor production verb requires both `merged_as`
+and `release_disposition`, including PC-0003. The predecessor-era PC-0007 cutoff does
+not apply to the successor ledger, whose numbering restarted at PC-0001. The schema
+keeps these fields optional only so immutable historical records remain valid; the
+executing verb is stricter for every newly appended record.
+
+A gate key is a nonempty, non-whitespace identity. Each failed gate must be acknowledged
+by a failing validation criterion that names that complete identity as a standalone
+token; a substring inside another gate name is not acknowledgment. This preserves the
+free-form criterion/evidence envelope while preventing empty and prefix gate names from
+borrowing another failure's disposition.
+
+PC-0001 and PC-0002 remain byte-immutable. R-0002 may append PC-0003 only after the
+source merge, with the exact merge SHA, the actual release disposition, and only the
+gates that truly failed at the source candidate.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

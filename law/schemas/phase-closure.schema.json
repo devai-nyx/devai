@@ -80,6 +80,11 @@
       "type": "object",
       "description": "Gate-sweep results at close, keyed by gate name (e.g. lint, typecheck, unit, integration, contract, docs-links, docs-governance, spec-validate-all).",
       "minProperties": 1,
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": ".*\\S.*"
+      },
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
@@ -132,11 +137,11 @@
     "merged_as": {
       "type": "string",
       "pattern": "^[0-9a-f]{7,40}$",
-      "description": "The integration-branch commit the closed round actually shipped as (merge commit or branch tip on main). Added at R18 (D-133) after PC-0005 attested gates at a SHA that was not the shipped tip; `devai govern phase close` requires this from PC-0007 onward."
+      "description": "The integration-branch commit the closed round actually shipped as (merge commit or branch tip on main). Historical records remain schema-valid without this field, but every new successor record emitted by `devai govern phase close` requires it."
     },
     "release_disposition": {
       "enum": ["published", "changeset-pending", "none-preratification", "none-needed", "missing"],
-      "description": "Whether the round's package changes have a release path: 'published' (release cut), 'changeset-pending' (changeset recorded, publish pending), 'none-preratification' (package-visible changes intentionally withheld until ratification), 'none-needed' (no package-visible changes), or 'missing' (package changes shipped with no changeset — a recorded defect, never a silent one). Added at R18 (D-133); required by the ceremony from PC-0007 onward."
+      "description": "Whether the round's package changes have a release path: 'published' (release cut), 'changeset-pending' (changeset recorded, publish pending), 'none-preratification' (package-visible changes intentionally withheld until ratification), 'none-needed' (no package-visible changes), or 'missing' (package changes shipped with no changeset — a recorded defect, never a silent one). Historical records remain schema-valid without this field, but every new successor record emitted by `devai govern phase close` requires it."
     },
     "evidence": {
       "type": "object",
