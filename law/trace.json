@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "meta": {
     "completeness": {
-      "min_invariants_with_tests_ratio": 0.6764705882352942,
-      "min_must_invariants_with_tests_ratio": 0.6764705882352942,
+      "min_invariants_with_tests_ratio": 1,
+      "min_must_invariants_with_tests_ratio": 1,
       "require_doc_links": false,
       "require_test_links": true
     },
@@ -55,6 +55,11 @@
           "suite": "unit",
           "path": "packages/authority/tests/unit/authority-resource-boundaries.red.test.ts",
           "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/authority/tests/unit/proof-path-domain.red.test.ts",
+          "target_type": "test"
         }
       ]
     },
@@ -89,6 +94,11 @@
         {
           "suite": "unit",
           "path": "packages/authority/tests/unit/authority-resource-boundaries.red.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/authority/tests/unit/proof-path-domain.red.test.ts",
           "target_type": "test"
         }
       ]
@@ -130,11 +140,23 @@
     },
     {
       "id": "INV-BLUEPRINT-002",
-      "tests": []
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/domains-loader.test.ts",
+          "target_type": "test"
+        }
+      ]
     },
     {
       "id": "INV-BLUEPRINT-003",
-      "tests": []
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/domains-loader.test.ts",
+          "target_type": "test"
+        }
+      ]
     },
     {
       "id": "INV-DEVAI-001",
@@ -186,6 +208,11 @@
         },
         {
           "suite": "unit",
+          "path": "packages/evidence/tests/unit/phase-closure-successor.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/evidence/tests/unit/redact.test.ts",
           "target_type": "test"
         },
@@ -197,6 +224,11 @@
         {
           "suite": "int",
           "path": "packages/schemas/tests/contract/adr.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -227,6 +259,11 @@
         {
           "suite": "int",
           "path": "packages/schemas/tests/contract/roster.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/trace-resolve.test.ts",
           "target_type": "test"
         },
         {
@@ -301,6 +338,11 @@
         },
         {
           "suite": "unit",
+          "path": "packages/skills/tests/unit/governance-skills.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/skills/tests/unit/introspect.test.ts",
           "target_type": "test"
         },
@@ -322,6 +364,11 @@
         {
           "suite": "int",
           "path": "packages/spec/tests/contract/r29-currentness-behavior.red.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/adr.test.ts",
           "target_type": "test"
         },
         {
@@ -468,15 +515,38 @@
     },
     {
       "id": "INV-DEVAI-003",
-      "tests": []
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/backlog-tasks.test.ts",
+          "target_type": "test"
+        }
+      ]
     },
     {
       "id": "INV-DEVAI-004",
-      "tests": []
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/backlog-tasks.test.ts",
+          "target_type": "test"
+        }
+      ]
     },
     {
       "id": "INV-DEVAI-005",
-      "tests": []
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/backlog-tasks.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/round-utilities.test.ts",
+          "target_type": "test"
+        }
+      ]
     },
     {
       "id": "INV-DEVAI-006",
@@ -495,7 +565,13 @@
     },
     {
       "id": "INV-DEVAI-007",
-      "tests": []
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/sensor-integrity.test.ts",
+          "target_type": "test"
+        }
+      ]
     },
     {
       "id": "INV-DEVAI-008",
@@ -569,7 +645,13 @@
     },
     {
       "id": "INV-DEVAI-011",
-      "tests": []
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/scorecard-assess-narrative.test.ts",
+          "target_type": "test"
+        }
+      ]
     },
     {
       "id": "INV-DEVAI-012",
@@ -625,6 +707,11 @@
       "id": "INV-DEVAI-013",
       "tests": [
         {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/fix-skills.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "int",
           "path": "tests/integration/ci-scaffold.integration.test.ts",
           "target_type": "test"
@@ -678,7 +765,18 @@
     },
     {
       "id": "INV-DEVAI-016",
-      "tests": []
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/local-evidence.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/post-merge-auditor.test.ts",
+          "target_type": "test"
+        }
+      ]
     },
     {
       "id": "INV-DEVAI-017",
@@ -686,6 +784,11 @@
         {
           "suite": "int",
           "path": "packages/evidence/tests/contract/actions-run-evidence.red.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/round-utilities.test.ts",
           "target_type": "test"
         }
       ]
@@ -696,6 +799,21 @@
         {
           "suite": "unit",
           "path": "packages/cli/tests/unit/dependency-security.sec.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/agent-run.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/local-evidence.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/post-merge-auditor.test.ts",
           "target_type": "test"
         },
         {
@@ -782,15 +900,33 @@
     },
     {
       "id": "INV-INVENTORY-002",
-      "tests": []
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/sensor-reading.test.ts",
+          "target_type": "test"
+        }
+      ]
     },
     {
       "id": "INV-INVENTORY-003",
-      "tests": []
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/sensor-reading.test.ts",
+          "target_type": "test"
+        }
+      ]
     },
     {
       "id": "INV-INVENTORY-004",
-      "tests": []
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/sensor-reading.test.ts",
+          "target_type": "test"
+        }
+      ]
     },
     {
       "id": "INV-RBAC-001",
@@ -894,6 +1030,15 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/authority/tests/unit/proof-path-domain.red.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-AUTH-002",
+        "INV-AUTH-003"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/cli/tests/contract/action-coverage.contract.test.ts",
       "suite": "contract",
       "invariant_ids": [
@@ -983,6 +1128,14 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/evidence/tests/unit/agent-run.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-018"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/evidence/tests/unit/chain.test.ts",
       "suite": "unit",
       "invariant_ids": [
@@ -1007,6 +1160,23 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/evidence/tests/unit/local-evidence.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-016",
+        "INV-DEVAI-018"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/evidence/tests/unit/phase-closure-successor.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/evidence/tests/unit/redact.test.ts",
       "suite": "unit",
       "invariant_ids": [
@@ -1023,10 +1193,21 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/loop/tests/unit/backlog-tasks.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-003",
+        "INV-DEVAI-004",
+        "INV-DEVAI-005"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/loop/tests/unit/scorecard-assess-narrative.test.ts",
       "suite": "unit",
       "invariant_ids": [
-        "INV-DEVAI-006"
+        "INV-DEVAI-006",
+        "INV-DEVAI-011"
       ],
       "lifecycle": "supported"
     },
@@ -1051,12 +1232,21 @@
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-002",
+        "INV-DEVAI-007",
         "INV-DEVAI-012"
       ],
       "lifecycle": "supported"
     },
     {
       "path": "packages/schemas/tests/contract/adr.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
       "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
@@ -1142,7 +1332,10 @@
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-002",
-        "INV-DEVAI-012"
+        "INV-DEVAI-012",
+        "INV-INVENTORY-002",
+        "INV-INVENTORY-003",
+        "INV-INVENTORY-004"
       ],
       "lifecycle": "supported"
     },
@@ -1161,6 +1354,14 @@
       "invariant_ids": [
         "INV-DEVAI-002",
         "INV-DEVAI-012"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/sensors/tests/unit/trace-resolve.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
@@ -1309,7 +1510,23 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/skills/tests/unit/fix-skills.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-013"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/skills/tests/unit/forbidden-actions.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/governance-skills.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001"
@@ -1366,10 +1583,28 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/skills/tests/unit/post-merge-auditor.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-016",
+        "INV-DEVAI-018"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/skills/tests/unit/prompt-firewall.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-008"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/round-utilities.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-005",
+        "INV-DEVAI-017"
       ],
       "lifecycle": "supported"
     },
@@ -1384,9 +1619,19 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/spec/tests/unit/adr.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/spec/tests/unit/domains-loader.test.ts",
       "suite": "unit",
       "invariant_ids": [
+        "INV-BLUEPRINT-002",
+        "INV-BLUEPRINT-003",
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
