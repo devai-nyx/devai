@@ -61,7 +61,7 @@
             "type": "array",
             "minItems": 1,
             "items": {
-              "enum": ["Owner", "Architect", "Inspector", "Engineer", "Auditor"]
+              "enum": ["Owner", "Architect", "Inspector", "Engineer", "Auditor", "Machine"]
             }
           },
           "commit": {

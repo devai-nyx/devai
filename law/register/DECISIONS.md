@@ -788,6 +788,21 @@ then emits the next machine PC record against the exact source merge SHA, using 
 as declaration and DII-112 as closing decision. R-0002 remains draft, ratifies nothing,
 releases nothing, deploys nothing, and transfers no readiness or evidence standing.
 
+### DII-113 — Closure batches may attribute verb-produced record commits to Machine
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 PC-0003 prevalidation; Constitution Articles 6 and 7; R-0002 plan B6; BL-054`
+
+The phase-closure batch-role vocabulary includes `Machine` so a closure can truthfully
+attribute a verb-produced commit under `record/`. `Machine` in this field is provenance,
+not a sixth human role and not a grant of general mutation authority. It is valid only
+for bytes produced by an authorized executing verb under Article 6; human-authored
+Owner, Architect, Inspector, Engineer, and Auditor batches retain their existing
+meanings and boundaries.
+
+R-0002 PC-0003 records the production-verb PC-0002 emission as Machine and its
+acceptance contract as Inspector instead of omitting or relabeling either batch. Existing
+closure records remain byte-identical. The TypeScript closure role must mirror the
+schema before the production verb may emit PC-0003.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
