@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-105; OM-002; OM-005; R-0002-OPENING-AUDIT; R-0002-CLAUDE-OPUS-CLOSE-REVIEW; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-2; immutable predecessor objects at 05dd242bf72334bfd683096aed380e8240b6b9aa,
+    DII-105; OM-002; OM-005; R-0002-OPENING-AUDIT; R-0002-CLAUDE-OPUS-CLOSE-REVIEW; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-2; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-3; immutable predecessor objects at 05dd242bf72334bfd683096aed380e8240b6b9aa,
   ]
 ---
 
@@ -19,9 +19,8 @@ provenance:
 
 This report is chronological. The initial B8 observations and each correction snapshot
 are retained as historical evidence; they are not current-candidate claims. The
-authoritative current observation is **Final exit-ladder re-close** below, against
-plant snapshot `448a423d5362468be4459486cabb4fb37488082b`. A third independent
-review still precedes source push. The later
+authoritative current observation is **Third Opus correction and fourth-review
+candidate re-close** below. A fourth independent review still precedes source push. The later
 Architect closing decision, source merge, exact-main observation, and machine closure
 record remain part of the two-PR close and are not predicted here.
 
@@ -111,7 +110,7 @@ Fresh local execution at the audited candidate produced:
   guard matches zero.
 - Trace validation resolves 34 invariants and 94 test links. Production trace
   resolution reports 34/34 invariants, zero unresolved references, zero missing paths,
-  and zero untraced tests.
+  and zero untraced invariants.
 - Forbidden-action coverage includes successor law and governance paths.
 - Reference triage and the frozen attestation contracts pass.
 - `.devai/config/` and `.devai/pin/` remain tracked; runtime contents under
@@ -193,12 +192,12 @@ selectors as BL-053 before repair.
 The correction remained role-pure:
 
 - Inspector commit `79238b2b9f4d97b04192e69dbe3f4db03ea954ff` pinned the
-  twelve failing mandate-and-instruction cases;
+  twelve failing mandate-and-enumerated-instruction cases;
 - Owner commit `9c716e2b896dc3a8ff47c038faf99ecfad9ae870` recorded OM-003
   without changing any other OM-002 boundary;
 - Architect commit `a283ad684922968afe4107a661bfa9e5c4be4214` recorded
-  DII-111 and changed only active campaign instructions to Claude Opus 5 with the
-  explicit `claude-opus-5` selector and no fallback;
+  DII-111 and changed the eleven instruction files enumerated by that contract to
+  Claude Opus 5 with the explicit `claude-opus-5` selector and no fallback;
 - Inspector commit `e562ad0b69c11f7c53234272117fd0553640f49c` added schema
   validation for the Owner rider and made all twelve cases green; and
 - Architect commit `26c200d813226510cc2dc4dd422333fa8c5ba613` regenerated the
@@ -444,10 +443,12 @@ The correction remained red-first and role-pure:
   Machine commit attribution. The focused closure suite passes 8 tests.
 - BL-068/064: Inspector `be956824e1a3ba4bf2b6fb81dc6a76ddfbf58a5d`
   made literal selectors, no fallback, and OM-003 precedence executable. Architect
-  `337dae8465853bb9e4a36c0180b15da209e6359b` corrected every active campaign
-  instruction and removed all retired BL-017 red permissions. The selector suite
-  passes 12 cases, and the decision-register introduction now describes its DII
-  numbering truthfully.
+  `337dae8465853bb9e4a36c0180b15da209e6359b` corrected the eleven
+  selector-enumerated instruction files and removed retired BL-017 permissions inside
+  that set. It did not cover the R-0003, R-0004, and R-0006 plans or campaign-level
+  ownership prose; BL-074 later closed that omission. The selector suite passes 12
+  cases, and the decision-register introduction now describes its DII numbering
+  truthfully.
 - BL-069/071: Inspector `2cd8121c2d2e264bc7157e23763741be4a74ae61`
   exposed shallow-history success, an uncaught malformed post-seal revision, and the
   array-shaped lifecycle scaffold. DII-128 commit
@@ -469,7 +470,7 @@ The third exact-candidate review remains mandatory. BL-063 still prohibits archi
 activation in R-0002, and BL-065 remains governed for R-0004; neither is relabelled
 green or treated as readiness.
 
-## Final exit-ladder re-close
+## Pre-third-review exit-ladder re-close
 
 The post-review ladder found two additional source blockers before third review:
 
@@ -509,8 +510,74 @@ The unchanged merged T1+T3 coverage command passes 75 files with 828 passing tes
 | Lines      | 9,489 / 13,123  |  72.30% |          70% |
 
 BL-064 and BL-066 through BL-073 are closed at this observation. BL-063 and BL-065
-remain the only catalogued later-round residuals discovered by the two Opus reviews;
-neither permits an R-0002 skip, red gate, archive activation, or readiness claim.
+were the catalogued later-round residuals discovered by the first two Opus reviews at
+that observation. The third review later added BL-080, BL-081, and BL-084 to the
+prepared later rounds. None permits an R-0002 skip, red gate, archive activation, or
+readiness claim.
+
+## Third Opus correction and fourth-review candidate re-close
+
+The third exact-candidate Claude Opus 5 review ran read-only through literal
+`claude-opus-5` with no fallback against
+`eb09504be91d3339d527ca6dd6a952280d625e81`. It returned **FAIL** and is
+preserved at `work/audit/R-0002/claude-opus-close-review-3.md`; the candidate did not
+advance to push. Auditor `1e456cb0d5cdb7df64da94ae01e5e41c38cf334a` governed
+BL-074 through BL-084 before repair or assignment.
+
+The P0 correction remained role-pure and red-first:
+
+- BL-074: Owner `ac67b4095699c691488a392ad96c5455dd96f632` recorded OM-006,
+  Inspector `96d18cf79c6838fd6b4ab5a4ad626ee2afa917ea` exposed the stale
+  active instructions, and Architect
+  `a771835a0c9da9a6d08a7f30726f2ac199d9b214` retired every remaining
+  BL-017 red permission under DII-131. Historical red observations remain unchanged.
+- BL-075: Inspector `ef5fe944ad1d2b57a90ea5355f40cf37fe2f8f3f` exposed the
+  synthetic Constitution fallback. DII-132 and Engineer
+  `46d0b2b4872afbc5677707d63d045a374e7a30b9` bind all callers to one
+  fail-closed parser for actual Constitution bytes.
+- BL-076: Inspector `97803fa9a64d745826478243ff17b66b9d7a6d32` and
+  `660b08443a518ac768ff12cff6e1dce3df191f15` established renamed-history
+  and unavailable-Git reds. DII-133 and Engineer
+  `a7c220d403d025accbdc1b44f3a297516565f276` preserve the historical path
+  at each commit and emit deterministic findings on every history failure.
+- BL-077: Inspector `51c2022e365f511c48c74da9f534170ba145ff57` and
+  `30fd48096cc772820e5046f0a5b947ab73b303e8` exposed neutral-message
+  deletion and unavailable-history behavior. DII-134 and Engineer
+  `6fbe40c3e5d09b8a63f4f1db51bec38cd34f34de` inspect committed
+  name-status and patch evidence and fail closed.
+- BL-078: DII-135 states the historical conformance limit without rewriting proof
+  bytes. PC-0002 has failing gate `coverage-t1-t3` and a null
+  `failed_validation_criterion`; it predates DII-124 and would be rejected as a new
+  closure by the current production verb. PC-0003 must satisfy the strict rule.
+- BL-079: the backlog register now classifies the gapless BL-001 through BL-084
+  population by current disposition without rewriting historical item text.
+- BL-082: Inspector `f5ba1ebd56f162033bda084c6fbd7be2b6581737` established the
+  integrity-pin red. Engineer `abbf46ab6ff2cf7724984769f833106b7f3fa6c3`
+  binds pnpm 9.15.0 to the registry SHA-512 digest in Corepack's canonical hexadecimal
+  metadata form; cold prewarm and version execution pass.
+- BL-083: the review premise that `rev-list` existed only in the Inspector scope is
+  refuted by the production CLI broker and post-merge auditor, both of which authorize
+  and execute it. Removing it broke the real post-merge receipt tests.
+  Inspector `ab41b900073c38a51eb36a1e9ca0a467b9a8bae2` restored the exact
+  production mirror and pinned fail-closed Constitution bytes in affected CLI
+  fixtures; 19 focused integration/unit cases pass.
+
+Fresh merged T1+T3 coverage executes 75 files with 832 passing tests and 7 declared
+skips:
+
+| Metric     | Covered / total | Reading | OM-005 target | Policy floor |
+| ---------- | --------------- | ------: | ------------: | -----------: |
+| Statements | 10,351 / 14,720 |  70.31% |        63.22% |          70% |
+| Branches   | 7,451 / 12,306  |  60.54% |        59.76% |          60% |
+| Functions  | 1,477 / 1,915   |  77.12% |        70.58% |          70% |
+| Lines      | 9,546 / 13,160  |  72.53% |        65.48% |          70% |
+
+BL-074 through BL-079 and BL-082 through BL-083 are closed at this observation.
+BL-080 and BL-084 remain prepared in R-0004, BL-081 remains prepared in R-0006, and
+DII-135 narrows current claims accordingly. The trace reading proves marker and
+tracked-path completeness, not the stronger assertion-semantic guarantee assigned to
+BL-081. The fourth exact-candidate Opus 5 PASS, exact local ladder, source PR, and
+closure-only PR remain mandatory.
 
 ## PC-0002 correction
 
@@ -521,7 +588,7 @@ production machine verb after BL-049 passed. Its source proof epoch is
 
 ## Residuals and closing posture
 
-The source PR may merge only after the third independent Claude Opus 5 review and exact
+The source PR may merge only after the fourth independent Claude Opus 5 review and exact
 candidate checks. After that merge, the closure-only branch must append the next
 machine PC record against the exact source merge SHA and verify final exact-main state.
 Every required source and exact-main workflow must be green; BL-017 is no longer an

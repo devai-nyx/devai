@@ -49,19 +49,18 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 
 ## Current disposition
 
-| Disposition                         | Governed records                                                                           |
-| ----------------------------------- | ------------------------------------------------------------------------------------------ |
-| Closed in R-0002                    | BL-001–003, BL-007, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–073 |
-| R-0002 repair in progress           | BL-074–079, BL-082–083                                                                     |
-| Open in prepared R-0003             | BL-004–006                                                                                 |
-| Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                             |
-| Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063                                 |
-| Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                 |
-| Open in prepared R-0007             | BL-019, BL-021, BL-032, BL-039, BL-044                                                     |
-| Prepared behind R-0008 human gate   | BL-020, BL-024                                                                             |
-| Dormant behind published R-0008     | BL-022, BL-036                                                                             |
-| Dormant behind fresh R-0010 mandate | BL-037–038                                                                                 |
-| Carried N/A                         | BL-040–043                                                                                 |
+| Disposition                         | Governed records                                                                                       |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Closed in R-0002                    | BL-001–003, BL-007, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083 |
+| Open in prepared R-0003             | BL-004–006                                                                                             |
+| Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                         |
+| Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063                                             |
+| Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                             |
+| Open in prepared R-0007             | BL-019, BL-021, BL-032, BL-039, BL-044                                                                 |
+| Prepared behind R-0008 human gate   | BL-020, BL-024                                                                                         |
+| Dormant behind published R-0008     | BL-022, BL-036                                                                                         |
+| Dormant behind fresh R-0010 mandate | BL-037–038                                                                                             |
+| Carried N/A                         | BL-040–043                                                                                             |
 
 ## Dependency spine
 
