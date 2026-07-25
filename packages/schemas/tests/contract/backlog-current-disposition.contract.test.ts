@@ -33,6 +33,6 @@ describe('R-0002 backlog current disposition', () => {
     expect(closedRow).toContain('BL-082–083');
     expect(closedRow).toContain('BL-085–104');
     expect(source).not.toMatch(/^\| Reopened in R-0002\s+\|/mu);
-    expect(source).toMatch(/^\| Awaiting exact sixth review\/close\s+\| BL-105\s+\|/mu);
+    expect(source).toMatch(/^\| Awaiting exact seventh review\/close\s+\| BL-105\s+\|/mu);
   });
 });

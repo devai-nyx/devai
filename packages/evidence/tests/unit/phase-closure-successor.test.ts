@@ -2,6 +2,7 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { afterEach, aroundEach, describe, expect, it } from 'vitest';
 import { withAuthorityHostTestScope } from '../../../authority/tests/unit/authority-host-test-scope.js';
 import { closePhase, type PhaseClosureDraft } from '../../src/closure/index.js';
@@ -37,6 +38,13 @@ function repoWithTwoClosures(): string {
       })}\n`,
     );
   }
+  execFileSync('git', ['init', '--quiet'], { cwd: repo });
+  execFileSync('git', ['add', '.'], { cwd: repo });
+  execFileSync(
+    'git',
+    ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'seed'],
+    { cwd: repo },
+  );
   return repo;
 }
 
@@ -168,14 +176,16 @@ describe('successor phase-closure binding', () => {
   });
 
   it('accepts a full commit identity for Machine-attributed batches', () => {
+    const repo = repoWithTwoClosures();
+    const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repo, encoding: 'utf8' }).trim();
     const result = closePhase(
-      repoWithTwoClosures(),
+      repo,
       draft({
         batches: [
           {
             id: 'close',
             roles: ['Machine'],
-            commit: fullCommit,
+            commit,
             headline: 'machine successor close',
           },
         ],
@@ -184,6 +194,26 @@ describe('successor phase-closure binding', () => {
       }),
     );
     expect(result.record.id).toBe('PC-0003');
+  });
+
+  it('rejects a full-length batch commit that does not resolve to a commit object', () => {
+    expect(() =>
+      closePhase(
+        repoWithTwoClosures(),
+        draft({
+          batches: [
+            {
+              id: 'close',
+              roles: ['Auditor'],
+              commit: fullCommit,
+              headline: 'fabricated full identity',
+            },
+          ],
+          merged_as: fullCommit,
+          release_disposition: 'none-preratification',
+        }),
+      ),
+    ).toThrow(/batch.*commit.*does not resolve/i);
   });
 
   it('rejects an empty failed-gate identity', () => {

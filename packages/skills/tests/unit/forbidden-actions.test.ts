@@ -185,6 +185,45 @@ describe('scanForbiddenActions', () => {
     );
   });
 
+  it('does not vacuously suppress protected-path message evidence on an unrelated change', () => {
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    mkdirSync(join(dir, 'packages/demo'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions: CANONICAL_FORBIDDEN_ACTIONS }),
+    );
+    writeFileSync(join(dir, 'packages/demo/index.ts'), 'export {};\n');
+    execFileSync('git', ['init', '-q'], { cwd: dir });
+    execFileSync('git', ['add', '.'], { cwd: dir });
+    execFileSync(
+      'git',
+      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'seed'],
+      { cwd: dir },
+    );
+    writeFileSync(join(dir, 'packages/demo/index.ts'), 'export const changed = true;\n');
+    execFileSync('git', ['add', 'packages/demo/index.ts'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=Fixture',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'git add .devai/config/forbidden-actions.json',
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-MUTATE-INVARIANTS',
+        source: 'commit-message',
+      }),
+    );
+  });
+
   it.each([
     ['law/constitution.md', 'governed\n', 'changed\n'],
     ['law/trace.json', '{}\n', '{"changed":true}\n'],

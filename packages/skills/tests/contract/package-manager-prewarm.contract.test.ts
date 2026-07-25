@@ -25,6 +25,19 @@ describe('cold-Corepack determinism', () => {
     ]);
   });
 
+  it('locally prepares every integrity-bound identity through the verification path', () => {
+    const result = spawnSync(process.execPath, [PREWARM, '--repo-root', ROOT, '--verify'], {
+      encoding: 'utf8',
+    });
+    expect(result.status, result.stderr).toBe(0);
+    expect(JSON.parse(result.stdout)).toEqual({
+      verified: [
+        'pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c',
+        PNPM_10,
+      ],
+    });
+  });
+
   it('prewarms before Corepack enable and install in every package-using workflow job', () => {
     for (const file of readdirSync(WORKFLOW_DIR).filter((name) => /\.ya?ml$/u.test(name))) {
       const workflow = parse(readFileSync(join(WORKFLOW_DIR, file), 'utf8')) as {
