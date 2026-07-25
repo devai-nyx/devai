@@ -352,6 +352,29 @@ closure object shape or runtime behavior; the schema description names
 production closure path and full R-0002 ladder remain green except for the exact
 BL-017 coverage thresholds.
 
+### BL-057 — Make sealed ADR history enforcement use the canonical lifecycle
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: OM-004 coverage strengthening; DII-106; governance-ledger branch audit`
+
+Priority: P0 before the R-0002 source review. Primary round: R-0002
+quota-window correction.
+
+The decision-record history guard searches only for `status: locked` or
+`status: accepted` when locating a sealing commit. DII-106 and the shared record schema
+admit neither token: successor ADRs bind at `status: active`, then may become
+`superseded` or `tombstoned`. The same guard also treats `superseded_by` as an array,
+while the canonical field is a string or null. Consequently its mutation protection is
+unreachable for schema-valid successor records and cannot enforce the advertised
+append-only supersession exception.
+
+Acceptance: an Inspector red first proves that body mutation after a schema-valid
+`active` sealing commit is detected; Architect law binds the permitted lifecycle
+transition and scalar `superseded_by` behavior; Engineer implementation uses only
+canonical lifecycle tokens, permits no return to draft, permits at most one
+append-only null-to-string supersession link with its matching terminal status, and
+rejects body or other frontmatter mutation; the ledger sensor and full R-0002 floor
+are green; no existing ADR standing changes.
+
 ## Carried guard map
 
 The original known-red mapping remains:
