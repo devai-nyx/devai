@@ -923,6 +923,23 @@ one stable string only with the matching `active`-to-`superseded` transition; a 
 may not be removed, replaced, or treated as an array. Body mutation, other
 frontmatter mutation, and every unlisted lifecycle transition remain findings.
 
+### DII-121 — R-0002 final source close includes the sealed-history repair
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 final source close; DII-105; DII-108–120; R-0002-AS-BUILT@73c6ef68f57630c07e7130b8fd02ff3a2279f05e; OM-004; BL-051–057`
+
+DII-121 supersedes DII-118 only as the final R-0002 source-closing decision. Earlier
+closing judgments remain immutable history and their no-ratification, no-release,
+no-readiness, and BL-017 posture continues unchanged. The final source candidate also
+closes BL-057 through the DII-120 successor-lifecycle guard and includes OM-004’s
+behavior-focused coverage strengthening without changing any coverage input,
+exclusion, threshold, production behavior, or later-round ownership.
+
+The source PR may merge only after the exact DII-121 candidate receives an independent
+read-only Claude Opus 5 review through `claude-opus-5` and its exact remote checks are
+green except for the bounded BL-017 coverage-threshold failure. The closure-only branch
+then emits PC-0003 against the exact source merge SHA, using DII-105 as declaration and
+DII-121 as closing decision. R-0002 remains draft, ratifies nothing, releases nothing,
+deploys nothing, and transfers no readiness or evidence standing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
