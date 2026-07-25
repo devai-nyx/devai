@@ -183,6 +183,11 @@
         },
         {
           "suite": "unit",
+          "path": "packages/cli/tests/unit/forbidden-actions-help.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/cli/tests/unit/version.test.ts",
           "target_type": "test"
         },
@@ -409,6 +414,11 @@
         {
           "suite": "unit",
           "path": "packages/spec/tests/unit/test-trace-validator.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/trace-validator.test.ts",
           "target_type": "test"
         },
         {
@@ -1157,6 +1167,14 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/cli/tests/unit/forbidden-actions-help.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/cli/tests/unit/hooks-install.test.ts",
       "suite": "unit",
       "invariant_ids": [
@@ -1824,6 +1842,14 @@
     },
     {
       "path": "packages/spec/tests/unit/test-trace-validator.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/spec/tests/unit/trace-validator.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001"
