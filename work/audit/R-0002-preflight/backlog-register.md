@@ -33,11 +33,11 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 
 | Primary round | Records                                                                                                               |
 | ------------- | --------------------------------------------------------------------------------------------------------------------- |
-| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064 |
+| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064 |
 | R-0003        | BL-004, BL-005, BL-006                                                                                                |
 | R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065                                        |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063                                                        |
-| R-0006        | BL-017, BL-026, BL-034, BL-035                                                                                        |
+| R-0006        | BL-026, BL-034, BL-035                                                                                                |
 | R-0007        | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                |
 | R-0008        | BL-020, BL-024                                                                                                        |
 | R-0009        | BL-022, BL-036                                                                                                        |
@@ -50,7 +50,8 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 2. R-0003 ratifies only after a fresh Auditor re-verifies R-0002.
 3. R-0004 stabilizes action identity, package topology, schemas, and governed surfaces.
 4. R-0005 implements proof epochs, local evidence, and corrected round mechanics.
-5. R-0006 closes output contracts and raises coverage to the unchanged legal floors.
+5. R-0006 closes output contracts and the remaining operational-value and mutation
+   work; R-0002 already reached the unchanged coverage floors.
 6. R-0007 performs Owner product correction and produces a deploy-ready documentation
    site without deploying it.
 7. R-0008 produces and dry-runs the 1.0.0 release candidate, then stops before external
@@ -82,7 +83,7 @@ primary round and prevents that round’s closure.
 | BL-014 | Successor domains policy              | Active; R-0002                                                                          |
 | BL-015 | Prompt overlays and 27 findings       | Active; R-0005                                                                          |
 | BL-016 | Effect extractor binding              | Active; R-0004                                                                          |
-| BL-017 | Merged coverage floors                | Active; R-0006 hard release gate                                                        |
+| BL-017 | Merged coverage floors                | Closed early in R-0002 at the unchanged 70/60/70/70 policy                             |
 | BL-018 | Clean post-merge Auditor worktree     | Active; R-0005                                                                          |
 | BL-019 | Generated CLI reference               | Active; R-0007 after action identity stabilizes                                         |
 | BL-020 | Ratified release lane                 | Active; R-0008 repository work; external completion remains Owner-gated                 |
@@ -263,7 +264,8 @@ Acceptance: an Inspector contract first proves missing and unrelated acknowledgm
 are accepted incorrectly; production then requires each failed gate key to appear in
 the criterion or evidence of at least one `verdict: fail` criterion; valid acknowledged
 failure remains recordable; all-pass closures remain unchanged; existing records stay
-byte-identical; and the R-0002 closure draft names the exact BL-017 gate and criterion.
+byte-identical; and the R-0002 closure draft reports the final all-pass gate set without
+inventing a failed BL-017 criterion.
 
 ### BL-053 — Replace active Fable review instructions with the Owner-directed Opus selector
 
@@ -508,12 +510,13 @@ deferral and makes no readiness claim.
 
 ## Carried guard map
 
-The original known-red mapping remains:
+The original known-red mapping remains as historical provenance:
 
 `KR-001→BL-012`; `KR-002→BL-010`; `KR-003→BL-013`;
 `KR-004/KR-007→BL-014`; `KR-005→BL-015`; `KR-006→BL-019`;
 `KR-008→BL-016`; `KR-009→BL-027`; `KR-010→BL-018`;
-`KR-011→BL-017`.
+`KR-011→BL-017` (closed in R-0002).
 
 No guard may be deleted or relabelled without its owning item closing in the same
-role-separated sequence.
+role-separated sequence. KR-011 is no longer an active red because its unchanged
+production threshold command passes at the R-0002 source candidate.

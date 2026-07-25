@@ -3,13 +3,13 @@ id: R-0002-AS-BUILT
 title: R-0002 frozen re-bind and operational-law repair as built
 type: audit-report
 status: active
-date: 2026-07-24
+date: 2026-07-25
 authority: Auditor
 supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-105; OM-002; R-0002-OPENING-AUDIT; R-0002-PLAN; immutable predecessor objects at 05dd242bf72334bfd683096aed380e8240b6b9aa,
+    DII-105; OM-002; OM-005; R-0002-OPENING-AUDIT; R-0002-CLAUDE-OPUS-CLOSE-REVIEW; immutable predecessor objects at 05dd242bf72334bfd683096aed380e8240b6b9aa,
   ]
 ---
 
@@ -17,13 +17,12 @@ provenance:
 
 ## Audit boundary
 
-This report observes the source candidate through
-`3f2275bb54086b5882cae3662899fceac6b56b3a`. The later Architect closing
-decision, source merge, exact-main observation, and machine closure record are part of
-the two-PR close and therefore were not predicted by the initial B8 observation.
-Post-review corrections discovered by the literal shared exit floor are appended
-below through closure-validation candidate
-`0f222c88bd0ad23e5c23d6380d86a6b2ee608285`.
+This report is chronological. The initial B8 observations and each correction snapshot
+are retained as historical evidence; they are not current-candidate claims. The
+authoritative current observation is **Post-Opus exact re-close** below, against source
+snapshot `db3cb8b8aa678e6d562b3311cf4adacf31da88af`. The later Architect
+closing decision, source merge, exact-main observation, and machine closure record
+remain part of the two-PR close and are not predicted here.
 
 The round re-binds frozen predecessor truth and repairs the scoped operational
 contracts. It ratifies nothing, releases nothing, deploys nothing, and transfers no
@@ -66,7 +65,7 @@ The local predecessor checkout was observed clean at
 | B6            | Machine / Inspector              | `bec810bb38e74ebdf0bd31ec3ee90aa0b186d1ed` emitted PC-0002 through the production closure verb; `ab1ef5a2338f76d04fa2af383e51839ecc9a4d9f` verifies append-only supersession and ledger selection.                                                                                    |
 | B7            | Inspector / Engineer             | `429e89d063500523ca45e84113c6f62c2c69a492` kept the new contract lint-clean; `3f2275bb54086b5882cae3662899fceac6b56b3a` repaired candidate-Constitution version parsing exposed by the production T1 gate.                                                                            |
 
-## Scoped backlog reconciliation
+## Historical scoped backlog reconciliation at initial B8
 
 | Item   | R-0002 disposition                                              | Acceptance evidence or explicit residual                                                                                                                                                                                                                                                                                                                                                                                               |
 | ------ | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -90,12 +89,12 @@ The local predecessor checkout was observed clean at
 | BL-056 | Closed after publication preflight.                             | A red-first contract proved the canonical phase-closure schema described mutable `.devai/state/closures` instead of the production compliance-proof path. DII-117 binds closure records to `record/proofs/compliance/closures/PC-NNNN.json`; the schema now agrees with implementation, CLI help, authority policy, and the three-tree doctrine without changing record shape or behavior.                                             |
 | BL-057 | Closed after quota-window coverage testing.                     | A red-first history fixture proved the ADR mutation guard searched only for schema-invalid predecessor lifecycle tokens and treated scalar `superseded_by` as an array. DII-120 binds successor sealing semantics. Production now detects body, metadata, replacement-link, and return-to-draft mutation after activation while admitting the one canonical reciprocal supersession transition.                                        |
 
-There is no uncatalogued deferral. BL-007’s wider population program is explicitly
-bounded above; BL-045 remains the named R-0001 correction residual; BL-017 is the only
-allowed command red; BL-015, BL-019, and BL-021 retain their existing later-round
-assignments.
+At that historical snapshot there was no uncatalogued deferral. Its BL-017 red was
+later closed by the assertion-bearing work recorded in the current re-close section.
+BL-007’s wider population program and BL-015, BL-019, BL-021, and BL-045 retain their
+separately governed later-round scope.
 
-## Production acceptance
+## Historical production acceptance at initial B8
 
 Fresh local execution at the audited candidate produced:
 
@@ -361,6 +360,69 @@ The focused sensor file passes 15 tests, the sensor typecheck is green, and the 
 Vitest floor passes 96 files / 892 tests / 8 declared skips. BL-058 is closed; the
 inventory schema, coverage source set, exclusions, and thresholds are unchanged.
 
+## Post-Opus exact re-close
+
+The first exact-candidate Claude Opus 5 review ran read-only through the literal
+`claude-opus-5` selector with no fallback against
+`00531f7876ca528051fdd922e001b95b6ed3f838`. It returned **FAIL** and is
+preserved at `work/audit/R-0002/claude-opus-close-review.md`. The candidate did not
+advance to push. Auditor commit `0a31f0ce7459ce0d4f4a792c6d343f70cc4eb921`
+governed BL-059 through BL-065 before remediation.
+
+The remediation remained red-first and role-pure:
+
+- BL-059: Inspector commit `1967d5263af97964dca01f980dbaa5b277c394ff`
+  deleted all seventeen import-only coverage projections. No provider, include glob,
+  exclusion, source selection, assertion, production behavior, or threshold changed.
+- BL-060: Inspector commit `1dbc5beb2853b53270711c409549e63556f6e63b`
+  pinned four successor-closure failures; DII-124 bound exact successor merge,
+  disposition, and gate identities; Engineer commit
+  `b46ad7c01a97d5ac6ae99e59d395f5c537a17a20` repaired the production validator; and
+  Inspector commit `33950f135d440dee3f60a9b9f81d44596bfa638c` accepted the exact
+  behavior while preserving PC-0001 and PC-0002 bytes.
+- BL-061: Inspector commit `89ec1bd24a411494dca93f18ea8a7e0d2d4205ab`
+  proved that an empty target list was counted as traced; DII-125 bound non-vacuous
+  links; Engineer commit `093c2758e88adf0dfa499578b30af145a8fccfcd`
+  required resolvable test targets; and Inspector/Architect commits
+  `93665e9694beb1fd6727002e91bd31930dedfea8` and
+  `9f0842c6a5d124b09e60ca27fa6267c278d0aa6c` classified and regenerated the corpus.
+- BL-017/OM-005: Inspector commit
+  `cc3b84defde7d4c1d679d2c6b340be020c3a77bc` added assertion-bearing release,
+  Actions-run, scaffolder, bounded-writer, trace, hook, Mermaid, state/profile, and
+  verdict behavior. It imported no suite and duplicated no execution through a
+  projection path. Architect commit
+  `db3cb8b8aa678e6d562b3311cf4adacf31da88af` regenerated the canonical trace and
+  reference map after the final test population changed.
+
+Fresh merged T1+T3 coverage at that exact source snapshot executes 75 files with 821
+passing tests and 7 declared skips. The unchanged production thresholds now pass:
+
+| Metric     | Covered / total | Reading | OM-005 target | Policy floor |
+| ---------- | --------------- | ------: | ------------: | -----------: |
+| Statements | 10,276 / 14,672 |  70.03% |        63.22% |          70% |
+| Branches   | 7,401 / 12,256  |  60.38% |        59.76% |          60% |
+| Functions  | 1,468 / 1,912   |  76.77% |        70.58% |          70% |
+| Lines      | 9,473 / 13,114  |  72.23% |        65.48% |          70% |
+
+The command exits zero. BL-017 therefore closed early in R-0002; it is not deferred,
+acknowledged red, suppressed, or relabelled. The full Vitest floor and
+`devai:prepare` pass. Deterministic trace generation produces 34 invariants and 114
+tracked executable tests; the production trace sensor reports 34/34 traced, zero
+unresolved invariant entries, zero missing paths, zero untraced invariants, and zero
+attestation-only invariants.
+
+BL-059, BL-060, BL-061, and BL-064 are closed. This section and the following
+Architect closing decision close BL-062 subject to a fresh exact-candidate Opus 5
+PASS. BL-063 remains ring-fenced to R-0005 before any `round archive` activation, and
+BL-065 remains assigned to R-0004 before production-readiness claims. Those two
+records are catalogued residual work, not an R-0002 source red.
+
+The prepared PC-0003 payload must now record every source gate as pass, include the
+exact source merge SHA and `none-preratification`, and contain no invented failed gate
+or failed validation criterion. PC-0001 and PC-0002 remain byte-immutable. R-0002
+ratifies nothing, releases nothing, deploys nothing, and transfers no readiness or
+evidence standing.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
@@ -373,7 +435,9 @@ production machine verb after BL-049 passed. Its source proof epoch is
 The source PR may merge only after the independent Claude Opus 5 review and exact
 candidate checks. After that merge, the closure-only branch must append the next
 machine PC record against the exact source merge SHA and verify final exact-main state.
-Both exact-main workflows must be reported red if and only if BL-017 is the sole red.
+Every required source and exact-main workflow must be green; BL-017 is no longer an
+allowed red. External R-0008 release, R-0009 activation, and R-0010 observation remain
+human-gated exactly as authorized.
 
 R-0003 must independently re-read the frozen bindings, this report, the source merge
 SHA, the machine closure record, and exact-main CI before conducting any founding
