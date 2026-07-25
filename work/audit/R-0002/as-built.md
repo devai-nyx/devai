@@ -763,6 +763,22 @@ Engineer correction. BL-115 and BL-116 are Auditor-owned consistency repairs. A 
 Architect binding, deterministic reference regeneration, exact candidate ladder, and
 one final independent Opus review remain mandatory.
 
+Inspector `67f7081` proved both behavioral residuals red before Engineer `3f7e5bc`
+repaired them. The production closure verb now validates the complete raw draft before
+dereferencing any batch and resolves both every supplied batch commit and `merged_as`
+to a Git commit before emission. Inspector `49f9488` aligned the superseded diagnostic
+expectation with schema-first validation; the focused closure suite passes 29 tests.
+
+The backlog's active posture no longer embeds a stale review ordinal, and the ignored
+PC-0003 template now covers the R-0002 repair population through BL-116 while
+preserving BL-106 as prospective R-0005 work. It still contains placeholders for the
+source merge, final review, remote checks, and disposable close and therefore cannot
+emit an immutable record prematurely.
+
+BL-113 through BL-116 are closed at this observation. BL-105 remains open only for the
+fresh Architect decision, deterministic projections, exact full ladder, and final
+exact-candidate Opus PASS.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the

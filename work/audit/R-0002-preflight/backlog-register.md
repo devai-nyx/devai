@@ -54,9 +54,8 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 
 | Disposition                         | Governed records                                                                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–104, BL-107–112 |
+| Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–104, BL-107–116 |
 | Awaiting final exact review/close   | BL-105                                                                                                                                           |
-| Open in seventh-review repair       | BL-113–116                                                                                                                                       |
 | Open in prepared R-0003             | BL-004–006                                                                                                                                       |
 | Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                                   |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
@@ -944,7 +943,7 @@ recommends a field rejected by the current schema.
 
 `type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: DII-138; R-0002 fifth Claude Opus 5 exact-candidate review`
 
-Priority: P0 before sixth close review. Primary round: R-0002.
+Priority: P0 before final source push. Primary round: R-0002.
 
 Acceptance: the final source decision distinguishes pre-decision measurements from
 exact-candidate checks; repository-reference freshness is rerun after any matching
