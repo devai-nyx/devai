@@ -956,6 +956,20 @@ Crossing the OM-005 target does not close BL-017 unless the separate unchanged
 70/60/70/70 policy also passes. The Opus 5 close review waits for the new exact
 candidate and remains subject to OM-003’s no-fallback rule.
 
+### DII-123 — SQL column constraints terminate type parsing
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 OM-005 coverage correction; BL-058`
+
+The data-model inventory must preserve SQL nullability as declared. A constraint
+keyword, including `NOT`, terminates the parsed type before constraint evaluation;
+it may not be consumed merely because the parser supports legitimate multi-word SQL
+types. Supported multi-word types remain explicit grammar cases rather than an
+unbounded second identifier.
+
+For `email TEXT NOT NULL`, the canonical output is type `TEXT` and
+`nullable: false`. The same boundary applies deterministically to other supported
+one-word and multi-word type declarations without changing the inventory schema,
+coverage inputs, exclusions, or thresholds.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
