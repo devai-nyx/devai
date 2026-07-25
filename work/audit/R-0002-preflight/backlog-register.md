@@ -23,7 +23,7 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-131. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-132. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
@@ -45,6 +45,7 @@ ordinary floor after the legal ADR-013 replacement.
 BL-130 governs the exact-candidate formatting failure across two repair files and three
 hash-bound immutable review copies.
 BL-131 governs the T2 formatting-exclusion guard exposed by the bounded BL-130 repair.
+BL-132 governs the stale active ADR roster index found by the second R-0003 Opus review.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -53,7 +54,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Primary round | Records                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-119 |
-| R-0003        | BL-004, BL-005, BL-006, BL-120–BL-131                                                                                                                                                     |
+| R-0003        | BL-004, BL-005, BL-006, BL-120–BL-132                                                                                                                                                     |
 | R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084                                                                                            |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
 | R-0006        | BL-026, BL-034, BL-035, BL-081                                                                                                                                                            |
@@ -68,7 +69,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Disposition                         | Governed records                                                                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–119 |
-| Open in active R-0003               | BL-004–006, BL-120–131                                                                                                                           |
+| Open in active R-0003               | BL-004–006, BL-120–132                                                                                                                           |
 | Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                                   |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
 | Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                                       |
@@ -1240,6 +1241,18 @@ Acceptance: the exact `.prettierignore` contract admits only the added
 `work/rounds/R-0003/reviews/` path, retains every prior exclusion in order, and remains
 paired with the exact review-byte hashes; T2 and the complete ladder pass without a
 broader formatting exemption.
+
+### BL-132 — Correct the active ADR roster index and bind it to active authority
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0003 second exact-candidate Claude Opus 5 review; candidate 68143f5; law/adr/README.md`
+
+Priority: P0 before R-0003 source push. Primary round: R-0003.
+
+Acceptance: the active ADR index states ADR-001 through ADR-013 are gapless, exactly
+twelve are active, ADR-005 is superseded by ADR-013, and its provenance resolves through
+an active successor decision rather than solely draft REV-0003; an Inspector contract
+binds those claims even though production `check adrs` intentionally scans only numbered
+records; the full ladder and a fresh exact Opus review pass.
 
 ## Carried guard map
 
