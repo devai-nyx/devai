@@ -1,12 +1,6 @@
 // Invariants: INV-DEVAI-013
 import { execFileSync } from 'node:child_process';
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -101,9 +95,9 @@ describe('fix skill behavior expansion', () => {
       expect(readFileSync(join(repo, 'docs/guide.md'), 'utf8')).toContain(
         '[moved](new.md#section)',
       );
-      expect(
-        (result.evidence as { fix_log: Array<{ outcome: string }> }).fix_log[0]?.outcome,
-      ).toBe('rewritten');
+      expect((result.evidence as { fix_log: Array<{ outcome: string }> }).fix_log[0]?.outcome).toBe(
+        'rewritten',
+      );
     });
   });
 
@@ -128,9 +122,7 @@ describe('fix skill behavior expansion', () => {
         iteration: { current: 1, max: 3 },
       });
       expect(result).toMatchObject({ status: 'pass' });
-      expect(
-        (result.evidence as { fix_log: Array<{ outcome: string }> }).fix_log,
-      ).toHaveLength(1);
+      expect((result.evidence as { fix_log: Array<{ outcome: string }> }).fix_log).toHaveLength(1);
       expect(readFileSync(path, 'utf8').match(/inv-override:/g)).toHaveLength(1);
       const second = await skill('SKILL-fix-overrides').run({ repoRoot: repo });
       expect(second).toMatchObject({ status: 'pass', evidence: { fix_log: [] } });
@@ -169,9 +161,9 @@ describe('fix skill behavior expansion', () => {
         iteration: { current: 3, max: 3 },
       });
       expect(result).toMatchObject({ status: 'fail' });
-      const outcomes = (
-        result.evidence as { fix_log: Array<{ outcome: string }> }
-      ).fix_log.map(({ outcome }) => outcome);
+      const outcomes = (result.evidence as { fix_log: Array<{ outcome: string }> }).fix_log.map(
+        ({ outcome }) => outcome,
+      );
       expect(outcomes).toContain('section-scaffolded');
       expect(outcomes).toContain('escalate-malformed-front-matter');
       expect(outcomes).toContain('rename-skipped-not-git');

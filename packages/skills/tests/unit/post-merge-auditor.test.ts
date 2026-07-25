@@ -18,10 +18,7 @@ import {
   runPostMergeAuditor,
   verifyPostMergeHostReceipt,
 } from '../../src/post-merge-auditor/index.js';
-import {
-  runWithAuthorityHostEffects,
-  type AuthorityHostEffectRequest,
-} from '@devai-nyx/authority';
+import { runWithAuthorityHostEffects, type AuthorityHostEffectRequest } from '@devai-nyx/authority';
 import { withAuthorityHostTestScope } from './authority-host-test-scope.js';
 
 const roots: string[] = [];
@@ -56,9 +53,7 @@ function git(root: string, args: readonly string[]): string {
 function signed(value: Record<string, unknown>, key: Buffer): Record<string, unknown> {
   return {
     ...value,
-    signature_hmac_sha256: createHmac('sha256', key)
-      .update(JSON.stringify(value))
-      .digest('hex'),
+    signature_hmac_sha256: createHmac('sha256', key).update(JSON.stringify(value)).digest('hex'),
   };
 }
 
@@ -224,7 +219,10 @@ describe('post-merge host receipt verification', () => {
     put(fx.root, '.git/devai/post-merge.key', fx.key);
     writeFileSync(fx.attestationPath, '{');
     expect(() => verify(fx)).toThrow('HOST_RECEIPT_UNVERIFIED');
-    writeFileSync(fx.attestationPath, JSON.stringify({ ...fx.attestation, signature_hmac_sha256: 'x' }));
+    writeFileSync(
+      fx.attestationPath,
+      JSON.stringify({ ...fx.attestation, signature_hmac_sha256: 'x' }),
+    );
     expect(() => verify(fx)).toThrow('HOST_RECEIPT_UNVERIFIED');
   });
 
@@ -234,8 +232,14 @@ describe('post-merge host receipt verification', () => {
       readonly receipt?: (value: Record<string, unknown>) => Record<string, unknown>;
       readonly code: string;
     }> = [
-      { receipt: (v) => ({ ...v, repository: join(String(v['repository']), 'other') }), code: 'HOST_RECEIPT_REPOSITORY_MISMATCH' },
-      { attestation: (v) => ({ ...v, repository_id: 'other' }), code: 'HOST_RECEIPT_REPOSITORY_MISMATCH' },
+      {
+        receipt: (v) => ({ ...v, repository: join(String(v['repository']), 'other') }),
+        code: 'HOST_RECEIPT_REPOSITORY_MISMATCH',
+      },
+      {
+        attestation: (v) => ({ ...v, repository_id: 'other' }),
+        code: 'HOST_RECEIPT_REPOSITORY_MISMATCH',
+      },
       { receipt: (v) => ({ ...v, adapter_id: 'other' }), code: 'HOST_RECEIPT_REPOSITORY_MISMATCH' },
       { receipt: (v) => ({ ...v, merge_sha: 'bad' }), code: 'HOST_RECEIPT_INVALID' },
       { attestation: (v) => ({ ...v, installed_at_head: 42 }), code: 'HOST_RECEIPT_INVALID' },
@@ -335,9 +339,9 @@ describe('post-merge authority host scope', () => {
     expect(() =>
       apply({ kind: 'filesystem', symbol: 'writeFileSync', arguments: [42, 'x'] }),
     ).toThrow('POST_MERGE_EFFECT_OUT_OF_SCOPE');
-    expect(
-      apply({ kind: 'process', symbol: 'spawnSync', arguments: ['git', ['status']] }),
-    ).toBe('applied');
+    expect(apply({ kind: 'process', symbol: 'spawnSync', arguments: ['git', ['status']] })).toBe(
+      'applied',
+    );
     expect(
       apply({
         kind: 'process',
@@ -380,10 +384,7 @@ describe('post-merge authority host scope', () => {
     };
 
     await expect(execute(true)).rejects.toThrow('POST_MERGE_OBSERVATION_INJECTED_FAILURE');
-    const stateRoot = join(
-      fx.root,
-      'scratch/worktrees/auditor-post-merge/work/audit/post-merge',
-    );
+    const stateRoot = join(fx.root, 'scratch/worktrees/auditor-post-merge/work/audit/post-merge');
     expect(
       JSON.parse(readFileSync(join(stateRoot, fx.mergeSha, 'status.json'), 'utf8')),
     ).toMatchObject({ status: 'error', code: 'POST_MERGE_OBSERVATION_INJECTED_FAILURE' });
@@ -392,9 +393,9 @@ describe('post-merge authority host scope', () => {
     expect(
       JSON.parse(readFileSync(join(stateRoot, fx.mergeSha, 'status.json'), 'utf8')),
     ).toMatchObject({ status: 'completed', readiness_promoting: false });
-    expect(
-      readFileSync(join(stateRoot, fx.mergeSha, 'status.json'), 'utf8'),
-    ).toContain('observation_digest_sha256');
+    expect(readFileSync(join(stateRoot, fx.mergeSha, 'status.json'), 'utf8')).toContain(
+      'observation_digest_sha256',
+    );
     expect(readdirSync(join(stateRoot, 'attempt-history', fx.mergeSha)).length).toBeGreaterThan(0);
 
     await expect(execute()).rejects.toThrow('POST_MERGE_WORKTREE_DIRTY');

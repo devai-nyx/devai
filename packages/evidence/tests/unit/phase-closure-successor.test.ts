@@ -46,17 +46,14 @@ function draft(overrides: Partial<PhaseClosureDraft> = {}): PhaseClosureDraft {
 describe('successor phase-closure binding', () => {
   it('requires merged_as on PC-0003', () => {
     expect(() =>
-      closePhase(
-        repoWithTwoClosures(),
-        draft({ release_disposition: 'none-preratification' }),
-      ),
+      closePhase(repoWithTwoClosures(), draft({ release_disposition: 'none-preratification' })),
     ).toThrow(/merged_as is required/);
   });
 
   it('requires release_disposition on PC-0003', () => {
-    expect(() =>
-      closePhase(repoWithTwoClosures(), draft({ merged_as: fullCommit })),
-    ).toThrow(/release_disposition is required/);
+    expect(() => closePhase(repoWithTwoClosures(), draft({ merged_as: fullCommit }))).toThrow(
+      /release_disposition is required/,
+    );
   });
 
   it('rejects a caller-supplied closure id', () => {
@@ -67,9 +64,7 @@ describe('successor phase-closure binding', () => {
       }),
       id: 'PC-9999',
     } as PhaseClosureDraft;
-    expect(() => closePhase(repoWithTwoClosures(), callerSteered)).toThrow(
-      /caller-supplied.*id/i,
-    );
+    expect(() => closePhase(repoWithTwoClosures(), callerSteered)).toThrow(/caller-supplied.*id/i);
   });
 
   it('rejects an abbreviated merged_as identity', () => {

@@ -1,12 +1,6 @@
 // Invariants: INV-DEVAI-001
 import { execFileSync, spawnSync } from 'node:child_process';
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -34,11 +28,7 @@ describe('canonical trace materialization', () => {
     roots.push(root);
     execFileSync('git', ['init', '-q'], { cwd: root });
     put(root, 'law/invariants/INV-A-001.json', '{}\n');
-    put(
-      root,
-      'packages/demo/tests/unit/a.test.ts',
-      '// Invariants: INV-A-001\nexport {};\n',
-    );
+    put(root, 'packages/demo/tests/unit/a.test.ts', '// Invariants: INV-A-001\nexport {};\n');
     track(root);
     execFileSync(process.execPath, [generator, root]);
     const canonical = join(root, 'law/trace.json');
@@ -53,11 +43,7 @@ describe('canonical trace materialization', () => {
     expect(incomplete.stderr).toContain('INV-B-001');
     expect(readFileSync(canonical, 'utf8')).toBe(baseline);
 
-    put(
-      root,
-      'packages/demo/tests/unit/b.test.ts',
-      '// Invariants: INV-B-001\nexport {};\n',
-    );
+    put(root, 'packages/demo/tests/unit/b.test.ts', '// Invariants: INV-B-001\nexport {};\n');
     track(root);
     const stale = spawnSync(process.execPath, [generator, root, '--check'], {
       encoding: 'utf8',

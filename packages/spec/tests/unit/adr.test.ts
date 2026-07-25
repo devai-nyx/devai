@@ -1,11 +1,5 @@
 // Invariants: INV-DEVAI-001
-import {
-  mkdirSync,
-  mkdtempSync,
-  rmSync,
-  symlinkSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -44,12 +38,14 @@ function adr(
     'Affected Rules',
   ];
   const arrays = overrides.blockArrays
-    ? ['supersedes:', '  - predecessor-record', 'provenance:', '  - bootstrap', 'affected_rules: []']
-    : [
-        'supersedes: [predecessor-record]',
-        'provenance: ["bootstrap"]',
+    ? [
+        'supersedes:',
+        '  - predecessor-record',
+        'provenance:',
+        '  - bootstrap',
         'affected_rules: []',
-      ];
+      ]
+    : ['supersedes: [predecessor-record]', 'provenance: ["bootstrap"]', 'affected_rules: []'];
   return [
     '---',
     '# fixture frontmatter',
@@ -126,9 +122,9 @@ describe('ADR validation', () => {
 
     const result = validateAdrs({ adrsDir: dir });
     expect(result.ok).toBe(false);
-    expect(result.errors.some(({ message }) => message.includes("does not start with id 'ADR-002-'"))).toBe(
-      true,
-    );
+    expect(
+      result.errors.some(({ message }) => message.includes("does not start with id 'ADR-002-'")),
+    ).toBe(true);
     expect(result.errors.filter(({ message }) => message.includes('body missing'))).toHaveLength(2);
     expect(result.errors.some(({ message }) => message.includes('numbering gap'))).toBe(true);
     expect(result.adrs[0]?.adr_id).toBe('ADR-002');

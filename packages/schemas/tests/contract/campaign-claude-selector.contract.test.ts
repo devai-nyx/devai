@@ -19,10 +19,7 @@ const ACTIVE_CAMPAIGN_INSTRUCTIONS = [
 describe('Owner-selected Claude review model', () => {
   it('records the live Opus-only narrowing as an Owner mandate', () => {
     const mandate = readFileSync(join(ROOT, 'product/owner-mandates/OM-003.md'), 'utf8');
-    const historicalMandate = readFileSync(
-      join(ROOT, 'product/owner-mandates/OM-002.md'),
-      'utf8',
-    );
+    const historicalMandate = readFileSync(join(ROOT, 'product/owner-mandates/OM-002.md'), 'utf8');
     const frontmatter = mandate.match(/^---\n([\s\S]*?)\n---\n/);
 
     expect(frontmatter).toBeTruthy();

@@ -222,9 +222,7 @@ describe('task record persistence', () => {
         },
       });
       expect(second.task.status).toBe('lock_denied');
-      expect(second.lock_denied).toEqual([
-        { target: 'F2:MOD-SHARED', held_by: 'TASK-0011' },
-      ]);
+      expect(second.lock_denied).toEqual([{ target: 'F2:MOD-SHARED', held_by: 'TASK-0011' }]);
       expect(completeTask({ repoRoot: repo, taskId: 'TASK-0011' }).status).toBe('completed');
     });
   });
