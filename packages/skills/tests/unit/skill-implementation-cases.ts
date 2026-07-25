@@ -1,4 +1,4 @@
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -9,6 +9,7 @@ import { withAuthorityHostTestScope } from './authority-host-test-scope.js';
 
 const roots: string[] = [];
 const NOW = '2026-07-24T00:00:00.000Z';
+const R20_FIXTURES = join(import.meta.dirname, '..', 'contract', 'fixtures', 'r20-baseline');
 
 afterEach(() => {
   for (const path of roots.splice(0)) rmSync(path, { recursive: true, force: true });
@@ -209,6 +210,77 @@ describe('scaffolder and round skill envelopes', () => {
         status: 'fail',
       });
     }
+  });
+
+  it('renders every deterministic scaffolder idempotently and reports file drift', async () => {
+    const repo = root();
+    const blueprintPath = join(repo, 'blueprint.json');
+    writeFileSync(
+      blueprintPath,
+      readFileSync(join(R20_FIXTURES, 'BP-DEMO-BOOKMARK-001.json'), 'utf8'),
+    );
+    writeFileSync(
+      join(repo, 'package.json'),
+      JSON.stringify({ dependencies: { '@nestjs/core': '10.0.0', '@angular/core': '17.0.0' } }),
+    );
+    cpSync(
+      join(R20_FIXTURES, 'redox-pack-nestjs-postgres-angular'),
+      join(repo, 'examples/redox-pack-nestjs-postgres-angular'),
+      { recursive: true },
+    );
+
+    await withAuthorityHostTestScope(async () => {
+      for (const id of [
+        'SKILL-scaffold-db',
+        'SKILL-scaffold-api',
+        'SKILL-scaffold-ui',
+        'SKILL-scaffold-tests',
+        'SKILL-scaffold-docs',
+        'SKILL-scaffold-ci',
+      ]) {
+        const fresh = await skill(id).run({
+          repoRoot: repo,
+          inputs: { blueprint_path: blueprintPath },
+        });
+        expect(fresh).toMatchObject({
+          skill_id: id,
+          status: 'pass',
+          evidence: { idempotency: 'fresh' },
+        });
+        expect(
+          (fresh.evidence as { files_created: string[] }).files_created.length,
+          `${id} must create an assertion-visible product`,
+        ).toBeGreaterThan(0);
+
+        const repeat = await skill(id).run({
+          repoRoot: repo,
+          inputs: { blueprint_path: blueprintPath },
+        });
+        expect(repeat).toMatchObject({
+          skill_id: id,
+          status: 'pass',
+          evidence: { idempotency: 'no-op' },
+        });
+      }
+
+      writeFileSync(
+        join(repo, 'domain/demo-bookmark/api/src/demo-bookmark/demo-bookmark.module.ts'),
+        'operator-owned drift\n',
+      );
+      const drift = await skill('SKILL-scaffold-api').run({
+        repoRoot: repo,
+        inputs: { blueprint_path: blueprintPath },
+      });
+      expect(drift).toMatchObject({
+        status: 'review',
+        evidence: {
+          idempotency: 'drift-detected',
+          drift_report: {
+            differing_files: [expect.objectContaining({ actual_sha256: expect.any(String) })],
+          },
+        },
+      });
+    });
   });
 
   it('materializes audit/backlog and emits safe orchestration and execution plans', async () => {
