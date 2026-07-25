@@ -19,8 +19,8 @@ provenance:
 
 This report is chronological. The initial B8 observations and each correction snapshot
 are retained as historical evidence; they are not current-candidate claims. The
-authoritative current observation is **Third Opus correction and fourth-review
-candidate re-close** below. A fourth independent review still precedes source push. The later
+authoritative current observation is **Fourth Opus correction and fifth-review
+candidate re-close** below. A fifth independent review still precedes source push. The later
 Architect closing decision, source merge, exact-main observation, and machine closure
 record remain part of the two-PR close and are not predicted here.
 
@@ -545,10 +545,10 @@ The P0 correction remained role-pure and red-first:
   deletion and unavailable-history behavior. DII-134 and Engineer
   `6fbe40c3e5d09b8a63f4f1db51bec38cd34f34de` inspect committed
   name-status and patch evidence and fail closed.
-- BL-078: DII-135 states the historical conformance limit without rewriting proof
-  bytes. PC-0002 has failing gate `coverage-t1-t3` and a null
-  `failed_validation_criterion`; it predates DII-124 and would be rejected as a new
-  closure by the current production verb. PC-0003 must satisfy the strict rule.
+- BL-078: DII-135 reached the correct historical conformance conclusion but misstated
+  the record shape. PC-0002 has failing gate `coverage-t1-t3`; its two failing
+  `validation_criteria` do not contain that standalone token. DII-137 corrects the
+  evidence without rewriting proof bytes. PC-0003 must satisfy the strict rule.
 - BL-079: the backlog register now classifies the gapless BL-001 through BL-084
   population by current disposition without rewriting historical item text.
 - BL-082: Inspector `f5ba1ebd56f162033bda084c6fbd7be2b6581737` established the
@@ -557,10 +557,9 @@ The P0 correction remained role-pure and red-first:
   metadata form; cold prewarm and version execution pass.
 - BL-083: the review premise that `rev-list` existed only in the Inspector scope is
   refuted by the production CLI broker and post-merge auditor, both of which authorize
-  and execute it. Removing it broke the real post-merge receipt tests.
-  Inspector `ab41b900073c38a51eb36a1e9ca0a467b9a8bae2` restored the exact
-  production mirror and pinned fail-closed Constitution bytes in affected CLI
-  fixtures; 19 focused integration/unit cases pass.
+  and execute it. Removing it broke the real post-merge receipt tests. That correction
+  still left `git show` in the Inspector scope without a production-broker match; the
+  fourth review reopened the item and BL-090 later removed it.
 
 Fresh merged T1+T3 coverage executes 75 files with 832 passing tests and 7 declared
 skips:
@@ -587,12 +586,42 @@ Exact local execution at clean pre-audit source snapshot
 - literal global Prettier, `git diff --check`, trace freshness, and worktree
   cleanliness pass.
 
-BL-074 through BL-079 and BL-082 through BL-083 are closed at this observation.
+BL-074 through BL-079 and BL-082 are closed at this observation.
 BL-080 and BL-084 remain prepared in R-0004, BL-081 remains prepared in R-0006, and
 DII-135 narrows current claims accordingly. The trace reading proves marker and
 tracked-path completeness, not the stronger assertion-semantic guarantee assigned to
-BL-081. The fourth exact-candidate Opus 5 PASS, exact local ladder, source PR, and
+BL-081. The fourth exact-candidate Opus 5 review, exact local ladder, source PR, and
 closure-only PR remain mandatory.
+
+## Fourth Opus correction and fifth-review candidate re-close
+
+The fourth exact-candidate Claude Opus 5 review ran read-only through literal
+`claude-opus-5` with no fallback against
+`892c24b8ec96603dc62b67a55bb5a9085db5b170`. It returned **FAIL** and is
+preserved at `work/audit/R-0002/claude-opus-close-review-4.md`; the candidate did not
+advance to push. Auditor `e0cf1ef` governed BL-085 through BL-093 and reopened
+BL-074, BL-077, BL-078, and BL-083 before repair.
+
+The correction remained red-first and role-pure:
+
+- Inspector `d074c4b` established nine failures covering exhaustive BL-017
+  instructions, current-plan digest binding, prepared residual ownership, protected
+  in-place mutations, malformed registry bytes, no-Git history, and the Git-command
+  mirror. It also pins the permitted global formatting exclusions.
+- Architect `22f8a4c` retired the remaining AGENTS, CLAUDE, CAMPAIGN, and R-0005 red
+  instructions; added BL-065/080/084 to R-0004 and BL-063 to R-0005; broadened the
+  canonical authority-path pattern; and recorded DII-137. DII-137 binds the amended
+  plan digest, corrects PC-0002's actual criterion shape, and reopens DII-136.
+- Engineer `e9c45eb` uses production-authorized `git diff-tree` rather than
+  Inspector-only `git show`, fails sealed history closed without `.git`, treats
+  malformed registries as explicit findings, and detects neutral updates throughout
+  the claimed law/product/work/record/config surfaces. Focused execution passes 74
+  tests and both affected builds.
+
+BL-074, BL-077, BL-078, BL-083, and BL-085 through BL-093 are closed at this
+observation. The fourth review's locale-sensitive reference-generation advisory
+remains explicitly within BL-065/R-0004; it is not relabelled complete. A fifth
+exact-candidate Opus 5 PASS and the complete local/remote ceremony remain mandatory.
 
 ## PC-0002 correction
 
@@ -603,7 +632,7 @@ production machine verb after BL-049 passed. Its source proof epoch is
 
 ## Residuals and closing posture
 
-The source PR may merge only after the fourth independent Claude Opus 5 review and exact
+The source PR may merge only after the fifth independent Claude Opus 5 review and exact
 candidate checks. After that merge, the closure-only branch must append the next
 machine PC record against the exact source merge SHA and verify final exact-main state.
 Every required source and exact-main workflow must be green; BL-017 is no longer an
