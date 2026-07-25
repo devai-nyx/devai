@@ -752,6 +752,42 @@
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
+      "locator": "packages/evidence/tests/unit/actions-run.test.ts:124:18:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "packages/evidence/tests/unit/actions-run.test.ts:125:19:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "packages/evidence/tests/unit/actions-run.test.ts:60:20:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "packages/evidence/tests/unit/actions-run.test.ts:61:21:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "packages/evidence/tests/unit/actions-run.test.ts:79:18:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "packages/evidence/tests/unit/actions-run.test.ts:80:19:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
       "locator": "packages/loop/package.json:50:36:devai-nyx/devai",
       "classification": "package-metadata",
       "action": "retain",

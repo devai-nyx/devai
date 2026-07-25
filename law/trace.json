@@ -383,6 +383,11 @@
         },
         {
           "suite": "unit",
+          "path": "packages/spec/tests/unit/test-trace-validator.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/spec/tests/unit/xref-resolver.test.ts",
           "target_type": "test"
         },
@@ -544,6 +549,11 @@
         {
           "suite": "unit",
           "path": "packages/skills/tests/unit/round-utilities.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/round-verdict.test.ts",
           "target_type": "test"
         }
       ]
@@ -708,6 +718,16 @@
       "tests": [
         {
           "suite": "unit",
+          "path": "packages/cli/tests/unit/hooks-install.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/render-mermaid.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/skills/tests/unit/fix-skills.test.ts",
           "target_type": "test"
         },
@@ -757,6 +777,11 @@
           "target_type": "test"
         },
         {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/bounded-writer.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "sec",
           "path": "tests/containment/apply-edits.containment.test.ts",
           "target_type": "test"
@@ -769,6 +794,11 @@
         {
           "suite": "unit",
           "path": "packages/evidence/tests/unit/local-evidence.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/release-control.test.ts",
           "target_type": "test"
         },
         {
@@ -788,7 +818,17 @@
         },
         {
           "suite": "unit",
+          "path": "packages/evidence/tests/unit/actions-run.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/skills/tests/unit/round-utilities.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/utils/tests/unit/state-profile.test.ts",
           "target_type": "test"
         }
       ]
@@ -803,12 +843,27 @@
         },
         {
           "suite": "unit",
+          "path": "packages/cli/tests/unit/hooks-install.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/actions-run.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/evidence/tests/unit/agent-run.test.ts",
           "target_type": "test"
         },
         {
           "suite": "unit",
           "path": "packages/evidence/tests/unit/local-evidence.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/release-control.test.ts",
           "target_type": "test"
         },
         {
@@ -1072,6 +1127,23 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/cli/tests/unit/hooks-install.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-013",
+        "INV-DEVAI-018"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/cli/tests/unit/render-mermaid.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-013"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/cli/tests/unit/sense-run-readiness.test.ts",
       "suite": "unit",
       "invariant_ids": [
@@ -1124,6 +1196,15 @@
       "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/evidence/tests/unit/actions-run.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-017",
+        "INV-DEVAI-018"
       ],
       "lifecycle": "supported"
     },
@@ -1199,6 +1280,15 @@
         "INV-DEVAI-003",
         "INV-DEVAI-004",
         "INV-DEVAI-005"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/loop/tests/unit/release-control.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-016",
+        "INV-DEVAI-018"
       ],
       "lifecycle": "supported"
     },
@@ -1486,6 +1576,14 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/skills/tests/unit/bounded-writer.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-015"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/skills/tests/unit/cli-client.test.ts",
       "suite": "unit",
       "invariant_ids": [
@@ -1609,6 +1707,14 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/skills/tests/unit/round-verdict.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-005"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/spec/tests/contract/r29-currentness-behavior.red.test.ts",
       "suite": "contract",
       "invariant_ids": [
@@ -1642,6 +1748,14 @@
       "invariant_ids": [
         "INV-DEVAI-001",
         "INV-RBAC-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/spec/tests/unit/test-trace-validator.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
@@ -1690,6 +1804,14 @@
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/utils/tests/unit/state-profile.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-017"
       ],
       "lifecycle": "supported"
     },
