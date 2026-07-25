@@ -193,16 +193,44 @@ function gitFile(repoRoot: string, commit: string, path: string): string | null 
   return git(repoRoot, ['show', `${commit}:${path}`]);
 }
 
-function normalizedFrontmatterWithoutSupersededBy(record: ParsedGovernanceRecord): string {
-  const { superseded_by: _allowed, ...rest } = record.frontmatter;
+function normalizedSealedFrontmatter(record: ParsedGovernanceRecord): string {
+  const { status: _lifecycle, superseded_by: _replacement, ...rest } = record.frontmatter;
   return JSON.stringify(rest);
 }
 
-function lockedHistoryFindings(
+function replacementId(record: ParsedGovernanceRecord): string | null {
+  const value = record.frontmatter['superseded_by'];
+  return typeof value === 'string' && value.length > 0 ? value : null;
+}
+
+function sealedTransitionAllowed(
+  before: ParsedGovernanceRecord,
+  after: ParsedGovernanceRecord,
+): boolean {
+  const beforeStatus = String(before.frontmatter['status']);
+  const afterStatus = String(after.frontmatter['status']);
+  const beforeReplacement = replacementId(before);
+  const afterReplacement = replacementId(after);
+
+  if (beforeStatus === 'active') {
+    if (afterStatus === 'active') return afterReplacement === beforeReplacement;
+    if (afterStatus === 'superseded') {
+      return beforeReplacement === null && afterReplacement !== null;
+    }
+    if (afterStatus === 'tombstoned') return afterReplacement === beforeReplacement;
+    return false;
+  }
+  return (
+    ['superseded', 'tombstoned'].includes(beforeStatus) &&
+    afterStatus === beforeStatus &&
+    afterReplacement === beforeReplacement
+  );
+}
+
+function sealedHistoryFindings(
   repoRoot: string,
   record: ParsedGovernanceRecord,
 ): GovernanceFinding[] {
-  if (!['locked', 'accepted'].includes(String(record.frontmatter['status']))) return [];
   const rel = relative(repoRoot, record.path);
   const commits = (git(repoRoot, ['log', '--follow', '--format=%H', '--reverse', '--', rel]) ?? '')
     .split('\n')
@@ -216,7 +244,7 @@ function lockedHistoryFindings(
       const candidate = parseRecordSource(rel, source);
       if (
         validators.recordMeta(candidate.frontmatter) &&
-        ['locked', 'accepted'].includes(String(candidate.frontmatter['status']))
+        ['active', 'superseded', 'tombstoned'].includes(String(candidate.frontmatter['status']))
       ) {
         sealed = candidate;
         sealIndex = index;
@@ -233,26 +261,13 @@ function lockedHistoryFindings(
     const later = parseRecordSource(rel, laterSource);
     if (
       later.body !== sealed.body ||
-      normalizedFrontmatterWithoutSupersededBy(later) !==
-        normalizedFrontmatterWithoutSupersededBy(sealed)
+      normalizedSealedFrontmatter(later) !== normalizedSealedFrontmatter(sealed) ||
+      !sealedTransitionAllowed(sealed, later)
     ) {
       return [
         {
           code: 'DECISION_LOCKED_BODY_MUTATED',
-          message: `${rel} changed after its sealing commit; only superseded_by appends are allowed.`,
-          path: rel,
-        },
-      ];
-    }
-    const before = sealed.frontmatter['superseded_by'];
-    const after = later.frontmatter['superseded_by'];
-    const beforeIds = Array.isArray(before) ? before.map(String) : [];
-    const afterIds = Array.isArray(after) ? after.map(String) : [];
-    if (beforeIds.some((id) => !afterIds.includes(id)) || afterIds.length < beforeIds.length) {
-      return [
-        {
-          code: 'DECISION_LOCKED_BODY_MUTATED',
-          message: `${rel} removed a sealed superseded_by entry.`,
+          message: `${rel} changed after its sealing commit; only a canonical terminal lifecycle transition is allowed.`,
           path: rel,
         },
       ];
@@ -315,21 +330,23 @@ export function decisionRecordIntegrity(options: {
       });
     }
     records.set(id, record);
-    findings.push(...lockedHistoryFindings(options.repoRoot, record));
+    findings.push(...sealedHistoryFindings(options.repoRoot, record));
   }
 
   for (const [id, record] of records) {
     const supersedes = Array.isArray(record.frontmatter['supersedes'])
       ? record.frontmatter['supersedes'].map(String)
       : [];
-    const supersededBy = Array.isArray(record.frontmatter['superseded_by'])
-      ? record.frontmatter['superseded_by'].map(String)
-      : [];
+    const supersededBy =
+      typeof record.frontmatter['superseded_by'] === 'string'
+        ? [record.frontmatter['superseded_by']]
+        : [];
     for (const target of supersedes) {
       const other = records.get(target);
-      const reverse = Array.isArray(other?.frontmatter['superseded_by'])
-        ? other.frontmatter['superseded_by'].map(String)
-        : [];
+      const reverse =
+        typeof other?.frontmatter['superseded_by'] === 'string'
+          ? [other.frontmatter['superseded_by']]
+          : [];
       if (other === undefined || !reverse.includes(id)) {
         findings.push({
           code: 'DECISION_SUPERSESSION_ASYMMETRIC',
