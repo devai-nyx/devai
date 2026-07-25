@@ -23,7 +23,7 @@ decision, source merge, exact-main observation, and machine closure record are p
 the two-PR close and therefore were not predicted by the initial B8 observation.
 Post-review corrections discovered by the literal shared exit floor are appended
 below through closure-validation candidate
-`68f682e30d2cdeb13ee3fb4d15f65c57531023ab`.
+`dd5787d6591e2cd970ad349e8346f61eef040662`.
 
 The round re-binds frozen predecessor truth and repairs the scoped operational
 contracts. It ratifies nothing, releases nothing, deploys nothing, and transfers no
@@ -55,16 +55,16 @@ The local predecessor checkout was observed clean at
 
 ## Batches and role attribution
 
-| Batch         | Role                             | Commits and observed result                                                                                                                                                                                                                                                     |
-| ------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| B0            | Architect                        | `d528c06420b398ed82b20649db71fac9d91638ae` declared the exact base, scope, claims ceiling, and opening reds.                                                                                                                                                                    |
-| B1            | Auditor                          | `3d8d899ae08dbb0378cdfe930d314c7ad994edd7` independently recorded the immutable and host opening state.                                                                                                                                                                         |
-| B2            | Inspector                        | `69caf2bfce5ab45cf53dd2fffb5f0590c49af27f`, `b1fa018ba11cc76570a0545f1e9e2edadcd827ed`, and `902938ae8cabf111060b2cb1f7f15b7f455ab595` established and corrected the red-first contracts without changing production behavior.                                                  |
-| B3            | Engineer                         | `f9b44082dc2365722748ff71246c0d616b79a4e7` made Corepack prewarming and closure validation deterministic and established the managed-runtime ignore boundary.                                                                                                                   |
-| B4–B5         | Architect / Engineer / Inspector | `f5c27ee2b3ff1b8ec5d9f8443fc2a13e3a7c00a5`, `68757da4d0879734c5bae958fc361fcd89007660`, `7a6c4d675735a2761ac3d681112adecfbdbeca28`, and `92385432ba79c378e40096105d3c86209da3e2c4` re-bound law, materialized operational policy and trace, and replaced the scoped known reds. |
-| B5 correction | Inspector / Engineer / Architect | `c98531149ffc9781307ae89c526e9a9cafe3a2ac`, `019b86446025247146b013ebdcef3eed92dcf4de`, and `95b1aaf747e8cde561f59e1fda977bb04632b8a4` exposed and then authorized the canonical machine-proof path through a role-pure red-first sequence.                                     |
-| B6            | Machine / Inspector              | `bec810bb38e74ebdf0bd31ec3ee90aa0b186d1ed` emitted PC-0002 through the production closure verb; `ab1ef5a2338f76d04fa2af383e51839ecc9a4d9f` verifies append-only supersession and ledger selection.                                                                              |
-| B7            | Inspector / Engineer             | `429e89d063500523ca45e84113c6f62c2c69a492` kept the new contract lint-clean; `3f2275bb54086b5882cae3662899fceac6b56b3a` repaired candidate-Constitution version parsing exposed by the production T1 gate.                                                                      |
+| Batch         | Role                             | Commits and observed result                                                                                                                                                                                                                                                           |
+| ------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| B0            | Architect                        | `d528c06420b398ed82b20649db71fac9d91638ae` declared the exact base, scope, claims ceiling, and opening reds.                                                                                                                                                                          |
+| B1            | Auditor                          | `3d8d899ae08dbb0378cdfe930d314c7ad994edd7` independently recorded the immutable and host opening state.                                                                                                                                                                               |
+| B2            | Inspector                        | `69caf2bfce5ab45cf53dd2fffb5f0590c49af27f`, `b1fa018ba11cc76570a0545f1e9e2edadcd827ed`, and `902938ae8cabf111060b2cb1f7f15b7f455ab595` established and corrected the red-first contracts without changing production behavior.                                                        |
+| B3            | Engineer                         | `f9b44082dc2365722748ff71246c0d616b79a4e7` made Corepack prewarming and closure validation deterministic and established the managed-runtime ignore boundary.                                                                                                                         |
+| B4–B5         | Architect / Engineer / Inspector | `f5c27ee2b3ff1b8ec5d9f8443fc2a13e3a7c00a5`, `68757da4d0879734c5bae958fc361fcd89007660`, `7a6c4d675735a2761ac3d681112adecfbdbeca28`, and `92385432ba79c378e40096105d3c86209da3e2c4` re-bound law, materialized operational policy and trace, and replaced the scoped known reds.       |
+| B5 correction | Inspector / Engineer / Architect | `c98531149ffc9781307ae89c526e9a9cafe3a2ac`, `019b86446025247146b013ebdcef3eed92dcf4de`, and `95b1aaf747e8cde561f59e1fda977bb04632b8a4` exposed and then authorized the canonical machine-proof path. DII-109 records the final commit’s historical generated-byte attribution defect. |
+| B6            | Machine / Inspector              | `bec810bb38e74ebdf0bd31ec3ee90aa0b186d1ed` emitted PC-0002 through the production closure verb; `ab1ef5a2338f76d04fa2af383e51839ecc9a4d9f` verifies append-only supersession and ledger selection.                                                                                    |
+| B7            | Inspector / Engineer             | `429e89d063500523ca45e84113c6f62c2c69a492` kept the new contract lint-clean; `3f2275bb54086b5882cae3662899fceac6b56b3a` repaired candidate-Constitution version parsing exposed by the production T1 gate.                                                                            |
 
 ## Scoped backlog reconciliation
 
@@ -87,6 +87,7 @@ The local predecessor checkout was observed clean at
 | BL-053 | Source correction closed; exact-candidate execution is a gate.  | OM-003 records the Owner’s quota pause and Opus-only narrowing. DII-111 and the active campaign instructions require `claude-opus-5`, prohibit fallback, and preserve historical Fable attribution. A 12-case Inspector contract rejects a missing rider, invalid metadata, any active Fable selector, and any active instruction lacking Opus 5. The required Opus review remains a pre-push merge gate, not a source deferral.       |
 | BL-054 | Closed after PC-0003 draft prevalidation.                       | A red-first closure contract proved that Machine attribution was rejected. DII-113 admits `Machine` only as provenance for verb-produced record commits; the schema and `ClosureRole` type now agree; the production closure path records separate Machine and Inspector B6 entries; and byte-hash guards preserve both existing PC records.                                                                                           |
 | BL-055 | Closed after production-write prevalidation.                    | A red-first contract proved both authority-policy copies bound stale pre-format Constitution bytes. DII-115 classifies formatting as a binding-relevant byte change. The production `adopt upgrade` transition refreshed `.devai/config`; the Architect mirror is byte-identical; rules and source/extension digests are unchanged; and a disposable production `govern phase close --write` emitted PC-0003 with Machine attribution. |
+| BL-056 | Closed after publication preflight.                             | A red-first contract proved the canonical phase-closure schema described mutable `.devai/state/closures` instead of the production compliance-proof path. DII-117 binds closure records to `record/proofs/compliance/closures/PC-NNNN.json`; the schema now agrees with implementation, CLI help, authority policy, and the three-tree doctrine without changing record shape or behavior.                                             |
 
 There is no uncatalogued deferral. BL-007’s wider population program is explicitly
 bounded above; BL-045 remains the named R-0001 correction residual; BL-017 is the only
@@ -99,7 +100,7 @@ Fresh local execution at the audited candidate produced:
 
 - Stage 1: workflow lint, repository lint, and typecheck pass.
 - Stage 2: build passes; T1 passes 48 files / 591 tests; T2 passes 30 files /
-  176 tests with 1 declared skip.
+  177 tests with 1 declared skip.
 - T3 passes 9 files / 50 tests with 7 declared skips.
 - T4 passes 2 files / 4 tests.
 - T5 passes 6 files / 25 tests.
@@ -260,6 +261,29 @@ the production command emitted PC-0003 successfully with separate Machine and In
 B6 entries, the acknowledged `coverage-t1-t3` failure, and
 `none-preratification`. Stage 2 now passes 30 T2 files / 176 tests / 1 declared skip;
 the global formatting gate remains green.
+
+## Publication-preflight BL-056 correction
+
+The publication evidence preflight found that the canonical phase-closure schema still
+claimed the production close verb wrote tracked records under
+`.devai/state/closures/<id>.json`. That contradicted the production implementation,
+CLI help, authority policy, and approved three-tree doctrine, all of which place
+immutable closure proof under `record/proofs/compliance/closures/`. Auditor commit
+`ca72277b4e61e12502fc8ef0faba5794e85106c9` governed BL-056 before repair.
+
+The correction remained red-first and role-pure:
+
+- Inspector commit `5fe07a9b248168e6bde9b56fde25b97062bf4d99` proved the canonical
+  schema named the wrong proof path; and
+- Architect commit `dd5787d6591e2cd970ad349e8346f61eef040662` recorded DII-117 and
+  corrected only the schema description to
+  `record/proofs/compliance/closures/PC-NNNN.json`.
+
+The focused phase-closure contract passes 15 tests, the full Vitest floor passes 96
+files / 850 tests / 8 declared skips, and Stage 2 passes 48 T1 files / 591 tests and 30
+T2 files / 177 tests / 1 declared skip. Coverage still builds and runs 57 files / 641
+tests / 7 declared skips before failing only at the unchanged BL-017 readings quoted
+above. PC-0001 and PC-0002 remain byte-identical.
 
 ## PC-0002 correction
 
