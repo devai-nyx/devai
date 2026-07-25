@@ -23,7 +23,18 @@ function repoWithTwoClosures(): string {
   for (const id of ['PC-0001', 'PC-0002']) {
     writeFileSync(
       join(dir, `${id}.json`),
-      `${JSON.stringify({ id, round_id: `fixture-${id}` })}\n`,
+      `${JSON.stringify({
+        schemaVersion: '1.0.0',
+        id,
+        round_id: `fixture-${id}`,
+        declaring_decision: 'DII-100',
+        closing_decision: 'DII-101',
+        batches: [{ id: 'fixture', roles: ['Architect'], headline: 'fixture close' }],
+        gates: { fixture: { status: 'pass' } },
+        source_repo_deleted: false,
+        validation_criteria: [{ criterion: 'fixture', verdict: 'pass' }],
+        closed_at: '2026-07-24T00:00:00.000Z',
+      })}\n`,
     );
   }
   return repo;
