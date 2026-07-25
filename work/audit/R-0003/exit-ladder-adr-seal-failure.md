@@ -7,7 +7,7 @@ date: 2026-07-25
 authority: Auditor
 supersedes: null
 superseded_by: null
-provenance: [DII-153 candidate 46535a3; R-0003 exact local ladder; BL-128]
+provenance: [rejected local candidate 46535a3; R-0003 exact local ladder; BL-128]
 ---
 
 # Exact-candidate ADR seal failure
@@ -26,5 +26,6 @@ terminally to `superseded` and a new gapless ADR must carry the corrected active
 set. No locked body may be silently rewritten.
 
 This failure changes no doctrine, release state, readiness, evidence standing, or
-coverage threshold. DII-153 is not a source-close authorization until a superseding
-decision binds the legal correction and a new exact ladder and Opus review pass.
+coverage threshold. The rejected candidate is not a source-close authorization. The
+clean rebuilt candidate requires a legal correction, new closing decision, new exact
+ladder, and fresh Opus review.
