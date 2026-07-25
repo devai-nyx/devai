@@ -1104,7 +1104,7 @@ failing validation criterion is admitted. R-0002 remains draft, ratifies nothing
 releases nothing, deploys nothing, and transfers no readiness or evidence standing.
 
 ### DII-131 — OM-005's satisfied condition closes BL-017 in R-0002
-`type: decision · status: draft · authority: Architect · provenance: OM-004; OM-005; OM-006; R-0002 third Claude Opus 5 correction; BL-074`
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 third Claude Opus 5 correction; OM-004; OM-005; OM-006; BL-074`
 
 OM-004's initial R-0006 ownership and DII-119's matching forecast were written while
 the unchanged legal coverage floors were red. OM-005 later authorized R-0002 to
@@ -1118,7 +1118,7 @@ expected coverage red, an exception, or R-0006 ownership. Historical red reading
 their then-current forecasts remain chronological evidence only.
 
 ### DII-132 — Authority binding uses one fail-closed Constitution parser
-`type: decision · status: draft · authority: Architect · provenance: R-0002 third Claude Opus 5 correction; BL-075`
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 third Claude Opus 5 correction; BL-075`
 
 Every authority-policy binding consumes the canonical
 `parseConstitutionVersion` implementation. Both `Version` and `Candidate version`
@@ -1130,7 +1130,7 @@ of synthetic bytes. A repository without canonical self bytes may bind only an
 existing pinned Constitution whose exact bytes carry a valid version marker.
 
 ### DII-133 — Sealed history follows renames and treats Git failure as a finding
-`type: decision · status: draft · authority: Architect · provenance: DII-128; R-0002 third Claude Opus 5 correction; BL-076`
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 third Claude Opus 5 correction; DII-128; BL-076`
 
 Complete sealed history includes the path in force at each commit. A rename does not
 create a new sealing boundary and cannot hide body or frontmatter mutation in the
@@ -1142,7 +1142,7 @@ or read a named revision produces a deterministic integrity finding. Only a conf
 non-shallow repository with successfully enumerated record history may report clean.
 
 ### DII-134 — Forbidden-action scanning includes committed path evidence
-`type: decision · status: draft · authority: Architect · provenance: R-0002 third Claude Opus 5 correction; BL-077`
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 third Claude Opus 5 correction; BL-077`
 
 Each scanned commit is evaluated against its message and deterministic committed
 change evidence. Change evidence includes name-status paths rendered as the
@@ -1153,6 +1153,30 @@ committed `.devai/config/` authority surfaces.
 The scanner emits at most one finding per rule and commit, identifies which evidence
 class matched, and fails closed when a requested commit cannot be inspected. This
 expands detection input only; it grants no mutation authority.
+
+### DII-135 — Historical closure conformance and fourth-review residuals are explicit
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 third Claude Opus 5 correction; DII-124; BL-078; BL-080–084`
+
+PC-0002 predates DII-124's exact failed-gate-token rule. Its
+`coverage-t1-t3` gate is `fail` while `failed_validation_criterion` is null, so its
+immutable bytes would not validate as a newly emitted closure under the current
+production verb. It remains historical append-only correction evidence rather than a
+template for PC-0003. PC-0003 must satisfy the current strict verb against the exact
+source merge SHA.
+
+R-0002 closes BL-082 by pinning the root Corepack identity to the registry-provided
+pnpm 9.15.0 SHA-512 digest and closes BL-083 by restricting Inspector Git reads to
+commands exercised by production. BL-080 and BL-084 remain prepared in R-0004; BL-081
+remains prepared in R-0006. Those residuals prohibit governed-surface or
+assertion-depth readiness claims until their assigned rounds close them, but they are
+not concealed R-0002 gate failures and do not authorize serial-round bypass.
+
+Current trace evidence proves the deterministic marker and tracked-path contract
+defined by DII-125 and DII-129. Until BL-081 closes, no R-0002 statement may strengthen
+that evidence into a universal assertion-semantic guarantee. Likewise, selector
+coverage claims are limited to the explicitly enumerated active campaign instruction
+set exercised by the contract; they do not imply discovery of every future prose
+surface.
 
 ## Appendix — Register-consistency guard
 
