@@ -20,6 +20,37 @@ import { senseInventoryDepGraph } from '../../src/inventory-dep-graph.js';
 import { senseInventoryDataHandling } from '../../src/inventory-data-handling.js';
 import { senseInventoryRbac } from '../../src/inventory-rbac.js';
 import { senseInventoryCoverage } from '../../src/inventory-coverage.js';
+import { senseDocsDrift } from '../../src/docs-drift.js';
+import { senseHarnessCoherence } from '../../src/harness-coherence.js';
+import { senseHarnessCoverage } from '../../src/harness-coverage.js';
+import { senseHarnessDepth } from '../../src/harness-depth.js';
+import { senseHarnessGreenMain } from '../../src/harness-green-main.js';
+import { senseHarnessIdiomaticity } from '../../src/harness-idiomaticity.js';
+import { senseHarnessInvariantAlignment } from '../../src/harness-invariant-alignment.js';
+import { senseHarnessPerformance } from '../../src/harness-performance.js';
+import { senseHarnessRobustness } from '../../src/harness-robustness.js';
+import { senseHarnessSecurity } from '../../src/harness-security.js';
+import { senseInventoryAdherence } from '../../src/inventory-adherence.js';
+import { senseInventoryDeterminism } from '../../src/inventory-determinism.js';
+import { senseInventoryPerformance } from '../../src/inventory-performance.js';
+import { sensePlantCoherence } from '../../src/plant-coherence.js';
+import { sensePlantCoverage } from '../../src/plant-coverage.js';
+import { sensePlantDepth } from '../../src/plant-depth.js';
+import { senseSpecAlignment } from '../../src/spec-alignment.js';
+import { senseSpecDepth } from '../../src/spec-depth.js';
+import { senseSpecFreshness } from '../../src/spec-freshness.js';
+import { senseSpecIdiomaticity } from '../../src/spec-idiomaticity.js';
+import { senseSpecPerformanceTargets } from '../../src/spec-performance-targets.js';
+import { senseSpecRobustnessTargets } from '../../src/spec-robustness-targets.js';
+import { senseSpecSecurityCoverage } from '../../src/spec-security-coverage.js';
+import { senseTestCoherence } from '../../src/test-coherence.js';
+import { senseTestCoverageDepth } from '../../src/test-coverage-depth.js';
+import { senseTestIdiomaticity } from '../../src/test-idiomaticity.js';
+import { senseTestInvariantAlignment } from '../../src/test-invariant-alignment.js';
+import { senseTestPerformanceCoverage } from '../../src/test-performance-coverage.js';
+import { senseTestRobustnessCoverage } from '../../src/test-robustness-coverage.js';
+import { senseTestSecurityCoverage } from '../../src/test-security-coverage.js';
+import { senseTestWeakening } from '../../src/test-weakening.js';
 
 const roots: string[] = [];
 const NOW = '2026-07-24T00:00:00.000Z';
@@ -566,5 +597,207 @@ describe('data and coverage inventory sensors', () => {
     });
     expect(invalid.reading.status).toBe('error');
     expect(invalid.bodyPath).toBeNull();
+  });
+});
+
+describe('static quality sensor families', () => {
+  it('reports schema-valid readings across populated spec, plant, test, and harness substrate', () => {
+    const root = buildFixture();
+    write(
+      root,
+      'law/invariants/INV-FIXTURE.json',
+      JSON.stringify({
+        id: 'INV-FIXTURE',
+        severity: 'gate',
+        statement: 'The fixture must stay observable and secure.',
+        rationale: 'Exercises static sensor behavior.',
+        scope: { components: ['fixture'], code_areas: ['apps/**'] },
+        measurable_via: ['pnpm test', 'pnpm run test:security', 'pnpm run test:performance'],
+      }),
+    );
+    write(
+      root,
+      'docs/meta/adr/ADR-0001.md',
+      '# ADR-0001\n\n## Context\nFixture context.\n\n## Decision\nUse deterministic tests.\n',
+    );
+    write(
+      root,
+      '.github/workflows/ci.yml',
+      `name: CI
+on:
+  pull_request_target:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pnpm test
+      - run: pnpm run test:security
+      - run: pnpm run test:performance
+`,
+    );
+    write(
+      root,
+      'packages/demo/src/MixedCase.ts',
+      'export function demo(value: string) { if (!value) throw new Error(\"missing\"); return value; }',
+    );
+    write(root, 'packages/demo/src/mixed_case.ts', 'export const mixed = true;');
+    write(
+      root,
+      'packages/demo/test/demo.integration.test.ts',
+      `describe('demo security performance edge cases', () => {
+        beforeEach(() => {});
+        it('rejects unauthorized traversal under load', () => {
+          vi.mock('fixture');
+          vi.fn();
+          expect(() => { throw new Error('denied'); }).toThrow();
+          expect('../../etc/passwd').toContain('..');
+        });
+      });`,
+    );
+    write(
+      root,
+      'record/proofs/sensor-readings/inventory_api/one.json',
+      JSON.stringify({ sensor: { kind: 'inventory_api' }, duration_ms: 25 }),
+    );
+    write(
+      root,
+      'record/proofs/sensor-readings/inventory_api/two.json',
+      JSON.stringify({ sensor: { kind: 'inventory_api' }, duration_ms: 250 }),
+    );
+    write(root, 'record/proofs/sensor-readings/inventory_api/bad.json', '{bad');
+
+    const readings = [
+      senseDocsDrift({ repoRoot: root, now: NOW }),
+      senseHarnessCoherence({ repoRoot: root, now: NOW }),
+      senseHarnessCoverage({ repoRoot: root, now: NOW }),
+      senseHarnessDepth({ repoRoot: root, now: NOW }),
+      senseHarnessIdiomaticity({ repoRoot: root, now: NOW }),
+      senseHarnessInvariantAlignment({ repoRoot: root, candidateHead: 'candidate', now: NOW }),
+      senseHarnessSecurity({ repoRoot: root, now: NOW }).reading,
+      senseInventoryAdherence({
+        report: {
+          counts: { total: 3, claimed: 1, orphan: 2 },
+          orphans: [
+            { kind: 'route', id: '/unclaimed', file: 'apps/web/routes.tsx' },
+            { kind: 'endpoint', id: 'GET /unclaimed' },
+          ],
+        },
+        maxOrphans: 1,
+        now: NOW,
+      }),
+      senseInventoryDeterminism({ canonicalA: 'a', canonicalB: 'b', now: NOW }),
+      senseInventoryPerformance({
+        repoRoot: root,
+        thresholds: { pass: 20, review: 100 },
+        now: NOW,
+      }),
+      sensePlantCoherence({ repoRoot: root, now: NOW }),
+      sensePlantCoverage({ repoRoot: root, now: NOW }),
+      sensePlantDepth({ repoRoot: root, now: NOW }),
+      senseSpecAlignment({ repoRoot: root, now: NOW }),
+      senseSpecDepth({ repoRoot: root, now: NOW }).reading,
+      senseSpecFreshness({
+        repoRoot: root,
+        thresholdDays: 0,
+        now: new Date(NOW),
+      }).reading,
+      senseSpecIdiomaticity({
+        validationResult: {
+          ok: false,
+          files_scanned: 2,
+          errors: [
+            {
+              severity: 'warning',
+              code: 'STATEMENT_LACKS_CNL_MODAL',
+              message: 'missing modal',
+              file: 'one.json',
+            },
+            { severity: 'error', code: 'INVALID_INVARIANT', message: 'invalid' },
+          ],
+        },
+        now: NOW,
+      }),
+      senseSpecPerformanceTargets({ repoRoot: root, now: NOW }),
+      senseSpecRobustnessTargets({ repoRoot: root, now: NOW }),
+      senseSpecSecurityCoverage({ repoRoot: root, now: NOW }),
+      senseTestCoherence({ repoRoot: root, now: NOW }),
+      senseTestCoverageDepth({
+        summary: { lines_total: 10, lines_covered: 4 },
+        thresholds: { pass: 80, review: 50 },
+        now: NOW,
+      }),
+      senseTestIdiomaticity({
+        repoRoot: root,
+        thresholds: { review: 0, fail: 0.5 },
+        now: NOW,
+      }),
+      senseTestInvariantAlignment({ repoRoot: root, now: NOW }),
+      senseTestPerformanceCoverage({ repoRoot: root, now: NOW }),
+      senseTestRobustnessCoverage({ repoRoot: root, now: NOW }),
+      senseTestSecurityCoverage({ repoRoot: root, now: NOW }),
+      senseTestWeakening({
+        cwd: root,
+        files: ['packages/demo/test/demo.integration.test.ts'],
+      }),
+    ];
+
+    expect(readings).toHaveLength(28);
+    for (const reading of readings) {
+      expect(reading.schemaVersion).toBe('1.0.0');
+      expect(['pass', 'review', 'fail', 'unknown', 'error']).toContain(reading.status);
+    }
+    expect(readings.some((reading) => reading.status === 'fail')).toBe(true);
+    expect(readings.some((reading) => reading.status === 'review')).toBe(true);
+    expect(() => senseHarnessGreenMain({ repoRoot: root, now: NOW })).toThrow(
+      'AUTHORITY_FINAL_BOUNDARY_REQUIRED',
+    );
+    expect(() => senseHarnessPerformance({ repoRoot: root, now: NOW })).toThrow(
+      'AUTHORITY_FINAL_BOUNDARY_REQUIRED',
+    );
+    expect(() => senseHarnessRobustness({ repoRoot: root, now: NOW })).toThrow(
+      'AUTHORITY_FINAL_BOUNDARY_REQUIRED',
+    );
+  });
+
+  it('handles absent substrate across every static quality family', () => {
+    const root = fixtureRoot();
+    const readings = [
+      senseDocsDrift({ repoRoot: root, now: NOW }),
+      senseHarnessCoherence({ repoRoot: root, now: NOW }),
+      senseHarnessCoverage({ repoRoot: root, now: NOW }),
+      senseHarnessDepth({ repoRoot: root, now: NOW }),
+      senseHarnessIdiomaticity({ repoRoot: root, now: NOW }),
+      senseHarnessInvariantAlignment({ repoRoot: root, candidateHead: 'candidate', now: NOW }),
+      senseHarnessSecurity({ repoRoot: root, now: NOW }).reading,
+      senseInventoryAdherence({
+        report: { counts: { total: 0, claimed: 0, orphan: 0 } },
+        now: NOW,
+      }),
+      senseInventoryDeterminism({ canonicalA: 'same', canonicalB: 'same', now: NOW }),
+      senseInventoryPerformance({ repoRoot: root, now: NOW }),
+      sensePlantCoherence({ repoRoot: root, now: NOW }),
+      sensePlantCoverage({ repoRoot: root, now: NOW }),
+      sensePlantDepth({ repoRoot: root, now: NOW }),
+      senseSpecAlignment({ repoRoot: root, now: NOW }),
+      senseSpecDepth({ repoRoot: root, now: NOW }).reading,
+      senseSpecFreshness({ repoRoot: root, now: new Date(NOW) }).reading,
+      senseSpecIdiomaticity({ validationResult: { ok: true, errors: [] }, now: NOW }),
+      senseSpecPerformanceTargets({ repoRoot: root, now: NOW }),
+      senseSpecRobustnessTargets({ repoRoot: root, now: NOW }),
+      senseSpecSecurityCoverage({ repoRoot: root, now: NOW }),
+      senseTestCoherence({ repoRoot: root, now: NOW }),
+      senseTestCoverageDepth({ summary: null, now: NOW }),
+      senseTestIdiomaticity({ repoRoot: root, now: NOW }),
+      senseTestInvariantAlignment({ repoRoot: root, now: NOW }),
+      senseTestPerformanceCoverage({ repoRoot: root, now: NOW }),
+      senseTestRobustnessCoverage({ repoRoot: root, now: NOW }),
+      senseTestSecurityCoverage({ repoRoot: root, now: NOW }),
+      senseTestWeakening({ cwd: root, files: [] }),
+    ];
+    expect(readings).toHaveLength(28);
+    expect(readings.every((reading) => reading.schemaVersion === '1.0.0')).toBe(true);
   });
 });
