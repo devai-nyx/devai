@@ -859,6 +859,14 @@ contract remains green. All 19 focused scanner tests and the affected package bu
 pass. BL-117 is re-closed locally; a new exact source run must still pass governed
 enforcement before merge.
 
+The subsequent full local floor correctly failed because Inspector `915d84a` itself
+commits the forbidden command text needed by the BL-117 fixture. Treating a literal
+inside a role-pure test-only commit as proof that the action executed is another
+classification defect, not an authorized action. BL-118 is open until a red-first
+contract bounds a test-fixture exemption to DEVAI Inspector commits whose every
+changed path is a test path. Commit messages, mixed-path changes, other authors,
+path-based evidence, and Git inspection failures remain in force.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the

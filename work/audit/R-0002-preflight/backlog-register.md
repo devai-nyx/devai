@@ -23,7 +23,7 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-117. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-118. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
@@ -33,6 +33,8 @@ findings. BL-094 through BL-106 record the confirmed and bounded fifth exact-can
 findings. BL-107 through BL-112 record the sixth exact-candidate findings. BL-113
 through BL-116 record the seventh exact-candidate residual findings. BL-117 records
 the synthetic pull-request merge aggregation defect exposed by exact source CI.
+BL-118 records the test-fixture classification defect exposed by the BL-117
+red-first commit.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -40,7 +42,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 
 | Primary round | Records                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-117 |
+| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-118 |
 | R-0003        | BL-004, BL-005, BL-006                                                                                                                                                                    |
 | R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084                                                                                            |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
@@ -56,6 +58,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Disposition                         | Governed records                                                                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–117 |
+| Open after BL-117 red-first commit  | BL-118                                                                                                                                           |
 | Open in prepared R-0003             | BL-004–006                                                                                                                                       |
 | Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                                   |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
@@ -1077,6 +1080,19 @@ scanned; its commit-message evidence remains scanned. A merge with novel resolut
 bytes remains fully inspected, including protected deletion evidence. Git ancestry or
 tree inspection failures remain fail-closed. Exact source CI must pass governed
 enforcement on the repaired candidate.
+
+### BL-118 — Distinguish role-pure test fixtures from action evidence
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector + Auditor · provenance: BL-117; Inspector 915d84aa96940a99056076924846dcb737ee756b; R-0002 exact local exit ladder`
+
+Priority: P0 before source merge. Primary round: R-0002.
+
+Acceptance: content-pattern matches in a commit authored by DEVAI Inspector are not
+reported as action evidence only when every changed path is a test path. Commit
+messages remain scanned; mixed test and non-test changes remain scanned; path-based
+authority and CI evidence remains scanned; other authors receive no exemption. A
+contract constructs the fixture without embedding an otherwise self-triggering
+literal in the governed test patch.
 
 ## Carried guard map
 
