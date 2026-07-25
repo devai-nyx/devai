@@ -1464,6 +1464,36 @@ DII-144 as closing decision. Its release disposition remains
 `none-preratification`. Nothing is ratified, released, deployed, published, or
 declared ready by this repair.
 
+### DII-145 — Exclude non-novel synthetic merge aggregation from change evidence
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 second exact-CI repair; OM-007; DII-105; DII-137; DII-144; GitHub Actions run 30171619705@4fc168c8b6a0ce9f15227e6caee66d06fd597a7b; BL-117; Auditor a70067278fb3b096a7e0e620fecbf0df5915bdbd; Inspector 915d84aa96940a99056076924846dcb737ee756b; Engineer b1e6c2a7dcef61ee3ef39fc73a9e5b315a52fbd3; Auditor 1205ddb7a47748834f8cac15fc7606551a1b18c3`
+
+DII-145 supersedes DII-144 only as the R-0002 source-closing judgment. Exact source
+CI run `30171205110` proved that bounded inspection alone was insufficient: GitHub's
+synthetic merge `cb2e93490e3ac439f979f4d7986ae7ac9fe9695e` was readable, but its
+tree was byte-identical to the source-head parent. Treating its aggregate diff as one
+newly authored change duplicated constituent evidence under the merge identity and
+misclassified literal policy, documentation, fixtures, and workflow paths as new
+forbidden actions.
+
+BL-117 narrows the correction to non-novel merge aggregation. Inspector `915d84a`
+proved red that the aggregate merge duplicated a constituent forbidden-pattern
+finding while the constituent commit remained independently discoverable. Engineer
+`b1e6c2a` now reads merge parents from the bounded log and omits aggregate change
+evidence only when the merge tree equals one parent. Commit-message evidence remains
+scanned. Merges with novel resolution bytes retain full path and patch inspection,
+and all Git inspection failures remain fail-closed. Auditor `1205ddb` re-closed
+BL-117 after all 19 focused scanner tests and the affected package build passed.
+
+The exact candidate containing DII-145 and fresh deterministic projections must pass
+the complete local ladder and all required GitHub checks before merge. Its exact
+merge SHA must pass exact-main checks before the closure-only branch may emit PC-0003
+through the production verb.
+
+PC-0003 uses DII-105 as historical declaration, DII-137 as amended-plan binding, and
+DII-145 as closing decision. Its release disposition remains
+`none-preratification`. OM-007 still replaces only the additional final Opus review.
+Nothing is ratified, released, deployed, published, or declared ready by this repair.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
