@@ -94,12 +94,13 @@ function validatesThresholds(value: unknown): boolean {
   );
 }
 
-const REGISTERED_POLICY_SCHEMAS: Partial<Record<BootstrapPolicyFile, Parameters<typeof getValidator>[0]>> =
-  {
-    'forbidden-actions.json': 'forbidden-actions.schema.json',
-    'glob-guards.json': 'glob-guards.schema.json',
-    'scorecard-na.json': 'scorecard-na-config.schema.json',
-  };
+const REGISTERED_POLICY_SCHEMAS: Partial<
+  Record<BootstrapPolicyFile, Parameters<typeof getValidator>[0]>
+> = {
+  'forbidden-actions.json': 'forbidden-actions.schema.json',
+  'glob-guards.json': 'glob-guards.schema.json',
+  'scorecard-na.json': 'scorecard-na-config.schema.json',
+};
 
 export function validateCanonicalPolicyContent(file: BootstrapPolicyFile, bytes: string): string {
   let parsed: unknown;
