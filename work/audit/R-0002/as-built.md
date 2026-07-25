@@ -22,8 +22,8 @@ This report observes the source candidate through
 decision, source merge, exact-main observation, and machine closure record are part of
 the two-PR close and therefore were not predicted by the initial B8 observation.
 Post-review corrections discovered by the literal shared exit floor are appended
-below through formatting candidate
-`871ed4d738d3aea23ef2dbaf2d093c7b561af003`.
+below through closure-validation candidate
+`5d614680cf2c984290a8dac1cb0255a358758f90`.
 
 The round re-binds frozen predecessor truth and repairs the scoped operational
 contracts. It ratifies nothing, releases nothing, deploys nothing, and transfers no
@@ -83,6 +83,7 @@ The local predecessor checkout was observed clean at
 | BL-048 | Closed by append-only correction.                               | PC-0001 retains SHA-256 `56f8d37868ec72ca9b16f22e3f1d74fd2098b2c050f73a230a9c147c250bfad9`. Machine-emitted PC-0002 supersedes it, preserves historical gates, states the unmatched P7 deferral now governed by BL-045, and is selected as the effective R-0001 record.                                                                                                                                             |
 | BL-049 | Closed.                                                         | Numeric DII ordering accepts valid order and rejects equal, inverted, malformed, and mixed-namespace IDs. `none-preratification` is typed end to end and the production CLI emitted PC-0002 under final schema validation.                                                                                                                                                                                          |
 | BL-051 | Closed after final-gate discovery.                              | The first literal repository-wide Prettier execution exposed 352 imported baseline failures. DII-110 excludes only generated/canonical, parser-sensitive, and immutable historical paths; Owner, Architect, Engineer, and Inspector formatted every remaining active file separately; the changed forbidden-action policy was re-materialized through the production verb; and the literal global command is green. |
+| BL-052 | Closed after closure-payload prevalidation.                     | An Inspector red-first contract proved that the production closure verb accepted failed gates with no matching failing validation criterion. The Engineer correction now requires every failed gate key to appear in the criterion or evidence of at least one `verdict: fail` criterion, while preserving all-pass and acknowledged-failure behavior.                                                              |
 
 There is no uncatalogued deferral. BL-007’s wider population program is explicitly
 bounded above; BL-045 remains the named R-0001 correction residual; BL-017 is the only
@@ -95,7 +96,7 @@ Fresh local execution at the audited candidate produced:
 
 - Stage 1: workflow lint, repository lint, and typecheck pass.
 - Stage 2: build passes; T1 passes 48 files / 591 tests; T2 passes 29 files /
-  158 tests with 1 declared skip.
+  162 tests with 1 declared skip.
 - T3 passes 9 files / 50 tests with 7 declared skips.
 - T4 passes 2 files / 4 tests.
 - T5 passes 6 files / 25 tests.
@@ -117,10 +118,10 @@ declared skips. Its only failure is the unchanged BL-017 threshold assertion:
 
 | Metric     | Covered / total | Reading | Floor |
 | ---------- | --------------- | ------- | ----- |
-| Statements | 4,188 / 14,544  | 28.79%  | 70%   |
-| Branches   | 3,308 / 12,178  | 27.16%  | 60%   |
-| Functions  | 606 / 1,899     | 31.91%  | 70%   |
-| Lines      | 3,869 / 12,989  | 29.78%  | 70%   |
+| Statements | 4,188 / 14,551  | 28.78%  | 70%   |
+| Branches   | 3,308 / 12,184  | 27.15%  | 60%   |
+| Functions  | 606 / 1,903     | 31.84%  | 70%   |
+| Lines      | 3,869 / 12,996  | 29.77%  | 70%   |
 
 The coverage provider, collection, and tests succeed. The workflow remains red; BL-017
 is not relabelled, suppressed, or weakened and must close in R-0006.
@@ -153,6 +154,29 @@ Prettier command. Stage 3 again builds and runs 57 files / 641 passed / 7 declar
 skips before failing only at the same BL-017 readings quoted above. Formatting changed
 no governed JSON meaning, immutable predecessor object, PC record, or threshold.
 
+## Post-review BL-052 correction
+
+Closure-payload prevalidation found that `closePhase` documented, but did not enforce,
+the requirement that a failed gate be acknowledged by a matching failing validation
+criterion. Auditor commit
+`aa9d65b23d54b7b7aa130e06a807cbdbafcb6957` governed BL-052 before repair.
+
+The correction remained red-first and role-pure:
+
+- Inspector commit `003226a0af95d9111a418da1232310be4dc8e372` proved that an
+  all-pass criterion set and an unrelated failing criterion were incorrectly accepted;
+  and
+- Engineer commit `5d614680cf2c984290a8dac1cb0255a358758f90` requires each
+  failed gate key to appear in the criterion or evidence of at least one failing
+  criterion while keeping valid acknowledged failures and all-pass closures green.
+
+Fresh execution after the correction passes stage 1, stage 2, T3–T6, changeset
+classification, the scoped production policy/trace commands, and the literal global
+Prettier command. Stage 3 builds and runs 57 files / 641 passed / 7 declared skips,
+then fails only at the updated BL-017 readings quoted above. The later machine R-0002
+closure must name its failed gate exactly as `coverage-t1-t3` and acknowledge that key
+in a `verdict: fail` validation criterion.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
@@ -162,7 +186,7 @@ production machine verb after BL-049 passed. Its source proof epoch is
 
 ## Residuals and closing posture
 
-The source PR may merge only after the independent Claude Fable 5 review and exact
+The source PR may merge only after the independent Claude Opus 5 review and exact
 candidate checks. After that merge, the closure-only branch must append the next
 machine PC record against the exact source merge SHA and verify final exact-main state.
 Both exact-main workflows must be reported red if and only if BL-017 is the sole red.
