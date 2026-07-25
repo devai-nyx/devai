@@ -23,28 +23,26 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-050:
-
-- 44 substantive active items;
-- 2 verify-and-close items: BL-002 and BL-003;
-- 4 completed N/A dispositions: BL-040 through BL-043.
+The governed population is gapless BL-001 through BL-065. BL-051 through BL-058 were
+added during the first R-0002 close-review correction cycles. BL-059 through BL-065
+record the independent Opus 5 exact-candidate findings before remediation.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
 ## Complete round ownership
 
-| Primary round | Records                                                                                        |
-| ------------- | ---------------------------------------------------------------------------------------------- |
-| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-023, BL-046, BL-047, BL-048, BL-049 |
-| R-0003        | BL-004, BL-005, BL-006                                                                         |
-| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031                         |
-| R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050                                         |
-| R-0006        | BL-017, BL-026, BL-034, BL-035                                                                 |
-| R-0007        | BL-019, BL-021, BL-032, BL-039, BL-044                                                         |
-| R-0008        | BL-020, BL-024                                                                                 |
-| R-0009        | BL-022, BL-036                                                                                 |
-| R-0010        | BL-037, BL-038                                                                                 |
-| Carried N/A   | BL-040, BL-041, BL-042, BL-043                                                                 |
+| Primary round | Records                                                                                                               |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064 |
+| R-0003        | BL-004, BL-005, BL-006                                                                                                |
+| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065                                        |
+| R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063                                                        |
+| R-0006        | BL-017, BL-026, BL-034, BL-035                                                                                        |
+| R-0007        | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                |
+| R-0008        | BL-020, BL-024                                                                                                        |
+| R-0009        | BL-022, BL-036                                                                                                        |
+| R-0010        | BL-037, BL-038                                                                                                        |
+| Carried N/A   | BL-040, BL-041, BL-042, BL-043                                                                                        |
 
 ## Dependency spine
 
@@ -393,6 +391,120 @@ following `NOT NULL`; Architect law binds constraint keywords as boundaries whil
 preserving supported multi-word SQL types; Engineer implementation parses both forms
 deterministically; focused and full sensor floors are green; the coverage source set,
 exclusions, and thresholds remain unchanged.
+
+### BL-059 — Remove T1/T3 coverage projection laundering
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0002 Claude Opus 5 exact-candidate review; OM-004; OM-005`
+
+Priority: P0 before source push. Primary round: R-0002.
+
+Seventeen tiny files import existing contract suites into paths selected by the merged
+T1/T3 coverage configuration. They double-execute existing suites and make the
+post-change reading incomparable with the DII-122 baseline without an explicit lane
+change.
+
+Acceptance: remove every projection wrapper; do not change provider, include glob,
+source selection, exclusions, or thresholds; the root floor executes each contract
+once; all coverage improvement comes from behavior-focused tests containing their own
+assertions; re-read exact covered counts and denominators; reconcile OM-005 honestly if
+its target is not met.
+
+### BL-060 — Bind every successor closure to an exact merge and exact failed gates
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: R-0002 Claude Opus 5 exact-candidate review; DII-118; phase-closure schema`
+
+Priority: P0 before PC-0003. Primary round: R-0002.
+
+The production validator applies merge/disposition requirements only to numeric closure
+IDs at or above seven, a predecessor-era cutoff that does not protect successor
+PC-0003. Failed-gate acknowledgment uses substring matching and admits empty or
+ambiguous gate keys.
+
+Acceptance: Inspector reds prove PC-0003 cannot omit `merged_as` or
+`release_disposition`, empty/whitespace gate keys fail, and one gate cannot be
+acknowledged by a criterion for a longer key; Architect law binds exact successor
+semantics; Engineer validation requires exact nonempty gate identity and source merge
+binding without mutating PC-0001/PC-0002; focused and full floors pass.
+
+### BL-061 — Make trace non-vacuity and regeneration truthful
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: R-0002 Claude Opus 5 exact-candidate review; law/trace.json`
+
+Priority: P0 before source push. Primary round: R-0002.
+
+Trace resolution counts invariant IDs before requiring linked tests, while 11 of 34
+invariants have empty test arrays despite `require_test_links: true`. The generated
+trace corpus is stale and current generation rejects newly tracked unmarked tests.
+
+Acceptance: red contracts prove empty test arrays cannot satisfy required trace links
+and generation covers every governed test; bind and implement non-vacuous metrics;
+classify helper/projection files explicitly rather than hiding them; regenerate the
+canonical trace deterministically; the production trace commands and full floor pass.
+
+### BL-062 — Re-close R-0002 from the exact post-Opus source candidate
+
+`type: backlog-item · status: draft · authority: Auditor + Architect · provenance: R-0002 Claude Opus 5 exact-candidate review; EXECUTION-CONTRACT`
+
+Priority: P0 before source push. Primary round: R-0002.
+
+The current as-built and DII-121 predate later governed work and state BL-017 is red
+although the reviewed command passed. They also instruct PC-0003 to record a false
+failed gate.
+
+Acceptance: after all source corrections and exact gates, Auditor rewrites current
+observations without changing historical evidence; the PC-0003 template names only
+actually failing gates and omits a failed criterion when none fail; Architect appends a
+later closing decision that binds the exact final as-built and candidate; a fresh Opus 5
+review passes that exact commit.
+
+### BL-063 — Reconcile deprecated round archive with canonical closure proof
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: R-0002 Claude Opus 5 exact-candidate review; BL-050`
+
+Priority: P0 in R-0005 before `round archive` activation. Primary round: R-0005.
+
+The ring-fenced archive implementation still reads `record/proofs/closures` and rejects
+any failing criterion, conflicting with the canonical compliance path and closure
+verb. R-0002 must not invoke it.
+
+Acceptance: preserve the current R-0002 prohibition; R-0005 red-first aligns archive
+reads with `record/proofs/compliance/closures`, adopts compatible gate semantics, and
+proves the approved three-tree lifecycle before activation.
+
+### BL-064 — Repair R-0002 census and claim drift
+
+`type: backlog-item · status: draft · authority: Auditor + Architect · provenance: R-0002 Claude Opus 5 exact-candidate review`
+
+Priority: P1 before source push. Primary round: R-0002.
+
+The backlog census stops at BL-050, the as-built overstates several command/test claims
+and carries a stale correction boundary, and the decision-register introduction denies
+its DII numbering.
+
+Acceptance: census and ownership are gapless through the latest record; as-built claims
+name only metrics actually emitted by cited commands; historical Fable facts remain
+historical without overstating the selector test; correction boundaries and register
+description match committed history.
+
+Known-red transition: the Auditor census edit moves the committed
+`devai-nyx/devai` locator in this file. Until the following Architect regeneration,
+`repository-reference-triage.contract.test.ts` is red only for the old line 172 versus
+the newly observed line 174. BL-064 owns that exact transition.
+
+### BL-065 — Complete package-manager and materialization reproducibility
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: R-0002 Claude Opus 5 exact-candidate review; BL-046; DII-115`
+
+Priority: P1 before production-readiness claims. Primary round: R-0004.
+
+Operational-law outputs retain runtime materialization fields without a complete CI
+byte-identity assertion; several sort/prewarm helpers depend on locale or insertion
+order; remote cold-pnpm jobs are not all covered by the current prewarm contract.
+
+Acceptance: R-0004 decides the reproducible representation, covers all canonical mirror
+pairs in CI, replaces locale/insertion-order dependencies with byte-stable ordering,
+and extends cold package-manager proof to every required remote job. R-0002 records the
+deferral and makes no readiness claim.
 
 ## Carried guard map
 
