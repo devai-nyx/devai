@@ -7,6 +7,8 @@ import { spawnSync } from 'node:child_process';
 const INTEGRITY_UPGRADES = new Map([
   [
     'pnpm@10.0.0',
+    // npm registry dist.integrity, observed 2026-07-25 with:
+    // npm view pnpm@10.0.0 dist.integrity
     'pnpm@10.0.0+sha512.b8fef5494bd3fe4cbd4edabd0745df2ee5be3e4b0b8b08fa643aa3e4c6702ccc0f00d68fa8a8c9858a735a0032485a44990ed2810526c875e416f001b17df12b',
   ],
 ]);
@@ -14,7 +16,7 @@ const INTEGRITY_UPGRADES = new Map([
 function usage(message) {
   if (message !== undefined) process.stderr.write(`${message}\n`);
   process.stderr.write(
-    'usage: node scripts/prewarm-package-managers.mjs [--repo-root <path>] [--list]\n',
+    'usage: node scripts/prewarm-package-managers.mjs [--repo-root <path>] [--list|--verify]\n',
   );
   process.exitCode = 2;
 }
@@ -22,6 +24,7 @@ function usage(message) {
 function parseArgs(argv) {
   let repoRoot = process.cwd();
   let list = false;
+  let verify = false;
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     if (arg === '--repo-root') {
@@ -34,12 +37,18 @@ function parseArgs(argv) {
       index += 1;
     } else if (arg === '--list') {
       list = true;
+    } else if (arg === '--verify') {
+      verify = true;
     } else {
       usage(`unknown argument: ${String(arg)}`);
       return null;
     }
   }
-  return { repoRoot, list };
+  if (list && verify) {
+    usage('--list and --verify are mutually exclusive');
+    return null;
+  }
+  return { repoRoot, list, verify };
 }
 
 function collectPackageManagers(value, found) {
@@ -100,12 +109,13 @@ if (options !== null) {
   if (options.list) {
     process.stdout.write(`${JSON.stringify(requirements)}\n`);
   } else {
+    const verified = [];
     for (const requirement of requirements) {
       const result = spawnSync('corepack', ['prepare', requirement], {
         cwd: options.repoRoot,
         env: process.env,
         encoding: 'utf8',
-        stdio: 'inherit',
+        stdio: options.verify ? ['ignore', 'pipe', 'pipe'] : 'inherit',
       });
       if (result.error !== undefined) {
         process.stderr.write(`prewarm package managers: ${requirement}: ${result.error.message}\n`);
@@ -113,9 +123,20 @@ if (options !== null) {
         break;
       }
       if (result.status !== 0) {
+        if (options.verify && typeof result.stderr === 'string') {
+          process.stderr.write(result.stderr);
+        }
         process.exitCode = result.status ?? 1;
         break;
       }
+      verified.push(requirement);
+    }
+    if (
+      options.verify &&
+      (process.exitCode ?? 0) === 0 &&
+      verified.length === requirements.length
+    ) {
+      process.stdout.write(`${JSON.stringify({ verified })}\n`);
     }
   }
 }

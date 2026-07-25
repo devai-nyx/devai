@@ -1,4 +1,5 @@
 import {
+  execFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
@@ -180,6 +181,19 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
     }
   }
   validateDraft();
+  for (const batch of draft.batches) {
+    if (batch.commit === undefined) continue;
+    try {
+      execFileSync('git', ['rev-parse', '--verify', `${batch.commit}^{commit}`], {
+        cwd: repoRoot,
+        stdio: ['ignore', 'ignore', 'ignore'],
+      });
+    } catch {
+      throw new Error(
+        `phase close: batch '${batch.id}' commit '${batch.commit}' does not resolve to a Git commit`,
+      );
+    }
+  }
   const existing = readClosures(repoRoot);
   const record: PhaseClosureRecord = {
     ...draft,

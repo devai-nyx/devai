@@ -454,20 +454,20 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
       continue;
     }
     for (const entry of compiled) {
+      const protectedPaths = changedPaths.filter((path) =>
+        /^(?:law\/|product\/|work\/(?:rounds|audit)\/|record\/|\.devai\/config\/)/u.test(path),
+      );
       if (
         entry.id === 'FORBID-MUTATE-INVARIANTS' &&
-        changedPaths
-          .filter((path) =>
-            /^(?:law\/|product\/|work\/(?:rounds|audit)\/|record\/|\.devai\/config\/)/u.test(path),
-          )
-          .every((path) => {
-            if (/^(?:law\/|work\/rounds\/)/u.test(path)) return author === 'DEVAI Architect';
-            if (path.startsWith('product/')) return author === 'DEVAI Owner';
-            if (path.startsWith('work/audit/')) return author === 'DEVAI Auditor';
-            if (path.startsWith('record/')) return author === 'DEVAI Machine';
-            if (path.startsWith('.devai/config/')) return author === 'DEVAI Engineer';
-            return false;
-          })
+        protectedPaths.length > 0 &&
+        protectedPaths.every((path) => {
+          if (/^(?:law\/|work\/rounds\/)/u.test(path)) return author === 'DEVAI Architect';
+          if (path.startsWith('product/')) return author === 'DEVAI Owner';
+          if (path.startsWith('work/audit/')) return author === 'DEVAI Auditor';
+          if (path.startsWith('record/')) return author === 'DEVAI Machine';
+          if (path.startsWith('.devai/config/')) return author === 'DEVAI Engineer';
+          return false;
+        })
       ) {
         continue;
       }

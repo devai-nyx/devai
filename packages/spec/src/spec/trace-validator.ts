@@ -1,11 +1,14 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 import { validators } from '@devai-nyx/schemas';
+import { validateRepositoryTarget } from '@devai-nyx/utils';
 import type { SpecValidationError, SpecValidationResult } from './types.js';
 
 export interface ValidateTraceOptions {
   /** Single-file path to trace.json (typically law/trace.json). */
   readonly tracePath: string;
   readonly invariantIds: ReadonlySet<string>;
+  readonly repoRoot?: string;
 }
 
 export interface TraceResult extends SpecValidationResult {
@@ -45,6 +48,43 @@ export function validateTrace(opts: ValidateTraceOptions): TraceResult {
     return { ok: false, errors, files_scanned: 1, trace_invariants_count: 0 };
   }
 
+  const repoRoot = opts.repoRoot ?? resolve(dirname(file), '..');
+  const parsedEntries =
+    typeof parsed === 'object' &&
+    parsed !== null &&
+    'invariants' in parsed &&
+    Array.isArray((parsed as { invariants?: unknown }).invariants)
+      ? (parsed as { invariants: unknown[] }).invariants
+      : [];
+  for (const [i, rawEntry] of parsedEntries.entries()) {
+    if (
+      typeof rawEntry !== 'object' ||
+      rawEntry === null ||
+      !('tests' in rawEntry) ||
+      !Array.isArray((rawEntry as { tests?: unknown }).tests)
+    ) {
+      continue;
+    }
+    for (const [j, rawTest] of (rawEntry as { tests: unknown[] }).tests.entries()) {
+      if (
+        typeof rawTest !== 'object' ||
+        rawTest === null ||
+        !('path' in rawTest) ||
+        typeof (rawTest as { path?: unknown }).path !== 'string'
+      ) {
+        continue;
+      }
+      const path = (rawTest as { path: string }).path;
+      if (!validateRepositoryTarget(repoRoot, path, 'test').ok) {
+        errors.push({
+          file,
+          pointer: `/invariants/${String(i)}/tests/${String(j)}/path`,
+          message: `trace path '${path}' is not a contained executable test file`,
+        });
+      }
+    }
+  }
+
   const ok = validators.trace(parsed);
   if (!ok) {
     for (const e of validators.trace.errors ?? []) {
@@ -65,15 +105,6 @@ export function validateTrace(opts: ValidateTraceOptions): TraceResult {
         pointer: `/invariants/${String(i)}/id`,
         message: `trace references unknown invariant '${entry.id}'`,
       });
-    }
-    for (const [j, test] of entry.tests.entries()) {
-      if (test.path.length === 0) {
-        errors.push({
-          file,
-          pointer: `/invariants/${String(i)}/tests/${String(j)}/path`,
-          message: 'test path is empty',
-        });
-      }
     }
   }
 
