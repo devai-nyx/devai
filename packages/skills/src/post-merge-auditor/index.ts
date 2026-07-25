@@ -14,7 +14,11 @@ import {
   type AuthorityHostEffectScope,
 } from '@devai-nyx/authority';
 import { regenerateInventory } from '@devai-nyx/loop';
-import { assessScorecard, computeScorecard } from '@devai-nyx/loop';
+import {
+  assessScorecard,
+  computeScorecard,
+  loadScorecardFailureMaxAgeMs,
+} from '@devai-nyx/loop';
 import {
   loadScorecardNaConfig,
   resolveScorecardNaPath,
@@ -422,6 +426,7 @@ async function writeBundle(
       integrationHead: mergeSha,
       readings,
       naCells,
+      staleFailAfterMs: loadScorecardFailureMaxAgeMs(worktreeRoot),
     });
     const assessment = assessScorecard(scorecard, timestamp, 1, readings);
     const backlogCurrent = await compileBacklogObservation(worktreeRoot, scorecard, timestamp);

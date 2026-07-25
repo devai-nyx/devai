@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import type { SensorReading } from '@devai-nyx/sensors';
 import { computeScorecard, type Scorecard } from '../loop/scorecard.js';
+import { loadScorecardFailureMaxAgeMs } from './freshness-policy.js';
 import { filterLatestPerKind } from './latest.js';
 
 export { filterLatestPerKind } from './latest.js';
@@ -92,6 +93,7 @@ export function resolveScorecardInputs(opts: ScorecardInputs): ResolvedScorecard
       timestamp: opts.timestamp,
       integrationHead,
       readings: preReadings,
+      staleFailAfterMs: loadScorecardFailureMaxAgeMs(opts.repoRoot),
     });
     return { scorecard, readings: preReadings, source: 'inputs' };
   }
@@ -105,6 +107,7 @@ export function resolveScorecardInputs(opts: ScorecardInputs): ResolvedScorecard
     timestamp: opts.timestamp,
     integrationHead,
     readings,
+    staleFailAfterMs: loadScorecardFailureMaxAgeMs(opts.repoRoot),
   });
   return { scorecard, readings, source: readings.length > 0 ? 'disk' : 'empty' };
 }

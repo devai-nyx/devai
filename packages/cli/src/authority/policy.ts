@@ -291,7 +291,9 @@ export function authorityBindings(root: string, packageVersion: string) {
     ? readFileSync(constitutionPath, 'utf8')
     : '# DEVAI Constitution\n\n**Version:** 0.5.0\n';
   const constitutionVersion =
-    /\*\*Version:\*\*\s*([0-9]+\.[0-9]+\.[0-9]+)/u.exec(constitutionText)?.[1] ?? '0.5.0';
+    /\*\*(?:Candidate version|Version):\*\*\s*([0-9]+\.[0-9]+\.[0-9]+)/u.exec(
+      constitutionText,
+    )?.[1] ?? '0.5.0';
   return {
     repository_id: repositoryIdFor(root),
     package_binding: { name: '@devai-nyx/cli', version: packageVersion },
@@ -367,6 +369,28 @@ export function buildTrustedAuthoritySources(
       subjects: human('architect'),
       rationale: 'Article 6 Architect reference authority.',
     }),
+    ...['law', 'law/**', 'work/rounds', 'work/rounds/**'].map((path, index) =>
+      rule({
+        id: `core-architect-governance-${String(index + 1)}`,
+        origin: 'immutable-core',
+        precedence: 750,
+        actionIds: groups.architect,
+        selector: fsSelector(repositoryId, path),
+        subjects: human('architect'),
+        rationale: 'Article 6 Architect successor law and governed-round authority.',
+      }),
+    ),
+    ...['work/audit', 'work/audit/**'].map((path, index) =>
+      rule({
+        id: `core-auditor-governed-observation-${String(index + 1)}`,
+        origin: 'immutable-core',
+        precedence: 750,
+        actionIds: groups.auditor,
+        selector: fsSelector(repositoryId, path),
+        subjects: human('auditor'),
+        rationale: 'Article 6 Auditor governed observation authority.',
+      }),
+    ),
     rule({
       id: 'core-auditor-observation-root',
       origin: 'immutable-core',
@@ -485,6 +509,15 @@ export function buildTrustedAuthoritySources(
       selector: fsSelector(repositoryId, 'record/derived/inventory/**'),
       subjects: [machineSubject('harness')],
       rationale: 'Article 6 inventory-machine transition.',
+    }),
+    rule({
+      id: 'core-harness-proofs',
+      origin: 'immutable-core',
+      precedence: 900,
+      actionIds: groups.harness,
+      selector: fsSelector(repositoryId, 'record/proofs/**'),
+      subjects: [machineSubject('harness')],
+      rationale: 'Article 6 verb-attributed machine proof transition.',
     }),
     rule({
       id: 'core-upgrade-config',

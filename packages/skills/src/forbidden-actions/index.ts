@@ -117,9 +117,13 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
   },
   {
     id: 'FORBID-DELETE-AUTHORITY-DOCS',
-    action: 'Deleting any file under docs/arch, docs/contracts, docs/ops, docs/security',
+    action:
+      'Deleting successor law, product intent, governed rounds/audits, or machine proofs outside the owning authority path',
     rationale: 'Authority violation',
     severity: 'critical',
+    detect_patterns: [
+      '\\b(?:git\\s+rm|rm)\\s+[^\\n]*(?:law|product|work/(?:rounds|audit)|record)/',
+    ],
     safer_alternative: 'Architect amendment via ADR + tombstone',
   },
   {
@@ -127,6 +131,7 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
     action: 'Sending external messages (Slack, email, GitHub issue comments outside the PR)',
     rationale: 'Visible action',
     severity: 'medium',
+    detect_patterns: ['\\b(?:slack|sendmail|mail)\\b', '\\bgh\\s+(?:issue|pr)\\s+comment\\b'],
     safer_alternative: 'Comment in the PR; let a human relay externally',
   },
   {
@@ -134,6 +139,7 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
     action: 'Modifying CI/CD pipelines without ADR',
     rationale: 'Gate weakening',
     severity: 'high',
+    detect_patterns: ['(?:\\.github/workflows/|scripts/(?:run-ci-stages|check-workflows)\\.mjs)'],
     safer_alternative: 'Draft an ADR explaining the gate change first',
   },
   {
@@ -141,6 +147,7 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
     action: 'Modifying KMS, IAM, SSM, Secrets Manager in stage or prod',
     rationale: 'Security surface',
     severity: 'critical',
+    detect_patterns: ['\\baws\\s+(?:kms|iam|ssm|secretsmanager)\\b'],
     safer_alternative: 'Use the ops authority path with per-action authorisation',
   },
   {
@@ -162,9 +169,12 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
   {
     id: 'FORBID-MUTATE-INVARIANTS',
     action:
-      'Modifying law/invariants/* or law/policy/* without Architect authority',
+      'Modifying successor law or committed policy materializations without Architect authority',
     rationale: 'Constitutional change',
     severity: 'critical',
+    detect_patterns: [
+      '\\b(?:git\\s+(?:add|rm)|rm)\\s+[^\\n]*(?:law/(?:constitution|invariants|register|policy)|\\.devai/config)/',
+    ],
     safer_alternative: 'Architect amendment via ADR + law/register/DECISIONS.md entry',
   },
 ] as const;

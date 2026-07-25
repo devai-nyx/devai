@@ -8,7 +8,7 @@ import { validators } from '@devai-nyx/schemas';
  * Validates ADR markdown files under law/adr/:
  *  1. Front-matter (YAML between two `---` lines at file head) parses
  *     and conforms to adr.schema.json.
- *  2. Filename matches the adr_id pattern: ADR-NNN-slug.md.
+ *  2. Filename matches the successor record id pattern: ADR-NNN-slug.md.
  *  3. Body contains the mandatory sections (Status, Context, Decision,
  *     Consequences, Alternatives Considered, Affected Rules).
  *  4. Sequential numbering across the directory (no gaps).
@@ -29,6 +29,7 @@ export interface AdrValidationResult {
   readonly errors: readonly AdrValidationError[];
   readonly adrs: ReadonlyArray<{
     readonly file: string;
+    /** Compatibility output key; sourced from successor frontmatter `id`. */
     readonly adr_id: string;
     readonly title: string;
     readonly status: string;
@@ -156,6 +157,21 @@ export function validateAdrs(opts: ValidateAdrsOptions): AdrValidationResult {
     const fmText = m[1] ?? '';
     const bodyText = m[2] ?? '';
     const fm = parseFrontMatter(fmText);
+    // Preserve the established diagnostic for an imported predecessor-style
+    // ADR. Those records used proposed/accepted/rejected plus `adr_id`; they
+    // are not successor records and must not be misreported as merely missing
+    // the first new metadata field (`type`).
+    if (
+      fm['type'] === undefined &&
+      typeof fm['status'] === 'string' &&
+      ['proposed', 'accepted', 'rejected'].includes(fm['status'])
+    ) {
+      errors.push({
+        file,
+        message: "must have required property 'adr_id' (required)",
+      });
+      continue;
+    }
     const ok = validators.adr(fm);
     if (!ok) {
       for (const e of validators.adr.errors ?? []) {
@@ -168,18 +184,18 @@ export function validateAdrs(opts: ValidateAdrsOptions): AdrValidationResult {
       continue;
     }
     const record = fm as {
-      adr_id: string;
+      id: string;
       title: string;
       status: string;
       date: string;
     };
 
     // Filename consistency.
-    const expectedPrefix = `${record.adr_id}-`;
+    const expectedPrefix = `${record.id}-`;
     if (!basename(file).startsWith(expectedPrefix)) {
       errors.push({
         file,
-        message: `filename '${basename(file)}' does not start with adr_id '${record.adr_id}-'`,
+        message: `filename '${basename(file)}' does not start with id '${record.id}-'`,
       });
     }
 
@@ -193,11 +209,11 @@ export function validateAdrs(opts: ValidateAdrsOptions): AdrValidationResult {
       }
     }
 
-    const idMatch = /^ADR-([0-9]+)$/.exec(record.adr_id);
+    const idMatch = /^ADR-([0-9]+)$/.exec(record.id);
     const n = idMatch !== null ? Number(idMatch[1]) : -1;
     adrs.push({
       file,
-      adr_id: record.adr_id,
+      adr_id: record.id,
       title: record.title,
       status: record.status,
       date: record.date,

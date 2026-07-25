@@ -187,6 +187,10 @@ export const upgrade = defineCommand({
         '--subprocess-effects',
         'Materialize the Architect-owned subprocess-effects F1 source into .devai/config with byte identity',
       )
+      .option(
+        '--operational-law',
+        'Materialize the canonical domains, forbidden-actions, glob-guards, scorecard N/A, and threshold policies with byte identity',
+      )
       .option('--execute', 'Apply the plan (default: print plan only)')
       .option('--force', 'With --execute: overwrite changed files')
       .option('--human', 'Human-readable output')
@@ -198,10 +202,58 @@ export const upgrade = defineCommand({
           profile?: string;
           constitution?: boolean;
           subprocessEffects?: boolean;
+          operationalLaw?: boolean;
           execute?: boolean;
           force?: boolean;
           human?: boolean;
         }) => {
+          if (options.operationalLaw === true) {
+            const targetRoot = resolve(options.target ?? DEFAULT_REPO_ROOT);
+            const files = [
+              'domains.json',
+              'forbidden-actions.json',
+              'glob-guards.json',
+              'scorecard-na.json',
+              'thresholds.json',
+            ] as const;
+            const materializations = files.map((file) => {
+              const sourcePath = join(targetRoot, 'law/policy', file);
+              if (!existsSync(sourcePath)) {
+                throw new Error(`canonical operational-law source is missing: ${sourcePath}`);
+              }
+              const bytes = readFileSync(sourcePath);
+              JSON.parse(bytes.toString('utf8'));
+              return {
+                source: `law/policy/${file}`,
+                target: `.devai/config/${file}`,
+                digest_sha256: createHash('sha256').update(bytes).digest('hex'),
+                byte_identity_required: true as const,
+                bytes,
+              };
+            });
+            const plan = materializations.map(({ bytes: _bytes, ...entry }) => entry);
+            if (options.execute !== true) {
+              emit(
+                { plan },
+                options.human === true,
+                `upgrade --operational-law (plan only): ${String(plan.length)} exact materializations`,
+              );
+              process.exitCode = EXIT_PASS;
+              return;
+            }
+            for (const entry of materializations) {
+              const targetPath = join(targetRoot, entry.target);
+              mkdirSync(dirname(targetPath), { recursive: true });
+              writeFileSync(targetPath, entry.bytes);
+            }
+            emit(
+              { materialized: plan },
+              options.human === true,
+              `upgrade --operational-law: ${String(plan.length)} exact materializations`,
+            );
+            process.exitCode = EXIT_PASS;
+            return;
+          }
           if (options.subprocessEffects === true) {
             const targetRoot = resolve(options.target ?? DEFAULT_REPO_ROOT);
             const sourcePath = join(targetRoot, 'law/policy/subprocess-effects.json');
