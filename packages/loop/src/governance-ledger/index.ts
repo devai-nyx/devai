@@ -474,7 +474,23 @@ export function decisionCitationResolution(options: {
   readonly recordsDir?: string;
 }): GovernanceIntegrityReport {
   const recordsDir = resolve(options.repoRoot, options.recordsDir ?? DEFAULT_RECORDS_DIR);
-  const resolved = new Set(markdownFiles(recordsDir).map((path) => basename(path, '.md')));
+  const resolved = new Set<string>();
+  for (const path of markdownFiles(recordsDir)) {
+    try {
+      const id = parseGovernanceRecord(path).frontmatter['id'];
+      if (typeof id === 'string') resolved.add(id);
+    } catch {
+      // Record-integrity reports malformed records; they cannot resolve citations.
+    }
+  }
+  const registerPath = resolve(options.repoRoot, 'law/register/DECISIONS.md');
+  if (existsSync(registerPath)) {
+    const register = readFileSync(registerPath, 'utf8');
+    for (const match of register.matchAll(/^### (DII-[0-9]+)\b/gmu)) {
+      const id = match[1];
+      if (id !== undefined) resolved.add(id);
+    }
+  }
   const roots = options.roots ?? ['README.md', 'law', 'product', 'docs', 'packages', 'work'];
   const strictRoots = options.roots !== undefined;
   const findings: GovernanceFinding[] = [];

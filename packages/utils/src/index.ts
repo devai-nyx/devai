@@ -1,4 +1,5 @@
 export * from './canonical-json/index.js';
+export * from './constitution-version.js';
 export * from './counters/index.js';
 export * from './exit.js';
 export * from './glob-guards/index.js';

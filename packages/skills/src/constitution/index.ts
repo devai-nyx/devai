@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseConstitutionVersion } from '@devai-nyx/utils';
 import { findDevaiPacksRoot } from '../pack-resolver/index.js';
 
 /**
@@ -31,11 +32,7 @@ export interface ResolvedConstitution {
   readonly path: string;
 }
 
-const VERSION_PATTERN = /^\*\*(?:Candidate version|Version):\*\*\s*([0-9]+\.[0-9]+\.[0-9]+)\s*$/mu;
-
-export function parseConstitutionVersion(text: string): string | null {
-  return VERSION_PATTERN.exec(text)?.[1] ?? null;
-}
+export { parseConstitutionVersion };
 
 export function sha256Text(text: string): string {
   return createHash('sha256').update(text, 'utf8').digest('hex');

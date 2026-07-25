@@ -339,11 +339,7 @@ export const checkForbiddenActions = defineCommand({
           } else {
             process.stdout.write(JSON.stringify(payload) + '\n');
           }
-          process.exit(
-            options.strict === true && (result.findings.length > 0 || !coverage.ok)
-              ? EXIT_FAIL
-              : EXIT_PASS,
-          );
+          process.exit(result.findings.length > 0 || !coverage.ok ? EXIT_FAIL : EXIT_PASS);
         },
       );
   },

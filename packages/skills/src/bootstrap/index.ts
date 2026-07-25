@@ -41,9 +41,8 @@ const POLICY_FILES = [
   'thresholds.json',
 ] as const;
 
-function canonicalPolicyContent(targetRoot: string, file: (typeof POLICY_FILES)[number]): string {
+function canonicalPolicyContent(file: (typeof POLICY_FILES)[number]): string {
   const candidates = [
-    join(resolve(targetRoot), 'law/policy', file),
     join(PACKAGE_ROOT, 'dist/law/policy', file),
     join(PACKAGE_ROOT, '../../law/policy', file),
   ];
@@ -51,7 +50,9 @@ function canonicalPolicyContent(targetRoot: string, file: (typeof POLICY_FILES)[
   if (source === undefined) {
     throw new Error(`canonical policy source unavailable: law/policy/${file}`);
   }
-  return readFileSync(source, 'utf8');
+  const bytes = readFileSync(source, 'utf8');
+  JSON.parse(bytes);
+  return bytes;
 }
 
 /**
@@ -75,7 +76,7 @@ export function buildBootstrapPlan(opts: {
   const entries: BootstrapPlanEntry[] = [];
   const counters = JSON.stringify({ TASK: 0, RGR: 0, CTG: 0, ESC: 0 }, null, 2) + '\n';
   const policyContent = Object.fromEntries(
-    POLICY_FILES.map((file) => [file, canonicalPolicyContent(opts.targetRoot, file)]),
+    POLICY_FILES.map((file) => [file, canonicalPolicyContent(file)]),
   ) as Record<(typeof POLICY_FILES)[number], string>;
   const emptyChain = JSON.stringify({ head: null, records: [] }, null, 2) + '\n';
   const canonicalGitignore = 'scratch/\n';

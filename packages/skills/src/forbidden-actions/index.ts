@@ -241,7 +241,23 @@ export interface ForbiddenCoverageResult {
 export function checkForbiddenRegistryCoverage(registryPath: string): ForbiddenCoverageResult {
   const registry = loadForbiddenRegistry(registryPath);
   const waivers = loadForbiddenWaivers(registryPath);
-  const presentIds = new Set(registry.map((e) => e.id));
+  const presentIds = new Set(
+    registry
+      .filter(
+        (entry) =>
+          Array.isArray(entry.detect_patterns) &&
+          entry.detect_patterns.length > 0 &&
+          entry.detect_patterns.every((pattern) => {
+            try {
+              new RegExp(pattern, 'i');
+              return true;
+            } catch {
+              return false;
+            }
+          }),
+      )
+      .map((entry) => entry.id),
+  );
   const waivedIds = new Set(waivers.map((w) => w.id));
   const present = CANONICAL_FORBIDDEN_ACTIONS.filter((e) => presentIds.has(e.id)).map((e) => e.id);
   const unwaivedMissing = CANONICAL_FORBIDDEN_ACTIONS.filter(
@@ -274,7 +290,18 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
       : join(opts.repoRoot, '.devai/config/forbidden-actions.json'));
   let registry: ForbiddenActionEntry[];
   if (!existsSync(registryPath)) {
-    return { registry_entries: 0, findings };
+    return {
+      registry_entries: 0,
+      findings: [
+        {
+          forbidden_id: 'FORBIDDEN-REGISTRY-INVALID',
+          source: 'commit-change',
+          ref: registryPath,
+          matched: '',
+          message: 'forbidden-action registry is missing',
+        },
+      ],
+    };
   }
   try {
     const parsed = JSON.parse(readFileSync(registryPath, 'utf8')) as {
@@ -297,7 +324,18 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     };
   }
   if (registry.length === 0) {
-    return { registry_entries: 0, findings };
+    return {
+      registry_entries: 0,
+      findings: [
+        {
+          forbidden_id: 'FORBIDDEN-REGISTRY-INVALID',
+          source: 'commit-change',
+          ref: registryPath,
+          matched: '',
+          message: 'forbidden-action registry has no actions',
+        },
+      ],
+    };
   }
   // Compile patterns once.
   const compiled = registry
@@ -315,8 +353,22 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
         })
         .filter((p): p is RegExp => p !== null),
     }));
-  if (compiled.length === 0) {
-    return { registry_entries: registry.length, findings };
+  if (
+    compiled.length !== registry.length ||
+    compiled.some((entry) => entry.patterns.length === 0)
+  ) {
+    return {
+      registry_entries: registry.length,
+      findings: [
+        {
+          forbidden_id: 'FORBIDDEN-REGISTRY-INVALID',
+          source: 'commit-change',
+          ref: registryPath,
+          matched: '',
+          message: 'every forbidden action must have at least one valid detection pattern',
+        },
+      ],
+    };
   }
 
   // Read recent commit log via git.
@@ -354,7 +406,7 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     try {
       const nameStatus = execFileSync(
         'git',
-        ['diff-tree', '--root', '--no-commit-id', '--name-status', '-r', '-M', sha],
+        ['diff-tree', '--root', '--no-commit-id', '--name-status', '-r', '-M', '-m', sha],
         {
           cwd: opts.repoRoot,
           encoding: 'utf8',
@@ -366,13 +418,16 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
         .filter(Boolean)
         .map((line) => {
           const [status = '', ...paths] = line.split('\t');
+          if ((status.startsWith('R') || status.startsWith('C')) && paths.length >= 2) {
+            return `git rm ${paths[0] ?? ''}\ngit add ${paths[1] ?? ''}\n${line}`;
+          }
           const path = paths.at(-1) ?? '';
           return `${status.startsWith('D') ? 'git rm' : 'git add'} ${path}\n${line}`;
         })
         .join('\n');
       const patch = execFileSync(
         'git',
-        ['diff-tree', '--root', '--no-commit-id', '--no-ext-diff', '--unified=0', '-p', sha],
+        ['diff-tree', '--root', '--no-commit-id', '--no-ext-diff', '--unified=0', '-p', '-m', sha],
         {
           cwd: opts.repoRoot,
           encoding: 'utf8',

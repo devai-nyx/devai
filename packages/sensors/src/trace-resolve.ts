@@ -1,5 +1,5 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { relative, resolve } from 'node:path';
 import {
   buildSensorReading,
   type SensorFinding,
@@ -37,8 +37,8 @@ interface TraceFile {
  * Emits a SensorReading with one finding per problem.
  */
 export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
-  const tracePath = opts.tracePath ?? join(opts.repoRoot, 'law/trace.json');
-  const invariantsDir = opts.invariantsDir ?? join(opts.repoRoot, 'law/invariants');
+  const tracePath = opts.tracePath ?? resolve(opts.repoRoot, 'law/trace.json');
+  const invariantsDir = opts.invariantsDir ?? resolve(opts.repoRoot, 'law/invariants');
   const command = [
     'devai',
     'sense',
@@ -91,6 +91,11 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
     );
   } catch {
     invariantIds = new Set();
+    findings.push({
+      severity: 'critical',
+      code: 'invariant_catalog_unavailable',
+      message: `${invariantsDir} could not be read`,
+    });
   }
 
   let unresolvedTraceEntries = 0;
@@ -107,7 +112,15 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
   const nonTestLinkedIds = new Set<string>();
   for (const [i, entry] of (parsed.invariants ?? []).entries()) {
     const id = entry.id;
-    if (id === undefined) continue;
+    if (id === undefined) {
+      unresolvedTraceEntries++;
+      findings.push({
+        severity: 'error',
+        code: 'missing_invariant_id',
+        message: `trace entry [${String(i)}] has no invariant id`,
+      });
+      continue;
+    }
     const knownInvariant = invariantIds.has(id);
     if (!knownInvariant) {
       unresolvedTraceEntries++;
@@ -128,13 +141,20 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
         });
         continue;
       }
-      const abs = join(opts.repoRoot, t.path);
-      if (!existsSync(abs)) {
+      const abs = resolve(opts.repoRoot, t.path);
+      const rel = relative(resolve(opts.repoRoot), abs);
+      const contained = rel.length > 0 && !rel.startsWith('..') && !rel.startsWith('/');
+      const isFile = contained && existsSync(abs) && statSync(abs).isFile();
+      const isExpectedTest =
+        t.target_type !== undefined && t.target_type !== 'test'
+          ? true
+          : /\.(?:test|spec)\.(?:ts|mjs)$/u.test(t.path);
+      if (!contained || !isFile || !isExpectedTest) {
         missingTestPaths++;
         findings.push({
-          severity: 'warning',
-          code: 'missing_test_path',
-          message: `trace entry [${String(i)}] test [${String(j)}] path '${t.path}' does not exist`,
+          severity: 'error',
+          code: 'invalid_test_path',
+          message: `trace entry [${String(i)}] test [${String(j)}] path '${t.path}' is not a contained file of the declared kind`,
         });
         continue;
       }

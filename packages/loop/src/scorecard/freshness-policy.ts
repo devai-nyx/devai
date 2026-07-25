@@ -13,13 +13,23 @@ interface ThresholdPolicy {
  * closed instead of silently reverting to caller-selected behavior.
  */
 export function loadScorecardFailureMaxAgeMs(repoRoot: string): number | undefined {
-  const policyPath = join(repoRoot, '.devai/config/thresholds.json');
+  const canonicalPath = join(repoRoot, 'law/policy/thresholds.json');
+  const materializedPath = join(repoRoot, '.devai/config/thresholds.json');
+  const policyPath = existsSync(canonicalPath) ? canonicalPath : materializedPath;
   if (!existsSync(policyPath)) return undefined;
-  const parsed = JSON.parse(readFileSync(policyPath, 'utf8')) as ThresholdPolicy;
+  const policyBytes = readFileSync(policyPath, 'utf8');
+  if (
+    policyPath === canonicalPath &&
+    existsSync(materializedPath) &&
+    readFileSync(materializedPath, 'utf8') !== policyBytes
+  ) {
+    throw new Error('canonical and materialized thresholds.json bytes diverge');
+  }
+  const parsed = JSON.parse(policyBytes) as ThresholdPolicy;
   const hours = parsed.freshness?.scorecard_failure_max_age_hours;
-  if (typeof hours !== 'number' || !Number.isFinite(hours) || hours <= 0) {
+  if (typeof hours !== 'number' || !Number.isFinite(hours) || hours < 1 || hours > 8760) {
     throw new Error(
-      'thresholds.json freshness.scorecard_failure_max_age_hours must be a positive number',
+      'thresholds.json freshness.scorecard_failure_max_age_hours must be at least 1 and at most 8760',
     );
   }
   return hours * 60 * 60 * 1000;
