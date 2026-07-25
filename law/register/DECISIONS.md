@@ -838,6 +838,29 @@ digests, version, role boundaries, and constitutional meaning must remain unchan
 R-0002 may close only after both materializations bind the new raw digest and a
 disposable production closure write passes.
 
+### DII-116 — R-0002 final source close includes binding-valid production writes
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 final source close; DII-105; DII-108–115; R-0002-AS-BUILT@064208b700191c3c8a8ee4c7d388d7b51bbb1d7d; BL-051–055`
+
+DII-116 supersedes DII-114 only as the final R-0002 source-closing decision. Earlier
+closing judgments remain immutable history and their no-ratification, no-release,
+no-readiness, and BL-017 posture continues unchanged. The final source candidate also
+closes BL-055: both authority-policy copies bind the exact current Constitution bytes,
+preserve every rule and source/extension digest, and permit the production
+Machine-attributed closure write.
+
+For path attribution, DII-115’s reference to both materializations describes the
+permitted byte set, not a transfer of `law/` authority. The production upgrade machine
+wrote and the Engineer committed `.devai/config/authority-policy.json`; a separate
+Architect batch synchronized the byte-identical canonical
+`law/policy/authority-policy.json`. No session crossed its path boundary.
+
+The source PR may merge only after the exact DII-116 candidate receives an independent
+read-only Claude Opus 5 review through `claude-opus-5` and its exact remote checks are
+green except for the bounded BL-017 coverage-threshold failure. The closure-only branch
+then emits PC-0003 against the exact source merge SHA, using DII-105 as declaration and
+DII-116 as closing decision. R-0002 remains draft, ratifies nothing, releases nothing,
+deploys nothing, and transfers no readiness or evidence standing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
