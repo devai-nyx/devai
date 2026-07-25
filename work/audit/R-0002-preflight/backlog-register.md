@@ -249,6 +249,24 @@ keep governed JSON semantics and all immutable records unchanged; make the liter
 repository-wide command green; and rerun the complete R-0002 exit ladder. A directory
 or file may not be excluded merely because it is inconvenient or currently red.
 
+### BL-052 — Enforce failed-gate acknowledgment in the closure verb
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector + Auditor · provenance: R-0002 closure-payload prevalidation; packages/evidence closePhase contract`
+
+Priority: P0 before PC-0003. Primary round: R-0002 post-review correction.
+
+`closePhase` promises to reject every failed gate that lacks an explicit failing
+validation criterion, but the production implementation validates only schema,
+decision order, duplicate/supersession shape, and later-PC shipment fields. A caller
+can therefore append a schema-valid closure whose gates fail while every criterion
+passes or discusses a different failure.
+
+Acceptance: an Inspector contract first proves missing and unrelated acknowledgments
+are accepted incorrectly; production then requires each failed gate key to appear in
+the criterion or evidence of at least one `verdict: fail` criterion; valid acknowledged
+failure remains recordable; all-pass closures remain unchanged; existing records stay
+byte-identical; and the R-0002 closure draft names the exact BL-017 gate and criterion.
+
 ## Carried guard map
 
 The original known-red mapping remains:
