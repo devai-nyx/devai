@@ -287,6 +287,25 @@ R-0002 through R-0010 prompts under Architect authority; preserve the prohibitio
 Claude interaction until quota recovery; and perform the next independent close review
 with `claude-opus-5` only.
 
+### BL-054 — Admit Machine attribution in phase-closure batch records
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Inspector + Auditor · provenance: R-0002 PC-0003 draft prevalidation; R-0002 plan B6; phase-closure schema and ClosureRole type`
+
+Priority: P0 before PC-0003. Primary round: R-0002 post-review correction.
+
+R-0002 B6 includes the machine-verb commit that emitted PC-0002, but the
+`phase-closure` schema and `ClosureRole` type admit only Owner, Architect, Inspector,
+Engineer, and Auditor. A truthful PC-0003 therefore cannot attribute the B6 Machine
+commit: omitting the commit or relabeling Machine as a human role would falsify the
+round record.
+
+Acceptance: an Inspector contract first proves a Machine-attributed closure batch is
+rejected; Architect law admits `Machine` only as batch attribution for verb-produced
+record commits and grants no general mutation authority; the Engineer type mirrors the
+schema; existing closures remain byte-identical; a human-only batch remains valid; and
+the production closure verb accepts a disposable R-0002-shaped draft containing both
+Machine and Inspector B6 entries.
+
 ## Carried guard map
 
 The original known-red mapping remains:
