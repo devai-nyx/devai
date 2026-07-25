@@ -41,6 +41,8 @@ function draft(
     source_repo_deleted: false,
     validation_criteria: [{ criterion: 'contract fixture', verdict: 'pass' }],
     closed_at: '2026-07-24T00:00:00.000Z',
+    merged_as: '1234567',
+    release_disposition: 'none-preratification',
     ...overrides,
   };
 }
