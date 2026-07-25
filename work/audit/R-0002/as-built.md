@@ -20,7 +20,10 @@ provenance:
 This report observes the source candidate through
 `3f2275bb54086b5882cae3662899fceac6b56b3a`. The later Architect closing
 decision, source merge, exact-main observation, and machine closure record are part of
-the two-PR close and therefore are not predicted here.
+the two-PR close and therefore were not predicted by the initial B8 observation.
+Post-review corrections discovered by the literal shared exit floor are appended
+below through formatting candidate
+`871ed4d738d3aea23ef2dbaf2d093c7b561af003`.
 
 The round re-binds frozen predecessor truth and repairs the scoped operational
 contracts. It ratifies nothing, releases nothing, deploys nothing, and transfers no
@@ -65,20 +68,21 @@ The local predecessor checkout was observed clean at
 
 ## Scoped backlog reconciliation
 
-| Item   | R-0002 disposition                                              | Acceptance evidence or explicit residual                                                                                                                                                                                                                                                                                                            |
-| ------ | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| BL-001 | Closed for frozen re-bind.                                      | The schema-valid genesis attestation contains the exact final commit, tree, chain head, closing decision/record, three immutable document digests, `frozen: true`, and `ratified: null`. Ratification remains BL-004/R-0003.                                                                                                                        |
-| BL-002 | Closed `none-needed`.                                           | D-196 and PC-0019 agree that no predecessor release is required and no pending predecessor changeset survives.                                                                                                                                                                                                                                      |
-| BL-003 | Closed as the authorized host transition, with residuals.       | The predecessor is renamed and archived and its frozen Pages surface returns 200. The former successor path returns 404, successor Pages is absent, and successor History/hash publication remains BL-021/R-0007. No predecessor repair is authorized.                                                                                              |
-| BL-007 | R-0002 operational-law slice closed; umbrella remains governed. | ADR parsing, successor authority/glob/forbidden-action policy, trace resolution, gapless decision identity, and cited law paths are non-vacuous and green. Registry-wide count/liveness/tombstone completion is not claimed: the explicit remaining population work stays in BL-008/009 (R-0004), BL-010/011/015 (R-0005), and BL-019/021 (R-0007). |
-| BL-012 | Closed as explicit N/A.                                         | F1:T1 is recorded in `scorecard-na.json` because no live emitter exists at the frozen pin; the exact known-red guard was replaced and the general scheduled-reachability set is empty.                                                                                                                                                              |
-| BL-013 | Closed.                                                         | Architect-owned freshness policy is 168 hours in authoritative and materialized thresholds; the scorecard loader consumes it instead of accepting caller-selected age. Same-kind ordering and stale behavior remain green.                                                                                                                          |
-| BL-014 | Closed.                                                         | The canonical schema-valid F5 domain policy is materialized byte-identically under law and `.devai/config`; trace and action coverage consume it.                                                                                                                                                                                                   |
-| BL-023 | Closed.                                                         | Auditor is admitted by the mutation and translation role schemas while final adapters continue to deny Auditor actuation; schema and role-closure tests are green.                                                                                                                                                                                  |
-| BL-046 | Closed.                                                         | CI prewarms both workspace and characterized fixture package-manager pins. Isolated cold and warm runs produce the same fingerprint corpus without refreshing the baseline or widening noise exemptions. Stage 2 is green and stage 3 executes.                                                                                                     |
-| BL-047 | Closed.                                                         | The deterministic triage maps all 148 committed repository-name occurrences: 115 active-successor, 17 frozen-predecessor, 5 historical-label, 10 package-metadata, and 1 generated-output. Its exact-locator guard and predecessor-attestation self-reference guard are green.                                                                      |
-| BL-048 | Closed by append-only correction.                               | PC-0001 retains SHA-256 `56f8d37868ec72ca9b16f22e3f1d74fd2098b2c050f73a230a9c147c250bfad9`. Machine-emitted PC-0002 supersedes it, preserves historical gates, states the unmatched P7 deferral now governed by BL-045, and is selected as the effective R-0001 record.                                                                             |
-| BL-049 | Closed.                                                         | Numeric DII ordering accepts valid order and rejects equal, inverted, malformed, and mixed-namespace IDs. `none-preratification` is typed end to end and the production CLI emitted PC-0002 under final schema validation.                                                                                                                          |
+| Item   | R-0002 disposition                                              | Acceptance evidence or explicit residual                                                                                                                                                                                                                                                                                                                                                                            |
+| ------ | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| BL-001 | Closed for frozen re-bind.                                      | The schema-valid genesis attestation contains the exact final commit, tree, chain head, closing decision/record, three immutable document digests, `frozen: true`, and `ratified: null`. Ratification remains BL-004/R-0003.                                                                                                                                                                                        |
+| BL-002 | Closed `none-needed`.                                           | D-196 and PC-0019 agree that no predecessor release is required and no pending predecessor changeset survives.                                                                                                                                                                                                                                                                                                      |
+| BL-003 | Closed as the authorized host transition, with residuals.       | The predecessor is renamed and archived and its frozen Pages surface returns 200. The former successor path returns 404, successor Pages is absent, and successor History/hash publication remains BL-021/R-0007. No predecessor repair is authorized.                                                                                                                                                              |
+| BL-007 | R-0002 operational-law slice closed; umbrella remains governed. | ADR parsing, successor authority/glob/forbidden-action policy, trace resolution, gapless decision identity, and cited law paths are non-vacuous and green. Registry-wide count/liveness/tombstone completion is not claimed: the explicit remaining population work stays in BL-008/009 (R-0004), BL-010/011/015 (R-0005), and BL-019/021 (R-0007).                                                                 |
+| BL-012 | Closed as explicit N/A.                                         | F1:T1 is recorded in `scorecard-na.json` because no live emitter exists at the frozen pin; the exact known-red guard was replaced and the general scheduled-reachability set is empty.                                                                                                                                                                                                                              |
+| BL-013 | Closed.                                                         | Architect-owned freshness policy is 168 hours in authoritative and materialized thresholds; the scorecard loader consumes it instead of accepting caller-selected age. Same-kind ordering and stale behavior remain green.                                                                                                                                                                                          |
+| BL-014 | Closed.                                                         | The canonical schema-valid F5 domain policy is materialized byte-identically under law and `.devai/config`; trace and action coverage consume it.                                                                                                                                                                                                                                                                   |
+| BL-023 | Closed.                                                         | Auditor is admitted by the mutation and translation role schemas while final adapters continue to deny Auditor actuation; schema and role-closure tests are green.                                                                                                                                                                                                                                                  |
+| BL-046 | Closed.                                                         | CI prewarms both workspace and characterized fixture package-manager pins. Isolated cold and warm runs produce the same fingerprint corpus without refreshing the baseline or widening noise exemptions. Stage 2 is green and stage 3 executes.                                                                                                                                                                     |
+| BL-047 | Closed.                                                         | The deterministic triage maps all 148 committed repository-name occurrences: 115 active-successor, 17 frozen-predecessor, 5 historical-label, 10 package-metadata, and 1 generated-output. Its exact-locator guard and predecessor-attestation self-reference guard are green.                                                                                                                                      |
+| BL-048 | Closed by append-only correction.                               | PC-0001 retains SHA-256 `56f8d37868ec72ca9b16f22e3f1d74fd2098b2c050f73a230a9c147c250bfad9`. Machine-emitted PC-0002 supersedes it, preserves historical gates, states the unmatched P7 deferral now governed by BL-045, and is selected as the effective R-0001 record.                                                                                                                                             |
+| BL-049 | Closed.                                                         | Numeric DII ordering accepts valid order and rejects equal, inverted, malformed, and mixed-namespace IDs. `none-preratification` is typed end to end and the production CLI emitted PC-0002 under final schema validation.                                                                                                                                                                                          |
+| BL-051 | Closed after final-gate discovery.                              | The first literal repository-wide Prettier execution exposed 352 imported baseline failures. DII-110 excludes only generated/canonical, parser-sensitive, and immutable historical paths; Owner, Architect, Engineer, and Inspector formatted every remaining active file separately; the changed forbidden-action policy was re-materialized through the production verb; and the literal global command is green. |
 
 There is no uncatalogued deferral. BL-007’s wider population program is explicitly
 bounded above; BL-045 remains the named R-0001 correction residual; BL-017 is the only
@@ -120,6 +124,34 @@ declared skips. Its only failure is the unchanged BL-017 threshold assertion:
 
 The coverage provider, collection, and tests succeed. The workflow remains red; BL-017
 is not relabelled, suppressed, or weakened and must close in R-0006.
+
+## Post-review BL-051 correction
+
+The first exact execution of `pnpm exec prettier --check .` after the initial Claude
+review failed over 352 imported baseline files. Because that was neither BL-017 nor a
+permitted skip, the candidate did not advance. Auditor commit
+`a5048b460fbf4a0d6ac891dc6edc4adca84a2001` governed BL-051 before repair.
+
+The correction remained role-pure:
+
+- Architect commit `9437eba096809941713b487e37d56d403675dc5a` defined the exact
+  active-source boundary in DII-110;
+- Engineer commit `1e33bb06a4e9500a6ce6c1ebe3d59e6abffb7397` encoded only those
+  reasoned exclusions;
+- Owner commit `4987cb05c2f4f5ce736aa604d5f419ff3eb08520` formatted active product
+  records;
+- Architect commit `29dd065c6d7d4c4af9e5e372b0e56759cc1cbf1e` formatted active law,
+  work, host prose, and publication sources and regenerated the reference map;
+- Engineer commit `631695eb695ae6fb6ef53c2a9c2b45a1e9e50253` formatted implementation
+  sources and re-materialized the changed forbidden-action policy; and
+- Inspector commit `871ed4d738d3aea23ef2dbaf2d093c7b561af003` formatted the remaining
+  active verification sources.
+
+Fresh execution after that sequence passes stage 1, stage 2, T3–T6, changeset
+classification, all scoped production policy/trace commands, and the literal global
+Prettier command. Stage 3 again builds and runs 57 files / 641 passed / 7 declared
+skips before failing only at the same BL-017 readings quoted above. Formatting changed
+no governed JSON meaning, immutable predecessor object, PC record, or threshold.
 
 ## PC-0002 correction
 
