@@ -325,6 +325,7 @@ describe('scanForbiddenActions', () => {
     }).trim();
     execFileSync('git', ['checkout', '-qb', 'remove-law'], { cwd: dir });
     rmSync(join(dir, 'law/constitution.md'));
+    writeFileSync(join(dir, 'large-merge-fixture.txt'), 'x'.repeat(1_100_000));
     execFileSync('git', ['add', '-A'], { cwd: dir });
     execFileSync(
       'git',
