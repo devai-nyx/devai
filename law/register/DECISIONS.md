@@ -1205,6 +1205,35 @@ source gate is pass, release disposition is `none-preratification`, and no faile
 or failing validation criterion is admitted. R-0002 remains draft, ratifies nothing,
 releases nothing, deploys nothing, and transfers no readiness or evidence standing.
 
+### DII-137 — Fourth-review corrections bind actual bytes and exhaustive guards
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 fourth Claude Opus 5 correction; DII-105; DII-131; DII-134–136; BL-074; BL-077–078; BL-083; BL-085–093`
+
+DII-136's source-closing judgment is reopened. The R-0002 plan changed after DII-105's
+declaration: DII-105 truthfully retains its original digest
+`4db25005ab7adc0fff3ca0e9a332870d709aa7c4343830ca5dc0dfca62c6b568`,
+while the amended current plan is bound here at
+`29e05473ab1c413552140e62ea93300a90de52aadf0f1cda73ecd6765830a7c5`.
+The closure uses DII-105 as the historical declaration and the later final closing
+decision as the current amended-plan binding.
+
+DII-135 misstated PC-0002's structure. The record has no
+`failed_validation_criterion` field. Its `validation_criteria` array contains two
+`verdict: fail` entries, but neither contains standalone gate token
+`coverage-t1-t3`; that exact-token defect is why the immutable historical record would
+not pass the current production verb.
+
+BL-017 retirement applies to root agent instructions and every campaign plan as well
+as the shared contract and orchestrator prompts. The active guard enumerates those
+surfaces and matches the prohibited meanings rather than one adjacent phrase.
+R-0004 explicitly carries BL-065, BL-080, and BL-084; R-0005 explicitly carries
+BL-063.
+
+Forbidden committed-change detection covers in-place additions and updates throughout
+`law/`, `product/`, `work/rounds/`, `work/audit/`, `record/`, and committed
+`.devai/config/`, as well as deletion. Malformed registry bytes and unavailable Git
+history are findings, never an empty clean scan. Inspector Git reads remain within the
+production broker. These detection rules do not grant proof mutation authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

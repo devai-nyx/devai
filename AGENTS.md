@@ -42,8 +42,8 @@ audit, backlog, or PC-0001. Future rounds R-0003 through R-0010 are prepared und
   commit.
 - The minimum commit floor is `pnpm run devai:prepare`, `pnpm vitest run`, and
   `git diff --check`, plus affected gates.
-- The merged-coverage red is BL-017. Through R-0005 it must remain visible at the
-  unchanged 70/60/70/70 floors; R-0006 must close it genuinely.
+- BL-017 closed in R-0002 after the unchanged 70/60/70/70 floors passed. Every later
+  round reruns that command as an all-green regression gate; no red exception survives.
 - Evidence values are re-read from source when cited, never restated from memory.
 - Deferrals are governed records. Missing scope never becomes an informal “later” list.
 - No package publication, tag, GitHub Release, Pages deployment, real-stynx mutation, or

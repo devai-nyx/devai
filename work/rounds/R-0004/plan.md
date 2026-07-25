@@ -7,7 +7,10 @@ date: 2026-07-24
 authority: Architect
 supersedes: null
 superseded_by: null
-provenance: [OM-002; BL-008; BL-009; BL-016; BL-025; BL-027; BL-028; BL-029; BL-030; BL-031]
+provenance:
+  [
+    OM-002; BL-008; BL-009; BL-016; BL-025; BL-027; BL-028; BL-029; BL-030; BL-031; BL-065; BL-080; BL-084,
+  ]
 ---
 
 # R-0004 — Action identity and governed surface

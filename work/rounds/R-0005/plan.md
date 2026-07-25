@@ -7,7 +7,7 @@ date: 2026-07-24
 authority: Architect
 supersedes: null
 superseded_by: null
-provenance: [OM-002; BL-010; BL-011; BL-015; BL-018; BL-033; BL-045; BL-050]
+provenance: [OM-002; BL-010; BL-011; BL-015; BL-018; BL-033; BL-045; BL-050; BL-063]
 ---
 
 # R-0005 — Evidence and corrected round mechanics
@@ -39,7 +39,7 @@ re-measured.
 | B5    | Engineer                 | Implement BL-018 cleanup and BL-050 runtime; preserve and adversarially verify the R-0002 ignore/sentinel prerequisite; keep config/pin materialized and committed; never move intent                          | Lifecycle, ignore-boundary, and idempotency tests    |
 | B6    | Engineer                 | Wire BL-011 SWEEP persistence and apply BL-015/033 consumers/generation                                                                                                                                        | Every live SWEEP runs or blocks honestly             |
 | B7    | Inspector                | Close exact guards; prove authority denial, tamper resistance, retry cleanliness, no caller-selected evidence, and migrated anchor totality                                                                    | Full T1–T6 plus evidence adversaries                 |
-| B8    | Machine verbs + Auditor  | Exercise a disposable proof epoch and corrected round close in fixtures; write as-built and fresh coverage red                                                                                                 | No hand-written `record/`; no standing claim         |
+| B8    | Machine verbs + Auditor  | Exercise a disposable proof epoch and corrected round close in fixtures; write as-built and fresh all-green coverage                                                                                           | No hand-written `record/`; no standing claim         |
 | B9    | Architect + machine verb | Close source and closure PRs under the shared ceremony                                                                                                                                                         | No evidence reuse/promotion                          |
 
 ## Acceptance
@@ -69,4 +69,5 @@ automatic promotion, or any proof written by hand.
 ## Exit claim
 
 Evidence and lifecycle machinery are implemented and tested. Reuse remains disabled
-until BL-022; actions-evidence standing remains zero; coverage remains red.
+until BL-022; actions-evidence standing remains zero; coverage remains an all-green
+regression gate.

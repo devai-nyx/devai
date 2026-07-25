@@ -135,7 +135,7 @@
       "rationale": "Constitutional change",
       "severity": "critical",
       "detect_patterns": [
-        "\\b(?:git\\s+(?:add|rm)|rm)\\s+[^\\n]*(?:law/(?:constitution|invariants|register|policy)|\\.devai/config)/"
+        "\\b(?:git\\s+(?:add|rm)|rm)\\s+[^\\n]*(?:law/|product/|work/(?:rounds|audit)/|record/|\\.devai/config/)"
       ],
       "safer_alternative": "Architect amendment via ADR + DESIGN-DECISIONS entry"
     }

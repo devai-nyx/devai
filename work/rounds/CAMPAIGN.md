@@ -23,17 +23,17 @@ evidence.
 
 ## Serial map
 
-| Round  | Primary backlog                     | Required predecessor                     | Exit claim ceiling                                       |
-| ------ | ----------------------------------- | ---------------------------------------- | -------------------------------------------------------- |
-| R-0002 | 001–003, 007, 012–014, 023, 046–049 | R-0001 closed; R-Ω frozen                | Re-bound and operationally coherent; not ratified        |
-| R-0003 | 004–006                             | R-0002 independently green               | Founding law ratified; not released or ready             |
-| R-0004 | 008, 009, 016, 025, 027–031         | R-0003                                   | Governed action/package surface implemented              |
-| R-0005 | 010, 011, 015, 018, 033, 045, 050   | R-0004                                   | Proof/local-evidence/round mechanics implemented         |
-| R-0006 | 026, 034, 035, 081                  | R-0005                                   | Output contracts, law extraction, and trace depth closed |
-| R-0007 | 019, 021, 032, 039, 044             | R-0006                                   | Product/docs/site deployable; not deployed               |
-| R-0008 | 020, 024                            | R-0007                                   | Exact 1.0.0 candidate and external-release handoff       |
-| R-0009 | 022, 036                            | R-0008 published close                   | Evidence authorization ready; streak remains zero        |
-| R-0010 | 037, 038                            | Published 1.0.0 plus fresh Owner mandate | Evidence-based disposition; activation separately gated  |
+| Round  | Primary backlog                            | Required predecessor                     | Exit claim ceiling                                       |
+| ------ | ------------------------------------------ | ---------------------------------------- | -------------------------------------------------------- |
+| R-0002 | 001–003, 007, 012–014, 023, 046–049        | R-0001 closed; R-Ω frozen                | Re-bound and operationally coherent; not ratified        |
+| R-0003 | 004–006                                    | R-0002 independently green               | Founding law ratified; not released or ready             |
+| R-0004 | 008, 009, 016, 025, 027–031, 065, 080, 084 | R-0003                                   | Governed action/package surface implemented              |
+| R-0005 | 010, 011, 015, 018, 033, 045, 050, 063     | R-0004                                   | Proof/local-evidence/round mechanics implemented         |
+| R-0006 | 026, 034, 035, 081                         | R-0005                                   | Output contracts, law extraction, and trace depth closed |
+| R-0007 | 019, 021, 032, 039, 044                    | R-0006                                   | Product/docs/site deployable; not deployed               |
+| R-0008 | 020, 024                                   | R-0007                                   | Exact 1.0.0 candidate and external-release handoff       |
+| R-0009 | 022, 036                                   | R-0008 published close                   | Evidence authorization ready; streak remains zero        |
+| R-0010 | 037, 038                                   | Published 1.0.0 plus fresh Owner mandate | Evidence-based disposition; activation separately gated  |
 
 BL-040 through BL-043 remain carried N/A and are checked at every planning boundary.
 
@@ -43,8 +43,12 @@ BL-040 through BL-043 remain carried N/A and are checked at every planning bound
   red.
 - R-0002 and R-0003 are separate so the round that repairs operational law cannot
   certify its own founding ratification.
-- BL-017 is the release throttle. No release candidate is externally publishable until
-  all four unchanged coverage floors pass.
+- BL-017 closed in R-0002. All four unchanged coverage floors remain mandatory
+  regression gates for every later release candidate.
+
+Prepared ownership is explicit: R-0004 carries BL-065, BL-080, and BL-084; R-0005
+carries BL-063.
+
 - R-0007 may prepare site bytes but may not deploy them.
 - R-0008 has two phases: repository-scoped preparation is authorized; publish, tag,
   GitHub Release, and Pages deployment are pending a later Owner grant.
