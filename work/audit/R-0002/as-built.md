@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-105; OM-002; OM-005; R-0002-OPENING-AUDIT; R-0002-CLAUDE-OPUS-CLOSE-REVIEW; immutable predecessor objects at 05dd242bf72334bfd683096aed380e8240b6b9aa,
+    DII-105; OM-002; OM-005; R-0002-OPENING-AUDIT; R-0002-CLAUDE-OPUS-CLOSE-REVIEW; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-2; immutable predecessor objects at 05dd242bf72334bfd683096aed380e8240b6b9aa,
   ]
 ---
 
@@ -19,10 +19,10 @@ provenance:
 
 This report is chronological. The initial B8 observations and each correction snapshot
 are retained as historical evidence; they are not current-candidate claims. The
-authoritative current observation is **Post-Opus exact re-close** below, against source
-snapshot `db3cb8b8aa678e6d562b3311cf4adacf31da88af`. The later Architect
-closing decision, source merge, exact-main observation, and machine closure record
-remain part of the two-PR close and are not predicted here.
+latest current observation is **Second Opus correction** below. A final exact-candidate
+metric refresh and third independent review still precede source push. The later
+Architect closing decision, source merge, exact-main observation, and machine closure
+record remain part of the two-PR close and are not predicted here.
 
 The round re-binds frozen predecessor truth and repairs the scoped operational
 contracts. It ratifies nothing, releases nothing, deploys nothing, and transfers no
@@ -78,7 +78,7 @@ The local predecessor checkout was observed clean at
 | BL-014 | Closed.                                                         | The canonical schema-valid F5 domain policy is materialized byte-identically under law and `.devai/config`; trace and action coverage consume it.                                                                                                                                                                                                                                                                                      |
 | BL-023 | Closed.                                                         | Auditor is admitted by the mutation and translation role schemas while final adapters continue to deny Auditor actuation; schema and role-closure tests are green.                                                                                                                                                                                                                                                                     |
 | BL-046 | Closed.                                                         | CI prewarms both workspace and characterized fixture package-manager pins. Isolated cold and warm runs produce the same fingerprint corpus without refreshing the baseline or widening noise exemptions. Stage 2 is green and stage 3 executes.                                                                                                                                                                                        |
-| BL-047 | Closed.                                                         | The deterministic triage maps all 148 committed repository-name occurrences: 115 active-successor, 17 frozen-predecessor, 5 historical-label, 10 package-metadata, and 1 generated-output. Its exact-locator guard and predecessor-attestation self-reference guard are green.                                                                                                                                                         |
+| BL-047 | Closed.                                                         | The current deterministic triage maps all 155 committed repository-name occurrences: 122 active-successor, 17 frozen-predecessor, 5 historical-label, 10 package-metadata, and 1 generated-output. Its exact-locator guard and predecessor-attestation self-reference guard are green after each governed regeneration.                                                                                                                |
 | BL-048 | Closed by append-only correction.                               | PC-0001 retains SHA-256 `56f8d37868ec72ca9b16f22e3f1d74fd2098b2c050f73a230a9c147c250bfad9`. Machine-emitted PC-0002 supersedes it, preserves historical gates, states the unmatched P7 deferral now governed by BL-045, and is selected as the effective R-0001 record.                                                                                                                                                                |
 | BL-049 | Closed.                                                         | Numeric DII ordering accepts valid order and rejects equal, inverted, malformed, and mixed-namespace IDs. `none-preratification` is typed end to end and the production CLI emitted PC-0002 under final schema validation.                                                                                                                                                                                                             |
 | BL-051 | Closed after final-gate discovery.                              | The first literal repository-wide Prettier execution exposed 352 imported baseline failures. DII-110 excludes only generated/canonical, parser-sensitive, and immutable historical paths; Owner, Architect, Engineer, and Inspector formatted every remaining active file separately; the changed forbidden-action policy was re-materialized through the production verb; and the literal global command is green.                    |
@@ -177,9 +177,10 @@ The correction remained red-first and role-pure:
 Fresh execution after the correction passes stage 1, stage 2, T3–T6, changeset
 classification, the scoped production policy/trace commands, and the literal global
 Prettier command. Stage 3 builds and runs 57 files / 641 passed / 7 declared skips,
-then fails only at the updated BL-017 readings quoted above. The later machine R-0002
-closure must name its failed gate exactly as `coverage-t1-t3` and acknowledge that key
-in a `verdict: fail` validation criterion.
+then fails only at the updated BL-017 readings quoted above. At that historical
+snapshot, a closure would have had to name `coverage-t1-t3` and acknowledge it through
+a failing criterion. That instruction was invalidated when BL-017 later closed; the
+current closure payload admits no red gate or failing criterion.
 
 ## Owner-directed BL-053 correction
 
@@ -290,7 +291,7 @@ above. PC-0001 and PC-0002 remain byte-identical.
 OM-004 coverage strengthening exercised the governance ledger’s historical mutation
 branches and found that its advertised sealed-record guard could never identify a
 schema-valid successor sealing commit. Auditor commit
-`0b374c9cde9471440d290153c387509b9b5eca23` governed BL-057 before repair.
+`0b374c9f8ef82768eb421344853592498c09aeb7` governed BL-057 before repair.
 
 The correction remained red-first and role-pure:
 
@@ -346,13 +347,13 @@ and incorrectly reporting the column nullable. Auditor commit
 
 The correction remained red-first and role-pure:
 
-- Inspector commit `a91ff982020d93d8d3a377699f8f3ebec15b6a56` established the
+- Inspector commit `a91ff98552794fb97c0bdba1d413f4fa60804d5a` established the
   isolated nullable-column failure while 14 companion inventory cases passed;
-- Architect commit `782545b347585749871eb55274324618d515c544` recorded DII-123 and
+- Architect commit `782545b32083f246da986dff429946ddb09ae1c2` recorded DII-123 and
   made constraint keywords type boundaries while retaining explicit multi-word types;
-- Engineer commit `85f3330a18662eda7f3ba2faef89382579404276` replaced the
+- Engineer commit `85f33306def27ad73b25d70ea20af06785374222` replaced the
   unconstrained second type identifier with deterministic supported forms; and
-- Inspector commit `f2b26aa6df6964fba9693747d7ce09c829a032e5` pinned ordinary
+- Inspector commit `f2b26aa0d6b4d60da59dacf42a17af710b703292` pinned ordinary
   `NOT NULL`, `DOUBLE PRECISION`, `CHARACTER VARYING`, and
   `TIMESTAMP WITH TIME ZONE` behavior.
 
@@ -422,6 +423,50 @@ exact source merge SHA and `none-preratification`, and contain no invented faile
 or failed validation criterion. PC-0001 and PC-0002 remain byte-immutable. R-0002
 ratifies nothing, releases nothing, deploys nothing, and transfers no readiness or
 evidence standing.
+
+## Second Opus correction
+
+The second exact-candidate Claude Opus 5 review ran read-only through literal
+`claude-opus-5` with no fallback against
+`d41423f3ab2d6ed8cede910deaec821fcf423937`. It returned **FAIL** and is
+preserved at `work/audit/R-0002/claude-opus-close-review-2.md`; the candidate did not
+advance to push. Auditor commit `6ec716622b7885ac4954ec55d6c19516956e923b`
+governed BL-066 through BL-071 and reopened BL-064’s remaining truth drift.
+
+The correction remained red-first and role-pure:
+
+- BL-066/067: Inspector `fdd59fdac13c9234954971422eebfe34816bc25a`
+  exposed caller-steered PC ids, abbreviated merge identities, and unbound Machine
+  batches. DII-127 and schema commit
+  `4cbb686dab0fc75d8f3554c35ad5b28962f6e2c8` bind full Git objects, and Engineer
+  `cdf7d6557e951a3f2acb4cf0fe43a6e4e478e9e9` rejects caller ids and requires
+  Machine commit attribution. The focused closure suite passes 8 tests.
+- BL-068/064: Inspector `be956824e1a3ba4bf2b6fb81dc6a76ddfbf58a5d`
+  made literal selectors, no fallback, and OM-003 precedence executable. Architect
+  `337dae8465853bb9e4a36c0180b15da209e6359b` corrected every active campaign
+  instruction and removed all retired BL-017 red permissions. The selector suite
+  passes 12 cases, and the decision-register introduction now describes its DII
+  numbering truthfully.
+- BL-069/071: Inspector `2cd8121c2d2e264bc7157e23763741be4a74ae61`
+  exposed shallow-history success, an uncaught malformed post-seal revision, and the
+  array-shaped lifecycle scaffold. DII-128 commit
+  `8f067414b38cd4bc8cf78d5188b0671cc8a1e2f5` binds complete, parseable history.
+  Engineer `520134ab3e1d3c611641f5a53b9ba843b3183c34` emits deterministic findings,
+  scaffolds `superseded_by: null`, and gives both remote workflows full Git history.
+  The focused ledger/lifecycle suites pass 64 tests and workflow lint passes.
+- BL-070: Inspector `2db9cc1c45c22af66c89aa410a1f97381ca25cb6`
+  proved check mode wrote its input and that the completeness floor self-relaxed.
+  DII-129 commit `d5191d3595178a267b2398ff7a9794800026ab4a`
+  fixes both required ratios at one. Engineer
+  `e3cbf5ed0e7f021d90c8b1c0b5f7952d5baed648` added a no-write
+  `trace:check` production/CI gate and refuses any untraced invariant. Architect
+  `f870df380b6cd1898b85a63438377b3c368b4a4f` regenerated 34/34 invariants
+  over 115 tracked executable tests; the trace sensor reports zero unresolved,
+  missing, untraced, or attestation-only entries.
+
+The third exact-candidate review remains mandatory. BL-063 still prohibits archive
+activation in R-0002, and BL-065 remains governed for R-0004; neither is relabelled
+green or treated as readiness.
 
 ## PC-0002 correction
 
