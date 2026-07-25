@@ -23,7 +23,7 @@ decision, source merge, exact-main observation, and machine closure record are p
 the two-PR close and therefore were not predicted by the initial B8 observation.
 Post-review corrections discovered by the literal shared exit floor are appended
 below through closure-validation candidate
-`dd5787d6591e2cd970ad349e8346f61eef040662`.
+`f0c8e7c1b9f74567bf7a47a493145907360f9b4e`.
 
 The round re-binds frozen predecessor truth and repairs the scoped operational
 contracts. It ratifies nothing, releases nothing, deploys nothing, and transfers no
@@ -88,6 +88,7 @@ The local predecessor checkout was observed clean at
 | BL-054 | Closed after PC-0003 draft prevalidation.                       | A red-first closure contract proved that Machine attribution was rejected. DII-113 admits `Machine` only as provenance for verb-produced record commits; the schema and `ClosureRole` type now agree; the production closure path records separate Machine and Inspector B6 entries; and byte-hash guards preserve both existing PC records.                                                                                           |
 | BL-055 | Closed after production-write prevalidation.                    | A red-first contract proved both authority-policy copies bound stale pre-format Constitution bytes. DII-115 classifies formatting as a binding-relevant byte change. The production `adopt upgrade` transition refreshed `.devai/config`; the Architect mirror is byte-identical; rules and source/extension digests are unchanged; and a disposable production `govern phase close --write` emitted PC-0003 with Machine attribution. |
 | BL-056 | Closed after publication preflight.                             | A red-first contract proved the canonical phase-closure schema described mutable `.devai/state/closures` instead of the production compliance-proof path. DII-117 binds closure records to `record/proofs/compliance/closures/PC-NNNN.json`; the schema now agrees with implementation, CLI help, authority policy, and the three-tree doctrine without changing record shape or behavior.                                             |
+| BL-057 | Closed after quota-window coverage testing.                     | A red-first history fixture proved the ADR mutation guard searched only for schema-invalid predecessor lifecycle tokens and treated scalar `superseded_by` as an array. DII-120 binds successor sealing semantics. Production now detects body, metadata, replacement-link, and return-to-draft mutation after activation while admitting the one canonical reciprocal supersession transition.                                        |
 
 There is no uncatalogued deferral. BL-007’s wider population program is explicitly
 bounded above; BL-045 remains the named R-0001 correction residual; BL-017 is the only
@@ -284,6 +285,30 @@ files / 850 tests / 8 declared skips, and Stage 2 passes 48 T1 files / 591 tests
 T2 files / 177 tests / 1 declared skip. Coverage still builds and runs 57 files / 641
 tests / 7 declared skips before failing only at the unchanged BL-017 readings quoted
 above. PC-0001 and PC-0002 remain byte-identical.
+
+## Quota-window BL-057 correction
+
+OM-004 coverage strengthening exercised the governance ledger’s historical mutation
+branches and found that its advertised sealed-record guard could never identify a
+schema-valid successor sealing commit. Auditor commit
+`0b374c9cde9471440d290153c387509b9b5eca23` governed BL-057 before repair.
+
+The correction remained red-first and role-pure:
+
+- Inspector commit `06b5787ba5d362bf65b25b57e63f1b108257d005` proved that
+  mutating the body after a schema-valid `active` commit went undetected;
+- Architect commit `b478edf8e11e7b7a0b79981d50cac07c4d319974` recorded
+  DII-120 and bound the successor lifecycle and scalar replacement semantics;
+- Engineer commit `27d8d74ff6a483cdaa88ac1b83dd4214477b6dbf` made the
+  historical guard seal on `active`, `superseded`, or `tombstoned`, implemented only
+  the permitted terminal transitions, and corrected reciprocal scalar-link handling;
+  and
+- Inspector commit `f0c8e7c1b9f74567bf7a47a493145907360f9b4e` pinned the
+  allowed active-to-superseded transition plus replacement-link and return-to-draft
+  rejection.
+
+The focused ledger suite passes 19 tests and the full Vitest floor passes 96 files /
+880 tests / 8 declared skips. No ADR status, body, or replacement link changed.
 
 ## PC-0002 correction
 
