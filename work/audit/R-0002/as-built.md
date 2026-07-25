@@ -806,6 +806,23 @@ PC-0003 to a source merge SHA that does not yet exist. The source PR and closure
 PR therefore remain separate proof boundaries but execute as one uninterrupted
 ceremony.
 
+## Exact source CI reopens BL-095
+
+Source PR #1 exact-SHA run `30171205110` tested
+`b55685762252d3af1d0b483746ab7a8c843b8532`. Evidence mode, Stage 1, and
+changeset classification passed, but governed repository enforcement failed closed on
+GitHub's synthetic merge commit `3469026a503837de49d829c233bc7e9eb6b53620`.
+The scanner reported `FORBIDDEN-SCAN-UNAVAILABLE` because its buffered `git diff-tree
+-m -p` inspection exceeded Node's default one-megabyte process-output buffer on the
+large R-0002 merge patch.
+
+This is not waived or relabelled green. Inspector `d8c9c22` reproduces the failure
+locally by adding a large merge payload to the existing protected-deletion merge
+contract: the scanner returns unavailable instead of detecting the deletion. BL-095
+is reopened until production can inspect a bounded large merge without weakening its
+fail-closed behavior, the focused contract and full ladder pass, and a new exact source
+SHA passes GitHub enforcement.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
