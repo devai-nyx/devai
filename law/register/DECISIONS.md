@@ -1300,6 +1300,41 @@ inside this campaign, exactly as its own applied boundary says. Historical Machi
 red-first ordering exceptions remain immutable and disclosed; BL-106/R-0005 owns the
 prospective mechanical sequencing guard.
 
+### DII-140 — R-0002 binds the fifth-review repairs without laundering evidence chronology
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 sixth-review source close; DII-105; DII-137; DII-139; R-0002-FIFTH-REVIEW-CORRECTIONS@f71192e50b956384e0594869a1f3fb56d1dee1b3; BL-075; BL-077; BL-079; BL-082; BL-086; BL-092; BL-094–105`
+
+DII-140 supersedes DII-138 only as the R-0002 source-closing judgment. The fifth
+review FAIL remains immutable evidence. Its confirmed enforcement defects were
+governed before repair, exercised by Inspector-owned failing contracts, repaired
+within path authority, and re-audited at
+`f71192e50b956384e0594869a1f3fb56d1dee1b3`.
+
+The 119-file local floor and 70.53/60.85/77.22/72.80 coverage readings recorded by the
+Auditor are measurements of pre-decision source snapshot
+`7f1f84a31e4e99f8cf5463dd74cb8fd73ddd265f`; they are not represented as
+measurements of this later law commit. The exact source candidate is the commit
+containing this decision plus the deterministic repository-reference regeneration.
+That exact candidate must independently pass the no-write trace/reference checks,
+workflow/governance checks, formatting and tree-cleanliness checks, then receive a
+fresh read-only Claude Opus 5 review through literal `claude-opus-5` with no fallback.
+Only an exact-candidate PASS may authorize push and exact-SHA remote CI.
+
+BL-075, BL-077, BL-079, BL-082, BL-086, BL-092, and BL-094 through BL-104 are
+closed. BL-105 closes only when the final repository-reference artifact, ignored
+PC-0003 operational template, and exact-candidate review all bind DII-140 and the
+actual candidate without predeclared evidence. BL-065 and BL-080/084 remain prepared
+in R-0004; BL-063 and prospective sequencing BL-106 remain prepared in R-0005;
+BL-081 remains prepared in R-0006. Those residuals constrain claims and do not
+authorize serial-round bypass.
+
+After the source PR merges, a closure-only branch may emit PC-0003 through the
+production verb against the exact source merge SHA, using DII-105 as historical
+declaration, DII-137 as amended-plan binding, and DII-140 as closing decision. Every
+observed source gate must be pass, `release_disposition` is
+`none-preratification`, and no failed gate or failing validation criterion may be
+invented. R-0002 remains draft, ratifies nothing, releases nothing, deploys nothing,
+and transfers no readiness or evidence standing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
