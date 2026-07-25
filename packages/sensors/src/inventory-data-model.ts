@@ -490,10 +490,12 @@ function parseColumnLine(line: string): DataModelColumn | null {
   if (rawName === undefined || rest === undefined) return null;
   const name = rawName.startsWith('"') ? rawName.slice(1, -1).replace(/""/g, '"') : rawName;
   if (RESERVED_FIRST_TOKENS.has(name.toUpperCase())) return null;
-  // Type: first token, optionally followed by parens (e.g. VARCHAR(255)) or
-  // a square-bracketed array suffix (TEXT[]).
+  // Type: one identifier or one of the explicit SQL multi-word type forms,
+  // optionally followed by parens (e.g. VARCHAR(255)) or an array suffix.
+  // An unconstrained second identifier would consume constraint keywords such
+  // as `NOT` in `TEXT NOT NULL`.
   const typeMatch = rest.match(
-    /^([A-Za-z_][\w]*(?:\s+[A-Za-z_][\w]*)?(?:\s*\([^)]*\))?(?:\s*\[\])?)/,
+    /^((?:(?:timestamp|time)\s+(?:with|without)\s+time\s+zone|double\s+precision|character\s+varying|bit\s+varying|national\s+character(?:\s+varying)?|[A-Za-z_][\w]*)(?:\s*\([^)]*\))?(?:\s*\[\])?)/i,
   );
   if (typeMatch === null) return null;
   const typeText = typeMatch[1];
