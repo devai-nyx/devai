@@ -57,7 +57,7 @@ const MANDATORY_SECTIONS: ReadonlyArray<{ label: string; re: RegExp }> = [
  * ADRs: scalar fields, simple string arrays (`[a, b]` or `- a` block),
  * comment lines. Strictly enough for the ADR schema.
  */
-function parseFrontMatter(text: string): Record<string, unknown> {
+export function parseAdrFrontMatter(text: string): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   const lines = text.split('\n');
   let i = 0;
@@ -89,7 +89,9 @@ function parseFrontMatter(text: string): Record<string, unknown> {
     if (/^\[.*\]$/.test(value.trim())) {
       const inner = value.trim().slice(1, -1).trim();
       out[key] =
-        inner === '' ? [] : inner.split(',').map((s) => s.trim().replace(/^['"]|['"]$/g, ''));
+        inner === ''
+          ? []
+          : inner.split(/[;,]/u).map((s) => s.trim().replace(/^['"]|['"]$/g, ''));
     } else {
       out[key] = value.trim().replace(/^['"]|['"]$/g, '');
     }
@@ -156,7 +158,7 @@ export function validateAdrs(opts: ValidateAdrsOptions): AdrValidationResult {
     }
     const fmText = m[1] ?? '';
     const bodyText = m[2] ?? '';
-    const fm = parseFrontMatter(fmText);
+    const fm = parseAdrFrontMatter(fmText);
     // Body diagnostics are independent of frontmatter validity. A malformed
     // imported record must not suppress missing-section findings.
     for (const { label, re } of MANDATORY_SECTIONS) {
