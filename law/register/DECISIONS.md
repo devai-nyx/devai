@@ -1523,6 +1523,32 @@ DII-146 as closing decision. Its release disposition remains
 `none-preratification`. OM-007 still replaces only the additional final Opus review.
 Nothing is ratified, released, deployed, published, or declared ready by this repair.
 
+### DII-147 — Bind append-only closure-ledger verification
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 disposable close correction; OM-007; DII-105; DII-137; DII-146; BL-119; Auditor 6ac68fd; Inspector 6dd0325; Auditor bdad995; Inspector e1d604b; Auditor 3086696`
+
+DII-147 supersedes DII-146 only as the R-0002 source-closing judgment. The first
+disposable production emission of PC-0003 from exact source merge
+`070b745a09285fddc4510da60dbbc3eb957de756` succeeded and preserved PC-0001 and
+PC-0002 byte-for-byte, but exposed a test-only population assumption: the PC-0002
+correction contract expected the effective ledger to contain exactly one round.
+
+BL-119 governs that closure blocker. Inspector `6dd0325` now derives the asserted
+count from effective, non-superseded ledger records while retaining the exact PC-0001
+and PC-0002 hashes, the PC-0002 supersession relationship, and the effective R-0001
+streak basis. The same 29 focused closure tests pass before PC-0003 exists and after
+the production close appends PC-0003 in the disposable worktree. Auditor `bdad995`
+re-closed BL-119 from those two observed states. Inspector `e1d604b` and Auditor
+`3086696` align the compact backlog contract with that disposition.
+
+The corrected exact candidate must pass the complete source ladder and all required
+GitHub checks before merge. Its exact merge SHA must then pass exact-main checks
+before the closure-only branch emits PC-0003 through the same production verb.
+
+PC-0003 uses DII-105 as historical declaration, DII-137 as amended-plan binding, and
+DII-147 as closing decision. Its release disposition remains
+`none-preratification`. OM-007 still replaces only the additional final Opus review.
+Nothing is ratified, released, deployed, published, or declared ready by this repair.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

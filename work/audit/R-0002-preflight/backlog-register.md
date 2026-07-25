@@ -23,7 +23,7 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-118. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-119. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
@@ -34,7 +34,8 @@ findings. BL-107 through BL-112 record the sixth exact-candidate findings. BL-11
 through BL-116 record the seventh exact-candidate residual findings. BL-117 records
 the synthetic pull-request merge aggregation defect exposed by exact source CI.
 BL-118 records the test-fixture classification defect exposed by the BL-117
-red-first commit.
+red-first commit. BL-119 records the closure-ledger contract assumption exposed by
+the disposable production emission of PC-0003.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -42,7 +43,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 
 | Primary round | Records                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-118 |
+| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-119 |
 | R-0003        | BL-004, BL-005, BL-006                                                                                                                                                                    |
 | R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084                                                                                            |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
@@ -57,7 +58,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 
 | Disposition                         | Governed records                                                                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–118 |
+| Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–119 |
 | Open in prepared R-0003             | BL-004–006                                                                                                                                       |
 | Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                                   |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
@@ -1092,6 +1093,17 @@ messages remain scanned; mixed test and non-test changes remain scanned; path-ba
 authority and CI evidence remains scanned; other authors receive no exemption. A
 contract constructs the fixture without embedding an otherwise self-triggering
 literal in the governed test patch.
+
+### BL-119 — Make closure-ledger assertions append-only safe
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: PC-0003 disposable production close at source merge 070b745a09285fddc4510da60dbbc3eb957de756; phase-closure.contract.test.ts`
+
+Priority: P0 before PC-0003. Primary round: R-0002.
+
+Acceptance: the PC-0002 correction contract continues to prove that PC-0001 is
+preserved and superseded by PC-0002 without assuming that R-0001 is the repository's
+only effective closed round. The complete suite passes both before and after PC-0003
+is appended; PC-0001 and PC-0002 remain byte-identical.
 
 ## Carried guard map
 

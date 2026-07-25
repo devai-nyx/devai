@@ -875,6 +875,27 @@ active. All 22 focused scanner tests, the affected package build, and the comple
 local governance command pass. BL-118 is closed locally pending the next exact source
 run.
 
+## Disposable PC-0003 close opens BL-119
+
+The production close command emitted PC-0003 successfully from exact source merge
+`070b745a09285fddc4510da60dbbc3eb957de756` in a disposable worktree, while preserving
+the exact PC-0001 and PC-0002 hashes. The focused closure suite then failed because
+the PC-0002 correction contract hard-coded an effective ledger count of one. That
+count described the pre-PC-0003 repository population rather than the invariant under
+test: PC-0001 remains present and is superseded by PC-0002.
+
+BL-119 governs this closure-only CI blocker. The Inspector must replace the population
+assumption with an append-only-safe assertion that still proves PC-0002 is the
+effective R-0001 record. The contract must pass both without PC-0003 on the source
+branch and with production-emitted PC-0003 in a disposable exact-candidate worktree.
+
+Inspector `6dd0325` replaced the fixed population count with the count of effective,
+non-superseded ledger records. The same 29 focused closure tests pass both on the
+source branch without PC-0003 and in the disposable worktree after production emitted
+PC-0003. Inspector `e1d604b` also aligned the compact backlog contract with BL-119's
+audited disposition. PC-0001 and PC-0002 retain their exact recorded hashes. BL-119
+is closed locally pending exact source PR and exact-main CI.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the

@@ -208,7 +208,9 @@ describe('PC-0002 append-only correction', () => {
       }),
     );
     const ledger = computeLedger(records);
-    expect(ledger.count).toBe(1);
+    expect(ledger.count).toBe(
+      ledger.rounds.filter((record) => record.superseded_by === undefined).length,
+    );
     expect(ledger.streak_basis).toContain('PC-0002');
     expect(ledger.rounds.find((record) => record.id === 'PC-0001')?.superseded_by).toBe('PC-0002');
   });
