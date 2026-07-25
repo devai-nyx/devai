@@ -29,6 +29,12 @@ let tempDir = '';
 
 beforeEach(() => {
   tempDir = mkdtempSync(join(tmpdir(), 'devai-ci-scaffold-cli-'));
+  const pinDirectory = join(tempDir, '.devai/pin');
+  mkdirSync(pinDirectory, { recursive: true });
+  writeFileSync(
+    join(pinDirectory, 'constitution.md'),
+    readFileSync(join(HERE, '..', '..', 'law', 'constitution.md'), 'utf8'),
+  );
 });
 
 afterEach(() => {
