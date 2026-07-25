@@ -1828,6 +1828,37 @@ exact-main CI establish the complete R-0003 close.
 R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
 promotes, re-earns, or declares ready nothing.
 
+### DII-157 — Rebind the R-0003 source close after the second Opus review
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 second Opus correction; DII-156; BL-132; R-0003-CLAUDE-OPUS-CLOSE-REVIEW-2; R-0003-CLAUDE-OPUS-CLOSE-REVIEW-2-CORRECTION; Inspector 5c62d2a; Architect ce75158; Auditor a8f9013 and 5e68493`
+
+DII-157 supersedes DII-156 only as the R-0003 source-closing judgment. The exact
+`claude-opus-5` review of candidate `68143f5` ended `VERDICT: FAIL` on one confirmed
+blocker: active `law/adr/README.md` retained the pre-replacement twelve-all-active claim
+and relied solely on draft review provenance. BL-132 governs and closes that finding.
+
+Inspector `5c62d2a` first bound the missing index contract red. Architect `ce75158` then
+corrected the index to the gapless ADR-001 through ADR-013 roster, twelve active records,
+and ADR-005 superseded by ADR-013; active DII-153 now supplies successor authority while
+REV-0003 remains historical input. No numbered ADR or immutable review byte changed.
+Auditor `5e68493` independently verified the correction.
+
+The second reviewer separately rejected objections about DII-153 identity, Auditor
+formatting role purity, DII-150's historical draft citations, and immutable corrected
+digests. Those rejected observations authorize no further mutation.
+
+The exact candidate containing DII-157 and a fresh repository-reference projection must
+restart the complete ladder from Stage 1 and then receive another read-only review
+through literal `claude-opus-5`, with no fallback. Any actionable finding reopens the
+governed repair cycle; only a PASS authorizes source push and exact-SHA CI.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-157 as the closing decision. Its release
+disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
+exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
