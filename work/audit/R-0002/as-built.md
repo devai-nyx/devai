@@ -572,6 +572,21 @@ skips:
 | Functions  | 1,477 / 1,915   |  77.12% |        70.58% |          70% |
 | Lines      | 9,546 / 13,160  |  72.53% |        65.48% |          70% |
 
+Exact local execution at clean pre-audit source snapshot
+`bcf5b4b7afcaaa9365b41cff2895c0a34d532253` also reports:
+
+- the full Vitest floor exits zero;
+- Stage 1 passes workflow lint, 34-invariant/115-test no-write trace freshness,
+  repository lint, and typecheck;
+- Stage 2 passes the build, 66 T1 files / 776 tests, and 31 T2 files / 185 tests
+  with 1 declared skip;
+- Stage 3 passes the build and the coverage execution above;
+- T4 passes 2 files / 4 tests, T5 passes 6 files / 25 tests, and T6 passes 1 file /
+  3 tests;
+- changeset classification passes with zero pending changesets; and
+- literal global Prettier, `git diff --check`, trace freshness, and worktree
+  cleanliness pass.
+
 BL-074 through BL-079 and BL-082 through BL-083 are closed at this observation.
 BL-080 and BL-084 remain prepared in R-0004, BL-081 remains prepared in R-0006, and
 DII-135 narrows current claims accordingly. The trace reading proves marker and
