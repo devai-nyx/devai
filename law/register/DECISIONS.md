@@ -819,6 +819,25 @@ then emits PC-0003 against the exact source merge SHA, using DII-105 as declarat
 DII-114 as closing decision. R-0002 remains draft, ratifies nothing, releases nothing,
 deploys nothing, and transfers no readiness or evidence standing.
 
+### DII-115 — Authority materialization binds every Constitution byte change
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 production closure prevalidation; DII-110; Constitution Article 6; BL-055`
+
+Formatting is a byte change for an authority-policy Constitution binding even when it
+changes no constitutional meaning. The DII-110 formatting sequence changed the raw
+Constitution digest from
+`e2ebe98eae91cb91e7868dda84309bd61c5d86d7b0b1a94f7bdacfb3ce6c2dd8`
+to `d1dd4858cf48ca14597d3a0d9f70fe8fbda01cc69a019c7e210b46e40bda3763`
+without re-materializing the authority policy. A later production write correctly
+refused the stale binding.
+
+An Engineer session must execute the authorized production transition
+`devai adopt upgrade --target . --as-role architect --write`. The trusted upgrade
+machine may update only the canonical and `.devai/config` authority-policy
+materializations and its verb receipt. The resolved rules, source and extension
+digests, version, role boundaries, and constitutional meaning must remain unchanged.
+R-0002 may close only after both materializations bind the new raw digest and a
+disposable production closure write passes.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
