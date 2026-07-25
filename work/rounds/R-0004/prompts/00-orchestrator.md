@@ -15,9 +15,10 @@ Run pack dry-runs but never publish. Prove every fixed-group member exists and e
 public package is included. Preserve action behavior unless a reviewed fold/tombstone
 map and migration contract say otherwise.
 
-Obtain Claude Opus 5 read-only review of surface loss, package cycles, stale mirrors,
-and command-smuggling risks. Merge only with all noncoverage exact-SHA checks green and
-the precisely retained BL-017 red; use the shared two-PR closure ceremony.
+Obtain Claude Opus 5 through literal `claude-opus-5` for read-only review of surface
+loss, package cycles, stale mirrors, and command-smuggling risks; no fallback to another
+model is permitted. Merge only with all exact-SHA checks green and use the shared two-PR
+closure ceremony.
 
 Final report:
 

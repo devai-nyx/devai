@@ -14,10 +14,10 @@ those recorded marks to the glossary and performs the ceremony only after every 
 command passes on the exact candidate, explicitly setting the genesis attestation’s
 `ratified` field. The Engineer materializes but does not author law.
 
-Ask Claude Opus 5 to inspect the candidate for doctrine drift, false lifecycle changes,
-unresolved citations, and claims inflation. Resolve findings before push. Merge only
-with every required noncoverage check green and only the exact BL-017 coverage red.
-Report the workflow red and use the shared two-PR closure ceremony.
+Ask Claude Opus 5 through literal `claude-opus-5` to inspect the candidate for doctrine
+drift, false lifecycle changes, unresolved citations, and claims inflation; no fallback
+to another model is permitted. Resolve findings before push. Merge only with every
+required check green and use the shared two-PR closure ceremony.
 
 Final report:
 

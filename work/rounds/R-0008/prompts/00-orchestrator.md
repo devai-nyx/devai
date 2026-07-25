@@ -9,9 +9,10 @@ Run the live preflight and execute Phase A only. Pack from a clean exact candida
 record all eleven hashes, verify attest subjects, and install the tarballs—not workspace
 links—into the hermetic adopter. Real `stynx` is read-only.
 
-Ask Claude Opus 5 to review supply-chain identity, workflow permissions/pins,
-fixed-group completeness, migration realism, rollback, and release-language accuracy.
-Resolve findings and produce A6’s handoff.
+Ask Claude Opus 5 through literal `claude-opus-5` to review supply-chain identity,
+workflow permissions/pins, fixed-group completeness, migration realism, rollback, and
+release-language accuracy; no fallback to another model is permitted. Resolve findings
+and produce A6’s handoff.
 
 Then read `EXTERNAL-RELEASE-AUTHORIZATION.md` again:
 

@@ -91,13 +91,15 @@ The R-0008 and R-0010 authorization files contain the later human gates.
 
 ## Campaign finish
 
+Every Claude interaction uses Claude Opus 5 through literal `claude-opus-5`; no fallback
+to another model is permitted.
+
 The currently authorized campaign checkpoint requires:
 
 1. R-0002 through R-0007 closed through machine-generated phase records;
 2. R-0008 Phase A complete with an exact pending external authorization handoff;
 3. R-0009 and R-0010 prepared but dormant behind their truthful entry gates;
-4. the complete local and remote gate set green at each merged candidate, except an
-   explicitly retained earlier coverage red that disappears only in R-0006;
+4. the complete local and remote gate set green at each merged candidate;
 5. independent Claude Opus 5 close review with every actionable finding resolved or
    governed before each merge;
 6. clean main, clean worktrees, no uncatalogued deferral, and no claims above the round’s

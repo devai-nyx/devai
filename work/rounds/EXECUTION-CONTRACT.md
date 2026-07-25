@@ -117,17 +117,13 @@ Before push:
 - inspect the complete diff and role attribution;
 - prove every backlog item in scope has acceptance evidence or remains blocking;
 - after quota recovery, ask Claude Opus 5 through the explicit `claude-opus-5` selector
-  for an independent read-only close review and resolve every
-  actionable finding;
-- never fall back to Fable or another Claude model when quota or model selection fails;
+  for an independent read-only close review and resolve every actionable finding; no fallback
+  to another model is permitted;
 - leave no untracked product or evidence artifacts.
 
 After push, inspect the exact candidate’s GitHub checks. Merge only when every required
-check is green for that SHA. OM-002’s one bounded pre-release exception is BL-017:
-through R-0005 the merged-coverage job must run and may remain red only at the exact
-unchanged legal thresholds while every other job is green. The workflow and exact-main
-run must be reported as red, never “green with an expected failure.” Any different red
-blocks merge. R-0006 removes this exception by closing BL-017.
+check is green for that SHA. BL-017 closed in R-0002 only after the unchanged
+70/60/70/70 floors passed; no source or exact-main red remains authorized.
 
 ## Closure and rollback
 
@@ -135,13 +131,13 @@ An Auditor writes the as-built before the closing decision. The close uses two e
 PR boundaries:
 
 1. the source PR contains all scoped work, as-built, and closing decision; after merge,
-   verify its exact-main run (including the bounded BL-017 red through R-0005);
+   verify its all-green exact-main run;
 2. from that merged SHA, the repaired machine closure verb appends the next PC record on
    a closure-only branch; merge that closure PR and verify final exact-main state.
 
-The PC record binds the source merge SHA, names all gates and honest red/non-release
-dispositions, and never pretends the later closure-only SHA was the tested source
-candidate.
+The PC record binds the source merge SHA, names all gates and the honest non-release
+disposition, and never pretends the later closure-only SHA was the tested source
+candidate. Any red gate blocks the ceremony rather than becoming an exception.
 
 Rollback is batch-local: revert the last role-pure batch or abandon its branch before
 continuing. Never use destructive reset against a dirty or shared worktree. Preserve

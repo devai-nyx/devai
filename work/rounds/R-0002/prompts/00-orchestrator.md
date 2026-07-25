@@ -36,11 +36,10 @@ R-0005 still owns the full BL-050 lifecycle. Any new defect becomes a gapless Au
 backlog record before work continues; scope expansion requiring Owner intent stops the
 round.
 
-During the pre-review Claude quota pause, OM-004 authorizes bounded,
-behavior-focused Inspector tests that improve measured coverage. Do not weaken any
-threshold, exclusion, source set, assertion, or production behavior; do not claim
-BL-017 closed; and preserve R-0006 ownership of the full 70/60/70/70 gate. Govern any
-production defect exposed by the tests before continuing.
+OM-004 authorizes bounded, behavior-focused Inspector tests that improve measured
+coverage. Do not weaken any threshold, exclusion, source set, assertion, or production
+behavior. BL-017 closes in R-0002 only when all unchanged 70/60/70/70 floors actually
+pass. Govern any production defect exposed by the tests before continuing.
 
 OM-005 extends that work until the fresh merged T1+T3 readings reach at least 63.22%
 statements, 59.76% branches, 70.58% functions, and 65.48% lines. Re-read raw covered
@@ -48,11 +47,9 @@ counts and denominators on each iteration; no displayed-rounding shortcut satisf
 the target. Keep the exact-candidate Claude review suspended until every target is met.
 
 After quota recovery, ask Claude Opus 5 through `claude-opus-5` for a read-only close
-review of the exact candidate. Do not fall back to Fable. Resolve its actionable
-findings. Push and merge only after all required checks for the SHA are green and the
-only remaining remote red is the exact BL-017 coverage job allowed by the shared
-contract. Report the overall workflow as red. Execute the shared two-PR closure
-ceremony.
+review of the exact candidate; no fallback to another model is permitted. Resolve its
+actionable findings. Push and merge only after all required checks for the SHA are
+green. Execute the shared two-PR closure ceremony.
 
 ## Final report
 

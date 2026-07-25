@@ -32,7 +32,7 @@ CI. R-0002 prepares founding ratification; it does not perform it.
 - Live predecessor commit/tree/chain-head/D-196/PC-0019 values match the preflight audit.
 - Successor base equals live `origin/main`.
 - The 812-test floor is green after `pnpm run devai:prepare`.
-- The coverage and exact-main CI reds are acknowledged, not suppressed.
+- Every local and exact-main CI gate must pass; no red exception remains authorized.
 
 ## Batches
 
@@ -47,7 +47,7 @@ CI. R-0002 prepares founding ratification; it does not perform it.
 | B6    | Machine verb + Inspector | Emit PC-0002 superseding PC-0001 with the unmatched BL-045 deferral stated honestly; verify ledger selection                                                                                                                  | PC-0001 unchanged; PC-0002 schema and ledger green                             |
 | B7    | Inspector                | Replace each exact known-red guard closed here in the same sequence; run production commands and adversarial checks                                                                                                           | No zero-match or self-reference success                                        |
 | B8    | Auditor                  | Write R-0002 as-built, reconcile all twelve items, quote fresh coverage, and record every residual                                                                                                                            | No uncatalogued deferral                                                       |
-| B9    | Architect + machine verb | Run the shared source-PR then closure-PR ceremony; verify exact-main with only the quoted BL-017 red                                                                                                                          | Closure says “ratifies nothing”                                                |
+| B9    | Architect + machine verb | Run the shared source-PR then closure-PR ceremony; verify exact-main is all green                                                                                                                                             | Closure says “ratifies nothing”                                                |
 
 Role changes are separate commits. B6’s `record/` output is never hand-authored.
 
@@ -67,7 +67,7 @@ In addition to the shared exit floor:
 - `.devai/config/` and `.devai/pin/` stay tracked, while runtime contents under
   `.devai/state/` and `.devai/worktrees/` are ignored except tracked `.gitkeep`
   sentinels;
-- stage 3 runs and fails only at the fresh BL-017 threshold readings.
+- stage 3 and the unchanged 70/60/70/70 coverage floors pass.
 
 ## Stop and rollback
 
@@ -83,7 +83,7 @@ The close record carries:
 - exact rebound attestation digest;
 - production-command results;
 - PC-0002 correction identity;
-- fresh coverage red;
+- fresh all-green coverage readings;
 - exact merged SHA and exact-main CI;
 - an explicit statement that R-0003 must independently re-verify all of them before
   ratification.

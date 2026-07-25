@@ -15,8 +15,9 @@ sentinels are tracked.
 
 Keep reuse and promotion disabled. Test round close in disposable fixtures until the
 source/closure PR ceremony itself is ready; never invoke the old archive-move semantics.
-Ask Claude Opus 5 to review evidence trust boundaries, round immutability, worktree
-cleanup, and anchor migration. Resolve all findings before merge.
+Ask Claude Opus 5 through literal `claude-opus-5` to review evidence trust boundaries,
+round immutability, worktree cleanup, and anchor migration; no fallback to another model
+is permitted. Resolve all findings before merge.
 
 Final report:
 

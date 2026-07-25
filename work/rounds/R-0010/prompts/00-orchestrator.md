@@ -10,9 +10,10 @@ classifiers.
 
 Execute B0–B8 without compressing the observation window. Pre-register metrics before
 seeing outcomes. Record only real successor operations that satisfy every current
-qualifier. Keep raw evidence and exclusions. Ask Claude Opus 5 at each checkpoint to
-challenge qualification, duplicate/synthetic detection, metric selection, skill
-compatibility, and revocation.
+qualifier. Keep raw evidence and exclusions. Ask Claude Opus 5 through literal
+`claude-opus-5` at each checkpoint to challenge qualification, duplicate/synthetic
+detection, metric selection, skill compatibility, and revocation; no fallback to
+another model is permitted.
 
 If evidence is insufficient, report that fact and keep the round open. Never change
 criteria to finish. If eligibility is proven, stop at B7 for the separate Owner

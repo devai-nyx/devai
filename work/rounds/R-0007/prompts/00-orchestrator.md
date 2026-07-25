@@ -10,9 +10,10 @@ site configuration. The Owner batch follows the approved line-level dispositions
 The Architect classifies every historical/active reference. The Engineer generates
 outputs; nobody hand-edits them. Build and hash the site locally but never deploy.
 
-Ask Claude Opus 5 to review current-vs-history semantics, product truth, generated
-identity, destructive commands, and release-language leakage. Resolve every actionable
-finding before merge.
+Ask Claude Opus 5 through literal `claude-opus-5` to review current-vs-history
+semantics, product truth, generated identity, destructive commands, and release-language
+leakage; no fallback to another model is permitted. Resolve every actionable finding
+before merge.
 
 Final report:
 

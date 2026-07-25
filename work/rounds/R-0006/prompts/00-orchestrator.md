@@ -11,8 +11,9 @@ reds and coverage tests; the Engineer fixes the plant and measurement plumbing. 
 exclude a valid source merely to raise a percentage.
 
 Exercise DB-gated integration tests with PostgreSQL. Inspect per-package/file coverage
-for suspicious zeroes and suspiciously excluded code. Ask Claude Opus 5 to challenge
-test quality, denominator integrity, output totality, and policy semantics.
+for suspicious zeroes and suspiciously excluded code. Ask Claude Opus 5 through literal
+`claude-opus-5` to challenge test quality, denominator integrity, output totality, and
+policy semantics; no fallback to another model is permitted.
 
 Do not close until all four exact floors pass on the normal command and remote stage 3
 passes on the exact SHA.
