@@ -1141,6 +1141,19 @@ Any failure to query repository state, enumerate history, resolve a historical p
 or read a named revision produces a deterministic integrity finding. Only a confirmed
 non-shallow repository with successfully enumerated record history may report clean.
 
+### DII-134 — Forbidden-action scanning includes committed path evidence
+`type: decision · status: draft · authority: Architect · provenance: R-0002 third Claude Opus 5 correction; BL-077`
+
+Each scanned commit is evaluated against its message and deterministic committed
+change evidence. Change evidence includes name-status paths rendered as the
+corresponding `git add` or `git rm` operation and the committed patch text. A neutral
+message cannot hide deletion or mutation of `law/`, `product/`, `work/`, `record/`, or
+committed `.devai/config/` authority surfaces.
+
+The scanner emits at most one finding per rule and commit, identifies which evidence
+class matched, and fails closed when a requested commit cannot be inspected. This
+expands detection input only; it grants no mutation authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
