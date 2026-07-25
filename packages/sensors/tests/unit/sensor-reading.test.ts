@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import './inventory-sensor-cases.js';
 import { buildSensorReading } from '../../src/sensor-reading.js';
 
 describe('buildSensorReading', () => {
