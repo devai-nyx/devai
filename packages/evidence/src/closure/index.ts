@@ -166,10 +166,7 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
         !record.validation_criteria.some(
           (criterion) =>
             criterion.verdict === 'fail' &&
-            mentionsExactGateIdentity(
-              `${criterion.criterion}\n${criterion.evidence ?? ''}`,
-              gate,
-            ),
+            mentionsExactGateIdentity(`${criterion.criterion}\n${criterion.evidence ?? ''}`, gate),
         ),
     );
   if (unacknowledgedFailedGates.length > 0) {

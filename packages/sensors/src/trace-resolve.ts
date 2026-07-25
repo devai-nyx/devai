@@ -161,9 +161,7 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
     }
   }
 
-  const attestationOnlyIds = new Set(
-    [...nonTestLinkedIds].filter((id) => !testLinkedIds.has(id)),
-  );
+  const attestationOnlyIds = new Set([...nonTestLinkedIds].filter((id) => !testLinkedIds.has(id)));
   for (const id of attestationOnlyIds) {
     findings.push({
       severity: 'info',

@@ -308,7 +308,8 @@ export function decisionRecordIntegrity(options: {
   if (git(options.repoRoot, ['rev-parse', '--is-shallow-repository']) === 'true') {
     findings.push({
       code: 'DECISION_HISTORY_SHALLOW',
-      message: 'Sealed decision history requires a complete Git history; shallow history cannot pass.',
+      message:
+        'Sealed decision history requires a complete Git history; shallow history cannot pass.',
       path: relative(options.repoRoot, recordsDir),
     });
   }
