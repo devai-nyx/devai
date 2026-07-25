@@ -136,7 +136,6 @@ describe('phase-closure machine attribution', () => {
         batches: [
           {
             id: 'B6-machine',
-            // @ts-expect-error BL-054: ClosureRole omits truthful Machine attribution.
             roles: ['Machine'],
             commit: 'bec810bb38e74ebdf0bd31ec3ee90aa0b186d1ed',
             headline: 'Emitted the append-only PC-0002 correction through the production verb',
@@ -159,8 +158,12 @@ describe('phase-closure machine attribution', () => {
 describe('PC-0002 append-only correction', () => {
   it('preserves PC-0001 and selects PC-0002 as the effective R-0001 closure', () => {
     const pc1 = readFileSync(join(ROOT, 'record/proofs/compliance/closures/PC-0001.json'));
+    const pc2 = readFileSync(join(ROOT, 'record/proofs/compliance/closures/PC-0002.json'));
     expect(createHash('sha256').update(pc1).digest('hex')).toBe(
       '56f8d37868ec72ca9b16f22e3f1d74fd2098b2c050f73a230a9c147c250bfad9',
+    );
+    expect(createHash('sha256').update(pc2).digest('hex')).toBe(
+      'b1d4ce8873272149d61de4eb71776c985b4d41c3086ddb7efed89550a1354135',
     );
     const records = readClosures(ROOT);
     const original = records.find((record) => record.id === 'PC-0001');
