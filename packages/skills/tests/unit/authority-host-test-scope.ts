@@ -38,7 +38,6 @@ const READ_PROCESS_VERBS: Readonly<Record<string, readonly string[]>> = {
     'merge-base',
     'rev-list',
     'rev-parse',
-    'show',
     'status',
   ],
   sh: ['-lc'],

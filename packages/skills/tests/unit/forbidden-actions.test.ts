@@ -111,6 +111,14 @@ describe('loadForbiddenWaivers', () => {
 });
 
 describe('scanForbiddenActions', () => {
+  it('fails closed when the registry bytes are malformed', () => {
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    writeFileSync(join(dir, '.devai/config/forbidden-actions.json'), '{ malformed');
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({ forbidden_id: 'FORBIDDEN-REGISTRY-INVALID' }),
+    );
+  });
+
   it('fails closed when committed history cannot be inspected', () => {
     mkdirSync(join(dir, '.devai/config'), { recursive: true });
     writeFileSync(
@@ -159,6 +167,46 @@ describe('scanForbiddenActions', () => {
 
     expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
       expect.objectContaining({ forbidden_id: 'FORBID-DELETE-AUTHORITY-DOCS' }),
+    );
+  });
+
+  it.each([
+    ['law/constitution.md', 'governed\n', 'changed\n'],
+    ['law/trace.json', '{}\n', '{"changed":true}\n'],
+    ['record/proofs/compliance/closures/PC-0001.json', '{}\n', '{"changed":true}\n'],
+  ])('detects a neutral in-place mutation of %s', (path, initial, changed) => {
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    mkdirSync(join(dir, path.slice(0, path.lastIndexOf('/'))), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions: CANONICAL_FORBIDDEN_ACTIONS }),
+    );
+    writeFileSync(join(dir, path), initial);
+    execFileSync('git', ['init', '-q'], { cwd: dir });
+    execFileSync('git', ['add', '.'], { cwd: dir });
+    execFileSync(
+      'git',
+      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'seed'],
+      { cwd: dir },
+    );
+    writeFileSync(join(dir, path), changed);
+    execFileSync('git', ['add', path], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=Fixture',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'chore: tidy',
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({ source: 'commit-change' }),
     );
   });
 });

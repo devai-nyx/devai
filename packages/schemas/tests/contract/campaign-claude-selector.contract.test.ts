@@ -1,5 +1,6 @@
 // Invariants: INV-DEVAI-001
 import { describe, expect, it } from 'vitest';
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { parse } from 'yaml';
@@ -17,10 +18,13 @@ const ACTIVE_CAMPAIGN_INSTRUCTIONS = [
 ];
 
 const BL017_RETIREMENT_INSTRUCTIONS = [
+  'AGENTS.md',
+  'CLAUDE.md',
   'work/rounds/CAMPAIGN.md',
   'work/rounds/EXECUTION-CONTRACT.md',
   'work/rounds/R-0003/plan.md',
   'work/rounds/R-0004/plan.md',
+  'work/rounds/R-0005/plan.md',
   'work/rounds/R-0006/plan.md',
 ];
 
@@ -66,7 +70,7 @@ describe('Owner-selected Claude review model', () => {
     (path) => {
       const instruction = readFileSync(join(ROOT, path), 'utf8');
       expect(instruction).not.toMatch(
-        /BL-017 (?:remains|red|remote red|release throttle)|continuing BL-017|Through R-0005/iu,
+        /merged-coverage red is BL-017|Through R-0005|R-0006 must close|BL-017 is the release throttle|coverage remains red|fresh coverage red/iu,
       );
     },
   );
@@ -76,5 +80,49 @@ describe('Owner-selected Claude review model', () => {
     const roundSix = readFileSync(join(ROOT, 'work/rounds/R-0006/plan.md'), 'utf8');
     expect(campaign).not.toMatch(/\| R-0006 \|[^|]*017/iu);
     expect(roundSix).not.toContain('BL-017');
+  });
+
+  it('binds the amended R-0002 plan digest in a later decision', () => {
+    const plan = readFileSync(join(ROOT, 'work/rounds/R-0002/plan.md'));
+    const digest = createHash('sha256').update(plan).digest('hex');
+    const decisions = readFileSync(join(ROOT, 'law/register/DECISIONS.md'), 'utf8');
+    expect(decisions).toContain(digest);
+  });
+
+  it('keeps prepared residual ownership aligned across the register, campaign, and plans', () => {
+    const campaign = readFileSync(join(ROOT, 'work/rounds/CAMPAIGN.md'), 'utf8');
+    const roundFour = readFileSync(join(ROOT, 'work/rounds/R-0004/plan.md'), 'utf8');
+    const roundFive = readFileSync(join(ROOT, 'work/rounds/R-0005/plan.md'), 'utf8');
+    for (const id of ['BL-065', 'BL-080', 'BL-084']) {
+      expect(campaign).toContain(id);
+      expect(roundFour).toContain(id);
+    }
+    expect(campaign).toContain('BL-063');
+    expect(roundFive).toContain('BL-063');
+  });
+
+  it('pins the global formatting exclusion boundary', () => {
+    const exclusions = readFileSync(join(ROOT, '.prettierignore'), 'utf8')
+      .split(/\r?\n/u)
+      .filter(Boolean);
+    expect(exclusions).toEqual([
+      'node_modules/',
+      'dist/',
+      'coverage/',
+      'record/',
+      'scratch/',
+      '.devai/config/',
+      '.devai/pin/',
+      '.devai/worktrees/',
+      '.claude/worktrees/',
+      'pnpm-lock.yaml',
+      'law/policy/authority-policy.json',
+      'law/trace.json',
+      'law/register/DECISIONS.md',
+      'law/adr/predecessor/',
+      'work/rounds/R-0001/',
+      'work/audit/R-0001/',
+      'work/devai-ii-succession-dossier.md',
+    ]);
   });
 });

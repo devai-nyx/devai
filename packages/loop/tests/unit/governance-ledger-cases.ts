@@ -215,6 +215,14 @@ describe('governance record parsing and integrity', () => {
     }
   });
 
+  it('fails sealed-history verification closed without Git metadata', () => {
+    const root = fixtureRoot();
+    writeRecord(root, 'ADR-001.md', recordSource({ status: 'active' }));
+    expect(decisionRecordIntegrity({ repoRoot: root }).findings).toContainEqual(
+      expect.objectContaining({ code: 'DECISION_HISTORY_UNAVAILABLE' }),
+    );
+  });
+
   it('treats superseded and tombstoned records as terminal', () => {
     for (const terminal of ['superseded', 'tombstoned']) {
       const root = fixtureRoot();
