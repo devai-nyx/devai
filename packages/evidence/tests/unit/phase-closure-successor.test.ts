@@ -187,7 +187,7 @@ describe('successor phase-closure binding', () => {
           release_disposition: 'none-preratification',
         }),
       ),
-    ).toThrow(/Machine.*commit/i);
+    ).toThrow(/does not validate.*batches.*commit/i);
     expect(() =>
       closePhase(
         repoWithTwoClosures(),
@@ -197,7 +197,7 @@ describe('successor phase-closure binding', () => {
           release_disposition: 'none-preratification',
         }),
       ),
-    ).toThrow(/Machine.*commit/i);
+    ).toThrow(/does not validate.*batches.*commit/i);
   });
 
   it('accepts a full commit identity for Machine-attributed batches', () => {
