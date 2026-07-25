@@ -371,5 +371,68 @@ describe('scanForbiddenActions', () => {
       }),
     );
   });
+
+  it('does not duplicate constituent evidence on a tree-identical synthetic merge', () => {
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions: CANONICAL_FORBIDDEN_ACTIONS }),
+    );
+    writeFileSync(join(dir, 'README.md'), 'seed\n');
+    execFileSync('git', ['init', '-q'], { cwd: dir });
+    execFileSync('git', ['add', '.'], { cwd: dir });
+    execFileSync(
+      'git',
+      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'seed'],
+      { cwd: dir },
+    );
+    const initialBranch = execFileSync('git', ['branch', '--show-current'], {
+      cwd: dir,
+      encoding: 'utf8',
+    }).trim();
+    execFileSync('git', ['checkout', '-qb', 'feature'], { cwd: dir });
+    writeFileSync(join(dir, 'README.md'), 'git push --force example\n');
+    execFileSync('git', ['add', 'README.md'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=Fixture',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'feature',
+      ],
+      { cwd: dir },
+    );
+    const featureCommit = execFileSync('git', ['rev-parse', 'HEAD'], {
+      cwd: dir,
+      encoding: 'utf8',
+    }).trim();
+    execFileSync('git', ['checkout', '-q', initialBranch], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=Fixture',
+        '-c',
+        'user.email=fixture@example.com',
+        'merge',
+        '--no-ff',
+        '-qm',
+        'synthetic merge',
+        'feature',
+      ],
+      { cwd: dir },
+    );
+
+    const findings = scanForbiddenActions({ repoRoot: dir, maxCommits: 3 }).findings.filter(
+      (finding) => finding.forbidden_id === 'FORBID-FORCE-PUSH',
+    );
+    expect(findings).toEqual([
+      expect.objectContaining({ ref: featureCommit, source: 'commit-change' }),
+    ]);
+  });
 });
 // Invariants: INV-DEVAI-001
