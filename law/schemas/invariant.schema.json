@@ -308,7 +308,7 @@
     "version": {
       "type": "string",
       "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[A-Za-z0-9.-]+)?$",
-      "description": "Per-invariant semver. Bumped on each substantive change to this invariant. Absorbs the per-file versioning convention from the stech-law predecessor draft (D-38, Batch 10.E). The aggregate `docs/framework/arch/invariants/VERSION` file records the directory-level version."
+      "description": "Per-invariant semver. Bumped on each substantive change to this invariant. Absorbs the per-file versioning convention from the stech-law predecessor draft (D-38, Batch 10.E). The aggregate `law/invariants/VERSION` file records the directory-level version."
     },
     "measurable_via": {
       "type": "array",

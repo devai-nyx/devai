@@ -8,14 +8,14 @@ authority: Architect (minting = BR-1/W04)
 supersedes: [ADR-HUMAN-SUPERVISED-EXPERIMENTAL-LOOP.md, ADR-001-autonomous-loop.md]
 superseded_by: null
 provenance: [REV-0003 disposition map; predecessor seeds in law/adr/predecessor/]
-affected_rules: [] # TODO at minting
+affected_rules: []
 ---
 
 # ADR-002. Human-supervised baseline and the experimental loop
 
 ## Status
 
-DRAFT (wireframe stub). Binds nothing until minted `accepted` under a declared Architect
+DRAFT (wireframe stub). Binds nothing until minted with `status: active` under a declared Architect
 session in BR-1/W04. Source texts: ADR-HUMAN-SUPERVISED-EXPERIMENTAL-LOOP.md; ADR-001-autonomous-loop.md (historical annex only).
 
 ## Context

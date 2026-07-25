@@ -169,7 +169,7 @@
     },
     "seed_invariants": {
       "type": "array",
-      "description": "Relative paths (from this manifest) to INV-CLIENT-*.json files the pack seeds. Each must validate against invariant.schema.json when copied into the adopter's docs/framework/arch/invariants/.",
+      "description": "Relative paths (from this manifest) to INV-CLIENT-*.json files the pack seeds. Each must validate against invariant.schema.json when copied into the adopter's law/invariants/.",
       "items": {
         "type": "string",
         "minLength": 1

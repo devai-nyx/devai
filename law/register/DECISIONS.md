@@ -335,9 +335,10 @@ Scaffolders are deterministic (template + token substitution); generators run fr
 ## 6. Evidence, CI economy, and promotion
 
 ### DII-055 — Hash-chained evidence with exact identity
-`type: decision · status: draft · authority: Architect · provenance: Constitution Arts 32–33; ex-D-24`
+`type: decision · status: draft · authority: Architect · provenance: Constitution Article 42; ex-D-24; R-0002 BL-007 correction`
 
-Hash-chained evidence with exact identity; the Article-32 chain is the sole durable authority.
+Hash-chained evidence with exact identity; the Article-42 chain is the sole durable
+evidence authority.
 
 ### DII-056 — ADR-CI-ECONOMY law
 `type: decision · status: draft · authority: Architect · provenance: ex-D-115`
@@ -360,9 +361,19 @@ Local CI evidence: manifest schema + collect-local/verify-local verbs; the forbi
 Root build materializes its own publish artifacts; the reusable gate defaults to sibling-checkout build (zero-new-secrets); collect/verify source-hash exclusion is symmetric.
 
 ### DII-060 — Actions-evidence promotion contract (the twelve boundaries, register-carried until the ...
-`type: decision · status: draft · authority: Architect · provenance: ex-D-164/165/167 extracts; ex-D-146/ADR-005`
+`type: decision · status: draft · authority: Architect · provenance: ex-D-164/165/167 extracts; ex-D-146; successor ADR-003`
 
-Actions-evidence promotion contract (the twelve boundaries, register-carried until the ADR successor absorbs them — see adrs.md): one authority; exact two-parent merge identity; reuse boundary with "source PRs always run full"; fail-closed dispositions (required-check aggregation may never translate an unjustified skip into green); first-parent authorization resolved only via `git show <base-sha>:` of the authorization record — a head-only record cannot authorize its own merge; revocation set including malformed authorization and explicit revocation, restoring full execution until a new complete green streak; weekly audit runs with promotion ignored; no manufactured pushes/dispatches to advance a soak or graduation window; promoted post-gate runs never count as qualifying evidence runs. **Standing in DEVAI-II: void pending re-earning (genesis must-re-earn).**
+Actions-evidence promotion contract (the twelve boundaries, register-carried until
+successor `law/adr/ADR-003-actions-evidence-promotion.md` absorbs them): one authority;
+exact two-parent merge identity; reuse boundary with "source PRs always run full";
+fail-closed dispositions (required-check aggregation may never translate an unjustified
+skip into green); first-parent authorization resolved only via
+`git show <base-sha>:` of the authorization record — a head-only record cannot authorize
+its own merge; revocation set including malformed authorization and explicit revocation,
+restoring full execution until a new complete green streak; weekly audit runs with
+promotion ignored; no manufactured pushes/dispatches to advance a soak or graduation
+window; promoted post-gate runs never count as qualifying evidence runs.
+**Standing in DEVAI-II: void pending re-earning (genesis must-re-earn).**
 
 ### DII-061 — Effect gate
 `type: decision · status: draft · authority: Architect · provenance: ex-D-158 extract, ex-D-157`
@@ -403,7 +414,7 @@ CI dispatch policy: trailing window 50, ≥20 qualifying runs, dispatch floor 80
 ## 7. Authority and governance process
 
 ### DII-068 — Runtime authority enforcement per the fail-closed boundary
-`type: decision · status: draft · authority: Architect · provenance: ex-D-136 extract; ADR-003 successor`
+`type: decision · status: draft · authority: Architect · provenance: ex-D-136 extract; successor ADR-001`
 
 Runtime authority enforcement per the fail-closed boundary: no implicit roles, no caller-selected machine principals, no replayable decisions, no router-only checks, no permissive unknown targets, no unbounded batches, no wildcard mutator exemptions, no false host-enforcement claims. `cli-only` claims nothing about external editors/shells without a verified host adapter.
 
@@ -529,7 +540,7 @@ Skill-scoped local-validation allowance: exact lint/typecheck/unit-test/acceptan
 semantic-review can never PASS; a future deterministic PASS requires a separate Architect decision and a closed registry of trusted adapters.
 
 ### DII-092 — The mutating-skill denominator is mechanically derived from the registry predicate, nev...
-`type: decision · status: draft · authority: Architect · provenance: ex-D-176 extract; ADR-006 successor`
+`type: decision · status: draft · authority: Architect · provenance: ex-D-176 extract; successor ADR-004`
 
 The mutating-skill denominator is mechanically derived from the registry predicate, never a maintained constant.
 
@@ -658,7 +669,29 @@ population beyond two Inspector-owned fixed-count guards; that exact temporary c
 red is governed by BL-007 and must be replaced by a gapless derived guard in B2, never
 hidden by removing this declaration or restating a new maintained count.
 
+### DII-106 — ADR lifecycle uses the successor record vocabulary
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002; OM-002 approved defaults; BL-007`
 
-## 12. Register-consistency guard
+Successor ADR frontmatter uses the shared record lifecycle: `draft` is non-binding,
+`active` is the binding state after Architect acceptance, `superseded` points to its
+replacement, and `tombstoned` records a rejected or retired identity that may not be
+re-minted. “Accepted” remains a judgment word in prose, not a second status token.
+R-0003 may accept an ADR only by moving its record to `status: active`; R-0002 changes
+no ADR standing.
 
-A mechanical check (CI + doctor) asserts no entry above contradicts constitutional text, and that every entry's provenance resolves into the frozen predecessor or this register. This entry authorizes the guard; the guard protects the rest. [closes the ex-Article-27 "six vs three" drift class]
+### DII-107 — Managed worktrees use the constitutional runtime root
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002; OM-002 approved product and doctrine marks; Constitution Article 27; BL-007/BL-050`
+
+The canonical managed runtime root is `.devai/worktrees/<task-id>` and its mutable
+registry is `.devai/state/worktrees.json`. `scratch/worktrees/` remains a disposable
+human preparation location and is not a supported governed-runtime target. Committed
+policy and documentation must preserve that distinction; runtime contents remain
+ignored except for the directory sentinels.
+
+## Appendix — Register-consistency guard
+
+This is an implementation note, not an unnumbered decision. A mechanical check
+(CI + doctor) asserts no entry above contradicts constitutional text, and that every
+entry's provenance resolves into the frozen predecessor or this register. DII-002 and
+DII-007 authorize the guard; the guard protects the rest. [closes the ex-Article-27
+"six vs three" drift class]

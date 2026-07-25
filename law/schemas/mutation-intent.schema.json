@@ -64,8 +64,10 @@
         "owner",
         "architect",
         "inspector",
-        "engineer"
-      ]
+        "engineer",
+        "auditor"
+      ],
+      "description": "Attributed human role. Auditor observations remain non-actuating and confer no mutation authority."
     },
     "strategy": {
       "$ref": "#/$defs/strategy"

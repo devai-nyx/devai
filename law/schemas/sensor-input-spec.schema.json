@@ -490,7 +490,7 @@
           "spec_version": 1,
           "file_inputs": [
             {
-              "pattern": "docs/framework/arch/invariants/*.json"
+              "pattern": "law/invariants/INV-*.json"
             }
           ],
           "tool_inputs": [],

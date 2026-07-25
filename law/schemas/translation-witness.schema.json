@@ -155,8 +155,10 @@
             "owner",
             "architect",
             "inspector",
-            "engineer"
-          ]
+            "engineer",
+            "auditor"
+          ],
+          "description": "Attributed human role. Auditor witnesses remain observation-only and confer no actuation authority."
         },
         "spec_edits": {
           "enum": [

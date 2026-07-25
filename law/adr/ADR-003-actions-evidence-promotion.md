@@ -8,14 +8,14 @@ authority: Architect (minting = BR-1/W04)
 supersedes: [ADR-005-actions-run-evidence-promotion.md, D-164/D-165 boundary set]
 superseded_by: null
 provenance: [REV-0003 disposition map; predecessor seeds in law/adr/predecessor/]
-affected_rules: [] # TODO at minting
+affected_rules: []
 ---
 
 # ADR-003. Actions-run evidence promotion
 
 ## Status
 
-DRAFT (wireframe stub). Binds nothing until minted `accepted` under a declared Architect
+DRAFT (wireframe stub). Binds nothing until minted with `status: active` under a declared Architect
 session in BR-1/W04. Source texts: ADR-005-actions-run-evidence-promotion.md; D-164/D-165 boundary set (register-carried).
 
 ## Context

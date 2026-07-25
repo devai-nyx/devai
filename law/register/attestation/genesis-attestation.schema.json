@@ -25,7 +25,8 @@
       "additionalProperties": false,
       "properties": {
         "repo_url": {
-          "type": "string"
+          "const": "https://github.com/devai-nyx/devai-original",
+          "description": "Frozen predecessor repository. The successor repository is never a valid self-reference."
         },
         "final_commit_sha": {
           "anyOf": [
@@ -187,7 +188,7 @@
       "record": "GEN-0001",
       "ratified": null,
       "predecessor": {
-        "repo_url": "https://github.com/devai-nyx/devai",
+        "repo_url": "https://github.com/devai-nyx/devai-original",
         "final_commit_sha": null,
         "final_tree_sha": null,
         "evidence_chain_head_sha256": null,
