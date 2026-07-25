@@ -1,7 +1,8 @@
 import { createHash } from 'node:crypto';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { afterEach, aroundEach, describe, expect, it } from 'vitest';
 import { withAuthorityHostTestScope } from '../../../authority/tests/unit/authority-host-test-scope.js';
 import {
@@ -24,6 +25,14 @@ afterEach(() => {
 function repoRoot(): string {
   const root = mkdtempSync(join(tmpdir(), 'devai-phase-closure-'));
   roots.push(root);
+  execFileSync('git', ['init', '--quiet'], { cwd: root });
+  const info = join(root, '.git/objects/info');
+  const commonDir = execFileSync('git', ['rev-parse', '--git-common-dir'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+  }).trim();
+  mkdirSync(info, { recursive: true });
+  writeFileSync(join(info, 'alternates'), `${resolve(ROOT, commonDir, 'objects')}\n`);
   return root;
 }
 
