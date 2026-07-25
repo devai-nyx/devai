@@ -989,6 +989,25 @@ PC-0001 and PC-0002 remain byte-immutable. R-0002 may append PC-0003 only after 
 source merge, with the exact merge SHA, the actual release disposition, and only the
 gates that truly failed at the source candidate.
 
+### DII-125 — Required trace links are non-vacuous and reproducible
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 Claude Opus 5 correction; BL-061`
+
+When canonical trace metadata declares `require_test_links: true`, an invariant counts
+as traced only when at least one linked `test` target has a nonempty path that resolves
+to an existing tracked test file. An empty target array, a missing or empty path, an
+unresolved path, a nonexistent invariant, or only non-test attestations cannot increase
+`traced_invariants`. Each known invariant without such a test link is reported as
+`untraced_invariant`; a missing linked path retains its additional
+`missing_test_path` finding.
+
+Deterministic trace generation covers every tracked executable test or fails closed.
+Each governed test file carries at least one canonical invariant marker, and every
+canonical invariant receives at least one assertion-bearing test link when test links
+are required. Helpers that are not independently executable are not invented as test
+corpus entries, and projection files that merely re-execute another suite are
+prohibited rather than classified as coverage. The committed `law/trace.json` is
+generated from the tracked corpus, not hand-adjusted to satisfy completeness.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
