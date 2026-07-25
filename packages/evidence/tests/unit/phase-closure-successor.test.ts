@@ -177,7 +177,10 @@ describe('successor phase-closure binding', () => {
 
   it('accepts a full commit identity for Machine-attributed batches', () => {
     const repo = repoWithTwoClosures();
-    const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repo, encoding: 'utf8' }).trim();
+    const commit = execFileSync('git', ['rev-parse', 'HEAD'], {
+      cwd: repo,
+      encoding: 'utf8',
+    }).trim();
     const result = closePhase(
       repo,
       draft({

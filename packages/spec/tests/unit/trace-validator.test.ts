@@ -24,7 +24,8 @@ describe('ordinary trace validation target boundary', () => {
         invariants: Array<{ id: string; tests: Array<{ path: string }> }>;
       };
       const first = trace.invariants[0];
-      if (first === undefined || first.tests[0] === undefined) throw new Error('trace fixture empty');
+      if (first === undefined || first.tests[0] === undefined)
+        throw new Error('trace fixture empty');
       first.tests[0].path = target;
       const tracePath = join(repo, 'law/trace.json');
       writeFileSync(tracePath, `${JSON.stringify(trace)}\n`);
