@@ -22,7 +22,7 @@ const validatePhaseClosure = getValidator('phase-closure.schema.json');
  * never drift the way hand-narrated counters did (D-108).
  */
 
-export type ClosureRole = 'Owner' | 'Architect' | 'Inspector' | 'Engineer' | 'Auditor';
+export type ClosureRole = 'Owner' | 'Architect' | 'Inspector' | 'Engineer' | 'Auditor' | 'Machine';
 
 export interface ClosureBatch {
   readonly id: string;
