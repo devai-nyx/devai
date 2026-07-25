@@ -359,7 +359,7 @@ export function scaffoldDecisionRecord(options: {
     `title: ${JSON.stringify(title)}`,
     'status: proposed',
     'supersedes: []',
-    'superseded_by: []',
+    'superseded_by: null',
     'constitution_articles: []',
     `round: ${JSON.stringify(options.round ?? 'pre-round')}`,
     `date: ${date}`,

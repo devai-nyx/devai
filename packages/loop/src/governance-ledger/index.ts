@@ -258,7 +258,18 @@ function sealedHistoryFindings(
   for (const commit of commits.slice(sealIndex + 1)) {
     const laterSource = gitFile(repoRoot, commit, rel);
     if (laterSource === null) continue;
-    const later = parseRecordSource(rel, laterSource);
+    let later: ParsedGovernanceRecord;
+    try {
+      later = parseRecordSource(rel, laterSource);
+    } catch (error) {
+      return [
+        {
+          code: 'DECISION_HISTORY_PARSE_INVALID',
+          message: `${rel} has malformed post-seal history at ${commit}: ${error instanceof Error ? error.message : String(error)}.`,
+          path: rel,
+        },
+      ];
+    }
     if (
       later.body !== sealed.body ||
       normalizedSealedFrontmatter(later) !== normalizedSealedFrontmatter(sealed) ||
@@ -294,6 +305,13 @@ export function decisionRecordIntegrity(options: {
 }): GovernanceIntegrityReport {
   const recordsDir = resolve(options.repoRoot, options.recordsDir ?? DEFAULT_RECORDS_DIR);
   const findings: GovernanceFinding[] = [];
+  if (git(options.repoRoot, ['rev-parse', '--is-shallow-repository']) === 'true') {
+    findings.push({
+      code: 'DECISION_HISTORY_SHALLOW',
+      message: 'Sealed decision history requires a complete Git history; shallow history cannot pass.',
+      path: relative(options.repoRoot, recordsDir),
+    });
+  }
   const records = new Map<string, ParsedGovernanceRecord>();
   for (const path of markdownFiles(recordsDir)) {
     let record: ParsedGovernanceRecord;
