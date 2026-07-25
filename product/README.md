@@ -13,6 +13,7 @@ provenance:
     REV-0006 Owner marks applied 2026-07-23 (JNY-007 supersession; OM-001 attested-historical; use-case refs mapped),
     OM-002 active successor completion mandate recorded 2026-07-24,
     OM-003 active Claude-review model rider recorded 2026-07-24,
+    OM-004 active bounded coverage-strengthening rider recorded 2026-07-24,
   ]
 ---
 
@@ -26,7 +27,8 @@ Architect-tier law (Article 12; see compilation.md).
 - `use-cases/` — sensor-consumed CLI use-case bundle (inventory-coverage input)
 - `owner-mandates/` — Owner mandate records (OM-001 is attested-historical;
   OM-002 is the active successor completion mandate; OM-003 is its active
-  Claude-review model rider)
+  Claude-review model rider; OM-004 authorizes bounded pre-review coverage
+  strengthening without closing BL-017)
 - `stories/`, `rules/` — reserved, empty at genesis
 
 Every artifact carries §5.1 record fields natively (JSON: schema fields; markdown:
