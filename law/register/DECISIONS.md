@@ -1549,6 +1549,27 @@ DII-147 as closing decision. Its release disposition remains
 `none-preratification`. OM-007 still replaces only the additional final Opus review.
 Nothing is ratified, released, deployed, published, or declared ready by this repair.
 
+### DII-148 — Declare R-0003 and bind the founding source crosswalk
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0003 declaration; OM-002; R-0003 authorization and plan; BL-004; REV-0001; R-0001 law-altitude-sweep; DII-098; R-0003-OPENING-AUDIT`
+
+R-0003 is declared for the founding-law ceremony only after the independent opening
+audit re-derived the frozen predecessor binding, R-0002 closure, exact-main CI, and
+unchanged coverage floors. It authorizes no release, deployment, publication, readiness
+claim, evidence promotion, or predecessor mutation.
+
+The 42-row source ledger in
+`work/rounds/R-0003/constitution-source-crosswalk.md` is the total disposition of the
+founding Constitution. Articles 1 through 40 retain predecessor 0.6.0 doctrine except
+for the reviewed successor deltas explicitly named in that ledger and the founding
+annex. Articles 41 and 42 are successor additions. DII-098 is affirmed: Article 42
+remains in Part XI because relocation would change anchors without improving doctrine.
+
+The crosswalk resolves the candidate wrapper's source statements and Part X placement
+without changing load-bearing Constitution bytes ahead of the authorized materializer.
+The exact wrapper/status transition is reserved to the later R-0003 ceremony decision,
+after ADR and joint glossary dispositions pass their gates, and must be followed by the
+role-pure materialization batch.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
