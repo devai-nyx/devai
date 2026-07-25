@@ -1620,6 +1620,42 @@ BL-005; they are not waived or represented as green.
 This act establishes only founding law. It releases, deploys, publishes, promotes, and
 re-earns nothing and establishes no product or production readiness.
 
+### DII-151 — Bind the R-0003 founding-ratification source close
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 source close; OM-002; DII-148–150; R-0003-AS-BUILT; BL-004–006`
+
+DII-151 closes the local source implementation of R-0003. The 42-article crosswalk,
+twelve accepted ADRs, jointly ratified 44-entry glossary, Constitution 1.0.0, and
+immutable genesis attestation satisfy the founding-law ceremony declared by DII-148.
+The ratified Constitution digest is
+`b005ba4ba57979d471a1a139e093f8e7d158ae03488c394d3f43561ca9c4c631`;
+the genesis attestation digest is
+`d72711c57e54025ebd2626b2ba20a1263db7d914e308d7d4ce172f4faee6bb09`;
+and both canonical and materialized authority policies have digest
+`6f62027f4dd3cb9d29daaa7d6b9a288176a9bc56979a3c9ca370cbd0ef2978c2`.
+
+The Auditor's as-built independently records the role-pure batches and the fresh exact
+local exit ladder: 1,101 ordinary tests with eight declared skips; 34/34 resolved
+invariants across 122 executable test files; all governance, T1 through T6,
+changeset, formatting, and deterministic-projection gates green; and unchanged
+70/60/70/70 coverage floors satisfied at 70.61/61.00/77.27/72.88.
+
+This decision does not predeclare remote or independent-review evidence. The exact
+candidate containing DII-151 and fresh deterministic projections must pass the
+complete local ladder and then a read-only review through literal `claude-opus-5`,
+with no fallback. All actionable findings must be resolved through the governed
+red-first, role-pure process before source push. Every required GitHub check must pass
+at the exact source SHA; the exact source merge must then pass exact-main checks before
+the production closure verb may append PC-0004 in a closure-only branch.
+
+PC-0004 uses DII-148 as the declaring decision, DII-150 as the ceremony act, and
+DII-151 as the closing decision. Its release disposition is `none-needed`: R-0003 is a
+law ceremony and creates no release obligation. BL-004 through BL-006 close only when
+that immutable closure record and its final exact-main CI are observed. R-0004 remains
+dormant until then.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
