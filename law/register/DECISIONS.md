@@ -1737,6 +1737,44 @@ dormant until PC-0004 and final exact-main CI establish the complete R-0003 clos
 R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
 promotes, re-earns, or declares ready nothing.
 
+### DII-154 — Bind the clean R-0003 founding-ratification source close
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 clean source close; DII-148–153; BL-004–006; BL-120–129; R-0003-FIRST-OPUS-CORRECTIONS; R-0003-ADR-POPULATION-CORRECTION; Auditor 1d5ef19 and ac7bf57; Inspector 08025ba; Architect d277b14`
+
+DII-154 supersedes DII-153 only as the R-0003 source-closing judgment. The source
+candidate is rebuilt from the last legal commit and contains no post-seal mutation of
+ADR-002, ADR-003, ADR-007, ADR-008, ADR-010, or ADR-011. ADR-005 preserves its sealed
+body and changes only through the permitted terminal lifecycle fields naming ADR-013.
+Decision-record integrity passes the clean history.
+
+The 42-article source ledger, Constitution 1.0.0, genesis attestation, active register
+container, thirteen-record/twelve-active ADR roster, 44-entry glossary, canonical
+authority policy, production materialization, durable review provenance, trace, and
+repository-reference projection now agree. BL-120 through BL-129 have independent
+Auditor dispositions, and the ordinary test floor passes after the final Inspector
+population correction.
+
+The corrected Constitution digest is
+`31c6874f2a0ae88a21e1114844c4084e9f0e9d8c58d54f7fefc1078af98fb8cd`.
+The immutable genesis-attestation digest remains
+`d72711c57e54025ebd2626b2ba20a1263db7d914e308d7d4ce172f4faee6bb09`.
+Canonical and production-materialized authority policy bytes remain identical at
+`6539f91912d1770ea49449c05ac17a84cef76aec0e22eacc133552eddfb785c2`.
+
+The exact candidate containing DII-154 and fresh deterministic projections must pass
+the complete local ladder, including governance, T1 through T6, unchanged 70/60/70/70
+coverage floors, changesets, formatting, trace, and repository-reference checks. It
+must then receive a fresh read-only review through literal `claude-opus-5` with no
+fallback. Any actionable finding reopens the governed repair cycle; only a PASS
+authorizes source push and exact-SHA CI.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-154 as the closing decision. Its release
+disposition is `none-needed`. R-0004 remains dormant until PC-0004 and final exact-main
+CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
