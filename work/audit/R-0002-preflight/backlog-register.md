@@ -330,6 +330,28 @@ production write broker then accepts a disposable R-0002-shaped Machine-attribut
 closure; no authority rule or constitutional meaning changes; and the full R-0002
 ladder is rerun.
 
+### BL-056 — Correct the canonical phase-closure proof path
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0002 publication preflight; three-tree doctrine; phase-closure schema versus production implementation`
+
+Priority: P0 before PC-0003. Primary round: R-0002 post-review correction.
+
+The canonical phase-closure schema still describes `devai govern phase close` as
+writing tracked closures to `.devai/state/closures/<id>.json`. The production
+implementation, CLI help, authority policy, and approved three-tree doctrine instead
+write immutable closure proof to
+`record/proofs/compliance/closures/PC-NNNN.json`; `.devai/state/` is ignored mutable
+runtime state. Leaving the stale schema description in force would make the law
+contradict the exact production ceremony used to emit PC-0003.
+
+Acceptance: an Inspector contract first proves the canonical schema names the wrong
+path; an Architect decision records the immutable proof path without changing the
+closure object shape or runtime behavior; the schema description names
+`record/proofs/compliance/closures/PC-NNNN.json` and no longer names
+`.devai/state/closures`; existing PC-0001 and PC-0002 bytes remain unchanged; the
+production closure path and full R-0002 ladder remain green except for the exact
+BL-017 coverage thresholds.
+
 ## Carried guard map
 
 The original known-red mapping remains:
