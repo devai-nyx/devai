@@ -23,7 +23,7 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-116. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-117. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
@@ -31,7 +31,8 @@ post-review exit-ladder lint and formatting failures. BL-074 through BL-084 reco
 third exact-candidate findings. BL-085 through BL-093 record the fourth exact-candidate
 findings. BL-094 through BL-106 record the confirmed and bounded fifth exact-candidate
 findings. BL-107 through BL-112 record the sixth exact-candidate findings. BL-113
-through BL-116 record the seventh exact-candidate residual findings.
+through BL-116 record the seventh exact-candidate residual findings. BL-117 records
+the synthetic pull-request merge aggregation defect exposed by exact source CI.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -39,7 +40,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 
 | Primary round | Records                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-116 |
+| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-117 |
 | R-0003        | BL-004, BL-005, BL-006                                                                                                                                                                    |
 | R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084                                                                                            |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
@@ -55,6 +56,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Disposition                         | Governed records                                                                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–116 |
+| Reopened by second exact source CI  | BL-117                                                                                                                                           |
 | Open in prepared R-0003             | BL-004–006                                                                                                                                       |
 | Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                                   |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
@@ -1063,6 +1065,19 @@ Acceptance: the ignored operational template names the complete R-0002 repair
 population through BL-116, distinguishes later prospective BL-106, carries no
 predeclared final-review verdict, and remains unusable until exact source merge and
 PASS evidence are substituted.
+
+### BL-117 — Ignore non-novel synthetic merge aggregation without weakening scanning
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector + Auditor · provenance: BL-095; DII-144; GitHub Actions run 30171619705@4fc168c8b6a0ce9f15227e6caee66d06fd597a7b`
+
+Priority: P0 before source merge. Primary round: R-0002.
+
+Acceptance: a merge commit whose tree is byte-identical to one parent contributes no
+aggregate change evidence, because its constituent commits remain independently
+scanned; its commit-message evidence remains scanned. A merge with novel resolution
+bytes remains fully inspected, including protected deletion evidence. Git ancestry or
+tree inspection failures remain fail-closed. Exact source CI must pass governed
+enforcement on the repaired candidate.
 
 ## Carried guard map
 

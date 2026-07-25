@@ -833,6 +833,24 @@ BL-095 is re-closed for the repaired local source candidate. A new exact source 
 must still pass the same GitHub governed-enforcement job before merge; the failed
 `b556857` run remains historical red evidence.
 
+## Second exact source CI opens BL-117
+
+Source PR #1 exact-SHA run `30171619705` tested
+`4fc168c8b6a0ce9f15227e6caee66d06fd597a7b`. The bounded scanner successfully read
+GitHub's synthetic merge `cb2e93490e3ac439f979f4d7986ae7ac9fe9695e`, but then
+treated that merge's aggregate diff as one newly authored change. Because the
+synthetic merge tree is byte-identical to the source-head parent, this duplicated
+already-scanned constituent changes under the merge author's identity and matched
+literal policy, documentation, fixture, and workflow content as though it were a new
+forbidden action.
+
+This is a separate semantic defect, not a recurrence of the buffer failure and not an
+authorized violation. BL-117 is open until a red-first contract proves the synthetic
+aggregation false positive, production omits aggregate change evidence only when a
+merge tree equals one parent, novel merge-resolution evidence remains scanned, and a
+new exact source SHA passes governed enforcement. Commit-message evidence and
+fail-closed Git inspection remain mandatory.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
