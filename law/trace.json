@@ -233,6 +233,11 @@
         },
         {
           "suite": "int",
+          "path": "packages/schemas/tests/contract/backlog-current-disposition.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
           "path": "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
           "target_type": "test"
         },
@@ -1362,6 +1367,14 @@
     },
     {
       "path": "packages/schemas/tests/contract/adr.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/schemas/tests/contract/backlog-current-disposition.contract.test.ts",
       "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
