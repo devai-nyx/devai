@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { canonicalJsonV1, canonicalJsonV2, canonicalSha256 } from '../../src/canonical-json/index.js';
+import {
+  canonicalJsonV1,
+  canonicalJsonV2,
+  canonicalSha256,
+} from '../../src/canonical-json/index.js';
 
 describe('canonicalJsonV1 (legacy)', () => {
   it('sorts top-level keys lexicographically', () => {
