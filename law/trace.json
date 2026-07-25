@@ -262,6 +262,11 @@
           "target_type": "test"
         },
         {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/trace-materialization.contract.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "unit",
           "path": "packages/sensors/tests/unit/trace-resolve.test.ts",
           "target_type": "test"
@@ -1394,6 +1399,14 @@
     },
     {
       "path": "packages/schemas/tests/contract/roster.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/schemas/tests/contract/trace-materialization.contract.test.ts",
       "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
