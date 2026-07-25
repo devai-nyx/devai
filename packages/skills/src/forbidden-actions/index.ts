@@ -376,11 +376,15 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
   // Read recent commit log via git.
   let log: string;
   try {
-    log = execFileSync('git', ['log', `-n${String(max)}`, '--pretty=format:%H%x00%an%x00%B%x1e'], {
-      cwd: opts.repoRoot,
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'pipe'],
-    });
+    log = execFileSync(
+      'git',
+      ['log', `-n${String(max)}`, '--pretty=format:%H%x00%an%x00%P%x00%B%x1e'],
+      {
+        cwd: opts.repoRoot,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      },
+    );
   } catch {
     return {
       registry_entries: registry.length,
@@ -406,47 +410,86 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     const authorEnd = c.indexOf('\x00', nul + 1);
     if (authorEnd === -1) continue;
     const author = c.slice(nul + 1, authorEnd);
-    const body = c.slice(authorEnd + 1);
+    const parentsEnd = c.indexOf('\x00', authorEnd + 1);
+    if (parentsEnd === -1) continue;
+    const parents = c
+      .slice(authorEnd + 1, parentsEnd)
+      .split(' ')
+      .filter(Boolean);
+    const body = c.slice(parentsEnd + 1);
     let operations: string;
     let patch: string;
     let changedPaths: string[];
     try {
-      const nameStatus = execFileSync(
-        'git',
-        ['diff-tree', '--root', '--no-commit-id', '--name-status', '-r', '-M', '-m', sha],
-        {
-          cwd: opts.repoRoot,
-          encoding: 'utf8',
-          maxBuffer: GIT_INSPECTION_MAX_BUFFER,
-          stdio: ['ignore', 'pipe', 'pipe'],
-        },
-      );
-      changedPaths = nameStatus
-        .split('\n')
-        .filter(Boolean)
-        .flatMap((line) => line.split('\t').slice(1));
-      operations = nameStatus
-        .split('\n')
-        .filter(Boolean)
-        .map((line) => {
-          const [status = '', ...paths] = line.split('\t');
-          if ((status.startsWith('R') || status.startsWith('C')) && paths.length >= 2) {
-            return `git rm ${paths[0] ?? ''}\ngit add ${paths[1] ?? ''}\n${line}`;
-          }
-          const path = paths.at(-1) ?? '';
-          return `${status.startsWith('D') ? 'git rm' : 'git add'} ${path}\n${line}`;
-        })
-        .join('\n');
-      patch = execFileSync(
-        'git',
-        ['diff-tree', '--root', '--no-commit-id', '--no-ext-diff', '--unified=0', '-p', '-m', sha],
-        {
-          cwd: opts.repoRoot,
-          encoding: 'utf8',
-          maxBuffer: GIT_INSPECTION_MAX_BUFFER,
-          stdio: ['ignore', 'pipe', 'pipe'],
-        },
-      );
+      let treeIdenticalToParent = false;
+      if (parents.length > 1) {
+        const trees = execFileSync(
+          'git',
+          ['rev-parse', `${sha}^{tree}`, ...parents.map((parent) => `${parent}^{tree}`)],
+          {
+            cwd: opts.repoRoot,
+            encoding: 'utf8',
+            maxBuffer: GIT_INSPECTION_MAX_BUFFER,
+            stdio: ['ignore', 'pipe', 'pipe'],
+          },
+        )
+          .split('\n')
+          .filter(Boolean);
+        const [mergeTree, ...parentTrees] = trees;
+        treeIdenticalToParent =
+          mergeTree !== undefined && parentTrees.some((parentTree) => parentTree === mergeTree);
+      }
+      if (treeIdenticalToParent) {
+        changedPaths = [];
+        operations = '';
+        patch = '';
+      } else {
+        const nameStatus = execFileSync(
+          'git',
+          ['diff-tree', '--root', '--no-commit-id', '--name-status', '-r', '-M', '-m', sha],
+          {
+            cwd: opts.repoRoot,
+            encoding: 'utf8',
+            maxBuffer: GIT_INSPECTION_MAX_BUFFER,
+            stdio: ['ignore', 'pipe', 'pipe'],
+          },
+        );
+        changedPaths = nameStatus
+          .split('\n')
+          .filter(Boolean)
+          .flatMap((line) => line.split('\t').slice(1));
+        operations = nameStatus
+          .split('\n')
+          .filter(Boolean)
+          .map((line) => {
+            const [status = '', ...paths] = line.split('\t');
+            if ((status.startsWith('R') || status.startsWith('C')) && paths.length >= 2) {
+              return `git rm ${paths[0] ?? ''}\ngit add ${paths[1] ?? ''}\n${line}`;
+            }
+            const path = paths.at(-1) ?? '';
+            return `${status.startsWith('D') ? 'git rm' : 'git add'} ${path}\n${line}`;
+          })
+          .join('\n');
+        patch = execFileSync(
+          'git',
+          [
+            'diff-tree',
+            '--root',
+            '--no-commit-id',
+            '--no-ext-diff',
+            '--unified=0',
+            '-p',
+            '-m',
+            sha,
+          ],
+          {
+            cwd: opts.repoRoot,
+            encoding: 'utf8',
+            maxBuffer: GIT_INSPECTION_MAX_BUFFER,
+            stdio: ['ignore', 'pipe', 'pipe'],
+          },
+        );
+      }
     } catch {
       findings.push({
         forbidden_id: 'FORBIDDEN-SCAN-UNAVAILABLE',
