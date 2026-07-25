@@ -83,6 +83,15 @@ describe('R-0003 first Opus review repairs', () => {
     }
   });
 
+  it('binds the active ADR index to the legal replacement topology', () => {
+    const index = text('law/adr/README.md');
+    expect(index).toContain('ADR-001..013 are gapless');
+    expect(index).toContain('twelve are active');
+    expect(index).toContain('ADR-005 is superseded by ADR-013');
+    expect(index).toMatch(/^provenance: \[DII-153; REV-0003]$/m);
+    expect(index).not.toContain('ADR-001..012 are gapless and active');
+  });
+
   it('records the Owner correction and describes retained glossary entries truthfully', () => {
     const correction = text('product/glossary-ratification-correction-marks.md');
     expect(correction).toContain('GE-006/016/020/022');
