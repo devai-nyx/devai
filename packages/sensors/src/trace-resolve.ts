@@ -16,6 +16,11 @@ export interface TraceResolveOptions {
 type TraceTargetType = 'test' | 'config-attestation' | 'script';
 
 interface TraceFile {
+  meta?: {
+    completeness?: {
+      require_test_links?: boolean;
+    };
+  };
   invariants?: Array<{
     id?: string;
     tests?: Array<{ path?: string; suite?: string; target_type?: TraceTargetType }>;
@@ -92,17 +97,19 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
   let missingTestPaths = 0;
   let untracedInvariants = 0;
 
-  const tracedIds = new Set<string>();
+  const requireTestLinks = parsed.meta?.completeness?.require_test_links === true;
+  const anyLinkedIds = new Set<string>();
+  const testLinkedIds = new Set<string>();
   // D-123 (item 10): an invariant traced ONLY by non-'test' targets
   // (config-attestation / script) has weaker evidence than one with
   // at least one real 'test' entry — track separately so trace
   // completeness metrics don't overstate active test verification.
-  const attestationOnlyIds = new Set<string>();
+  const nonTestLinkedIds = new Set<string>();
   for (const [i, entry] of (parsed.invariants ?? []).entries()) {
     const id = entry.id;
     if (id === undefined) continue;
-    tracedIds.add(id);
-    if (!invariantIds.has(id)) {
+    const knownInvariant = invariantIds.has(id);
+    if (!knownInvariant) {
       unresolvedTraceEntries++;
       findings.push({
         severity: 'error',
@@ -111,14 +118,16 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
       });
     }
     const tests = entry.tests ?? [];
-    if (
-      tests.length > 0 &&
-      tests.every((t) => t.target_type !== undefined && t.target_type !== 'test')
-    ) {
-      attestationOnlyIds.add(id);
-    }
     for (const [j, t] of tests.entries()) {
-      if (t.path === undefined || t.path.length === 0) continue;
+      if (t.path === undefined || t.path.length === 0) {
+        missingTestPaths++;
+        findings.push({
+          severity: 'warning',
+          code: 'missing_test_path',
+          message: `trace entry [${String(i)}] test [${String(j)}] has no path`,
+        });
+        continue;
+      }
       const abs = join(opts.repoRoot, t.path);
       if (!existsSync(abs)) {
         missingTestPaths++;
@@ -127,10 +136,20 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
           code: 'missing_test_path',
           message: `trace entry [${String(i)}] test [${String(j)}] path '${t.path}' does not exist`,
         });
+        continue;
+      }
+      if (knownInvariant) {
+        anyLinkedIds.add(id);
+        if (t.target_type === undefined || t.target_type === 'test') {
+          testLinkedIds.add(id);
+        } else {
+          nonTestLinkedIds.add(id);
+        }
       }
     }
   }
 
+  const tracedIds = requireTestLinks ? testLinkedIds : anyLinkedIds;
   for (const id of invariantIds) {
     if (!tracedIds.has(id)) {
       untracedInvariants++;
@@ -142,6 +161,9 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
     }
   }
 
+  const attestationOnlyIds = new Set(
+    [...nonTestLinkedIds].filter((id) => !testLinkedIds.has(id)),
+  );
   for (const id of attestationOnlyIds) {
     findings.push({
       severity: 'info',
