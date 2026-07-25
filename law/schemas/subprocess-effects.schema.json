@@ -99,6 +99,7 @@
                     "fs:f5-config",
                     "fs:f5-state",
                     "fs:f4-inventory",
+                    "fs:proofs",
                     "fs:worktree-admin",
                     "fs:workspace",
                     "fs:unknown-write",

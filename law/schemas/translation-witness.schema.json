@@ -193,6 +193,7 @@
               "fs:inventory",
               "fs:f5-config",
               "fs:f5-state",
+              "fs:proofs",
               "fs:workspace",
               "fs:worktree-admin",
               "db:read",
