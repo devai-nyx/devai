@@ -69,10 +69,19 @@ describe('Catalog contracts', () => {
     }
   });
 
-  skipIfNotBuilt('pins action coverage to the missing domains-policy known-red', () => {
+  skipIfNotBuilt('validates action coverage through the materialized domains policy', () => {
     const r = run(['spec', 'validate', 'action', 'coverage', '--repo-root', REPO_ROOT]);
-    expect(r.status).toBe(2);
-    expect(r.stderr).toContain('.devai/config/domains.json');
+    expect(r.status, r.stderr).toBe(0);
+    const parsed = JSON.parse(r.stdout) as {
+      ok: boolean;
+      in_scope_count: number;
+      claimed_count: number;
+      unclaimed: string[];
+    };
+    expect(parsed.ok).toBe(true);
+    expect(parsed.in_scope_count).toBeGreaterThan(0);
+    expect(parsed.claimed_count).toBe(parsed.in_scope_count);
+    expect(parsed.unclaimed).toEqual([]);
   });
 
   skipIfNotBuilt('pins the absent generated CLI reference pages without relabeling drift', () => {

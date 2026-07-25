@@ -42,3 +42,4 @@ describe('frozen predecessor genesis binding', () => {
     expect(validate(instance), JSON.stringify(validate.errors)).toBe(true);
   });
 });
+// Invariants: INV-DEVAI-001

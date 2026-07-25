@@ -35,3 +35,4 @@ describe('cold-Corepack determinism', () => {
     }
   });
 });
+// Invariants: INV-DEVAI-001, INV-DEVAI-008

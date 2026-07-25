@@ -25,6 +25,7 @@ describe('roster', () => {
     for (const i of INFRASTRUCTURE) expect(ROSTER).toContain(i);
   });
 });
+// Invariants: INV-DEVAI-001
 
 describe('live instances validate (the W02 recipe, proven)', () => {
   it('all 34 invariants green', () => {

@@ -12,6 +12,7 @@ const roots: string[] = [];
 afterEach(() => {
   for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
 });
+// Invariants: INV-DEVAI-001
 
 function repoRoot(): string {
   const root = mkdtempSync(join(tmpdir(), 'devai-phase-closure-'));

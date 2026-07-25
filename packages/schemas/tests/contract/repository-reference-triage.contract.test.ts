@@ -70,3 +70,4 @@ describe('repository-name reference triage', () => {
     );
   });
 });
+// Invariants: INV-DEVAI-001

@@ -85,3 +85,4 @@ describe('successor operational law', () => {
     }
   });
 });
+// Invariants: INV-DEVAI-001, INV-DEVAI-014

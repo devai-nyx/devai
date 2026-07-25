@@ -51,3 +51,4 @@ describe('register records', () => {
       expect(e.provenance).toMatch(/ex-|dossier|closes|generalizes|session-draft|Part/);
   });
 });
+// Invariants: INV-DEVAI-001

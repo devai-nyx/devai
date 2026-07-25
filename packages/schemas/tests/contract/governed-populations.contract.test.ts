@@ -67,6 +67,7 @@ describe('governed population count guards', () => {
     expect(registry.archived_kinds).toHaveLength(5);
   });
 });
+// Invariants: INV-DEVAI-001, INV-DEVAI-014
 
 describe('population-registry honesty', () => {
   const registry = json('law/policy/population-registry.json') as {
@@ -214,7 +215,7 @@ describe('sensor-registry liveness and reachability', () => {
     }
   });
 
-  it('pins the sole scheduled-reachability known-red to F1:T1', () => {
+  it('leaves no unexplained scheduled-reachability gap after the F1:T1 N/A disposition', () => {
     const reachable = new Set(
       registry.entries.flatMap((entry) =>
         entry.tiers.length > 0
@@ -222,13 +223,25 @@ describe('sensor-registry liveness and reachability', () => {
           : [],
       ),
     );
+    const na = json('.devai/config/scorecard-na.json') as {
+      cells: Array<{ cell: string; reason: string }>;
+    };
+    const notApplicable = new Set(na.cells.map((cell) => cell.cell));
+    expect(na.cells).toEqual([
+      expect.objectContaining({
+        cell: 'F1:T1',
+        reason: expect.stringContaining('contract_validation remains archived'),
+      }),
+    ]);
     const unreachable: string[] = [];
     for (const substrate of ['F1', 'F2', 'F3', 'F4', 'F5']) {
       for (let property = 1; property <= 9; property += 1) {
         const cell = `${substrate}:T${String(property)}`;
-        if (cell !== 'F4:T5' && !reachable.has(cell)) unreachable.push(cell);
+        if (cell !== 'F4:T5' && !notApplicable.has(cell) && !reachable.has(cell)) {
+          unreachable.push(cell);
+        }
       }
     }
-    expect(unreachable).toEqual(['F1:T1']);
+    expect(unreachable).toEqual([]);
   });
 });
