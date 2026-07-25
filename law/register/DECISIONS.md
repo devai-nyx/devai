@@ -1129,6 +1129,18 @@ No binding path may invent fallback Constitution text, a fallback version, or a 
 of synthetic bytes. A repository without canonical self bytes may bind only an
 existing pinned Constitution whose exact bytes carry a valid version marker.
 
+### DII-133 — Sealed history follows renames and treats Git failure as a finding
+`type: decision · status: draft · authority: Architect · provenance: DII-128; R-0002 third Claude Opus 5 correction; BL-076`
+
+Complete sealed history includes the path in force at each commit. A rename does not
+create a new sealing boundary and cannot hide body or frontmatter mutation in the
+rename commit. The guard resolves the historical path from Git's own name-status
+evidence before reading each revision.
+
+Any failure to query repository state, enumerate history, resolve a historical path,
+or read a named revision produces a deterministic integrity finding. Only a confirmed
+non-shallow repository with successfully enumerated record history may report clean.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
