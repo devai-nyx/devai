@@ -32,16 +32,24 @@ describe('R-0003 founding ratification boundary', () => {
     expect(constitution).toContain('DII-150 ratified this text');
   });
 
-  it('keeps every ADR and glossary record active with no live replacement', () => {
+  it('keeps twelve active ADRs after the sealed ADR-005 lifecycle correction', () => {
     const adrs = readdirSync(join(ROOT, 'law/adr')).filter((file) =>
       /^ADR-\d{3}-.+\.md$/.test(file),
     );
-    expect(adrs).toHaveLength(12);
+    expect(adrs).toHaveLength(13);
+    const active: string[] = [];
     for (const file of adrs) {
       const adr = bytes(`law/adr/${file}`).toString('utf8');
-      expect(adr, file).toMatch(/^status: active$/m);
-      expect(adr, file).toMatch(/^superseded_by: null$/m);
+      if (file === 'ADR-005-ci-economy.md') {
+        expect(adr, file).toMatch(/^status: superseded$/m);
+        expect(adr, file).toMatch(/^superseded_by: ADR-013$/m);
+      } else {
+        expect(adr, file).toMatch(/^status: active$/m);
+        expect(adr, file).toMatch(/^superseded_by: null$/m);
+        active.push(file);
+      }
     }
+    expect(active).toHaveLength(12);
     for (let index = 1; index <= 44; index++) {
       const id = `GE-${String(index).padStart(3, '0')}`;
       const entry = json(`law/glossary/${id}.json`);
