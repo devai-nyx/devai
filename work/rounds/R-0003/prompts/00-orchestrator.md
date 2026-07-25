@@ -2,7 +2,7 @@
 
 Execute the founding law ceremony only if R-0002 is independently green.
 
-Read OM-002, the shared execution contract, this round’s authorization and plan,
+Read OM-002, OM-003, the shared execution contract, this round’s authorization and plan,
 R-0002’s merged audit/closure, the rebound attestation, Constitution, ADRs, glossary,
 trace, policy sources, and ratification tests. Start with Auditor B0; the repair round’s
 own report is not sufficient evidence.
@@ -14,7 +14,7 @@ those recorded marks to the glossary and performs the ceremony only after every 
 command passes on the exact candidate, explicitly setting the genesis attestation’s
 `ratified` field. The Engineer materializes but does not author law.
 
-Ask Claude Fable 5 to inspect the candidate for doctrine drift, false lifecycle changes,
+Ask Claude Opus 5 to inspect the candidate for doctrine drift, false lifecycle changes,
 unresolved citations, and claims inflation. Resolve findings before push. Merge only
 with every required noncoverage check green and only the exact BL-017 coverage red.
 Report the workflow red and use the shared two-PR closure ceremony.

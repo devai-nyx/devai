@@ -6,12 +6,13 @@ repository-scoped round to completion; do not ratify or release.
 ## Read before action
 
 1. `product/owner-mandates/OM-002.md`
-2. `work/audit/R-0002-preflight/consolidated-audit.md`
-3. `work/audit/R-0002-preflight/backlog-register.md`
-4. `work/rounds/EXECUTION-CONTRACT.md`
-5. `work/rounds/R-0002/AUTHORIZATION.md`
-6. `work/rounds/R-0002/plan.md`
-7. R-0001 as-built, combined freshness audit, PC-0001, current attestation, law
+2. `product/owner-mandates/OM-003.md`
+3. `work/audit/R-0002-preflight/consolidated-audit.md`
+4. `work/audit/R-0002-preflight/backlog-register.md`
+5. `work/rounds/EXECUTION-CONTRACT.md`
+6. `work/rounds/R-0002/AUTHORIZATION.md`
+7. `work/rounds/R-0002/plan.md`
+8. R-0001 as-built, combined freshness audit, PC-0001, current attestation, law
    regeneration status, and every known-red file named by the scoped items
 
 If authorization is not GRANTED or immutable R-Ω values do not re-derive, stop.
@@ -33,10 +34,12 @@ R-0005 still owns the full BL-050 lifecycle. Any new defect becomes a gapless Au
 backlog record before work continues; scope expansion requiring Owner intent stops the
 round.
 
-Ask Claude Fable 5 for a read-only close review of the exact candidate. Resolve its
-actionable findings. Push and merge only after all required checks for the SHA are green
-and the only remaining remote red is the exact BL-017 coverage job allowed by the shared
-contract. Report the overall workflow as red. Execute the shared two-PR closure ceremony.
+After quota recovery, ask Claude Opus 5 through `claude-opus-5` for a read-only close
+review of the exact candidate. Do not fall back to Fable. Resolve its actionable
+findings. Push and merge only after all required checks for the SHA are green and the
+only remaining remote red is the exact BL-017 coverage job allowed by the shared
+contract. Report the overall workflow as red. Execute the shared two-PR closure
+ceremony.
 
 ## Final report
 

@@ -757,6 +757,20 @@ Architect-owned policy source changes, the Engineer re-materializes its `.devai`
 target through the production verb before the gate may pass. BL-051 closes only when
 the literal repository-wide command is green and the full R-0002 ladder is rerun.
 
+### DII-111 — Active campaign review uses Claude Opus 5 only after quota recovery
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 Owner-selector correction; OM-003; BL-053`
+
+OM-003 narrows the active campaign’s independent Claude review selector. No new Claude
+interaction occurs until the current quota recovers. After recovery, every active
+campaign prompt and the shared execution contract select Claude Opus 5 through the
+explicit CLI model identifier `claude-opus-5`; quota or selector failure blocks rather
+than falling back to Fable or another model.
+
+Historical Fable planning and review artifacts retain their factual model attribution
+and evidentiary limits. They are neither rewritten nor treated as Opus review. This
+decision changes no round authorization, release gate, real-stynx boundary, role/path
+authority, claims ceiling, or exact-candidate merge requirement.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

@@ -1,6 +1,7 @@
 # R-0004 ORCHESTRATOR — action identity and governed surface
 
-Read OM-002, the shared execution contract, R-0004 authorization/plan, R-0003 close,
+Read OM-002, OM-003, the shared execution contract, R-0004 authorization/plan,
+R-0003 close,
 current registries, regeneration status, effect bindings, sensor notes, command
 manifest/router, Changesets config, all package manifests, BL-031 known-red, and the
 R-0001 measured surface review.
@@ -14,7 +15,7 @@ Run pack dry-runs but never publish. Prove every fixed-group member exists and e
 public package is included. Preserve action behavior unless a reviewed fold/tombstone
 map and migration contract say otherwise.
 
-Obtain Claude Fable 5 read-only review of surface loss, package cycles, stale mirrors,
+Obtain Claude Opus 5 read-only review of surface loss, package cycles, stale mirrors,
 and command-smuggling risks. Merge only with all noncoverage exact-SHA checks green and
 the precisely retained BL-017 red; use the shared two-PR closure ceremony.
 

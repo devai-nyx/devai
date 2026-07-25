@@ -8,7 +8,9 @@ authority: Architect
 supersedes: null
 superseded_by: null
 provenance:
-  [OM-002; Constitution Articles 6–10 and 27; R-0001 rehearsal lessons; R-0002-PREFLIGHT-AUDIT]
+  [
+    OM-002; OM-003; Constitution Articles 6–10 and 27; R-0001 rehearsal lessons; R-0002-PREFLIGHT-AUDIT,
+  ]
 ---
 
 # Shared execution contract
@@ -20,8 +22,8 @@ may not weaken it.
 
 Before mutation:
 
-1. read OM-002, the consolidated audit/backlog, this contract, the round authorization,
-   the round plan, and the round prompt;
+1. read OM-002, OM-003, the consolidated audit/backlog, this contract, the round
+   authorization, the round plan, and the round prompt;
 2. treat a conditional grant as PENDING until its predecessor close and entry condition
    are independently re-verified, then verify the authorization’s exact phase is
    GRANTED; PENDING means stop;
@@ -114,8 +116,10 @@ Before push:
 
 - inspect the complete diff and role attribution;
 - prove every backlog item in scope has acceptance evidence or remains blocking;
-- ask Claude Fable 5 for an independent read-only close review and resolve every
+- after quota recovery, ask Claude Opus 5 through the explicit `claude-opus-5` selector
+  for an independent read-only close review and resolve every
   actionable finding;
+- never fall back to Fable or another Claude model when quota or model selection fails;
 - leave no untracked product or evidence artifacts.
 
 After push, inspect the exact candidate’s GitHub checks. Merge only when every required

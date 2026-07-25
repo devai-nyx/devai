@@ -1,6 +1,7 @@
 # R-0005 ORCHESTRATOR — evidence and corrected round mechanics
 
-Read OM-002, the shared execution contract, R-0005 authorization/plan, R-0004 close,
+Read OM-002, OM-003, the shared execution contract, R-0005 authorization/plan,
+R-0004 close,
 ADR-004/005/012, JNY-014, evidence and phase-closure schemas, proof writers, local
 evidence implementation, scorecard registry, prompt-firewall guards, worktree/round
 lifecycle code, and invariant schema/trace consumers.
@@ -14,7 +15,7 @@ sentinels are tracked.
 
 Keep reuse and promotion disabled. Test round close in disposable fixtures until the
 source/closure PR ceremony itself is ready; never invoke the old archive-move semantics.
-Ask Claude Fable 5 to review evidence trust boundaries, round immutability, worktree
+Ask Claude Opus 5 to review evidence trust boundaries, round immutability, worktree
 cleanup, and anchor migration. Resolve all findings before merge.
 
 Final report:

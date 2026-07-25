@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    OM-002; R-0002-PREFLIGHT-AUDIT; R-0002-PREFLIGHT-BACKLOG; reconciled Codex and Claude Fable 5 plan,
+    OM-002; OM-003; R-0002-PREFLIGHT-AUDIT; R-0002-PREFLIGHT-BACKLOG; reconciled Codex and historical Claude review plan,
   ]
 ---
 
@@ -98,7 +98,7 @@ The currently authorized campaign checkpoint requires:
 3. R-0009 and R-0010 prepared but dormant behind their truthful entry gates;
 4. the complete local and remote gate set green at each merged candidate, except an
    explicitly retained earlier coverage red that disappears only in R-0006;
-5. independent Claude Fable 5 close review with every actionable finding resolved or
+5. independent Claude Opus 5 close review with every actionable finding resolved or
    governed before each merge;
 6. clean main, clean worktrees, no uncatalogued deferral, and no claims above the round’s
    ceiling.

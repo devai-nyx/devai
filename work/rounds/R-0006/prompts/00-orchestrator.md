@@ -1,6 +1,6 @@
 # R-0006 ORCHESTRATOR — contracts and coverage depth
 
-Read OM-002, the shared execution contract, authorization/plan, R-0005 close,
+Read OM-002, OM-003, the shared execution contract, authorization/plan, R-0005 close,
 Constitution operational-value findings, thresholds policy, coverage config, current
 coverage JSON, all action manifests/emitters, error and output schemas, and BL-035
 review sources.
@@ -11,7 +11,7 @@ reds and coverage tests; the Engineer fixes the plant and measurement plumbing. 
 exclude a valid source merely to raise a percentage.
 
 Exercise DB-gated integration tests with PostgreSQL. Inspect per-package/file coverage
-for suspicious zeroes and suspiciously excluded code. Ask Claude Fable 5 to challenge
+for suspicious zeroes and suspiciously excluded code. Ask Claude Opus 5 to challenge
 test quality, denominator integrity, output totality, and policy semantics.
 
 Do not close until all four exact floors pass on the normal command and remote stage 3
