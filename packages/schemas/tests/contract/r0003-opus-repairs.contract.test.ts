@@ -60,11 +60,16 @@ describe('R-0003 first Opus review repairs', () => {
     expect(register).toMatch(/DII-150[^\n]*\n`type: decision · status: active/);
   });
 
-  it('resolves ADR-005 affected rules and parses every multi-source supersession', () => {
+  it('supersedes ADR-005 legally and preserves sealed multi-source ADR bytes', () => {
     const adr005 = text('law/adr/ADR-005-ci-economy.md');
-    expect(adr005).not.toContain('.github/workflows/reusable-evidence-gate.yml');
-    expect(adr005).toContain('.github/workflows/ci.yml');
-    expect(adr005).toContain('.github/workflows/round-gates.yml');
+    expect(adr005).toMatch(/^status: superseded$/m);
+    expect(adr005).toMatch(/^superseded_by: ADR-013$/m);
+    expect(adr005).toContain('.github/workflows/reusable-evidence-gate.yml');
+    const replacement = text('law/adr/ADR-013-ci-economy-correction.md');
+    expect(replacement).toMatch(/^status: active$/m);
+    expect(replacement).toMatch(/^supersedes: \[ADR-005]$/m);
+    expect(replacement).toContain('.github/workflows/ci.yml');
+    expect(replacement).toContain('.github/workflows/round-gates.yml');
     for (const file of [
       'ADR-002-human-supervised-experimental-loop.md',
       'ADR-003-actions-evidence-promotion.md',
@@ -74,14 +79,7 @@ describe('R-0003 first Opus review repairs', () => {
       'ADR-011-prompt-firewall.md',
     ]) {
       const supersedes = text(`law/adr/${file}`).match(/^supersedes: \[(.+)]$/m)?.[1] ?? '';
-      expect(supersedes, file).not.toContain(';');
-      expect(
-        supersedes
-          .split(',')
-          .map((value) => value.trim())
-          .filter(Boolean).length,
-        file,
-      ).toBe(2);
+      expect(supersedes, file).toContain(';');
     }
   });
 

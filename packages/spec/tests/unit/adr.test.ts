@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { afterEach, describe, expect, it } from 'vitest';
-import { validateAdrs } from '../../src/adr/index.js';
+import { parseAdrFrontMatter, validateAdrs } from '../../src/adr/index.js';
 
 const roots: string[] = [];
 
@@ -68,6 +68,13 @@ afterEach(() => {
 });
 
 describe('ADR validation', () => {
+  it('parses preserved semicolon-delimited predecessor sources as distinct records', () => {
+    const parsed = parseAdrFrontMatter(
+      ['supersedes: [first-predecessor; second-predecessor]', 'affected_rules: []'].join('\n'),
+    );
+    expect(parsed.supersedes).toEqual(['first-predecessor', 'second-predecessor']);
+  });
+
   it('accepts sorted successor ADRs using inline and block array frontmatter', () => {
     const dir = join(root(), 'law/adr');
     put(dir, 'ADR-002-second.md', adr('ADR-002', { blockArrays: true }));
