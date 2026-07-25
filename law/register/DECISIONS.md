@@ -1234,6 +1234,33 @@ Forbidden committed-change detection covers in-place additions and updates throu
 history are findings, never an empty clean scan. Inspector Git reads remain within the
 production broker. These detection rules do not grant proof mutation authority.
 
+### DII-138 — R-0002 closes from the fourth-review repairs and exact green ladder
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 fifth-review source close; DII-105; DII-137; R-0002-AS-BUILT@9083ca5893a5189bbb8c0d519e271dd1e7109fb9; BL-074; BL-077–078; BL-083; BL-085–093`
+
+DII-138 supersedes DII-136 only as the final R-0002 source-closing decision. The
+Auditor re-close preserves the fourth Opus FAIL, the red-first role-pure repairs, the
+amended plan binding, actual PC-0002 criterion shape, exhaustive BL-017 retirement,
+prepared residual ownership, protected committed-change detection, fail-closed
+registry/history behavior, exact Inspector/production Git verbs, and the executable
+formatting exclusion boundary.
+
+BL-074, BL-077, BL-078, BL-083, and BL-085 through BL-093 are closed. BL-065 and
+BL-080/084 remain prepared in R-0004; BL-063 remains prepared in R-0005; BL-081
+remains prepared in R-0006. Those residuals remain claim constraints and do not
+authorize a serial-round bypass.
+
+The exact source candidate is the commit containing this decision and a fresh
+deterministic repository-reference check. It may advance only after a fifth independent
+read-only Claude Opus 5 review through literal `claude-opus-5` with no fallback, a
+clean worktree, and every required local and exact remote gate green.
+
+After the source PR merges, the closure-only branch emits PC-0003 against the exact
+source merge SHA using DII-105 as historical declaration, DII-137 as amended-plan
+binding, and DII-138 as closing decision. Every source gate is pass, release
+disposition is `none-preratification`, and no failed gate or failing validation
+criterion is admitted. R-0002 remains draft, ratifies nothing, releases nothing,
+deploys nothing, and transfers no readiness or evidence standing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
