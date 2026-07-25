@@ -44,6 +44,37 @@ function draft(overrides: Partial<PhaseClosureDraft> = {}): PhaseClosureDraft {
 }
 
 describe('successor phase-closure binding', () => {
+  it('validates raw draft shape before dereferencing batches', () => {
+    const malformed = {
+      ...draft({
+        merged_as: fullCommit,
+        release_disposition: 'none-preratification',
+      }),
+      batches: undefined,
+    } as unknown as PhaseClosureDraft;
+    expect(() => closePhase(repoWithTwoClosures(), malformed)).toThrow(
+      /does not validate.*batches/i,
+    );
+  });
+
+  it('reports malformed existing closure JSON deterministically', () => {
+    const repo = mkdtempSync(join(tmpdir(), 'devai-malformed-closure-'));
+    roots.push(repo);
+    const dir = join(repo, 'record/proofs/compliance/closures');
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'PC-0001.json'), '{ malformed');
+
+    expect(() =>
+      closePhase(
+        repo,
+        draft({
+          merged_as: fullCommit,
+          release_disposition: 'none-preratification',
+        }),
+      ),
+    ).toThrow(/PC-0001.*malformed/i);
+  });
+
   it('requires merged_as on PC-0003', () => {
     expect(() =>
       closePhase(repoWithTwoClosures(), draft({ release_disposition: 'none-preratification' })),

@@ -105,7 +105,14 @@ describe('ADR validation', () => {
     expect(result.ok).toBe(false);
     expect(result.files_scanned).toBe(4);
     expect(result.errors.some(({ message }) => message.includes('missing YAML'))).toBe(true);
-    expect(result.errors.some(({ message }) => message.includes("'adr_id'"))).toBe(true);
+    expect(result.errors.some(({ message }) => message.includes("'id'"))).toBe(true);
+    expect(result.errors.some(({ message }) => message.includes("'adr_id'"))).toBe(false);
+    expect(
+      result.errors.some(
+        ({ file, message }) =>
+          file.endsWith('ADR-002-predecessor.md') && message.includes('body missing'),
+      ),
+    ).toBe(true);
     expect(result.errors.some(({ message }) => message.includes('required'))).toBe(true);
     expect(result.errors.some(({ message }) => message.startsWith('cannot read:'))).toBe(true);
   });
