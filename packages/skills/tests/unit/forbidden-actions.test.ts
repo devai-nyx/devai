@@ -263,5 +263,73 @@ describe('scanForbiddenActions', () => {
       }),
     );
   });
+
+  it('detects a protected deletion introduced by a merge commit', () => {
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    mkdirSync(join(dir, 'law'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions: CANONICAL_FORBIDDEN_ACTIONS }),
+    );
+    writeFileSync(join(dir, 'law/constitution.md'), 'governed\n');
+    writeFileSync(join(dir, 'README.md'), 'seed\n');
+    execFileSync('git', ['init', '-q'], { cwd: dir });
+    execFileSync('git', ['add', '.'], { cwd: dir });
+    execFileSync(
+      'git',
+      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'seed'],
+      { cwd: dir },
+    );
+    const initialBranch = execFileSync('git', ['branch', '--show-current'], {
+      cwd: dir,
+      encoding: 'utf8',
+    }).trim();
+    execFileSync('git', ['checkout', '-qb', 'remove-law'], { cwd: dir });
+    rmSync(join(dir, 'law/constitution.md'));
+    execFileSync('git', ['add', '-A'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=Fixture',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'remove',
+      ],
+      { cwd: dir },
+    );
+    execFileSync('git', ['checkout', '-q', initialBranch], { cwd: dir });
+    writeFileSync(join(dir, 'README.md'), 'main\n');
+    execFileSync('git', ['add', 'README.md'], { cwd: dir });
+    execFileSync(
+      'git',
+      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'main'],
+      { cwd: dir },
+    );
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=Fixture',
+        '-c',
+        'user.email=fixture@example.com',
+        'merge',
+        '--no-ff',
+        '-qm',
+        'merge',
+        'remove-law',
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-DELETE-AUTHORITY-DOCS',
+        source: 'commit-change',
+      }),
+    );
+  });
 });
 // Invariants: INV-DEVAI-001
