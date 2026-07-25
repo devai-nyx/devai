@@ -714,6 +714,34 @@ contracts followed by Engineer implementation. DII-140 is reopened for a later
 Architect close after those repairs, exact checks, and deterministic reference
 regeneration. A seventh exact-candidate Opus PASS remains mandatory.
 
+Inspector `3db837d` pinned all remaining behavior red before Engineer `122fa08`
+repaired it. Production phase-close now resolves every supplied batch identity to a
+Git commit before emission; the operational template carries the actual
+`0b374c9f8ef82768eb421344853592498c09aeb7` object. The package-manager verifier
+records the registry-integrity derivation and successfully prepares both pnpm
+identities locally. Ordinary trace validation uses the shared contained
+executable-test primitive. Forbidden authority bypass requires a nonempty protected
+path population, and CLI help now matches its fail-closed default. Inspector
+`9d92ef8` binds historical closure fixtures to real repository objects.
+
+Architect `ad8db19` regenerated the trace to 34 invariants / 121 executable test
+files, and Architect `7c8d3f3` refreshed all 155 repository-reference locators after
+the audit changes. Exact full-floor and formatting execution at clean pre-audit source
+snapshot `5fd2af6251375c3de3df8df841f4bf3c0e1e808a` passes 121 files / 1,091
+tests with 8 declared skips.
+
+The Stage 1/governance/T1–T6 ladder at the immediately preceding behavior-equivalent
+snapshot passes: T1 70 files / 807 tests; T2 33 files / 196 tests with 1 declared
+skip; merged T1+T3 79 files / 863 tests with 7 declared skips; T4 4 tests; T5 25
+tests; T6 3 tests. Coverage remains above the unchanged policy at statements 70.58%
+(10,497/14,872), branches 60.96% (7,617/12,495), functions 77.22%
+(1,492/1,932), and lines 72.84% (9,688/13,299). Changesets and global formatting
+pass.
+
+BL-107 through BL-112 are closed. BL-105 remains open only for the new final
+Architect binding, final reference regeneration, and seventh exact-candidate Opus
+review. No source push is authorized before that PASS.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
