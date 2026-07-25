@@ -1,0 +1,897 @@
+{
+  "round_id": "R-0002",
+  "title": "Re-bound the frozen predecessor and repaired successor operational law",
+  "declaring_decision": "DII-105",
+  "closing_decision": "DII-147",
+  "batches": [
+    {
+      "id": "B0",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "d528c06420b398ed82b20649db71fac9d91638ae",
+      "headline": "Declared the exact R-0002 execution boundary"
+    },
+    {
+      "id": "B1",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "3d8d899ae08dbb0378cdfe930d314c7ad994edd7",
+      "headline": "Re-read immutable predecessor and successor opening state"
+    },
+    {
+      "id": "B2",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "69caf2bfce5ab45cf53dd2fffb5f0590c49af27f",
+      "headline": "Pinned the operational repair contracts red-first"
+    },
+    {
+      "id": "B3",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "f9b44082dc2365722748ff71246c0d616b79a4e7",
+      "headline": "Repaired cold-Corepack and closure determinism"
+    },
+    {
+      "id": "B4",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "f5c27ee2b3ff1b8ec5d9f8443fc2a13e3a7c00a5",
+      "headline": "Re-bound successor governance and the frozen genesis"
+    },
+    {
+      "id": "B5-engineer",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "68757da4d0879734c5bae958fc361fcd89007660",
+      "headline": "Materialized successor operational policy"
+    },
+    {
+      "id": "B5-inspector",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "7a6c4d675735a2761ac3d681112adecfbdbeca28",
+      "headline": "Replaced the scoped operational known reds"
+    },
+    {
+      "id": "B6-machine",
+      "roles": [
+        "Machine"
+      ],
+      "commit": "bec810bb38e74ebdf0bd31ec3ee90aa0b186d1ed",
+      "headline": "Emitted append-only PC-0002 through the production verb"
+    },
+    {
+      "id": "B6-inspector",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "ab1ef5a2338f76d04fa2af383e51839ecc9a4d9f",
+      "headline": "Verified PC-0002 supersession and ledger selection"
+    },
+    {
+      "id": "B7-inspector",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "429e89d063500523ca45e84113c6f62c2c69a492",
+      "headline": "Kept the repaired contract lint-clean"
+    },
+    {
+      "id": "B7-engineer",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "3f2275bb54086b5882cae3662899fceac6b56b3a",
+      "headline": "Repaired candidate-Constitution version parsing"
+    },
+    {
+      "id": "C-review",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "30343ab33647757d74092ddd3c75e62e3aa47f4a",
+      "headline": "Resolved historical role-attribution and correction-semantics review findings"
+    },
+    {
+      "id": "C-format-owner",
+      "roles": [
+        "Owner"
+      ],
+      "commit": "4987cb05c2f4f5ce736aa604d5f419ff3eb08520",
+      "headline": "Normalized active Owner records"
+    },
+    {
+      "id": "C-format-architect",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "29dd065c6d7d4c4af9e5e372b0e56759cc1cbf1e",
+      "headline": "Normalized active governance and publication sources"
+    },
+    {
+      "id": "C-format-engineer",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "631695eb695ae6fb6ef53c2a9c2b45a1e9e50253",
+      "headline": "Normalized implementation sources and re-materialized changed policy"
+    },
+    {
+      "id": "C-format-inspector",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "871ed4d738d3aea23ef2dbaf2d093c7b561af003",
+      "headline": "Normalized active verification sources"
+    },
+    {
+      "id": "C-gate-ack",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "5d614680cf2c984290a8dac1cb0255a358758f90",
+      "headline": "Enforced failed closure-gate acknowledgment"
+    },
+    {
+      "id": "C-opus-owner",
+      "roles": [
+        "Owner"
+      ],
+      "commit": "9c716e2b896dc3a8ff47c038faf99ecfad9ae870",
+      "headline": "Recorded the Opus-only Claude review rider"
+    },
+    {
+      "id": "C-opus-architect",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "a283ad684922968afe4107a661bfa9e5c4be4214",
+      "headline": "Applied the Opus-only selector across active campaign instructions"
+    },
+    {
+      "id": "C-machine-schema",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "b0d5aed3d637122a83528c3b061310d90401ae55",
+      "headline": "Admitted Machine provenance in the phase-closure schema"
+    },
+    {
+      "id": "C-machine-type",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "a9b1386cab8d51081d7fcbd314bac57a16c5d421",
+      "headline": "Mirrored Machine provenance in the production closure type"
+    },
+    {
+      "id": "C-machine-acceptance",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "ce549b6a02e3f71944b2e7d0eb95b97f57dab50d",
+      "headline": "Accepted truthful Machine closure attribution"
+    },
+    {
+      "id": "C-authority-binding-red",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "3a587cbf8e29c7eaf6721e421941dabd2b56ea79",
+      "headline": "Pinned the stale Constitution binding red"
+    },
+    {
+      "id": "C-authority-binding-materialization",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "1d81940ed53d5b86be2ee6090176f1c54590ff03",
+      "headline": "Captured the verb-produced authority-policy materialization"
+    },
+    {
+      "id": "C-authority-binding-mirror",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "68f682e30d2cdeb13ee3fb4d15f65c57531023ab",
+      "headline": "Restored exact Constitution binding in the canonical mirror"
+    },
+    {
+      "id": "C-proof-path-govern",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "ca72277b4e61e12502fc8ef0faba5794e85106c9",
+      "headline": "Governed the canonical closure proof-path contradiction"
+    },
+    {
+      "id": "C-proof-path-red",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "5fe07a9b248168e6bde9b56fde25b97062bf4d99",
+      "headline": "Pinned the stale phase-closure proof path red"
+    },
+    {
+      "id": "C-proof-path-law",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "dd5787d6591e2cd970ad349e8346f61eef040662",
+      "headline": "Bound phase closures to immutable compliance proof"
+    },
+    {
+      "id": "B8",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "f85c68d1ff82a6f2d01ff9aff49b054dadf9b39f",
+      "headline": "Reconciled the final R-0002 as-built and every governed correction"
+    },
+    {
+      "id": "B9",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "4ebb9cf0b1227ee5f93eb29153161908581a3cdf",
+      "headline": "Recorded the canonical-proof final source close"
+    },
+    {
+      "id": "C-coverage-owner",
+      "roles": [
+        "Owner"
+      ],
+      "commit": "b15ca54af5a771ac3b7bd4cc2bf7cd2f32c65e87",
+      "headline": "Authorized bounded behavior-focused coverage strengthening"
+    },
+    {
+      "id": "C-coverage-law",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "6b118af051ae95f1283ca1bc08012791a4461ddb",
+      "headline": "Bound quota-window coverage work without closing BL-017"
+    },
+    {
+      "id": "C-coverage-tests",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "2a03c556acddbab3a8d3edb6fadfcbd93946458e",
+      "headline": "Strengthened triage and scorecard behavior coverage"
+    },
+    {
+      "id": "C-adr-history-govern",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "0b374c9f8ef82768eb421344853592498c09aeb7",
+      "headline": "Governed the unreachable ADR history guard as BL-057"
+    },
+    {
+      "id": "C-adr-history-red",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "06b5787ba5d362bf65b25b57e63f1b108257d005",
+      "headline": "Proved active ADR body mutation went undetected"
+    },
+    {
+      "id": "C-adr-history-law",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "b478edf8e11e7b7a0b79981d50cac07c4d319974",
+      "headline": "Bound successor sealed-ADR lifecycle semantics"
+    },
+    {
+      "id": "C-adr-history-fix",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "27d8d74ff6a483cdaa88ac1b83dd4214477b6dbf",
+      "headline": "Enforced sealed ADR history and scalar supersession links"
+    },
+    {
+      "id": "C-adr-history-tests",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "f0c8e7c1b9f74567bf7a47a493145907360f9b4e",
+      "headline": "Pinned allowed and forbidden sealed lifecycle transitions"
+    },
+    {
+      "id": "C-adr-history-audit",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "0f222c88bd0ad23e5c23d6380d86a6b2ee608285",
+      "headline": "Closed the sealed ADR lifecycle gap"
+    },
+    {
+      "id": "C-coverage-audit",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "73c6ef68f57630c07e7130b8fd02ff3a2279f05e",
+      "headline": "Recorded the exact quota-window coverage uplift"
+    },
+    {
+      "id": "C-coverage-final-close",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "8b514ac62d1464608964fbb815ac81840075b3a5",
+      "headline": "Recorded the coverage-strengthened final source close"
+    },
+    {
+      "id": "C-fifth-review-audit",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "1ffbde56e0f21fd9f2b8241fd91a5e7369bf2c63",
+      "headline": "Governed the fifth Opus review findings as BL-094 through BL-106"
+    },
+    {
+      "id": "C-fifth-review-red",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "0c81ce75636b5659dfd5722cd73d5047599b65f8",
+      "headline": "Pinned the residual governance-input defects red-first"
+    },
+    {
+      "id": "C-fifth-review-law",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "a40c9bbe3573532774b3283d9be7a364cc104e1c",
+      "headline": "Bound the fifth-review enforcement and freshness corrections"
+    },
+    {
+      "id": "C-fifth-review-fix",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "a1ce4d43190eaddbf61f6b5f30d7239145e24e49",
+      "headline": "Made governance automatic and repaired Corepack, closure, ADR, and scanner enforcement"
+    },
+    {
+      "id": "C-fifth-review-residual-fix",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "1a1e0d55be396819d8c2bf879b9c882d5964374c",
+      "headline": "Closed residual trace, closure-ledger, and bootstrap-policy inputs"
+    },
+    {
+      "id": "C-fifth-review-reclose",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "f71192e50b956384e0594869a1f3fb56d1dee1b3",
+      "headline": "Re-audited the fifth-review correction and exact local ladder"
+    },
+    {
+      "id": "C-sixth-review-close",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "e7b7d460f30efbfb38b914899b5942001781406a",
+      "headline": "Bound the final evidence chronology and sixth-review source close"
+    },
+    {
+      "id": "C-final-reference-refresh",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "d21a3f2c3345dfb1d235292562b6ad152110bfbf",
+      "headline": "Regenerated exact final repository-reference locators"
+    },
+    {
+      "id": "C-sixth-review-audit",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "7641d9fb396ce8905a2d87827f0b9f0775d3fe51",
+      "headline": "Governed the sixth Opus findings as BL-107 through BL-112"
+    },
+    {
+      "id": "C-sixth-review-red",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "3db837d1236c883a1e20a63e29d5fbbd5a3ee379",
+      "headline": "Pinned all sixth-review behavior defects red-first"
+    },
+    {
+      "id": "C-sixth-review-fix",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "122fa08e4e26805a86efc999101be0e88d9e3720",
+      "headline": "Repaired closure provenance, prewarm verification, trace validation, forbidden authority, and CLI help"
+    },
+    {
+      "id": "C-sixth-review-trace",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "ad8db1905f0b53b8dab925660236ceffee8a2aa8",
+      "headline": "Regenerated the 121-file trace corpus"
+    },
+    {
+      "id": "C-sixth-review-fixtures",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "9d92ef8d1747a01ead93264fb33aa1dcdac728ca",
+      "headline": "Bound historical closure fixtures to real Git objects"
+    },
+    {
+      "id": "C-sixth-review-references",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "7c8d3f30a52c9b81a1f0af3b0f677729a52d988d",
+      "headline": "Refreshed all repository-reference locators"
+    },
+    {
+      "id": "C-sixth-review-format",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "5fd2af6251375c3de3df8df841f4bf3c0e1e808a",
+      "headline": "Kept sixth-review contracts globally format-clean"
+    },
+    {
+      "id": "C-sixth-review-reclose",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "30ecb06a990ac4a09a92b6114d1cdb0d8bdcf44d",
+      "headline": "Re-audited and closed BL-107 through BL-112"
+    },
+    {
+      "id": "C-seventh-review-close",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "0053380926197d0d7fdb603de9d0c9d7f2a77978",
+      "headline": "Bound the sixth-review correction for exact seventh review"
+    },
+    {
+      "id": "C-seventh-review-audit",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "fec91e90575dba97d06ade33e2d5be11f9af0859",
+      "headline": "Preserved the seventh Opus PASS and governed BL-113 through BL-116"
+    },
+    {
+      "id": "C-seventh-review-red",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "67f708108949a38c2b59550dcd1ccf4b856a70dd",
+      "headline": "Pinned source-merge resolution and schema-first batch validation red-first"
+    },
+    {
+      "id": "C-seventh-review-fix",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "3f7e5bcfdf38dce16b298e4bec3b74d25c4aed55",
+      "headline": "Resolved final closure objects and validated complete drafts before dereference"
+    },
+    {
+      "id": "C-seventh-review-green",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "49f9488498a64bd7f1c1a5500e7f1ef4e5ba6b6a",
+      "headline": "Aligned the schema-first diagnostic contract and restored focused green"
+    },
+    {
+      "id": "C-seventh-review-reclose",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "ba47c335fdca893068dd711f30a96c68e620f672",
+      "headline": "Re-audited and closed BL-113 through BL-116"
+    },
+    {
+      "id": "C-final-backlog-contract",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "c90a9c751bcaecdd5f0be6e5bf2def3901208d7a",
+      "headline": "Bound the final backlog disposition without a stale review ordinal"
+    },
+    {
+      "id": "C-final-source-decision",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "71b58af98ff82cc37ecaf05c23ed89e03547e86b",
+      "headline": "Bound the seventh-review repairs for final exact review"
+    },
+    {
+      "id": "C-final-source-references",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "a1146322e5acf00e54d276ae2dcb4584e2e8c9d1",
+      "headline": "Regenerated final exact-candidate repository-reference locators"
+    },
+    {
+      "id": "C-owner-close-exception",
+      "roles": [
+        "Owner"
+      ],
+      "commit": "9e08908af2b56a372eb87cc83358592a660d471e",
+      "headline": "Mandated the scoped R-0002 final-review exception and continuous close"
+    },
+    {
+      "id": "C-owner-close-decision",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "07788955693d88136799a847899df0a982a2d58b",
+      "headline": "Bound the Owner exception without weakening proof gates"
+    },
+    {
+      "id": "C-owner-close-audit",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "ba13b8cb9d160627c03058de8807dc53f77f6260",
+      "headline": "Applied the Owner exception and closed BL-105"
+    },
+    {
+      "id": "C-owner-close-contract",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "7794e68ee168f89fa8a5a2a72bf37fa0743221ae",
+      "headline": "Bound the compact Owner-exception backlog disposition"
+    },
+    {
+      "id": "C-owner-close-references",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "b55685762252d3af1d0b483746ab7a8c843b8532",
+      "headline": "Regenerated Owner-exception repository-reference locators"
+    },
+    {
+      "id": "C-exact-ci-large-merge-red",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "d8c9c22a2a02cfb457cb22d6c99e62e5085ab70f",
+      "headline": "Pinned bounded large-merge inspection red-first"
+    },
+    {
+      "id": "C-exact-ci-large-merge-audit",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "48bc9dc600991afc8576f4d9d0014ba9c6f5da59",
+      "headline": "Reopened BL-095 against the exact failed source run"
+    },
+    {
+      "id": "C-exact-ci-large-merge-fix",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "5552ddfc1468b10d8cce2b7d2f7dcb91561628c4",
+      "headline": "Raised bounded Git inspection capacity while retaining fail-closed behavior"
+    },
+    {
+      "id": "C-exact-ci-large-merge-reclose",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "375c19d6dc375d731e14faf76fe13574ec432b0f",
+      "headline": "Re-audited and re-closed BL-095 after the local repair floor"
+    },
+    {
+      "id": "C-exact-ci-large-merge-decision",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "4fc168c8b6a0ce9f15227e6caee66d06fd597a7b",
+      "headline": "Bound the exact-CI merge inspection repair for source close"
+    },
+    {
+      "id": "C-exact-ci-synthetic-merge-audit",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "a70067278fb3b096a7e0e620fecbf0df5915bdbd",
+      "headline": "Governed synthetic merge aggregation as BL-117"
+    },
+    {
+      "id": "C-exact-ci-synthetic-merge-red",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "915d84aa96940a99056076924846dcb737ee756b",
+      "headline": "Pinned duplicate synthetic merge evidence red-first"
+    },
+    {
+      "id": "C-exact-ci-synthetic-merge-fix",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "b1e6c2a7dcef61ee3ef39fc73a9e5b315a52fbd3",
+      "headline": "Omitted only non-novel aggregate merge change evidence"
+    },
+    {
+      "id": "C-exact-ci-synthetic-merge-reclose",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "1205ddb7a47748834f8cac15fc7606551a1b18c3",
+      "headline": "Re-audited and re-closed BL-117"
+    },
+    {
+      "id": "C-exact-ci-synthetic-merge-decision",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "3f49162242e8c0f7a0fbc9d576d1c20c73d6a007",
+      "headline": "Bound the non-novel synthetic merge correction"
+    },
+    {
+      "id": "C-exact-ci-synthetic-merge-references",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "748bc2fe8bca98ed6d9b48dfab673a99b672fb81",
+      "headline": "Regenerated exact-CI repair repository references"
+    },
+    {
+      "id": "C-test-fixture-classification-audit",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "87546850f9b022d232f9fba709f33f11f417e118",
+      "headline": "Governed test fixture classification as BL-118"
+    },
+    {
+      "id": "C-test-fixture-classification-red",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "f01463da36c2b108f839a3197c6ee18ee5e05b3d",
+      "headline": "Pinned Inspector test-only fixture classification red-first"
+    },
+    {
+      "id": "C-test-fixture-classification-fix",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "cd71e378e1479687e3a47fad9bf3fd84b756c626",
+      "headline": "Bound the fixture exemption to Inspector test-only changes"
+    },
+    {
+      "id": "C-test-fixture-classification-guards",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "9915e8a8da5c96bd5f315e000063da9d14cdbbd5",
+      "headline": "Proved message and mixed-path evidence remain active"
+    },
+    {
+      "id": "C-test-fixture-classification-reclose",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "8ae36b4e13c1919193b64952c3aa8ed0ec26760d",
+      "headline": "Re-audited and re-closed BL-118"
+    },
+    {
+      "id": "C-test-fixture-backlog-contract",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "152b06efa110ef5916bef4ff0f5cfabfdd683e52",
+      "headline": "Aligned the compact final repair range"
+    },
+    {
+      "id": "C-test-fixture-classification-decision",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "6e7c8ed9b0c6d5a0f88c855c479ab20eaa3b2ad7",
+      "headline": "Bound the role-pure test fixture correction"
+    },
+    {
+      "id": "C-test-fixture-classification-references",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "a5dd9e81212091f63f94b52ccae6949bb49caf91",
+      "headline": "Regenerated final exact-CI repository references"
+    },
+    {
+      "id": "C-closure-ledger-audit",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "6ac68fdd9f1924a9c07fc6f2eb4e73d02625459d",
+      "headline": "Governed append-only closure-ledger verification as BL-119"
+    },
+    {
+      "id": "C-closure-ledger-inspector",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "6dd03258ab697e008fdb1e803862b0c278a7dace",
+      "headline": "Made the closure-ledger contract append-only safe"
+    },
+    {
+      "id": "C-closure-ledger-reclose",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "bdad995ffde2f77a2f9b3130c0af52198b7defd5",
+      "headline": "Closed BL-119 across pre-close and post-close states"
+    },
+    {
+      "id": "C-closure-ledger-decision",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "3881c4c39ddb2f337030b37ea871ee2500504f0e",
+      "headline": "Bound append-only closure-ledger verification"
+    },
+    {
+      "id": "C-closure-ledger-references",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "4d3c3d014947cce1f07e3fbeb2c4880dd653c571",
+      "headline": "Refreshed closure-correction repository references"
+    },
+    {
+      "id": "C-closure-ledger-backlog-contract",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "e1d604bd17b23e4bd85dc8905ae6a8d69b00f66f",
+      "headline": "Aligned the compact BL-119 closed range"
+    },
+    {
+      "id": "C-closure-ledger-reconciliation",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "30866961b0bcfc678ff615bde3f6461229bd28a0",
+      "headline": "Reconciled the complete BL-119 contract"
+    },
+    {
+      "id": "C-closure-ledger-final-decision",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "eeef0394817e12b736045eedb19dbdd729630bbf",
+      "headline": "Bound the complete BL-119 correction for source close"
+    }
+  ],
+  "gates": {
+    "stage-1": {
+      "status": "pass",
+      "detail": "Workflow lint, repository lint, and typecheck pass"
+    },
+    "tier-t1": {
+      "status": "pass",
+      "detail": "70 test files; 813 passed"
+    },
+    "tier-t2": {
+      "status": "pass",
+      "detail": "33 test files; 196 passed; 1 declared skip"
+    },
+    "tier-t3": {
+      "status": "pass",
+      "detail": "Merged T1+T3 coverage execution: 79 test files; 869 passed; 7 declared skips"
+    },
+    "tier-t4": {
+      "status": "pass",
+      "detail": "2 test files; 4 passed"
+    },
+    "tier-t5": {
+      "status": "pass",
+      "detail": "6 test files; 25 passed"
+    },
+    "tier-t6": {
+      "status": "pass",
+      "detail": "1 test file; 3 passed"
+    },
+    "changesets": {
+      "status": "pass",
+      "detail": "0 pending changesets; release disposition is none-preratification"
+    },
+    "formatting": {
+      "status": "pass",
+      "detail": "Literal repository-wide Prettier check passes"
+    },
+    "operational-law": {
+      "status": "pass",
+      "detail": "Strict forbidden actions, decision integrity/citations, trace resolution, canonical policy, and docs drift pass"
+    },
+    "authority-binding": {
+      "status": "pass",
+      "detail": "Both policy copies are byte-identical and bind the exact current Constitution"
+    },
+    "disposable-production-close": {
+      "status": "pass",
+      "detail": "Production close accepted the schema-complete exact-source-merge draft and emitted PC-0003 in a disposable worktree; post-emission invariants are verified separately"
+    },
+    "independent-opus-review": {
+      "status": "pass",
+      "detail": "OM-007 relies on the preserved seventh exact-candidate Claude Opus 5 PASS at d8c119910bf2a4ea755e1aa8d8b1d6f5ba98f965; BL-113 through BL-116 residuals were governed and repaired"
+    },
+    "remote-source-noncoverage": {
+      "status": "pass",
+      "detail": "Original source candidate a5dd9e81212091f63f94b52ccae6949bb49caf91 and its merge passed runs 30172212628 and 30172399964; BL-119 correction candidate eeef0394817e12b736045eedb19dbdd729630bbf passed every required PR check in run 30172896629; exact final source merge 3d111a8cb571b289cee03ae78faa173ca327ae3a passed every required main check in push run 30173075330"
+    },
+    "coverage-t1-t3": {
+      "status": "pass",
+      "detail": "Statements 70.61% (10515/14890), branches 61.00% (7632/12510), functions 77.27% (1496/1936), lines 72.88% (9705/13316)"
+    },
+    "predecessor-clean": {
+      "status": "pass",
+      "detail": "Read-only predecessor remained clean at d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+    }
+  },
+  "source_repo_deleted": false,
+  "validation_criteria": [
+    {
+      "criterion": "Frozen predecessor truth is rebound without importing standing",
+      "verdict": "pass",
+      "evidence": "Genesis attestation and R-0002 as-built bind the exact frozen commit, tree, close, chain head, and document digests"
+    },
+    {
+      "criterion": "Every scoped R-0002 item and discovered correction has an explicit disposition",
+      "verdict": "pass",
+      "evidence": "R-0002 as-built and backlog register close the R-0002 repair population through BL-119; BL-106 remains the explicit prospective R-0005 control"
+    },
+    {
+      "criterion": "Production closure semantics and authority binding are write-valid",
+      "verdict": "pass",
+      "evidence": "The production govern phase close command emitted PC-0003 from an exact-source-merge disposable worktree without altering prior closure proofs"
+    },
+    {
+      "criterion": "Independent Claude Opus 5 review accepted the exact source candidate",
+      "verdict": "pass",
+      "evidence": "OM-007 explicitly replaces the additional final review with the preserved seventh Opus PASS at d8c119910bf2a4ea755e1aa8d8b1d6f5ba98f965 after its four residual findings were governed and repaired"
+    },
+    {
+      "criterion": "coverage-t1-t3 satisfies the unchanged 70/60/70/70 policy",
+      "verdict": "pass",
+      "evidence": "Statements 70.61% (10515/14890), branches 61.00% (7632/12510), functions 77.27% (1496/1936), and lines 72.88% (9705/13316) on exact final source candidate eeef0394817e12b736045eedb19dbdd729630bbf"
+    },
+    {
+      "criterion": "Founding ratification, release, readiness, and evidence standing completed",
+      "verdict": "n/a",
+      "evidence": "Explicitly outside R-0002; R-0003 owns ratification and external release remains human-gated"
+    }
+  ],
+  "merged_as": "3d111a8cb571b289cee03ae78faa173ca327ae3a",
+  "release_disposition": "none-preratification",
+  "notes": "R-0002 re-binds and repairs the successor without importing predecessor standing. PC-0002 remains the append-only R-0001 correction. The unchanged coverage policy is green. This record ratifies nothing, releases nothing, deploys nothing, and claims no readiness or evidence standing.",
+  "schemaVersion": "1.0.0",
+  "id": "PC-0003",
+  "closed_at": "2026-07-25T20:17:45.438Z"
+}
