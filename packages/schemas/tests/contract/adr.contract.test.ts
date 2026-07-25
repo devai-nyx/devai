@@ -46,10 +46,10 @@ describe('ADR roster records', () => {
     }
   });
 
-  it('draft lifecycle discipline: draft status, null superseded_by, non-empty supersedes + provenance', () => {
+  it('founding lifecycle discipline: active status, null superseded_by, non-empty supersedes + provenance', () => {
     for (const f of files) {
       const fm = frontMatter(f);
-      expect(fm.status, f).toBe('draft');
+      expect(fm.status, f).toBe('active');
       expect(fm.superseded_by, f).toBeNull();
       expect(
         Array.isArray(fm.supersedes) && (fm.supersedes as unknown[]).length > 0,
