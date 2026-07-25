@@ -29,11 +29,7 @@
       "pattern": "^TASK-"
     },
     "emitting_discipline": {
-      "enum": [
-        "engineer",
-        "inspector",
-        "auditor"
-      ],
+      "enum": ["engineer", "inspector", "auditor"],
       "description": "Owner and Architect cannot emit RGRs; they set the reference."
     },
     "created_at": {
@@ -41,19 +37,13 @@
       "format": "date-time"
     },
     "target_authority": {
-      "enum": [
-        "owner",
-        "architect"
-      ],
+      "enum": ["owner", "architect"],
       "description": "Which authority must resolve. Owner for business-tier gaps; Architect for engineering-tier."
     },
     "problem": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "summary",
-        "ambiguity"
-      ],
+      "required": ["summary", "ambiguity"],
       "properties": {
         "summary": {
           "type": "string",
@@ -104,10 +94,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "qid",
-          "question"
-        ],
+        "required": ["qid", "question"],
         "properties": {
           "qid": {
             "type": "string",
@@ -164,13 +151,7 @@
       }
     },
     "status": {
-      "enum": [
-        "open",
-        "in_review",
-        "resolved",
-        "rejected",
-        "superseded"
-      ]
+      "enum": ["open", "in_review", "resolved", "rejected", "superseded"]
     },
     "resolution": {
       "type": "object",
@@ -188,10 +169,7 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-              "qid",
-              "answer"
-            ],
+            "required": ["qid", "answer"],
             "properties": {
               "qid": {
                 "type": "string",
@@ -210,10 +188,7 @@
           }
         },
         "resumed_task_id": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "pattern": "^TASK-",
           "description": "Task spawned on the new integration HEAD after spec update."
         }
@@ -238,9 +213,7 @@
           "question": "Must stale refresh tokens be rejected?"
         }
       ],
-      "evidence_refs": [
-        "EV-abcdef01"
-      ],
+      "evidence_refs": ["EV-abcdef01"],
       "status": "open"
     }
   ]

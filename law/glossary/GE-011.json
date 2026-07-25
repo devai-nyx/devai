@@ -6,19 +6,8 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "see_also": [
-    "GE-012",
-    "GE-004"
-  ],
-  "related_invariants": [
-    "INV-DEVAI-002"
-  ],
-  "examples": [
-    "tsc invocation",
-    "vitest run",
-    "runtime API probe"
-  ],
-  "provenance": [
-    "ex-GE-011@devai-original"
-  ]
+  "see_also": ["GE-012", "GE-004"],
+  "related_invariants": ["INV-DEVAI-002"],
+  "examples": ["tsc invocation", "vitest run", "runtime API probe"],
+  "provenance": ["ex-GE-011@devai-original"]
 }

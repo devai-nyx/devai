@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { detectRelabeledSensors } from '../../src/loop/sensor-integrity.js';
 import type { SensorReading } from '@devai-nyx/sensors';
+import './triage-cases.js';
 
 /**
  * Minimal fixture builder — `detectRelabeledSensors` reads only
@@ -71,4 +72,4 @@ describe('detectRelabeledSensors', () => {
     expect(groups[0]?.reading_ids).toEqual(['a', 'b']);
   });
 });
-// Invariants: INV-DEVAI-002, INV-DEVAI-012
+// Invariants: INV-DEVAI-002, INV-DEVAI-007, INV-DEVAI-012

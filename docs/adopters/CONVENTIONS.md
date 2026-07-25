@@ -8,12 +8,12 @@ Authoritative naming and layout decisions for all Stech repos. Adopters: DEVAI, 
 
 Short forms only. No long aliases.
 
-| Canonical | Replaces                          |
-|-----------|-----------------------------------|
-| `eng/`    | `engineering/`                    |
-| `arch/`   | `architecture/`                   |
-| `ops/`    | `operations/`                     |
-| `gov/`    | `governance/`                     |
+| Canonical | Replaces        |
+| --------- | --------------- |
+| `eng/`    | `engineering/`  |
+| `arch/`   | `architecture/` |
+| `ops/`    | `operations/`   |
+| `gov/`    | `governance/`   |
 
 Full canonical `docs/` layout (an adopter implements the subset that applies):
 
@@ -34,6 +34,7 @@ docs/
 ```
 
 Rules:
+
 - Names are stable. Do **not** introduce parallel forms (`docs/governance/` plus `docs/gov/` is a violation).
 - `docs/work/` is transient. Do not promote `work/` content into adopter-facing locations without explicit ADR.
 - An adopter may keep `gov/` locally OR delegate to a sibling DEVAI checkout (TEAT-style). Both supported; declare which in repo `README.md` or `AGENTS.md`.
@@ -53,6 +54,7 @@ database/
 ```
 
 Rules:
+
 - DDL files bootstrap a fresh database in numeric order.
 - Seed files run AFTER all DDL, in numeric order.
 - Migrations are append-only and never re-edited once shipped.
@@ -117,12 +119,12 @@ ROUND  R<n>            first-tier division; strictly sequential; ≥1 wave
          └─ STEP   R<n>-W<m>-<L>.<num>   finest unit
 ```
 
-| Tier  | Identifier            | Example                  |
-|-------|-----------------------|--------------------------|
-| Round | `R<n>`                | `R3`                     |
-| Wave  | `R<n>-W<m>`           | `R3-W2`                  |
-| Phase | `R<n>-W<m>-<L>`       | `R3-W2-A`                |
-| Step  | `R<n>-W<m>-<L>.<num>` | `R3-W2-A.1`              |
+| Tier  | Identifier            | Example     |
+| ----- | --------------------- | ----------- |
+| Round | `R<n>`                | `R3`        |
+| Wave  | `R<n>-W<m>`           | `R3-W2`     |
+| Phase | `R<n>-W<m>-<L>`       | `R3-W2-A`   |
+| Step  | `R<n>-W<m>-<L>.<num>` | `R3-W2-A.1` |
 
 Rules:
 

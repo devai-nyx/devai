@@ -42,7 +42,7 @@ Matching semantics: OR over signals (any hit counts), then sort by hit count des
 
 ## When `pack resolve` returns no match
 
-For workspace-style monorepos where dependencies live in subpackages, signals at the *root* `package.json` won't fire. The Phase 19.B widening already added `turbo.json`, `pnpm-workspace.yaml`, and `dir_present packages-web` to the NestJS+Postgres+Angular pack to cover this case. If your repo still doesn't match:
+For workspace-style monorepos where dependencies live in subpackages, signals at the _root_ `package.json` won't fire. The Phase 19.B widening already added `turbo.json`, `pnpm-workspace.yaml`, and `dir_present packages-web` to the NestJS+Postgres+Angular pack to cover this case. If your repo still doesn't match:
 
 1. Run with `--format human` to see what signals were evaluated.
 2. Inspect each pack's `detect.signals` (under `node_modules/@devai-nyx/core/examples/redox-pack-*/stack-adapter.json`, or the equivalent sibling checkout).
@@ -54,13 +54,13 @@ Avoid creating an adopter-specific pack — packs are meant to describe stack fa
 
 The typed [sensor registry](../reference/sensor-registry.md) is authoritative for every pack key and labels each parameter `consumed` or `declared-only`. The inventory adapters currently consume:
 
-| Sensor | Pack field | Effect |
-|---|---|---|
-| `sense api` | `inventory_api.scan_dir`, `.scan_dir_alternates`, `.public_marker_decorators` | Selects NestJS-shaped controller roots and public markers. |
-| `sense routes` | `inventory_routes.scan_dir`, `.scan_dir_alternates`, `.framework` | Selects roots and the supported `react` or `angular` walker. |
-| `sense data-model` | `inventory_data_model.migration_dirs`, `.dialect`, `.pii_registry_table` | Sets migration roots, SQL dialect metadata, and PII-registry lookup. |
-| `sense coverage` | `inventory_routes.framework` | Selects the matching routes inventory body. |
-| `sense type check` | `inventory_type_check.typecheck_strategy` | Selects root or per-package type checking. |
+| Sensor             | Pack field                                                                    | Effect                                                               |
+| ------------------ | ----------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `sense api`        | `inventory_api.scan_dir`, `.scan_dir_alternates`, `.public_marker_decorators` | Selects NestJS-shaped controller roots and public markers.           |
+| `sense routes`     | `inventory_routes.scan_dir`, `.scan_dir_alternates`, `.framework`             | Selects roots and the supported `react` or `angular` walker.         |
+| `sense data-model` | `inventory_data_model.migration_dirs`, `.dialect`, `.pii_registry_table`      | Sets migration roots, SQL dialect metadata, and PII-registry lookup. |
+| `sense coverage`   | `inventory_routes.framework`                                                  | Selects the matching routes inventory body.                          |
+| `sense type check` | `inventory_type_check.typecheck_strategy`                                     | Selects root or per-package type checking.                           |
 
 Other consumed bindings—including thresholds, timeouts, migration roles, and LLM timeouts—are listed exhaustively in the generated registry. A field shown there as `declared-only` is accepted pack metadata but has no runtime effect.
 
@@ -89,16 +89,16 @@ devai sense inventory api \
 
 ## Pack inventory
 
-| Pack | Stack |
-|---|---|
-| `redox-pack-nestjs-postgres-react` | NestJS + Postgres + React |
-| `redox-pack-nestjs-postgres-angular` | NestJS + Postgres + Angular |
-| `redox-pack-express-knex-postgres-angular` | Express + Knex + Postgres + Angular |
-| `redox-pack-laravel-postgres-angular` | Laravel + Postgres + Angular |
-| `redox-pack-laravel-postgres-blade` | Laravel + Postgres + Blade |
-| `redox-pack-laravel-postgres-react-blade` | Laravel + Postgres + React/Blade |
-| `redox-pack-java-spring-oracle-angularjs` | Java Spring + Oracle + AngularJS |
-| `law-pack` | The DEVAI bootstrap pack (used by `init`) |
+| Pack                                       | Stack                                     |
+| ------------------------------------------ | ----------------------------------------- |
+| `redox-pack-nestjs-postgres-react`         | NestJS + Postgres + React                 |
+| `redox-pack-nestjs-postgres-angular`       | NestJS + Postgres + Angular               |
+| `redox-pack-express-knex-postgres-angular` | Express + Knex + Postgres + Angular       |
+| `redox-pack-laravel-postgres-angular`      | Laravel + Postgres + Angular              |
+| `redox-pack-laravel-postgres-blade`        | Laravel + Postgres + Blade                |
+| `redox-pack-laravel-postgres-react-blade`  | Laravel + Postgres + React/Blade          |
+| `redox-pack-java-spring-oracle-angularjs`  | Java Spring + Oracle + AngularJS          |
+| `law-pack`                                 | The DEVAI bootstrap pack (used by `init`) |
 
 Only the two NestJS packs ship Phase-18 scaffolder template trees. The other 5 are detect+overlay only; their template trees are deferred (D-60 consequence #4).
 
@@ -106,16 +106,16 @@ Only the two NestJS packs ship Phase-18 scaffolder template trees. The other 5 a
 
 Support has three distinct legs, and they do not advance together: **detection + writer prompt overlays** work for every listed pack; the registry-marked **consumed pack parameters** tune existing sensors; but parser availability is narrower. `inventory_api` remains NestJS-shaped. `inventory_routes` has React and Angular walkers. Laravel, Express, Spring, Blade, and AngularJS AST parsers do not exist, so their pack fields are detection/advisory metadata and non-NestJS inventory output is partial, conservative, and independently validated. Template generation is narrower still.
 
-| Stack family | Status | Notes |
-|---|---|---|
-| NestJS + Postgres + Angular | Supported | Canonical adopter path; includes detect signals, extractor params, prompt overlays, seed invariants, and Phase-18 templates. |
-| NestJS + Postgres + React | Supported | Same support class as Angular, with React route extraction. |
-| Express + Knex + Postgres + Angular | Detection + overlays + pack-tuned parameters; **inventory parsing partial** (no Express parser yet); non-MVP for templates | Validate inventory output independently. |
-| Laravel + Postgres + Angular | Detection + overlays + pack-tuned parameters; **inventory parsing partial** (no Laravel parser yet); non-MVP for templates | Validate inventory output independently. |
-| Laravel + Postgres + Blade | Detection + overlays + pack-tuned parameters; **inventory parsing partial** (no Laravel parser yet); non-MVP for templates | Validate inventory output independently. |
-| Laravel + Postgres + React/Blade | Detection + overlays + pack-tuned parameters; **inventory parsing partial** (no Laravel parser yet); non-MVP for templates | Validate inventory output independently. |
-| Java Spring + Oracle + AngularJS | Detection + overlays + pack-tuned parameters; **inventory parsing partial** (no Spring/AngularJS parser yet); non-MVP for templates | Database-specific extraction also conservative. |
-| Any unlisted stack | Non-MVP | Requires Architect review and a new or extended stack-adapter pack before readiness can be claimed. |
+| Stack family                        | Status                                                                                                                              | Notes                                                                                                                        |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| NestJS + Postgres + Angular         | Supported                                                                                                                           | Canonical adopter path; includes detect signals, extractor params, prompt overlays, seed invariants, and Phase-18 templates. |
+| NestJS + Postgres + React           | Supported                                                                                                                           | Same support class as Angular, with React route extraction.                                                                  |
+| Express + Knex + Postgres + Angular | Detection + overlays + pack-tuned parameters; **inventory parsing partial** (no Express parser yet); non-MVP for templates          | Validate inventory output independently.                                                                                     |
+| Laravel + Postgres + Angular        | Detection + overlays + pack-tuned parameters; **inventory parsing partial** (no Laravel parser yet); non-MVP for templates          | Validate inventory output independently.                                                                                     |
+| Laravel + Postgres + Blade          | Detection + overlays + pack-tuned parameters; **inventory parsing partial** (no Laravel parser yet); non-MVP for templates          | Validate inventory output independently.                                                                                     |
+| Laravel + Postgres + React/Blade    | Detection + overlays + pack-tuned parameters; **inventory parsing partial** (no Laravel parser yet); non-MVP for templates          | Validate inventory output independently.                                                                                     |
+| Java Spring + Oracle + AngularJS    | Detection + overlays + pack-tuned parameters; **inventory parsing partial** (no Spring/AngularJS parser yet); non-MVP for templates | Database-specific extraction also conservative.                                                                              |
+| Any unlisted stack                  | Non-MVP                                                                                                                             | Requires Architect review and a new or extended stack-adapter pack before readiness can be claimed.                          |
 
 For supported readiness, deterministic sensing and human-supervised verification are binding. Real-provider writer tests are opt-in with `DEVAI_LLM_TESTS=1`; mock-provider tests verify deterministic wiring. Autonomous-loop evidence is experimental and cannot establish supported readiness.
 

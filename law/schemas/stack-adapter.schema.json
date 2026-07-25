@@ -6,14 +6,7 @@
   "description": "Manifest record at the root of a stack-adapter pack (e.g. examples/redox-pack-nestjs-postgres-react/stack-adapter.json). Declares detection heuristics, inventory-sensor parameter overrides, writer-skill prompt overlays, and seed invariants. Loaded by the seed-merge plumbing (Phase 11) when the adopter passes `--seeds <path>` or when auto-detection picks the pack. Per Constitution Article 6 (authority); per D-57 (brownfield-adoption substrate); per D-53 (examples/ is integral to DEVAI).",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "id",
-    "name",
-    "version",
-    "stack",
-    "detect"
-  ],
+  "required": ["schemaVersion", "id", "name", "version", "stack", "detect"],
   "properties": {
     "schemaVersion": {
       "type": "string",
@@ -36,11 +29,7 @@
       "type": "object",
       "description": "Triple naming the (backend, frontend, db) the pack targets. Used by the detector and by writer prompt overlays.",
       "additionalProperties": false,
-      "required": [
-        "backend",
-        "frontend",
-        "db"
-      ],
+      "required": ["backend", "frontend", "db"],
       "properties": {
         "backend": {
           "type": "string",
@@ -63,9 +52,7 @@
       "type": "object",
       "description": "Heuristics that mark a repo as matching this stack. Detection MAY combine signals; the pack matches when ANY of `signals[]` matches (OR semantics). Phase 17.G ships only filesystem-presence + package.json-dep signals; future signals (composer.json deps, Gemfile, go.mod) ride the same shape.",
       "additionalProperties": false,
-      "required": [
-        "signals"
-      ],
+      "required": ["signals"],
       "properties": {
         "signals": {
           "type": "array",
@@ -98,21 +85,11 @@
         "items": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "layer",
-            "name",
-            "body"
-          ],
+          "required": ["layer", "name", "body"],
           "properties": {
             "layer": {
               "type": "string",
-              "enum": [
-                "global",
-                "role",
-                "task",
-                "payload",
-                "overlay"
-              ]
+              "enum": ["global", "role", "task", "payload", "overlay"]
             },
             "name": {
               "type": "string",
@@ -129,10 +106,7 @@
             },
             "mode": {
               "type": "string",
-              "enum": [
-                "append",
-                "replace_layer"
-              ],
+              "enum": ["append", "replace_layer"],
               "default": "append",
               "description": "P3.10: `append` (default) appends the component alongside the writer's own; `replace_layer` removes the writer's namespaced contribution for `layer` (the `${skill_id}.${layer}` component) before appending. Shared components (writer.output-contract, ${skill_id}.word-budget) survive regardless. Use `replace_layer` only when the writer's default global is structurally wrong for the stack (e.g. 'group endpoints by controller class' is wrong for a Laravel-Blade web monolith)."
             }
@@ -146,10 +120,7 @@
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "path",
-          "consumed_by"
-        ],
+        "required": ["path", "consumed_by"],
         "properties": {
           "path": {
             "type": "string",
@@ -169,7 +140,7 @@
     },
     "seed_invariants": {
       "type": "array",
-      "description": "Relative paths (from this manifest) to INV-CLIENT-*.json files the pack seeds. Each must validate against invariant.schema.json when copied into the adopter's docs/framework/arch/invariants/.",
+      "description": "Relative paths (from this manifest) to INV-CLIENT-*.json files the pack seeds. Each must validate against invariant.schema.json when copied into the adopter's law/invariants/.",
       "items": {
         "type": "string",
         "minLength": 1
@@ -191,9 +162,7 @@
     "DetectSignal": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "kind"
-      ],
+      "required": ["kind"],
       "properties": {
         "kind": {
           "type": "string",

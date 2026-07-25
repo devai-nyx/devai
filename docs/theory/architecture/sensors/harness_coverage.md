@@ -8,7 +8,7 @@
 
 1. Walk `.github/workflows/*.yml{,.yaml}` and collect the union of `on.<trigger>.paths[]` filters across all workflows (and the union of `paths-ignore[]`).
 2. List tracked repo files via `git ls-files`.
-3. A file is *covered* if some path filter glob matches it AND no `paths-ignore` glob excludes it. Workflows with no `paths` filter (i.e. they run on every push/PR) cause every tracked file to count as covered.
+3. A file is _covered_ if some path filter glob matches it AND no `paths-ignore` glob excludes it. Workflows with no `paths` filter (i.e. they run on every push/PR) cause every tracked file to count as covered.
 4. Compute `coverage_pct = covered_files / total_files * 100`.
 
 ## PASS / REVIEW / FAIL boundaries

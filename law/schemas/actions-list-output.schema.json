@@ -59,11 +59,7 @@
         ]
       },
       "lifecycle": {
-        "enum": [
-          "supported",
-          "experimental",
-          "retired"
-        ]
+        "enum": ["supported", "experimental", "retired"]
       },
       "lifecycle_reason": {
         "type": "string",
@@ -77,18 +73,10 @@
         }
       },
       "visibility": {
-        "enum": [
-          "common",
-          "standard",
-          "advanced",
-          "maintainer"
-        ]
+        "enum": ["common", "standard", "advanced", "maintainer"]
       },
       "tier": {
-        "enum": [
-          "porcelain",
-          "plumbing"
-        ],
+        "enum": ["porcelain", "plumbing"],
         "description": "Declared command-surface tier. Porcelain actions appear in default help; plumbing actions require the expanded catalog."
       },
       "profiles": {
@@ -96,20 +84,11 @@
         "minItems": 1,
         "uniqueItems": true,
         "items": {
-          "enum": [
-            "tier1",
-            "tier2",
-            "tier3"
-          ]
+          "enum": ["tier1", "tier2", "tier3"]
         }
       },
       "effects": {
-        "enum": [
-          "read",
-          "harness-write",
-          "local-write",
-          "remote-write"
-        ]
+        "enum": ["read", "harness-write", "local-write", "remote-write"]
       },
       "authority_contract_version": {
         "const": "1.0.0",
@@ -123,9 +102,7 @@
       {
         "name": "doctor",
         "previous_name": "doctor",
-        "path": [
-          "doctor"
-        ],
+        "path": ["doctor"],
         "description": "Run repository health checks.",
         "authority": "sensor",
         "lifecycle": "supported",
@@ -133,9 +110,7 @@
         "promotion_criteria": [],
         "visibility": "common",
         "tier": "porcelain",
-        "profiles": [
-          "tier1"
-        ],
+        "profiles": ["tier1"],
         "effects": "read"
       }
     ]

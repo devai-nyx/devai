@@ -1,6 +1,6 @@
 # Adoption guide
 
-This guide takes a fresh NestJS+Angular+Postgres client repository from "nothing installed" to "first green scorecard." It is the practical companion to [`user-guide.md`](./user-guide.md) — read that first for the *why*.
+This guide takes a fresh NestJS+Angular+Postgres client repository from "nothing installed" to "first green scorecard." It is the practical companion to [`user-guide.md`](./user-guide.md) — read that first for the _why_.
 
 Target reader: an engineer adopting DEVAI into an existing or new client project. Estimated time: 60–90 minutes for a small repo; longer if the spec backfill is substantial.
 
@@ -8,13 +8,13 @@ Target reader: an engineer adopting DEVAI into an existing or new client project
 
 ## Prerequisites
 
-| Requirement | Version | Notes |
-|---|---|---|
-| Node.js | ≥ 24.0 | Pinned in `engines.node` in `package.json` (`>=24.0.0`); CI runs Node 24. |
-| pnpm | ≥ 9 | Other package managers are detected but unsupported. |
-| git | ≥ 2.40 | Worktree subsystem requires modern `git worktree`. |
-| Postgres | ≥ 15 | Only required if running `--with-db` flows or integration tests against a real DB. |
-| Docker (optional) | recent | For the shared dev cluster (`devai work db start shared`). |
+| Requirement       | Version | Notes                                                                              |
+| ----------------- | ------- | ---------------------------------------------------------------------------------- |
+| Node.js           | ≥ 24.0  | Pinned in `engines.node` in `package.json` (`>=24.0.0`); CI runs Node 24.          |
+| pnpm              | ≥ 9     | Other package managers are detected but unsupported.                               |
+| git               | ≥ 2.40  | Worktree subsystem requires modern `git worktree`.                                 |
+| Postgres          | ≥ 15    | Only required if running `--with-db` flows or integration tests against a real DB. |
+| Docker (optional) | recent  | For the shared dev cluster (`devai work db start shared`).                         |
 
 DEVAI itself runs on macOS and Linux. CI runs on Linux. Windows is not currently supported.
 
@@ -75,12 +75,12 @@ If anything already exists, an apply command reports it as `skip-exists` rather 
 
 Edit `.devai/config/project.json` to set `project_type` accurately:
 
-| Value | When |
-|---|---|
-| `runtime-host` | The repo deploys a runtime (a NestJS service, an Angular app, a CLI). |
-| `platform-package` | The repo ships a library other repos depend on. |
-| `docs-archive` | The repo is documentation only. |
-| `framework` | Like DEVAI itself — provides primitives others extend. |
+| Value              | When                                                                  |
+| ------------------ | --------------------------------------------------------------------- |
+| `runtime-host`     | The repo deploys a runtime (a NestJS service, an Angular app, a CLI). |
+| `platform-package` | The repo ships a library other repos depend on.                       |
+| `docs-archive`     | The repo is documentation only.                                       |
+| `framework`        | Like DEVAI itself — provides primitives others extend.                |
 
 The choice filters which invariants apply (Phase 10.J). A `docs-archive` repo doesn't need `INV-RUNTIME-*` invariants, for example.
 
@@ -264,16 +264,16 @@ npx devai policy check forbidden actions || exit 1
 
 ## Troubleshooting
 
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| An `init apply-*` command says its target exists | That authority segment already ran | Re-run only that segment with its declared role and `--force`; provenance-critical F5 state remains preserved. |
-| `devai inventory regen` returns 0 modules | Source globs don't match | Edit `.devai/config/walker.json`; check `--include-ignored` flag. |
-| `spec validate-invariants` rejects an anchor | The cited heading doesn't exist | Either fix the slug, add the heading, or pick a different authority anchor. |
-| `spec validate-glossary` complains about duplicate terms | Two entries share a term (case-insensitive) | Pick distinct terms, or merge into one entry. |
-| `sense test` skips everything | Test discovery globs missing | Check `vitest.config.ts` / `jest.config.ts`; ensure tests match the configured globs. |
-| `release gate` always returns `inconclusive` | No scorecard provided AND no sensors freshly emitted | Run `sense …` first, then `score compute`, then `release gate`. |
-| `check pr-compliance` fails | PR body lacks `Inv-Compliance:` trailer | Add the trailer to your PR body listing the INV ids you advanced. |
-| LLM substrate doesn't start | `ANTHROPIC_API_KEY` (or equivalent) not set | Set the env var; or `export DEVAI_LLM_BACKEND=mock` for offline work. |
+| Symptom                                                  | Likely cause                                         | Fix                                                                                                            |
+| -------------------------------------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| An `init apply-*` command says its target exists         | That authority segment already ran                   | Re-run only that segment with its declared role and `--force`; provenance-critical F5 state remains preserved. |
+| `devai inventory regen` returns 0 modules                | Source globs don't match                             | Edit `.devai/config/walker.json`; check `--include-ignored` flag.                                              |
+| `spec validate-invariants` rejects an anchor             | The cited heading doesn't exist                      | Either fix the slug, add the heading, or pick a different authority anchor.                                    |
+| `spec validate-glossary` complains about duplicate terms | Two entries share a term (case-insensitive)          | Pick distinct terms, or merge into one entry.                                                                  |
+| `sense test` skips everything                            | Test discovery globs missing                         | Check `vitest.config.ts` / `jest.config.ts`; ensure tests match the configured globs.                          |
+| `release gate` always returns `inconclusive`             | No scorecard provided AND no sensors freshly emitted | Run `sense …` first, then `score compute`, then `release gate`.                                                |
+| `check pr-compliance` fails                              | PR body lacks `Inv-Compliance:` trailer              | Add the trailer to your PR body listing the INV ids you advanced.                                              |
+| LLM substrate doesn't start                              | `ANTHROPIC_API_KEY` (or equivalent) not set          | Set the env var; or `export DEVAI_LLM_BACKEND=mock` for offline work.                                          |
 
 ## Brownfield path (Phase 17, D-57)
 
@@ -362,6 +362,7 @@ When `mmdc` is not on PATH, the verb gracefully reports `skipped_no_mmdc` and ex
 ### Step B6 — Curate candidates, author client invariants
 
 Read the INV-CANDIDATE-* records. For each one you accept, either:
+
 - Move the suggested_invariant skeleton into a new `law/invariants/INV-CLIENT-<DOMAIN>-NNN.json`, fill in the missing fields (verification, authority, scope), and delete the candidate. OR
 - Edit the candidate's status to `rejected` and explain the reason in the rationale (for the forensic trail).
 

@@ -8,8 +8,8 @@ The three-stage observer with reference-comparison junction at the end. Conveys 
 
 ## Visual structure
 
-- **Horizontal pipeline**: *y(k) SensorReadings* (sensor palette) → *Inventory regen* → *Scorecard compute* → *Assessment* → *x̂(k)* (state estimate, observer palette).
-- **Σ summing junction** to the right of x̂, with the reference *r(k)* feeding from above.
+- **Horizontal pipeline**: _y(k) SensorReadings_ (sensor palette) → _Inventory regen_ → _Scorecard compute_ → _Assessment_ → _x̂(k)_ (state estimate, observer palette).
+- **Σ summing junction** to the right of x̂, with the reference _r(k)_ feeding from above.
 - Σ → downward arrow labelled 'e(k)' indicating the error output.
 - **Aspect**: very wide and short, ~1180×240.
 

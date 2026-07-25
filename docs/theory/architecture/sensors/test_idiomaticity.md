@@ -13,6 +13,7 @@ Walk test files (`*.test.*` and `*.spec.*`) under configurable roots. For each f
 - `toMatchSnapshot(`, `toMatchInlineSnapshot(` → snapshot-test usage.
 
 Compute:
+
 - `mock_heavy_files`: files with ≥ 2 mock-usage hits.
 - `mock_heavy_ratio`: `mock_heavy_files / total test files`.
 

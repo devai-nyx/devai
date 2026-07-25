@@ -3,20 +3,11 @@ import type { SensorReading, SensorFinding } from '@devai-nyx/sensors';
 
 /** Classification enum (schema-conformant, underscored). */
 export type TriageClass =
-  | 'plant_bug'
-  | 'sensor_error'
-  | 'policy_issue'
-  | 'reference_gap'
-  | 'inconclusive';
+  'plant_bug' | 'sensor_error' | 'policy_issue' | 'reference_gap' | 'inconclusive';
 
 /** Discipline enum from triage.schema.json#recommended_route. */
 export type Discipline =
-  | 'engineer'
-  | 'inspector'
-  | 'auditor'
-  | 'architect'
-  | 'owner'
-  | 'harness_review';
+  'engineer' | 'inspector' | 'auditor' | 'architect' | 'owner' | 'harness_review';
 
 /** Action enum from triage.schema.json#recommended_route. */
 export type Action =

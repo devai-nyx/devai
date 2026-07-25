@@ -10,10 +10,7 @@
   "rationale": "Both verbs write into artifacts a human or another tool may already be maintaining (a git hook file, a CI workflow file). Per Article 36 and the D-99 per-batch verification discipline, a scaffolder that silently duplicates content on re-run or silently clobbers an adopter's hand-edited CI workflow would corrupt exactly the local tooling it exists to help set up \u2014 the plan/--write split and the deny-by-default/idempotent-update guarantees are what make repeated invocation safe.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int"
-    ],
+    "required_suites": ["unit", "int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -30,10 +27,7 @@
     ]
   },
   "scope": {
-    "components": [
-      "core",
-      "cli"
-    ],
+    "components": ["core", "cli"],
     "code_areas": [
       "packages/core/src/hooks-install/**",
       "packages/core/src/ci-scaffold/**",
@@ -42,25 +36,11 @@
     ]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "d-123",
-    "hooks",
-    "ci-scaffold",
-    "governance-roadmap"
-  ],
-  "measurable_via": [
-    "adopt hooks install",
-    "adopt ci scaffold"
-  ],
-  "provenance": [
-    "ex-INV-DEVAI-013@devai-original"
-  ]
+  "tags": ["d-123", "hooks", "ci-scaffold", "governance-roadmap"],
+  "measurable_via": ["adopt hooks install", "adopt ci scaffold"],
+  "provenance": ["ex-INV-DEVAI-013@devai-original"]
 }

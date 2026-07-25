@@ -292,7 +292,7 @@ export const checkForbiddenActions = defineCommand({
       .option('--max-commits <n>', 'How many recent commits to scan (default: 50)')
       .option(
         '--strict',
-        'Exit FAIL on any commit-history finding OR any unwaived canonical-coverage gap (default: exit OK with findings reported)',
+        'Exit FAIL on any commit-history finding or unwaived canonical-coverage gap; --strict remains accepted for compatibility',
       )
       .option('--human', 'Human-readable output')
       .action(
@@ -339,11 +339,7 @@ export const checkForbiddenActions = defineCommand({
           } else {
             process.stdout.write(JSON.stringify(payload) + '\n');
           }
-          process.exit(
-            options.strict === true && (result.findings.length > 0 || !coverage.ok)
-              ? EXIT_FAIL
-              : EXIT_PASS,
-          );
+          process.exit(result.findings.length > 0 || !coverage.ok ? EXIT_FAIL : EXIT_PASS);
         },
       );
   },

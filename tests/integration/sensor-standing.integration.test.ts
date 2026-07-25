@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { computeScorecard, filterLatestPerKind } from '../../packages/loop/src/index.js';
+import {
+  computeScorecard,
+  filterLatestPerKind,
+  loadScorecardFailureMaxAgeMs,
+} from '../../packages/loop/src/index.js';
 import type { SensorReading } from '../../packages/sensors/src/index.js';
 
 function reading(id: string, timestamp: string, status: SensorReading['status']): SensorReading {
@@ -41,10 +45,13 @@ describe('DII-103 same-kind sensor standing', () => {
   });
 
   it('turns a stale latest FAIL into REVIEW-stale without dropping its evidence', () => {
-    const fail = reading('SR-fail', '2026-07-23T10:00:00.000Z', 'fail');
-    const cell = lintCell([fail], 60 * 60 * 1000);
+    const policyMs = loadScorecardFailureMaxAgeMs(new URL('../..', import.meta.url).pathname);
+    expect(policyMs).toBe(168 * 60 * 60 * 1000);
+    const veryOld = reading('SR-fail', '2026-07-01T10:00:00.000Z', 'fail');
+    const cell = lintCell([veryOld], policyMs);
     expect(cell?.verdict).toBe('REVIEW');
     expect(cell?.sensor_readings).toEqual(['SR-fail']);
     expect(cell?.notes).toContain('REVIEW-stale');
   });
 });
+// Invariants: INV-DEVAI-002, INV-DEVAI-012

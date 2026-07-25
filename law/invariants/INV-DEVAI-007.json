@@ -10,9 +10,7 @@
   "rationale": "Article 15 makes triage the routing decision for every failure. A non-reproducible classifier means the same fault routes to different disciplines on different runs, breaking the audit chain. The rule-based MVP is deterministic by construction. Phase-9 Batch 9.F ships the Article-23 cross-family ladder: when two classifications from one family disagree, a breaker from a different family votes; persistent disagreement (breaker inconclusive) escalates to a human per Article 19. The breaker call emits confidence.method='article-23-cross-family-breaker' for audit traceability.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -33,36 +31,15 @@
     ]
   },
   "scope": {
-    "components": [
-      "core",
-      "cli"
-    ],
-    "code_areas": [
-      "packages/core/src/loop/triage.ts",
-      "packages/cli/src/commands/phase6/**"
-    ]
+    "components": ["core", "cli"],
+    "code_areas": ["packages/core/src/loop/triage.ts", "packages/cli/src/commands/phase6/**"]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval",
-      "adr"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval", "adr"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-6",
-    "triage",
-    "determinism"
-  ],
-  "measurable_via": [
-    "govern triage classify",
-    "govern triage dispatch",
-    "govern triage tie break"
-  ],
-  "provenance": [
-    "ex-INV-DEVAI-007@devai-original"
-  ]
+  "tags": ["phase-6", "triage", "determinism"],
+  "measurable_via": ["govern triage classify", "govern triage dispatch", "govern triage tie break"],
+  "provenance": ["ex-INV-DEVAI-007@devai-original"]
 }

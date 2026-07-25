@@ -55,7 +55,7 @@ CI runs the deterministic tools beneath them:
 
 ## What you should do as an adopter
 
-**Don't blindly copy DEVAI's `ci.yml` if your repo has different substrate.** Adopters with real product surfaces will *want* to run sense-* sensors on CI because the sensors produce useful signal about CI's own environment (e.g., `sense-routes` against a React app catches frontend route regressions). The principle stays the same:
+**Don't blindly copy DEVAI's `ci.yml` if your repo has different substrate.** Adopters with real product surfaces will _want_ to run sense-* sensors on CI because the sensors produce useful signal about CI's own environment (e.g., `sense-routes` against a React app catches frontend route regressions). The principle stays the same:
 
 1. Use CI for things CI can do uniquely: clean environment, frozen-lockfile install, cross-platform validation.
 2. Use the Inspector for things humans-with-context produce: comprehensive scorecards, narrative assessments, threshold tuning.

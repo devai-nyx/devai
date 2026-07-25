@@ -6,11 +6,6 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "aliases": [
-    "Substrate F4",
-    "Inventory"
-  ],
-  "provenance": [
-    "ex-GE-009@devai-original"
-  ]
+  "aliases": ["Substrate F4", "Inventory"],
+  "provenance": ["ex-GE-009@devai-original"]
 }

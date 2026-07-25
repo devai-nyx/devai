@@ -1,12 +1,12 @@
 # Blueprint authoring (greenfield path)
 
-Goal: author a single `module-blueprint` describing the *intent* of a new vertical slice (DB tables + API endpoints + UI components + RBAC + tests + docs), then let DEVAI's deterministic scaffolders generate the boilerplate.
+Goal: author a single `module-blueprint` describing the _intent_ of a new vertical slice (DB tables + API endpoints + UI components + RBAC + tests + docs), then let DEVAI's deterministic scaffolders generate the boilerplate.
 
 This is the **greenfield** path. If you're inventorying an existing repo, see [first-introspection.md](./first-introspection.md) instead.
 
 ## What a blueprint is
 
-A `module-blueprint` is an Owner-authored document under `product/blueprints/` that pairs with the `module-blueprint.schema.json`. Per Phase 18 (D-59), it captures the *intent* of a vertical-slice module: what entities exist, what endpoints expose them, what RBAC permissions guard them, what retention policy applies to each field.
+A `module-blueprint` is an Owner-authored document under `product/blueprints/` that pairs with the `module-blueprint.schema.json`. Per Phase 18 (D-59), it captures the _intent_ of a vertical-slice module: what entities exist, what endpoints expose them, what RBAC permissions guard them, what retention policy applies to each field.
 
 Minimal shape:
 
@@ -22,8 +22,7 @@ Minimal shape:
         "primaryKey": ["id"],
         "fields": [
           { "name": "id", "type": "uuid", "default": "gen_random_uuid()" },
-          { "name": "email", "type": "varchar(255)", "pii": "low",
-            "retention": "default" },
+          { "name": "email", "type": "varchar(255)", "pii": "low", "retention": "default" },
           { "name": "created_at", "type": "timestamptz", "default": "now()" }
         ]
       }
@@ -31,10 +30,7 @@ Minimal shape:
   },
   "api": {
     "basePath": "/api",
-    "resources": [
-      { "entity": "User",
-        "operations": ["list", "get", "create", "update", "delete"] }
-    ]
+    "resources": [{ "entity": "User", "operations": ["list", "get", "create", "update", "delete"] }]
   },
   "auth": {
     "rbac": {
@@ -92,7 +88,7 @@ Generated files land under `domain/<module-slug>/` (where `<module-slug>` is the
 Re-run the scaffolders. Two outcomes:
 
 - **No-op**: files match what the template would render now. Reported as `idempotency: no-op`.
-- **Drift detected**: a scaffolded file was hand-edited after generation. Reported as `idempotency: drift-detected` with a per-file diff report. Drift is *observational*, not blocking — the agent-run record captures the divergence; manual edits to scaffolded code are explicitly allowed (per Phase 18 design).
+- **Drift detected**: a scaffolded file was hand-edited after generation. Reported as `idempotency: drift-detected` with a per-file diff report. Drift is _observational_, not blocking — the agent-run record captures the divergence; manual edits to scaffolded code are explicitly allowed (per Phase 18 design).
 
 For a real version bump (e.g. you added a field), the scaffolders re-render with the new content and overwrite. Hand-edits to non-bumped files survive because the no-op check is exact-content.
 
@@ -107,7 +103,7 @@ The 5 other stack packs have empty `templates` registries. The scaffolder family
 
 ## What this path doesn't do
 
-- It doesn't invent an LLM-derived blueprint for you. `SKILL-plan-blueprint` (Phase 18.F, optional) is an LLM-backed planner that *drafts* a candidate blueprint from a journey + invariants; Owner curates the draft into a real spec.
+- It doesn't invent an LLM-derived blueprint for you. `SKILL-plan-blueprint` (Phase 18.F, optional) is an LLM-backed planner that _drafts_ a candidate blueprint from a journey + invariants; Owner curates the draft into a real spec.
 - It doesn't substitute for code review. Scaffolded files are starting points; they get hand-edited freely.
 
 ## Further reading

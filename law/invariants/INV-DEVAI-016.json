@@ -11,11 +11,7 @@
   "rationale": "A generated page changes HEAD and a deployed site has another source identity. Conflating those identities or selecting evidence by filename, mtime, or fallback creates false-current self-application evidence.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int",
-      "e2e"
-    ],
+    "required_suites": ["unit", "int", "e2e"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -34,18 +30,10 @@
         "anchor": "decision-3-renderer-truth-and-deployed-truth-are-separate"
       }
     ],
-    "decisions": [
-      "D-139",
-      "ADR-004"
-    ]
+    "decisions": ["D-139", "ADR-004"]
   },
   "scope": {
-    "components": [
-      "self-scorecard",
-      "docs-site",
-      "site-drift",
-      "release-preflight"
-    ],
+    "components": ["self-scorecard", "docs-site", "site-drift", "release-preflight"],
     "code_areas": [
       "scripts/gen-self-scorecard.mjs",
       "scripts/check-site-links.mjs",
@@ -66,9 +54,7 @@
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "measurable_via": [
-    "sense site drift"
-  ],
+  "measurable_via": ["sense site drift"],
   "tags": [
     "published-truth",
     "exact-head",
@@ -78,7 +64,5 @@
     "article-36",
     "article-39"
   ],
-  "provenance": [
-    "ex-INV-DEVAI-016@devai-original"
-  ]
+  "provenance": ["ex-INV-DEVAI-016@devai-original"]
 }

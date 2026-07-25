@@ -8,26 +8,26 @@ slug: /framework
 
 > §3 is the framework reference — the contract DEVAI offers to an adopter. Reading it tells you what you are getting and what is expected of you. The [Constitution](../reference/law.md) is the index; everything else here is commentary that orients you to the Constitution's binding text.
 >
-> §3 is deliberately separated from [§7 Meta](../dev), which describes DEVAI's *self-application* (DEVAI applied to its own development per [Article 36](../reference/law.md)). The split is binding per [ADR-DOCS-IA Decision 2](../../law/adr/README.md): an adopter reading "the framework requires X" should never have to disambiguate "X is a property of the framework you are adopting" from "X is what DEVAI happens to do in its own client-of-itself repo."
+> §3 is deliberately separated from [§7 Meta](../dev), which describes DEVAI's _self-application_ (DEVAI applied to its own development per [Article 36](../reference/law.md)). The split is binding per [ADR-DOCS-IA Decision 2](../../law/adr/README.md): an adopter reading "the framework requires X" should never have to disambiguate "X is a property of the framework you are adopting" from "X is what DEVAI happens to do in its own client-of-itself repo."
 
 ## What's here
 
-| Page | What it covers |
-|---|---|
-| [Constitution](../reference/law.md) | The ordered constitutional articles. The Index. Cite by article number. |
-| [Substrates](./framework/substrates.md) | F1-F5 — Specification, Plant, Observation, Inventory, Harness — and how authority-by-path enforcement works. |
-| [Transversals](./framework/transversals.md) | T1-T9 — Coverage, Depth, Coherence, Alignment, Idiomaticity, Security/Privacy, Performance/Efficiency, Robustness, Discipline — evaluated across substrates. |
-| [Aspect grid](./framework/aspect-grid.md) (W10) | The 5×9 substrate × transversal grid with the sensor that scores each cell. |
-| [Scorecard](./framework/scorecard.md) | Hard gate, soft gate, tri-state verdicts, threshold defaults, tie-breaker ladder. |
-| [Loop](./framework/loop.md) | Triage → three cycles (A/B/C) → iteration cap → RGR → escalation. |
-| [Concurrency](./framework/concurrency.md) | Coupled triplets, module locks, pipelined rebase, worktree discipline. |
-| [Evidence](./framework/evidence.md) | Hash-chained per-event records; what's evidenced; verification and redaction. |
-| [Invariants](./framework/invariants.md) | The atomic spec unit; trace; per-invariant change policy. |
-| [Test policy](./framework/test-policy.md) (W09) | Six test suites, journeys, DB tests, mutation scenarios, weakening, quarantine, coverage, per-batch verification. |
-| Contracts | API/data contracts under `docs/reference/contracts/`. |
-| Schemas | The schema roster is derived from `law/policy/population-registry.json` and guarded by the schema liveness checks; no prose count is authoritative. |
-| Glossary | Canonical vocabulary under `law/glossary/`; cite by term. |
-| Product | Owner-authored journeys and use-cases under `product/`. |
+| Page                                            | What it covers                                                                                                                                               |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [Constitution](../reference/law.md)             | The ordered constitutional articles. The Index. Cite by article number.                                                                                      |
+| [Substrates](./framework/substrates.md)         | F1-F5 — Specification, Plant, Observation, Inventory, Harness — and how authority-by-path enforcement works.                                                 |
+| [Transversals](./framework/transversals.md)     | T1-T9 — Coverage, Depth, Coherence, Alignment, Idiomaticity, Security/Privacy, Performance/Efficiency, Robustness, Discipline — evaluated across substrates. |
+| [Aspect grid](./framework/aspect-grid.md) (W10) | The 5×9 substrate × transversal grid with the sensor that scores each cell.                                                                                  |
+| [Scorecard](./framework/scorecard.md)           | Hard gate, soft gate, tri-state verdicts, threshold defaults, tie-breaker ladder.                                                                            |
+| [Loop](./framework/loop.md)                     | Triage → three cycles (A/B/C) → iteration cap → RGR → escalation.                                                                                            |
+| [Concurrency](./framework/concurrency.md)       | Coupled triplets, module locks, pipelined rebase, worktree discipline.                                                                                       |
+| [Evidence](./framework/evidence.md)             | Hash-chained per-event records; what's evidenced; verification and redaction.                                                                                |
+| [Invariants](./framework/invariants.md)         | The atomic spec unit; trace; per-invariant change policy.                                                                                                    |
+| [Test policy](./framework/test-policy.md) (W09) | Six test suites, journeys, DB tests, mutation scenarios, weakening, quarantine, coverage, per-batch verification.                                            |
+| Contracts                                       | API/data contracts under `docs/reference/contracts/`.                                                                                                        |
+| Schemas                                         | The schema roster is derived from `law/policy/population-registry.json` and guarded by the schema liveness checks; no prose count is authoritative.          |
+| Glossary                                        | Canonical vocabulary under `law/glossary/`; cite by term.                                                                                                    |
+| Product                                         | Owner-authored journeys and use-cases under `product/`.                                                                                                      |
 
 ## How to read this section
 
@@ -40,7 +40,7 @@ Pick by purpose:
 
 ## Adopter contract anchor
 
-Every page in §3 describes a property of DEVAI that holds for *every* adopter that runs the framework. If a property is DEVAI-specific (e.g., "DEVAI's self-scorecard shows 35 PASS / 2 FAIL"), it lives in §7 Meta, not here.
+Every page in §3 describes a property of DEVAI that holds for _every_ adopter that runs the framework. If a property is DEVAI-specific (e.g., "DEVAI's self-scorecard shows 35 PASS / 2 FAIL"), it lives in §7 Meta, not here.
 
 ---
 

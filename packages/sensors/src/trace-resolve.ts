@@ -1,5 +1,7 @@
+import { execFileSync } from '@devai-nyx/authority';
+import { validateRepositoryTarget } from '@devai-nyx/utils';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { resolve } from 'node:path';
 import {
   buildSensorReading,
   type SensorFinding,
@@ -16,6 +18,11 @@ export interface TraceResolveOptions {
 type TraceTargetType = 'test' | 'config-attestation' | 'script';
 
 interface TraceFile {
+  meta?: {
+    completeness?: {
+      require_test_links?: boolean;
+    };
+  };
   invariants?: Array<{
     id?: string;
     tests?: Array<{ path?: string; suite?: string; target_type?: TraceTargetType }>;
@@ -32,8 +39,8 @@ interface TraceFile {
  * Emits a SensorReading with one finding per problem.
  */
 export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
-  const tracePath = opts.tracePath ?? join(opts.repoRoot, 'law/trace.json');
-  const invariantsDir = opts.invariantsDir ?? join(opts.repoRoot, 'law/invariants');
+  const tracePath = opts.tracePath ?? resolve(opts.repoRoot, 'law/trace.json');
+  const invariantsDir = opts.invariantsDir ?? resolve(opts.repoRoot, 'law/invariants');
   const command = [
     'devai',
     'sense',
@@ -50,9 +57,11 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
       sensorName: 'trace-resolve',
       sensorKind: 'trace_resolution',
       command,
-      status: 'skipped',
+      status: 'error',
       deterministic: true,
-      findings: [{ severity: 'info', code: 'no_trace', message: `${tracePath} does not exist` }],
+      findings: [
+        { severity: 'critical', code: 'no_trace', message: `${tracePath} does not exist` },
+      ],
     });
   }
 
@@ -86,23 +95,38 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
     );
   } catch {
     invariantIds = new Set();
+    findings.push({
+      severity: 'critical',
+      code: 'invariant_catalog_unavailable',
+      message: `${invariantsDir} could not be read`,
+    });
   }
 
   let unresolvedTraceEntries = 0;
   let missingTestPaths = 0;
   let untracedInvariants = 0;
 
-  const tracedIds = new Set<string>();
+  const requireTestLinks = parsed.meta?.completeness?.require_test_links === true;
+  const anyLinkedIds = new Set<string>();
+  const testLinkedIds = new Set<string>();
   // D-123 (item 10): an invariant traced ONLY by non-'test' targets
   // (config-attestation / script) has weaker evidence than one with
   // at least one real 'test' entry — track separately so trace
   // completeness metrics don't overstate active test verification.
-  const attestationOnlyIds = new Set<string>();
+  const nonTestLinkedIds = new Set<string>();
   for (const [i, entry] of (parsed.invariants ?? []).entries()) {
     const id = entry.id;
-    if (id === undefined) continue;
-    tracedIds.add(id);
-    if (!invariantIds.has(id)) {
+    if (id === undefined) {
+      unresolvedTraceEntries++;
+      findings.push({
+        severity: 'error',
+        code: 'missing_invariant_id',
+        message: `trace entry [${String(i)}] has no invariant id`,
+      });
+      continue;
+    }
+    const knownInvariant = invariantIds.has(id);
+    if (!knownInvariant) {
       unresolvedTraceEntries++;
       findings.push({
         severity: 'error',
@@ -111,26 +135,55 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
       });
     }
     const tests = entry.tests ?? [];
-    if (
-      tests.length > 0 &&
-      tests.every((t) => t.target_type !== undefined && t.target_type !== 'test')
-    ) {
-      attestationOnlyIds.add(id);
-    }
     for (const [j, t] of tests.entries()) {
-      if (t.path === undefined || t.path.length === 0) continue;
-      const abs = join(opts.repoRoot, t.path);
-      if (!existsSync(abs)) {
+      if (t.path === undefined || t.path.length === 0) {
         missingTestPaths++;
         findings.push({
           severity: 'warning',
           code: 'missing_test_path',
-          message: `trace entry [${String(i)}] test [${String(j)}] path '${t.path}' does not exist`,
+          message: `trace entry [${String(i)}] test [${String(j)}] has no path`,
         });
+        continue;
+      }
+      const target = validateRepositoryTarget(
+        opts.repoRoot,
+        t.path,
+        t.target_type === undefined || t.target_type === 'test' ? 'test' : 'file',
+      );
+      let tracked = false;
+      if (target.ok) {
+        try {
+          execFileSync('git', ['ls-files', '--error-unmatch', '--', target.repositoryPath], {
+            cwd: opts.repoRoot,
+            encoding: 'utf8',
+            stdio: ['ignore', 'ignore', 'ignore'],
+          });
+          tracked = true;
+        } catch {
+          tracked = false;
+        }
+      }
+      if (!target.ok || !tracked) {
+        missingTestPaths++;
+        findings.push({
+          severity: 'error',
+          code: 'invalid_test_path',
+          message: `trace entry [${String(i)}] test [${String(j)}] path '${t.path}' is not a contained, tracked file of the declared kind`,
+        });
+        continue;
+      }
+      if (knownInvariant) {
+        anyLinkedIds.add(id);
+        if (t.target_type === undefined || t.target_type === 'test') {
+          testLinkedIds.add(id);
+        } else {
+          nonTestLinkedIds.add(id);
+        }
       }
     }
   }
 
+  const tracedIds = requireTestLinks ? testLinkedIds : anyLinkedIds;
   for (const id of invariantIds) {
     if (!tracedIds.has(id)) {
       untracedInvariants++;
@@ -142,6 +195,7 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
     }
   }
 
+  const attestationOnlyIds = new Set([...nonTestLinkedIds].filter((id) => !testLinkedIds.has(id)));
   for (const id of attestationOnlyIds) {
     findings.push({
       severity: 'info',

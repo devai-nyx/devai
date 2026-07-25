@@ -11,11 +11,7 @@
   "rationale": "A correct decision cannot compensate for an action omitted from the registry, and durable evidence must never become a replayable capability or an inflated production-readiness claim.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int",
-      "e2e"
-    ],
+    "required_suites": ["unit", "int", "e2e"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -34,18 +30,10 @@
         "anchor": "9-action-contract-and-staged-cutover"
       }
     ],
-    "decisions": [
-      "D-135",
-      "ADR-003"
-    ]
+    "decisions": ["D-135", "ADR-003"]
   },
   "scope": {
-    "components": [
-      "action-registry",
-      "authority-evidence",
-      "readiness",
-      "host-enforcement"
-    ],
+    "components": ["action-registry", "authority-evidence", "readiness", "host-enforcement"],
     "code_areas": [
       "docs/framework/schemas/authority-action-contract.schema.json",
       "docs/framework/schemas/authority-evidence.schema.json",
@@ -64,15 +52,6 @@
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "authority",
-    "action-contract",
-    "evidence",
-    "readiness",
-    "cli-only",
-    "fail-closed"
-  ],
-  "provenance": [
-    "ex-INV-AUTH-004@devai-original"
-  ]
+  "tags": ["authority", "action-contract", "evidence", "readiness", "cli-only", "fail-closed"],
+  "provenance": ["ex-INV-AUTH-004@devai-original"]
 }

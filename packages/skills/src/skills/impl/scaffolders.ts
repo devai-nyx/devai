@@ -1,7 +1,4 @@
-import {
-  mkdirSync,
-  writeFileSync,
-} from '@devai-nyx/authority';
+import { mkdirSync, writeFileSync } from '@devai-nyx/authority';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import type { Blueprint } from '@devai-nyx/spec';
@@ -46,7 +43,10 @@ function makeScaffolderSkill(spec: ScaffolderManifestSpec): SkillEntry {
       agent_class: 'coding-agent',
       permission_tier: 'write',
       host_mutation_policy: 'write_requires_flag',
-      allowed_write_scopes: [...spec.allowed_write_scopes, `record/proofs/work/skill-runs/${spec.id}/**`],
+      allowed_write_scopes: [
+        ...spec.allowed_write_scopes,
+        `record/proofs/work/skill-runs/${spec.id}/**`,
+      ],
       evidence_files: [`record/proofs/work/skill-runs/${spec.id}/*.json`],
       risk_level: 'medium',
       tags: ['phase-18', 'phase-18-F', 'scaffold', 'deterministic', ...(spec.extraTags ?? [])],

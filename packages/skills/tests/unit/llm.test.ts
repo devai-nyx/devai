@@ -14,6 +14,7 @@ import {
 } from '../../src/llm/index.js';
 import { composePrompt } from '@devai-nyx/loop';
 import { withAuthorityHostTestScope } from '../unit/authority-host-test-scope.js';
+import './skill-implementation-cases.js';
 
 aroundEach((runTest) => withAuthorityHostTestScope(runTest));
 

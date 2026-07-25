@@ -10,9 +10,7 @@
   "rationale": "Per Constitution Article 6 and CLAUDE.md \"Authority and the human's role\". The five-role separation is the framework's primary defense against silent reinterpretation: an Architect declaration binds the agent to constitutional/schema work and prevents it from drifting into Engineer-class changes that would alter behavior under cover of a spec edit, and vice versa. Without an enforceable RBAC invariant the role declarations are advisory, not binding. The hard-fail severity reflects Article 17's hard-gate discipline: a cross-role commit is the framework's equivalent of a privileged user crossing tenancy. Joint-authority pairs (Architect/Owner over docs/glossary) are explicitly enumerated so the invariant remains decidable from the file-set alone.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -37,37 +35,15 @@
     ]
   },
   "scope": {
-    "components": [
-      "governance"
-    ],
-    "code_areas": [
-      "CONSTITUTION.md",
-      "CLAUDE.md",
-      "docs/**",
-      "packages/**",
-      ".github/**"
-    ]
+    "components": ["governance"],
+    "code_areas": ["CONSTITUTION.md", "CLAUDE.md", "docs/**", "packages/**", ".github/**"]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "human_approval",
-      "adr"
-    ],
+    "breaking_change_requires": ["doc_update", "human_approval", "adr"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "rbac",
-    "governance",
-    "article-6",
-    "five-roles",
-    "self-application"
-  ],
-  "measurable_via": [
-    "policy check pr compliance"
-  ],
-  "provenance": [
-    "ex-INV-RBAC-001@devai-original"
-  ]
+  "tags": ["rbac", "governance", "article-6", "five-roles", "self-application"],
+  "measurable_via": ["policy check pr compliance"],
+  "provenance": ["ex-INV-RBAC-001@devai-original"]
 }

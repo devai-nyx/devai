@@ -5,7 +5,7 @@
 
 ## What an ADR is
 
-An **Architecture Decision Record** captures one durable structural decision: a choice that constrains future code, schemas, or processes, and whose *why* is not obvious from the artifact alone. ADRs are write-once: once accepted, never edited; superseded by a new ADR if reversed.
+An **Architecture Decision Record** captures one durable structural decision: a choice that constrains future code, schemas, or processes, and whose _why_ is not obvious from the artifact alone. ADRs are write-once: once accepted, never edited; superseded by a new ADR if reversed.
 
 ADRs live at `law/adr/` in each adopting repo. One ADR per decision.
 
@@ -47,7 +47,7 @@ Proposed (draft, in review) ┤
 
 - `Proposed` is the only status for which an ADR may still be edited. Once `Accepted` or `Rejected`, the body is immutable.
 - A `Superseded` ADR keeps its body intact and adds a one-line note at the top pointing forward.
-- Never delete an ADR. Even rejected ADRs are archive: the *why we didn't* is as load-bearing as the *why we did*.
+- Never delete an ADR. Even rejected ADRs are archive: the _why we didn't_ is as load-bearing as the _why we did_.
 
 ## One ADR per decision
 

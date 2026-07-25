@@ -10,10 +10,7 @@
   "rationale": "Article 25 makes module-level mutex the substrate of safe parallel work. The file-lock implementation must use atomic create (O_CREAT|O_EXCL) and fsync; a TOCTOU race between existsSync and writeFile is a correctness bug, not a performance bug.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int"
-    ],
+    "required_suites": ["unit", "int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -30,37 +27,15 @@
     ]
   },
   "scope": {
-    "components": [
-      "core",
-      "cli"
-    ],
-    "code_areas": [
-      "packages/core/src/loop/locks.ts",
-      "packages/cli/src/commands/loop/**"
-    ]
+    "components": ["core", "cli"],
+    "code_areas": ["packages/core/src/loop/locks.ts", "packages/cli/src/commands/loop/**"]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval",
-      "adr"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval", "adr"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-5",
-    "locks",
-    "concurrency"
-  ],
-  "measurable_via": [
-    "work lock acquire",
-    "work lock list",
-    "work lock reap",
-    "work lock release"
-  ],
-  "provenance": [
-    "ex-INV-DEVAI-003@devai-original"
-  ]
+  "tags": ["phase-5", "locks", "concurrency"],
+  "measurable_via": ["work lock acquire", "work lock list", "work lock reap", "work lock release"],
+  "provenance": ["ex-INV-DEVAI-003@devai-original"]
 }

@@ -1,4 +1,5 @@
 import {
+  execFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
@@ -22,7 +23,7 @@ const validatePhaseClosure = getValidator('phase-closure.schema.json');
  * never drift the way hand-narrated counters did (D-108).
  */
 
-export type ClosureRole = 'Owner' | 'Architect' | 'Inspector' | 'Engineer' | 'Auditor';
+export type ClosureRole = 'Owner' | 'Architect' | 'Inspector' | 'Engineer' | 'Auditor' | 'Machine';
 
 export interface ClosureBatch {
   readonly id: string;
@@ -53,10 +54,11 @@ export interface PhaseClosureDraft {
   readonly validation_criteria: readonly ClosureCriterion[];
   readonly closed_at?: string;
   readonly supersedes?: string;
-  // R18 (D-133/H1): the shipped-state fields. Optional in the schema for
-  // pre-R18 record validity; the ceremony requires both from PC-0007 on.
+  // Shipped-state fields stay optional in the schema for immutable historical
+  // records; the successor production verb requires both on every new closure.
   readonly merged_as?: string;
-  readonly release_disposition?: 'published' | 'changeset-pending' | 'none-needed' | 'missing';
+  readonly release_disposition?:
+    'published' | 'changeset-pending' | 'none-preratification' | 'none-needed' | 'missing';
   readonly notes?: string;
 }
 
@@ -78,7 +80,26 @@ export function readClosures(repoRoot: string): PhaseClosureRecord[] {
   const records: PhaseClosureRecord[] = [];
   for (const name of readdirSync(dir).sort()) {
     if (!/^PC-[0-9]{4}\.json$/.test(name)) continue;
-    records.push(JSON.parse(readFileSync(join(dir, name), 'utf8')) as PhaseClosureRecord);
+    let record: PhaseClosureRecord;
+    try {
+      record = JSON.parse(readFileSync(join(dir, name), 'utf8')) as PhaseClosureRecord;
+    } catch (error) {
+      throw new Error(
+        `phase closure ${name} is malformed: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+    if (record.id !== name.slice(0, -'.json'.length)) {
+      throw new Error(`phase closure ${name} declares mismatched id '${String(record.id)}'`);
+    }
+    if (!validatePhaseClosure(record)) {
+      const errors = (validatePhaseClosure.errors ?? [])
+        .map((error) => `${error.instancePath || '/'} ${error.message ?? ''}`)
+        .join('; ');
+      throw new Error(
+        `phase closure ${name} does not validate against phase-closure.schema.json: ${errors}`,
+      );
+    }
+    records.push(record);
   }
   return records.sort((a, b) => a.id.localeCompare(b.id));
 }
@@ -92,13 +113,40 @@ function nextClosureId(existing: readonly PhaseClosureRecord[]): string {
   return `PC-${String(max + 1).padStart(4, '0')}`;
 }
 
-function decisionNumber(d: string): number {
-  return Number(d.slice(2));
+interface ParsedDecisionId {
+  readonly namespace: 'D' | 'DII';
+  readonly number: number;
+}
+
+function parseDecisionId(value: string): ParsedDecisionId {
+  const match = /^(D|DII)-([0-9]+)$/.exec(value);
+  if (match === null) throw new Error(`phase close: malformed decision id '${value}'`);
+  const number = Number(match[2]);
+  if (!Number.isSafeInteger(number)) {
+    throw new Error(`phase close: malformed decision id '${value}'`);
+  }
+  return { namespace: match[1] as ParsedDecisionId['namespace'], number };
 }
 
 export interface ClosePhaseResult {
   readonly record: PhaseClosureRecord;
   readonly path: string;
+}
+
+function mentionsExactGateIdentity(text: string, gate: string): boolean {
+  const escaped = gate.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(?<![A-Za-z0-9_-])${escaped}(?![A-Za-z0-9_-])`, 'u').test(text);
+}
+
+function requireGitCommit(repoRoot: string, identity: string, label: string): void {
+  try {
+    execFileSync('git', ['rev-parse', '--verify', `${identity}^{commit}`], {
+      cwd: repoRoot,
+      stdio: ['ignore', 'ignore', 'ignore'],
+    });
+  } catch {
+    throw new Error(`phase close: ${label} '${identity}' does not resolve to a Git commit`);
+  }
 }
 
 /**
@@ -109,12 +157,48 @@ export interface ClosePhaseResult {
  * failing validation criterion acknowledging it.
  */
 export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePhaseResult {
+  if (Object.prototype.hasOwnProperty.call(draft, 'id')) {
+    throw new Error(
+      'phase close: caller-supplied id is forbidden; the closure verb assigns the next PC identity',
+    );
+  }
+  const preflightRecord = {
+    ...draft,
+    schemaVersion: '1.0.0',
+    id: 'PC-0000',
+    closed_at: draft.closed_at ?? new Date().toISOString(),
+  };
+  const validateDraft = (): void => {
+    if (validatePhaseClosure(preflightRecord)) return;
+    const errors = (validatePhaseClosure.errors ?? [])
+      .map((error) => `${error.instancePath || '/'} ${error.message ?? ''}`)
+      .join('; ');
+    throw new Error(
+      `phase close: draft does not validate against phase-closure.schema.json: ${errors}`,
+    );
+  };
+  validateDraft();
+  const fullGitObject = /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/u;
+  for (const batch of draft.batches) {
+    if (
+      batch.roles.includes('Machine') &&
+      (batch.commit === undefined || !fullGitObject.test(batch.commit))
+    ) {
+      throw new Error(
+        `phase close: Machine-attributed batch '${batch.id}' requires a full 40- or 64-character commit identity`,
+      );
+    }
+  }
+  for (const batch of draft.batches) {
+    if (batch.commit === undefined) continue;
+    requireGitCommit(repoRoot, batch.commit, `batch '${batch.id}' commit`);
+  }
   const existing = readClosures(repoRoot);
   const record: PhaseClosureRecord = {
+    ...draft,
     schemaVersion: '1.0.0',
     id: nextClosureId(existing),
     closed_at: draft.closed_at ?? new Date().toISOString(),
-    ...draft,
   } as PhaseClosureRecord;
 
   if (!validatePhaseClosure(record)) {
@@ -125,9 +209,32 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
       `phase close: draft does not validate against phase-closure.schema.json: ${errors}`,
     );
   }
-  if (decisionNumber(record.closing_decision) < decisionNumber(record.declaring_decision)) {
+  const unacknowledgedFailedGates = Object.entries(record.gates)
+    .filter(([, result]) => result.status === 'fail')
+    .map(([gate]) => gate)
+    .filter(
+      (gate) =>
+        !record.validation_criteria.some(
+          (criterion) =>
+            criterion.verdict === 'fail' &&
+            mentionsExactGateIdentity(`${criterion.criterion}\n${criterion.evidence ?? ''}`, gate),
+        ),
+    );
+  if (unacknowledgedFailedGates.length > 0) {
     throw new Error(
-      `phase close: closing decision ${record.closing_decision} precedes declaring decision ${record.declaring_decision}`,
+      `phase close: failed gates require explicit failing validation criteria naming each gate: ${unacknowledgedFailedGates.join(', ')}`,
+    );
+  }
+  const declaring = parseDecisionId(record.declaring_decision);
+  const closing = parseDecisionId(record.closing_decision);
+  if (declaring.namespace !== closing.namespace) {
+    throw new Error(
+      `phase close: declaring decision ${record.declaring_decision} and closing decision ${record.closing_decision} use different namespaces`,
+    );
+  }
+  if (closing.number <= declaring.number) {
+    throw new Error(
+      `phase close: closing decision ${record.closing_decision} must strictly follow declaring decision ${record.declaring_decision}`,
     );
   }
   const dup = existing.find((r) => r.round_id === record.round_id);
@@ -139,25 +246,21 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
   if (record.supersedes !== undefined && !existing.some((r) => r.id === record.supersedes)) {
     throw new Error(`phase close: supersedes ${record.supersedes} does not exist`);
   }
-  // R18.E (D-133/H1): from PC-0007 onward the ceremony attests SHIPPED
-  // state, not a pre-merge working tree — PC-0005 attested a SHA that was
-  // not the shipped tip, its first remote CI run failed, and no release
-  // disposition existed. merged_as and release_disposition are therefore
-  // mandatory (the schema keeps them optional so pre-R18 records stay
-  // valid); the ceremony runs at/after merge under the D-134 convention.
-  const numericId = Number(record.id.slice(3));
-  if (numericId >= 7) {
-    if (record.merged_as === undefined) {
-      throw new Error(
-        'phase close: merged_as is required from PC-0007 onward — run the ceremony at/after the merge that ships the round (D-134)',
-      );
-    }
-    if (record.release_disposition === undefined) {
-      throw new Error(
-        'phase close: release_disposition is required from PC-0007 onward (published | changeset-pending | none-needed | missing)',
-      );
-    }
+  // DII-124: the successor ledger restarted at PC-0001, so the predecessor-era
+  // PC-0007 cutoff cannot protect successor records. Keep the fields optional
+  // in the schema for immutable historical records, but require them on every
+  // newly emitted successor closure.
+  if (record.merged_as === undefined) {
+    throw new Error(
+      'phase close: merged_as is required for every successor closure — run the ceremony at/after the merge that ships the round (DII-124)',
+    );
   }
+  if (record.release_disposition === undefined) {
+    throw new Error(
+      'phase close: release_disposition is required for every successor closure (published | changeset-pending | none-preratification | none-needed | missing)',
+    );
+  }
+  requireGitCommit(repoRoot, record.merged_as, 'merged_as');
 
   const dir = closuresDir(repoRoot);
   mkdirSync(dir, { recursive: true });

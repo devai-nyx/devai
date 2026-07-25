@@ -7,14 +7,14 @@
 - **Forward.** Every claim in the spec resolves to real plant — every invariant's `scope.code_areas[]` glob matches ≥ 1 file on disk.
 - **Reverse.** Every part of the plant is claimed by some spec — every authored source module is referenced by ≥ 1 invariant's `scope.code_areas[]`.
 
-Forward catches *stale* spec (claims about deleted code). Reverse catches *unclaimed* code (drift from documented intent).
+Forward catches _stale_ spec (claims about deleted code). Reverse catches _unclaimed_ code (drift from documented intent).
 
 ## Operational definition
 
 Run two scans against a single repo root:
 
-1. **Forward scan.** Walk `law/invariants/*.json`. For each invariant, expand each `scope.code_areas[]` glob (trailing `/**` stripped to a directory; literal paths statted directly) and count matched files. An invariant whose every entry matches zero files is *broken-forward*.
-2. **Reverse scan.** Walk a configured set of source directories (default `packages/*/src/**`). For each `.ts` / `.tsx` / `.js` file, test it against the union of all `scope.code_areas[]` globs. Files matching zero globs are *unclaimed-reverse*.
+1. **Forward scan.** Walk `law/invariants/*.json`. For each invariant, expand each `scope.code_areas[]` glob (trailing `/**` stripped to a directory; literal paths statted directly) and count matched files. An invariant whose every entry matches zero files is _broken-forward_.
+2. **Reverse scan.** Walk a configured set of source directories (default `packages/*/src/**`). For each `.ts` / `.tsx` / `.js` file, test it against the union of all `scope.code_areas[]` globs. Files matching zero globs are _unclaimed-reverse_.
 
 Both metrics published in the SR `metrics` block.
 
@@ -33,7 +33,7 @@ The forward direction is hard-fail because stale spec is a correctness problem (
 
 ## Out of scope
 
-- **Per-claim verification of *semantic* alignment** (does the file actually implement what the invariant says?). That requires an LLM judge and is deferred to a future `spec_alignment_judge` kind in Phase 29+.
+- **Per-claim verification of _semantic_ alignment** (does the file actually implement what the invariant says?). That requires an LLM judge and is deferred to a future `spec_alignment_judge` kind in Phase 29+.
 - **Test alignment** (do tests claim invariants in `trace.json`?). That's F3×T4 already covered by `test_invariant_alignment` (26.G).
 - **Cross-cell aggregation.** Per-cell only; the scorecard rolls up.
 

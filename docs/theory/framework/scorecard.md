@@ -11,19 +11,19 @@ sidebar_position: 5
 
 Each cell of the scorecard is a single verdict, one of:
 
-| Verdict | Meaning |
-|---|---|
-| **PASS** | Sensor measured the cell at or above threshold. |
-| **REVIEW** | Sensor measured below pass threshold but above review threshold. Triggers the tie-breaker ladder. |
-| **FAIL** | Sensor measured below review threshold. Blocks merge unconditionally. |
-| **N/A** | Cell is degenerate (Article 5) or per-repo overridden as inapplicable. |
+| Verdict     | Meaning                                                                                                                        |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **PASS**    | Sensor measured the cell at or above threshold.                                                                                |
+| **REVIEW**  | Sensor measured below pass threshold but above review threshold. Triggers the tie-breaker ladder.                              |
+| **FAIL**    | Sensor measured below review threshold. Blocks merge unconditionally.                                                          |
+| **N/A**     | Cell is degenerate (Article 5) or per-repo overridden as inapplicable.                                                         |
 | **UNKNOWN** | Sensor produced no reading, or reading is stale / inconclusive. Treated as `unknown` per [Article 39](../../reference/law.md). |
 
 The overall scorecard verdict is the worst per-cell verdict, with the tie-breaker ladder applied to any REVIEW.
 
 ## Hard gate (Article 17)
 
-The hard gate is the deterministic component of error *Error(0)*. It comprises:
+The hard gate is the deterministic component of error _Error(0)_. It comprises:
 
 - Type-check clean on affected projects.
 - Lint clean on errors. Warnings handled separately by `Plant × Discipline`.

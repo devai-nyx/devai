@@ -4,16 +4,16 @@
 
 ## Purpose
 
-Layer 1 of the input-saturation defense: catches authority-inverting overlays *before* the LLM is called, complementing the actuation-layer checks of Figure 10.
+Layer 1 of the input-saturation defense: catches authority-inverting overlays _before_ the LLM is called, complementing the actuation-layer checks of Figure 10.
 
 ## Visual structure
 
-- **Linear chain**: *Prompt overlay declaration* (ref-blue) → *devai policy check prompt overlays* (sup-amber, subtitle 'topology check') → *Composer* (ctrl-green).
+- **Linear chain**: _Prompt overlay declaration_ (ref-blue) → _devai policy check prompt overlays_ (sup-amber, subtitle 'topology check') → _Composer_ (ctrl-green).
 - **Four side-branches** dashed off the firewall to red rejection boxes (forbidden palette), each labelled with a specific finding code:
--   - 'authority inversion'
--   - 'read-tier with write scopes'
--   - 'ops-agent writes tests'
--   - 'joint-reserved without review-agent' (this one in amber not red — a warning, not a block)
+- - 'authority inversion'
+- - 'read-tier with write scopes'
+- - 'ops-agent writes tests'
+- - 'joint-reserved without review-agent' (this one in amber not red — a warning, not a block)
 - **Main arrow** from firewall to composer labelled 'valid'.
 - **Aspect**: ~1180×420.
 

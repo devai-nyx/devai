@@ -8,14 +8,14 @@ authority: Architect (minting = BR-1/W04)
 supersedes: [ADR-MUTATION-SCENARIOS.md, ADR-EFFECTS content]
 superseded_by: null
 provenance: [REV-0003 disposition map; predecessor seeds in law/adr/predecessor/]
-affected_rules: [] # TODO at minting
+affected_rules: []
 ---
 
 # ADR-010. Declared capabilities and subprocess effects
 
 ## Status
 
-DRAFT (wireframe stub). Binds nothing until minted `accepted` under a declared Architect
+DRAFT (wireframe stub). Binds nothing until minted with `status: active` under a declared Architect
 session in BR-1/W04. Source texts: ADR-MUTATION-SCENARIOS.md; ADR-EFFECTS content (ex-D-150..158, register-carried).
 
 ## Context

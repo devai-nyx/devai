@@ -24,7 +24,7 @@ The unified verdict won because:
 - **The verdict's role is risk classification, not phase categorization.** Whether a finding came from a "prompt overlay" or a "semantic check" is provenance metadata, not a structural concern of the verdict.
 - **The split scaled badly:** as new validator categories emerged, the three-firewall pattern wanted a fourth/fifth/etc. The unified verdict accommodates new validators by adding finding codes, not new schemas.
 
-The discrete validator (`devai policy check prompt overlays`) is the part of the sibling's design that *was* adopted, because the gap it closes is real and not covered by any other validator: a Constructor overlay that quietly adds `docs/theory/architecture/**` to `allowed_write_scopes` would otherwise slip past every check.
+The discrete validator (`devai policy check prompt overlays`) is the part of the sibling's design that _was_ adopted, because the gap it closes is real and not covered by any other validator: a Constructor overlay that quietly adds `docs/theory/architecture/**` to `allowed_write_scopes` would otherwise slip past every check.
 
 ## The gap this closes
 
@@ -41,22 +41,22 @@ What it did **not** do: inspect the prompt content for authority claims. A Const
 
 The validator's authority model treats the following paths as reserved by role:
 
-| Path | Reserved to |
-|---|---|
-| `law/constitution.md` | Architect (Article 40 governs amendments) |
-| `law/schemas/**` | Architect (F1) |
-| `docs/reference/contracts/**` | Architect (F1) |
-| `docs/theory/architecture/**` | Architect (F1) |
-| `law/adr/**` | Architect (F1) |
-| `docs/dev/operations/**` | Architect (F1) |
-| `docs/dev/security/**` | Architect (F1) |
-| `product/**` | Owner (F1) |
-| `law/glossary/**` | Architect + Owner joint (F1) |
-| `.devai/config/**` | Architect / harness only |
-| `db/migrations/**` | Engineer (F2) |
-| `tests/**`, `e2e/**`, `**/*.spec.ts`, `**/*.test.ts` | Inspector (F3) |
-| `record/derived/inventory/**` | F4 (no human or agent writes; regenerated only) |
-| `.devai/` (excluding `inventory/` and `worktrees/`) | F5 — modified via `devai adopt upgrade` only |
+| Path                                                 | Reserved to                                     |
+| ---------------------------------------------------- | ----------------------------------------------- |
+| `law/constitution.md`                                | Architect (Article 40 governs amendments)       |
+| `law/schemas/**`                                     | Architect (F1)                                  |
+| `docs/reference/contracts/**`                        | Architect (F1)                                  |
+| `docs/theory/architecture/**`                        | Architect (F1)                                  |
+| `law/adr/**`                                         | Architect (F1)                                  |
+| `docs/dev/operations/**`                             | Architect (F1)                                  |
+| `docs/dev/security/**`                               | Architect (F1)                                  |
+| `product/**`                                         | Owner (F1)                                      |
+| `law/glossary/**`                                    | Architect + Owner joint (F1)                    |
+| `.devai/config/**`                                   | Architect / harness only                        |
+| `db/migrations/**`                                   | Engineer (F2)                                   |
+| `tests/**`, `e2e/**`, `**/*.spec.ts`, `**/*.test.ts` | Inspector (F3)                                  |
+| `record/derived/inventory/**`                        | F4 (no human or agent writes; regenerated only) |
+| `.devai/` (excluding `inventory/` and `worktrees/`)  | F5 — modified via `devai adopt upgrade` only    |
 
 A Constructor / coding-agent / write-tier overlay that names any of these paths in `allowed_write_scopes` produces a finding with `code: PROMPT_OVERLAY_AUTHORITY_INVERSION` and the offending overlay + scope cited.
 

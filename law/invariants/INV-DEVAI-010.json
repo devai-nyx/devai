@@ -10,9 +10,7 @@
   "rationale": "Article 33 makes the auditor the state estimator of the loop, and Article 35 makes the backlog the only work queue: both depend on every skill outcome being a recoverable artifact. A skill that runs without leaving a trace is invisible to the auditor and to every downstream tool. The persistence is best-effort: persistence failure must surface in the result but never block emit; the skill's `evidence_path` field is the link the rest of the framework follows.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -33,35 +31,15 @@
     ]
   },
   "scope": {
-    "components": [
-      "core",
-      "cli"
-    ],
-    "code_areas": [
-      "packages/core/src/skills/**",
-      "packages/cli/src/commands/skill/**"
-    ]
+    "components": ["core", "cli"],
+    "code_areas": ["packages/core/src/skills/**", "packages/cli/src/commands/skill/**"]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval",
-      "adr"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval", "adr"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-8",
-    "skills",
-    "evidence"
-  ],
-  "measurable_via": [
-    "agent skill list",
-    "agent skill run"
-  ],
-  "provenance": [
-    "ex-INV-DEVAI-010@devai-original"
-  ]
+  "tags": ["phase-8", "skills", "evidence"],
+  "measurable_via": ["agent skill list", "agent skill run"],
+  "provenance": ["ex-INV-DEVAI-010@devai-original"]
 }

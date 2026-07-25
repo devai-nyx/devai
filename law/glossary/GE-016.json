@@ -6,9 +6,7 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "see_also": [
-    "GE-017"
-  ],
+  "see_also": ["GE-017"],
   "provenance": [
     "ex-GE-016@devai-original",
     "REV-0006 signal: definition carries unqualified autonomy framing; needs the experimental caveat (W01 vocabulary pass)",

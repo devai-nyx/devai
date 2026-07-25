@@ -34,11 +34,7 @@
       "type": "string"
     },
     "lifecycle": {
-      "enum": [
-        "supported",
-        "experimental",
-        "retired"
-      ],
+      "enum": ["supported", "experimental", "retired"],
       "default": "supported"
     },
     "lifecycle_reason": {
@@ -55,9 +51,7 @@
     "persona": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "role"
-      ],
+      "required": ["role"],
       "properties": {
         "role": {
           "type": "string",
@@ -86,10 +80,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "seq",
-          "action"
-        ],
+        "required": ["seq", "action"],
         "properties": {
           "seq": {
             "type": "integer",
@@ -126,10 +117,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "id",
-          "statement"
-        ],
+        "required": ["id", "statement"],
         "properties": {
           "id": {
             "type": "string",
@@ -164,12 +152,7 @@
       }
     },
     "status": {
-      "enum": [
-        "draft",
-        "active",
-        "deprecated",
-        "retired"
-      ]
+      "enum": ["draft", "active", "deprecated", "retired"]
     },
     "tags": {
       "type": "array",
@@ -185,19 +168,13 @@
       "description": "Absorption/supersession provenance per the record meta-structure (§5.1)."
     },
     "supersedes": {
-      "type": [
-        "array",
-        "null"
-      ],
+      "type": ["array", "null"],
       "items": {
         "type": "string"
       }
     },
     "superseded_by": {
-      "type": [
-        "string",
-        "null"
-      ]
+      "type": ["string", "null"]
     }
   },
   "schema_version": "1.0.0",

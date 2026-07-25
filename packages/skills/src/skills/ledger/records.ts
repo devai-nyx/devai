@@ -1,7 +1,4 @@
-import {
-  appendFileSync,
-  mkdirSync,
-} from '@devai-nyx/authority';
+import { appendFileSync, mkdirSync } from '@devai-nyx/authority';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import type { AnyLedgerRecord, ResolutionRecord } from '../types.js';

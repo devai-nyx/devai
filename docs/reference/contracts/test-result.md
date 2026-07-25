@@ -18,23 +18,23 @@ Promoting one contract eliminates the per-repo re-implementations and lets the f
 
 ## Producers
 
-| Producer | Trigger | Notes |
-|---|---|---|
-| `devai evidence test record` | wrapper around any test-runner invocation | The canonical writer post-DEVAI R2 (R1 ships only the contract). |
-| Adopter CI step | direct emission from a workflow | Permitted; must validate against this schema. |
-| `stynx scripts/run-and-record.mjs` (legacy) | wrapper today | Will be retired in STYNX R2 in favor of `devai evidence test record`. |
+| Producer                                    | Trigger                                   | Notes                                                                 |
+| ------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------- |
+| `devai evidence test record`                | wrapper around any test-runner invocation | The canonical writer post-DEVAI R2 (R1 ships only the contract).      |
+| Adopter CI step                             | direct emission from a workflow           | Permitted; must validate against this schema.                         |
+| `stynx scripts/run-and-record.mjs` (legacy) | wrapper today                             | Will be retired in STYNX R2 in favor of `devai evidence test record`. |
 
 A producer MUST set every field in `required`. A producer SHOULD set `evidence.log_path` so a forensic re-trace can find the raw runner output without consulting the chain.
 
 ## Consumers
 
-| Consumer | What it reads | Notes |
-|---|---|---|
-| `devai evidence test matrix` | one result per (package, tier); aggregates into the F×T scorecard matrix | DEVAI R2 deliverable. |
-| `devai evidence coverage aggregate` | every result with `tier=coverage` or `metrics.coverage_pct` set | Folds unit-coverage and integration-coverage into a single repo-level summary (see D-98 / Phase 37 in DEVAI). |
-| `devai evidence emit` | the producing run; writes a corresponding chain entry pointing at the result file | One chain entry per `test-result`. |
-| DEVAI sensors (`sense-unit-test`, `sense-coverage`, `sense-mutation-test`, …) | the relevant tier's results | Sensors read filesystem; this schema is their input contract. |
-| Adopter CI summary jobs | results from many packages; produce a Markdown summary | Schema-driven; no parsing of JUnit required. |
+| Consumer                                                                      | What it reads                                                                     | Notes                                                                                                         |
+| ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `devai evidence test matrix`                                                  | one result per (package, tier); aggregates into the F×T scorecard matrix          | DEVAI R2 deliverable.                                                                                         |
+| `devai evidence coverage aggregate`                                           | every result with `tier=coverage` or `metrics.coverage_pct` set                   | Folds unit-coverage and integration-coverage into a single repo-level summary (see D-98 / Phase 37 in DEVAI). |
+| `devai evidence emit`                                                         | the producing run; writes a corresponding chain entry pointing at the result file | One chain entry per `test-result`.                                                                            |
+| DEVAI sensors (`sense-unit-test`, `sense-coverage`, `sense-mutation-test`, …) | the relevant tier's results                                                       | Sensors read filesystem; this schema is their input contract.                                                 |
+| Adopter CI summary jobs                                                       | results from many packages; produce a Markdown summary                            | Schema-driven; no parsing of JUnit required.                                                                  |
 
 ## Relationship to `evidence-chain.json`
 
@@ -52,19 +52,19 @@ This split is deliberate. The chain is append-only and hash-linked; the result f
 
 ## Tier semantics
 
-| `tier` | What runs | Typical `metrics` |
-|---|---|---|
-| `unit` | in-process unit suite (Vitest, Jest, node:test) | `passed`/`failed`/`skipped`/`total`, optional `coverage_pct` |
-| `api` | API-shape tests against a running service | `passed`/`failed`/`skipped`/`total` |
-| `db` | database-acceptance tests (DDL apply, migrations, RLS smoke) | `passed`/`failed`/`skipped`/`total` |
-| `e2e` | end-to-end browser tests (Playwright, Cypress) | `passed`/`failed`/`skipped`/`total` |
-| `mutation` | mutation testing (Stryker, Mutmut) | `mutation_score`, `mutation_survivors` |
-| `perf` | latency / throughput smoke (k6, autocannon, custom) | `perf.{p50_ms,p95_ms,p99_ms,rps,samples}` |
-| `lint` | static lint (ESLint, ruff, golangci-lint) | `lint.{errors,warnings}` |
-| `typecheck` | type-checker pass (`tsc`, `pyright`, `mypy`) | `typecheck.errors` |
-| `coverage` | coverage aggregation only (no test run) | `coverage_pct.{lines,branches,functions,statements}` |
+| `tier`      | What runs                                                    | Typical `metrics`                                            |
+| ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `unit`      | in-process unit suite (Vitest, Jest, node:test)              | `passed`/`failed`/`skipped`/`total`, optional `coverage_pct` |
+| `api`       | API-shape tests against a running service                    | `passed`/`failed`/`skipped`/`total`                          |
+| `db`        | database-acceptance tests (DDL apply, migrations, RLS smoke) | `passed`/`failed`/`skipped`/`total`                          |
+| `e2e`       | end-to-end browser tests (Playwright, Cypress)               | `passed`/`failed`/`skipped`/`total`                          |
+| `mutation`  | mutation testing (Stryker, Mutmut)                           | `mutation_score`, `mutation_survivors`                       |
+| `perf`      | latency / throughput smoke (k6, autocannon, custom)          | `perf.{p50_ms,p95_ms,p99_ms,rps,samples}`                    |
+| `lint`      | static lint (ESLint, ruff, golangci-lint)                    | `lint.{errors,warnings}`                                     |
+| `typecheck` | type-checker pass (`tsc`, `pyright`, `mypy`)                 | `typecheck.errors`                                           |
+| `coverage`  | coverage aggregation only (no test run)                      | `coverage_pct.{lines,branches,functions,statements}`         |
 
-`tier=coverage` is distinct from "a unit run that emitted coverage as a side-effect". A coverage-tier result is the post-aggregation summary across one or more runs and is the canonical input to `devai evidence coverage aggregate`. A unit-tier result that incidentally carries `coverage_pct` describes *that one runner's* coverage and is not a substitute.
+`tier=coverage` is distinct from "a unit run that emitted coverage as a side-effect". A coverage-tier result is the post-aggregation summary across one or more runs and is the canonical input to `devai evidence coverage aggregate`. A unit-tier result that incidentally carries `coverage_pct` describes _that one runner's_ coverage and is not a substitute.
 
 ## Worked examples
 

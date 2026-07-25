@@ -6,14 +6,7 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "aliases": [
-    "Controlled Natural Language"
-  ],
-  "see_also": [
-    "GE-019",
-    "GE-026"
-  ],
-  "provenance": [
-    "ex-GE-029@devai-original"
-  ]
+  "aliases": ["Controlled Natural Language"],
+  "see_also": ["GE-019", "GE-026"],
+  "provenance": ["ex-GE-029@devai-original"]
 }

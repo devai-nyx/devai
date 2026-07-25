@@ -57,7 +57,7 @@ docs/meta/rounds/round-<n>/          ← CLOSED, DURABLE, HASH-SEALED
 
 ## 3. Plan.md
 
-The round's *why*, *what*, and acceptance criteria. Reads as a one-pager an outside reviewer can understand. Stable for the round's duration (re-edit only on scope changes, document the change at the bottom).
+The round's _why_, _what_, and acceptance criteria. Reads as a one-pager an outside reviewer can understand. Stable for the round's duration (re-edit only on scope changes, document the change at the bottom).
 
 Required sections:
 
@@ -75,7 +75,7 @@ Optional sections:
 
 ## 4. Orchestrator prompt — `prompts/00-orchestrator.md`
 
-The round's *how*. Wave dispatch, gate declarations, fix-up policy, close procedure. The agent's playbook.
+The round's _how_. Wave dispatch, gate declarations, fix-up policy, close procedure. The agent's playbook.
 
 **Role:** strictly non-worker. The orchestrator declares + dispatches + gates + closes; it does not edit source files. Implementation work happens in waves.
 
@@ -116,8 +116,8 @@ Every prompt under `prompts/` carries a YAML front-matter header:
 ---
 role: owner | architect | inspector | engineer | auditor
 effort: low | medium | high
-model: <id>     # optional; only when distinction matters
-vendor: <id>    # optional; only when distinction matters
+model: <id> # optional; only when distinction matters
+vendor: <id> # optional; only when distinction matters
 ---
 ```
 
@@ -136,7 +136,6 @@ See [prompt-header.md](./prompt-header.md) for the spec, semantics, and authorin
 >
 > Without the exception, wave logs are written locally but never tracked, breaking round artifact discipline. DEVAI hit this trap in R3 — caught at round close, fixed in-place; canon now calls it out.
 
-
 Created on wave completion. Minimum mandatory template:
 
 ```markdown
@@ -145,12 +144,14 @@ Created on wave completion. Minimum mandatory template:
 **Closed:** YYYY-MM-DDTHH:MM:SSZ
 **Status:** clean | blocked | aborted
 **Files touched:**
+
 - ADD <path>
 - MOD <path>
 - MV <old> → <new>
 - DEL <path>
 
 **Gates:**
+
 - lint: pass | fail
 - typecheck: pass | fail
 - tests: N/M passed
@@ -163,10 +164,12 @@ Optional extensions (when relevant):
 
 ```markdown
 **Phases:**
-- R<n>-W<m>-A: <phase-desc>  (steps A.1-A.3)
-- R<n>-W<m>-B: <phase-desc>  (steps B.1-B.5)
+
+- R<n>-W<m>-A: <phase-desc> (steps A.1-A.3)
+- R<n>-W<m>-B: <phase-desc> (steps B.1-B.5)
 
 **Blockers raised:** (lift these into Closeout.md's blockers section)
+
 - <blocker-id>: <description>
 
 **Evidence chain entries:** EV-xxxx, EV-yyyy
@@ -209,31 +212,39 @@ Mandatory at round close. Template:
 **Closing commit(s):** <sha>, <sha>, …
 
 ## Goal
+
 <one-sentence restatement from Plan.md>
 
 ## Outcome
+
 <one-paragraph summary: what shipped, what didn't>
 
 ## Measurements
 
 ### Before (round-open)
+
 <from inv/before.json if present; otherwise narrative gate state>
 
 ### After (round-close)
+
 <from inv/after.json if present; otherwise narrative gate state>
 
 ### Delta
+
 <diff: cells flipped, tests added, schemas added, files changed counts>
 
 ## Backlog disposition
+
 - <item>: shipped (commit <sha>)
 - <item>: deferred to R<n+1>
 - <item>: escalated → <decisions-ledger entry>
 
 ## Blockers
+
 <unresolved items needing human input; lift from each wave's log>
 
 ## Next round prep
+
 <what should be on R<n+1>'s audit reading list>
 ```
 
@@ -295,7 +306,7 @@ for gate in effective_gate_set:
 
 ### Local close
 
-The round is *done* inside the working repo:
+The round is _done_ inside the working repo:
 
 - Every wave has a `.log` file with `status: clean` or `status: blocked`.
 - `Closeout.md` exists.
@@ -319,11 +330,11 @@ The round unlocks `R<n+1>`:
 
 ### Verdict semantics
 
-| Verdict | Condition | Product state |
-|---------|-----------|---------------|
-| `clean` | All gates green, zero blockers, all backlog items disposed (shipped or properly deferred) | Valid usable state ✓ |
+| Verdict         | Condition                                                                                                | Product state                                                 |
+| --------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `clean`         | All gates green, zero blockers, all backlog items disposed (shipped or properly deferred)                | Valid usable state ✓                                          |
 | `with-blockers` | At least one declared gate is red and captured as a blocker requiring human input; remaining gates green | Valid usable state ✓ (within the documented blocker envelope) |
-| `aborted` | Round abandoned mid-execution; scope changed, work stopped, never reached close | NOT guaranteed valid; next round must audit |
+| `aborted`       | Round abandoned mid-execution; scope changed, work stopped, never reached close                          | NOT guaranteed valid; next round must audit                   |
 
 `with-blockers` IS a valid local close. The product is in a usable state — gates pass except for known, documented exceptions. The round honestly reports its limits; the next round picks up the blockers.
 

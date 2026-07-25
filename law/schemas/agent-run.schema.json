@@ -38,19 +38,10 @@
     "caller": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "kind",
-        "name"
-      ],
+      "required": ["kind", "name"],
       "properties": {
         "kind": {
-          "enum": [
-            "skill",
-            "sense",
-            "loop",
-            "cli",
-            "subagent"
-          ]
+          "enum": ["skill", "sense", "loop", "cli", "subagent"]
         },
         "name": {
           "type": "string",
@@ -81,11 +72,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "argv",
-          "exit_code",
-          "duration_ms"
-        ],
+        "required": ["argv", "exit_code", "duration_ms"],
         "properties": {
           "argv": {
             "type": "array",
@@ -109,10 +96,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "agent_type",
-          "prompt_pc_id"
-        ],
+        "required": ["agent_type", "prompt_pc_id"],
         "properties": {
           "agent_type": {
             "type": "string"
@@ -125,11 +109,7 @@
             "type": "string"
           },
           "parent_verification": {
-            "enum": [
-              "pass",
-              "fail",
-              "skipped"
-            ]
+            "enum": ["pass", "fail", "skipped"]
           }
         }
       }
@@ -137,9 +117,7 @@
     "compliance": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "invariant_ids"
-      ],
+      "required": ["invariant_ids"],
       "properties": {
         "invariant_ids": {
           "type": "array",
@@ -162,12 +140,7 @@
       "additionalProperties": false,
       "properties": {
         "status": {
-          "enum": [
-            "pass",
-            "fail",
-            "review",
-            "skipped"
-          ]
+          "enum": ["pass", "fail", "review", "skipped"]
         },
         "notes": {
           "type": "array",
@@ -178,10 +151,7 @@
       }
     },
     "prev_hash": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "pattern": "^([a-f0-9]{64}|GENESIS)$"
     },
     "manifest_hash": {
@@ -189,10 +159,7 @@
       "pattern": "^[a-f0-9]{64}$"
     },
     "hash_algo_version": {
-      "enum": [
-        "1.0",
-        "2.0"
-      ],
+      "enum": ["1.0", "2.0"],
       "description": "Algorithm version under which `manifest_hash` was computed (Phase 16.G). '1.0' = shallow-sort (legacy, pre-Phase-16.G writes). '2.0' = deep-sort recursive canonicalisation (current default for new writes). Absent means '1.0' for backward-compatible read. Verifiers dispatch by this field per-record."
     }
   },

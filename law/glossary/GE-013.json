@@ -6,13 +6,7 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "aliases": [
-    "Triage classifier"
-  ],
-  "see_also": [
-    "GE-018"
-  ],
-  "provenance": [
-    "ex-GE-013@devai-original"
-  ]
+  "aliases": ["Triage classifier"],
+  "see_also": ["GE-018"],
+  "provenance": ["ex-GE-013@devai-original"]
 }

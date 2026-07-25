@@ -16,15 +16,15 @@ Pass `--profile tier1` to each applicable `devai init apply-*` bootstrap segment
 
 ## The three tiers
 
-| | tier1 — gates + evidence | tier2 — reference signal | tier3 — supervised control |
-|---|---|---|---|
-| Pitch | "CI you cannot lie to, in an afternoon" | Specs become setpoints | Humans drive through the complete control harness |
-| Hard gates (type-check, lint, build, test) | binding | binding | binding |
-| Evidence chain, authority-by-path | binding | binding | binding |
-| Invariants, trace, spec validation | — | binding | binding |
-| Test-weakening checks, deterministic sensors | — | binding | binding |
-| Scorecard | not expected | computed, **advisory** | **gates merges** |
-| Soft gate (LLM-judged), triage, coupled triplets, supervised backlog/worktree flow | — | — | binding |
+|                                                                                    | tier1 — gates + evidence                | tier2 — reference signal | tier3 — supervised control                        |
+| ---------------------------------------------------------------------------------- | --------------------------------------- | ------------------------ | ------------------------------------------------- |
+| Pitch                                                                              | "CI you cannot lie to, in an afternoon" | Specs become setpoints   | Humans drive through the complete control harness |
+| Hard gates (type-check, lint, build, test)                                         | binding                                 | binding                  | binding                                           |
+| Evidence chain, authority-by-path                                                  | binding                                 | binding                  | binding                                           |
+| Invariants, trace, spec validation                                                 | —                                       | binding                  | binding                                           |
+| Test-weakening checks, deterministic sensors                                       | —                                       | binding                  | binding                                           |
+| Scorecard                                                                          | not expected                            | computed, **advisory**   | **gates merges**                                  |
+| Soft gate (LLM-judged), triage, coupled triplets, supervised backlog/worktree flow | —                                       | —                        | binding                                           |
 
 ## What a profile changes mechanically
 
@@ -32,11 +32,11 @@ A profile is a **floor declaration, not a cage**. Nothing is disabled; obligatio
 
 - **`devai doctor`** reports the declared profile, and checks that only matter above your tier (`llm-bridges`, `docs-governance`) are reported as `advisory: true` instead of failing the run.
 - **`devai govern score compute`** still computes the full scorecard at tier1/tier2, but exits PASS regardless of cell verdicts (the JSON body is unchanged; only gating is suspended). At tier3 a failing cell fails the command, as always.
-- **Everything else runs identically.** You can run `devai sense lint` or `devai spec validate all` at tier1 — the profile never blocks a tool, it only changes what blocks *you*.
+- **Everything else runs identically.** You can run `devai sense lint` or `devai spec validate all` at tier1 — the profile never blocks a tool, it only changes what blocks _you_.
 
 Two boundaries to respect:
 
-- A tier1/tier2 repo **must not claim Article 36-style full self-application** — the scorecard isn't gating, so "all gates green" means the *declared* gates.
+- A tier1/tier2 repo **must not claim Article 36-style full self-application** — the scorecard isn't gating, so "all gates green" means the _declared_ gates.
 - The constitution still binds at every tier. Profiles tier obligations, not axioms (Article 18's threshold-override clause is the constitutional basis for advisory scoring).
 
 ## Walking up a tier

@@ -73,24 +73,13 @@
     "isolation": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "mode",
-        "network_egress",
-        "database",
-        "readiness_eligible"
-      ],
+      "required": ["mode", "network_egress", "database", "readiness_eligible"],
       "properties": {
         "mode": {
-          "enum": [
-            "linux-container-no-network",
-            "macos-best-effort"
-          ]
+          "enum": ["linux-container-no-network", "macos-best-effort"]
         },
         "network_egress": {
-          "enum": [
-            "denied",
-            "not-proven"
-          ]
+          "enum": ["denied", "not-proven"]
         },
         "database": {
           "const": "per-task-database"
@@ -110,10 +99,7 @@
                 "const": "denied"
               }
             },
-            "required": [
-              "mode",
-              "network_egress"
-            ]
+            "required": ["mode", "network_egress"]
           },
           "then": {
             "properties": {
@@ -156,31 +142,17 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "phase",
-          "test_ref",
-          "outcome",
-          "failure_mode",
-          "evidence_ref"
-        ],
+        "required": ["phase", "test_ref", "outcome", "failure_mode", "evidence_ref"],
         "properties": {
           "phase": {
-            "enum": [
-              "base",
-              "candidate",
-              "test-overlay"
-            ]
+            "enum": ["base", "candidate", "test-overlay"]
           },
           "test_ref": {
             "type": "string",
             "minLength": 1
           },
           "outcome": {
-            "enum": [
-              "pass",
-              "fail",
-              "crash"
-            ]
+            "enum": ["pass", "fail", "crash"]
           },
           "failure_mode": {
             "enum": [
@@ -205,11 +177,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name",
-          "status",
-          "evidence_refs"
-        ],
+        "required": ["name", "status", "evidence_refs"],
         "properties": {
           "name": {
             "enum": [
@@ -247,12 +215,7 @@
     "expected_diff": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "manifest_digest_sha256",
-        "expected",
-        "observed",
-        "unexpected"
-      ],
+      "required": ["manifest_digest_sha256", "expected", "observed", "unexpected"],
       "properties": {
         "manifest_digest_sha256": {
           "$ref": "#/$defs/sha256"
@@ -283,37 +246,20 @@
     "cleanup": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "lease_id",
-        "worktree",
-        "database",
-        "recovery_scan"
-      ],
+      "required": ["lease_id", "worktree", "database", "recovery_scan"],
       "properties": {
         "lease_id": {
           "type": "string",
           "pattern": "^TVL-[a-f0-9]{16}$"
         },
         "worktree": {
-          "enum": [
-            "removed",
-            "not-created",
-            "orphan-fail"
-          ]
+          "enum": ["removed", "not-created", "orphan-fail"]
         },
         "database": {
-          "enum": [
-            "removed",
-            "not-created",
-            "orphan-fail"
-          ]
+          "enum": ["removed", "not-created", "orphan-fail"]
         },
         "recovery_scan": {
-          "enum": [
-            "clean",
-            "recovered",
-            "fail"
-          ]
+          "enum": ["clean", "recovered", "fail"]
         },
         "recovered_lease_ids": {
           "type": "array",
@@ -353,9 +299,7 @@
         }
       },
       "then": {
-        "required": [
-          "test_overlay_sha"
-        ],
+        "required": ["test_overlay_sha"],
         "properties": {
           "executions": {
             "allOf": [
@@ -366,9 +310,7 @@
                       "const": "test-overlay"
                     }
                   },
-                  "required": [
-                    "phase"
-                  ]
+                  "required": ["phase"]
                 }
               },
               {
@@ -378,9 +320,7 @@
                       "const": "candidate"
                     }
                   },
-                  "required": [
-                    "phase"
-                  ]
+                  "required": ["phase"]
                 }
               }
             ]
@@ -408,10 +348,7 @@
                   "const": "REVIEW"
                 }
               },
-              "required": [
-                "name",
-                "status"
-              ]
+              "required": ["name", "status"]
             }
           }
         }
@@ -483,14 +420,10 @@
                 "minItems": 1
               }
             },
-            "required": [
-              "unexpected"
-            ]
+            "required": ["unexpected"]
           }
         },
-        "required": [
-          "expected_diff"
-        ]
+        "required": ["expected_diff"]
       },
       "then": {
         "properties": {
@@ -504,10 +437,7 @@
                   "const": "FAIL"
                 }
               },
-              "required": [
-                "name",
-                "status"
-              ]
+              "required": ["name", "status"]
             }
           },
           "verdict": {
@@ -542,10 +472,7 @@
     "stateChange": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "path",
-        "operation"
-      ],
+      "required": ["path", "operation"],
       "properties": {
         "path": {
           "type": "string",
@@ -553,11 +480,7 @@
           "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\u0000]+$"
         },
         "operation": {
-          "enum": [
-            "create",
-            "append",
-            "retire"
-          ]
+          "enum": ["create", "append", "retire"]
         }
       }
     }
@@ -605,9 +528,7 @@
       "verdict": "PASS",
       "report_only": true,
       "readiness_eligible": false,
-      "evidence_chain_refs": [
-        "EV-0123456789abcdef"
-      ]
+      "evidence_chain_refs": ["EV-0123456789abcdef"]
     }
   ]
 }

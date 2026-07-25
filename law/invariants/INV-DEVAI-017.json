@@ -11,10 +11,7 @@
   "rationale": "A read action that appends state contradicts the fail-closed action registry, while a root gate that traverses another checkout makes its result depend on unrelated work rather than the evaluated tree.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int"
-    ],
+    "required_suites": ["unit", "int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -33,18 +30,10 @@
         "anchor": "decision-6-managed-worktree-isolation"
       }
     ],
-    "decisions": [
-      "D-139",
-      "ADR-004"
-    ]
+    "decisions": ["D-139", "ADR-004"]
   },
   "scope": {
-    "components": [
-      "cli-observation",
-      "sensor-readings",
-      "evidence-chain",
-      "root-gates"
-    ],
+    "components": ["cli-observation", "sensor-readings", "evidence-chain", "root-gates"],
     "code_areas": [
       "packages/cli/src/commands/sense/**",
       "packages/cli/src/commands/phase6/**",
@@ -65,9 +54,7 @@
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "measurable_via": [
-    "sense readings record"
-  ],
+  "measurable_via": ["sense readings record"],
   "tags": [
     "state-hygiene",
     "explicit-consent",
@@ -76,7 +63,5 @@
     "article-6",
     "article-36"
   ],
-  "provenance": [
-    "ex-INV-DEVAI-017@devai-original"
-  ]
+  "provenance": ["ex-INV-DEVAI-017@devai-original"]
 }

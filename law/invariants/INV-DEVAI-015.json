@@ -11,10 +11,7 @@
   "rationale": "An experimental controller is useful only when it cannot silently acquire supported authority, treat a green baseline as task completion, or destroy unreviewed work.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int",
-      "e2e"
-    ],
+    "required_suites": ["int", "e2e"],
     "oracle": "tests"
   },
   "authority": {
@@ -24,16 +21,10 @@
         "anchor": "article-3-operating-mode"
       }
     ],
-    "decisions": [
-      "D-126",
-      "docs/meta/adr/ADR-HUMAN-SUPERVISED-EXPERIMENTAL-LOOP.md"
-    ]
+    "decisions": ["D-126", "docs/meta/adr/ADR-HUMAN-SUPERVISED-EXPERIMENTAL-LOOP.md"]
   },
   "scope": {
-    "components": [
-      "harness",
-      "experimental-controller"
-    ],
+    "components": ["harness", "experimental-controller"],
     "code_areas": [
       "packages/cli/src/commands/loop-run/**",
       "packages/cli/src/runtime-policy.ts",
@@ -51,13 +42,6 @@
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "experimental",
-    "autonomous-loop",
-    "human-review",
-    "recoverability"
-  ],
-  "provenance": [
-    "ex-INV-DEVAI-015@devai-original"
-  ]
+  "tags": ["experimental", "autonomous-loop", "human-review", "recoverability"],
+  "provenance": ["ex-INV-DEVAI-015@devai-original"]
 }

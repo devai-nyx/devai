@@ -20,22 +20,22 @@ does not freeze a second version claim.
 
 Every failure that enters the framework is classified by the triage skill before a human authorizes remediation. No discipline begins feedback work until triage has classified the failure **and a human has selected or approved its route**; an experimental controller may perform the bounded dispatch only when its policy is explicitly enabled. Triage assigns each failure to exactly one of four classes:
 
-| Class | Meaning | Routes to |
-|---|---|---|
-| **plant-bug** | Code violates clear specification. | Engineer |
-| **sensor-error** | Test, probe, or adapter is incorrect, stale, or misconfigured. | Inspector |
-| **policy-issue** | Harness policy or threshold is misconfigured. | Harness review |
-| **reference-gap** | Specification is silent, contradictory, or ambiguous. | Architect or Owner via RGR |
+| Class             | Meaning                                                        | Routes to                  |
+| ----------------- | -------------------------------------------------------------- | -------------------------- |
+| **plant-bug**     | Code violates clear specification.                             | Engineer                   |
+| **sensor-error**  | Test, probe, or adapter is incorrect, stale, or misconfigured. | Inspector                  |
+| **policy-issue**  | Harness policy or threshold is misconfigured.                  | Harness review             |
+| **reference-gap** | Specification is silent, contradictory, or ambiguous.          | Architect or Owner via RGR |
 
 This rule prevents the canonical failure mode where Engineer "fixes" a test failure by modifying the test (a sensor-error class problem treated as plant-bug class).
 
 ## Three cycle levels (Article 16)
 
-| Cycle | Scope | Frequency | Gate set |
-|---|---|---|---|
-| **A** | Within-iteration checkpoint | Continuously during agent work | Affected-only hard gate (type-check, lint, unit tests) |
-| **B** | Pre-merge gate | Once per merge attempt | Full hard gate on task scope. Iteration cap applies. |
-| **C** | Post-merge integration | Once per merge | Full scorecard including soft gates and Auditor regeneration |
+| Cycle | Scope                       | Frequency                      | Gate set                                                     |
+| ----- | --------------------------- | ------------------------------ | ------------------------------------------------------------ |
+| **A** | Within-iteration checkpoint | Continuously during agent work | Affected-only hard gate (type-check, lint, unit tests)       |
+| **B** | Pre-merge gate              | Once per merge attempt         | Full hard gate on task scope. Iteration cap applies.         |
+| **C** | Post-merge integration      | Once per merge                 | Full scorecard including soft gates and Auditor regeneration |
 
 A merge requires Cycle B clean; Cycle C runs immediately after.
 

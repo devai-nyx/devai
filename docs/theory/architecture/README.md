@@ -6,22 +6,22 @@ This directory holds Architect-authored engineering specifications: invariants u
 
 ## Architecture reference docs
 
-| Doc | What it covers | Forensic anchor |
-|---|---|---|
-| [`reference-stack.md`](./reference-stack.md) | Primary NestJS + Angular + Postgres reference stack and the declared-stack adapter-pack boundary | D-5, Article 1 |
-| [`persistence.md`](./persistence.md) | Raw SQL migrations, no ORM — and why | D-16 |
-| [`runtime-stack.md`](./runtime-stack.md) | TS strict, ESM, pnpm, Vitest, `cac`, `ajv`, `json-schema-to-typescript` | D-29 |
-| [`id-scheme.md`](./id-scheme.md) | Three-shape ID scheme (sequential, date-stamped, content-hash) | D-32 |
-| [`tool-surface.md`](./tool-surface.md) | Two-layer action + skill contract; live inventories come from the CLI catalogs | D-26, D-129 |
-| [`cli-grammar.md`](../../reference/cli-grammar.md) | Noun-verb subcommand grouping, with the noun catalog | D-27 |
-| [`skill-roadmap.md`](../../dev/skill-roadmap.md) | Need-driven order of Layer-2 skill ships | D-28 |
-| [`prompt-versioning.md`](./prompt-versioning.md) | Prompt templates version alongside skill code | D-35 |
-| [`prompt-firewall.md`](./prompt-firewall.md) | `devai policy check prompt overlays` + the path-reservation model | D-42 |
-| [`rtd.md`](./rtd.md) | `rtd-manifest.schema.json` + `devai spec rtd bundle` aggregate view | D-41 |
-| [`test-weakening.md`](./test-weakening.md) | Detector + per-project config (`.devai/config/test-weakening.json`) | D-21, D-56 |
-| [`sensor-inputs.md`](./sensor-inputs.md) | R26 report-only input-spec, derived-glob, digest, and materialization contracts | D-161 |
-| [`invariant-taxonomy.md`](./invariant-taxonomy.md) | Core + client invariant domain set | D-9 |
-| [`invariant-authoring.md`](./invariant-authoring.md) | The CNL discipline for authoring invariants | — |
+| Doc                                                  | What it covers                                                                                   | Forensic anchor |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------- |
+| [`reference-stack.md`](./reference-stack.md)         | Primary NestJS + Angular + Postgres reference stack and the declared-stack adapter-pack boundary | D-5, Article 1  |
+| [`persistence.md`](./persistence.md)                 | Raw SQL migrations, no ORM — and why                                                             | D-16            |
+| [`runtime-stack.md`](./runtime-stack.md)             | TS strict, ESM, pnpm, Vitest, `cac`, `ajv`, `json-schema-to-typescript`                          | D-29            |
+| [`id-scheme.md`](./id-scheme.md)                     | Three-shape ID scheme (sequential, date-stamped, content-hash)                                   | D-32            |
+| [`tool-surface.md`](./tool-surface.md)               | Two-layer action + skill contract; live inventories come from the CLI catalogs                   | D-26, D-129     |
+| [`cli-grammar.md`](../../reference/cli-grammar.md)   | Noun-verb subcommand grouping, with the noun catalog                                             | D-27            |
+| [`skill-roadmap.md`](../../dev/skill-roadmap.md)     | Need-driven order of Layer-2 skill ships                                                         | D-28            |
+| [`prompt-versioning.md`](./prompt-versioning.md)     | Prompt templates version alongside skill code                                                    | D-35            |
+| [`prompt-firewall.md`](./prompt-firewall.md)         | `devai policy check prompt overlays` + the path-reservation model                                | D-42            |
+| [`rtd.md`](./rtd.md)                                 | `rtd-manifest.schema.json` + `devai spec rtd bundle` aggregate view                              | D-41            |
+| [`test-weakening.md`](./test-weakening.md)           | Detector + per-project config (`.devai/config/test-weakening.json`)                              | D-21, D-56      |
+| [`sensor-inputs.md`](./sensor-inputs.md)             | R26 report-only input-spec, derived-glob, digest, and materialization contracts                  | D-161           |
+| [`invariant-taxonomy.md`](./invariant-taxonomy.md)   | Core + client invariant domain set                                                               | D-9             |
+| [`invariant-authoring.md`](./invariant-authoring.md) | The CNL discipline for authoring invariants                                                      | —               |
 
 For database operations (per-task DB provisioning, template rebuild) see [`../../meta/ops/db-isolation.md`](../../dev/operations/db-isolation.md). For full-production DB/LLM test defaults and hermetic opt-outs, see [`../../meta/ops/testing.md`](../../dev/operations/testing.md).
 

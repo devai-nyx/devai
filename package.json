@@ -6,7 +6,7 @@
   "description": "DEVAI-II governance and agentic-harness workspace.",
   "license": "Apache-2.0",
   "author": "Antonio Augusto Russo <aarusso@nyxk.com.br>",
-  "packageManager": "pnpm@9.15.0",
+  "packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c",
   "engines": {
     "node": ">=24"
   },
@@ -23,12 +23,14 @@
     "test:t5": "vitest run --config tests/config/t5.e2e.config.ts",
     "test:t6": "vitest run --config tests/config/t6.containment.config.ts",
     "test:coverage:t1-t3": "vitest run --config tests/config/t1-t3.coverage.config.ts --coverage.reportsDirectory=scratch/coverage/t1-t3",
-    "ci:stage1": "pnpm run ci:workflows && pnpm run lint && pnpm run typecheck",
+    "trace:check": "node scripts/generate-trace.mjs . --check",
+    "ci:stage1": "pnpm run ci:workflows && pnpm run trace:check && pnpm run lint && pnpm run typecheck",
     "ci:stage2": "pnpm run build && pnpm run test:t1 && pnpm run test:t2",
     "ci:stage3": "pnpm run build && pnpm run test:coverage:t1-t3",
     "ci:local": "node scripts/run-ci-stages.mjs",
     "ci:evidence-mode": "node scripts/refuse-evidence-mode.mjs",
     "ci:changesets": "node scripts/check-changesets.mjs",
+    "ci:governance": "pnpm devai:prepare && node packages/cli/dist/bin.js policy check forbidden actions --strict --repo-root . && node packages/cli/dist/bin.js sense run decision_record_integrity --repo-root . && node packages/cli/dist/bin.js sense run decision_citation_resolution --repo-root . && node packages/cli/dist/bin.js sense trace resolve --repo-root . --no-emit-reading && node packages/cli/dist/bin.js sense docs drift --repo-root . --no-emit-reading",
     "ci:workflows": "node scripts/check-workflows.mjs"
   },
   "devDependencies": {

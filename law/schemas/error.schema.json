@@ -6,13 +6,7 @@
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "code",
-    "class",
-    "exit",
-    "message"
-  ],
+  "required": ["schemaVersion", "code", "class", "exit", "message"],
   "properties": {
     "schemaVersion": {
       "const": "1.0.0"

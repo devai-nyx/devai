@@ -9,7 +9,7 @@
 1. Walk `law/invariants/*.json`; collect every invariant with `severity === 'gate'`.
 2. For each, collect its `measurable_via[]` strings (e.g. `"sense rbac"`, `"sense coverage"`).
 3. Walk all workflow `run:` scripts + `uses:` references via `workflow-parser`.
-4. An invariant is *aligned* iff ≥ 1 of its `measurable_via[]` entries appears (substring match, after normalising "sense rbac" → both "sense rbac" and "sense-rbac") in any workflow's `run:` body or `uses:` reference.
+4. An invariant is _aligned_ iff ≥ 1 of its `measurable_via[]` entries appears (substring match, after normalising "sense rbac" → both "sense rbac" and "sense-rbac") in any workflow's `run:` body or `uses:` reference.
 
 ## PASS / REVIEW / FAIL boundaries
 
@@ -24,7 +24,7 @@
 ## Out of scope
 
 - **Non-gate invariants.** Hard-fail / constitutional invariants are out of scope here; they have their own enforcement paths.
-- **Whether the aligned action *succeeded* in CI.** That's harness performance/robustness territory.
+- **Whether the aligned action _succeeded_ in CI.** That's harness performance/robustness territory.
 
 ---
 

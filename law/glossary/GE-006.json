@@ -6,13 +6,8 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "aliases": [
-    "Substrate F1"
-  ],
-  "see_also": [
-    "GE-019",
-    "GE-020"
-  ],
+  "aliases": ["Substrate F1"],
+  "see_also": ["GE-019", "GE-020"],
   "provenance": [
     "ex-GE-006@devai-original",
     "REV-0006 signal: adopter-side path unmarked",

@@ -4,6 +4,7 @@ export type AuthorityFsCapability =
   | 'fs:f5-config'
   | 'fs:f5-state'
   | 'fs:f4-inventory'
+  | 'fs:proofs'
   | 'fs:worktree-admin'
   | 'fs:workspace';
 
@@ -27,6 +28,7 @@ export function classifyAuthorityPath(repoRoot: string, target: string): Authori
   if (path[0] === 'record' && path[1] === 'derived' && path[2] === 'inventory') {
     return 'fs:f4-inventory';
   }
+  if (path[0] === 'record' && path[1] === 'proofs') return 'fs:proofs';
   if (path[0] === 'scratch' && path[1] === 'worktrees') return 'fs:worktree-admin';
   return 'fs:workspace';
 }

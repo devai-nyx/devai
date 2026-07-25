@@ -51,7 +51,7 @@ The Inspector **does**:
    - `sensor-error` (flake) → fix the test; do not edit the code under test.
    - `plant-bug` → emit a finding, hand off to Engineer.
    - `policy-issue` → emit a finding, hand off to Architect.
-   The triage classifier helps: `devai govern triage classify --reading SR-NNNN`.
+     The triage classifier helps: `devai govern triage classify --reading SR-NNNN`.
 7. **Commit** with the Inv-Compliance trailer naming the invariants the tests now cover.
 
 ## What success looks like
@@ -64,45 +64,45 @@ The Inspector **does**:
 
 ## Anti-patterns
 
-| Pattern | Why bad |
-|---|---|
-| Marking a test `it.skip` to make CI green | Sensor weakening. Refused at the tool layer when `sense test-weakening` runs. If the test is wrong, fix it; if the plant is wrong, file the bug. |
-| Adding a test that asserts `expect(true).toBe(true)` to "cover" an invariant | Trace claims a test that doesn't measure anything. The harness can't catch this directly; PR review must. |
-| Editing the code under test instead of the test | Cross-role. The harness refuses; even if it didn't, the PR is in the wrong role. |
-| Letting a flaky test run on retry | Flake is `sensor-error`; tracking the flake without fixing it accumulates noise that masks real signals. |
-| Removing a test because "it's outdated" | If the invariant is alive, the test stays. If the invariant is retired, tombstone the test reference in `trace.json` per Phase 10.D. |
+| Pattern                                                                      | Why bad                                                                                                                                          |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Marking a test `it.skip` to make CI green                                    | Sensor weakening. Refused at the tool layer when `sense test-weakening` runs. If the test is wrong, fix it; if the plant is wrong, file the bug. |
+| Adding a test that asserts `expect(true).toBe(true)` to "cover" an invariant | Trace claims a test that doesn't measure anything. The harness can't catch this directly; PR review must.                                        |
+| Editing the code under test instead of the test                              | Cross-role. The harness refuses; even if it didn't, the PR is in the wrong role.                                                                 |
+| Letting a flaky test run on retry                                            | Flake is `sensor-error`; tracking the flake without fixing it accumulates noise that masks real signals.                                         |
+| Removing a test because "it's outdated"                                      | If the invariant is alive, the test stays. If the invariant is retired, tombstone the test reference in `trace.json` per Phase 10.D.             |
 
 ## Tools the Inspector uses
 
-| Command | When |
-|---|---|
-| `devai sense test` | Continuously while editing tests. |
-| `devai sense test weakening` | Before committing test changes. |
-| `devai agent skill run SKILL-compile-tests-from-docs` | Starting tests for a new invariant. |
-| `devai agent skill run SKILL-mutation-test` | Confirming a test actually fails when the code is wrong. |
-| `devai inventory coverage --fail-under <N>` | Check coverage thresholds. |
-| `devai spec validate trace` | Confirm `trace.json` claims line up with test files. |
-| `devai govern triage classify --reading SR-NNNN` | Classify a failing reading. |
+| Command                                               | When                                                     |
+| ----------------------------------------------------- | -------------------------------------------------------- |
+| `devai sense test`                                    | Continuously while editing tests.                        |
+| `devai sense test weakening`                          | Before committing test changes.                          |
+| `devai agent skill run SKILL-compile-tests-from-docs` | Starting tests for a new invariant.                      |
+| `devai agent skill run SKILL-mutation-test`           | Confirming a test actually fails when the code is wrong. |
+| `devai inventory coverage --fail-under <N>`           | Check coverage thresholds.                               |
+| `devai spec validate trace`                           | Confirm `trace.json` claims line up with test files.     |
+| `devai govern triage classify --reading SR-NNNN`      | Classify a failing reading.                              |
 
 ## Hand-offs
 
-| To | When |
-|---|---|
-| Engineer | Plant bug discovered — Engineer fixes the code. |
-| Architect | Coverage gap reveals an invariant is too vague — Architect refines. |
-| Auditor | Scorecard health check — Auditor reads `test_inventory` from `inv regen`. |
+| To        | When                                                                      |
+| --------- | ------------------------------------------------------------------------- |
+| Engineer  | Plant bug discovered — Engineer fixes the code.                           |
+| Architect | Coverage gap reveals an invariant is too vague — Architect refines.       |
+| Auditor   | Scorecard health check — Auditor reads `test_inventory` from `inv regen`. |
 
 ## Authority files
 
-| Path | Editable by Inspector? |
-|---|---|
-| `packages/**/test/**` | ✅ Yes |
-| `tests/**` | ✅ Yes |
-| `vitest.config.ts`, test configs | ✅ Yes |
-| Test fixtures (in test paths) | ✅ Yes |
-| `packages/**/src/**` | ❌ No |
-| `docs/**` | ❌ No |
-| `record/proofs/**` | ❌ No |
+| Path                             | Editable by Inspector? |
+| -------------------------------- | ---------------------- |
+| `packages/**/test/**`            | ✅ Yes                 |
+| `tests/**`                       | ✅ Yes                 |
+| `vitest.config.ts`, test configs | ✅ Yes                 |
+| Test fixtures (in test paths)    | ✅ Yes                 |
+| `packages/**/src/**`             | ❌ No                  |
+| `docs/**`                        | ❌ No                  |
+| `record/proofs/**`               | ❌ No                  |
 
 ## See also
 

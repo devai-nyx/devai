@@ -2,17 +2,17 @@
 
 **Authority:** Architect. **Schema:** [`docs/reference/contracts/mutation-scenario.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/mutation-scenario.schema.json). **ADR:** [`ADR-MUTATION-SCENARIOS`](../../law/adr/README.md) (D-A-44).
 
-This guide is for adopters who want to declare mutation tests as data rather than ship a bespoke producer script. It is companion to the ADR; read the ADR first if you need the *why*.
+This guide is for adopters who want to declare mutation tests as data rather than ship a bespoke producer script. It is companion to the ADR; read the ADR first if you need the _why_.
 
 ## When to write a scenario
 
 Write a mutation scenario when:
 
-- An invariant in your codebase is load-bearing enough that *silent regression of the test that pins it* would be costly. Examples: gate-evidence formats, security-sensitive comparators, billing-rounding logic, contract serialization.
+- An invariant in your codebase is load-bearing enough that _silent regression of the test that pins it_ would be costly. Examples: gate-evidence formats, security-sensitive comparators, billing-rounding logic, contract serialization.
 - The mutation is expressible as a small literal or single-occurrence regex edit. v1.0.0 ships `string-replace` and `regex-replace` only; AST-class mutations are reserved for v1.1.
 - The expected outcome is observable from your test command's exit code. The runner classifies outcomes from process exit; if your test command always exits zero on failure, fix the test command before adopting scenarios.
 
-Do *not* write a scenario when:
+Do _not_ write a scenario when:
 
 - The mutation requires multi-file atomicity (reserved for a future minor; the `mutations` array shape permits it but the v1.0.0 built-in runner does not execute it as a single transaction).
 - The "mutation" is really a fault-injection (network timeout, clock skew, etc.). The schema's `kind` enum reserves space for future kinds; v1.0.0 is `mutation` only.
@@ -27,7 +27,7 @@ scenarios/*.json  ──►  devai sense mutation run  ──►  record/proofs/
                           (producer)                 (Stryker-compatible flat shape)         (sensor)
 ```
 
-`verify-mutation` is unchanged by this contract. It still reads `mutation_score` / `survived` (or Stryker's `metrics.mutationScore` / `metrics.survived`) from `current.json` and compares to baseline + thresholds. The contract introduced by D-A-44 is *upstream* of `verify-mutation` — it standardizes the input shape that `devai sense mutation run` consumes.
+`verify-mutation` is unchanged by this contract. It still reads `mutation_score` / `survived` (or Stryker's `metrics.mutationScore` / `metrics.survived`) from `current.json` and compares to baseline + thresholds. The contract introduced by D-A-44 is _upstream_ of `verify-mutation` — it standardizes the input shape that `devai sense mutation run` consumes.
 
 You can adopt the scenario format without adopting `devai sense mutation run` (use it purely as documentation; keep your external producer). You can adopt `devai sense mutation run` without adopting the scenario format (… you cannot, actually; `devai sense mutation run` consumes scenarios). You can skip both and continue writing `current.json` from any tool (Stryker, Pitest, hand-rolled); `verify-mutation` does not care how `current.json` was produced.
 
@@ -74,15 +74,15 @@ The canonical bespoke producer is TEAT's `scripts/run-teat-mutation-scenarios.ts
 1. **Inventory.** List your scenarios. For TEAT this is the `MutationScenario[]` literal in the script.
 2. **Translate.** For each scenario, produce one JSON file under `tests/mutation/scenarios/` (or a subdirectory). Field mapping:
 
-   | Bespoke field (TEAT) | Scenario JSON field |
-   |---|---|
-   | `name` (e.g., `ait-finalize-status-guard`) | `id` |
-   | `target` / `file` | `target.file` |
-   | `find` | `mutations[0].find` (type `string-replace`) |
-   | `replace` | `mutations[0].replace` |
-   | `specs` | `expectations[0].specs` |
-   | `tier` (`tier1`/`tier2`/`tier3`) | `domain_tags` entry |
-   | `description` / inline comment | `rationale` |
+   | Bespoke field (TEAT)                       | Scenario JSON field                         |
+   | ------------------------------------------ | ------------------------------------------- |
+   | `name` (e.g., `ait-finalize-status-guard`) | `id`                                        |
+   | `target` / `file`                          | `target.file`                               |
+   | `find`                                     | `mutations[0].find` (type `string-replace`) |
+   | `replace`                                  | `mutations[0].replace`                      |
+   | `specs`                                    | `expectations[0].specs`                     |
+   | `tier` (`tier1`/`tier2`/`tier3`)           | `domain_tags` entry                         |
+   | `description` / inline comment             | `rationale`                                 |
 
 3. **Validate.** Each file must validate against the schema. Run `devai inventory contracts` (or your existing schema-validation gate) over the new files.
 4. **Wire.** Replace your bespoke-producer invocation in `package.json` with `devai sense mutation run && devai verify-mutation`. The `verify-mutation` call is unchanged from your current setup.
@@ -94,11 +94,11 @@ TEAT's current shape (from `align/proposals/teat-to-devai.md` § Gap 3 and the A
 
 ```ts
 interface MutationScenario {
-  name: string;          // e.g. 'ait-finalize-status-guard'
-  target: string;        // repo-relative path
-  find: string;          // literal substring
-  replace: string;       // literal substring
-  specs: string[];       // vitest spec paths
+  name: string; // e.g. 'ait-finalize-status-guard'
+  target: string; // repo-relative path
+  find: string; // literal substring
+  replace: string; // literal substring
+  specs: string[]; // vitest spec paths
   tier: 'tier1' | 'tier2' | 'tier3';
 }
 ```
@@ -114,16 +114,20 @@ Expressed in the v1.0.0 schema:
     "file": "domain/ait-ait-lifecycle/api/src/wave2-legal/ait-commands.service.ts",
     "symbol": "AitCommandsService.finalize"
   },
-  "mutations": [{
-    "type": "string-replace",
-    "find": "const ait = await this.requireAitStatus(id, ['draft']);",
-    "replace": "const ait = await this.requireAitStatus(id, ['issued']);",
-    "mutator_name": "ArrayDeclaration"
-  }],
-  "expectations": [{
-    "assertion": "tests-detect",
-    "specs": ["tests/unit/domain/wave2-legal-commands.spec.ts"]
-  }],
+  "mutations": [
+    {
+      "type": "string-replace",
+      "find": "const ait = await this.requireAitStatus(id, ['draft']);",
+      "replace": "const ait = await this.requireAitStatus(id, ['issued']);",
+      "mutator_name": "ArrayDeclaration"
+    }
+  ],
+  "expectations": [
+    {
+      "assertion": "tests-detect",
+      "specs": ["tests/unit/domain/wave2-legal-commands.spec.ts"]
+    }
+  ],
   "domain_tags": ["tier1", "ait-lifecycle"],
   "rationale": "Finalization MUST accept only draft AITs; flipping the allowed-status list is a silent governance regression."
 }

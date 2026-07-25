@@ -5,10 +5,7 @@
   "summary": "A Constructor-tier agent encounters an underspecified or contradictory invariant, emits an RGR, pauses the originating task, the Architect revises the invariant (new version), and the task resumes on the new integration HEAD.",
   "persona": {
     "role": "Engineer (or LLM agent in Engineer authority)",
-    "permissions_required": [
-      "rgr.emit",
-      "task.pause"
-    ]
+    "permissions_required": ["rgr.emit", "task.pause"]
   },
   "preconditions": [
     "Task is in_progress",
@@ -65,29 +62,16 @@
     {
       "id": "AC-001",
       "statement": "A paused task does NOT transition back to in_progress until a superseding invariant version exists (Article 22 spec-revision discipline).",
-      "measurable_via": [
-        "INV-DEVAI-005"
-      ]
+      "measurable_via": ["INV-DEVAI-005"]
     },
     {
       "id": "AC-002",
       "statement": "The RGR record's emitting_discipline is engineer | inspector | auditor (not architect or owner); Architects and Owners set the reference, they don't emit RGRs against themselves.",
-      "measurable_via": [
-        "INV-DEVAI-005"
-      ]
+      "measurable_via": ["INV-DEVAI-005"]
     }
   ],
-  "related_invariants": [
-    "INV-DEVAI-005"
-  ],
+  "related_invariants": ["INV-DEVAI-005"],
   "status": "active",
-  "tags": [
-    "rgr",
-    "spec-revision",
-    "reference-gap",
-    "self-application"
-  ],
-  "provenance": [
-    "ex-JNY-004@devai-original"
-  ]
+  "tags": ["rgr", "spec-revision", "reference-gap", "self-application"],
+  "provenance": ["ex-JNY-004@devai-original"]
 }

@@ -5,6 +5,8 @@ import {
   type InventoryShape,
   type TraceShape,
 } from '../../src/inventory/adherence-reverse.js';
+import './governance-ledger-cases.js';
+import './inventory-expansion-cases.js';
 
 describe('globToRegExp', () => {
   it('matches single-star within one path segment only', () => {

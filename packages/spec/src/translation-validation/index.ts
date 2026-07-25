@@ -7,11 +7,7 @@ import { Client } from 'pg';
 import { validators } from '@devai-nyx/schemas';
 
 export type TranslationStrategy =
-  | 'regression'
-  | 'feature-overlay'
-  | 'behavioral-equivalence'
-  | 'structural'
-  | 'semantic-review';
+  'regression' | 'feature-overlay' | 'behavioral-equivalence' | 'structural' | 'semantic-review';
 
 export interface StateChange {
   readonly path: string;
@@ -170,10 +166,7 @@ function validateMutationIntent(repoRoot: string, intent: MutationIntent): void 
     readonly criteria?: ReadonlyArray<{ readonly demonstrated_by?: readonly unknown[] }>;
   }>) {
     if (typeof entry.invariant_id !== 'string') throw new Error('MUTATION_INVARIANT_INVALID');
-    const invariantPath = resolve(
-      repoRoot,
-      `law/invariants/${entry.invariant_id}.json`,
-    );
+    const invariantPath = resolve(repoRoot, `law/invariants/${entry.invariant_id}.json`);
     if (!existsSync(invariantPath)) throw new Error('MUTATION_INVARIANT_MISSING');
     const invariant = JSON.parse(readFileSync(invariantPath, 'utf8')) as unknown;
     if (!validators.invariant(invariant)) throw new Error('MUTATION_INVARIANT_INVALID');
@@ -432,8 +425,7 @@ export function recordMutationEvidenceCommit(input: {
   const witnessPath = `record/proofs/compliance/translation-validation/witnesses/${witnessId}.json`;
   const taskPath = `.devai/state/tasks/${taskId}.json`;
   const skillPrefix = `record/proofs/work/skill-runs/${skillId}/`;
-  const agentRunPattern =
-    /^record\/proofs\/work\/agent-runs\/AR-[A-Za-z0-9-]+\.json$/u;
+  const agentRunPattern = /^record\/proofs\/work\/agent-runs\/AR-[A-Za-z0-9-]+\.json$/u;
   for (const path of statePaths) {
     if (
       (!path.startsWith('.devai/state/') && !path.startsWith('record/proofs/')) ||
@@ -613,13 +605,7 @@ interface TestExecution {
   readonly test_ref: string;
   readonly outcome: 'pass' | 'fail' | 'crash';
   readonly failure_mode:
-    | 'none'
-    | 'assertion'
-    | 'missing-file'
-    | 'load-error'
-    | 'timeout'
-    | 'signal'
-    | 'infrastructure';
+    'none' | 'assertion' | 'missing-file' | 'load-error' | 'timeout' | 'signal' | 'infrastructure';
 }
 
 interface EvaluationInput {
@@ -676,12 +662,7 @@ function stateKey(change: StateChange): string {
 const ROOT_ARCHITECT_PATHS = new Set(['README.md', 'AGENTS.md', 'CLAUDE.md']);
 const DECISION_REGISTER_PATH = 'law/register/DECISIONS.md';
 
-export type TranslationAuthorityRole =
-  | 'owner'
-  | 'architect'
-  | 'inspector'
-  | 'engineer'
-  | 'auditor';
+export type TranslationAuthorityRole = 'owner' | 'architect' | 'inspector' | 'engineer' | 'auditor';
 export type MutationAuthorityRole = Exclude<TranslationAuthorityRole, 'auditor'>;
 
 export type TranslationFilesystemEffect =
@@ -743,11 +724,7 @@ export function classifyTranslationPath(
   if (path === 'scratch' || path.startsWith('scratch/')) {
     return { allowed: false, effect: 'fs:worktree-admin' };
   }
-  if (
-    (path === 'work' || path.startsWith('work/')) &&
-    !auditorObservation &&
-    !architectRoundPath
-  ) {
+  if ((path === 'work' || path.startsWith('work/')) && !auditorObservation && !architectRoundPath) {
     return { allowed: false, effect: 'fs:architect-spec' };
   }
   if (auditorObservation) {

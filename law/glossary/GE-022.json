@@ -6,9 +6,7 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "see_also": [
-    "GE-019"
-  ],
+  "see_also": ["GE-019"],
   "provenance": [
     "ex-GE-022@devai-original",
     "REV-0006 signal: adopter-side path unmarked",

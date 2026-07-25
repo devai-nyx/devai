@@ -8,8 +8,8 @@ Introduces the feedforward path: how CNL-shaped reference + repo introspection +
 
 ## Visual structure
 
-- **Three inputs on the left**: *r(k) — invariants* (with CNL extraction label on the arrow), *repo introspection* (subtitle 'Phase 11.D'), *prior agent-runs* (subtitle 'F5 substrate', labelled 'continuity').
-- **Composer box** in the center — large, ctrl palette, two-line title '*Feedforward composer / SKILL-feedback-iteration · prompt-composition.schema.json*'.
+- **Three inputs on the left**: _r(k) — invariants_ (with CNL extraction label on the arrow), _repo introspection_ (subtitle 'Phase 11.D'), _prior agent-runs_ (subtitle 'F5 substrate', labelled 'continuity').
+- **Composer box** in the center — large, ctrl palette, two-line title '_Feedforward composer / SKILL-feedback-iteration · prompt-composition.schema.json_'.
 - **LLM controller K** on the right (ctrl palette).
 - **Plant** below LLM (plant palette).
 - **Error feedback** from the observer enters the LLM from below-left labelled 'current error' with a slight curve.

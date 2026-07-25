@@ -6,11 +6,7 @@
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "id",
-    "populations"
-  ],
+  "required": ["schemaVersion", "id", "populations"],
   "properties": {
     "schemaVersion": {
       "const": "1.0.0"
@@ -30,35 +26,20 @@
     "guard": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "state",
-        "mechanism",
-        "source",
-        "backlog_ref"
-      ],
+      "required": ["state", "mechanism", "source", "backlog_ref"],
       "properties": {
         "state": {
-          "enum": [
-            "implemented",
-            "declared",
-            "backlogged"
-          ]
+          "enum": ["implemented", "declared", "backlogged"]
         },
         "mechanism": {
           "type": "string",
           "minLength": 1
         },
         "source": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "backlog_ref": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         }
       }
     },
@@ -88,10 +69,7 @@
           "minLength": 1
         },
         "record_schema": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "count_guard": {
           "$ref": "#/$defs/guard"

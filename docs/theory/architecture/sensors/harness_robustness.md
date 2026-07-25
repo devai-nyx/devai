@@ -6,7 +6,7 @@
 
 ## Operational definition
 
-Call `gh run list --branch <branch> --json conclusion,attempts --limit <N>`. A run is *flaky* if `conclusion === 'success'` AND `attempts > 1`. Compute `flakiness_pct = flaky_runs / total_runs * 100`.
+Call `gh run list --branch <branch> --json conclusion,attempts --limit <N>`. A run is _flaky_ if `conclusion === 'success'` AND `attempts > 1`. Compute `flakiness_pct = flaky_runs / total_runs * 100`.
 
 Graceful degradation: same gh-unavailable contract as 28.G + 26.K.
 

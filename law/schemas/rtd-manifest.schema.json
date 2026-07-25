@@ -62,10 +62,7 @@
     "readiness": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "ok",
-        "sub_verdicts"
-      ],
+      "required": ["ok", "sub_verdicts"],
       "properties": {
         "ok": {
           "type": "boolean",
@@ -76,10 +73,7 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-              "component",
-              "ok"
-            ],
+            "required": ["component", "ok"],
             "properties": {
               "component": {
                 "type": "string",
@@ -103,10 +97,7 @@
       "description": "SHA-256 of the canonicalized manifest record minus this field. The single citable handle: `RTM-NNNN sha256:<manifest_hash>`."
     },
     "hash_algo_version": {
-      "enum": [
-        "1.0",
-        "2.0"
-      ],
+      "enum": ["1.0", "2.0"],
       "description": "Algorithm version under which `manifest_hash` was computed (Phase 16.G). rtd-manifest has always used deep-sort canonicalisation, which is now formalised as '2.0'. Pre-Phase-16.G records lack this field; readers default to '2.0' for rtd-manifest specifically (the algorithm has been deep-sort throughout this schema's life). New writes always set '2.0' explicitly."
     }
   },
@@ -114,10 +105,7 @@
     "componentEntry": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "hash",
-        "ok"
-      ],
+      "required": ["hash", "ok"],
       "properties": {
         "count": {
           "type": "integer",

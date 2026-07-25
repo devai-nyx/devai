@@ -5,10 +5,7 @@
   "description": "Per-repo override file declaring which F×T scorecard cells are degenerate for THIS repo's substrate (Phase 34, D-91). Lives at `.devai/config/scorecard-na.json` (optional; absence is a no-op). Extends Article 5 (degenerate cells) from a global structural claim to a per-repo substrate-shape claim. Each listed cell is forced to verdict 'N/A' as an overlay AFTER global DEGENERATE_CELLS and BEFORE reading-driven verdicts — so a stray SR cannot silently flip an N/A carve-out. Each cell MUST carry a `reason` so the carve-out is justified in writing.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "cells"
-  ],
+  "required": ["schemaVersion", "cells"],
   "properties": {
     "schemaVersion": {
       "const": "1.0.0"
@@ -19,10 +16,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "cell",
-          "reason"
-        ],
+        "required": ["cell", "reason"],
         "properties": {
           "cell": {
             "type": "string",

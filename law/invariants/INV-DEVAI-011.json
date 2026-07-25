@@ -10,9 +10,7 @@
   "rationale": "Scorecard computation runs on every loop iteration and on every CI verification cycle. A runaway walk (e.g. accidentally O(n\u00b2) in cell-mapping) silently degrades the developer feedback loop. Bounding wall-clock at 5s catches regressions before they reach adopters.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -29,33 +27,15 @@
     ]
   },
   "scope": {
-    "components": [
-      "core"
-    ],
-    "code_areas": [
-      "packages/core/src/scorecard/**",
-      "packages/core/src/loop/scorecard.ts"
-    ]
+    "components": ["core"],
+    "code_areas": ["packages/core/src/scorecard/**", "packages/core/src/loop/scorecard.ts"]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-30",
-    "performance",
-    "scorecard"
-  ],
-  "measurable_via": [
-    "sense inventory performance",
-    "govern score compute"
-  ],
-  "provenance": [
-    "ex-INV-DEVAI-011@devai-original"
-  ]
+  "tags": ["phase-30", "performance", "scorecard"],
+  "measurable_via": ["sense inventory performance", "govern score compute"],
+  "provenance": ["ex-INV-DEVAI-011@devai-original"]
 }

@@ -5,10 +5,7 @@
   "summary": "An adopter who has already installed DEVAI (JNY-001) copies the law-pack invariant scaffold into their repo, customizes a subset of cluster-level invariants for their stack, and adds inv-override entries for transitional exceptions. Their substantive invariants now enforce alongside DEVAI's meta-invariants.",
   "persona": {
     "role": "Adopter-Architect",
-    "permissions_required": [
-      "docs.architecture.write",
-      "config.write"
-    ]
+    "permissions_required": ["docs.architecture.write", "config.write"]
   },
   "preconditions": [
     "JNY-001 has been completed; .devai/ scaffold present",
@@ -60,33 +57,17 @@
     {
       "id": "AC-001",
       "statement": "Client's spec validate-all is green: 25+ invariants, trace clean, glossary clean, all actions claimed.",
-      "measurable_via": [
-        "INV-DEVAI-001"
-      ]
+      "measurable_via": ["INV-DEVAI-001"]
     },
     {
       "id": "AC-002",
       "statement": "Every active inv-override carries a future-dated `expires` value; expired overrides are reported as findings (Phase 10.B discipline).",
-      "measurable_via": [
-        "INV-DEVAI-001"
-      ]
+      "measurable_via": ["INV-DEVAI-001"]
     }
   ],
-  "related_invariants": [
-    "INV-DEVAI-001"
-  ],
-  "compliance_refs": [
-    "D-39 (law-pack provenance)",
-    "Article 36"
-  ],
+  "related_invariants": ["INV-DEVAI-001"],
+  "compliance_refs": ["D-39 (law-pack provenance)", "Article 36"],
   "status": "active",
-  "tags": [
-    "law-pack",
-    "client-adoption",
-    "extension",
-    "self-application"
-  ],
-  "provenance": [
-    "ex-JNY-006@devai-original"
-  ]
+  "tags": ["law-pack", "client-adoption", "extension", "self-application"],
+  "provenance": ["ex-JNY-006@devai-original"]
 }

@@ -8,6 +8,7 @@ export type ActionCapability =
   | 'fs:f5-config'
   | 'fs:f5-state'
   | 'fs:f4-inventory'
+  | 'fs:proofs'
   | 'fs:worktree-admin'
   | 'fs:workspace'
   | 'fs:unknown-write'
@@ -126,12 +127,12 @@ function capabilitiesFor(name: string, effect: ActionEffect): readonly ActionCap
   if (name === 'state prune') return ['fs:f5-state', 'fs:workspace', ...subprocesses];
   if (effect === 'harness-write') {
     if (name.startsWith('worktree ')) {
-      return ['fs:worktree-admin', 'fs:f5-state', ...subprocesses];
+      return ['fs:worktree-admin', 'fs:f5-state', 'fs:proofs', ...subprocesses];
     }
     if (['task spawn', 'task complete'].includes(name)) {
-      return ['fs:f5-state', 'fs:worktree-admin', ...subprocesses];
+      return ['fs:f5-state', 'fs:worktree-admin', 'fs:proofs', ...subprocesses];
     }
-    return ['fs:f5-state', ...subprocesses];
+    return ['fs:f5-state', 'fs:proofs', ...subprocesses];
   }
   if (F5_CONFIG_ACTIONS.has(name)) {
     return name === 'hooks install'
@@ -170,7 +171,7 @@ export function deriveActionEffectFromCapabilities(
   }
   if (
     capabilities.some((capability) =>
-      ['fs:f5-state', 'fs:f4-inventory', 'fs:worktree-admin'].includes(capability),
+      ['fs:f5-state', 'fs:f4-inventory', 'fs:proofs', 'fs:worktree-admin'].includes(capability),
     )
   ) {
     return 'harness-write';

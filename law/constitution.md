@@ -4,7 +4,7 @@ title: DEVAI-II Constitution (1.0.0 candidate)
 type: constitution
 status: draft
 date: 2026-07-23
-authority: Architect (founding ratification = BR-1/W01, per Article 40 successor process)
+authority: Architect (founding ratification = R-0003, per Article 41 succession process)
 supersedes: null
 superseded_by: null
 provenance: REV-0001 + W01-annex deltas applied 2026-07-23 (Arts 1/6/9 amended in place, Art 42 added; see annex crosswalk)
@@ -22,8 +22,8 @@ empty at 1.0.0 with a genesis pointer.**
 
 # DEVAI Constitution
 
-**Version:** 0.6.0
-**Status:** ratified for implementation
+**Candidate version:** 1.0.0
+**Status:** draft; founding ratification is reserved to R-0003
 
 This is the immutable axiom set for DEVAI. Every other artifact in the framework — contracts, charters, skills, bootstrap layout, scorecard — derives from these axioms and may not contradict them.
 
@@ -226,7 +226,9 @@ Every gate verdict is tri-state: **PASS**, **REVIEW**, or **FAIL**. PASS allows 
 
 When a model performs soft-gate evaluation, it is distinct from the working agent — at minimum a different model instance with no shared context, preferably a different model family from the tie-breaker ladder. The human initiates the evaluation in the supported harness. This prevents an agent from being evaluator of its own output.
 
-A merge requires both gates at or above their thresholds. Thresholds live in `.devai/scorecard/thresholds.json` with DEVAI-supplied defaults and per-client overrides permitted.
+A merge requires both gates at or above their thresholds. Thresholds live in
+`.devai/config/thresholds.json` with DEVAI-supplied defaults and per-client overrides
+permitted.
 
 ### Article 19. Iteration cap and bump-model escalation
 
@@ -289,6 +291,7 @@ The ladder applies to soft-gate scoring disputes, RGR ambiguity classification, 
 Work that spans the authority chain is grouped into human-coordinated coupled triplets: an Architect task that produces invariant changes, an Inspector task that produces tests for those invariants, and an Engineer task that produces code satisfying those tests. The three tasks share a `coupled_task_group` ID in the backlog.
 
 Triplet branches form a pipeline:
+
 - Architect branch is created from integration HEAD.
 - Inspector branch is created from Architect's HEAD.
 - Engineer branch is created from Inspector's HEAD.
@@ -339,7 +342,10 @@ Inspector authority over tests is constrained by Article 30 (weakening) and by t
 
 Every commit touching F3 is AST-diffed against its parent commit. Weakening events are quantified by metrics including: change in assertion count, change in expect-call count, change in HTTP-status assertions, addition of `skip`/`todo`/`only` annotations, and removal of invariant references.
 
-A test change is **unjustified weakening** when its weakening metrics exceed configured thresholds in `.devai/scorecard/thresholds.json` AND the weakening does not correspond to a tracked invariant change (deprecation, retirement, or scope reduction with Architect commit).
+A test change is **unjustified weakening** when its weakening metrics exceed configured
+thresholds in `.devai/config/thresholds.json` AND the weakening does not correspond to a
+tracked invariant change (deprecation, retirement, or scope reduction with Architect
+commit).
 
 Default thresholds: maximum 20% assertion-decrease ratio per file, absolute floor of one assertion, exempt when test-case count increases (split-not-weaken pattern). Clients may tighten or loosen thresholds per-aspect.
 

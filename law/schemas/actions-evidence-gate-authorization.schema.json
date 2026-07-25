@@ -5,13 +5,7 @@
   "description": "Canonical Architect authorization for ADR-005 Actions evidence promotion. The gate resolver reads this closed record only from the candidate merge's actual base parent; missing, malformed, revoked, or unresolved records select full execution.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "kind",
-    "status",
-    "decisionId",
-    "authorizedAt"
-  ],
+  "required": ["schemaVersion", "kind", "status", "decisionId", "authorizedAt"],
   "properties": {
     "schemaVersion": {
       "const": 1,
@@ -22,10 +16,7 @@
       "description": "Closed discriminator for the ADR-005 gate authorization record."
     },
     "status": {
-      "enum": [
-        "active",
-        "revoked"
-      ],
+      "enum": ["active", "revoked"],
       "description": "Active permits evaluation after every other gate condition passes; revoked selects full execution."
     },
     "decisionId": {

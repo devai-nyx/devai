@@ -1,1040 +1,131 @@
 {
   "schemaVersion": "1.0.0",
-  "version": "0.19.0",
+  "version": "1.0.0",
+  "meta": {
+    "completeness": {
+      "min_invariants_with_tests_ratio": 1,
+      "min_must_invariants_with_tests_ratio": 1,
+      "require_doc_links": false,
+      "require_test_links": true
+    },
+    "provenance": [
+      "R-0002 deterministic regeneration from canonical law/invariants and explicit test markers"
+    ]
+  },
   "invariants": [
     {
-      "id": "INV-DEVAI-001",
-      "tests": [
-        {
-          "suite": "int",
-          "path": "packages/cli/test/cli.integration.test.ts",
-          "names": [
-            "devai catalog actions",
-            "devai doctor"
-          ],
-          "assertions": [
-            "Phase-1 commands register and appear in actions list",
-            "doctor passes on the DEVAI repo (schemas loadable, F1 paths present, evidence chain valid)"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/spec.integration.test.ts",
-          "names": [
-            "devai spec validate all against this repo"
-          ],
-          "assertions": [
-            "F1 specs validate against DEVAI's own invariant + trace (Phase-2 self-application)"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/cli/test/docs-work-boundary.contract.test.ts",
-          "names": [
-            "docs/work scratch-only boundary"
-          ],
-          "assertions": [
-            "docs/work remains untracked, unlinked from durable Markdown, and absent from fixed production dependencies"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/inv.integration.test.ts",
-          "names": [
-            "devai inventory regen against the DEVAI repo",
-            "devai inventory regen byte-identical across runs"
-          ],
-          "assertions": [
-            "F4 inventory regenerates against this repo and validates against inventory.schema.json (Phase-3 self-application)",
-            "Two consecutive regen invocations produce byte-identical output (determinism criterion)"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/core/test/chain.test.ts",
-          "names": [
-            "computeManifestHash",
-            "verifyChain"
-          ],
-          "assertions": [
-            "DEVAI's own evidence chain semantics are exercised by unit tests"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/core/test/authority-seam.test.ts",
-          "names": [
-            "authority decision seam > declares exactly the five human roles and rejects machine actors",
-            "authority decision seam > keeps CI/post-merge-capable machine identities non-caller-declarable",
-            "authority decision seam > scrubs spoofed effect, mode, policy, machine context, and progress from raw requests",
-            "authority decision seam > passes a verified read through and keeps read and dry-run decisions readiness-ineligible",
-            "authority decision seam > refuses malformed paths, duplicate targets, and consent violations even in shadow",
-            "authority decision seam > records shadow denials but proceeds and never promotes readiness",
-            "authority decision seam > refuses a missing runtime even when the envelope is configured for shadow",
-            "authority decision seam > refuses the same runtime/policy failures in binding mode",
-            "authority decision seam > makes only a verified binding allow for a real mutation authority-readiness eligible",
-            "authority decision seam > refuses boundary preparation when targets change under the same plan and decision IDs",
-            "authority decision seam > authorizes selectors for observation but never prepares without an exact batch",
-            "authority decision seam > refuses out-of-envelope dynamic batches before policy and reports trusted recovery state",
-            "authority decision seam > rejects unsafe integer bounds and empty selector operation sets",
-            "authority decision seam > rejects replayed batches and unsafe or incoherent trusted progress"
-          ],
-          "assertions": [
-            "Only the five human roles are caller-declarable; machine principals remain trusted-transition identities",
-            "Raw requests cannot select effect, enforcement mode, policy, machine context, or dynamic progress; the trusted runtime materializes and digest-attests the envelope",
-            "Exact plans are whole-plan atomic; bounded batches are exact per batch, selector- and safe-bound-constrained, and preserve trusted partial/recovery evidence",
-            "Shadow evaluates real targets without readiness promotion while binding refuses denials; malformed work, read, dry-run, and unverified envelopes never reach mutation prepare",
-            "Decision and opaque preparation capabilities bind the full subject, authority context, resolved policy, adapter identity, and decision digest so same-ID target swaps and structurally forged apply inputs are refused before side effects"
-          ]
-        },
-        {
-          "suite": "e2e",
-          "path": "packages/cli/test/journey-adoption.e2e.test.ts",
-          "names": [
-            "JNY-001 \u2014 Adopt DEVAI in a fresh client repo (e2e) > init --introspect --write creates scaffold, copies law-pack, validates clean, builds RTM-0001",
-            "JNY-001 \u2014 Adopt DEVAI in a fresh client repo (e2e) > init --write (second invocation, no --force) is deny-by-default"
-          ],
-          "assertions": [
-            "Full JNY-001 adoption flow exercises init --introspect --write, law-pack copy, spec validate-invariants, rtd bundle on a fresh temp tree (Phase 16.H e2e self-application)",
-            "Deny-by-default behavior of repeated init --write without --force is pinned"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/cli-help.smoke.test.ts",
-          "names": [
-            "CLI binary smoke > --help succeeds and prints a non-empty list of commands",
-            "CLI binary smoke > --version prints a version string containing semver",
-            "CLI binary smoke > actions list produces a non-empty JSON array",
-            "CLI binary smoke > skill list produces 16 skill manifests",
-            "CLI binary smoke > an unknown command exits cleanly without crashing"
-          ],
-          "assertions": [
-            "Post-build CLI binary answers --help / --version / actions list / skill list in <1s each (Phase 16.H smoke self-application)"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/action-coverage.contract.test.ts",
-          "names": [
-            "Catalog contracts > every action has a non-empty description",
-            "Catalog contracts > every action carries an authority tag (Phase 11.G)",
-            "Catalog contracts > every action is claimed by at least one invariant.measurable_via",
-            "Catalog contracts > docs/cli/ is byte-identical to what docs cli would regenerate",
-            "Catalog contracts > every documented internal cross-reference resolves",
-            "Skill manifest contracts > every skill manifest validates against skill-manifest.schema.json",
-            "Skill manifest contracts > every skill has agent_class + permission_tier declared (Phase 10.G)",
-            "Skill manifest contracts > prompt-overlay firewall passes against the current skill catalog"
-          ],
-          "assertions": [
-            "Schema-vs-implementation drift is bounded: descriptions, authority tags, invariant coverage, docs/cli byte-identity, cross-refs, skill manifest shape, agent_class + permission_tier presence, and prompt-overlay firewall all hold against the live catalog (Phase 16.H contract self-application)"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/inv-suggest.integration.test.ts",
-          "names": [
-            "devai inventory suggest --from-inventory (Phase 17.E)"
-          ],
-          "assertions": [
-            "inv suggest action registers and is claimed by INV-DEVAI-001.measurable_via",
-            "Persisted INV-CANDIDATE-<ulid>.json records validate against inv-candidate.schema.json",
-            "4 candidate categories fire on a brownfield fixture: unmapped_route, unmapped_endpoint, unlabeled_pii_column, forbidden_edge"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/docs-synthesize.integration.test.ts",
-          "names": [
-            "devai docs synthesize <kind> (Phase 17.F.1)"
-          ],
-          "assertions": [
-            "docs synthesize action registers and is claimed by INV-DEVAI-001.measurable_via",
-            "Unknown kind \u2192 EXIT_USAGE",
-            "Missing inventory \u2192 status=fail with explicit note",
-            "Mock-LLM happy path: skill invokes, writes docs/Overview.md, emits evidence + agent-run record",
-            "All 12 writer kinds (Phase 17.F.2) resolve to a registered SKILL-write-* skill",
-            "Spot-check kinds (architecture-guide, database-reference, erd, rbac-matrix) share the missing-inventory failure surface \u2014 proving the runWriterSkill helper is wired uniformly"
-          ]
-        },
-        {
-          "suite": "e2e",
-          "path": "packages/cli/test/journey-brownfield-adoption.e2e.test.ts",
-          "names": [
-            "JNY-brownfield \u2014 full adoption chain (Phase 17.J e2e)"
-          ],
-          "assertions": [
-            "Full chain init \u2192 7 inventory sensors \u2192 inv suggest runs cleanly on a brownfield-shaped temp-dir fixture",
-            "Each sensor emits a body file at the expected path under .devai/state/sensors/",
-            "inv suggest emits \u22651 candidate per active category (unmapped_route, unmapped_endpoint, unlabeled_pii_column, forbidden_edge) with zero unread_inputs",
-            "Every persisted INV-CANDIDATE validates against inv-candidate.schema.json"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/inventory-cli.smoke.test.ts",
-          "names": [
-            "Phase 17 inventory CLI smoke"
-          ],
-          "assertions": [
-            "All 7 inventory sense verbs (api, routes, data-model, data-handling, rbac, dep-graph, coverage) appear in `devai catalog actions`",
-            "inv suggest + docs synthesize verbs appear in the catalog",
-            "All 7 inventory sense verbs are tagged authority=sensor"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/cli/test/r28-campaign-evidence.test.mjs",
-          "names": [
-            "writer candidate emits one exact-subject document"
-          ],
-          "assertions": [
-            "Exactly one registered writer output exists in each isolated candidate",
-            "The emitted document is non-empty report-only evidence for the exact-subject self-application task"
-          ]
-        }
-      ],
-      "code_areas": [
-        ".devai/**",
-        "packages/**",
-        ".github/workflows/**",
-        "vitest*.config.ts",
-        "tsconfig*.json",
-        "package.json",
-        "pnpm-workspace.yaml"
-      ]
-    },
-    {
       "id": "INV-AUTH-001",
-      "docs": [
-        {
-          "doc": "docs/meta/adr/ADR-003-runtime-authority-enforcement.md",
-          "anchor": "2-human-declarations-and-sessions"
-        }
-      ],
       "tests": [
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-runtime-api.red.test.ts",
-          "names": [
-            "R19 frozen authority runtime API > accepts direct CLI human declaration without a synthetic session ID",
-            "R19 frozen authority runtime API > requires the real session ID on persisted-session declaration"
-          ],
-          "assertions": [
-            "The frozen runtime accepts direct-cli provenance without inventing a session ID and requires a real ID for session-state provenance"
-          ]
+          "path": "packages/authority/tests/unit/authority-declaration-context.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-declaration-context.red.test.ts",
-          "names": [
-            "R19 authority declaration resolution",
-            "R19 trusted machine-context derivation"
-          ],
-          "assertions": [
-            "Reads reject inapplicable declarations, mutations require exactly one explicit flag or valid session, and ambient role/session variables never authorize",
-            "Derived machine context preserves the actual allowed initiator, origin, consent, invocation and binding while clones, replays and substitutions refuse"
-          ]
+          "path": "packages/authority/tests/unit/authority-policy-runtime.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-policy-runtime.red.test.ts",
-          "names": [
-            "R19 policy materialization authorization and purity"
-          ],
-          "assertions": [
-            "Policy materialization requires an Architect initiation and exact write consent before deriving the bounded upgrade machine authority"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/core/test/authority-required-cases.red.test.ts",
-          "names": [
-            "R19 resolver total-order and selector matrix",
-            "R19 issuer complete-set, batch, and receipt matrix"
-          ],
-          "assertions": [
-            "Context receipts are exact, non-clonable, non-replayable and invocation/action/repository/policy/consent bound"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/authority-action-registry.red.contract.test.ts",
-          "names": [
-            "R19 fail-closed action authority registry"
-          ],
-          "assertions": [
-            "Every action declares its exact authority subject and an unknown action cannot inherit read posture"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/authority-cli-materialization.red.integration.test.ts",
-          "names": [
-            "R19 authority-policy materialization CLI boundary"
-          ],
-          "assertions": [
-            "Upgrade mutation refuses missing/wrong role, missing consent and caller-forged machine identity before side effects"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/authority-cli-router.red.integration.test.ts",
-          "names": [
-            "R19 CLI authority declaration and dispatch boundary",
-            "R19 CLI-to-runtime authority handoff"
-          ],
-          "assertions": [
-            "The CLI enforces the complete flag/session role matrix before handlers or LLM invocation and preserves exact direct/session provenance",
-            "Only runtime-issued handoff receipts may reach final dispatch; replay, clone, lost consent and binding substitution produce zero effects"
-          ]
-        },
-        {
-          "suite": "e2e",
-          "path": "packages/cli/test/authority-cli.red.e2e.test.ts",
-          "names": [
-            "R19 supported CLI authority end-to-end"
-          ],
-          "assertions": [
-            "The built CLI demonstrates explicit declaration, denial, ambient-state refusal, read-role refusal and non-mutating Architect dry-run behavior"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/core/test/authority-direct-mutator.red.contract.test.ts",
-          "names": [
-            "R19 authoritative direct-mutator before inventory"
-          ],
-          "assertions": [
-            "Every current raw mutator has explicit action ownership and the future binding guard rejects an unowned call site"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/r21-w09-readiness-authority.integration.test.ts",
-          "names": [
-            "R21 W09 read-action authority containment"
-          ],
-          "assertions": [
-            "Supported read composites may execute only bounded read children and cannot use legacy regeneration flags to bypass the authority boundary"
-          ]
+          "path": "packages/authority/tests/unit/authority-required-cases.red.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/core/src/authority/**",
-        "packages/cli/src/command-router.ts",
-        "packages/cli/src/commands/work/**"
       ]
     },
     {
       "id": "INV-AUTH-002",
-      "docs": [
-        {
-          "doc": "docs/meta/adr/ADR-003-runtime-authority-enforcement.md",
-          "anchor": "5-deterministic-precedence"
-        }
-      ],
       "tests": [
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-policy-runtime.red.test.ts",
-          "names": [
-            "R19 authority policy loading",
-            "R19 policy materialization authorization and purity",
-            "R19 single-query policy resolution"
-          ],
-          "assertions": [
-            "Policy load recomputes immutable source, additive extension and resolved bindings and rejects source, digest, version, staleness and weakening defects in frozen order",
-            "Pure materialization emits exactly one canonical policy artifact and resolution binds one exact action/context/operation/resource/consent query",
-            "Protected Inspector test rules outrank broad package-source rules"
-          ]
+          "path": "packages/authority/tests/unit/authority-final-boundary.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-required-cases.red.test.ts",
-          "names": [
-            "R19 strict SemVer policy classifier matrix",
-            "R19 materialization total precedence inventory",
-            "R19 resolver total-order and selector matrix"
-          ],
-          "assertions": [
-            "Strict SemVer, materialization, selector and resolver precedence are total and deterministic",
-            "Unknown, ambiguous, denied, operation-mismatched and consent-deficient queries fail closed"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/authority-cli-materialization.red.integration.test.ts",
-          "names": [
-            "R19 authority-policy materialization CLI boundary"
-          ],
-          "assertions": [
-            "CLI policy materialization exposes one repository-bound canonical F5 artifact and refuses divergent policy replacement before mutation"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/core/test/authority-direct-mutator.red.contract.test.ts",
-          "names": [
-            "R19 authoritative direct-mutator before inventory"
-          ],
-          "assertions": [
-            "The complete AST mutator denominator is exact, non-wildcard and bound to resource/action ownership"
-          ]
+          "path": "packages/authority/tests/unit/authority-policy-runtime.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-final-boundary.red.test.ts",
-          "names": [
-            "R19 private planner and batch registry"
-          ],
-          "assertions": [
-            "Exact plans and bounded batches bind the policy subject, target set, planner membership, order, cumulative bounds and recovery before effects"
-          ]
+          "path": "packages/authority/tests/unit/authority-required-cases.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-resource-boundaries.red.test.ts",
-          "names": [
-            "R19 filesystem resource classification",
-            "R19 Git-ref resource classification",
-            "R19 database resource classification",
-            "R19 remote resource classification"
-          ],
-          "assertions": [
-            "Filesystem, Git-ref, database and remote resources use exact kind-correlated semantic identities and refuse traversal, credentials, payloads and unauthorized operations"
-          ]
+          "path": "packages/authority/tests/unit/authority-resource-boundaries.red.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/authority/tests/unit/proof-path-domain.red.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "docs/framework/schemas/authority-policy.schema.json",
-        "packages/core/src/authority/**",
-        ".devai/config/authority-policy.json"
       ]
     },
     {
       "id": "INV-AUTH-003",
-      "docs": [
-        {
-          "doc": "docs/meta/adr/ADR-003-runtime-authority-enforcement.md",
-          "anchor": "10-evidence-contract-and-issuer-authenticity"
-        }
-      ],
       "tests": [
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-runtime-api.red.test.ts",
-          "names": [
-            "R19 frozen authority runtime API"
-          ],
-          "assertions": [
-            "The internal composition module exposes exactly the frozen authority APIs while package and authority roots expose none of them"
-          ]
+          "path": "packages/authority/tests/unit/authority-decision-issuer.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-policy-runtime.red.test.ts",
-          "names": [
-            "R19 single-query policy resolution"
-          ],
-          "assertions": [
-            "Only privately tracked resolver results can become issuer input and valid allow outcomes are deeply frozen and query-bound"
-          ]
+          "path": "packages/authority/tests/unit/authority-evidence-validator.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-decision-issuer.red.test.ts",
-          "names": [
-            "R19 authority decision issuer construction and lifecycle"
-          ],
-          "assertions": [
-            "The sole issuer owns the opaque receipt store, exposes no caller-blessing API and invalidates all operations after disposal"
-          ]
+          "path": "packages/authority/tests/unit/authority-final-boundary.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-evidence-validator.red.test.ts",
-          "names": [
-            "R19 audit-only authority evidence"
-          ],
-          "assertions": [
-            "Authority evidence is current-binding, issuer-attributed, secret-safe audit-only data and cannot be reused as a declaration or mutation capability"
-          ]
+          "path": "packages/authority/tests/unit/authority-policy-runtime.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-required-cases.red.test.ts",
-          "names": [
-            "R19 issuer complete-set, batch, and receipt matrix",
-            "R19 evidence total-order matrix"
-          ],
-          "assertions": [
-            "Only a complete unique same-policy exact-query allow set receives a bounded one-shot adapter receipt; clones, foreign issuers, expiry and replay refuse",
-            "Denials and evidence never carry capability material and evidence validation has a total binding/readiness order"
-          ]
+          "path": "packages/authority/tests/unit/authority-required-cases.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-final-boundary.red.test.ts",
-          "names": [
-            "R19 final boundary is load-bearing",
-            "R19 target-specific final adapters",
-            "R19 private planner and batch registry",
-            "R19 issuer disposal closes final-boundary authority"
-          ],
-          "assertions": [
-            "Final filesystem, Git-ref, database and remote adapters require a genuine exact adapter receipt and private planner membership immediately before effects",
-            "Structural values, direct router/handler/skill/library bypass, target races, replay, drift, cumulative overflow and stale recovery produce zero additional effects"
-          ]
+          "path": "packages/authority/tests/unit/authority-resource-boundaries.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-resource-boundaries.red.test.ts",
-          "names": [
-            "R19 filesystem resource classification",
-            "R19 Git-ref resource classification",
-            "R19 database resource classification",
-            "R19 remote resource classification"
-          ],
-          "assertions": [
-            "Each mutation resource is classified into the exact final-adapter boundary without secret-bearing or widened targets"
-          ]
+          "path": "packages/authority/tests/unit/proof-path-domain.red.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/core/src/authority/**",
-        "packages/cli/src/**"
       ]
     },
     {
       "id": "INV-AUTH-004",
-      "docs": [
-        {
-          "doc": "docs/meta/adr/ADR-003-runtime-authority-enforcement.md",
-          "anchor": "9-action-contract-and-staged-cutover"
-        }
-      ],
       "tests": [
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-runtime-api.red.test.ts",
-          "names": [
-            "R19 frozen authority runtime API"
-          ],
-          "assertions": [
-            "Validated action and evidence views are complete while runtime APIs remain confined to the internal CLI composition subpath"
-          ]
+          "path": "packages/authority/tests/unit/authority-declaration-context.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-declaration-context.red.test.ts",
-          "names": [
-            "R19 authority declaration resolution"
-          ],
-          "assertions": [
-            "Read, mutation and mutation-dry-run behavior is derived from a fail-closed action contract rather than caller effect metadata"
-          ]
+          "path": "packages/authority/tests/unit/authority-evidence-validator.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-evidence-validator.red.test.ts",
-          "names": [
-            "R19 audit-only authority evidence"
-          ],
-          "assertions": [
-            "Read, dry-run, shadow, denial and binding mismatch evidence remains authority-ineligible and non-capable"
-          ]
+          "path": "packages/authority/tests/unit/authority-final-boundary.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/authority-required-cases.red.test.ts",
-          "names": [
-            "R19 evidence total-order matrix"
-          ],
-          "assertions": [
-            "Evidence provenance, issuer, bootstrap, initiator and readiness rules fail closed in a stable order"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/authority-action-registry.red.contract.test.ts",
-          "names": [
-            "R19 fail-closed action authority registry",
-            "R19 CLI authority composition boundary"
-          ],
-          "assertions": [
-            "Missing or unknown effect, subject, consent, planner, boundary or readiness metadata refuses registry construction and unknown actions never default to read",
-            "CLI composition creates one issuer/store first, injects that same opaque identity throughout and exposes no store manipulation"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/authority-cli-materialization.red.integration.test.ts",
-          "names": [
-            "R19 host-authority posture honesty",
-            "R19 internal init-record subtransition",
-            "R19 publication consent remains independent"
-          ],
-          "assertions": [
-            "CLI-only is explicit, unverified host-integrated posture cannot authorize, internal recording is non-routable and remote publication keeps independent consent"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/authority-cli-router.red.integration.test.ts",
-          "names": [
-            "R19 CLI authority declaration and dispatch boundary",
-            "R19 CLI authority result rendering",
-            "R19 CLI-to-runtime authority handoff"
-          ],
-          "assertions": [
-            "Declaration usage errors exit 2, valid refusals and dependency errors exit 1, and human/JSON output is concise and secret-safe",
-            "Read and dry-run readiness posture stays honest and malformed handoffs never reach side effects"
-          ]
-        },
-        {
-          "suite": "e2e",
-          "path": "packages/cli/test/authority-cli.red.e2e.test.ts",
-          "names": [
-            "R19 supported CLI authority end-to-end"
-          ],
-          "assertions": [
-            "The built supported CLI pins exact exit/output behavior and proves denied or dry-run requests leave tracked state unchanged"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/core/test/authority-final-boundary.red.test.ts",
-          "names": [
-            "R19 final boundary is load-bearing"
-          ],
-          "assertions": [
-            "Router metadata alone is never a capability and no direct invocation path can bypass final re-verification"
-          ]
+          "path": "packages/authority/tests/unit/authority-required-cases.red.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "docs/framework/schemas/authority-action-contract.schema.json",
-        "docs/framework/schemas/authority-evidence.schema.json",
-        "packages/cli/src/**",
-        "packages/core/src/authority/**"
-      ]
-    },
-    {
-      "id": "INV-DEVAI-002",
-      "tests": [
-        {
-          "suite": "unit",
-          "path": "packages/sensors/test/sensor-reading.test.ts",
-          "names": [
-            "buildSensorReading > produces a record that validates against sensor-reading.schema.json",
-            "buildSensorReading > throws when a malformed reading would be produced",
-            "buildSensorReading > rejects a finding with an invalid line number"
-          ],
-          "assertions": [
-            "Every reading produced by buildSensorReading validates against sensor-reading.schema.json",
-            "Malformed kind or invalid finding fields make the builder throw rather than emit silently-bad data"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/sense.integration.test.ts",
-          "names": [
-            "devai sense type check",
-            "devai sense trace resolve",
-            "devai sense migrate check",
-            "devai sense test weakening",
-            "devai sense judge"
-          ],
-          "assertions": [
-            "Every CLI sense emit path produces a SensorReading that validates against the schema"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/inventory-dep-graph.integration.test.ts",
-          "names": [
-            "devai sense inventory dep graph (Phase 17.C1 \u2014 inventory_dep_graph sensor)"
-          ],
-          "assertions": [
-            "inventory_dep_graph SensorReading at tier L0 validates against sensor-reading.schema.json",
-            "Body file validates against dep-graph.schema.json",
-            "Deterministic: identical input produces identical SR id"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/inventory-api-routes.integration.test.ts",
-          "names": [
-            "devai sense inventory api (Phase 17.C2 \u2014 inventory_api, NestJS adapter)",
-            "devai sense inventory routes (Phase 17.C2 \u2014 inventory_routes, React adapter)"
-          ],
-          "assertions": [
-            "inventory_api SensorReading at tier L0 validates against sensor-reading.schema.json",
-            "inventory_api body validates against api-map.schema.json with 3 NestJS-fixture endpoints",
-            "AuthGuard @UseGuards is surfaced in auth.guards[]",
-            "inventory_routes SensorReading at tier L0 validates against sensor-reading.schema.json",
-            "inventory_routes body validates against routes-inventory.schema.json with framework=react",
-            "Both JSX <Route> and createBrowserRouter([...]) config forms discovered; nested children inherit parentId",
-            "Empty React repo surfaces status=review with ROUTES_INVENTORY_EMPTY finding"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/inventory-data-model-rbac-data-handling.integration.test.ts",
-          "names": [
-            "17.C3 inventory chain \u2014 data-model + rbac + data-handling"
-          ],
-          "assertions": [
-            "inventory_data_model parses CREATE TABLE blocks + FK constraints from inline SQL fixture",
-            "inventory_data_model body validates against data-model-inventory.schema.json",
-            "inventory_rbac infers roles + permissions + role-permission join from data-model",
-            "inventory_rbac body validates against rbac-inventory.schema.json",
-            "inventory_rbac surfaces status=review with RBAC_REQUIRES_DATA_MODEL when data-model body is missing",
-            "inventory_data_handling classifies PII columns via name heuristics (contact / credentials / identity / personal / ip)",
-            "inventory_data_handling body re-emits the data-model with pii_class set"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/inventory-coverage.integration.test.ts",
-          "names": [
-            "devai sense inventory coverage (Phase 17.C4 \u2014 inventory_coverage meta-sensor)"
-          ],
-          "assertions": [
-            "inventory_coverage SensorReading at tier L0 validates against sensor-reading.schema.json",
-            "body validates against coverage-matrix.schema.json",
-            "Assembles routes + endpoints from inventory_api + inventory_routes outputs",
-            "Inferred path-shape matches surfaced in metrics (not as use-case-anchored triads)",
-            "useCases[] + links[] empty in 17.C4 (use-case authoring deferred to 17.F)",
-            "Every route/endpoint marked unmapped (consumed by INV-INVENTORY-001 in 17.D)",
-            "Missing api-map body \u2192 status=review + COVERAGE_REQUIRES_API_MAP"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/cli/test/r28-campaign-evidence.test.mjs",
-          "names": [
-            "compiled test candidate captures the contract-validation task"
-          ],
-          "assertions": [
-            "The Inspector candidate contains a non-empty deterministic test plan for generic fail-closed contract validation"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/sensors/src/**",
-        "packages/cli/src/commands/sense/**"
-      ]
-    },
-    {
-      "id": "INV-DEVAI-003",
-      "tests": [
-        {
-          "suite": "unit",
-          "path": "packages/core/test/locks.test.ts",
-          "names": [
-            "acquireLocks (atomic) > denies a second acquirer when the first holds the lock",
-            "acquireLocks (atomic) > serial double-acquire by the same task is denied",
-            "acquireLocks (atomic) > reclaims an expired lock atomically"
-          ],
-          "assertions": [
-            "Two acquire calls on the same target produce exactly one acquired + one denied",
-            "The lock file is written via openSync('wx') + fsync so EEXIST is the deny path",
-            "Expired locks are reclaimable; non-expired locks are not"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/loop.integration.test.ts",
-          "names": [
-            "devai lock \u2014 atomic acquire/deny/release/reap > second lock acquire on same target denies (no overwrite)",
-            "devai lock \u2014 atomic acquire/deny/release/reap > release frees the lock for re-acquisition",
-            "devai lock \u2014 atomic acquire/deny/release/reap > reap removes expired locks"
-          ],
-          "assertions": [
-            "CLI lock acquire / release / reap honor the underlying mutual exclusion"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/core/src/loop/locks.ts",
-        "packages/cli/src/commands/loop/**"
-      ]
-    },
-    {
-      "id": "INV-DEVAI-004",
-      "tests": [
-        {
-          "suite": "int",
-          "path": "packages/cli/test/loop.integration.test.ts",
-          "names": [
-            "devai task \u2014 lifecycle state machine > task spawn --with-worktree composes locks + worktree",
-            "devai task \u2014 lifecycle state machine > task spawn --with-db without --database-url errors with EXIT_USAGE",
-            "devai task \u2014 lifecycle state machine > task complete --destroy-worktree cleans up the worktree"
-          ],
-          "assertions": [
-            "task spawn --with-worktree leaves the worktree on disk and the task at status:in_progress",
-            "task spawn --with-db requires --database-url; refusal does not partially initialize",
-            "task complete --destroy-worktree removes the worktree and releases the locks"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/core/src/loop/tasks.ts",
-        "packages/core/src/loop/worktrees.ts",
-        "packages/core/src/loop/db.ts",
-        "packages/cli/src/commands/loop/**"
-      ]
-    },
-    {
-      "id": "INV-DEVAI-005",
-      "tests": [
-        {
-          "suite": "int",
-          "path": "packages/cli/test/loop.integration.test.ts",
-          "names": [
-            "devai task \u2014 lifecycle state machine > task spawn writes a schema-conformant task record",
-            "devai task \u2014 lifecycle state machine > task pause-rgr / resume-rgr round-trip persists across CLI calls",
-            "devai task \u2014 lifecycle state machine > task list returns persisted records sorted by id"
-          ],
-          "assertions": [
-            "Each task transition writes a complete, schema-valid task.json snapshot",
-            "pause-rgr / resume-rgr is observable across separate CLI invocations via persisted tags",
-            "task list returns the persisted state in stable sorted order"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/core/src/loop/tasks.ts",
-        "packages/cli/src/commands/loop/**"
-      ]
-    },
-    {
-      "id": "INV-DEVAI-006",
-      "tests": [
-        {
-          "suite": "int",
-          "path": "packages/cli/test/phase6.integration.test.ts",
-          "names": [
-            "devai govern score compute / assess > compute from empty readings file produces a schema-valid scorecard",
-            "devai govern score compute / assess > compute --readings-dir folds per-sensor files into one scorecard",
-            "devai govern score compute / assess > score assess on a scorecard emits a schema-valid assessment"
-          ],
-          "assertions": [
-            "Compute produces a schema-valid Scorecard with 45 cells and a deterministic SC-YYYYMMDDThhmmss-NNN id",
-            "Per-sensor readings collapse into the right cells (F2\u00d7T5 from lint, F2\u00d7T8 from type_check)",
-            "Assess produces a schema-valid Assessment with a green/yellow/red narrative"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/core/src/loop/scorecard.ts",
-        "packages/cli/src/commands/phase6/**"
-      ]
-    },
-    {
-      "id": "INV-DEVAI-007",
-      "tests": [
-        {
-          "suite": "int",
-          "path": "packages/cli/test/phase6.integration.test.ts",
-          "names": [
-            "devai govern triage classify > classifies a failing reading as plant_bug and validates against schema",
-            "devai govern triage classify > emits no schema-drift warning (validateOrExit is silent on success)",
-            "devai govern triage tie break > picks the higher-confidence verdict and marks tie_breaker_invoked"
-          ],
-          "assertions": [
-            "classifyFailure returns a TriageVerdict that validates against triage.schema.json",
-            "Verdict id and classification are reproducible across runs for the same reading",
-            "tie-break sets tie_breaker_invoked and records the loser's evidence ref"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/core/src/loop/triage.ts",
-        "packages/cli/src/commands/phase6/**"
-      ]
-    },
-    {
-      "id": "INV-DEVAI-008",
-      "tests": [
-        {
-          "suite": "int",
-          "path": "packages/cli/test/phase6.integration.test.ts",
-          "names": [
-            "devai agent prompt compose / diff / freeze > compose without --task-id errors with EXIT_USAGE",
-            "devai agent prompt compose / diff / freeze > compose emits a schema-valid PromptComposition that is deterministic",
-            "devai agent prompt compose / diff / freeze > freeze sets frozen_against to self id (schema-valid)"
-          ],
-          "assertions": [
-            "task_id is required (per prompt-composition.schema.json)",
-            "Same components + same order \u2192 identical id and stack_sha256 regardless of timestamp",
-            "freeze sets frozen_against to the composition's own id and drift_from_frozen:false"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/core/src/loop/prompts.ts",
-        "packages/cli/src/commands/phase6/**"
-      ]
-    },
-    {
-      "id": "INV-DEVAI-009",
-      "tests": [
-        {
-          "suite": "unit",
-          "path": "packages/core/test/bootstrap.test.ts",
-          "names": [
-            "executeBootstrapPlan --force preserves provenance > preserves a populated evidence chain even with --force",
-            "executeBootstrapPlan --force preserves provenance > preserves populated counters even with --force",
-            "executeBootstrapPlan --force preserves provenance > does NOT preserve unrelated existing files when --force"
-          ],
-          "assertions": [
-            "A populated evidence-chain.json is preserved under --force",
-            "A populated counters.json is preserved under --force",
-            "Unrelated existing files (docs/*/README.md) are still overwritable by --force"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/init.integration.test.ts",
-          "names": [
-            "devai init > init --write --force on a populated chain preserves provenance (Article 32)",
-            "devai init > init --write (without --force) is deny-by-default on existing files"
-          ],
-          "assertions": [
-            "CLI surfaces the preserved list separately from overwritten",
-            "Second init without --force makes no changes on disk"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/cli/test/r28-campaign-evidence.test.mjs",
-          "names": [
-            "elicit candidate records the adopter-bootstrap task"
-          ],
-          "assertions": [
-            "The Owner-authorized elicitation emits a structured task-bound invariant candidate without overwriting accepted specifications"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/core/src/bootstrap/**",
-        "packages/cli/src/commands/init/**"
-      ]
-    },
-    {
-      "id": "INV-DEVAI-010",
-      "tests": [
-        {
-          "suite": "int",
-          "path": "packages/cli/test/skill.integration.test.ts",
-          "names": [
-            "devai agent skill run \u2014 deterministic skills > SKILL-assess-state runs end-to-end with empty readings dir; emits evidence",
-            "devai agent skill run \u2014 deterministic skills > SKILL-assess-state composes a scorecard from sensor-readings dir",
-            "devai agent skill run \u2014 deterministic skills > SKILL-mutation-test (Phase-8 stub) returns status:skipped with notes"
-          ],
-          "assertions": [
-            "Pass-status skill runs persist evidence at .devai/state/skills/<id>/<ts>.json",
-            "The persisted evidence is a schema-valid contract instance (Assessment for SKILL-assess-state)",
-            "status:skipped runs are exempt from persistence (notes-only)"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/core/src/skills/**",
-        "packages/cli/src/commands/skill/**"
-      ]
-    },
-    {
-      "id": "INV-INVENTORY-001",
-      "tests": [
-        {
-          "suite": "int",
-          "path": "packages/cli/test/inventory-coverage.integration.test.ts",
-          "names": [
-            "devai sense inventory coverage (Phase 17.C4 \u2014 inventory_coverage meta-sensor)"
-          ],
-          "assertions": [
-            "coverage-matrix body validates against coverage-matrix.schema.json",
-            "Empty links + non-empty routes/endpoints produces non-empty unmapped sets \u2014 the gate condition this invariant fires on",
-            "Use-case authoring (manual or via 17.F skills) closes the unmapped gap"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/sensors/src/inventory-coverage.ts",
-        "packages/sensors/src/inventory-api.ts",
-        "packages/sensors/src/inventory-routes.ts",
-        "packages/cli/src/commands/sense/inventory-coverage.ts"
-      ]
-    },
-    {
-      "id": "INV-INVENTORY-002",
-      "tests": [
-        {
-          "suite": "int",
-          "path": "packages/cli/test/inventory-data-model-rbac-data-handling.integration.test.ts",
-          "names": [
-            "17.C3 inventory chain \u2014 data-model + rbac + data-handling > devai sense inventory data handling (Phase 17.C3 \u2014 inventory_data_handling)"
-          ],
-          "assertions": [
-            "inventory_data_handling classifies columns into PII categories and surfaces unlabeled_pii_column_count metric",
-            "data-model-inventory.schema.json carries legal_basis and retention slots per column",
-            "Architect curation (or stack-adapter pack) populates legal_basis + retention; this invariant hard-fails any pii_class column missing either field"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/sensors/src/inventory-data-handling.ts",
-        "packages/sensors/src/inventory-data-model.ts",
-        "packages/cli/src/commands/sense/inventory-data-handling.ts",
-        "packages/cli/src/commands/sense/inventory-data-model.ts"
-      ]
-    },
-    {
-      "id": "INV-INVENTORY-003",
-      "tests": [
-        {
-          "suite": "int",
-          "path": "packages/cli/test/inventory-data-model-rbac-data-handling.integration.test.ts",
-          "names": [
-            "17.C3 inventory chain \u2014 data-model + rbac + data-handling > devai sense inventory rbac (Phase 17.C3 \u2014 inventory_rbac)"
-          ],
-          "assertions": [
-            "inventory_rbac identifies role + permission + RBAC join tables from the data-model",
-            "rbac-inventory.bindings.endpointBindings[] is the structured anchor that this invariant scans for endpoint coverage",
-            "Future decorator-aware extraction populates endpointBindings; until then, gating defers to explicit per-endpoint auth.required=false declarations"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/sensors/src/inventory-api.ts",
-        "packages/sensors/src/inventory-rbac.ts",
-        "packages/cli/src/commands/sense/inventory-api.ts",
-        "packages/cli/src/commands/sense/inventory-rbac.ts"
-      ]
-    },
-    {
-      "id": "INV-INVENTORY-004",
-      "tests": [
-        {
-          "suite": "int",
-          "path": "packages/cli/test/inventory-dep-graph.integration.test.ts",
-          "names": [
-            "devai sense inventory dep graph (Phase 17.C1 \u2014 inventory_dep_graph sensor)"
-          ],
-          "assertions": [
-            "dep-graph body validates against dep-graph.schema.json",
-            "Adjacency-list shape exposes cross-package internal-subpath traversals as discoverable graph edges",
-            "Cross-package internal-subpath imports are forbidden and surface as gate-fail when this invariant is enforced"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/sensors/src/inventory-dep-graph.ts",
-        "packages/cli/src/commands/sense/inventory-dep-graph.ts"
       ]
     },
     {
@@ -1042,155 +133,624 @@
       "tests": [
         {
           "suite": "int",
-          "path": "packages/cli/test/blueprint-validate.integration.test.ts",
-          "names": [
-            "devai spec blueprint validate (Phase 18.E)"
-          ],
-          "assertions": [
-            "module-blueprint missing database.entities[] \u2192 status=fail with INV-BLUEPRINT-001 reason",
-            "entity missing primaryKey \u2192 status=fail with INV-BLUEPRINT-001 reason",
-            "well-formed minimal blueprint with 1 entity and PK passes"
-          ]
+          "path": "packages/schemas/tests/contract/product.contract.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/core/src/blueprint/index.ts",
-        "packages/cli/src/commands/blueprint/validate.ts"
       ]
     },
     {
       "id": "INV-BLUEPRINT-002",
       "tests": [
         {
-          "suite": "int",
-          "path": "packages/cli/test/blueprint-validate.integration.test.ts",
-          "names": [
-            "devai spec blueprint validate (Phase 18.E)"
-          ],
-          "assertions": [
-            "field with pii=low and retention=default \u2192 status=fail with INV-BLUEPRINT-002 reason",
-            "field with pii=high and retention=default \u2192 status=fail with INV-BLUEPRINT-002 reason",
-            "field with pii=low and retention=1y passes",
-            "field with pii=none and retention=default passes (the discipline applies only to PII fields)"
-          ]
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/domains-loader.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/core/src/blueprint/index.ts",
-        "packages/cli/src/commands/blueprint/validate.ts"
       ]
     },
     {
       "id": "INV-BLUEPRINT-003",
       "tests": [
         {
-          "suite": "int",
-          "path": "packages/cli/test/blueprint-validate.integration.test.ts",
-          "names": [
-            "devai spec blueprint validate (Phase 18.E)"
-          ],
-          "assertions": [
-            "operation declared but no permission grants it \u2192 status=fail with INV-BLUEPRINT-003 reason",
-            "operation granted by 'manage' alias passes",
-            "operation granted by '*' wildcard passes"
-          ]
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/domains-loader.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/core/src/blueprint/index.ts",
-        "packages/cli/src/commands/blueprint/validate.ts"
       ]
     },
     {
-      "id": "INV-SCAFFOLD-001",
+      "id": "INV-DEVAI-001",
       "tests": [
         {
           "suite": "unit",
-          "path": "packages/core/test/templates.test.ts",
-          "names": [
-            "renderTemplate (Phase 18.C \u2014 substrate for INV-SCAFFOLD-001 header emission)"
-          ],
-          "assertions": [
-            "renderTemplate emits a deterministic sha256 for byte-identity tracking",
-            "Different inputs (different blueprint contents) produce different sha256 \u2014 the change-detection primitive INV-SCAFFOLD-001 audits against"
-          ]
+          "path": "packages/authority/tests/unit/authority-seam.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/cli/tests/contract/action-coverage.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/cli/tests/contract/no-exit-after-emit.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/cli/tests/contract/successor-operational-law.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/forbidden-actions-help.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/version.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/evidence/tests/contract/phase-closure.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/chain.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/git-context.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/id-generator.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/phase-closure-successor.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/redact.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/adherence-reverse.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/freshness-policy-fail-closed.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/adr.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/backlog-current-disposition.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/constitution.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/genesis-attestation-binding.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/governed-populations.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/register.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/repository-reference-triage.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/roster.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/trace-materialization.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/docs-drift-fail-closed.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/trace-resolve.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/package-manager-prewarm.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/required-workflow-gates.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-api-surface.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-cycle-gate.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-facade-gate.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-fingerprint-behavior.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-ledger-corpus.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-manifest-corpus.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-prompt-inventory.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-rendered-prompts.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-round-corpus.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/cli-client.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/constitution.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/firewall-overlaps.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/forbidden-actions.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/governance-skills.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/introspect.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/llm-timeout-resolver.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/llm-timeout-wrapper.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/llm.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/spec/tests/contract/r29-currentness-behavior.red.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/adr.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/domains-loader.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/pr-compliance.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/test-trace-validator.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/trace-validator.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/xref-resolver.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/utils/tests/unit/canonical-json.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/utils/tests/unit/exit.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/utils/tests/unit/logger.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/utils/tests/unit/redact.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/utils/tests/unit/templates.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "e2e",
+          "path": "tests/e2e/bare-domain-help.e2e.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "e2e",
+          "path": "tests/e2e/built-cli-guard.e2e.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "e2e",
+          "path": "tests/e2e/cli-help.smoke.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "e2e",
+          "path": "tests/e2e/usage-exit-codes.e2e.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "tests/integration/rtd-manifest.integration.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "tests/integration/sensor-descriptor-cli-parity.integration.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "perf",
+          "path": "tests/regression/evidence-chain-100-event.regression.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "perf",
+          "path": "tests/regression/xref-resolver-performance.regression.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/core/src/templates/index.ts"
+      ]
+    },
+    {
+      "id": "INV-DEVAI-002",
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/sensor-integrity.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/runtime-probe.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/sensor-reading.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/test-coherence.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/test-weakening-config.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/pack-resolver-sensor-params.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/spec/tests/contract/r29-currentness-behavior.red.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "e2e",
+          "path": "tests/e2e/inventory-sensors.smoke.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "tests/integration/runtime-probe-data.integration.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "tests/integration/sensor-descriptor-cli-parity.integration.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "tests/integration/sensor-standing.integration.test.ts",
+          "target_type": "test"
+        }
+      ]
+    },
+    {
+      "id": "INV-DEVAI-003",
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/backlog-tasks.test.ts",
+          "target_type": "test"
+        }
+      ]
+    },
+    {
+      "id": "INV-DEVAI-004",
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/backlog-tasks.test.ts",
+          "target_type": "test"
+        }
+      ]
+    },
+    {
+      "id": "INV-DEVAI-005",
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/backlog-tasks.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/round-utilities.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/round-verdict.test.ts",
+          "target_type": "test"
+        }
+      ]
+    },
+    {
+      "id": "INV-DEVAI-006",
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/scorecard-assess-narrative.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/scorecard-na-override.test.ts",
+          "target_type": "test"
+        }
+      ]
+    },
+    {
+      "id": "INV-DEVAI-007",
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/sensor-integrity.test.ts",
+          "target_type": "test"
+        }
+      ]
+    },
+    {
+      "id": "INV-DEVAI-008",
+      "tests": [
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/package-manager-prewarm.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/required-workflow-gates.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-fingerprint-behavior.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-prompt-inventory.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-rendered-prompts.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/prompt-firewall.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/spec/tests/contract/r29-currentness-behavior.red.test.ts",
+          "target_type": "test"
+        }
+      ]
+    },
+    {
+      "id": "INV-DEVAI-009",
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/bootstrap.test.ts",
+          "target_type": "test"
+        }
+      ]
+    },
+    {
+      "id": "INV-DEVAI-010",
+      "tests": [
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-fingerprint-behavior.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-ledger-corpus.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-manifest-corpus.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-round-corpus.test.ts",
+          "target_type": "test"
+        }
       ]
     },
     {
       "id": "INV-DEVAI-011",
       "tests": [
         {
-          "suite": "int",
-          "path": "packages/cli/test/sense-inventory-performance-29f.integration.test.ts",
-          "names": [
-            "senseInventoryPerformance threshold transitions"
-          ],
-          "assertions": [
-            "PASS verdict at overall_p95_ms < 2000 (Phase 29.F threshold)",
-            "REVIEW at 2000-5000, FAIL at \u22655000 \u2014 bounded scorecard computation"
-          ]
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/scorecard-assess-narrative.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/core/src/scorecard/inputs.ts",
-        "packages/core/src/loop/scorecard.ts"
       ]
     },
     {
       "id": "INV-DEVAI-012",
       "tests": [
         {
-          "suite": "int",
-          "path": "packages/cli/test/sense-spec-idiomaticity-29b.integration.test.ts",
-          "names": [
-            "domains fallback returns status=unknown when neither candidate exists"
-          ],
-          "assertions": [
-            "Per Phase 29.B: sense-spec-idiomaticity emits status='unknown' with DOMAINS_FILE_NOT_FOUND, never ENOENT-throws.",
-            "Per Phase 30 lane D: sense-inventory-adherence emits status='unknown' with INVENTORY_ADHERENCE_INPUT_MISSING, never ENOENT-throws.",
-            "Per Phase 26.K: sense-harness-green-main emits status='unknown' with HARNESS_GREEN_MAIN_GH_UNAVAILABLE when gh is absent."
-          ]
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/sensor-integrity.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/cli/test/r28-campaign-evidence.test.mjs",
-          "names": [
-            "feedback candidate routes score input errors without a raw stack"
-          ],
-          "assertions": [
-            "The Engineer candidate adds an explicit score-input diagnostic boundary before score computation"
-          ]
-        }
-      ],
-      "code_areas": [
-        "packages/sensors/src/**",
-        "packages/cli/src/commands/sense/**"
-      ]
-    },
-    {
-      "id": "INV-RBAC-001",
-      "tests": [
+          "path": "packages/sensors/tests/unit/runtime-probe.test.ts",
+          "target_type": "test"
+        },
         {
           "suite": "unit",
-          "path": "packages/core/test/pr-compliance.test.ts",
-          "names": [
-            "extracts ids from a well-formed trailer",
-            "flags missing trailer when required (default)",
-            "flags malformed ids",
-            "flags unknown ids against the catalog"
-          ],
-          "assertions": [
-            "Commit-trailer extraction and validation (INV/REQ ids) underpins commit-level role attribution: a commit body parses and constraints are enforced. Full role-class authority enforcement (file-set vs. declared role) is partial-cover here and is followed by a dedicated commit-attribution test (see code_areas) in the next Inspector cycle."
-          ]
+          "path": "packages/sensors/tests/unit/sensor-reading.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/test-coherence.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/test-weakening-config.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/pack-resolver-sensor-params.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "e2e",
+          "path": "tests/e2e/inventory-sensors.smoke.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "tests/integration/runtime-probe-data.integration.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "tests/integration/sensor-standing.integration.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/core/src/pr-compliance/index.ts",
-        "packages/cli/src/commands/check/index.ts"
       ]
     },
     {
@@ -1198,100 +758,49 @@
       "tests": [
         {
           "suite": "unit",
-          "path": "packages/core/test/hooks-install.test.ts",
-          "names": [
-            "appends the marker block after existing hook content, preserving it",
-            "updates (not duplicates) an already-installed marker block on re-run with a different command",
-            "re-running after --write updates in place rather than duplicating"
-          ],
-          "assertions": [
-            "Re-running devai adopt hooks install never duplicates the marker block",
-            "Surrounding hook content (e.g. lint-staged) is preserved verbatim"
-          ]
+          "path": "packages/cli/tests/unit/hooks-install.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/ci-scaffold.test.ts",
-          "names": [
-            "refuses to overwrite an existing file without --force",
-            "overwrites when force is set"
-          ],
-          "assertions": [
-            "devai adopt ci scaffold does not clobber an existing workflow file without --force",
-            "--force overwrites as expected"
-          ]
+          "path": "packages/cli/tests/unit/render-mermaid.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/fix-skills.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "int",
-          "path": "packages/cli/test/hooks-install.integration.test.ts",
-          "names": [
-            "plan-only mode reports the target without writing anything",
-            "--write writes an executable pre-push hook using .git/hooks when no husky dir exists"
-          ],
-          "assertions": [
-            "devai adopt hooks install is plan-only by default; no filesystem write occurs without --write",
-            "--write writes an executable hook file"
-          ]
+          "path": "tests/integration/ci-scaffold.integration.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "int",
-          "path": "packages/cli/test/ci-scaffold.integration.test.ts",
-          "names": [
-            "plan-only mode reports the target path without writing anything",
-            "--write without --force refuses to clobber an existing file"
-          ],
-          "assertions": [
-            "devai adopt ci scaffold is plan-only by default; no filesystem write occurs without --write",
-            "an existing target file survives --write without --force"
-          ]
+          "path": "tests/integration/hooks-install.integration.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/core/src/hooks-install/**",
-        "packages/core/src/ci-scaffold/**",
-        "packages/cli/src/commands/hooks/**",
-        "packages/cli/src/commands/ci/**"
       ]
     },
     {
       "id": "INV-DEVAI-014",
       "tests": [
         {
-          "suite": "unit",
-          "path": "packages/core/test/glob-guards.test.ts",
-          "names": [
-            "reports zero matches when the base directory does not exist at all (stynx-shape bug)",
-            "matches files under an existing directory against the glob",
-            "honors min_matches as a regression threshold, not just zero-detection",
-            "recurses with **",
-            "treats a glob-metacharacter-free pattern as a literal file existence check",
-            "never descends into node_modules or .git even when the pattern would otherwise match"
-          ],
-          "assertions": [
-            "A pattern whose base directory doesn't exist resolves to zero matches, not a throw",
-            "min_matches acts as a regression threshold above zero, not just zero-detection",
-            "Literal patterns are a file-existence check, not a directory walk (would always be zero otherwise)",
-            "node_modules and .git are hard-excluded from every walk regardless of the pattern"
-          ]
+          "suite": "int",
+          "path": "packages/cli/tests/contract/successor-operational-law.contract.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "int",
-          "path": "packages/cli/test/check-glob-guards.integration.test.ts",
-          "names": [
-            "exits PASS with 0 guards when the registry is absent",
-            "exits FAIL when a registered guard has gone to zero matches (the stynx-shape bug)",
-            "exits PASS when every guard still matches at least min_matches"
-          ],
-          "assertions": [
-            "An absent or empty registry is valid: 0 guards, PASS",
-            "devai policy check glob guards exits FAIL by default (no --strict needed) when a guard fails",
-            "A healthy registry exits PASS"
-          ]
+          "path": "packages/schemas/tests/contract/governed-populations.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/utils/tests/unit/glob-guards.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/core/src/glob-guards/**",
-        "packages/cli/src/commands/check/glob-guards.ts"
       ]
     },
     {
@@ -1299,685 +808,259 @@
       "tests": [
         {
           "suite": "int",
-          "path": "packages/cli/test/experimental-loop-r15.integration.test.ts",
-          "names": [
-            "R15 experimental autonomous-loop containment"
-          ],
-          "assertions": [
-            "Every mutating activation combination is refused before state mutation unless all three grants are present",
-            "A green baseline still invokes the bounded writer and task-specific acceptance",
-            "Blocked execution preserves the task branch and worktree for human disposition",
-            "Direct experimental skill invocation cannot bypass lifecycle checks"
-          ]
+          "path": "packages/skills/tests/contract/feedback-iteration-bounded-replacements.red.test.ts",
+          "target_type": "test"
         },
         {
-          "suite": "e2e",
-          "path": "packages/cli/test/journey-brownfield-loop.e2e.test.ts",
-          "names": [
-            "JNY-brownfield-loop"
-          ],
-          "assertions": [
-            "Experimental loop planning remains safely available through a non-mutating dry run"
-          ]
+          "suite": "int",
+          "path": "packages/skills/tests/contract/skills-bounded-writer-corpus.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/bounded-writer.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "sec",
+          "path": "tests/containment/apply-edits.containment.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/cli/src/commands/loop-run/**",
-        "packages/cli/src/runtime-policy.ts",
-        "packages/core/src/skills/bounded-writer.ts"
       ]
     },
     {
       "id": "INV-DEVAI-016",
-      "docs": [
-        {
-          "doc": "docs/meta/adr/ADR-004-published-truth-operational-self-adoption.md",
-          "anchor": "decision-2-exact-current-scorecard-contract"
-        }
-      ],
       "tests": [
         {
           "suite": "unit",
-          "path": "packages/cli/test/r21-self-scorecard-freshness.red.contract.test.ts",
-          "names": [
-            "R21 exact-current self-scorecard renderer"
-          ],
-          "assertions": [
-            "Explicit exact-subject scorecards render canonical and site pages byte-identically without collapsing subject and render identities",
-            "Missing, malformed, stale, placeholder, wrong-subject, and synthetic inputs fail without overwriting current truth"
-          ]
+          "path": "packages/evidence/tests/unit/local-evidence.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/cli/test/r21-site-sync-scorecard-identity.contract.test.ts",
-          "names": [
-            "R21 governed self-scorecard site synchronization"
-          ],
-          "assertions": [
-            "The real site synchronization path preserves the exact renderer bytes of the governed self-scorecard mirror"
-          ]
+          "path": "packages/loop/tests/unit/release-control.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/cli/test/r21-site-surface-truth.red.contract.test.ts",
-          "names": [
-            "R21 current documentation surface truth"
-          ],
-          "assertions": [
-            "The current renderer identifies devai-nyx and fails natively on broken links and anchors",
-            "The stable/current labels describe the 0.6.0 and unreleased surfaces honestly"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/sensors/test/site-drift-r21.red.test.ts",
-          "names": [
-            "R21 site drift provenance semantics"
-          ],
-          "assertions": [
-            "Repository drift and deployed-source provenance remain distinct and missing or invalid provenance never promotes readiness"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/cli/test/current-doc-claims.contract.test.ts",
-          "names": [
-            "current documentation claims inventory"
-          ],
-          "assertions": [
-            "False-current mission and version prose is detected while explicitly historical paths are excluded"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/cli/test/adopter-guide-placement.contract.test.ts",
-          "names": [
-            "canonical adopter-guide placement"
-          ],
-          "assertions": [
-            "Adopter guides have one canonical docs/adopters location and no stale active inbound links"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/core/test/r26-sensor-inputs.red.test.ts",
-          "names": [
-            "R26 sensor-input integrity red contracts",
-            "R26 git-anchored input digest red contracts"
-          ],
-          "assertions": [
-            "Dead direct globs and wholly dead alternative groups fail the derived input-integrity check",
-            "The digest is stable under a no-op and changes when any declared sensor, command, tool, environment, or file input changes",
-            "Clean and dirty subjects remain explicitly distinguished by Git identity and matched dirty paths"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "scripts/release-contract.test.mjs",
-          "target_type": "script",
-          "names": [
-            "release preflight docs snapshot cases"
-          ],
-          "assertions": [
-            "A version commit is accepted only when its parent already contains the exact matching documentation snapshot"
-          ]
+          "path": "packages/skills/tests/unit/post-merge-auditor.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "scripts/gen-self-scorecard.mjs",
-        "scripts/check-site-links.mjs",
-        "docs/site/**",
-        "packages/cli/src/commands/sense/**"
       ]
     },
     {
       "id": "INV-DEVAI-017",
-      "docs": [
-        {
-          "doc": "docs/meta/adr/ADR-004-published-truth-operational-self-adoption.md",
-          "anchor": "decision-5-observation-is-pure-persistence-is-a-separate-mutation"
-        }
-      ],
       "tests": [
         {
-          "suite": "unit",
-          "path": "packages/cli/test/r21-observation-effects.red.contract.test.ts",
-          "names": [
-            "R21 supported observations are catalogued read-only"
-          ],
-          "assertions": [
-            "Supported observations are read-classified and SensorReading persistence is a separate harness mutation"
-          ]
-        },
-        {
           "suite": "int",
-          "path": "packages/cli/test/sensor-readings-persistence.integration.test.ts",
-          "names": [
-            "sense observation is non-recording; SensorReading persistence is explicit"
-          ],
-          "assertions": [
-            "Observation leaves state byte-identical and explicit role-declared write-consented recording persists idempotently"
-          ]
+          "path": "packages/evidence/tests/contract/actions-run-evidence.red.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/cli/test/managed-worktree-isolation.test.ts",
-          "names": [
-            "managed-worktree root-gate isolation"
-          ],
-          "assertions": [
-            "Parent gates exclude discovered nested managed worktrees while each candidate remains checkable from its own root"
-          ]
+          "path": "packages/evidence/tests/unit/actions-run.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/r26-sensor-inputs.red.test.ts",
-          "names": [
-            "R26 sensor-input integrity red contracts",
-            "R26 git-anchored input digest red contracts"
-          ],
-          "assertions": [
-            "Input inspection reports clean and dirty subjects without conflating their Git identities",
-            "A dirty digest identifies the modified matched paths that influenced the observation"
-          ]
+          "path": "packages/skills/tests/unit/round-utilities.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/utils/tests/unit/state-profile.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/cli/src/commands/sense/**",
-        "packages/core/src/evidence/**",
-        "eslint.config.mjs",
-        ".prettierignore"
       ]
     },
     {
       "id": "INV-DEVAI-018",
-      "docs": [
-        {
-          "doc": "docs/meta/adr/ADR-004-published-truth-operational-self-adoption.md",
-          "anchor": "decision-7-article-34-post-merge-implementation"
-        }
-      ],
       "tests": [
         {
           "suite": "unit",
-          "path": "packages/core/test/hooks-post-merge.test.ts",
-          "names": [
-            "Article 34 post-merge hook plan"
-          ],
-          "assertions": [
-            "Post-merge installation uses a bounded verified host transition rather than fabricating a human Auditor declaration"
-          ]
+          "path": "packages/cli/tests/unit/dependency-security.sec.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/hooks-install.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/actions-run.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/agent-run.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/local-evidence.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/release-control.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/post-merge-auditor.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "e2e",
-          "path": "packages/cli/test/post-merge-auditor.e2e.test.ts",
-          "names": [
-            "Article 34 post-merge Auditor composite"
-          ],
-          "assertions": [
-            "Each unseen first-parent merge is processed exactly once under a lock in persistent isolated state",
-            "Visible failure cannot roll back a merge or dirty the source checkout"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/dependency-security.integration.test.ts",
-          "names": [
-            "binding dependency-security result contract"
-          ],
-          "assertions": [
-            "The complete lock graph passes clean fixtures and blocks high, critical, malformed, unavailable, expired-waiver, and unknown-waiver results"
-          ]
-        },
-        {
-          "suite": "sec",
-          "path": "packages/core/test/dependency-security.sec.test.ts",
-          "names": [
-            "dependency-security provenance and freshness contract"
-          ],
-          "assertions": [
-            "Pinned scanner identity, exact lockfile digest, current advisory data, and lower-severity REVIEW semantics are fail-closed"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/sensors/test/harness-coherence-concurrency.test.ts",
-          "names": [
-            "workflow concurrency semantic groups"
-          ],
-          "assertions": [
-            "Workflow concurrency is evaluated by semantic cancellation and serialization groups"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/cli/test/reusable-evidence-self-adoption.contract.test.ts",
-          "names": [
-            "reusable evidence-gate self-adoption"
-          ],
-          "assertions": [
-            "DEVAI invokes the exported reusable evidence gate while retaining its repository-specific full verification"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/cli/test/r28-campaign-evidence.test.mjs",
-          "names": [
-            "blueprint candidate records merged-main publication provenance"
-          ],
-          "assertions": [
-            "The Architect candidate emits a task-bound blueprint draft for the supervised merged-main publication journey"
-          ]
+          "path": "tests/e2e/post-merge-auditor.e2e.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/core/src/hooks-install/**",
-        "packages/cli/src/commands/govern/**",
-        "packages/cli/src/commands/check/**",
-        ".github/workflows/**"
       ]
     },
     {
       "id": "INV-DEVAI-019",
-      "docs": [
-        {
-          "doc": "docs/meta/adr/ADR-004-published-truth-operational-self-adoption.md",
-          "anchor": "decision-9-aggregate-readiness-and-alignment-semantics"
-        }
-      ],
       "tests": [
         {
           "suite": "unit",
-          "path": "packages/cli/test/sense-run-readiness.test.ts",
-          "names": [
-            "sense run readiness aggregation"
-          ],
-          "assertions": [
-            "Execution ERROR remains distinct from N/A, REVIEW, and UNKNOWN readiness without binary collapse"
-          ]
+          "path": "packages/cli/tests/unit/sense-run-readiness.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/sensors/test/harness-invariant-alignment-evidence.test.ts",
-          "names": [
-            "evidence-backed invariant alignment"
-          ],
-          "assertions": [
-            "Comments, echoes, quoted strings, ignored failures, stale evidence, and wrong-candidate evidence cannot satisfy alignment",
-            "A fail-closed executable step with fresh successful candidate-bound evidence can satisfy alignment",
-            "A chained subject observation remains valid through an evidence-only projection commit, while any intervening source change blocks promotion"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/r21-w09-readiness-authority.integration.test.ts",
-          "names": [
-            "R21 W09 actual sense-run boundary"
-          ],
-          "assertions": [
-            "The actual supported read composite executes and applies repository N/A policy rather than exposing helper-only aggregation semantics"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/sensors/test/r21-w09-alignment-adversarial.test.ts",
-          "names": [
-            "R21 W09 adversarial alignment semantics"
-          ],
-          "assertions": [
-            "An action mentioned only as another executable's argument and experimental evidence cannot promote supported alignment"
-          ]
+          "path": "packages/sensors/tests/unit/r21-w09-alignment-adversarial.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/cli/src/commands/sense/run-set.ts",
-        "packages/sensors/src/harness-invariant-alignment.ts",
-        ".devai/config/scorecard-na.json"
       ]
     },
     {
       "id": "INV-DEVAI-020",
-      "docs": [
-        {
-          "doc": "DESIGN-DECISIONS.md",
-          "anchor": "d-150-round-24-opened--declared-capability-sets-and-subprocess-effects-become-f1-contracts-inference-remains-shadow-soft"
-        }
-      ],
       "tests": [
         {
-          "suite": "unit",
-          "path": "packages/effects-check/test/r24-effects.red.contract.test.ts",
-          "names": [
-            "R24 effect-inference red contracts"
-          ],
-          "assertions": [
-            "Extractor/catalog inequality fails closed and ACTION_EFFECTS accepts identifier and string-literal keys",
-            "Symbol declarations take precedence over Node signature declarations when attributing guarded seam sinks",
-            "Missing capability declarations and unregistered subprocess templates fail visibly",
-            "Callbacks, factories, union receivers, higher-order functions, and method dispatch are conservatively reached or explicitly dispositioned"
-          ]
+          "suite": "int",
+          "path": "packages/effects-check/tests/contract/r24-effects.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/effects-check/tests/contract/r25-binding.red.contract.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/r25-effect-capabilities.red.contract.test.ts",
-          "names": [
-            "R25 effect-capability red contracts"
-          ],
-          "assertions": [
-            "The five Article-6 filesystem domains derive from target paths and reject cross-domain writes",
-            "Explicit dual-domain declarations permit only their two domains",
-            "Database read and write wrappers are distinct explicit capabilities"
-          ]
+          "path": "packages/effects-check/tests/unit/binding.test.ts",
+          "target_type": "test"
         },
         {
-          "suite": "unit",
-          "path": "packages/effects-check/test/r25-binding.red.contract.test.ts",
-          "names": [
-            "R25 binding effect-check red contracts"
-          ],
-          "assertions": [
-            "Under-declaration, unregistered subprocesses, and unresolved edges fail closed",
-            "Conservative over-declaration remains advisory"
-          ]
+          "suite": "int",
+          "path": "tests/integration/action-effects-binding.integration.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/effects-check/**",
-        "packages/cli/src/**",
-        "packages/core/src/**",
-        "packages/sensors/src/**",
-        "docs/framework/arch/subprocess-effects.json"
       ]
     },
     {
       "id": "INV-DEVAI-021",
-      "docs": [
+      "tests": [
         {
-          "doc": "docs/meta/adr/ADR-006-independent-completion-evidence.md",
-          "anchor": "decision"
+          "suite": "int",
+          "path": "packages/skills/tests/contract/mutating-llm-artifact-emission.red.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "tests/integration/mutation-candidate-provenance.red.integration.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "tests/integration/translation-validation.red.integration.test.ts",
+          "target_type": "test"
         }
-      ],
+      ]
+    },
+    {
+      "id": "INV-INVENTORY-001",
       "tests": [
         {
           "suite": "unit",
-          "path": "packages/schemas/test/r28-independent-completion-evidence.red.test.ts",
-          "names": [
-            "R28 witness and validation-result schema contracts"
-          ],
-          "assertions": [
-            "Witnesses remain untrusted claims and cannot carry executable commands",
-            "Validation results remain report-only and readiness-ineligible",
-            "The readiness-bearing strategy population is non-empty and complete"
-          ]
+          "path": "packages/loop/tests/unit/scorecard-inventory-mapping.test.ts",
+          "target_type": "test"
         },
         {
           "suite": "unit",
-          "path": "packages/core/test/translation-validation.red.test.ts",
-          "names": [
-            "R28 independent translation validation red contracts"
-          ],
-          "assertions": [
-            "No-op, pre-green, crash-as-red, scope, authority, weakening, inventory, effects, and injection violations fail",
-            "Expected state and exact-id cleanup fail closed"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/verify-translation.red.integration.test.ts",
-          "names": [
-            "R28 verify translation isolation and recovery contracts"
-          ],
-          "assertions": [
-            "Linux-container network egress is denied",
-            "Task databases are isolated and normal failure removes temporary substrates",
-            "A stale exact-id lease is recovered before new validation"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/cli/test/translation-weakening-wiring.red.test.ts",
-          "names": [
-            "D-183 translation weakening wiring"
-          ],
-          "assertions": [
-            "Translation validation uses the canonical deterministic weakening sensor",
-            "An additive candidate plan passes while assertion loss in an existing test fails"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/core/test/mutation-candidate-provenance.red.test.ts",
-          "names": [
-            "R28 D-173 recorder-derived candidate provenance red contracts"
-          ],
-          "assertions": [
-            "Candidate provenance is recorder-derived after exactly one mutation run",
-            "Candidate commits contain only declared task bytes and retain their exact base parent"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/skill-mutation-provenance.red.integration.test.ts",
-          "names": [
-            "R28 mutating skill recorder end-to-end red contract"
-          ],
-          "assertions": [
-            "Mutating skills accept typed intent but reject caller-selected candidate provenance",
-            "Candidate and evidence refs preserve separate task and runtime state commits"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/r28-translation-validation-workflow.red.contract.test.ts",
-          "names": [
-            "R28 non-secret Linux translation validator workflow red contract"
-          ],
-          "assertions": [
-            "The manual Linux lane accepts only a witness id and uses no provider secret",
-            "The lane fails closed before publishing the exact evidence set"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/core/test/mutating-llm-artifact-emission.red.test.ts",
-          "names": [
-            "R28 mutating LLM skills emit attributable candidate bytes"
-          ],
-          "assertions": [
-            "Every live mutating LLM skill produces non-no-op candidate bytes within its declared role scope",
-            "Deterministic candidate paths refuse overwrite and preserve existing work"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/mutating-llm-artifact-emission.integration.test.ts",
-          "names": [
-            "R28 built mutating LLM skills emit candidate artifacts"
-          ],
-          "assertions": [
-            "The built distribution emits deterministic candidate artifacts for every formerly no-op mutating skill",
-            "Merged built-package coverage observes the production artifact-emission paths"
-          ]
-        },
-        {
-          "suite": "int",
-          "path": "packages/cli/test/skill-host-adapter.red.integration.test.ts",
-          "names": [
-            "R28 agent skill local-LLM authority adapter red contract"
-          ],
-          "assertions": [
-            "A real agent skill run reaches only the typed non-publication local-LLM subprocess target through both supported CLI selectors",
-            "Feedback iteration reaches only its exact non-publication lint, typecheck, unit-test, and named Node test validation targets",
-            "Near-miss validation shapes and unrecognized process targets remain denied by the production authority boundary"
-          ]
-        },
-        {
-          "suite": "unit",
-          "path": "packages/core/test/cli-structured-output.red.test.ts",
-          "names": [
-            "R28 exact local-CLI structured-output contracts"
-          ],
-          "assertions": [
-            "Every mutating LLM skill supplies its exact nested response schema to both supported CLI selectors",
-            "Local agentic CLI completion is tool-disabled, ephemeral, and read-only without mutable schema scratch",
-            "Malformed nested values and mismatched immutable schema assets fail without coercion"
-          ]
+          "path": "packages/skills/tests/unit/inv-override.test.ts",
+          "target_type": "test"
         }
-      ],
-      "code_areas": [
-        "packages/core/prompts/response-schemas/**",
-        "packages/core/src/llm/**",
-        "packages/core/src/skills/**",
-        "packages/core/src/translation-validation/**",
-        "packages/cli/src/commands/verify/**",
-        "packages/cli/src/commands/spec/**",
-        "packages/cli/src/commands/skill/**",
-        "packages/cli/src/authority/**",
-        "scripts/r28-translation-validation.mjs",
-        ".github/workflows/r28-translation-validation.yml"
+      ]
+    },
+    {
+      "id": "INV-INVENTORY-002",
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/sensor-reading.test.ts",
+          "target_type": "test"
+        }
+      ]
+    },
+    {
+      "id": "INV-INVENTORY-003",
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/sensor-reading.test.ts",
+          "target_type": "test"
+        }
+      ]
+    },
+    {
+      "id": "INV-INVENTORY-004",
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/sensor-reading.test.ts",
+          "target_type": "test"
+        }
+      ]
+    },
+    {
+      "id": "INV-RBAC-001",
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/spec/tests/unit/pr-compliance.test.ts",
+          "target_type": "test"
+        }
+      ]
+    },
+    {
+      "id": "INV-SCAFFOLD-001",
+      "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/utils/tests/unit/templates.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "tests/integration/ci-scaffold.integration.test.ts",
+          "target_type": "test"
+        }
       ]
     }
   ],
   "test_corpus": [
     {
-      "path": "packages/cli/test/translation-weakening-wiring.red.test.ts",
+      "path": "packages/authority/tests/unit/authority-decision-issuer.red.test.ts",
       "suite": "unit",
       "invariant_ids": [
-        "INV-DEVAI-021"
+        "INV-AUTH-003"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/verify-translation.red.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-021"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/translation-validation.red.test.ts",
+      "path": "packages/authority/tests/unit/authority-declaration-context.red.test.ts",
       "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-021"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/schemas/test/r28-independent-completion-evidence.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-021"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/mutation-candidate-provenance.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-021"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/skill-mutation-provenance.red.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-021"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/r28-translation-validation-workflow.red.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-021"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/mutating-llm-artifact-emission.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-021"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/mutating-llm-artifact-emission.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-021"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/skill-host-adapter.red.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-021"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/cli-structured-output.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-021"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/action-coverage.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/adopter-guide-placement.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-016"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/action-effects-binding.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-020"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/actions-evidence-verify.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-017"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/adopter-templates.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/adoption-profiles-d112.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/authority-action-registry.red.contract.test.ts",
-      "suite": "contract",
       "invariant_ids": [
         "INV-AUTH-001",
         "INV-AUTH-004"
@@ -1985,166 +1068,73 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/authority-cli-materialization.red.integration.test.ts",
-      "suite": "int",
+      "path": "packages/authority/tests/unit/authority-evidence-validator.red.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-AUTH-003",
+        "INV-AUTH-004"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/authority/tests/unit/authority-final-boundary.red.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-AUTH-002",
+        "INV-AUTH-003",
+        "INV-AUTH-004"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/authority/tests/unit/authority-policy-runtime.red.test.ts",
+      "suite": "unit",
       "invariant_ids": [
         "INV-AUTH-001",
         "INV-AUTH-002",
-        "INV-AUTH-004"
+        "INV-AUTH-003"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/authority-cli-router.red.integration.test.ts",
-      "suite": "int",
+      "path": "packages/authority/tests/unit/authority-required-cases.red.test.ts",
+      "suite": "unit",
       "invariant_ids": [
         "INV-AUTH-001",
+        "INV-AUTH-002",
+        "INV-AUTH-003",
         "INV-AUTH-004"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/authority-cli.red.e2e.test.ts",
-      "suite": "e2e",
+      "path": "packages/authority/tests/unit/authority-resource-boundaries.red.test.ts",
+      "suite": "unit",
       "invariant_ids": [
-        "INV-AUTH-001",
-        "INV-AUTH-004"
+        "INV-AUTH-002",
+        "INV-AUTH-003"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/bare-domain-help.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/blueprint-validate.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-BLUEPRINT-001",
-        "INV-BLUEPRINT-002",
-        "INV-BLUEPRINT-003"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/built-cli-guard.integration.test.ts",
-      "suite": "int",
+      "path": "packages/authority/tests/unit/authority-seam.test.ts",
+      "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/check-ci-economy.integration.test.ts",
-      "suite": "int",
+      "path": "packages/authority/tests/unit/proof-path-domain.red.test.ts",
+      "suite": "unit",
       "invariant_ids": [
-        "INV-DEVAI-001"
+        "INV-AUTH-002",
+        "INV-AUTH-003"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/check-docs-governance-r13.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/check-forbidden-actions.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/check-glob-guards.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-014"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/check-prompt-overlays.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-008"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/ci-scaffold.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-013",
-        "INV-SCAFFOLD-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/cli-help.smoke.test.ts",
-      "suite": "smoke",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/cli-stdout-truncation.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/cli.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/coverage-aggregate.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/current-doc-claims.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-016"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/decision-close-d-a-42.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/dependency-security.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-018"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/docs-work-boundary.contract.test.ts",
+      "path": "packages/cli/tests/contract/action-coverage.contract.test.ts",
       "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
@@ -2152,55 +1142,7 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/docs-links-root-markdown.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/docs-publish-r13.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/docs-render-mermaid.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/docs-synthesize.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/docs.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/doctor.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/effects-truth.contract.test.ts",
+      "path": "packages/cli/tests/contract/no-exit-after-emit.contract.test.ts",
       "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
@@ -2208,40 +1150,8 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/evidence-emit.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/evidence-redact.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/experimental-loop-r15.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-015"
-      ],
-      "lifecycle": "experimental"
-    },
-    {
-      "path": "packages/cli/test/generators.contract.test.ts",
+      "path": "packages/cli/tests/contract/successor-operational-law.contract.test.ts",
       "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/glob-guards-self-pin.integration.test.ts",
-      "suite": "int",
       "invariant_ids": [
         "INV-DEVAI-001",
         "INV-DEVAI-014"
@@ -2249,622 +1159,40 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/hooks-install.integration.test.ts",
-      "suite": "int",
+      "path": "packages/cli/tests/unit/dependency-security.sec.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-018"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/cli/tests/unit/forbidden-actions-help.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/cli/tests/unit/hooks-install.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-013",
+        "INV-DEVAI-018"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/cli/tests/unit/render-mermaid.test.ts",
+      "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-013"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/init.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-009"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/inv-regen-22g.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-INVENTORY-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/inv-suggest-gc-stale-29h.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-INVENTORY-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/inv-suggest.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001",
-        "INV-INVENTORY-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/inv.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/inventory-api-routes.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-INVENTORY-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/inventory-cli.smoke.test.ts",
-      "suite": "smoke",
-      "invariant_ids": [
-        "INV-DEVAI-001",
-        "INV-INVENTORY-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/inventory-coverage.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-INVENTORY-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/inventory-data-model-rbac-data-handling.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-INVENTORY-001",
-        "INV-INVENTORY-002",
-        "INV-INVENTORY-003"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/inventory-dep-graph.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-INVENTORY-001",
-        "INV-INVENTORY-004"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/journey-adoption.e2e.test.ts",
-      "suite": "e2e",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/journey-brownfield-adoption.e2e.test.ts",
-      "suite": "e2e",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/journey-brownfield-loop.e2e.test.ts",
-      "suite": "e2e",
-      "invariant_ids": [
-        "INV-DEVAI-015"
-      ],
-      "lifecycle": "experimental"
-    },
-    {
-      "path": "packages/cli/test/journey-greenfield-scaffold.e2e.test.ts",
-      "suite": "e2e",
-      "invariant_ids": [
-        "INV-SCAFFOLD-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/llm-timeout-flag-24c.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/loop-crash-recovery.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-015"
-      ],
-      "lifecycle": "experimental"
-    },
-    {
-      "path": "packages/cli/test/loop.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001",
-        "INV-DEVAI-003",
-        "INV-DEVAI-004",
-        "INV-DEVAI-005"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/managed-worktree-isolation.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-017"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/mutation-run.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/no-exit-after-emit.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/pack-graduate-invariants.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/pack-resolve.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/package-distribution-r15.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/phase-close-d110.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/phase6.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001",
-        "INV-DEVAI-006",
-        "INV-DEVAI-007",
-        "INV-DEVAI-008"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/post-merge-auditor.e2e.test.ts",
-      "suite": "e2e",
-      "invariant_ids": [
-        "INV-DEVAI-018"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/r21-observation-effects.red.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-017"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/r21-self-scorecard-freshness.red.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-016"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/r21-site-sync-scorecard-identity.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-016"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/r21-site-surface-truth.red.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-016"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/r21-w09-readiness-authority.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-019",
-        "INV-AUTH-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/r23-hygiene.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/rbac-unknown-state.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/record-run.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/release.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/render-matrix.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/reusable-evidence-self-adoption.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-018"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/rgr.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/rtd.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/runtime-probe.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/scaffold-api-templates.e2e.test.ts",
-      "suite": "e2e",
-      "invariant_ids": [
-        "INV-SCAFFOLD-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/scaffold-bp-demo-bookmark-23h.e2e.test.ts",
-      "suite": "e2e",
-      "invariant_ids": [
-        "INV-SCAFFOLD-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/scaffolder-adopter-fallback.e2e.test.ts",
-      "suite": "e2e",
-      "invariant_ids": [
-        "INV-SCAFFOLD-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/score-view.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-006"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/scorecard-invariant-rollups-29i.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-006"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/scorecard-l1-correctness-23g.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-006"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/scorecard-skill-equality-25b.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-006"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/scorecard-view-modes-29j.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-006"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-api-public-marker.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-coverage-use-cases.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-data-model-pii.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-docs-drift-dr.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-harness-coherence-28d.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-harness-coverage-28b.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-harness-depth-28c.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-harness-green-main-26k.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-harness-idiomaticity-28f.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-harness-invariant-alignment-28e.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-harness-performance-28g.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-harness-robustness-28h.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-harness-robustness-29c.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-harness-security-26j.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-inventory-adherence-26h.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-INVENTORY-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-inventory-determinism-26i.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-INVENTORY-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-inventory-performance-29f.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-011",
-        "INV-INVENTORY-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-migrate-check-29d.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-pack-tune.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-perf-test-30h.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-plant-coherence-27g.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-plant-coverage-26e.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-plant-depth-27f.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-run-readiness.test.ts",
+      "path": "packages/cli/tests/unit/sense-run-readiness.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-019"
@@ -2872,179 +1200,47 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/sense-spec-alignment-27b.integration.test.ts",
-      "suite": "int",
+      "path": "packages/cli/tests/unit/version.test.ts",
+      "suite": "unit",
       "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
+        "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/sense-spec-depth-26b.integration.test.ts",
-      "suite": "int",
+      "path": "packages/effects-check/tests/contract/r24-effects.red.contract.test.ts",
+      "suite": "contract",
       "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
+        "INV-DEVAI-020"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/sense-spec-freshness-26d.integration.test.ts",
-      "suite": "int",
+      "path": "packages/effects-check/tests/contract/r25-binding.red.contract.test.ts",
+      "suite": "contract",
       "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
+        "INV-DEVAI-020"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/sense-spec-idiomaticity-26c.integration.test.ts",
-      "suite": "int",
+      "path": "packages/effects-check/tests/unit/binding.test.ts",
+      "suite": "unit",
       "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
+        "INV-DEVAI-020"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/sense-spec-idiomaticity-29b.integration.test.ts",
-      "suite": "int",
+      "path": "packages/evidence/tests/contract/actions-run-evidence.red.test.ts",
+      "suite": "contract",
       "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-spec-performance-targets-27d.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-spec-robustness-targets-27e.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-spec-security-coverage-27c.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-test-coherence-27h.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-test-coverage-depth-26f.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-test-idiomaticity-27i.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-test-invariant-alignment-26g.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-test-performance-coverage-27k.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-test-robustness-coverage-27l.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-test-security-coverage-27j.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-test-weakening-29e.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense-type-check-23d.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sense.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/sensor-readings-persistence.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012",
         "INV-DEVAI-017"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/site-broken-links.contract.test.ts",
+      "path": "packages/evidence/tests/contract/phase-closure.contract.test.ts",
       "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
@@ -3052,159 +1248,24 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/skill-catalog-firewall.integration.test.ts",
-      "suite": "int",
+      "path": "packages/evidence/tests/unit/actions-run.test.ts",
+      "suite": "unit",
       "invariant_ids": [
-        "INV-DEVAI-010"
+        "INV-DEVAI-017",
+        "INV-DEVAI-018"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/skill-fix-adrs-r11.integration.test.ts",
-      "suite": "int",
+      "path": "packages/evidence/tests/unit/agent-run.test.ts",
+      "suite": "unit",
       "invariant_ids": [
-        "INV-DEVAI-010"
+        "INV-DEVAI-018"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/skill-fix-catalog.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-010"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/skill-fix-docs-links-r11.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-010"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/skill-fix-overrides-r11.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-010"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/skill-r5-publish-path.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-015"
-      ],
-      "lifecycle": "experimental"
-    },
-    {
-      "path": "packages/cli/test/skill-r6-substrate-fixes.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-015"
-      ],
-      "lifecycle": "experimental"
-    },
-    {
-      "path": "packages/cli/test/skill-round-execute-d-a-40.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-015"
-      ],
-      "lifecycle": "experimental"
-    },
-    {
-      "path": "packages/cli/test/skill-round-execution.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-010"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/skill-round-orchestrate-f4.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-015"
-      ],
-      "lifecycle": "experimental"
-    },
-    {
-      "path": "packages/cli/test/skill-round.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-010"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/skill.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-010"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/spec-validate-action-coverage-29g.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/spec-validate-all-d-a-38.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/spec-validate-companion-23e.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/spec.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/stack-adapter-packs.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/usage-exit-codes.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/verify-mutation.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/version.test.ts",
+      "path": "packages/evidence/tests/unit/chain.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001"
@@ -3212,23 +1273,7 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/cli/test/writer-real-llm-matrix.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/cli/test/writer-real-llm.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/adherence-reverse.test.ts",
+      "path": "packages/evidence/tests/unit/git-context.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001"
@@ -3236,116 +1281,7 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/actions-evidence-source-hash.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-017"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/actions-run-evidence.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-017"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/apply-edits-containment.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-015"
-      ],
-      "lifecycle": "experimental"
-    },
-    {
-      "path": "packages/core/test/authority-decision-issuer.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-AUTH-003"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/authority-declaration-context.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-AUTH-001",
-        "INV-AUTH-004"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/authority-direct-mutator.red.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-AUTH-001",
-        "INV-AUTH-002"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/authority-evidence-validator.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-AUTH-003",
-        "INV-AUTH-004"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/authority-final-boundary.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-AUTH-002",
-        "INV-AUTH-003",
-        "INV-AUTH-004"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/authority-policy-runtime.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-AUTH-001",
-        "INV-AUTH-002",
-        "INV-AUTH-003"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/authority-required-cases.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-AUTH-001",
-        "INV-AUTH-002",
-        "INV-AUTH-003",
-        "INV-AUTH-004"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/authority-resource-boundaries.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-AUTH-002",
-        "INV-AUTH-003"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/authority-runtime-api.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-AUTH-001",
-        "INV-AUTH-003",
-        "INV-AUTH-004"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/authority-seam.test.ts",
+      "path": "packages/evidence/tests/unit/id-generator.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001"
@@ -3353,23 +1289,16 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/bootstrap.test.ts",
+      "path": "packages/evidence/tests/unit/local-evidence.test.ts",
       "suite": "unit",
       "invariant_ids": [
-        "INV-DEVAI-009"
+        "INV-DEVAI-016",
+        "INV-DEVAI-018"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/canonical-json.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/chain.test.ts",
+      "path": "packages/evidence/tests/unit/phase-closure-successor.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001"
@@ -3377,16 +1306,7 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/ci-scaffold.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-013",
-        "INV-SCAFFOLD-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/cli-client.test.ts",
+      "path": "packages/evidence/tests/unit/redact.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001"
@@ -3394,7 +1314,7 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/constitution.test.ts",
+      "path": "packages/loop/tests/unit/adherence-reverse.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001"
@@ -3402,104 +1322,158 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/db-introspector.integration.test.ts",
-      "suite": "int",
+      "path": "packages/loop/tests/unit/backlog-tasks.test.ts",
+      "suite": "unit",
       "invariant_ids": [
+        "INV-DEVAI-003",
         "INV-DEVAI-004",
         "INV-DEVAI-005"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/db-taskid.regression.test.ts",
-      "suite": "regression",
+      "path": "packages/loop/tests/unit/freshness-policy-fail-closed.test.ts",
+      "suite": "unit",
       "invariant_ids": [
-        "INV-DEVAI-004"
+        "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/dependency-security.sec.test.ts",
-      "suite": "sec",
+      "path": "packages/loop/tests/unit/release-control.test.ts",
+      "suite": "unit",
       "invariant_ids": [
+        "INV-DEVAI-016",
         "INV-DEVAI-018"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/domains-loader.test.ts",
+      "path": "packages/loop/tests/unit/scorecard-assess-narrative.test.ts",
       "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-006",
+        "INV-DEVAI-011"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/loop/tests/unit/scorecard-inventory-mapping.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-INVENTORY-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/loop/tests/unit/scorecard-na-override.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-006"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/loop/tests/unit/sensor-integrity.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-007",
+        "INV-DEVAI-012"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/schemas/tests/contract/adr.contract.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/evidence-soak.regression.test.ts",
-      "suite": "regression",
+      "path": "packages/schemas/tests/contract/backlog-current-disposition.contract.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/feedback-iteration-bounded-replacements.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-015"
-      ],
-      "lifecycle": "experimental"
-    },
-    {
-      "path": "packages/core/test/firewall-overlaps.test.ts",
-      "suite": "unit",
+      "path": "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/forbidden-actions.test.ts",
-      "suite": "unit",
+      "path": "packages/schemas/tests/contract/constitution.contract.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/git-context.test.ts",
-      "suite": "unit",
+      "path": "packages/schemas/tests/contract/genesis-attestation-binding.contract.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/glob-guards.test.ts",
-      "suite": "unit",
+      "path": "packages/schemas/tests/contract/governed-populations.contract.test.ts",
+      "suite": "contract",
       "invariant_ids": [
+        "INV-DEVAI-001",
         "INV-DEVAI-014"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/hooks-install.test.ts",
-      "suite": "unit",
+      "path": "packages/schemas/tests/contract/product.contract.test.ts",
+      "suite": "contract",
       "invariant_ids": [
-        "INV-DEVAI-013"
+        "INV-BLUEPRINT-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/hooks-post-merge.test.ts",
-      "suite": "unit",
+      "path": "packages/schemas/tests/contract/register.contract.test.ts",
+      "suite": "contract",
       "invariant_ids": [
-        "INV-DEVAI-018"
+        "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/id-generator.test.ts",
+      "path": "packages/schemas/tests/contract/repository-reference-triage.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/schemas/tests/contract/roster.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/schemas/tests/contract/trace-materialization.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/sensors/tests/unit/docs-drift-fail-closed.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001"
@@ -3507,63 +1481,15 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/introspect.test.ts",
+      "path": "packages/sensors/tests/unit/r21-w09-alignment-adversarial.test.ts",
       "suite": "unit",
       "invariant_ids": [
-        "INV-DEVAI-001"
+        "INV-DEVAI-019"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/inv-override.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-INVENTORY-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/llm-timeout-resolver.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/llm-timeout-wrapper.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/llm.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/local-evidence.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/locks.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-003"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/pack-resolver-sensor-params.test.ts",
+      "path": "packages/sensors/tests/unit/runtime-probe.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-002",
@@ -3572,122 +1498,112 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/pr-compliance.test.ts",
+      "path": "packages/sensors/tests/unit/sensor-reading.test.ts",
       "suite": "unit",
       "invariant_ids": [
-        "INV-DEVAI-001",
-        "INV-RBAC-001"
+        "INV-DEVAI-002",
+        "INV-DEVAI-012",
+        "INV-INVENTORY-002",
+        "INV-INVENTORY-003",
+        "INV-INVENTORY-004"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/prompt-firewall.test.ts",
+      "path": "packages/sensors/tests/unit/test-coherence.test.ts",
       "suite": "unit",
       "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-012"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/sensors/tests/unit/test-weakening-config.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-012"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/sensors/tests/unit/trace-resolve.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/contract/feedback-iteration-bounded-replacements.red.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-015"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/contract/mutating-llm-artifact-emission.red.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-021"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/contract/package-manager-prewarm.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
         "INV-DEVAI-008"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/redact.test.ts",
-      "suite": "unit",
+      "path": "packages/skills/tests/contract/required-workflow-gates.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-008"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/contract/skills-api-surface.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/rgr.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/rtd-manifest.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/scorecard-assess-narrative.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-006"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/scorecard-inventory-mapping.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-INVENTORY-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/scorecard-latest-per-kind.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-006"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/scorecard-na-override.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-006"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/sensor-integrity.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/skills-api-surface.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/skills-bounded-writer-corpus.test.ts",
-      "suite": "unit",
+      "path": "packages/skills/tests/contract/skills-bounded-writer-corpus.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-015"
       ],
-      "lifecycle": "experimental"
+      "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/skills-cycle-gate.test.ts",
-      "suite": "unit",
+      "path": "packages/skills/tests/contract/skills-cycle-gate.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/skills-facade-gate.test.ts",
-      "suite": "unit",
+      "path": "packages/skills/tests/contract/skills-facade-gate.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/skills-fingerprint-behavior.test.ts",
-      "suite": "unit",
+      "path": "packages/skills/tests/contract/skills-fingerprint-behavior.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001",
         "INV-DEVAI-008",
@@ -3696,8 +1612,8 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/skills-ledger-corpus.test.ts",
-      "suite": "unit",
+      "path": "packages/skills/tests/contract/skills-ledger-corpus.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001",
         "INV-DEVAI-010"
@@ -3705,8 +1621,8 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/skills-manifest-corpus.test.ts",
-      "suite": "unit",
+      "path": "packages/skills/tests/contract/skills-manifest-corpus.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001",
         "INV-DEVAI-010"
@@ -3714,8 +1630,8 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/skills-prompt-inventory.test.ts",
-      "suite": "unit",
+      "path": "packages/skills/tests/contract/skills-prompt-inventory.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001",
         "INV-DEVAI-008"
@@ -3723,8 +1639,8 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/skills-rendered-prompts.test.ts",
-      "suite": "unit",
+      "path": "packages/skills/tests/contract/skills-rendered-prompts.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001",
         "INV-DEVAI-008"
@@ -3732,8 +1648,8 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/skills-round-corpus.test.ts",
-      "suite": "unit",
+      "path": "packages/skills/tests/contract/skills-round-corpus.test.ts",
+      "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001",
         "INV-DEVAI-010"
@@ -3741,7 +1657,263 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/templates.test.ts",
+      "path": "packages/skills/tests/unit/bootstrap.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-009"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/bounded-writer.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-015"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/cli-client.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/constitution.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/firewall-overlaps.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/fix-skills.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-013"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/forbidden-actions.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/governance-skills.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/introspect.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/inv-override.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-INVENTORY-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/llm-timeout-resolver.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/llm-timeout-wrapper.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/llm.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/pack-resolver-sensor-params.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-012"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/post-merge-auditor.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-016",
+        "INV-DEVAI-018"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/prompt-firewall.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-008"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/round-utilities.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-005",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/round-verdict.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-005"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/spec/tests/contract/r29-currentness-behavior.red.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-002",
+        "INV-DEVAI-008"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/spec/tests/unit/adr.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/spec/tests/unit/domains-loader.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-BLUEPRINT-002",
+        "INV-BLUEPRINT-003",
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/spec/tests/unit/pr-compliance.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-RBAC-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/spec/tests/unit/test-trace-validator.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/spec/tests/unit/trace-validator.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/spec/tests/unit/xref-resolver.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/utils/tests/unit/canonical-json.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/utils/tests/unit/exit.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/utils/tests/unit/glob-guards.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-014"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/utils/tests/unit/logger.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/utils/tests/unit/redact.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/utils/tests/unit/state-profile.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/utils/tests/unit/templates.test.ts",
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001",
@@ -3750,161 +1922,39 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/verb-evidence.test.ts",
-      "suite": "unit",
+      "path": "tests/containment/apply-edits.containment.test.ts",
+      "suite": "sec",
+      "invariant_ids": [
+        "INV-DEVAI-015"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/e2e/bare-domain-help.e2e.test.ts",
+      "suite": "e2e",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/xref-resolver-perf.regression.test.ts",
-      "suite": "regression",
+      "path": "tests/e2e/built-cli-guard.e2e.test.ts",
+      "suite": "e2e",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/xref-resolver.test.ts",
-      "suite": "unit",
+      "path": "tests/e2e/cli-help.smoke.test.ts",
+      "suite": "smoke",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/core/test/effect-capabilities.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-020"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/r25-effect-capabilities.red.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-020"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/core/test/r26-sensor-inputs.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-016",
-        "INV-DEVAI-017"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/effects-check/test/binding.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-020"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/effects-check/test/r24-effects.red.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-020"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/effects-check/test/r25-binding.red.contract.test.ts",
-      "suite": "contract",
-      "invariant_ids": [
-        "INV-DEVAI-020"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/schemas/test/glossary-entry-schema.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/schemas/test/invariant-schema.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/schemas/test/journey-schema.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/schemas/test/parsers.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/schemas/test/sensor-reading-schema.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/schemas/test/trace-schema.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/schemas/test/validate.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/harness-coherence-concurrency.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-018"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/harness-invariant-alignment-evidence.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-019"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/harness-invariant-alignment-mode.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-001"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/performance.smoke.test.ts",
+      "path": "tests/e2e/inventory-sensors.smoke.test.ts",
       "suite": "smoke",
       "invariant_ids": [
         "INV-DEVAI-002",
@@ -3913,131 +1963,132 @@
       "lifecycle": "supported"
     },
     {
-      "path": "packages/sensors/test/r21-w09-alignment-adversarial.test.ts",
-      "suite": "unit",
+      "path": "tests/e2e/post-merge-auditor.e2e.test.ts",
+      "suite": "e2e",
       "invariant_ids": [
-        "INV-DEVAI-019"
+        "INV-DEVAI-018"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/sensors/test/runtime-probe-data.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/runtime-probe.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/sense-harness-green-main-32d.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/sense-lint-32b.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/sense-migrate-check-32c.integration.test.ts",
-      "suite": "int",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/sensor-reading.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/site-drift-r21.red.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-016"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/test-coherence.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/test-weakening-config.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/sensors/test/trace-resolve.test.ts",
-      "suite": "unit",
-      "invariant_ids": [
-        "INV-DEVAI-002",
-        "INV-DEVAI-012"
-      ],
-      "lifecycle": "supported"
-    },
-    {
-      "path": "packages/utils/test/exit.test.ts",
-      "suite": "unit",
+      "path": "tests/e2e/usage-exit-codes.e2e.test.ts",
+      "suite": "e2e",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/utils/test/logger.test.ts",
-      "suite": "unit",
+      "path": "tests/integration/action-effects-binding.integration.test.ts",
+      "suite": "int",
+      "invariant_ids": [
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/integration/ci-scaffold.integration.test.ts",
+      "suite": "int",
+      "invariant_ids": [
+        "INV-DEVAI-013",
+        "INV-SCAFFOLD-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/integration/hooks-install.integration.test.ts",
+      "suite": "int",
+      "invariant_ids": [
+        "INV-DEVAI-013"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/integration/mutation-candidate-provenance.red.integration.test.ts",
+      "suite": "int",
+      "invariant_ids": [
+        "INV-DEVAI-021"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/integration/rtd-manifest.integration.test.ts",
+      "suite": "int",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
     {
-      "path": "packages/utils/test/redact.test.ts",
-      "suite": "unit",
+      "path": "tests/integration/runtime-probe-data.integration.test.ts",
+      "suite": "int",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-012"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/integration/sensor-descriptor-cli-parity.integration.test.ts",
+      "suite": "int",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-002"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/integration/sensor-standing.integration.test.ts",
+      "suite": "int",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-012"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/integration/translation-validation.red.integration.test.ts",
+      "suite": "int",
+      "invariant_ids": [
+        "INV-DEVAI-021"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/regression/evidence-chain-100-event.regression.test.ts",
+      "suite": "regression",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/regression/xref-resolver-performance.regression.test.ts",
+      "suite": "regression",
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     }
   ],
-  "meta": {
-    "provenance": [
-      "ex-trace.json@devai-original",
-      "regen 2026-07-23: INV-RBAC-001 code_areas corrected (pr-compliance moved; audit finding REV-0005 \u00a71)"
-    ]
+  "suites": {
+    "unit": {
+      "command": "pnpm test:t1"
+    },
+    "contract": {
+      "command": "pnpm test:t2"
+    },
+    "integration": {
+      "command": "pnpm test:t3"
+    },
+    "regression": {
+      "command": "pnpm test:t4"
+    },
+    "e2e": {
+      "command": "pnpm test:t5"
+    },
+    "containment": {
+      "command": "pnpm test:t6"
+    }
   }
 }

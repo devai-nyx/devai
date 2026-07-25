@@ -11,10 +11,7 @@
   "rationale": "Exit codes alone discard the uncertainty and applicability information the scorecard exists to preserve. Text presence is not proof that a requirement was executed or passed.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int"
-    ],
+    "required_suites": ["unit", "int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -29,17 +26,10 @@
         "anchor": "decision-9-aggregate-readiness-and-alignment-semantics"
       }
     ],
-    "decisions": [
-      "D-139",
-      "ADR-004"
-    ]
+    "decisions": ["D-139", "ADR-004"]
   },
   "scope": {
-    "components": [
-      "sense-run",
-      "scorecard-na",
-      "harness-invariant-alignment"
-    ],
+    "components": ["sense-run", "scorecard-na", "harness-invariant-alignment"],
     "code_areas": [
       "packages/cli/src/commands/sense/run-set.ts",
       "packages/sensors/src/harness-invariant-alignment.ts",
@@ -58,15 +48,6 @@
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "readiness",
-    "n-a",
-    "unknown",
-    "alignment",
-    "evidence",
-    "article-39"
-  ],
-  "provenance": [
-    "ex-INV-DEVAI-019@devai-original"
-  ]
+  "tags": ["readiness", "n-a", "unknown", "alignment", "evidence", "article-39"],
+  "provenance": ["ex-INV-DEVAI-019@devai-original"]
 }

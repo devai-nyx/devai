@@ -6,11 +6,6 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "examples": [
-    "SKILL-feedback-iteration",
-    "SKILL-emit-rgr"
-  ],
-  "provenance": [
-    "ex-GE-036@devai-original"
-  ]
+  "examples": ["SKILL-feedback-iteration", "SKILL-emit-rgr"],
+  "provenance": ["ex-GE-036@devai-original"]
 }

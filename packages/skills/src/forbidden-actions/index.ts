@@ -117,9 +117,13 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
   },
   {
     id: 'FORBID-DELETE-AUTHORITY-DOCS',
-    action: 'Deleting any file under docs/arch, docs/contracts, docs/ops, docs/security',
+    action:
+      'Deleting successor law, product intent, governed rounds/audits, or machine proofs outside the owning authority path',
     rationale: 'Authority violation',
     severity: 'critical',
+    detect_patterns: [
+      '\\b(?:git\\s+rm|rm)\\s+[^\\n]*(?:law|product|work/(?:rounds|audit)|record)/',
+    ],
     safer_alternative: 'Architect amendment via ADR + tombstone',
   },
   {
@@ -127,6 +131,7 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
     action: 'Sending external messages (Slack, email, GitHub issue comments outside the PR)',
     rationale: 'Visible action',
     severity: 'medium',
+    detect_patterns: ['\\b(?:slack|sendmail|mail)\\b', '\\bgh\\s+(?:issue|pr)\\s+comment\\b'],
     safer_alternative: 'Comment in the PR; let a human relay externally',
   },
   {
@@ -134,6 +139,7 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
     action: 'Modifying CI/CD pipelines without ADR',
     rationale: 'Gate weakening',
     severity: 'high',
+    detect_patterns: ['(?:\\.github/workflows/|scripts/(?:run-ci-stages|check-workflows)\\.mjs)'],
     safer_alternative: 'Draft an ADR explaining the gate change first',
   },
   {
@@ -141,6 +147,7 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
     action: 'Modifying KMS, IAM, SSM, Secrets Manager in stage or prod',
     rationale: 'Security surface',
     severity: 'critical',
+    detect_patterns: ['\\baws\\s+(?:kms|iam|ssm|secretsmanager)\\b'],
     safer_alternative: 'Use the ops authority path with per-action authorisation',
   },
   {
@@ -162,16 +169,19 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
   {
     id: 'FORBID-MUTATE-INVARIANTS',
     action:
-      'Modifying law/invariants/* or law/policy/* without Architect authority',
+      'Modifying successor law or committed policy materializations without Architect authority',
     rationale: 'Constitutional change',
     severity: 'critical',
+    detect_patterns: [
+      '\\b(?:git\\s+(?:add|rm)|rm)\\s+[^\\n]*(?:law/|product/|work/(?:rounds|audit)/|record/|\\.devai/config/)',
+    ],
     safer_alternative: 'Architect amendment via ADR + law/register/DECISIONS.md entry',
   },
 ] as const;
 
 export interface ForbiddenActionFinding {
   readonly forbidden_id: string;
-  readonly source: 'commit-message' | 'commit-author-email' | 'reflog';
+  readonly source: 'commit-message' | 'commit-change' | 'commit-author-email' | 'reflog';
   readonly ref: string;
   readonly matched: string;
   readonly message: string;
@@ -189,6 +199,8 @@ export interface ScanForbiddenResult {
   readonly registry_entries: number;
   readonly findings: readonly ForbiddenActionFinding[];
 }
+
+const GIT_INSPECTION_MAX_BUFFER = 16 * 1024 * 1024;
 
 export function loadForbiddenRegistry(path: string): ForbiddenActionEntry[] {
   if (!existsSync(path)) return [];
@@ -231,7 +243,23 @@ export interface ForbiddenCoverageResult {
 export function checkForbiddenRegistryCoverage(registryPath: string): ForbiddenCoverageResult {
   const registry = loadForbiddenRegistry(registryPath);
   const waivers = loadForbiddenWaivers(registryPath);
-  const presentIds = new Set(registry.map((e) => e.id));
+  const presentIds = new Set(
+    registry
+      .filter(
+        (entry) =>
+          Array.isArray(entry.detect_patterns) &&
+          entry.detect_patterns.length > 0 &&
+          entry.detect_patterns.every((pattern) => {
+            try {
+              new RegExp(pattern, 'i');
+              return true;
+            } catch {
+              return false;
+            }
+          }),
+      )
+      .map((entry) => entry.id),
+  );
   const waivedIds = new Set(waivers.map((w) => w.id));
   const present = CANONICAL_FORBIDDEN_ACTIONS.filter((e) => presentIds.has(e.id)).map((e) => e.id);
   const unwaivedMissing = CANONICAL_FORBIDDEN_ACTIONS.filter(
@@ -248,9 +276,10 @@ export function checkForbiddenRegistryCoverage(registryPath: string): ForbiddenC
 }
 
 /**
- * Scan recent commits for forbidden-pattern matches in messages.
- * Best-effort: silently skips when git isn't available or when the
- * repo has no commits yet.
+ * Scan recent commits for forbidden-pattern matches in messages and
+ * committed path/patch evidence. History inspection fails closed so a
+ * missing Git binary, non-repository root, or unreadable commit cannot
+ * masquerade as a clean scan.
  */
 export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenResult {
   const findings: ForbiddenActionFinding[] = [];
@@ -261,9 +290,54 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     (existsSync(authoredRegistry)
       ? authoredRegistry
       : join(opts.repoRoot, '.devai/config/forbidden-actions.json'));
-  const registry = loadForbiddenRegistry(registryPath);
+  let registry: ForbiddenActionEntry[];
+  if (!existsSync(registryPath)) {
+    return {
+      registry_entries: 0,
+      findings: [
+        {
+          forbidden_id: 'FORBIDDEN-REGISTRY-INVALID',
+          source: 'commit-change',
+          ref: registryPath,
+          matched: '',
+          message: 'forbidden-action registry is missing',
+        },
+      ],
+    };
+  }
+  try {
+    const parsed = JSON.parse(readFileSync(registryPath, 'utf8')) as {
+      actions?: ForbiddenActionEntry[];
+    };
+    if (!Array.isArray(parsed.actions)) throw new Error('actions must be an array');
+    registry = parsed.actions;
+  } catch {
+    return {
+      registry_entries: 0,
+      findings: [
+        {
+          forbidden_id: 'FORBIDDEN-REGISTRY-INVALID',
+          source: 'commit-change',
+          ref: registryPath,
+          matched: '',
+          message: 'forbidden-action registry bytes are malformed',
+        },
+      ],
+    };
+  }
   if (registry.length === 0) {
-    return { registry_entries: 0, findings };
+    return {
+      registry_entries: 0,
+      findings: [
+        {
+          forbidden_id: 'FORBIDDEN-REGISTRY-INVALID',
+          source: 'commit-change',
+          ref: registryPath,
+          matched: '',
+          message: 'forbidden-action registry has no actions',
+        },
+      ],
+    };
   }
   // Compile patterns once.
   const compiled = registry
@@ -281,20 +355,49 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
         })
         .filter((p): p is RegExp => p !== null),
     }));
-  if (compiled.length === 0) {
-    return { registry_entries: registry.length, findings };
+  if (
+    compiled.length !== registry.length ||
+    compiled.some((entry) => entry.patterns.length === 0)
+  ) {
+    return {
+      registry_entries: registry.length,
+      findings: [
+        {
+          forbidden_id: 'FORBIDDEN-REGISTRY-INVALID',
+          source: 'commit-change',
+          ref: registryPath,
+          matched: '',
+          message: 'every forbidden action must have at least one valid detection pattern',
+        },
+      ],
+    };
   }
 
   // Read recent commit log via git.
   let log: string;
   try {
-    log = execFileSync('git', ['log', `-n${String(max)}`, '--pretty=format:%H%x00%B%x1e'], {
-      cwd: opts.repoRoot,
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'pipe'],
-    });
+    log = execFileSync(
+      'git',
+      ['log', `-n${String(max)}`, '--pretty=format:%H%x00%an%x00%P%x00%B%x1e'],
+      {
+        cwd: opts.repoRoot,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      },
+    );
   } catch {
-    return { registry_entries: registry.length, findings };
+    return {
+      registry_entries: registry.length,
+      findings: [
+        {
+          forbidden_id: 'FORBIDDEN-SCAN-UNAVAILABLE',
+          source: 'commit-change',
+          ref: 'git-log',
+          matched: '',
+          message: 'committed history could not be inspected',
+        },
+      ],
+    };
   }
   const commits = log
     .split('\x1e')
@@ -304,14 +407,149 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     const nul = c.indexOf('\x00');
     if (nul === -1) continue;
     const sha = c.slice(0, nul);
-    const body = c.slice(nul + 1);
+    const authorEnd = c.indexOf('\x00', nul + 1);
+    if (authorEnd === -1) continue;
+    const author = c.slice(nul + 1, authorEnd);
+    const parentsEnd = c.indexOf('\x00', authorEnd + 1);
+    if (parentsEnd === -1) continue;
+    const parents = c
+      .slice(authorEnd + 1, parentsEnd)
+      .split(' ')
+      .filter(Boolean);
+    const body = c.slice(parentsEnd + 1);
+    let operations: string;
+    let patch: string;
+    let changedPaths: string[];
+    try {
+      let treeIdenticalToParent = false;
+      if (parents.length > 1) {
+        const trees = execFileSync(
+          'git',
+          ['rev-parse', `${sha}^{tree}`, ...parents.map((parent) => `${parent}^{tree}`)],
+          {
+            cwd: opts.repoRoot,
+            encoding: 'utf8',
+            maxBuffer: GIT_INSPECTION_MAX_BUFFER,
+            stdio: ['ignore', 'pipe', 'pipe'],
+          },
+        )
+          .split('\n')
+          .filter(Boolean);
+        const [mergeTree, ...parentTrees] = trees;
+        treeIdenticalToParent =
+          mergeTree !== undefined && parentTrees.some((parentTree) => parentTree === mergeTree);
+      }
+      if (treeIdenticalToParent) {
+        changedPaths = [];
+        operations = '';
+        patch = '';
+      } else {
+        const nameStatus = execFileSync(
+          'git',
+          ['diff-tree', '--root', '--no-commit-id', '--name-status', '-r', '-M', '-m', sha],
+          {
+            cwd: opts.repoRoot,
+            encoding: 'utf8',
+            maxBuffer: GIT_INSPECTION_MAX_BUFFER,
+            stdio: ['ignore', 'pipe', 'pipe'],
+          },
+        );
+        changedPaths = nameStatus
+          .split('\n')
+          .filter(Boolean)
+          .flatMap((line) => line.split('\t').slice(1));
+        operations = nameStatus
+          .split('\n')
+          .filter(Boolean)
+          .map((line) => {
+            const [status = '', ...paths] = line.split('\t');
+            if ((status.startsWith('R') || status.startsWith('C')) && paths.length >= 2) {
+              return `git rm ${paths[0] ?? ''}\ngit add ${paths[1] ?? ''}\n${line}`;
+            }
+            const path = paths.at(-1) ?? '';
+            return `${status.startsWith('D') ? 'git rm' : 'git add'} ${path}\n${line}`;
+          })
+          .join('\n');
+        patch = execFileSync(
+          'git',
+          [
+            'diff-tree',
+            '--root',
+            '--no-commit-id',
+            '--no-ext-diff',
+            '--unified=0',
+            '-p',
+            '-m',
+            sha,
+          ],
+          {
+            cwd: opts.repoRoot,
+            encoding: 'utf8',
+            maxBuffer: GIT_INSPECTION_MAX_BUFFER,
+            stdio: ['ignore', 'pipe', 'pipe'],
+          },
+        );
+      }
+    } catch {
+      findings.push({
+        forbidden_id: 'FORBIDDEN-SCAN-UNAVAILABLE',
+        source: 'commit-change',
+        ref: sha,
+        matched: '',
+        message: `commit ${sha.slice(0, 12)} change evidence could not be inspected`,
+      });
+      continue;
+    }
     for (const entry of compiled) {
+      const protectedPaths = changedPaths.filter((path) =>
+        /^(?:law\/|product\/|work\/(?:rounds|audit)\/|record\/|\.devai\/config\/)/u.test(path),
+      );
+      const inspectorTestOnly =
+        author === 'DEVAI Inspector' &&
+        changedPaths.length > 0 &&
+        changedPaths.every(
+          (path) =>
+            /(?:^|\/)tests\//u.test(path) || /\.(?:test|spec)\.(?:[cm]?[jt]s|[jt]sx)$/u.test(path),
+        );
+      if (
+        entry.id === 'FORBID-MUTATE-INVARIANTS' &&
+        protectedPaths.length > 0 &&
+        protectedPaths.every((path) => {
+          if (/^(?:law\/|work\/rounds\/)/u.test(path)) return author === 'DEVAI Architect';
+          if (path.startsWith('product/')) return author === 'DEVAI Owner';
+          if (path.startsWith('work/audit/')) return author === 'DEVAI Auditor';
+          if (path.startsWith('record/')) return author === 'DEVAI Machine';
+          if (path.startsWith('.devai/config/')) return author === 'DEVAI Engineer';
+          return false;
+        })
+      ) {
+        continue;
+      }
+      if (
+        entry.id === 'FORBID-CI-WITHOUT-ADR' &&
+        author === 'DEVAI Engineer' &&
+        changedPaths.some((path) => path.startsWith('.github/workflows/'))
+      ) {
+        continue;
+      }
+      const pathEvidenceIds = new Set([
+        'FORBID-DELETE-AUTHORITY-DOCS',
+        'FORBID-MUTATE-INVARIANTS',
+        'FORBID-CI-WITHOUT-ADR',
+      ]);
+      const changeEvidence = pathEvidenceIds.has(entry.id) ? operations : `${operations}\n${patch}`;
       for (const re of entry.patterns) {
-        const m = re.exec(body);
+        const messageMatch = re.exec(body);
+        re.lastIndex = 0;
+        const changeMatch =
+          messageMatch === null && !(inspectorTestOnly && !pathEvidenceIds.has(entry.id))
+            ? re.exec(changeEvidence)
+            : null;
+        const m = messageMatch ?? changeMatch;
         if (m === null) continue;
         findings.push({
           forbidden_id: entry.id,
-          source: 'commit-message',
+          source: messageMatch === null ? 'commit-change' : 'commit-message',
           ref: sha,
           matched: m[0],
           message: `commit ${sha.slice(0, 12)} matches forbidden pattern: ${entry.action}`,

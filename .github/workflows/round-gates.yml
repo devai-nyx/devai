@@ -17,9 +17,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+      - run: node scripts/prewarm-package-managers.mjs
       - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm run test:t4
@@ -30,9 +33,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+      - run: node scripts/prewarm-package-managers.mjs
       - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
@@ -44,9 +50,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+      - run: node scripts/prewarm-package-managers.mjs
       - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm run test:t6

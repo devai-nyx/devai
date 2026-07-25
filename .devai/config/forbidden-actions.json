@@ -6,10 +6,7 @@
       "action": "Force-push to any branch",
       "rationale": "Overwrites history",
       "severity": "critical",
-      "detect_patterns": [
-        "\\bgit\\s+push\\s+--force\\b",
-        "\\bgit\\s+push\\s+\\+"
-      ],
+      "detect_patterns": ["\\bgit\\s+push\\s+--force\\b", "\\bgit\\s+push\\s+\\+"],
       "safer_alternative": "Open a new PR; merge via the platform"
     },
     {
@@ -17,9 +14,7 @@
       "action": "Push to `main` directly",
       "rationale": "Bypasses review",
       "severity": "critical",
-      "detect_patterns": [
-        "\\bgit\\s+push\\s+.*\\bmain\\b"
-      ],
+      "detect_patterns": ["\\bgit\\s+push\\s+.*\\bmain\\b"],
       "safer_alternative": "Push to a feature branch + PR"
     },
     {
@@ -27,9 +22,7 @@
       "action": "`git reset --hard` on tracked changes",
       "rationale": "Data loss",
       "severity": "critical",
-      "detect_patterns": [
-        "\\bgit\\s+reset\\s+--hard\\b"
-      ],
+      "detect_patterns": ["\\bgit\\s+reset\\s+--hard\\b"],
       "safer_alternative": "git stash or branch the work first"
     },
     {
@@ -37,9 +30,7 @@
       "action": "`git rebase --interactive`",
       "rationale": "Rewrites history",
       "severity": "high",
-      "detect_patterns": [
-        "\\bgit\\s+rebase\\s+(--interactive|-i)\\b"
-      ],
+      "detect_patterns": ["\\bgit\\s+rebase\\s+(--interactive|-i)\\b"],
       "safer_alternative": "Stack the change into a new commit"
     },
     {
@@ -47,9 +38,7 @@
       "action": "Any `--no-verify` flag",
       "rationale": "Bypasses hooks",
       "severity": "high",
-      "detect_patterns": [
-        "\\b--no-verify\\b"
-      ],
+      "detect_patterns": ["\\b--no-verify\\b"],
       "safer_alternative": "Fix the underlying hook failure"
     },
     {
@@ -57,10 +46,7 @@
       "action": "Any `--no-gpg-sign` flag",
       "rationale": "Bypasses signing",
       "severity": "high",
-      "detect_patterns": [
-        "\\b--no-gpg-sign\\b",
-        "commit\\.gpgsign=false"
-      ],
+      "detect_patterns": ["\\b--no-gpg-sign\\b", "commit\\.gpgsign=false"],
       "safer_alternative": "Configure signing in the environment"
     },
     {
@@ -68,10 +54,7 @@
       "action": "Deleting any branch",
       "rationale": "Loss of work",
       "severity": "high",
-      "detect_patterns": [
-        "\\bgit\\s+branch\\s+-D\\b",
-        "\\bgit\\s+push\\s+.*--delete\\b"
-      ],
+      "detect_patterns": ["\\bgit\\s+branch\\s+-D\\b", "\\bgit\\s+push\\s+.*--delete\\b"],
       "safer_alternative": "Archive the branch; merge first if work survives"
     },
     {
@@ -91,16 +74,17 @@
       "action": "`rm -rf` on uncommitted work",
       "rationale": "Data loss",
       "severity": "high",
-      "detect_patterns": [
-        "\\brm\\s+-rf\\b"
-      ],
+      "detect_patterns": ["\\brm\\s+-rf\\b"],
       "safer_alternative": "Commit first; rm -rf only on confirmed paths"
     },
     {
       "id": "FORBID-DELETE-AUTHORITY-DOCS",
-      "action": "Deleting any file under docs/arch, docs/contracts, docs/ops, docs/security",
+      "action": "Deleting successor law, product intent, governed rounds/audits, or machine proofs outside the owning authority path",
       "rationale": "Authority violation",
       "severity": "critical",
+      "detect_patterns": [
+        "\\b(?:git\\s+rm|rm)\\s+[^\\n]*(?:law|product|work/(?:rounds|audit)|record)/"
+      ],
       "safer_alternative": "Architect amendment via ADR + tombstone"
     },
     {
@@ -108,6 +92,7 @@
       "action": "Sending external messages (Slack, email, GitHub issue comments outside the PR)",
       "rationale": "Visible action",
       "severity": "medium",
+      "detect_patterns": ["\\b(?:slack|sendmail|mail)\\b", "\\bgh\\s+(?:issue|pr)\\s+comment\\b"],
       "safer_alternative": "Comment in the PR; let a human relay externally"
     },
     {
@@ -115,6 +100,9 @@
       "action": "Modifying CI/CD pipelines without ADR",
       "rationale": "Gate weakening",
       "severity": "high",
+      "detect_patterns": [
+        "(?:\\.github/workflows/|scripts/(?:run-ci-stages|check-workflows)\\.mjs)"
+      ],
       "safer_alternative": "Draft an ADR explaining the gate change first"
     },
     {
@@ -122,6 +110,7 @@
       "action": "Modifying KMS, IAM, SSM, Secrets Manager in stage or prod",
       "rationale": "Security surface",
       "severity": "critical",
+      "detect_patterns": ["\\baws\\s+(?:kms|iam|ssm|secretsmanager)\\b"],
       "safer_alternative": "Use the ops authority path with per-action authorisation"
     },
     {
@@ -129,9 +118,7 @@
       "action": "`npm publish` / `pnpm publish` (or equivalent)",
       "rationale": "Release action",
       "severity": "high",
-      "detect_patterns": [
-        "\\b(npm|pnpm|yarn)\\s+publish\\b"
-      ],
+      "detect_patterns": ["\\b(npm|pnpm|yarn)\\s+publish\\b"],
       "safer_alternative": "Release via the platform pipeline"
     },
     {
@@ -139,17 +126,17 @@
       "action": "`aws s3 rm`, `aws s3 sync --delete`, `aws ecs delete-*` outside dev",
       "rationale": "Data/service loss",
       "severity": "critical",
-      "detect_patterns": [
-        "\\baws\\s+s3\\s+rm\\b",
-        "\\baws\\s+s3\\s+sync\\s+.*--delete\\b"
-      ],
+      "detect_patterns": ["\\baws\\s+s3\\s+rm\\b", "\\baws\\s+s3\\s+sync\\s+.*--delete\\b"],
       "safer_alternative": "Soft-delete + dev verification first"
     },
     {
       "id": "FORBID-MUTATE-INVARIANTS",
-      "action": "Modifying docs/framework/arch/invariants/* or .devai/config/* without Architect authority",
+      "action": "Modifying successor law or committed policy materializations without Architect authority",
       "rationale": "Constitutional change",
       "severity": "critical",
+      "detect_patterns": [
+        "\\b(?:git\\s+(?:add|rm)|rm)\\s+[^\\n]*(?:law/|product/|work/(?:rounds|audit)/|record/|\\.devai/config/)"
+      ],
       "safer_alternative": "Architect amendment via ADR + DESIGN-DECISIONS entry"
     }
   ]

@@ -25,3 +25,4 @@ describe('constitution structure', () => {
     expect(text).not.toContain('deltas to work into article text');
   });
 });
+// Invariants: INV-DEVAI-001

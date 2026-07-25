@@ -9,17 +9,17 @@ sidebar_position: 3
 
 ## The nine transversals
 
-| ID | Name | What it measures | Example sensors |
-|---|---|---|---|
-| T1 | Coverage | Does the substrate cover what it should? Are there gaps? | `sense-spec-depth`, `sense-test-coverage-depth`, `sense-inventory-adherence`, `sense-harness-coverage` |
-| T2 | Depth | Are individual artifacts substantive, or shallow? | `sense-spec-depth`, `sense-test-coverage-depth`, `sense-plant-depth` |
-| T3 | Coherence | Do the parts of this substrate agree with one another? | `sense-spec-alignment` (cross-references), `sense-test-coherence`, `sense-harness-coherence` |
-| T4 | Alignment | Does this substrate agree with the substrates above it in the authority chain? | `sense-test-invariant-alignment`, `sense-harness-invariant-alignment`, `sense-spec-alignment` |
-| T5 | Idiomaticity | Does this substrate follow the framework's idioms? Linter-style. | `sense-spec-idiomaticity`, `sense-plant-coherence` + lint, `sense-test-idiomaticity`, `sense-harness-idiomaticity` |
-| T6 | Security and Privacy | Are security/privacy concerns named, tested, and enforced? | `sense-security-scan`, `sense-spec-security-coverage`, `sense-test-security-coverage`, `sense-harness-security` |
-| T7 | Performance and Efficiency | Are perf/efficiency concerns named and tested? | `sense-perf-test`, `sense-spec-performance-targets`, `sense-test-performance-coverage`, `sense-inventory-performance`, `sense-harness-performance` |
-| T8 | Robustness | Does the substrate handle stress, failure, edge cases? | `sense-spec-robustness-targets`, `sense-test-robustness-coverage`, `sense-harness-robustness` |
-| T9 | Discipline | Are framework rules honored over time? Is there drift? | `sense-test-weakening` (Article 30), `sense-harness-green-main`, `sense-trace-resolve` |
+| ID  | Name                       | What it measures                                                               | Example sensors                                                                                                                                    |
+| --- | -------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| T1  | Coverage                   | Does the substrate cover what it should? Are there gaps?                       | `sense-spec-depth`, `sense-test-coverage-depth`, `sense-inventory-adherence`, `sense-harness-coverage`                                             |
+| T2  | Depth                      | Are individual artifacts substantive, or shallow?                              | `sense-spec-depth`, `sense-test-coverage-depth`, `sense-plant-depth`                                                                               |
+| T3  | Coherence                  | Do the parts of this substrate agree with one another?                         | `sense-spec-alignment` (cross-references), `sense-test-coherence`, `sense-harness-coherence`                                                       |
+| T4  | Alignment                  | Does this substrate agree with the substrates above it in the authority chain? | `sense-test-invariant-alignment`, `sense-harness-invariant-alignment`, `sense-spec-alignment`                                                      |
+| T5  | Idiomaticity               | Does this substrate follow the framework's idioms? Linter-style.               | `sense-spec-idiomaticity`, `sense-plant-coherence` + lint, `sense-test-idiomaticity`, `sense-harness-idiomaticity`                                 |
+| T6  | Security and Privacy       | Are security/privacy concerns named, tested, and enforced?                     | `sense-security-scan`, `sense-spec-security-coverage`, `sense-test-security-coverage`, `sense-harness-security`                                    |
+| T7  | Performance and Efficiency | Are perf/efficiency concerns named and tested?                                 | `sense-perf-test`, `sense-spec-performance-targets`, `sense-test-performance-coverage`, `sense-inventory-performance`, `sense-harness-performance` |
+| T8  | Robustness                 | Does the substrate handle stress, failure, edge cases?                         | `sense-spec-robustness-targets`, `sense-test-robustness-coverage`, `sense-harness-robustness`                                                      |
+| T9  | Discipline                 | Are framework rules honored over time? Is there drift?                         | `sense-test-weakening` (Article 30), `sense-harness-green-main`, `sense-trace-resolve`                                                             |
 
 Each transversal is a single property evaluated five times — once per substrate. T6 (Security) for F1 is "are security invariants named?"; T6 for F2 is "is the code secure?"; T6 for F3 is "do tests probe security?"; and so on.
 

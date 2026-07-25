@@ -14,16 +14,16 @@ Each invariant references exactly one domain.
 
 ### Core domains
 
-| Domain | Concern | Examples |
-|---|---|---|
-| `AUTH` | Authentication, authorization, RBAC | `INV-AUTH-001` (e.g. "session tokens are HttpOnly+Secure") |
-| `SEC` | Security beyond auth (CSP, secrets handling, injection) | `INV-SEC-001` (e.g. "no eval in prod bundles") |
-| `PERF` | Performance budgets, latency targets | `INV-PERF-001` (e.g. "p99 page load < 2s") |
-| `DATA` | Data integrity, PII handling, constraints | `INV-DATA-001` (e.g. "users.email NOT NULL UNIQUE") |
-| `API` | API contracts, versioning, deprecation | `INV-API-001` (e.g. "v1 endpoints maintain backward compatibility") |
-| `INFRA` | Build, deploy, CI, infrastructure-as-code | `INV-INFRA-001` (e.g. "deploys are reversible") |
-| `UI` | Frontend behavior, accessibility, UX | `INV-UI-001` (e.g. "all interactive elements are keyboard-reachable") |
-| `CORE` | DEVAI-internal governance | `INV-DEVAI-001` ("DEVAI applies to itself") |
+| Domain  | Concern                                                 | Examples                                                              |
+| ------- | ------------------------------------------------------- | --------------------------------------------------------------------- |
+| `AUTH`  | Authentication, authorization, RBAC                     | `INV-AUTH-001` (e.g. "session tokens are HttpOnly+Secure")            |
+| `SEC`   | Security beyond auth (CSP, secrets handling, injection) | `INV-SEC-001` (e.g. "no eval in prod bundles")                        |
+| `PERF`  | Performance budgets, latency targets                    | `INV-PERF-001` (e.g. "p99 page load < 2s")                            |
+| `DATA`  | Data integrity, PII handling, constraints               | `INV-DATA-001` (e.g. "users.email NOT NULL UNIQUE")                   |
+| `API`   | API contracts, versioning, deprecation                  | `INV-API-001` (e.g. "v1 endpoints maintain backward compatibility")   |
+| `INFRA` | Build, deploy, CI, infrastructure-as-code               | `INV-INFRA-001` (e.g. "deploys are reversible")                       |
+| `UI`    | Frontend behavior, accessibility, UX                    | `INV-UI-001` (e.g. "all interactive elements are keyboard-reachable") |
+| `CORE`  | DEVAI-internal governance                               | `INV-DEVAI-001` ("DEVAI applies to itself")                           |
 
 `CORE` is reserved for the framework itself. Adopters use the other seven plus their own client domains.
 
@@ -49,11 +49,11 @@ Adding a domain is a config change reviewed under Architect authority.
 
 Three options were considered:
 
-| Option | Verdict | Why |
-|---|---|---|
+| Option                                               | Verdict  | Why                                                                                                                                                    |
+| ---------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Fixed taxonomy (DEVAI ships a single canonical list) | Rejected | Business domains vary widely. A fixed list either gets too long (covering every plausible business) or too short (leaving real concerns unclassified). |
-| Pure client-defined (no canonical core) | Rejected | Cross-DEVAI consistency dies. `INV-AUTH-001` should mean roughly the same kind of thing across every DEVAI-governed repo. |
-| Hybrid (core + client extensions) | Chosen | Cross-cutting concerns have stable names; business specifics are project-defined. Both needs met. |
+| Pure client-defined (no canonical core)              | Rejected | Cross-DEVAI consistency dies. `INV-AUTH-001` should mean roughly the same kind of thing across every DEVAI-governed repo.                              |
+| Hybrid (core + client extensions)                    | Chosen   | Cross-cutting concerns have stable names; business specifics are project-defined. Both needs met.                                                      |
 
 The core seven (eight including `CORE`) was distilled from analysis of what concerns reliably appear across every adopter, regardless of business domain. Adding a ninth core domain requires a successor D-entry: the bar is "this concern appears in the majority of DEVAI-adopting projects."
 

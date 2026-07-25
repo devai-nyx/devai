@@ -10,10 +10,7 @@
   "rationale": "A framework that cannot apply to itself cannot be trusted to apply elsewhere. Phase-0 minimum: F5 schemas validate. Each subsequent phase ratchets self-application up another rung.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int"
-    ],
+    "required_suites": ["unit", "int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -30,29 +27,15 @@
     ]
   },
   "scope": {
-    "components": [
-      "harness"
-    ],
-    "code_areas": [
-      ".devai/**",
-      "packages/**",
-      ".github/workflows/**"
-    ]
+    "components": ["harness"],
+    "code_areas": [".devai/**", "packages/**", ".github/workflows/**"]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval",
-      "adr"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval", "adr"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "self-application",
-    "article-36"
-  ],
+  "tags": ["self-application", "article-36"],
   "measurable_via": [
     "catalog actions",
     "policy check adrs",
@@ -110,7 +93,5 @@
     "spec validate test trace",
     "work state prune"
   ],
-  "provenance": [
-    "ex-INV-DEVAI-001@devai-original"
-  ]
+  "provenance": ["ex-INV-DEVAI-001@devai-original"]
 }

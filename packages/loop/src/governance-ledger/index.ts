@@ -193,30 +193,106 @@ function gitFile(repoRoot: string, commit: string, path: string): string | null 
   return git(repoRoot, ['show', `${commit}:${path}`]);
 }
 
-function normalizedFrontmatterWithoutSupersededBy(record: ParsedGovernanceRecord): string {
-  const { superseded_by: _allowed, ...rest } = record.frontmatter;
+interface HistoricalPath {
+  readonly commit: string;
+  readonly path: string;
+}
+
+function recordHistory(repoRoot: string, path: string): HistoricalPath[] | null {
+  const output = git(repoRoot, [
+    'log',
+    '--follow',
+    '--find-renames=1%',
+    '--format=%H',
+    '--name-status',
+    '--',
+    path,
+  ]);
+  if (output === null) return null;
+  const entries: HistoricalPath[] = [];
+  let commit: string | undefined;
+  for (const line of output.split('\n').map((value) => value.trim())) {
+    if (/^[0-9a-f]{40}(?:[0-9a-f]{24})?$/u.test(line)) {
+      commit = line;
+    } else if (line.length > 0 && commit !== undefined) {
+      const fields = line.split('\t');
+      const status = fields[0] ?? '';
+      const historicalPath = status.startsWith('R') ? fields[2] : fields[1];
+      if (historicalPath === undefined) continue;
+      entries.push({ commit, path: historicalPath });
+      commit = undefined;
+    }
+  }
+  return entries.reverse();
+}
+
+function normalizedSealedFrontmatter(record: ParsedGovernanceRecord): string {
+  const { status: _lifecycle, superseded_by: _replacement, ...rest } = record.frontmatter;
   return JSON.stringify(rest);
 }
 
-function lockedHistoryFindings(
+function replacementId(record: ParsedGovernanceRecord): string | null {
+  const value = record.frontmatter['superseded_by'];
+  return typeof value === 'string' && value.length > 0 ? value : null;
+}
+
+function sealedTransitionAllowed(
+  before: ParsedGovernanceRecord,
+  after: ParsedGovernanceRecord,
+): boolean {
+  const beforeStatus = String(before.frontmatter['status']);
+  const afterStatus = String(after.frontmatter['status']);
+  const beforeReplacement = replacementId(before);
+  const afterReplacement = replacementId(after);
+
+  if (beforeStatus === 'active') {
+    if (afterStatus === 'active') return afterReplacement === beforeReplacement;
+    if (afterStatus === 'superseded') {
+      return beforeReplacement === null && afterReplacement !== null;
+    }
+    if (afterStatus === 'tombstoned') return afterReplacement === beforeReplacement;
+    return false;
+  }
+  return (
+    ['superseded', 'tombstoned'].includes(beforeStatus) &&
+    afterStatus === beforeStatus &&
+    afterReplacement === beforeReplacement
+  );
+}
+
+function sealedHistoryFindings(
   repoRoot: string,
   record: ParsedGovernanceRecord,
 ): GovernanceFinding[] {
-  if (!['locked', 'accepted'].includes(String(record.frontmatter['status']))) return [];
   const rel = relative(repoRoot, record.path);
-  const commits = (git(repoRoot, ['log', '--follow', '--format=%H', '--reverse', '--', rel]) ?? '')
-    .split('\n')
-    .filter(Boolean);
+  const history = recordHistory(repoRoot, rel);
+  if (history === null || history.length === 0) {
+    return [
+      {
+        code: 'DECISION_HISTORY_UNAVAILABLE',
+        message: `${rel} history could not be enumerated completely.`,
+        path: rel,
+      },
+    ];
+  }
   let sealed: ParsedGovernanceRecord | undefined;
   let sealIndex = -1;
-  for (const [index, commit] of commits.entries()) {
-    const source = gitFile(repoRoot, commit, rel);
-    if (source === null) continue;
+  for (const [index, entry] of history.entries()) {
+    const source = gitFile(repoRoot, entry.commit, entry.path);
+    if (source === null) {
+      return [
+        {
+          code: 'DECISION_HISTORY_UNAVAILABLE',
+          message: `${rel} revision ${entry.commit}:${entry.path} could not be read.`,
+          path: rel,
+        },
+      ];
+    }
     try {
-      const candidate = parseRecordSource(rel, source);
+      const candidate = parseRecordSource(entry.path, source);
       if (
         validators.recordMeta(candidate.frontmatter) &&
-        ['locked', 'accepted'].includes(String(candidate.frontmatter['status']))
+        ['active', 'superseded', 'tombstoned'].includes(String(candidate.frontmatter['status']))
       ) {
         sealed = candidate;
         sealIndex = index;
@@ -227,32 +303,38 @@ function lockedHistoryFindings(
     }
   }
   if (sealed === undefined || sealIndex < 0) return [];
-  for (const commit of commits.slice(sealIndex + 1)) {
-    const laterSource = gitFile(repoRoot, commit, rel);
-    if (laterSource === null) continue;
-    const later = parseRecordSource(rel, laterSource);
-    if (
-      later.body !== sealed.body ||
-      normalizedFrontmatterWithoutSupersededBy(later) !==
-        normalizedFrontmatterWithoutSupersededBy(sealed)
-    ) {
+  for (const entry of history.slice(sealIndex + 1)) {
+    const laterSource = gitFile(repoRoot, entry.commit, entry.path);
+    if (laterSource === null) {
       return [
         {
-          code: 'DECISION_LOCKED_BODY_MUTATED',
-          message: `${rel} changed after its sealing commit; only superseded_by appends are allowed.`,
+          code: 'DECISION_HISTORY_UNAVAILABLE',
+          message: `${rel} revision ${entry.commit}:${entry.path} could not be read.`,
           path: rel,
         },
       ];
     }
-    const before = sealed.frontmatter['superseded_by'];
-    const after = later.frontmatter['superseded_by'];
-    const beforeIds = Array.isArray(before) ? before.map(String) : [];
-    const afterIds = Array.isArray(after) ? after.map(String) : [];
-    if (beforeIds.some((id) => !afterIds.includes(id)) || afterIds.length < beforeIds.length) {
+    let later: ParsedGovernanceRecord;
+    try {
+      later = parseRecordSource(entry.path, laterSource);
+    } catch (error) {
+      return [
+        {
+          code: 'DECISION_HISTORY_PARSE_INVALID',
+          message: `${rel} has malformed post-seal history at ${entry.commit}: ${error instanceof Error ? error.message : String(error)}.`,
+          path: rel,
+        },
+      ];
+    }
+    if (
+      later.body !== sealed.body ||
+      normalizedSealedFrontmatter(later) !== normalizedSealedFrontmatter(sealed) ||
+      !sealedTransitionAllowed(sealed, later)
+    ) {
       return [
         {
           code: 'DECISION_LOCKED_BODY_MUTATED',
-          message: `${rel} removed a sealed superseded_by entry.`,
+          message: `${rel} changed after its sealing commit; only a canonical terminal lifecycle transition is allowed.`,
           path: rel,
         },
       ];
@@ -279,6 +361,25 @@ export function decisionRecordIntegrity(options: {
 }): GovernanceIntegrityReport {
   const recordsDir = resolve(options.repoRoot, options.recordsDir ?? DEFAULT_RECORDS_DIR);
   const findings: GovernanceFinding[] = [];
+  const hasGitMetadata = existsSync(join(options.repoRoot, '.git'));
+  const shallowState = hasGitMetadata
+    ? git(options.repoRoot, ['rev-parse', '--is-shallow-repository'])
+    : null;
+  const historyAvailable = hasGitMetadata && shallowState !== null;
+  if (!hasGitMetadata || shallowState === null) {
+    findings.push({
+      code: 'DECISION_HISTORY_UNAVAILABLE',
+      message: 'Sealed decision history requires Git, but repository state could not be queried.',
+      path: relative(options.repoRoot, recordsDir),
+    });
+  } else if (shallowState === 'true') {
+    findings.push({
+      code: 'DECISION_HISTORY_SHALLOW',
+      message:
+        'Sealed decision history requires a complete Git history; shallow history cannot pass.',
+      path: relative(options.repoRoot, recordsDir),
+    });
+  }
   const records = new Map<string, ParsedGovernanceRecord>();
   for (const path of markdownFiles(recordsDir)) {
     let record: ParsedGovernanceRecord;
@@ -300,10 +401,7 @@ export function decisionRecordIntegrity(options: {
       });
     }
     const id = String(record.frontmatter['id'] ?? '');
-    if (
-      basename(path, '.md') !== id &&
-      !basename(path, '.md').startsWith(`${id}-`)
-    ) {
+    if (basename(path, '.md') !== id && !basename(path, '.md').startsWith(`${id}-`)) {
       findings.push({
         code: 'DECISION_ID_FILENAME_MISMATCH',
         message: `${relative(options.repoRoot, path)} declares ${id || '(missing id)'}.`,
@@ -318,22 +416,33 @@ export function decisionRecordIntegrity(options: {
       });
     }
     records.set(id, record);
-    findings.push(...lockedHistoryFindings(options.repoRoot, record));
+    if (hasGitMetadata && historyAvailable) {
+      findings.push(...sealedHistoryFindings(options.repoRoot, record));
+    }
   }
 
   for (const [id, record] of records) {
     const supersedes = Array.isArray(record.frontmatter['supersedes'])
       ? record.frontmatter['supersedes'].map(String)
       : [];
-    const supersededBy = Array.isArray(record.frontmatter['superseded_by'])
-      ? record.frontmatter['superseded_by'].map(String)
-      : [];
+    const supersededBy =
+      typeof record.frontmatter['superseded_by'] === 'string'
+        ? [record.frontmatter['superseded_by']]
+        : [];
     for (const target of supersedes) {
       const other = records.get(target);
-      const reverse = Array.isArray(other?.frontmatter['superseded_by'])
-        ? other.frontmatter['superseded_by'].map(String)
-        : [];
-      if (other === undefined || !reverse.includes(id)) {
+      const reverse =
+        typeof other?.frontmatter['superseded_by'] === 'string'
+          ? [other.frontmatter['superseded_by']]
+          : [];
+      // Draft successor ADRs may cite frozen predecessor source filenames in
+      // `supersedes`. Reverse symmetry applies only within the live successor
+      // record population; external provenance is resolved by the archive
+      // manifest and citation checks.
+      if (
+        (other === undefined && /^ADR-[0-9]{3}$/u.test(target)) ||
+        (other !== undefined && !reverse.includes(id))
+      ) {
         findings.push({
           code: 'DECISION_SUPERSESSION_ASYMMETRIC',
           message: `${id} supersedes ${target}, but the reverse link does not resolve.`,
@@ -372,7 +481,23 @@ export function decisionCitationResolution(options: {
   readonly recordsDir?: string;
 }): GovernanceIntegrityReport {
   const recordsDir = resolve(options.repoRoot, options.recordsDir ?? DEFAULT_RECORDS_DIR);
-  const resolved = new Set(markdownFiles(recordsDir).map((path) => basename(path, '.md')));
+  const resolved = new Set<string>();
+  for (const path of markdownFiles(recordsDir)) {
+    try {
+      const id = parseGovernanceRecord(path).frontmatter['id'];
+      if (typeof id === 'string') resolved.add(id);
+    } catch {
+      // Record-integrity reports malformed records; they cannot resolve citations.
+    }
+  }
+  const registerPath = resolve(options.repoRoot, 'law/register/DECISIONS.md');
+  if (existsSync(registerPath)) {
+    const register = readFileSync(registerPath, 'utf8');
+    for (const match of register.matchAll(/^### (DII-[0-9]+)\b/gmu)) {
+      const id = match[1];
+      if (id !== undefined) resolved.add(id);
+    }
+  }
   const roots = options.roots ?? ['README.md', 'law', 'product', 'docs', 'packages', 'work'];
   const strictRoots = options.roots !== undefined;
   const findings: GovernanceFinding[] = [];

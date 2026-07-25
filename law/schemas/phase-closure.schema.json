@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/phase-closure.schema.json",
   "title": "PhaseClosure",
-  "description": "Machine-recorded closure of a phase or round (D-110, governance-roadmap item 4). Replaces the hand-narrated portion of closing D-entries: gate posture, batch list, validation criteria, and the no-deletion flag become data; derived properties (consecutive-streak counters, scope trends) are computed from the ledger by `devai govern phase ledger`, never stored as prose. The closing D-entry shrinks to a human judgment plus a pointer to this record. Written by `devai govern phase close` to .devai/state/closures/<id>.json (tracked, append-only by convention: a recorded closure is never edited; corrections append a new record with `supersedes`).",
+  "description": "Machine-recorded closure of a phase or round (D-110, governance-roadmap item 4). Replaces the hand-narrated portion of closing D-entries: gate posture, batch list, validation criteria, and the no-deletion flag become data; derived properties (consecutive-streak counters, scope trends) are computed from the ledger by `devai govern phase ledger`, never stored as prose. The closing D-entry shrinks to a human judgment plus a pointer to this record. Written by `devai govern phase close` to record/proofs/compliance/closures/PC-NNNN.json (tracked, append-only by convention: a recorded closure is never edited; corrections append a new record with `supersedes`).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -51,11 +51,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "id",
-          "roles",
-          "headline"
-        ],
+        "required": ["id", "roles", "headline"],
         "properties": {
           "id": {
             "type": "string",
@@ -65,44 +61,54 @@
             "type": "array",
             "minItems": 1,
             "items": {
-              "enum": [
-                "Owner",
-                "Architect",
-                "Inspector",
-                "Engineer",
-                "Auditor"
-              ]
+              "enum": ["Owner", "Architect", "Inspector", "Engineer", "Auditor", "Machine"]
             }
           },
           "commit": {
             "type": "string",
-            "pattern": "^[0-9a-f]{7,40}$",
+            "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$",
             "description": "Commit SHA the batch landed as. Optional for batches folded into the closing commit."
           },
           "headline": {
             "type": "string",
             "minLength": 1
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "roles": {
+                  "contains": {
+                    "const": "Machine"
+                  }
+                }
+              },
+              "required": ["roles"]
+            },
+            "then": {
+              "required": ["commit"]
+            }
+          }
+        ]
       }
     },
     "gates": {
       "type": "object",
       "description": "Gate-sweep results at close, keyed by gate name (e.g. lint, typecheck, unit, integration, contract, docs-links, docs-governance, spec-validate-all).",
       "minProperties": 1,
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": ".*\\S.*"
+      },
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "status"
-        ],
+        "required": ["status"],
         "properties": {
           "status": {
-            "enum": [
-              "pass",
-              "fail",
-              "skipped"
-            ]
+            "enum": ["pass", "fail", "skipped"]
           },
           "detail": {
             "type": "string",
@@ -121,21 +127,14 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "criterion",
-          "verdict"
-        ],
+        "required": ["criterion", "verdict"],
         "properties": {
           "criterion": {
             "type": "string",
             "minLength": 1
           },
           "verdict": {
-            "enum": [
-              "pass",
-              "fail",
-              "n/a"
-            ]
+            "enum": ["pass", "fail", "n/a"]
           },
           "evidence": {
             "type": "string"
@@ -154,26 +153,17 @@
     },
     "merged_as": {
       "type": "string",
-      "pattern": "^[0-9a-f]{7,40}$",
-      "description": "The integration-branch commit the closed round actually shipped as (merge commit or branch tip on main). Added at R18 (D-133) after PC-0005 attested gates at a SHA that was not the shipped tip; `devai govern phase close` requires this from PC-0007 onward."
+      "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$",
+      "description": "The integration-branch commit the closed round actually shipped as (merge commit or branch tip on main). Historical records remain schema-valid without this field, but every new successor record emitted by `devai govern phase close` requires it."
     },
     "release_disposition": {
-      "enum": [
-        "published",
-        "changeset-pending",
-        "none-preratification",
-        "none-needed",
-        "missing"
-      ],
-      "description": "Whether the round's package changes have a release path: 'published' (release cut), 'changeset-pending' (changeset recorded, publish pending), 'none-preratification' (package-visible changes intentionally withheld until ratification), 'none-needed' (no package-visible changes), or 'missing' (package changes shipped with no changeset — a recorded defect, never a silent one). Added at R18 (D-133); required by the ceremony from PC-0007 onward."
+      "enum": ["published", "changeset-pending", "none-preratification", "none-needed", "missing"],
+      "description": "Whether the round's package changes have a release path: 'published' (release cut), 'changeset-pending' (changeset recorded, publish pending), 'none-preratification' (package-visible changes intentionally withheld until ratification), 'none-needed' (no package-visible changes), or 'missing' (package changes shipped with no changeset — a recorded defect, never a silent one). Historical records remain schema-valid without this field, but every new successor record emitted by `devai govern phase close` requires it."
     },
     "evidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "proof_epoch",
-        "terminal_sha256"
-      ],
+      "required": ["proof_epoch", "terminal_sha256"],
       "properties": {
         "proof_epoch": {
           "type": "string",
@@ -201,9 +191,7 @@
       "batches": [
         {
           "id": "DR.A",
-          "roles": [
-            "Architect"
-          ],
+          "roles": ["Architect"],
           "headline": "Constitution 0.2.0 -> 0.3.0 (Articles 1, 23, 27); BUILD-PLAN history frozen to archive; README/CLAUDE refresh; docs_drift schema enum; D-108"
         }
       ],

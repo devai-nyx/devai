@@ -1,13 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "roles": [
-    "operator",
-    "architect",
-    "engineer",
-    "inspector",
-    "auditor",
-    "owner"
-  ],
+  "roles": ["operator", "architect", "engineer", "inspector", "auditor", "owner"],
   "cases": [
     {
       "id": "UC-devai-doctor",
@@ -458,20 +451,12 @@
       "id": "UC-devai-round-lifecycle",
       "title": "Maintainer opens, observes, and archives a governed round",
       "goal": "Carry one human-directed round from disposable local planning state to an immutable durable record without crossing into experimental autonomy.",
-      "actors": [
-        "owner",
-        "architect",
-        "inspector",
-        "engineer",
-        "auditor"
-      ],
+      "actors": ["owner", "architect", "inspector", "engineer", "auditor"],
       "preconditions": [
         "DEVAI adoption has seeded the local and durable round directories",
         "The repository has a binding authority policy"
       ],
-      "triggers": [
-        "A maintainer is authorized to open a reserved governance round"
-      ],
+      "triggers": ["A maintainer is authorized to open a reserved governance round"],
       "mainFlow": [
         {
           "id": "round-scaffold",

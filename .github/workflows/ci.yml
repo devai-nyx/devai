@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
@@ -34,9 +36,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+      - run: node scripts/prewarm-package-managers.mjs
       - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm run ci:stage1
@@ -47,9 +52,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+      - run: node scripts/prewarm-package-managers.mjs
       - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm run ci:stage2
@@ -60,9 +68,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+      - run: node scripts/prewarm-package-managers.mjs
       - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm run ci:changesets
@@ -92,9 +103,34 @@ jobs:
       DEVAI_DB_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+      - run: node scripts/prewarm-package-managers.mjs
       - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm run ci:stage3
+
+  governance:
+    name: Governed repository enforcement
+    needs: static
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: node scripts/prewarm-package-managers.mjs
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run ci:governance
+
+  round-gates:
+    needs:
+      - merged-coverage
+      - governance
+    uses: ./.github/workflows/round-gates.yml

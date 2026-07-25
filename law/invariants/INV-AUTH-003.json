@@ -11,12 +11,7 @@
   "rationale": "Public decision fields and hashes prove consistency, not origin. Final-boundary issuer membership is required to make the authority decision load-bearing against direct imports and replay.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int",
-      "sec",
-      "e2e"
-    ],
+    "required_suites": ["unit", "int", "sec", "e2e"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -35,21 +30,11 @@
         "anchor": "10-evidence-contract-and-issuer-authenticity"
       }
     ],
-    "decisions": [
-      "D-135",
-      "ADR-003"
-    ]
+    "decisions": ["D-135", "ADR-003"]
   },
   "scope": {
-    "components": [
-      "authority-issuer",
-      "mutation-planner",
-      "mutation-boundaries"
-    ],
-    "code_areas": [
-      "packages/core/src/authority/**",
-      "packages/cli/src/**"
-    ]
+    "components": ["authority-issuer", "mutation-planner", "mutation-boundaries"],
+    "code_areas": ["packages/core/src/authority/**", "packages/cli/src/**"]
   },
   "change_policy": {
     "breaking_change_requires": [
@@ -70,7 +55,5 @@
     "exact-plan",
     "security"
   ],
-  "provenance": [
-    "ex-INV-AUTH-003@devai-original"
-  ]
+  "provenance": ["ex-INV-AUTH-003@devai-original"]
 }

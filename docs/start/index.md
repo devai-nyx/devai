@@ -17,13 +17,13 @@ slug: /
 
 Pick the entry point that matches what you came here to do.
 
-| You want to… | Start at |
-|---|---|
-| **Understand the theory** — why DEVAI uses control-theoretic vocabulary literally, not metaphorically | [§2 Theory](../theory) — the metaphor map plus the unified theory document |
-| **Adopt DEVAI in your repo** — install, declare a role, run the introspection, get a green scorecard | [§5 Adopters](../adopters) — install → first introspection → packs → operations |
-| **Operate as a role-holder** (Owner / Architect / Inspector / Engineer / Auditor) | [§4 Roles](../roles) — authority chain, per-role walkthroughs, coupled-triplet coordination |
-| **Reference a verb, skill, schema, or sensor** | [§6 Reference](../reference) — auto-generated CLI / skills / schemas, plus scripts and examples |
-| **Contribute to DEVAI itself, or audit its self-application** | [§7 Meta](../dev) — Article-36 surface: self-scorecard, test matrix, dev process, build plan |
+| You want to…                                                                                          | Start at                                                                                        |
+| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **Understand the theory** — why DEVAI uses control-theoretic vocabulary literally, not metaphorically | [§2 Theory](../theory) — the metaphor map plus the unified theory document                      |
+| **Adopt DEVAI in your repo** — install, declare a role, run the introspection, get a green scorecard  | [§5 Adopters](../adopters) — install → first introspection → packs → operations                 |
+| **Operate as a role-holder** (Owner / Architect / Inspector / Engineer / Auditor)                     | [§4 Roles](../roles) — authority chain, per-role walkthroughs, coupled-triplet coordination     |
+| **Reference a verb, skill, schema, or sensor**                                                        | [§6 Reference](../reference) — auto-generated CLI / skills / schemas, plus scripts and examples |
+| **Contribute to DEVAI itself, or audit its self-application**                                         | [§7 Meta](../dev) — Article-36 surface: self-scorecard, test matrix, dev process, build plan    |
 
 ## Status
 

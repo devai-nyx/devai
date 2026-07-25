@@ -2,7 +2,7 @@
 
 ## Property semantics
 
-**T7 Performance and Efficiency** (Constitution Article 5): "the artifact addresses latency, throughput, and resource budgets at a level appropriate to its responsibilities." For F1 (Spec), this means the spec substrate names *concrete* perf targets — not "should be fast" but "p95 < 200 ms" or "≥ 1000 RPS at steady state."
+**T7 Performance and Efficiency** (Constitution Article 5): "the artifact addresses latency, throughput, and resource budgets at a level appropriate to its responsibilities." For F1 (Spec), this means the spec substrate names _concrete_ perf targets — not "should be fast" but "p95 < 200 ms" or "≥ 1000 RPS at steady state."
 
 ## Operational definition
 

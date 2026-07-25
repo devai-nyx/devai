@@ -25,7 +25,8 @@
       "additionalProperties": false,
       "properties": {
         "repo_url": {
-          "type": "string"
+          "const": "https://github.com/devai-nyx/devai-original",
+          "description": "Frozen predecessor repository. The successor repository is never a valid self-reference."
         },
         "final_commit_sha": {
           "anyOf": [
@@ -113,16 +114,11 @@
                 "$ref": "common-defs.schema.json#/$defs/sha256"
               }
             },
-            "required": [
-              "path",
-              "sha256"
-            ]
+            "required": ["path", "sha256"]
           }
         }
       },
-      "required": [
-        "documents"
-      ]
+      "required": ["documents"]
     },
     "imported_law": {
       "type": "object"
@@ -143,20 +139,13 @@
             }
           },
           "status": {
-            "enum": [
-              "attested-historical",
-              "must-re-earn"
-            ]
+            "enum": ["attested-historical", "must-re-earn"]
           },
           "note": {
             "type": "string"
           }
         },
-        "required": [
-          "claim",
-          "predecessor_records",
-          "status"
-        ]
+        "required": ["claim", "predecessor_records", "status"]
       }
     },
     "tombstones": {
@@ -176,18 +165,13 @@
       }
     }
   },
-  "required": [
-    "record",
-    "predecessor",
-    "imported_evidence",
-    "non_claims"
-  ],
+  "required": ["record", "predecessor", "imported_evidence", "non_claims"],
   "examples": [
     {
       "record": "GEN-0001",
       "ratified": null,
       "predecessor": {
-        "repo_url": "https://github.com/devai-nyx/devai",
+        "repo_url": "https://github.com/devai-nyx/devai-original",
         "final_commit_sha": null,
         "final_tree_sha": null,
         "evidence_chain_head_sha256": null,
@@ -196,9 +180,7 @@
         "frozen": false
       },
       "imported_evidence": [],
-      "non_claims": [
-        "successor-standing-starts-at-zero"
-      ]
+      "non_claims": ["successor-standing-starts-at-zero"]
     }
   ]
 }

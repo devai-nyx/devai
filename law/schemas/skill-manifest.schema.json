@@ -40,11 +40,7 @@
       "type": "string"
     },
     "lifecycle": {
-      "enum": [
-        "supported",
-        "experimental",
-        "retired"
-      ],
+      "enum": ["supported", "experimental", "retired"],
       "default": "supported",
       "description": "Product posture. Experimental skills require explicit activation and cannot promote supported readiness."
     },
@@ -60,23 +56,10 @@
       }
     },
     "kind": {
-      "enum": [
-        "command",
-        "workflow",
-        "template",
-        "elicitation"
-      ]
+      "enum": ["command", "workflow", "template", "elicitation"]
     },
     "authority_role": {
-      "enum": [
-        "owner",
-        "architect",
-        "inspector",
-        "engineer",
-        "auditor",
-        "harness",
-        "orchestrator"
-      ],
+      "enum": ["owner", "architect", "inspector", "engineer", "auditor", "harness", "orchestrator"],
       "description": "Which role's authority this skill operates under. The orchestrator enforces path-based write restrictions accordingly."
     },
     "deterministic": {
@@ -88,35 +71,19 @@
       "description": "True if the skill's run path invokes an LLM. llm_backed:true implies deterministic:false in practice (subject to retry-and-vote)."
     },
     "default_family": {
-      "enum": [
-        "claude",
-        "codex",
-        "auto"
-      ],
+      "enum": ["claude", "codex", "auto"],
       "description": "Phase-9 multi-provider routing hint. Skills declare a preferred model family; `auto` defers to .devai/config/llm.json's default_family. Operators override at the CLI."
     },
     "agent_class": {
-      "enum": [
-        "coding-agent",
-        "review-agent",
-        "ops-agent"
-      ],
+      "enum": ["coding-agent", "review-agent", "ops-agent"],
       "description": "Phase-10 absorption of LAW-12.CLASS.* (D-38). coding-agent: reads + writes source, opens PRs. review-agent: reads + comments, NEVER writes source. ops-agent: triggers deploy / post-deploy / external mutations under per-action authorisation. The orchestrator MUST refuse actions outside the declared class."
     },
     "permission_tier": {
-      "enum": [
-        "read",
-        "write",
-        "act"
-      ],
+      "enum": ["read", "write", "act"],
       "description": "Phase-10 absorption of LAW-12.PERM.* (D-38). read: read files + status queries. write: + modify files, create branches, run mutating local commands. act: + deploy, push to remote, mutate prod state — requires per-action authorisation. The runtime refuses to load a skill whose tier exceeds the session grant."
     },
     "host_mutation_policy": {
-      "enum": [
-        "read_only",
-        "evidence_only",
-        "write_requires_flag"
-      ],
+      "enum": ["read_only", "evidence_only", "write_requires_flag"],
       "description": "read_only: no writes at all. evidence_only: writes only under .devai/evidence/. write_requires_flag: writes to host substrates allowed only with --write --write."
     },
     "allowed_write_scopes": {
@@ -138,24 +105,14 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "key"
-        ],
+        "required": ["key"],
         "properties": {
           "key": {
             "type": "string",
             "minLength": 1
           },
           "type": {
-            "enum": [
-              "string",
-              "integer",
-              "boolean",
-              "path",
-              "task_id",
-              "invariant_id",
-              "json"
-            ]
+            "enum": ["string", "integer", "boolean", "path", "task_id", "invariant_id", "json"]
           },
           "required": {
             "type": "boolean"
@@ -169,10 +126,7 @@
     "redaction": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "fields",
-        "patterns"
-      ],
+      "required": ["fields", "patterns"],
       "description": "Mandatory redaction policy applied to all evidence outputs.",
       "properties": {
         "fields": {
@@ -197,12 +151,7 @@
       "description": "Skill terminated and marked killed if exceeded."
     },
     "risk_level": {
-      "enum": [
-        "low",
-        "medium",
-        "high",
-        "critical"
-      ],
+      "enum": ["low", "medium", "high", "critical"],
       "description": "high/critical skills require additional confirmation; orchestrator may inject extra firewall checks."
     },
     "entry": {
@@ -211,12 +160,7 @@
       "description": "Canonical invocation entry point (CLI command, file path, function reference)."
     },
     "runtime": {
-      "enum": [
-        "claude",
-        "codex",
-        "devai-cli",
-        "generic"
-      ]
+      "enum": ["claude", "codex", "devai-cli", "generic"]
     },
     "tags": {
       "type": "array",
@@ -234,14 +178,7 @@
       "description": "Constitution articles this skill implements or enforces. For traceability."
     },
     "family": {
-      "enum": [
-        "fix",
-        "cycle-driver",
-        "writer",
-        "scaffolder",
-        "audit",
-        "other"
-      ],
+      "enum": ["fix", "cycle-driver", "writer", "scaffolder", "audit", "other"],
       "description": "Top-level taxonomy for orchestrator discovery (R3 / W2). Optional; absent = informal. Orchestrators predict skill names from family + gate_id / cycle_level + cycle_role."
     },
     "gate_id": {
@@ -250,31 +187,15 @@
       "description": "For family=fix skills: the gate this skill recovers. Matches sensor name or verb subnoun (e.g. 'lint', 'docs-links', 'action-coverage'). Convention: SKILL-fix-<gate_id>."
     },
     "cycle_level": {
-      "enum": [
-        "round",
-        "wave",
-        "phase",
-        "step"
-      ],
+      "enum": ["round", "wave", "phase", "step"],
       "description": "For family=cycle-driver skills: which work-break hierarchy level this skill drives. See docs/adopters/round-break.md."
     },
     "cycle_role": {
-      "enum": [
-        "orchestrate",
-        "audit",
-        "backlog",
-        "verify-publish",
-        "execute",
-        "loop"
-      ],
+      "enum": ["orchestrate", "audit", "backlog", "verify-publish", "execute", "loop"],
       "description": "For family=cycle-driver skills: which role at the cycle_level. Convention: SKILL-<cycle_level>-<cycle_role>."
     },
     "auto_fix_capable": {
-      "enum": [
-        "full",
-        "partial",
-        "none"
-      ],
+      "enum": ["full", "partial", "none"],
       "description": "For family=fix skills: whether the skill can actually fix the gate it diagnoses. 'full' = autofix resolves typical failures (e.g., eslint --fix); 'partial' = autofix handles some failures (e.g., autofill missing fields); 'none' = diagnose-only, no autofix attempted. Orchestrators use this to skip iteration on diagnose-only skills (R4-W1; consumed by the iteration loop substrate in R4-W2). Optional; absent = unknown (orchestrators default to iterate once). family=fix skills SHOULD declare this; non-fix skills SHOULD omit it."
     }
   },

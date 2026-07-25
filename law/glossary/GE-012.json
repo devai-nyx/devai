@@ -6,16 +6,8 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "aliases": [
-    "SR-record"
-  ],
-  "see_also": [
-    "GE-011"
-  ],
-  "related_invariants": [
-    "INV-DEVAI-002"
-  ],
-  "provenance": [
-    "ex-GE-012@devai-original"
-  ]
+  "aliases": ["SR-record"],
+  "see_also": ["GE-011"],
+  "related_invariants": ["INV-DEVAI-002"],
+  "provenance": ["ex-GE-012@devai-original"]
 }

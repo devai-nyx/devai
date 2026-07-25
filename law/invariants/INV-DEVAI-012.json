@@ -10,9 +10,7 @@
   "rationale": "Phase 26.K (`harness_green_main`) established graceful-degradation as the load-bearing contract for sensors that depend on external preconditions. Phase 29.B + Phase 30 lane D enforced this for `sense-spec-idiomaticity` and `sense-inventory-adherence` after they crashed in adopter / self-application runs. A throwing sensor breaks the autonomous-loop assumption that 'any sensor can run; verdict is what we read.' Status='unknown' preserves the contract.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -33,36 +31,19 @@
     ]
   },
   "scope": {
-    "components": [
-      "sensors",
-      "cli"
-    ],
-    "code_areas": [
-      "packages/sensors/src/**",
-      "packages/cli/src/commands/sense/**"
-    ]
+    "components": ["sensors", "cli"],
+    "code_areas": ["packages/sensors/src/**", "packages/cli/src/commands/sense/**"]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval",
-      "adr"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval", "adr"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-30",
-    "error-semantics",
-    "graceful-degradation"
-  ],
+  "tags": ["phase-30", "error-semantics", "graceful-degradation"],
   "measurable_via": [
     "sense harness green main",
     "sense inventory adherence",
     "sense spec idiomaticity"
   ],
-  "provenance": [
-    "ex-INV-DEVAI-012@devai-original"
-  ]
+  "provenance": ["ex-INV-DEVAI-012@devai-original"]
 }

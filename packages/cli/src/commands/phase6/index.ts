@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import type { CAC } from 'cac';
 import {
   applyFilter,
@@ -13,6 +13,7 @@ import {
   dispatchFor,
   freezePrompt,
   loadReadingsFromDir,
+  loadScorecardFailureMaxAgeMs,
   loadScorecardNaConfig,
   parseFilterFlags,
   renderScorecard,
@@ -200,6 +201,12 @@ function resolveDefaultScorecardNaPath(readingsDir: string | undefined): string 
     }
   }
   return resolveScorecardNaPath();
+}
+
+function resolveDefaultScorecardRepoRoot(readingsDir: string): string {
+  const normalized = readingsDir.replace(/\/+$/, '');
+  const match = normalized.match(/^(.+?)\/\.devai\/state\/sensor-readings(?:\/[^/]+)?$/);
+  return resolve(match?.[1] ?? '.');
 }
 
 function loadReadings(opts: {
@@ -400,7 +407,17 @@ export const scoreCompute = defineCommand({
           const naPath = options.scorecardNa ?? resolveDefaultScorecardNaPath(options.readingsDir);
           const naConfig = loadScorecardNaConfig(naPath);
           const naCells = scorecardNaCellSet(naConfig);
-          const scorecard = computeScorecard({ timestamp, integrationHead, readings, naCells });
+          const scorecard = computeScorecard({
+            timestamp,
+            integrationHead,
+            readings,
+            naCells,
+            staleFailAfterMs: loadScorecardFailureMaxAgeMs(
+              options.readingsDir === undefined
+                ? process.cwd()
+                : resolveDefaultScorecardRepoRoot(options.readingsDir),
+            ),
+          });
           validateOrExit(
             validators.scorecard,
             scorecard,

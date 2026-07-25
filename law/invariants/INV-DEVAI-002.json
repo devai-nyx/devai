@@ -10,10 +10,7 @@
   "rationale": "The SensorReading envelope is the uniform interface every downstream consumer (scorecard, triage, skills) depends on. Article 32 makes the envelope the contract; silent drift in shape would mean Phase 6 + 8 receive payloads they think they understand but don't. Schema-invalid emit is a hard-gate failure (Article 17).",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int"
-    ],
+    "required_suites": ["unit", "int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -34,30 +31,15 @@
     ]
   },
   "scope": {
-    "components": [
-      "sensors",
-      "cli"
-    ],
-    "code_areas": [
-      "packages/sensors/src/**",
-      "packages/cli/src/commands/sense/**"
-    ]
+    "components": ["sensors", "cli"],
+    "code_areas": ["packages/sensors/src/**", "packages/cli/src/commands/sense/**"]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval",
-      "adr"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval", "adr"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-4",
-    "sensors",
-    "schema-contract"
-  ],
+  "tags": ["phase-4", "sensors", "schema-contract"],
   "measurable_via": [
     "sense inventory api",
     "sense build",
@@ -112,7 +94,5 @@
     "sense trace resolve",
     "sense type check"
   ],
-  "provenance": [
-    "ex-INV-DEVAI-002@devai-original"
-  ]
+  "provenance": ["ex-INV-DEVAI-002@devai-original"]
 }

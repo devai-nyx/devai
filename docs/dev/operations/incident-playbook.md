@@ -33,24 +33,24 @@ The first failing entry tells you which validator fired. Common patterns:
 
 Likely causes:
 
-| Diagnostic | Action |
-|---|---|
-| Different Node version | Check CI's Node matches `engines.node` in `package.json` (24.x). |
-| Test relying on filesystem case | macOS is case-insensitive; Linux CI is case-sensitive. Hunt for paths with mixed case. |
-| Test relying on env var not set in CI | Check `DEVAI_LLM_BACKEND` (default `mock` in CI per Phase 9). |
-| Time-sensitive test using `Date.now()` | Pin timestamps in tests; never use real wall clock. |
-| Coverage threshold | `inv coverage --fail-under N` may differ between local and CI configs. |
+| Diagnostic                             | Action                                                                                 |
+| -------------------------------------- | -------------------------------------------------------------------------------------- |
+| Different Node version                 | Check CI's Node matches `engines.node` in `package.json` (24.x).                       |
+| Test relying on filesystem case        | macOS is case-insensitive; Linux CI is case-sensitive. Hunt for paths with mixed case. |
+| Test relying on env var not set in CI  | Check `DEVAI_LLM_BACKEND` (default `mock` in CI per Phase 9).                          |
+| Time-sensitive test using `Date.now()` | Pin timestamps in tests; never use real wall clock.                                    |
+| Coverage threshold                     | `inv coverage --fail-under N` may differ between local and CI configs.                 |
 
 ## 4. `inv regen` produces different output across two runs
 
 Determinism is the F4 self-application criterion. Causes of non-determinism:
 
-| Cause | Action |
-|---|---|
-| Walker reading hidden files | Confirm `DEFAULT_IGNORE` covers `.git`, `node_modules`, etc. |
-| Schema discovery double-counting via symlinks | Check `inv schemas` count against `ls law/schemas/*.json \| wc -l`. |
-| Timestamps in the output | `--timestamp` flag should pin; no `Date.now()` calls outside it. |
-| Map iteration order | `Map` preserves insertion order; if you're seeing drift, a `Set` is being iterated where order matters. Sort explicitly. |
+| Cause                                         | Action                                                                                                                   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Walker reading hidden files                   | Confirm `DEFAULT_IGNORE` covers `.git`, `node_modules`, etc.                                                             |
+| Schema discovery double-counting via symlinks | Check `inv schemas` count against `ls law/schemas/*.json \| wc -l`.                                                      |
+| Timestamps in the output                      | `--timestamp` flag should pin; no `Date.now()` calls outside it.                                                         |
+| Map iteration order                           | `Map` preserves insertion order; if you're seeing drift, a `Set` is being iterated where order matters. Sort explicitly. |
 
 ## 5. `inv adherence-reverse` reports orphans
 

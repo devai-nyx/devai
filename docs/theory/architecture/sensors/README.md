@@ -1,6 +1,6 @@
 # Sensor design notes
 
-This directory is the canonical reference for the per-sensor *operational definitions* that govern Phase 27+ sensor kinds. Each `<kind>.md` file answers four questions for one sensor kind:
+This directory is the canonical reference for the per-sensor _operational definitions_ that govern Phase 27+ sensor kinds. Each `<kind>.md` file answers four questions for one sensor kind:
 
 1. **Property semantics.** What does the T-axis property (Article 5) mean for this substrate?
 2. **Operational definition.** What does the sensor concretely measure?

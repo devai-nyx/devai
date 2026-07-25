@@ -2,7 +2,7 @@
 
 ## Property semantics
 
-**T2 Depth** (Constitution Article 5): "the artifact extends from surface to internals with appropriate elaboration." For F2 (Plant), depth means *complexity per unit* — how big and how internally complex each module is. A plant that's all 100-LOC files is shallow (likely missing decomposition); a plant where the 95th-percentile file is 2000 LOC has runaway depth (likely missing decomposition the other way).
+**T2 Depth** (Constitution Article 5): "the artifact extends from surface to internals with appropriate elaboration." For F2 (Plant), depth means _complexity per unit_ — how big and how internally complex each module is. A plant that's all 100-LOC files is shallow (likely missing decomposition); a plant where the 95th-percentile file is 2000 LOC has runaway depth (likely missing decomposition the other way).
 
 ## Operational definition
 

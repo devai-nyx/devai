@@ -93,6 +93,7 @@ will be promoted to `stable` and the compat rules become binding.
 ## Change log
 
 - `v1` — YYYY-MM-DD — Initial publication.
+
 <!--
 - `v1.1` — YYYY-MM-DD — Added optional `<field>`.
 - `v2` — YYYY-MM-DD — Breaking: renamed `<old>` → `<new>`. See ADR-<scope>-<nnnn>.

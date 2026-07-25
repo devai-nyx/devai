@@ -12,9 +12,7 @@
   ],
   "persona": {
     "role": "Operator",
-    "permissions_required": [
-      "task.escalate"
-    ]
+    "permissions_required": ["task.escalate"]
   },
   "preconditions": [
     "Task is in `in_progress` and has exhausted `max_iterations` or has Article-23 ladder failure",
@@ -64,29 +62,16 @@
     {
       "id": "AC-001",
       "statement": "The task's state field follows the documented transitions and never jumps from in_progress directly to completed without passing escalation when convergence fails.",
-      "measurable_via": [
-        "INV-DEVAI-005"
-      ]
+      "measurable_via": ["INV-DEVAI-005"]
     },
     {
       "id": "AC-002",
       "statement": "Module locks held by the failed task are released atomically with the escalation; subsequent tasks targeting the same modules can acquire them.",
-      "measurable_via": [
-        "INV-DEVAI-004"
-      ]
+      "measurable_via": ["INV-DEVAI-004"]
     }
   ],
-  "related_invariants": [
-    "INV-DEVAI-004",
-    "INV-DEVAI-005"
-  ],
+  "related_invariants": ["INV-DEVAI-004", "INV-DEVAI-005"],
   "status": "active",
-  "tags": [
-    "escalation",
-    "convergence-failure",
-    "self-application"
-  ],
-  "provenance": [
-    "ex-JNY-003@devai-original"
-  ]
+  "tags": ["escalation", "convergence-failure", "self-application"],
+  "provenance": ["ex-JNY-003@devai-original"]
 }

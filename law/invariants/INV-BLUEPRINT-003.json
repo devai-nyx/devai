@@ -10,9 +10,7 @@
   "rationale": "Per D-59. The Phase-18 scaffolders emit endpoints from api.resources[].operations[]; if an operation has no matching permission, the generated endpoint is unreachable behind RBAC guards. Severity gate: blocks scaffolding (the scaffolder won't emit dead endpoints), but the spec author can fix by either adding a permission or removing the operation. INV-INVENTORY-003 is the brownfield-side analog (every endpoint must have at least one role binding); -003 (blueprint side) and INV-INVENTORY-003 (inventory side) form a discipline pair that prevents unbound endpoints at both layers.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -29,35 +27,18 @@
     ]
   },
   "scope": {
-    "components": [
-      "core",
-      "cli"
-    ],
+    "components": ["core", "cli"],
     "code_areas": [
       "packages/core/src/blueprint/index.ts",
       "packages/cli/src/commands/blueprint/validate.ts"
     ]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update"],
     "test_weakening_allowed": false,
     "human_approval_required": false
   },
-  "tags": [
-    "phase-18",
-    "phase-18-D",
-    "blueprint",
-    "greenfield",
-    "rbac",
-    "authz"
-  ],
-  "measurable_via": [
-    "spec blueprint validate"
-  ],
-  "provenance": [
-    "ex-INV-BLUEPRINT-003@devai-original"
-  ]
+  "tags": ["phase-18", "phase-18-D", "blueprint", "greenfield", "rbac", "authz"],
+  "measurable_via": ["spec blueprint validate"],
+  "provenance": ["ex-INV-BLUEPRINT-003@devai-original"]
 }

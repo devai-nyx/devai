@@ -6,14 +6,7 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "aliases": [
-    "Substrate F5",
-    "Harness"
-  ],
-  "see_also": [
-    "GE-021"
-  ],
-  "provenance": [
-    "ex-GE-010@devai-original"
-  ]
+  "aliases": ["Substrate F5", "Harness"],
+  "see_also": ["GE-021"],
+  "provenance": ["ex-GE-010@devai-original"]
 }

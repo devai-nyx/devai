@@ -23,13 +23,13 @@ function legacyAuthHandler(req: Request) {
 
 Required fields:
 
-| Field | Format | Notes |
-|---|---|---|
+| Field            | Format                | Notes                                            |
+| ---------------- | --------------------- | ------------------------------------------------ |
 | The invariant id | After `inv-override:` | Must match an active invariant (not tombstoned). |
-| `reason` | Free text | Why the deviation is necessary. Reviewable. |
-| `ticket` | Free text or ID | An external tracking handle. |
-| `expires` | ISO-8601 date | When this override must be revisited. Required. |
-| `approver` | Email or identifier | Who signed off. |
+| `reason`         | Free text             | Why the deviation is necessary. Reviewable.      |
+| `ticket`         | Free text or ID       | An external tracking handle.                     |
+| `expires`        | ISO-8601 date         | When this override must be revisited. Required.  |
+| `approver`       | Email or identifier   | Who signed off.                                  |
 
 The scanner accepts the annotation in a few forms: a single-line `// inv-override: …` followed by the structured key/value comment lines (preferred), or a JSDoc-style `/** @inv-override … */` block. See `inv-override.schema.json` for the canonical structure.
 
@@ -78,14 +78,14 @@ Overrides are an Engineer-tier mechanism (they live in source code). But the **a
 
 ## Anti-patterns
 
-| Pattern | Why bad |
-|---|---|
-| Override without `reason` | Defeats the purpose; reviewer can't evaluate. |
-| Override with `reason: "for now"` | Vague; no constraint on what unlocks removal. |
-| Override with `expires` years in the future | Effectively permanent. Tighten. |
-| Override approved by the same person who wrote the code | No independent review. |
-| Override on a `severity: constitutional` invariant | Schema-rejected. |
-| Multiple overrides accumulating on the same surface | Architecture smell; revisit the invariant or the surface. |
+| Pattern                                                 | Why bad                                                   |
+| ------------------------------------------------------- | --------------------------------------------------------- |
+| Override without `reason`                               | Defeats the purpose; reviewer can't evaluate.             |
+| Override with `reason: "for now"`                       | Vague; no constraint on what unlocks removal.             |
+| Override with `expires` years in the future             | Effectively permanent. Tighten.                           |
+| Override approved by the same person who wrote the code | No independent review.                                    |
+| Override on a `severity: constitutional` invariant      | Schema-rejected.                                          |
+| Multiple overrides accumulating on the same surface     | Architecture smell; revisit the invariant or the surface. |
 
 ## CI integration
 

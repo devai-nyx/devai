@@ -28,7 +28,7 @@
     "prompts"
   ],
   "scripts": {
-    "build": "tsc -b && node scripts/copy-constitution.mjs && node scripts/copy-prompts.mjs",
+    "build": "tsc -b && node scripts/copy-constitution.mjs && node scripts/copy-policy.mjs && node scripts/copy-prompts.mjs",
     "clean": "tsc -b --clean",
     "test": "vitest run tests"
   },

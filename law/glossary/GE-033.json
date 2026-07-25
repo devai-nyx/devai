@@ -6,13 +6,7 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "aliases": [
-    "REL-record"
-  ],
-  "see_also": [
-    "GE-032"
-  ],
-  "provenance": [
-    "ex-GE-033@devai-original"
-  ]
+  "aliases": ["REL-record"],
+  "see_also": ["GE-032"],
+  "provenance": ["ex-GE-033@devai-original"]
 }

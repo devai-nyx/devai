@@ -9,7 +9,7 @@ sidebar_position: 12
 
 ## What a test is in DEVAI
 
-- **A sensor.** Tests measure *y(t)* — the plant's actual behaviour — against *r(t)*, the specification.
+- **A sensor.** Tests measure _y(t)_ — the plant's actual behaviour — against _r(t)_, the specification.
 - **Anchored to invariants.** Every test references one or more invariants via the test's `invariants:` declaration; the trace artifact records the mapping.
 - **Not malleable documentation.** A failing test means the plant violated the specification. The Inspector cannot relax the test to make the plant pass — relaxation requires either an Architect invariant change (Article 24) or an [RGR](./loop.md) (Article 22).
 

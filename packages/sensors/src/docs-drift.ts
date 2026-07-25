@@ -1,5 +1,6 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, realpathSync } from 'node:fs';
 import { join } from 'node:path';
+import { parseConstitutionVersion } from '@devai-nyx/utils';
 import { buildSensorReading, type SensorFinding, type SensorReading } from './sensor-reading.js';
 
 /**
@@ -34,7 +35,6 @@ const SCHEMA_COUNT_CLAIM = /(\d+)\s+JSON Schema files?/gi;
 const D_RANGE_CLAIM = /D-1\s*(?:…|\.{2,3})\s*D-(\d+)/g;
 const CAP_PROSE = /capped at (\w+)/i;
 const CAP_CONSTANT = /WORKTREE_CAP\s*=\s*(\d+)/;
-const VERSION_HEADER = /\*\*Version:\*\*\s*(\S+)/;
 
 const NUMBER_WORDS: Readonly<Record<string, number>> = {
   one: 1,
@@ -140,6 +140,14 @@ export function senseDocsDrift(opts: DocsDriftOptions): SensorReading {
 
   // Check 3 — Article 27 cap prose vs the WORKTREE_CAP constant.
   const constitutionBody = readIfPresent(opts.repoRoot, 'law/constitution.md');
+  if (constitutionBody === null) {
+    findings.push({
+      severity: 'critical',
+      code: 'DOCS_DRIFT_CONSTITUTION_NOT_FOUND',
+      message: 'law/constitution.md is required for DEVAI docs-drift checks.',
+      file: 'law/constitution.md',
+    });
+  }
   if (worktreeCapSource === undefined) {
     findings.push({
       severity: 'info',
@@ -187,16 +195,27 @@ export function senseDocsDrift(opts: DocsDriftOptions): SensorReading {
   // Check 4 — constitution version header vs the pinned snapshot.
   const snapshotBody = readIfPresent(opts.repoRoot, '.devai/pin/constitution.md');
   if (constitutionBody !== null && snapshotBody !== null) {
-    claimsChecked += 1;
-    const live = VERSION_HEADER.exec(constitutionBody)?.[1];
-    const pinned = VERSION_HEADER.exec(snapshotBody)?.[1];
-    if (live !== pinned) {
+    const livePath = join(opts.repoRoot, 'law/constitution.md');
+    const snapshotPath = join(opts.repoRoot, '.devai/pin/constitution.md');
+    if (realpathSync(livePath) === realpathSync(snapshotPath)) {
       findings.push({
-        severity: 'error',
-        code: 'DOCS_DRIFT_CONSTITUTION_VERSION',
-        message: `law/constitution.md is at ${live ?? '(no version)'}; .devai/pin/constitution.md pins ${pinned ?? '(no version)'}.`,
+        severity: 'info',
+        code: 'DOCS_DRIFT_CONSTITUTION_SELF_PIN',
+        message: '.devai/pin/constitution.md resolves to the canonical Constitution.',
         file: '.devai/pin/constitution.md',
       });
+    } else {
+      const live = parseConstitutionVersion(constitutionBody);
+      const pinned = parseConstitutionVersion(snapshotBody);
+      if (live !== null && pinned !== null) claimsChecked += 1;
+      if (live === null || pinned === null || live !== pinned) {
+        findings.push({
+          severity: 'error',
+          code: 'DOCS_DRIFT_CONSTITUTION_VERSION',
+          message: `law/constitution.md is at ${live ?? '(no version)'}; .devai/pin/constitution.md pins ${pinned ?? '(no version)'}.`,
+          file: '.devai/pin/constitution.md',
+        });
+      }
     }
   } else if (constitutionBody !== null) {
     findings.push({
@@ -214,8 +233,8 @@ export function senseDocsDrift(opts: DocsDriftOptions): SensorReading {
   if (statusBody !== null && constitutionBody !== null) {
     claimsChecked += 1;
     const constClaim = /Constitution \*\*(\d+\.\d+\.\d+)\*\*/.exec(statusBody)?.[1];
-    const live = VERSION_HEADER.exec(constitutionBody)?.[1];
-    if (constClaim !== undefined && live !== undefined && constClaim !== live) {
+    const live = parseConstitutionVersion(constitutionBody);
+    if (constClaim !== undefined && (live === null || constClaim !== live)) {
       findings.push({
         severity: 'error',
         code: 'DOCS_DRIFT_STATUS_CONSTITUTION_VERSION',
@@ -252,7 +271,9 @@ export function senseDocsDrift(opts: DocsDriftOptions): SensorReading {
     }
   }
 
-  const driftCount = findings.filter((f) => f.severity === 'error').length;
+  const driftCount = findings.filter(
+    (finding) => finding.severity === 'error' || finding.severity === 'critical',
+  ).length;
 
   return buildSensorReading({
     sensorName: 'docs-drift',

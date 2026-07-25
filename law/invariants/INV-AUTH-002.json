@@ -11,10 +11,7 @@
   "rationale": "A broad first-match rule or stale materialized policy can silently invert Article 6. Explicit precedence and digest provenance make the mapping deterministic and auditable.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int"
-    ],
+    "required_suites": ["unit", "int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -33,17 +30,10 @@
         "anchor": "5-deterministic-precedence"
       }
     ],
-    "decisions": [
-      "D-135",
-      "ADR-003"
-    ]
+    "decisions": ["D-135", "ADR-003"]
   },
   "scope": {
-    "components": [
-      "authority-policy",
-      "resource-classification",
-      "self-adoption"
-    ],
+    "components": ["authority-policy", "resource-classification", "self-adoption"],
     "code_areas": [
       "docs/framework/schemas/authority-policy.schema.json",
       "packages/core/src/authority/**",
@@ -70,7 +60,5 @@
     "joint-glossary",
     "deny-unknown"
   ],
-  "provenance": [
-    "ex-INV-AUTH-002@devai-original"
-  ]
+  "provenance": ["ex-INV-AUTH-002@devai-original"]
 }

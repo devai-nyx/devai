@@ -109,10 +109,12 @@ Why this is gated, not always-on: cost + determinism. CI runs many times per day
 `.github/workflows/llm-real-matrix.yml` (Phase 19.E, D-61) widens the gated suite into a CI matrix across the `{claude, codex}` provider families. It is **not** part of the default `ci.yml` workflow; default PRs are unaffected.
 
 Triggers:
+
 - `workflow_dispatch` — operator clicks "Run workflow" in the GitHub UI.
 - `schedule` — Sundays at 06:00 UTC, but the job is no-op unless the opt-in secret is set.
 
 Secret prerequisites (configured at the repo level):
+
 - `DEVAI_LLM_REAL` — any non-empty value enables the workflow.
 - `ANTHROPIC_API_KEY` — required for the `claude` matrix cell.
 - `OPENAI_API_KEY` — required for the `codex` matrix cell.

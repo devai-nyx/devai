@@ -57,26 +57,16 @@
       "description": "Absorption/supersession provenance per the record meta-structure (§5.1)."
     },
     "supersedes": {
-      "type": [
-        "array",
-        "null"
-      ],
+      "type": ["array", "null"],
       "items": {
         "type": "string"
       }
     },
     "superseded_by": {
-      "type": [
-        "string",
-        "null"
-      ]
+      "type": ["string", "null"]
     }
   },
-  "required": [
-    "schemaVersion",
-    "roles",
-    "cases"
-  ],
+  "required": ["schemaVersion", "roles", "cases"],
   "$defs": {
     "Evidence": {
       "type": "object",
@@ -98,11 +88,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "path",
-        "startLine",
-        "endLine"
-      ]
+      "required": ["path", "startLine", "endLine"]
     },
     "Ref": {
       "type": "object",
@@ -146,9 +132,7 @@
           "description": "Present only when id preserves the predecessor canonical path pending successor CLI binding."
         }
       },
-      "required": [
-        "id"
-      ]
+      "required": ["id"]
     },
     "Step": {
       "type": "object",
@@ -173,9 +157,7 @@
           }
         }
       },
-      "required": [
-        "action"
-      ]
+      "required": ["action"]
     },
     "AltFlow": {
       "type": "object",
@@ -194,10 +176,7 @@
           }
         }
       },
-      "required": [
-        "when",
-        "steps"
-      ]
+      "required": ["when", "steps"]
     },
     "Exception": {
       "type": "object",
@@ -213,10 +192,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "when",
-        "handling"
-      ]
+      "required": ["when", "handling"]
     },
     "UseCase": {
       "type": "object",
@@ -299,11 +275,7 @@
           }
         }
       },
-      "required": [
-        "id",
-        "title",
-        "mainFlow"
-      ]
+      "required": ["id", "title", "mainFlow"]
     }
   },
   "schema_version": "1.0.0",
@@ -311,9 +283,7 @@
     {
       "schemaVersion": "1.0.0",
       "generatedAt": "2026-05-18T05:30:00.000Z",
-      "roles": [
-        "operator"
-      ],
+      "roles": ["operator"],
       "cases": [
         {
           "id": "UC-devai-doctor",

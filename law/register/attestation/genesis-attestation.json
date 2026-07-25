@@ -1,15 +1,31 @@
 {
   "record": "GEN-0001",
   "ratified": null,
-  "_status": "PROVISIONAL pre-freeze binding; re-bind after R-\u03a9. Retrieved from read-only predecessor at 2026-07-23T23:47:53Z.",
+  "_status": "FROZEN predecessor binding prepared by R-0002; ratification remains reserved to R-0003.",
   "predecessor": {
-    "repo_url": "https://github.com/devai-nyx/devai",
-    "final_commit_sha": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d",
-    "final_tree_sha": "386cbb500a795f17624442ebb2c416ed5f16b15d",
-    "evidence_chain_head_sha256": "8ae98775e373617f814e2e7bd3d2616f7664a90f761442b45d5b205537984fb1",
-    "closing_decision": null,
-    "closing_pc_record": null,
-    "frozen": false
+    "repo_url": "https://github.com/devai-nyx/devai-original",
+    "final_commit_sha": "05dd242bf72334bfd683096aed380e8240b6b9aa",
+    "final_tree_sha": "a6d6bf5ba06d78e182792441dffac4ae554b684c",
+    "evidence_chain_head_sha256": "d0c5b9ac2da64fb2e3533317abcc65511b593c3e610d301c60504cc8deddc9c4",
+    "closing_decision": "D-196",
+    "closing_pc_record": "PC-0019",
+    "frozen": true
+  },
+  "absorption_manifest": {
+    "documents": [
+      {
+        "path": "docs/meta/rounds/round-31/audit/absorption-manifest.json",
+        "sha256": "c406f7b419b59f8d122fc4bdd8882210fa3a821b324242790388f46bd0f0a4c1"
+      },
+      {
+        "path": "docs/meta/rounds/round-31/audit/coupling-reverification.md",
+        "sha256": "b73d0e196a74d31f3a960f5a4b8f1d946453ef6a3c828ce7ea7a53292bce6942"
+      },
+      {
+        "path": ".devai/state/evidence-chain.json",
+        "sha256": "8ae98775e373617f814e2e7bd3d2616f7664a90f761442b45d5b205537984fb1"
+      }
+    ]
   },
   "imported_evidence": [],
   "non_claims": [

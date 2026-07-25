@@ -6,13 +6,6 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "examples": [
-    "runtime-host",
-    "platform-package",
-    "docs-archive",
-    "framework"
-  ],
-  "provenance": [
-    "ex-GE-028@devai-original"
-  ]
+  "examples": ["runtime-host", "platform-package", "docs-archive", "framework"],
+  "provenance": ["ex-GE-028@devai-original"]
 }

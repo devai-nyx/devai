@@ -73,22 +73,22 @@ Operator-driven worktree create/destroy doesn't auto-acquire locks — those are
 
 ## Failure modes
 
-| Symptom | Cause | Action |
-|---|---|---|
-| `worktree create` rejected with "cap exceeded" | 3 non-adopted worktrees already active (D-52) | `worktree list` to identify candidates; reap stale entries; if all 3 are legitimate, queue. Human-adopted worktrees are cap-exempt and don't count. |
-| `worktree destroy` rejected for uncommitted changes | Agent crashed mid-edit | Inspect the worktree's working state; commit-or-discard manually; retry with `--force` if discard is intentional. |
-| Registry entry exists but path is gone | Crash or external `git worktree remove` | Run `worktree reap --write`; the orphan registry entry will be cleaned. |
-| Path exists but no registry entry | External `git worktree add` bypassing the harness | Adopt with `worktree adopt --path <p> --task <id>` to attach it back to the registry, or remove manually with `git worktree remove`. |
-| Branch `escalated/<task-id>` left behind | Task escalated, worktree reaped, branch preserved per Article 21 | Intentional. Leave the branch for human review; delete only after resolving the escalation. |
-| `git worktree` reports lockfile contention | Concurrent `git worktree add` from another process | Retry; the harness's `worktree create` is single-writer per repo. |
+| Symptom                                             | Cause                                                            | Action                                                                                                                                              |
+| --------------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `worktree create` rejected with "cap exceeded"      | 3 non-adopted worktrees already active (D-52)                    | `worktree list` to identify candidates; reap stale entries; if all 3 are legitimate, queue. Human-adopted worktrees are cap-exempt and don't count. |
+| `worktree destroy` rejected for uncommitted changes | Agent crashed mid-edit                                           | Inspect the worktree's working state; commit-or-discard manually; retry with `--force` if discard is intentional.                                   |
+| Registry entry exists but path is gone              | Crash or external `git worktree remove`                          | Run `worktree reap --write`; the orphan registry entry will be cleaned.                                                                             |
+| Path exists but no registry entry                   | External `git worktree add` bypassing the harness                | Adopt with `worktree adopt --path <p> --task <id>` to attach it back to the registry, or remove manually with `git worktree remove`.                |
+| Branch `escalated/<task-id>` left behind            | Task escalated, worktree reaped, branch preserved per Article 21 | Intentional. Leave the branch for human review; delete only after resolving the escalation.                                                         |
+| `git worktree` reports lockfile contention          | Concurrent `git worktree add` from another process               | Retry; the harness's `worktree create` is single-writer per repo.                                                                                   |
 
 ## Routine maintenance
 
-| Cadence | Command | What it does |
-|---|---|---|
-| Every CI run | `devai work worktree reap --write` | Clean up stale entries from prior failed runs. |
-| Daily | `devai work worktree list` (audit) | Confirm worktree count is healthy. |
-| On task escalate | (automatic) | `task escalate` renames the branch and marks the worktree for reaping. |
+| Cadence          | Command                            | What it does                                                           |
+| ---------------- | ---------------------------------- | ---------------------------------------------------------------------- |
+| Every CI run     | `devai work worktree reap --write` | Clean up stale entries from prior failed runs.                         |
+| Daily            | `devai work worktree list` (audit) | Confirm worktree count is healthy.                                     |
+| On task escalate | (automatic)                        | `task escalate` renames the branch and marks the worktree for reaping. |
 
 ## See also
 

@@ -6,18 +6,7 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "see_also": [
-    "GE-019",
-    "GE-027"
-  ],
-  "examples": [
-    "constitutional",
-    "hard-fail",
-    "gate",
-    "warn",
-    "advisory"
-  ],
-  "provenance": [
-    "ex-GE-026@devai-original"
-  ]
+  "see_also": ["GE-019", "GE-027"],
+  "examples": ["constitutional", "hard-fail", "gate", "warn", "advisory"],
+  "provenance": ["ex-GE-026@devai-original"]
 }

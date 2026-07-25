@@ -5,13 +5,7 @@
   "description": "Architect-authored classification of statically extracted subprocess command templates. This is the complete trusted annotation surface for effects that cross the in-program analysis boundary.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "id",
-    "source_authority",
-    "materialization",
-    "templates"
-  ],
+  "required": ["schemaVersion", "id", "source_authority", "materialization", "templates"],
   "properties": {
     "schemaVersion": {
       "const": "1.0.0"
@@ -38,9 +32,7 @@
           "const": ".devai/config/subprocess-effects.json"
         },
         "allowed_verbs": {
-          "const": [
-            "devai adopt upgrade"
-          ]
+          "const": ["devai adopt upgrade"]
         },
         "authority_and_consent_required": {
           "const": true
@@ -99,6 +91,7 @@
                     "fs:f5-config",
                     "fs:f5-state",
                     "fs:f4-inventory",
+                    "fs:proofs",
                     "fs:worktree-admin",
                     "fs:workspace",
                     "fs:unknown-write",
@@ -120,12 +113,7 @@
             }
           },
           "effect": {
-            "enum": [
-              "read",
-              "harness-write",
-              "local-write",
-              "remote-write"
-            ],
+            "enum": ["read", "harness-write", "local-write", "remote-write"],
             "description": "Derived public consent summary retained for a mechanical capabilities-to-effect consistency check."
           },
           "reason": {
@@ -147,9 +135,7 @@
       "source_authority": "F1-architect",
       "materialization": {
         "target": ".devai/config/subprocess-effects.json",
-        "allowed_verbs": [
-          "devai adopt upgrade"
-        ],
+        "allowed_verbs": ["devai adopt upgrade"],
         "authority_and_consent_required": true,
         "byte_identity_required": true,
         "adopter_upgrade_path_required": true,

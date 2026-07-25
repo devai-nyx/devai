@@ -5,10 +5,7 @@
   "summary": "A new adopter installs the DEVAI governance harness into an existing client repository, copies the law-pack scaffold, and reaches a first-green spec-validate-all + a first signed RTD manifest.",
   "persona": {
     "role": "Adopter",
-    "permissions_required": [
-      "filesystem.write",
-      "git.commit"
-    ]
+    "permissions_required": ["filesystem.write", "git.commit"]
   },
   "preconditions": [
     "Client repo exists and is a git working tree",
@@ -65,30 +62,16 @@
     {
       "id": "AC-001",
       "statement": "After step 5, `devai spec validate all` exits 0 and `devai spec rtd bundle` produces a manifest whose readiness.ok is true.",
-      "measurable_via": [
-        "INV-DEVAI-001",
-        "INV-DEVAI-009"
-      ]
+      "measurable_via": ["INV-DEVAI-001", "INV-DEVAI-009"]
     },
     {
       "id": "AC-002",
       "statement": "Every `devai init apply-*` segment is deny-by-default on existing files and does not overwrite without --force; provenance-critical F5 state remains preserved (Article 32).",
-      "measurable_via": [
-        "INV-DEVAI-009"
-      ]
+      "measurable_via": ["INV-DEVAI-009"]
     }
   ],
-  "related_invariants": [
-    "INV-DEVAI-001",
-    "INV-DEVAI-009"
-  ],
+  "related_invariants": ["INV-DEVAI-001", "INV-DEVAI-009"],
   "status": "active",
-  "tags": [
-    "adoption",
-    "self-application",
-    "onboarding"
-  ],
-  "provenance": [
-    "ex-JNY-001@devai-original"
-  ]
+  "tags": ["adoption", "self-application", "onboarding"],
+  "provenance": ["ex-JNY-001@devai-original"]
 }

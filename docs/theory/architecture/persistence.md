@@ -7,7 +7,7 @@
 
 Client repositories using DEVAI use **raw SQL migrations** for all schema management. The migrations directory is `db/migrations/`, one numbered SQL file per migration, applied in lexicographic order. No ORM mediates schema definition.
 
-Application code may use a query builder, a thin pg-driver wrapper, or hand-written SQL — that's an application concern. But the *schema source of truth* is the migration files, not any ORM entity declaration.
+Application code may use a query builder, a thin pg-driver wrapper, or hand-written SQL — that's an application concern. But the _schema source of truth_ is the migration files, not any ORM entity declaration.
 
 ## Rationale
 
@@ -17,7 +17,7 @@ ORMs were considered (TypeORM, Prisma, node-pg-migrate) and rejected for three c
 
 2. **Schema introspection at ORM startup races with TEMPLATE cloning.** Many ORMs read `information_schema` on startup to validate the entity → table mapping. When two parallel tasks each provision a fresh DB via `CREATE DATABASE … TEMPLATE devai_template`, the introspection happens against a database that may still be settling.
 
-3. **An opinion-layer between code and database muddies sensor readings.** DEVAI's F4 inventory sensors read `information_schema` directly to enumerate tables, columns, constraints, and indexes (`sense-data-model`). When an ORM stands between the application and the database, the sensor sees the *database's* shape — which may differ from the *ORM's* declared shape, and from the *application code's* assumptions about both. Three sources of truth, none authoritative.
+3. **An opinion-layer between code and database muddies sensor readings.** DEVAI's F4 inventory sensors read `information_schema` directly to enumerate tables, columns, constraints, and indexes (`sense-data-model`). When an ORM stands between the application and the database, the sensor sees the _database's_ shape — which may differ from the _ORM's_ declared shape, and from the _application code's_ assumptions about both. Three sources of truth, none authoritative.
 
 Raw SQL collapses this to one source of truth (the migration files), one reader (Postgres), and one observable (`information_schema`).
 
@@ -37,7 +37,7 @@ Raw SQL collapses this to one source of truth (the migration files), one reader 
 
 Trigger conditions for a successor D-entry:
 
-- A canonical-stack ORM emerges that can be wired safely to per-worktree DB provisioning *and* that the sensor inventory can introspect without depending on the ORM's runtime. Currently no candidate fits.
+- A canonical-stack ORM emerges that can be wired safely to per-worktree DB provisioning _and_ that the sensor inventory can introspect without depending on the ORM's runtime. Currently no candidate fits.
 - The empirical cost of hand-writing migrations exceeds the benefits, measured against a real adopter survey. So far, raw SQL has been a net positive for the same adopters who would have struggled with ORM-mediated migration race conditions.
 
 A new D-entry supersedes this one; the migration directory layout stays stable across the transition for adopter sanity.

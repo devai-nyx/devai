@@ -5,13 +5,7 @@
   "description": "Architect-authored declarations of the repository inputs read by the hermetic sensor kinds admitted to R26 measurement. The registry is report-only in R26 and cannot authorize cache population, sensor persistence, or replay.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "id",
-    "source_authority",
-    "materialization",
-    "specs"
-  ],
+  "required": ["schemaVersion", "id", "source_authority", "materialization", "specs"],
   "properties": {
     "schemaVersion": {
       "const": "1.0.0"
@@ -38,9 +32,7 @@
           "const": ".devai/config/sensor-inputs.json"
         },
         "allowed_verbs": {
-          "const": [
-            "devai adopt upgrade --sensor-inputs"
-          ]
+          "const": ["devai adopt upgrade --sensor-inputs"]
         },
         "authority_and_consent_required": {
           "const": true
@@ -73,9 +65,7 @@
                 "const": "build"
               }
             },
-            "required": [
-              "kind"
-            ]
+            "required": ["kind"]
           },
           "minContains": 1,
           "maxContains": 1
@@ -88,9 +78,7 @@
                 "const": "lint"
               }
             },
-            "required": [
-              "kind"
-            ]
+            "required": ["kind"]
           },
           "minContains": 1,
           "maxContains": 1
@@ -103,9 +91,7 @@
                 "const": "type_check"
               }
             },
-            "required": [
-              "kind"
-            ]
+            "required": ["kind"]
           },
           "minContains": 1,
           "maxContains": 1
@@ -118,9 +104,7 @@
                 "const": "inventory_api"
               }
             },
-            "required": [
-              "kind"
-            ]
+            "required": ["kind"]
           },
           "minContains": 1,
           "maxContains": 1
@@ -133,9 +117,7 @@
                 "const": "inventory_routes"
               }
             },
-            "required": [
-              "kind"
-            ]
+            "required": ["kind"]
           },
           "minContains": 1,
           "maxContains": 1
@@ -148,9 +130,7 @@
                 "const": "inventory_data_model"
               }
             },
-            "required": [
-              "kind"
-            ]
+            "required": ["kind"]
           },
           "minContains": 1,
           "maxContains": 1
@@ -163,9 +143,7 @@
                 "const": "inventory_rbac"
               }
             },
-            "required": [
-              "kind"
-            ]
+            "required": ["kind"]
           },
           "minContains": 1,
           "maxContains": 1
@@ -178,9 +156,7 @@
                 "const": "inventory_data_handling"
               }
             },
-            "required": [
-              "kind"
-            ]
+            "required": ["kind"]
           },
           "minContains": 1,
           "maxContains": 1
@@ -193,9 +169,7 @@
                 "const": "inventory_dep_graph"
               }
             },
-            "required": [
-              "kind"
-            ]
+            "required": ["kind"]
           },
           "minContains": 1,
           "maxContains": 1
@@ -208,9 +182,7 @@
                 "const": "spec_depth"
               }
             },
-            "required": [
-              "kind"
-            ]
+            "required": ["kind"]
           },
           "minContains": 1,
           "maxContains": 1
@@ -222,9 +194,7 @@
     "inputPattern": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "pattern"
-      ],
+      "required": ["pattern"],
       "properties": {
         "pattern": {
           "type": "string",
@@ -251,9 +221,7 @@
                 "const": 0
               }
             },
-            "required": [
-              "min_matches"
-            ]
+            "required": ["min_matches"]
           },
           "then": {
             "properties": {
@@ -262,9 +230,7 @@
                 "minLength": 1
               }
             },
-            "required": [
-              "reason"
-            ]
+            "required": ["reason"]
           }
         }
       ]
@@ -272,10 +238,7 @@
     "alternativeGroup": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "group_id",
-        "any_of"
-      ],
+      "required": ["group_id", "any_of"],
       "properties": {
         "group_id": {
           "type": "string",
@@ -296,14 +259,7 @@
     "spec": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "kind",
-        "spec_version",
-        "file_inputs",
-        "tool_inputs",
-        "env_inputs",
-        "hermetic"
-      ],
+      "required": ["kind", "spec_version", "file_inputs", "tool_inputs", "env_inputs", "hermetic"],
       "properties": {
         "kind": {
           "enum": [
@@ -368,9 +324,7 @@
       "source_authority": "F1-architect",
       "materialization": {
         "target": ".devai/config/sensor-inputs.json",
-        "allowed_verbs": [
-          "devai adopt upgrade --sensor-inputs"
-        ],
+        "allowed_verbs": ["devai adopt upgrade --sensor-inputs"],
         "authority_and_consent_required": true,
         "byte_identity_required": true,
         "adopter_upgrade_path_required": true,
@@ -490,7 +444,7 @@
           "spec_version": 1,
           "file_inputs": [
             {
-              "pattern": "docs/framework/arch/invariants/*.json"
+              "pattern": "law/invariants/INV-*.json"
             }
           ],
           "tool_inputs": [],

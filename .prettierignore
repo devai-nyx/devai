@@ -3,5 +3,15 @@ dist/
 coverage/
 record/
 scratch/
+.devai/config/
+.devai/pin/
 .devai/worktrees/
 .claude/worktrees/
+pnpm-lock.yaml
+law/policy/authority-policy.json
+law/trace.json
+law/register/DECISIONS.md
+law/adr/predecessor/
+work/rounds/R-0001/
+work/audit/R-0001/
+work/devai-ii-succession-dossier.md

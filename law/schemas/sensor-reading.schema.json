@@ -20,10 +20,7 @@
       "const": "1.0.0"
     },
     "lifecycle": {
-      "enum": [
-        "supported",
-        "experimental"
-      ],
+      "enum": ["supported", "experimental"],
       "default": "supported",
       "description": "Experimental readings are retained but excluded from supported readiness aggregation."
     },
@@ -35,10 +32,7 @@
     "sensor": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "name",
-        "kind"
-      ],
+      "required": ["name", "kind"],
       "properties": {
         "name": {
           "type": "string",
@@ -122,24 +116,11 @@
       "minimum": 0
     },
     "tier": {
-      "enum": [
-        "L0",
-        "L1",
-        "L2",
-        "semantic"
-      ],
+      "enum": ["L0", "L1", "L2", "semantic"],
       "description": "Sensor latency/scope tier (Phase 16.D, D-50). L0 = static (lint, typecheck, build, dead-code, dep-audit; module-local fast feedback). L1 = dynamic (unit, integration, API-contract, smoke tests; layer-local behaviour). L2 = integrity (coverage thresholds, hard-fail checks, protected-surface smoke, agent-registry checks; cross-layer integrity). semantic = trace-resolution, adherence audit, prompt firewall, runtime arbiter (system-wide semantic confidence). Optional during the substrate-only phase; sensor adapters that opt in declare their tier so progressive-gate consumers can filter."
     },
     "status": {
-      "enum": [
-        "pass",
-        "fail",
-        "review",
-        "skipped",
-        "killed",
-        "error",
-        "unknown"
-      ],
+      "enum": ["pass", "fail", "review", "skipped", "killed", "error", "unknown"],
       "description": "Tri-state plus operational states. 'killed' = timeout exceeded; 'error' = sensor itself failed; 'unknown' = explicit uncertainty (Article 39)."
     },
     "deterministic": {
@@ -156,16 +137,10 @@
       "description": "SHA-256 of the canonical command for drift detection."
     },
     "exit_code": {
-      "type": [
-        "integer",
-        "null"
-      ]
+      "type": ["integer", "null"]
     },
     "evidence_path": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "description": "Path under .devai/evidence/ where full output is retained."
     },
     "out_head": {
@@ -185,19 +160,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "severity",
-          "code",
-          "message"
-        ],
+        "required": ["severity", "code", "message"],
         "properties": {
           "severity": {
-            "enum": [
-              "info",
-              "warning",
-              "error",
-              "critical"
-            ]
+            "enum": ["info", "warning", "error", "critical"]
           },
           "code": {
             "type": "string",
@@ -224,11 +190,7 @@
     "metrics": {
       "type": "object",
       "additionalProperties": {
-        "type": [
-          "number",
-          "string",
-          "boolean"
-        ]
+        "type": ["number", "string", "boolean"]
       },
       "description": "Sensor-specific metrics (test count, coverage %, score, etc.)."
     },

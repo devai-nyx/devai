@@ -67,17 +67,17 @@ sidebar_position: 4
 
 Each transversal is evaluated five times (once per substrate). See the [aspect grid](../theory/framework/aspect-grid.md) for the canonical cell × sensor mapping.
 
-| Transversal | Substrate hits | Pattern |
-|---|---|---|
-| T1 Coverage | F1, F2, F3, F4, F5 | `sense-*-coverage` |
-| T2 Depth | F1, F2, F3 (F4 N/A in some packs, F5 N/A by design) | `sense-*-depth`, `sense-spec-depth` |
-| T3 Coherence | F1-F5 | `sense-*-coherence`, plus `sense-type-check` for F2 |
-| T4 Alignment | F1-F5 | `sense-*-invariant-alignment`, `sense-spec-alignment`, `sense-trace-resolve` |
-| T5 Idiomaticity | F1-F5 (F4 N/A) | `sense-*-idiomaticity`, plus `sense-lint` for F2 |
-| T6 Security | F1-F5 | `sense-*-security-*`, `sense-security-scan` |
-| T7 Performance | F1-F5 | `sense-*-performance-*`, `sense-perf-test`, `sense-inventory-performance` |
-| T8 Robustness | F1-F5 | `sense-*-robustness-*`, `sense-inventory-determinism`, `sense-migrate-check` |
-| T9 Discipline | F1, F3, F5 (others mostly N/A) | `sense-spec-freshness`, `sense-test-weakening`, `sense-harness-green-main` |
+| Transversal     | Substrate hits                                      | Pattern                                                                      |
+| --------------- | --------------------------------------------------- | ---------------------------------------------------------------------------- |
+| T1 Coverage     | F1, F2, F3, F4, F5                                  | `sense-*-coverage`                                                           |
+| T2 Depth        | F1, F2, F3 (F4 N/A in some packs, F5 N/A by design) | `sense-*-depth`, `sense-spec-depth`                                          |
+| T3 Coherence    | F1-F5                                               | `sense-*-coherence`, plus `sense-type-check` for F2                          |
+| T4 Alignment    | F1-F5                                               | `sense-*-invariant-alignment`, `sense-spec-alignment`, `sense-trace-resolve` |
+| T5 Idiomaticity | F1-F5 (F4 N/A)                                      | `sense-*-idiomaticity`, plus `sense-lint` for F2                             |
+| T6 Security     | F1-F5                                               | `sense-*-security-*`, `sense-security-scan`                                  |
+| T7 Performance  | F1-F5                                               | `sense-*-performance-*`, `sense-perf-test`, `sense-inventory-performance`    |
+| T8 Robustness   | F1-F5                                               | `sense-*-robustness-*`, `sense-inventory-determinism`, `sense-migrate-check` |
+| T9 Discipline   | F1, F3, F5 (others mostly N/A)                      | `sense-spec-freshness`, `sense-test-weakening`, `sense-harness-green-main`   |
 
 ## Observation and recording boundary
 

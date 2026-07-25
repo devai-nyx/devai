@@ -8,7 +8,7 @@ The guidance is **descriptive**, not enforced by the schema. A `warn`-severity l
 
 Invariants exist so an automated agent can decide, from the `statement:` alone, whether plant behavior violates the rule. Free-form prose makes that decision unreliable: pronouns are ambiguous, modal force varies, time windows are implicit, actors are elided. CNL constrains the writing style enough that the agent's decision becomes mechanical.
 
-This is not about restricting expressiveness — it's about restricting *ambiguity* in the small subset of prose that drives go/no-go gates.
+This is not about restricting expressiveness — it's about restricting _ambiguity_ in the small subset of prose that drives go/no-go gates.
 
 ## The pattern
 
@@ -33,13 +33,13 @@ Compare with the equivalent free-form prose:
 
 Use exactly one of the five RFC-2119 modals per `statement:`, and pick the one that matches the invariant's `severity:`:
 
-| Modal | Severity | Meaning |
-|---|---|---|
-| `MUST` | `constitutional`, `hard-fail` | Hard requirement. Violation blocks. |
-| `MUST NOT` | `constitutional`, `hard-fail` | Prohibited behavior. Violation blocks. |
-| `SHOULD` | `gate` | Preferred. Violation gates with possible override. |
-| `SHOULD NOT` | `gate` | Discouraged. Violation gates with possible override. |
-| `MAY` | `warn`, `advisory` | Explicitly optional. Surfaced but never blocks. |
+| Modal        | Severity                      | Meaning                                              |
+| ------------ | ----------------------------- | ---------------------------------------------------- |
+| `MUST`       | `constitutional`, `hard-fail` | Hard requirement. Violation blocks.                  |
+| `MUST NOT`   | `constitutional`, `hard-fail` | Prohibited behavior. Violation blocks.               |
+| `SHOULD`     | `gate`                        | Preferred. Violation gates with possible override.   |
+| `SHOULD NOT` | `gate`                        | Discouraged. Violation gates with possible override. |
+| `MAY`        | `warn`, `advisory`            | Explicitly optional. Surfaced but never blocks.      |
 
 Do not mix modals in one statement (`The API MUST authenticate but MAY skip when…`). Split into two invariants.
 
@@ -47,11 +47,11 @@ Do not mix modals in one statement (`The API MUST authenticate but MAY skip when
 
 Replace vague subjects with concrete ones:
 
-| Vague | Specific |
-|---|---|
+| Vague        | Specific                                                             |
+| ------------ | -------------------------------------------------------------------- |
 | "the system" | "the API gateway" / "the migration runner" / "the audit interceptor" |
-| "users" | "tenant users" / "platform admins" / "service accounts" |
-| "data" | "tenant rows" / "audit events" / "session tokens" |
+| "users"      | "tenant users" / "platform admins" / "service accounts"              |
+| "data"       | "tenant rows" / "audit events" / "session tokens"                    |
 
 If you can't name the actor, the invariant is probably too coarse — split it.
 
@@ -68,7 +68,7 @@ The `WHEN`, `UNLESS`, `WITHIN` clauses make the rule machine-checkable:
 Bad statements share these failure modes:
 
 - **Pronouns without antecedent.** "It MUST validate" — what is `it`?
-- **Implementation masquerading as semantics.** "The route handler MUST call `validateToken()`" — that's an implementation note, not an observable contract. Rewrite as the *observable* the implementation produces.
+- **Implementation masquerading as semantics.** "The route handler MUST call `validateToken()`" — that's an implementation note, not an observable contract. Rewrite as the _observable_ the implementation produces.
 - **Hidden time windows.** "The job MUST complete soon" — what does soon mean? Bound it or remove it.
 - **Mixed modal force.** "The API MUST return 401 but MAY return 403" — split into two.
 - **Authoring policy in the statement.** "Engineers MUST review this carefully" — that's a process, not an invariant.

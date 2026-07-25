@@ -10,10 +10,7 @@
   "rationale": "The tool exists specifically to catch config drift where a glob silently degrades to matching nothing (or less than expected) while whatever consumes it keeps reporting green \u2014 found via stynx's devai-gates.yml (docs/architecture/invariants/*.json went to zero matches after a rename, guarded by a defensive `[ -f ... ] || continue` that made the whole validation step a silent no-op) and pec's generate-test-obligations.mjs (an .md-only, non-recursive scan silently dropped invariants already migrated to devai's canonical .json format). A glob-guard checker that itself gets these classification boundaries wrong (zero vs. under-threshold vs. healthy, literal vs. glob, or that walks into node_modules and reports false-positive matches) would fail to catch the exact bug class it was built for.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "unit",
-      "int"
-    ],
+    "required_suites": ["unit", "int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -30,33 +27,18 @@
     ]
   },
   "scope": {
-    "components": [
-      "core",
-      "cli"
-    ],
+    "components": ["core", "cli"],
     "code_areas": [
       "packages/core/src/glob-guards/**",
       "packages/cli/src/commands/check/glob-guards.ts"
     ]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "d-124",
-    "glob-guards",
-    "governance-roadmap"
-  ],
-  "measurable_via": [
-    "policy check glob guards"
-  ],
-  "provenance": [
-    "ex-INV-DEVAI-014@devai-original"
-  ]
+  "tags": ["d-124", "glob-guards", "governance-roadmap"],
+  "measurable_via": ["policy check glob guards"],
+  "provenance": ["ex-INV-DEVAI-014@devai-original"]
 }

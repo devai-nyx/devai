@@ -71,68 +71,33 @@
       "type": "string"
     },
     "status": {
-      "enum": [
-        "draft",
-        "active",
-        "deprecated",
-        "retired"
-      ]
+      "enum": ["draft", "active", "deprecated", "retired"]
     },
     "verification": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "required_suites",
-        "oracle"
-      ],
+      "required": ["required_suites", "oracle"],
       "properties": {
         "required_suites": {
           "type": "array",
           "items": {
-            "enum": [
-              "unit",
-              "api",
-              "int",
-              "e2e",
-              "sec",
-              "perf",
-              "journey",
-              "db"
-            ]
+            "enum": ["unit", "api", "int", "e2e", "sec", "perf", "journey", "db"]
           },
           "minItems": 1
         },
         "optional_suites": {
           "type": "array",
           "items": {
-            "enum": [
-              "unit",
-              "api",
-              "int",
-              "e2e",
-              "sec",
-              "perf",
-              "journey",
-              "db"
-            ]
+            "enum": ["unit", "api", "int", "e2e", "sec", "perf", "journey", "db"]
           }
         },
         "oracle": {
-          "enum": [
-            "tests",
-            "static_analysis",
-            "runtime_probe",
-            "llm_judge"
-          ]
+          "enum": ["tests", "static_analysis", "runtime_probe", "llm_judge"]
         },
         "strategy": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "primary",
-            "deterministic_check_available",
-            "rationale"
-          ],
+          "required": ["primary", "deterministic_check_available", "rationale"],
           "properties": {
             "primary": {
               "enum": [
@@ -178,9 +143,7 @@
                 }
               },
               "then": {
-                "required": [
-                  "semantic_review_justification"
-                ]
+                "required": ["semantic_review_justification"]
               }
             }
           ]
@@ -193,19 +156,14 @@
     "authority": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "docs"
-      ],
+      "required": ["docs"],
       "properties": {
         "docs": {
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-              "doc",
-              "anchor"
-            ],
+            "required": ["doc", "anchor"],
             "properties": {
               "doc": {
                 "type": "string",
@@ -231,9 +189,7 @@
     "scope": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "components"
-      ],
+      "required": ["components"],
       "properties": {
         "components": {
           "type": "array",
@@ -270,11 +226,7 @@
     "change_policy": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "breaking_change_requires",
-        "test_weakening_allowed",
-        "human_approval_required"
-      ],
+      "required": ["breaking_change_requires", "test_weakening_allowed", "human_approval_required"],
       "properties": {
         "breaking_change_requires": {
           "type": "array",
@@ -308,7 +260,7 @@
     "version": {
       "type": "string",
       "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[A-Za-z0-9.-]+)?$",
-      "description": "Per-invariant semver. Bumped on each substantive change to this invariant. Absorbs the per-file versioning convention from the stech-law predecessor draft (D-38, Batch 10.E). The aggregate `docs/framework/arch/invariants/VERSION` file records the directory-level version."
+      "description": "Per-invariant semver. Bumped on each substantive change to this invariant. Absorbs the per-file versioning convention from the stech-law predecessor draft (D-38, Batch 10.E). The aggregate `law/invariants/VERSION` file records the directory-level version."
     },
     "measurable_via": {
       "type": "array",
@@ -319,10 +271,7 @@
       "description": "Layer-1 action names that measure this invariant (e.g. 'sense lint', 'inv regen'). Used by `devai spec validate action coverage` to gate: every registered action must be claimed by at least one invariant's measurable_via."
     },
     "measurable_via_mode": {
-      "enum": [
-        "any",
-        "all"
-      ],
+      "enum": ["any", "all"],
       "description": "How measurable_via entries combine (R18/D-133, closes the false-green alignment class). 'any' (the default when absent, back-compat): exercising any one listed action measures the invariant. 'all': the invariant is measured only when every listed action is exercised \u2014 for invariants whose statement genuinely requires multiple observations (e.g. INV-INVENTORY-003 needs both the api and rbac inventories to check endpoint-role binding). Consumed by sense harness invariant-alignment."
     },
     "provenance": {
@@ -333,10 +282,7 @@
       "description": "Absorption/supersession provenance per the record meta-structure (\u00a75.1)."
     },
     "supersedes": {
-      "type": [
-        "array",
-        "null"
-      ],
+      "type": ["array", "null"],
       "items": {
         "$ref": "common-defs.schema.json#/$defs/id_invariant"
       }
@@ -355,17 +301,10 @@
   "allOf": [
     {
       "if": {
-        "required": [
-          "severity",
-          "status"
-        ],
+        "required": ["severity", "status"],
         "properties": {
           "severity": {
-            "enum": [
-              "constitutional",
-              "hard-fail",
-              "gate"
-            ]
+            "enum": ["constitutional", "hard-fail", "gate"]
           },
           "status": {
             "const": "active"
@@ -380,9 +319,7 @@
       "then": {
         "properties": {
           "verification": {
-            "required": [
-              "strategy"
-            ]
+            "required": ["strategy"]
           }
         }
       }
@@ -403,11 +340,7 @@
       "rationale": "Articles 6-10 make role declaration and separation load-bearing. An implicit role or caller-selected machine actor would turn the authority boundary into advisory metadata.",
       "status": "active",
       "verification": {
-        "required_suites": [
-          "unit",
-          "int",
-          "e2e"
-        ],
+        "required_suites": ["unit", "int", "e2e"],
         "oracle": "tests",
         "strategy": {
           "primary": "regression",
@@ -426,17 +359,10 @@
             "anchor": "2-human-declarations-and-sessions"
           }
         ],
-        "decisions": [
-          "D-135",
-          "ADR-003"
-        ]
+        "decisions": ["D-135", "ADR-003"]
       },
       "scope": {
-        "components": [
-          "authority-runtime",
-          "authority-sessions",
-          "machine-principals"
-        ],
+        "components": ["authority-runtime", "authority-sessions", "machine-principals"],
         "code_areas": [
           "packages/core/src/authority/**",
           "packages/cli/src/command-router.ts",
@@ -462,13 +388,8 @@
         "non-elevation",
         "article-7"
       ],
-      "measurable_via": [
-        "work session start",
-        "work session end"
-      ],
-      "provenance": [
-        "ex-INV-AUTH-001@devai-original"
-      ]
+      "measurable_via": ["work session start", "work session end"],
+      "provenance": ["ex-INV-AUTH-001@devai-original"]
     }
   ],
   "$comment": "W02 DECIDED, DEFERRED: invariant `authority` (anchor-docs object) will be renamed to `authority_docs`; execution is deferred because it re-anchors trace and requires coordinated consumer migration. Record-meta `authority` remains the authoring-role field."

@@ -32,22 +32,22 @@ Use [`TEMPLATE.md`](./TEMPLATE.md) verbatim as the starting point.
 
 ## Schema transports
 
-| Transport | When to use | Filename pattern |
-|-----------|-------------|------------------|
-| **JSON Schema 2020-12** | data contracts, config files, on-disk artifacts | `<name>.schema.json` |
-| **OpenAPI 3.1** | HTTP API contracts | `openapi.json` (one per service) or `<service>.openapi.json` |
-| **AsyncAPI 2.6** | event-driven / pubsub contracts | `<topic>.asyncapi.yaml` |
-| **SQL DDL** | database surface contracts | `ddl/<nn>-<name>.sql` (per the database-layout canon) |
+| Transport               | When to use                                     | Filename pattern                                             |
+| ----------------------- | ----------------------------------------------- | ------------------------------------------------------------ |
+| **JSON Schema 2020-12** | data contracts, config files, on-disk artifacts | `<name>.schema.json`                                         |
+| **OpenAPI 3.1**         | HTTP API contracts                              | `openapi.json` (one per service) or `<service>.openapi.json` |
+| **AsyncAPI 2.6**        | event-driven / pubsub contracts                 | `<topic>.asyncapi.yaml`                                      |
+| **SQL DDL**             | database surface contracts                      | `ddl/<nn>-<name>.sql` (per the database-layout canon)        |
 
 Pick the one that matches the wire format; do not author two transports for the same contract. If a contract carries both HTTP and an underlying data shape, ship the OpenAPI and have it `$ref` the JSON Schema for the body.
 
 ## Stability levels
 
-| Level | Compatibility commitment | What can change |
-|-------|--------------------------|-----------------|
-| `experimental` | none | any shape change permitted; readers MUST pin a version. |
-| `stable` | semver-style additive only | add fields, add enum values; never remove or rename. |
-| `deprecated` | scheduled for removal | no changes; consumers migrate to the successor (named in the contract). |
+| Level          | Compatibility commitment   | What can change                                                         |
+| -------------- | -------------------------- | ----------------------------------------------------------------------- |
+| `experimental` | none                       | any shape change permitted; readers MUST pin a version.                 |
+| `stable`       | semver-style additive only | add fields, add enum values; never remove or rename.                    |
+| `deprecated`   | scheduled for removal      | no changes; consumers migrate to the successor (named in the contract). |
 
 ## Breaking changes require a new contract version + ADR
 
@@ -60,7 +60,7 @@ A breaking change is any of:
 
 To ship a breaking change:
 
-1. Open an ADR per [`../../meta/adr/README.md`](../../../law/adr/README.md) recording the *why*.
+1. Open an ADR per [`../../meta/adr/README.md`](../../../law/adr/README.md) recording the _why_.
 2. Ship a new contract file `<name>-v2.md` + `<name>-v2.schema.json`. Old version stays.
 3. Mark the old contract `deprecated` and link to the successor.
 4. Bump consumers in a deliberate sequence.
@@ -70,19 +70,19 @@ A `schemaVersion` field inside a JSON Schema serves the same role at the data la
 
 ## Worked stability / compatibility matrix
 
-| Change | `experimental` | `stable` | Notes |
-|--------|---------------|----------|-------|
-| Add optional field | OK | OK | additive, always non-breaking |
-| Add enum value | OK | OK if all consumers tolerate unknowns | otherwise breaking |
-| Add `required` field | OK | breaking | tightens reader contract |
-| Rename field | OK | breaking | ship `v2` |
-| Remove field | OK | breaking | ship `v2`, deprecate v1 |
-| Change type (string → number) | OK | breaking | always |
-| Loosen `pattern` regex | OK | OK | wider acceptance |
-| Tighten `pattern` regex | OK | breaking | narrower acceptance |
-| Add HTTP route | OK | OK | additive |
-| Add response field | OK | OK | additive |
-| Add request body required field | OK | breaking | tightens producer requirement |
+| Change                          | `experimental` | `stable`                              | Notes                         |
+| ------------------------------- | -------------- | ------------------------------------- | ----------------------------- |
+| Add optional field              | OK             | OK                                    | additive, always non-breaking |
+| Add enum value                  | OK             | OK if all consumers tolerate unknowns | otherwise breaking            |
+| Add `required` field            | OK             | breaking                              | tightens reader contract      |
+| Rename field                    | OK             | breaking                              | ship `v2`                     |
+| Remove field                    | OK             | breaking                              | ship `v2`, deprecate v1       |
+| Change type (string → number)   | OK             | breaking                              | always                        |
+| Loosen `pattern` regex          | OK             | OK                                    | wider acceptance              |
+| Tighten `pattern` regex         | OK             | breaking                              | narrower acceptance           |
+| Add HTTP route                  | OK             | OK                                    | additive                      |
+| Add response field              | OK             | OK                                    | additive                      |
+| Add request body required field | OK             | breaking                              | tightens producer requirement |
 
 ## Index pattern
 

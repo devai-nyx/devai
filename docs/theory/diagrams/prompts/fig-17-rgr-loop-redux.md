@@ -8,10 +8,10 @@ Repeats Figure 4 (with slightly more detail in the wait-loop) emphasizing the ti
 
 ## Visual structure
 
-- **Same topology as Figure 4** but with: *Inner / outer loop* on the left (broader description), *Emit RGR-NNNN* (with agent-run subtitle), *task pause-rgr* (with state subtitle).
-- **Up to human**: *Human Architect* (red) with subtitle 'amends invariant (version bump)'.
-- **Reference update**: *r(k+T) = r(k) + Δr* — labelled formula in the box.
-- **Back down**: *task resume-rgr*, then return to inner.
+- **Same topology as Figure 4** but with: _Inner / outer loop_ on the left (broader description), _Emit RGR-NNNN_ (with agent-run subtitle), _task pause-rgr_ (with state subtitle).
+- **Up to human**: _Human Architect_ (red) with subtitle 'amends invariant (version bump)'.
+- **Reference update**: _r(k+T) = r(k) + Δr_ — labelled formula in the box.
+- **Back down**: _task resume-rgr_, then return to inner.
 - Dashed wait-arrow labelled 'timescale: hours/days'.
 - **Aspect**: ~1180×320.
 

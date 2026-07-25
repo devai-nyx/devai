@@ -1,4 +1,5 @@
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { validateRepositoryTarget } from '@devai-nyx/utils';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import type { SpecValidationError, SpecValidationResult } from './types.js';
 
@@ -146,8 +147,11 @@ export function validateTestTrace(opts: ValidateTestTraceOptions): TestTraceResu
       continue;
     }
     corpusByPath.set(entry.path, entry);
-    if (!existsSync(join(opts.repoRoot, entry.path))) {
-      errors.push({ file: entry.path, message: 'stale trace path does not resolve' });
+    if (!validateRepositoryTarget(opts.repoRoot, entry.path, 'test').ok) {
+      errors.push({
+        file: entry.path,
+        message: 'trace path is not a contained executable test file',
+      });
     }
   }
   for (const [path, marker] of markers) {
@@ -172,9 +176,11 @@ export function validateTestTrace(opts: ValidateTestTraceOptions): TestTraceResu
   }
   for (const entry of trace.invariants ?? []) {
     for (const test of entry.tests) {
-      const fullPath = join(opts.repoRoot, test.path);
-      if (!existsSync(fullPath) || !statSync(fullPath).isFile()) {
-        errors.push({ file: test.path, message: 'stale trace path does not resolve' });
+      if (!validateRepositoryTarget(opts.repoRoot, test.path, 'test').ok) {
+        errors.push({
+          file: test.path,
+          message: 'trace path is not a contained executable test file',
+        });
       }
     }
   }

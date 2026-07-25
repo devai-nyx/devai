@@ -110,6 +110,7 @@ describe('product tier records', () => {
     }
   });
 });
+// Invariants: INV-BLUEPRINT-001
 
 describe('glossary records (joint tier)', () => {
   const G = join(R, 'law', 'glossary');

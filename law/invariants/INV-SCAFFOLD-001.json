@@ -10,9 +10,7 @@
   "rationale": "Per D-59. Scaffolders emit large diffs into adopter code, and adopters frequently edit scaffolded files thereafter. The header is intentionally NOT a freeze: manual edits to scaffolded code are explicitly allowed (the substrate is a starting point, not a frozen artifact). What the header does is record provenance: any future maintainer can answer 'which blueprint version emitted this file?' by reading the header, and the audit can detect 'scaffolded file diverged from blueprint without a regeneration cycle.' Severity gate: observational at edit time, blocking only at audit/release time when drift exceeds a configurable threshold (Phase 18.F sets the threshold per skill).",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -29,35 +27,15 @@
     ]
   },
   "scope": {
-    "components": [
-      "core",
-      "cli"
-    ],
-    "code_areas": [
-      "packages/core/src/templates/index.ts",
-      "packages/core/src/skills/scaffolders/"
-    ]
+    "components": ["core", "cli"],
+    "code_areas": ["packages/core/src/templates/index.ts", "packages/core/src/skills/scaffolders/"]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update"],
     "test_weakening_allowed": false,
     "human_approval_required": false
   },
-  "tags": [
-    "phase-18",
-    "phase-18-D",
-    "scaffold",
-    "greenfield",
-    "audit",
-    "provenance"
-  ],
-  "measurable_via": [
-    "spec blueprint diff"
-  ],
-  "provenance": [
-    "ex-INV-SCAFFOLD-001@devai-original"
-  ]
+  "tags": ["phase-18", "phase-18-D", "scaffold", "greenfield", "audit", "provenance"],
+  "measurable_via": ["spec blueprint diff"],
+  "provenance": ["ex-INV-SCAFFOLD-001@devai-original"]
 }

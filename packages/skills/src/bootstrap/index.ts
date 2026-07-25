@@ -1,12 +1,9 @@
-import {
-  mkdirSync,
-  symlinkSync,
-  writeFileSync,
-} from '@devai-nyx/authority';
+import { mkdirSync, symlinkSync, writeFileSync } from '@devai-nyx/authority';
+import { getValidator } from '@devai-nyx/schemas';
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { buildConstitutionBindingPlan } from '../constitution/index.js';
-import { CANONICAL_FORBIDDEN_ACTIONS } from '../forbidden-actions/index.js';
 
 export interface BootstrapPlanEntry {
   readonly path: string;
@@ -36,6 +33,119 @@ export interface BootstrapPlan {
 }
 
 const DEFAULT_VERSION = '0.0.0';
+const PACKAGE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const POLICY_FILES = [
+  'domains.json',
+  'forbidden-actions.json',
+  'glob-guards.json',
+  'scorecard-na.json',
+  'thresholds.json',
+] as const;
+
+type BootstrapPolicyFile = (typeof POLICY_FILES)[number];
+
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function validStringRoster(value: unknown): boolean {
+  return (
+    Array.isArray(value) &&
+    value.every((item) => typeof item === 'string' && item.length > 0) &&
+    new Set(value).size === value.length
+  );
+}
+
+function validFiniteRange(value: unknown, min: number, max: number): boolean {
+  return typeof value === 'number' && Number.isFinite(value) && value >= min && value <= max;
+}
+
+function validatesDomains(value: unknown): boolean {
+  if (!isPlainRecord(value)) return false;
+  if (value['schemaVersion'] !== '1.0.0') return false;
+  if (!validStringRoster(value['core']) || !validStringRoster(value['framework'])) return false;
+  if (!validStringRoster(value['client'])) return false;
+  return (value['core'] as unknown[]).length > 0 && (value['framework'] as unknown[]).length > 0;
+}
+
+function validatesThresholds(value: unknown): boolean {
+  if (!isPlainRecord(value) || value['schemaVersion'] !== '1.0.0') return false;
+  const coverage = value['coverage'];
+  const mutation = value['mutation'];
+  const lint = value['lint'];
+  const typecheck = value['typecheck'];
+  const freshness = value['freshness'];
+  return (
+    isPlainRecord(coverage) &&
+    ['lines', 'branches', 'functions', 'statements'].every((key) =>
+      validFiniteRange(coverage[key], 0, 100),
+    ) &&
+    isPlainRecord(mutation) &&
+    validFiniteRange(mutation['score_min'], 0, 100) &&
+    validFiniteRange(mutation['survived_max'], 0, Number.MAX_SAFE_INTEGER) &&
+    isPlainRecord(lint) &&
+    validFiniteRange(lint['max_errors'], 0, Number.MAX_SAFE_INTEGER) &&
+    validFiniteRange(lint['max_warnings'], 0, Number.MAX_SAFE_INTEGER) &&
+    isPlainRecord(typecheck) &&
+    validFiniteRange(typecheck['max_errors'], 0, Number.MAX_SAFE_INTEGER) &&
+    isPlainRecord(freshness) &&
+    validFiniteRange(freshness['default_max_age_hours'], 1, 8760) &&
+    validFiniteRange(freshness['scorecard_failure_max_age_hours'], 1, 8760)
+  );
+}
+
+const REGISTERED_POLICY_SCHEMAS: Partial<
+  Record<BootstrapPolicyFile, Parameters<typeof getValidator>[0]>
+> = {
+  'forbidden-actions.json': 'forbidden-actions.schema.json',
+  'glob-guards.json': 'glob-guards.schema.json',
+  'scorecard-na.json': 'scorecard-na-config.schema.json',
+};
+
+export function validateCanonicalPolicyContent(file: BootstrapPolicyFile, bytes: string): string {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(bytes);
+  } catch (error) {
+    throw new Error(
+      `canonical policy ${file} failed schema validation: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+  const schemaName = REGISTERED_POLICY_SCHEMAS[file];
+  if (schemaName !== undefined) {
+    const validate = getValidator(schemaName);
+    if (!validate(parsed)) {
+      const detail = (validate.errors ?? [])
+        .map((error) => `${error.instancePath || '/'} ${error.message ?? ''}`)
+        .join('; ');
+      throw new Error(`canonical policy ${file} failed schema validation: ${detail}`);
+    }
+    return bytes;
+  }
+  const valid =
+    file === 'domains.json'
+      ? validatesDomains(parsed)
+      : file === 'thresholds.json'
+        ? validatesThresholds(parsed)
+        : false;
+  if (!valid) {
+    throw new Error(`canonical policy ${file} failed schema validation`);
+  }
+  return bytes;
+}
+
+function canonicalPolicyContent(file: (typeof POLICY_FILES)[number]): string {
+  const candidates = [
+    join(PACKAGE_ROOT, 'dist/law/policy', file),
+    join(PACKAGE_ROOT, '../../law/policy', file),
+  ];
+  const source = candidates.find((candidate) => existsSync(candidate));
+  if (source === undefined) {
+    throw new Error(`canonical policy source unavailable: law/policy/${file}`);
+  }
+  const bytes = readFileSync(source, 'utf8');
+  return validateCanonicalPolicyContent(file, bytes);
+}
 
 /**
  * Compute a bootstrap plan for a target directory. Phase-7 MVP:
@@ -57,52 +167,11 @@ export function buildBootstrapPlan(opts: {
   const version = opts.version ?? DEFAULT_VERSION;
   const entries: BootstrapPlanEntry[] = [];
   const counters = JSON.stringify({ TASK: 0, RGR: 0, CTG: 0, ESC: 0 }, null, 2) + '\n';
-  const domains =
-    JSON.stringify(
-      {
-        schemaVersion: '1.0.0',
-        core: ['AUTH', 'SEC', 'PERF', 'DATA', 'API', 'INFRA', 'UI', 'CORE'],
-        framework: ['DEVAI', 'HARNESS'],
-        client: [],
-      },
-      null,
-      2,
-    ) + '\n';
+  const policyContent = Object.fromEntries(
+    POLICY_FILES.map((file) => [file, canonicalPolicyContent(file)]),
+  ) as Record<(typeof POLICY_FILES)[number], string>;
   const emptyChain = JSON.stringify({ head: null, records: [] }, null, 2) + '\n';
   const canonicalGitignore = 'scratch/\n';
-  // Phase-9 Batch 9.A.4: coverage threshold defaults. Soft enough that
-  // a fresh init doesn't immediately fail; clients can tighten them
-  // once their coverage baseline is in.
-  const thresholds =
-    JSON.stringify(
-      {
-        schemaVersion: '1.0.0',
-        coverage: {
-          statements: 0.7,
-          branches: 0.6,
-          functions: 0.7,
-          lines: 0.7,
-        },
-      },
-      null,
-      2,
-    ) + '\n';
-
-  // Phase-10 Batch 10.H: forbidden actions registry (LAW-12.FORBID.1).
-  // Sixteen entries absorbed verbatim from the stech-law predecessor
-  // draft (D-38). Clients may extend (never relax) by editing the
-  // file in their own repo. D-123 (item 6): sourced from the single
-  // CANONICAL_FORBIDDEN_ACTIONS constant (packages/skills/src/forbidden-actions/)
-  // so the bootstrap seed and the coverage check can never drift apart.
-  const forbiddenActions =
-    JSON.stringify(
-      {
-        schemaVersion: '1.0.0',
-        actions: CANONICAL_FORBIDDEN_ACTIONS,
-      },
-      null,
-      2,
-    ) + '\n';
 
   // D-119: constitution binding is planned before project.json so
   // its pin (when resolved) can be folded into the config seed.
@@ -159,9 +228,10 @@ export function buildBootstrapPlan(opts: {
     { path: '.gitignore', content: canonicalGitignore },
     { path: 'record/proofs/chain.json', content: emptyChain },
     { path: '.devai/state/counters.json', content: counters },
-    { path: '.devai/config/domains.json', content: domains },
-    { path: '.devai/config/thresholds.json', content: thresholds },
-    { path: '.devai/config/forbidden-actions.json', content: forbiddenActions },
+    ...POLICY_FILES.map((file) => ({
+      path: `.devai/config/${file}`,
+      content: policyContent[file],
+    })),
     { path: '.devai/config/project.json', content: projectConfig },
     constitutionBinding.pointerFile,
     ...(constitutionBinding.rootFile !== undefined ? [constitutionBinding.rootFile] : []),
@@ -183,10 +253,7 @@ export function buildBootstrapPlan(opts: {
           ['product', 'Owner'] as const,
         ]),
     ...(profile === 'tier3'
-      ? [
-          ['work/rounds', 'Architect'] as const,
-          ['work/audit', 'Auditor'] as const,
-        ]
+      ? [['work/rounds', 'Architect'] as const, ['work/audit', 'Auditor'] as const]
       : []),
   ];
   for (const [dir, authority] of f1Dirs) {

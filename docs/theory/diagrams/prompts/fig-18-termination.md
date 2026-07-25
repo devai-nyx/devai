@@ -8,13 +8,13 @@ Every path through the inner loop reaches one of four explicit terminal states; 
 
 ## Visual structure
 
-- **Decision tree** with *Inner loop k=0* at the top, branching down to *Iteration k* (central decision diamond / box).
+- **Decision tree** with _Inner loop k=0_ at the top, branching down to _Iteration k_ (central decision diamond / box).
 - **Four branch outcomes**:
--   - assess=pass → SUCCESS (ctrl-green)
--   - k = N_max → Article-23 ladder (sup-amber)
--   - budget → BUDGET_EXHAUSTED (human-red)
--   - triage = reference-gap → RGR_PENDING (human-red)
-- **Below the ladder**: split into *switch π → next tier* (sup) which dashed-returns to Iteration k, and *ESCALATION (Art 19)* (human-red).
+- - assess=pass → SUCCESS (ctrl-green)
+- - k = N_max → Article-23 ladder (sup-amber)
+- - budget → BUDGET_EXHAUSTED (human-red)
+- - triage = reference-gap → RGR_PENDING (human-red)
+- **Below the ladder**: split into _switch π → next tier_ (sup) which dashed-returns to Iteration k, and _ESCALATION (Art 19)_ (human-red).
 - **Aspect**: ~1080×480, vertical.
 
 ## Authoring notes

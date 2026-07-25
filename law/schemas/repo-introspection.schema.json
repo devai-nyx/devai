@@ -30,13 +30,7 @@
       "format": "date-time"
     },
     "package_manager": {
-      "enum": [
-        "pnpm",
-        "yarn",
-        "npm",
-        "bun",
-        "unknown"
-      ],
+      "enum": ["pnpm", "yarn", "npm", "bun", "unknown"],
       "description": "Detected by lockfile presence. 'unknown' when no recognized lockfile or package.json was found."
     },
     "languages": {
@@ -44,10 +38,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name",
-          "file_count"
-        ],
+        "required": ["name", "file_count"],
         "properties": {
           "name": {
             "enum": [
@@ -75,10 +66,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name",
-          "evidence"
-        ],
+        "required": ["name", "evidence"],
         "properties": {
           "name": {
             "enum": [
@@ -131,12 +119,7 @@
       "description": "True when .devai/config/project.json already exists; the bootstrap plan should treat this as deny-by-default."
     },
     "proposed_project_type": {
-      "enum": [
-        "runtime-host",
-        "platform-package",
-        "docs-archive",
-        "framework"
-      ],
+      "enum": ["runtime-host", "platform-package", "docs-archive", "framework"],
       "description": "Best-guess project_type for project-config.schema.json. Architect-approved before adoption."
     },
     "notes": {

@@ -10,9 +10,7 @@
   "rationale": "Per D-57's brownfield-adoption argument: adopting DEVAI on a pre-existing repo means inheriting a security posture that has accumulated without explicit role mapping discipline. INV-INVENTORY-003 surfaces every endpoint whose authorization story is undocumented. The 'gate' severity (Phase 10.A) reflects that an unbound endpoint may be legitimately public (e.g. /health, /metrics) \u2014 closure requires either binding a role to it OR explicitly tagging it as public. Either choice is acceptable; ambiguity is not.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -33,10 +31,7 @@
     ]
   },
   "scope": {
-    "components": [
-      "sensors",
-      "cli"
-    ],
+    "components": ["sensors", "cli"],
     "code_areas": [
       "packages/sensors/src/inventory-api.ts",
       "packages/sensors/src/inventory-rbac.ts",
@@ -45,28 +40,12 @@
     ]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-17",
-    "phase-17-D",
-    "inventory",
-    "brownfield",
-    "rbac",
-    "authorization"
-  ],
-  "measurable_via": [
-    "sense inventory api",
-    "sense inventory rbac"
-  ],
+  "tags": ["phase-17", "phase-17-D", "inventory", "brownfield", "rbac", "authorization"],
+  "measurable_via": ["sense inventory api", "sense inventory rbac"],
   "measurable_via_mode": "all",
-  "provenance": [
-    "ex-INV-INVENTORY-003@devai-original"
-  ]
+  "provenance": ["ex-INV-INVENTORY-003@devai-original"]
 }

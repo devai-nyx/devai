@@ -1,30 +1,52 @@
-# Instructions for Claude Code — DEVAI successor repository (bootstrap-ready)
+# Instructions for agents — DEVAI successor completion campaign
 
-This repository is the DEVAI successor, prepared for round **R-0001: the bootstrap**.
-The predecessor is at **`../devai` — READ-ONLY, always**: it is absorption source and
-evidence archive; writing to it under any circumstance is a hard violation.
+This is the active DEVAI successor repository. R-0001 completed the bootstrap. The
+predecessor completed R-Ω at immutable commit
+`05dd242bf72334bfd683096aed380e8240b6b9aa` and is archived as
+`devai-nyx/devai-original`.
 
-## If you are the bootstrap orchestrator (fresh session, told to "run the bootstrap")
+The predecessor checkout at **`../devai` is READ-ONLY, always**. It remains at the
+opening absorption pin and must not be fetched, configured, checked out, or modified.
+Read terminal evidence through immutable GitHub objects instead.
+
+## If you are told to run the next round
 
 Read and follow, in order:
-1. `work/rounds/R-0001/AUTHORIZATION.md` — the gate (GRANTED 2026-07-23; verify, don't assume).
-2. `work/rounds/R-0001/prompts/00-orchestrator.md` — your full operating prompt (P0–P8).
-3. `work/rounds/R-0001/plan.md` Appendix A — the phase map.
-Everything you need is in-repo: the dossier at `work/devai-ii-succession-dossier.md`,
-context packs and reviews under `scratch/` (gitignored but present on disk).
 
-## Standing rules (any session, any task)
+1. `product/owner-mandates/OM-002.md`
+2. `work/audit/R-0002-preflight/consolidated-audit.md`
+3. `work/audit/R-0002-preflight/backlog-register.md`
+4. `work/rounds/EXECUTION-CONTRACT.md`
+5. `work/rounds/R-0002/AUTHORIZATION.md`
+6. `work/rounds/R-0002/plan.md`
+7. `work/rounds/R-0002/prompts/00-orchestrator.md`
 
-- Authority is role-pure by path (draft Article 6 table, `law/constitution.md`):
-  law/ = Architect · product/ = Owner marks only · work/rounds/ = Architect ·
-  work/audit/ = Auditor · docs/ = Architect · record/ = machine only ·
-  packages/ = Engineer · tests/ = Inspector · scratch/ = ephemeral.
-  Commit as `git -c user.name="DEVAI <Role>" -c user.email="aarusso@nyxk.com.br"`.
-- **Verify before commit** — run checks and READ output first (rehearsal defect #2).
-- Owner decisions are already recorded (DS-01, REV-0006, the granted authorization);
-  APPLY them; never invent new ones — park questions in the backlog.
-- Gates: `pnpm vitest run` is the current floor (27+ contract tests); it must be green
-  at every commit unless a KNOWN-RED is documented with a backlog pointer.
+R-0001 is closed historical intent. Do not rerun it or edit its plan, prompts, handoffs,
+audit, backlog, or PC-0001. Future rounds R-0003 through R-0010 are prepared under
+`work/rounds/`; each remains dormant until its own entry gate passes.
+
+## Standing rules
+
+- Authority is role-pure by path: `law/` = Architect; `product/` = Owner marks only;
+  `work/rounds/` = Architect; `work/audit/` = Auditor; `docs/` = Architect; `record/` =
+  machine verbs only; `packages/` and workspace tooling = Engineer; `tests/` =
+  Inspector; `scratch/` = ephemeral.
+- OM-002’s target boundary makes `.devai/config/` and `.devai/pin/` committed machine
+  materializations from Architect-owned sources, generated and committed by the
+  executing Engineer session. R-0002 must establish, and later rounds must preserve,
+  `.devai/state/` and `.devai/worktrees/` as ignored Engineer-owned runtime state except
+  for tracked `.gitkeep` sentinels.
+- Commit as
+  `git -c user.name="DEVAI <Role>" -c user.email="aarusso@nyxk.com.br"`.
+- Use dedicated worktrees and one role per commit. Read validation output before every
+  commit.
+- The minimum commit floor is `pnpm run devai:prepare`, `pnpm vitest run`, and
+  `git diff --check`, plus affected gates.
+- BL-017 closed in R-0002 after the unchanged 70/60/70/70 floors passed. Every later
+  round reruns that command as an all-green regression gate; no red exception survives.
 - Evidence values are re-read from source when cited, never restated from memory.
-- Nothing here is ratified: everything is `status: draft` until the ratification round
-  after the human runs R-Ω in the predecessor.
+- Deferrals are governed records. Missing scope never becomes an informal “later” list.
+- No package publication, tag, GitHub Release, Pages deployment, real-stynx mutation, or
+  evidence streak is authorized by OM-002.
+- Nothing is ratified before R-0003; nothing is released before R-0008’s separate
+  external gate; R-0010 requires a fresh Owner mandate.

@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { isDomainAllowed, loadDomains } from '../../src/spec/domains-loader.js';
+import './blueprint-inventory-cases.js';
 
 let tempDir = '';
 
@@ -60,4 +61,4 @@ describe('loadDomains', () => {
     expect(() => loadDomains(path)).toThrow(/failed to parse/);
   });
 });
-// Invariants: INV-DEVAI-001
+// Invariants: INV-BLUEPRINT-002, INV-BLUEPRINT-003, INV-DEVAI-001

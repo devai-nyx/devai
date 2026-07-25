@@ -11,7 +11,7 @@ const DEFAULT_REPO_ROOT = process.cwd();
  *
  * `close` validates a draft closure record (JSON file via --input, or
  * stdin with --stdin), assigns the next sequential PC id, and writes
- * .devai/state/closures/PC-NNNN.json. `ledger` computes the derived
+ * record/proofs/compliance/closures/PC-NNNN.json. `ledger` computes the derived
  * properties — the consecutive no-deletion streak, per-round batch
  * counts, gate-failure history — from the records on demand; derived
  * counters are never stored or hand-narrated (the D-108 drift class).
@@ -27,7 +27,7 @@ interface CloseOptions {
 export const phaseClose = defineCommand({
   name: 'phase close',
   description:
-    'Validate and record a phase/round closure (phase-closure.schema.json) under .devai/state/closures/',
+    'Validate and record a phase/round closure (phase-closure.schema.json) under record/proofs/compliance/closures/',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli

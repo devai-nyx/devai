@@ -1,8 +1,4 @@
-import {
-  execFileSync,
-  spawnSync,
-  writeFileSync,
-} from '@devai-nyx/authority';
+import { execFileSync, spawnSync, writeFileSync } from '@devai-nyx/authority';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, isAbsolute, join } from 'node:path';
 import { senseTypeCheck } from '@devai-nyx/sensors';
@@ -205,10 +201,7 @@ export function createFixSkills(resolveSkills: () => readonly SkillEntry[]): rea
     readonly target: string;
     readonly resolved: string;
     readonly outcome:
-      | 'rewritten'
-      | 'no-rename-history'
-      | 'multiple-candidates'
-      | 'rename-target-missing';
+      'rewritten' | 'no-rename-history' | 'multiple-candidates' | 'rename-target-missing';
     readonly new_target?: string;
   }
 

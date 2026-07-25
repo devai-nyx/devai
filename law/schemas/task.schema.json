@@ -43,13 +43,7 @@
       ]
     },
     "discipline": {
-      "enum": [
-        "owner",
-        "architect",
-        "inspector",
-        "engineer",
-        "auditor"
-      ]
+      "enum": ["owner", "architect", "inspector", "engineer", "auditor"]
     },
     "discipline_specialization": {
       "type": "string",
@@ -64,10 +58,7 @@
       "type": "string"
     },
     "lifecycle": {
-      "enum": [
-        "supported",
-        "experimental"
-      ],
+      "enum": ["supported", "experimental"],
       "default": "supported"
     },
     "acceptance_commands": {
@@ -84,44 +75,24 @@
       "description": "Explicit argv arrays run without a shell to evaluate task-specific acceptance."
     },
     "coupled_task_group": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "pattern": "^CTG-[0-9]{4,}$",
       "description": "If non-null, identifies a coupled triplet group. Tasks sharing a CTG merge in authority-chain order."
     },
     "coupled_pipeline_position": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "enum": [
-        null,
-        "architect",
-        "inspector",
-        "engineer"
-      ],
+      "type": ["string", "null"],
+      "enum": [null, "architect", "inspector", "engineer"],
       "description": "Position in the coupled triplet pipeline. Null if not part of a triplet."
     },
     "upstream_task_id": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "pattern": "^TASK-[0-9]{4,}$",
       "description": "Upstream task in the pipeline (e.g., Inspector's upstream is Architect)."
     },
     "target_substrates": {
       "type": "array",
       "items": {
-        "enum": [
-          "F1",
-          "F2",
-          "F3",
-          "F4",
-          "F5"
-        ]
+        "enum": ["F1", "F2", "F3", "F4", "F5"]
       },
       "minItems": 1
     },
@@ -142,18 +113,11 @@
       "description": "Invariants this task aims to affect (introduce, modify, satisfy, retire)."
     },
     "db_isolation": {
-      "enum": [
-        "database",
-        "cluster"
-      ],
+      "enum": ["database", "cluster"],
       "description": "database = TEMPLATE-cloned DB on shared server (default). cluster = dedicated Postgres container."
     },
     "model_tier": {
-      "enum": [
-        "default",
-        "bumped",
-        "fallback"
-      ],
+      "enum": ["default", "bumped", "fallback"],
       "description": "default = first attempt. bumped = larger model after iteration cap. fallback = cross-family per tie-breaker ladder (Article 23)."
     },
     "iteration_count": {
@@ -170,37 +134,22 @@
       "format": "date-time"
     },
     "spawned_at": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "format": "date-time"
     },
     "completed_at": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "format": "date-time"
     },
     "branch": {
-      "type": [
-        "string",
-        "null"
-      ]
+      "type": ["string", "null"]
     },
     "worktree_id": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "pattern": "^WT-"
     },
     "prompt_composition_id": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "pattern": "^PC-[a-f0-9]{16}$"
     },
     "intent_diff": {
@@ -253,11 +202,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "iteration",
-          "started_at",
-          "verdict"
-        ],
+        "required": ["iteration", "started_at", "verdict"],
         "properties": {
           "iteration": {
             "type": "integer",
@@ -268,20 +213,11 @@
             "format": "date-time"
           },
           "ended_at": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "format": "date-time"
           },
           "verdict": {
-            "enum": [
-              "PASS",
-              "REVIEW",
-              "FAIL",
-              "RGR",
-              "ESCALATED"
-            ]
+            "enum": ["PASS", "REVIEW", "FAIL", "RGR", "ESCALATED"]
           },
           "hard_gate_failures": {
             "type": "array",
@@ -327,9 +263,7 @@
       "discipline": "engineer",
       "title": "Implement the approved change",
       "target_modules": [],
-      "target_substrates": [
-        "F2"
-      ],
+      "target_substrates": ["F2"],
       "created_at": "2026-07-23T00:00:00.000Z",
       "db_isolation": "database",
       "iteration_count": 0

@@ -1,6 +1,17 @@
 import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 
-const dirs = ['start', 'theory', 'roles', 'adopters', 'dev', 'reference', 'governance', 'product', 'process', 'history'];
+const dirs = [
+  'start',
+  'theory',
+  'roles',
+  'adopters',
+  'dev',
+  'reference',
+  'governance',
+  'product',
+  'process',
+  'history',
+];
 const sidebars: SidebarsConfig = {
   docsSidebar: dirs.map((dirName) => ({
     type: 'category',

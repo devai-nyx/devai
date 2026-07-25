@@ -11,7 +11,7 @@ sidebar_position: 2
 
 ### F1 — Specification (the reference signal)
 
-What the framework is trying to achieve. The reference signal *r(t)* in control-theory terms.
+What the framework is trying to achieve. The reference signal _r(t)_ in control-theory terms.
 
 - **Contents.** Business specs (Owner-authored journeys + use-cases under `product/`), engineering specs (Architect-authored arch notes + invariants + trace + ADRs under `docs/theory/architecture/`, `framework/adr/`), contracts (`docs/reference/contracts/`), glossary (`law/glossary/`, joint Owner+Architect).
 - **Authors.** Owner for business tier, Architect for engineering tier, joint at glossary.
@@ -19,7 +19,7 @@ What the framework is trying to achieve. The reference signal *r(t)* in control-
 
 ### F2 — Plant (the system under control)
 
-The system the controller acts on. The plant *P*.
+The system the controller acts on. The plant _P_.
 
 - **Contents.** All source code under `apps/`, `libs/`, `packages/` (in monorepo layouts); DB migrations under `db/migrations/`; seeds under `db/seeds/`; infrastructure-as-code under `iac/`; root-level build scripts.
 - **Author.** Engineer.
@@ -27,7 +27,7 @@ The system the controller acts on. The plant *P*.
 
 ### F3 — Observation (sensors on the plant)
 
-The tests that measure what *P* actually does, compared with what F1 says it should do. Sensors *y(t)*.
+The tests that measure what _P_ actually does, compared with what F1 says it should do. Sensors _y(t)_.
 
 - **Contents.** All `**/*.spec.ts`, `**/*.test.ts`, `tests/`, `e2e/`, configuration files that encode test intent.
 - **Author.** Inspector.
@@ -35,10 +35,10 @@ The tests that measure what *P* actually does, compared with what F1 says it sho
 
 ### F4 — Inventory (plant identification)
 
-A derived model of *P*. The controller's view of the plant's current state *x̂*.
+A derived model of _P_. The controller's view of the plant's current state _x̂_.
 
 - **Contents.** `record/derived/inventory/` — generated artifacts from `inv modules`, `inv routes`, `inv components`, `inv dependencies`, `inv schemas`, `inv contracts`, `inv glossary`, `inv tests`, `inv coverage`. Plus the L0 sensors' outputs (`sense api`, `sense routes`, `sense data-model`, etc.) at `record/proofs/sensor-readings/`.
-- **Author.** No one — F4 is *never* authored. Regenerated only by the inventory subsystem and the L0 sensors. Drift is detected by `inv regen` comparing fresh output to checked-in state.
+- **Author.** No one — F4 is _never_ authored. Regenerated only by the inventory subsystem and the L0 sensors. Drift is detected by `inv regen` comparing fresh output to checked-in state.
 - **Sensor regime.** `sense-inventory-adherence`, `sense-inventory-determinism`, `sense-inventory-performance`.
 
 ### F5 — Harness (the controller infrastructure)
@@ -51,11 +51,11 @@ The DEVAI machinery as instantiated in the client repo. The control system itsel
 
 ## Authority-by-path enforcement
 
-[Article 6](../../reference/law.md) — *"Authority is enforced by filesystem path. The harness refuses writes that violate this mapping at the tool layer, not at review time."*
+[Article 6](../../reference/law.md) — _"Authority is enforced by filesystem path. The harness refuses writes that violate this mapping at the tool layer, not at review time."_
 
 This is the load-bearing semantic difference between DEVAI and a convention-based governance model. Authority is not "what reviewers expect" or "what the PR template says" — it's what the tool refuses at execution time.
 
-A worker that tries to write outside its declared role's enumerated paths gets a refusal *before* the write happens, not a flag *after*. The mapping is constitutional (immutable at the F1 Owner / F1 Architect / F2 / F3 / F4 / F5 level) and version-pinned per [Article 40](../../reference/law.md). Constitution 0.2.0 (R14) rewrote the F1 enumeration to point at the new section roots; clients pinned to 0.1.1 honour the old mapping until they upgrade.
+A worker that tries to write outside its declared role's enumerated paths gets a refusal _before_ the write happens, not a flag _after_. The mapping is constitutional (immutable at the F1 Owner / F1 Architect / F2 / F3 / F4 / F5 level) and version-pinned per [Article 40](../../reference/law.md). Constitution 0.2.0 (R14) rewrote the F1 enumeration to point at the new section roots; clients pinned to 0.1.1 honour the old mapping until they upgrade.
 
 ## Substrate extensions
 

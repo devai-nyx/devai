@@ -10,23 +10,23 @@ Skills are registered in [`packages/core/src/skills/index.ts`](https://github.co
 
 The round-execute family promotes SGP's `sgp-round-*` skills into DEVAI's universal substrate. The loop is **measure → plan → execute → compare**, materialized under `scratch/sessions/rounds/round-<N>/`:
 
-| Skill | Phase | Doc |
-|---|---|---|
-| [`SKILL-round-audit`](./round-audit.md) | measure | Collect sensor readings, compute scorecard, write `audit/scratch.md`. |
-| [`SKILL-round-backlog`](./round-backlog.md) | plan | Turn audit findings into a prioritized backlog and materialize orchestrator + worker prompts. |
-| [`SKILL-round-orchestrate`](./round-orchestrate.md) | execute | Dispatch workers, gate each wave, invoke fix-up skills on failure. |
-| [`SKILL-round-verify-publish`](./round-verify-publish.md) | compare | Re-run gates, diff scorecard vs baseline, and write a disposable local closeout. |
-| [`SKILL-round-execute`](./round-execute.md) | driver | Executes one round end-to-end; composes the four phases; always stops at the disposable local close. (Renamed from SKILL-round-loop in R3-W2.) |
+| Skill                                                     | Phase   | Doc                                                                                                                                            |
+| --------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`SKILL-round-audit`](./round-audit.md)                   | measure | Collect sensor readings, compute scorecard, write `audit/scratch.md`.                                                                          |
+| [`SKILL-round-backlog`](./round-backlog.md)               | plan    | Turn audit findings into a prioritized backlog and materialize orchestrator + worker prompts.                                                  |
+| [`SKILL-round-orchestrate`](./round-orchestrate.md)       | execute | Dispatch workers, gate each wave, invoke fix-up skills on failure.                                                                             |
+| [`SKILL-round-verify-publish`](./round-verify-publish.md) | compare | Re-run gates, diff scorecard vs baseline, and write a disposable local closeout.                                                               |
+| [`SKILL-round-execute`](./round-execute.md)               | driver  | Executes one round end-to-end; composes the four phases; always stops at the disposable local close. (Renamed from SKILL-round-loop in R3-W2.) |
 
 ## Fix-up family
 
 Gate-recovery skills invoked by the round orchestrator when a gate fails mid-wave:
 
-| Skill | Gate | Doc |
-|---|---|---|
-| [`SKILL-fix-lint`](./fix-lint.md) | `sense lint` / `eslint .` | Runs `eslint --fix`; re-evaluates the gate. |
-| [`SKILL-fix-build`](./fix-build.md) | `sense build` / `tsc -b` | Diagnoses; surfaces the SensorReading for downstream remediation. |
-| [`SKILL-fix-test`](./fix-test.md) | `sense test --suite unit` | Diagnoses; surfaces the SensorReading. |
+| Skill                               | Gate                      | Doc                                                               |
+| ----------------------------------- | ------------------------- | ----------------------------------------------------------------- |
+| [`SKILL-fix-lint`](./fix-lint.md)   | `sense lint` / `eslint .` | Runs `eslint --fix`; re-evaluates the gate.                       |
+| [`SKILL-fix-build`](./fix-build.md) | `sense build` / `tsc -b`  | Diagnoses; surfaces the SensorReading for downstream remediation. |
+| [`SKILL-fix-test`](./fix-test.md)   | `sense test --suite unit` | Diagnoses; surfaces the SensorReading.                            |
 
 ## Where else to look
 

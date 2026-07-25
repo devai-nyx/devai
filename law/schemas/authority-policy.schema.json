@@ -39,10 +39,7 @@
     "framework_package": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "name",
-        "version"
-      ],
+      "required": ["name", "version"],
       "properties": {
         "name": {
           "const": "@devai-nyx/cli"
@@ -55,10 +52,7 @@
     "constitution": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "version",
-        "digest_sha256"
-      ],
+      "required": ["version", "digest_sha256"],
       "properties": {
         "version": {
           "type": "string",
@@ -72,11 +66,7 @@
     "source_policy": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "policy_id",
-        "policy_version",
-        "digest_sha256"
-      ],
+      "required": ["policy_id", "policy_version", "digest_sha256"],
       "properties": {
         "policy_id": {
           "const": "devai-core-authority"
@@ -95,11 +85,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "extension_id",
-          "extension_version",
-          "digest_sha256"
-        ],
+        "required": ["extension_id", "extension_version", "digest_sha256"],
         "properties": {
           "extension_id": {
             "type": "string",
@@ -174,11 +160,7 @@
         "initiated_by": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "role",
-            "declaration_source"
-          ],
+          "required": ["kind", "role", "declaration_source"],
           "properties": {
             "kind": {
               "const": "human"
@@ -187,10 +169,7 @@
               "const": "architect"
             },
             "declaration_source": {
-              "enum": [
-                "cli-flag",
-                "session-state"
-              ]
+              "enum": ["cli-flag", "session-state"]
             },
             "session_id": {
               "type": "string",
@@ -205,20 +184,14 @@
                     "const": "session-state"
                   }
                 },
-                "required": [
-                  "declaration_source"
-                ]
+                "required": ["declaration_source"]
               },
               "then": {
-                "required": [
-                  "session_id"
-                ]
+                "required": ["session_id"]
               },
               "else": {
                 "not": {
-                  "required": [
-                    "session_id"
-                  ]
+                  "required": ["session_id"]
                 }
               }
             }
@@ -227,9 +200,7 @@
         "consent": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "write"
-          ],
+          "required": ["write"],
           "properties": {
             "write": {
               "const": true
@@ -245,24 +216,15 @@
     "enforcement": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "mode"
-      ],
+      "required": ["mode"],
       "properties": {
         "mode": {
-          "enum": [
-            "binding",
-            "shadow"
-          ]
+          "enum": ["binding", "shadow"]
         },
         "shadow": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "reason",
-            "approved_by",
-            "expires_at"
-          ],
+          "required": ["reason", "approved_by", "expires_at"],
           "properties": {
             "reason": {
               "type": "string",
@@ -272,19 +234,13 @@
             "approved_by": {
               "type": "object",
               "additionalProperties": false,
-              "required": [
-                "role",
-                "declaration_source"
-              ],
+              "required": ["role", "declaration_source"],
               "properties": {
                 "role": {
                   "const": "architect"
                 },
                 "declaration_source": {
-                  "enum": [
-                    "cli-flag",
-                    "session-state"
-                  ]
+                  "enum": ["cli-flag", "session-state"]
                 },
                 "session_id": {
                   "type": "string",
@@ -299,20 +255,14 @@
                         "const": "session-state"
                       }
                     },
-                    "required": [
-                      "declaration_source"
-                    ]
+                    "required": ["declaration_source"]
                   },
                   "then": {
-                    "required": [
-                      "session_id"
-                    ]
+                    "required": ["session_id"]
                   },
                   "else": {
                     "not": {
-                      "required": [
-                        "session_id"
-                      ]
+                      "required": ["session_id"]
                     }
                   }
                 }
@@ -333,20 +283,14 @@
                 "const": "shadow"
               }
             },
-            "required": [
-              "mode"
-            ]
+            "required": ["mode"]
           },
           "then": {
-            "required": [
-              "shadow"
-            ]
+            "required": ["shadow"]
           },
           "else": {
             "not": {
-              "required": [
-                "shadow"
-              ]
+              "required": ["shadow"]
             }
           }
         }
@@ -355,23 +299,15 @@
     "host_enforcement": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "mode"
-      ],
+      "required": ["mode"],
       "properties": {
         "mode": {
-          "enum": [
-            "cli-only",
-            "host-integrated"
-          ]
+          "enum": ["cli-only", "host-integrated"]
         },
         "adapter": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "adapter_id",
-            "adapter_version"
-          ],
+          "required": ["adapter_id", "adapter_version"],
           "properties": {
             "adapter_id": {
               "type": "string",
@@ -391,20 +327,14 @@
                 "const": "host-integrated"
               }
             },
-            "required": [
-              "mode"
-            ]
+            "required": ["mode"]
           },
           "then": {
-            "required": [
-              "adapter"
-            ]
+            "required": ["adapter"]
           },
           "else": {
             "not": {
-              "required": [
-                "adapter"
-              ]
+              "required": ["adapter"]
             }
           }
         }
@@ -430,10 +360,7 @@
     "humanSubject": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "kind",
-        "roles"
-      ],
+      "required": ["kind", "roles"],
       "properties": {
         "kind": {
           "const": "human"
@@ -443,13 +370,7 @@
           "minItems": 1,
           "uniqueItems": true,
           "items": {
-            "enum": [
-              "owner",
-              "architect",
-              "inspector",
-              "engineer",
-              "auditor"
-            ]
+            "enum": ["owner", "architect", "inspector", "engineer", "auditor"]
           }
         }
       }
@@ -457,30 +378,17 @@
     "machineSubject": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "kind",
-        "actor",
-        "transition",
-        "initiator"
-      ],
+      "required": ["kind", "actor", "transition", "initiator"],
       "properties": {
         "kind": {
           "const": "derived-machine"
         },
         "actor": {
-          "enum": [
-            "harness",
-            "upgrade",
-            "release"
-          ],
+          "enum": ["harness", "upgrade", "release"],
           "description": "bootstrap is a non-authorizing planner/orchestrator identity and is forbidden from policy allow subjects."
         },
         "transition": {
-          "enum": [
-            "harness-write",
-            "upgrade",
-            "release"
-          ]
+          "enum": ["harness-write", "upgrade", "release"]
         },
         "initiator": {
           "oneOf": [
@@ -490,23 +398,14 @@
             {
               "type": "object",
               "additionalProperties": false,
-              "required": [
-                "allowed_roles",
-                "preserve_in_context"
-              ],
+              "required": ["allowed_roles", "preserve_in_context"],
               "properties": {
                 "allowed_roles": {
                   "type": "array",
                   "minItems": 1,
                   "uniqueItems": true,
                   "items": {
-                    "enum": [
-                      "owner",
-                      "architect",
-                      "inspector",
-                      "engineer",
-                      "auditor"
-                    ]
+                    "enum": ["owner", "architect", "inspector", "engineer", "auditor"]
                   },
                   "description": "The runtime binds exactly one actual initiated_by role from this set and requires it to match the invocation flag or session."
                 },
@@ -539,14 +438,10 @@
             },
             "initiator": {
               "type": "object",
-              "required": [
-                "allowed_roles"
-              ],
+              "required": ["allowed_roles"],
               "properties": {
                 "allowed_roles": {
-                  "const": [
-                    "architect"
-                  ]
+                  "const": ["architect"]
                 }
               }
             }
@@ -562,14 +457,10 @@
             },
             "initiator": {
               "type": "object",
-              "required": [
-                "allowed_roles"
-              ],
+              "required": ["allowed_roles"],
               "properties": {
                 "allowed_roles": {
-                  "const": [
-                    "architect"
-                  ]
+                  "const": ["architect"]
                 }
               }
             }
@@ -582,12 +473,7 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "repository_id",
-            "canonical_relative_path_glob",
-            "operations"
-          ],
+          "required": ["kind", "repository_id", "canonical_relative_path_glob", "operations"],
           "properties": {
             "kind": {
               "const": "fs"
@@ -606,12 +492,7 @@
               "minItems": 1,
               "uniqueItems": true,
               "items": {
-                "enum": [
-                  "create",
-                  "update",
-                  "delete",
-                  "rename"
-                ]
+                "enum": ["create", "update", "delete", "rename"]
               }
             }
           }
@@ -619,12 +500,7 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "repository_id",
-            "ref_glob",
-            "operations"
-          ],
+          "required": ["kind", "repository_id", "ref_glob", "operations"],
           "properties": {
             "kind": {
               "const": "git-ref"
@@ -647,13 +523,7 @@
               "minItems": 1,
               "uniqueItems": true,
               "items": {
-                "enum": [
-                  "create",
-                  "update",
-                  "delete",
-                  "merge",
-                  "push"
-                ]
+                "enum": ["create", "update", "delete", "merge", "push"]
               }
             }
           }
@@ -661,13 +531,7 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "connection_id",
-            "database_id_glob",
-            "object_id_glob",
-            "operations"
-          ],
+          "required": ["kind", "connection_id", "database_id_glob", "object_id_glob", "operations"],
           "properties": {
             "kind": {
               "const": "db"
@@ -689,13 +553,7 @@
               "minItems": 1,
               "uniqueItems": true,
               "items": {
-                "enum": [
-                  "insert",
-                  "update",
-                  "delete",
-                  "ddl",
-                  "execute"
-                ]
+                "enum": ["insert", "update", "delete", "ddl", "execute"]
               }
             }
           }
@@ -703,13 +561,7 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "kind",
-            "system_id",
-            "endpoint_ids",
-            "operation_ids",
-            "publication"
-          ],
+          "required": ["kind", "system_id", "endpoint_ids", "operation_ids", "publication"],
           "properties": {
             "kind": {
               "const": "remote"
@@ -764,22 +616,11 @@
           "pattern": "^[a-z][a-z0-9._-]{2,127}$"
         },
         "origin": {
-          "enum": [
-            "immutable-core",
-            "additive-extension"
-          ]
+          "enum": ["immutable-core", "additive-extension"]
         },
         "precedence": {
           "type": "integer",
-          "enum": [
-            500,
-            650,
-            700,
-            750,
-            800,
-            900,
-            1000
-          ]
+          "enum": [500, 650, 700, 750, 800, 900, 1000]
         },
         "action_ids": {
           "type": "array",
@@ -795,10 +636,7 @@
           "$ref": "#/$defs/selector"
         },
         "effect": {
-          "enum": [
-            "allow",
-            "deny"
-          ]
+          "enum": ["allow", "deny"]
         },
         "subjects": {
           "type": "array",
@@ -817,11 +655,7 @@
         "required_consent": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "write",
-            "allow_publish",
-            "experimental"
-          ],
+          "required": ["write", "allow_publish", "experimental"],
           "properties": {
             "write": {
               "type": "boolean"
@@ -897,12 +731,8 @@
       "resolved_digest_sha256": "f9cd53741be54eb361441db85f8f30b3693695dc89e270823b89612b267ec1fc",
       "rules": [
         {
-          "action_ids": [
-            "agent skill run"
-          ],
-          "constitutional_anchors": [
-            6
-          ],
+          "action_ids": ["agent skill run"],
+          "constitutional_anchors": [6],
           "effect": "allow",
           "origin": "immutable-core",
           "precedence": 650,
@@ -914,19 +744,15 @@
           },
           "rule_id": "core-owner-product-root",
           "selector": {
-            "canonical_relative_path_glob": "docs/framework/product",
+            "canonical_relative_path_glob": "product",
             "kind": "fs",
-            "operations": [
-              "create"
-            ],
+            "operations": ["create"],
             "repository_id": "devai-self"
           },
           "subjects": [
             {
               "kind": "human",
-              "roles": [
-                "owner"
-              ]
+              "roles": ["owner"]
             }
           ]
         }

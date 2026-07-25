@@ -16,12 +16,12 @@ A repo MAY also have `database/policies/`, `database/views/`, `database/function
 
 ## Filename conventions
 
-| Subdir | Prefix | Slug case | Example |
-|--------|--------|-----------|---------|
-| `ddl/` | `nn` (2-digit) | lowercase-kebab-case | `01-tenants.sql`, `02-users.sql`, `03-audit-events.sql` |
-| `seed/` | `nn` (2-digit) | lowercase-kebab-case | `01-system-tenants.sql`, `02-demo-users.sql` |
-| `migrations/` | `nnn` (3-digit) | snake_case | `001_add_email_to_users.sql`, `042_drop_legacy_indexes.sql` |
-| `policies/`, `views/`, `functions/` | `nn` (2-digit) | lowercase-kebab-case | `01-tenant-isolation.sql` |
+| Subdir                              | Prefix          | Slug case            | Example                                                     |
+| ----------------------------------- | --------------- | -------------------- | ----------------------------------------------------------- |
+| `ddl/`                              | `nn` (2-digit)  | lowercase-kebab-case | `01-tenants.sql`, `02-users.sql`, `03-audit-events.sql`     |
+| `seed/`                             | `nn` (2-digit)  | lowercase-kebab-case | `01-system-tenants.sql`, `02-demo-users.sql`                |
+| `migrations/`                       | `nnn` (3-digit) | snake_case           | `001_add_email_to_users.sql`, `042_drop_legacy_indexes.sql` |
+| `policies/`, `views/`, `functions/` | `nn` (2-digit)  | lowercase-kebab-case | `01-tenant-isolation.sql`                                   |
 
 **Why the asymmetry?** DDL and seed are repo-internal canonical bootstrap; lowercase-kebab matches the rest of the repo's filenames. Migration naming follows ecosystem conventions (Flyway, Sqitch, Alembic, Knex, Prisma) which standardize on `<integer-prefix>_<snake_case>.sql`. Aligning migrations to the wider ecosystem makes tool-swap cheaper than internal-consistency would.
 
@@ -45,13 +45,13 @@ Corollary: no `git rebase` history-rewrite on `main` that touches a migration fi
 
 Common legacy paths and how to migrate them:
 
-| Legacy path | Action |
-|-------------|--------|
-| `db/` (top-level) | `git mv db database` |
-| `database/` flat (files at root, no subdirs) | sort into `ddl/`, `seed/`, `migrations/` then `git mv` |
-| `prisma/migrations/` | `git mv prisma/migrations database/migrations`; rename Prisma's auto-timestamps to 3-digit prefix |
-| `infra/db/` | `git mv infra/db database` |
-| `backend/db/` | `git mv backend/db database` |
+| Legacy path                                  | Action                                                                                            |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `db/` (top-level)                            | `git mv db database`                                                                              |
+| `database/` flat (files at root, no subdirs) | sort into `ddl/`, `seed/`, `migrations/` then `git mv`                                            |
+| `prisma/migrations/`                         | `git mv prisma/migrations database/migrations`; rename Prisma's auto-timestamps to 3-digit prefix |
+| `infra/db/`                                  | `git mv infra/db database`                                                                        |
+| `backend/db/`                                | `git mv backend/db database`                                                                      |
 
 Always `git mv` (not `mv` + `git add`) so git records the rename and history follows.
 

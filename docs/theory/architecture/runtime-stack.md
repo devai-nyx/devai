@@ -7,17 +7,17 @@
 
 DEVAI's own implementation (the `@devai-nyx/*` packages) is built on a fixed set of runtime and tooling choices:
 
-| Layer | Choice |
-|---|---|
-| Language | TypeScript (strict mode, ESM modules throughout) |
-| Workspace manager | pnpm workspaces (content-addressable store, lightweight orchestration) |
-| Build | `tsc -b` composite builds; project references per package |
-| Test runner | Vitest (one root config + filename-suffix-driven test categories) |
-| CLI framework | `cac` (small, declarative, no plugin architecture) |
-| Type generation | `json-schema-to-typescript` (schemas → `.d.ts` for compile-time validation) |
-| Runtime validation | `ajv` + `ajv-formats` (Draft 2020-12 schemas) |
-| Dev platform | macOS |
-| CI platform | Linux (GitHub Actions) |
+| Layer              | Choice                                                                      |
+| ------------------ | --------------------------------------------------------------------------- |
+| Language           | TypeScript (strict mode, ESM modules throughout)                            |
+| Workspace manager  | pnpm workspaces (content-addressable store, lightweight orchestration)      |
+| Build              | `tsc -b` composite builds; project references per package                   |
+| Test runner        | Vitest (one root config + filename-suffix-driven test categories)           |
+| CLI framework      | `cac` (small, declarative, no plugin architecture)                          |
+| Type generation    | `json-schema-to-typescript` (schemas → `.d.ts` for compile-time validation) |
+| Runtime validation | `ajv` + `ajv-formats` (Draft 2020-12 schemas)                               |
+| Dev platform       | macOS                                                                       |
+| CI platform        | Linux (GitHub Actions)                                                      |
 
 Generated TypeScript types are not committed (per [`.gitignore`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/.gitignore) — `packages/schemas/generated/`).
 
@@ -29,7 +29,7 @@ Each choice was made by elimination:
 `commander` is mature but verbose for ~60 commands (see [`tool-surface.md`](./tool-surface.md)). `oclif` is heavy: plugin architecture, manifest generation, command lifecycle hooks — none of which DEVAI needs since all commands ship in one binary. `cac` is the right size: a clean declarative API, sub-command grouping out of the box, no overkill.
 
 **Workspace manager — `pnpm` over plain npm and Nx:**
-Plain npm workspaces work but lack a content-addressable store, which makes installs in CI slow and disk-hungry across multiple worktrees. Nx is an orchestration framework — DEVAI *is* an orchestration framework, so layering Nx on top would conflict on the same surface. `pnpm`'s store + workspace primitives are exactly what DEVAI needs and nothing more.
+Plain npm workspaces work but lack a content-addressable store, which makes installs in CI slow and disk-hungry across multiple worktrees. Nx is an orchestration framework — DEVAI _is_ an orchestration framework, so layering Nx on top would conflict on the same surface. `pnpm`'s store + workspace primitives are exactly what DEVAI needs and nothing more.
 
 **Test framework — Vitest over Jest and `node:test`:**
 Jest is CJS-by-default and slow to start across a multi-package monorepo. `node:test` is minimal but lacks the watch / coverage / project-references behaviour the workflow depends on. Vitest is ESM-native, fast, and integrates cleanly with `tsc -b` composite builds.

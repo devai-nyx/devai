@@ -6,14 +6,7 @@
   "authority": "architect",
   "category": "technical",
   "status": "active",
-  "see_also": [
-    "GE-011",
-    "GE-012"
-  ],
-  "related_invariants": [
-    "INV-DEVAI-002"
-  ],
-  "provenance": [
-    "ex-GE-004@devai-original"
-  ]
+  "see_also": ["GE-011", "GE-012"],
+  "related_invariants": ["INV-DEVAI-002"],
+  "provenance": ["ex-GE-004@devai-original"]
 }

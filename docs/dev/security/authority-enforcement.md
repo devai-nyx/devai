@@ -10,17 +10,17 @@ There are exactly five caller-declarable human roles: `owner`, `architect`, `ins
 
 ## Constitutional path table
 
-| Substrate | Authority | Canonical paths |
-|---|---|---|
-| F1 business reference | Owner | `product/`; `law/glossary/` jointly with Architect |
-| F1 engineering reference | Architect | `docs/start/`, `docs/theory/`, `docs/theory/framework/` except `product/`, `docs/roles/`, `docs/adopters/`, `docs/reference/`, `docs/meta/`, `README.md` |
-| F1 working papers | Architect | `docs/work/`, except the Auditor path below |
-| F1 observations | Auditor | `docs/work/*/audit/` and descendants; observation does not ratify the reference signal |
-| F2 plant | Engineer | `apps/`, `libs/`, `db/migrations/`, `db/seeds/`, `iac/`, root build scripts, and project-specific additive source paths |
-| F3 sensors | Inspector | `**/*.spec.ts`, `**/*.test.ts`, `tests/`, `e2e/`, and test-intent configuration |
-| F4 inventory | Derived inventory subsystem | `record/derived/inventory/`; never hand-edited |
-| F5 configuration and machinery | Derived upgrade subsystem | `.devai/` excluding `inventory/`, `worktrees/`, and `state/` |
-| F5 runtime state | Executing DEVAI verb | `record/proofs/`; attributed to the verb and never hand-edited |
+| Substrate                      | Authority                   | Canonical paths                                                                                                                                          |
+| ------------------------------ | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| F1 business reference          | Owner                       | `product/`; `law/glossary/` jointly with Architect                                                                                                       |
+| F1 engineering reference       | Architect                   | `docs/start/`, `docs/theory/`, `docs/theory/framework/` except `product/`, `docs/roles/`, `docs/adopters/`, `docs/reference/`, `docs/meta/`, `README.md` |
+| F1 working papers              | Architect                   | `docs/work/`, except the Auditor path below                                                                                                              |
+| F1 observations                | Auditor                     | `docs/work/*/audit/` and descendants; observation does not ratify the reference signal                                                                   |
+| F2 plant                       | Engineer                    | `apps/`, `libs/`, `db/migrations/`, `db/seeds/`, `iac/`, root build scripts, and project-specific additive source paths                                  |
+| F3 sensors                     | Inspector                   | `**/*.spec.ts`, `**/*.test.ts`, `tests/`, `e2e/`, and test-intent configuration                                                                          |
+| F4 inventory                   | Derived inventory subsystem | `record/derived/inventory/`; never hand-edited                                                                                                           |
+| F5 configuration and machinery | Derived upgrade subsystem   | `.devai/` excluding `inventory/`, `worktrees/`, and `state/`                                                                                             |
+| F5 runtime state               | Executing DEVAI verb        | `record/proofs/`; attributed to the verb and never hand-edited                                                                                           |
 
 Client extensions are additive. They may narrow a specialization, add project paths, or add a higher-precedence deny; they cannot replace, weaken, or tie-conflict with the immutable core.
 
@@ -88,11 +88,11 @@ Shadow evaluation is time-bounded, explicitly Architect-approved, evidence-visib
 
 ## Exit and output semantics
 
-| Category | Exit | Meaning |
-|---|---:|---|
-| `usage-error` | 2 | Missing/conflicting/invalid declaration or consent |
-| `refused` | 1 | Policy, role, resource, plan, replay, or final-boundary denial |
-| `dependency-error` | 1 | A required validator or declared host adapter is unavailable |
+| Category           | Exit | Meaning                                                        |
+| ------------------ | ---: | -------------------------------------------------------------- |
+| `usage-error`      |    2 | Missing/conflicting/invalid declaration or consent             |
+| `refused`          |    1 | Policy, role, resource, plan, replay, or final-boundary denial |
+| `dependency-error` |    1 | A required validator or declared host adapter is unavailable   |
 
 JSON output includes a stable `category` and `code`. Human output is one concise line. Both redact local paths, credential URLs, secrets, and tokens. Dry-run, shadow, denial, unverified-host, and experimental evidence cannot promote supported readiness.
 

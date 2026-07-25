@@ -1,5 +1,9 @@
 import { createHash } from 'node:crypto';
-import { canonicalSha256, DEFAULT_CANONICAL_HASH_ALGO_VERSION, nextCounterId } from '@devai-nyx/utils';
+import {
+  canonicalSha256,
+  DEFAULT_CANONICAL_HASH_ALGO_VERSION,
+  nextCounterId,
+} from '@devai-nyx/utils';
 import {
   existsSync,
   mkdirSync,

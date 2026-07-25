@@ -4,13 +4,13 @@ Goal: from "I have a repo and want to try DEVAI" to "every gate is green against
 
 ## Prerequisites
 
-| Tool | Minimum | Notes |
-|---|---|---|
-| Node.js | 24.0 | Pinned in `engines.node`. |
-| pnpm | 9 | Other managers detected but unsupported. |
-| git | 2.40 | Worktree subsystem needs modern `git worktree`. |
-| Postgres | 15 | Full-production readiness assumes `postgresql://$USER@localhost:5432/devai_test` or `DEVAI_DB_URL`. |
-| `claude` or `codex` CLI | Current | Full-production docs synthesis uses a real host LLM bridge by default. |
+| Tool                    | Minimum | Notes                                                                                               |
+| ----------------------- | ------- | --------------------------------------------------------------------------------------------------- |
+| Node.js                 | 24.0    | Pinned in `engines.node`.                                                                           |
+| pnpm                    | 9       | Other managers detected but unsupported.                                                            |
+| git                     | 2.40    | Worktree subsystem needs modern `git worktree`.                                                     |
+| Postgres                | 15      | Full-production readiness assumes `postgresql://$USER@localhost:5432/devai_test` or `DEVAI_DB_URL`. |
+| `claude` or `codex` CLI | Current | Full-production docs synthesis uses a real host LLM bridge by default.                              |
 
 ## Step 1 — Install DEVAI
 
@@ -71,13 +71,13 @@ Before touching anything substantive, decide which authority you're operating un
 
 DEVAI runs against five LLM-backend families: `claude-cli` and `codex-cli` (host CLI bridges that inherit your OAuth session), `claude` and `codex` (SDK; require API keys), and `mock` (explicit hermetic wiring mode). When `DEVAI_LLM_BACKEND` is unset, DEVAI checks `.devai/config/llm.json`, then prefers `claude-cli`, then `codex-cli`, and falls back to `mock` only when no natural real provider is available.
 
-| Backend | When to use | Setup |
-|---|---|---|
-| `claude-cli` | Default production path when the Claude Code CLI is installed and logged in. | Verify `claude --version` succeeds. `DEVAI_LLM_BACKEND` may be omitted or set to `claude-cli`. The host CLI's `--max-budget-usd` flag is honoured if `.devai/config/llm.json` sets `max_budget_usd_cli`. |
-| `codex-cli` | Default production fallback when `claude` is absent and the `codex` CLI is installed and logged in. | Verify `codex --version` succeeds. `DEVAI_LLM_BACKEND` may be omitted or set to `codex-cli`. |
-| `claude` | Production synthesis with your own Anthropic API key + budget cap. | `export ANTHROPIC_API_KEY=…; export DEVAI_LLM_BUDGET_USD=1.00; export DEVAI_LLM_BACKEND=claude` |
-| `codex` | Production synthesis with your own OpenAI API key + budget cap. | `export OPENAI_API_KEY=…; export DEVAI_LLM_BUDGET_USD=1.00; export DEVAI_LLM_BACKEND=codex` |
-| `mock` | Wiring verification and deterministic hermetic runs only. Writer skills emit deterministic stub markdown labelled "Mock backend output for wiring verification only." | `export DEVAI_LLM_BACKEND=mock`. Mock runs do not satisfy full-production readiness. |
+| Backend      | When to use                                                                                                                                                           | Setup                                                                                                                                                                                                    |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `claude-cli` | Default production path when the Claude Code CLI is installed and logged in.                                                                                          | Verify `claude --version` succeeds. `DEVAI_LLM_BACKEND` may be omitted or set to `claude-cli`. The host CLI's `--max-budget-usd` flag is honoured if `.devai/config/llm.json` sets `max_budget_usd_cli`. |
+| `codex-cli`  | Default production fallback when `claude` is absent and the `codex` CLI is installed and logged in.                                                                   | Verify `codex --version` succeeds. `DEVAI_LLM_BACKEND` may be omitted or set to `codex-cli`.                                                                                                             |
+| `claude`     | Production synthesis with your own Anthropic API key + budget cap.                                                                                                    | `export ANTHROPIC_API_KEY=…; export DEVAI_LLM_BUDGET_USD=1.00; export DEVAI_LLM_BACKEND=claude`                                                                                                          |
+| `codex`      | Production synthesis with your own OpenAI API key + budget cap.                                                                                                       | `export OPENAI_API_KEY=…; export DEVAI_LLM_BUDGET_USD=1.00; export DEVAI_LLM_BACKEND=codex`                                                                                                              |
+| `mock`       | Wiring verification and deterministic hermetic runs only. Writer skills emit deterministic stub markdown labelled "Mock backend output for wiring verification only." | `export DEVAI_LLM_BACKEND=mock`. Mock runs do not satisfy full-production readiness.                                                                                                                     |
 
 Run `node "$DEVAI/packages/cli/dist/bin.js" doctor --format human` to surface which bridges are available on your machine — the `llm-bridges` row reports `claude-cli` / `codex-cli` presence + version + usability, with an actionable hint per family. This is the recommended way to confirm CLI-bridge wiring before pointing `docs synthesize` at it.
 
@@ -93,20 +93,20 @@ pnpm exec devai doctor --format human --repo-root /path/to/your/repo
 
 The default behaviour (`--auto`) sniffs the repo-root: if it has DEVAI's monorepo shape (both `packages/cli/src/bin.ts` and `examples/redox-pack-*` directly under it), doctor picks `--self` and runs the full self-check set. Otherwise it picks `--adopter` and runs the subset that applies to adopter repos (the live run is authoritative if this table drifts):
 
-| Check | Adopter | Notes |
-|---|---|---|
-| `workspace-layout` | — | DEVAI-self-only (checks `packages/{cli,core,...}`). |
-| `f1-paths-present` | ✓ | Adopter version checks the substrate roots the role-separated `init apply-owner` and `init apply-architect` segments seed; framework schemas are consumed from `@devai-nyx/schemas`. |
-| `schemas-loadable` | — | Cascades from above. |
-| `constitution-symlink` | ✓ | Requires `.devai/constitution.md` to exist and point at a valid `law/constitution.md`. Phase 21.D relaxes the accepted shapes for adopters (symlink to sibling devai or plain-file pointer). |
-| `agents-claude-sync` | ✓ | Adopter must ship a `CLAUDE.md` and `AGENTS.md` at repo root referencing Constitution Article 6, the five role names, and the canonical reading-order sources. |
-| `chain-dir-writable` | ✓ | |
-| `evidence-chain-valid` | ✓ | |
-| `llm-bridges` | ✓ | |
-| `docs-governance` | ✓ | Requires `.devai/config/project.json` with `repo.kind` and `docs.builder` declared. |
-| `devai-version-match` | ✓ | Declared `devai_version` must match the CLI actually resolving (D-118). |
-| `constitution-binding` | ✓ | Vendored-copy constitution binding shape (D-119); pointer-only cannot satisfy tier3. |
-| `devai-consumption-declared` | ✓ | `devai_consumption` declared in project config (D-122) — ends sibling-linking as a silent default. |
+| Check                        | Adopter | Notes                                                                                                                                                                                        |
+| ---------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `workspace-layout`           | —       | DEVAI-self-only (checks `packages/{cli,core,...}`).                                                                                                                                          |
+| `f1-paths-present`           | ✓       | Adopter version checks the substrate roots the role-separated `init apply-owner` and `init apply-architect` segments seed; framework schemas are consumed from `@devai-nyx/schemas`.         |
+| `schemas-loadable`           | —       | Cascades from above.                                                                                                                                                                         |
+| `constitution-symlink`       | ✓       | Requires `.devai/constitution.md` to exist and point at a valid `law/constitution.md`. Phase 21.D relaxes the accepted shapes for adopters (symlink to sibling devai or plain-file pointer). |
+| `agents-claude-sync`         | ✓       | Adopter must ship a `CLAUDE.md` and `AGENTS.md` at repo root referencing Constitution Article 6, the five role names, and the canonical reading-order sources.                               |
+| `chain-dir-writable`         | ✓       |                                                                                                                                                                                              |
+| `evidence-chain-valid`       | ✓       |                                                                                                                                                                                              |
+| `llm-bridges`                | ✓       |                                                                                                                                                                                              |
+| `docs-governance`            | ✓       | Requires `.devai/config/project.json` with `repo.kind` and `docs.builder` declared.                                                                                                          |
+| `devai-version-match`        | ✓       | Declared `devai_version` must match the CLI actually resolving (D-118).                                                                                                                      |
+| `constitution-binding`       | ✓       | Vendored-copy constitution binding shape (D-119); pointer-only cannot satisfy tier3.                                                                                                         |
+| `devai-consumption-declared` | ✓       | `devai_consumption` declared in project config (D-122) — ends sibling-linking as a silent default.                                                                                           |
 
 If you want to force a posture (e.g. you're auditing the DEVAI checkout from inside an adopter cwd, or vice versa), pass `--self` or `--adopter` explicitly. The three flags are mutually exclusive; supplying more than one is a usage failure (exit 2, before any side effect — the 0.5 contract).
 

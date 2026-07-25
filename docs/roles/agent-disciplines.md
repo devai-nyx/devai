@@ -9,13 +9,13 @@ sidebar_position: 7
 
 ## Discipline ↔ role
 
-| Human role | Agent discipline | Extensible? | Singleton? |
-|---|---|---|---|
-| Owner | owner-agent | Yes | No |
-| Architect | architect-agent | Yes | No |
-| Inspector | inspector-agent | **No** (singleton) | **Yes** |
-| Engineer | engineer-agent | Yes | No |
-| Auditor | auditor-agent | **No** (singleton) | **Yes** |
+| Human role | Agent discipline | Extensible?        | Singleton? |
+| ---------- | ---------------- | ------------------ | ---------- |
+| Owner      | owner-agent      | Yes                | No         |
+| Architect  | architect-agent  | Yes                | No         |
+| Inspector  | inspector-agent  | **No** (singleton) | **Yes**    |
+| Engineer   | engineer-agent   | Yes                | No         |
+| Auditor    | auditor-agent    | **No** (singleton) | **Yes**    |
 
 **Inspector** is singleton to prevent sensor-calibration fragmentation: if two Inspectors graded the same test differently, the framework would have no canonical reading. **Auditor** is singleton to prevent observation-authority fragmentation: the framework cannot have two contradictory views of its own state.
 

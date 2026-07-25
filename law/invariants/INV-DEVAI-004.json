@@ -10,9 +10,7 @@
   "rationale": "Articles 25 (locks) and 27 (worktree discipline) jointly assume the harness can construct the per-task execution environment as a single transactional unit. Without rollback, the loop's central state machine corrupts the substrate on every partial failure, and lock leaks accumulate.",
   "status": "active",
   "verification": {
-    "required_suites": [
-      "int"
-    ],
+    "required_suites": ["int"],
     "oracle": "tests",
     "strategy": {
       "primary": "regression",
@@ -33,10 +31,7 @@
     ]
   },
   "scope": {
-    "components": [
-      "core",
-      "cli"
-    ],
+    "components": ["core", "cli"],
     "code_areas": [
       "packages/core/src/loop/tasks.ts",
       "packages/core/src/loop/worktrees.ts",
@@ -45,20 +40,11 @@
     ]
   },
   "change_policy": {
-    "breaking_change_requires": [
-      "doc_update",
-      "test_update",
-      "human_approval",
-      "adr"
-    ],
+    "breaking_change_requires": ["doc_update", "test_update", "human_approval", "adr"],
     "test_weakening_allowed": false,
     "human_approval_required": true
   },
-  "tags": [
-    "phase-5",
-    "task-lifecycle",
-    "atomicity"
-  ],
+  "tags": ["phase-5", "task-lifecycle", "atomicity"],
   "measurable_via": [
     "work db drop",
     "work db provision",
@@ -70,7 +56,5 @@
     "work worktree create",
     "work worktree destroy"
   ],
-  "provenance": [
-    "ex-INV-DEVAI-004@devai-original"
-  ]
+  "provenance": ["ex-INV-DEVAI-004@devai-original"]
 }

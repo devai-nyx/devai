@@ -12,12 +12,12 @@
 
 ## Where each language fits
 
-| Surface | English | Portuguese |
-|---------|---------|------------|
-| `docs/eng/`, `docs/theory/architecture/`, `law/adr/`, `docs/reference/contracts/`, `law/schemas/`, `docs/dev/operations/`, `docs/dev/security/`, `docs/gov/` | preferred | only for quoted gov-br references |
-| `docs/user/` (personas, training, demo, release notes) | acceptable | preferred when audience is pt-BR |
-| Code, schemas, identifiers | required | not permitted |
-| Commit messages, PR descriptions | required | not permitted |
+| Surface                                                                                                                                                      | English    | Portuguese                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------------------------- |
+| `docs/eng/`, `docs/theory/architecture/`, `law/adr/`, `docs/reference/contracts/`, `law/schemas/`, `docs/dev/operations/`, `docs/dev/security/`, `docs/gov/` | preferred  | only for quoted gov-br references |
+| `docs/user/` (personas, training, demo, release notes)                                                                                                       | acceptable | preferred when audience is pt-BR  |
+| Code, schemas, identifiers                                                                                                                                   | required   | not permitted                     |
+| Commit messages, PR descriptions                                                                                                                             | required   | not permitted                     |
 
 ## FAQ
 
