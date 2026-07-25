@@ -823,6 +823,16 @@ is reopened until production can inspect a bounded large merge without weakening
 fail-closed behavior, the focused contract and full ladder pass, and a new exact source
 SHA passes GitHub enforcement.
 
+Engineer `5552ddf` raises the explicit buffered Git-inspection ceiling from Node's
+one-megabyte default to 16 MiB for both merge name-status and patch evidence. The
+scanner remains bounded and fail-closed above that ceiling. The 1.1 MiB merge fixture
+now detects the protected deletion rather than reporting unavailable; all 18 focused
+forbidden-action tests and the affected package build pass.
+
+BL-095 is re-closed for the repaired local source candidate. A new exact source SHA
+must still pass the same GitHub governed-enforcement job before merge; the failed
+`b556857` run remains historical red evidence.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
