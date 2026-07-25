@@ -193,6 +193,39 @@ function gitFile(repoRoot: string, commit: string, path: string): string | null 
   return git(repoRoot, ['show', `${commit}:${path}`]);
 }
 
+interface HistoricalPath {
+  readonly commit: string;
+  readonly path: string;
+}
+
+function recordHistory(repoRoot: string, path: string): HistoricalPath[] | null {
+  const output = git(repoRoot, [
+    'log',
+    '--follow',
+    '--find-renames=1%',
+    '--format=%H',
+    '--name-status',
+    '--',
+    path,
+  ]);
+  if (output === null) return null;
+  const entries: HistoricalPath[] = [];
+  let commit: string | undefined;
+  for (const line of output.split('\n').map((value) => value.trim())) {
+    if (/^[0-9a-f]{40}(?:[0-9a-f]{24})?$/u.test(line)) {
+      commit = line;
+    } else if (line.length > 0 && commit !== undefined) {
+      const fields = line.split('\t');
+      const status = fields[0] ?? '';
+      const historicalPath = status.startsWith('R') ? fields[2] : fields[1];
+      if (historicalPath === undefined) continue;
+      entries.push({ commit, path: historicalPath });
+      commit = undefined;
+    }
+  }
+  return entries.reverse();
+}
+
 function normalizedSealedFrontmatter(record: ParsedGovernanceRecord): string {
   const { status: _lifecycle, superseded_by: _replacement, ...rest } = record.frontmatter;
   return JSON.stringify(rest);
@@ -232,16 +265,31 @@ function sealedHistoryFindings(
   record: ParsedGovernanceRecord,
 ): GovernanceFinding[] {
   const rel = relative(repoRoot, record.path);
-  const commits = (git(repoRoot, ['log', '--follow', '--format=%H', '--reverse', '--', rel]) ?? '')
-    .split('\n')
-    .filter(Boolean);
+  const history = recordHistory(repoRoot, rel);
+  if (history === null || history.length === 0) {
+    return [
+      {
+        code: 'DECISION_HISTORY_UNAVAILABLE',
+        message: `${rel} history could not be enumerated completely.`,
+        path: rel,
+      },
+    ];
+  }
   let sealed: ParsedGovernanceRecord | undefined;
   let sealIndex = -1;
-  for (const [index, commit] of commits.entries()) {
-    const source = gitFile(repoRoot, commit, rel);
-    if (source === null) continue;
+  for (const [index, entry] of history.entries()) {
+    const source = gitFile(repoRoot, entry.commit, entry.path);
+    if (source === null) {
+      return [
+        {
+          code: 'DECISION_HISTORY_UNAVAILABLE',
+          message: `${rel} revision ${entry.commit}:${entry.path} could not be read.`,
+          path: rel,
+        },
+      ];
+    }
     try {
-      const candidate = parseRecordSource(rel, source);
+      const candidate = parseRecordSource(entry.path, source);
       if (
         validators.recordMeta(candidate.frontmatter) &&
         ['active', 'superseded', 'tombstoned'].includes(String(candidate.frontmatter['status']))
@@ -255,17 +303,25 @@ function sealedHistoryFindings(
     }
   }
   if (sealed === undefined || sealIndex < 0) return [];
-  for (const commit of commits.slice(sealIndex + 1)) {
-    const laterSource = gitFile(repoRoot, commit, rel);
-    if (laterSource === null) continue;
+  for (const entry of history.slice(sealIndex + 1)) {
+    const laterSource = gitFile(repoRoot, entry.commit, entry.path);
+    if (laterSource === null) {
+      return [
+        {
+          code: 'DECISION_HISTORY_UNAVAILABLE',
+          message: `${rel} revision ${entry.commit}:${entry.path} could not be read.`,
+          path: rel,
+        },
+      ];
+    }
     let later: ParsedGovernanceRecord;
     try {
-      later = parseRecordSource(rel, laterSource);
+      later = parseRecordSource(entry.path, laterSource);
     } catch (error) {
       return [
         {
           code: 'DECISION_HISTORY_PARSE_INVALID',
-          message: `${rel} has malformed post-seal history at ${commit}: ${error instanceof Error ? error.message : String(error)}.`,
+          message: `${rel} has malformed post-seal history at ${entry.commit}: ${error instanceof Error ? error.message : String(error)}.`,
           path: rel,
         },
       ];
@@ -305,7 +361,18 @@ export function decisionRecordIntegrity(options: {
 }): GovernanceIntegrityReport {
   const recordsDir = resolve(options.repoRoot, options.recordsDir ?? DEFAULT_RECORDS_DIR);
   const findings: GovernanceFinding[] = [];
-  if (git(options.repoRoot, ['rev-parse', '--is-shallow-repository']) === 'true') {
+  const hasGitMetadata = existsSync(join(options.repoRoot, '.git'));
+  const shallowState = hasGitMetadata
+    ? git(options.repoRoot, ['rev-parse', '--is-shallow-repository'])
+    : null;
+  const historyAvailable = !hasGitMetadata || shallowState !== null;
+  if (hasGitMetadata && shallowState === null) {
+    findings.push({
+      code: 'DECISION_HISTORY_UNAVAILABLE',
+      message: 'Sealed decision history requires Git, but repository state could not be queried.',
+      path: relative(options.repoRoot, recordsDir),
+    });
+  } else if (shallowState === 'true') {
     findings.push({
       code: 'DECISION_HISTORY_SHALLOW',
       message:
@@ -349,7 +416,9 @@ export function decisionRecordIntegrity(options: {
       });
     }
     records.set(id, record);
-    findings.push(...sealedHistoryFindings(options.repoRoot, record));
+    if (hasGitMetadata && historyAvailable) {
+      findings.push(...sealedHistoryFindings(options.repoRoot, record));
+    }
   }
 
   for (const [id, record] of records) {
