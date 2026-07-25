@@ -679,7 +679,7 @@
             "errors": [
               {
                 "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-                "message": "must have required property 'adr_id' (required)"
+                "message": "must have required property 'type' (required)"
               }
             ],
             "files_scanned": 1,
@@ -690,7 +690,27 @@
             "errors": [
               {
                 "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-                "message": "must have required property 'adr_id' (required)"
+                "message": "body missing mandatory section '## Status'"
+              },
+              {
+                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
+                "message": "body missing mandatory section '## Decision(s)'"
+              },
+              {
+                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
+                "message": "body missing mandatory section '## Consequences'"
+              },
+              {
+                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
+                "message": "body missing mandatory section '## Alternatives Considered'"
+              },
+              {
+                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
+                "message": "body missing mandatory section '## Affected Rules'"
+              },
+              {
+                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
+                "message": "must have required property 'type' (required)"
               }
             ],
             "files_scanned": 1,
@@ -698,9 +718,34 @@
           },
           "fix_log": [
             {
-              "detail": "must have required property 'adr_id' (required)",
+              "detail": "must have required property 'type' (required)",
               "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
               "outcome": "escalate-missing-adr-id"
+            },
+            {
+              "detail": "Status",
+              "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
+              "outcome": "section-scaffolded"
+            },
+            {
+              "detail": "Decisions",
+              "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
+              "outcome": "section-scaffolded"
+            },
+            {
+              "detail": "Consequences",
+              "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
+              "outcome": "section-scaffolded"
+            },
+            {
+              "detail": "Alternatives Considered",
+              "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
+              "outcome": "section-scaffolded"
+            },
+            {
+              "detail": "Affected Rules",
+              "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
+              "outcome": "section-scaffolded"
             }
           ],
           "iteration": {
@@ -713,7 +758,9 @@
       },
       "fs_products": {
         "created": {},
-        "modified": {}
+        "modified": {
+          "law/adr/ADR-001-fixture.md": "3d844106b37823b45ac0ef3b93010b0fe60ab10b1bdf23d329bb57c0b155fd1d"
+        }
       },
       "strategy": "main-path"
     },
@@ -820,11 +867,19 @@
       },
       "behavior": {
         "evidence": {
-          "findings": [],
+          "findings": [
+            {
+              "forbidden_id": "FORBIDDEN-REGISTRY-INVALID",
+              "matched": "",
+              "message": "forbidden-action registry is missing",
+              "ref": "<FIXTURE>/.devai/config/forbidden-actions.json",
+              "source": "commit-change"
+            }
+          ],
           "registry_entries": 0
         },
         "notes": [],
-        "status": "pass"
+        "status": "fail"
       },
       "fs_products": {
         "created": {},

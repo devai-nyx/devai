@@ -179,7 +179,14 @@ describe('fix skill behavior expansion', () => {
     });
     expect(await skill('SKILL-fix-forbidden-actions').run({ repoRoot: repo })).toMatchObject({
       skill_id: 'SKILL-fix-forbidden-actions',
-      status: 'pass',
+      status: 'fail',
+      evidence: {
+        findings: [
+          expect.objectContaining({
+            forbidden_id: 'FORBIDDEN-REGISTRY-INVALID',
+          }),
+        ],
+      },
     });
   });
 });
