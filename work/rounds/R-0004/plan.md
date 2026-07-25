@@ -37,7 +37,7 @@ workflow has run.
 | B5    | Engineer                 | Apply BL-029/030 surface dispositions and BL-031 bounded root scripts without recursion or command smuggling                                                     | Liveness, tombstone, porcelain, and authority checks   |
 | B6    | Inspector                | Close exact guards, exercise every kept/folded/tombstoned route, pack contract, and root command                                                                 | Unknown and retired routes fail correctly              |
 | B7    | Auditor                  | Reconcile all nine items and current populations; quote fresh coverage                                                                                           | No unexplained count movement                          |
-| B8    | Architect + machine verb | Run the shared two-PR ceremony with only the exact BL-017 remote red                                                                                             | No publication                                         |
+| B8    | Architect + machine verb | Run the shared two-PR ceremony with every required exact-SHA check green                                                                                         | No publication                                         |
 
 ## Acceptance
 
@@ -62,4 +62,4 @@ publish, or coverage-threshold change.
 ## Exit claim
 
 The governed surface and package topology are implemented and tested. Nothing is
-published, deployed, or ready; BL-017 remains the release throttle.
+published, deployed, or ready; all unchanged coverage floors remain required.

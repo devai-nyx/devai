@@ -1103,6 +1103,20 @@ gate is pass, the release disposition is `none-preratification`, and no failed g
 failing validation criterion is admitted. R-0002 remains draft, ratifies nothing,
 releases nothing, deploys nothing, and transfers no readiness or evidence standing.
 
+### DII-131 — OM-005's satisfied condition closes BL-017 in R-0002
+`type: decision · status: draft · authority: Architect · provenance: OM-004; OM-005; OM-006; R-0002 third Claude Opus 5 correction; BL-074`
+
+OM-004's initial R-0006 ownership and DII-119's matching forecast were written while
+the unchanged legal coverage floors were red. OM-005 later authorized R-0002 to
+iterate and expressly made actual passage of those floors the BL-017 closing
+condition. OM-006 records the Owner's resulting ownership transition after that
+condition passed.
+
+BL-017 is therefore closed in R-0002. R-0003 through R-0010 retain the unchanged
+coverage command as an all-green regression gate; no later plan may preserve an
+expected coverage red, an exception, or R-0006 ownership. Historical red readings and
+their then-current forecasts remain chronological evidence only.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

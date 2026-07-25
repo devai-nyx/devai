@@ -100,11 +100,10 @@ pnpm run ci:changesets
 pnpm exec prettier --check .
 ```
 
-`pnpm run test:coverage:t1-t3` is run and quoted at every close. Through R-0005, every
-included test and the coverage provider must succeed; only the unchanged 70/60/70/70
-threshold assertions may remain red. Provider, collection, test, or any other failure
-blocks. Every floor must pass from R-0006 onward. Each round plan names any additional
-production commands required by its scope.
+`pnpm run test:coverage:t1-t3` is run and quoted at every close. BL-017 closed in
+R-0002 after every unchanged 70/60/70/70 floor passed. Provider, collection, test,
+threshold, or any other failure blocks every later round. Each round plan names any
+additional production commands required by its scope.
 
 A command that cannot run is a blocker or a newly governed defect, never a green skip.
 Declared DB skips remain skips only under their existing contract and are exercised with

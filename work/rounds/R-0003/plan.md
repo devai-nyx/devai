@@ -24,7 +24,7 @@ supersede the successor glossary. This is a law ceremony, not a release ceremony
   digest, production-law results, and exact-main CI.
 - Every production law command is green at ceremony time.
 - `ratified` is still null before the ceremony.
-- Coverage remains quoted as red and does not block law ratification, but blocks release.
+- Coverage is independently re-run and must retain the all-green R-0002 floors.
 
 ## Batches
 
@@ -37,8 +37,8 @@ supersede the successor glossary. This is a law ceremony, not a release ceremony
 | B4    | Architect                            | Apply the recorded marks to `law/glossary/`, finalize its lifecycle, ratify Constitution 1.0.0 and the genesis attestation, and append the ceremony decision | Glossary/invariant graph and full law suite        |
 | B5    | Engineer via authorized materializer | Re-materialize authority policy and vendored constitution/checksum against the exact ratified digest                                                         | Byte identity and upgrade-path tests               |
 | B6    | Inspector                            | Run schema, register, invariant, journey, trace, authority, and adversarial ratification contracts                                                           | No stale draft/accepted mismatch                   |
-| B7    | Auditor                              | Write the as-built with the exact ceremony boundary and fresh coverage red                                                                                   | No release/readiness wording                       |
-| B8    | Architect + machine verb             | Run the shared two-PR ceremony; every noncoverage job is green and BL-017 remains quoted red                                                                 | Closure scope is ratification only                 |
+| B7    | Auditor                              | Write the as-built with the exact ceremony boundary and fresh all-green coverage                                                                             | No release/readiness wording                       |
+| B8    | Architect + machine verb             | Run the shared two-PR ceremony with every required job green                                                                                                 | Closure scope is ratification only                 |
 
 ## Acceptance
 
@@ -50,7 +50,7 @@ supersede the successor glossary. This is a law ceremony, not a release ceremony
 - The genesis attestation’s `ratified` field is set to that same ceremony timestamp and
   validates against its schema.
 - Authority materialization cites and byte-matches the exact ratified law.
-- Coverage thresholds remain unchanged and their red result remains visible.
+- Coverage thresholds remain unchanged and all four floors remain green.
 
 ## Stops
 
@@ -61,5 +61,5 @@ release/deployment action.
 ## Exit handoff
 
 R-0004 receives the ratified law digest, accepted ADR/package topology constraints,
-materialized policy digest, exact merge SHA, exact-main CI, and the continuing BL-017
-red. The only new claim is **founding law ratified**.
+materialized policy digest, exact merge SHA, exact-main CI, and fresh all-green
+coverage. The only new claim is **founding law ratified**.

@@ -23,17 +23,17 @@ evidence.
 
 ## Serial map
 
-| Round  | Primary backlog                     | Required predecessor                     | Exit claim ceiling                                      |
-| ------ | ----------------------------------- | ---------------------------------------- | ------------------------------------------------------- |
-| R-0002 | 001–003, 007, 012–014, 023, 046–049 | R-0001 closed; R-Ω frozen                | Re-bound and operationally coherent; not ratified       |
-| R-0003 | 004–006                             | R-0002 independently green               | Founding law ratified; not released or ready            |
-| R-0004 | 008, 009, 016, 025, 027–031         | R-0003                                   | Governed action/package surface implemented             |
-| R-0005 | 010, 011, 015, 018, 033, 045, 050   | R-0004                                   | Proof/local-evidence/round mechanics implemented        |
-| R-0006 | 017, 026, 034, 035                  | R-0005                                   | Contract and 70/60/70/70 release gates green            |
-| R-0007 | 019, 021, 032, 039, 044             | R-0006                                   | Product/docs/site deployable; not deployed              |
-| R-0008 | 020, 024                            | R-0007                                   | Exact 1.0.0 candidate and external-release handoff      |
-| R-0009 | 022, 036                            | R-0008 published close                   | Evidence authorization ready; streak remains zero       |
-| R-0010 | 037, 038                            | Published 1.0.0 plus fresh Owner mandate | Evidence-based disposition; activation separately gated |
+| Round  | Primary backlog                     | Required predecessor                     | Exit claim ceiling                                       |
+| ------ | ----------------------------------- | ---------------------------------------- | -------------------------------------------------------- |
+| R-0002 | 001–003, 007, 012–014, 023, 046–049 | R-0001 closed; R-Ω frozen                | Re-bound and operationally coherent; not ratified        |
+| R-0003 | 004–006                             | R-0002 independently green               | Founding law ratified; not released or ready             |
+| R-0004 | 008, 009, 016, 025, 027–031         | R-0003                                   | Governed action/package surface implemented              |
+| R-0005 | 010, 011, 015, 018, 033, 045, 050   | R-0004                                   | Proof/local-evidence/round mechanics implemented         |
+| R-0006 | 026, 034, 035, 081                  | R-0005                                   | Output contracts, law extraction, and trace depth closed |
+| R-0007 | 019, 021, 032, 039, 044             | R-0006                                   | Product/docs/site deployable; not deployed               |
+| R-0008 | 020, 024                            | R-0007                                   | Exact 1.0.0 candidate and external-release handoff       |
+| R-0009 | 022, 036                            | R-0008 published close                   | Evidence authorization ready; streak remains zero        |
+| R-0010 | 037, 038                            | Published 1.0.0 plus fresh Owner mandate | Evidence-based disposition; activation separately gated  |
 
 BL-040 through BL-043 remain carried N/A and are checked at every planning boundary.
 
