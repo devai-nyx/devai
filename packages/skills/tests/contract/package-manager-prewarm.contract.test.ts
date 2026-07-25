@@ -17,7 +17,10 @@ describe('cold-Corepack determinism', () => {
       encoding: 'utf8',
     });
     expect(result.status, result.stderr).toBe(0);
-    expect(JSON.parse(result.stdout)).toEqual(['pnpm@9.15.0', 'pnpm@10.0.0']);
+    expect(JSON.parse(result.stdout)).toEqual([
+      'pnpm@9.15.0+sha512.duI3l2CkMo7EQVgVvNZije5yevN3mqpMkU45RBVsQpmSGon5djge4QfUHxLPpLZmgcqccY8GaPoIMe1MbYulbA==',
+      'pnpm@10.0.0',
+    ]);
   });
 
   it('prewarms before the first pnpm invocation in every package-using CI job', () => {
