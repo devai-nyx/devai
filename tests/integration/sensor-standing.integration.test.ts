@@ -45,7 +45,6 @@ describe('DII-103 same-kind sensor standing', () => {
   });
 
   it('turns a stale latest FAIL into REVIEW-stale without dropping its evidence', () => {
-    const fail = reading('SR-fail', '2026-07-23T10:00:00.000Z', 'fail');
     const policyMs = loadScorecardFailureMaxAgeMs(
       new URL('../..', import.meta.url).pathname,
     );
