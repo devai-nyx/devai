@@ -53,8 +53,8 @@ export interface PhaseClosureDraft {
   readonly validation_criteria: readonly ClosureCriterion[];
   readonly closed_at?: string;
   readonly supersedes?: string;
-  // R18 (D-133/H1): the shipped-state fields. Optional in the schema for
-  // pre-R18 record validity; the ceremony requires both from PC-0007 on.
+  // Shipped-state fields stay optional in the schema for immutable historical
+  // records; the successor production verb requires both on every new closure.
   readonly merged_as?: string;
   readonly release_disposition?:
     'published' | 'changeset-pending' | 'none-preratification' | 'none-needed' | 'missing';
@@ -126,12 +126,28 @@ function mentionsExactGateIdentity(text: string, gate: string): boolean {
  * failing validation criterion acknowledging it.
  */
 export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePhaseResult {
+  if (Object.prototype.hasOwnProperty.call(draft, 'id')) {
+    throw new Error(
+      'phase close: caller-supplied id is forbidden; the closure verb assigns the next PC identity',
+    );
+  }
+  const fullGitObject = /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/u;
+  for (const batch of draft.batches) {
+    if (
+      batch.roles.includes('Machine') &&
+      (batch.commit === undefined || !fullGitObject.test(batch.commit))
+    ) {
+      throw new Error(
+        `phase close: Machine-attributed batch '${batch.id}' requires a full 40- or 64-character commit identity`,
+      );
+    }
+  }
   const existing = readClosures(repoRoot);
   const record: PhaseClosureRecord = {
+    ...draft,
     schemaVersion: '1.0.0',
     id: nextClosureId(existing),
     closed_at: draft.closed_at ?? new Date().toISOString(),
-    ...draft,
   } as PhaseClosureRecord;
 
   if (!validatePhaseClosure(record)) {
