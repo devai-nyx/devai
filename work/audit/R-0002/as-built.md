@@ -867,6 +867,14 @@ contract bounds a test-fixture exemption to DEVAI Inspector commits whose every
 changed path is a test path. Commit messages, mixed-path changes, other authors,
 path-based evidence, and Git inspection failures remain in force.
 
+Inspector `f01463d` pins that boundary red without embedding the command literal in
+the governed test patch. Engineer `cd71e37` exempts content-pattern change evidence
+only when DEVAI Inspector authored a non-empty, all-test-path change. Inspector
+`9915e8a` proves test-only message evidence and mixed-path change evidence remain
+active. All 22 focused scanner tests, the affected package build, and the complete
+local governance command pass. BL-118 is closed locally pending the next exact source
+run.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
