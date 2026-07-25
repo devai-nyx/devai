@@ -222,6 +222,11 @@
           "target_type": "test"
         },
         {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/freshness-policy-fail-closed.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "int",
           "path": "packages/schemas/tests/contract/adr.contract.test.ts",
           "target_type": "test"
@@ -268,12 +273,22 @@
         },
         {
           "suite": "unit",
+          "path": "packages/sensors/tests/unit/docs-drift-fail-closed.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/sensors/tests/unit/trace-resolve.test.ts",
           "target_type": "test"
         },
         {
           "suite": "int",
           "path": "packages/skills/tests/contract/package-manager-prewarm.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/required-workflow-gates.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -594,6 +609,11 @@
         {
           "suite": "int",
           "path": "packages/skills/tests/contract/package-manager-prewarm.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/skills/tests/contract/required-workflow-gates.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -1289,6 +1309,14 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/loop/tests/unit/freshness-policy-fail-closed.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/loop/tests/unit/release-control.test.ts",
       "suite": "unit",
       "invariant_ids": [
@@ -1414,6 +1442,14 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/sensors/tests/unit/docs-drift-fail-closed.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/sensors/tests/unit/r21-w09-alignment-adversarial.test.ts",
       "suite": "unit",
       "invariant_ids": [
@@ -1486,6 +1522,15 @@
     },
     {
       "path": "packages/skills/tests/contract/package-manager-prewarm.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-008"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/contract/required-workflow-gates.contract.test.ts",
       "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001",
