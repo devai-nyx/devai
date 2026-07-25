@@ -803,6 +803,22 @@ acceptance contract as Inspector instead of omitting or relabeling either batch.
 closure records remain byte-identical. The TypeScript closure role must mirror the
 schema before the production verb may emit PC-0003.
 
+### DII-114 — R-0002 final source close includes truthful Machine attribution
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 final source close; DII-105; DII-108–113; R-0002-AS-BUILT@fbae67bd8527e99fe9af15db4a9640f1af13af4a; BL-051–054`
+
+DII-114 supersedes DII-112 only as the final R-0002 source-closing decision. DII-108
+and DII-112 remain immutable historical closing judgments; their no-ratification,
+no-release, no-readiness, and BL-017 posture continues unchanged. The final source
+candidate additionally closes BL-054 through DII-113 so PC-0003 can attribute the B6
+machine-verb and Inspector batches truthfully.
+
+The source PR may merge only after the exact DII-114 candidate receives an independent
+read-only Claude Opus 5 review through `claude-opus-5` and its exact remote checks are
+green except for the bounded BL-017 coverage-threshold failure. The closure-only branch
+then emits PC-0003 against the exact source merge SHA, using DII-105 as declaration and
+DII-114 as closing decision. R-0002 remains draft, ratifies nothing, releases nothing,
+deploys nothing, and transfers no readiness or evidence standing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
