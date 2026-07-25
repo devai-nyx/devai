@@ -892,8 +892,9 @@ branch and with production-emitted PC-0003 in a disposable exact-candidate workt
 Inspector `6dd0325` replaced the fixed population count with the count of effective,
 non-superseded ledger records. The same 29 focused closure tests pass both on the
 source branch without PC-0003 and in the disposable worktree after production emitted
-PC-0003. PC-0001 and PC-0002 retain their exact recorded hashes. BL-119 is closed
-locally pending exact source PR and exact-main CI.
+PC-0003. Inspector `e1d604b` also aligned the compact backlog contract with BL-119's
+audited disposition. PC-0001 and PC-0002 retain their exact recorded hashes. BL-119
+is closed locally pending exact source PR and exact-main CI.
 
 ## PC-0002 correction
 
