@@ -1775,6 +1775,33 @@ CI establish the complete R-0003 close.
 R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
 promotes, re-earns, or declares ready nothing.
 
+### DII-155 — Rebind the R-0003 source close after the formatting correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 final local source close; DII-154; BL-130; R-0003-FORMATTING-FAILURE; R-0003-FORMATTING-CORRECTION; Auditor 964fdce and 8ea924e; Engineer b45073a`
+
+DII-155 supersedes DII-154 only as the R-0003 source-closing judgment. The first complete
+ladder on the clean candidate passed Stage 1 through Stage 3, governance, T1 through T6,
+unchanged coverage floors, and changeset classification, then correctly stopped at
+repository-wide formatting. BL-130 governs and closes that bounded failure.
+
+Engineer `b45073a` formatted the live parser and excluded only the immutable
+`work/rounds/R-0003/reviews/` subtree. The exact REV-0001, REV-0003, and REV-0006 hashes
+remain unchanged and their contract passes. Auditor `8ea924e` independently records the
+correction. The exclusion does not apply to active law, product, packages, tests, live
+audit prose, or other round sources.
+
+The exact candidate containing DII-155 and the refreshed repository-reference projection
+must restart the complete ladder from Stage 1. It then requires a fresh read-only review
+through literal `claude-opus-5`, with no fallback. Any actionable finding reopens the
+governed repair cycle; only a PASS authorizes source push and exact-SHA CI.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-155 as the closing decision. Its release
+disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
+exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
