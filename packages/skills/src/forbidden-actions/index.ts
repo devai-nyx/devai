@@ -181,7 +181,7 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
 
 export interface ForbiddenActionFinding {
   readonly forbidden_id: string;
-  readonly source: 'commit-message' | 'commit-author-email' | 'reflog';
+  readonly source: 'commit-message' | 'commit-change' | 'commit-author-email' | 'reflog';
   readonly ref: string;
   readonly matched: string;
   readonly message: string;
@@ -258,9 +258,10 @@ export function checkForbiddenRegistryCoverage(registryPath: string): ForbiddenC
 }
 
 /**
- * Scan recent commits for forbidden-pattern matches in messages.
- * Best-effort: silently skips when git isn't available or when the
- * repo has no commits yet.
+ * Scan recent commits for forbidden-pattern matches in messages and
+ * committed path/patch evidence. History inspection fails closed so a
+ * missing Git binary, non-repository root, or unreadable commit cannot
+ * masquerade as a clean scan.
  */
 export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenResult {
   const findings: ForbiddenActionFinding[] = [];
@@ -304,7 +305,18 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
       stdio: ['ignore', 'pipe', 'pipe'],
     });
   } catch {
-    return { registry_entries: registry.length, findings };
+    return {
+      registry_entries: registry.length,
+      findings: [
+        {
+          forbidden_id: 'FORBIDDEN-SCAN-UNAVAILABLE',
+          source: 'commit-change',
+          ref: 'git-log',
+          matched: '',
+          message: 'committed history could not be inspected',
+        },
+      ],
+    };
   }
   const commits = log
     .split('\x1e')
@@ -315,13 +327,56 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     if (nul === -1) continue;
     const sha = c.slice(0, nul);
     const body = c.slice(nul + 1);
+    let changeEvidence: string;
+    try {
+      const nameStatus = execFileSync(
+        'git',
+        ['show', '--format=', '--name-status', '--find-renames', sha],
+        {
+          cwd: opts.repoRoot,
+          encoding: 'utf8',
+          stdio: ['ignore', 'pipe', 'pipe'],
+        },
+      );
+      const operations = nameStatus
+        .split('\n')
+        .filter(Boolean)
+        .map((line) => {
+          const [status = '', ...paths] = line.split('\t');
+          const path = paths.at(-1) ?? '';
+          return `${status.startsWith('D') ? 'git rm' : 'git add'} ${path}\n${line}`;
+        })
+        .join('\n');
+      const patch = execFileSync(
+        'git',
+        ['show', '--format=', '--no-ext-diff', '--unified=0', sha],
+        {
+          cwd: opts.repoRoot,
+          encoding: 'utf8',
+          stdio: ['ignore', 'pipe', 'pipe'],
+        },
+      );
+      changeEvidence = `${operations}\n${patch}`;
+    } catch {
+      findings.push({
+        forbidden_id: 'FORBIDDEN-SCAN-UNAVAILABLE',
+        source: 'commit-change',
+        ref: sha,
+        matched: '',
+        message: `commit ${sha.slice(0, 12)} change evidence could not be inspected`,
+      });
+      continue;
+    }
     for (const entry of compiled) {
       for (const re of entry.patterns) {
-        const m = re.exec(body);
+        const messageMatch = re.exec(body);
+        re.lastIndex = 0;
+        const changeMatch = messageMatch === null ? re.exec(changeEvidence) : null;
+        const m = messageMatch ?? changeMatch;
         if (m === null) continue;
         findings.push({
           forbidden_id: entry.id,
-          source: 'commit-message',
+          source: messageMatch === null ? 'commit-change' : 'commit-message',
           ref: sha,
           matched: m[0],
           message: `commit ${sha.slice(0, 12)} matches forbidden pattern: ${entry.action}`,
