@@ -75,6 +75,59 @@ describe('phase-closure release disposition', () => {
   });
 });
 
+describe('phase-closure failed-gate acknowledgment', () => {
+  it.each([
+    ['all criteria pass', [{ criterion: 'coverage-t1-t3 threshold', verdict: 'pass' as const }]],
+    [
+      'the failing criterion names another gate',
+      [
+        {
+          criterion: 'different-gate failed',
+          verdict: 'fail' as const,
+          evidence: 'BL-999',
+        },
+      ],
+    ],
+  ])('rejects a failed gate when %s', (_label, validation_criteria) => {
+    expect(() =>
+      closePhase(
+        repoRoot(),
+        draft('DII-104', 'DII-105', {
+          gates: { 'coverage-t1-t3': { status: 'fail' } },
+          validation_criteria,
+        }),
+      ),
+    ).toThrow(/coverage-t1-t3/);
+  });
+
+  it.each([
+    [
+      'criterion',
+      {
+        criterion: 'coverage-t1-t3 remains below the unchanged floor',
+        verdict: 'fail' as const,
+      },
+    ],
+    [
+      'evidence',
+      {
+        criterion: 'Merged coverage remains governed',
+        verdict: 'fail' as const,
+        evidence: 'coverage-t1-t3 is the exact BL-017 red',
+      },
+    ],
+  ])('accepts an explicit failing acknowledgment in the %s', (_label, criterion) => {
+    const result = closePhase(
+      repoRoot(),
+      draft('DII-104', 'DII-105', {
+        gates: { 'coverage-t1-t3': { status: 'fail' } },
+        validation_criteria: [criterion],
+      }),
+    );
+    expect(result.record.gates['coverage-t1-t3']?.status).toBe('fail');
+  });
+});
+
 describe('PC-0002 append-only correction', () => {
   it('preserves PC-0001 and selects PC-0002 as the effective R-0001 closure', () => {
     const pc1 = readFileSync(join(ROOT, 'record/proofs/compliance/closures/PC-0001.json'));
