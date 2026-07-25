@@ -7,7 +7,10 @@ date: 2026-07-25
 authority: Owner + Architect (joint — the single declared authority exception inside law/)
 supersedes: null
 superseded_by: null
-provenance: [ex-glossary@devai-original; REV-0006; R-0003-GLOSSARY-OWNER-MARKS; DII-150]
+provenance:
+  [
+    ex-glossary@devai-original; R-0003 durable REV provenance; R-0003-GLOSSARY-OWNER-MARKS; R-0003-GLOSSARY-OWNER-CORRECTION-MARKS; DII-150; DII-152,
+  ]
 ---
 
 # Glossary
@@ -18,9 +21,11 @@ This directory holds glossary entries — canonical terms with definitions, cros
 
 ## Index
 
-The predecessor vocabulary imported at GE-001..037. The successor vocabulary rider at
-GE-038..044 and the reviewed GE-006/016/020/022 touch-ups were jointly activated by the
-Owner marks and Architect ceremony in R-0003. All 44 entries are active.
+The predecessor vocabulary imported at GE-001..037. The four entries
+GE-006/016/020/022 were retained after joint review. Their already-applied successor
+wording and active lifecycle did not originate in R-0003. The successor vocabulary
+rider GE-038..044 was jointly activated by the Owner marks and Architect ceremony. All
+44 entries are active.
 
 | Group                                     | IDs         | Terms                                                                                                        |
 | ----------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------ |

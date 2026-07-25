@@ -2,21 +2,21 @@
 id: DECISIONS
 title: DEVAI-II decision register
 type: register
-status: draft
-date: 2026-07-23
-authority: Architect (DII numbering binds at BR-1/W03; ratification at W01/W03)
+status: active
+date: 2026-07-25
+authority: Architect (active container; per-entry lifecycle controls authority)
 supersedes: null
 superseded_by: null
-provenance: regenerated from REV-0002; record-meta fields applied per entry 2026-07-23 (provisional DII ids, W03 ratifies)
+provenance: regenerated from REV-0002; DII namespace bound during R-0001/R-0002; container activated and corrected by DII-152
 ---
 
 # DEVAI-II decision register
 
-**WIREFRAME DRAFT — regenerated from the pre-W01 review draft (REV-0002). Nothing here
-carries authority until ratified under a declared Architect session in the real BR-1.
-Entries carry provisional DII identifiers; `[ex-D-nn]` suffixes preserve predecessor
-provenance shorthand until W03 ratifies the register.
-Evidence values are cited to the frozen predecessor, never restated.**
+This is the active successor decision-register container. DII identifiers are durable
+and never re-minted. Only entries with `status: active` carry authority; entries whose
+own metadata remains `draft` are preserved proposals and gain no authority from the
+container lifecycle. `[ex-D-nn]` suffixes retain predecessor provenance shorthand.
+Evidence values are cited to the frozen predecessor, never restated.
 
 ### DII-1. DEVAI-II is founded by absorption from devai-original under the terminal decision (locked; founding record)
 
@@ -85,8 +85,8 @@ The product/ family (journeys, use-cases, stories, rules, mandates) is explicitl
 Entries below carry the §5.1 fragment inline: a heading `### <id> — <title>` followed by a
 meta line (`type · status · authority · provenance`). File-level front-matter carries `date`;
 `supersedes`/`superseded_by` are null until successor-internal supersession begins (predecessor
-supersession lives in provenance). **Ids are provisional wireframe assignments — W03 ratifies or
-renumbers under declared authority.** A `check records` prototype validates every entry against
+supersession lives in provenance). **Ids are durable successor assignments; entry lifecycle
+determines authority and later correction is append-only.** A `check records` prototype validates every entry against
 `record-meta.schema.json` (see packages/schemas tests).
 ## 1. Frame and stack
 
@@ -1655,6 +1655,52 @@ dormant until then.
 
 R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
 promotes, re-earns, or declares ready nothing.
+
+### DII-152 — Correct R-0003 founding provenance and activate the register container
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 first Opus correction; DII-148–151; R-0003-CLAUDE-OPUS-CLOSE-REVIEW; BL-120–125; R-0003-GLOSSARY-OWNER-CORRECTION-MARKS; R-0003-REV-PROVENANCE-MANIFEST`
+
+DII-152 supersedes DII-151 as the current R-0003 source-closing judgment and corrects
+only the inaccurate provenance and completeness assertions in DII-148 through DII-150;
+it does not undo the founding ceremony, alter article doctrine, or edit the immutable
+genesis attestation. The terminal predecessor Constitution is 0.8.0, not 0.6.0. The
+live Constitution wrapper and 42-row ledger now identify that source truthfully.
+
+The ledger remains total after disclosing the previously omitted threshold-path
+rebindings in Articles 18 and 30. Its Article 7 row now records the complete successor
+authority delta: durable `work/audit/` replaces ignored local output, so the predecessor
+Architect transfer-and-seal duty, Auditor non-commit sentence, and durable-scope
+qualifier do not transpose. The founding annex no longer claims six inline markers when
+only three textual insertions carry them. These are provenance corrections to the
+already-reviewed successor text, not new doctrine.
+
+The decision register becomes an active governed container at this act. Container
+activation binds the DII namespace but does not ratify its contents wholesale: only an
+entry whose own metadata is `active` carries authority, while every `draft` entry remains
+a non-authoritative proposal. The file-level date records this container act, not an
+invented ceremony date for preserved draft entries. This resolves the circular state in
+which DII-150 was active while its containing register denied all authority.
+
+ADR-005's sealed predecessor workflow binding and the six multi-source ADR delimiters
+remain byte-preserved pending a legal append-only correction. Exact REV-0001, REV-0003,
+and REV-0006 bytes are preserved under the durable R-0003 review manifest; their
+historical conclusions remain attributable without relying on ignored scratch.
+
+The corrective Owner mark establishes that GE-006/016/020/022 were already active and
+were retained after joint review; only GE-038 through GE-044 were newly activated in
+R-0003. The glossary guidance applies that fact without changing any definition,
+reference, or lifecycle.
+
+The Constitution's corrected wrapper changes its content digest. Before source close,
+the Architect canonical policy and Engineer materialization must be rebound to the new
+digest, the ratified version pin must be materialized, the sealed ADR binding must be
+corrected through its terminal lifecycle and a gapless replacement, all repair contracts
+and deterministic projections must pass, and the Auditor must bind fresh exact-candidate
+evidence. A new closing decision and exact read-only `claude-opus-5` PASS remain
+mandatory before source push. PC-0004 and R-0004 remain blocked until the complete
+two-PR close.
+
+This correction establishes only **founding law ratified**. It releases, deploys,
+publishes, promotes, re-earns, or declares ready nothing.
 
 ## Appendix — Register-consistency guard
 
