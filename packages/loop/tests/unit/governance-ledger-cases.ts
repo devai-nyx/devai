@@ -176,6 +176,43 @@ describe('governance record parsing and integrity', () => {
     );
   });
 
+  it('detects a sealed-body mutation hidden inside a rename commit', () => {
+    const root = fixtureRoot();
+    const oldPath = writeRecord(
+      root,
+      'ADR-001-original.md',
+      recordSource({ status: 'active', body: '# ADR-001. Sealed before rename' }),
+    );
+    initGit(root);
+    commitAll(root, 'activate old path');
+    const currentPath = join(root, 'law/adr/ADR-001.md');
+    execFileSync('git', ['mv', oldPath, currentPath], { cwd: root });
+    writeFileSync(
+      currentPath,
+      recordSource({ status: 'active', body: '# ADR-001. Mutated during rename' }),
+    );
+    commitAll(root, 'rename and mutate');
+
+    expect(decisionRecordIntegrity({ repoRoot: root }).findings).toContainEqual(
+      expect.objectContaining({ code: 'DECISION_LOCKED_BODY_MUTATED' }),
+    );
+  });
+
+  it('fails sealed-history verification closed when Git is unavailable', () => {
+    const root = fixtureRoot();
+    writeRecord(root, 'ADR-001.md', recordSource({ status: 'active' }));
+    const originalPath = process.env['PATH'];
+    process.env['PATH'] = '';
+    try {
+      expect(decisionRecordIntegrity({ repoRoot: root }).findings).toContainEqual(
+        expect.objectContaining({ code: 'DECISION_HISTORY_UNAVAILABLE' }),
+      );
+    } finally {
+      if (originalPath === undefined) delete process.env['PATH'];
+      else process.env['PATH'] = originalPath;
+    }
+  });
+
   it('treats superseded and tombstoned records as terminal', () => {
     for (const terminal of ['superseded', 'tombstoned']) {
       const root = fixtureRoot();
