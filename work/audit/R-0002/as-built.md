@@ -889,6 +889,12 @@ assumption with an append-only-safe assertion that still proves PC-0002 is the
 effective R-0001 record. The contract must pass both without PC-0003 on the source
 branch and with production-emitted PC-0003 in a disposable exact-candidate worktree.
 
+Inspector `6dd0325` replaced the fixed population count with the count of effective,
+non-superseded ledger records. The same 29 focused closure tests pass both on the
+source branch without PC-0003 and in the disposable worktree after production emitted
+PC-0003. PC-0001 and PC-0002 retain their exact recorded hashes. BL-119 is closed
+locally pending exact source PR and exact-main CI.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
