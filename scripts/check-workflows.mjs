@@ -44,6 +44,20 @@ for (const file of files) {
   if (workflow.on === undefined || workflow.on === null) findings.push(`${file}: missing triggers`);
   if (workflow.jobs === undefined || workflow.jobs === null) findings.push(`${file}: missing jobs`);
   visit(workflow, '', file);
+  if (file === 'ci.yml' && workflow.jobs !== undefined && workflow.jobs !== null) {
+    const jobs = Object.values(workflow.jobs);
+    const commands = jobs.flatMap((job) =>
+      Array.isArray(job.steps)
+        ? job.steps.flatMap((step) => (typeof step.run === 'string' ? [step.run] : []))
+        : [],
+    );
+    if (!commands.includes('pnpm run ci:governance')) {
+      findings.push('ci.yml: required pnpm run ci:governance command is missing');
+    }
+    if (!jobs.some((job) => job.uses === './.github/workflows/round-gates.yml')) {
+      findings.push('ci.yml: required automatic round-gates workflow call is missing');
+    }
+  }
 }
 
 if (files.length === 0) findings.push('no workflow files found');

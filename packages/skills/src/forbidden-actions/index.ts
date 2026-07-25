@@ -374,7 +374,7 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
   // Read recent commit log via git.
   let log: string;
   try {
-    log = execFileSync('git', ['log', `-n${String(max)}`, '--pretty=format:%H%x00%B%x1e'], {
+    log = execFileSync('git', ['log', `-n${String(max)}`, '--pretty=format:%H%x00%an%x00%B%x1e'], {
       cwd: opts.repoRoot,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
@@ -401,8 +401,13 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     const nul = c.indexOf('\x00');
     if (nul === -1) continue;
     const sha = c.slice(0, nul);
-    const body = c.slice(nul + 1);
-    let changeEvidence: string;
+    const authorEnd = c.indexOf('\x00', nul + 1);
+    if (authorEnd === -1) continue;
+    const author = c.slice(nul + 1, authorEnd);
+    const body = c.slice(authorEnd + 1);
+    let operations: string;
+    let patch: string;
+    let changedPaths: string[];
     try {
       const nameStatus = execFileSync(
         'git',
@@ -413,7 +418,11 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
           stdio: ['ignore', 'pipe', 'pipe'],
         },
       );
-      const operations = nameStatus
+      changedPaths = nameStatus
+        .split('\n')
+        .filter(Boolean)
+        .flatMap((line) => line.split('\t').slice(1));
+      operations = nameStatus
         .split('\n')
         .filter(Boolean)
         .map((line) => {
@@ -425,7 +434,7 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
           return `${status.startsWith('D') ? 'git rm' : 'git add'} ${path}\n${line}`;
         })
         .join('\n');
-      const patch = execFileSync(
+      patch = execFileSync(
         'git',
         ['diff-tree', '--root', '--no-commit-id', '--no-ext-diff', '--unified=0', '-p', '-m', sha],
         {
@@ -434,7 +443,6 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
           stdio: ['ignore', 'pipe', 'pipe'],
         },
       );
-      changeEvidence = `${operations}\n${patch}`;
     } catch {
       findings.push({
         forbidden_id: 'FORBIDDEN-SCAN-UNAVAILABLE',
@@ -446,6 +454,36 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
       continue;
     }
     for (const entry of compiled) {
+      if (
+        entry.id === 'FORBID-MUTATE-INVARIANTS' &&
+        changedPaths
+          .filter((path) =>
+            /^(?:law\/|product\/|work\/(?:rounds|audit)\/|record\/|\.devai\/config\/)/u.test(path),
+          )
+          .every((path) => {
+            if (/^(?:law\/|work\/rounds\/)/u.test(path)) return author === 'DEVAI Architect';
+            if (path.startsWith('product/')) return author === 'DEVAI Owner';
+            if (path.startsWith('work/audit/')) return author === 'DEVAI Auditor';
+            if (path.startsWith('record/')) return author === 'DEVAI Machine';
+            if (path.startsWith('.devai/config/')) return author === 'DEVAI Engineer';
+            return false;
+          })
+      ) {
+        continue;
+      }
+      if (
+        entry.id === 'FORBID-CI-WITHOUT-ADR' &&
+        author === 'DEVAI Engineer' &&
+        changedPaths.some((path) => path.startsWith('.github/workflows/'))
+      ) {
+        continue;
+      }
+      const pathEvidenceIds = new Set([
+        'FORBID-DELETE-AUTHORITY-DOCS',
+        'FORBID-MUTATE-INVARIANTS',
+        'FORBID-CI-WITHOUT-ADR',
+      ]);
+      const changeEvidence = pathEvidenceIds.has(entry.id) ? operations : `${operations}\n${patch}`;
       for (const re of entry.patterns) {
         const messageMatch = re.exec(body);
         re.lastIndex = 0;

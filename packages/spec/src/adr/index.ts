@@ -157,20 +157,15 @@ export function validateAdrs(opts: ValidateAdrsOptions): AdrValidationResult {
     const fmText = m[1] ?? '';
     const bodyText = m[2] ?? '';
     const fm = parseFrontMatter(fmText);
-    // Preserve the established diagnostic for an imported predecessor-style
-    // ADR. Those records used proposed/accepted/rejected plus `adr_id`; they
-    // are not successor records and must not be misreported as merely missing
-    // the first new metadata field (`type`).
-    if (
-      fm['type'] === undefined &&
-      typeof fm['status'] === 'string' &&
-      ['proposed', 'accepted', 'rejected'].includes(fm['status'])
-    ) {
-      errors.push({
-        file,
-        message: "must have required property 'adr_id' (required)",
-      });
-      continue;
+    // Body diagnostics are independent of frontmatter validity. A malformed
+    // imported record must not suppress missing-section findings.
+    for (const { label, re } of MANDATORY_SECTIONS) {
+      if (!re.test(bodyText)) {
+        errors.push({
+          file,
+          message: `body missing mandatory section '## ${label}'`,
+        });
+      }
     }
     const ok = validators.adr(fm);
     if (!ok) {
@@ -197,16 +192,6 @@ export function validateAdrs(opts: ValidateAdrsOptions): AdrValidationResult {
         file,
         message: `filename '${basename(file)}' does not start with id '${record.id}-'`,
       });
-    }
-
-    // Body must contain the mandatory section headers.
-    for (const { label, re } of MANDATORY_SECTIONS) {
-      if (!re.test(bodyText)) {
-        errors.push({
-          file,
-          message: `body missing mandatory section '## ${label}'`,
-        });
-      }
     }
 
     const idMatch = /^ADR-([0-9]+)$/.exec(record.id);

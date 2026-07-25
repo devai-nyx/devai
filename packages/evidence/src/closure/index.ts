@@ -79,7 +79,18 @@ export function readClosures(repoRoot: string): PhaseClosureRecord[] {
   const records: PhaseClosureRecord[] = [];
   for (const name of readdirSync(dir).sort()) {
     if (!/^PC-[0-9]{4}\.json$/.test(name)) continue;
-    records.push(JSON.parse(readFileSync(join(dir, name), 'utf8')) as PhaseClosureRecord);
+    let record: PhaseClosureRecord;
+    try {
+      record = JSON.parse(readFileSync(join(dir, name), 'utf8')) as PhaseClosureRecord;
+    } catch (error) {
+      throw new Error(
+        `phase closure ${name} is malformed: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+    if (record.id !== name.slice(0, -'.json'.length)) {
+      throw new Error(`phase closure ${name} declares mismatched id '${String(record.id)}'`);
+    }
+    records.push(record);
   }
   return records.sort((a, b) => a.id.localeCompare(b.id));
 }
@@ -131,6 +142,24 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
       'phase close: caller-supplied id is forbidden; the closure verb assigns the next PC identity',
     );
   }
+  const preflightRecord = {
+    ...draft,
+    schemaVersion: '1.0.0',
+    id: 'PC-0000',
+    closed_at: draft.closed_at ?? new Date().toISOString(),
+  };
+  const validateDraft = (): void => {
+    if (validatePhaseClosure(preflightRecord)) return;
+    const errors = (validatePhaseClosure.errors ?? [])
+      .map((error) => `${error.instancePath || '/'} ${error.message ?? ''}`)
+      .join('; ');
+    throw new Error(
+      `phase close: draft does not validate against phase-closure.schema.json: ${errors}`,
+    );
+  };
+  if (!Array.isArray(draft.batches)) {
+    validateDraft();
+  }
   const fullGitObject = /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/u;
   for (const batch of draft.batches) {
     if (
@@ -142,6 +171,7 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
       );
     }
   }
+  validateDraft();
   const existing = readClosures(repoRoot);
   const record: PhaseClosureRecord = {
     ...draft,

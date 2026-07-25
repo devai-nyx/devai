@@ -435,7 +435,14 @@ export function decisionRecordIntegrity(options: {
         typeof other?.frontmatter['superseded_by'] === 'string'
           ? [other.frontmatter['superseded_by']]
           : [];
-      if (other === undefined || !reverse.includes(id)) {
+      // Draft successor ADRs may cite frozen predecessor source filenames in
+      // `supersedes`. Reverse symmetry applies only within the live successor
+      // record population; external provenance is resolved by the archive
+      // manifest and citation checks.
+      if (
+        (other === undefined && /^ADR-[0-9]{3}$/u.test(target)) ||
+        (other !== undefined && !reverse.includes(id))
+      ) {
         findings.push({
           code: 'DECISION_SUPERSESSION_ASYMMETRIC',
           message: `${id} supersedes ${target}, but the reverse link does not resolve.`,
