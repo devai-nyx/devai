@@ -861,6 +861,20 @@ then emits PC-0003 against the exact source merge SHA, using DII-105 as declarat
 DII-116 as closing decision. R-0002 remains draft, ratifies nothing, releases nothing,
 deploys nothing, and transfers no readiness or evidence standing.
 
+### DII-117 — Phase closure records are immutable compliance proof
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 publication preflight; three-tree doctrine; BL-056`
+
+The canonical output of `devai govern phase close` is the append-only compliance proof
+record `record/proofs/compliance/closures/PC-NNNN.json`. Closure records do not live
+under `.devai/state/`: that tree contains ignored mutable runtime state and cannot be
+the durable authority for a round-closing judgment.
+
+The phase-closure schema description must name the same immutable path as the production
+implementation, CLI help, authority policy, and approved three-tree doctrine. This
+correction changes no closure field, validation rule, write behavior, existing record
+byte, or authority boundary; it makes the canonical law describe the production path
+already in force.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

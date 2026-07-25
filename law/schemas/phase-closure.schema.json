@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/phase-closure.schema.json",
   "title": "PhaseClosure",
-  "description": "Machine-recorded closure of a phase or round (D-110, governance-roadmap item 4). Replaces the hand-narrated portion of closing D-entries: gate posture, batch list, validation criteria, and the no-deletion flag become data; derived properties (consecutive-streak counters, scope trends) are computed from the ledger by `devai govern phase ledger`, never stored as prose. The closing D-entry shrinks to a human judgment plus a pointer to this record. Written by `devai govern phase close` to .devai/state/closures/<id>.json (tracked, append-only by convention: a recorded closure is never edited; corrections append a new record with `supersedes`).",
+  "description": "Machine-recorded closure of a phase or round (D-110, governance-roadmap item 4). Replaces the hand-narrated portion of closing D-entries: gate posture, batch list, validation criteria, and the no-deletion flag become data; derived properties (consecutive-streak counters, scope trends) are computed from the ledger by `devai govern phase ledger`, never stored as prose. The closing D-entry shrinks to a human judgment plus a pointer to this record. Written by `devai govern phase close` to record/proofs/compliance/closures/PC-NNNN.json (tracked, append-only by convention: a recorded closure is never edited; corrections append a new record with `supersedes`).",
   "type": "object",
   "additionalProperties": false,
   "required": [
