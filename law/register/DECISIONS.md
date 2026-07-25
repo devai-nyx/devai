@@ -1261,6 +1261,45 @@ disposition is `none-preratification`, and no failed gate or failing validation
 criterion is admitted. R-0002 remains draft, ratifies nothing, releases nothing,
 deploys nothing, and transfers no readiness or evidence standing.
 
+### DII-139 — Fifth-review enforcement failures reopen the R-0002 close
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 fifth Claude Opus 5 correction; DII-138; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-5; BL-075; BL-077; BL-079; BL-082; BL-086; BL-092; BL-094–106`
+
+DII-138's source-closing judgment is reopened. Its pre-decision ladder was genuinely
+green, but that ladder did not execute several governance guards whose production
+implementations remained fail-open or structurally ineffective. No local green result
+or future remote check may stand in for execution of the guard it claims to prove.
+
+Constitution version parsing has one canonical implementation and every caller fails
+closed on missing bytes or markers. Forbidden-action registries require at least one
+executable detection pattern per entry; missing, empty, malformed, pattern-less, merge,
+and rename evidence cannot report clean. Decision citations resolve from declared
+record identities, including DII headings in the canonical register, rather than from
+filename coincidence. Draft ADRs remain intentionally unsealed until R-0003, but the
+live-tree guard must report that state and become non-vacuous immediately on
+activation.
+
+Trace targets are contained repository-relative paths to the file kind declared by the
+target. Missing catalogs, entries, paths, parseability, containment, and file-kind
+failures block rather than reduce the judged population. BL-081 still owns the later
+assertion-depth contract; it cannot be used to waive path integrity now.
+
+The canonical freshness window is 168 hours and its accepted policy range is 1 through
+8760 hours inclusive. Canonical Architect policy is read before its Engineer-owned
+materialization, and byte divergence is a blocking error. Bootstrap seeds only
+packaged, schema-valid canonical policy; existing target bytes are never promoted to
+authority.
+
+Pull-request CI must reproduce strict forbidden-action, governance-ledger,
+trace-resolution, canonical-policy, and T4–T6 checks. Workflow lint enforces the
+required command roster. Closure inputs validate before use, current backlog views
+must agree, and final-close language distinguishes a pre-decision measurement from an
+exact-candidate check.
+
+OM-003 is not a shipped-runtime model restriction. It narrows only Claude interactions
+inside this campaign, exactly as its own applied boundary says. Historical Machine and
+red-first ordering exceptions remain immutable and disclosed; BL-106/R-0005 owns the
+prospective mechanical sequencing guard.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
