@@ -1078,6 +1078,31 @@ writing `law/trace.json`, fails on incomplete inputs, and fails when committed b
 stale. Local and remote CI invoke that check. Only the Architect materialization step
 may write the canonical trace after the Inspector-owned corpus changes.
 
+### DII-130 — R-0002 closes from the second-review and exit-ladder repairs
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 final source close; DII-105; DII-124–129; R-0002-AS-BUILT@807b5581e2647377ce0aa7bf90c75cb4a210c047; BL-064; BL-066–073`
+
+DII-130 supersedes DII-126 only as the final R-0002 source-closing decision. Earlier
+closing judgments and measurements remain immutable chronological evidence but do not
+describe the current candidate. The final Auditor re-close records exact closure
+identity, Machine commit binding, literal no-fallback Opus selection, complete sealed
+history, no-write trace freshness, truthful current instructions/citations, lint-clean
+assertions, and role-pure global formatting.
+
+The exact source candidate is the commit containing this decision and the final
+deterministic repository-reference regeneration. It may advance only after a third
+independent read-only Claude Opus 5 review through literal `claude-opus-5` with no
+fallback, a clean worktree, and every local and exact remote gate green. BL-063 remains
+ring-fenced to R-0005 before round-archive activation, and BL-065 remains assigned to
+R-0004 before production-readiness claims; neither is an R-0002 source red or a claim
+of completion beyond this round.
+
+After the source PR merges, the closure-only branch emits PC-0003 against that exact
+source merge SHA using DII-105 as declaration and DII-130 as closing decision.
+Every batch attributed to Machine carries its full commit id. Every observed source
+gate is pass, the release disposition is `none-preratification`, and no failed gate or
+failing validation criterion is admitted. R-0002 remains draft, ratifies nothing,
+releases nothing, deploys nothing, and transfers no readiness or evidence standing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
