@@ -9,6 +9,7 @@ import { closePhase, type PhaseClosureDraft } from '../../src/closure/index.js';
 aroundEach((runTest) => withAuthorityHostTestScope(runTest));
 
 const roots: string[] = [];
+const fullCommit = '1234567890abcdef1234567890abcdef12345678';
 
 afterEach(() => {
   for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
@@ -54,8 +55,81 @@ describe('successor phase-closure binding', () => {
 
   it('requires release_disposition on PC-0003', () => {
     expect(() =>
-      closePhase(repoWithTwoClosures(), draft({ merged_as: '1234567' })),
+      closePhase(repoWithTwoClosures(), draft({ merged_as: fullCommit })),
     ).toThrow(/release_disposition is required/);
+  });
+
+  it('rejects a caller-supplied closure id', () => {
+    const callerSteered = {
+      ...draft({
+        merged_as: fullCommit,
+        release_disposition: 'none-preratification',
+      }),
+      id: 'PC-9999',
+    } as PhaseClosureDraft;
+    expect(() => closePhase(repoWithTwoClosures(), callerSteered)).toThrow(
+      /caller-supplied.*id/i,
+    );
+  });
+
+  it('rejects an abbreviated merged_as identity', () => {
+    expect(() =>
+      closePhase(
+        repoWithTwoClosures(),
+        draft({
+          merged_as: '1234567',
+          release_disposition: 'none-preratification',
+        }),
+      ),
+    ).toThrow(/merged_as/i);
+  });
+
+  it('requires a full commit identity for Machine-attributed batches', () => {
+    const machineBatch = (commit?: string) => ({
+      id: 'close',
+      roles: ['Machine'] as const,
+      ...(commit !== undefined && { commit }),
+      headline: 'machine successor close',
+    });
+    expect(() =>
+      closePhase(
+        repoWithTwoClosures(),
+        draft({
+          batches: [machineBatch()],
+          merged_as: fullCommit,
+          release_disposition: 'none-preratification',
+        }),
+      ),
+    ).toThrow(/Machine.*commit/i);
+    expect(() =>
+      closePhase(
+        repoWithTwoClosures(),
+        draft({
+          batches: [machineBatch('1234567')],
+          merged_as: fullCommit,
+          release_disposition: 'none-preratification',
+        }),
+      ),
+    ).toThrow(/Machine.*commit/i);
+  });
+
+  it('accepts a full commit identity for Machine-attributed batches', () => {
+    const result = closePhase(
+      repoWithTwoClosures(),
+      draft({
+        batches: [
+          {
+            id: 'close',
+            roles: ['Machine'],
+            commit: fullCommit,
+            headline: 'machine successor close',
+          },
+        ],
+        merged_as: fullCommit,
+        release_disposition: 'none-preratification',
+      }),
+    );
+    expect(result.record.id).toBe('PC-0003');
   });
 
   it('rejects an empty failed-gate identity', () => {
@@ -63,7 +137,7 @@ describe('successor phase-closure binding', () => {
       closePhase(
         repoWithTwoClosures(),
         draft({
-          merged_as: '1234567',
+          merged_as: fullCommit,
           release_disposition: 'none-preratification',
           gates: { '': { status: 'fail' } },
           validation_criteria: [{ criterion: 'some failure', verdict: 'fail' }],
@@ -77,7 +151,7 @@ describe('successor phase-closure binding', () => {
       closePhase(
         repoWithTwoClosures(),
         draft({
-          merged_as: '1234567',
+          merged_as: fullCommit,
           release_disposition: 'none-preratification',
           gates: { t1: { status: 'fail' } },
           validation_criteria: [
