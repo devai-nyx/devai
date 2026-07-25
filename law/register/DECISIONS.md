@@ -1494,6 +1494,35 @@ DII-145 as closing decision. Its release disposition remains
 `none-preratification`. OM-007 still replaces only the additional final Opus review.
 Nothing is ratified, released, deployed, published, or declared ready by this repair.
 
+### DII-146 — Bound role-pure test fixtures without exempting action evidence
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 final exact-CI correction; OM-007; DII-105; DII-137; DII-145; BL-118; Auditor 87546850f9b022d232f9fba709f33f11f417e118; Inspector f01463da36c2b108f839a3197c6ee18ee5e05b3d; Engineer cd71e378e1479687e3a47fad9bf3fd84b756c626; Inspector 9915e8a8da5c96bd5f315e000063da9d14cdbbd5; Auditor 8ae36b4e13c1919193b64952c3aa8ed0ec26760d; Inspector 152b06efa110ef5916bef4ff0f5cfabfdd683e52`
+
+DII-146 supersedes DII-145 only as the R-0002 source-closing judgment. The BL-117
+red-first commit necessarily encoded a forbidden command as test data, and the next
+complete local floor correctly showed that undifferentiated patch-content scanning
+classified that fixture as executed action evidence. BL-118 governs this separate
+classification defect rather than waiving or hiding the finding.
+
+Inspector `f01463d` proved the fixture boundary red without placing the command
+literal in its governed patch. Engineer `cd71e37` exempts content-pattern change
+evidence only for commits attributed to DEVAI Inspector when the non-empty changed
+path set consists entirely of test paths. Inspector `9915e8a` proves that commit
+messages and mixed-path changes remain scanned; prior contracts preserve scanning for
+other authors, path-based authority and CI evidence, novel merge resolutions, and all
+inspection failures. Auditor `8ae36b4` re-closed BL-118 after all 22 focused scanner
+tests, the affected build, and local governance passed. Inspector `152b06e` aligned
+the compact closed-range contract with the audited BL-118 disposition.
+
+The exact candidate containing DII-146 and fresh deterministic projections must pass
+the complete local ladder and all required GitHub checks before merge. Its exact
+merge SHA must pass exact-main checks before the closure-only branch may emit PC-0003
+through the production verb.
+
+PC-0003 uses DII-105 as historical declaration, DII-137 as amended-plan binding, and
+DII-146 as closing decision. Its release disposition remains
+`none-preratification`. OM-007 still replaces only the additional final Opus review.
+Nothing is ratified, released, deployed, published, or declared ready by this repair.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
