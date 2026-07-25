@@ -24,16 +24,16 @@ closing decision, and exact-candidate Opus PASS remain mandatory before source p
 
 ## Independent reconciliation
 
-| Record | Observed correction | Role-pure commit |
-| ------ | ------------------- | ---------------- |
-| BL-120 | The wrapper and source ledger bind predecessor Constitution 0.8.0; rows 7, 18, and 30 and the annex-marker claim disclose the complete reviewed deltas. | Architect `8478e57` |
-| BL-121 | The register container is active while per-entry lifecycle controls authority; draft entries remain proposals and the file date binds the container act. | Architect `8478e57` |
-| BL-122 | Sealed ADR-005 transitions terminally to ADR-013, which binds both actual successor workflow paths. | Architect `7e630e5` |
-| BL-123 | A new Owner mark records retention of the already-active glossary entries; joint guidance applies it without changing product meaning. | Owner `7c87f0e`; Architect `8478e57` |
-| BL-124 | The production upgrade verb atomically materializes an existing version pin at Constitution 1.0.0 and preserves repositories where the legacy pin is absent. | Engineer `1449e4d`, `938e2ab` |
-| BL-125 | Exact REV-0001, REV-0003, and REV-0006 bytes are durable and hash-bound by a governed manifest. | Architect `8478e57` |
-| BL-126 | This append-only correction records the full review-repair sequence and refreshed evidence. | Auditor, this commit |
-| BL-127 | The generator requires an explicit target, supports no-write `--check`, participates in Stage 1, and its current projection verifies. | Engineer `1449e4d`; Architect `611e14c` |
+| Record | Observed correction                                                                                                                                                                                 | Role-pure commit                                                        |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| BL-120 | The wrapper and source ledger bind predecessor Constitution 0.8.0; rows 7, 18, and 30 and the annex-marker claim disclose the complete reviewed deltas.                                             | Architect `8478e57`                                                     |
+| BL-121 | The register container is active while per-entry lifecycle controls authority; draft entries remain proposals and the file date binds the container act.                                            | Architect `8478e57`                                                     |
+| BL-122 | Sealed ADR-005 transitions terminally to ADR-013, which binds both actual successor workflow paths.                                                                                                 | Architect `7e630e5`                                                     |
+| BL-123 | A new Owner mark records retention of the already-active glossary entries; joint guidance applies it without changing product meaning.                                                              | Owner `7c87f0e`; Architect `8478e57`                                    |
+| BL-124 | The production upgrade verb atomically materializes an existing version pin at Constitution 1.0.0 and preserves repositories where the legacy pin is absent.                                        | Engineer `1449e4d`, `938e2ab`                                           |
+| BL-125 | Exact REV-0001, REV-0003, and REV-0006 bytes are durable and hash-bound by a governed manifest.                                                                                                     | Architect `8478e57`                                                     |
+| BL-126 | This append-only correction records the full review-repair sequence and refreshed evidence.                                                                                                         | Auditor, this commit                                                    |
+| BL-127 | The generator requires an explicit target, supports no-write `--check`, participates in Stage 1, and its current projection verifies.                                                               | Engineer `1449e4d`; Architect `611e14c`                                 |
 | BL-128 | The clean branch omits all illegal intermediate ADR mutations, preserves six sealed multi-source records, parses their semicolon delimiter, and performs only ADR-005's legal lifecycle transition. | Inspector `726fe66`, `0ba2612`; Engineer `fa17a5c`; Architect `7e630e5` |
 
 Inspector `4fd2d05` proved the first-review contracts red before implementation. Auditor
@@ -46,11 +46,11 @@ now explicit and changes no role attribution or source conclusion.
 
 ## Corrected bindings
 
-| Artifact | SHA-256 |
-| -------- | ------- |
-| Constitution 1.0.0 | `31c6874f2a0ae88a21e1114844c4084e9f0e9d8c58d54f7fefc1078af98fb8cd` |
-| Genesis attestation | `d72711c57e54025ebd2626b2ba20a1263db7d914e308d7d4ce172f4faee6bb09` |
-| Canonical authority policy | `6539f91912d1770ea49449c05ac17a84cef76aec0e22eacc133552eddfb785c2` |
+| Artifact                      | SHA-256                                                            |
+| ----------------------------- | ------------------------------------------------------------------ |
+| Constitution 1.0.0            | `31c6874f2a0ae88a21e1114844c4084e9f0e9d8c58d54f7fefc1078af98fb8cd` |
+| Genesis attestation           | `d72711c57e54025ebd2626b2ba20a1263db7d914e308d7d4ce172f4faee6bb09` |
+| Canonical authority policy    | `6539f91912d1770ea49449c05ac17a84cef76aec0e22eacc133552eddfb785c2` |
 | Materialized authority policy | `6539f91912d1770ea49449c05ac17a84cef76aec0e22eacc133552eddfb785c2` |
 
 The genesis attestation is byte-unchanged. The Constitution correction changes only
