@@ -89,9 +89,7 @@ export function parseAdrFrontMatter(text: string): Record<string, unknown> {
     if (/^\[.*\]$/.test(value.trim())) {
       const inner = value.trim().slice(1, -1).trim();
       out[key] =
-        inner === ''
-          ? []
-          : inner.split(/[;,]/u).map((s) => s.trim().replace(/^['"]|['"]$/g, ''));
+        inner === '' ? [] : inner.split(/[;,]/u).map((s) => s.trim().replace(/^['"]|['"]$/g, ''));
     } else {
       out[key] = value.trim().replace(/^['"]|['"]$/g, '');
     }
