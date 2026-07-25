@@ -87,9 +87,14 @@ describe('successor phase-closure binding', () => {
   });
 
   it('quarantines a parseable existing closure that violates the closure schema', () => {
+    const repo = repoWithTwoClosures();
+    writeFileSync(
+      join(repo, 'record/proofs/compliance/closures/PC-0001.json'),
+      '{"id":"PC-0001","round_id":"parseable-but-invalid"}\n',
+    );
     expect(() =>
       closePhase(
-        repoWithTwoClosures(),
+        repo,
         draft({
           merged_as: fullCommit,
           release_disposition: 'none-preratification',

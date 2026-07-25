@@ -128,7 +128,7 @@ describe('canonical test-trace validation', () => {
         expect.stringContaining('unknown invariant'),
         expect.stringContaining('mixed invariant lifecycles'),
         expect.stringContaining('duplicate canonical test mapping'),
-        expect.stringContaining('stale trace path'),
+        expect.stringContaining('contained executable test'),
         expect.stringContaining('absent from trace.test_corpus'),
         expect.stringContaining('canonical invariant mapping differs'),
       ]),
