@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-105; OM-002; OM-005; R-0002-OPENING-AUDIT; R-0002-CLAUDE-OPUS-CLOSE-REVIEW; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-2; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-3; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-4; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-5; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-6; immutable predecessor objects at 05dd242bf72334bfd683096aed380e8240b6b9aa,
+    DII-105; OM-002; OM-005; R-0002-OPENING-AUDIT; R-0002-CLAUDE-OPUS-CLOSE-REVIEW; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-2; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-3; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-4; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-5; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-6; R-0002-CLAUDE-OPUS-CLOSE-REVIEW-7; immutable predecessor objects at 05dd242bf72334bfd683096aed380e8240b6b9aa,
   ]
 ---
 
@@ -19,8 +19,8 @@ provenance:
 
 This report is chronological. The initial B8 observations and each correction snapshot
 are retained as historical evidence; they are not current-candidate claims. The
-authoritative current observation is **Sixth Opus exact-candidate FAIL and correction
-cycle** below. A seventh independent review still precedes source push. The later
+authoritative current observation is **Seventh Opus PASS and final closure-path
+correction** below. One final independent review still precedes source push. The later
 Architect closing decision, source merge, exact-main observation, and machine closure
 record remain part of the two-PR close and are not predicted here.
 
@@ -742,6 +742,27 @@ BL-107 through BL-112 are closed. BL-105 remains open only for the new final
 Architect binding, final reference regeneration, and seventh exact-candidate Opus
 review. No source push is authorized before that PASS.
 
+## Seventh Opus PASS and final closure-path correction
+
+The seventh exact-candidate review ran read-only through literal `claude-opus-5` with
+no fallback against `d8c119910bf2a4ea755e1aa8d8b1d6f5ba98f965`. It returned
+**PASS** and is preserved at
+`work/audit/R-0002/claude-opus-close-review-7.md`.
+
+The review confirmed all 16 requested checks, the 34-invariant / 121-test-file trace,
+and the 155-entry repository-reference projection. It also reported four bounded
+residuals: the closure verb did not resolve `merged_as`; malformed batch elements
+could be dereferenced before schema validation; active close posture retained stale
+review ordinals; and the ignored PC-0003 template named an incomplete repair
+population. These are governed as BL-113 through BL-116.
+
+Although the PASS permitted source push after exact local checks and deferral of
+`merged_as` resolution until PC-0003, the Auditor elects to repair all four findings
+before publication. BL-113 and BL-114 require red-first Inspector contracts and
+Engineer correction. BL-115 and BL-116 are Auditor-owned consistency repairs. A fresh
+Architect binding, deterministic reference regeneration, exact candidate ladder, and
+one final independent Opus review remain mandatory.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
@@ -751,7 +772,7 @@ production machine verb after BL-049 passed. Its source proof epoch is
 
 ## Residuals and closing posture
 
-The source PR may merge only after the seventh independent Claude Opus 5 review and exact
+The source PR may merge only after the final independent Claude Opus 5 review and exact
 candidate checks. After that merge, the closure-only branch must append the next
 machine PC record against the exact source merge SHA and verify final exact-main state.
 Every required source and exact-main workflow must be green; BL-017 is no longer an

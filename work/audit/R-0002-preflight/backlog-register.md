@@ -23,14 +23,15 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-112. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-116. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
 post-review exit-ladder lint and formatting failures. BL-074 through BL-084 record the
 third exact-candidate findings. BL-085 through BL-093 record the fourth exact-candidate
 findings. BL-094 through BL-106 record the confirmed and bounded fifth exact-candidate
-findings. BL-107 through BL-112 record the sixth exact-candidate findings.
+findings. BL-107 through BL-112 record the sixth exact-candidate findings. BL-113
+through BL-116 record the seventh exact-candidate residual findings.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -38,7 +39,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 
 | Primary round | Records                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-112 |
+| R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-116 |
 | R-0003        | BL-004, BL-005, BL-006                                                                                                                                                                    |
 | R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084                                                                                            |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
@@ -54,7 +55,8 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Disposition                         | Governed records                                                                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–104, BL-107–112 |
-| Awaiting exact seventh review/close | BL-105                                                                                                                                           |
+| Awaiting final exact review/close   | BL-105                                                                                                                                           |
+| Open in seventh-review repair       | BL-113–116                                                                                                                                       |
 | Open in prepared R-0003             | BL-004–006                                                                                                                                       |
 | Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                                   |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
@@ -1021,6 +1023,48 @@ Priority: P1 before seventh close review. Primary round: R-0002.
 Acceptance: help and implementation both state that any finding or unwaived coverage
 gap exits nonzero; `--strict` remains accepted for compatibility without advertising
 a weaker default.
+
+### BL-113 — Resolve the source merge commit before closure emission
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector + Auditor · provenance: R-0002 seventh Claude Opus 5 exact-candidate review`
+
+Priority: P0 before PC-0003. Primary round: R-0002.
+
+Acceptance: the production phase-close verb resolves `merged_as` to a Git commit in
+the target repository before immutable emission; missing, fabricated, and non-commit
+objects fail deterministically; a full hexadecimal shape is never treated as proof of
+existence.
+
+### BL-114 — Validate every raw closure batch before property access
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector + Auditor · provenance: BL-103; R-0002 seventh Claude Opus 5 exact-candidate review`
+
+Priority: P0 before PC-0003. Primary round: R-0002.
+
+Acceptance: the complete raw closure draft, including every array element, passes
+schema validation before production dereferences batch properties; malformed elements
+receive deterministic schema diagnostics rather than an untyped exception.
+
+### BL-115 — Remove stale review ordinals from active close gates
+
+`type: backlog-item · status: draft · authority: Auditor · provenance: BL-105; R-0002 seventh Claude Opus 5 exact-candidate review`
+
+Priority: P0 before source push. Primary round: R-0002.
+
+Acceptance: compact and detailed active close posture names a final exact review
+without retaining a superseded ordinal; preserved historical review descriptions keep
+their factual sequence.
+
+### BL-116 — Keep the operational PC-0003 template evidence population complete
+
+`type: backlog-item · status: draft · authority: Auditor · provenance: BL-105; R-0002 seventh Claude Opus 5 exact-candidate review`
+
+Priority: P0 before PC-0003. Primary round: R-0002.
+
+Acceptance: the ignored operational template names the complete R-0002 repair
+population through BL-116, distinguishes later prospective BL-106, carries no
+predeclared final-review verdict, and remains unusable until exact source merge and
+PASS evidence are substituted.
 
 ## Carried guard map
 
