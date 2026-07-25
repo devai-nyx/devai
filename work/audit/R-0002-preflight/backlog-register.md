@@ -267,6 +267,26 @@ the criterion or evidence of at least one `verdict: fail` criterion; valid ackno
 failure remains recordable; all-pass closures remain unchanged; existing records stay
 byte-identical; and the R-0002 closure draft names the exact BL-017 gate and criterion.
 
+### BL-053 — Replace active Fable review instructions with the Owner-directed Opus selector
+
+`type: backlog-item · status: draft · authority: Owner + Architect + Inspector + Auditor · provenance: direct Owner instruction in the active R-0002 task on 2026-07-24; OM-002 revocation clause; active campaign prompt audit`
+
+Priority: P0 before the next Claude interaction. Primary round: R-0002
+post-review correction.
+
+The Owner directly suspended Claude interaction until the current quota returns and
+narrowed every later Claude interaction to Opus 5 only. OM-002 and the active shared
+execution contract and prepared orchestrator prompts still select Fable 5, so a future
+orchestrator could follow stale repository instructions and violate the live Owner
+boundary.
+
+Acceptance: record the direct Owner narrowing without rewriting historical Fable review
+facts; add an Inspector contract that rejects Fable selectors in active campaign
+instructions and requires Opus 5; update the shared contract, campaign acceptance, and
+R-0002 through R-0010 prompts under Architect authority; preserve the prohibition on
+Claude interaction until quota recovery; and perform the next independent close review
+with `claude-opus-5` only.
+
 ## Carried guard map
 
 The original known-red mapping remains:
