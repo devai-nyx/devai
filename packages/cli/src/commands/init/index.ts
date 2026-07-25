@@ -23,6 +23,38 @@ import { resolveCliVersion } from '../../version.js';
 
 const DEFAULT_REPO_ROOT = '.';
 
+function materializeSelfVersionPin(targetRoot: string): {
+  path: string;
+  constitution_version: string;
+  devai_version: string;
+} | null {
+  const absoluteRoot = resolve(targetRoot);
+  const constitutionPath = join(absoluteRoot, 'law/constitution.md');
+  if (!existsSync(constitutionPath)) return null;
+  const constitution = readFileSync(constitutionPath, 'utf8');
+  const constitutionVersion = /^\*\*Version:\*\*\s+([^\s]+)$/m.exec(constitution)?.[1];
+  if (constitutionVersion === undefined) {
+    throw new Error('canonical self Constitution has no **Version:** binding');
+  }
+  const devaiVersion = resolveCliVersion();
+  const path = '.devai/pin/versions.json';
+  const target = join(absoluteRoot, path);
+  mkdirSync(dirname(target), { recursive: true });
+  writeFileSync(
+    target,
+    `${JSON.stringify(
+      {
+        devai_version: devaiVersion,
+        constitution_version: constitutionVersion,
+        _status: 'active materialization',
+      },
+      null,
+      2,
+    )}\n`,
+  );
+  return { path, constitution_version: constitutionVersion, devai_version: devaiVersion };
+}
+
 function emit(json: unknown, human: boolean, humanText: string): void {
   if (human) process.stdout.write(humanText.endsWith('\n') ? humanText : humanText + '\n');
   else process.stdout.write(JSON.stringify(json) + '\n');
@@ -431,10 +463,14 @@ export const upgrade = defineCommand({
               operation: string;
               digest_sha256: string;
             };
+            const versionPin = materializeSelfVersionPin(options.target ?? DEFAULT_REPO_ROOT);
             emit(
-              { artifact },
+              { artifact, version_pin: versionPin },
               options.human === true,
-              `authority policy ${artifact.operation}: ${artifact.path} (${artifact.digest_sha256})`,
+              `authority policy ${artifact.operation}: ${artifact.path} (${artifact.digest_sha256})` +
+                (versionPin === null
+                  ? ''
+                  : `\nversion pin materialized: ${versionPin.path} (${versionPin.constitution_version})`),
             );
             process.exitCode = EXIT_PASS;
             return;

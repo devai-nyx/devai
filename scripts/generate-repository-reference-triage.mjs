@@ -1,10 +1,38 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
-const root = resolve(process.argv[2] ?? '.');
-const targetRelative = 'work/rounds/R-0002/repository-reference-triage.json';
+const args = process.argv.slice(2);
+let rootArgument = '.';
+let targetRelative;
+let check = false;
+for (let index = 0; index < args.length; index++) {
+  const argument = args[index];
+  if (argument === '--check') {
+    check = true;
+    continue;
+  }
+  if (argument === '--target') {
+    targetRelative = args[index + 1];
+    if (targetRelative === undefined || targetRelative.startsWith('--')) {
+      throw new Error('--target requires a repository-relative path');
+    }
+    index++;
+    continue;
+  }
+  if (argument?.startsWith('--')) throw new Error(`unknown option: ${argument}`);
+  if (rootArgument !== '.') throw new Error(`unexpected positional argument: ${argument}`);
+  rootArgument = argument ?? '.';
+}
+if (targetRelative === undefined) {
+  throw new Error('--target is required; no closed-round output path is implicit');
+}
+if (targetRelative.startsWith('/') || targetRelative.split('/').includes('..')) {
+  throw new Error('--target must stay within the repository');
+}
+
+const root = resolve(rootArgument);
 const successorReference = ['devai-nyx', 'devai'].join('/');
 const referencePattern = new RegExp(`${successorReference}(?:-original)?`, 'g');
 
@@ -83,8 +111,16 @@ for (const file of files) {
   }
 }
 references.sort((left, right) => left.locator.localeCompare(right.locator));
-writeFileSync(
-  join(root, targetRelative),
-  `${JSON.stringify({ schemaVersion: '1.0.0', references }, null, 2)}\n`,
-);
-process.stdout.write(`${String(references.length)} repository references classified\n`);
+const bytes = `${JSON.stringify({ schemaVersion: '1.0.0', references }, null, 2)}\n`;
+const target = join(root, targetRelative);
+if (check) {
+  if (!existsSync(target) || readFileSync(target, 'utf8') !== bytes) {
+    process.stderr.write(`repository reference projection is stale: ${targetRelative}\n`);
+    process.exitCode = 1;
+  } else {
+    process.stdout.write(`${String(references.length)} repository references verified\n`);
+  }
+} else {
+  writeFileSync(target, bytes);
+  process.stdout.write(`${String(references.length)} repository references classified\n`);
+}
