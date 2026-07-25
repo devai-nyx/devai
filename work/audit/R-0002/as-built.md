@@ -338,6 +338,29 @@ The unchanged thresholds still fail at statements 70%, branches 60%, functions 7
 and lines 70%. The command therefore remains honestly red under BL-017, which R-0006
 still owns; no closure or readiness is inferred from the uplift.
 
+## OM-005 BL-058 correction
+
+The coverage-doubling inventory fixture exposed a production SQL parsing defect:
+`TEXT NOT NULL` was parsed as type `TEXT NOT`, leaving `NULL` as the constraint tail
+and incorrectly reporting the column nullable. Auditor commit
+`a7eb9049b12ee2bb072fae488c3767482645c121` governed BL-058 before repair.
+
+The correction remained red-first and role-pure:
+
+- Inspector commit `a91ff982020d93d8d3a377699f8f3ebec15b6a56` established the
+  isolated nullable-column failure while 14 companion inventory cases passed;
+- Architect commit `782545b347585749871eb55274324618d515c544` recorded DII-123 and
+  made constraint keywords type boundaries while retaining explicit multi-word types;
+- Engineer commit `85f3330a18662eda7f3ba2faef89382579404276` replaced the
+  unconstrained second type identifier with deterministic supported forms; and
+- Inspector commit `f2b26aa6df6964fba9693747d7ce09c829a032e5` pinned ordinary
+  `NOT NULL`, `DOUBLE PRECISION`, `CHARACTER VARYING`, and
+  `TIMESTAMP WITH TIME ZONE` behavior.
+
+The focused sensor file passes 15 tests, the sensor typecheck is green, and the full
+Vitest floor passes 96 files / 892 tests / 8 declared skips. BL-058 is closed; the
+inventory schema, coverage source set, exclusions, and thresholds are unchanged.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
