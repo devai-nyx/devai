@@ -1,5 +1,7 @@
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { relative, resolve } from 'node:path';
+import { execFileSync } from '@devai-nyx/authority';
+import { validateRepositoryTarget } from '@devai-nyx/utils';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { resolve } from 'node:path';
 import {
   buildSensorReading,
   type SensorFinding,
@@ -55,9 +57,11 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
       sensorName: 'trace-resolve',
       sensorKind: 'trace_resolution',
       command,
-      status: 'skipped',
+      status: 'error',
       deterministic: true,
-      findings: [{ severity: 'info', code: 'no_trace', message: `${tracePath} does not exist` }],
+      findings: [
+        { severity: 'critical', code: 'no_trace', message: `${tracePath} does not exist` },
+      ],
     });
   }
 
@@ -141,20 +145,30 @@ export function senseTraceResolve(opts: TraceResolveOptions): SensorReading {
         });
         continue;
       }
-      const abs = resolve(opts.repoRoot, t.path);
-      const rel = relative(resolve(opts.repoRoot), abs);
-      const contained = rel.length > 0 && !rel.startsWith('..') && !rel.startsWith('/');
-      const isFile = contained && existsSync(abs) && statSync(abs).isFile();
-      const isExpectedTest =
-        t.target_type !== undefined && t.target_type !== 'test'
-          ? true
-          : /\.(?:test|spec)\.(?:ts|mjs)$/u.test(t.path);
-      if (!contained || !isFile || !isExpectedTest) {
+      const target = validateRepositoryTarget(
+        opts.repoRoot,
+        t.path,
+        t.target_type === undefined || t.target_type === 'test' ? 'test' : 'file',
+      );
+      let tracked = false;
+      if (target.ok) {
+        try {
+          execFileSync('git', ['ls-files', '--error-unmatch', '--', target.repositoryPath], {
+            cwd: opts.repoRoot,
+            encoding: 'utf8',
+            stdio: ['ignore', 'ignore', 'ignore'],
+          });
+          tracked = true;
+        } catch {
+          tracked = false;
+        }
+      }
+      if (!target.ok || !tracked) {
         missingTestPaths++;
         findings.push({
           severity: 'error',
           code: 'invalid_test_path',
-          message: `trace entry [${String(i)}] test [${String(j)}] path '${t.path}' is not a contained file of the declared kind`,
+          message: `trace entry [${String(i)}] test [${String(j)}] path '${t.path}' is not a contained, tracked file of the declared kind`,
         });
         continue;
       }

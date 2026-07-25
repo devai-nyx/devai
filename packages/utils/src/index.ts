@@ -6,5 +6,6 @@ export * from './glob-guards/index.js';
 export * from './logger.js';
 export * from './profile/index.js';
 export * from './redact.js';
+export * from './repository-target.js';
 export * from './state/index.js';
 export * from './templates/index.js';

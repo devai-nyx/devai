@@ -90,6 +90,14 @@ export function readClosures(repoRoot: string): PhaseClosureRecord[] {
     if (record.id !== name.slice(0, -'.json'.length)) {
       throw new Error(`phase closure ${name} declares mismatched id '${String(record.id)}'`);
     }
+    if (!validatePhaseClosure(record)) {
+      const errors = (validatePhaseClosure.errors ?? [])
+        .map((error) => `${error.instancePath || '/'} ${error.message ?? ''}`)
+        .join('; ');
+      throw new Error(
+        `phase closure ${name} does not validate against phase-closure.schema.json: ${errors}`,
+      );
+    }
     records.push(record);
   }
   return records.sort((a, b) => a.id.localeCompare(b.id));
