@@ -23,7 +23,7 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-119. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-127. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
@@ -36,6 +36,8 @@ the synthetic pull-request merge aggregation defect exposed by exact source CI.
 BL-118 records the test-fixture classification defect exposed by the BL-117
 red-first commit. BL-119 records the closure-ledger contract assumption exposed by
 the disposable production emission of PC-0003.
+BL-120 through BL-127 govern the confirmed and promoted findings from the first R-0003
+exact-candidate Opus review.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -44,7 +46,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Primary round | Records                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-119 |
-| R-0003        | BL-004, BL-005, BL-006                                                                                                                                                                    |
+| R-0003        | BL-004, BL-005, BL-006, BL-120–BL-127                                                                                                                                                     |
 | R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084                                                                                            |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
 | R-0006        | BL-026, BL-034, BL-035, BL-081                                                                                                                                                            |
@@ -59,7 +61,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Disposition                         | Governed records                                                                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–119 |
-| Open in prepared R-0003             | BL-004–006                                                                                                                                       |
+| Open in active R-0003               | BL-004–006, BL-120–127                                                                                                                           |
 | Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                                   |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
 | Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                                       |
@@ -1104,6 +1106,88 @@ Acceptance: the PC-0002 correction contract continues to prove that PC-0001 is
 preserved and superseded by PC-0002 without assuming that R-0001 is the repository's
 only effective closed round. The complete suite passes both before and after PC-0003
 is appended; PC-0001 and PC-0002 remain byte-identical.
+
+### BL-120 — Correct founding source provenance and crosswalk totality
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0003 first Claude Opus 5 exact-candidate review; predecessor Constitution 0.8.0@05dd242bf72334bfd683096aed380e8240b6b9aa`
+
+Priority: P0 before R-0003 source push. Primary round: R-0003.
+
+Acceptance: the live wrapper and a superseding decision identify predecessor 0.8.0;
+the 42-row ledger discloses every article delta, including Articles 18 and 30, and
+fully describes Article 7's authority changes; annex-marker wording matches actual
+markers; no article doctrine changes beyond the already-reviewed successor deltas.
+
+### BL-121 — Activate the decision-register container without laundering drafts
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0003 first Claude Opus 5 exact-candidate review; DII-150; DII-151`
+
+Priority: P0 before R-0003 source push. Primary round: R-0003.
+
+Acceptance: the register wrapper no longer denies authority to active entries, its
+date semantics do not predate the founding ceremony, provisional W03 wording is
+removed, draft entries remain explicitly non-authoritative, and contracts prove that
+container activation never changes an entry's lifecycle.
+
+### BL-122 — Resolve ADR affected rules and multi-source supersession
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0003 first Claude Opus 5 exact-candidate review; DII-149; ADR-005`
+
+Priority: P0 before R-0003 source push. Primary round: R-0003.
+
+Acceptance: ADR-005 names only real successor affected-rule paths or explicit frozen
+historical inputs; every multi-source `supersedes` list parses into the intended
+individual records; a contract rejects nonexistent live paths and opaque joined ids.
+
+### BL-123 — Distinguish retained glossary entries from R-0003 activation
+
+`type: backlog-item · status: draft · authority: Owner + Architect + Inspector + Auditor · provenance: R-0003 first Claude Opus 5 exact-candidate review; R-0003-GLOSSARY-OWNER-MARKS; DII-150`
+
+Priority: P0 before R-0003 source push. Primary round: R-0003.
+
+Acceptance: a corrective Owner mark records that GE-006/016/020/022 were already
+active and were retained after review; the Architect applies that distinction to live
+glossary guidance without changing any approved definition or lifecycle.
+
+### BL-124 — Materialize the ratified Constitution version pin
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector + Auditor · provenance: R-0003 first Claude Opus 5 exact-candidate review; R-0003 B5 materialization`
+
+Priority: P0 before R-0003 source push. Primary round: R-0003.
+
+Acceptance: `.devai/pin/versions.json` identifies Constitution 1.0.0 and an active
+materialized state, contains no predecessor-seed or wireframe label, and a contract
+binds it to the canonical Constitution rather than a hand-maintained expectation.
+
+### BL-125 — Preserve the load-bearing founding review inputs durably
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0003 first Claude Opus 5 exact-candidate review; REV-0001; REV-0003; REV-0006`
+
+Priority: P0 before R-0003 source push. Primary round: R-0003.
+
+Acceptance: exact REV-0001, REV-0003, and REV-0006 bytes are preserved in a durable
+governed path with hashes and attribution; live provenance resolves to those copies;
+the original scratch paths remain non-authoritative and disposable.
+
+### BL-126 — Bind the repaired exact candidate in an audit correction
+
+`type: backlog-item · status: draft · authority: Auditor · provenance: R-0003 first Claude Opus 5 exact-candidate review; R-0003-AS-BUILT`
+
+Priority: P0 before R-0003 source push. Primary round: R-0003.
+
+Acceptance: an append-only audit correction records every review-repair commit,
+corrects the B1 projection omission, cites fresh exact-candidate local gates and
+coverage, and preserves the failed first review as historical red evidence.
+
+### BL-127 — Make repository-reference projection checking current and deterministic
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector + Auditor · provenance: R-0003 first Claude Opus 5 exact-candidate review; scripts/generate-repository-reference-triage.mjs`
+
+Priority: P0 before R-0003 source push. Primary round: R-0003.
+
+Acceptance: the generator supports a no-write check mode against a caller-selected or
+current governed output, has no hardcoded closed-round destination, fails on drift,
+and participates in the exact local/CI gate without changing the projection schema.
 
 ## Carried guard map
 
