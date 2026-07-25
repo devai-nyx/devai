@@ -860,13 +860,13 @@
       "rationale": "Immutable historical text records the repository name used when that evidence was created."
     },
     {
-      "locator": "work/audit/R-0002-preflight/backlog-register.md:202:27:devai-nyx/devai",
+      "locator": "work/audit/R-0002-preflight/backlog-register.md:204:27:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "work/audit/R-0002-preflight/backlog-register.md:521:2:devai-nyx/devai",
+      "locator": "work/audit/R-0002-preflight/backlog-register.md:523:2:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
