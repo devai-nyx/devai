@@ -1065,6 +1065,19 @@ DII-120 remains controlling for lifecycle semantics: `active` may transition to
 `superseded_by: null`, never an array, so generated records enter the canonical
 scalar-or-null lifecycle without a repair step.
 
+### DII-129 — Required trace links have a fixed complete floor and a no-write check
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 second Claude Opus 5 correction; DII-125; BL-070`
+
+When canonical trace generation sets `require_test_links: true`, both invariant
+completeness floors are exactly `1`. The generator must fail if any canonical invariant
+lacks an assertion-bearing tracked test; it may not derive a lower required ratio from
+the incomplete population it is meant to judge.
+
+The production trace command has a check mode that computes expected bytes without
+writing `law/trace.json`, fails on incomplete inputs, and fails when committed bytes are
+stale. Local and remote CI invoke that check. Only the Architect materialization step
+may write the canonical trace after the Inspector-owned corpus changes.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
