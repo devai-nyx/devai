@@ -1050,6 +1050,21 @@ proof. When any batch attributes a write to `Machine`, that batch must carry suc
 full commit id. Human-only historical batches may omit a commit, and PC-0001 and
 PC-0002 remain byte-immutable.
 
+### DII-128 — Sealed-history verification requires complete, parseable history
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 second Claude Opus 5 correction; DII-120; BL-069; BL-071`
+
+A sealed-record integrity check is valid only against complete Git history. A shallow
+repository must produce a deterministic integrity finding and cannot report success;
+remote workflows that exercise the guard must fetch full history. After the first
+schema-valid sealing commit, an unreadable or malformed later revision is itself an
+integrity finding rather than an uncaught exception or a skipped transition.
+
+DII-120 remains controlling for lifecycle semantics: `active` may transition to
+`superseded` with one scalar replacement or to `tombstoned`; `superseded` and
+`tombstoned` are terminal. Governance scaffolding must therefore emit
+`superseded_by: null`, never an array, so generated records enter the canonical
+scalar-or-null lifecycle without a repair step.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
