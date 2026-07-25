@@ -10,7 +10,11 @@ import {
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, aroundEach, beforeEach, describe, expect, it } from 'vitest';
-import { buildBootstrapPlan, executeBootstrapPlan } from '../../src/bootstrap/index.js';
+import {
+  buildBootstrapPlan,
+  executeBootstrapPlan,
+  validateCanonicalPolicyContent,
+} from '../../src/bootstrap/index.js';
 import { withAuthorityHostTestScope } from './authority-host-test-scope.js';
 
 aroundEach((runTest) => withAuthorityHostTestScope(runTest));
@@ -107,6 +111,21 @@ describe('executeBootstrapPlan --force preserves provenance', () => {
     const plan = buildBootstrapPlan({ targetRoot: dir });
     const thresholds = plan.entries.find((entry) => entry.path === '.devai/config/thresholds.json');
     expect(thresholds?.content).not.toContain('0.0001');
+  });
+
+  it('schema-validates every canonical policy shape before materialization', () => {
+    expect(() =>
+      validateCanonicalPolicyContent(
+        'thresholds.json',
+        '{"schemaVersion":"1.0.0","coverage":{"lines":"green"}}',
+      ),
+    ).toThrow(/thresholds\.json.*schema/i);
+    expect(() =>
+      validateCanonicalPolicyContent(
+        'forbidden-actions.json',
+        '{"schemaVersion":"1.0.0","actions":"disabled"}',
+      ),
+    ).toThrow(/forbidden-actions\.json.*schema/i);
   });
 });
 

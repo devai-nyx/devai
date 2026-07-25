@@ -156,4 +156,32 @@ describe('canonical test-trace validation', () => {
       errors: [expect.objectContaining({ message: expect.stringContaining('parse error') })],
     });
   });
+
+  it.each([
+    '../../outside.test.ts',
+    'packages/demo/tests/unit',
+    'packages/demo/tests/unit/not-a-test.ts',
+  ])('rejects a trace target outside the shared executable-test contract: %s', (traceTarget) => {
+    const repo = root();
+    invariant(repo, 'INV-DEMO-001');
+    put(repo, 'packages/demo/tests/unit/a.test.ts', '// Invariants: INV-DEMO-001\n');
+    put(
+      repo,
+      'law/trace.json',
+      JSON.stringify({
+        test_corpus: [
+          {
+            path: 'packages/demo/tests/unit/a.test.ts',
+            invariant_ids: ['INV-DEMO-001'],
+            lifecycle: 'supported',
+          },
+        ],
+        invariants: [{ id: 'INV-DEMO-001', tests: [{ path: traceTarget }] }],
+      }),
+    );
+
+    expect(validateTestTrace({ repoRoot: repo }).errors).toContainEqual(
+      expect.objectContaining({ message: expect.stringContaining('contained executable test') }),
+    );
+  });
 });

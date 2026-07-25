@@ -2,6 +2,7 @@
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { afterEach, describe, expect, it } from 'vitest';
 import { senseTraceResolve } from '../../src/trace-resolve.js';
 
@@ -26,6 +27,17 @@ function makeFixture(tests: Array<{ path?: string; target_type?: 'test' | 'scrip
 }
 
 describe('senseTraceResolve trace non-vacuity', () => {
+  it('fails closed when the trace file is absent', () => {
+    const root = makeFixture([]);
+    rmSync(join(root, 'law/trace.json'));
+
+    const reading = senseTraceResolve({ repoRoot: root });
+    expect(reading.status).toBe('error');
+    expect(reading.findings).toContainEqual(
+      expect.objectContaining({ severity: 'critical', code: 'no_trace' }),
+    );
+  });
+
   it('does not count an invariant with no linked targets as traced', () => {
     const reading = senseTraceResolve({ repoRoot: makeFixture([]) });
 
@@ -62,6 +74,20 @@ describe('senseTraceResolve trace non-vacuity', () => {
     mkdirSync(join(root, 'tests'), { recursive: true });
     const reading = senseTraceResolve({ repoRoot: root });
 
+    expect(reading.status).toBe('fail');
+    expect(reading.findings).toContainEqual(
+      expect.objectContaining({ severity: 'error', code: 'invalid_test_path' }),
+    );
+  });
+
+  it('fails when an otherwise valid executable test path is not tracked', () => {
+    const root = makeFixture([{ path: 'tests/example.test.ts' }]);
+    mkdirSync(join(root, 'tests'), { recursive: true });
+    writeFileSync(join(root, 'tests/example.test.ts'), 'export {};\n');
+    execFileSync('git', ['init', '--quiet'], { cwd: root });
+    execFileSync('git', ['add', 'law'], { cwd: root });
+
+    const reading = senseTraceResolve({ repoRoot: root });
     expect(reading.status).toBe('fail');
     expect(reading.findings).toContainEqual(
       expect.objectContaining({ severity: 'error', code: 'invalid_test_path' }),

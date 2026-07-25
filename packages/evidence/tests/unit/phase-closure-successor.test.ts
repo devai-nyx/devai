@@ -75,6 +75,18 @@ describe('successor phase-closure binding', () => {
     ).toThrow(/PC-0001.*malformed/i);
   });
 
+  it('quarantines a parseable existing closure that violates the closure schema', () => {
+    expect(() =>
+      closePhase(
+        repoWithTwoClosures(),
+        draft({
+          merged_as: fullCommit,
+          release_disposition: 'none-preratification',
+        }),
+      ),
+    ).toThrow(/PC-0001.*does not validate.*phase-closure\.schema\.json/i);
+  });
+
   it('requires merged_as on PC-0003', () => {
     expect(() =>
       closePhase(repoWithTwoClosures(), draft({ release_disposition: 'none-preratification' })),
