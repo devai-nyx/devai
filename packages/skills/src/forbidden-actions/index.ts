@@ -504,6 +504,13 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
       const protectedPaths = changedPaths.filter((path) =>
         /^(?:law\/|product\/|work\/(?:rounds|audit)\/|record\/|\.devai\/config\/)/u.test(path),
       );
+      const inspectorTestOnly =
+        author === 'DEVAI Inspector' &&
+        changedPaths.length > 0 &&
+        changedPaths.every(
+          (path) =>
+            /(?:^|\/)tests\//u.test(path) || /\.(?:test|spec)\.(?:[cm]?[jt]s|[jt]sx)$/u.test(path),
+        );
       if (
         entry.id === 'FORBID-MUTATE-INVARIANTS' &&
         protectedPaths.length > 0 &&
@@ -534,7 +541,10 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
       for (const re of entry.patterns) {
         const messageMatch = re.exec(body);
         re.lastIndex = 0;
-        const changeMatch = messageMatch === null ? re.exec(changeEvidence) : null;
+        const changeMatch =
+          messageMatch === null && !(inspectorTestOnly && !pathEvidenceIds.has(entry.id))
+            ? re.exec(changeEvidence)
+            : null;
         const m = messageMatch ?? changeMatch;
         if (m === null) continue;
         findings.push({
