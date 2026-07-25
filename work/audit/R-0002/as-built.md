@@ -19,8 +19,9 @@ provenance:
 
 This report is chronological. The initial B8 observations and each correction snapshot
 are retained as historical evidence; they are not current-candidate claims. The
-latest current observation is **Second Opus correction** below. A final exact-candidate
-metric refresh and third independent review still precede source push. The later
+authoritative current observation is **Final exit-ladder re-close** below, against
+plant snapshot `448a423d5362468be4459486cabb4fb37488082b`. A third independent
+review still precedes source push. The later
 Architect closing decision, source merge, exact-main observation, and machine closure
 record remain part of the two-PR close and are not predicted here.
 
@@ -468,6 +469,49 @@ The third exact-candidate review remains mandatory. BL-063 still prohibits archi
 activation in R-0002, and BL-065 remains governed for R-0004; neither is relabelled
 green or treated as readiness.
 
+## Final exit-ladder re-close
+
+The post-review ladder found two additional source blockers before third review:
+
+- BL-072: Stage 1 reported 19 lint findings in assertion-bearing Inspector sources.
+  Auditor `76e8722deac74d78eb9db1519620398b13d9c58d` governed the red before
+  Inspector `baea69f5cc3b2906437cbd03411647771d894831` replaced unsafe
+  assertions and one unnecessary escape without changing production behavior or test
+  expectations.
+- BL-073: the literal global Prettier check then reported 12 active files. Auditor
+  `85bedf77ec5109821d307fb9dab38d3c464f621d` governed the red before
+  Engineer `bee40d0afec2e41a3c3289389dc844f1e2f7e493` formatted only
+  implementation paths and Inspector
+  `448a423d5362468be4459486cabb4fb37488082b` formatted only test paths.
+  DII-110 exclusions, immutable history, generated proof, thresholds, and source
+  selection were unchanged.
+
+Fresh exact execution after those repairs reports:
+
+- the full Vitest floor: 115/115 files, 1,038 passes, 8 declared skips;
+- Stage 1: workflow lint, 34-invariant/115-test no-write trace freshness, repository
+  lint, and typecheck pass;
+- Stage 2: build passes; T1 passes 66 files / 772 tests; T2 passes 31 files /
+  178 tests with 1 declared skip;
+- T4 passes 2 files / 4 tests; T5 passes 6 files / 25 tests; T6 passes 1 file /
+  3 tests;
+- Changeset classification passes with zero pending changesets;
+- the literal `pnpm exec prettier --check .` and `git diff --check` pass.
+
+The unchanged merged T1+T3 coverage command passes 75 files with 828 passing tests and
+7 declared skips:
+
+| Metric     | Covered / total | Reading | Policy floor |
+| ---------- | --------------- | ------: | -----------: |
+| Statements | 10,293 / 14,682 |  70.10% |          70% |
+| Branches   | 7,414 / 12,267  |  60.43% |          60% |
+| Functions  | 1,468 / 1,912   |  76.77% |          70% |
+| Lines      | 9,489 / 13,123  |  72.30% |          70% |
+
+BL-064 and BL-066 through BL-073 are closed at this observation. BL-063 and BL-065
+remain the only catalogued later-round residuals discovered by the two Opus reviews;
+neither permits an R-0002 skip, red gate, archive activation, or readiness claim.
+
 ## PC-0002 correction
 
 PC-0002 is a correction to R-0001, not the R-0002 closure. It was emitted by the
@@ -477,7 +521,7 @@ production machine verb after BL-049 passed. Its source proof epoch is
 
 ## Residuals and closing posture
 
-The source PR may merge only after the independent Claude Opus 5 review and exact
+The source PR may merge only after the third independent Claude Opus 5 review and exact
 candidate checks. After that merge, the closure-only branch must append the next
 machine PC record against the exact source merge SHA and verify final exact-main state.
 Every required source and exact-main workflow must be green; BL-017 is no longer an
