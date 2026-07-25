@@ -618,6 +618,22 @@ The correction remained red-first and role-pure:
   the claimed law/product/work/record/config surfaces. Focused execution passes 74
   tests and both affected builds.
 
+Exact local execution at clean pre-audit snapshot
+`44e75d1d4a9f85691020056fde7446bc5749c23f` reports:
+
+- the full Vitest floor passes 115 files / 1,060 tests with 8 declared skips;
+- Stage 1 passes workflow lint, 34-invariant/115-test no-write trace freshness, lint,
+  and typecheck;
+- Stage 2 passes the build, 66 T1 files / 781 tests, and 31 T2 files / 191 tests
+  with 1 declared skip;
+- Stage 3 passes 75 files / 837 tests with 7 declared skips at statements 70.31%
+  (10,356/14,727), branches 60.55% (7,454/12,310), functions 77.12%
+  (1,477/1,915), and lines 72.54% (9,551/13,166);
+- T4 passes 2 files / 4 tests, T5 passes 6 files / 25 tests, and T6 passes 1 file /
+  3 tests; and
+- changesets, literal global Prettier, `git diff --check`, and worktree cleanliness
+  pass.
+
 BL-074, BL-077, BL-078, BL-083, and BL-085 through BL-093 are closed at this
 observation. The fourth review's locale-sensitive reference-generation advisory
 remains explicitly within BL-065/R-0004; it is not relabelled complete. A fifth
