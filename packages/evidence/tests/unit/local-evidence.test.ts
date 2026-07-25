@@ -1,3 +1,4 @@
+// Invariants: INV-DEVAI-016, INV-DEVAI-018
 import { execFileSync } from 'node:child_process';
 import {
   mkdirSync,

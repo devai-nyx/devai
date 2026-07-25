@@ -243,4 +243,4 @@ describe('assessScorecard per-cell-class narrative (Phase 23.I, closes D-A-16)',
     expect(assessment.narrative).not.toContain('Per-cell signals:');
   });
 });
-// Invariants: INV-DEVAI-006
+// Invariants: INV-DEVAI-006, INV-DEVAI-011

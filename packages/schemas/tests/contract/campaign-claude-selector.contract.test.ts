@@ -1,3 +1,4 @@
+// Invariants: INV-DEVAI-001
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';

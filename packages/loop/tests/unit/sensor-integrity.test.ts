@@ -72,4 +72,4 @@ describe('detectRelabeledSensors', () => {
     expect(groups[0]?.reading_ids).toEqual(['a', 'b']);
   });
 });
-// Invariants: INV-DEVAI-002, INV-DEVAI-012
+// Invariants: INV-DEVAI-002, INV-DEVAI-007, INV-DEVAI-012

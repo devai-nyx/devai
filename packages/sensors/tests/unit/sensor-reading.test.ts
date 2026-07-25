@@ -55,4 +55,4 @@ describe('buildSensorReading', () => {
     ).toThrow(/sensor-reading\.schema\.json/);
   });
 });
-// Invariants: INV-DEVAI-002, INV-DEVAI-012
+// Invariants: INV-DEVAI-002, INV-DEVAI-012, INV-INVENTORY-002, INV-INVENTORY-003, INV-INVENTORY-004

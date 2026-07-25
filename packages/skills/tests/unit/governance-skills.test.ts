@@ -1,3 +1,4 @@
+// Invariants: INV-DEVAI-001
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
