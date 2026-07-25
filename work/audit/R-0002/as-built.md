@@ -23,7 +23,7 @@ decision, source merge, exact-main observation, and machine closure record are p
 the two-PR close and therefore were not predicted by the initial B8 observation.
 Post-review corrections discovered by the literal shared exit floor are appended
 below through closure-validation candidate
-`f0c8e7c1b9f74567bf7a47a493145907360f9b4e`.
+`0f222c88bd0ad23e5c23d6380d86a6b2ee608285`.
 
 The round re-binds frozen predecessor truth and repairs the scoped operational
 contracts. It ratifies nothing, releases nothing, deploys nothing, and transfers no
@@ -309,6 +309,34 @@ The correction remained red-first and role-pure:
 
 The focused ledger suite passes 19 tests and the full Vitest floor passes 96 files /
 880 tests / 8 declared skips. No ADR status, body, or replacement link changed.
+
+## OM-004 coverage strengthening
+
+Owner mandate OM-004 authorized behavior-focused Inspector tests during the Claude
+quota pause without changing source selection, exclusions, assertions, production
+behavior, or the 70/60/70/70 policy. Architect commit
+`6b118af051ae95f1283ca1bc08012791a4461ddb` recorded DII-119’s non-closing boundary.
+
+Inspector commit `2a03c556acddbab3a8d3edb6fadfcbd93946458e` added triage
+classification, deterministic identity, dispatch, synchronous tie-break, Article-23
+breaker, scorecard filter, grid, narrative, transpose, color, caption, brief, and JSON
+cases. The BL-057 red-first and closing Inspector commits added governance parsing,
+record integrity, git-history sealing, citation, archive, rendering, and round-ledger
+cases. The production source set and coverage configuration are unchanged.
+
+The fresh merged T1+T3 run executes 57 files / 671 tests / 7 declared skips. Relative
+to the OM-004 baseline, it adds 30 passing tests and improves:
+
+| Metric     | Baseline | Current | Delta |
+| ---------- | -------: | ------: | ----: |
+| Statements |   28.78% |  31.61% | +2.83 |
+| Branches   |   27.15% |  29.88% | +2.73 |
+| Functions  |   31.84% |  35.29% | +3.45 |
+| Lines      |   29.77% |  32.74% | +2.97 |
+
+The unchanged thresholds still fail at statements 70%, branches 60%, functions 70%,
+and lines 70%. The command therefore remains honestly red under BL-017, which R-0006
+still owns; no closure or readiness is inferred from the uplift.
 
 ## PC-0002 correction
 
