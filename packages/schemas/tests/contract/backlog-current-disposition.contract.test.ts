@@ -25,14 +25,15 @@ describe('R-0002 backlog current disposition', () => {
     }
   });
 
-  it('moves repaired fifth-review items into the compact closed set only after audit', () => {
+  it('moves repaired review items into the compact closed set only after audit', () => {
     const source = readFileSync(REGISTER, 'utf8');
     const closedRow = source.split('\n').find((line) => line.startsWith('| Closed in R-0002 '));
     expect(closedRow).toBeDefined();
     expect(closedRow).toContain('BL-066–079');
     expect(closedRow).toContain('BL-082–083');
     expect(closedRow).toContain('BL-085–104');
+    expect(closedRow).toContain('BL-107–116');
     expect(source).not.toMatch(/^\| Reopened in R-0002\s+\|/mu);
-    expect(source).toMatch(/^\| Awaiting exact seventh review\/close\s+\| BL-105\s+\|/mu);
+    expect(source).toMatch(/^\| Awaiting final exact review\/close\s+\| BL-105\s+\|/mu);
   });
 });
