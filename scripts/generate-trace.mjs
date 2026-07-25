@@ -3,7 +3,9 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 
-const root = resolve(process.argv[2] ?? '.');
+const args = process.argv.slice(2);
+const check = args.includes('--check');
+const root = resolve(args.find((argument) => !argument.startsWith('--')) ?? '.');
 const invariantFiles = execFileSync(
   'find',
   ['law/invariants', '-maxdepth', '1', '-type', 'f', '-name', 'INV-*.json'],
@@ -75,14 +77,20 @@ const invariants = invariantIds.map((id) => ({
       target_type: 'test',
     })),
 }));
-const tracedWithTests = invariants.filter((entry) => entry.tests.length > 0).length;
+const untraced = invariants.filter((entry) => entry.tests.length === 0).map((entry) => entry.id);
+if (untraced.length > 0) {
+  process.stderr.write(
+    `trace generation refused: ${String(untraced.length)} invariant(s) lack tracked tests\n${untraced.join('\n')}\n`,
+  );
+  process.exit(1);
+}
 const trace = {
   schemaVersion: '1.0.0',
   version: '1.0.0',
   meta: {
     completeness: {
-      min_invariants_with_tests_ratio: tracedWithTests / invariants.length,
-      min_must_invariants_with_tests_ratio: tracedWithTests / invariants.length,
+      min_invariants_with_tests_ratio: 1,
+      min_must_invariants_with_tests_ratio: 1,
       require_doc_links: false,
       require_test_links: true,
     },
@@ -106,7 +114,25 @@ const trace = {
     containment: { command: 'pnpm test:t6' },
   },
 };
-writeFileSync(join(root, 'law/trace.json'), `${JSON.stringify(trace, null, 2)}\n`);
+const output = `${JSON.stringify(trace, null, 2)}\n`;
+const tracePath = join(root, 'law/trace.json');
+if (check) {
+  let committed = '';
+  try {
+    committed = readFileSync(tracePath, 'utf8');
+  } catch {
+    process.stderr.write('trace materialization stale: law/trace.json is missing\n');
+    process.exit(1);
+  }
+  if (committed !== output) {
+    process.stderr.write(
+      'trace materialization stale: law/trace.json differs from deterministic inputs\n',
+    );
+    process.exit(1);
+  }
+} else {
+  writeFileSync(tracePath, output);
+}
 process.stdout.write(
-  `${String(invariants.length)} invariants and ${String(testRows.length)} tests materialized\n`,
+  `${String(invariants.length)} invariants and ${String(testRows.length)} tests ${check ? 'verified' : 'materialized'}\n`,
 );
