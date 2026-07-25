@@ -892,6 +892,21 @@ then emits PC-0003 against the exact source merge SHA, using DII-105 as declarat
 DII-118 as closing decision. R-0002 remains draft, ratifies nothing, releases nothing,
 deploys nothing, and transfers no readiness or evidence standing.
 
+### DII-119 — Pre-review coverage strengthening is bounded and non-closing
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 Owner-directed quota-window work; OM-004; BL-017`
+
+OM-004 permits R-0002 to add behavior-focused Inspector tests during the Claude quota
+pause before the exact-candidate Opus 5 review. The work may increase measured
+coverage, but it does not move the 70/60/70/70 thresholds, narrow the coverage source
+set, exclude files, weaken assertions, change production behavior, or claim BL-017
+closed.
+
+R-0006 retains ownership of complete BL-017 closure. R-0002 records the fresh readings
+and preserves `coverage-t1-t3` as a failing gate unless every unchanged threshold
+actually passes. Any production defect exposed by the added tests requires its own
+gapless Auditor record and role-separated repair before the source candidate can
+advance.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
