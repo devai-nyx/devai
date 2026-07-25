@@ -137,6 +137,22 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
       `phase close: draft does not validate against phase-closure.schema.json: ${errors}`,
     );
   }
+  const unacknowledgedFailedGates = Object.entries(record.gates)
+    .filter(([, result]) => result.status === 'fail')
+    .map(([gate]) => gate)
+    .filter(
+      (gate) =>
+        !record.validation_criteria.some(
+          (criterion) =>
+            criterion.verdict === 'fail' &&
+            `${criterion.criterion}\n${criterion.evidence ?? ''}`.includes(gate),
+        ),
+    );
+  if (unacknowledgedFailedGates.length > 0) {
+    throw new Error(
+      `phase close: failed gates require explicit failing validation criteria naming each gate: ${unacknowledgedFailedGates.join(', ')}`,
+    );
+  }
   const declaring = parseDecisionId(record.declaring_decision);
   const closing = parseDecisionId(record.closing_decision);
   if (declaring.namespace !== closing.namespace) {
