@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { basename, join, resolve } from 'node:path';
 import { existsSync, readFileSync } from 'node:fs';
+import { parseConstitutionVersion } from '@devai-nyx/skills';
 import type { RegistryEntry } from '../define-command.js';
 
 type JsonRecord = Record<string, unknown>;
@@ -287,13 +288,18 @@ export function authorityBindings(root: string, packageVersion: string) {
   const selfConstitution = join(resolve(root), 'law/constitution.md');
   const pinnedConstitution = join(resolve(root), '.devai/pin/constitution.md');
   const constitutionPath = existsSync(selfConstitution) ? selfConstitution : pinnedConstitution;
-  const constitutionText = existsSync(constitutionPath)
-    ? readFileSync(constitutionPath, 'utf8')
-    : '# DEVAI Constitution\n\n**Version:** 0.5.0\n';
-  const constitutionVersion =
-    /\*\*(?:Candidate version|Version):\*\*\s*([0-9]+\.[0-9]+\.[0-9]+)/u.exec(
-      constitutionText,
-    )?.[1] ?? '0.5.0';
+  if (!existsSync(constitutionPath)) {
+    throw new Error(
+      `authority policy: Constitution not found at ${selfConstitution} or ${pinnedConstitution}`,
+    );
+  }
+  const constitutionText = readFileSync(constitutionPath, 'utf8');
+  const constitutionVersion = parseConstitutionVersion(constitutionText);
+  if (constitutionVersion === null) {
+    throw new Error(
+      `authority policy: Constitution version marker is missing in ${constitutionPath}`,
+    );
+  }
   return {
     repository_id: repositoryIdFor(root),
     package_binding: { name: '@devai-nyx/cli', version: packageVersion },
