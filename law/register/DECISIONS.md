@@ -1434,6 +1434,36 @@ DII-143 as closing decision. Its release disposition remains
 their existing review and serial entry gates. Nothing is ratified, released,
 deployed, published, or declared ready by this decision.
 
+### DII-144 — Repair bounded merge inspection after exact source CI
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0002 exact-CI repair; OM-007; DII-105; DII-137; DII-143; GitHub Actions run 30171205110@b55685762252d3af1d0b483746ab7a8c843b8532; BL-095; Inspector d8c9c22a2a02cfb457cb22d6c99e62e5085ab70f; Auditor 48bc9dc600991afc8576f4d9d0014ba9c6f5da59; Engineer 5552ddfc1468b10d8cce2b7d2f7dcb91561628c4; Auditor 375c19d6dc375d731e14faf76fe13574ec432b0f`
+
+DII-144 supersedes DII-143 only as the R-0002 source-closing judgment. Exact source
+CI run `30171205110` exposed a bounded-inspection defect at source candidate
+`b55685762252d3af1d0b483746ab7a8c843b8532`: the synthetic pull-request merge patch
+exceeded Node's one-megabyte default child-process buffer, so the forbidden-action
+scanner failed closed as `FORBIDDEN-SCAN-UNAVAILABLE` before it could classify the
+protected deletion evidence.
+
+Inspector `d8c9c22` reproduced that failure red-first with a 1.1 MiB merge payload.
+Auditor `48bc9dc` reopened BL-095 against the exact failed run. Engineer `5552ddf`
+introduced an explicit 16 MiB ceiling for both merge name-status and patch
+inspection; the scanner remains bounded and fail-closed above that ceiling. The
+focused 18-test forbidden-action suite, affected package build, and complete
+1,093-pass repository floor then passed. Auditor `375c19d` re-closed BL-095 locally
+while retaining the failed run as historical red evidence.
+
+The correction changes no authority, production, release, review, or evidence
+threshold. OM-007 still replaces only the additional final Opus review. The exact
+candidate containing DII-144 and fresh deterministic references must pass the full
+local ladder and all required GitHub checks before merge. Its exact merge SHA must
+then pass exact-main checks before the closure-only branch may emit PC-0003 through
+the production verb.
+
+PC-0003 uses DII-105 as historical declaration, DII-137 as amended-plan binding, and
+DII-144 as closing decision. Its release disposition remains
+`none-preratification`. Nothing is ratified, released, deployed, published, or
+declared ready by this repair.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
