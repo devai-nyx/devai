@@ -138,6 +138,9 @@ function buildFixture(): string {
         ip_address inet,
         balance numeric(10, 2) DEFAULT 0,
         active boolean DEFAULT true,
+        score double precision NOT NULL,
+        display_name character varying(64) NOT NULL,
+        seen_at timestamp with time zone NOT NULL,
         role_id uuid REFERENCES auth.roles(id),
         CONSTRAINT users_pk PRIMARY KEY (id)
       );
@@ -367,6 +370,18 @@ describe('data and coverage inventory sensors', () => {
       retention: 'P1Y',
     });
     expect(users?.columns.find((column) => column.name === 'active')?.default).toBe('true');
+    expect(users?.columns.find((column) => column.name === 'score')).toMatchObject({
+      type: 'double precision',
+      nullable: false,
+    });
+    expect(users?.columns.find((column) => column.name === 'display_name')).toMatchObject({
+      type: 'character varying(64)',
+      nullable: false,
+    });
+    expect(users?.columns.find((column) => column.name === 'seen_at')).toMatchObject({
+      type: 'timestamp with time zone',
+      nullable: false,
+    });
     expect(result.bodyPath).toBeNull();
   });
 
