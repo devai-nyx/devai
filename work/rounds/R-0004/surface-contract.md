@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    OM-002; DII-162; DII-193; BL-163; BL-165; BL-169; BL-172; BL-174; BL-180; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION,
+    OM-002; DII-162; DII-194; BL-163; BL-165; BL-169; BL-172; BL-174; BL-180; BL-181; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; R-0004-SOURCE-DECISION-SHA-CORRECTION,
   ]
 ---
 
@@ -79,6 +79,13 @@ existing time and duration masks and omits only the exact fixed-fixture per-file
 line selected by CI. The subprocess output retained as evidence remains byte-for-byte
 raw, passed/failed summary metrics remain visible, and no characterization baseline is
 recaptured.
+
+Governed forty-hex Git identities must resolve locally to their declared object kind.
+Historical foreign, predecessor, transient-merge, and intentionally invalid review
+specimens are admitted only through the canonical exception registry and only at their
+exact classified paths. CI scans the governed surface and fails closed on an unresolved,
+wrong-kind, or newly misplaced identity; it does not treat an exception value as a
+repository-wide waiver.
 
 R-0004 implements a governed surface and package topology only. It publishes, tags,
 releases, deploys, promotes, re-earns, or declares ready nothing.

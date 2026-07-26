@@ -2622,6 +2622,28 @@ the refreshed handoff must restart the complete ladder and receive a fresh read-
 review through literal `claude-opus-5`, with no fallback, before source push. The claims
 ceiling and every external human gate remain unchanged.
 
+### DII-194 — Admit the governed SHA-reference repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 tenth-Opus repair; DII-193; BL-181; R-0004-SOURCE-DECISION-SHA-CORRECTION; Auditor 832da68`
+
+DII-194 supersedes DII-193 only as the R-0004 source-closing judgment. The tenth exact
+candidate Opus review found two fabricated forty-hex commit expansions and the absence
+of a repository-wide recurrence guard. The red-first repair corrects both active
+references and requires every governed forty-hex identity to resolve locally to its
+declared Git object kind or to an exact path-scoped historical exception. The batched
+check is part of strict governance and treats no exception value as a repository-wide
+waiver.
+
+The complete ladder passed on exact repaired snapshot
+`fd99ab7deaa1702467b6d8f9c4d6a98f4372b87e`: T1 passed 71 files / 838 tests, T2 passed
+38 files / 241 tests plus one declared skip, the root porcelain passed 127 files / 1,167
+tests plus eight declared skips, merged T1+T3 coverage passed at 71.23% statements,
+61.79% branches, 77.62% functions, and 73.25% lines, the governed SHA-reference check
+resolved 245 local objects and classified 8 historical specimens, and all eleven
+public-package dry-runs passed. The next clean commit containing DII-194, the refreshed
+contract, and the refreshed handoff must restart the complete ladder and receive a fresh
+read-only review through literal `claude-opus-5`, with no fallback, before source push.
+The claims ceiling and every external human gate remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
