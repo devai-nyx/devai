@@ -23,7 +23,7 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-138. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-139. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
@@ -47,6 +47,7 @@ hash-bound immutable review copies.
 BL-131 governs the T2 formatting-exclusion guard exposed by the bounded BL-130 repair.
 BL-132 governs the stale active ADR roster index found by the second R-0003 Opus review.
 BL-133 through BL-138 govern the six blockers from the third R-0003 Opus review.
+BL-139 governs the deterministic trace staleness introduced by the six-contract Inspector file.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -55,7 +56,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Primary round | Records                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-119 |
-| R-0003        | BL-004, BL-005, BL-006, BL-120–BL-138                                                                                                                                                     |
+| R-0003        | BL-004, BL-005, BL-006, BL-120–BL-139                                                                                                                                                     |
 | R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084                                                                                            |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
 | R-0006        | BL-026, BL-034, BL-035, BL-081                                                                                                                                                            |
@@ -70,7 +71,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Disposition                         | Governed records                                                                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–119 |
-| Open in active R-0003               | BL-004–006, BL-120–138                                                                                                                           |
+| Open in active R-0003               | BL-004–006, BL-120–139                                                                                                                           |
 | Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                                   |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
 | Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                                       |
@@ -1316,6 +1317,17 @@ Acceptance: an active governed disclosure names the seven replay commits whose r
 authors retained a human cherry-pick committer, binds each to its role-pure sibling
 original and byte-equivalent role-scoped change, records the procedural defect without
 waiving future identity requirements, and is contract-checked before source push.
+
+### BL-139 — Refresh trace after the third-review Inspector contract
+
+`type: backlog-item · status: draft · authority: Architect + Auditor · provenance: R-0003 exact ladder at 8273349 Stage 1; deterministic trace no-write check`
+
+Priority: P0 before R-0003 source push. Primary round: R-0003.
+
+Acceptance: Architect regenerates `law/trace.json` from the unchanged 34 invariants and
+the new executable Inspector path; trace no-write and resolution checks pass with no
+missing or untraced invariant; the source-closing decision and complete ladder restart
+bind the refreshed candidate.
 
 ## Carried guard map
 
