@@ -1,7 +1,8 @@
 #!/usr/bin/env node
+import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve, sep } from 'node:path';
 
 function option(name) {
   const index = process.argv.indexOf(name);
@@ -26,6 +27,36 @@ function defaultBase() {
   return '';
 }
 
+function observation(sha) {
+  const [author, subject] = git(['show', '-s', '--format=%an%x00%s', sha]).split('\0');
+  const paths = git(['diff-tree', '--no-commit-id', '--name-only', '-r', sha])
+    .split('\n')
+    .filter(Boolean);
+  const token = /\br([0-9]{4})\b/iu.exec(subject ?? '')?.[1];
+  return { sha, author, subject, paths, round: token === undefined ? null : `R-${token}` };
+}
+
+function substantiveEngineer(commit) {
+  return (
+    commit.author === 'DEVAI Engineer' &&
+    commit.paths.some((path) =>
+      /^(?:packages\/|scripts\/|\.github\/|package\.json$|pnpm-lock\.yaml$)/u.test(path),
+    )
+  );
+}
+
+function containedEvidencePath(value) {
+  if (typeof value !== 'string' || !value.startsWith('work/audit/')) return null;
+  const absolute = resolve(repoRoot, value);
+  const auditRoot = resolve(repoRoot, 'work/audit');
+  if (absolute !== auditRoot && !absolute.startsWith(`${auditRoot}${sep}`)) return null;
+  return absolute;
+}
+
+function sha256(value) {
+  return createHash('sha256').update(value).digest('hex');
+}
+
 const base = option('--base') ?? defaultBase();
 const head = option('--head') ?? 'HEAD';
 const policy = JSON.parse(
@@ -38,75 +69,183 @@ const commits =
     : git(['rev-list', '--reverse', `${base}..${head}`])
         .split('\n')
         .filter(Boolean);
-const observations = commits.map((sha) => {
-  const [author, subject] = git(['show', '-s', '--format=%an%x00%s', sha]).split('\0');
-  const paths = git(['diff-tree', '--no-commit-id', '--name-only', '-r', sha])
-    .split('\n')
-    .filter(Boolean);
-  const token = /\br([0-9]{4})\b/iu.exec(subject ?? '')?.[1];
-  return { sha, author, subject, paths, round: token === undefined ? null : `R-${token}` };
-});
-
+const observations = commits.map(observation);
+const bySha = new Map(observations.map((commit, index) => [commit.sha, { commit, index }]));
 const findings = [];
-for (const [index, commit] of observations.entries()) {
-  if (commit.round !== null && exceptions.has(commit.round)) continue;
-  const prior = observations.slice(0, index);
-  const substantiveEngineer =
-    commit.author === 'DEVAI Engineer' &&
-    commit.paths.some((path) =>
-      /^(?:packages\/|scripts\/|\.github\/|package\.json$|pnpm-lock\.yaml$)/u.test(path),
-    );
-  if (substantiveEngineer) {
-    if (commit.round === null) {
+const bindings = Array.isArray(policy.bindings) ? policy.bindings : [];
+if (!Array.isArray(policy.bindings)) {
+  findings.push({
+    rule: 'binding-registry',
+    sha: null,
+    message: 'policy.bindings must be an array',
+  });
+}
+
+const implementationOwners = new Map();
+for (const binding of bindings) {
+  if (binding === null || typeof binding !== 'object' || Array.isArray(binding)) {
+    findings.push({ rule: 'binding-shape', sha: null, message: 'binding must be an object' });
+    continue;
+  }
+  const implementationCommits = binding.implementation_commits;
+  const lawCommits = binding.law_commits;
+  const redEvidence = binding.red_evidence;
+  if (
+    typeof binding.round !== 'string' ||
+    !Array.isArray(implementationCommits) ||
+    implementationCommits.length === 0 ||
+    !Array.isArray(lawCommits) ||
+    lawCommits.length === 0 ||
+    redEvidence === null ||
+    typeof redEvidence !== 'object' ||
+    Array.isArray(redEvidence)
+  ) {
+    findings.push({ rule: 'binding-shape', sha: null, message: 'binding fields are incomplete' });
+    continue;
+  }
+  for (const sha of implementationCommits) {
+    const owners = implementationOwners.get(sha) ?? [];
+    owners.push(binding);
+    implementationOwners.set(sha, owners);
+  }
+
+  const inRangeImplementations = implementationCommits.map((sha) => bySha.get(sha)).filter(Boolean);
+  if (inRangeImplementations.length === 0) continue;
+  for (const sha of implementationCommits) {
+    const candidate = bySha.get(sha);
+    if (!candidate || !substantiveEngineer(candidate.commit)) {
+      findings.push({
+        rule: 'implementation-commit',
+        sha,
+        message: 'bound implementation is absent from the range or not substantive Engineer work',
+      });
+    } else if (candidate.commit.round !== binding.round) {
       findings.push({
         rule: 'round-attribution',
-        sha: commit.sha,
-        message: 'Engineer commit lacks an rNNNN subject token',
-      });
-      continue;
-    }
-    const priorRound = prior.filter((candidate) => candidate.round === commit.round);
-    if (!priorRound.some((candidate) => candidate.author === 'DEVAI Architect')) {
-      findings.push({
-        rule: 'law-before-implementation',
-        sha: commit.sha,
-        message: `no prior Architect commit for ${commit.round}`,
-      });
-    }
-    if (
-      !priorRound.some(
-        (candidate) =>
-          candidate.author === 'DEVAI Inspector' &&
-          candidate.paths.some((path) => path.startsWith('tests/') || path.includes('/tests/')),
-      )
-    ) {
-      findings.push({
-        rule: 'red-before-repair',
-        sha: commit.sha,
-        message: `no prior Inspector contract commit for ${commit.round}`,
+        sha,
+        message: `binding round ${binding.round} does not match commit subject`,
       });
     }
   }
-  const machineRecord =
-    commit.author === 'DEVAI Machine' && commit.paths.some((path) => path.startsWith('record/'));
-  if (machineRecord) {
-    const hasShape = prior.some(
-      (candidate) =>
-        candidate.author === 'DEVAI Architect' &&
-        candidate.paths.some((path) => path.startsWith('law/schemas/')),
-    );
-    const hasVerb = prior.some(
-      (candidate) =>
-        candidate.author === 'DEVAI Engineer' &&
-        candidate.paths.some((path) => path.startsWith('packages/')),
-    );
-    if (!hasShape || !hasVerb) {
+
+  const implementationIndexes = inRangeImplementations.map(({ index }) => index);
+  const firstImplementation = Math.min(...implementationIndexes);
+  for (const sha of lawCommits) {
+    const candidate = bySha.get(sha);
+    if (
+      !candidate ||
+      candidate.commit.author !== 'DEVAI Architect' ||
+      candidate.index >= firstImplementation ||
+      !candidate.commit.paths.some(
+        (path) => path.startsWith('law/') || path.startsWith('work/rounds/'),
+      )
+    ) {
       findings.push({
-        rule: 'shape-before-machine-record',
-        sha: commit.sha,
-        message: 'Machine record lacks prior schema or validated implementation verb',
+        rule: 'law-before-implementation',
+        sha,
+        message: 'bound law must be prior Architect law or round governance in this range',
       });
     }
+  }
+
+  const redCommit = typeof redEvidence.commit === 'string' ? bySha.get(redEvidence.commit) : null;
+  const redTests = Array.isArray(redEvidence.tests) ? redEvidence.tests : [];
+  if (
+    !redCommit ||
+    redCommit.commit.author !== 'DEVAI Inspector' ||
+    redCommit.index >= firstImplementation ||
+    redTests.length === 0 ||
+    redTests.some(
+      (path) =>
+        typeof path !== 'string' ||
+        (!path.startsWith('tests/') && !path.includes('/tests/')) ||
+        !redCommit.commit.paths.includes(path),
+    ) ||
+    !Number.isInteger(redEvidence.observed_exit) ||
+    redEvidence.observed_exit === 0 ||
+    typeof redEvidence.command !== 'string' ||
+    redEvidence.command.length === 0
+  ) {
+    findings.push({
+      rule: 'red-before-repair',
+      sha: redEvidence.commit ?? null,
+      message: 'bound red evidence must be an exact prior failing Inspector test commit',
+    });
+  }
+
+  const evidencePath = containedEvidencePath(redEvidence.evidence_path);
+  let evidence = null;
+  if (
+    evidencePath === null ||
+    !existsSync(evidencePath) ||
+    typeof redEvidence.evidence_sha256 !== 'string' ||
+    sha256(readFileSync(evidencePath)) !== redEvidence.evidence_sha256
+  ) {
+    findings.push({
+      rule: 'red-evidence-artifact',
+      sha: redEvidence.commit ?? null,
+      message: 'red evidence artifact is missing, outside work/audit, or hash-mismatched',
+    });
+  } else {
+    try {
+      evidence = JSON.parse(readFileSync(evidencePath, 'utf8'));
+    } catch {
+      findings.push({
+        rule: 'red-evidence-artifact',
+        sha: redEvidence.commit ?? null,
+        message: 'red evidence artifact is not JSON',
+      });
+    }
+  }
+  const observed = Array.isArray(evidence?.observations)
+    ? evidence.observations.find((entry) => entry?.commit === redEvidence.commit)
+    : null;
+  if (
+    observed?.command !== redEvidence.command ||
+    observed?.exit_code !== redEvidence.observed_exit ||
+    JSON.stringify(observed?.tests) !== JSON.stringify(redTests)
+  ) {
+    findings.push({
+      rule: 'red-evidence-artifact',
+      sha: redEvidence.commit ?? null,
+      message: 'red evidence artifact does not bind the declared command, exit, and tests',
+    });
+  }
+}
+
+for (const commit of observations.filter(substantiveEngineer)) {
+  if (commit.round !== null && exceptions.has(commit.round)) continue;
+  const owners = implementationOwners.get(commit.sha) ?? [];
+  if (owners.length !== 1) {
+    findings.push({
+      rule: 'implementation-binding',
+      sha: commit.sha,
+      message: `substantive Engineer commit must have exactly one binding; observed ${String(owners.length)}`,
+    });
+  }
+}
+
+for (const [index, commit] of observations.entries()) {
+  const machineRecord =
+    commit.author === 'DEVAI Machine' && commit.paths.some((path) => path.startsWith('record/'));
+  if (!machineRecord) continue;
+  const prior = observations.slice(0, index);
+  const hasShape = prior.some(
+    (candidate) =>
+      candidate.author === 'DEVAI Architect' &&
+      candidate.paths.some((path) => path.startsWith('law/schemas/')),
+  );
+  const hasVerb = prior.some(
+    (candidate) =>
+      candidate.author === 'DEVAI Engineer' &&
+      candidate.paths.some((path) => path.startsWith('packages/')),
+  );
+  if (!hasShape || !hasVerb) {
+    findings.push({
+      rule: 'shape-before-machine-record',
+      sha: commit.sha,
+      message: 'Machine record lacks prior schema or validated implementation verb',
+    });
   }
 }
 
@@ -122,6 +261,6 @@ else if (result.ok)
   process.stdout.write(`governed sequencing: PASS (${String(commits.length)} commits)\n`);
 else
   process.stderr.write(
-    `governed sequencing: FAIL\n${findings.map((finding) => `${finding.rule} ${finding.sha}: ${finding.message}`).join('\n')}\n`,
+    `governed sequencing: FAIL\n${findings.map((finding) => `${finding.rule} ${finding.sha ?? '-'}: ${finding.message}`).join('\n')}\n`,
   );
 process.exitCode = result.ok ? 0 : 1;
