@@ -1721,6 +1721,57 @@ handoff agree on one latest closing DII; the Architect refreshes them atomically
 sixth-review failure is paired with a symmetric correction before a new closing DII,
 complete ladder restart, and fresh literal `claude-opus-5` review.
 
+### BL-175 — Gate the eleven-package pack surface before R-0008
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector · provenance: R-0004 seventh exact-candidate Claude Opus 5 PASS F1–F2; candidate 344638a; R-0004-OPUS-CLOSE-REVIEW-7-PASS`
+
+Priority: P1 before R-0008. Primary round: R-0007 or R-0008 preparation.
+
+Acceptance: `@devai-nyx/core@1.0.0` has an intentional Changesets disposition; CI runs
+`npm pack --dry-run --ignore-scripts --json` for all eleven public packages and asserts
+the exact package set plus core's six-path archive contract; no publish occurs.
+
+### BL-176 — Scope historical closing claims to their commits
+
+`type: backlog-item · status: draft · authority: Architect + Auditor · provenance: R-0004 seventh exact-candidate Claude Opus 5 PASS F3; candidate 344638a; R-0004-OPUS-CLOSE-REVIEW-7-PASS`
+
+Priority: P2. Primary round: R-0005 documentation and record reconciliation.
+
+Acceptance: superseded closing decisions and paired audit corrections use explicitly
+commit-scoped wording when describing what the active contract cited at that snapshot;
+BL-174 retains the same scoped-phrasing requirement for future closing DIIs.
+
+### BL-177 — Reconcile entry measurement and disposition terminology
+
+`type: backlog-item · status: draft · authority: Architect + Auditor · provenance: R-0004 seventh exact-candidate Claude Opus 5 PASS F4; candidate 344638a; R-0004-OPUS-CLOSE-REVIEW-7-PASS`
+
+Priority: P2. Primary round: R-0005 documentation and record reconciliation.
+
+Acceptance: the entry measurement distinguishes its 146-action and 54-schema base
+readings from the complete 147-keep and 55-schema exit surface; disposition fields use
+names that cannot confuse base totals with exit totals; historical values remain
+immutable and correctly labelled.
+
+### BL-178 — Bind anti-skip governance to test sources
+
+`type: backlog-item · status: draft · authority: Inspector · provenance: R-0004 seventh exact-candidate Claude Opus 5 PASS F5; candidate 344638a; R-0004-OPUS-CLOSE-REVIEW-7-PASS`
+
+Priority: P2. Primary round: R-0005 test-contract hardening.
+
+Acceptance: the R-0004 anti-skip contract scans the governed test sources where
+build-conditional skips can occur, rejects new undeclared patterns, and preserves the
+eight declared skips without weakening assertions or floors.
+
+### BL-179 — Normalize public-package repository metadata
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector · provenance: R-0004 seventh exact-candidate Claude Opus 5 PASS F6; pre-existing package metadata; R-0004-OPUS-CLOSE-REVIEW-7-PASS`
+
+Priority: P1 before R-0008. Primary round: R-0007 or R-0008 preparation.
+
+Acceptance: all eleven public packages expose the canonical successor repository URL;
+an exact package-manifest guard prevents predecessor or alternate-repository drift; the
+change includes any required package-version disposition and no publish occurs.
+
 ## Carried guard map
 
 The original known-red mapping remains as historical provenance:
