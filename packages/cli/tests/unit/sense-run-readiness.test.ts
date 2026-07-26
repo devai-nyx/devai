@@ -75,6 +75,14 @@ describe('sense run readiness aggregation', () => {
       argv: ['sense', 'readings', 'rebuild', '--repo-root', '/repo'],
       runnable: false,
     });
+    expect(
+      plan(
+        ['sense', 'run', 'test_weakening_review', '--repo-root', '/repo'],
+        '/cli.js',
+        entries,
+        '1.0.0',
+      ),
+    ).toEqual({ argv: [], runnable: false });
   });
 
   it('routes a registry-derived public sensor child to its internal binding', () => {
