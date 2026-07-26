@@ -83,9 +83,9 @@ recaptured.
 Governed forty-hex Git identities must resolve as local Git objects.
 Historical foreign, predecessor, transient-merge, and intentionally invalid review
 specimens are admitted only through the canonical exception registry and only at their
-exact classified paths. CI scans the governed surface and fails closed on an unresolved
-or newly misplaced identity, stale allowed path, or stale exception; it does not treat
-an exception value as a repository-wide waiver.
+exact classified paths. CI scans the decision register and Auditor records and fails
+closed on an unresolved or newly misplaced identity, stale allowed path, or stale
+exception; it does not treat an exception value as a repository-wide waiver.
 
 R-0004 implements a governed surface and package topology only. It publishes, tags,
 releases, deploys, promotes, re-earns, or declares ready nothing.
