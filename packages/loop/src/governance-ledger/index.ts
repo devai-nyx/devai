@@ -308,7 +308,11 @@ function sealedHistoryFindings(
     }
   }
   if (sealed === undefined || sealIndex < 0) return [];
-  for (const entry of history.slice(sealIndex + 1)) {
+  const originalSeal = sealed;
+  let lockedMutationObserved = false;
+  let terminalObservedBeforeFinal = false;
+  const laterHistory = history.slice(sealIndex + 1);
+  for (const [laterIndex, entry] of laterHistory.entries()) {
     const laterSource = gitFile(repoRoot, entry.commit, entry.path);
     if (laterSource === null) {
       return [
@@ -336,6 +340,25 @@ function sealedHistoryFindings(
       normalizedSealedFrontmatter(later) !== normalizedSealedFrontmatter(sealed) ||
       !sealedTransitionAllowed(sealed, later)
     ) {
+      lockedMutationObserved = true;
+    }
+    if (
+      laterIndex < laterHistory.length - 1 &&
+      ['superseded', 'tombstoned'].includes(String(later.frontmatter['status']))
+    ) {
+      terminalObservedBeforeFinal = true;
+    }
+    sealed = later;
+  }
+  if (lockedMutationObserved) {
+    const restoredThroughTerminalTransition =
+      String(originalSeal.frontmatter['status']) === 'active' &&
+      !terminalObservedBeforeFinal &&
+      ['superseded', 'tombstoned'].includes(String(sealed.frontmatter['status'])) &&
+      sealed.body === originalSeal.body &&
+      normalizedSealedFrontmatter(sealed) === normalizedSealedFrontmatter(originalSeal) &&
+      sealedTransitionAllowed(originalSeal, sealed);
+    if (!restoredThroughTerminalTransition) {
       return [
         {
           code: 'DECISION_LOCKED_BODY_MUTATED',
@@ -344,7 +367,6 @@ function sealedHistoryFindings(
         },
       ];
     }
-    sealed = later;
   }
   return [];
 }
