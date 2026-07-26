@@ -111,6 +111,36 @@ describe('loadForbiddenWaivers', () => {
 });
 
 describe('scanForbiddenActions', () => {
+  function writeContextAwareRegistry(): void {
+    const actions = CANONICAL_FORBIDDEN_ACTIONS.map((entry) =>
+      entry.id === 'FORBID-DROP-PROD'
+        ? {
+            ...entry,
+            allowed_change_line_patterns: [
+              '\\bdevai_task_(?:[A-Za-z0-9_]+|<id>)',
+              '\\bdevai_template\\b',
+            ],
+          }
+        : entry,
+    );
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions }),
+    );
+  }
+
+  function seedRepository(): void {
+    writeFileSync(join(dir, 'README.md'), 'seed\n');
+    execFileSync('git', ['init', '-q'], { cwd: dir });
+    execFileSync('git', ['add', '.'], { cwd: dir });
+    execFileSync(
+      'git',
+      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'seed'],
+      { cwd: dir },
+    );
+  }
+
   it('fails closed when the registry is missing or has no executable patterns', () => {
     expect(
       scanForbiddenActions({ repoRoot: dir, registryPath: join(dir, 'missing.json') }).findings,
@@ -551,6 +581,117 @@ describe('scanForbiddenActions', () => {
         forbidden_id: 'FORBID-FORCE-PUSH',
         source: 'commit-change',
       }),
+    );
+  });
+
+  it('accepts a destructive SQL occurrence whose changed line is explicitly dev-scoped', () => {
+    writeContextAwareRegistry();
+    seedRepository();
+    mkdirSync(join(dir, 'packages/demo'), { recursive: true });
+    writeFileSync(
+      join(dir, 'packages/demo/action.txt'),
+      'Terminate connections + DROP DATABASE devai_task_<id>\n',
+    );
+    execFileSync('git', ['add', 'packages/demo/action.txt'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Engineer',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'feat: add bounded development cleanup',
+      ],
+      { cwd: dir },
+    );
+
+    expect(
+      scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings.filter(
+        (finding) => finding.forbidden_id === 'FORBID-DROP-PROD',
+      ),
+    ).toEqual([]);
+  });
+
+  it('still reports an unsafe occurrence when the same change contains safe dev SQL', () => {
+    writeContextAwareRegistry();
+    seedRepository();
+    mkdirSync(join(dir, 'packages/demo'), { recursive: true });
+    writeFileSync(
+      join(dir, 'packages/demo/action.txt'),
+      [
+        'DROP DATABASE devai_task_<id>',
+        'TRUNCATE TABLE production_accounts',
+        '',
+      ].join('\n'),
+    );
+    execFileSync('git', ['add', 'packages/demo/action.txt'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Engineer',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'feat: add cleanup actions',
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-DROP-PROD',
+        source: 'commit-change',
+        matched: 'TRUNCATE TABLE',
+      }),
+    );
+  });
+
+  it('never applies change-line context to commit-message evidence', () => {
+    writeContextAwareRegistry();
+    seedRepository();
+    writeFileSync(join(dir, 'README.md'), 'changed\n');
+    execFileSync('git', ['add', 'README.md'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Engineer',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'DROP DATABASE devai_task_<id>',
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-DROP-PROD',
+        source: 'commit-message',
+      }),
+    );
+  });
+
+  it('fails closed when an allowed change-line pattern is invalid', () => {
+    const actions = CANONICAL_FORBIDDEN_ACTIONS.map((entry) =>
+      entry.id === 'FORBID-DROP-PROD'
+        ? { ...entry, allowed_change_line_patterns: ['['] }
+        : entry,
+    );
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions }),
+    );
+    seedRepository();
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({ forbidden_id: 'FORBIDDEN-REGISTRY-INVALID' }),
     );
   });
 });
