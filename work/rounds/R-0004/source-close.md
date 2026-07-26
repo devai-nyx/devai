@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-162–181; R-0004-AS-BUILT; Auditor 41d73a2,
+    DII-162–182; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; Auditor 41d73a2,
     a9c1dab,
     9da5b54,
     8f7581c,
@@ -18,7 +18,8 @@ provenance:
     1ba28c7,
     9e3480c,
     e7d4e48,
-    and ae8f508; Inspector b7bf300,
+    ae8f508,
+    and a73993f; Inspector b7bf300,
     4c08b46,
     fbfb226,
     b3be172,
@@ -56,8 +57,8 @@ provenance:
 
 ## Bound result
 
-DII-181 accepts the Auditor's B7 reconciliation and BL-141 through BL-155 corrections,
-supersedes DII-180 only as the closing judgment, and closes the local source
+DII-182 accepts the Auditor's B7 reconciliation, BL-141 through BL-155 corrections, and
+the exact local ladder, supersedes DII-181 only as the closing judgment, and closes the local source
 implementation. The governed action surface is 147 keep / 38 fold / 1 tombstone; action
 effects are 186/186 with zero findings; 59 live sensors retain their 50/9
 cell/diagnostic standing; the recursive canon contains 55 schemas; and the fixed public
@@ -76,14 +77,15 @@ Exact active-ADR coverage now binds every governed CI path. Copy ancestry no lon
 inherits a source record's seal, restored endpoints remain fail-closed against mutation
 or replacement drift, and active ADR-015 carries the complete CI association.
 
-The root build/test porcelain, required workflow pins and prewarm, semantic
+The complete local ladder passed on exact source snapshot `6116635`, including root
+build/test porcelain, required workflow pins and prewarm, semantic
 repository-reference generation, generated action views, package dry-runs, all six test
 tiers, the complete ordinary floor, and unchanged coverage floors are green. The
 Auditor's exact readings and role-pure commit map are in `work/audit/R-0004/as-built.md`.
 
 ## Review and ceremony gate
 
-The next clean commit containing this handoff, DII-181, updated population guards, and
+The next clean commit containing this handoff, DII-182, updated population guards, and
 fresh deterministic projections is the review candidate. It must receive one read-only
 close review through literal `claude-opus-5`, with no fallback. Actionable findings
 return to red-first role-pure repair; PASS permits the shared source-PR and closure-only

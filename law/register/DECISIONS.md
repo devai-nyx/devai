@@ -2422,6 +2422,23 @@ focused governance-ledger tests pass. No production, law, assertion meaning, thr
 skip, or gate changed. The complete ladder and literal `claude-opus-5` review restart
 requirements remain unchanged.
 
+### DII-182 — Admit the exact local ladder
+
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 exact-ladder close; DII-181; R-0004-EXACT-LADDER-PASS; Auditor a73993fea5cb20b5278c47c6a95139c60909b7d9`
+
+DII-182 supersedes DII-181 only as the R-0004 source-closing judgment. The complete
+local ladder passed on exact snapshot
+`6116635a2e565c974e28b7dec5a4f664a97b6cb7`: all six tiers, strict governance,
+unchanged coverage floors, root build/test porcelain, deterministic projections,
+formatting, and all eleven public-package dry-runs are green. The Auditor's exact
+readings and claims ceiling are admitted without expanding the round.
+
+The next clean commit containing DII-182, its refreshed source-close handoff, and the
+fresh repository-reference projection is the Opus review candidate. It must receive
+the mandated read-only close review through literal `claude-opus-5`, with no fallback.
+Actionable findings restart the governed red-first cycle; only PASS permits source push.
+No external gate, publication, release, deployment, or real-stynx boundary changes.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
