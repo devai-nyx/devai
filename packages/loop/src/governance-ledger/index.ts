@@ -40,7 +40,7 @@ function scalar(value: string): unknown {
   if (trimmed === '{}') return {};
   if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
     const inner = trimmed.slice(1, -1).trim();
-    return inner.length === 0 ? [] : inner.split(',').map((item) => scalar(item));
+    return inner.length === 0 ? [] : inner.split(/[;,]/u).map((item) => scalar(item));
   }
   if (
     (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
