@@ -1778,11 +1778,13 @@ change includes any required package-version disposition and no publish occurs.
 
 Priority: P0 before R-0004 source merge. Primary round: R-0004.
 
-Acceptance: an Inspector red-first case proves ANSI SGR sequences cannot hide Vitest's
-passed/failed summary; the production sensor extracts the same metrics from colored and
-plain output while preserving raw evidence heads; focused T1/T2 and the complete ladder
-pass locally and in exact-head CI; no baseline recapture, skip, threshold, or assertion
-weakening is permitted.
+Acceptance: Inspector red-first cases prove ANSI SGR sequences cannot hide Vitest's
+passed/failed summary and cannot destabilize the R20 fingerprint's normalized reporter
+text; the production sensor extracts the same metrics from colored and plain output
+while preserving raw evidence heads; deterministic fingerprint normalization masks
+terminal presentation without masking semantic output; focused T1/T2 and the complete
+ladder pass locally and in exact-head CI; no baseline recapture, skip, threshold, or
+assertion weakening is permitted.
 
 ## Carried guard map
 

@@ -2,11 +2,11 @@
 id: R-0004-SOURCE-CI-ANSI-CORRECTION
 title: R-0004 source exact-head ANSI summary correction
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: R-0004-SOURCE-CI-ANSI-FAILURE
-superseded_by: null
+superseded_by: R-0004-OPUS-CLOSE-REVIEW-8-FAILURE
 provenance: [BL-180; Inspector a01e5d5 and 016a3fa; Engineer a0dc396]
 ---
 
@@ -23,6 +23,7 @@ tests plus one declared skip, and the complete local floor passed 127 files / 1,
 tests plus eight declared skips. No R20 baseline was recaptured; no skip, threshold,
 assertion, or evidence source changed.
 
-The complete ladder, package dry-runs, fresh literal `claude-opus-5` review, and repaired
-exact-head CI remain mandatory before source merge. No closure record, publication,
-release, deployment, real-stynx write, or later human gate moved.
+This correction repaired summary metrics but did not normalize ANSI-decorated reporter
+text for the deterministic R20 fingerprint. The eighth exact-candidate Opus review
+therefore superseded this record. No closure record, publication, release, deployment,
+real-stynx write, or later human gate moved.
