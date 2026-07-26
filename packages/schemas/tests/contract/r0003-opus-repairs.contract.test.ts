@@ -66,15 +66,15 @@ describe('R-0003 first Opus review repairs', () => {
     expect(adr005).toMatch(/^superseded_by: ADR-013$/m);
     expect(adr005).toContain('.github/workflows/reusable-evidence-gate.yml');
     const replacement = text('law/adr/ADR-013-ci-economy-correction.md');
-    expect(replacement).toMatch(/^status: superseded$/m);
-    expect(replacement).toMatch(/^superseded_by: ADR-014$/m);
+    expect(replacement).toMatch(/^status: active$/m);
+    expect(replacement).toMatch(/^superseded_by: null$/m);
     expect(replacement).toMatch(/^supersedes: \[ADR-005]$/m);
     expect(replacement).toContain('.github/workflows/ci.yml');
     expect(replacement).toContain('.github/workflows/round-gates.yml');
     const active = text('law/adr/ADR-014-ci-checker-adr-association.md');
     expect(active).toMatch(/^status: superseded$/m);
     expect(active).toMatch(/^superseded_by: ADR-015$/m);
-    expect(active).toMatch(/^supersedes: \[ADR-013]$/m);
+    expect(active).toMatch(/^supersedes: \[]$/m);
     expect(active).toContain('scripts/check-workflows.mjs');
     const final = text('law/adr/ADR-015-ci-governance-path-coverage.md');
     expect(final).toMatch(/^status: active$/m);
@@ -96,9 +96,9 @@ describe('R-0003 first Opus review repairs', () => {
   it('binds the active ADR index to the legal replacement topology', () => {
     const index = text('law/adr/README.md');
     expect(index).toContain('ADR-001..015 are gapless');
-    expect(index).toContain('twelve are active');
-    expect(index).toContain('ADR-005 is superseded by ADR-013');
-    expect(index).toContain('ADR-014 and active ADR-015');
+    expect(index).toContain('thirteen are active');
+    expect(index).toContain('ADR-005 is superseded by active ADR-013');
+    expect(index).toContain('ADR-014 is independently superseded by active ADR-015');
     expect(index).toMatch(/^provenance: \[DII-153; DII-175; DII-178; REV-0003]$/m);
     expect(index).not.toContain('ADR-001..012 are gapless and active');
   });

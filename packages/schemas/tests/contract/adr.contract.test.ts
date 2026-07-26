@@ -46,15 +46,12 @@ describe('ADR roster records', () => {
     }
   });
 
-  it('founding lifecycle discipline preserves twelve active ADRs and the ADR-005 replacement', () => {
+  it('lifecycle discipline preserves thirteen active ADRs and both replacements', () => {
     for (const f of files) {
       const fm = frontMatter(f);
       if (f === 'ADR-005-ci-economy.md') {
         expect(fm.status, f).toBe('superseded');
         expect(fm.superseded_by, f).toBe('ADR-013');
-      } else if (f === 'ADR-013-ci-economy-correction.md') {
-        expect(fm.status, f).toBe('superseded');
-        expect(fm.superseded_by, f).toBe('ADR-014');
       } else if (f === 'ADR-014-ci-checker-adr-association.md') {
         expect(fm.status, f).toBe('superseded');
         expect(fm.superseded_by, f).toBe('ADR-015');
@@ -62,14 +59,18 @@ describe('ADR roster records', () => {
         expect(fm.status, f).toBe('active');
         expect(fm.superseded_by, f).toBeNull();
       }
-      expect(
-        Array.isArray(fm.supersedes) && (fm.supersedes as unknown[]).length > 0,
-        `${f} names what it absorbs`,
-      ).toBe(true);
+      if (f === 'ADR-014-ci-checker-adr-association.md') {
+        expect(fm.supersedes, `${f} preserves its first sealed source list`).toEqual([]);
+      } else {
+        expect(
+          Array.isArray(fm.supersedes) && (fm.supersedes as unknown[]).length > 0,
+          `${f} names what it absorbs`,
+        ).toBe(true);
+      }
       expect(fm.provenance, f).toBeTruthy();
     }
     expect(frontMatter('ADR-013-ci-economy-correction.md').supersedes).toEqual(['ADR-005']);
-    expect(frontMatter('ADR-014-ci-checker-adr-association.md').supersedes).toEqual(['ADR-013']);
+    expect(frontMatter('ADR-014-ci-checker-adr-association.md').supersedes).toEqual([]);
     expect(frontMatter('ADR-015-ci-governance-path-coverage.md').supersedes).toEqual(['ADR-014']);
   });
 });
