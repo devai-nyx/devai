@@ -2468,6 +2468,21 @@ zero findings. The next clean commit containing DII-184 and the refreshed handof
 restart the complete ladder and literal `claude-opus-5` review. No waiver, external gate,
 publication, release, deployment, or real-stynx boundary changes.
 
+### DII-185 — Admit the repaired exact ladder
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 repaired exact-ladder close; DII-184; R-0004-EXACT-LADDER-PASS; Auditor 5cf3af6`
+
+DII-185 supersedes DII-184 only as the R-0004 source-closing judgment. The complete
+ladder passed on exact repaired snapshot
+`31dfbaf3d8b51e2089aef6aa01ea45b46d9b266c`, including the exact round-range governance
+scan, all five live suite routes, 71 T1 files / 837 tests, 38 T2 files / 236 passing plus
+one declared skip, root 127 files / 1,161 passing plus eight declared skips, unchanged
+coverage floors, and all eleven public-package dry-runs.
+
+The next clean commit containing DII-185 and its refreshed handoff is the review
+candidate. It must pass the complete ladder and a new read-only review through literal
+`claude-opus-5`, with no fallback, before source push. The claims ceiling and every
+external human gate remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
