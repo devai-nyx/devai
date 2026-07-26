@@ -27,6 +27,14 @@ plus two fabricated active R-0004 commit expansions. Engineer `aee78a3`, `7b4432
 historical exceptions and corrected the register; Auditor `fd53fe9` corrected the active
 evidence. The contract and `ci:sha-references` are now green.
 
+BL-182 preserves the eleventh-review red: snapshot-specific SHA counts must bind the
+snapshot that produced them, and active records must describe the implemented local
+resolution or exact path-scoped exception semantics without claiming an absent local
+object-kind comparison. The same Inspector batch proves hermetically that unresolved
+identities, misplaced exceptions, stale allowed paths, and stale exceptions fail
+closed. Rejection behavior is green; active-claim reconciliation is intentionally red
+until the owning authorities correct it.
+
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at
 the exact B0 candidate `10b9f1b9e599b77d6123daef165210259f90a8eb`.

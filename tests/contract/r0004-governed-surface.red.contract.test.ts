@@ -1,5 +1,15 @@
 import { spawnSync } from 'node:child_process';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
@@ -26,6 +36,43 @@ const DISPOSITION = JSON.parse(
 
 function readJson(relativePath: string): unknown {
   return JSON.parse(readFileSync(join(ROOT, relativePath), 'utf8')) as unknown;
+}
+
+function runShaReferenceFixture(
+  decisionText: string,
+  entries: {
+    sha: string;
+    object_kind: string;
+    reason: string;
+    allowed_paths: string[];
+  }[],
+) {
+  const fixture = mkdtempSync(join(tmpdir(), 'devai-sha-guard-'));
+  try {
+    for (const directory of ['scripts', 'law/policy', 'law/register', 'work/audit']) {
+      mkdirSync(join(fixture, directory), { recursive: true });
+    }
+    copyFileSync(
+      join(ROOT, 'scripts/check-governed-sha-references.mjs'),
+      join(fixture, 'scripts/check-governed-sha-references.mjs'),
+    );
+    writeFileSync(join(fixture, 'law/register/DECISIONS.md'), decisionText);
+    writeFileSync(
+      join(fixture, 'law/policy/governed-sha-reference-exceptions.json'),
+      `${JSON.stringify({ entries }, null, 2)}\n`,
+    );
+    const initialized = spawnSync('git', ['init', '--quiet'], {
+      cwd: fixture,
+      encoding: 'utf8',
+    });
+    expect(initialized.status, initialized.stderr).toBe(0);
+    return spawnSync('node', [join(fixture, 'scripts/check-governed-sha-references.mjs')], {
+      cwd: fixture,
+      encoding: 'utf8',
+    });
+  } finally {
+    rmSync(fixture, { recursive: true, force: true });
+  }
 }
 
 function typeScriptFiles(directory: string): string[] {
@@ -353,6 +400,65 @@ describe('R-0004 governed surface red-first contracts', () => {
     const result = spawnSync('node', [scriptPath], { cwd: ROOT, encoding: 'utf8' });
     expect(result.status, result.stderr || result.stdout).toBe(0);
     expect(result.stdout).toContain('governed SHA references: PASS');
+  });
+
+  it('BL-182 keeps snapshot readings and active SHA semantics exact', () => {
+    const snapshot = 'fd99ab7deaa1702467b6d8f9c4d6a98f4372b87e';
+    for (const path of ['law/register/DECISIONS.md', 'work/rounds/R-0004/source-close.md']) {
+      const text = readFileSync(join(ROOT, path), 'utf8');
+      const index = text.indexOf(snapshot);
+      expect(index).toBeGreaterThanOrEqual(0);
+      const context = text.slice(index, index + 700);
+      expect(context).toContain('252 identities');
+      expect(context).toContain('244 local');
+      expect(context).toContain('8');
+      expect(context).not.toContain('245 local');
+    }
+    for (const path of [
+      'law/register/DECISIONS.md',
+      'work/rounds/R-0004/surface-contract.md',
+      'work/rounds/R-0004/source-close.md',
+      'work/audit/R-0002-preflight/backlog-register.md',
+      'work/audit/R-0004/as-built.md',
+      'tests/KNOWN-RED-R0004.md',
+    ]) {
+      const text = readFileSync(join(ROOT, path), 'utf8');
+      expect(text).not.toMatch(/declared (?:local )?Git object kind|wrong-kind/u);
+    }
+  });
+
+  it('BL-182 rejects unresolved and stale or misplaced SHA exceptions', () => {
+    const first = '1111111111111111111111111111111111111111';
+    const second = '2222222222222222222222222222222222222222';
+    const exception = (sha: string, allowedPaths: string[]) => ({
+      sha,
+      object_kind: 'historical specimen',
+      reason: 'hermetic rejection fixture',
+      allowed_paths: allowedPaths,
+    });
+
+    const unresolved = runShaReferenceFixture(`unresolved ${first}\n`, []);
+    expect(unresolved.status).not.toBe(0);
+    expect(unresolved.stderr).toContain(`unresolved ${first}`);
+
+    const misplaced = runShaReferenceFixture(`misplaced ${first}\n`, [
+      exception(first, ['work/audit/expected.md']),
+    ]);
+    expect(misplaced.status).not.toBe(0);
+    expect(misplaced.stderr).toContain(`exception ${first} used outside allowed paths`);
+
+    const stalePath = runShaReferenceFixture(`stale path ${first}\n`, [
+      exception(first, ['law/register/DECISIONS.md', 'work/audit/missing.md']),
+    ]);
+    expect(stalePath.status).not.toBe(0);
+    expect(stalePath.stderr).toContain(`exception ${first} has stale allowed paths`);
+
+    const staleException = runShaReferenceFixture(`classified ${first}\n`, [
+      exception(first, ['law/register/DECISIONS.md']),
+      exception(second, ['work/audit/unreferenced.md']),
+    ]);
+    expect(staleException.status).not.toBe(0);
+    expect(staleException.stderr).toContain(`stale exception ${second}`);
   });
 
   it('BL-162 binds strict governance to a window covering the complete R-0004 range', () => {
