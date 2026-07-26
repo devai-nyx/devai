@@ -7,8 +7,7 @@ date: 2026-07-26
 authority: Auditor
 supersedes: null
 superseded_by: R-0004-GOVERNANCE-RANGE-CORRECTION
-provenance:
-  [BL-162; failed strict-governance reading after c530468; R-0004-GOVERNANCE-RANGE-CORRECTION]
+provenance: [BL-162; failed strict-governance reading after c530468]
 ---
 
 # R-0004 overbroad governance-range failure
