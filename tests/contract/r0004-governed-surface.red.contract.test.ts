@@ -493,31 +493,28 @@ describe('R-0004 governed surface red-first contracts', () => {
   });
 
   it('BL-184 classifies clean-checkout-only historical objects at exact audit paths', () => {
-    const expected = [
-      {
-        sha: '3469026a503837de49d829c233bc7e9eb6b53620',
-        object_kind: 'transient merge commit',
-        reason:
-          'Historical GitHub pull-request synthetic merge object retained locally but absent from a clean checkout.',
-        allowed_paths: ['work/audit/R-0002/as-built.md'],
-      },
-      {
-        sha: '46535a3c8939aad7a2bbc8fce981bdcc48757e54',
-        object_kind: 'rejected amended commit',
-        reason:
-          'Historical rejected R-0003 candidate retained locally but absent from a clean checkout.',
-        allowed_paths: [
-          'work/audit/R-0002-preflight/backlog-register.md',
-          'work/audit/R-0003/exit-ladder-adr-seal-failure.md',
-        ],
-      },
-    ];
+    const transient = {
+      sha: '3469026a503837de49d829c233bc7e9eb6b53620',
+      object_kind: 'transient merge commit',
+      reason:
+        'Historical GitHub pull-request synthetic merge object retained locally but absent from a clean checkout.',
+      allowed_paths: ['work/audit/R-0002/as-built.md'],
+    };
+    const rejected = {
+      sha: '46535a3c8939aad7a2bbc8fce981bdcc48757e54',
+      object_kind: 'rejected amended commit',
+      reason:
+        'Historical rejected R-0003 candidate retained locally but absent from a clean checkout.',
+      allowed_paths: [
+        'work/audit/R-0002-preflight/backlog-register.md',
+        'work/audit/R-0003/exit-ladder-adr-seal-failure.md',
+      ],
+    };
+    const expected = [transient, rejected];
     const registry = readJson('law/policy/governed-sha-reference-exceptions.json') as {
       entries: typeof expected;
     };
     expect(registry.entries).toEqual(expect.arrayContaining(expected));
-    const transient = expected[0]!;
-    const rejected = expected[1]!;
 
     const result = runShaReferenceFixture('', expected, {
       'work/audit/R-0002/as-built.md': `transient ${transient.sha}\n`,
