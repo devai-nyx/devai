@@ -78,9 +78,7 @@ function processIsReadOnly(request: AuthorityHostEffectRequest): boolean {
       ].includes(String(args[0]))) ||
       (args.length === 2 &&
         args[0] === 'run' &&
-        ['build', 'test', 'test:t1', 'test:t3', 'test:t4', 'test:t5'].includes(
-          String(args[1]),
-        )) ||
+        ['build', 'test', 'test:t1', 'test:t3', 'test:t4', 'test:t5'].includes(String(args[1]))) ||
       (args.length === 2 && args[0] === '-r' && args[1] === 'build') ||
       (args.length === 2 && args[0] === 'vitest' && args[1] === 'run'))
   ) {

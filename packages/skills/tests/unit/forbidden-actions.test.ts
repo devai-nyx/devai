@@ -620,11 +620,7 @@ describe('scanForbiddenActions', () => {
     mkdirSync(join(dir, 'packages/demo'), { recursive: true });
     writeFileSync(
       join(dir, 'packages/demo/action.txt'),
-      [
-        'DROP DATABASE devai_task_<id>',
-        'TRUNCATE TABLE production_accounts',
-        '',
-      ].join('\n'),
+      ['DROP DATABASE devai_task_<id>', 'TRUNCATE TABLE production_accounts', ''].join('\n'),
     );
     execFileSync('git', ['add', 'packages/demo/action.txt'], { cwd: dir });
     execFileSync(
@@ -679,9 +675,7 @@ describe('scanForbiddenActions', () => {
 
   it('fails closed when an allowed change-line pattern is invalid', () => {
     const actions = CANONICAL_FORBIDDEN_ACTIONS.map((entry) =>
-      entry.id === 'FORBID-DROP-PROD'
-        ? { ...entry, allowed_change_line_patterns: ['['] }
-        : entry,
+      entry.id === 'FORBID-DROP-PROD' ? { ...entry, allowed_change_line_patterns: ['['] } : entry,
     );
     mkdirSync(join(dir, '.devai/config'), { recursive: true });
     writeFileSync(
