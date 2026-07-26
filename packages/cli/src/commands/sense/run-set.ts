@@ -236,7 +236,7 @@ export function planSensorChild(
   }
   const internalName = routed.argv[2];
   const entry = entries.find((candidate) => candidate.internal_name === internalName);
-  if (entry === undefined) throw new Error('SENSE_RUN_CHILD_BINDING_MISSING');
+  if (entry === undefined) return { argv: [], runnable: false };
   return {
     argv: [...entry.path, ...routed.argv.slice(3)],
     runnable: entry.effects === 'read',
