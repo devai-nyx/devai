@@ -2,11 +2,11 @@
 id: R-0004-OPUS-CLOSE-REVIEW-11-CORRECTION
 title: R-0004 eleventh exact-candidate Opus repair correction
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: R-0004-OPUS-CLOSE-REVIEW-11-FAILURE
-superseded_by: null
+superseded_by: R-0004-OPUS-CLOSE-REVIEW-12-FAILURE
 provenance: [BL-182; Inspector deaa1b1 and 8ff6c5a; Architect cd51d1b]
 ---
 

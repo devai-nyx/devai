@@ -1817,6 +1817,19 @@ paths, a stale allowed path, and a stale exception; the failure/correction lifec
 symmetric; a fresh atomic closing DII, complete ladder, and literal `claude-opus-5`
 review pass before source push.
 
+### BL-183 — Close the remaining audit supersession back-edge
+
+`type: backlog-item · status: draft · authority: Auditor + Inspector + Architect · provenance: R-0004 twelfth exact-candidate Claude Opus 5 failure; candidate 62bef48; R-0004-OPUS-CLOSE-REVIEW-12-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: `R-0004-SOURCE-DECISION-SHA-CORRECTION` is superseded by the eleventh-review
+failure on both sides of the lifecycle edge; an Inspector guard proves that exact
+relationship; SHA scan wording names the decision register and Auditor records; the
+snapshot assertion matches the exact classified-count phrase; the twelfth-review
+failure/correction lifecycle is symmetric; a fresh atomic closing DII, complete ladder,
+and literal `claude-opus-5` review pass before source push.
+
 ## Carried guard map
 
 The original known-red mapping remains as historical provenance:
