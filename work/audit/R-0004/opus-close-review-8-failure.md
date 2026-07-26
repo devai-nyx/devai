@@ -29,7 +29,7 @@ BL-180 is reopened. Inspector must first reproduce the fingerprint-level colored
 failure. Engineer may normalize terminal presentation only inside the deterministic
 R20 fingerprint view; raw sensor evidence must remain byte-for-byte. The baseline must
 not be recaptured. The corrected test and known-red record must turn green before a
-symmetric Auditor correction, an atomic DII-192 rebind, a complete ladder, another
+symmetric Auditor correction, an atomic next-closing-decision rebind, a complete ladder, another
 literal `claude-opus-5` review, and repaired exact-head CI.
 
 The review also identified two bounded reconciliation gaps to close in the same repair
