@@ -4,7 +4,13 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { authorityBindings } from '../../src/authority/policy.js';
+import {
+  authorityBindings,
+  buildTrustedAuthoritySources,
+  canonicalSha256,
+} from '../../src/authority/policy.js';
+import { getFullRegistry } from '../../src/define-command.js';
+import { resolveCliVersion } from '../../src/version.js';
 
 const PKG_ROOT = join(import.meta.dirname, '..', '..');
 const ROOT = join(PKG_ROOT, '..', '..');
@@ -79,6 +85,26 @@ describe('successor operational law', () => {
         constitution: { digest_sha256: string };
       };
       expect(policy.constitution.digest_sha256, path).toBe(digest);
+    }
+  });
+
+  it('binds both authority-policy materializations to the current resolved rule set', () => {
+    const expected = buildTrustedAuthoritySources(getFullRegistry(), ROOT, resolveCliVersion());
+    for (const path of [
+      join(ROOT, 'law', 'policy', 'authority-policy.json'),
+      join(ROOT, '.devai', 'config', 'authority-policy.json'),
+    ]) {
+      const policy = JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>;
+      expect(policy['resolved_digest_sha256'], path).toBe(
+        expected.provenance.resolved_digest_sha256,
+      );
+      expect(canonicalSha256(policy['source_policy']), path).toBe(
+        canonicalSha256(expected.provenance.source_policy),
+      );
+      expect(canonicalSha256(policy['additive_extensions']), path).toBe(
+        canonicalSha256(expected.provenance.additive_extensions),
+      );
+      expect(canonicalSha256(policy['rules']), path).toBe(canonicalSha256(expected.rules));
     }
   });
 
