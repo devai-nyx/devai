@@ -17,7 +17,7 @@ provenance: [session-draft R-0004 B2, DII-162]
 This note binds the successor-local design standing for `spec_security_coverage`. Its canonical emitter
 is `packages/sensors/src/spec-security-coverage.ts`; R-0004 does not change its measured runtime semantics.
 
-Bound cells: [object Object].
+Bound cells: F1×T6.
 
 The sensor emits evidence only through its registered cells or diagnostic surface. Any
 future change to identity, standing, tier, or emitter requires an Architect disposition

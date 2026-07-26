@@ -17,7 +17,7 @@ provenance: [session-draft R-0004 B2, DII-162]
 This note binds the successor-local design standing for `e2e_test`. Its canonical emitter
 is `packages/sensors/src/test.ts`; R-0004 does not change its measured runtime semantics.
 
-Bound cells: [object Object].
+Bound cells: F3×T1.
 
 The sensor emits evidence only through its registered cells or diagnostic surface. Any
 future change to identity, standing, tier, or emitter requires an Architect disposition

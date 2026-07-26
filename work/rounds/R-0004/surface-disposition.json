@@ -11,7 +11,7 @@
     "conclusion": "success"
   },
   "actions": {
-    "measured_total": 146,
+    "measured_total": 147,
     "keep": [
       {
         "action_id": "catalog actions",
@@ -779,6 +779,13 @@
       {
         "action_id": "policy check prompt overlays",
         "internal_binding": "check prompt-overlays",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "policy check schemas",
+        "internal_binding": "check schemas",
         "lifecycle": "supported",
         "tier": "plumbing",
         "effect": "read"
@@ -1631,11 +1638,11 @@
   "root_porcelain": {
     "build": {
       "public_action": "sense build",
-      "argv": ["pnpm", "-r", "--if-present", "build"]
+      "argv": ["pnpm", "-r", "build"]
     },
     "test": {
       "public_action": "sense test",
-      "argv": ["pnpm", "exec", "vitest", "run"]
+      "argv": ["pnpm", "vitest", "run"]
     },
     "constraints": [
       "exact argv only",
