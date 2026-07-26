@@ -62,3 +62,16 @@ prompt-policy consumers (KR-R5-005), the coordinated invariant consumer migratio
 change (KR-R5-010). No production implementation was present at that measurement, and
 no unrelated failure class was observed. B4 through B7 must return the entire floor to
 green; this paragraph does not authorize a red source candidate.
+
+## B7 retirement
+
+Inspector commit `3b7fc2b` closes KR-R5-001 through KR-R5-011. The complete ordinary
+floor then passed 130 test files with 1,188 passing tests, the unchanged eight declared
+skips, and zero failures. The adversarial set covers proof mutation, reordering,
+truncation, duplicate terminals, invalid errata, local-evidence subject/expiry/path
+selection, post-merge retry cleanliness, total anchor migration, prospective
+law-first/red-first sequencing, and conditional-skip source enumeration.
+
+This ledger now describes retired, commit-scoped red authority. It grants no permission
+for a red source candidate, a weakened assertion, a new conditional skip, or a later
+round to reuse any cluster without fresh Architect authorization.
