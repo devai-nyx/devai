@@ -1,3 +1,4 @@
+// Invariants: INV-DEVAI-004, INV-DEVAI-005, INV-DEVAI-017
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';

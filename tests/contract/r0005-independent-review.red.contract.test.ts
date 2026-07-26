@@ -1,3 +1,4 @@
+// Invariants: INV-DEVAI-001, INV-DEVAI-005, INV-DEVAI-017, INV-DEVAI-018, INV-DEVAI-020
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
