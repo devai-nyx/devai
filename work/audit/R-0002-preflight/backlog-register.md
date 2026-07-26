@@ -23,7 +23,7 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-140. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-141. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
@@ -50,6 +50,8 @@ BL-133 through BL-138 govern the six blockers from the third R-0003 Opus review.
 BL-139 governs the deterministic trace staleness introduced by the six-contract Inspector file.
 BL-140 governs the non-portable sibling-commit identity contract exposed by the fourth
 R-0003 exact-candidate Opus review.
+BL-141 governs the R-0004 Inspector regex lint defect exposed by the first complete
+exact-candidate ladder.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -59,7 +61,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-119 |
 | R-0003        | BL-004, BL-005, BL-006, BL-120–BL-140                                                                                                                                                     |
-| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084                                                                                            |
+| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084, BL-141                                                                                    |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
 | R-0006        | BL-026, BL-034, BL-035, BL-081                                                                                                                                                            |
 | R-0007        | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                                                                    |
@@ -75,6 +77,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–119 |
 | Closed in R-0003                    | BL-004–006, BL-120–140                                                                                                                           |
 | Implemented in active R-0004        | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084; source and closure ceremonies pending                                            |
+| Open in active R-0004               | BL-141                                                                                                                                           |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
 | Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                                       |
 | Open in prepared R-0007             | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                           |
@@ -1344,6 +1347,18 @@ that are ancestors of the candidate, and passes in a fresh single-branch clone c
 only the candidate branch. The failure/correction audit pair is symmetric, DII-161 binds
 the correction without waiving identity requirements, the complete ladder passes, and a
 fresh exact Opus review returns PASS before source push.
+
+### BL-141 — Restore lint-clean R-0004 workflow assertions
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor + Architect · provenance: R-0004 exact ladder at 268e31f Stage 1; R-0004-EXIT-LADDER-LINT-FAILURE`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: replace only the countable two-space regex literal in the R-0004 workflow
+contract with an equivalent exact-cardinality expression; preserve the YAML job-key
+boundary and every assertion; focused R-0004 tests, lint, the full floor, and the
+complete exact-candidate ladder pass; Auditor records the symmetric correction and a
+later Architect decision rebinds the source close before Opus review.
 
 ## Carried guard map
 
