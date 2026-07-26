@@ -21,8 +21,11 @@ remain protected.
 
 BL-181 preserves the tenth-review red: governed forty-hex identities must resolve to
 their declared Git object kind or carry an explicit governed exception. The Inspector
-contract is red in this batch because no production check, CI binding, or exception set
-exists and two active R-0004 commit expansions are fabricated.
+contract at `759014a` proved the missing production check, CI binding, and exception set,
+plus two fabricated active R-0004 commit expansions. Engineer `aee78a3`, `7b44322`, and
+`4047bec` implemented and bounded the check; Architect `cb50655` classified the exact
+historical exceptions and corrected the register; Auditor `fd53fe9` corrected the active
+evidence. The contract and `ci:sha-references` are now green.
 
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at
