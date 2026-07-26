@@ -1632,6 +1632,40 @@ only the changed third-review failure record and records a symmetric correction;
 assertion, claim, threshold, skip, or generated source changes; standalone Prettier and
 the restarted complete ladder pass before a fresh Opus review.
 
+### BL-167 — Make command-description parity complete and non-vacuous
+
+`type: backlog-item · status: draft · authority: Inspector + Engineer + Auditor · provenance: R-0004 fourth exact-candidate Claude Opus 5 review F1; candidate dfa5659; R-0004-OPUS-CLOSE-REVIEW-4-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: description parity keys public keep records by `internal_binding`, covers
+every statically resolvable `defineCommand` literal including both quote styles and
+factory/template declarations, and pins exact expected coverage rather than a nonzero
+floor; all observed descriptions equal the canonical registry; the known-red map lists
+all 14 current R-0004 clusters and current role-pure implementation history.
+
+### BL-168 — Repair R-0004 audit lifecycle and machine-readable links
+
+`type: backlog-item · status: draft · authority: Auditor · provenance: R-0004 fourth exact-candidate Claude Opus 5 advisory findings 2, 3, and 5; R-0004-OPUS-CLOSE-REVIEW-4-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: multi-source audit `supersedes` uses the parser-supported flow sequence;
+the real governance-range failure has an immutable paired failure record and the active
+correction names it; current as-built and exact-ladder provenance does not create a
+forward DII-187 evidence cycle; failure/correction symmetry remains explicit.
+
+### BL-169 — Refresh the final surface contract and closing provenance
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0004 fourth exact-candidate Claude Opus 5 advisory findings 4 and 6; R-0004-OPUS-CLOSE-REVIEW-4-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the active surface-contract provenance names the BL-163/165 correction and
+current closing decision; the bounded-test clause distinguishes the fixed all-suite root
+porcelain from the four exact configured suite variants; the source close is rebound by
+a new DII after all BL-167–169 corrections, without widening any human gate.
+
 ## Carried guard map
 
 The original known-red mapping remains as historical provenance:
