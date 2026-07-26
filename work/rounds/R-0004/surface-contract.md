@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    OM-002; DII-162; DII-191; BL-163; BL-165; BL-169; BL-172; BL-174; BL-180; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-SOURCE-CI-ANSI-CORRECTION,
+    OM-002; DII-162; DII-192; BL-163; BL-165; BL-169; BL-172; BL-174; BL-180; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION,
   ]
 ---
 
@@ -29,6 +29,11 @@ are `fold` records preserving behavior through `sense run <kind>`. Backlog compa
 a `tombstone`; the retired route must fail with typed migration guidance. Unknown action
 ids fail closed. Generation sorts by UTF-8 code-unit order and never by locale or input
 insertion order.
+
+The command-description parity guard resolves all 147 keep bindings as 144 literal AST
+definitions plus three exact invocations of the init command factory. It verifies the
+factory template, invocation segments, owner specialization, and canonical registry
+text; it does not claim 147 literal definitions.
 
 ## Sensors and schema canon
 
@@ -69,7 +74,9 @@ binaries rather than silently skipping suites, and pin third-party workflow acti
 immutable commit with readable version comments. Generated action and sensor views are
 checked byte-for-byte in CI. Human help remains read-only and never supplies consent.
 Vitest summary parsing ignores ANSI SGR sequences only in its metric-extraction view;
-the subprocess output retained as evidence remains byte-for-byte raw.
+deterministic R20 fingerprint normalization also ignores ANSI presentation before its
+existing time and duration masks. The subprocess output retained as evidence remains
+byte-for-byte raw, and no characterization baseline is recaptured.
 
 R-0004 implements a governed surface and package topology only. It publishes, tags,
 releases, deploys, promotes, re-earns, or declares ready nothing.

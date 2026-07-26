@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-162–191; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-FINAL-REPAIR-FORMATTING-CORRECTION; R-0004-GOVERNANCE-RANGE-CORRECTION; R-0004-SOURCE-CI-ANSI-CORRECTION; Auditor 41d73a2,
+    DII-162–192; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-FINAL-REPAIR-FORMATTING-CORRECTION; R-0004-GOVERNANCE-RANGE-CORRECTION; R-0004-SOURCE-CI-ANSI-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION; Auditor 41d73a2,
     a9c1dab,
     9da5b54,
     8f7581c,
@@ -36,7 +36,10 @@ provenance:
     c7dd9fb,
     8a9ea09,
     7b63f65,
-    and d63b0a5; Inspector b7bf300,
+    d63b0a5,
+    19a95ae,
+    dc64176,
+    and 3d33985; Inspector b7bf300,
     4c08b46,
     fbfb226,
     b3be172,
@@ -59,7 +62,9 @@ provenance:
     7a1006b,
     b70d530,
     a01e5d5,
-    and 016a3fa; Engineer d875b73,
+    016a3fa,
+    b4d895e,
+    and bf42be1; Engineer d875b73,
     b8d6c98,
     55ee8d0,
     2ef3936,
@@ -70,7 +75,8 @@ provenance:
     c530468,
     ab04008,
     d6369f9,
-    and a0dc396; Architect e1b952b,
+    a0dc396,
+    and db75ddc; Architect e1b952b,
     96d2477,
     a1dbb5b,
     b187210,
@@ -84,7 +90,8 @@ provenance:
     c2d418b,
     735fb70,
     4416eb9,
-    and 7ca26c4,
+    7ca26c4,
+    and 467b001,
   ]
 ---
 
@@ -92,7 +99,7 @@ provenance:
 
 ## Bound result
 
-DII-191 accepts the BL-180 exact-CI ANSI repair, supersedes DII-190 only as the closing
+DII-192 accepts the complete BL-180 ANSI fingerprint repair, supersedes DII-191 only as the closing
 judgment, and rebinds the locally repaired source implementation. The
 governed action surface is 147 keep / 38 fold / 1 tombstone; action
 effects are 186/186 with zero findings; 59 live sensors retain their 50/9
@@ -120,8 +127,9 @@ The third review's active-text inconsistencies are also repaired: the surface co
 names the exact production build/test argv and 55-schema live canon, and the direct
 `sense build` command description equals the canonical registry. Inspector guards now
 derive these claims from canonical sources.
-The fourth review's complete-parity and record gaps are repaired: all 147 keep bindings
-have canonical source descriptions, the owner factory is covered, all 14 known-red
+The fourth review's complete-parity and record gaps are repaired: 144 literal AST
+definitions plus three exact init-factory invocations cover all 147 keep bindings with
+canonical source descriptions, and all 14 known-red
 clusters are current, audit supersession links parse and pair, and the surface contract
 distinguishes all five admitted test routes with refreshed provenance.
 The fifth review's two blocking record inaccuracies are repaired: current-lineage prose
@@ -135,9 +143,15 @@ The first source-PR CI failure is also repaired red first: ANSI SGR sequences ar
 ignored only while extracting Vitest summary metrics, while raw subprocess output
 remains unchanged evidence. The active contract, this handoff, and the register now
 agree atomically on DII-191.
+The eighth review exposed the remaining fingerprint divergence. ANSI presentation is
+now removed only inside deterministic R20 normalization before the existing reporter
+time/duration masks; raw evidence remains unchanged and the baseline was not recaptured.
+The disposition is pinned to the 55-schema exit canon. The active contract, this
+handoff, and the register now agree atomically on DII-192.
 
-The complete repaired local ladder passed on exact source snapshot `7b63f65`, including
-T1 at 71 files / 838 tests, root test at 127 files / 1,164 passing plus eight declared
+The complete repaired local ladder passed on exact source snapshot `dc64176`, including
+T1 at 71 files / 838 tests, T2 at 38 files / 239 passing plus one declared skip, root
+test at 127 files / 1,165 passing plus eight declared
 skips, merged T1+T3 coverage at 71.23% statements, 61.79% branches, 77.62% functions,
 and 73.25% lines, root build/test porcelain, required workflow pins and prewarm, semantic
 repository-reference generation, generated action views, package dry-runs, all six test
@@ -146,7 +160,7 @@ Auditor's exact readings and role-pure commit map are in `work/audit/R-0004/as-b
 
 ## Review and ceremony gate
 
-The clean commit containing this handoff, DII-191, the BL-180 correction, and the
+The clean commit containing this handoff, DII-192, the BL-180 correction, and the
 symmetric Auditor pair is the review candidate. It must restart the
 complete ladder and receive one read-only close review through literal
 `claude-opus-5`, with no fallback. Actionable findings return to red-first role-pure

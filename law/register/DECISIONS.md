@@ -2582,6 +2582,26 @@ ladder and receive a fresh read-only review through literal `claude-opus-5`, wit
 fallback, before source push. The claims ceiling and every external human gate remain
 unchanged.
 
+### DII-192 — Admit the complete ANSI fingerprint repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 eighth-Opus repair; DII-191; BL-180; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION; Auditor 3d33985`
+
+DII-192 supersedes DII-191 only as the R-0004 source-closing judgment. The repaired
+fingerprint normalization removes ANSI terminal presentation before masking reporter
+time and duration, while the sensor retains raw subprocess output byte-for-byte. The
+R20 baseline was not recaptured. The surface disposition now binds the 55-schema exit
+canon, and the command-description guard is stated exactly as 144 literal AST
+definitions plus three exact init-factory invocations.
+
+The complete ladder passed on exact repaired snapshot
+`dc64176017ad07c956548b47e59955862541db21`: T1 passed 71 files / 838 tests, T2 passed
+38 files / 239 tests plus one declared skip, the root porcelain passed 127 files / 1,165
+tests plus eight declared skips, merged T1+T3 coverage passed at 71.23% statements,
+61.79% branches, 77.62% functions, and 73.25% lines, and all eleven public-package
+dry-runs passed. The next clean commit containing DII-192, the refreshed contract, and
+the refreshed handoff must restart the complete ladder and receive a fresh read-only
+review through literal `claude-opus-5`, with no fallback, before source push. The claims
+ceiling and every external human gate remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
