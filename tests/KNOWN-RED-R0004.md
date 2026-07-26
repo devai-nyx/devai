@@ -6,6 +6,11 @@ strengthened BL-164/167 parity guard was historical red characterization at exac
 candidate `dfa5659`; Engineer `d6369f9` aligned the five exposed production literals,
 and the complete 147-binding guard is green. This history is evidence, not a waiver.
 
+BL-180 adds one exact-CI portability red: colored Vitest summaries must yield the same
+passed/failed metrics as plain summaries. The Inspector case is intentionally red until
+the Engineer makes production metric extraction ANSI-insensitive; raw evidence output
+must remain unchanged.
+
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at
 the exact B0 candidate `10b9f1b9e599b77d6123daef165210259f90a8eb`.

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import './inventory-sensor-cases.js';
 import { buildSensorReading } from '../../src/sensor-reading.js';
+import { parseVitestSummary } from '../../src/test.js';
 
 describe('buildSensorReading', () => {
   it('produces a record that validates against sensor-reading.schema.json', () => {
@@ -53,6 +54,17 @@ describe('buildSensorReading', () => {
         ],
       }),
     ).toThrow(/sensor-reading\.schema\.json/);
+  });
+});
+
+describe('parseVitestSummary', () => {
+  it('extracts identical metrics from plain and ANSI-colored Vitest summaries', () => {
+    const plain = '      Tests  1 passed | 2 failed (3)';
+    const colored =
+      '\u001b[2m      Tests \u001b[22m \u001b[1m\u001b[32m1 passed\u001b[39m\u001b[22m | \u001b[1m\u001b[31m2 failed\u001b[39m\u001b[22m \u001b[90m(3)\u001b[39m';
+
+    expect(parseVitestSummary(plain)).toEqual({ passed: 1, failed: 2 });
+    expect(parseVitestSummary(colored)).toEqual({ passed: 1, failed: 2 });
   });
 });
 // Invariants: INV-DEVAI-002, INV-DEVAI-012, INV-INVENTORY-002, INV-INVENTORY-003, INV-INVENTORY-004
