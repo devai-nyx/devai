@@ -6,10 +6,12 @@ strengthened BL-164/167 parity guard was historical red characterization at exac
 candidate `dfa5659`; Engineer `d6369f9` aligned the five exposed production literals,
 and the complete 147-binding guard is green. This history is evidence, not a waiver.
 
-BL-180 preserves one exact-CI portability red: colored Vitest summaries had to yield the
-same passed/failed metrics as plain summaries. Engineer `a0dc396` made production metric
-extraction ANSI-insensitive while preserving raw evidence output; the Inspector case is
-green.
+BL-180 preserves the exact-CI portability reds: colored Vitest summaries must yield the
+same passed/failed metrics as plain summaries, and ANSI-decorated reporter text must
+produce the same deterministic R20 fingerprint without changing raw evidence. Engineer
+`a0dc396` closed metric extraction; the fingerprint case is red in this Inspector
+batch, and the surface-disposition schema-total guard is red until its stale 54 is
+reconciled to the 55-schema exit canon.
 
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at

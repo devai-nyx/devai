@@ -16,6 +16,7 @@ const DISPOSITION = JSON.parse(
 ) as {
   actions: { keep: { action_id: string }[]; fold: unknown[]; tombstone: unknown[] };
   sensors: { entries: { sensor_id: string; design_note_path: string }[] };
+  schemas: { canonical_total: number };
   packages: { fixed_group: string[] };
   root_porcelain: {
     build: { argv: string[] };
@@ -158,7 +159,8 @@ describe('R-0004 governed surface red-first contracts', () => {
       rules: string[];
     };
     expect(output.ok).toBe(true);
-    expect(output.canonical_total).toBeGreaterThanOrEqual(55);
+    expect(output.canonical_total).toBe(55);
+    expect(DISPOSITION.schemas.canonical_total).toBe(output.canonical_total);
     expect(output.rules).toEqual(
       expect.arrayContaining([
         'recursive-closed-complete-objects',
