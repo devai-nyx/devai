@@ -16,10 +16,22 @@ const DISPOSITION = JSON.parse(
   actions: { keep: { action_id: string }[]; fold: unknown[]; tombstone: unknown[] };
   sensors: { entries: { sensor_id: string; design_note_path: string }[] };
   packages: { fixed_group: string[] };
+  root_porcelain: {
+    build: { argv: string[] };
+    test: { argv: string[] };
+  };
 };
 
 function readJson(relativePath: string): unknown {
   return JSON.parse(readFileSync(join(ROOT, relativePath), 'utf8')) as unknown;
+}
+
+function typeScriptFiles(directory: string): string[] {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) return typeScriptFiles(path);
+    return entry.name.endsWith('.ts') ? [path] : [];
+  });
 }
 
 describe('R-0004 governed surface red-first contracts', () => {
@@ -196,6 +208,62 @@ describe('R-0004 governed surface red-first contracts', () => {
     )?.description;
     expect(description).toContain('pnpm -r build');
     expect(description).not.toMatch(/default|override|caller-selected|pnpm run build/u);
+  });
+
+  it('BL-163/165 derives active surface-contract argv and schema count from canonical sources', () => {
+    const contract = readFileSync(join(ROOT, 'work/rounds/R-0004/surface-contract.md'), 'utf8');
+    expect(contract).toContain(
+      `The build action may execute only \`${DISPOSITION.root_porcelain.build.argv.join(' ')}\`.`,
+    );
+    expect(contract).toContain(
+      `The test action may execute only \`${DISPOSITION.root_porcelain.test.argv.join(' ')}\`.`,
+    );
+
+    const result = spawnSync(
+      'node',
+      [BIN, 'policy', 'check', 'schemas', '--repo-root', ROOT, '--format', 'json'],
+      { cwd: ROOT, encoding: 'utf8' },
+    );
+    expect(result.status, result.stderr).toBe(0);
+    const { canonical_total: canonicalTotal } = JSON.parse(result.stdout) as {
+      canonical_total: number;
+    };
+    expect(contract).toContain(`across all ${canonicalTotal} schemas`);
+  });
+
+  it('BL-164 keeps direct public command descriptions equal to the canonical registry', () => {
+    const registry = readJson('law/policy/action-registry.json') as {
+      entries: {
+        action_id: string;
+        internal_binding: string;
+        disposition: string;
+        description: string;
+      }[];
+    };
+    const directDescriptions = new Map(
+      registry.entries
+        .filter(
+          (entry) =>
+            entry.disposition === 'keep' && entry.action_id === entry.internal_binding,
+        )
+        .map((entry) => [entry.action_id, entry.description]),
+    );
+    const observed = new Map<string, string>();
+    const literal =
+      /defineCommand\(\{\s*name:\s*'((?:\\.|[^'])*)',\s*description:\s*'((?:\\.|[^'])*)'/gsu;
+    for (const path of typeScriptFiles(join(ROOT, 'packages/cli/src/commands'))) {
+      for (const match of readFileSync(path, 'utf8').matchAll(literal)) {
+        const name = match[1];
+        const description = match[2];
+        if (name !== undefined && description !== undefined && directDescriptions.has(name)) {
+          observed.set(name, description);
+        }
+      }
+    }
+    expect(observed.size).toBeGreaterThan(0);
+    for (const [name, description] of observed) {
+      expect(description, name).toBe(directDescriptions.get(name));
+    }
   });
 
   it('BL-162 binds strict governance to a window covering the complete R-0004 range', () => {
