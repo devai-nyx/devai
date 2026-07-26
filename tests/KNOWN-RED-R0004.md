@@ -9,9 +9,9 @@ and the complete 147-binding guard is green. This history is evidence, not a wai
 BL-180 preserves the exact-CI portability reds: colored Vitest summaries must yield the
 same passed/failed metrics as plain summaries, and ANSI-decorated reporter text must
 produce the same deterministic R20 fingerprint without changing raw evidence. Engineer
-`a0dc396` closed metric extraction; the fingerprint case is red in this Inspector
-batch, and the surface-disposition schema-total guard is red until its stale 54 is
-reconciled to the 55-schema exit canon.
+`a0dc396` closed metric extraction, Engineer `db75ddc` closed fingerprint normalization,
+and Architect `467b001` reconciled the surface disposition to the 55-schema exit canon.
+Both Inspector guards are green without a baseline recapture.
 
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at
