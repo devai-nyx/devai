@@ -2537,8 +2537,8 @@ The claims ceiling and every external human gate remain unchanged.
 
 DII-189 supersedes DII-188 only as the R-0004 source-closing judgment. The Inspector
 known-red record now distinguishes all fourteen current green clusters from the
-historical `dfa5659` parity failure, the active surface contract cites terminal DII-188
-and the third-review correction, and the fifth-review and governance-range lifecycle
+historical `dfa5659` parity failure, the active surface contract cites this decision and
+the third-review correction, and the fifth-review and governance-range lifecycle
 records are symmetric and non-self-referential.
 
 The complete ladder passed on exact repaired snapshot
