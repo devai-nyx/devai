@@ -1,10 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { CAC } from 'cac';
-import { enforceEffectReport } from '@devai-nyx/effects-check';
+import { ACTION_EFFECT_CONTRACTS, enforceEffectReport } from '@devai-nyx/effects-check';
 import { senseActionEffectInference } from '@devai-nyx/sensors';
 import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
-import { defineCommand, getFullRegistry } from '../../define-command.js';
+import { defineCommand } from '../../define-command.js';
 
 interface Options {
   readonly repoRoot?: string;
@@ -48,15 +48,10 @@ export const checkActionEffectsCmd = defineCommand({
             capabilities?: unknown;
           }[];
         };
-        const entries = getFullRegistry();
         const result = await senseActionEffectInference({
           tsconfigPath: resolve(repoRoot, options.tsconfig ?? 'tsconfig.effects.json'),
-          catalog: entries.map((entry) => entry.previous_name),
-          contracts: entries.map((entry) => ({
-            action_id: entry.previous_name,
-            effect: entry.effects,
-            capabilities: entry.authority_contract.capabilities,
-          })),
+          catalog: ACTION_EFFECT_CONTRACTS.map((entry) => entry.action_id),
+          contracts: ACTION_EFFECT_CONTRACTS,
           subprocessRegistry: registry,
         });
 

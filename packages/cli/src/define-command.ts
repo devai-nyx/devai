@@ -1,6 +1,7 @@
 import type { CAC } from 'cac';
 import {
   metadataFor,
+  registryActionFor,
   type AuthorityActionContract,
   type ActionEffect,
   type ActionLifecycle,
@@ -76,6 +77,8 @@ export interface CommandDefinition extends Omit<
 /** Extended registry entry that carries extended_doc for the docs generator. */
 export interface RegistryEntry extends CommandSpec {
   readonly internal_name: string;
+  readonly disposition: 'keep' | 'fold' | 'tombstone';
+  readonly migration: string | null;
   readonly authority_contract: AuthorityActionContract;
   runtime_args?: string;
   runtime_options?: readonly { readonly flags: string; readonly description: string }[];
@@ -85,46 +88,8 @@ export interface RegistryEntry extends CommandSpec {
 
 const registry: RegistryEntry[] = [];
 
-const NAMED_SENSOR_VERBS = new Set([
-  'sense build',
-  'sense docs-drift',
-  'sense lint',
-  'sense inventory-performance',
-  'sense run',
-  'sense spec-idiomaticity',
-  'sense test',
-  'sense type-check',
-  'sense api',
-  'sense data-model',
-  'sense rbac',
-]);
-
-const SENSOR_CONTROL_VERBS = new Set([
-  'sense judge',
-  'sense migrate-check',
-  'sense mutation-run',
-  'sense mutation-verify',
-  'sense readings-rebuild',
-  'sense readings-record',
-  'sense runtime-api',
-  'sense runtime-auth',
-  'sense runtime-data',
-  'sense site-drift',
-  'sense trace-resolve',
-]);
-
-function isCollapsedSensorWrapper(entry: RegistryEntry): boolean {
-  return (
-    entry.previous_name.startsWith('sense ') &&
-    !NAMED_SENSOR_VERBS.has(entry.previous_name) &&
-    !SENSOR_CONTROL_VERBS.has(entry.previous_name)
-  );
-}
-
 function publicRegistry(): RegistryEntry[] {
-  return registry.filter(
-    (entry) => !isCollapsedSensorWrapper(entry) && entry.previous_name !== 'backlog compact',
-  );
+  return registry.filter((entry) => entry.disposition === 'keep');
 }
 
 function publicText(value: string): string {
@@ -136,6 +101,7 @@ function publicText(value: string): string {
 }
 
 export function defineCommand(definition: CommandDefinition): CommandDefinition {
+  const canonical = registryActionFor(definition.name);
   const metadata = metadataFor(
     definition.name,
     definition.authority,
@@ -147,9 +113,11 @@ export function defineCommand(definition: CommandDefinition): CommandDefinition 
     name: metadata.path.join(' '),
     previous_name: definition.name,
     internal_name: definition.name.replaceAll(' ', '-'),
+    disposition: canonical.disposition,
+    migration: canonical.migration,
     ...metadata,
-    description: publicText(definition.description),
-    authority: definition.authority ?? 'mesh_controller',
+    description: publicText(canonical.description),
+    authority: canonical.authority ?? definition.authority ?? 'mesh_controller',
     ...(definition.extended_doc !== undefined && {
       extended_doc: publicText(definition.extended_doc),
     }),
@@ -171,6 +139,8 @@ export function getActionsList(opts: { authority?: ActionAuthority } = {}): read
       runtime_options: _options,
       runtime_supports_human: _human,
       authority_contract: _authorityContract,
+      disposition: _disposition,
+      migration: _migration,
       ...spec
     }) => spec,
   );

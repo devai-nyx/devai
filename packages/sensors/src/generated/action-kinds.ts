@@ -1,0 +1,509 @@
+// @generated from law/policy/action-registry.json
+// Do not edit; run node scripts/generate-action-registry.mjs.
+
+export const SENSOR_ACTION_KINDS = [
+  {
+    "action_id": "inventory adherence",
+    "internal_binding": "inv adherence-reverse",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "inventory components",
+    "internal_binding": "inv components",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "inventory contracts",
+    "internal_binding": "inv contracts",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "inventory coverage",
+    "internal_binding": "inv coverage",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "inventory dependencies",
+    "internal_binding": "inv dependencies",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "inventory glossary",
+    "internal_binding": "inv glossary",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "inventory modules",
+    "internal_binding": "inv modules",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "inventory regen",
+    "internal_binding": "inv regen",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "inventory routes",
+    "internal_binding": "inv routes",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "inventory schemas",
+    "internal_binding": "inv schemas",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "inventory tests",
+    "internal_binding": "inv tests",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense archive immutability",
+    "internal_binding": "sense archive-immutability",
+    "disposition": "fold",
+    "migration": "sense run archive_immutability",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense build",
+    "internal_binding": "sense build",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense decision citation resolution",
+    "internal_binding": "sense decision-citation-resolution",
+    "disposition": "fold",
+    "migration": "sense run decision_citation_resolution",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense decision record integrity",
+    "internal_binding": "sense decision-record-integrity",
+    "disposition": "fold",
+    "migration": "sense run decision_record_integrity",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense docs drift",
+    "internal_binding": "sense docs-drift",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense harness coherence",
+    "internal_binding": "sense harness-coherence",
+    "disposition": "fold",
+    "migration": "sense run harness_coherence",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense harness coverage",
+    "internal_binding": "sense harness-coverage",
+    "disposition": "fold",
+    "migration": "sense run harness_coverage",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense harness depth",
+    "internal_binding": "sense harness-depth",
+    "disposition": "fold",
+    "migration": "sense run harness_depth",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense harness green main",
+    "internal_binding": "sense harness-green-main",
+    "disposition": "fold",
+    "migration": "sense run harness_green_main",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense harness idiomaticity",
+    "internal_binding": "sense harness-idiomaticity",
+    "disposition": "fold",
+    "migration": "sense run harness_idiomaticity",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense harness invariant alignment",
+    "internal_binding": "sense harness-invariant-alignment",
+    "disposition": "fold",
+    "migration": "sense run harness_invariant_alignment",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense harness performance",
+    "internal_binding": "sense harness-performance",
+    "disposition": "fold",
+    "migration": "sense run harness_performance",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense harness robustness",
+    "internal_binding": "sense harness-robustness",
+    "disposition": "fold",
+    "migration": "sense run harness_robustness",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense harness security",
+    "internal_binding": "sense harness-security",
+    "disposition": "fold",
+    "migration": "sense run harness_security",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense inventory adherence",
+    "internal_binding": "sense inventory-adherence",
+    "disposition": "fold",
+    "migration": "sense run inventory_adherence",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense inventory api",
+    "internal_binding": "sense api",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense inventory coverage",
+    "internal_binding": "sense coverage",
+    "disposition": "fold",
+    "migration": "sense run coverage",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense inventory data handling",
+    "internal_binding": "sense data-handling",
+    "disposition": "fold",
+    "migration": "sense run data_handling",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense inventory data model",
+    "internal_binding": "sense data-model",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense inventory dep graph",
+    "internal_binding": "sense dep-graph",
+    "disposition": "fold",
+    "migration": "sense run dep_graph",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense inventory determinism",
+    "internal_binding": "sense inventory-determinism",
+    "disposition": "fold",
+    "migration": "sense run inventory_determinism",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense inventory performance",
+    "internal_binding": "sense inventory-performance",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense inventory rbac",
+    "internal_binding": "sense rbac",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense inventory routes",
+    "internal_binding": "sense routes",
+    "disposition": "fold",
+    "migration": "sense run routes",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense judge",
+    "internal_binding": "sense judge",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense lint",
+    "internal_binding": "sense lint",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense migrate check",
+    "internal_binding": "sense migrate-check",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense mutation run",
+    "internal_binding": "mutation run",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "harness-write"
+  },
+  {
+    "action_id": "sense mutation verify",
+    "internal_binding": "mutation verify",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "local-write"
+  },
+  {
+    "action_id": "sense perf test",
+    "internal_binding": "sense perf-test",
+    "disposition": "fold",
+    "migration": "sense run perf_test",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense plant coherence",
+    "internal_binding": "sense plant-coherence",
+    "disposition": "fold",
+    "migration": "sense run plant_coherence",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense plant coverage",
+    "internal_binding": "sense plant-coverage",
+    "disposition": "fold",
+    "migration": "sense run plant_coverage",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense plant depth",
+    "internal_binding": "sense plant-depth",
+    "disposition": "fold",
+    "migration": "sense run plant_depth",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense readings rebuild",
+    "internal_binding": "sense readings-rebuild",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "harness-write"
+  },
+  {
+    "action_id": "sense readings record",
+    "internal_binding": "sense readings-record",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "harness-write"
+  },
+  {
+    "action_id": "sense round record integrity",
+    "internal_binding": "sense round-record-integrity",
+    "disposition": "fold",
+    "migration": "sense run round_record_integrity",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense run",
+    "internal_binding": "sense run",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense runtime api",
+    "internal_binding": "sense runtime-api",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense runtime auth",
+    "internal_binding": "sense runtime-auth",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense runtime data",
+    "internal_binding": "sense runtime-data",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense security scan",
+    "internal_binding": "sense security-scan",
+    "disposition": "fold",
+    "migration": "sense run security_scan",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense site drift",
+    "internal_binding": "sense site-drift",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense spec alignment",
+    "internal_binding": "sense spec-alignment",
+    "disposition": "fold",
+    "migration": "sense run spec_alignment",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense spec depth",
+    "internal_binding": "sense spec-depth",
+    "disposition": "fold",
+    "migration": "sense run spec_depth",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense spec freshness",
+    "internal_binding": "sense spec-freshness",
+    "disposition": "fold",
+    "migration": "sense run spec_freshness",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense spec idiomaticity",
+    "internal_binding": "sense spec-idiomaticity",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense spec performance targets",
+    "internal_binding": "sense spec-performance-targets",
+    "disposition": "fold",
+    "migration": "sense run spec_performance_targets",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense spec robustness targets",
+    "internal_binding": "sense spec-robustness-targets",
+    "disposition": "fold",
+    "migration": "sense run spec_robustness_targets",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense spec security coverage",
+    "internal_binding": "sense spec-security-coverage",
+    "disposition": "fold",
+    "migration": "sense run spec_security_coverage",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense test",
+    "internal_binding": "sense test",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense test coherence",
+    "internal_binding": "sense test-coherence",
+    "disposition": "fold",
+    "migration": "sense run test_coherence",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense test coverage depth",
+    "internal_binding": "sense test-coverage-depth",
+    "disposition": "fold",
+    "migration": "sense run test_coverage_depth",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense test idiomaticity",
+    "internal_binding": "sense test-idiomaticity",
+    "disposition": "fold",
+    "migration": "sense run test_idiomaticity",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense test invariant alignment",
+    "internal_binding": "sense test-invariant-alignment",
+    "disposition": "fold",
+    "migration": "sense run test_invariant_alignment",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense test performance coverage",
+    "internal_binding": "sense test-performance-coverage",
+    "disposition": "fold",
+    "migration": "sense run test_performance_coverage",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense test robustness coverage",
+    "internal_binding": "sense test-robustness-coverage",
+    "disposition": "fold",
+    "migration": "sense run test_robustness_coverage",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense test security coverage",
+    "internal_binding": "sense test-security-coverage",
+    "disposition": "fold",
+    "migration": "sense run test_security_coverage",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense test weakening",
+    "internal_binding": "sense test-weakening",
+    "disposition": "fold",
+    "migration": "sense run test_weakening",
+    "effect": "read"
+  },
+  {
+    "action_id": "sense trace resolve",
+    "internal_binding": "sense trace-resolve",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "sense type check",
+    "internal_binding": "sense type-check",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "read"
+  },
+  {
+    "action_id": "verify translation",
+    "internal_binding": "verify translation",
+    "disposition": "keep",
+    "migration": null,
+    "effect": "local-write"
+  }
+] as const;

@@ -111,7 +111,7 @@ export function renderHelp(
     (entry) =>
       entry.lifecycle !== 'retired' &&
       startsWithPath(entry.path, prefix) &&
-      (includeAll || entry.tier === 'porcelain'),
+      (includeAll || entry.tier === 'porcelain' || entry.path.length === prefix.length),
   );
   const lines = [`devai/${version}`, ''];
   lines.push(`Usage: devai${prefix.length > 0 ? ` ${prefix.join(' ')}` : ''} <command> [options]`);
@@ -315,6 +315,12 @@ export function routeArgv(
       context: { action: 'work backlog compact', successor: 'work backlog list' },
     });
     return { kind: 'output', text: renderCliError(error, wantsJson(args)), exitCode: 2 };
+  }
+  if (args[0] === 'policy' && args[1] === 'check' && args[2] === 'schemas') {
+    return {
+      kind: 'dispatch',
+      argv: [...argv.slice(0, 2), 'check-schemas', ...args.slice(3)],
+    };
   }
   const obsoleteFlag = args.find((arg) => ['--execute', '--apply', '--human'].includes(arg));
   if (obsoleteFlag !== undefined) {
