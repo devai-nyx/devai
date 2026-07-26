@@ -1,8 +1,9 @@
 # R-0004 governed-surface known reds
 
-Resolution: all nine red-first clusters are green on the role-pure implementation base
-`e9798399cbd46cec3e1c980b5c8186ae643c61e0`. The evidence below remains the immutable
-B1 characterization; it is not a current waiver.
+Resolution: the original nine red-first clusters and five later review-repair clusters
+are preserved below. The first thirteen are green through exact candidate `dfa5659`.
+The strengthened BL-164/167 parity guard is intentionally red until its stale production
+literals are aligned; this is characterization evidence, not a waiver.
 
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at
@@ -16,6 +17,11 @@ the exact B0 candidate `10b9f1b9e599b77d6123daef165210259f90a8eb`.
 | Leaf help routing                                              | BL-027                 |
 | Core façade and eleven-member fixed group                      | BL-025                 |
 | Exact non-recursive root build/test porcelain                  | BL-031                 |
+| Every fixed production `sense test` suite route                | BL-156                 |
+| Fixed recursive canonical build help                           | BL-159                 |
+| Surface-contract argv and live schema count                    | BL-163, BL-165         |
+| Complete command-description parity                            | BL-164, BL-167         |
+| Complete exact-range governance scan                           | BL-162                 |
 | Complete keep/fold/tombstone surface                           | BL-030                 |
 | Reproducibility and immutable workflow behavior                | BL-065, BL-084         |
 | Disposition-derived repository-reference semantics             | BL-080                 |

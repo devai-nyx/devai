@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 import { describe, expect, it } from 'vitest';
 
 // Invariants: INV-DEVAI-017, INV-DEVAI-020
@@ -32,6 +33,59 @@ function typeScriptFiles(directory: string): string[] {
     if (entry.isDirectory()) return typeScriptFiles(path);
     return entry.name.endsWith('.ts') ? [path] : [];
   });
+}
+
+function staticCommandDescriptions(path: string): Map<string, string> {
+  const sourceText = readFileSync(path, 'utf8');
+  const source = ts.createSourceFile(path, sourceText, ts.ScriptTarget.Latest, true);
+  const descriptions = new Map<string, string>();
+  function visit(node: ts.Node): void {
+    if (
+      ts.isCallExpression(node) &&
+      ts.isIdentifier(node.expression) &&
+      node.expression.text === 'defineCommand' &&
+      node.arguments.length === 1 &&
+      ts.isObjectLiteralExpression(node.arguments[0])
+    ) {
+      const fields = new Map<string, ts.Expression>();
+      for (const property of node.arguments[0].properties) {
+        if (
+          ts.isPropertyAssignment(property) &&
+          (ts.isIdentifier(property.name) || ts.isStringLiteral(property.name))
+        ) {
+          fields.set(property.name.text, property.initializer);
+        }
+      }
+      const name = fields.get('name');
+      const description = fields.get('description');
+      if (
+        name !== undefined &&
+        description !== undefined &&
+        ts.isStringLiteralLike(name) &&
+        ts.isStringLiteralLike(description)
+      ) {
+        descriptions.set(name.text, description.text);
+      }
+    }
+    ts.forEachChild(node, visit);
+  }
+  visit(source);
+  if (path.endsWith('/init/index.ts')) {
+    expect(sourceText).toContain('name: `init apply-${segment}`');
+    expect(sourceText).toContain(
+      'description: `Apply only the ${segment} bootstrap segment under its declared authority.`',
+    );
+    for (const match of sourceText.matchAll(/initApplyDefinition\('([^']+)'\)/gu)) {
+      const segment = match[1];
+      if (segment !== undefined) {
+        descriptions.set(
+          `init apply-${segment}`,
+          `Apply only the ${segment} bootstrap segment under its declared authority.`,
+        );
+      }
+    }
+  }
+  return descriptions;
 }
 
 describe('R-0004 governed surface red-first contracts', () => {
@@ -231,7 +285,7 @@ describe('R-0004 governed surface red-first contracts', () => {
     expect(contract).toContain(`across all ${canonicalTotal} schemas`);
   });
 
-  it('BL-164 keeps direct public command descriptions equal to the canonical registry', () => {
+  it('BL-164/167 keeps resolvable public command descriptions equal to the canonical registry', () => {
     const registry = readJson('law/policy/action-registry.json') as {
       entries: {
         action_id: string;
@@ -240,29 +294,33 @@ describe('R-0004 governed surface red-first contracts', () => {
         description: string;
       }[];
     };
-    const directDescriptions = new Map(
-      registry.entries
-        .filter(
-          (entry) => entry.disposition === 'keep' && entry.action_id === entry.internal_binding,
-        )
-        .map((entry) => [entry.action_id, entry.description]),
-    );
-    const observed = new Map<string, string>();
-    const literal =
-      /defineCommand\(\{\s*name:\s*'((?:\\.|[^'])*)',\s*description:\s*'((?:\\.|[^'])*)'/gsu;
+    const allObserved = new Map<string, string>();
     for (const path of typeScriptFiles(join(ROOT, 'packages/cli/src/commands'))) {
-      for (const match of readFileSync(path, 'utf8').matchAll(literal)) {
-        const name = match[1];
-        const description = match[2];
-        if (name !== undefined && description !== undefined && directDescriptions.has(name)) {
-          observed.set(name, description);
-        }
+      for (const [name, description] of staticCommandDescriptions(path)) {
+        allObserved.set(name, description);
       }
     }
-    expect(observed.size).toBeGreaterThan(0);
-    for (const [name, description] of observed) {
-      expect(description, name).toBe(directDescriptions.get(name));
-    }
+    const keepBindings = new Set(
+      registry.entries
+        .filter((entry) => entry.disposition === 'keep')
+        .map((entry) => entry.internal_binding),
+    );
+    const observed = new Map([...allObserved].filter(([name]) => keepBindings.has(name)));
+    const expectedByBinding = new Map(
+      registry.entries
+        .filter((entry) => entry.disposition === 'keep' && observed.has(entry.internal_binding))
+        .map((entry) => [entry.internal_binding, entry.description]),
+    );
+    expect(observed.size).toBe(147);
+    expect(expectedByBinding.size).toBe(observed.size);
+    const drift = [...observed]
+      .filter(([name, description]) => description !== expectedByBinding.get(name))
+      .map(([name, description]) => ({
+        name,
+        observed: description,
+        expected: expectedByBinding.get(name),
+      }));
+    expect(drift).toEqual([]);
   });
 
   it('BL-162 binds strict governance to a window covering the complete R-0004 range', () => {
