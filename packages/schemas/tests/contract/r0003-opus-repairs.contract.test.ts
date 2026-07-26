@@ -95,11 +95,13 @@ describe('R-0003 first Opus review repairs', () => {
 
   it('binds the active ADR index to the legal replacement topology', () => {
     const index = text('law/adr/README.md');
-    expect(index).toContain('ADR-001..017 are gapless');
-    expect(index).toContain('fourteen are active');
+    expect(index).toContain('ADR-001..020 are gapless');
+    expect(index).toContain('fifteen are active');
     expect(index).toContain('ADR-005 is superseded by active ADR-013');
     expect(index).toMatch(/ADR-014 is independently superseded by active\s+ADR-015/u);
     expect(index).toContain('ADR-011 is superseded by active ADR-016');
+    expect(index).toContain('ADR-017 plus ADR-018 are superseded by active ADR-019');
+    expect(index).toContain('ADR-020 aligns governance-history inline-array parsing');
     expect(index).toMatch(/^provenance: \[DII-153; DII-175; DII-178; REV-0003]$/m);
     expect(index).not.toContain('ADR-001..012 are gapless and active');
   });
