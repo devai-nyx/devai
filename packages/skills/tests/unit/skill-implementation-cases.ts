@@ -1,4 +1,12 @@
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -293,6 +301,11 @@ describe('scaffolder and round skill envelopes', () => {
         await skill('SKILL-round-backlog').run({ repoRoot: repo, inputs: { round_n: 7 } }),
       ).toMatchObject({ status: 'pass' });
     });
+
+    expect(existsSync(join(repo, 'work/rounds/R-0007'))).toBe(false);
+    expect(
+      existsSync(join(repo, '.devai/state/round-runs/R-0007/backlog/backlog.json')),
+    ).toBe(true);
 
     expect(
       await skill('SKILL-round-orchestrate').run({
