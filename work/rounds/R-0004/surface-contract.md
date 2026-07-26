@@ -7,7 +7,10 @@ date: 2026-07-26
 authority: Architect
 supersedes: null
 superseded_by: null
-provenance: [OM-002; DII-162; DII-187; BL-163; BL-165; BL-169; R-0004-SURFACE-DISPOSITION]
+provenance:
+  [
+    OM-002; DII-162; DII-188; BL-163; BL-165; BL-169; BL-172; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION,
+  ]
 ---
 
 # R-0004 governed surface and package contract
