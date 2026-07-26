@@ -1666,6 +1666,17 @@ current closing decision; the bounded-test clause distinguishes the fixed all-su
 porcelain from the four exact configured suite variants; the source close is rebound by
 a new DII after all BL-167–169 corrections, without widening any human gate.
 
+### BL-170 — Narrow the command-parity AST argument under strict TypeScript
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 command-parity typecheck failure after Inspector bf9a690; R-0004-COMMAND-PARITY-TYPECHECK-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the Inspector AST traversal explicitly narrows the first `defineCommand`
+argument before object-literal inspection; exact typecheck passes; the focused guard
+retains the same five-item intentional red evidence until Engineer repair; Auditor pairs
+the failure with a symmetric correction.
+
 ## Carried guard map
 
 The original known-red mapping remains as historical provenance:
