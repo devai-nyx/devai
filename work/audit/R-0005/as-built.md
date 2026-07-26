@@ -17,8 +17,8 @@ provenance:
 
 ## Boundary and verdict
 
-R-0005 B0 through B8 are implemented at implementation snapshot
-`2cb2ff31186e617e687febfa9eadab55fb7ad788`. The source is not closed by this
+R-0005 B0 through B8 and the first-review/exit-ladder repairs are implemented at
+governed snapshot `52a353b31fb680d981d6c2f1f947d22ec988e7dc`. The source is not closed by this
 report: the independent Codex review, complete exit ladder, source PR and exact-head
 CI, source merge and exact-main CI, machine PC-0006 emission, closure-only PR, closure
 merge, and final exact-main CI remain serial gates.
@@ -62,38 +62,41 @@ until the exact source merge passes exact-main CI.
 
 ## Role-pure batch map
 
-| Batch                  | Role                             | Commit(s)                                                                                         | Result                                                                                                                                          |
-| ---------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| B0                     | Owner + Architect                | `47d9ca8`, `f93b957`                                                                              | OM-009 authorizes the exact R-0005 Codex substitution; DII-202 and the entry inventory declare the round.                                       |
-| B1                     | Owner                            | `861ca54`                                                                                         | JNY-014 adopts the three-tree doctrine and `.devai/worktrees` setpoint.                                                                         |
-| B2                     | Architect + Inspector            | `99f6dbd`, `6ecbfd9`                                                                              | Eleven bounded red clusters were authorized and demonstrated red for their expected missing behavior.                                           |
-| B3                     | Architect                        | `6ed9f72`, `9de2ee1`                                                                              | ADR-016, proof vocabulary, lifecycle, anchor migration, and prospective sequencing became governed semantics.                                   |
-| B4-B6                  | Engineer + Architect             | `02da3be`, `584337d`, `e76d65f`, `1bfbfbb`, `b167ce9`                                             | Evidence epochs, exact-subject local evidence, prompt bounds, clean observation, corrected lifecycle, and SWEEP persistence were implemented.   |
-| B7                     | Inspector + Architect            | `3b7fc2b`, `3771e05`, `00f56cc`                                                                   | Adversarial coverage closed the initial reds and refreshed invariant trace projection.                                                          |
-| Exit projection        | Architect + Inspector            | `c717c73`, `35bd9bd`, `30bf3ee`, `54a0b5e`                                                        | Exact current repository references were restored without weakening semantic classification.                                                    |
-| Exit quality           | Architect + Inspector + Engineer | `340360f`, `d869e1f`, `571d1cd`, `afe0e00`, `14fa547`                                             | Lint and formatting collateral were governed and repaired under path ownership.                                                                 |
-| Policy materialization | Architect + Inspector + Engineer | `2929b4f`, `450bf79`, `4d040c4`, `e03b8f9`, `4ea2c00`                                             | The machine-resolved policy, runtime parity guard, and Architect law mirror were synchronized.                                                  |
-| SWEEP authority        | Architect + Inspector + Engineer | `84be6f7`, `75b4352`, `06e9af6`, `5a6521f`, `9ca6c4b`, `e92be4d`, `70bb495`, `cc2eee2`, `2cb2ff3` | Registry-derived read children execute under bounded authority; non-read and folded actions persist honest blockers and cannot abort the epoch. |
+| Batch                     | Role                                       | Commit(s)                                                                                         | Result                                                                                                                                                                                   |
+| ------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| B0                        | Owner + Architect                          | `47d9ca8`, `f93b957`                                                                              | OM-009 authorizes the exact R-0005 Codex substitution; DII-202 and the entry inventory declare the round.                                                                                |
+| B1                        | Owner                                      | `861ca54`                                                                                         | JNY-014 adopts the three-tree doctrine and `.devai/worktrees` setpoint.                                                                                                                  |
+| B2                        | Architect + Inspector                      | `99f6dbd`, `6ecbfd9`                                                                              | Eleven bounded red clusters were authorized and demonstrated red for their expected missing behavior.                                                                                    |
+| B3                        | Architect                                  | `6ed9f72`, `9de2ee1`                                                                              | ADR-016, proof vocabulary, lifecycle, anchor migration, and prospective sequencing became governed semantics.                                                                            |
+| B4-B6                     | Engineer + Architect                       | `02da3be`, `584337d`, `e76d65f`, `1bfbfbb`, `b167ce9`                                             | Evidence epochs, exact-subject local evidence, prompt bounds, clean observation, corrected lifecycle, and SWEEP persistence were implemented.                                            |
+| B7                        | Inspector + Architect                      | `3b7fc2b`, `3771e05`, `00f56cc`                                                                   | Adversarial coverage closed the initial reds and refreshed invariant trace projection.                                                                                                   |
+| Exit projection           | Architect + Inspector                      | `c717c73`, `35bd9bd`, `30bf3ee`, `54a0b5e`                                                        | Exact current repository references were restored without weakening semantic classification.                                                                                             |
+| Exit quality              | Architect + Inspector + Engineer           | `340360f`, `d869e1f`, `571d1cd`, `afe0e00`, `14fa547`                                             | Lint and formatting collateral were governed and repaired under path ownership.                                                                                                          |
+| Policy materialization    | Architect + Inspector + Engineer           | `2929b4f`, `450bf79`, `4d040c4`, `e03b8f9`, `4ea2c00`                                             | The machine-resolved policy, runtime parity guard, and Architect law mirror were synchronized.                                                                                           |
+| SWEEP authority           | Architect + Inspector + Engineer           | `84be6f7`, `75b4352`, `06e9af6`, `5a6521f`, `9ca6c4b`, `e92be4d`, `70bb495`, `cc2eee2`, `2cb2ff3` | Registry-derived read children execute under bounded authority; non-read and folded actions persist honest blockers and cannot abort the epoch.                                          |
+| Independent review repair | Auditor + Architect + Inspector + Engineer | `f47ec0c`, `8932138`, `faad6fd`, `d752bac` through `b875121`                                      | The first independent Codex FAIL is preserved; all eight P0/P1 findings received governed adversaries and bounded repairs.                                                               |
+| Strict governance repair  | Architect + Inspector + Engineer + Auditor | `4ea2dbc`, `7a17bc3`, `691a90d`, `94192b3`, `d71bcda`                                             | Protected-path scanning now classifies repository-root ownership without nested-path false positives.                                                                                    |
+| Final ladder repair       | Architect + Inspector + Engineer + Auditor | `fcc9a1b` through `52a353b`                                                                       | Sealed ADR history was repaired by canonical supersession; single read sensors use bounded read authority; parser, roster, trace, lint, typecheck, and formatting gates are exact-green. |
 
 Combined-role rows are serial role-pure commits, never shared-authority commits.
 
 ## Fresh regression evidence
 
-The ordinary floor after the terminal SWEEP repair passed 130 files with 1,192 tests
-passing, eight declared skips, and zero failures. The pre-close merged T1+T3 coverage
-reading passed 81 files with 897 tests and seven declared skips against the unchanged
+The final pre-review ordinary floor passed 132 files with 1,211 tests passing, eight
+declared skips, and zero failures. The merged T1+T3 coverage reading passed 82 files
+with 911 tests and seven declared skips against the unchanged
 70/60/70/70 policy:
 
 | Metric     |                  Reading | Floor |
 | ---------- | -----------------------: | ----: |
-| Statements | 71.34% (10,659 / 14,941) |   70% |
-| Branches   |  61.86% (7,736 / 12,504) |   60% |
-| Functions  |   77.92% (1,521 / 1,952) |   70% |
-| Lines      |  73.38% (9,833 / 13,399) |   70% |
+| Statements | 71.17% (10,826 / 15,211) |   70% |
+| Branches   |  61.62% (7,885 / 12,796) |   60% |
+| Functions  |   77.39% (1,554 / 2,008) |   70% |
+| Lines      |  73.25% (9,989 / 13,635) |   70% |
 
-The final ladder must refresh these readings after the independent review evidence and
-source-closing law are complete. No threshold, source set, conditional skip, or
-assertion was weakened.
+Stage 1, Stage 2, Stage 3, changeset classification, T4, T5, T6, strict governance,
+repository-wide Prettier, and `git diff --check` all pass. No threshold, source set,
+conditional skip, assertion, lint rule, or formatting rule was weakened.
 
 ## Remaining ceremony
 
