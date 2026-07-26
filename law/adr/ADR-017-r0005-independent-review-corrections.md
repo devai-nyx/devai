@@ -14,7 +14,6 @@ affected_rules:
   - law/schemas/common-defs.schema.json
   - law/policy/governed-sequencing.json
   - packages/cli/src/authority/sense-run-child.ts
-  - packages/cli/src/command-router.ts
   - packages/evidence/src/evidence/verb-evidence.ts
   - packages/evidence/src/local-evidence/subject.ts
   - packages/evidence/src/local-evidence/verify.ts
@@ -90,12 +89,6 @@ The reusable evidence workflow is an affected rule of this active ADR. The
 child-authority predicate is extracted without behavior change so tests cover the pure
 surface without importing the complete broker; coverage thresholds and source inclusion
 remain unchanged.
-
-A public `sense run <registered-kind>` invocation is non-mutating only when its exact
-registry-derived internal child has `read` effects and the invocation carries no write
-consent. This bounded single-sensor projection may use the read authority boundary;
-presets, SWEEP, unknown or archived kinds, missing bindings, and every non-read child
-retain the parent `harness-write` authority contract.
 
 ## Consequences
 
