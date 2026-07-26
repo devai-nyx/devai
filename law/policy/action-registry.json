@@ -3917,7 +3917,7 @@
       "profiles": ["tier1", "tier2", "tier3"],
       "effect": "read",
       "authority": "mesh_controller",
-      "description": "Read one local or archived governed round and report its schema-valid canonical status.",
+      "description": "Read one governed round in place and report its schema-valid canonical status.",
       "promotion_criteria": [],
       "authority_contract_version": "1.0.0",
       "authority_contract": {
