@@ -63,33 +63,45 @@ describe('R-0003 third Opus review repairs', () => {
 
   it('binds the seven replay committer anomalies to role-pure originals', () => {
     const register = text('law/register/DECISIONS.md');
+    const failurePath = 'work/audit/R-0003/opus-close-review-4-portability-failure.md';
+    const correctionPath = 'work/audit/R-0003/opus-close-review-4-portability-correction.md';
+    const failure = text(failurePath);
+    const correction = text(correctionPath);
     const pairs = [
-      ['1449e4d', '16a9f36'],
-      ['611e14c', 'bfccf19'],
-      ['938e2ab', 'a26369e'],
-      ['3d44a48', 'dde5ae2'],
-      ['726fe66', '9293ace'],
-      ['0ba2612', '93ef651'],
-      ['fa17a5c', '7442708'],
+      ['1449e4d', '16a9f36', 'Engineer'],
+      ['611e14c', 'bfccf19', 'Architect'],
+      ['938e2ab', 'a26369e', 'Engineer'],
+      ['3d44a48', 'dde5ae2', 'Auditor'],
+      ['726fe66', '9293ace', 'Inspector'],
+      ['0ba2612', '93ef651', 'Inspector'],
+      ['fa17a5c', '7442708', 'Engineer'],
     ] as const;
-    for (const [replay, original] of pairs) {
+    for (const [replay, original, role] of pairs) {
       expect(register).toContain(replay);
       expect(register).toContain(original);
+      expect(failure).toContain(`| ${replay} | DEVAI ${role} / Antonio A. Russo`);
+      expect(failure).toContain(`| ${original}  | DEVAI ${role} / DEVAI ${role}`);
       expect(
         execFileSync('git', ['show', '-s', '--format=%an|%cn', replay], {
           cwd: ROOT,
           encoding: 'utf8',
         }).trim(),
-      ).toMatch(/^DEVAI (?:Architect|Engineer|Inspector|Auditor)\|Antonio A\. Russo$/);
-      expect(
-        execFileSync('git', ['show', '-s', '--format=%an|%cn', original], {
+      ).toBe(`DEVAI ${role}|Antonio A. Russo`);
+      expect(() =>
+        execFileSync('git', ['merge-base', '--is-ancestor', replay, 'HEAD'], {
           cwd: ROOT,
-          encoding: 'utf8',
-        }).trim(),
-      ).toMatch(
-        /^DEVAI (?:Architect|Engineer|Inspector|Auditor)\|DEVAI (?:Architect|Engineer|Inspector|Auditor)$/,
-      );
+          stdio: 'pipe',
+        }),
+      ).not.toThrow();
     }
+    const failureMeta = frontmatter(failurePath);
+    const correctionMeta = frontmatter(correctionPath);
+    expect(failureMeta.status).toBe('superseded');
+    expect(failureMeta.superseded_by).toBe(correctionMeta.id);
+    expect(correctionMeta.status).toBe('active');
+    expect(correctionMeta.supersedes).toBe(failureMeta.id);
+    expect(correction).toContain('single-branch clone');
+    expect(register).toContain('### DII-161');
     expect(register).toContain('procedural replay defect');
     expect(register).toContain('does not waive future identity requirements');
   });
