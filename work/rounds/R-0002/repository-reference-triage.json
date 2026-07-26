@@ -942,6 +942,12 @@
       "classification": "frozen-predecessor",
       "action": "retain",
       "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
+    },
+    {
+      "locator": "work/rounds/R-0004/entry-measurement.md:26:23:devai-nyx/devai-original",
+      "classification": "frozen-predecessor",
+      "action": "retain",
+      "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
     }
   ]
 }
