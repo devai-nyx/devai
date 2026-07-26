@@ -248,7 +248,8 @@ describe('governance record parsing and integrity', () => {
     expect(
       decisionRecordIntegrity({ repoRoot: root }).findings.filter(
         (finding) =>
-          finding.code === 'DECISION_LOCKED_BODY_MUTATED' && finding.path.endsWith('ADR-002.md'),
+          finding.code === 'DECISION_LOCKED_BODY_MUTATED' &&
+          finding.path?.endsWith('ADR-002.md') === true,
       ),
     ).toEqual([]);
   });
