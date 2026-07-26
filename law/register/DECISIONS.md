@@ -2423,7 +2423,6 @@ skip, or gate changed. The complete ladder and literal `claude-opus-5` review re
 requirements remain unchanged.
 
 ### DII-182 — Admit the exact local ladder
-
 `type: decision · status: active · authority: Architect · provenance: session-draft R-0004 exact-ladder close; DII-181; R-0004-EXACT-LADDER-PASS; Auditor a73993fea5cb20b5278c47c6a95139c60909b7d9`
 
 DII-182 supersedes DII-181 only as the R-0004 source-closing judgment. The complete
