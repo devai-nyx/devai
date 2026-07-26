@@ -15,8 +15,9 @@ Both Inspector guards are green without a baseline recapture.
 
 Exact-head CI run `30209278971` exposed one further BL-180 red: Actions selected a
 nondeterministic per-file Vitest progress line for the fixture fingerprint. The new
-Inspector case is red in this batch until only that presentation line is normalized;
-raw output, summary metrics, and the committed baseline remain protected.
+Inspector case at `6c876f1` is green after Engineer `d694249` normalized only that exact
+fixture presentation line; raw output, summary metrics, and the committed baseline
+remain protected.
 
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at
