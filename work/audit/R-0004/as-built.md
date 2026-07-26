@@ -18,7 +18,7 @@ provenance:
 ## Boundary and verdict
 
 R-0004 has completed B0 through B7 locally at source snapshot
-`6116635a2e565c974e28b7dec5a4f664a97b6cb7`. The governed surface and package
+`31dfbaf3d8b51e2089aef6aa01ea45b46d9b266c`. The governed surface and package
 topology satisfy the round acceptance criteria at that snapshot. The round is not yet
 closed: the Architect closing record, exact-candidate Claude Opus 5 review, source PR,
 exact-SHA CI, source merge, exact-main CI, closure-only machine record, closure PR, and
@@ -107,32 +107,33 @@ paths: four `dist/index` JavaScript/declaration artifacts, `package.json`, and
 | T2 restart         | Auditor + Architect + Inspector            | `6447d9c`, `691821a`, `1c27935`                                                                                                                          | Admitted contract trace bindings and exact fixed Vitest argv in the test authority composition.                   |
 | Governance restart | Auditor + Architect + Inspector + Engineer | `9e3480c`, `fee91e9`, `ebe227d`, `e984aed`, `0e80205`, `e7d4e48`, `2c2d8ec`, `b119515`, `c3cd89c`, `cc4e2c9`, `cb2d58e`, `7e4248e`, `f134f26`, `fceaa12` | Bound exact active-ADR CI coverage and repaired copied/restored seal history through ADR-015.                     |
 | Final strictness   | Auditor + Architect + Inspector            | `ae8f508`, `30acc79`, `4a56da2`, `6116635`                                                                                                               | Reconciled the final CI/ADR correction, tightened optional-path handling, and rebound DII-181.                    |
+| Second Opus repair | Auditor + Architect + Inspector + Engineer | `f738abc`, `9ee3c0e`, `c2d418b`, `c530468`, `a544733`, `d374fa0`, `0955da4`, `3581591`, `ab04008`, `212850a`, `31dfbaf`                                  | Closed all seven review findings and replaced the overbroad history tail with the exact round range.              |
 
 ## Fresh tests and coverage
 
-The complete tiered exit ladder passed on exact source snapshot `6116635`:
+The complete tiered exit ladder passed on exact source snapshot `31dfbaf`:
 
-- T1: 71 files / 834 tests;
-- T2: 38 files / 232 passed / 1 declared skip;
+- T1: 71 files / 837 tests;
+- T2: 38 files / 236 passed / 1 declared skip;
 - T3: 9 files / 56 passed / 7 declared skips;
 - T4: 2 files / 4 tests;
 - T5: 6 files / 25 tests;
 - T6: 1 file / 3 tests.
 
-The root `pnpm run test` porcelain passed 127 files / 1,154 tests with 8 declared skips
+The root `pnpm run test` porcelain passed 127 files / 1,161 tests with 8 declared skips
 and zero failures. Root `pnpm run build` passed through
 the registered `pnpm -r build` process and built all thirteen applicable workspace
 projects, including core.
 
-Fresh merged T1+T3 coverage passed 80 files / 890 tests with 7 declared skips against
+Fresh merged T1+T3 coverage passed 80 files / 893 tests with 7 declared skips against
 the unchanged 70/60/70/70 policy:
 
 | Metric     |                  Reading | Floor |
 | ---------- | -----------------------: | ----: |
-| Statements | 71.21% (10,533 / 14,791) |   70% |
-| Branches   |  61.78% (7,631 / 12,351) |   60% |
+| Statements | 71.21% (10,534 / 14,792) |   70% |
+| Branches   |  61.79% (7,633 / 12,353) |   60% |
 | Functions  |   77.61% (1,501 / 1,934) |   70% |
-| Lines      |  73.23% (9,715 / 13,266) |   70% |
+| Lines      |  73.23% (9,716 / 13,267) |   70% |
 
 No threshold, coverage source set, skip, or assertion was weakened. The R-0004
 contract's first action/effect subprocess test alone received a 30-second budget after
