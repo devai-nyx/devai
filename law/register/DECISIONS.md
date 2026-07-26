@@ -2801,6 +2801,36 @@ PASS is inferred. PC-0005 uses DII-162 as the declaration and DII-201 as the clo
 decision with `release_disposition: none-preratification`. Every external release,
 publication, deployment, real-stynx, R-0008, R-0009, and R-0010 gate remains closed.
 
+### DII-202 — Open R-0005 evidence and corrected round mechanics
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0005 declaration; R-0005-AUTHORIZATION; R-0005-PLAN@sha256:2a2e6bfcf375c5e5fbbd04c41260e465af2a72112cbdbfd15ebe22abeb456273; R-0005-ENTRY-INVENTORY; OM-002; OM-009; DII-201; PC-0005; successor e9db37209ee879c0f6cc0e2ee6c7c5619c3cb190`
+
+R-0005 is declared from exact successor base
+`e9db37209ee879c0f6cc0e2ee6c7c5619c3cb190` after PC-0005 and its exact-main CI.
+The round owns BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063,
+BL-106, and carry-ins BL-176 through BL-178 under the plan whose exact SHA-256 is
+bound above. The entry inventory is the no-hidden-source map; discovery of another
+writer, consumer, lifecycle, worktree, anchor, or sequencing authority requires an
+Architect amendment before implementation continues.
+
+The implementation must remain law-first and red-first prospectively. Inspector reds
+must precede the substantive Engineer repairs, except for an explicit later governed
+exception. Machine proof may be emitted only by validated verbs. Committed round intent
+stays in place; audit and proof remain separate; managed worktrees converge on
+`.devai/worktrees`; invariant anchor-doc objects migrate totally to `authority_docs`
+without renaming record-meta authoring authority.
+
+OM-009 replaces only R-0005's unavailable Claude close review with an independent,
+read-only Codex-agent review of the exact source candidate and governed range. Its
+identity, commit, range, findings, and verdict must be recorded truthfully, all
+actionable findings must be repaired, and no Claude, Opus, or cross-provider PASS may
+be inferred.
+
+The closing decision and PC-0006 must bind the exact role-pure batch range, complete
+gate results, exact source merge, and exact-main CI. R-0005 cannot authorize evidence
+reuse or promotion, package publication, tags, GitHub Releases, Pages deployment,
+external release or deployment, real-stynx mutation, R-0008 external action, R-0009
+activation, or R-0010 observation. The predecessor remains read-only.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
