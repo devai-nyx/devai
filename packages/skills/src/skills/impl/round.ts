@@ -14,7 +14,6 @@ import {
   buildOrchestratorTemplate,
   buildWavePromptTemplate,
   ensureAuditDir,
-  ensurePromptsDir,
   resolveAuditDir,
   roundDir,
   type RoundPlan,
@@ -170,7 +169,7 @@ export function createRoundSkills(
       summary:
         'Plan phase of the round loop. R4-W3 real execution: reads the audit scorecard, invokes ' +
         'SKILL-compile-backlog, and materializes backlog.json + backlog.md + per-item templated ' +
-        'wave prompts under work/rounds/R-NNNN/{,prompts/}.',
+        'wave prompt proposals under .devai/state/round-runs/R-NNNN/backlog/.',
       kind: 'workflow',
       authority_role: 'architect',
       deterministic: true,
@@ -178,7 +177,10 @@ export function createRoundSkills(
       agent_class: 'coding-agent',
       permission_tier: 'write',
       host_mutation_policy: 'write_requires_flag',
-      allowed_write_scopes: ['record/proofs/work/skill-runs/**', 'work/rounds/R-*/**'],
+      allowed_write_scopes: [
+        'record/proofs/work/skill-runs/**',
+        '.devai/state/round-runs/**',
+      ],
       evidence_files: ['record/proofs/work/skill-runs/SKILL-round-backlog/*.json'],
       risk_level: 'medium',
       tags: ['round', 'backlog', 'plan'],
@@ -191,7 +193,14 @@ export function createRoundSkills(
       const dir = roundDir(ctx);
       const roundDirAbs = isAbsolute(dir) ? dir : join(ctx.repoRoot, dir);
       const auditDir = resolveAuditDir(ctx.repoRoot, dir);
-      const promptsDir = ensurePromptsDir(ctx.repoRoot, dir);
+      const proposalDir = join(
+        ctx.repoRoot,
+        '.devai/state/round-runs',
+        basename(roundDirAbs),
+        'backlog',
+      );
+      const promptsDir = join(proposalDir, 'prompts');
+      mkdirSync(promptsDir, { recursive: true });
       const filesWritten: string[] = [];
 
       // Read the scorecard baseline if present (audit must have run first).
@@ -224,7 +233,7 @@ export function createRoundSkills(
       }
 
       // Write backlog.json (raw) + backlog.md (narrative).
-      const backlogJsonPath = join(roundDirAbs, 'backlog.json');
+      const backlogJsonPath = join(proposalDir, 'backlog.json');
       mkdirSync(dirname(backlogJsonPath), { recursive: true });
       writeFileSync(
         backlogJsonPath,
@@ -232,8 +241,11 @@ export function createRoundSkills(
       );
       filesWritten.push(backlogJsonPath);
 
-      const backlogMdPath = join(roundDirAbs, 'backlog.md');
-      writeFileSync(backlogMdPath, buildBacklogMd(dir, items));
+      const backlogMdPath = join(proposalDir, 'backlog.md');
+      writeFileSync(
+        backlogMdPath,
+        buildBacklogMd(`.devai/state/round-runs/${basename(roundDirAbs)}/backlog`, items),
+      );
       filesWritten.push(backlogMdPath);
 
       // Materialize per-item templated wave prompts under prompts/.
@@ -315,7 +327,8 @@ export function createRoundSkills(
           ...plan,
           executed_artifacts: {
             round_dir: dir,
-            prompts_dir: `${dir}/prompts`,
+            proposal_dir: `.devai/state/round-runs/${basename(roundDirAbs)}/backlog`,
+            prompts_dir: `.devai/state/round-runs/${basename(roundDirAbs)}/backlog/prompts`,
             backlog_item_count: items.length,
             files: filesWritten.map((f) => f.replace(`${ctx.repoRoot}/`, '')),
           },
@@ -373,7 +386,15 @@ export function createRoundSkills(
       const dir = roundDir(ctx);
       const roundN = (ctx.inputs?.['round_n'] as number | string | undefined) ?? 0;
       const roundDirAbs = isAbsolute(dir) ? dir : join(ctx.repoRoot, dir);
-      const promptsDir = join(roundDirAbs, 'prompts');
+      const proposedPromptsDir = join(
+        ctx.repoRoot,
+        '.devai/state/round-runs',
+        basename(roundDirAbs),
+        'backlog/prompts',
+      );
+      const promptsDir = existsSync(proposedPromptsDir)
+        ? proposedPromptsDir
+        : join(roundDirAbs, 'prompts');
       const orchestratorPath = join(promptsDir, '00-orchestrator.md');
       const runDir = join(
         ctx.repoRoot,
@@ -735,7 +756,15 @@ export function createRoundSkills(
         'verify-publish',
       );
       const closeoutDir = join(runDir, 'closeout');
-      const promptsDir = join(roundDirAbs, 'prompts');
+      const proposedPromptsDir = join(
+        ctx.repoRoot,
+        '.devai/state/round-runs',
+        basename(roundDirAbs),
+        'backlog/prompts',
+      );
+      const promptsDir = existsSync(proposedPromptsDir)
+        ? proposedPromptsDir
+        : join(roundDirAbs, 'prompts');
 
       const plan: RoundPlan = {
         round_dir: dir,
