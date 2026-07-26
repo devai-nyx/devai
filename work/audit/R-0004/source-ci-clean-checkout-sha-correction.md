@@ -9,9 +9,10 @@ supersedes: R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-FAILURE
 superseded_by: null
 provenance:
   [
-    BL-184; GitHub Actions run 30215723543; Inspector 6b880b2,
+    BL-184; GitHub Actions runs 30215723543 and 30216260434; Inspector 6b880b2,
     6c436be,
-    and 78320af; Architect 808eba0; exact repaired snapshot 808eba01af556dbac37100f894c6706241bf6553,
+    78320af,
+    and cbd9eb3; Architect 808eba0 and f46cf69; exact repaired snapshot 808eba01af556dbac37100f894c6706241bf6553,
   ]
 ---
 
@@ -45,6 +46,14 @@ strict narrowing used forbidden non-null assertions. Inspector `78320af` instead
 the two exact fixture objects before constructing the expectation array. Lint,
 typecheck, and the focused BL-184 contract pass; assertion meaning and production code
 remain unchanged.
+
+The next exact-head run `30216260434` at
+`2c4f15bed4897de801295c7eb93e4f5c7aebcd72` proved that the first path set omitted the
+BL-184 backlog and this failure/correction pair's own truthful citations. Inspector
+`cbd9eb3` extended the empty-repository regression red first to the complete current
+path set. Architect `f46cf69` adds only those already-existing Auditor paths. The
+focused contract, local SHA guard, lint, and typecheck pass; any future citation at an
+unlisted path still fails closed.
 
 BL-184 is repaired locally pending the final complete-ladder restart. Historical
 evidence remains byte-for-byte intact; no repository-wide waiver, threshold, review
