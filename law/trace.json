@@ -482,6 +482,11 @@
           "target_type": "test"
         },
         {
+          "suite": "contract",
+          "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "e2e",
           "path": "tests/e2e/bare-domain-help.e2e.test.ts",
           "target_type": "test"
@@ -610,6 +615,11 @@
           "suite": "unit",
           "path": "packages/loop/tests/unit/backlog-tasks.test.ts",
           "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/worktrees-containment.test.ts",
+          "target_type": "test"
         }
       ]
     },
@@ -623,12 +633,22 @@
         },
         {
           "suite": "unit",
+          "path": "packages/loop/tests/unit/worktrees-containment.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/skills/tests/unit/round-utilities.test.ts",
           "target_type": "test"
         },
         {
           "suite": "unit",
           "path": "packages/skills/tests/unit/round-verdict.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
           "target_type": "test"
         }
       ]
@@ -913,6 +933,11 @@
         },
         {
           "suite": "unit",
+          "path": "packages/loop/tests/unit/worktrees-containment.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/skills/tests/unit/authority-host-readonly.test.ts",
           "target_type": "test"
         },
@@ -934,6 +959,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
           "target_type": "test"
         }
       ]
@@ -979,6 +1009,11 @@
         {
           "suite": "unit",
           "path": "packages/skills/tests/unit/post-merge-auditor.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -1039,6 +1074,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -1489,6 +1529,16 @@
         "INV-DEVAI-002",
         "INV-DEVAI-007",
         "INV-DEVAI-012"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/loop/tests/unit/worktrees-containment.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-004",
+        "INV-DEVAI-005",
+        "INV-DEVAI-017"
       ],
       "lifecycle": "supported"
     },
@@ -2096,6 +2146,18 @@
       "invariant_ids": [
         "INV-DEVAI-001",
         "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-005",
+        "INV-DEVAI-017",
+        "INV-DEVAI-018",
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported"
