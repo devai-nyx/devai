@@ -139,6 +139,11 @@ export function normalize(value: unknown, fixtureRoot: string): unknown {
       // content hash must fail parity, never vanish into a blanket mask.
       let s = v.replace(ANSI_SEQUENCE, '');
       for (const alias of fixtureAliases) s = s.split(alias).join('<FIXTURE>');
+      // Vitest selects a per-file progress line in CI but omits it in the
+      // local non-interactive reporter. The exact R20 fixture has one fixed
+      // passing test; its progress duration is presentation, while summary
+      // metrics and raw SensorReading output remain unmodified.
+      s = s.replace(/^[ \t]*✓ tests\/fixture\.test\.ts \(1 test\) \d+ms\n/gmu, '');
       // ISO timestamps: wall-clock.
       s = s.replace(/\d{4}-\d{2}-\d{2}T[0-9:.]+Z/g, '<TS>');
       // Vitest's human reporter embeds wall-clock start time and aggregate
