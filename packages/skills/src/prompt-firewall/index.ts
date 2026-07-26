@@ -171,6 +171,26 @@ function isArchitectDocumentWriter(m: SkillManifestShape, scope: string): boolea
   );
 }
 
+const ARCHITECT_LIFECYCLE_WRITER_SCOPES: Readonly<Record<string, readonly string[]>> =
+  Object.freeze({
+    'SKILL-round-scaffold': ['work/rounds/R-*/**'],
+    'SKILL-round-archive': ['work/rounds/R-*/**', 'work/rounds/archive/**'],
+    'SKILL-adr-new': ['law/adr/D-*.md'],
+    'SKILL-round-backlog': ['work/rounds/R-*/**'],
+  });
+
+function isArchitectLifecycleWriter(m: SkillManifestShape, scope: string): boolean {
+  return (
+    m.authority_role === 'architect' &&
+    m.agent_class === 'coding-agent' &&
+    m.permission_tier === 'write' &&
+    m.host_mutation_policy === 'write_requires_flag' &&
+    m.deterministic === true &&
+    m.llm_backed === false &&
+    (ARCHITECT_LIFECYCLE_WRITER_SCOPES[m.id] ?? []).includes(scope)
+  );
+}
+
 /**
  * Sandbox/draft scopes under reserved prefixes are exempt from
  * the authority-inversion check when the agent_class is
@@ -282,9 +302,16 @@ export function checkPromptOverlays(opts: CheckPromptOverlaysOptions): PromptFir
         const exemptByDraft = cls === 'review-agent' && isDraftSubpath(s);
         const exemptByAutofix = isAutofixSelfScope(m, s);
         const architectDocumentWriter = isArchitectDocumentWriter(m, s);
+        const architectLifecycleWriter = isArchitectLifecycleWriter(m, s);
         for (const reserved of ARCHITECT_RESERVED) {
           if (overlaps(s, reserved)) {
-            if (exemptByDraft || exemptByAutofix || architectDocumentWriter) break;
+            if (
+              exemptByDraft ||
+              exemptByAutofix ||
+              architectDocumentWriter ||
+              architectLifecycleWriter
+            )
+              break;
             findings.push({
               code: 'PROMPT_OVERLAY_AUTHORITY_INVERSION',
               severity: 'critical',
