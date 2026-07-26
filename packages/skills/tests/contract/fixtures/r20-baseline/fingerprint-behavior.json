@@ -771,8 +771,8 @@
       },
       "behavior": {
         "evidence": {
-          "command": "pnpm run build",
-          "command_hash": "ce4dccceab6682814be8785fab6f7cc4c874a7a03ce125006766123b57dee5c8",
+          "command": "pnpm -r build",
+          "command_hash": "56228b1ade3a7f69b4d3d06d543ac355a66e24ad312a93e14d1c0dd3e0bbca23",
           "deterministic": true,
           "duration_ms": "<N>",
           "err_head": "",

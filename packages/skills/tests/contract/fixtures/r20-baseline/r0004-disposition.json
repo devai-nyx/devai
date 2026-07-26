@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0004",
+  "changed_fixtures": {
+    "fingerprint-behavior.json": {
+      "implementation_commit": "2938b14e5d6ef3c4e5190af48e180dc4776c34f2",
+      "reason": "SKILL-build-project now observes the fixed non-recursive pnpm -r build argv required by BL-031.",
+      "changed_fields": [
+        "SKILL-build-project.behavior.evidence.command",
+        "SKILL-build-project.behavior.evidence.command_hash"
+      ]
+    }
+  }
+}

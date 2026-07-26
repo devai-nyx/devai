@@ -10,11 +10,11 @@ function json(path: string): unknown {
 }
 
 describe('governed population count guards', () => {
-  it('guards the 54-schema canonical roster', () => {
+  it('guards the 55-schema canonical roster', () => {
     const files = readdirSync(join(ROOT, 'law', 'schemas'))
       .filter((file) => file.endsWith('.schema.json'))
       .sort();
-    expect(files).toHaveLength(54);
+    expect(files).toHaveLength(55);
   });
 
   it('guards the 34-invariant roster', () => {

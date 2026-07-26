@@ -66,8 +66,11 @@ describe('command-layer usage failures exit 2 without stack traces (R18.B.6)', (
     () => {
       const r = run(['init', 'apply-owner', '--help']);
       expect(r.status).toBe(0);
-      expect(r.stdout).toContain('Usage: devai init apply-owner <command>');
-      expect(r.stdout).toContain('--help');
+      expect(r.stdout).toContain('Usage: devai init apply-owner [options]');
+      expect(r.stdout).toContain('Apply the exact owner bootstrap segment');
+      expect(r.stdout).toContain('--as-role <role>');
+      expect(r.stdout).toContain('--write');
+      expect(r.stdout).not.toContain('<command>');
       expect(r.stdout + r.stderr).not.toMatch(/AUTHORITY_|required for this invocation/i);
     },
     CLI_TIMEOUT_MS,

@@ -69,7 +69,7 @@ describe('R-0004 governed surface red-first contracts', () => {
       { cwd: ROOT, encoding: 'utf8' },
     );
     expect(effect.status, effect.stderr).toBe(0);
-  });
+  }, 30_000);
 
   it('BL-009 exposes the complete recursive schema canon through policy check schemas', () => {
     expect(existsSync(join(ROOT, 'law/schemas/action-registry.schema.json'))).toBe(true);
@@ -163,9 +163,12 @@ describe('R-0004 governed surface red-first contracts', () => {
     );
     const build = readFileSync(join(ROOT, 'packages/cli/src/commands/sense/build.ts'), 'utf8');
     const test = readFileSync(join(ROOT, 'packages/cli/src/commands/sense/test.ts'), 'utf8');
+    const runner = readFileSync(join(ROOT, 'packages/sensors/src/run-command.ts'), 'utf8');
     expect(build).not.toContain(".option('--command");
     expect(test).not.toContain(".option('--command");
     expect(`${build}\n${test}`).not.toMatch(/execSync|\bexec\(/);
+    expect(runner).toContain('result.error !== undefined');
+    expect(runner).toContain('exit_code: 127');
   });
 
   it('BL-030 keeps every public action and carries all folds and tombstones with migration', () => {

@@ -52,7 +52,10 @@ if (result.error) {
   process.stderr.write(result.error.message + '\\n');
   process.exit(1);
 }
-if (result.signal) process.kill(process.pid, result.signal);
+if (result.signal) {
+  process.stderr.write('r20 hermetic npx: child terminated by ' + result.signal + '\\n');
+  process.exit(1);
+}
 process.exit(result.status === null ? 1 : result.status);
 `;
   const path = join(binDir, 'npx');
