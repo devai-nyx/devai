@@ -161,6 +161,21 @@ contract's first action/effect subprocess test alone received a 30-second budget
 the real full-suite concurrency demonstrated that its assertions could exceed the
 generic five-second default; the assertions themselves remained unchanged.
 
+## R-0005 audit reconciliation — omitted terminal repair cycle
+
+BL-177 identified one cycle omitted from the table above after this as-built's original
+snapshot. The immutable commits remain unchanged; this current Auditor appendix makes
+the governed map complete:
+
+| Cycle                         | Role      | Commit    | Result                                                                                       |
+| ----------------------------- | --------- | --------- | -------------------------------------------------------------------------------------------- |
+| Clean-checkout SHA completion | Auditor   | `12f67ed` | Preserved the final exact-head clean-checkout failure and bounded its observed citation gap. |
+| Clean-checkout SHA completion | Architect | `7ca26c4` | Added the remaining exact governed-path classifications without widening their meaning.      |
+| Clean-checkout SHA completion | Auditor   | `c7dd9fb` | Reconciled the correction record and terminal as-built evidence before R-0004 source close.  |
+
+This appendix corrects only the current cycle map. It does not rewrite R-0004's
+historical source snapshot, test totals, review evidence, or closing claim.
+
 ## Remaining ceremony
 
 OM-008 replaces the additional post-repair review for R-0004 only, and DII-197 binds
