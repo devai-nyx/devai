@@ -70,6 +70,7 @@ façade.
 | BL-144–155 | Implemented; ceremony pending              | First-review, T2 collateral, active-ADR association, and sealed-history gaps are repaired and focused green; the full ladder and fresh Opus review remain.                                                       |
 | BL-156–162 | Implemented; ceremony pending              | Production test-suite argv, exact audit counts, derived non-vacuous fixtures, fixed build help, real session-store evidence, exact test-host configs, and the complete governance scan window are focused green. |
 | BL-163–166 | Implemented; ceremony pending              | Active contract argv/schema claims and direct command metadata derive from canonical sources; role-owned formatting is reconciled and the complete ladder restarted green.                                       |
+| BL-167–170 | Implemented; ceremony pending              | All 147 command bindings have exact metadata parity; audit lifecycle links resolve; test variants/provenance are complete; strict AST typing is paired and green.                                                |
 
 No R-0005 through R-0010 item was absorbed into this round.
 
@@ -111,6 +112,7 @@ paths: four `dist/index` JavaScript/declaration artifacts, `package.json`, and
 | Second Opus repair | Auditor + Architect + Inspector + Engineer | `f738abc`, `9ee3c0e`, `c2d418b`, `c530468`, `a544733`, `d374fa0`, `0955da4`, `3581591`, `ab04008`, `212850a`, `31dfbaf`                                  | Closed all seven review findings and replaced the overbroad history tail with the exact round range.              |
 | Third Opus repair  | Auditor + Inspector + Engineer + Architect | `9810d80`, `b0af62c`, `ca6dff9`, `c7d1807`, `cf85bc0`                                                                                                    | Reconciled active contract argv/schema claims and direct build metadata through red-first role-pure repair.       |
 | Final formatting   | Auditor + Inspector                        | `6d6c7eb`, `965b007`, `7be9d31`                                                                                                                          | Preserved the exact two-file formatting failure and repaired each file only under its owning role.                |
+| Fourth Opus repair | Auditor + Inspector + Engineer + Architect | `93ebe91`, `bf9a690`, `6acb066`, `48e2ccc`, `af91f7c`, `d6369f9`, `6b4213c`, `7a1006b`, `735fb70`                                                        | Closed complete metadata parity, audit lifecycle, strict AST typing, and the five-route contract/provenance gaps. |
 
 ## Fresh tests and coverage
 
