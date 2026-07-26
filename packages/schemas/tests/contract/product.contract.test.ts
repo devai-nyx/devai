@@ -124,17 +124,17 @@ describe('glossary records (joint tier)', () => {
       .map((f) => f.replace('.json', '')),
   );
 
-  it('all 44 entries validate with imported or rider provenance applied', () => {
+  it('all 44 founding entries are active and validate with imported or rider provenance', () => {
     expect(files.length).toBe(44);
     const v = getValidator('glossary-entry.schema.json');
     for (const f of files) {
       const g = JSON.parse(readFileSync(join(G, f), 'utf8'));
       expect(v(g), `${f}: ${JSON.stringify(v.errors)}`).toBe(true);
+      expect(g.status, f).toBe('active');
       const id = Number(f.slice(3, 6));
       if (id <= 37) {
         expect(g.provenance?.[0], f).toMatch(/^ex-GE-\d+@devai-original$/);
       } else {
-        expect(g.status, f).toBe('draft');
         expect(g.authority, f).toBe('joint');
         expect(g.provenance?.[0], f).toMatch(/REV-0006 vocabulary rider.*Owner 2026-07-23/);
       }

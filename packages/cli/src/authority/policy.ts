@@ -588,6 +588,7 @@ export function buildTrustedAuthoritySources(
       '.devai/constitution.md',
       '.devai/pin',
       '.devai/pin/constitution.md',
+      '.devai/pin/versions.json',
       '.gitignore',
     ].map((path, index) =>
       rule({

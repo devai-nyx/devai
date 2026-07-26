@@ -253,12 +253,27 @@
         },
         {
           "suite": "int",
+          "path": "packages/schemas/tests/contract/founding-ratification.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
           "path": "packages/schemas/tests/contract/genesis-attestation-binding.contract.test.ts",
           "target_type": "test"
         },
         {
           "suite": "int",
           "path": "packages/schemas/tests/contract/governed-populations.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/r0003-opus-repairs.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "packages/schemas/tests/contract/r0003-opus-review-3.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -1416,6 +1431,14 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/schemas/tests/contract/founding-ratification.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/schemas/tests/contract/genesis-attestation-binding.contract.test.ts",
       "suite": "contract",
       "invariant_ids": [
@@ -1437,6 +1460,22 @@
       "suite": "contract",
       "invariant_ids": [
         "INV-BLUEPRINT-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/schemas/tests/contract/r0003-opus-repairs.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/schemas/tests/contract/r0003-opus-review-3.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },

@@ -2,21 +2,21 @@
 id: DECISIONS
 title: DEVAI-II decision register
 type: register
-status: draft
-date: 2026-07-23
-authority: Architect (DII numbering binds at BR-1/W03; ratification at W01/W03)
+status: active
+date: 2026-07-25
+authority: Architect (active container; per-entry lifecycle controls authority)
 supersedes: null
 superseded_by: null
-provenance: regenerated from REV-0002; record-meta fields applied per entry 2026-07-23 (provisional DII ids, W03 ratifies)
+provenance: absorbed from the predecessor decision corpus; DII namespace bound during R-0001/R-0002; container activated by DII-152 and corrected by DII-158
 ---
 
 # DEVAI-II decision register
 
-**WIREFRAME DRAFT — regenerated from the pre-W01 review draft (REV-0002). Nothing here
-carries authority until ratified under a declared Architect session in the real BR-1.
-Entries carry provisional DII identifiers; `[ex-D-nn]` suffixes preserve predecessor
-provenance shorthand until W03 ratifies the register.
-Evidence values are cited to the frozen predecessor, never restated.**
+This is the active successor decision-register container. DII identifiers are durable
+and never re-minted. Only entries with `status: active` carry authority; entries whose
+own metadata remains `draft` are preserved proposals and gain no authority from the
+container lifecycle. `[ex-D-nn]` suffixes retain predecessor provenance shorthand.
+Evidence values are cited to the frozen predecessor, never restated.
 
 ### DII-1. DEVAI-II is founded by absorption from devai-original under the terminal decision (locked; founding record)
 
@@ -85,8 +85,8 @@ The product/ family (journeys, use-cases, stories, rules, mandates) is explicitl
 Entries below carry the §5.1 fragment inline: a heading `### <id> — <title>` followed by a
 meta line (`type · status · authority · provenance`). File-level front-matter carries `date`;
 `supersedes`/`superseded_by` are null until successor-internal supersession begins (predecessor
-supersession lives in provenance). **Ids are provisional wireframe assignments — W03 ratifies or
-renumbers under declared authority.** A `check records` prototype validates every entry against
+supersession lives in provenance). **Ids are durable successor assignments; entry lifecycle
+determines authority and later correction is append-only.** A `check records` prototype validates every entry against
 `record-meta.schema.json` (see packages/schemas tests).
 ## 1. Frame and stack
 
@@ -1548,6 +1548,456 @@ PC-0003 uses DII-105 as historical declaration, DII-137 as amended-plan binding,
 DII-147 as closing decision. Its release disposition remains
 `none-preratification`. OM-007 still replaces only the additional final Opus review.
 Nothing is ratified, released, deployed, published, or declared ready by this repair.
+
+### DII-148 — Declare R-0003 and bind the founding source crosswalk
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0003 declaration; OM-002; R-0003 authorization and plan; BL-004; REV-0001; R-0001 law-altitude-sweep; DII-098; R-0003-OPENING-AUDIT`
+
+R-0003 is declared for the founding-law ceremony only after the independent opening
+audit re-derived the frozen predecessor binding, R-0002 closure, exact-main CI, and
+unchanged coverage floors. It authorizes no release, deployment, publication, readiness
+claim, evidence promotion, or predecessor mutation.
+
+The 42-row source ledger in
+`work/rounds/R-0003/constitution-source-crosswalk.md` is the total disposition of the
+founding Constitution. Articles 1 through 40 retain predecessor 0.6.0 doctrine except
+for the reviewed successor deltas explicitly named in that ledger and the founding
+annex. Articles 41 and 42 are successor additions. DII-098 is affirmed: Article 42
+remains in Part XI because relocation would change anchors without improving doctrine.
+
+The crosswalk resolves the candidate wrapper's source statements and Part X placement
+without changing load-bearing Constitution bytes ahead of the authorized materializer.
+The exact wrapper/status transition is reserved to the later R-0003 ceremony decision,
+after ADR and joint glossary dispositions pass their gates, and must be followed by the
+role-pure materialization batch.
+
+### DII-149 — Accept the gapless successor ADR roster
+`type: decision · status: draft · authority: Architect · provenance: session-draft R-0003 ADR disposition; BL-005; REV-0003; DII-106; DII-120; law/adr/predecessor/`
+
+ADR-001 through ADR-012 are accepted with `status: active` under the successor lifecycle.
+Each record names the predecessor inputs it supersedes, contains the six mandatory
+sections, resolves its provenance and affected rules, and has no successor replacement.
+The frozen predecessor source files remain historical input and are not active law.
+
+ADR-001 preserves the zero-exemption derived mutator denominator and constitutional
+change-control requirement. ADR-002 makes human-supervised operation the supported
+baseline. ADR-003 accepts the promotion mechanism while keeping all graduation standing
+void pending re-earning. ADR-004 generalizes the independent-checkability rule and names
+its deferred aggregation boundary. ADR-005 through ADR-012 bind the reviewed CI, CLI,
+publication, publish-path, self-adoption, effects, prompt-firewall, and round semantics
+without authorizing publication or importing predecessor evidence standing.
+
+This lifecycle act closes only the ADR disposition required by BL-005. It establishes no
+release, deployment, readiness, evidence promotion, or autonomous-operation claim.
+The pre-ceremony Inspector contract that still requires twelve drafts is the explicit
+BL-005 known-red until B6 replaces that obsolete lifecycle expectation with ratification
+contracts; the production ADR validator itself must be green in this batch.
+
+### DII-150 — Ratify the DEVAI-II founding law and genesis attestation
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 founding ceremony; OM-002; DII-148; DII-149; BL-004; BL-006; R-0003-CONSTITUTION-CROSSWALK; R-0003-GLOSSARY-OWNER-MARKS; GEN-0001`
+
+At `2026-07-25T22:08:05Z`, the Architect ratifies DEVAI-II Constitution 1.0.0 and
+the genesis attestation bound to it. The same timestamp is written in the Constitution
+ceremony marker and `GEN-0001.ratified`. The attestation's predecessor identities,
+manifest document hashes, empty imported-evidence set, and nonclaims remain unchanged;
+after this act it is immutable and any correction requires a new decision.
+
+The 42-article ledger in `work/rounds/R-0003/constitution-source-crosswalk.md` is total
+and DII-098's Part XI placement is final. The wrapper, version, Part X heading, and body
+now state 1.0.0/ratified; frontmatter uses the schema's binding `active` lifecycle.
+No unreviewed doctrine was introduced.
+
+The Owner marks in `product/glossary-ratification-marks.md` are applied jointly: all
+GE-001 through GE-044 records are active, none is deprecated, retired, or superseded,
+and the reviewed GE-006/016/020/022 corrections plus GE-038..044 successor rider retain
+their approved definitions and resolved graph.
+
+BL-004, BL-005, and BL-006 are substantively satisfied by DII-148 through DII-150, but
+round closure still requires materialization, Inspector contracts, independent audit,
+Opus review, exact-SHA CI, and PC-0004. Until B5 and B6, the stale authority digest and
+pre-ceremony draft/null expectations are explicit known-reds governed by BL-004 and
+BL-005; they are not waived or represented as green.
+
+This act establishes only founding law. It releases, deploys, publishes, promotes, and
+re-earns nothing and establishes no product or production readiness.
+
+### DII-151 — Bind the R-0003 founding-ratification source close
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 source close; OM-002; DII-148–150; R-0003-AS-BUILT; BL-004–006`
+
+DII-151 closes the local source implementation of R-0003. The 42-article crosswalk,
+twelve accepted ADRs, jointly ratified 44-entry glossary, Constitution 1.0.0, and
+immutable genesis attestation satisfy the founding-law ceremony declared by DII-148.
+The ratified Constitution digest is
+`b005ba4ba57979d471a1a139e093f8e7d158ae03488c394d3f43561ca9c4c631`;
+the genesis attestation digest is
+`d72711c57e54025ebd2626b2ba20a1263db7d914e308d7d4ce172f4faee6bb09`;
+and both canonical and materialized authority policies have digest
+`6f62027f4dd3cb9d29daaa7d6b9a288176a9bc56979a3c9ca370cbd0ef2978c2`.
+
+The Auditor's as-built independently records the role-pure batches and the fresh exact
+local exit ladder: 1,101 ordinary tests with eight declared skips; 34/34 resolved
+invariants across 122 executable test files; all governance, T1 through T6,
+changeset, formatting, and deterministic-projection gates green; and unchanged
+70/60/70/70 coverage floors satisfied at 70.61/61.00/77.27/72.88.
+
+This decision does not predeclare remote or independent-review evidence. The exact
+candidate containing DII-151 and fresh deterministic projections must pass the
+complete local ladder and then a read-only review through literal `claude-opus-5`,
+with no fallback. All actionable findings must be resolved through the governed
+red-first, role-pure process before source push. Every required GitHub check must pass
+at the exact source SHA; the exact source merge must then pass exact-main checks before
+the production closure verb may append PC-0004 in a closure-only branch.
+
+PC-0004 uses DII-148 as the declaring decision, DII-150 as the ceremony act, and
+DII-151 as the closing decision. Its release disposition is `none-needed`: R-0003 is a
+law ceremony and creates no release obligation. BL-004 through BL-006 close only when
+that immutable closure record and its final exact-main CI are observed. R-0004 remains
+dormant until then.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
+### DII-152 — Correct R-0003 founding provenance and activate the register container
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 first Opus correction; DII-148–151; R-0003-CLAUDE-OPUS-CLOSE-REVIEW; BL-120–125; R-0003-GLOSSARY-OWNER-CORRECTION-MARKS; R-0003-REV-PROVENANCE-MANIFEST`
+
+DII-152 supersedes DII-151 as the current R-0003 source-closing judgment and corrects
+only the inaccurate provenance and completeness assertions in DII-148 through DII-150;
+it does not undo the founding ceremony, alter article doctrine, or edit the immutable
+genesis attestation. The terminal predecessor Constitution is 0.8.0, not 0.6.0. The
+live Constitution wrapper and 42-row ledger now identify that source truthfully.
+
+The ledger remains total after disclosing the previously omitted threshold-path
+rebindings in Articles 18 and 30. Its Article 7 row now records the complete successor
+authority delta: durable `work/audit/` replaces ignored local output, so the predecessor
+Architect transfer-and-seal duty, Auditor non-commit sentence, and durable-scope
+qualifier do not transpose. The founding annex no longer claims six inline markers when
+only three textual insertions carry them. These are provenance corrections to the
+already-reviewed successor text, not new doctrine.
+
+The decision register becomes an active governed container at this act. Container
+activation binds the DII namespace but does not ratify its contents wholesale: only an
+entry whose own metadata is `active` carries authority, while every `draft` entry remains
+a non-authoritative proposal. The file-level date records this container act, not an
+invented ceremony date for preserved draft entries. This resolves the circular state in
+which DII-150 was active while its containing register denied all authority.
+
+ADR-005's sealed predecessor workflow binding and the six multi-source ADR delimiters
+remain byte-preserved pending a legal append-only correction. Exact REV-0001, REV-0003,
+and REV-0006 bytes are preserved under the durable R-0003 review manifest; their
+historical conclusions remain attributable without relying on ignored scratch.
+
+The corrective Owner mark establishes that GE-006/016/020/022 were already active and
+were retained after joint review; only GE-038 through GE-044 were newly activated in
+R-0003. The glossary guidance applies that fact without changing any definition,
+reference, or lifecycle.
+
+The Constitution's corrected wrapper changes its content digest. Before source close,
+the Architect canonical policy and Engineer materialization must be rebound to the new
+digest, the ratified version pin must be materialized, the sealed ADR binding must be
+corrected through its terminal lifecycle and a gapless replacement, all repair contracts
+and deterministic projections must pass, and the Auditor must bind fresh exact-candidate
+evidence. A new closing decision and exact read-only `claude-opus-5` PASS remain
+mandatory before source push. PC-0004 and R-0004 remain blocked until the complete
+two-PR close.
+
+This correction establishes only **founding law ratified**. It releases, deploys,
+publishes, promotes, re-earns, or declares ready nothing.
+
+### DII-153 — Repair the sealed ADR lifecycle and rebind the R-0003 source close
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 ADR seal-integrity correction; DII-149; DII-152; BL-128; R-0003-EXIT-LADDER-ADR-SEAL-FAILURE; Inspector 726fe66 and 0ba2612; Engineer fa17a5c`
+
+DII-153 supersedes DII-152 only as the R-0003 source-closing judgment. A rejected local
+candidate correctly exposed post-seal body mutations in ADR-002, ADR-003, ADR-005,
+ADR-007, ADR-008, ADR-010, and ADR-011. BL-128 governs that blocker; no seal exception
+or waiver is created. The rejected branch is retained as red evidence and is not the
+source candidate.
+
+The clean source branch preserves the exact sealed bytes of the six multi-source ADRs.
+Their historic semicolon-delimited predecessor lists remain distinct sources, and the
+production parser now accepts that delimiter without rewriting active law. ADR-005's
+sealed body, including its historical workflow binding, is likewise preserved. Its only
+post-seal mutations are the canonical terminal lifecycle fields: `status: superseded`
+and `superseded_by: ADR-013`.
+
+ADR-013 is the gapless active replacement. It preserves ADR-005's CI-economy doctrine,
+supersedes ADR-005 explicitly, and binds the actual successor workflows
+`.github/workflows/ci.yml` and `.github/workflows/round-gates.yml`. The roster therefore
+contains thirteen records, twelve active and one terminally superseded; predecessor files
+under `law/adr/predecessor/` remain historical input only.
+
+Before source push, an independent correction audit and a fresh exact-candidate closing
+decision must bind the complete local ladder. A fresh read-only review through literal
+`claude-opus-5`, with no fallback, remains mandatory. Any actionable finding reopens the
+governed red-first repair cycle; only a PASS authorizes source push and exact-SHA CI.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and the final post-audit source-closing decision as
+its closing decision. Its release disposition remains `none-needed`. R-0004 remains
+dormant until PC-0004 and final exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
+### DII-154 — Bind the clean R-0003 founding-ratification source close
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 clean source close; DII-148–153; BL-004–006; BL-120–129; R-0003-FIRST-OPUS-CORRECTIONS; R-0003-ADR-POPULATION-CORRECTION; Auditor 1d5ef19 and ac7bf57; Inspector 08025ba; Architect d277b14`
+
+DII-154 supersedes DII-153 only as the R-0003 source-closing judgment. The source
+candidate is rebuilt from the last legal commit and contains no post-seal mutation of
+ADR-002, ADR-003, ADR-007, ADR-008, ADR-010, or ADR-011. ADR-005 preserves its sealed
+body and changes only through the permitted terminal lifecycle fields naming ADR-013.
+Decision-record integrity passes the clean history.
+
+The 42-article source ledger, Constitution 1.0.0, genesis attestation, active register
+container, thirteen-record/twelve-active ADR roster, 44-entry glossary, canonical
+authority policy, production materialization, durable review provenance, trace, and
+repository-reference projection now agree. BL-120 through BL-129 have independent
+Auditor dispositions, and the ordinary test floor passes after the final Inspector
+population correction.
+
+The corrected Constitution digest is
+`31c6874f2a0ae88a21e1114844c4084e9f0e9d8c58d54f7fefc1078af98fb8cd`.
+The immutable genesis-attestation digest remains
+`d72711c57e54025ebd2626b2ba20a1263db7d914e308d7d4ce172f4faee6bb09`.
+Canonical and production-materialized authority policy bytes remain identical at
+`6539f91912d1770ea49449c05ac17a84cef76aec0e22eacc133552eddfb785c2`.
+
+The exact candidate containing DII-154 and fresh deterministic projections must pass
+the complete local ladder, including governance, T1 through T6, unchanged 70/60/70/70
+coverage floors, changesets, formatting, trace, and repository-reference checks. It
+must then receive a fresh read-only review through literal `claude-opus-5` with no
+fallback. Any actionable finding reopens the governed repair cycle; only a PASS
+authorizes source push and exact-SHA CI.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-154 as the closing decision. Its release
+disposition is `none-needed`. R-0004 remains dormant until PC-0004 and final exact-main
+CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
+### DII-155 — Rebind the R-0003 source close after the formatting correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 final local source close; DII-154; BL-130; R-0003-FORMATTING-FAILURE; R-0003-FORMATTING-CORRECTION; Auditor 964fdce and 8ea924e; Engineer b45073a`
+
+DII-155 supersedes DII-154 only as the R-0003 source-closing judgment. The first complete
+ladder on the clean candidate passed Stage 1 through Stage 3, governance, T1 through T6,
+unchanged coverage floors, and changeset classification, then correctly stopped at
+repository-wide formatting. BL-130 governs and closes that bounded failure.
+
+Engineer `b45073a` formatted the live parser and excluded only the immutable
+`work/rounds/R-0003/reviews/` subtree. The exact REV-0001, REV-0003, and REV-0006 hashes
+remain unchanged and their contract passes. Auditor `8ea924e` independently records the
+correction. The exclusion does not apply to active law, product, packages, tests, live
+audit prose, or other round sources.
+
+The exact candidate containing DII-155 and the refreshed repository-reference projection
+must restart the complete ladder from Stage 1. It then requires a fresh read-only review
+through literal `claude-opus-5`, with no fallback. Any actionable finding reopens the
+governed repair cycle; only a PASS authorizes source push and exact-SHA CI.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-155 as the closing decision. Its release
+disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
+exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
+### DII-156 — Rebind the R-0003 source close after the T2 exclusion guard
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 final exact-ladder source close; DII-155; BL-131; R-0003-FORMATTING-CONTRACT-FAILURE; R-0003-FORMATTING-CONTRACT-CORRECTION; Auditor 03b3931 and c8e1e21; Inspector 817c5f9`
+
+DII-156 supersedes DII-155 only as the R-0003 source-closing judgment. The restarted
+ladder passed Stage 1 and T1, then T2 correctly rejected the newly added immutable-review
+formatting exclusion because its exact boundary contract had not yet been updated.
+BL-131 governs and closes that bounded contract failure.
+
+Inspector `817c5f9` adds exactly `work/rounds/R-0003/reviews/` to the pinned exclusion
+sequence, retains every prior path in order, and passes alongside the exact review-byte
+hash contract. Auditor `c8e1e21` independently records the correction. No broader
+formatting exception or evidence mutation is authorized.
+
+The exact candidate containing DII-156 and a fresh repository-reference projection must
+restart the complete ladder from Stage 1 and then receive a read-only review through
+literal `claude-opus-5`, with no fallback. Any actionable finding reopens the governed
+repair cycle; only a PASS authorizes source push and exact-SHA CI.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-156 as the closing decision. Its release
+disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
+exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
+### DII-157 — Rebind the R-0003 source close after the second Opus review
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 second Opus correction; DII-156; BL-132; R-0003-CLAUDE-OPUS-CLOSE-REVIEW-2; R-0003-CLAUDE-OPUS-CLOSE-REVIEW-2-CORRECTION; Inspector 5c62d2a; Architect ce75158; Auditor a8f9013 and 5e68493`
+
+DII-157 supersedes DII-156 only as the R-0003 source-closing judgment. The exact
+`claude-opus-5` review of candidate `68143f5` ended `VERDICT: FAIL` on one confirmed
+blocker: active `law/adr/README.md` retained the pre-replacement twelve-all-active claim
+and relied solely on draft review provenance. BL-132 governs and closes that finding.
+
+Inspector `5c62d2a` first bound the missing index contract red. Architect `ce75158` then
+corrected the index to the gapless ADR-001 through ADR-013 roster, twelve active records,
+and ADR-005 superseded by ADR-013; active DII-153 now supplies successor authority while
+REV-0003 remains historical input. No numbered ADR or immutable review byte changed.
+Auditor `5e68493` independently verified the correction.
+
+The second reviewer separately rejected objections about DII-153 identity, Auditor
+formatting role purity, DII-150's historical draft citations, and immutable corrected
+digests. Those rejected observations authorize no further mutation.
+
+The exact candidate containing DII-157 and a fresh repository-reference projection must
+restart the complete ladder from Stage 1 and then receive another read-only review
+through literal `claude-opus-5`, with no fallback. Any actionable finding reopens the
+governed repair cycle; only a PASS authorizes source push and exact-SHA CI.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-157 as the closing decision. Its release
+disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
+exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
+### DII-158 — Correct third-review governance provenance and disclose replay identity
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 third Opus correction; DII-157; BL-133–138; R-0003-CLAUDE-OPUS-CLOSE-REVIEW-3; Inspector 025bb58; Auditor 51f571a`
+
+DII-158 supersedes DII-157 only as the R-0003 source-closing judgment and resolves all
+six blockers from the third exact `claude-opus-5` review. It corrects DII-153's unresolved
+seal-failure citation: the declared Auditor record is `R-0003-ADR-SEAL-FAILURE`, not
+`R-0003-EXIT-LADDER-ADR-SEAL-FAILURE`. The active register container was absorbed from
+the predecessor decision corpus and activated by DII-152; absent REV-0002 is not its
+provenance. BL-133 closes on those append-only corrections and the truthful container
+metadata.
+
+ADR-005's sealed body necessarily retains the historical phrase “Accepted and active in
+R-0003.” Its lifecycle frontmatter is controlling successor state and terminally marks it
+superseded by ADR-013. The active ADR index now discloses that distinction without
+mutating sealed bytes. BL-134 closes on that bounded interpretation.
+
+Auditor `51f571a` makes the three correction pairs symmetric: the formatting failure,
+formatting-contract failure, and second Opus review are terminally superseded by their
+existing active correction records. The ratified Constitution crosswalk is active under
+DII-150, and the review manifest identifies DII-149 only as a preserved draft while
+active DII-153 carries the corrected ADR disposition. BL-135 through BL-137 close on
+those role-pure changes.
+
+BL-138 records a procedural replay defect without hiding or waiving it. Seven clean-branch
+commits preserve correct role authors and byte-equivalent role-scoped changes but retained
+the human cherry-pick committer `Antonio A. Russo`. Each is bound to its role-pure sibling
+original:
+
+- Engineer `1449e4d` replays `16a9f36`;
+- Architect `611e14c` replays `bfccf19`;
+- Engineer `938e2ab` replays `a26369e`;
+- Auditor `3d44a48` replays `dde5ae2`;
+- Inspector `726fe66` replays `9293ace`;
+- Inspector `0ba2612` replays `93ef651`; and
+- Engineer `fa17a5c` replays `7442708`.
+
+The replay used already role-pure authored changes while rebuilding away an illegal ADR
+history; path authority remained role-pure and the third reviewer independently verified
+44/44 path-role batches. This disclosure does not waive future identity requirements:
+every new commit remains required to use both DEVAI role author and committer identity.
+The disclosed replay defect creates no precedent for human-committer source work.
+
+The exact candidate containing DII-158, the independent correction audit, and refreshed
+deterministic projections must restart the complete ladder from Stage 1 and receive a
+fresh read-only review through literal `claude-opus-5`, with no fallback. Any actionable
+finding reopens the governed repair cycle; only a PASS authorizes source push.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and the final post-audit source-closing decision
+as the closing decision. Its release disposition remains `none-needed`. R-0004 remains
+dormant until PC-0004 and final exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
+### DII-159 — Bind the R-0003 source close after the third Opus correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 third Opus corrected source close; DII-158; BL-133–138; R-0003-CLAUDE-OPUS-CLOSE-REVIEW-3-CORRECTION; Auditor 223a4e8; Architect a911063`
+
+DII-159 supersedes DII-158 only as the R-0003 source-closing judgment. Auditor
+`223a4e8` independently confirms all six third-review blockers locally closed and makes
+the third review/correction lifecycle symmetric. The active register, ADR index,
+Constitution crosswalk, review manifest, and Auditor correction graph now agree with the
+ratified ceremony and current record lifecycles.
+
+The replay committer disclosure remains a recorded procedural defect, not an identity
+waiver. Every post-disclosure commit uses DEVAI role identity for both author and
+committer. The seven disclosed replay commits retain their exact role-pure authors,
+role-scoped paths, and role-pure sibling-original provenance; no additional replay
+anomaly is admitted.
+
+The exact candidate containing DII-159 and refreshed deterministic projections must
+restart the complete local ladder from Stage 1, including governance, T1 through T6,
+unchanged 70/60/70/70 coverage floors, changesets, formatting, trace, and
+repository-reference checks. It must then receive a fresh read-only review through
+literal `claude-opus-5`, with no fallback. Any actionable finding reopens the governed
+repair cycle; only a PASS authorizes source push and exact-SHA CI.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-159 as the closing decision. Its release
+disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
+exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
+### DII-160 — Rebind the R-0003 source close after trace regeneration
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 deterministic trace close; DII-159; BL-139; R-0003-TRACE-PROJECTION-FAILURE; Auditor c6c3703`
+
+DII-160 supersedes DII-159 only as the R-0003 source-closing judgment. The exact ladder
+at candidate `8273349` passed workflow lint and then correctly stopped because the new
+third-review Inspector contract was absent from deterministic `law/trace.json`. BL-139
+governs the projection-only correction.
+
+Architect regeneration retains all 34 invariant sources and adds the new executable test
+path without deleting or weakening any trace relationship. The exact candidate containing
+DII-160 and both fresh deterministic projections must restart the complete ladder from
+Stage 1 and then receive a read-only review through literal `claude-opus-5`, with no
+fallback. Any actionable finding reopens the governed repair cycle; only a PASS
+authorizes source push.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-160 as the closing decision. Its release
+disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
+exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
+### DII-161 — Rebind the R-0003 source close to portable replay evidence
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 fourth Opus correction; DII-160; BL-140; R-0003-OPUS-CLOSE-REVIEW-4-PORTABILITY-FAILURE; Auditor c8517aa; Inspector 5235fc1`
+
+DII-161 supersedes DII-160 only as the R-0003 source-closing judgment. The fourth exact
+`claude-opus-5` review of candidate `b21b1f1` confirmed every preceding correction but
+found that the BL-138 contract dynamically resolved seven sibling-original commits that
+exist only on an abandoned local branch. Exact-SHA CI would not receive those objects.
+The same review found the BL-001 current-disposition row stale after the founding act.
+BL-140 governs and closes both bounded portability corrections.
+
+Auditor `c8517aa` preserves the observed replay and original author/committer identities
+as durable repository evidence and corrects BL-001's current disposition. Inspector
+`5235fc1` rebinds the pair mapping to this active register and that durable evidence,
+uses live Git only for the seven replay commits that are candidate ancestors, and
+requires a symmetric independent correction audit. The historical human-committer replay
+defect remains disclosed. It does not waive the standing requirement that every new
+commit use the applicable DEVAI role for both author and committer identity.
+
+The exact candidate containing DII-161, the independent Auditor correction, and fresh
+deterministic projections must pass the complete ladder from Stage 1 and a fresh
+single-branch clone proof containing only the candidate branch. It must then receive a
+read-only review through literal `claude-opus-5`, with no fallback. Any actionable
+finding reopens the governed repair cycle; only a PASS authorizes source push.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-161 as the closing decision. Its release
+disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
+exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
 
 ## Appendix — Register-consistency guard
 

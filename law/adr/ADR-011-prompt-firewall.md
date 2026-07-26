@@ -2,42 +2,58 @@
 id: ADR-011
 title: Prompt firewall
 type: adr
-status: draft
-date: 2026-07-23
-authority: Architect (minting = BR-1/W04)
-supersedes: [ADR-FIREWALL-OVERLAPS-GLOB-AWARE.md, ADR-FIX-SKILL-AUTOFIX-FIREWALL-EXEMPTION.md]
+status: active
+date: 2026-07-25
+authority: Architect
+supersedes: [ADR-FIREWALL-OVERLAPS-GLOB-AWARE.md; ADR-FIX-SKILL-AUTOFIX-FIREWALL-EXEMPTION.md]
 superseded_by: null
-provenance: [REV-0003 disposition map; predecessor seeds in law/adr/predecessor/]
-affected_rules: []
+provenance:
+  - REV-0003 disposition map; predecessor firewall ADRs; DII-120
+affected_rules:
+  - law/policy/forbidden-actions.json
+  - law/policy/glob-guards.json
+  - law/schemas/prompt-composition.schema.json
 ---
 
 # ADR-011. Prompt firewall
 
 ## Status
 
-DRAFT (wireframe stub). Binds nothing until minted with `status: active` under a declared Architect
-session in BR-1/W04. Source texts: ADR-FIREWALL-OVERLAPS-GLOB-AWARE.md; ADR-FIX-SKILL-AUTOFIX-FIREWALL-EXEMPTION.md.
+Accepted and active in R-0003.
 
 ## Context
 
-TODO (BL-005) at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
-reference, never restate SHAs/run-IDs.
-
-**Scope (from the disposition map):** Merged firewall contract: reserved-path protection (now the static-prefix table incl. law/ and record/), overlap shape rules, the fix-skill autofix exemption. NOTE: under the Part VII static-prefix layout the glob-shape surface shrinks — revalidate which overlap rules remain load-bearing before minting.
+Prompt composition can ask an agent to write outside its discipline even when runtime
+authority later blocks the effect. Early detection improves safety and gives precise
+review feedback, but it must not be mistaken for the final runtime boundary.
 
 ## Decision
 
-TODO (BL-005) at minting — the binding contract, transposed from source(s) with the deltas below
-integrated.
+The prompt firewall compares the composed agent class, permission tier, and declared
+write scopes with the static constitutional path-prefix table, including `law/` and
+`record/`. It rejects reserved-path conflicts and material glob overlaps before a prompt
+is dispatched. Overlap checks remain load-bearing for extension and nested scopes even
+though core authority uses static prefixes.
+
+A registered fix-skill may describe an autofix only within its already authorized target
+scope; that narrow classification prevents diagnostic wording from being treated as an
+independent cross-role write request. It never exempts the eventual mutation from final
+adapter authority, effect, consent, or expected-diff enforcement.
 
 ## Consequences
 
-TODO (BL-005) at minting.
+Unsafe prompt intent fails early and deterministically. Runtime authority remains the
+decisive control, and extension globs cannot shadow reserved roots.
 
 ## Alternatives Considered
 
-TODO (BL-005) at minting — carry forward the predecessor's rejected alternatives where still relevant.
+Relying only on runtime denial, substring matching, blanket rejection of all autofix
+language, and granting fix skills a firewall bypass were rejected as either too late,
+imprecise, or unsafe. Removing overlap analysis was rejected because additive extension
+scopes still use globs.
 
 ## Affected Rules
 
-TODO (BL-005) at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).
+- `law/policy/forbidden-actions.json`
+- `law/policy/glob-guards.json`
+- `law/schemas/prompt-composition.schema.json`

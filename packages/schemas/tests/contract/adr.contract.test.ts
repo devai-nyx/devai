@@ -21,9 +21,9 @@ describe('ADR roster records', () => {
     .filter((f) => /^ADR-\d{3}-.+\.md$/.test(f))
     .sort();
 
-  it('roster is gapless ADR-001..012', () => {
+  it('roster is gapless ADR-001..013', () => {
     const nums = files.map((f) => Number(f.slice(4, 7)));
-    expect(nums).toEqual(Array.from({ length: 12 }, (_, i) => i + 1));
+    expect(nums).toEqual(Array.from({ length: 13 }, (_, i) => i + 1));
   });
 
   it('every front-matter validates against record-meta', () => {
@@ -46,17 +46,23 @@ describe('ADR roster records', () => {
     }
   });
 
-  it('draft lifecycle discipline: draft status, null superseded_by, non-empty supersedes + provenance', () => {
+  it('founding lifecycle discipline preserves twelve active ADRs and the ADR-005 replacement', () => {
     for (const f of files) {
       const fm = frontMatter(f);
-      expect(fm.status, f).toBe('draft');
-      expect(fm.superseded_by, f).toBeNull();
+      if (f === 'ADR-005-ci-economy.md') {
+        expect(fm.status, f).toBe('superseded');
+        expect(fm.superseded_by, f).toBe('ADR-013');
+      } else {
+        expect(fm.status, f).toBe('active');
+        expect(fm.superseded_by, f).toBeNull();
+      }
       expect(
         Array.isArray(fm.supersedes) && (fm.supersedes as unknown[]).length > 0,
         `${f} names what it absorbs`,
       ).toBe(true);
       expect(fm.provenance, f).toBeTruthy();
     }
+    expect(frontMatter('ADR-013-ci-economy-correction.md').supersedes).toEqual(['ADR-005']);
   });
 });
 // Invariants: INV-DEVAI-001

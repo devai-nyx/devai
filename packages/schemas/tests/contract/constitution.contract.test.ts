@@ -15,10 +15,15 @@ describe('constitution structure', () => {
   it('exactly 42 articles, numbered 1..42, unique, in order', () => {
     expect(nums).toEqual(Array.from({ length: 42 }, (_, i) => i + 1));
   });
-  it('front-matter validates against record-meta', () => {
+  it('front-matter is active and the body carries the exact founding ratification', () => {
     const fm = parse(text.match(/^---\n([\s\S]*?)\n---\n/)?.[1] ?? '') as Record<string, unknown>;
     expect(getValidator('record-meta.schema.json')(fm), 'constitution front-matter').toBe(true);
-    expect(fm.status).toBe('draft');
+    expect(fm.status).toBe('active');
+    expect(fm.title).toBe('DEVAI-II Constitution 1.0.0');
+    expect(text).toContain('**Version:** 1.0.0');
+    expect(text).toContain('**Status:** ratified (active lifecycle)');
+    expect(text).toContain('**Ratified:** 2026-07-25T22:08:05Z');
+    expect(text).not.toMatch(/WIREFRAME DRAFT|Candidate version|status:\s*draft/i);
   });
   it('the annex is the crosswalk form, not the stale checklist', () => {
     expect(text).toContain('application crosswalk');

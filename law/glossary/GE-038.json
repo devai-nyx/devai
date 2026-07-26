@@ -5,7 +5,7 @@
   "definition": "The DEVAI-II process-intent tree. Architect-authored round plans and handoffs live under work/rounds/; Auditor-authored observations live under work/audit/. It does not contain machine-authored proof records.",
   "authority": "joint",
   "category": "operational",
-  "status": "draft",
+  "status": "active",
   "see_also": ["GE-039", "GE-040", "GE-044"],
   "provenance": [
     "REV-0006 vocabulary rider ratified by Owner 2026-07-23; definition derived from the successor meta-catalog"

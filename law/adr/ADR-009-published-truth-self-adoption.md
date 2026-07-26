@@ -2,42 +2,58 @@
 id: ADR-009
 title: Published truth and operational self-adoption
 type: adr
-status: draft
-date: 2026-07-23
-authority: Architect (minting = BR-1/W04)
+status: active
+date: 2026-07-25
+authority: Architect
 supersedes: [ADR-004-published-truth-operational-self-adoption.md]
 superseded_by: null
-provenance: [REV-0003 disposition map; predecessor seeds in law/adr/predecessor/]
-affected_rules: []
+provenance:
+  - REV-0003 disposition map; predecessor ADR-004; ex-D-134/139/140; DII-120
+affected_rules:
+  - law/schemas/release-control.schema.json
+  - law/schemas/runtime-charter.schema.json
+  - law/schemas/evidence.schema.json
 ---
 
 # ADR-009. Published truth and operational self-adoption
 
 ## Status
 
-DRAFT (wireframe stub). Binds nothing until minted with `status: active` under a declared Architect
-session in BR-1/W04. Source texts: ADR-004-published-truth-operational-self-adoption.md.
+Accepted and active in R-0003.
 
 ## Context
 
-TODO (BL-005) at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
-reference, never restate SHAs/run-IDs.
-
-**Scope (from the disposition map):** Source truth, deployed truth, package publication, and post-merge attestation are distinct authority boundaries; diagnostics are non-recording; canonical persistence is a registered consented mutation. Ex-D-139/D-140/D-134 lineage.
+Repository source, built packages, remotely published packages, and a host installation
+are different facts. A diagnostic that silently updates canonical state makes observation
+an unauthorized mutation and can falsely declare the repository self-adopted.
 
 ## Decision
 
-TODO (BL-005) at minting — the binding contract, transposed from source(s) with the deltas below
-integrated.
+Source truth, package truth, published truth, and host-installed truth are distinct typed
+boundaries with separate exact identities. Publication evidence proves only the artifact
+and registry event it names. Operational self-adoption additionally requires a verified
+host receipt binding repository, installed package, policy, Constitution, hook/adapter,
+and exact source identity.
+
+Diagnostics are read-only and non-recording. Persisting canonical state occurs only
+through a registered mutation with role, consent, expected targets, and machine receipt.
+Post-merge observation may attest facts after a merge but may not retroactively authorize
+the merge or publish operation.
 
 ## Consequences
 
-TODO (BL-005) at minting.
+Claims state which boundary they establish. Drift between source, package, registry, and
+host remains visible, and a check cannot repair its own inputs.
 
 ## Alternatives Considered
 
-TODO (BL-005) at minting — carry forward the predecessor's rejected alternatives where still relevant.
+Treating a green source tree as deployed truth, allowing doctor commands to persist
+repairs, and accepting unsigned host assertions were rejected because they collapse
+authority boundaries. One undifferentiated “current version” field was rejected because
+it cannot identify which truth changed.
 
 ## Affected Rules
 
-TODO (BL-005) at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).
+- `law/schemas/release-control.schema.json`
+- `law/schemas/runtime-charter.schema.json`
+- `law/schemas/evidence.schema.json`

@@ -21,8 +21,9 @@ describe('frozen predecessor genesis binding', () => {
     };
   };
 
-  it('binds the immutable predecessor close without self-reference or ratification', () => {
-    expect(document.ratified).toBeNull();
+  it('ratifies once while preserving the immutable predecessor close', () => {
+    expect(document.ratified).toBe('2026-07-25T22:08:05Z');
+    expect(document._status).toMatch(/RATIFIED by DII-150.*immutable/);
     expect(document.predecessor).toEqual({
       repo_url: 'https://github.com/devai-nyx/devai-original',
       final_commit_sha: '05dd242bf72334bfd683096aed380e8240b6b9aa',

@@ -2,46 +2,59 @@
 id: ADR-006
 title: CLI information architecture
 type: adr
-status: draft
-date: 2026-07-23
-authority: Architect (minting = BR-1/W04)
+status: active
+date: 2026-07-25
+authority: Architect
 supersedes: [ADR-CLI-INFORMATION-ARCHITECTURE.md]
 superseded_by: null
-provenance: [REV-0003 disposition map; predecessor seeds in law/adr/predecessor/]
-affected_rules: []
+provenance:
+  - REV-0003 disposition map; predecessor ADR-CLI-IA; ex-D-26; ex-D-27; ex-D-129; DII-120
+affected_rules:
+  - law/policy/domains.json
+  - law/policy/population-registry.json
+  - law/policy/sensor-registry.json
 ---
 
 # ADR-006. CLI information architecture
 
 ## Status
 
-DRAFT (wireframe stub). Binds nothing until minted with `status: active` under a declared Architect
-session in BR-1/W04. Source texts: ADR-CLI-INFORMATION-ARCHITECTURE.md.
+Accepted and active in R-0003.
 
 ## Context
 
-TODO (BL-005) at minting — absorb from predecessor source(s); cite frozen-predecessor evidence by
-reference, never restate SHAs/run-IDs.
-
-**Scope (from the disposition map):** Registry-derived hierarchical router, noun-verb grammar, fail-closed exit-2 routing, --write/--allow-publish consent, no legacy aliases. Ex-D-129/D-26/D-27.
+Hand-wired routers and duplicated action catalogs drift. The CLI needs a stable human
+grammar while allowing registered actions and sensors to grow without hidden aliases or
+unmeasured surface changes.
 
 ## Decision
 
-TODO (BL-005) at minting — the binding contract, transposed from source(s) with the deltas below
-integrated.
+One schema-backed action registry derives action identity, hierarchical routing, help,
+and catalog output. The public grammar is noun then verb. Unknown routes and invalid
+arguments fail closed with usage exit 2. Mutating actions require explicit `--write`;
+publishing actions additionally require explicit `--allow-publish`. Removed legacy names
+are tombstoned rather than retained as aliases.
 
-**Verified amendment deltas (dossier Part II — must not be lost):**
-
-- Extend per dossier Part VIII: porcelain/plumbing tier field in the manifest; the sensor registry (not the router) as the sensing extension point; surface count + liveness guards + tombstone path.
+Each manifest action declares a porcelain or plumbing tier. The bounded root help shows
+porcelain only; domain and leaf help expose the appropriate registered surface. Action
+count, liveness, uniqueness, and tombstones are guarded as a population. Sensing extends
+through the sensor registry, not special router branches; sensor descriptors bind to the
+registered sensing action.
 
 ## Consequences
 
-TODO (BL-005) at minting.
+Documentation, routing, and inventory can share exact identities. Adding a command or
+sensor requires a registry record and passes population guards. Users receive explicit
+consent boundaries and predictable usage failures.
 
 ## Alternatives Considered
 
-TODO (BL-005) at minting — carry forward the predecessor's rejected alternatives where still relevant.
+Independent router definitions, verb-first commands, implicit write consent, legacy
+aliases, and sensor-specific routing were rejected because they multiply identity and
+drift surfaces. Showing all plumbing at the root was rejected as unbounded public noise.
 
 ## Affected Rules
 
-TODO (BL-005) at minting — enumerate; feeds the front-matter field and invariant anchor re-pointing (W05).
+- `law/policy/domains.json`
+- `law/policy/population-registry.json`
+- `law/policy/sensor-registry.json`

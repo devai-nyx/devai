@@ -800,7 +800,7 @@
       "rationale": "Package and repository metadata remains bound to the active successor identity."
     },
     {
-      "locator": "packages/schemas/tests/contract/genesis-attestation-binding.contract.test.ts:27:37:devai-nyx/devai-original",
+      "locator": "packages/schemas/tests/contract/genesis-attestation-binding.contract.test.ts:28:37:devai-nyx/devai-original",
       "classification": "frozen-predecessor",
       "action": "retain",
       "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
@@ -860,13 +860,13 @@
       "rationale": "Immutable historical text records the repository name used when that evidence was created."
     },
     {
-      "locator": "work/audit/R-0002-preflight/backlog-register.md:198:27:devai-nyx/devai",
+      "locator": "work/audit/R-0002-preflight/backlog-register.md:212:27:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "work/audit/R-0002-preflight/backlog-register.md:517:2:devai-nyx/devai",
+      "locator": "work/audit/R-0002-preflight/backlog-register.md:531:2:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."
@@ -909,6 +909,18 @@
     },
     {
       "locator": "work/audit/R-0002/opening-audit.md:60:21:devai-nyx/devai-original",
+      "classification": "frozen-predecessor",
+      "action": "retain",
+      "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
+    },
+    {
+      "locator": "work/audit/R-0003/opening-audit.md:33:21:devai-nyx/devai-original",
+      "classification": "frozen-predecessor",
+      "action": "retain",
+      "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
+    },
+    {
+      "locator": "work/audit/R-0003/opening-audit.md:37:35:devai-nyx/devai-original",
       "classification": "frozen-predecessor",
       "action": "retain",
       "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
