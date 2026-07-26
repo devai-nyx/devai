@@ -25,7 +25,7 @@ devai spec validate all --format human
 The first failing entry tells you which validator fired. Common patterns:
 
 - **"file does not match `<id>.json`"** → the invariant id and filename diverged; rename the file or fix the id.
-- **"cannot resolve anchor '<slug>' in doc '<doc>'"** → the cited heading was removed/renamed. Fix the invariant's `authority.docs[].anchor` or restore the heading.
+- **"cannot resolve anchor '<slug>' in doc '<doc>'"** → the cited heading was removed/renamed. Fix the invariant's `authority_docs.docs[].anchor` or restore the heading.
 - **"tombstoned id '<id>' reused"** → the id was retired in `tombstones.json`. Pick a fresh id (10.D).
 - **"duplicate invariant id"** → two files have the same id; rename one.
 

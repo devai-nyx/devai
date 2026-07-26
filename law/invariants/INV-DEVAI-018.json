@@ -21,7 +21,7 @@
   },
   "measurable_via": ["govern auditor post-merge", "policy check dependencies"],
   "measurable_via_mode": "all",
-  "authority": {
+  "authority_docs": {
     "docs": [
       {
         "doc": "CONSTITUTION.md",

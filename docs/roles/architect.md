@@ -38,7 +38,7 @@ The Architect is the load-bearing role for governance. The Architect:
 3. **For a new invariant**:
    - Open `docs/theory/architecture/invariant-authoring.md` (the CNL discipline, Phase 11.E).
    - Author the invariant statement in `<Actor> <MODAL> <Behavior> [WHEN] [UNLESS] [WITHIN]` form.
-   - Write the file at `law/invariants/INV-<DOMAIN>-NNN.json`. Required fields: `schemaVersion`, `version`, `id`, `domain`, `severity` (5-tier ladder), `type`, `statement`, `authority.docs[]`, `change_policy`.
+   - Write the file at `law/invariants/INV-<DOMAIN>-NNN.json`. Required fields: `schemaVersion`, `version`, `id`, `domain`, `severity` (5-tier ladder), `type`, `statement`, `authority_docs.docs[]`, `change_policy`.
    - Validate:
      ```bash
      devai spec validate invariants --strict-cnl

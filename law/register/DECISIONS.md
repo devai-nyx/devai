@@ -2831,6 +2831,53 @@ reuse or promotion, package publication, tags, GitHub Releases, Pages deployment
 external release or deployment, real-stynx mutation, R-0008 external action, R-0009
 activation, or R-0010 observation. The predecessor remains read-only.
 
+### DII-203 — Govern the R-0005 evidence and lifecycle contract
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0005 governed semantics; DII-202; ADR-016; BL-010; BL-011; BL-015; BL-018; BL-033; BL-045; BL-050; BL-063; BL-106; BL-176; BL-177; BL-178; R-0005-KNOWN-RED`
+
+R-0005 adopts `proof-epoch.schema.json` as the canonical line shape for per-round,
+per-kind JSONL evidence. Every record and erratum binds the previous line; exactly one
+terminal line binds the last non-terminal hash and record count. Reordering, mutation,
+truncation, duplicate terminals, post-terminal data, forward errata, and cross-round or
+cross-kind lines fail closed. The old aggregate chain remains a bounded compatibility
+reader only and cannot become a second canonical writer.
+
+Local-evidence manifests now require producer-derived `subject` and `expiresAt` values.
+The verifier recomputes repository, commit, tree, source hash, required jobs, and expiry
+from the canonical policy path. A caller may not select a manifest, subject, job set, or
+freshness window for gate standing. This machinery is implemented in R-0005, but BL-022
+remains the independent authorization required before reuse or promotion.
+
+ADR-016 replaces sealed ADR-011 and permits only two bounded prompt cases: evidence-only
+machine output under the two named `record/proofs/work` roots, and an exact single-file
+`docs/` output from an Architect-bound review-agent writer with explicit write consent.
+Experimental round composers lose direct `work/rounds/**` scope and use disposable
+`.devai/state/round-runs/**` output. All reserved-root overlap and final runtime authority
+checks remain binding.
+
+Round close retains committed intent in `work/rounds/R-NNNN`, appends attributable close
+state, reads machine closure only from `record/proofs/compliance/closures`, and keeps
+Auditor observations in `work/audit`. Managed worktrees use `.devai/worktrees`; mutable
+registry state uses `.devai/state/worktrees.json`; cleanup must preserve unrelated or
+human-adopted worktrees and committed config/pin materializations.
+
+Invariant anchor-doc objects are renamed totally from `authority` to `authority_docs` in
+the schema, all 34 current invariants, and every consumer. Record-meta `authority` is a
+different authoring-role field and is unchanged. The prospective sequencing policy binds
+law before implementation, a failing Inspector contract before repair, and an authorized
+shape before Machine emission. R-0002's disclosed inversions remain immutable historical
+exceptions, not reusable waivers.
+
+Historical closing language is interpreted only at its cited commit. R-0004's
+146-action/54-schema base and 147-action/55-schema exit are distinct measurement epochs;
+later canon growth does not rewrite them. The current Auditor map must append the omitted
+`12f67ed` / `7ca26c4` / `c7dd9fb` repair cycle before R-0005 close.
+
+Nothing in this decision authorizes evidence reuse, promotion, package publication,
+tags, GitHub Releases, Pages deployment, external release or deployment, real-stynx
+mutation, R-0008 external action, R-0009 activation, or R-0010 observation. OM-009's
+independent Codex review substitution remains exact to R-0005 and creates no Claude or
+Opus PASS.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

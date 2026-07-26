@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "governed-sequencing",
+  "status": "active",
+  "date": "2026-07-26",
+  "authority": "Architect",
+  "prospective_from": "DII-202",
+  "rules": [
+    {
+      "id": "law-before-implementation",
+      "description": "A substantive Engineer implementation commit must follow the Architect decision or schema that authorizes its contract."
+    },
+    {
+      "id": "red-before-repair",
+      "description": "A substantive Engineer repair must follow a failing Inspector contract or an explicit governed exception."
+    },
+    {
+      "id": "shape-before-machine-record",
+      "description": "A Machine record emission must follow the Architect-owned schema and validated verb that govern its shape."
+    }
+  ],
+  "historical_exceptions": [
+    {
+      "round": "R-0002",
+      "reason": "Immutable ordering inversions disclosed by DII-113 and BL-106; no history is rewritten and the exception does not apply prospectively."
+    }
+  ]
+}

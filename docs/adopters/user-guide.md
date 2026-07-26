@@ -69,7 +69,7 @@ The atomic unit of Architect-authored specification (D-6). Each invariant is a J
 
 - `statement` — the rule, in CNL form (`<Actor> <MODAL> <Behavior> [WHEN] [UNLESS] [WITHIN]`). See [`architecture/invariant-authoring.md`](../theory/architecture/invariant-authoring.md).
 - `severity` — one of the 5-tier ladder: `constitutional | hard-fail | gate | warn | advisory` (Phase 10.A, `GE-026`).
-- `authority.docs[]` — the prose anchors that introduce the concept.
+- `authority_docs.docs[]` — the prose anchors that introduce the concept.
 - `code_areas` — where the plant surface lives.
 - `change_policy` — what's required to amend this invariant.
 

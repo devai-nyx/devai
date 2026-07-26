@@ -49,3 +49,16 @@ of a syntax, type, fixture, or harness error.
 The obsolete global Claude-selector failure in KR-R5-001 must become green in the same
 Inspector batch. No additional failure is authorized. The table is retired only after
 all clusters pass and the complete regression floor is green.
+
+## B3 transition measurement
+
+After the Architect introduced the governed schema and ADR semantics, the full floor
+reported 52 failures across 13 test files, with 1,129 passing and 8 intentionally
+skipped. The larger assertion count is the expected downstream expression of the same
+authorized clusters: proof-schema roster/current-population guards (KR-R5-002 and
+KR-R5-010), local-evidence producers and fixtures (KR-R5-004), ADR-016 lifecycle and
+prompt-policy consumers (KR-R5-005), the coordinated invariant consumer migration
+(KR-R5-007), and repository-reference reconciliation displaced by the governed schema
+change (KR-R5-010). No production implementation was present at that measurement, and
+no unrelated failure class was observed. B4 through B7 must return the entire floor to
+green; this paragraph does not authorize a red source candidate.
