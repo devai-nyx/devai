@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import {
   RoundLifecycleError,
   archiveGovernedRound,
+  closeGovernedRound,
   declareGovernedRound,
   governedRoundStatus,
   normalizeRoundId,
@@ -140,9 +141,62 @@ describe('round lifecycle filesystem behavior', () => {
         id: 'R-0002',
         path: 'work/rounds/R-0002/record.md',
       });
-      expect(() => governedRoundStatus({ repoRoot: repo, round: 2 })).toThrow(
-        'ROUND_RECORD_SCHEMA_INVALID',
+      expect(governedRoundStatus({ repoRoot: repo, round: 2 })).toMatchObject({
+        ok: true,
+        id: 'R-0002',
+        location: 'active',
+        record: { title: 'R-0002 fixture', type: 'round-record', authority: 'Architect' },
+      });
+    });
+  });
+
+  it('KR-R5-020 round-trips a declaration and closes it idempotently via DII register entries', async () => {
+    const repo = root();
+    await withAuthorityHostTestScope(() => {
+      scaffoldGovernedRound({ repoRoot: repo, round: 5 });
+      const closed = {
+        ...record('R-0005'),
+        status: 'closed',
+        closed_by: 'DII-2',
+        phase_closure: 'PC-0001',
+        merged_as: 'b'.repeat(40),
+      };
+      declareGovernedRound({
+        repoRoot: repo,
+        round: 5,
+        recordPath: write(repo, 'record.json', closed),
+      });
+      write(
+        repo,
+        'law/register/DECISIONS.md',
+        '### DII-1 — Declare fixture\n\n### DII-2 — Close fixture\n',
       );
+      write(repo, 'record/proofs/compliance/closures/PC-0001.json', {
+        schemaVersion: '1.0.0',
+        id: 'PC-0001',
+        round_id: 'R-0005',
+        declaring_decision: 'DII-1',
+        closing_decision: 'DII-2',
+        batches: [{ id: 'B1', roles: ['Architect'], headline: 'fixture' }],
+        gates: { unit: { status: 'pass' } },
+        source_repo_deleted: false,
+        validation_criteria: [{ criterion: 'fixture', verdict: 'pass', evidence: 'unit' }],
+        closed_at: '2026-07-26T00:00:00.000Z',
+        merged_as: 'b'.repeat(40),
+        release_disposition: 'none-preratification',
+        supersedes: null,
+      });
+      write(repo, 'record/derived/indexes/rounds.md', 'PC-0001\n');
+
+      expect(closeGovernedRound({ repoRoot: repo, round: 5 })).toMatchObject({
+        ok: true,
+        id: 'R-0005',
+        path: 'work/rounds/R-0005',
+      });
+      expect(closeGovernedRound({ repoRoot: repo, round: 5 })).toMatchObject({ ok: true });
+      expect(governedRoundStatus({ repoRoot: repo, round: 5 })).toMatchObject({
+        location: 'closed',
+      });
     });
   });
 

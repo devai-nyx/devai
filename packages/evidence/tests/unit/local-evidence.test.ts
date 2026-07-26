@@ -308,6 +308,48 @@ describe('local evidence verification', () => {
     });
   });
 
+  it('KR-R5-021 survives its trailer commit and verifies from a fresh checkout', async () => {
+    const repo = root();
+    initialize(repo);
+    await collected(repo);
+    execFileSync('git', ['add', MANIFEST], { cwd: repo });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Inspector',
+        '-c',
+        'user.email=inspector@example.test',
+        'commit',
+        '-qm',
+        `test: bind evidence\n\nLocal-CI-Evidence: ${MANIFEST}`,
+      ],
+      { cwd: repo },
+    );
+    const fresh = root();
+    rmSync(fresh, { recursive: true, force: true });
+    execFileSync('git', ['clone', '-q', repo, fresh]);
+    execFileSync(
+      'git',
+      ['remote', 'set-url', 'origin', 'https://github.com/devai-nyx/fixture.git'],
+      {
+        cwd: fresh,
+      },
+    );
+
+    await withAuthorityHostTestScope(() => {
+      expect(
+        verifyLocalEvidence({
+          repoRoot: fresh,
+          mode: 'gate',
+          context: context(),
+          trustedActors: ['trusted'],
+          now: NOW.getTime(),
+        }),
+      ).toMatchObject({ outcome: 'evidence-valid', evidenceMode: true });
+    });
+  });
+
   it('rejects absent policy, mismatched trailers, missing and malformed manifests', async () => {
     const repo = root();
     await expect(
