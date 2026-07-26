@@ -62,10 +62,7 @@ describe('ADR roster records', () => {
         expect(fm.status, f).toBe('active');
         expect(fm.superseded_by, f).toBeNull();
       }
-      if (
-        f === 'ADR-014-ci-checker-adr-association.md' ||
-        f === 'ADR-017-r0005-independent-review-corrections.md'
-      ) {
+      if (f === 'ADR-014-ci-checker-adr-association.md') {
         expect(fm.supersedes, `${f} preserves its first sealed source list`).toEqual([]);
       } else {
         expect(
@@ -81,7 +78,9 @@ describe('ADR roster records', () => {
     expect(frontMatter('ADR-016-bounded-authority-prompt-composition.md').supersedes).toEqual([
       'ADR-011',
     ]);
-    expect(frontMatter('ADR-017-r0005-independent-review-corrections.md').supersedes).toEqual([]);
+    expect(frontMatter('ADR-017-r0005-independent-review-corrections.md').supersedes).toEqual([
+      'DII-202; DII-203; R-0005-INDEPENDENT-CODEX-REVIEW-1-FAILURE',
+    ]);
   });
 });
 // Invariants: INV-DEVAI-001

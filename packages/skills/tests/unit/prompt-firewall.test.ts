@@ -115,6 +115,30 @@ describe('checkPromptOverlays', () => {
     expect(v.findings[0]?.code).toBe('PROMPT_OVERLAY_AUTHORITY_INVERSION');
   });
 
+  it('allows only exact governed Architect lifecycle writer identities and scopes', () => {
+    const exact = {
+      id: 'SKILL-round-scaffold',
+      authority_role: 'architect',
+      agent_class: 'coding-agent',
+      permission_tier: 'write',
+      host_mutation_policy: 'write_requires_flag',
+      deterministic: true,
+      llm_backed: false,
+    } as const;
+    expect(
+      checkPromptOverlays({
+        manifests: [{ ...exact, allowed_write_scopes: ['work/rounds/R-*/**'] }],
+      }).ok,
+    ).toBe(true);
+    for (const manifest of [
+      { ...exact, id: 'SKILL-lookalike', allowed_write_scopes: ['work/rounds/R-*/**'] },
+      { ...exact, allowed_write_scopes: ['work/rounds/**'] },
+      { ...exact, deterministic: false, allowed_write_scopes: ['work/rounds/R-*/**'] },
+    ]) {
+      expect(checkPromptOverlays({ manifests: [manifest] }).ok).toBe(false);
+    }
+  });
+
   it('flags read tier with host_mutation scopes', () => {
     const v = checkPromptOverlays({
       manifests: [
