@@ -498,7 +498,12 @@ describe('R-0004 governed surface red-first contracts', () => {
       object_kind: 'transient merge commit',
       reason:
         'Historical GitHub pull-request synthetic merge object retained locally but absent from a clean checkout.',
-      allowed_paths: ['work/audit/R-0002/as-built.md'],
+      allowed_paths: [
+        'work/audit/R-0002-preflight/backlog-register.md',
+        'work/audit/R-0002/as-built.md',
+        'work/audit/R-0004/source-ci-clean-checkout-sha-correction.md',
+        'work/audit/R-0004/source-ci-clean-checkout-sha-failure.md',
+      ],
     };
     const rejected = {
       sha: '46535a3c8939aad7a2bbc8fce981bdcc48757e54',
@@ -508,6 +513,8 @@ describe('R-0004 governed surface red-first contracts', () => {
       allowed_paths: [
         'work/audit/R-0002-preflight/backlog-register.md',
         'work/audit/R-0003/exit-ladder-adr-seal-failure.md',
+        'work/audit/R-0004/source-ci-clean-checkout-sha-correction.md',
+        'work/audit/R-0004/source-ci-clean-checkout-sha-failure.md',
       ],
     };
     const expected = [transient, rejected];
@@ -517,9 +524,11 @@ describe('R-0004 governed surface red-first contracts', () => {
     expect(registry.entries).toEqual(expect.arrayContaining(expected));
 
     const result = runShaReferenceFixture('', expected, {
+      'work/audit/R-0002-preflight/backlog-register.md': `transient ${transient.sha}\nrejected ${rejected.sha}\n`,
       'work/audit/R-0002/as-built.md': `transient ${transient.sha}\n`,
-      'work/audit/R-0002-preflight/backlog-register.md': `rejected ${rejected.sha}\n`,
       'work/audit/R-0003/exit-ladder-adr-seal-failure.md': `rejected ${rejected.sha}\n`,
+      'work/audit/R-0004/source-ci-clean-checkout-sha-correction.md': `transient ${transient.sha}\nrejected ${rejected.sha}\n`,
+      'work/audit/R-0004/source-ci-clean-checkout-sha-failure.md': `transient ${transient.sha}\nrejected ${rejected.sha}\n`,
     });
     expect(result.status, result.stderr || result.stdout).toBe(0);
     expect(result.stdout).toContain('2 classified');
