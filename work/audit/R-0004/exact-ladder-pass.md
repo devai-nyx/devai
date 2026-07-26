@@ -9,14 +9,14 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    R-0004-AS-BUILT; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION; source snapshot b10baed06e21ed39f07b625a5993355a57526d63,
+    R-0004-AS-BUILT; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION; OM-008; DII-197; source snapshot bb34ce0d0dc29cbb5b16b179852b3ab81d35a90b,
   ]
 ---
 
 # R-0004 exact-candidate ladder pass
 
 The complete local R-0004 exit ladder passed on exact source snapshot
-`b10baed06e21ed39f07b625a5993355a57526d63` with a clean worktree.
+`bb34ce0d0dc29cbb5b16b179852b3ab81d35a90b` with a clean worktree.
 
 - workflow lint: 2 workflow files passed;
 - action registry: 3 generated views reproduced byte-for-byte;
@@ -24,7 +24,7 @@ The complete local R-0004 exit ladder passed on exact source snapshot
 - repository references: 164 classified references reproduced;
 - lint, typecheck, recursive build, Changesets status, formatting, and strict governance:
   passed; strict governance reported zero forbidden-action findings and the governed
-  SHA-reference check reported 256 identities, 248 local objects, and 8 exact
+  SHA-reference check reported 257 identities, 249 local objects, and 8 exact
   path-classified historical specimens;
 - T1: 71 files / 838 tests;
 - T2: 38 files / 244 passed / 1 declared skip;
@@ -41,5 +41,6 @@ No threshold, test source set, skip, assertion, waiver, or governance gate was w
 The package commands were dry-runs only: no archive was created and no publish, tag,
 release, deployment, real-stynx write, or external R-0008 through R-0010 action ran.
 
-This report admits the local ladder only. The literal `claude-opus-5` read-only close
-review and the source and closure-only PR ceremonies remain required.
+This report admits the local ladder only. OM-008 replaces the additional post-repair
+`claude-opus-5` review for R-0004 without claiming a PASS. The source and closure-only
+PR ceremonies and all exact-SHA CI boundaries remain required.

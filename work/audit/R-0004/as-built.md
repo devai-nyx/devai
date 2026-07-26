@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION; source snapshot b10baed06e21ed39f07b625a5993355a57526d63,
+    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION; OM-008; DII-197; source snapshot bb34ce0d0dc29cbb5b16b179852b3ab81d35a90b,
   ]
 ---
 
@@ -18,11 +18,12 @@ provenance:
 ## Boundary and verdict
 
 R-0004 has completed B0 through B7 locally at source snapshot
-`b10baed06e21ed39f07b625a5993355a57526d63`. The governed surface and package
-topology satisfy the round acceptance criteria at that snapshot. The round is not yet
-closed: the Architect closing record, exact-candidate Claude Opus 5 review, source PR,
-exact-SHA CI, source merge, exact-main CI, closure-only machine record, closure PR, and
-final exact-main CI remain required.
+`bb34ce0d0dc29cbb5b16b179852b3ab81d35a90b`. The governed surface and package
+topology satisfy the round acceptance criteria at that snapshot. OM-008 and DII-197
+replace the additional post-repair Claude Opus 5 review without claiming a PASS. The
+round is not yet closed: source PR, exact-head CI, source merge, exact-main CI,
+closure-only machine record, closure PR, closure merge, and final exact-main CI remain
+required.
 
 The only claim established here is **governed surface and package topology implemented
 and tested**. Nothing was published, tagged, released, deployed, promoted, re-earned,
@@ -126,10 +127,11 @@ paths: four `dist/index` JavaScript/declaration artifacts, `package.json`, and
 | Tenth Opus repair       | Auditor + Inspector + Engineer + Architect | `61e66b2`, `759014a`, `aee78a3`, `cb50655`, `7b44322`, `4047bec`, `fd53fe9`, `fd99ab7`                                                                   | Added the governed SHA-reference gate, bounded historical exceptions by exact path, corrected active evidence, and kept the full-suite check performant. |
 | Eleventh Opus repair    | Auditor + Inspector + Architect            | `9b68e02`, `deaa1b1`, `cd51d1b`, `8ff6c5a`, `1f118e1`, `2a86444`                                                                                         | Corrected snapshot-bound readings and active semantics, then added hermetic rejection coverage for every exception failure mode.                         |
 | Twelfth Opus repair     | Auditor + Inspector + Architect            | `b981d38`, `88062a8`, `745f0aa`, `2a24c79`, `4034db1`                                                                                                    | Closed the sole audit-lifecycle back-edge, tightened exact count evidence, and named the production guard's precise scan scope.                          |
+| Owner review exception  | Owner + Architect                          | `28df88c`, `f2c4d35`                                                                                                                                     | Replaced only the additional post-repair review, preserved the FAIL verdict, and bound the exact-SHA source and closure ceremony.                        |
 
 ## Fresh tests and coverage
 
-The complete tiered exit ladder passed on exact source snapshot `b10baed`:
+The complete tiered exit ladder passed on exact source snapshot `bb34ce0`:
 
 - T1: 71 files / 838 tests;
 - T2: 38 files / 244 passed / 1 declared skip;
@@ -160,8 +162,9 @@ generic five-second default; the assertions themselves remained unchanged.
 
 ## Remaining ceremony
 
-The Architect must bind this as-built snapshot and the complete local ladder, then the
-literal `claude-opus-5` selector must perform the mandated read-only close review with
-no fallback. Only PASS permits the shared two-PR sequence. External release,
-publication, deployment, real-stynx writes, R-0009 activation, and R-0010 observation
-remain outside this round and human-gated.
+OM-008 replaces the additional post-repair review for R-0004 only, and DII-197 binds
+that exception without fabricating a PASS. Source PR #6 may merge only after every
+required exact-head check passes. PC-0005 may be emitted only from the exact source
+merge after exact-main CI passes; its closure-only PR and final main must then pass
+their exact-SHA checks. External release, publication, deployment, real-stynx writes,
+R-0009 activation, and R-0010 observation remain outside this round and human-gated.
