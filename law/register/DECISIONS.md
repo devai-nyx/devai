@@ -2074,6 +2074,49 @@ harness-write, 23 local-write, and one remote-write. Engineer regeneration is re
 before the generated views are current. No external release or downstream human gate is
 altered.
 
+### DII-165 — Bind the R-0004 governed-surface source close
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 source close; DII-162–164; R-0004-AS-BUILT; Auditor 41d73a28012d3be387f912eb25da5834906bd0c2; Inspector b7bf300eec5b4a14181e1cfbb5e5e489e55cb55e; BL-008–009; BL-016; BL-025; BL-027–031; BL-065; BL-080; BL-084`
+
+DII-165 closes the local source implementation declared by DII-162. The canonical
+action registry now contains 185 never-reminted identities: 146 kept public actions, 38
+behavior-preserving folds, and one tombstone with migration guidance. Three generated
+consumers reproduce that authority byte-for-byte; the production effect analyzer reports
+185 catalog actions, 185 extracted actions, and zero findings or unresolved edges. The
+55-schema recursive canon passes every named rule. All 59 live sensor kinds resolve local
+design notes while retaining fifty cell-bound and nine diagnostic standings.
+
+The selected `@devai-nyx/core` package is an acyclic export-only façade over the other
+ten public packages, and Changesets binds exactly those eleven members. All eleven
+packages pass content-only pack dry-runs; no archive or publication was produced. Root
+build and test invoke only the registered non-recursive argv, required binaries fail
+closed, both workflows use immutable action SHAs and prewarm every install job, and 164
+repository references reproduce from explicit disposition semantics with UTF-8 byte
+ordering.
+
+Auditor `41d73a2` reconciles all twelve scoped backlog records and measures the unchanged
+coverage floors at 71.07% statements, 61.63% branches, 77.44% functions, and 73.07%
+lines. The exact ordinary floor and root test porcelain pass 125 files and 1,128 tests
+with eight declared skips; T1 through T6, build, schema canon, action/effect parity,
+workflow lint, generated-view checks, package dry-runs, and deterministic projections
+are green.
+
+This decision does not predeclare independent or remote evidence. The clean commit
+containing DII-165 and fresh deterministic projections must pass the complete local
+ladder and then a read-only close review through literal `claude-opus-5`, with no
+fallback. Any actionable finding reopens the red-first role-pure repair cycle. Only PASS
+permits the source PR. Every required check must pass at the exact source SHA; after
+source merge, exact-main CI must pass before the production closure verb may append the
+closure record in a closure-only PR.
+
+The closure record uses DII-162 as the declaring decision and DII-165 as the closing
+decision. Its release disposition is `none-needed`: R-0004 changes repository source and
+package topology but authorizes no external release. The scoped backlog records close
+only when that immutable closure record and final exact-main CI are observed.
+
+R-0004 establishes only **governed surface and package topology implemented and tested**.
+It publishes, tags, releases, deploys, promotes, re-earns, mutates real stynx, activates
+R-0009, or opens R-0010 observation nothing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

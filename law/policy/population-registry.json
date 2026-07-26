@@ -32,22 +32,22 @@
       "path": "law/policy/action-registry.json#entries",
       "record_schema": "action-registry.schema.json",
       "count_guard": {
-        "state": "declared",
-        "mechanism": "Schema-backed exact keep, fold, and tombstone counts; generated-view parity is the R-0004/B3 handoff",
-        "source": "law/policy/action-registry.json",
-        "backlog_ref": "R-0004/B3"
+        "state": "implemented",
+        "mechanism": "Schema-backed exact keep, fold, and tombstone counts with byte-identical generated-view parity",
+        "source": "tests/contract/r0004-governed-surface.red.contract.test.ts",
+        "backlog_ref": null
       },
       "liveness_guard": {
-        "state": "declared",
-        "mechanism": "Every kept action names a runtime binding and canonical lifecycle standing; runtime derivation is the R-0004/B3 handoff",
-        "source": "law/policy/action-registry.json",
-        "backlog_ref": "R-0004/B3"
+        "state": "implemented",
+        "mechanism": "Every kept action names a runtime binding and canonical lifecycle standing consumed by generated CLI, effect, and sensor views",
+        "source": "tests/contract/r0004-governed-surface.red.contract.test.ts",
+        "backlog_ref": null
       },
       "tombstone_guard": {
-        "state": "declared",
-        "mechanism": "Every folded or tombstoned public path is never-reminted and resolves to migration guidance; CLI enforcement is the R-0004/B3 handoff",
-        "source": "law/policy/action-registry.json",
-        "backlog_ref": "R-0004/B3"
+        "state": "implemented",
+        "mechanism": "Every folded or tombstoned public path is never-reminted, resolves to migration guidance, and is rejected or redirected by the governed runtime surface",
+        "source": "tests/contract/r0004-governed-surface.red.contract.test.ts",
+        "backlog_ref": null
       }
     },
     {

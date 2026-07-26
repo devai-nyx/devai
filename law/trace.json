@@ -885,6 +885,11 @@
           "suite": "unit",
           "path": "packages/utils/tests/unit/state-profile.test.ts",
           "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
+          "target_type": "test"
         }
       ]
     },
@@ -964,6 +969,11 @@
         {
           "suite": "unit",
           "path": "packages/effects-check/tests/unit/binding.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "int",
+          "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -1965,6 +1975,15 @@
       "suite": "sec",
       "invariant_ids": [
         "INV-DEVAI-015"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
+      "suite": "int",
+      "invariant_ids": [
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
       ],
       "lifecycle": "supported"
     },
