@@ -6,7 +6,7 @@ status: active
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-EXIT-LADDER-GOVERNANCE-CORRECTION
 provenance: [candidate 0621f12794d4c2cab500d6098fe90a4d22023ee7; governance gate; BL-142]
 ---
 
