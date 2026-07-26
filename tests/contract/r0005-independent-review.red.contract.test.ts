@@ -3,6 +3,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import * as publicEvidence from '../../packages/evidence/src/index.js';
 
 const ROOT = resolve(fileURLToPath(new URL('../..', import.meta.url)));
 
@@ -43,6 +44,12 @@ describe('R-0005 independent-review red contracts', () => {
     ].map(read);
     for (const source of writers) {
       expect(source).not.toMatch(/\b(?:appendRecord|redactRecord|initChain)\s*\(/u);
+    }
+  });
+
+  it('KR-R5-035 excludes legacy aggregate-chain writers from the public package API', () => {
+    for (const writer of ['initChain', 'saveChain', 'appendRecord', 'redactRecord']) {
+      expect(Object.hasOwn(publicEvidence, writer), writer).toBe(false);
     }
   });
 

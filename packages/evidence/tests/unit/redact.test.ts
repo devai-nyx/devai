@@ -8,11 +8,11 @@ import {
   extractManifestInputs,
   initChain,
   loadChain,
-  redactRecord,
   verifyChain,
   type DraftEvidence,
   type EvidenceContext,
-} from '../../src/evidence/index.js';
+} from '../../src/evidence/chain.js';
+import { redactRecord } from '../../src/evidence/redact.js';
 import { withAuthorityHostTestScope } from '../../../authority/tests/unit/authority-host-test-scope.js';
 
 aroundEach((runTest) => withAuthorityHostTestScope(runTest));

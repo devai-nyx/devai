@@ -115,7 +115,7 @@ describe('checkPromptOverlays', () => {
     expect(v.findings[0]?.code).toBe('PROMPT_OVERLAY_AUTHORITY_INVERSION');
   });
 
-  it('allows only exact governed Architect lifecycle writer identities and scopes', () => {
+  it('KR-R5-036 rejects Architect lifecycle writers outside the bounded exceptions', () => {
     const exact = {
       id: 'SKILL-round-scaffold',
       authority_role: 'architect',
@@ -125,17 +125,23 @@ describe('checkPromptOverlays', () => {
       deterministic: true,
       llm_backed: false,
     } as const;
-    expect(
-      checkPromptOverlays({
-        manifests: [{ ...exact, allowed_write_scopes: ['work/rounds/R-*/**'] }],
-      }).ok,
-    ).toBe(true);
     for (const manifest of [
-      { ...exact, id: 'SKILL-lookalike', allowed_write_scopes: ['work/rounds/R-*/**'] },
-      { ...exact, allowed_write_scopes: ['work/rounds/**'] },
-      { ...exact, deterministic: false, allowed_write_scopes: ['work/rounds/R-*/**'] },
+      { ...exact, allowed_write_scopes: ['work/rounds/R-*/**'] },
+      {
+        ...exact,
+        id: 'SKILL-round-archive',
+        allowed_write_scopes: ['work/rounds/archive/**'],
+      },
+      { ...exact, id: 'SKILL-adr-new', allowed_write_scopes: ['law/adr/D-*.md'] },
+      {
+        ...exact,
+        id: 'SKILL-round-backlog',
+        allowed_write_scopes: ['work/rounds/R-*/**'],
+      },
     ]) {
-      expect(checkPromptOverlays({ manifests: [manifest] }).ok).toBe(false);
+      const verdict = checkPromptOverlays({ manifests: [manifest] });
+      expect(verdict.ok, manifest.id).toBe(false);
+      expect(verdict.findings[0]?.code).toBe('PROMPT_OVERLAY_AUTHORITY_INVERSION');
     }
   });
 
