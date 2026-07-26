@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0005-RED-EVIDENCE-BINDINGS",
+  "round": "R-0005",
+  "authority": "Auditor",
+  "date": "2026-07-26",
+  "observations": [
+    {
+      "commit": "6ecbfd90ec4aec39d352f4bcf474b53c7530bc62",
+      "command": "pnpm vitest run packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
+        "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts"
+      ],
+      "failure_summary": "The initial R-0005 lifecycle contracts failed against absent exact evidence epochs, governed lifecycle, SWEEP, and review-selector behavior."
+    },
+    {
+      "commit": "75b435278a8d7eff97287ff170cb06eeb315e6c1",
+      "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
+      "exit_code": 1,
+      "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"],
+      "failure_summary": "The SWEEP child-routing contract failed before the registry-derived read-only child planner and broker predicate existed."
+    },
+    {
+      "commit": "faad6fdfda023f523310f0d8b478bf13b5182dd2",
+      "command": "pnpm vitest run packages/loop/tests/unit/worktrees-containment.test.ts packages/loop/tests/unit/scorecard-assess-narrative.test.ts packages/evidence/tests/unit/local-evidence.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "packages/evidence/tests/unit/local-evidence.test.ts",
+        "packages/loop/tests/unit/round-lifecycle-cases.ts",
+        "packages/loop/tests/unit/worktrees-containment.test.ts",
+        "tests/contract/r0005-independent-review.red.contract.test.ts"
+      ],
+      "failure_summary": "The independent-review contracts failed for unsafe worktree cleanup, incomplete lifecycle round-trip, self-invalidating evidence, live legacy writers, prompt bypass, missing attributable post-merge products, weak sequencing, and lexical anti-skip enforcement."
+    }
+  ]
+}
