@@ -275,7 +275,16 @@
     {
       "template_id": "git-doctor-diff-tree-names",
       "executable": "git",
-      "argv_shape": ["diff-tree", "--root", "--no-commit-id", "--name-status", "-r", "-M", "-m", "<dynamic>"],
+      "argv_shape": [
+        "diff-tree",
+        "--root",
+        "--no-commit-id",
+        "--name-status",
+        "-r",
+        "-M",
+        "-m",
+        "<dynamic>"
+      ],
       "capabilities": ["proc:git-read"],
       "effect": "read",
       "reason": "Doctor reads bounded path-change metadata for one selected revision.",
@@ -284,7 +293,16 @@
     {
       "template_id": "git-doctor-diff-tree-patch",
       "executable": "git",
-      "argv_shape": ["diff-tree", "--root", "--no-commit-id", "--no-ext-diff", "--unified=0", "-p", "-m", "<dynamic>"],
+      "argv_shape": [
+        "diff-tree",
+        "--root",
+        "--no-commit-id",
+        "--no-ext-diff",
+        "--unified=0",
+        "-p",
+        "-m",
+        "<dynamic>"
+      ],
       "capabilities": ["proc:git-read"],
       "effect": "read",
       "reason": "Doctor reads a zero-context patch for one selected revision.",

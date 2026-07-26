@@ -2187,6 +2187,25 @@ cycle; only PASS permits source push. The two-PR ceremony, `none-needed` release
 disposition, closing-record bindings, claims ceiling, and every external human gate
 remain exactly as DII-165 established.
 
+### DII-169 — Authorize role-pure formatter closure for R-0004
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 formatter correction; DII-168; BL-143; R-0004-EXIT-LADDER-FORMATTING-FAILURE; Auditor 87a8ff9f37c835c725c1dbbbe9d8c71f4ea8245d`
+
+Candidate `907ccd94bad69c9a5c58709494ae24114412027c` passed every functional gate through
+T6 and then correctly stopped on the standalone formatter check's exact 13-file set.
+BL-143 authorizes a semantics-preserving, role-pure correction only.
+
+Architect may format the four reported `law/` files. Engineer may format the four
+reported hand-authored production/generator files, update the action-registry generator
+only as necessary to emit formatter-clean bytes, and regenerate its three owned views.
+Inspector may format the two reported test files without changing assertions. Each role
+must commit separately. Generated views must continue to byte-match their producer;
+schema, action, effect, trace, and repository-reference projections must remain exact.
+
+Auditor must preserve the symmetric correction and the complete ladder must restart
+under a later source-closing decision. This decision authorizes no behavior, threshold,
+skip, authority, release, publication, deployment, external R-0008 action, R-0009
+activation, R-0010 observation, or real-stynx change.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
