@@ -2549,6 +2549,20 @@ containing DII-189 and its refreshed handoff must pass the complete ladder and a
 read-only review through literal `claude-opus-5`, with no fallback, before source push.
 The claims ceiling and every external human gate remain unchanged.
 
+### DII-190 — Rebind atomic terminal provenance
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 sixth-Opus repaired close; DII-189; BL-174; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; Architect 7ca26c4; Auditor c7dd9fb`
+
+DII-190 supersedes DII-189 only as the R-0004 source-closing judgment. The active
+surface contract cites this decision in the same Architect commit, the source-close
+handoff names DII-190 as the sole latest judgment, and BL-172 through BL-174 require
+every future closing DII to preserve that atomic agreement.
+
+No engineering behavior, assertion, threshold, skip, evidence source, or human gate
+changed. This exact clean candidate must restart the complete ladder, pass all eleven
+public-package dry-runs, and receive a fresh read-only review through literal
+`claude-opus-5`, with no fallback, before source push. The claims ceiling and every
+external human gate remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
