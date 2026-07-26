@@ -190,6 +190,7 @@ clusters are now authorized for red-first role-pure repair:
 | KR-R5-030 | full floor   | ADR roster guards and the active roster index must reflect the canonical ADR-001..020 population and its fifteen active records after the sealed-history repair. |
 | KR-R5-031 | Stage 1     | The two independent-review test files must carry canonical invariant markers and be projected into the generated trace without changing their assertions. |
 | KR-R5-032 | Stage 1     | The sequencing adversary must satisfy the no-non-null-assertion lint rule while retaining its exact duplicate-binding mutation and expectations. |
+| KR-R5-033 | Stage 1     | The pure child-authority adversary must use an explicit test-side structural function type so minimal registry fixtures typecheck without fabricating production registry fields. |
 
 Each Inspector cluster must fail for its named absent behavior. KR-R5-027 is the
 strict-governance integration repair exposed after the independent-review batch. Law precedes every
