@@ -281,18 +281,10 @@ export function checkPromptOverlays(opts: CheckPromptOverlaysOptions): PromptFir
       for (const s of scopes) {
         const exemptByDraft = cls === 'review-agent' && isDraftSubpath(s);
         const exemptByAutofix = isAutofixSelfScope(m, s);
-        const architectBoundDeterministicSkill =
-          m.authority_role === 'architect' && m.deterministic === true && m.llm_backed === false;
         const architectDocumentWriter = isArchitectDocumentWriter(m, s);
         for (const reserved of ARCHITECT_RESERVED) {
           if (overlaps(s, reserved)) {
-            if (
-              exemptByDraft ||
-              exemptByAutofix ||
-              architectBoundDeterministicSkill ||
-              architectDocumentWriter
-            )
-              break;
+            if (exemptByDraft || exemptByAutofix || architectDocumentWriter) break;
             findings.push({
               code: 'PROMPT_OVERLAY_AUTHORITY_INVERSION',
               severity: 'critical',

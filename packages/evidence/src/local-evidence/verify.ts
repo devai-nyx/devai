@@ -5,7 +5,7 @@ import { computeSourceHash } from './source-hash.js';
 import { dirname } from 'node:path';
 import { resolveLocalEvidencePolicy, type LocalEvidencePolicy } from './config.js';
 import type { LocalEvidenceManifest } from './collect.js';
-import { deriveExactSubject } from './subject.js';
+import { deriveExactSubject, deriveTrailerParentSubject } from './subject.js';
 
 const validateLocalEvidenceManifest = getValidator('local-evidence-manifest.schema.json');
 
@@ -128,8 +128,21 @@ function validateAge(manifest: LocalEvidenceManifest, now: number): void {
   if (now > expiresAt) fail('manifest has expired');
 }
 
-export function validateExactSubject(manifest: LocalEvidenceManifest, repoRoot: string): void {
-  const expected = deriveExactSubject(repoRoot);
+export function validateExactSubject(
+  manifest: LocalEvidenceManifest,
+  repoRoot: string,
+  manifestPath: string,
+): void {
+  const current = deriveExactSubject(repoRoot);
+  let expected = current;
+  if (manifest.subject.commitSha !== current.commitSha) {
+    try {
+      expected = deriveTrailerParentSubject(repoRoot, manifestPath);
+    } catch {
+      // Retain the current subject so ordinary commits keep the stable
+      // subject-mismatch diagnostic instead of being mistaken for trailers.
+    }
+  }
   if (manifest.subject.repository !== expected.repository) {
     fail(
       `manifest repository subject mismatch: expected ${expected.repository}, got ${manifest.subject.repository}`,
@@ -259,7 +272,7 @@ function validateManifest(
   const manifest = readManifest(join(inputs.repoRoot, manifestPath));
   validatePolicyAlignment(manifest, policy);
   validateAge(manifest, inputs.now ?? Date.now());
-  validateExactSubject(manifest, inputs.repoRoot);
+  validateExactSubject(manifest, inputs.repoRoot, manifestPath);
   validateSourceHash(manifest, inputs.repoRoot, manifestPath);
   validateTools(manifest, inputs.repoRoot, policy);
   validateJobs(manifest, policy);

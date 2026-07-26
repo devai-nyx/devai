@@ -114,8 +114,12 @@ function renderRoundRecord(record: JsonRecord): string {
     '---',
     `schemaVersion: ${yamlScalar(record['schemaVersion'])}`,
     `id: ${yamlScalar(record['id'])}`,
+    `title: ${yamlScalar(record['title'])}`,
+    `type: ${yamlScalar(record['type'])}`,
     `kind: ${yamlScalar(record['kind'])}`,
     `status: ${yamlScalar(record['status'])}`,
+    `date: ${yamlScalar(record['date'])}`,
+    `authority: ${yamlScalar(record['authority'])}`,
     `goal: ${yamlScalar(record['goal'])}`,
     `declared_by: ${yamlScalar(record['declared_by'])}`,
   ];
@@ -211,6 +215,15 @@ function readJson(path: string, code: string): JsonRecord {
   }
 }
 
+function decisionExists(repoRoot: string, decision: string): boolean {
+  if (existsSync(join(repoRoot, 'law/adr', `${decision}.md`))) return true;
+  if (existsSync(join(repoRoot, 'law/register', `${decision}.md`))) return true;
+  const register = join(repoRoot, 'law/register/DECISIONS.md');
+  if (!existsSync(register)) return false;
+  if (!/^[A-Z]+-[0-9]+$/u.test(decision)) return false;
+  return new RegExp(`^###\\s+${decision}\\b`, 'mu').test(readFileSync(register, 'utf8'));
+}
+
 function assertClosePreconditions(repoRoot: string, id: string, source: string): JsonRecord {
   const recordPath = join(source, 'record.md');
   if (!existsSync(recordPath)) fail('ROUND_ARCHIVE_RECORD_MISSING');
@@ -222,7 +235,7 @@ function assertClosePreconditions(repoRoot: string, id: string, source: string):
   const declaredBy = String(record['declared_by']);
   const closedBy = String(record['closed_by']);
   for (const decision of [declaredBy, closedBy]) {
-    if (!existsSync(join(repoRoot, 'law/adr', `${decision}.md`))) {
+    if (!decisionExists(repoRoot, decision)) {
       fail(`ROUND_ARCHIVE_DECISION_MISSING:${decision}`);
     }
   }
