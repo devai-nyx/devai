@@ -1598,7 +1598,7 @@
     ]
   },
   "schemas": {
-    "canonical_total": 54,
+    "canonical_total": 55,
     "canon_rules": [
       "recursive closed complete objects",
       "predicate fragments remain valid",
