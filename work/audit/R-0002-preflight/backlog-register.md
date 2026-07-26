@@ -1621,6 +1621,17 @@ Acceptance: the active surface contract reports the exact live recursive canonic
 schema total, and an Inspector guard derives the total from the same production canon so
 future additions cannot leave the governed claim stale.
 
+### BL-166 — Reconcile third-review repair formatting by owner
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 exact ladder formatting failure at cf85bc0; R-0004-FINAL-REPAIR-FORMATTING-FAILURE`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: Inspector formats only the changed R-0004 contract test; Auditor formats
+only the changed third-review failure record and records a symmetric correction; no
+assertion, claim, threshold, skip, or generated source changes; standalone Prettier and
+the restarted complete ladder pass before a fresh Opus review.
+
 ## Carried guard map
 
 The original known-red mapping remains as historical provenance:
