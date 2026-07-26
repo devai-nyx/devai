@@ -1,9 +1,5 @@
 import { spawnSync } from '@devai-nyx/authority';
-import {
-  existsSync,
-  mkdirSync,
-  writeFileSync,
-} from '@devai-nyx/authority';
+import { mkdirSync, writeFileSync } from '@devai-nyx/authority';
 import { dirname, join, resolve } from 'node:path';
 import { hostname } from 'node:os';
 import type { CAC } from 'cac';
@@ -136,6 +132,11 @@ export const recordRun = defineCommand({
             process.stderr.write('devai evidence test record: --cmd is required\n');
             process.exit(EXIT_USAGE);
           }
+          if (options.chain === true) {
+            throw new Error(
+              'LEGACY_EVIDENCE_WRITER_RETIRED: omit --chain and use a governed round-bound proof epoch',
+            );
+          }
           const repoRoot = resolve(options.repoRoot ?? process.cwd());
           const repoSlug = (options.repo ?? repoRoot.split('/').pop() ?? 'unknown')
             .toLowerCase()
@@ -188,14 +189,6 @@ export const recordRun = defineCommand({
 
           writeFileSync(outPath, JSON.stringify(record, null, 2) + '\n');
 
-          if (options.chain === true) {
-            // Delegate to `evidence emit`'s record-append helper via a
-            // minimal local stub. Avoid a circular import — re-derive
-            // the chain helpers from #core-compat. Awaited so the chain
-            // entry lands before this verb exits.
-            await chainEmit(repoRoot, record, ts);
-          }
-
           if (options.human === true) {
             const host = hostname();
             process.stdout.write(
@@ -216,51 +209,3 @@ export const recordRun = defineCommand({
       });
   },
 });
-
-interface TestResultRecord {
-  readonly id: string;
-  readonly tier: string;
-  readonly status: string;
-  readonly repo: string;
-  readonly scope?: string;
-}
-
-async function chainEmit(
-  repoRoot: string,
-  record: TestResultRecord,
-  timestamp: string,
-): Promise<void> {
-  // Lazy-load to keep this verb's top-level surface lean.
-  const core = await import('#core-compat');
-  const chainPath = resolve(repoRoot, 'record/proofs/chain.json');
-  if (!existsSync(chainPath)) {
-    mkdirSync(dirname(chainPath), { recursive: true });
-    writeFileSync(chainPath, JSON.stringify({ head: null, records: [] }, null, 2));
-  }
-  const chain = core.loadChain(chainPath);
-  const gitCtx = core.gatherGitContext(repoRoot);
-  const draft = {
-    id: core.deriveEvidenceId({
-      timestamp,
-      actor: 'devai-record-run',
-      actor_role: 'harness',
-      action: `test-run.${record.tier}`,
-      status: record.status === 'pass' ? 'completed' : 'failed',
-      git_head_sha: gitCtx.head_sha,
-      artifact_sha256s: [null],
-      previous_run_hash: chain.head,
-    }),
-    timestamp,
-    actor: 'devai-record-run',
-    actor_role: 'harness' as const,
-    action: `test-run.${record.tier}`,
-    status: (record.status === 'pass' ? 'completed' : 'failed') as 'completed' | 'failed',
-    context: { repo_root: repoRoot, git: gitCtx },
-    artifacts: [],
-    notes: [
-      `test-result id: ${record.id}; scope: ${record.scope ?? record.repo}; tier: ${record.tier}`,
-    ],
-  };
-  // appendRecord computes manifest_hash and writes back the chain.
-  core.appendRecord(chainPath, draft);
-}
