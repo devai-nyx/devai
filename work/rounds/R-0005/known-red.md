@@ -75,3 +75,16 @@ law-first/red-first sequencing, and conditional-skip source enumeration.
 This ledger now describes retired, commit-scoped red authority. It grants no permission
 for a red source candidate, a weakened assertion, a new conditional skip, or a later
 round to reuse any cluster without fresh Architect authorization.
+
+## KR-R5-012 — Current repository-reference projection drift
+
+The first B8 `ci:stage1` restart passed workflow, action-registry, and trace checks, then
+failed because `work/rounds/R-0002/repository-reference-triage.json` no longer matched
+the deterministic current projection. The B7 test had incorrectly relaxed this active
+production contract to a historical subset when R-0005 line and population changes
+shifted the projection.
+
+The bounded repair is authorized to restore exact Inspector parity before regenerating
+the Architect-owned projection. It may not exclude another file, normalize away a
+reference, weaken semantic classification, or change the generator. The cluster retires
+only when the focused test, `repository-reference:check`, and the complete floor pass.
