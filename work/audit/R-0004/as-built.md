@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-11-CORRECTION; source snapshot 2a864440c9178cc59834c961c132d3b5616d4bfa,
+    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION; source snapshot b10baed06e21ed39f07b625a5993355a57526d63,
   ]
 ---
 
@@ -18,7 +18,7 @@ provenance:
 ## Boundary and verdict
 
 R-0004 has completed B0 through B7 locally at source snapshot
-`2a864440c9178cc59834c961c132d3b5616d4bfa`. The governed surface and package
+`b10baed06e21ed39f07b625a5993355a57526d63`. The governed surface and package
 topology satisfy the round acceptance criteria at that snapshot. The round is not yet
 closed: the Architect closing record, exact-candidate Claude Opus 5 review, source PR,
 exact-SHA CI, source merge, exact-main CI, closure-only machine record, closure PR, and
@@ -129,16 +129,16 @@ paths: four `dist/index` JavaScript/declaration artifacts, `package.json`, and
 
 ## Fresh tests and coverage
 
-The complete tiered exit ladder passed on exact source snapshot `2a86444`:
+The complete tiered exit ladder passed on exact source snapshot `b10baed`:
 
 - T1: 71 files / 838 tests;
-- T2: 38 files / 243 passed / 1 declared skip;
+- T2: 38 files / 244 passed / 1 declared skip;
 - T3: 9 files / 56 passed / 7 declared skips;
 - T4: 2 files / 4 tests;
 - T5: 6 files / 25 tests;
 - T6: 1 file / 3 tests.
 
-The root `pnpm run test` porcelain passed 127 files / 1,169 tests with 8 declared skips
+The root `pnpm run test` porcelain passed 127 files / 1,170 tests with 8 declared skips
 and zero failures. Root `pnpm run build` passed through
 the registered `pnpm -r build` process and built all thirteen applicable workspace
 projects, including core.
