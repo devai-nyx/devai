@@ -23,7 +23,7 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-151. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-153. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
@@ -57,7 +57,8 @@ candidate's strict governance gate.
 BL-143 governs the cross-authority formatting debt exposed after the corrected R-0004
 candidate passed every functional tier.
 BL-144 through BL-151 govern the eight findings from the first R-0004 exact-candidate
-Claude Opus 5 close review.
+Claude Opus 5 close review. BL-152 and BL-153 govern the two collateral failures exposed
+when the corrected candidate restarted the complete T2 ladder.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -67,7 +68,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-119 |
 | R-0003        | BL-004, BL-005, BL-006, BL-120–BL-140                                                                                                                                                     |
-| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084, BL-141–BL-151                                                                             |
+| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084, BL-141–BL-153                                                                             |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
 | R-0006        | BL-026, BL-034, BL-035, BL-081                                                                                                                                                            |
 | R-0007        | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                                                                    |
@@ -83,6 +84,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–119 |
 | Closed in R-0003                    | BL-004–006, BL-120–140                                                                                                                           |
 | Implemented in active R-0004        | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084, BL-141–151; source and closure ceremonies pending                                |
+| Open in active R-0004               | BL-152–153                                                                                                                                       |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
 | Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                                       |
 | Open in prepared R-0007             | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                           |
@@ -1472,6 +1474,27 @@ Acceptance: the production workflow checker rejects every local or remote `uses:
 without the policy-required immutable reference and readable version comment where
 applicable; the guard runs on both existing workflows and cannot depend on a nonexistent
 release file.
+
+### BL-152 — Admit contract evidence in trace invariant bindings
+
+`type: backlog-item · status: draft · authority: Architect + Auditor · provenance: R-0004 corrected-candidate T2 failure at 8d95fd0; trace.schema.json invariant test suite enum`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: the canonical trace schema accepts `contract` for invariant test bindings as
+it already does for the test index; the live 34-invariant / 126-test trace validates
+through schema and CLI resolution without weakening path or evidence requirements.
+
+### BL-153 — Recognize fixed Vitest argv in the authority test harness
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 corrected-candidate T2 failure at 8d95fd0; AUTHORITY_TEST_PROCESS_NOT_READ_ONLY`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: the test-only authority host accepts only the production fixed read-only
+`pnpm vitest run` shape, with an optional exact `--config <tests/config/*.ts>` suffix;
+arbitrary package-manager commands, scripts, flags, and caller-selected shell text remain
+denied; both skill baselines and the focused harness contract pass.
 
 ## Carried guard map
 
