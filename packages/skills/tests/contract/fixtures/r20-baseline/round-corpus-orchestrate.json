@@ -1,9 +1,7 @@
 {
   "evidence": {
     "executed_artifacts": {
-      "blockers_escalated": [
-        "DEC-0001"
-      ],
+      "blockers_escalated": ["DEC-0001"],
       "dispatched": [
         {
           "mode": "not-dispatched",
@@ -34,11 +32,7 @@
     "phase": "orchestrate",
     "references": {
       "prompts_library": "docs/adopters/round-prompts/B3-orchestrate.md",
-      "skills": [
-        "SKILL-fix-lint",
-        "SKILL-fix-build",
-        "SKILL-fix-test"
-      ]
+      "skills": ["SKILL-fix-lint", "SKILL-fix-build", "SKILL-fix-test"]
     },
     "round_dir": "work/rounds/R-0777",
     "steps": [

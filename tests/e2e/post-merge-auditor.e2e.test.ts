@@ -75,10 +75,7 @@ function install() {
 beforeEach(() => {
   repo = mkdtempSync(join(tmpdir(), 'devai-r21-post-merge-e2e-'));
   expect(git(['init', '-b', 'main']).status).toBe(0);
-  writeFileSync(
-    join(repo, '.gitignore'),
-    '.devai/state/\n.devai/worktrees/\nscratch/worktrees/\n',
-  );
+  writeFileSync(join(repo, '.gitignore'), '.devai/state/\n.devai/worktrees/\nscratch/worktrees/\n');
   mkdirSync(join(repo, 'law'), { recursive: true });
   writeFileSync(join(repo, 'law', 'constitution.md'), readFileSync(CONSTITUTION, 'utf8'));
   commitFile('README.md', 'initial\n');

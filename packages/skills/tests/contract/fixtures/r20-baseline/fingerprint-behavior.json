@@ -15,10 +15,7 @@
       ],
       "behavior": {
         "evidence": {
-          "docs": [
-            "docs/A.md",
-            "docs/B.md"
-          ],
+          "docs": ["docs/A.md", "docs/B.md"],
           "drifts": [],
           "llm": {
             "cost_usd": "<N>",
@@ -74,30 +71,16 @@
       "behavior": {
         "evidence": {
           "commands": [
-            [
-              "git",
-              "add",
-              "--",
-              "README.md"
-            ],
-            [
-              "git",
-              "commit",
-              "-m",
-              "devai: characterization commit"
-            ]
+            ["git", "add", "--", "README.md"],
+            ["git", "commit", "-m", "devai: characterization commit"]
           ],
           "committed": false,
-          "files": [
-            "README.md"
-          ],
+          "files": ["README.md"],
           "mode": "dry-run",
           "pr_opened": false,
           "pushed": false
         },
-        "notes": [
-          "mode=dry-run; 2 commands previewed"
-        ],
+        "notes": ["mode=dry-run; 2 commands previewed"],
         "status": "pass"
       },
       "fs_products": {
@@ -290,18 +273,14 @@
               "deterministic": true,
               "notes": "latest type_check failure at undefined",
               "property": "T8",
-              "sensor_readings": [
-                "SR-2"
-              ],
+              "sensor_readings": ["SR-2"],
               "substrate": "F2",
               "verdict": "FAIL"
             },
             {
               "deterministic": true,
               "property": "T9",
-              "sensor_readings": [
-                "SR-1"
-              ],
+              "sensor_readings": ["SR-1"],
               "substrate": "F2",
               "verdict": "PASS"
             },
@@ -552,9 +531,7 @@
           "created_at": "<TS>",
           "emitting_discipline": "engineer",
           "emitting_task_id": "TASK-0001",
-          "evidence_refs": [
-            "EV-fixture0001"
-          ],
+          "evidence_refs": ["EV-fixture0001"],
           "id": "RGR-0001",
           "problem": {
             "ambiguity": "spec ambiguity in fixture",
@@ -600,20 +577,14 @@
             {
               "acceptance": [
                 {
-                  "command": [
-                    "node",
-                    "-e",
-                    "process.exit(0)"
-                  ],
+                  "command": ["node", "-e", "process.exit(0)"],
                   "exit_code": 0
                 }
               ],
               "converged": false,
               "edits": {
                 "rejected": [],
-                "written": [
-                  "packages/fix.ts"
-                ]
+                "written": ["packages/fix.ts"]
               },
               "iteration": 1,
               "llm": {
@@ -654,9 +625,7 @@
           ],
           "task_id": "TASK-FIXTURE-1"
         },
-        "notes": [
-          "did not converge after 1 iteration(s); escalate per Article 19"
-        ],
+        "notes": ["did not converge after 1 iteration(s); escalate per Article 19"],
         "status": "fail"
       },
       "fs_products": {
@@ -1174,19 +1143,13 @@
       },
       "behavior": {
         "evidence": {
-          "command": [
-            "node",
-            "-e",
-            "console.log('Mutation score: 100.0%')"
-          ],
+          "command": ["node", "-e", "console.log('Mutation score: 100.0%')"],
           "exit_code": 0,
           "mutation_score": 1,
           "passed": true,
           "threshold": 0.7
         },
-        "notes": [
-          "mutation score 100.0% ≥ threshold 70.0%"
-        ],
+        "notes": ["mutation score 100.0% ≥ threshold 70.0%"],
         "status": "pass"
       },
       "fs_products": {
@@ -1250,9 +1213,7 @@
       ],
       "behavior": {
         "evidence": {
-          "files_reviewed": [
-            "src/sample.ts"
-          ],
+          "files_reviewed": ["src/sample.ts"],
           "llm": {
             "cost_usd": "<N>",
             "family": "claude",
@@ -1294,10 +1255,7 @@
           "phase": "audit",
           "references": {
             "prompts_library": "docs/adopters/round-prompts/B0-audit.md",
-            "skills": [
-              "SKILL-assess-state",
-              "SKILL-compute-scorecard"
-            ]
+            "skills": ["SKILL-assess-state", "SKILL-compute-scorecard"]
           },
           "round_dir": "work/rounds/R-0999",
           "steps": [
@@ -1355,9 +1313,7 @@
           "phase": "backlog",
           "references": {
             "prompts_library": "docs/adopters/round-prompts/B1-backlog.md",
-            "skills": [
-              "SKILL-compile-backlog"
-            ]
+            "skills": ["SKILL-compile-backlog"]
           },
           "round_dir": "work/rounds/R-0999",
           "steps": [
@@ -1446,9 +1402,7 @@
             }
           ]
         },
-        "notes": [
-          "mode=plan — emitted RoundPlan for round 999; no sub-skills invoked."
-        ],
+        "notes": ["mode=plan — emitted RoundPlan for round 999; no sub-skills invoked."],
         "status": "pass"
       },
       "fs_products": {
@@ -1484,11 +1438,7 @@
           "phase": "orchestrate",
           "references": {
             "prompts_library": "docs/adopters/round-prompts/B3-orchestrate.md",
-            "skills": [
-              "SKILL-fix-lint",
-              "SKILL-fix-build",
-              "SKILL-fix-test"
-            ]
+            "skills": ["SKILL-fix-lint", "SKILL-fix-build", "SKILL-fix-test"]
           },
           "round_dir": "work/rounds/R-0999",
           "steps": [
@@ -1514,9 +1464,7 @@
             }
           ]
         },
-        "notes": [
-          "Round dispatch complete; SKILL-round-verify-publish required for verdict."
-        ],
+        "notes": ["Round dispatch complete; SKILL-round-verify-publish required for verdict."],
         "status": "pass"
       },
       "fs_products": {
@@ -1689,9 +1637,7 @@
           "blueprint_id": "BP-DEMO-BOOKMARK-001",
           "blueprint_sha256": "4d1101dd50699c71607c2fc81423526cb25e6d0b70e75e572bd6252364b6801c",
           "blueprint_version": "1.0.0",
-          "files_created": [
-            ".github/workflows/module-demo-bookmark.yml"
-          ],
+          "files_created": [".github/workflows/module-demo-bookmark.yml"],
           "files_modified": [],
           "files_skipped": [],
           "idempotency": "fresh",
@@ -2037,9 +1983,7 @@
         "evidence": {
           "raw_response": "[r20-mock:fbaf3334e28f1e19] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2065,9 +2009,7 @@
         "evidence": {
           "raw_response": "[r20-mock:142103d69e81de7c] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2093,9 +2035,7 @@
         "evidence": {
           "raw_response": "[r20-mock:1d6b6a0726217bf9] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2121,9 +2061,7 @@
         "evidence": {
           "raw_response": "[r20-mock:526b303ca18dab99] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2149,9 +2087,7 @@
         "evidence": {
           "raw_response": "[r20-mock:50136d19d6a0a642] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2177,9 +2113,7 @@
         "evidence": {
           "raw_response": "[r20-mock:e40cc2beddfb86bc] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2205,9 +2139,7 @@
         "evidence": {
           "raw_response": "[r20-mock:22b090abaa510ec8] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2233,9 +2165,7 @@
         "evidence": {
           "raw_response": "[r20-mock:728183fcf4b46bdc] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2261,9 +2191,7 @@
         "evidence": {
           "raw_response": "[r20-mock:f87b05889a3aab2b] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2289,9 +2217,7 @@
         "evidence": {
           "raw_response": "[r20-mock:9da34602e9d5a3cc] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2317,9 +2243,7 @@
         "evidence": {
           "raw_response": "[r20-mock:a0f4242417fc09fe] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2345,9 +2269,7 @@
         "evidence": {
           "raw_response": "[r20-mock:14ae253ebbead5f0] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2373,9 +2295,7 @@
         "evidence": {
           "raw_response": "[r20-mock:b48b875a0c0fbbd9] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
@@ -2401,9 +2321,7 @@
         "evidence": {
           "raw_response": "[r20-mock:690c0cd87d3cc062] deterministic characterization response."
         },
-        "notes": [
-          "LLM response did not parse as { markdown: \"...\" }"
-        ],
+        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
         "status": "fail"
       },
       "fs_products": {
