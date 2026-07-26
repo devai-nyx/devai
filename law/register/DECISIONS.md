@@ -2162,6 +2162,31 @@ Strict governance and the complete local ladder must restart under a later Archi
 source-closing decision before the literal `claude-opus-5` review. No release or
 external human gate is altered.
 
+### DII-168 — Rebind the R-0004 source close after the governance correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 corrected governance close; DII-166; DII-167; BL-142; R-0004-EXIT-LADDER-GOVERNANCE-FAILURE; R-0004-EXIT-LADDER-GOVERNANCE-CORRECTION; Auditor 39a546feecca6d1e3d3e5c6da098b63bdcc50130 and 9da5b541cda63024da9b3ac09da531ae4b7c1465; Inspector fbfb226b19ef79d26def93afda24563aa2d3c210; Engineer d875b73c7b7479a610634ab7657780246731fda2`
+
+DII-168 supersedes DII-166 only as the R-0004 source-closing judgment. Candidate
+`0621f12794d4c2cab500d6098fe90a4d22023ee7` passed the complete Stage 1 through
+Stage 3 ladder and changeset classification, then correctly stopped at strict
+governance on two development-only database descriptions. BL-142 governs and closes
+that bounded false positive without weakening the underlying prohibition.
+
+Inspector `fbfb226` proves the safe development occurrence red, preserves the unsafe
+sibling and commit-message channels, and requires invalid context expressions to fail
+closed. Engineer `d875b73` materializes DII-167's two exact development identities and
+applies them independently to each changed-line occurrence. Auditor `9da5b54` records
+the symmetric correction. The focused scanner suite, lint, type-check, ordinary floor,
+and strict governance pass with all 16 canonical rules present, no waiver, and zero
+findings. This Architect batch regenerates deterministic projections from current
+tracked source.
+
+The clean candidate containing DII-168 and fresh projections must restart the complete
+local ladder and then receive the mandated read-only close review through literal
+`claude-opus-5`, with no fallback. Any actionable finding reopens the role-pure red-first
+cycle; only PASS permits source push. The two-PR ceremony, `none-needed` release
+disposition, closing-record bindings, claims ceiling, and every external human gate
+remain exactly as DII-165 established.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
