@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; source snapshot fd8c8b68e05f2fc7a305b6403373f2820d9b64bc,
+    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; source snapshot 12189704dd49a0ef4bd989b4ad1070dc4de413e0,
   ]
 ---
 
@@ -18,7 +18,7 @@ provenance:
 ## Boundary and verdict
 
 R-0004 has completed B0 through B7 locally at source snapshot
-`fd8c8b68e05f2fc7a305b6403373f2820d9b64bc`. The governed surface and package
+`12189704dd49a0ef4bd989b4ad1070dc4de413e0`. The governed surface and package
 topology satisfy the round acceptance criteria at that snapshot. The round is not yet
 closed: the Architect closing record, exact-candidate Claude Opus 5 review, source PR,
 exact-SHA CI, source merge, exact-main CI, closure-only machine record, closure PR, and
@@ -71,6 +71,7 @@ façade.
 | BL-156–162 | Implemented; ceremony pending              | Production test-suite argv, exact audit counts, derived non-vacuous fixtures, fixed build help, real session-store evidence, exact test-host configs, and the complete governance scan window are focused green. |
 | BL-163–166 | Implemented; ceremony pending              | Active contract argv/schema claims and direct command metadata derive from canonical sources; role-owned formatting is reconciled and the complete ladder restarted green.                                       |
 | BL-167–170 | Implemented; ceremony pending              | All 147 command bindings have exact metadata parity; audit lifecycle links resolve; test variants/provenance are complete; strict AST typing is paired and green.                                                |
+| BL-171–173 | Implemented; ceremony pending              | The fourteen-cluster lineage statement and active contract provenance are current; the fifth-review failure/correction pair and governance-range provenance are symmetric.                                       |
 
 No R-0005 through R-0010 item was absorbed into this round.
 
@@ -113,10 +114,11 @@ paths: four `dist/index` JavaScript/declaration artifacts, `package.json`, and
 | Third Opus repair  | Auditor + Inspector + Engineer + Architect | `9810d80`, `b0af62c`, `ca6dff9`, `c7d1807`, `cf85bc0`                                                                                                    | Reconciled active contract argv/schema claims and direct build metadata through red-first role-pure repair.       |
 | Final formatting   | Auditor + Inspector                        | `6d6c7eb`, `965b007`, `7be9d31`                                                                                                                          | Preserved the exact two-file formatting failure and repaired each file only under its owning role.                |
 | Fourth Opus repair | Auditor + Inspector + Engineer + Architect | `93ebe91`, `bf9a690`, `6acb066`, `48e2ccc`, `af91f7c`, `d6369f9`, `6b4213c`, `7a1006b`, `735fb70`                                                        | Closed complete metadata parity, audit lifecycle, strict AST typing, and the five-route contract/provenance gaps. |
+| Fifth Opus repair  | Auditor + Inspector + Architect            | `46f3854`, `b70d530`, `4416eb9`, `1218970`                                                                                                               | Reconciled current-lineage wording, terminal contract provenance, and symmetric review/governance-range records.  |
 
 ## Fresh tests and coverage
 
-The complete tiered exit ladder passed on exact source snapshot `fd8c8b6`:
+The complete tiered exit ladder passed on exact source snapshot `1218970`:
 
 - T1: 71 files / 837 tests;
 - T2: 38 files / 238 passed / 1 declared skip;
