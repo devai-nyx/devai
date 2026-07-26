@@ -23,7 +23,7 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-154. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-155. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
@@ -60,6 +60,7 @@ BL-144 through BL-151 govern the eight findings from the first R-0004 exact-cand
 Claude Opus 5 close review. BL-152 and BL-153 govern the two collateral failures exposed
 when the corrected candidate restarted the complete T2 ladder. BL-154 governs the
 missing machine-verifiable ADR association exposed by the strict governance restart.
+BL-155 governs the copied-history seal false positive and the post-seal ADR-014 repair.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -69,7 +70,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-119 |
 | R-0003        | BL-004, BL-005, BL-006, BL-120–BL-140                                                                                                                                                     |
-| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084, BL-141–BL-154                                                                             |
+| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084, BL-141–BL-155                                                                             |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
 | R-0006        | BL-026, BL-034, BL-035, BL-081                                                                                                                                                            |
 | R-0007        | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                                                                    |
@@ -86,6 +87,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Closed in R-0003                    | BL-004–006, BL-120–140                                                                                                                           |
 | Implemented in active R-0004        | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084, BL-141–153; source and closure ceremonies pending                                |
 | Open in active R-0004               | BL-154                                                                                                                                           |
+| Open in active R-0004               | BL-155                                                                                                                                           |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
 | Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                                       |
 | Open in prepared R-0007             | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                           |
@@ -1509,6 +1511,18 @@ path only when at least one active numbered ADR lists that exact path under
 `affected_rules`; absent, superseded, malformed, or unrelated ADR coverage remains a
 finding; focused tests prove both sides; the complete strict governance gate passes
 without an exact-commit waiver.
+
+### BL-155 — Separate copied-record history and preserve sealed ADR correction
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Engineer + Auditor · provenance: R-0004 governance integrity reading after 9c7818d; DECISION_LOCKED_BODY_MUTATED on ADR-013 and ADR-014`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: governance history follows renames but treats a Git copy as the new record's
+history boundary, so ADR-013 does not inherit ADR-005's sealed body; a focused test proves
+copy isolation while the rename-mutation guard remains red; ADR-014 is restored to its
+sealed body plus one terminal lifecycle transition; a gapless ADR-015 carries the
+complete active CI rule and exact affected paths; strict decision integrity passes.
 
 ## Carried guard map
 
