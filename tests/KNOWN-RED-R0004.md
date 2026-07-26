@@ -20,7 +20,7 @@ fixture presentation line; raw output, summary metrics, and the committed baseli
 remain protected.
 
 BL-181 preserves the tenth-review red: governed forty-hex identities must resolve to
-their declared Git object kind or carry an explicit governed exception. The Inspector
+local Git objects or carry an explicit governed exact path-scoped exception. The Inspector
 contract at `759014a` proved the missing production check, CI binding, and exception set,
 plus two fabricated active R-0004 commit expansions. Engineer `aee78a3`, `7b44322`, and
 `4047bec` implemented and bounded the check; Architect `cb50655` classified the exact
@@ -32,8 +32,8 @@ snapshot that produced them, and active records must describe the implemented lo
 resolution or exact path-scoped exception semantics without claiming an absent local
 object-kind comparison. The same Inspector batch proves hermetically that unresolved
 identities, misplaced exceptions, stale allowed paths, and stale exceptions fail
-closed. Rejection behavior is green; active-claim reconciliation is intentionally red
-until the owning authorities correct it.
+closed. Architect `cd51d1b` and Auditor `1f118e1` corrected the active claims; the
+complete BL-182 contract is now green.
 
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at
