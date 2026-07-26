@@ -116,6 +116,8 @@ describe('R-0004 governed surface red-first contracts', () => {
   });
 
   it('BL-027 routes leaf help to leaf metadata without granting authority', () => {
+    const sessionDirectory = join(ROOT, '.devai/state/authority-sessions');
+    const sessionsBefore = existsSync(sessionDirectory) ? readdirSync(sessionDirectory).sort() : [];
     const result = spawnSync('node', [BIN, 'init', 'apply-owner', '--help'], {
       cwd: ROOT,
       encoding: 'utf8',
@@ -125,7 +127,8 @@ describe('R-0004 governed surface red-first contracts', () => {
     expect(result.stdout).toContain('--as-role <role>');
     expect(result.stdout).toContain('--write');
     expect(result.stdout).not.toContain('<command>');
-    expect(existsSync(join(ROOT, '.devai/state/authority-sessions.json'))).toBe(false);
+    const sessionsAfter = existsSync(sessionDirectory) ? readdirSync(sessionDirectory).sort() : [];
+    expect(sessionsAfter).toEqual(sessionsBefore);
   });
 
   it('BL-025 creates an acyclic export-only core and exact eleven-member fixed group', () => {
@@ -169,6 +172,45 @@ describe('R-0004 governed surface red-first contracts', () => {
     expect(`${build}\n${test}`).not.toMatch(/execSync|\bexec\(/);
     expect(runner).toContain('result.error !== undefined');
     expect(runner).toContain('exit_code: 127');
+  });
+
+  it('BL-156 admits exactly every fixed sense-test suite argv in the production broker', () => {
+    const broker = readFileSync(join(ROOT, 'packages/cli/src/authority/broker.ts'), 'utf8');
+    for (const config of [
+      'tests/config/t1.unit.config.ts',
+      'tests/config/t3.integration.config.ts',
+      'tests/config/t4.regression.config.ts',
+      'tests/config/t5.e2e.config.ts',
+    ]) {
+      expect(broker).toContain(config);
+    }
+    expect(broker).not.toMatch(/test:integration|test:regression|test:e2e/u);
+  });
+
+  it('BL-159 publishes fixed recursive build help from the canonical registry', () => {
+    const registry = readJson('law/policy/action-registry.json') as {
+      entries: { action_id: string; description: string }[];
+    };
+    const description = registry.entries.find(
+      (entry) => entry.action_id === 'sense build',
+    )?.description;
+    expect(description).toContain('pnpm -r build');
+    expect(description).not.toMatch(/default|override|caller-selected|pnpm run build/u);
+  });
+
+  it('BL-162 binds strict governance to a window covering the complete R-0004 range', () => {
+    const root = readJson('package.json') as { scripts: Record<string, string> };
+    const match = /check forbidden actions --strict --repo-root \. --max-commits (\d+)/u.exec(
+      root.scripts['ci:governance'] ?? '',
+    );
+    expect(match).not.toBeNull();
+    const count = spawnSync(
+      'git',
+      ['rev-list', '--count', 'b60b4c52bff1779da84f48edc63cbf34652ab18e..HEAD'],
+      { cwd: ROOT, encoding: 'utf8' },
+    );
+    expect(count.status, count.stderr).toBe(0);
+    expect(Number(match?.[1] ?? '0')).toBeGreaterThanOrEqual(Number(count.stdout.trim()));
   });
 
   it('BL-030 keeps every public action and carries all folds and tombstones with migration', () => {

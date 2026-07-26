@@ -4,6 +4,7 @@
 // after W2 slice 8 turns index.ts into `export { X } from ...` /
 // `export type { Y } from ...` façade statements. Red-proofed against a
 // synthetic re-export fixture before trusting it on the real module.
+import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -67,22 +68,54 @@ describe('R20 baseline: skills module API surface (checker-based)', () => {
       readFileSync(join(BASELINE_DIR, 'r0004-disposition.json'), 'utf8'),
     ) as {
       round: string;
-      changed_fixtures: Record<
-        string,
-        { implementation_commit: string; reason: string; changed_fields: string[] }
-      >;
+      baseline_commit: string;
+      changed_files: string[];
+      changed_skills: Record<string, { changed_fields: string[] }>;
     };
     expect(disposition.round).toBe('R-0004');
-    expect(Object.keys(disposition.changed_fixtures)).toEqual(['fingerprint-behavior.json']);
-    expect(disposition.changed_fixtures['fingerprint-behavior.json']).toEqual({
-      implementation_commit: '2938b14e5d6ef3c4e5190af48e180dc4776c34f2',
-      reason:
-        'SKILL-build-project now observes the fixed non-recursive pnpm -r build argv required by BL-031.',
-      changed_fields: [
-        'SKILL-build-project.behavior.evidence.command',
-        'SKILL-build-project.behavior.evidence.command_hash',
+    expect(disposition.baseline_commit).toBe('b60b4c52bff1779da84f48edc63cbf34652ab18e');
+    expect(disposition.changed_files).toEqual([
+      'fingerprint-behavior.json',
+      'inputs/family-fix.json',
+      'inputs/family-workflow.json',
+    ]);
+    const changedFiles = execFileSync(
+      'git',
+      [
+        'diff',
+        '--name-only',
+        `${disposition.baseline_commit}..HEAD`,
+        '--',
+        'packages/skills/tests/contract/fixtures/r20-baseline',
       ],
+      { cwd: resolve(HERE, '../../../..'), encoding: 'utf8' },
+    )
+      .trim()
+      .split('\n')
+      .filter(Boolean)
+      .map((path) => path.replace('packages/skills/tests/contract/fixtures/r20-baseline/', ''))
+      .filter((path) => path !== 'r0004-disposition.json')
+      .sort();
+    expect(changedFiles).toEqual([...disposition.changed_files].sort());
+    expect(disposition.changed_skills).toEqual({
+      'SKILL-fix-build': {
+        changed_fields: ['behavior.evidence.command', 'behavior.evidence.command_hash'],
+      },
+      'SKILL-fix-test': {
+        changed_fields: [
+          'behavior.evidence.command',
+          'behavior.evidence.command_hash',
+          'behavior.evidence.err_head',
+          'behavior.evidence.out_head',
+        ],
+      },
     });
+    expect(readFileSync(join(BASELINE_DIR, 'inputs/family-fix.json'), 'utf8')).not.toContain(
+      'passWithNoTests',
+    );
+    expect(readFileSync(join(BASELINE_DIR, 'inputs/family-workflow.json'), 'utf8')).not.toContain(
+      'passWithNoTests',
+    );
   });
 
   it('records only the three explained post-fork fixture deltas', () => {
