@@ -10,7 +10,7 @@ provenance: [DII-153; DII-175; DII-178; REV-0003]
 
 # ADR roster
 
-ADR-001..016 are gapless; thirteen are active. ADR-005 is superseded by active ADR-013;
+ADR-001..017 are gapless; fourteen are active. ADR-005 is superseded by active ADR-013;
 ADR-011 is superseded by active ADR-016; ADR-014 is independently superseded by active
 ADR-015 under the corrected R-0003 founding disposition. Each numbered ADR names the predecessor or
 successor input it supersedes and carries all six required body sections. Predecessor
@@ -25,6 +25,12 @@ association between CI-path changes and active-ADR `affected_rules` coverage.
 
 ADR-016 preserves ADR-011's reserved-root denial and narrows only evidence-only output,
 exact Architect-bound document writers, and disposable round-composer state.
+
+ADR-017 binds the bounded R-0005 independent-review corrections: contained worktree
+cleanup, round-trip closure, non-self-referential local evidence, reader-only legacy
+chains, exact prompt exceptions, attributable post-merge audit, exact sequencing
+bindings, comprehensive conditional-skip discovery, workflow association, and the
+coverage-safe predicate boundary.
 
 ADR-005's sealed body retains the historical status phrase “Accepted and active in
 R-0003.” Its lifecycle frontmatter controls current successor state: ADR-005 is

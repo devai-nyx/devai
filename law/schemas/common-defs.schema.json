@@ -100,7 +100,7 @@
       ]
     },
     "record_status": {
-      "enum": ["draft", "active", "superseded", "tombstoned"]
+      "enum": ["draft", "active", "superseded", "tombstoned", "closed"]
     },
     "inv_lifecycle": {
       "enum": ["supported", "experimental"]
