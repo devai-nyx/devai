@@ -63,13 +63,30 @@ if (!existsSync(EXCEPTIONS_PATH)) {
     }
   }
 
+  const identities = [...references.keys()];
+  const batchOutput = execFileSync(
+    'git',
+    ['cat-file', '--batch-check=%(objectname) %(objecttype)'],
+    {
+      cwd: ROOT,
+      encoding: 'utf8',
+      input: `${identities.join('\n')}\n`,
+    },
+  );
+  const localObjects = new Map(
+    batchOutput
+      .trimEnd()
+      .split('\n')
+      .map((line) => line.split(' '))
+      .filter((parts) => parts.length === 2 && parts[1] !== 'missing'),
+  );
+
   let resolved = 0;
   let classified = 0;
   for (const [sha, paths] of references) {
-    try {
-      execFileSync('git', ['cat-file', '-e', sha], { cwd: ROOT, stdio: 'ignore' });
+    if (localObjects.has(sha)) {
       resolved += 1;
-    } catch {
+    } else {
       const exception = exceptions.get(sha);
       if (exception !== undefined) {
         const allowedPaths = new Set(exception.allowed_paths);
