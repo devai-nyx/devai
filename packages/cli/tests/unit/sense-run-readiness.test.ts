@@ -33,6 +33,50 @@ function aggregate(children: readonly Child[]): Aggregate {
 }
 
 describe('sense run readiness aggregation', () => {
+  it('plans non-read registry children as honest blockers instead of spawning them', () => {
+    const plan = (
+      runSet as unknown as {
+        planSensorChild?: (
+          command: readonly string[],
+          executable: string,
+          entries: readonly unknown[],
+          version: string,
+        ) => { readonly argv: readonly string[]; readonly runnable: boolean };
+      }
+    ).planSensorChild;
+    expect(plan, 'run-set must expose deterministic child planning').toBeTypeOf('function');
+    if (plan === undefined) throw new Error('planSensorChild is not implemented');
+    const entries = [
+      {
+        internal_name: 'sense-type-check',
+        path: ['sense', 'type', 'check'],
+        effects: 'read',
+        previous_name: 'sense type check',
+      },
+      {
+        internal_name: 'sense-readings-rebuild',
+        path: ['sense', 'readings', 'rebuild'],
+        effects: 'local-write',
+        previous_name: 'sense readings rebuild',
+      },
+    ];
+
+    expect(
+      plan(['sense', 'run', 'type_check', '--repo-root', '/repo'], '/cli.js', entries, '1.0.0'),
+    ).toEqual({ argv: ['sense', 'type', 'check', '--repo-root', '/repo'], runnable: true });
+    expect(
+      plan(
+        ['sense', 'run', 'inventory_regeneration', '--repo-root', '/repo'],
+        '/cli.js',
+        entries,
+        '1.0.0',
+      ),
+    ).toEqual({
+      argv: ['sense', 'readings', 'rebuild', '--repo-root', '/repo'],
+      runnable: false,
+    });
+  });
+
   it('routes a registry-derived public sensor child to its internal binding', () => {
     const route = (
       runSet as unknown as {
