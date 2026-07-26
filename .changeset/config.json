@@ -4,11 +4,16 @@
   "commit": false,
   "fixed": [
     [
+      "@devai-nyx/authority",
       "@devai-nyx/cli",
       "@devai-nyx/core",
       "@devai-nyx/effects-check",
+      "@devai-nyx/evidence",
+      "@devai-nyx/loop",
       "@devai-nyx/schemas",
       "@devai-nyx/sensors",
+      "@devai-nyx/skills",
+      "@devai-nyx/spec",
       "@devai-nyx/utils"
     ]
   ],
