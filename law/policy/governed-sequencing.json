@@ -19,6 +19,76 @@
       "description": "A Machine record emission must follow the Architect-owned schema and validated verb that govern its shape."
     }
   ],
+  "bindings": [
+    {
+      "round": "R-0005",
+      "implementation_commits": [
+        "02da3be1a0e242aa3938bf76482b29361aa7cc2e",
+        "584337d7e444ec1a24dfbf2b56ce13086938c35e",
+        "b167ce9ab815dd9183291538234137f282a15154",
+        "571d1cd07082a0bd1947591de7c5d9c449dce523"
+      ],
+      "law_commits": [
+        "99f6dbd24b19dc440608d718b074d2ea817aa71f",
+        "6ed9f724a8388469aeb40b0ec312ade13fbfc097",
+        "9de2ee173564597ad143391c4e1d4e9597963f4b"
+      ],
+      "red_evidence": {
+        "commit": "6ecbfd90ec4aec39d352f4bcf474b53c7530bc62",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "1acb1bc0d8fdc3b031dcc65ae7c8eee5eff12d5e9f80e1a708b9848ec35d3226",
+        "tests": [
+          "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
+          "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts"
+        ]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": [
+        "06e9af6b4f67d3278bf01c9aad4989438c042559",
+        "9ca6c4bba2de82f6a9e62ad81bd268be397b66c5",
+        "70bb4950cd39c5f6d2f50cac4d7951b6f9289bf5",
+        "2cb2ff31186e617e687febfa9eadab55fb7ad788"
+      ],
+      "law_commits": ["84be6f75181fe43b258f9007afb5b0e16438b686"],
+      "red_evidence": {
+        "commit": "75b435278a8d7eff97287ff170cb06eeb315e6c1",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "1acb1bc0d8fdc3b031dcc65ae7c8eee5eff12d5e9f80e1a708b9848ec35d3226",
+        "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": [
+        "d752bac23956ba1ff466b603cf0b523ce8ebe43e",
+        "c213b47602c75d7e4ae0bc7ce279a53731260b98",
+        "e7b22100d6a5b0328cce58f338028f304ce85329",
+        "52b3ec1d28189ea8e5ba6128871754efb7044562",
+        "f93a7e11d91d1fd0384839b127372111b9a08da2",
+        "f479b03d0b8e1d5ce4985f5f63f48fc69d3a7be6"
+      ],
+      "law_commits": ["893213892750e0c5cdd3eea2fa4703a23783ba38"],
+      "red_evidence": {
+        "commit": "faad6fdfda023f523310f0d8b478bf13b5182dd2",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/loop/tests/unit/worktrees-containment.test.ts packages/loop/tests/unit/scorecard-assess-narrative.test.ts packages/evidence/tests/unit/local-evidence.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "1acb1bc0d8fdc3b031dcc65ae7c8eee5eff12d5e9f80e1a708b9848ec35d3226",
+        "tests": [
+          "packages/evidence/tests/unit/local-evidence.test.ts",
+          "packages/loop/tests/unit/round-lifecycle-cases.ts",
+          "packages/loop/tests/unit/worktrees-containment.test.ts",
+          "tests/contract/r0005-independent-review.red.contract.test.ts"
+        ]
+      }
+    }
+  ],
   "historical_exceptions": [
     {
       "round": "R-0002",
