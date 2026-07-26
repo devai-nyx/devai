@@ -2740,6 +2740,27 @@ decision with `release_disposition: none-preratification`. No publication, tag, 
 Release, Pages deployment, external release or deployment, real-stynx mutation,
 R-0008 external action, R-0009 activation, or R-0010 observation is authorized.
 
+### DII-199 — Admit the strict fixture-narrowing repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 clean-checkout fixture correction; OM-008; DII-198; BL-184; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-CORRECTION; Inspector 6c436be; Auditor 69ea8c8`
+
+DII-199 supersedes DII-198 only as the R-0004 source-closing judgment. The first
+post-BL-184 complete-ladder restart passed through lint but failed strict typecheck on
+three possibly-undefined array accesses in the new Inspector fixture. Inspector
+`6c436be` narrows the two exact fixture entries before interpolation. Typecheck and the
+focused BL-184 contract pass without changing the exception set, assertion meaning, or
+production behavior.
+
+The exact candidate containing DII-199 and the atomically refreshed contract and
+handoff must pass the complete local ladder and every required exact-head GitHub check
+before source merge. Its exact source merge must pass exact-main CI before PC-0005 may
+be emitted through the production closure verb; closure-head and final-main checks
+remain mandatory.
+
+OM-008 continues to replace only the additional post-repair Opus review for R-0004; no
+PASS is inferred. PC-0005 uses DII-162 as the declaration and DII-199 as the closing
+decision with `release_disposition: none-preratification`. Every external release,
+publication, deployment, real-stynx, R-0008, R-0009, and R-0010 gate remains closed.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
