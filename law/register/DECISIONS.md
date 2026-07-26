@@ -2226,6 +2226,43 @@ literal `claude-opus-5`, with no fallback. Any actionable finding reopens the ro
 red-first cycle; only PASS permits source push. The two-PR ceremony, `none-needed`
 release disposition, claims ceiling, and every external human gate remain unchanged.
 
+### DII-171 — Bind the first R-0004 Opus review correction set
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 first-review correction; DII-170; BL-144–151; R-0004-OPUS-CLOSE-REVIEW-FAILURE; Auditor fdce9484bf0bb1d6c077c4a3fdfa4157b130b39b`
+
+The first exact-candidate review through literal `claude-opus-5` returned FAIL on eight
+actionable gaps. BL-144 through BL-151 are promoted in full; none is deferred.
+
+The governed public surface adds the already-live `policy check schemas` path as one
+supported, read-only, plumbing-tier `policy_firewall` action bound internally to
+`check schemas`. This corrects the authoritative counts to 147 keep, 38 fold, and one
+tombstone, 186 total; it does not invent behavior. The command must register through
+the canonical definition path and the router must derive its dispatch normally.
+
+The root R-0004 contract belongs to T2. Every tracked test must belong to at least one
+T1–T6 include set, and trace must identify the R-0004 file as contract. Sensor notes must
+render each cell as `<substrate>×<property>` in registry order, or state the diagnostic
+standing without cells. The root porcelain authority is the production fixed argv:
+build `pnpm -r build`; every test selection invokes `pnpm vitest run` with an explicit
+tier config where one exists, and `all` invokes `pnpm vitest run`. No route may invoke a
+root package script that re-enters itself.
+
+Allowed destructive-SQL context must cover the detected SQL occurrence and its target,
+not merely appear elsewhere on the same line. Exact dev-task and template targets remain
+allowed; production targets, additional unsafe targets, malformed contexts, and all
+commit-message evidence remain findings. Every declared byte-identical policy mirror
+must match law. Every remote workflow `uses:` must carry a 40-hex immutable SHA and a
+readable version comment; repository-local reusable workflow paths remain allowed.
+
+Inspector must prove these boundaries red before Engineer implementation. Architect may
+correct the action registry, surface declaration, trace, and 50 sensor notes. Engineer
+may correct registry-backed CLI dispatch, fixed test argv, policy materializations,
+SQL occurrence matching, workflow validation, and generated views. Auditor must
+normalize superseded record status and preserve symmetric correction evidence.
+
+The complete ladder and a fresh literal `claude-opus-5` review remain mandatory before
+source push. No release, publication, deployment, predecessor write, real-stynx write,
+external R-0008 action, R-0009 activation, or R-0010 observation is authorized.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
