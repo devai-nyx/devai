@@ -9,11 +9,14 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-162–168; R-0004-AS-BUILT; Auditor 41d73a2,
+    DII-162–170; R-0004-AS-BUILT; Auditor 41d73a2,
     a9c1dab,
-    and 9da5b54; Inspector b7bf300,
+    9da5b54,
+    and 8f7581c; Inspector b7bf300,
     4c08b46,
-    and fbfb226; Engineer d875b73,
+    fbfb226,
+    and b3be172; Engineer d875b73,
+    and b8d6c98; Architect e1b952b,
   ]
 ---
 
@@ -21,8 +24,8 @@ provenance:
 
 ## Bound result
 
-DII-168 accepts the Auditor's B7 reconciliation and BL-141/BL-142 corrections,
-supersedes DII-166 only as the closing judgment, and closes the local source
+DII-170 accepts the Auditor's B7 reconciliation and BL-141 through BL-143 corrections,
+supersedes DII-168 only as the closing judgment, and closes the local source
 implementation. The governed action surface is 146 keep / 38 fold / 1 tombstone; action
 effects are 185/185 with zero findings; 59 live sensors retain their 50/9
 cell/diagnostic standing; the recursive canon contains 55 schemas; and the fixed public
@@ -35,7 +38,7 @@ Auditor's exact readings and role-pure commit map are in `work/audit/R-0004/as-b
 
 ## Review and ceremony gate
 
-The next clean commit containing this handoff, DII-168, updated population guards, and
+The next clean commit containing this handoff, DII-170, updated population guards, and
 fresh deterministic projections is the review candidate. It must receive one read-only
 close review through literal `claude-opus-5`, with no fallback. Actionable findings
 return to red-first role-pure repair; PASS permits the shared source-PR and closure-only

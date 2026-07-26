@@ -2206,6 +2206,26 @@ under a later source-closing decision. This decision authorizes no behavior, thr
 skip, authority, release, publication, deployment, external R-0008 action, R-0009
 activation, R-0010 observation, or real-stynx change.
 
+### DII-170 — Rebind the R-0004 source close after formatter correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 formatter-corrected close; DII-168; DII-169; BL-143; R-0004-EXIT-LADDER-FORMATTING-FAILURE; R-0004-EXIT-LADDER-FORMATTING-CORRECTION; Auditor 87a8ff9f37c835c725c1dbbbe9d8c71f4ea8245d and 8f7581cb75da27ff4e173eeba26e05dcbb6b9c67; Architect e1b952bf023cd779bc4c3c18b11d71c32c1e70eb; Engineer b8d6c9827ed9629970c32606729cb3a5fe6f061f; Inspector b3be1720be63edd5ca88b74ce5a7a140e546c435`
+
+DII-170 supersedes DII-168 only as the R-0004 source-closing judgment. Candidate
+`907ccd94bad69c9a5c58709494ae24114412027c` passed all functional gates through T6
+and then correctly stopped on 13 formatter findings. BL-143 closes that bounded debt
+through separate Architect, Engineer, and Inspector commits.
+
+The action-registry producer now emits bytes under the repository's exact formatting
+contract; all three generated views reproduce exactly. The complete repository
+formatter check, focused scanner suite, lint, type-check, and action-registry projection
+pass without assertion or behavior change. This Architect batch regenerates the
+repository-reference projection after the formatter and Auditor locator movements.
+
+The clean candidate containing DII-170 and fresh deterministic projections must restart
+the complete local ladder and then receive the mandated read-only close review through
+literal `claude-opus-5`, with no fallback. Any actionable finding reopens the role-pure
+red-first cycle; only PASS permits source push. The two-PR ceremony, `none-needed`
+release disposition, claims ceiling, and every external human gate remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
