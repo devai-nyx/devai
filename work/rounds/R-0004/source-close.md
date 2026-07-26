@@ -168,9 +168,9 @@ normalization; raw output, status, summary metrics, and baseline remain unchange
 active contract, this handoff, and the register now agree atomically on DII-193.
 
 The tenth review found two fabricated forty-hex expansions and no repository-wide guard
-against recurrence. The red-first BL-181 repair now resolves every governed identity to
-its declared local Git object kind, or to one of eight historical specimens classified
-by exact path. The two active references are corrected, exception scope is path-bounded,
+against recurrence. The red-first BL-181 repair now resolves every governed identity as
+a local Git object, or as one of eight historical specimens classified by exact path.
+The two active references are corrected, exception scope is path-bounded,
 and the batched production check is part of strict governance. The active contract,
 this handoff, and the register now agree atomically on DII-194.
 
@@ -180,9 +180,9 @@ test at 127 files / 1,167 passing plus eight declared
 skips, merged T1+T3 coverage at 71.23% statements, 61.79% branches, 77.62% functions,
 and 73.25% lines, root build/test porcelain, required workflow pins and prewarm, semantic
 repository-reference generation, generated action views, package dry-runs, all six test
-tiers, the governed SHA-reference check at 245 local objects plus 8 path-classified
-historical specimens, the complete ordinary floor, and unchanged coverage floors are
-green. The
+tiers, the governed SHA-reference check at 252 identities / 244 local objects / 8
+path-classified historical specimens, the complete ordinary floor, and unchanged
+coverage floors are green. The
 Auditor's exact readings and role-pure commit map are in `work/audit/R-0004/as-built.md`.
 
 ## Review and ceremony gate
