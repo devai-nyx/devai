@@ -2602,6 +2602,26 @@ the refreshed handoff must restart the complete ladder and receive a fresh read-
 review through literal `claude-opus-5`, with no fallback, before source push. The claims
 ceiling and every external human gate remain unchanged.
 
+### DII-193 — Admit the exact fixture-progress repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 second exact-CI repair; DII-192; BL-180; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; Auditor 29e5c41`
+
+DII-193 supersedes DII-192 only as the R-0004 source-closing judgment. Exact-head CI
+run 30209278971 selected a Vitest per-file progress line with a nondeterministic duration
+for the fixed one-test R20 fixture. The red-first repair removes only that exact
+presentation line inside deterministic fingerprint normalization. Raw sensor output,
+subprocess status, passed/failed metrics, summary text, and the unchanged baseline
+remain authoritative.
+
+The complete ladder passed on exact repaired snapshot
+`54e79a1d9b15170b885950c1371758867ac52024`: T1 passed 71 files / 838 tests, T2 passed
+38 files / 240 tests plus one declared skip, the root porcelain passed 127 files / 1,166
+tests plus eight declared skips, merged T1+T3 coverage passed at 71.23% statements,
+61.79% branches, 77.62% functions, and 73.25% lines, and all eleven public-package
+dry-runs passed. The next clean commit containing DII-193, the refreshed contract, and
+the refreshed handoff must restart the complete ladder and receive a fresh read-only
+review through literal `claude-opus-5`, with no fallback, before source push. The claims
+ceiling and every external human gate remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

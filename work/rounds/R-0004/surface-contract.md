@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    OM-002; DII-162; DII-192; BL-163; BL-165; BL-169; BL-172; BL-174; BL-180; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION,
+    OM-002; DII-162; DII-193; BL-163; BL-165; BL-169; BL-172; BL-174; BL-180; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION,
   ]
 ---
 
@@ -75,8 +75,10 @@ immutable commit with readable version comments. Generated action and sensor vie
 checked byte-for-byte in CI. Human help remains read-only and never supplies consent.
 Vitest summary parsing ignores ANSI SGR sequences only in its metric-extraction view;
 deterministic R20 fingerprint normalization also ignores ANSI presentation before its
-existing time and duration masks. The subprocess output retained as evidence remains
-byte-for-byte raw, and no characterization baseline is recaptured.
+existing time and duration masks and omits only the exact fixed-fixture per-file progress
+line selected by CI. The subprocess output retained as evidence remains byte-for-byte
+raw, passed/failed summary metrics remain visible, and no characterization baseline is
+recaptured.
 
 R-0004 implements a governed surface and package topology only. It publishes, tags,
 releases, deploys, promotes, re-earns, or declares ready nothing.
