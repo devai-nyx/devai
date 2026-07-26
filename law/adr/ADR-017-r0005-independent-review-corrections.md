@@ -2,11 +2,11 @@
 id: ADR-017
 title: R-0005 independent review corrections
 type: adr
-status: active
+status: superseded
 date: 2026-07-26
 authority: Architect
 supersedes: [DII-202; DII-203; R-0005-INDEPENDENT-CODEX-REVIEW-1-FAILURE]
-superseded_by: null
+superseded_by: ADR-019
 provenance:
   - DII-202; DII-203; OM-009; R-0005-INDEPENDENT-CODEX-REVIEW-1-FAILURE; KR-R5-017 through KR-R5-026
 affected_rules:

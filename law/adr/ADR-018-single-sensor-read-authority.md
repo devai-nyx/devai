@@ -2,11 +2,11 @@
 id: ADR-018
 title: Single-sensor read authority projection
 type: adr
-status: active
+status: superseded
 date: 2026-07-26
 authority: Architect
 supersedes: [DII-202; DII-203]
-superseded_by: null
+superseded_by: ADR-019
 provenance:
   - R-0005; KR-R5-028; ADR-017
 affected_rules:
