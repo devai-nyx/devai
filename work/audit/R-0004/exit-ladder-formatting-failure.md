@@ -6,7 +6,7 @@ status: active
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-EXIT-LADDER-FORMATTING-CORRECTION
 provenance: [candidate 907ccd94bad69c9a5c58709494ae24114412027c; standalone Prettier gate; BL-143]
 ---
 
