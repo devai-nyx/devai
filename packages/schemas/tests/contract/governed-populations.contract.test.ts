@@ -39,13 +39,13 @@ describe('governed population count guards', () => {
     expect(files).toHaveLength(44);
   });
 
-  it('guards the gapless 14-record and 12-active successor ADR roster', () => {
+  it('guards the gapless 15-record and 12-active successor ADR roster', () => {
     const files = readdirSync(join(ROOT, 'law', 'adr'))
       .filter((file) => /^ADR-\d{3}-.+\.md$/.test(file))
       .sort();
-    expect(files).toHaveLength(14);
+    expect(files).toHaveLength(15);
     expect(files.map((file) => Number(file.slice(4, 7)))).toEqual(
-      Array.from({ length: 14 }, (_, index) => index + 1),
+      Array.from({ length: 15 }, (_, index) => index + 1),
     );
     const records = files.map((file) => ({
       file,
@@ -57,6 +57,9 @@ describe('governed population count guards', () => {
     );
     expect(records.find(({ file }) => file.startsWith('ADR-013-'))?.source).toMatch(
       /^superseded_by: ADR-014$/m,
+    );
+    expect(records.find(({ file }) => file.startsWith('ADR-014-'))?.source).toMatch(
+      /^superseded_by: ADR-015$/m,
     );
   });
 

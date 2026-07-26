@@ -18,7 +18,7 @@ function run(args: readonly string[]): { status: number | null; stdout: string; 
 }
 
 describe('successor operational law', () => {
-  cliIt('validates all fourteen successor ADR records through the production command', () => {
+  cliIt('validates all fifteen successor ADR records through the production command', () => {
     const result = run(['policy', 'check', 'adrs', '--repo-root', ROOT]);
     expect(result.status, result.stderr || result.stdout).toBe(0);
     const report = JSON.parse(result.stdout) as {
@@ -27,8 +27,8 @@ describe('successor operational law', () => {
       errors: unknown[];
       adrs: unknown[];
     };
-    expect(report).toMatchObject({ ok: true, files_scanned: 14, errors: [] });
-    expect(report.adrs).toHaveLength(14);
+    expect(report).toMatchObject({ ok: true, files_scanned: 15, errors: [] });
+    expect(report.adrs).toHaveLength(15);
   });
 
   cliIt('evaluates non-vacuous successor glob guards through the production command', () => {
