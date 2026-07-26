@@ -2,11 +2,11 @@
 id: R-0003-CLAUDE-OPUS-CLOSE-REVIEW-2
 title: Second exact-candidate Claude Opus 5 close review
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-25
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0003-CLAUDE-OPUS-CLOSE-REVIEW-2-CORRECTION
 provenance:
   [candidate 68143f5; literal claude-opus-5 session a0ce6bdd-8d46-4edb-a78b-0cdcf1462f98; BL-132]
 ---

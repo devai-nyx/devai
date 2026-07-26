@@ -2,11 +2,11 @@
 id: R-0003-FORMATTING-CONTRACT-FAILURE
 title: Exact-candidate formatting exclusion contract failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-25
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0003-FORMATTING-CONTRACT-CORRECTION
 provenance: [candidate ef50b8b; Stage 2 T2; BL-130; BL-131]
 ---
 

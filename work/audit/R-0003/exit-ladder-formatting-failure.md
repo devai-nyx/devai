@@ -2,11 +2,11 @@
 id: R-0003-FORMATTING-FAILURE
 title: Exact-candidate formatting failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-25
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0003-FORMATTING-CORRECTION
 provenance: [candidate b89a7d7; complete R-0003 local ladder; BL-130]
 ---
 
