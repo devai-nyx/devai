@@ -688,5 +688,36 @@ describe('scanForbiddenActions', () => {
       expect.objectContaining({ forbidden_id: 'FORBIDDEN-REGISTRY-INVALID' }),
     );
   });
+
+  it.each([
+    'DROP TABLE production_accounts; -- devai_template',
+    'DROP TABLE devai_task_x, customers',
+  ])('does not let an unrelated same-line dev identity suppress %s', (sql) => {
+    writeContextAwareRegistry();
+    seedRepository();
+    mkdirSync(join(dir, 'packages/demo'), { recursive: true });
+    writeFileSync(join(dir, 'packages/demo/action.txt'), `${sql}\n`);
+    execFileSync('git', ['add', 'packages/demo/action.txt'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Engineer',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'feat: add cleanup action',
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-DROP-PROD',
+        source: 'commit-change',
+      }),
+    );
+  });
 });
 // Invariants: INV-DEVAI-001

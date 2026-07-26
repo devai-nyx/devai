@@ -32,7 +32,7 @@ describe('R-0004 governed surface red-first contracts', () => {
     const registry = readJson('law/policy/action-registry.json') as {
       entries: { action_id: string; disposition: string }[];
     };
-    expect(registry.entries.filter((entry) => entry.disposition === 'keep')).toHaveLength(146);
+    expect(registry.entries.filter((entry) => entry.disposition === 'keep')).toHaveLength(147);
     expect(registry.entries.filter((entry) => entry.disposition === 'fold')).toHaveLength(38);
     expect(registry.entries.filter((entry) => entry.disposition === 'tombstone')).toHaveLength(1);
 
@@ -199,11 +199,10 @@ describe('R-0004 governed surface red-first contracts', () => {
     );
     for (const name of workflows) {
       const source = readFileSync(join(ROOT, '.github/workflows', name), 'utf8');
-      for (const match of source.matchAll(
-        /^\s*- uses: (actions\/(?:checkout|setup-node))@([^\s#]+)(.*)$/gmu,
-      )) {
-        expect(match[2]).toMatch(/^[0-9a-f]{40}$/u);
-        expect(match[3]).toMatch(/# v[0-9]/u);
+      for (const match of source.matchAll(/^\s*(?:-\s*)?uses:\s*([^\s#]+)(.*)$/gmu)) {
+        if (match[1]?.startsWith('./.github/workflows/')) continue;
+        expect(match[1]).toMatch(/@[0-9a-f]{40}$/u);
+        expect(match[2]).toMatch(/# v[0-9]/u);
       }
       const jobs = source.split(/^ {2}[a-zA-Z0-9_-]+:\s*$/gmu).slice(1);
       for (const job of jobs.filter((body) => body.includes('pnpm install'))) {
