@@ -2320,6 +2320,24 @@ fallback. Any actionable finding reopens the role-pure red-first cycle; only PAS
 permits source push. The two-PR ceremony, `none-needed` release disposition, claims
 ceiling, and every external human gate remain unchanged.
 
+### DII-175 — Bind active ADR coverage for CI checker changes
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 CI ADR correction; DII-171; DII-174; BL-151; BL-154; ADR-014; R-0004-CORRECTED-CANDIDATE-GOVERNANCE-FAILURE; Auditor 9e3480c0e2d70d045a7a7cfa0b4941b36fab1c26`
+
+ADR-014 is accepted as the gapless active record for the workflow checker and its
+forbidden-action association. The live ADR roster becomes ADR-001 through ADR-014,
+thirteen active records, with only ADR-005 terminally superseded by ADR-013.
+
+Inspector must first prove that exact active-ADR `affected_rules` coverage accepts the
+governed checker path while absent, malformed, superseded, and unrelated ADR records do
+not. Engineer may then implement frontmatter-derived exact-path association in the
+forbidden-action scanner. No exact-commit waiver, generic ADR-exists bypass, author-only
+bypass, threshold change, or skip is permitted.
+
+After symmetric Auditor correction and Architect source-close rebind, the complete
+ladder and fresh literal `claude-opus-5` review remain mandatory before source push. No
+release, publication, deployment, predecessor write, real-stynx write, or external
+human gate changes.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
