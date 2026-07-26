@@ -1,0 +1,1581 @@
+{
+  "round_id": "R-0004",
+  "title": "Implemented the governed action surface and eleven-package topology",
+  "declaring_decision": "DII-162",
+  "closing_decision": "DII-201",
+  "batches": [
+    {
+      "id": "R4-001",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "cb832ce3a5230cb1ad14b42eadf4e3ab30b42ca3",
+      "headline": "law(r0004): declare governed surface"
+    },
+    {
+      "id": "R4-002",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "10b9f1b9e599b77d6123daef165210259f90a8eb",
+      "headline": "law(r0004): refresh declaration references"
+    },
+    {
+      "id": "R4-003",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "ba3ed1d2c53b0af56a7c004622e37fe95bc66905",
+      "headline": "test(r0004): pin governed surface gaps red-first"
+    },
+    {
+      "id": "R4-004",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "b8783e6c9b07ae6d79c167567e095f7d7b347f0b",
+      "headline": "law(r0004): bind governed action authority"
+    },
+    {
+      "id": "R4-005",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "cb88dfdc0ff71760d698707ce115bff37e25fd28",
+      "headline": "feat(r0004): derive governed action consumers"
+    },
+    {
+      "id": "R4-006",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "78cc594d3e9a70c7e031017270af2db691408748",
+      "headline": "law(r0004): complete action consumer authority"
+    },
+    {
+      "id": "R4-007",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "903fb937b9c7532f33cbed238151a7ecd645c1e2",
+      "headline": "build(r0004): refresh action authority views"
+    },
+    {
+      "id": "R4-008",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "d7d71b64fbf5f7f4758a62d03a95afe155b7d119",
+      "headline": "feat(r0004): add export-only core facade"
+    },
+    {
+      "id": "R4-009",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "2938b14e5d6ef3c4e5190af48e180dc4776c34f2",
+      "headline": "feat(r0004): bind reproducible porcelain"
+    },
+    {
+      "id": "R4-010",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "e9798399cbd46cec3e1c980b5c8186ae643c61e0",
+      "headline": "work(r0004): refresh semantic reference projection"
+    },
+    {
+      "id": "R4-011",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "a73d880a3f02a26ed915a855e0e7e4ef1249b338",
+      "headline": "fix(r0004): preserve adopter suite commands"
+    },
+    {
+      "id": "R4-012",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "e69379671484064f4cdfde32e844ee6059f0739e",
+      "headline": "fix(r0004): drain sensor output before exit"
+    },
+    {
+      "id": "R4-013",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "b7bf300eec5b4a14181e1cfbb5e5e489e55cb55e",
+      "headline": "test(r0004): close governed surface contracts"
+    },
+    {
+      "id": "R4-014",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "41d73a28012d3be387f912eb25da5834906bd0c2",
+      "headline": "audit(r0004): reconcile governed surface"
+    },
+    {
+      "id": "R4-015",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "268e31f0169508a635bb58a06c6e1c6fe3075239",
+      "headline": "law(r0004): bind governed surface close"
+    },
+    {
+      "id": "R4-016",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "0104a976c7def6a6e8c8085f5950cb25c75145eb",
+      "headline": "audit(r0004): record exact-candidate lint failure"
+    },
+    {
+      "id": "R4-017",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "4c08b4614ac3445d59ecef8fcd312a10ff0eef82",
+      "headline": "test(r0004): restore workflow assertion lint"
+    },
+    {
+      "id": "R4-018",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "a9c1dabc0c119b093755e9c3c865cc232f06e62a",
+      "headline": "audit(r0004): close exact-candidate lint repair"
+    },
+    {
+      "id": "R4-019",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "0621f12794d4c2cab500d6098fe90a4d22023ee7",
+      "headline": "law(r0004): rebind corrected source close"
+    },
+    {
+      "id": "R4-020",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "39a546feecca6d1e3d3e5c6da098b63bdcc50130",
+      "headline": "audit(r0004): record dev-scoped SQL governance failure"
+    },
+    {
+      "id": "R4-021",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "2c3a235c8f6d0e5dc876b450e244069d72143cf3",
+      "headline": "law(r0004): bind dev-scoped SQL context"
+    },
+    {
+      "id": "R4-022",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "fbfb226b19ef79d26def93afda24563aa2d3c210",
+      "headline": "test(governance): prove per-line dev SQL context"
+    },
+    {
+      "id": "R4-023",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "d875b73c7b7479a610634ab7657780246731fda2",
+      "headline": "fix(governance): scope destructive SQL per change line"
+    },
+    {
+      "id": "R4-024",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "9da5b541cda63024da9b3ac09da531ae4b7c1465",
+      "headline": "audit(r0004): close dev-scoped SQL repair"
+    },
+    {
+      "id": "R4-025",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "907ccd94bad69c9a5c58709494ae24114412027c",
+      "headline": "law(r0004): rebind governance-corrected source close"
+    },
+    {
+      "id": "R4-026",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "87a8ff9f37c835c725c1dbbbe9d8c71f4ea8245d",
+      "headline": "audit(r0004): record formatter gate failure"
+    },
+    {
+      "id": "R4-027",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "e1b952bf023cd779bc4c3c18b11d71c32c1e70eb",
+      "headline": "law(r0004): authorize and format governed sources"
+    },
+    {
+      "id": "R4-028",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "b8d6c9827ed9629970c32606729cb3a5fe6f061f",
+      "headline": "fix(format): emit formatter-clean governed views"
+    },
+    {
+      "id": "R4-029",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "b3be1720be63edd5ca88b74ce5a7a140e546c435",
+      "headline": "test(format): normalize governed contracts"
+    },
+    {
+      "id": "R4-030",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "8f7581cb75da27ff4e173eeba26e05dcbb6b9c67",
+      "headline": "audit(r0004): close formatter repair"
+    },
+    {
+      "id": "R4-031",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "1bcaf5d9120976c296e85160b478495f5a47aba0",
+      "headline": "law(r0004): rebind formatter-corrected source close"
+    },
+    {
+      "id": "R4-032",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "fdce9484bf0bb1d6c077c4a3fdfa4157b130b39b",
+      "headline": "audit(r0004): govern first Opus review findings"
+    },
+    {
+      "id": "R4-033",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "a7d20644c43fe73ca82d23da57995c54dbd8296d",
+      "headline": "law(r0004): bind first Opus correction set"
+    },
+    {
+      "id": "R4-034",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "84a9150f240b5f514a394a4c6ce3e42ac2145926",
+      "headline": "test(r0004): prove first Opus findings red"
+    },
+    {
+      "id": "R4-035",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "96d2477f8c0529713c4f57c94fd5fe87b3c899df",
+      "headline": "law(r0004): correct reviewed surface authority"
+    },
+    {
+      "id": "R4-036",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "a1dbb5b148bee0936982b959fc5063f7a303244e",
+      "headline": "law(r0004): bind SQL context to exact target"
+    },
+    {
+      "id": "R4-037",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "55ee8d05112730fad5732bf0e5de0400d9a1aa80",
+      "headline": "fix(r0004): implement first Opus review repairs"
+    },
+    {
+      "id": "R4-038",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "b187210365b94825961af23eb1eb19c5619bff8d",
+      "headline": "law(r0004): correct placeholder SQL boundary"
+    },
+    {
+      "id": "R4-039",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "2ef39366b121b15b4d9e1145bb7f3605ddebc1f8",
+      "headline": "fix(governance): honor exact dev SQL targets"
+    },
+    {
+      "id": "R4-040",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "1f01fff5a1a687ab9d695a968f2a136e9b97087d",
+      "headline": "test(r0004): close first Opus repair contracts"
+    },
+    {
+      "id": "R4-041",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "98171a09d0fdcdefd6d4a6a886e9bea6e1181b23",
+      "headline": "law(r0004): bind complete tiered test trace"
+    },
+    {
+      "id": "R4-042",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "ab045184015f8cf6c796606e285045b52855662b",
+      "headline": "audit(r0004): correct first Opus findings"
+    },
+    {
+      "id": "R4-043",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "8d95fd020b4f27989596e7f7bd55c81f7e4b3100",
+      "headline": "law(r0004): rebind corrected source close"
+    },
+    {
+      "id": "R4-044",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "6447d9c9202358905df04afc130d06c94fbf52e1",
+      "headline": "audit(r0004): govern corrected candidate T2 gaps"
+    },
+    {
+      "id": "R4-045",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "691821aa362330ad6e738ebc06ff7385d2ce2ab2",
+      "headline": "law(r0004): bind T2 collateral repairs"
+    },
+    {
+      "id": "R4-046",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "1c2793568045c1c5178ccae331f30ecad5159eb6",
+      "headline": "test(r0004): admit fixed Vitest reads in harness"
+    },
+    {
+      "id": "R4-047",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "1ba28c7ccf760deb419c1684b742f89b8bf16ff0",
+      "headline": "audit(r0004): correct T2 collateral gaps"
+    },
+    {
+      "id": "R4-048",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "a66cf9ba00fa129c25b3b4dd97d059f319049730",
+      "headline": "test(r0004): bind harness guard to trace"
+    },
+    {
+      "id": "R4-049",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "a8937f5297a5a5e300128f5959cb3245a237ac0b",
+      "headline": "law(r0004): materialize final T2 rebind"
+    },
+    {
+      "id": "R4-050",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "9e3480c0e2d70d045a7a7cfa0b4941b36fab1c26",
+      "headline": "audit(r0004): govern CI ADR association gap"
+    },
+    {
+      "id": "R4-051",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "fee91e91714536c20727bd3d19960af3c1e912b1",
+      "headline": "law(r0004): bind CI checker ADR coverage"
+    },
+    {
+      "id": "R4-052",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "ebe227d4f293ecbb4ff6ef7a73a06ff907b0ed98",
+      "headline": "law(r0004): correct ADR-014 lifecycle chain"
+    },
+    {
+      "id": "R4-053",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "e984aed97978a738db13db8be09fa4c927b26675",
+      "headline": "test(r0004): prove CI ADR association red"
+    },
+    {
+      "id": "R4-054",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "0e802054a8f1c5dc6ab663815c4f4447fa3a880c",
+      "headline": "fix(r0004): verify CI paths against active ADRs"
+    },
+    {
+      "id": "R4-055",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "9c7818d6d8763b74b008e2756a6d0e45bad87b2b",
+      "headline": "law(r0004): complete ADR CI path coverage"
+    },
+    {
+      "id": "R4-056",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "e7d4e48780a657bf02e166f8f90208c248e342f6",
+      "headline": "audit(r0004): govern ADR seal history gap"
+    },
+    {
+      "id": "R4-057",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "2c2d8ece839c7df72d233971dfb105e615674c33",
+      "headline": "test(r0004): prove copied ADR history red"
+    },
+    {
+      "id": "R4-058",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "b1195158f15438cd8b773f41a58bd2ea3b188e29",
+      "headline": "law(r0004): restore sealed CI ADR chain"
+    },
+    {
+      "id": "R4-059",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "c3cd89c288780d4851beae1c8091879bcea4415a",
+      "headline": "fix(r0004): stop sealed history at copies"
+    },
+    {
+      "id": "R4-060",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "7a474ff193e32aa673be3a800671184a8322fde7",
+      "headline": "test(r0004): bind final CI ADR topology"
+    },
+    {
+      "id": "R4-061",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "cc4e2c916b89a2c1fe95b07a094578cc8acedd62",
+      "headline": "test(r0004): prove sealed-body restoration red"
+    },
+    {
+      "id": "R4-062",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "cb2d58e9c40d807aa13d88c2ba6e3afe7ccf8f8e",
+      "headline": "fix(r0004): accept restored terminal ADRs"
+    },
+    {
+      "id": "R4-063",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "7e4248ed53e701448ad8a622705a7bc57e871d3b",
+      "headline": "law(r0004): preserve actual ADR first seal"
+    },
+    {
+      "id": "R4-064",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "f134f265a20a3a123d9e811d111d67e157cec467",
+      "headline": "fix(r0004): validate restored seal endpoints"
+    },
+    {
+      "id": "R4-065",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "fceaa128d153a989baa8343b2803f81c8aeb7ac6",
+      "headline": "test(r0004): bind preserved ADR seal topology"
+    },
+    {
+      "id": "R4-066",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "ae8f508b40d2973ac53f27bbd1c2cfe0c0966373",
+      "headline": "audit(r0004): correct CI ADR governance"
+    },
+    {
+      "id": "R4-067",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "30acc792efb22c97dd429823d8dc7e1ddd30692d",
+      "headline": "law(r0004): rebind governance-corrected close"
+    },
+    {
+      "id": "R4-068",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "4a56da2187d8f9281c39924898a99648c57907b6",
+      "headline": "test(r0004): guard optional finding path"
+    },
+    {
+      "id": "R4-069",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "6116635a2e565c974e28b7dec5a4f664a97b6cb7",
+      "headline": "law(r0004): rebind strictness-corrected close"
+    },
+    {
+      "id": "R4-070",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "a73993fea5cb20b5278c47c6a95139c60909b7d9",
+      "headline": "audit(r0004): record exact ladder pass"
+    },
+    {
+      "id": "R4-071",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "03c8266bd2ab792cddd44effff3b2823a9c3882e",
+      "headline": "docs(r0004): bind exact ladder candidate"
+    },
+    {
+      "id": "R4-072",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "cd536da78ae4980176e6866c3b3369d5bb71e3d6",
+      "headline": "docs(r0004): preserve decision register grammar"
+    },
+    {
+      "id": "R4-073",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "f738abcb7cda3b978840ac08eebe58dfa655ec8a",
+      "headline": "audit(r0004): govern second Opus findings"
+    },
+    {
+      "id": "R4-074",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "9ee3c0e501b6b5005b33b94d82c02547fa7a6e30",
+      "headline": "test(r0004): expose second Opus defects"
+    },
+    {
+      "id": "R4-075",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "c2d418b6a5bcb36765813ba2bc8909ab305ce4fc",
+      "headline": "docs(r0004): correct fixed build help"
+    },
+    {
+      "id": "R4-076",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "c530468b99978adc76a2062d421750e2e50bbc4b",
+      "headline": "fix(r0004): align governed execution surfaces"
+    },
+    {
+      "id": "R4-077",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "a5447331bcbf40e985ee39f3ca3ad84c0187693f",
+      "headline": "test(r0004): close Opus fixture and host gaps"
+    },
+    {
+      "id": "R4-078",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "d374fa0b9e3e422740f6b2ee78ea0269b79ee409",
+      "headline": "audit(r0004): reconcile second Opus repairs"
+    },
+    {
+      "id": "R4-079",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "0955da4dc9ba51692f97d47784b317095aa18e5e",
+      "headline": "docs(r0004): rebind second Opus repairs"
+    },
+    {
+      "id": "R4-080",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "3581591a3761b45a9adcbabfdec785d71da4502c",
+      "headline": "test(r0004): require exact governance range"
+    },
+    {
+      "id": "R4-081",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "ab04008e08cecc2aad73caec1bc7d198ac88598f",
+      "headline": "fix(r0004): bound governance to round base"
+    },
+    {
+      "id": "R4-082",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "212850a720f7fbd83f1596d506d57b6c303d4a45",
+      "headline": "audit(r0004): record exact governance range"
+    },
+    {
+      "id": "R4-083",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "31dfbaf3d8b51e2089aef6aa01ea45b46d9b266c",
+      "headline": "docs(r0004): bind exact governance range"
+    },
+    {
+      "id": "R4-084",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "5cf3af69a032a0783a435831a30fc68309bd5bf3",
+      "headline": "audit(r0004): refresh repaired exact ladder"
+    },
+    {
+      "id": "R4-085",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "c100cc8b3436d5c5ecac4e662d3b6f16015c5aba",
+      "headline": "docs(r0004): admit repaired exact ladder"
+    },
+    {
+      "id": "R4-086",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "9810d8032ad8f3e52a1690124ad6a6650686bba2",
+      "headline": "audit(r0004): record third Opus findings"
+    },
+    {
+      "id": "R4-087",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "b0af62c4e4b6f22faf31745e3141f02e6bc547d5",
+      "headline": "test(r0004): expose final surface drift"
+    },
+    {
+      "id": "R4-088",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "ca6dff9f8f4ab88cfaab5766fe650ef5316188cb",
+      "headline": "fix(cli): align fixed build description"
+    },
+    {
+      "id": "R4-089",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "c7d18076d7f0f7e1181be1d7cc6d0a0a24930299",
+      "headline": "law(r0004): reconcile final surface contract"
+    },
+    {
+      "id": "R4-090",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "cf85bc0271ca62373ff1f067c359f0bc9515fe91",
+      "headline": "audit(r0004): reconcile third Opus repairs"
+    },
+    {
+      "id": "R4-091",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "6d6c7eb71ddaa2935755c6d3570ec2b96085beaa",
+      "headline": "audit(r0004): record final repair formatting failure"
+    },
+    {
+      "id": "R4-092",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "965b007c77d5c0b0252a948650e70fabfba1bf55",
+      "headline": "test(r0004): format final surface guards"
+    },
+    {
+      "id": "R4-093",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "7be9d31dcbfb07fffc2f8547af89c5b04e8b66f9",
+      "headline": "audit(r0004): reconcile final repair formatting"
+    },
+    {
+      "id": "R4-094",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "ab888d04cba3f94efd87914e509166852ab5ea9b",
+      "headline": "audit(r0004): bind final exact ladder readings"
+    },
+    {
+      "id": "R4-095",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "dfa56594d38ac2c7ccd59bdc8890f59d3c01b02b",
+      "headline": "law(r0004): bind final repaired candidate"
+    },
+    {
+      "id": "R4-096",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "93ebe91e3e549e2e4299980ce46fcebeb71a1032",
+      "headline": "audit(r0004): record fourth Opus findings"
+    },
+    {
+      "id": "R4-097",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "bf9a690ecb54bc3a98312c9a2a43992000ca0795",
+      "headline": "test(r0004): expose complete command metadata drift"
+    },
+    {
+      "id": "R4-098",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "6acb066b9927ea49d1a439aaf4e3b0cae2d09e0f",
+      "headline": "audit(r0004): record parity guard typecheck failure"
+    },
+    {
+      "id": "R4-099",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "48e2ccc0e5602cea0c11a2332c3b4441923644e0",
+      "headline": "test(r0004): narrow command metadata AST input"
+    },
+    {
+      "id": "R4-100",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "af91f7c54d51240556f930850c5c6bfe277ae4b5",
+      "headline": "test(r0004): cover owner metadata factory"
+    },
+    {
+      "id": "R4-101",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "d6369f9505056a5db75afb3173314471418835a1",
+      "headline": "fix(cli): align canonical command metadata"
+    },
+    {
+      "id": "R4-102",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "6b4213c9bb946bf1cf79c51d7a6fba4454e4adab",
+      "headline": "audit(r0004): repair final review evidence links"
+    },
+    {
+      "id": "R4-103",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "7a1006bbb8210143e61901bfccdd7ac44e4a64cc",
+      "headline": "test(r0004): expose complete test-route contract"
+    },
+    {
+      "id": "R4-104",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "735fb704000cfd37f0774d3790ac29e86b93f27f",
+      "headline": "law(r0004): complete test-route contract"
+    },
+    {
+      "id": "R4-105",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "fd8c8b68e05f2fc7a305b6403373f2820d9b64bc",
+      "headline": "audit(r0004): reconcile fourth Opus repairs"
+    },
+    {
+      "id": "R4-106",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "cd59beb38bfd271e0608642f5e34da0685e28e7f",
+      "headline": "audit(r0004): bind fourth-review ladder"
+    },
+    {
+      "id": "R4-107",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "7d66471b20d75af5f277a2e02097808cfc3f856a",
+      "headline": "law(r0004): bind fourth-review candidate"
+    },
+    {
+      "id": "R4-108",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "46f3854f7ddb4392e6535a41e760308c2facf2cf",
+      "headline": "audit(r0004): record fifth Opus findings"
+    },
+    {
+      "id": "R4-109",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "b70d5308e341246f4fe02ba0ed0d52352c68134f",
+      "headline": "test(r0004): close known-red lineage statement"
+    },
+    {
+      "id": "R4-110",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "4416eb9c2abeef6f3ebae5be4146de23ddbeb9e5",
+      "headline": "docs(r0004): refresh surface provenance"
+    },
+    {
+      "id": "R4-111",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "12189704dd49a0ef4bd989b4ad1070dc4de413e0",
+      "headline": "audit(r0004): pair fifth review corrections"
+    },
+    {
+      "id": "R4-112",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "dd0130c8d59829774669be0e92200bbf4638ca8d",
+      "headline": "audit(r0004): admit fifth-review repaired ladder"
+    },
+    {
+      "id": "R4-113",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "ed345baa2c7ebf0a9a785025c23ef82ca1ac6d3b",
+      "headline": "law(r0004): bind fifth-review candidate"
+    },
+    {
+      "id": "R4-114",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "12f67edd9df49e25bb1932a77ea875e87295b204",
+      "headline": "audit(r0004): record terminal provenance failure"
+    },
+    {
+      "id": "R4-115",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "7ca26c4cbb663e960a887526f5acc03c672df9da",
+      "headline": "law(r0004): make closing provenance atomic"
+    },
+    {
+      "id": "R4-116",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "c7dd9fbd2340a5cb95efcea0dd72d863934d6a2c",
+      "headline": "audit(r0004): pair terminal provenance repair"
+    },
+    {
+      "id": "R4-117",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "344638a99ada7229ec19b63b547bf237692ce14d",
+      "headline": "law(r0004): bind atomic terminal candidate"
+    },
+    {
+      "id": "R4-118",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "1eed4022c06f9bfb682d820caa4755d7a29c3710",
+      "headline": "audit(r0004): record Opus close PASS"
+    },
+    {
+      "id": "R4-119",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "8a9ea09d1705e30fd3d0fe30a35cb529e8355989",
+      "headline": "audit(r0004): govern exact-CI ANSI failure"
+    },
+    {
+      "id": "R4-120",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "a01e5d5298c2b7d8ab29953afb615bb63c333b96",
+      "headline": "test(r0004): expose ANSI summary metric drift"
+    },
+    {
+      "id": "R4-121",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "a0dc39649dfdc6d1b44e43acbe8259ddea7e7047",
+      "headline": "fix(sensors): parse colored Vitest summaries"
+    },
+    {
+      "id": "R4-122",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "016a3fa500c25ba87c9eed11d4d33ded6a0b7f03",
+      "headline": "test(r0004): close ANSI summary red"
+    },
+    {
+      "id": "R4-123",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "7b63f6548f19147c1a6226768b587634d45a1915",
+      "headline": "audit(r0004): pair ANSI CI correction"
+    },
+    {
+      "id": "R4-124",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "d63b0a5b031ca6c2b68a4feef341076bfcc554e2",
+      "headline": "audit(r0004): admit exact-CI repaired ladder"
+    },
+    {
+      "id": "R4-125",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "f6a03a004ac255bd55ea26e9f97c9ad82d1bbb57",
+      "headline": "law(r0004): admit exact-CI repair candidate"
+    },
+    {
+      "id": "R4-126",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "19a95ae13333fd9163f08ac0ba1ce72ea75a036c",
+      "headline": "audit(r0004): reopen ANSI fingerprint repair"
+    },
+    {
+      "id": "R4-127",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "b4d895e0c326cdb1a8a2437356bf0cc6decdf87b",
+      "headline": "test(r0004): expose ANSI fingerprint drift"
+    },
+    {
+      "id": "R4-128",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "db75ddc92413c128b619c088217d31230135c02d",
+      "headline": "fix(skills): normalize colored fingerprint output"
+    },
+    {
+      "id": "R4-129",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "467b001a98bcf18edb7ab8389e18a14ad694a392",
+      "headline": "docs(r0004): reconcile exit schema total"
+    },
+    {
+      "id": "R4-130",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "bf42be1151c8f569b6edda0369564bcbf6570389",
+      "headline": "test(r0004): close ANSI fingerprint red"
+    },
+    {
+      "id": "R4-131",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "dc64176ab75675a65e3c561576a2f5bb756b408f",
+      "headline": "audit(r0004): keep future decision citation unresolved"
+    },
+    {
+      "id": "R4-132",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "3d33985d014a362303c2d67e635c00feb366f71d",
+      "headline": "audit(r0004): admit ANSI fingerprint repair"
+    },
+    {
+      "id": "R4-133",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "e4064d34291577a5cbf1395449b5fdd00b1927c6",
+      "headline": "law(r0004): bind complete ANSI repair candidate"
+    },
+    {
+      "id": "R4-134",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "f4466a6b8ffc4fe0455893d1b9013a6f5f4f0f34",
+      "headline": "audit(r0004): record final Opus close PASS"
+    },
+    {
+      "id": "R4-135",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "9622e3518564e4e274d87bd97c5e94c10139f4a8",
+      "headline": "audit(r0004): govern CI reporter progress drift"
+    },
+    {
+      "id": "R4-136",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "6c876f183e241985e72bf1ebae7756e8a44b4447",
+      "headline": "test(r0004): expose CI reporter progress drift"
+    },
+    {
+      "id": "R4-137",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "d694249c77490546e8cba571948452c32bae86e4",
+      "headline": "fix(skills): normalize CI fixture progress line"
+    },
+    {
+      "id": "R4-138",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "54e79a19a22e64ec8a6c6ea698087081872d70fd",
+      "headline": "test(r0004): close CI reporter progress red"
+    },
+    {
+      "id": "R4-139",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "29e5c4122eb15f65ec36a6e60dfa4fdd4fbef2b0",
+      "headline": "audit(r0004): admit CI reporter progress repair"
+    },
+    {
+      "id": "R4-140",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "e0af282d368501127003e026bb66de1bfeef76e4",
+      "headline": "law(r0004): bind CI reporter repair candidate"
+    },
+    {
+      "id": "R4-141",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "61e66b2a7dbd1bb9dbe4793301ebe4516565685b",
+      "headline": "audit(r0004): govern evidence SHA resolution"
+    },
+    {
+      "id": "R4-142",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "759014a8b547d3d1887db4a222d8ecc88335d59d",
+      "headline": "test(r0004): expose unresolved governed SHAs"
+    },
+    {
+      "id": "R4-143",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "aee78a31adb74feba59134f6d49616769ddd60b0",
+      "headline": "ci(governance): verify governed SHA references"
+    },
+    {
+      "id": "R4-144",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "cb50655b0a0135bb3a56d3f8e263099d7bc84317",
+      "headline": "law(r0004): classify governed SHA exceptions"
+    },
+    {
+      "id": "R4-145",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "7b443226c2ee151dbcc7d6c1c7352ff64a7f575f",
+      "headline": "ci(governance): scope SHA exceptions by path"
+    },
+    {
+      "id": "R4-146",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "4047becd3cc98c8b542128ba8fc56cc87afec966",
+      "headline": "perf(governance): batch SHA object checks"
+    },
+    {
+      "id": "R4-147",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "fd53fe99aafc6284ec66216f4c8f031c61060268",
+      "headline": "audit(r0004): correct governed SHA bindings"
+    },
+    {
+      "id": "R4-148",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "fd99ab7deaa1702467b6d8f9c4d6a98f4372b87e",
+      "headline": "test(r0004): close governed SHA red"
+    },
+    {
+      "id": "R4-149",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "832da68f74e2a484c96a07b8de128df5127515cb",
+      "headline": "audit(r0004): bind final SHA-repair ladder"
+    },
+    {
+      "id": "R4-150",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "e79b2830e1a0484e68f816f54de64ba852013d88",
+      "headline": "law(r0004): bind governed SHA close"
+    },
+    {
+      "id": "R4-151",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "9b68e028c534f2f0507b2646669856d20e8fe5d2",
+      "headline": "audit(r0004): preserve eleventh review failure"
+    },
+    {
+      "id": "R4-152",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "deaa1b103d8efb16fbf3eb1a5a19b446bb083be9",
+      "headline": "test(r0004): characterize SHA semantic drift"
+    },
+    {
+      "id": "R4-153",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "cd51d1beee24f02e4c12a1724197247663976a14",
+      "headline": "law(r0004): correct SHA contract semantics"
+    },
+    {
+      "id": "R4-154",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "8ff6c5aca750ffce63e87ec94b0d1089cc426b2d",
+      "headline": "test(r0004): bind handoff snapshot context"
+    },
+    {
+      "id": "R4-155",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "1f118e1a5f82506822d7707a29c02bfe6ddd1a28",
+      "headline": "audit(r0004): correct SHA review semantics"
+    },
+    {
+      "id": "R4-156",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "2a864440c9178cc59834c961c132d3b5616d4bfa",
+      "headline": "test(r0004): close SHA semantic red"
+    },
+    {
+      "id": "R4-157",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "19b957d4fddf34df41bf6e7faefb61de41148a7c",
+      "headline": "audit(r0004): bind eleventh-repair ladder"
+    },
+    {
+      "id": "R4-158",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "62bef480316e27e0e07f804054874e9fc6327b61",
+      "headline": "law(r0004): bind exact SHA semantics close"
+    },
+    {
+      "id": "R4-159",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "b981d3869bf7a2b960213e02e778669a983b61fb",
+      "headline": "audit(r0004): preserve twelfth review failure"
+    },
+    {
+      "id": "R4-160",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "88062a8acf8d787368884e9b3591cc1efd669901",
+      "headline": "test(r0004): characterize audit lifecycle back-edge"
+    },
+    {
+      "id": "R4-161",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "745f0aa7fdac43666003936b42bacbe045b72199",
+      "headline": "audit(r0004): close SHA audit back-edge"
+    },
+    {
+      "id": "R4-162",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "2a24c79e61a59fe5ea603d11d7a6e2edcb0513ca",
+      "headline": "test(r0004): close audit lifecycle red"
+    },
+    {
+      "id": "R4-163",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "4034db1a867572916403b760527a7a0c8874edfa",
+      "headline": "law(r0004): name governed SHA scan scope"
+    },
+    {
+      "id": "R4-164",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "b10baed06e21ed39f07b625a5993355a57526d63",
+      "headline": "audit(r0004): correct twelfth review lifecycle"
+    },
+    {
+      "id": "R4-165",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "6bde01c70e5066a5d6508c21b504b8cb85219a38",
+      "headline": "audit(r0004): bind lifecycle-repair ladder"
+    },
+    {
+      "id": "R4-166",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "bb34ce0d0dc29cbb5b16b179852b3ab81d35a90b",
+      "headline": "law(r0004): bind audit lifecycle close"
+    },
+    {
+      "id": "R4-167",
+      "roles": [
+        "Owner"
+      ],
+      "commit": "28df88ca963857ba54e03d58ae9c05cb4173668a",
+      "headline": "product: record R-0004 close-review exception"
+    },
+    {
+      "id": "R4-168",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "f2c4d3583d28f63fb10fc6720cd0858b93fcf31f",
+      "headline": "law(r0004): bind Owner review exception"
+    },
+    {
+      "id": "R4-169",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "70b6092869b19631b845e6db79bfd0632871ab68",
+      "headline": "audit(r0004): apply Owner close exception"
+    },
+    {
+      "id": "R4-170",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "02e6784a5ab902fed0b769d10b088db8b4d23dd2",
+      "headline": "audit(r0004): govern clean-checkout SHA failure"
+    },
+    {
+      "id": "R4-171",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "6b880b215ed7290198de3722fa24153b4b919578",
+      "headline": "test(r0004): prove clean-checkout SHA gap red"
+    },
+    {
+      "id": "R4-172",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "808eba01af556dbac37100f894c6706241bf6553",
+      "headline": "law(r0004): classify clean-checkout SHA objects"
+    },
+    {
+      "id": "R4-173",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "d03d48dadf00dc4a7ce23fbee1619c3c8ceea85d",
+      "headline": "audit(r0004): close clean-checkout SHA gap"
+    },
+    {
+      "id": "R4-174",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "c80ea92a991b5d3e7e85ae554bb80f8119e69d98",
+      "headline": "law(r0004): bind clean-checkout SHA close"
+    },
+    {
+      "id": "R4-175",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "6c436be2dd20958e71fde02db9254f8905bbf755",
+      "headline": "test(r0004): narrow clean-checkout fixtures"
+    },
+    {
+      "id": "R4-176",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "69ea8c8a15af70e267d474b315b898c97cf548ef",
+      "headline": "audit(r0004): reconcile clean-checkout fixture"
+    },
+    {
+      "id": "R4-177",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "cc8552b362a3ad13b6666d44f7611b15d22b8b48",
+      "headline": "law(r0004): bind strict fixture close"
+    },
+    {
+      "id": "R4-178",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "78320af91c1a9671b277e065a003853156ba2edd",
+      "headline": "test(r0004): name clean-checkout fixtures"
+    },
+    {
+      "id": "R4-179",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "2a8682d020729dc20d842dd67bc4fc37b874b36a",
+      "headline": "audit(r0004): reconcile clean-checkout lint"
+    },
+    {
+      "id": "R4-180",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "2c4f15bed4897de801295c7eb93e4f5c7aebcd72",
+      "headline": "law(r0004): bind lint-clean SHA close"
+    },
+    {
+      "id": "R4-181",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "cbd9eb3ec1544b4bf645091a14a76e9cdede5c6a",
+      "headline": "test(r0004): prove complete SHA path set red"
+    },
+    {
+      "id": "R4-182",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "f46cf6974dbf58c639f08cbb455a4277f9377158",
+      "headline": "law(r0004): classify complete SHA path set"
+    },
+    {
+      "id": "R4-183",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "53a0f75838221354396440e435cdfce32665d8cd",
+      "headline": "audit(r0004): reconcile complete SHA path set"
+    },
+    {
+      "id": "R4-184",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "01033e55d0780cad9d6a9f00447243e699c5c02e",
+      "headline": "law(r0004): bind complete SHA path close"
+    }
+  ],
+  "gates": {
+    "stage-1": {
+      "status": "pass",
+      "detail": "Exact source candidate and exact source merge passed Stage 1 static checks"
+    },
+    "stage-2": {
+      "status": "pass",
+      "detail": "Exact source candidate and exact source merge passed T1, T2, law, and record contracts"
+    },
+    "stage-3": {
+      "status": "pass",
+      "detail": "Exact source candidate and exact source merge passed merged T1+T3 coverage"
+    },
+    "tier-t4": {
+      "status": "pass",
+      "detail": "Exact source candidate and exact source merge passed T4 regression"
+    },
+    "tier-t5": {
+      "status": "pass",
+      "detail": "Exact source candidate and exact source merge passed T5 smoke and E2E"
+    },
+    "tier-t6": {
+      "status": "pass",
+      "detail": "Exact source candidate and exact source merge passed T6 containment"
+    },
+    "changesets": {
+      "status": "pass",
+      "detail": "Changeset classification passed with release disposition none-preratification"
+    },
+    "governance": {
+      "status": "pass",
+      "detail": "Governed repository enforcement passed at candidate and exact source merge"
+    },
+    "evidence-mode": {
+      "status": "pass",
+      "detail": "Bootstrap evidence reuse remained fail-closed"
+    },
+    "local-exit-ladder": {
+      "status": "pass",
+      "detail": "Workflow lint, generated views, trace and repository references, lint, typecheck, build, governance, T1 through T6, changesets, formatting, package dry-runs, diff check, and cleanliness passed on exact candidate"
+    },
+    "coverage-t1-t3": {
+      "status": "pass",
+      "detail": "Statements 71.23%, branches 61.79%, functions 77.62%, lines 73.25%"
+    },
+    "owner-review-exception": {
+      "status": "pass",
+      "detail": "OM-008 and DII-197 authorize proceeding without an additional post-repair Opus review; no review PASS is fabricated"
+    },
+    "remote-source-pr": {
+      "status": "pass",
+      "detail": "PR 6 exact candidate 01033e55d0780cad9d6a9f00447243e699c5c02e passed all nine required checks in CI run 30216582364"
+    },
+    "remote-exact-main": {
+      "status": "pass",
+      "detail": "Exact source merge 93a78e2ac83bf285498af49462fe5370acaa7a37 passed all nine main jobs in CI run 30216792535"
+    },
+    "predecessor-clean": {
+      "status": "pass",
+      "detail": "Read-only predecessor remained clean at d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+    }
+  },
+  "source_repo_deleted": false,
+  "validation_criteria": [
+    {
+      "criterion": "Action identity, effects, sensors, schemas, bounded commands, and package topology share the governed surface",
+      "verdict": "pass",
+      "evidence": "DII-201, R-0004 source-close, and as-built bind 186 actions as 147 keep / 38 fold / 1 tombstone; 186/186 effects; 59 sensors; 55 schemas; and eleven public packages"
+    },
+    {
+      "criterion": "Every R-0004 source and correction commit is role-pure and represented",
+      "verdict": "pass",
+      "evidence": "All 184 exact source commits from closed R-0003 main b60b4c52bff1779da84f48edc63cbf34652ab18e through candidate 01033e55d0780cad9d6a9f00447243e699c5c02e are recorded with DEVAI role attribution"
+    },
+    {
+      "criterion": "The Owner-authorized final-review exception is applied without rewriting review evidence",
+      "verdict": "pass",
+      "evidence": "OM-008 and DII-197 replace only the additional post-repair Opus review; the twelfth review FAIL and its BL-183 repair remain truthful, and no PASS is inferred"
+    },
+    {
+      "criterion": "Exact source candidate and exact merged main satisfy every required local and remote check",
+      "verdict": "pass",
+      "evidence": "PR 6 candidate 01033e55d0780cad9d6a9f00447243e699c5c02e passed run 30216582364 and source merge 93a78e2ac83bf285498af49462fe5370acaa7a37 passed run 30216792535"
+    },
+    {
+      "criterion": "coverage-t1-t3 satisfies the unchanged 70/60/70/70 policy",
+      "verdict": "pass",
+      "evidence": "Statements 71.23%, branches 61.79%, functions 77.62%, and lines 73.25% on the exact candidate"
+    },
+    {
+      "criterion": "External release, deployment, publication, evidence promotion, real-stynx mutation, R-0008, R-0009, and R-0010",
+      "verdict": "n/a",
+      "evidence": "Outside R-0004 and still human-gated; R-0004 establishes only governed surface and package topology implemented and tested"
+    }
+  ],
+  "merged_as": "93a78e2ac83bf285498af49462fe5370acaa7a37",
+  "release_disposition": "none-preratification",
+  "notes": "R-0004 establishes only governed surface and package topology implemented and tested. It performs no package publish, tag, GitHub Release, Pages deployment, external release, deployment, evidence promotion, real-stynx mutation, R-0008 action, R-0009 activation, R-0010 observation, or readiness declaration. The predecessor remains read-only and clean.",
+  "schemaVersion": "1.0.0",
+  "id": "PC-0005",
+  "closed_at": "2026-07-26T19:34:52.386Z"
+}
