@@ -987,7 +987,10 @@ export const ACTION_REGISTRY = [
       "action_id": "docs render mermaid",
       "effect": "local-write",
       "capabilities": [
-        "fs:workspace"
+        "fs:workspace",
+        "proc:dynamic",
+        "proc:mmdc",
+        "proc:which"
       ],
       "subject": {
         "kind": "human",
@@ -3048,7 +3051,7 @@ export const ACTION_REGISTRY = [
     ],
     "effect": "local-write",
     "authority": "mesh_controller",
-    "description": "Apply only the owner bootstrap segment under its declared authority.",
+    "description": "Apply the exact owner bootstrap segment under its declared authority.",
     "promotion_criteria": [],
     "authority_contract_version": "1.0.0",
     "authority_contract": {

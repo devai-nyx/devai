@@ -127,7 +127,10 @@ export const ACTION_EFFECT_CONTRACTS = [
     "public_action_id": "docs render mermaid",
     "effect": "local-write",
     "capabilities": [
-      "fs:workspace"
+      "fs:workspace",
+      "proc:dynamic",
+      "proc:mmdc",
+      "proc:which"
     ]
   },
   {
