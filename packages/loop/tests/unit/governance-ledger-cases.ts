@@ -318,6 +318,32 @@ describe('governance record parsing and integrity', () => {
     expect(decisionRecordIntegrity({ repoRoot: root })).toEqual({ ok: true, findings: [] });
   });
 
+  it('accepts a pre-merge body restoration followed by canonical supersession', () => {
+    const root = fixtureRoot();
+    const originalBody = '# ADR-001. Sealed';
+    const path = writeRecord(
+      root,
+      'ADR-001.md',
+      recordSource({ status: 'active', body: originalBody }),
+    );
+    initGit(root);
+    commitAll(root, 'activate');
+    writeFileSync(path, recordSource({ status: 'active', body: '# ADR-001. Invalid edit' }));
+    commitAll(root, 'invalid intermediate edit');
+    writeFileSync(
+      path,
+      recordSource({ status: 'superseded', supersededBy: 'ADR-002', body: originalBody }),
+    );
+    writeRecord(root, 'ADR-002.md', recordSource({ id: 'ADR-002', supersedes: '[ADR-001]' }));
+    commitAll(root, 'restore and supersede');
+
+    expect(
+      decisionRecordIntegrity({ repoRoot: root }).findings.filter(
+        (finding) => finding.code === 'DECISION_LOCKED_BODY_MUTATED',
+      ),
+    ).toEqual([]);
+  });
+
   it('rejects replacement changes after supersession and returns to draft', () => {
     const supersededRoot = fixtureRoot();
     const supersededPath = writeRecord(
