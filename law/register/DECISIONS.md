@@ -2362,6 +2362,25 @@ machine-readable projection to include `.github/workflows/ci.yml`,
 workflow checker and scanner paths. The active doctrine and all DII-176 boundaries are
 unchanged.
 
+### DII-178 — Restore sealed ADR history through ADR-015
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 ADR seal correction; DII-176; DII-177; BL-155; ADR-015; R-0004-ADR-SEAL-GOVERNANCE-FAILURE; Auditor e7d4e48780a657bf02e166f8f90208c248e342f6; Inspector 2c2d8ece839c7df72d233971dfb105e615674c33`
+
+DII-178 supersedes DII-177 as the active CI-path projection judgment. ADR-014 is restored
+to its sealed bytes except for the one permitted terminal lifecycle transition naming
+ADR-015. ADR-015 is the gapless active replacement and carries the complete seven-path
+CI governance set plus the preserved CI-economy and workflow-pin doctrine.
+
+Inspector's red copy-history contract proves that Git copy ancestry must not be treated
+as the new record's sealed history. Engineer may correct history enumeration to stop at
+a copy boundary while continuing through true renames; the existing rename-mutation
+guard must remain green. The roster becomes ADR-001 through ADR-015, twelve active, with
+the terminal chain ADR-005 to ADR-013 to ADR-014 to ADR-015.
+
+After symmetric Auditor correction and source-close rebind, the full ladder and fresh
+literal `claude-opus-5` review remain mandatory. No waiver, history rewrite, threshold,
+skip, release, publication, deployment, predecessor write, real-stynx write, or external
+human gate changes.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
