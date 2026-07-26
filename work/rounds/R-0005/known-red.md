@@ -2,7 +2,7 @@
 id: R-0005-KNOWN-RED
 title: R-0005 bounded known-red ledger
 type: round-known-red
-status: active
+status: retired
 date: 2026-07-26
 authority: Architect
 supersedes: null
@@ -145,3 +145,22 @@ to their existing internal bindings and admit only those bindings under the pare
 `sense run` scope. No arbitrary command, write flag, unknown sensor, external binary,
 or non-read action may pass. The cluster retires only after adversarial tests, a live
 59-sensor disposable SWEEP with a valid terminal epoch, and the complete ladder pass.
+
+## B8 final retirement
+
+KR-R5-015 retires at Engineer materialization `4d040c4`, Inspector runtime-byte guard
+`e03b8f9`, and Architect mirror `4ea2c00`: policy resolution, byte parity, the ordinary
+floor, and the production SWEEP policy load are green.
+
+KR-R5-016 retires through the complete red-first repair ending at Engineer `2cb2ff3`.
+The focused authority/readiness suite passes six tests, the ordinary floor passes 130
+files with 1,192 tests and eight declared skips, and the live disposable `R-0999` SWEEP
+writes 59 unique record lines plus one terminal. The canonical verifier reports a valid,
+closed 60-line epoch with record count 59 and no errors. Forty-four non-runnable or
+under-bound actions are preserved as honest blockers; the terminal truthfully remains
+execution ERROR and readiness FAIL. The fixture was removed after verification and was
+not committed.
+
+KR-R5-012 through KR-R5-014 were already retired by their named exact projection, lint,
+formatting, and full-floor measurements. This ledger now grants no active red authority.
+Any independent-review or CI finding requires a fresh Architect entry before repair.
