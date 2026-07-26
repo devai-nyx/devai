@@ -29,25 +29,25 @@
     {
       "id": "actions",
       "title": "CLI action registry",
-      "path": "packages/core/src/actions/**",
-      "record_schema": "actions-list-output.schema.json",
+      "path": "law/policy/action-registry.json#entries",
+      "record_schema": "action-registry.schema.json",
       "count_guard": {
-        "state": "backlogged",
-        "mechanism": "Roster ceiling and floor",
-        "source": null,
-        "backlog_ref": "R-0001/P4-P5"
+        "state": "declared",
+        "mechanism": "Schema-backed exact keep, fold, and tombstone counts; generated-view parity is the R-0004/B3 handoff",
+        "source": "law/policy/action-registry.json",
+        "backlog_ref": "R-0004/B3"
       },
       "liveness_guard": {
-        "state": "backlogged",
-        "mechanism": "Every supported action retains a production invoker or explicit porcelain standing",
-        "source": null,
-        "backlog_ref": "post-bootstrap/W05"
+        "state": "declared",
+        "mechanism": "Every kept action names a runtime binding and canonical lifecycle standing; runtime derivation is the R-0004/B3 handoff",
+        "source": "law/policy/action-registry.json",
+        "backlog_ref": "R-0004/B3"
       },
       "tombstone_guard": {
-        "state": "backlogged",
-        "mechanism": "Retired verbs resolve to a migration disposition for one major",
-        "source": null,
-        "backlog_ref": "post-bootstrap/W05"
+        "state": "declared",
+        "mechanism": "Every folded or tombstoned public path is never-reminted and resolves to migration guidance; CLI enforcement is the R-0004/B3 handoff",
+        "source": "law/policy/action-registry.json",
+        "backlog_ref": "R-0004/B3"
       }
     },
     {
@@ -128,22 +128,22 @@
       "path": "law/policy/sensor-registry.json",
       "record_schema": "sensor-registry.schema.json",
       "count_guard": {
-        "state": "declared",
-        "mechanism": "Active emitter-backed entries and archived compatibility dispositions are counted in the schema-backed registry; runtime roster derivation is pending",
-        "source": "law/policy/sensor-registry.json",
-        "backlog_ref": "R-0001/P4"
+        "state": "implemented",
+        "mechanism": "Active emitter-backed entries and archived compatibility dispositions are schema-backed and runtime-derived",
+        "source": "packages/sensors/src/sensor-registry.ts",
+        "backlog_ref": null
       },
       "liveness_guard": {
-        "state": "declared",
-        "mechanism": "Every active entry names an emitter module and has nonempty cells or diagnostic=true; emitter and consumer parity enforcement is pending",
-        "source": "law/schemas/sensor-registry.schema.json",
-        "backlog_ref": "R-0001/P4"
+        "state": "implemented",
+        "mechanism": "Every active entry names an emitter, preserves cell or diagnostic standing, and resolves a successor-local design note",
+        "source": "tests/contract/r0004-governed-surface.red.contract.test.ts",
+        "backlog_ref": null
       },
       "tombstone_guard": {
-        "state": "declared",
-        "mechanism": "Enum-only predecessor compatibility kinds have explicit archive dispositions; mechanical non-remint enforcement is pending",
+        "state": "implemented",
+        "mechanism": "Archived compatibility kinds retain explicit provenance, reason, replacement, and non-remint coverage",
         "source": "law/policy/sensor-registry.json#archived_kinds",
-        "backlog_ref": "R-0001/P4-P5"
+        "backlog_ref": null
       }
     },
     {

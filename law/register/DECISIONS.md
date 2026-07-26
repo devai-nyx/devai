@@ -2035,6 +2035,29 @@ R-0004 may establish only that the governed surface and package topology are imp
 and tested. It authorizes no package publication, tag, GitHub Release, Pages deployment,
 real-stynx mutation, readiness claim, evidence promotion, or R-0010 observation.
 
+### DII-163 — Bind canonical action and sensor authority for R-0004
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 B2; DII-162; R-0004-SURFACE-DISPOSITION; GOVERNED-SURFACE-POLICY; ACTION-REGISTRY; SENSOR-REGISTRY`
+
+The public action path is the permanent action identity. The canonical registry at
+`law/policy/action-registry.json` contains all 185 governed records: 146 retained public
+actions, 38 historical sensor-wrapper folds, and one tombstone. Every non-kept identity
+is never-reminted and carries migration guidance. Effect, tier, lifecycle, authority,
+and authority contract are attributes of this canonical identity; runtime tables and
+generated views may not independently define them.
+
+The 59 live sensor kinds each resolve an active successor-local design note. Their nine
+diagnostic and fifty cell-bound standings remain unchanged. The canonical schema corpus
+is now 55 files because `action-registry.schema.json` joins the prior 54-file baseline.
+Engineer B3 must derive runtime consumers and the recursive schema command from these
+Architect-owned sources; until that handoff is green, the action population guards
+remain declared rather than implemented.
+
+The exact eleven-package fixed group, implementation-free core façade, bounded root
+porcelain argv, fail-closed binary checks, immutable workflow references, and UTF-8
+byte-stable projections are bound by `law/policy/governed-surface.md`. None of these
+bindings grants external release, deployment, publication, real-stynx mutation, R-0008
+external action, R-0009 activation, or R-0010 observation.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

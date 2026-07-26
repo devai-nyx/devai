@@ -27,9 +27,8 @@
       ],
       "tiers": ["BASELINE", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/type_check.md"
       }
     },
     {
@@ -56,9 +55,8 @@
       ],
       "tiers": ["BASELINE", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/lint.md"
       }
     },
     {
@@ -85,9 +83,8 @@
       ],
       "tiers": ["BASELINE", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/build.md"
       }
     },
     {
@@ -114,9 +111,8 @@
       ],
       "tiers": ["BASELINE", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/unit_test.md"
       }
     },
     {
@@ -143,9 +139,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/integration_test.md"
       }
     },
     {
@@ -172,9 +167,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/e2e_test.md"
       }
     },
     {
@@ -201,9 +195,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/migration_check.md"
       }
     },
     {
@@ -230,9 +223,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/inventory_regeneration.md"
       }
     },
     {
@@ -259,9 +251,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/test_weakening_review.md"
       }
     },
     {
@@ -288,9 +279,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/trace_resolution.md"
       }
     },
     {
@@ -317,9 +307,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/security_scan.md"
       }
     },
     {
@@ -346,9 +335,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/perf_test.md"
       }
     },
     {
@@ -375,9 +363,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/llm_judge.md"
       }
     },
     {
@@ -399,9 +386,8 @@
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/runtime_probe_api.md"
       }
     },
     {
@@ -423,9 +409,8 @@
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/runtime_probe_auth.md"
       }
     },
     {
@@ -447,9 +432,8 @@
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/runtime_probe_data.md"
       }
     },
     {
@@ -480,9 +464,8 @@
       ],
       "tiers": ["TIER2", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/inventory_api.md"
       }
     },
     {
@@ -513,9 +496,8 @@
       ],
       "tiers": ["TIER2", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/inventory_routes.md"
       }
     },
     {
@@ -546,9 +528,8 @@
       ],
       "tiers": ["TIER2", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/inventory_data_model.md"
       }
     },
     {
@@ -579,9 +560,8 @@
       ],
       "tiers": ["TIER2", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/inventory_rbac.md"
       }
     },
     {
@@ -614,9 +594,8 @@
       ],
       "tiers": ["TIER2", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/inventory_data_handling.md"
       }
     },
     {
@@ -647,9 +626,8 @@
       ],
       "tiers": ["TIER2", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/inventory_dep_graph.md"
       }
     },
     {
@@ -680,9 +658,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/inventory_coverage.md"
       }
     },
     {
@@ -709,9 +686,8 @@
       ],
       "tiers": ["TIER2", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/spec_depth.md"
       }
     },
     {
@@ -738,9 +714,8 @@
       ],
       "tiers": ["TIER3", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/spec_idiomaticity.md"
       }
     },
     {
@@ -767,9 +742,8 @@
       ],
       "tiers": ["TIER3", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/spec_freshness.md"
       }
     },
     {
@@ -796,9 +770,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/plant_coverage.md"
       }
     },
     {
@@ -825,9 +798,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/test_coverage_depth.md"
       }
     },
     {
@@ -856,9 +828,8 @@
       ],
       "tiers": ["TIER3", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/test_invariant_alignment.md"
       }
     },
     {
@@ -885,9 +856,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/inventory_adherence.md"
       }
     },
     {
@@ -914,9 +884,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/inventory_determinism.md"
       }
     },
     {
@@ -943,9 +912,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/harness_security.md"
       }
     },
     {
@@ -972,9 +940,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/harness_green_main.md"
       }
     },
     {
@@ -1001,9 +968,8 @@
       ],
       "tiers": ["TIER2", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/spec_alignment.md"
       }
     },
     {
@@ -1030,9 +996,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/spec_security_coverage.md"
       }
     },
     {
@@ -1061,9 +1026,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/spec_performance_targets.md"
       }
     },
     {
@@ -1092,9 +1056,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/spec_robustness_targets.md"
       }
     },
     {
@@ -1121,9 +1084,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/plant_depth.md"
       }
     },
     {
@@ -1150,9 +1112,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/plant_coherence.md"
       }
     },
     {
@@ -1179,9 +1140,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/test_coherence.md"
       }
     },
     {
@@ -1208,9 +1168,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/test_idiomaticity.md"
       }
     },
     {
@@ -1237,9 +1196,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/test_security_coverage.md"
       }
     },
     {
@@ -1268,9 +1226,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/test_performance_coverage.md"
       }
     },
     {
@@ -1299,9 +1256,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/test_robustness_coverage.md"
       }
     },
     {
@@ -1328,9 +1284,8 @@
       ],
       "tiers": ["TIER3", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/harness_coverage.md"
       }
     },
     {
@@ -1357,9 +1312,8 @@
       ],
       "tiers": ["TIER3", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/harness_depth.md"
       }
     },
     {
@@ -1386,9 +1340,8 @@
       ],
       "tiers": ["TIER3", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/harness_coherence.md"
       }
     },
     {
@@ -1417,9 +1370,8 @@
       ],
       "tiers": ["TIER3", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/harness_invariant_alignment.md"
       }
     },
     {
@@ -1446,9 +1398,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/harness_idiomaticity.md"
       }
     },
     {
@@ -1475,9 +1426,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/harness_performance.md"
       }
     },
     {
@@ -1504,9 +1454,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/harness_robustness.md"
       }
     },
     {
@@ -1533,9 +1482,8 @@
       ],
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/inventory_performance.md"
       }
     },
     {
@@ -1559,9 +1507,8 @@
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/decision_record_integrity.md"
       }
     },
     {
@@ -1585,9 +1532,8 @@
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/decision_citation_resolution.md"
       }
     },
     {
@@ -1609,9 +1555,8 @@
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/archive_immutability.md"
       }
     },
     {
@@ -1633,9 +1578,8 @@
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/round_record_integrity.md"
       }
     },
     {
@@ -1662,9 +1606,8 @@
       ],
       "tiers": ["TIER3", "SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/docs_drift.md"
       }
     },
     {
@@ -1686,9 +1629,8 @@
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/site_drift.md"
       }
     },
     {
@@ -1712,9 +1654,8 @@
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
-        "state": "backlogged",
-        "path": null,
-        "backlog_ref": "post-bootstrap/W05-design-notes"
+        "state": "active",
+        "path": "law/policy/sensor-notes/action_effect_inference.md"
       }
     }
   ],
