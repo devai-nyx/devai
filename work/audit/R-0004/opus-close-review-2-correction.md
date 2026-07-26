@@ -7,7 +7,12 @@ date: 2026-07-26
 authority: Auditor
 supersedes: R-0004-OPUS-CLOSE-REVIEW-2-FAILURE
 superseded_by: null
-provenance: [BL-156–162; Inspector 9ee3c0e and a544733; Architect c2d418b; Engineer c530468]
+provenance:
+  [
+    BL-156–162; Inspector 9ee3c0e,
+    a544733,
+    and 3581591; Architect c2d418b; Engineer c530468 and ab04008,
+  ]
 ---
 
 # R-0004 corrected exact-candidate Opus repair
@@ -20,8 +25,11 @@ replaced the former tautological help assertion.
 
 Architect `c2d418b` corrected the canonical build description. Engineer `c530468`
 aligned the production broker with the exact four configured suite argv plus the fixed
-all-suite argv, removed unreachable legacy forms, regenerated the affected action view,
-and bound strict governance to a 1,000-commit window that exceeds the full R-0004 range.
+all-suite argv, removed unreachable legacy forms, and regenerated the affected action
+view. Inspector `3581591` then proved that a trailing count cannot express the required
+round boundary; Engineer `ab04008` added a verified `--since-ref` range and bound strict
+governance to the exact R-0003 merge base. The complete range passes without importing
+unrelated pre-round history.
 
 Inspector `a544733` restricted the test host to the exact six tier configs. The R20
 disposition now derives three changed files and both changed skill records against the
