@@ -2645,6 +2645,31 @@ contract, and the refreshed handoff must restart the complete ladder and receive
 read-only review through literal `claude-opus-5`, with no fallback, before source push.
 The claims ceiling and every external human gate remain unchanged.
 
+### DII-195 — Admit the exact SHA-semantics repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 eleventh-Opus repair; DII-194; BL-182; R-0004-OPUS-CLOSE-REVIEW-11-CORRECTION; Auditor 19b957d`
+
+DII-195 supersedes DII-194 only as the R-0004 source-closing judgment. The eleventh
+exact-candidate Opus review found that DII-194 attached a later SHA-reference count to
+the earlier `fd99ab7` snapshot, active law claimed an unimplemented local object-kind
+comparison, and the Inspector contract did not exercise rejection paths. The repaired
+records bind each count to its producing snapshot and state the implemented local-Git-
+object or exact-path-scoped-exception semantics. Hermetic Inspector cases prove that an
+unresolved identity, an exception used outside its allowed paths, a stale allowed path,
+and a stale exception all fail closed. Production behavior and exception scope did not
+change.
+
+The complete ladder passed on exact repaired snapshot
+`2a864440c9178cc59834c961c132d3b5616d4bfa`: T1 passed 71 files / 838 tests, T2 passed
+38 files / 243 tests plus one declared skip, the root porcelain passed 127 files / 1,169
+tests plus eight declared skips, merged T1+T3 coverage passed at 71.23% statements,
+61.79% branches, 77.62% functions, and 73.25% lines, the governed SHA-reference check
+scanned 254 identities, resolved 246 local objects, and classified 8 historical
+specimens, and all eleven public-package dry-runs passed. The next clean commit
+containing DII-195, the refreshed contract, and the refreshed handoff must restart the
+complete ladder and receive a fresh read-only review through literal `claude-opus-5`,
+with no fallback, before source push. The claims ceiling and every external human gate
+remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
