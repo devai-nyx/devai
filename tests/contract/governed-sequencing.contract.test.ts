@@ -1,5 +1,6 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003
 import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -20,7 +21,7 @@ function git(root: string, args: readonly string[]): string {
   return execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
 }
 
-function commit(root: string, author: string, subject: string, path: string): void {
+function commit(root: string, author: string, subject: string, path: string): string {
   put(root, path, `${subject}\n`);
   git(root, ['add', path]);
   git(root, [
@@ -32,6 +33,46 @@ function commit(root: string, author: string, subject: string, path: string): vo
     '-qm',
     subject,
   ]);
+  return git(root, ['rev-parse', 'HEAD']);
+}
+
+interface BindingSpec {
+  readonly round: string;
+  readonly implementation_commits: string[];
+  readonly law_commits: string[];
+  readonly red_evidence: {
+    readonly commit: string;
+    readonly observed_exit: number;
+    readonly command: string;
+    readonly tests: string[];
+  };
+}
+
+function configureBindings(root: string, bindings: readonly BindingSpec[]): void {
+  const evidencePath = 'work/audit/fixture/red-evidence.json';
+  const evidence = `${JSON.stringify(
+    {
+      observations: bindings.map(({ red_evidence: red }) => ({
+        commit: red.commit,
+        command: red.command,
+        exit_code: red.observed_exit,
+        tests: red.tests,
+      })),
+    },
+    null,
+    2,
+  )}\n`;
+  put(root, evidencePath, evidence);
+  const document = JSON.parse(readFileSync(policy, 'utf8')) as Record<string, unknown>;
+  document['bindings'] = bindings.map((binding) => ({
+    ...binding,
+    red_evidence: {
+      ...binding.red_evidence,
+      evidence_path: evidencePath,
+      evidence_sha256: createHash('sha256').update(evidence).digest('hex'),
+    },
+  }));
+  put(root, 'law/policy/governed-sequencing.json', `${JSON.stringify(document, null, 2)}\n`);
 }
 
 function fixture(): { root: string; base: string } {
@@ -61,9 +102,37 @@ afterEach(() => {
 describe('governed sequencing', () => {
   it('accepts law, red contract, then implementation for one attributed round', () => {
     const { root, base } = fixture();
-    commit(root, 'DEVAI Architect', 'law(r0006): declare fixture', 'law/decisions/D-999.md');
-    commit(root, 'DEVAI Inspector', 'test(r0006): establish red', 'tests/fixture.test.ts');
-    commit(root, 'DEVAI Engineer', 'feat(r0006): repair fixture', 'packages/fixture/index.ts');
+    const law = commit(
+      root,
+      'DEVAI Architect',
+      'law(r0006): declare fixture',
+      'law/decisions/D-999.md',
+    );
+    const red = commit(
+      root,
+      'DEVAI Inspector',
+      'test(r0006): establish red',
+      'tests/fixture.test.ts',
+    );
+    const implementation = commit(
+      root,
+      'DEVAI Engineer',
+      'feat(r0006): repair fixture',
+      'packages/fixture/index.ts',
+    );
+    configureBindings(root, [
+      {
+        round: 'R-0006',
+        implementation_commits: [implementation],
+        law_commits: [law],
+        red_evidence: {
+          commit: red,
+          observed_exit: 1,
+          command: 'pnpm vitest run tests/fixture.test.ts',
+          tests: ['tests/fixture.test.ts'],
+        },
+      },
+    ]);
 
     const result = check(root, base);
     expect(result.status).toBe(0);
@@ -72,7 +141,27 @@ describe('governed sequencing', () => {
 
   it('rejects implementation before both governing law and red contract', () => {
     const { root, base } = fixture();
-    commit(root, 'DEVAI Engineer', 'feat(r0006): skip the gates', 'packages/fixture/index.ts');
+    const implementation = commit(
+      root,
+      'DEVAI Engineer',
+      'feat(r0006): skip the gates',
+      'packages/fixture/index.ts',
+    );
+    const law = commit(root, 'DEVAI Architect', 'law(r0006): too late', 'law/decisions/D-999.md');
+    const red = commit(root, 'DEVAI Inspector', 'test(r0006): too late', 'tests/fixture.test.ts');
+    configureBindings(root, [
+      {
+        round: 'R-0006',
+        implementation_commits: [implementation],
+        law_commits: [law],
+        red_evidence: {
+          commit: red,
+          observed_exit: 1,
+          command: 'pnpm vitest run tests/fixture.test.ts',
+          tests: ['tests/fixture.test.ts'],
+        },
+      },
+    ]);
 
     const result = check(root, base);
     expect(result.status).toBe(1);
@@ -81,6 +170,57 @@ describe('governed sequencing', () => {
       findings: expect.arrayContaining([
         expect.objectContaining({ rule: 'law-before-implementation' }),
         expect.objectContaining({ rule: 'red-before-repair' }),
+      ]),
+    });
+  });
+
+  it('rejects unrelated, already-green, hash-mismatched, and duplicate bindings', () => {
+    const { root, base } = fixture();
+    const law = commit(
+      root,
+      'DEVAI Architect',
+      'law(r0006): declare fixture',
+      'law/decisions/D-999.md',
+    );
+    const red = commit(
+      root,
+      'DEVAI Inspector',
+      'test(r0006): establish red',
+      'tests/fixture.test.ts',
+    );
+    const implementation = commit(
+      root,
+      'DEVAI Engineer',
+      'feat(r0006): repair fixture',
+      'packages/fixture/index.ts',
+    );
+    const binding: BindingSpec = {
+      round: 'R-0006',
+      implementation_commits: [implementation],
+      law_commits: [law],
+      red_evidence: {
+        commit: red,
+        observed_exit: 0,
+        command: 'pnpm vitest run tests/fixture.test.ts',
+        tests: ['tests/unrelated.test.ts'],
+      },
+    };
+    configureBindings(root, [binding, binding]);
+    const documentPath = join(root, 'law/policy/governed-sequencing.json');
+    const document = JSON.parse(readFileSync(documentPath, 'utf8')) as {
+      bindings: Array<{ red_evidence: { evidence_sha256: string } }>;
+    };
+    document.bindings[0]!.red_evidence.evidence_sha256 = 'f'.repeat(64);
+    writeFileSync(documentPath, `${JSON.stringify(document, null, 2)}\n`);
+
+    const result = check(root, base);
+    expect(result.status).toBe(1);
+    expect(JSON.parse(result.stdout as string)).toMatchObject({
+      ok: false,
+      findings: expect.arrayContaining([
+        expect.objectContaining({ rule: 'red-before-repair' }),
+        expect.objectContaining({ rule: 'red-evidence-artifact' }),
+        expect.objectContaining({ rule: 'implementation-binding' }),
       ]),
     });
   });
