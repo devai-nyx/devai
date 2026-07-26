@@ -32,6 +32,12 @@ function write(path: string, lines: readonly ProofEpochLine[]): void {
   writeFileSync(path, `${lines.map((line) => JSON.stringify(line)).join('\n')}\n`);
 }
 
+function lineAt(lines: readonly ProofEpochLine[], index: number): ProofEpochLine {
+  const line = lines[index];
+  if (line === undefined) throw new Error(`proof epoch fixture line ${String(index)} is missing`);
+  return line;
+}
+
 aroundEach((runTest) => withAuthorityHostTestScope(runTest));
 
 afterEach(() => {
@@ -97,13 +103,16 @@ describe('proof epoch integrity', () => {
     closeProofEpoch(inputs);
     const path = proofEpochPath(repoRoot, inputs.roundId, inputs.kind);
     const original = parse(path);
+    const first = lineAt(original, 0);
+    const second = lineAt(original, 1);
+    const terminal = lineAt(original, 2);
 
     const tampered = structuredClone(original);
-    tampered[0] = { ...tampered[0]!, payload: { ordinal: 99 } };
+    tampered[0] = { ...first, payload: { ordinal: 99 } };
     write(path, tampered);
     expect(verifyProofEpoch(inputs).errors).toContain('line 1 has a tampered hash');
 
-    write(path, [original[1]!, original[0]!, original[2]!]);
+    write(path, [second, first, terminal]);
     expect(verifyProofEpoch(inputs).errors).toEqual(
       expect.arrayContaining([
         'line 1 has reordered sequence',
@@ -116,7 +125,7 @@ describe('proof epoch integrity', () => {
     expect(verifyProofEpoch(inputs)).toMatchObject({ valid: false, closed: false });
     expect(verifyProofEpoch(inputs).errors).toContain('proof epoch is missing its terminal line');
 
-    write(path, [...original, original[2]!]);
+    write(path, [...original, terminal]);
     expect(verifyProofEpoch(inputs).errors).toEqual(
       expect.arrayContaining([
         'line 3 has post-terminal data',
