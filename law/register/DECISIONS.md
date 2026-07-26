@@ -2716,6 +2716,30 @@ authorizes package publication, tags, GitHub Releases, Pages deployment, externa
 release or deployment, real-stynx mutation, R-0008 external action, R-0009 activation,
 or R-0010 observation. The predecessor remains read-only.
 
+### DII-198 — Classify clean-checkout-only SHA objects after exact source CI
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 clean-checkout SHA repair; OM-008; DII-197; GitHub Actions run 30215723543@70b6092869b19631b845e6db79bfd0632871ab68; BL-184; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-CORRECTION; Inspector 6b880b2; Architect 808eba0; Auditor d03d48d`
+
+DII-198 supersedes DII-197 only as the R-0004 source-closing judgment. Exact-head CI
+run `30215723543` proved that two truthful historical identities resolved in the local
+development object database but not in GitHub's clean checkout. The repair classifies
+the transient pull-request merge and rejected amended R-0003 candidate only at their
+three existing Auditor paths. A hermetic Inspector fixture proves the classifications
+against an empty Git object database. Historical evidence is unchanged, and an
+identity used at any other path still fails closed.
+
+The environment-dependent local/classified split does not change the governed identity
+population or semantics. The exact candidate containing DII-198 and the refreshed
+contract and handoff must pass the complete local ladder and every required GitHub check
+before merge. Its exact source merge must pass exact-main CI before the production
+closure verb may append PC-0005; the closure-only PR and final main must also pass their
+exact-SHA checks.
+
+OM-008 continues to replace only the additional post-repair Opus review for R-0004; no
+PASS is inferred. PC-0005 uses DII-162 as the declaration and DII-198 as the closing
+decision with `release_disposition: none-preratification`. No publication, tag, GitHub
+Release, Pages deployment, external release or deployment, real-stynx mutation,
+R-0008 external action, R-0009 activation, or R-0010 observation is authorized.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

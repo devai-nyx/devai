@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    OM-002; OM-008; DII-162; DII-197; BL-163; BL-165; BL-169; BL-172; BL-174; BL-180; BL-181; BL-182; BL-183; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; R-0004-SOURCE-DECISION-SHA-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-11-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION,
+    OM-002; OM-008; DII-162; DII-198; BL-163; BL-165; BL-169; BL-172; BL-174; BL-180; BL-181; BL-182; BL-183; BL-184; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; R-0004-SOURCE-DECISION-SHA-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-11-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-CORRECTION,
   ]
 ---
 
@@ -85,7 +85,9 @@ Historical foreign, predecessor, transient-merge, and intentionally invalid revi
 specimens are admitted only through the canonical exception registry and only at their
 exact classified paths. CI scans the decision register and Auditor records and fails
 closed on an unresolved or newly misplaced identity, stale allowed path, or stale
-exception; it does not treat an exception value as a repository-wide waiver.
+exception; it does not treat an exception value as a repository-wide waiver. The
+registry includes two objects that resolve in the development repository but are absent
+from clean CI checkouts; their exact-path classifications are exercised hermetically.
 
 R-0004 implements a governed surface and package topology only. It publishes, tags,
 releases, deploys, promotes, re-earns, or declares ready nothing.
