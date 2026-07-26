@@ -48,6 +48,15 @@ export function processIsReadOnlyForTest(request: AuthorityHostEffectRequest): b
   const executable = request.arguments[0];
   const args = request.arguments[1];
   if (typeof executable !== 'string' || !Array.isArray(args)) return false;
+  if (
+    executable === 'git' &&
+    args.length === 3 &&
+    args[0] === 'worktree' &&
+    args[1] === 'list' &&
+    args[2] === '--porcelain'
+  ) {
+    return true;
+  }
   if (args.length === 1 && args[0] === '--version') return true;
   if (
     (executable === 'node' || executable === process.execPath) &&
