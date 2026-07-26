@@ -1590,6 +1590,37 @@ fixed trailing window; a red-first guard proves the workflow-changing commit is 
 active-ADR affected-rule coverage is exercised against every governed CI path changed in
 the round.
 
+### BL-163 — Reconcile the active surface contract with fixed root argv
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0004 third exact-candidate Claude Opus 5 review F1; candidate c100cc8b; R-0004-OPUS-CLOSE-REVIEW-3-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the active surface contract names exactly `pnpm -r build` and `pnpm vitest
+run`; both forms agree with the disposition, production sensors, and production broker;
+an Inspector guard derives and compares the contract rather than pinning an independent
+stale string.
+
+### BL-164 — Keep command-definition help equal to canonical registry help
+
+`type: backlog-item · status: draft · authority: Inspector + Engineer + Auditor · provenance: R-0004 third exact-candidate Claude Opus 5 review F2; candidate c100cc8b; R-0004-OPUS-CLOSE-REVIEW-3-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: every local `defineCommand` description equals its canonical action-registry
+description; the `sense build` literal describes fixed recursive `pnpm -r build`; a
+red-first guard prevents hidden metadata drift even where rendered help uses the registry.
+
+### BL-165 — Bind the surface-contract schema count to the live canon
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0004 third exact-candidate Claude Opus 5 review F3; candidate c100cc8b; R-0004-OPUS-CLOSE-REVIEW-3-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the active surface contract reports the exact live recursive canonical
+schema total, and an Inspector guard derives the total from the same production canon so
+future additions cannot leave the governed claim stale.
+
 ## Carried guard map
 
 The original known-red mapping remains as historical provenance:
