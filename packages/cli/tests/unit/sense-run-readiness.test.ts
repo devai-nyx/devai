@@ -1,6 +1,7 @@
 // Invariants: INV-DEVAI-019
 import { describe, expect, it } from 'vitest';
 import { readOnlyDevaiChild } from '../../src/authority/sense-run-child.js';
+import { invocationIsNonMutating } from '../../src/command-router.js';
 import * as runSet from '../../src/commands/sense/run-set.js';
 
 type Child = {
@@ -33,6 +34,46 @@ function aggregate(children: readonly Child[]): Aggregate {
 }
 
 describe('sense run readiness aggregation', () => {
+  it('KR-R5-028 projects only an exact registry-resolved read sensor to a read boundary', () => {
+    const classify = invocationIsNonMutating as (
+      internalName: string,
+      args: readonly string[],
+      entries: readonly unknown[],
+    ) => boolean;
+    const entries = [
+      {
+        internal_name: 'sense-decision-record-integrity',
+        path: ['sense', 'decision', 'record-integrity'],
+        effects: 'read',
+        previous_name: 'sense decision-record-integrity',
+      },
+      {
+        internal_name: 'sense-readings-rebuild',
+        path: ['sense', 'readings', 'rebuild'],
+        effects: 'local-write',
+        previous_name: 'sense readings rebuild',
+      },
+    ];
+    const argv = (kind: string, ...extra: string[]) => [
+      '/usr/bin/node',
+      '/repo/packages/cli/dist/bin.js',
+      'sense',
+      'run',
+      kind,
+      '--repo-root',
+      '/repo',
+      ...extra,
+    ];
+
+    expect(classify('sense-run', argv('decision_record_integrity'), entries)).toBe(true);
+    expect(classify('sense-run', argv('decision_record_integrity', '--write'), entries)).toBe(false);
+    expect(classify('sense-run', argv('inventory_regeneration'), entries)).toBe(false);
+    expect(classify('sense-run', argv('unknown_kind'), entries)).toBe(false);
+    expect(
+      classify('sense-run', ['/usr/bin/node', '/cli.js', 'sense', 'run', '--set', 'sweep'], entries),
+    ).toBe(false);
+  });
+
   it('plans non-read registry children as honest blockers instead of spawning them', () => {
     const plan = (
       runSet as unknown as {
