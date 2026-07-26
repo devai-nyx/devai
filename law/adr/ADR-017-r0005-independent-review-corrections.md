@@ -5,7 +5,7 @@ type: adr
 status: superseded
 date: 2026-07-26
 authority: Architect
-supersedes: [DII-202; DII-203; R-0005-INDEPENDENT-CODEX-REVIEW-1-FAILURE]
+supersedes: []
 superseded_by: ADR-019
 provenance:
   - DII-202; DII-203; OM-009; R-0005-INDEPENDENT-CODEX-REVIEW-1-FAILURE; KR-R5-017 through KR-R5-026
@@ -20,7 +20,6 @@ affected_rules:
   - packages/loop/src/loop/worktrees.ts
   - packages/loop/src/round-lifecycle/index.ts
   - packages/skills/src/post-merge-auditor/index.ts
-  - packages/skills/src/forbidden-actions/index.ts
   - packages/skills/src/prompt-firewall/index.ts
   - scripts/check-governed-sequencing.mjs
   - scripts/detect-conditional-skips.mjs
