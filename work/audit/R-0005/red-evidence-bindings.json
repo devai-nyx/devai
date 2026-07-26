@@ -45,18 +45,14 @@
       "commit": "beb081d5160a57b36b59d97f813abc77ed99f3eb",
       "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
       "exit_code": 1,
-      "tests": [
-        "packages/cli/tests/unit/sense-run-readiness.test.ts"
-      ],
+      "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"],
       "failure_summary": "The public single-sensor projection retained the parent harness-write authority even when the exact registry-derived child was read-only."
     },
     {
       "commit": "f2a9d60bd8b7fc79ddd8bc09ffbd0d6d678652a1",
       "command": "pnpm vitest run packages/loop/tests/unit/adherence-reverse.test.ts -t KR-R5-029",
       "exit_code": 1,
-      "tests": [
-        "packages/loop/tests/unit/governance-ledger-cases.ts"
-      ],
+      "tests": ["packages/loop/tests/unit/governance-ledger-cases.ts"],
       "failure_summary": "The governance-history YAML subset parser treated a validator-accepted semicolon-separated inline array as one scalar and could not resolve canonical supersession links."
     }
   ]
