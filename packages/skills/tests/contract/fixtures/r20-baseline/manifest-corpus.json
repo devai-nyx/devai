@@ -2,11 +2,15 @@
   "manifests": [
     {
       "agent_class": "coding-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/SKILL-commit-push/**"],
+      "allowed_write_scopes": [
+        "record/proofs/work/skill-runs/SKILL-commit-push/**"
+      ],
       "authority_role": "engineer",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-commit-push",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-commit-push/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-commit-push/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-commit-push",
       "kind": "command",
@@ -15,17 +19,26 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Deterministic git add (of explicitly named files) + commit. R5-W2 extended with optional push, gh pr create, branch-hygiene preconditions, final pre-commit gate re-run, and dry-run mode. permission_tier stays `write`; act-tier escalation is per-invocation via inputs.push=true + ctx.grants.publish=true (session-grant wired by --allow-publish in W3). See ADR-002.",
-      "tags": ["vcs", "commit", "push", "pr"],
+      "tags": [
+        "vcs",
+        "commit",
+        "push",
+        "pr"
+      ],
       "title": "Commit and push",
       "version": "1.1.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/**"],
+      "allowed_write_scopes": [
+        "record/proofs/work/skill-runs/**"
+      ],
       "authority_role": "harness",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-triage",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-triage/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-triage/*.json"
+      ],
       "host_mutation_policy": "evidence_only",
       "id": "SKILL-triage",
       "kind": "command",
@@ -34,17 +47,24 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Classify a SensorReading failure via the rule-based triage classifier",
-      "tags": ["triage", "classification"],
+      "tags": [
+        "triage",
+        "classification"
+      ],
       "title": "Classify a failure",
       "version": "1.0.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/**"],
+      "allowed_write_scopes": [
+        "record/proofs/work/skill-runs/**"
+      ],
       "authority_role": "harness",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-materialize-prompt",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-materialize-prompt/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-materialize-prompt/*.json"
+      ],
       "host_mutation_policy": "evidence_only",
       "id": "SKILL-materialize-prompt",
       "kind": "command",
@@ -53,17 +73,23 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Compose a prompt stack deterministically and emit the PromptComposition",
-      "tags": ["prompts"],
+      "tags": [
+        "prompts"
+      ],
       "title": "Materialize a prompt stack",
       "version": "1.0.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/**"],
+      "allowed_write_scopes": [
+        "record/proofs/work/skill-runs/**"
+      ],
       "authority_role": "auditor",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-compute-scorecard",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-compute-scorecard/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-compute-scorecard/*.json"
+      ],
       "host_mutation_policy": "evidence_only",
       "id": "SKILL-compute-scorecard",
       "kind": "command",
@@ -72,17 +98,24 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Compute the substrate × property scorecard from a SensorReading set",
-      "tags": ["scorecard", "audit"],
+      "tags": [
+        "scorecard",
+        "audit"
+      ],
       "title": "Compute scorecard",
       "version": "1.0.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/**"],
+      "allowed_write_scopes": [
+        "record/proofs/work/skill-runs/**"
+      ],
       "authority_role": "auditor",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-compile-backlog",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-compile-backlog/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-compile-backlog/*.json"
+      ],
       "host_mutation_policy": "evidence_only",
       "id": "SKILL-compile-backlog",
       "kind": "command",
@@ -91,7 +124,10 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Translate failing scorecard cells into backlog items (MVP: one per fail)",
-      "tags": ["backlog", "audit"],
+      "tags": [
+        "backlog",
+        "audit"
+      ],
       "title": "Compile backlog from scorecard",
       "version": "1.0.0"
     },
@@ -105,7 +141,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai agent skill run SKILL-feedback-iteration",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-feedback-iteration/**/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-feedback-iteration/**/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-feedback-iteration",
       "kind": "workflow",
@@ -122,18 +160,26 @@
       "risk_level": "high",
       "schemaVersion": "1.0.0",
       "summary": "Engineer iteration loop: sense (lint/test/type-check) → triage → LLM edits → re-sense; up to max_iterations.",
-      "tags": ["phase-9", "engineer-loop", "llm"],
+      "tags": [
+        "phase-9",
+        "engineer-loop",
+        "llm"
+      ],
       "title": "Engineer iteration loop",
       "version": "1.0.0"
     },
     {
       "agent_class": "coding-agent",
-      "allowed_write_scopes": ["packages/**/*.{ts,tsx,js,jsx,json}"],
+      "allowed_write_scopes": [
+        "packages/**/*.{ts,tsx,js,jsx,json}"
+      ],
       "authority_role": "engineer",
       "auto_fix_capable": "full",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-fix-lint",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-lint/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-lint/*.json"
+      ],
       "family": "fix",
       "gate_id": "lint",
       "host_mutation_policy": "write_requires_flag",
@@ -144,7 +190,10 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Run sense lint; if failing, run eslint --fix; re-run; record evidence",
-      "tags": ["lint", "autofix"],
+      "tags": [
+        "lint",
+        "autofix"
+      ],
       "title": "Auto-fix lint",
       "version": "1.0.0"
     },
@@ -155,7 +204,9 @@
       "auto_fix_capable": "none",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-fix-build",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-build/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-build/*.json"
+      ],
       "family": "fix",
       "gate_id": "build",
       "host_mutation_policy": "read_only",
@@ -166,7 +217,10 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Run sense build; on failure, surface the SensorReading for downstream remediation",
-      "tags": ["build", "diagnose"],
+      "tags": [
+        "build",
+        "diagnose"
+      ],
       "title": "Diagnose build failure",
       "version": "1.0.0"
     },
@@ -177,7 +231,9 @@
       "auto_fix_capable": "none",
       "deterministic": false,
       "entry": "devai agent skill run SKILL-fix-test",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-test/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-test/*.json"
+      ],
       "family": "fix",
       "gate_id": "test",
       "host_mutation_policy": "read_only",
@@ -188,13 +244,19 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Run sense test unit; on failure surface the SensorReading",
-      "tags": ["tests", "diagnose"],
+      "tags": [
+        "tests",
+        "diagnose"
+      ],
       "title": "Diagnose test failure",
       "version": "1.0.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/**", "record/proofs/work/rgr/**"],
+      "allowed_write_scopes": [
+        "record/proofs/work/skill-runs/**",
+        "record/proofs/work/rgr/**"
+      ],
       "authority_role": "engineer",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-emit-rgr",
@@ -210,18 +272,26 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Draft a Reference Gap Report from a SensorReading + question text",
-      "tags": ["rgr", "reference-gap"],
+      "tags": [
+        "rgr",
+        "reference-gap"
+      ],
       "title": "Emit Reference Gap Report",
       "version": "1.0.0"
     },
     {
       "agent_class": "coding-agent",
-      "allowed_write_scopes": ["packages/*/tests/**", "tests/**"],
+      "allowed_write_scopes": [
+        "packages/*/tests/**",
+        "tests/**"
+      ],
       "authority_role": "inspector",
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai agent skill run SKILL-compile-tests-from-docs",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-compile-tests-from-docs/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-compile-tests-from-docs/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-compile-tests-from-docs",
       "kind": "workflow",
@@ -230,17 +300,26 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Generate a test plan + stub file from an invariant declaration. LLM-backed (Phase-9 Batch 9.E).",
-      "tags": ["phase-9", "tests", "scaffold", "llm"],
+      "tags": [
+        "phase-9",
+        "tests",
+        "scaffold",
+        "llm"
+      ],
       "title": "Compile tests from docs",
       "version": "1.1.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/**"],
+      "allowed_write_scopes": [
+        "record/proofs/work/skill-runs/**"
+      ],
       "authority_role": "auditor",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-assess-state",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-assess-state/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-assess-state/*.json"
+      ],
       "host_mutation_policy": "evidence_only",
       "id": "SKILL-assess-state",
       "kind": "command",
@@ -249,18 +328,25 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Auditor narrative summary of the current scorecard. If no scorecard is provided, computes one from .devai/state/sensor-readings/.",
-      "tags": ["assessment", "audit"],
+      "tags": [
+        "assessment",
+        "audit"
+      ],
       "title": "Assess current state",
       "version": "1.0.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/**"],
+      "allowed_write_scopes": [
+        "record/proofs/work/skill-runs/**"
+      ],
       "authority_role": "engineer",
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai agent skill run SKILL-review-dry",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-review-dry/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-review-dry/*.json"
+      ],
       "host_mutation_policy": "evidence_only",
       "id": "SKILL-review-dry",
       "kind": "command",
@@ -269,17 +355,26 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Periodic refactor pass: read named files, propose changes (no edits applied). LLM-backed (Phase-9 Batch 9.E).",
-      "tags": ["phase-9", "refactor", "dry-run", "llm"],
+      "tags": [
+        "phase-9",
+        "refactor",
+        "dry-run",
+        "llm"
+      ],
       "title": "Dry refactor review",
       "version": "1.0.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/**"],
+      "allowed_write_scopes": [
+        "record/proofs/work/skill-runs/**"
+      ],
       "authority_role": "inspector",
       "deterministic": false,
       "entry": "devai agent skill run SKILL-mutation-test",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-mutation-test/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-mutation-test/*.json"
+      ],
       "host_mutation_policy": "evidence_only",
       "id": "SKILL-mutation-test",
       "kind": "command",
@@ -288,18 +383,26 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Run an external mutation-testing tool (Stryker, mutmut, etc.) and parse its score. Tool name + threshold come from .devai/config/mutation.json.",
-      "tags": ["phase-9", "mutation-testing"],
+      "tags": [
+        "phase-9",
+        "mutation-testing"
+      ],
       "title": "Run mutation testing",
       "version": "1.0.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["product/draft/**", "law/draft/**"],
+      "allowed_write_scopes": [
+        "product/draft/**",
+        "law/draft/**"
+      ],
       "authority_role": "owner",
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai agent skill run SKILL-elicit",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-elicit/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-elicit/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-elicit",
       "kind": "elicitation",
@@ -308,18 +411,26 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Owner/Architect guided interview: a topic + answers → invariant-candidate drafts. LLM-backed (Phase-9 Batch 9.E).",
-      "tags": ["phase-9", "elicitation", "llm"],
+      "tags": [
+        "phase-9",
+        "elicitation",
+        "llm"
+      ],
       "title": "Elicit invariant candidates",
       "version": "1.1.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/**"],
+      "allowed_write_scopes": [
+        "record/proofs/work/skill-runs/**"
+      ],
       "authority_role": "architect",
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai agent skill run SKILL-align-docs",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-align-docs/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-align-docs/*.json"
+      ],
       "host_mutation_policy": "evidence_only",
       "id": "SKILL-align-docs",
       "kind": "workflow",
@@ -328,7 +439,12 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Architect doc coherence pass: read named docs, flag drift / contradictions. LLM-backed (Phase-9 Batch 9.E).",
-      "tags": ["phase-9", "docs", "drift", "llm"],
+      "tags": [
+        "phase-9",
+        "docs",
+        "drift",
+        "llm"
+      ],
       "title": "Detect doc coherence drift",
       "version": "1.0.0"
     },
@@ -342,7 +458,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize overview",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-overview/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-overview/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-overview",
       "kind": "command",
@@ -351,7 +469,13 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Synthesize a brownfield Overview document from inventory sensor outputs (api/routes/data-model/coverage/intro). LLM-backed; writes docs/Overview.md.",
-      "tags": ["phase-17", "phase-17-F", "brownfield", "writer", "llm"],
+      "tags": [
+        "phase-17",
+        "phase-17-F",
+        "brownfield",
+        "writer",
+        "llm"
+      ],
       "title": "Write Overview.md from inventory sensor bodies",
       "version": "1.0.0"
     },
@@ -365,7 +489,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize software-stack",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-software-stack/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-software-stack/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-software-stack",
       "kind": "command",
@@ -374,7 +500,13 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Synthesize a Software Stack document listing detected languages, frameworks, package managers, DB dialect, and runtime assumptions.",
-      "tags": ["phase-17", "phase-17-F", "brownfield", "writer", "llm"],
+      "tags": [
+        "phase-17",
+        "phase-17-F",
+        "brownfield",
+        "writer",
+        "llm"
+      ],
       "title": "Write Software Stack.md from inventory sensor bodies",
       "version": "1.0.0"
     },
@@ -388,7 +520,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize architecture-guide",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-architecture-guide/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-architecture-guide/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-architecture-guide",
       "kind": "command",
@@ -397,7 +531,13 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Synthesize an Architecture Guide describing top-level layout, module boundaries, and dep-graph structure.",
-      "tags": ["phase-17", "phase-17-F", "brownfield", "writer", "llm"],
+      "tags": [
+        "phase-17",
+        "phase-17-F",
+        "brownfield",
+        "writer",
+        "llm"
+      ],
       "title": "Write Architecture Guide.md from inventory sensor bodies",
       "version": "1.0.0"
     },
@@ -411,7 +551,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize database-reference",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-database-reference/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-database-reference/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-database-reference",
       "kind": "command",
@@ -420,18 +562,30 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Synthesize a Database Reference document enumerating tables, columns (with types), primary keys, and foreign-key relationships.",
-      "tags": ["phase-17", "phase-17-F", "brownfield", "writer", "llm", "db"],
+      "tags": [
+        "phase-17",
+        "phase-17-F",
+        "brownfield",
+        "writer",
+        "llm",
+        "db"
+      ],
       "title": "Write Database Reference.md from inventory_data_model",
       "version": "1.0.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["docs/ERD.md", "record/proofs/work/skill-runs/SKILL-write-erd/**"],
+      "allowed_write_scopes": [
+        "docs/ERD.md",
+        "record/proofs/work/skill-runs/SKILL-write-erd/**"
+      ],
       "authority_role": "architect",
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize erd",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-erd/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-erd/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-erd",
       "kind": "command",
@@ -440,7 +594,15 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Synthesize an Entity-Relationship Diagram document with a Mermaid erDiagram block derived from the data-model inventory.",
-      "tags": ["phase-17", "phase-17-F", "brownfield", "writer", "llm", "erd", "mermaid"],
+      "tags": [
+        "phase-17",
+        "phase-17-F",
+        "brownfield",
+        "writer",
+        "llm",
+        "erd",
+        "mermaid"
+      ],
       "title": "Write ERD.md from inventory_data_model",
       "version": "1.0.0"
     },
@@ -454,7 +616,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize api-map",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-api-map/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-api-map/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-api-map",
       "kind": "command",
@@ -463,7 +627,13 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Synthesize an API Map document listing every backend endpoint discovered, grouped by controller.",
-      "tags": ["phase-17", "phase-17-F", "brownfield", "writer", "llm"],
+      "tags": [
+        "phase-17",
+        "phase-17-F",
+        "brownfield",
+        "writer",
+        "llm"
+      ],
       "title": "Write API Map.md from inventory_api",
       "version": "1.0.0"
     },
@@ -477,7 +647,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize frontend-routes-map",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-frontend-routes-map/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-frontend-routes-map/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-frontend-routes-map",
       "kind": "command",
@@ -486,7 +658,13 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Synthesize a Frontend Routes Map document listing every frontend route discovered, with parent/child nesting.",
-      "tags": ["phase-17", "phase-17-F", "brownfield", "writer", "llm"],
+      "tags": [
+        "phase-17",
+        "phase-17-F",
+        "brownfield",
+        "writer",
+        "llm"
+      ],
       "title": "Write Frontend Routes Map.md from inventory_routes",
       "version": "1.0.0"
     },
@@ -500,7 +678,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize rbac-matrix",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-rbac-matrix/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-rbac-matrix/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-rbac-matrix",
       "kind": "command",
@@ -509,7 +689,15 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Synthesize an RBAC Matrix document listing roles, permissions, and the discovered RBAC ILF tables.",
-      "tags": ["phase-17", "phase-17-F", "brownfield", "writer", "llm", "rbac", "security"],
+      "tags": [
+        "phase-17",
+        "phase-17-F",
+        "brownfield",
+        "writer",
+        "llm",
+        "rbac",
+        "security"
+      ],
       "title": "Write RBAC Matrix.md from inventory_rbac",
       "version": "1.0.0"
     },
@@ -523,7 +711,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize compliance-lgpd",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-compliance-lgpd/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-compliance-lgpd/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-compliance-lgpd",
       "kind": "command",
@@ -555,7 +745,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize compliance-gdpr",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-compliance-gdpr/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-compliance-gdpr/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-compliance-gdpr",
       "kind": "command",
@@ -587,7 +779,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize compliance-ccpa",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-compliance-ccpa/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-compliance-ccpa/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-compliance-ccpa",
       "kind": "command",
@@ -620,7 +814,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize fp-report",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-fp-report/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-fp-report/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-fp-report",
       "kind": "command",
@@ -629,7 +825,15 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Synthesize an IFPUG-flavored Function Point Report from the api + routes + data-model inventories. Generous-counting policy per redox tradition.",
-      "tags": ["phase-17", "phase-17-F", "brownfield", "writer", "llm", "fp", "ifpug"],
+      "tags": [
+        "phase-17",
+        "phase-17-F",
+        "brownfield",
+        "writer",
+        "llm",
+        "fp",
+        "ifpug"
+      ],
       "title": "Write Function Point Report.md from inventory bodies",
       "version": "1.0.0"
     },
@@ -643,7 +847,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize threat-model",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-threat-model/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-threat-model/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-threat-model",
       "kind": "command",
@@ -652,7 +858,15 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Synthesize a STRIDE-flavored threat model document anchored to the discovered api + routes + rbac + data-handling inventories.",
-      "tags": ["phase-17", "phase-17-F", "brownfield", "writer", "llm", "security", "threat-model"],
+      "tags": [
+        "phase-17",
+        "phase-17-F",
+        "brownfield",
+        "writer",
+        "llm",
+        "security",
+        "threat-model"
+      ],
       "title": "Write Security Threat Model.md from inventory bodies",
       "version": "1.0.0"
     },
@@ -666,7 +880,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai docs synthesize onboarding",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-write-onboarding/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-write-onboarding/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-write-onboarding",
       "kind": "command",
@@ -675,7 +891,14 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Synthesize an Onboarding Quickstart document — first-week reading list + 30-minute checkout-to-running-tests instructions.",
-      "tags": ["phase-17", "phase-17-F", "brownfield", "writer", "llm", "onboarding"],
+      "tags": [
+        "phase-17",
+        "phase-17-F",
+        "brownfield",
+        "writer",
+        "llm",
+        "onboarding"
+      ],
       "title": "Write Onboarding Quickstart.md from inventory bodies",
       "version": "1.0.0"
     },
@@ -688,7 +911,9 @@
       "authority_role": "engineer",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-scaffold-db",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-scaffold-db/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-scaffold-db/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-scaffold-db",
       "kind": "command",
@@ -697,7 +922,13 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Deterministic scaffolder: consumes a module-blueprint, renders DB templates (migration.sql + seed.sql) from the matched stack-adapter pack, writes under domain/<module-slug>/db/. No LLM. Idempotent.",
-      "tags": ["phase-18", "phase-18-F", "scaffold", "deterministic", "db"],
+      "tags": [
+        "phase-18",
+        "phase-18-F",
+        "scaffold",
+        "deterministic",
+        "db"
+      ],
       "title": "Scaffold DB migrations + seeds from a module blueprint",
       "version": "1.0.0"
     },
@@ -710,7 +941,9 @@
       "authority_role": "engineer",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-scaffold-api",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-scaffold-api/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-scaffold-api/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-scaffold-api",
       "kind": "command",
@@ -719,7 +952,13 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Deterministic scaffolder: renders the API-tier templates (module / per-entity entity, controller, service, DTOs; per-module policy guard + policy decorator) from the matched stack-adapter pack. Writes under domain/<module-slug>/api/src/. No LLM. Idempotent. Phase 22.E (D-A-15) widened to emit companion files + bind DTO fields to blueprint entity fields.",
-      "tags": ["phase-18", "phase-18-F", "scaffold", "deterministic", "api"],
+      "tags": [
+        "phase-18",
+        "phase-18-F",
+        "scaffold",
+        "deterministic",
+        "api"
+      ],
       "title": "Scaffold NestJS module + controller + service + DTOs + entity + companions from a module blueprint",
       "version": "1.0.0"
     },
@@ -732,7 +971,9 @@
       "authority_role": "engineer",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-scaffold-ui",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-scaffold-ui/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-scaffold-ui/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-scaffold-ui",
       "kind": "command",
@@ -741,7 +982,14 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Deterministic scaffolder: renders the UI-tier templates (feature module, per-entity list + detail components, service) from the matched stack-adapter pack. Writes under domain/<module-slug>/web/src/. No LLM.",
-      "tags": ["phase-18", "phase-18-F", "scaffold", "deterministic", "ui", "frontend"],
+      "tags": [
+        "phase-18",
+        "phase-18-F",
+        "scaffold",
+        "deterministic",
+        "ui",
+        "frontend"
+      ],
       "title": "Scaffold Angular feature module + components from a module blueprint",
       "version": "1.0.0"
     },
@@ -755,7 +1003,9 @@
       "authority_role": "inspector",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-scaffold-tests",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-scaffold-tests/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-scaffold-tests/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-scaffold-tests",
       "kind": "command",
@@ -764,7 +1014,13 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Deterministic scaffolder: renders test-stub templates from the matched stack-adapter pack. Writes per-entity spec files under domain/<module-slug>/api/test/. Inspector authority. No LLM.",
-      "tags": ["phase-18", "phase-18-F", "scaffold", "deterministic", "tests"],
+      "tags": [
+        "phase-18",
+        "phase-18-F",
+        "scaffold",
+        "deterministic",
+        "tests"
+      ],
       "title": "Scaffold per-entity controller + service test stubs from a module blueprint",
       "version": "1.0.0"
     },
@@ -777,7 +1033,9 @@
       "authority_role": "architect",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-scaffold-docs",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-scaffold-docs/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-scaffold-docs/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-scaffold-docs",
       "kind": "command",
@@ -786,7 +1044,13 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Deterministic scaffolder: renders module-level docs templates (README, ADR-0001) from the matched stack-adapter pack. Writes under domain/<module-slug>/docs/. Architect authority. No LLM.",
-      "tags": ["phase-18", "phase-18-F", "scaffold", "deterministic", "docs"],
+      "tags": [
+        "phase-18",
+        "phase-18-F",
+        "scaffold",
+        "deterministic",
+        "docs"
+      ],
       "title": "Scaffold module README + ADR from a module blueprint",
       "version": "1.0.0"
     },
@@ -799,7 +1063,9 @@
       "authority_role": "engineer",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-scaffold-ci",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-scaffold-ci/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-scaffold-ci/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-scaffold-ci",
       "kind": "command",
@@ -808,7 +1074,13 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Deterministic scaffolder: renders the CI workflow template from the matched stack-adapter pack. Writes a single per-module workflow file under .github/workflows/. No LLM.",
-      "tags": ["phase-18", "phase-18-F", "scaffold", "deterministic", "ci"],
+      "tags": [
+        "phase-18",
+        "phase-18-F",
+        "scaffold",
+        "deterministic",
+        "ci"
+      ],
       "title": "Scaffold per-module CI workflow from a module blueprint",
       "version": "1.0.0"
     },
@@ -822,7 +1094,9 @@
       "default_family": "claude",
       "deterministic": false,
       "entry": "devai agent skill run SKILL-plan-blueprint",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-plan-blueprint/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-plan-blueprint/*.json"
+      ],
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-plan-blueprint",
       "kind": "elicitation",
@@ -831,7 +1105,13 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "LLM-backed planner: given a journey id (or free-text intent) and existing invariants, drafts a module-blueprint candidate the Owner curates. Output to product/draft/blueprints/. Does NOT scaffold; honest gaps, no fabrication. Per Phase 18.F (D-59) optional.",
-      "tags": ["phase-18", "phase-18-F", "blueprint", "planner", "llm"],
+      "tags": [
+        "phase-18",
+        "phase-18-F",
+        "blueprint",
+        "planner",
+        "llm"
+      ],
       "title": "Draft a module-blueprint candidate from a journey + invariants",
       "version": "1.1.0"
     },
@@ -842,7 +1122,9 @@
       "auto_fix_capable": "none",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-fix-typecheck",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-typecheck/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-typecheck/*.json"
+      ],
       "family": "fix",
       "gate_id": "typecheck",
       "host_mutation_policy": "read_only",
@@ -853,7 +1135,10 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Diagnose the typecheck gate; read-only (R3-W3 catalog-fill; iteration loops + real fixing deferred per R2-Δ1).",
-      "tags": ["typecheck", "diagnose"],
+      "tags": [
+        "typecheck",
+        "diagnose"
+      ],
       "title": "Diagnose typecheck failure",
       "version": "1.0.0"
     },
@@ -864,7 +1149,9 @@
       "auto_fix_capable": "none",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-fix-coverage",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-coverage/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-coverage/*.json"
+      ],
       "family": "fix",
       "gate_id": "coverage",
       "host_mutation_policy": "read_only",
@@ -875,7 +1162,10 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Diagnose the coverage gate; read-only (R3-W3 catalog-fill; iteration loops + real fixing deferred per R2-Δ1).",
-      "tags": ["coverage", "diagnose"],
+      "tags": [
+        "coverage",
+        "diagnose"
+      ],
       "title": "Diagnose coverage gate",
       "version": "1.0.0"
     },
@@ -886,7 +1176,9 @@
       "auto_fix_capable": "none",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-fix-mutation",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-mutation/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-mutation/*.json"
+      ],
       "family": "fix",
       "gate_id": "mutation",
       "host_mutation_policy": "read_only",
@@ -897,7 +1189,10 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Diagnose the mutation gate; read-only (R3-W3 catalog-fill; iteration loops + real fixing deferred per R2-Δ1).",
-      "tags": ["mutation", "diagnose"],
+      "tags": [
+        "mutation",
+        "diagnose"
+      ],
       "title": "Diagnose mutation gate",
       "version": "1.0.0"
     },
@@ -908,7 +1203,9 @@
       "auto_fix_capable": "none",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-fix-spec-validate",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-spec-validate/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-spec-validate/*.json"
+      ],
       "family": "fix",
       "gate_id": "spec-validate",
       "host_mutation_policy": "read_only",
@@ -919,7 +1216,10 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Diagnose the spec-validate gate; read-only (R3-W3 catalog-fill; iteration loops + real fixing deferred per R2-Δ1).",
-      "tags": ["spec-validate", "diagnose"],
+      "tags": [
+        "spec-validate",
+        "diagnose"
+      ],
       "title": "Diagnose spec-validate gate",
       "version": "1.0.0"
     },
@@ -930,7 +1230,9 @@
       "auto_fix_capable": "none",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-fix-action-coverage",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-action-coverage/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-action-coverage/*.json"
+      ],
       "family": "fix",
       "gate_id": "action-coverage",
       "host_mutation_policy": "read_only",
@@ -941,18 +1243,25 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Diagnose the action-coverage gate; read-only (R3-W3 catalog-fill; iteration loops + real fixing deferred per R2-Δ1).",
-      "tags": ["action-coverage", "diagnose"],
+      "tags": [
+        "action-coverage",
+        "diagnose"
+      ],
       "title": "Diagnose action-coverage gate",
       "version": "1.0.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["docs/**/*.md"],
+      "allowed_write_scopes": [
+        "docs/**/*.md"
+      ],
       "authority_role": "architect",
       "auto_fix_capable": "partial",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-fix-docs-links",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-docs-links/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-docs-links/*.json"
+      ],
       "family": "fix",
       "gate_id": "docs-links",
       "host_mutation_policy": "write_requires_flag",
@@ -963,7 +1272,10 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Diagnose broken markdown links in docs/**; auto-rewrite stale paths via git rename history (R11-W6.07; R2-Δ1 first batch).",
-      "tags": ["docs-links", "autofix"],
+      "tags": [
+        "docs-links",
+        "autofix"
+      ],
       "title": "Autofix docs-links gate",
       "version": "1.0.0"
     },
@@ -974,7 +1286,9 @@
       "auto_fix_capable": "none",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-fix-prompt-overlays",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-prompt-overlays/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-prompt-overlays/*.json"
+      ],
       "family": "fix",
       "gate_id": "prompt-overlays",
       "host_mutation_policy": "read_only",
@@ -985,7 +1299,10 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Diagnose the prompt-overlays gate; read-only (R3-W3 catalog-fill; iteration loops + real fixing deferred per R2-Δ1).",
-      "tags": ["prompt-overlays", "diagnose"],
+      "tags": [
+        "prompt-overlays",
+        "diagnose"
+      ],
       "title": "Diagnose prompt-overlays gate",
       "version": "1.0.0"
     },
@@ -996,7 +1313,9 @@
       "auto_fix_capable": "none",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-fix-forbidden-actions",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-forbidden-actions/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-forbidden-actions/*.json"
+      ],
       "family": "fix",
       "gate_id": "forbidden-actions",
       "host_mutation_policy": "read_only",
@@ -1007,18 +1326,25 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Diagnose the forbidden-actions gate; read-only (R3-W3 catalog-fill; iteration loops + real fixing deferred per R2-Δ1).",
-      "tags": ["forbidden-actions", "diagnose"],
+      "tags": [
+        "forbidden-actions",
+        "diagnose"
+      ],
       "title": "Diagnose forbidden-actions gate",
       "version": "1.0.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["law/adr/**/*.md"],
+      "allowed_write_scopes": [
+        "law/adr/**/*.md"
+      ],
       "authority_role": "architect",
       "auto_fix_capable": "partial",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-fix-adrs",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-adrs/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-adrs/*.json"
+      ],
       "family": "fix",
       "gate_id": "adrs",
       "host_mutation_policy": "write_requires_flag",
@@ -1029,18 +1355,25 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Diagnose ADRs gate; auto-scaffold missing mandatory sections and normalize filenames via git mv (R11-W6.07 extension; R2-Δ1 ship-now).",
-      "tags": ["adrs", "autofix"],
+      "tags": [
+        "adrs",
+        "autofix"
+      ],
       "title": "Autofix ADRs gate",
       "version": "1.0.0"
     },
     {
       "agent_class": "review-agent",
-      "allowed_write_scopes": ["packages/**/*.{ts,tsx,js,jsx,mjs,cjs}"],
+      "allowed_write_scopes": [
+        "packages/**/*.{ts,tsx,js,jsx,mjs,cjs}"
+      ],
       "authority_role": "engineer",
       "auto_fix_capable": "partial",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-fix-overrides",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-fix-overrides/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-fix-overrides/*.json"
+      ],
       "family": "fix",
       "gate_id": "overrides",
       "host_mutation_policy": "write_requires_flag",
@@ -1051,19 +1384,27 @@
       "risk_level": "low",
       "schemaVersion": "1.0.0",
       "summary": "Diagnose inv-override annotations; auto-delete duplicate override blocks (R11-W6.07; R2-Δ1 first batch).",
-      "tags": ["overrides", "autofix"],
+      "tags": [
+        "overrides",
+        "autofix"
+      ],
       "title": "Autofix inv-overrides gate",
       "version": "1.0.0"
     },
     {
       "agent_class": "coding-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/**", "work/audit/R-*/**"],
+      "allowed_write_scopes": [
+        "record/proofs/work/skill-runs/**",
+        "work/audit/R-*/**"
+      ],
       "authority_role": "auditor",
       "cycle_level": "round",
       "cycle_role": "audit",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-round-audit",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-round-audit/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-round-audit/*.json"
+      ],
       "family": "cycle-driver",
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-round-audit",
@@ -1073,19 +1414,28 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Measure phase of the round loop. R4-W3 real execution: invokes SKILL-assess-state + SKILL-compute-scorecard and materializes the audit context pack (scratch.md, assessment.json, scorecard.baseline.json) under work/audit/R-NNNN/.",
-      "tags": ["round", "audit", "measure"],
+      "tags": [
+        "round",
+        "audit",
+        "measure"
+      ],
       "title": "Round audit",
       "version": "1.0.0"
     },
     {
       "agent_class": "coding-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/**", "work/rounds/R-*/**"],
+      "allowed_write_scopes": [
+        "record/proofs/work/skill-runs/**",
+        "work/rounds/R-*/**"
+      ],
       "authority_role": "architect",
       "cycle_level": "round",
       "cycle_role": "backlog",
       "deterministic": true,
       "entry": "devai agent skill run SKILL-round-backlog",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-round-backlog/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-round-backlog/*.json"
+      ],
       "family": "cycle-driver",
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-round-backlog",
@@ -1095,23 +1445,29 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Plan phase of the round loop. R4-W3 real execution: reads the audit scorecard, invokes SKILL-compile-backlog, and materializes backlog.json + backlog.md + per-item templated wave prompts under work/rounds/R-NNNN/{,prompts/}.",
-      "tags": ["round", "backlog", "plan"],
+      "tags": [
+        "round",
+        "backlog",
+        "plan"
+      ],
       "title": "Round backlog",
       "version": "1.0.0"
     },
     {
       "agent_class": "coding-agent",
       "allowed_write_scopes": [
-        "work/rounds/R-*/**",
         "record/proofs/work/skill-runs/**",
-        ".devai/state/decisions.jsonl"
+        ".devai/state/decisions.jsonl",
+        ".devai/state/round-runs/**"
       ],
       "authority_role": "orchestrator",
       "cycle_level": "round",
       "cycle_role": "orchestrate",
       "deterministic": false,
       "entry": "devai agent skill run SKILL-round-orchestrate",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-round-orchestrate/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-round-orchestrate/*.json"
+      ],
       "family": "cycle-driver",
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-round-orchestrate",
@@ -1128,7 +1484,11 @@
       "risk_level": "high",
       "schemaVersion": "1.0.0",
       "summary": "Execute phase of the round loop. R4-W4 real execution: parses the wave catalog from prompts/00-orchestrator.md, dispatches waves sequentially (skill-backed in-process; prompt-only via poll-with-timeout), runs gates between waves with the R4-W2 iteration substrate, escalates blockers into .devai/state/decisions.jsonl.",
-      "tags": ["round", "orchestrate", "execute"],
+      "tags": [
+        "round",
+        "orchestrate",
+        "execute"
+      ],
       "title": "Round orchestrate",
       "version": "1.0.0"
     },
@@ -1137,14 +1497,16 @@
       "allowed_write_scopes": [
         "record/proofs/work/skill-runs/**",
         ".devai/state/decisions.jsonl",
-        "work/rounds/R-*/**"
+        ".devai/state/round-runs/**"
       ],
       "authority_role": "auditor",
       "cycle_level": "round",
       "cycle_role": "verify-publish",
       "deterministic": false,
       "entry": "devai agent skill run SKILL-round-verify-publish",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-round-verify-publish/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-round-verify-publish/*.json"
+      ],
       "family": "cycle-driver",
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-round-verify-publish",
@@ -1161,23 +1523,30 @@
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
       "summary": "Compare phase of the round loop. R4-W5 real execution: re-runs mandatory minimum gates, recomputes scorecard via SKILL-compute-scorecard, diffs against the audit baseline, lifts open blockers from .devai/state/decisions.jsonl, and materializes a disposable local Closeout.md.",
-      "tags": ["round", "verify", "publish", "compare"],
+      "tags": [
+        "round",
+        "verify",
+        "publish",
+        "compare"
+      ],
       "title": "Round verify and publish",
       "version": "1.0.0"
     },
     {
       "agent_class": "coding-agent",
       "allowed_write_scopes": [
-        "work/rounds/R-*/**",
         "record/proofs/work/skill-runs/**",
-        ".devai/state/decisions.jsonl"
+        ".devai/state/decisions.jsonl",
+        ".devai/state/round-runs/**"
       ],
       "authority_role": "orchestrator",
       "cycle_level": "round",
       "cycle_role": "execute",
       "deterministic": false,
       "entry": "devai agent skill run SKILL-round-execute",
-      "evidence_files": ["record/proofs/work/skill-runs/SKILL-round-execute/*.json"],
+      "evidence_files": [
+        "record/proofs/work/skill-runs/SKILL-round-execute/*.json"
+      ],
       "family": "cycle-driver",
       "host_mutation_policy": "write_requires_flag",
       "id": "SKILL-round-execute",
@@ -1194,7 +1563,10 @@
       "risk_level": "high",
       "schemaVersion": "1.0.0",
       "summary": "Execute one round end-to-end. R4-W5 real composition: invokes SKILL-round-audit → SKILL-round-backlog → SKILL-round-orchestrate → SKILL-round-verify-publish in sequence. Picks round_n from inputs or finds the next free integer. Renamed from SKILL-round-loop in R3-W2; \"loop\" reserved for multi-instance iteration semantics.",
-      "tags": ["round", "execute"],
+      "tags": [
+        "round",
+        "execute"
+      ],
       "title": "Round execute",
       "version": "1.0.0"
     }

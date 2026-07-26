@@ -1,7 +1,9 @@
 {
   "evidence": {
     "executed_artifacts": {
-      "blockers_escalated": ["DEC-0001"],
+      "blockers_escalated": [
+        "DEC-0001"
+      ],
       "dispatched": [
         {
           "mode": "not-dispatched",
@@ -32,7 +34,11 @@
     "phase": "orchestrate",
     "references": {
       "prompts_library": "docs/adopters/round-prompts/B3-orchestrate.md",
-      "skills": ["SKILL-fix-lint", "SKILL-fix-build", "SKILL-fix-test"]
+      "skills": [
+        "SKILL-fix-lint",
+        "SKILL-fix-build",
+        "SKILL-fix-test"
+      ]
     },
     "round_dir": "work/rounds/R-0777",
     "steps": [
@@ -60,9 +66,7 @@
   },
   "files": {
     "/work/rounds/R-0777/prompts/00-orchestrator.md": "# Orchestrator\n\n## Wave catalog\n\n| # | slug | goal | role | effort | dependsOn |\n|---|---|---|---|---|---|\n| 1 | `alpha` | first | engineer | low | - |\n| 2 | `beta` | second | inspector | medium | 1 |\n| 3 | `gamma` | third (prompt file missing) | auditor | low | 2 |\n",
-    "/work/rounds/R-0777/prompts/01-alpha.log": "# R777-W1 — alpha\n\n**Closed:** <TS>\n**Status:** not-dispatched\n\nNOTE (R11 R6-F-4): wave has no dispatch:/skill_id:/agent_cli: header and no SKILL-* body reference — classified as auto-generated/unbacked. skip_unbacked_waves=true; skipping poll. To force a full poll on this wave, set skip_unbacked_waves=false or add a dispatch: header.\n",
     "/work/rounds/R-0777/prompts/01-alpha.md": "# Wave 1 — alpha\n\nProse only.\n",
-    "/work/rounds/R-0777/prompts/02-beta.log": "# R777-W2 — beta\n\n**Closed:** <TS>\n**Status:** not-dispatched\n\nNOTE (R11 R6-F-4): wave has no dispatch:/skill_id:/agent_cli: header and no SKILL-* body reference — classified as auto-generated/unbacked. skip_unbacked_waves=true; skipping poll. To force a full poll on this wave, set skip_unbacked_waves=false or add a dispatch: header.\n",
     "/work/rounds/R-0777/prompts/02-beta.md": "# Wave 2 — beta\n\nProse only.\n"
   },
   "ledger": [

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0005",
+  "baseline_commit": "e9db37209ee879c0f6cc0e2ee6c7c5619c3cb190",
+  "reason": "BL-025 and BL-029 remove the governed prompt-overlay false positives and move disposable round orchestration logs out of Architect-owned round records while preserving the canonical behavior corpus.",
+  "changed_files": [
+    "fingerprint-behavior.json",
+    "manifest-corpus.json",
+    "round-corpus-orchestrate.json"
+  ],
+  "changed_skills": {
+    "SKILL-fix-prompt-overlays": {
+      "changed_fields": ["behavior.evidence.findings", "behavior.evidence.ok", "behavior.status"]
+    },
+    "SKILL-round-orchestrate": {
+      "changed_fields": [
+        "fs_products.created..devai/state/round-runs/R-0999/orchestrate/01-fixture-wave.log",
+        "fs_products.created.work/rounds/R-0999/prompts/01-fixture-wave.log"
+      ]
+    }
+  }
+}

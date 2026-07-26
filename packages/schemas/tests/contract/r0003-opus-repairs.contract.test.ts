@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -95,10 +95,11 @@ describe('R-0003 first Opus review repairs', () => {
 
   it('binds the active ADR index to the legal replacement topology', () => {
     const index = text('law/adr/README.md');
-    expect(index).toContain('ADR-001..015 are gapless');
+    expect(index).toContain('ADR-001..016 are gapless');
     expect(index).toContain('thirteen are active');
     expect(index).toContain('ADR-005 is superseded by active ADR-013');
-    expect(index).toContain('ADR-014 is independently superseded by active ADR-015');
+    expect(index).toMatch(/ADR-014 is independently superseded by active\s+ADR-015/u);
+    expect(index).toContain('ADR-011 is superseded by active ADR-016');
     expect(index).toMatch(/^provenance: \[DII-153; DII-175; DII-178; REV-0003]$/m);
     expect(index).not.toContain('ADR-001..012 are gapless and active');
   });
@@ -143,12 +144,12 @@ describe('R-0003 first Opus review repairs', () => {
     expect(correction).toContain('exact candidate');
   });
 
-  it('offers a no-write current-target repository-reference check', () => {
+  it('preserves the closed R-0002 projection as a commit-scoped historical snapshot', () => {
     const scriptPath = join(ROOT, 'scripts/generate-repository-reference-triage.mjs');
     const source = readFileSync(scriptPath, 'utf8');
     expect(source).toContain('--check');
     expect(source).not.toContain("const targetRelative = 'work/rounds/R-0002/");
-    const output = execFileSync(
+    const result = spawnSync(
       'node',
       [
         scriptPath,
@@ -159,7 +160,9 @@ describe('R-0003 first Opus review repairs', () => {
       ],
       { cwd: ROOT, encoding: 'utf8' },
     );
-    expect(output).toContain('repository references verified');
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('repository reference projection is stale');
+    expect(text('work/rounds/R-0005/documentation-reconciliation.md')).toContain('commit-scoped');
   });
 });
 // Invariants: INV-DEVAI-001

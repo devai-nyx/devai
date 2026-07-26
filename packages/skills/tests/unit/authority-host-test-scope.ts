@@ -30,6 +30,7 @@ type JsonRecord = Record<string, unknown>;
 const READ_PROCESS_VERBS: Readonly<Record<string, readonly string[]>> = {
   command: ['-v'],
   git: [
+    'config',
     'diff',
     'diff-tree',
     'hash-object',

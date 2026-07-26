@@ -111,7 +111,7 @@ describe('R20 baseline: skills module API surface (checker-based)', () => {
       [
         'diff',
         '--name-only',
-        `${disposition.baseline_commit}..HEAD`,
+        `${disposition.baseline_commit}..e9db37209ee879c0f6cc0e2ee6c7c5619c3cb190`,
         '--',
         'packages/skills/tests/contract/fixtures/r20-baseline',
       ],
@@ -122,6 +122,79 @@ describe('R20 baseline: skills module API surface (checker-based)', () => {
       .filter(Boolean)
       .map((path) => path.replace('packages/skills/tests/contract/fixtures/r20-baseline/', ''))
       .filter((path) => path !== 'r0004-disposition.json')
+      .sort();
+    expect(changedFiles).toEqual([...disposition.changed_files].sort());
+    const baselineFingerprint = JSON.parse(
+      execFileSync(
+        'git',
+        [
+          'show',
+          `${disposition.baseline_commit}:packages/skills/tests/contract/fixtures/r20-baseline/fingerprint-behavior.json`,
+        ],
+        { cwd: resolve(HERE, '../../../..'), encoding: 'utf8' },
+      ),
+    ) as { skills: Record<string, unknown> };
+    const currentFingerprint = JSON.parse(
+      execFileSync(
+        'git',
+        [
+          'show',
+          'e9db37209ee879c0f6cc0e2ee6c7c5619c3cb190:packages/skills/tests/contract/fixtures/r20-baseline/fingerprint-behavior.json',
+        ],
+        { cwd: resolve(HERE, '../../../..'), encoding: 'utf8' },
+      ),
+    ) as { skills: Record<string, unknown> };
+    const changedSkills = Object.keys(currentFingerprint.skills)
+      .filter(
+        (skillId) =>
+          JSON.stringify(currentFingerprint.skills[skillId]) !==
+          JSON.stringify(baselineFingerprint.skills[skillId]),
+      )
+      .sort();
+    expect(changedSkills).toEqual(Object.keys(disposition.changed_skills).sort());
+    for (const skillId of changedSkills) {
+      expect(disposition.changed_skills[skillId]?.changed_fields).toEqual(
+        changedLeafPaths(baselineFingerprint.skills[skillId], currentFingerprint.skills[skillId]),
+      );
+    }
+    expect(
+      Object.values(disposition.changed_skills).flatMap((entry) => entry.changed_fields),
+    ).toHaveLength(6);
+    expect(readFileSync(join(BASELINE_DIR, 'inputs/family-fix.json'), 'utf8')).not.toContain(
+      'passWithNoTests',
+    );
+    expect(readFileSync(join(BASELINE_DIR, 'inputs/family-workflow.json'), 'utf8')).not.toContain(
+      'passWithNoTests',
+    );
+  });
+
+  it('records the exact R-0005 evidence-lifecycle fixture delta', () => {
+    const disposition = JSON.parse(
+      readFileSync(join(BASELINE_DIR, 'r0005-disposition.json'), 'utf8'),
+    ) as {
+      round: string;
+      baseline_commit: string;
+      changed_files: string[];
+      changed_skills: Record<string, { changed_fields: string[] }>;
+    };
+    expect(disposition.round).toBe('R-0005');
+    expect(disposition.baseline_commit).toBe('e9db37209ee879c0f6cc0e2ee6c7c5619c3cb190');
+    const changedFiles = execFileSync(
+      'git',
+      [
+        'diff',
+        '--name-only',
+        disposition.baseline_commit,
+        '--',
+        'packages/skills/tests/contract/fixtures/r20-baseline',
+      ],
+      { cwd: resolve(HERE, '../../../..'), encoding: 'utf8' },
+    )
+      .trim()
+      .split('\n')
+      .filter(Boolean)
+      .map((path) => path.replace('packages/skills/tests/contract/fixtures/r20-baseline/', ''))
+      .filter((path) => path !== 'r0005-disposition.json')
       .sort();
     expect(changedFiles).toEqual([...disposition.changed_files].sort());
     const baselineFingerprint = JSON.parse(
@@ -152,13 +225,7 @@ describe('R20 baseline: skills module API surface (checker-based)', () => {
     }
     expect(
       Object.values(disposition.changed_skills).flatMap((entry) => entry.changed_fields),
-    ).toHaveLength(6);
-    expect(readFileSync(join(BASELINE_DIR, 'inputs/family-fix.json'), 'utf8')).not.toContain(
-      'passWithNoTests',
-    );
-    expect(readFileSync(join(BASELINE_DIR, 'inputs/family-workflow.json'), 'utf8')).not.toContain(
-      'passWithNoTests',
-    );
+    ).toHaveLength(5);
   });
 
   it('records only the three explained post-fork fixture deltas', () => {

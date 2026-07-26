@@ -36,13 +36,16 @@ describe('R-0003 founding ratification boundary', () => {
     const adrs = readdirSync(join(ROOT, 'law/adr')).filter((file) =>
       /^ADR-\d{3}-.+\.md$/.test(file),
     );
-    expect(adrs).toHaveLength(15);
+    expect(adrs).toHaveLength(16);
     const active: string[] = [];
     for (const file of adrs) {
       const adr = bytes(`law/adr/${file}`).toString('utf8');
       if (file === 'ADR-005-ci-economy.md') {
         expect(adr, file).toMatch(/^status: superseded$/m);
         expect(adr, file).toMatch(/^superseded_by: ADR-013$/m);
+      } else if (file === 'ADR-011-prompt-firewall.md') {
+        expect(adr, file).toMatch(/^status: superseded$/m);
+        expect(adr, file).toMatch(/^superseded_by: ADR-016$/m);
       } else if (file === 'ADR-014-ci-checker-adr-association.md') {
         expect(adr, file).toMatch(/^status: superseded$/m);
         expect(adr, file).toMatch(/^superseded_by: ADR-015$/m);

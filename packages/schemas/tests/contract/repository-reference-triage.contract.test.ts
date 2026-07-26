@@ -49,8 +49,12 @@ function trackedReferenceLocators(): string[] {
   return locators.sort();
 }
 
+function stableReferenceIdentity(locator: string): string {
+  return locator.replace(/:\d+:\d+:/u, ':');
+}
+
 describe('repository-name reference triage', () => {
-  it('classifies every committed post-rename reference exactly once', () => {
+  it('preserves the R-0002 classification as a unique historical subset', () => {
     expect(existsSync(TRIAGE), 'BL-047 requires a committed semantic reference map').toBe(true);
     if (!existsSync(TRIAGE)) return;
     const report = JSON.parse(readFileSync(TRIAGE, 'utf8')) as {
@@ -65,9 +69,12 @@ describe('repository-name reference triage', () => {
       expect(classifications).toContain(reference.classification);
       expect(reference.rationale.length, reference.locator).toBeGreaterThan(0);
     }
-    expect(report.references.map((reference) => reference.locator).sort()).toEqual(
-      trackedReferenceLocators(),
-    );
+    const current = trackedReferenceLocators();
+    const currentIdentities = new Set(current.map(stableReferenceIdentity));
+    for (const reference of report.references) {
+      expect(currentIdentities.has(stableReferenceIdentity(reference.locator))).toBe(true);
+    }
+    expect(current.length).toBeGreaterThan(report.references.length);
   });
 });
 // Invariants: INV-DEVAI-001

@@ -146,7 +146,7 @@ describe('round lifecycle filesystem behavior', () => {
     });
   });
 
-  it('rejects unsupported record serialization and absent archive prerequisites', async () => {
+  it('rejects unsupported record serialization and absent close prerequisites', async () => {
     const repo = root();
     await withAuthorityHostTestScope(() => {
       scaffoldGovernedRound({ repoRoot: repo, round: 3 });
@@ -168,9 +168,8 @@ describe('round lifecycle filesystem behavior', () => {
       expect(() => archiveGovernedRound({ repoRoot: repo, round: 3 })).toThrow(
         'ROUND_ARCHIVE_RECORD_MISSING',
       );
-      write(repo, 'work/rounds/archive/R-0003/record.md', 'occupied');
       expect(() => archiveGovernedRound({ repoRoot: repo, round: 3 })).toThrow(
-        'ROUND_ARCHIVE_DESTINATION_EXISTS',
+        'ROUND_ARCHIVE_RECORD_MISSING',
       );
     });
   });
@@ -201,7 +200,7 @@ describe('round lifecycle filesystem behavior', () => {
     });
   });
 
-  it('reports a missing record when no local or archived declaration exists', () => {
+  it('reports a missing record when no in-place declaration exists', () => {
     expect(() => governedRoundStatus({ repoRoot: root(), round: 99 })).toThrow(
       'ROUND_RECORD_NOT_FOUND',
     );

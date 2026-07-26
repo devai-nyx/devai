@@ -37,6 +37,12 @@ function manifest(
   return {
     schemaVersion: 1,
     generatedAt: '2026-07-25T00:00:00.000Z',
+    expiresAt: '2026-07-26T00:00:00.000Z',
+    subject: {
+      repository: 'devai-nyx/devaii',
+      commitSha: actionsOverrides.testedCommitSha ?? A,
+      tree: actionsOverrides.testedTree ?? { algorithm: 'sha1', value: TREE },
+    },
     origin: 'actions-run',
     sourceHash: { algorithm: 'sha256', value: DIGEST, fileCount: 12 },
     policy: {

@@ -316,7 +316,7 @@ describe('post-merge authority host scope', () => {
       apply({
         kind: 'filesystem',
         symbol: 'writeFileSync',
-        arguments: [join(fx.root, 'scratch/worktrees/auditor-post-merge/status.json'), 'x'],
+        arguments: [join(fx.root, '.devai/worktrees/auditor-post-merge/status.json'), 'x'],
       }),
     ).toBe('applied');
     expect(
@@ -331,7 +331,7 @@ describe('post-merge authority host scope', () => {
         kind: 'filesystem',
         symbol: 'renameSync',
         arguments: [
-          join(fx.root, 'scratch/worktrees/auditor-post-merge/a'),
+          join(fx.root, '.devai/worktrees/auditor-post-merge/a'),
           join(fx.root, 'outside'),
         ],
       }),
@@ -384,12 +384,15 @@ describe('post-merge authority host scope', () => {
     };
 
     await expect(execute(true)).rejects.toThrow('POST_MERGE_OBSERVATION_INJECTED_FAILURE');
-    const stateRoot = join(fx.root, 'scratch/worktrees/auditor-post-merge/work/audit/post-merge');
+    const stateRoot = join(fx.root, '.git/devai/post-merge-observations');
     expect(
       JSON.parse(readFileSync(join(stateRoot, fx.mergeSha, 'status.json'), 'utf8')),
     ).toMatchObject({ status: 'error', code: 'POST_MERGE_OBSERVATION_INJECTED_FAILURE' });
 
-    await expect(execute()).rejects.toThrow('POST_MERGE_WORKTREE_DIRTY');
+    await expect(execute()).resolves.toMatchObject({
+      status: 'completed',
+      processed: [fx.mergeSha],
+    });
     expect(
       JSON.parse(readFileSync(join(stateRoot, fx.mergeSha, 'status.json'), 'utf8')),
     ).toMatchObject({ status: 'completed', readiness_promoting: false });
@@ -398,6 +401,12 @@ describe('post-merge authority host scope', () => {
     );
     expect(readdirSync(join(stateRoot, 'attempt-history', fx.mergeSha)).length).toBeGreaterThan(0);
 
+    await expect(execute()).resolves.toMatchObject({ status: 'replayed', processed: [] });
+    mkdirSync(join(fx.root, '.devai/worktrees/auditor-post-merge/work'), { recursive: true });
+    writeFileSync(
+      join(fx.root, '.devai/worktrees/auditor-post-merge/work/untracked.txt'),
+      'dirty\n',
+    );
     await expect(execute()).rejects.toThrow('POST_MERGE_WORKTREE_DIRTY');
     mkdirSync(join(fx.root, '.git/devai/post-merge.lock'));
     await expect(execute()).resolves.toMatchObject({

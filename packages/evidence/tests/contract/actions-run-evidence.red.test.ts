@@ -186,6 +186,12 @@ function localFields(): Record<string, unknown> {
   return {
     schemaVersion: 1,
     generatedAt: '2026-07-17T12:00:00.000Z',
+    expiresAt: '2026-07-18T12:00:00.000Z',
+    subject: {
+      repository: 'devai-nyx/devai',
+      commitSha: SHA_A,
+      tree: { algorithm: 'sha1', value: TREE },
+    },
     sourceHash: { algorithm: 'sha256', value: DIGEST, fileCount: 12 },
     policy: {
       maxAgeHours: 24,

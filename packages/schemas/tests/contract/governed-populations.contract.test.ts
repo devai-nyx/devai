@@ -10,11 +10,11 @@ function json(path: string): unknown {
 }
 
 describe('governed population count guards', () => {
-  it('guards the 55-schema canonical roster', () => {
+  it('guards the 56-schema canonical roster', () => {
     const files = readdirSync(join(ROOT, 'law', 'schemas'))
       .filter((file) => file.endsWith('.schema.json'))
       .sort();
-    expect(files).toHaveLength(55);
+    expect(files).toHaveLength(56);
   });
 
   it('guards the 34-invariant roster', () => {
@@ -39,13 +39,13 @@ describe('governed population count guards', () => {
     expect(files).toHaveLength(44);
   });
 
-  it('guards the gapless 15-record and 13-active successor ADR roster', () => {
+  it('guards the gapless 16-record and 13-active successor ADR roster', () => {
     const files = readdirSync(join(ROOT, 'law', 'adr'))
       .filter((file) => /^ADR-\d{3}-.+\.md$/.test(file))
       .sort();
-    expect(files).toHaveLength(15);
+    expect(files).toHaveLength(16);
     expect(files.map((file) => Number(file.slice(4, 7)))).toEqual(
-      Array.from({ length: 15 }, (_, index) => index + 1),
+      Array.from({ length: 16 }, (_, index) => index + 1),
     );
     const records = files.map((file) => ({
       file,
@@ -57,6 +57,9 @@ describe('governed population count guards', () => {
     );
     expect(records.find(({ file }) => file.startsWith('ADR-014-'))?.source).toMatch(
       /^superseded_by: ADR-015$/m,
+    );
+    expect(records.find(({ file }) => file.startsWith('ADR-011-'))?.source).toMatch(
+      /^superseded_by: ADR-016$/m,
     );
   });
 

@@ -15,7 +15,10 @@
       ],
       "behavior": {
         "evidence": {
-          "docs": ["docs/A.md", "docs/B.md"],
+          "docs": [
+            "docs/A.md",
+            "docs/B.md"
+          ],
           "drifts": [],
           "llm": {
             "cost_usd": "<N>",
@@ -71,16 +74,30 @@
       "behavior": {
         "evidence": {
           "commands": [
-            ["git", "add", "--", "README.md"],
-            ["git", "commit", "-m", "devai: characterization commit"]
+            [
+              "git",
+              "add",
+              "--",
+              "README.md"
+            ],
+            [
+              "git",
+              "commit",
+              "-m",
+              "devai: characterization commit"
+            ]
           ],
           "committed": false,
-          "files": ["README.md"],
+          "files": [
+            "README.md"
+          ],
           "mode": "dry-run",
           "pr_opened": false,
           "pushed": false
         },
-        "notes": ["mode=dry-run; 2 commands previewed"],
+        "notes": [
+          "mode=dry-run; 2 commands previewed"
+        ],
         "status": "pass"
       },
       "fs_products": {
@@ -273,14 +290,18 @@
               "deterministic": true,
               "notes": "latest type_check failure at undefined",
               "property": "T8",
-              "sensor_readings": ["SR-2"],
+              "sensor_readings": [
+                "SR-2"
+              ],
               "substrate": "F2",
               "verdict": "FAIL"
             },
             {
               "deterministic": true,
               "property": "T9",
-              "sensor_readings": ["SR-1"],
+              "sensor_readings": [
+                "SR-1"
+              ],
               "substrate": "F2",
               "verdict": "PASS"
             },
@@ -531,7 +552,9 @@
           "created_at": "<TS>",
           "emitting_discipline": "engineer",
           "emitting_task_id": "TASK-0001",
-          "evidence_refs": ["EV-fixture0001"],
+          "evidence_refs": [
+            "EV-fixture0001"
+          ],
           "id": "RGR-0001",
           "problem": {
             "ambiguity": "spec ambiguity in fixture",
@@ -577,14 +600,20 @@
             {
               "acceptance": [
                 {
-                  "command": ["node", "-e", "process.exit(0)"],
+                  "command": [
+                    "node",
+                    "-e",
+                    "process.exit(0)"
+                  ],
                   "exit_code": 0
                 }
               ],
               "converged": false,
               "edits": {
                 "rejected": [],
-                "written": ["packages/fix.ts"]
+                "written": [
+                  "packages/fix.ts"
+                ]
               },
               "iteration": 1,
               "llm": {
@@ -625,7 +654,9 @@
           ],
           "task_id": "TASK-FIXTURE-1"
         },
-        "notes": ["did not converge after 1 iteration(s); escalate per Article 19"],
+        "notes": [
+          "did not converge after 1 iteration(s); escalate per Article 19"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -985,229 +1016,12 @@
       },
       "behavior": {
         "evidence": {
-          "findings": [
-            {
-              "code": "READ_TIER_WITH_WRITE_SCOPES",
-              "message": "skill 'SKILL-triage' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
-              "offending_scope": "record/proofs/work/skill-runs/**",
-              "reserved_to": "architect",
-              "severity": "error",
-              "skill_id": "SKILL-triage"
-            },
-            {
-              "code": "READ_TIER_WITH_WRITE_SCOPES",
-              "message": "skill 'SKILL-materialize-prompt' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
-              "offending_scope": "record/proofs/work/skill-runs/**",
-              "reserved_to": "architect",
-              "severity": "error",
-              "skill_id": "SKILL-materialize-prompt"
-            },
-            {
-              "code": "READ_TIER_WITH_WRITE_SCOPES",
-              "message": "skill 'SKILL-compute-scorecard' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
-              "offending_scope": "record/proofs/work/skill-runs/**",
-              "reserved_to": "architect",
-              "severity": "error",
-              "skill_id": "SKILL-compute-scorecard"
-            },
-            {
-              "code": "READ_TIER_WITH_WRITE_SCOPES",
-              "message": "skill 'SKILL-compile-backlog' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
-              "offending_scope": "record/proofs/work/skill-runs/**",
-              "reserved_to": "architect",
-              "severity": "error",
-              "skill_id": "SKILL-compile-backlog"
-            },
-            {
-              "code": "READ_TIER_WITH_WRITE_SCOPES",
-              "message": "skill 'SKILL-emit-rgr' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
-              "offending_scope": "record/proofs/work/skill-runs/**",
-              "reserved_to": "architect",
-              "severity": "error",
-              "skill_id": "SKILL-emit-rgr"
-            },
-            {
-              "code": "READ_TIER_WITH_WRITE_SCOPES",
-              "message": "skill 'SKILL-emit-rgr' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/rgr/**'",
-              "offending_scope": "record/proofs/work/rgr/**",
-              "reserved_to": "architect",
-              "severity": "error",
-              "skill_id": "SKILL-emit-rgr"
-            },
-            {
-              "code": "READ_TIER_WITH_WRITE_SCOPES",
-              "message": "skill 'SKILL-assess-state' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
-              "offending_scope": "record/proofs/work/skill-runs/**",
-              "reserved_to": "architect",
-              "severity": "error",
-              "skill_id": "SKILL-assess-state"
-            },
-            {
-              "code": "READ_TIER_WITH_WRITE_SCOPES",
-              "message": "skill 'SKILL-review-dry' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
-              "offending_scope": "record/proofs/work/skill-runs/**",
-              "reserved_to": "architect",
-              "severity": "error",
-              "skill_id": "SKILL-review-dry"
-            },
-            {
-              "code": "READ_TIER_WITH_WRITE_SCOPES",
-              "message": "skill 'SKILL-mutation-test' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
-              "offending_scope": "record/proofs/work/skill-runs/**",
-              "reserved_to": "architect",
-              "severity": "error",
-              "skill_id": "SKILL-mutation-test"
-            },
-            {
-              "code": "READ_TIER_WITH_WRITE_SCOPES",
-              "message": "skill 'SKILL-align-docs' permission_tier=read but allowed_write_scopes contains 'record/proofs/work/skill-runs/**'",
-              "offending_scope": "record/proofs/work/skill-runs/**",
-              "reserved_to": "architect",
-              "severity": "error",
-              "skill_id": "SKILL-align-docs"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-overview' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Overview.md'",
-              "offending_scope": "docs/Overview.md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-overview"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-software-stack' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Software Stack.md'",
-              "offending_scope": "docs/Software Stack.md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-software-stack"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-architecture-guide' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Architecture Guide.md'",
-              "offending_scope": "docs/Architecture Guide.md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-architecture-guide"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-database-reference' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Database Reference.md'",
-              "offending_scope": "docs/Database Reference.md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-database-reference"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-erd' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/ERD.md'",
-              "offending_scope": "docs/ERD.md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-erd"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-api-map' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/API Map.md'",
-              "offending_scope": "docs/API Map.md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-api-map"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-frontend-routes-map' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Frontend Routes Map.md'",
-              "offending_scope": "docs/Frontend Routes Map.md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-frontend-routes-map"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-rbac-matrix' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/RBAC Matrix.md'",
-              "offending_scope": "docs/RBAC Matrix.md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-rbac-matrix"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-compliance-lgpd' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Compliance (LGPD).md'",
-              "offending_scope": "docs/Compliance (LGPD).md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-compliance-lgpd"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-compliance-gdpr' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Compliance (GDPR).md'",
-              "offending_scope": "docs/Compliance (GDPR).md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-compliance-gdpr"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-compliance-ccpa' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Compliance (CCPA).md'",
-              "offending_scope": "docs/Compliance (CCPA).md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-compliance-ccpa"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-fp-report' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Function Point Report.md'",
-              "offending_scope": "docs/Function Point Report.md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-fp-report"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-threat-model' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Security Threat Model.md'",
-              "offending_scope": "docs/Security Threat Model.md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-threat-model"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-write-onboarding' (agent_class=review-agent, tier=write) names Architect-reserved path 'docs/' via scope 'docs/Onboarding Quickstart.md'",
-              "offending_scope": "docs/Onboarding Quickstart.md",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-write-onboarding"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-round-orchestrate' (agent_class=coding-agent, tier=write) names Architect-reserved path 'work/rounds/' via scope 'work/rounds/R-*/**'",
-              "offending_scope": "work/rounds/R-*/**",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-round-orchestrate"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-round-verify-publish' (agent_class=coding-agent, tier=write) names Architect-reserved path 'work/rounds/' via scope 'work/rounds/R-*/**'",
-              "offending_scope": "work/rounds/R-*/**",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-round-verify-publish"
-            },
-            {
-              "code": "PROMPT_OVERLAY_AUTHORITY_INVERSION",
-              "message": "skill 'SKILL-round-execute' (agent_class=coding-agent, tier=write) names Architect-reserved path 'work/rounds/' via scope 'work/rounds/R-*/**'",
-              "offending_scope": "work/rounds/R-*/**",
-              "reserved_to": "architect",
-              "severity": "critical",
-              "skill_id": "SKILL-round-execute"
-            }
-          ],
+          "findings": [],
           "manifests_checked": 52,
-          "ok": false
+          "ok": true
         },
         "notes": [],
-        "status": "fail"
+        "status": "pass"
       },
       "fs_products": {
         "created": {},
@@ -1360,13 +1174,19 @@
       },
       "behavior": {
         "evidence": {
-          "command": ["node", "-e", "console.log('Mutation score: 100.0%')"],
+          "command": [
+            "node",
+            "-e",
+            "console.log('Mutation score: 100.0%')"
+          ],
           "exit_code": 0,
           "mutation_score": 1,
           "passed": true,
           "threshold": 0.7
         },
-        "notes": ["mutation score 100.0% ≥ threshold 70.0%"],
+        "notes": [
+          "mutation score 100.0% ≥ threshold 70.0%"
+        ],
         "status": "pass"
       },
       "fs_products": {
@@ -1430,7 +1250,9 @@
       ],
       "behavior": {
         "evidence": {
-          "files_reviewed": ["src/sample.ts"],
+          "files_reviewed": [
+            "src/sample.ts"
+          ],
           "llm": {
             "cost_usd": "<N>",
             "family": "claude",
@@ -1472,7 +1294,10 @@
           "phase": "audit",
           "references": {
             "prompts_library": "docs/adopters/round-prompts/B0-audit.md",
-            "skills": ["SKILL-assess-state", "SKILL-compute-scorecard"]
+            "skills": [
+              "SKILL-assess-state",
+              "SKILL-compute-scorecard"
+            ]
           },
           "round_dir": "work/rounds/R-0999",
           "steps": [
@@ -1530,7 +1355,9 @@
           "phase": "backlog",
           "references": {
             "prompts_library": "docs/adopters/round-prompts/B1-backlog.md",
-            "skills": ["SKILL-compile-backlog"]
+            "skills": [
+              "SKILL-compile-backlog"
+            ]
           },
           "round_dir": "work/rounds/R-0999",
           "steps": [
@@ -1619,7 +1446,9 @@
             }
           ]
         },
-        "notes": ["mode=plan — emitted RoundPlan for round 999; no sub-skills invoked."],
+        "notes": [
+          "mode=plan — emitted RoundPlan for round 999; no sub-skills invoked."
+        ],
         "status": "pass"
       },
       "fs_products": {
@@ -1655,7 +1484,11 @@
           "phase": "orchestrate",
           "references": {
             "prompts_library": "docs/adopters/round-prompts/B3-orchestrate.md",
-            "skills": ["SKILL-fix-lint", "SKILL-fix-build", "SKILL-fix-test"]
+            "skills": [
+              "SKILL-fix-lint",
+              "SKILL-fix-build",
+              "SKILL-fix-test"
+            ]
           },
           "round_dir": "work/rounds/R-0999",
           "steps": [
@@ -1681,12 +1514,14 @@
             }
           ]
         },
-        "notes": ["Round dispatch complete; SKILL-round-verify-publish required for verdict."],
+        "notes": [
+          "Round dispatch complete; SKILL-round-verify-publish required for verdict."
+        ],
         "status": "pass"
       },
       "fs_products": {
         "created": {
-          "work/rounds/R-0999/prompts/01-fixture-wave.log": "783abb038282ccb4f4a127142ec8a85175ac0e9fbc325c7d3113ae99b434821c"
+          ".devai/state/round-runs/R-0999/orchestrate/01-fixture-wave.log": "783abb038282ccb4f4a127142ec8a85175ac0e9fbc325c7d3113ae99b434821c"
         },
         "modified": {}
       },
@@ -1854,7 +1689,9 @@
           "blueprint_id": "BP-DEMO-BOOKMARK-001",
           "blueprint_sha256": "4d1101dd50699c71607c2fc81423526cb25e6d0b70e75e572bd6252364b6801c",
           "blueprint_version": "1.0.0",
-          "files_created": [".github/workflows/module-demo-bookmark.yml"],
+          "files_created": [
+            ".github/workflows/module-demo-bookmark.yml"
+          ],
           "files_modified": [],
           "files_skipped": [],
           "idempotency": "fresh",
@@ -2200,7 +2037,9 @@
         "evidence": {
           "raw_response": "[r20-mock:fbaf3334e28f1e19] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2226,7 +2065,9 @@
         "evidence": {
           "raw_response": "[r20-mock:142103d69e81de7c] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2252,7 +2093,9 @@
         "evidence": {
           "raw_response": "[r20-mock:1d6b6a0726217bf9] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2278,7 +2121,9 @@
         "evidence": {
           "raw_response": "[r20-mock:526b303ca18dab99] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2304,7 +2149,9 @@
         "evidence": {
           "raw_response": "[r20-mock:50136d19d6a0a642] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2330,7 +2177,9 @@
         "evidence": {
           "raw_response": "[r20-mock:e40cc2beddfb86bc] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2356,7 +2205,9 @@
         "evidence": {
           "raw_response": "[r20-mock:22b090abaa510ec8] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2382,7 +2233,9 @@
         "evidence": {
           "raw_response": "[r20-mock:728183fcf4b46bdc] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2408,7 +2261,9 @@
         "evidence": {
           "raw_response": "[r20-mock:f87b05889a3aab2b] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2434,7 +2289,9 @@
         "evidence": {
           "raw_response": "[r20-mock:9da34602e9d5a3cc] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2460,7 +2317,9 @@
         "evidence": {
           "raw_response": "[r20-mock:a0f4242417fc09fe] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2486,7 +2345,9 @@
         "evidence": {
           "raw_response": "[r20-mock:14ae253ebbead5f0] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2512,7 +2373,9 @@
         "evidence": {
           "raw_response": "[r20-mock:b48b875a0c0fbbd9] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
@@ -2538,7 +2401,9 @@
         "evidence": {
           "raw_response": "[r20-mock:690c0cd87d3cc062] deterministic characterization response."
         },
-        "notes": ["LLM response did not parse as { markdown: \"...\" }"],
+        "notes": [
+          "LLM response did not parse as { markdown: \"...\" }"
+        ],
         "status": "fail"
       },
       "fs_products": {
