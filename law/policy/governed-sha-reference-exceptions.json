@@ -23,7 +23,12 @@
       "sha": "3469026a503837de49d829c233bc7e9eb6b53620",
       "object_kind": "transient merge commit",
       "reason": "Historical GitHub pull-request synthetic merge object retained locally but absent from a clean checkout.",
-      "allowed_paths": ["work/audit/R-0002/as-built.md"]
+      "allowed_paths": [
+        "work/audit/R-0002-preflight/backlog-register.md",
+        "work/audit/R-0002/as-built.md",
+        "work/audit/R-0004/source-ci-clean-checkout-sha-correction.md",
+        "work/audit/R-0004/source-ci-clean-checkout-sha-failure.md"
+      ]
     },
     {
       "sha": "386cbb500a795f17624442ebb2c416ed5f16b15d",
@@ -37,7 +42,9 @@
       "reason": "Historical rejected R-0003 candidate retained locally but absent from a clean checkout.",
       "allowed_paths": [
         "work/audit/R-0002-preflight/backlog-register.md",
-        "work/audit/R-0003/exit-ladder-adr-seal-failure.md"
+        "work/audit/R-0003/exit-ladder-adr-seal-failure.md",
+        "work/audit/R-0004/source-ci-clean-checkout-sha-correction.md",
+        "work/audit/R-0004/source-ci-clean-checkout-sha-failure.md"
       ]
     },
     {
