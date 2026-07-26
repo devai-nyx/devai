@@ -2,11 +2,11 @@
 id: R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-FAILURE
 title: R-0004 source exact-head clean-checkout SHA failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-CORRECTION
 provenance:
   [PR #6; exact head 70b6092869b19631b845e6db79bfd0632871ab68; GitHub Actions run 30215723543; BL-184]
 ---
