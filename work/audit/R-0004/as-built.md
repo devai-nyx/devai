@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-SOURCE-DECISION-SHA-CORRECTION; source snapshot fd99ab7deaa1702467b6d8f9c4d6a98f4372b87e,
+    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-11-CORRECTION; source snapshot 2a864440c9178cc59834c961c132d3b5616d4bfa,
   ]
 ---
 
@@ -18,7 +18,7 @@ provenance:
 ## Boundary and verdict
 
 R-0004 has completed B0 through B7 locally at source snapshot
-`fd99ab7deaa1702467b6d8f9c4d6a98f4372b87e`. The governed surface and package
+`2a864440c9178cc59834c961c132d3b5616d4bfa`. The governed surface and package
 topology satisfy the round acceptance criteria at that snapshot. The round is not yet
 closed: the Architect closing record, exact-candidate Claude Opus 5 review, source PR,
 exact-SHA CI, source merge, exact-main CI, closure-only machine record, closure PR, and
@@ -123,19 +123,20 @@ paths: four `dist/index` JavaScript/declaration artifacts, `package.json`, and
 | Eighth Opus repair      | Auditor + Inspector + Engineer + Architect | `19a95ae`, `b4d895e`, `db75ddc`, `467b001`, `bf42be1`, `dc64176`                                                                                         | Repaired fingerprint normalization, pinned the 55-schema disposition, and preserved raw evidence and baseline.                                           |
 | Second source CI repair | Auditor + Inspector + Engineer             | `9622e35`, `6c876f1`, `d694249`, `54e79a1`                                                                                                               | Repaired exact fixture progress-line variance without changing raw evidence, metrics, or baseline.                                                       |
 | Tenth Opus repair       | Auditor + Inspector + Engineer + Architect | `61e66b2`, `759014a`, `aee78a3`, `cb50655`, `7b44322`, `4047bec`, `fd53fe9`, `fd99ab7`                                                                   | Added the governed SHA-reference gate, bounded historical exceptions by exact path, corrected active evidence, and kept the full-suite check performant. |
+| Eleventh Opus repair    | Auditor + Inspector + Architect            | `9b68e02`, `deaa1b1`, `cd51d1b`, `8ff6c5a`, `1f118e1`, `2a86444`                                                                                         | Corrected snapshot-bound readings and active semantics, then added hermetic rejection coverage for every exception failure mode.                         |
 
 ## Fresh tests and coverage
 
-The complete tiered exit ladder passed on exact source snapshot `fd99ab7`:
+The complete tiered exit ladder passed on exact source snapshot `2a86444`:
 
 - T1: 71 files / 838 tests;
-- T2: 38 files / 241 passed / 1 declared skip;
+- T2: 38 files / 243 passed / 1 declared skip;
 - T3: 9 files / 56 passed / 7 declared skips;
 - T4: 2 files / 4 tests;
 - T5: 6 files / 25 tests;
 - T6: 1 file / 3 tests.
 
-The root `pnpm run test` porcelain passed 127 files / 1,167 tests with 8 declared skips
+The root `pnpm run test` porcelain passed 127 files / 1,169 tests with 8 declared skips
 and zero failures. Root `pnpm run build` passed through
 the registered `pnpm -r build` process and built all thirteen applicable workspace
 projects, including core.
