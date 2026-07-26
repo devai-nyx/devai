@@ -2285,6 +2285,25 @@ finding reopens the role-pure red-first cycle; only PASS permits source push. Th
 two-PR ceremony, `none-needed` release disposition, claims ceiling, and every external
 human gate remain unchanged.
 
+### DII-173 — Bind the corrected-candidate T2 collateral repairs
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 corrected-candidate repair; DII-172; BL-152–153; R-0004-CORRECTED-CANDIDATE-T2-FAILURE; Auditor 6447d9c9202358905df04afc130d06c94fbf52e1`
+
+The corrected candidate's first complete-ladder restart exposed two collateral contract
+gaps and stopped at T2. BL-152 and BL-153 are promoted in full; neither is deferred.
+
+The canonical trace invariant-binding suite enum must admit `contract`, matching the
+existing test index and the actual T2 runner. No path, lifecycle, target-type, invariant,
+or evidence-strength rule changes. The Inspector's authority test composition may admit
+the exact fixed read-only production shapes `pnpm vitest run` and
+`pnpm vitest run --config tests/config/<tier>.ts`; it must reject additional flags,
+arbitrary configs, scripts, shell text, and any other package-manager command.
+
+Architect owns the schema correction. Inspector owns the test-only host correction and
+its deny-boundary assertions. Auditor must record symmetric green correction evidence.
+The complete ladder and fresh literal `claude-opus-5` review remain mandatory before
+source push. No production argv, threshold, skip, release, publication, deployment,
+predecessor write, real-stynx write, or external human gate changes.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
