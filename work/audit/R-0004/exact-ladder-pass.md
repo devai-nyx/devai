@@ -9,30 +9,32 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    R-0004-AS-BUILT; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; source snapshot 54e79a19a22e64ec8a6c6ea698087081872d70fd,
+    R-0004-AS-BUILT; R-0004-SOURCE-DECISION-SHA-CORRECTION; source snapshot fd99ab7deaa1702467b6d8f9c4d6a98f4372b87e,
   ]
 ---
 
 # R-0004 exact-candidate ladder pass
 
 The complete local R-0004 exit ladder passed on exact source snapshot
-`54e79a19a22e64ec8a6c6ea698087081872d70fd` with a clean worktree.
+`fd99ab7deaa1702467b6d8f9c4d6a98f4372b87e` with a clean worktree.
 
 - workflow lint: 2 workflow files passed;
 - action registry: 3 generated views reproduced byte-for-byte;
 - contract trace: 34 invariants bound 127 tests;
 - repository references: 164 classified references reproduced;
 - lint, typecheck, recursive build, Changesets status, formatting, and strict governance:
-  passed; strict governance reported zero forbidden-action findings;
+  passed; strict governance reported zero forbidden-action findings and the governed
+  SHA-reference check reported 252 identities, 244 local objects, and 8 exact
+  path-classified historical specimens;
 - T1: 71 files / 838 tests;
-- T2: 38 files / 240 passed / 1 declared skip;
+- T2: 38 files / 241 passed / 1 declared skip;
 - T3: 9 files / 56 passed / 7 declared skips;
 - T4: 2 files / 4 tests;
 - T5: 6 files / 25 tests;
 - T6: 1 file / 3 tests;
 - merged T1+T3 coverage: 80 files / 894 passed / 7 declared skips, with statements
   71.23%, branches 61.79%, functions 77.62%, and lines 73.25%;
-- root `pnpm run test`: 127 files / 1,166 passed / 8 declared skips;
+- root `pnpm run test`: 127 files / 1,167 passed / 8 declared skips;
 - all eleven public packages passed `npm pack --dry-run --ignore-scripts --json`.
 
 No threshold, test source set, skip, assertion, waiver, or governance gate was weakened.
