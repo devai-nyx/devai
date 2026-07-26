@@ -17,3 +17,9 @@ source texts remain under `predecessor/` as frozen historical inputs excluded fr
 `check adrs`; they are not concurrent successor law. The §5.1 record meta-structure
 applies, and `check records`/`check adrs` bind only the numbered files. The R-0003
 acceptance contract separately binds this active index to the numbered roster.
+
+ADR-005's sealed body retains the historical status phrase “Accepted and active in
+R-0003.” Its lifecycle frontmatter controls current successor state: ADR-005 is
+superseded, `superseded_by: ADR-013`, and ADR-013 is the active replacement. This
+disclosure preserves the seal rather than treating the historical body phrase as live
+lifecycle state.

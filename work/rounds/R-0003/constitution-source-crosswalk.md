@@ -2,14 +2,14 @@
 id: R-0003-CONSTITUTION-CROSSWALK
 title: Constitution 1.0.0 source and disposition crosswalk
 type: round-artifact
-status: draft
+status: active
 date: 2026-07-25
 authority: Architect
 supersedes: null
 superseded_by: null
 provenance:
   [
-    R-0003-REV-PROVENANCE-MANIFEST; R-0001 law-altitude-sweep; Constitution founding annex; DII-098; DII-152,
+    R-0003-REV-PROVENANCE-MANIFEST; R-0001 law-altitude-sweep; Constitution founding annex; DII-098; DII-150; DII-152,
   ]
 ---
 

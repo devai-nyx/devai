@@ -7,7 +7,7 @@ date: 2026-07-25
 authority: Architect (active container; per-entry lifecycle controls authority)
 supersedes: null
 superseded_by: null
-provenance: regenerated from REV-0002; DII namespace bound during R-0001/R-0002; container activated and corrected by DII-152
+provenance: absorbed from the predecessor decision corpus; DII namespace bound during R-0001/R-0002; container activated by DII-152 and corrected by DII-158
 ---
 
 # DEVAI-II decision register
@@ -1855,6 +1855,61 @@ After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the dec
 decision, DII-150 as the founding act, and DII-157 as the closing decision. Its release
 disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
 exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
+### DII-158 — Correct third-review governance provenance and disclose replay identity
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 third Opus correction; DII-157; BL-133–138; R-0003-CLAUDE-OPUS-CLOSE-REVIEW-3; Inspector 025bb58; Auditor 51f571a`
+
+DII-158 supersedes DII-157 only as the R-0003 source-closing judgment and resolves all
+six blockers from the third exact `claude-opus-5` review. It corrects DII-153's unresolved
+seal-failure citation: the declared Auditor record is `R-0003-ADR-SEAL-FAILURE`, not
+`R-0003-EXIT-LADDER-ADR-SEAL-FAILURE`. The active register container was absorbed from
+the predecessor decision corpus and activated by DII-152; absent REV-0002 is not its
+provenance. BL-133 closes on those append-only corrections and the truthful container
+metadata.
+
+ADR-005's sealed body necessarily retains the historical phrase “Accepted and active in
+R-0003.” Its lifecycle frontmatter is controlling successor state and terminally marks it
+superseded by ADR-013. The active ADR index now discloses that distinction without
+mutating sealed bytes. BL-134 closes on that bounded interpretation.
+
+Auditor `51f571a` makes the three correction pairs symmetric: the formatting failure,
+formatting-contract failure, and second Opus review are terminally superseded by their
+existing active correction records. The ratified Constitution crosswalk is active under
+DII-150, and the review manifest identifies DII-149 only as a preserved draft while
+active DII-153 carries the corrected ADR disposition. BL-135 through BL-137 close on
+those role-pure changes.
+
+BL-138 records a procedural replay defect without hiding or waiving it. Seven clean-branch
+commits preserve correct role authors and byte-equivalent role-scoped changes but retained
+the human cherry-pick committer `Antonio A. Russo`. Each is bound to its role-pure sibling
+original:
+
+- Engineer `1449e4d` replays `16a9f36`;
+- Architect `611e14c` replays `bfccf19`;
+- Engineer `938e2ab` replays `a26369e`;
+- Auditor `3d44a48` replays `dde5ae2`;
+- Inspector `726fe66` replays `9293ace`;
+- Inspector `0ba2612` replays `93ef651`; and
+- Engineer `fa17a5c` replays `7442708`.
+
+The replay used already role-pure authored changes while rebuilding away an illegal ADR
+history; path authority remained role-pure and the third reviewer independently verified
+44/44 path-role batches. This disclosure does not waive future identity requirements:
+every new commit remains required to use both DEVAI role author and committer identity.
+The disclosed replay defect creates no precedent for human-committer source work.
+
+The exact candidate containing DII-158, the independent correction audit, and refreshed
+deterministic projections must restart the complete ladder from Stage 1 and receive a
+fresh read-only review through literal `claude-opus-5`, with no fallback. Any actionable
+finding reopens the governed repair cycle; only a PASS authorizes source push.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and the final post-audit source-closing decision
+as the closing decision. Its release disposition remains `none-needed`. R-0004 remains
+dormant until PC-0004 and final exact-main CI establish the complete R-0003 close.
 
 R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
 promotes, re-earns, or declares ready nothing.
