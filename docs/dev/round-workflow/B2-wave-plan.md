@@ -6,24 +6,26 @@
 
 ## Required inputs
 
-- `scratch/sessions/rounds/round-{{round_n}}/backlog.json` (from [B1](./B1-backlog.md)).
+- `.devai/state/round-runs/R-{{round_n}}/backlog/backlog.json` (from [B1](./B1-backlog.md)).
 
 ## Goal
 
-Materialize the orchestrator + worker prompts the execute phase reads. Output is a self-contained `scratch/sessions/rounds/round-{{round_n}}/prompts/` directory the round-orchestrator can run blind.
+Materialize disposable orchestrator and worker prompt proposals. Output is a
+self-contained `.devai/state/round-runs/R-{{round_n}}/backlog/prompts/` directory;
+it becomes governed round intent only after explicit Architect review and promotion.
 
 ## Steps
 
 1. **Determine wave count.** Pin the rough waves from B1 to a final count. Common shapes: 1 wave (small round, <5 items), 2 waves (typical), 3+ waves (large or interdependent).
 2. **Assign workers to waves.** Each backlog item gets one worker prompt (`NN-<slug>.md`). Numbering is round-global (01, 02, …), not per-wave. The wave membership is declared in the orchestrator prompt, not in the worker filenames.
-3. **Author the orchestrator prompt.** `scratch/sessions/rounds/round-{{round_n}}/prompts/00-orchestrator.md` MUST contain:
+3. **Author the orchestrator prompt.** `.devai/state/round-runs/R-{{round_n}}/backlog/prompts/00-orchestrator.md` MUST contain:
    - **Goal** — one paragraph: what this round delivers.
    - **Inputs** — files the orchestrator reads (backlog, scratch, prior-round closeout).
    - **Worker fan-out** — wave-by-wave listing, each wave naming its worker prompts and effort hint.
    - **Gates** — what runs between waves (lint, typecheck, schema validate, tests).
    - **Output checklist** — concrete files/directories expected at round close.
    - **Logging** — append-to-log format.
-4. **Author each worker prompt.** `scratch/sessions/rounds/round-{{round_n}}/prompts/NN-<slug>.md` MUST carry the six headings:
+4. **Author each worker prompt.** `.devai/state/round-runs/R-{{round_n}}/backlog/prompts/NN-<slug>.md` MUST carry the six headings:
    - **Goal** — what this worker delivers.
    - **Inputs** — files to cite (do not byte-copy).
    - **Deliverable** — files to add/modify.
@@ -41,8 +43,11 @@ Materialize the orchestrator + worker prompts the execute phase reads. Output is
 
 ## Deliverables
 
-- `scratch/sessions/rounds/round-{{round_n}}/prompts/00-orchestrator.md`.
-- `scratch/sessions/rounds/round-{{round_n}}/prompts/NN-<slug>.md` per backlog item.
+- `.devai/state/round-runs/R-{{round_n}}/backlog/prompts/00-orchestrator.md`.
+- `.devai/state/round-runs/R-{{round_n}}/backlog/prompts/NN-<slug>.md` per backlog item.
+
+Before execution, an Architect reviews and promotes the accepted files to
+`work/rounds/R-{{round_n}}/prompts/`; the skill never writes that reserved tree.
 
 ## Acceptance
 

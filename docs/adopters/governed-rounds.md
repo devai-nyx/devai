@@ -52,10 +52,10 @@ profiles do not activate it.
 
 ## Decision records
 
-`SKILL-adr-new` can scaffold the next collision-free proposed decision record
-when invoked by an Architect with explicit write consent. The record is not
-accepted merely because it was scaffolded: review, authority, and the normal
-decision lifecycle still bind.
+Decision records remain direct Architect work. No agent skill may claim a wildcard
+write scope under `law/adr/` or `law/register/`. An Architect selects the next
+collision-free identity, authors the proposed record under the governed law surface,
+and applies the normal review and decision lifecycle; creating a file never accepts it.
 
 The canonical navigation surfaces are the
 [decision-record index](../../law/adr/README.md) and
