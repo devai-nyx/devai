@@ -46,6 +46,7 @@ function runShaReferenceFixture(
     reason: string;
     allowed_paths: string[];
   }[],
+  auditFiles: Record<string, string> = {},
 ) {
   const fixture = mkdtempSync(join(tmpdir(), 'devai-sha-guard-'));
   try {
@@ -57,6 +58,11 @@ function runShaReferenceFixture(
       join(fixture, 'scripts/check-governed-sha-references.mjs'),
     );
     writeFileSync(join(fixture, 'law/register/DECISIONS.md'), decisionText);
+    for (const [relativePath, text] of Object.entries(auditFiles)) {
+      const path = join(fixture, relativePath);
+      mkdirSync(dirname(path), { recursive: true });
+      writeFileSync(path, text);
+    }
     writeFileSync(
       join(fixture, 'law/policy/governed-sha-reference-exceptions.json'),
       `${JSON.stringify({ entries }, null, 2)}\n`,
@@ -484,6 +490,40 @@ describe('R-0004 governed surface red-first contracts', () => {
     ]);
     expect(staleException.status).not.toBe(0);
     expect(staleException.stderr).toContain(`stale exception ${second}`);
+  });
+
+  it('BL-184 classifies clean-checkout-only historical objects at exact audit paths', () => {
+    const expected = [
+      {
+        sha: '3469026a503837de49d829c233bc7e9eb6b53620',
+        object_kind: 'transient merge commit',
+        reason:
+          'Historical GitHub pull-request synthetic merge object retained locally but absent from a clean checkout.',
+        allowed_paths: ['work/audit/R-0002/as-built.md'],
+      },
+      {
+        sha: '46535a3c8939aad7a2bbc8fce981bdcc48757e54',
+        object_kind: 'rejected amended commit',
+        reason:
+          'Historical rejected R-0003 candidate retained locally but absent from a clean checkout.',
+        allowed_paths: [
+          'work/audit/R-0002-preflight/backlog-register.md',
+          'work/audit/R-0003/exit-ladder-adr-seal-failure.md',
+        ],
+      },
+    ];
+    const registry = readJson('law/policy/governed-sha-reference-exceptions.json') as {
+      entries: typeof expected;
+    };
+    expect(registry.entries).toEqual(expect.arrayContaining(expected));
+
+    const result = runShaReferenceFixture('', expected, {
+      'work/audit/R-0002/as-built.md': `transient ${expected[0].sha}\n`,
+      'work/audit/R-0002-preflight/backlog-register.md': `rejected ${expected[1].sha}\n`,
+      'work/audit/R-0003/exit-ladder-adr-seal-failure.md': `rejected ${expected[1].sha}\n`,
+    });
+    expect(result.status, result.stderr || result.stdout).toBe(0);
+    expect(result.stdout).toContain('2 classified');
   });
 
   it('BL-162 binds strict governance to a window covering the complete R-0004 range', () => {
