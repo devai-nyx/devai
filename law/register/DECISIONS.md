@@ -2396,6 +2396,22 @@ absorbs ADR-014 and carries the corrected complete rule. The gapless roster is A
 through ADR-015 with thirteen active records, ADR-005 superseded by active ADR-013, and
 ADR-014 superseded by active ADR-015. All remaining DII-178 boundaries remain unchanged.
 
+### DII-180 — Rebind the R-0004 source close after CI governance correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 governance-corrected close; DII-174; DII-175–179; BL-154–155; R-0004-CI-ADR-GOVERNANCE-CORRECTION; Auditor ae8f508b40d2973ac53f27bbd1c2cfe0c0966373`
+
+DII-180 supersedes DII-174 only as the R-0004 source-closing judgment. BL-154 and
+BL-155 are implemented with exact active-ADR path association, copy-boundary history,
+restored-seal endpoint validation, and the gapless active ADR-015 replacement. Strict
+forbidden-action, decision-integrity, citation, trace, and docs-drift governance pass
+with zero blocking findings and no waiver.
+
+The clean candidate containing DII-180, the refreshed source-close handoff, and fresh
+deterministic projections must restart the complete local ladder from Stage 1 and then
+receive the mandated read-only close review through literal `claude-opus-5`, with no
+fallback. Any actionable finding reopens the role-pure red-first cycle; only PASS
+permits source push. The two-PR ceremony, `none-needed` release disposition, claims
+ceiling, and every external human gate remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
