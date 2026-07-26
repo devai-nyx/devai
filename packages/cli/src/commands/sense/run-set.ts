@@ -18,7 +18,8 @@ import { join, resolve } from 'node:path';
 import { validators } from '@devai-nyx/schemas';
 import { sensorTierKinds, type SensorReading } from '@devai-nyx/sensors';
 import { EXIT_FAIL, EXIT_PASS, EXIT_REVIEW, EXIT_USAGE } from '@devai-nyx/utils';
-import { defineCommand } from '../../define-command.js';
+import { routeArgv } from '../../command-router.js';
+import { defineCommand, getFullRegistry, type RegistryEntry } from '../../define-command.js';
 import { resolveCliVersion } from '../../version.js';
 
 type SensorSet = 'baseline' | 'tier1' | 'tier2' | 'tier3' | 'all' | 'sweep';
@@ -221,6 +222,19 @@ export function expandSensorSet(set: SensorSet): readonly (readonly string[])[] 
   if (set === 'baseline' || set === 'tier1') return BASELINE;
   if (set === 'tier2') return [...BASELINE, ...TIER2_ADDITIONS];
   return [...BASELINE, ...TIER2_ADDITIONS, ...TIER3_ADDITIONS];
+}
+
+export function routeSensorChildArgv(
+  command: readonly string[],
+  executable: string,
+  entries: readonly RegistryEntry[],
+  version: string,
+): readonly string[] {
+  const routed = routeArgv([process.execPath, executable, ...command], entries, version);
+  if (routed.kind !== 'dispatch') {
+    throw new Error('SENSE_RUN_CHILD_ROUTE_INVALID');
+  }
+  return routed.argv.slice(2);
 }
 
 const COMMAND_KINDS: Readonly<Record<string, string>> = {
@@ -488,7 +502,13 @@ export const senseRunSetCmd = defineCommand({
             : null;
         const results = commands.map((command) => {
           const args = [...command, '--repo-root', repoRoot];
-          const result = spawnSync(process.execPath, [executable, ...args], {
+          const childArgs = routeSensorChildArgv(
+            args,
+            executable,
+            getFullRegistry(),
+            resolveCliVersion(),
+          );
+          const result = spawnSync(process.execPath, [executable, ...childArgs], {
             encoding: 'utf8',
             env: process.env,
           });

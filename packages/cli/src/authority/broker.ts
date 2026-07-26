@@ -319,7 +319,7 @@ function fsTarget(
   };
 }
 
-function readOnlyDevaiChild(
+export function readOnlyDevaiChild(
   executable: string,
   args: readonly unknown[],
   entries: readonly RegistryEntry[],
@@ -351,15 +351,18 @@ function readOnlyDevaiChild(
   ) {
     return false;
   }
-  const action = entries
-    .filter(
-      (entry) =>
-        entry.path.length <= childArgs.length &&
-        entry.path.every((part, index) => childArgs[index] === part),
-    )
-    .sort((left, right) => right.path.length - left.path.length)[0];
+  const internalAction = entries.find((entry) => entry.internal_name === childArgs[0]);
+  const action =
+    internalAction ??
+    entries
+      .filter(
+        (entry) =>
+          entry.path.length <= childArgs.length &&
+          entry.path.every((part, index) => childArgs[index] === part),
+      )
+      .sort((left, right) => right.path.length - left.path.length)[0];
   if (action?.effects !== 'read') return false;
-  const tail = childArgs.slice(action.path.length);
+  const tail = childArgs.slice(internalAction === undefined ? action.path.length : 1);
   if (action.previous_name === 'sense test') {
     return (
       tail.length === 3 &&
