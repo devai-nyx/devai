@@ -39,19 +39,19 @@ describe('governed population count guards', () => {
     expect(files).toHaveLength(44);
   });
 
-  it('guards the gapless 17-record and 14-active successor ADR roster', () => {
+  it('guards the gapless 20-record and 15-active successor ADR roster', () => {
     const files = readdirSync(join(ROOT, 'law', 'adr'))
       .filter((file) => /^ADR-\d{3}-.+\.md$/.test(file))
       .sort();
-    expect(files).toHaveLength(17);
+    expect(files).toHaveLength(20);
     expect(files.map((file) => Number(file.slice(4, 7)))).toEqual(
-      Array.from({ length: 17 }, (_, index) => index + 1),
+      Array.from({ length: 20 }, (_, index) => index + 1),
     );
     const records = files.map((file) => ({
       file,
       source: readFileSync(join(ROOT, 'law', 'adr', file), 'utf8'),
     }));
-    expect(records.filter(({ source }) => /^status: active$/m.test(source))).toHaveLength(14);
+    expect(records.filter(({ source }) => /^status: active$/m.test(source))).toHaveLength(15);
     expect(records.find(({ file }) => file.startsWith('ADR-005-'))?.source).toMatch(
       /^superseded_by: ADR-013$/m,
     );
@@ -61,6 +61,11 @@ describe('governed population count guards', () => {
     expect(records.find(({ file }) => file.startsWith('ADR-011-'))?.source).toMatch(
       /^superseded_by: ADR-016$/m,
     );
+    for (const id of ['ADR-017-', 'ADR-018-']) {
+      expect(records.find(({ file }) => file.startsWith(id))?.source).toMatch(
+        /^superseded_by: ADR-019$/m,
+      );
+    }
   });
 
   it('guards the complete decision register roster without a maintained count literal', () => {

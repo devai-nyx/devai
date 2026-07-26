@@ -21,9 +21,9 @@ describe('ADR roster records', () => {
     .filter((f) => /^ADR-\d{3}-.+\.md$/.test(f))
     .sort();
 
-  it('roster is gapless ADR-001..017', () => {
+  it('roster is gapless ADR-001..020', () => {
     const nums = files.map((f) => Number(f.slice(4, 7)));
-    expect(nums).toEqual(Array.from({ length: 17 }, (_, i) => i + 1));
+    expect(nums).toEqual(Array.from({ length: 20 }, (_, i) => i + 1));
   });
 
   it('every front-matter validates against record-meta', () => {
@@ -46,7 +46,7 @@ describe('ADR roster records', () => {
     }
   });
 
-  it('lifecycle discipline preserves fourteen active ADRs and all replacements', () => {
+  it('lifecycle discipline preserves fifteen active ADRs and all replacements', () => {
     for (const f of files) {
       const fm = frontMatter(f);
       if (f === 'ADR-005-ci-economy.md') {
@@ -58,11 +58,20 @@ describe('ADR roster records', () => {
       } else if (f === 'ADR-014-ci-checker-adr-association.md') {
         expect(fm.status, f).toBe('superseded');
         expect(fm.superseded_by, f).toBe('ADR-015');
+      } else if (
+        f === 'ADR-017-r0005-independent-review-corrections.md' ||
+        f === 'ADR-018-single-sensor-read-authority.md'
+      ) {
+        expect(fm.status, f).toBe('superseded');
+        expect(fm.superseded_by, f).toBe('ADR-019');
       } else {
         expect(fm.status, f).toBe('active');
         expect(fm.superseded_by, f).toBeNull();
       }
-      if (f === 'ADR-014-ci-checker-adr-association.md') {
+      if (
+        f === 'ADR-014-ci-checker-adr-association.md' ||
+        f === 'ADR-017-r0005-independent-review-corrections.md'
+      ) {
         expect(fm.supersedes, `${f} preserves its first sealed source list`).toEqual([]);
       } else {
         expect(
@@ -78,9 +87,7 @@ describe('ADR roster records', () => {
     expect(frontMatter('ADR-016-bounded-authority-prompt-composition.md').supersedes).toEqual([
       'ADR-011',
     ]);
-    expect(frontMatter('ADR-017-r0005-independent-review-corrections.md').supersedes).toEqual([
-      'DII-202; DII-203; R-0005-INDEPENDENT-CODEX-REVIEW-1-FAILURE',
-    ]);
+    expect(frontMatter('ADR-017-r0005-independent-review-corrections.md').supersedes).toEqual([]);
   });
 });
 // Invariants: INV-DEVAI-001
