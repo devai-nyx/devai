@@ -113,6 +113,8 @@ const VOLATILE_KEYS = new Set([
   'cost_usd',
 ]);
 
+const ANSI_SEQUENCE = new RegExp(`${String.fromCharCode(27)}\\[[0-?]*[ -/]*[@-~]`, 'g');
+
 /**
  * Normalize a skill result for signature purposes: volatile keys masked,
  * absolute fixture paths rewritten to <FIXTURE>, 16-hex ids masked.
@@ -135,7 +137,7 @@ export function normalize(value: unknown, fixtureRoot: string): unknown {
       // mask names a specific volatile identifier class with its reason.
       // Semantic/evidence/content/stack hashes are PRESERVED — a drifting
       // content hash must fail parity, never vanish into a blanket mask.
-      let s = v;
+      let s = v.replace(ANSI_SEQUENCE, '');
       for (const alias of fixtureAliases) s = s.split(alias).join('<FIXTURE>');
       // ISO timestamps: wall-clock.
       s = s.replace(/\d{4}-\d{2}-\d{2}T[0-9:.]+Z/g, '<TS>');
