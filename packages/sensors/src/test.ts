@@ -25,18 +25,29 @@ function defaultCommand(suite: TestSuite): readonly string[] {
 }
 
 const VITEST_SUMMARY = /Tests\s+(\d+) passed(?:\s+\|\s+(\d+) failed)?/;
+const ANSI_SEQUENCE = new RegExp(`${String.fromCharCode(27)}\\[[0-?]*[ -/]*[@-~]`, 'g');
+
+export interface VitestSummary {
+  readonly passed: number;
+  readonly failed: number;
+}
+
+export function parseVitestSummary(output: string): VitestSummary | null {
+  const match = VITEST_SUMMARY.exec(output.replace(ANSI_SEQUENCE, ''));
+  if (match === null) return null;
+  return {
+    passed: Number(match[1] ?? 0),
+    failed: Number(match[2] ?? 0),
+  };
+}
 
 export function senseTest(opts: TestOptions): SensorReading {
   const args = [...defaultCommand(opts.suite)];
   const result = runCommand(args, { cwd: opts.cwd, timeoutMs: opts.timeoutMs ?? 600_000 });
 
-  let passed = 0;
-  let failed = 0;
-  const m = VITEST_SUMMARY.exec(result.stdout) ?? VITEST_SUMMARY.exec(result.stderr);
-  if (m) {
-    passed = Number(m[1] ?? 0);
-    failed = Number(m[2] ?? 0);
-  }
+  const summary = parseVitestSummary(result.stdout) ?? parseVitestSummary(result.stderr);
+  const passed = summary?.passed ?? 0;
+  const failed = summary?.failed ?? 0;
 
   const status: SensorStatus = result.exit_code === 0 ? 'pass' : failed > 0 ? 'fail' : 'error';
 
