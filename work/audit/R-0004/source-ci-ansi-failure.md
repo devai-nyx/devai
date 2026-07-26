@@ -2,11 +2,11 @@
 id: R-0004-SOURCE-CI-ANSI-FAILURE
 title: R-0004 source exact-head ANSI summary failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-SOURCE-CI-ANSI-CORRECTION
 provenance: [PR #6; exact head 1eed4022c06f9bfb682d820caa4755d7a29c3710; GitHub Actions run 30206695586; BL-180]
 ---
 
