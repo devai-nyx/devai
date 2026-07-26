@@ -2263,6 +2263,28 @@ The complete ladder and a fresh literal `claude-opus-5` review remain mandatory 
 source push. No release, publication, deployment, predecessor write, real-stynx write,
 external R-0008 action, R-0009 activation, or R-0010 observation is authorized.
 
+### DII-172 — Rebind the R-0004 source close after first Opus correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 corrected close; DII-170; DII-171; BL-144–151; R-0004-OPUS-CLOSE-REVIEW-FAILURE; R-0004-OPUS-CLOSE-REVIEW-CORRECTION; Auditor ab045184015f8cf6c796606e285045b52855662b`
+
+DII-172 supersedes DII-170 only as the R-0004 source-closing judgment. The first Opus
+review's eight findings are implemented through the role-pure red-first sequence bound
+by DII-171 and reconciled by the Auditor. The corrected surface is 147 keep, 38 fold,
+and one tombstone, 186 total, including the previously live but unregistered
+`policy check schemas` action.
+
+The correction also binds the root contract to T2 and trace, covers every tracked test
+by the T1–T6 union, restores every declared policy mirror, repairs exact sensor cell
+rendering, fixes non-recursive root test argv, scopes destructive-SQL allowance to the
+matched operation and target, normalizes superseded failure status, and validates every
+remote workflow action pin while retaining local reusable-workflow paths.
+
+The clean candidate containing DII-172, the refreshed source-close handoff, and fresh
+deterministic projections must restart the complete local ladder and then receive a new
+read-only close review through literal `claude-opus-5`, with no fallback. Any actionable
+finding reopens the role-pure red-first cycle; only PASS permits source push. The shared
+two-PR ceremony, `none-needed` release disposition, claims ceiling, and every external
+human gate remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

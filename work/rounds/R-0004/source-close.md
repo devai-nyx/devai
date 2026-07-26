@@ -9,14 +9,23 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-162–170; R-0004-AS-BUILT; Auditor 41d73a2,
+    DII-162–172; R-0004-AS-BUILT; Auditor 41d73a2,
     a9c1dab,
     9da5b54,
-    and 8f7581c; Inspector b7bf300,
+    8f7581c,
+    and ab04518; Inspector b7bf300,
     4c08b46,
     fbfb226,
-    and b3be172; Engineer d875b73,
-    and b8d6c98; Architect e1b952b,
+    b3be172,
+    84a9150,
+    and 1f01fff; Engineer d875b73,
+    b8d6c98,
+    55ee8d0,
+    and 2ef3936; Architect e1b952b,
+    96d2477,
+    a1dbb5b,
+    b187210,
+    and 98171a0,
   ]
 ---
 
@@ -24,12 +33,19 @@ provenance:
 
 ## Bound result
 
-DII-170 accepts the Auditor's B7 reconciliation and BL-141 through BL-143 corrections,
-supersedes DII-168 only as the closing judgment, and closes the local source
-implementation. The governed action surface is 146 keep / 38 fold / 1 tombstone; action
-effects are 185/185 with zero findings; 59 live sensors retain their 50/9
+DII-172 accepts the Auditor's B7 reconciliation and BL-141 through BL-151 corrections,
+supersedes DII-170 only as the closing judgment, and closes the local source
+implementation. The governed action surface is 147 keep / 38 fold / 1 tombstone; action
+effects are 186/186 with zero findings; 59 live sensors retain their 50/9
 cell/diagnostic standing; the recursive canon contains 55 schemas; and the fixed public
 package group contains exactly eleven packages, including the export-only core façade.
+
+The first exact-candidate Opus review's eight actionable findings are red-first repaired:
+every tracked test belongs to a tier, the root contract is T2 and trace-bound,
+`policy check schemas` is canonical, all policy mirrors match, exact sensor cells render
+without object coercion, root test argv is fixed and non-recursive, SQL allowance covers
+the matched operation and target, superseded failure records agree symmetrically, and
+every remote workflow action use is immutably pinned with readable provenance.
 
 The root build/test porcelain, required workflow pins and prewarm, semantic
 repository-reference generation, generated action views, package dry-runs, all six test
@@ -38,7 +54,7 @@ Auditor's exact readings and role-pure commit map are in `work/audit/R-0004/as-b
 
 ## Review and ceremony gate
 
-The next clean commit containing this handoff, DII-170, updated population guards, and
+The next clean commit containing this handoff, DII-172, updated population guards, and
 fresh deterministic projections is the review candidate. It must receive one read-only
 close review through literal `claude-opus-5`, with no fallback. Actionable findings
 return to red-first role-pure repair; PASS permits the shared source-PR and closure-only
