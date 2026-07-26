@@ -346,6 +346,27 @@ describe('post-merge authority host scope', () => {
       apply({
         kind: 'process',
         symbol: 'spawnSync',
+        arguments: ['git', ['add', '--', `work/audit/post-merge/${fx.mergeSha}`]],
+      }),
+    ).toBe('applied');
+    expect(
+      apply({
+        kind: 'process',
+        symbol: 'spawnSync',
+        arguments: ['git', ['commit', '-m', `audit(post-merge): observe ${fx.mergeSha}`]],
+      }),
+    ).toBe('applied');
+    expect(() =>
+      apply({
+        kind: 'process',
+        symbol: 'spawnSync',
+        arguments: ['git', ['add', '--', 'work/audit/post-merge/not-a-sha']],
+      }),
+    ).toThrow('POST_MERGE_PROCESS_FORBIDDEN');
+    expect(
+      apply({
+        kind: 'process',
+        symbol: 'spawnSync',
         arguments: ['/usr/bin/git', ['worktree', 'add']],
       }),
     ).toBe('applied');
@@ -399,6 +420,16 @@ describe('post-merge authority host scope', () => {
     expect(readFileSync(join(stateRoot, fx.mergeSha, 'status.json'), 'utf8')).toContain(
       'observation_digest_sha256',
     );
+    const auditRef = `refs/devai/post-merge/${fx.mergeSha}`;
+    expect(
+      git(fx.root, ['show', `${auditRef}:work/audit/post-merge/${fx.mergeSha}/status.json`]),
+    ).toContain('observation_digest_sha256');
+    expect(git(fx.root, ['show', '-s', '--format=%an <%ae>', auditRef])).toBe(
+      'DEVAI Auditor <aarusso@nyxk.com.br>',
+    );
+    expect(
+      git(join(fx.root, '.devai/worktrees/auditor-post-merge'), ['status', '--porcelain']),
+    ).toBe('');
     expect(readdirSync(join(stateRoot, 'attempt-history', fx.mergeSha)).length).toBeGreaterThan(0);
 
     await expect(execute()).resolves.toMatchObject({ status: 'replayed', processed: [] });
