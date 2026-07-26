@@ -413,13 +413,21 @@ function readOnlyProcess(
     return true;
   }
   if (parentAction === 'sense test' && basename(executable) === 'pnpm') {
+    const governedConfigs = [
+      'tests/config/t1.unit.config.ts',
+      'tests/config/t3.integration.config.ts',
+      'tests/config/t4.regression.config.ts',
+      'tests/config/t5.e2e.config.ts',
+    ];
+    if (args.length === 2 && args[0] === 'vitest' && args[1] === 'run') {
+      return true;
+    }
     if (
-      (args.length === 2 && args[0] === 'vitest' && args[1] === 'run') ||
-      (args.length === 1 &&
-        ['test', 'test:integration', 'test:regression', 'test:e2e'].includes(String(args[0]))) ||
-      (args.length === 2 &&
-        args[0] === 'run' &&
-        ['test:t1', 'test:t3', 'test:t4', 'test:t5'].includes(String(args[1])))
+      args.length === 4 &&
+      args[0] === 'vitest' &&
+      args[1] === 'run' &&
+      args[2] === '--config' &&
+      governedConfigs.includes(String(args[3]))
     ) {
       return true;
     }

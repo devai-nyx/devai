@@ -4029,7 +4029,7 @@ export const ACTION_REGISTRY = [
     profiles: ['tier1', 'tier2', 'tier3'],
     effect: 'read',
     authority: 'sensor',
-    description: 'Wrap the project build (default: pnpm run build); emit a SensorReading',
+    description: 'Run the fixed recursive project build (pnpm -r build); emit a SensorReading',
     promotion_criteria: [],
     authority_contract_version: '1.0.0',
     authority_contract: {
