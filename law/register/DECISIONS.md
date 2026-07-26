@@ -2352,6 +2352,16 @@ superseded by ADR-013, and ADR-013 is superseded by ADR-014. All remaining DII-1
 implementation, red-first, review, ceremony, claims, and external-gate boundaries remain
 unchanged.
 
+### DII-177 — Complete ADR-014's machine-readable CI path set
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 ADR affected-rules correction; DII-176; strict governance reading after Engineer 0e802054a8f1c5dc6ab663815c4f4447fa3a880c`
+
+ADR-014's body preserved both live workflows and the CI-stage runner, but its initial
+frontmatter `affected_rules` omitted those three exact paths. DII-177 corrects that
+machine-readable projection to include `.github/workflows/ci.yml`,
+`.github/workflows/round-gates.yml`, and `scripts/run-ci-stages.mjs` alongside the
+workflow checker and scanner paths. The active doctrine and all DII-176 boundaries are
+unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

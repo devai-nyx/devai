@@ -11,8 +11,12 @@ provenance:
   - DII-171; DII-174; BL-151; BL-154; R-0004-OPUS-CLOSE-REVIEW-FAILURE; R-0004-CORRECTED-CANDIDATE-GOVERNANCE-FAILURE
 affected_rules:
   - scripts/check-workflows.mjs
+  - scripts/run-ci-stages.mjs
   - packages/skills/src/forbidden-actions/index.ts
   - law/policy/forbidden-actions.json
+  - law/schemas/local-evidence-manifest.schema.json
+  - .github/workflows/ci.yml
+  - .github/workflows/round-gates.yml
 ---
 
 # ADR-014. CI checker ADR association
@@ -74,6 +78,7 @@ and this record carries the complete active rule.
 ## Affected Rules
 
 - `scripts/check-workflows.mjs`
+- `scripts/run-ci-stages.mjs`
 - `packages/skills/src/forbidden-actions/index.ts`
 - `law/policy/forbidden-actions.json`
 - `law/schemas/local-evidence-manifest.schema.json`
