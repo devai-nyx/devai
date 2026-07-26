@@ -2,11 +2,11 @@
 id: ADR-013
 title: CI economy workflow correction
 type: adr
-status: active
+status: superseded
 date: 2026-07-25
 authority: Architect
 supersedes: [ADR-005]
-superseded_by: null
+superseded_by: ADR-014
 provenance:
   - DII-149; DII-152; BL-122; BL-128; ADR-005 sealed source; R-0003 Opus review
 affected_rules:

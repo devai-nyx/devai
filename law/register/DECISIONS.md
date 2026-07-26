@@ -2338,6 +2338,20 @@ ladder and fresh literal `claude-opus-5` review remain mandatory before source p
 release, publication, deployment, predecessor write, real-stynx write, or external
 human gate changes.
 
+### DII-176 — Correct the ADR-014 lifecycle chain
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 ADR-014 lifecycle correction; DII-175; ADR validator reading after fee91e91714536c20727bd3d19960af3c1e912b1`
+
+DII-176 supersedes DII-175 only as the ADR roster and lifecycle judgment. The ADR schema
+requires every successor ADR to name at least one superseded source. ADR-014 therefore
+supersedes ADR-013, whose sealed body remains unchanged while its lifecycle frontmatter
+transitions terminally. ADR-014 preserves ADR-013's complete CI-economy doctrine and adds
+the checker-path association; no active rule is lost.
+
+The roster is gapless ADR-001 through ADR-014 with twelve active records. ADR-005 is
+superseded by ADR-013, and ADR-013 is superseded by ADR-014. All remaining DII-175
+implementation, red-first, review, ceremony, claims, and external-gate boundaries remain
+unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
