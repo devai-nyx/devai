@@ -243,8 +243,7 @@ describe('R-0004 governed surface red-first contracts', () => {
     const directDescriptions = new Map(
       registry.entries
         .filter(
-          (entry) =>
-            entry.disposition === 'keep' && entry.action_id === entry.internal_binding,
+          (entry) => entry.disposition === 'keep' && entry.action_id === entry.internal_binding,
         )
         .map((entry) => [entry.action_id, entry.description]),
     );
