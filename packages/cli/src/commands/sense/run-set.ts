@@ -224,12 +224,12 @@ export function expandSensorSet(set: SensorSet): readonly (readonly string[])[] 
   return [...BASELINE, ...TIER2_ADDITIONS, ...TIER3_ADDITIONS];
 }
 
-export function routeSensorChildArgv(
+export function planSensorChild(
   command: readonly string[],
   executable: string,
   entries: readonly RegistryEntry[],
   version: string,
-): readonly string[] {
+): { readonly argv: readonly string[]; readonly runnable: boolean } {
   const routed = routeArgv([process.execPath, executable, ...command], entries, version);
   if (routed.kind !== 'dispatch') {
     throw new Error('SENSE_RUN_CHILD_ROUTE_INVALID');
@@ -237,7 +237,19 @@ export function routeSensorChildArgv(
   const internalName = routed.argv[2];
   const entry = entries.find((candidate) => candidate.internal_name === internalName);
   if (entry === undefined) throw new Error('SENSE_RUN_CHILD_BINDING_MISSING');
-  return [...entry.path, ...routed.argv.slice(3)];
+  return {
+    argv: [...entry.path, ...routed.argv.slice(3)],
+    runnable: entry.effects === 'read',
+  };
+}
+
+export function routeSensorChildArgv(
+  command: readonly string[],
+  executable: string,
+  entries: readonly RegistryEntry[],
+  version: string,
+): readonly string[] {
+  return planSensorChild(command, executable, entries, version).argv;
 }
 
 const COMMAND_KINDS: Readonly<Record<string, string>> = {
@@ -505,16 +517,17 @@ export const senseRunSetCmd = defineCommand({
             : null;
         const results = commands.map((command) => {
           const args = [...command, '--repo-root', repoRoot];
-          const childArgs = routeSensorChildArgv(
-            args,
-            executable,
-            getFullRegistry(),
-            resolveCliVersion(),
-          );
-          const result = spawnSync(process.execPath, [executable, ...childArgs], {
-            encoding: 'utf8',
-            env: process.env,
-          });
+          const plan = planSensorChild(args, executable, getFullRegistry(), resolveCliVersion());
+          const result = plan.runnable
+            ? spawnSync(process.execPath, [executable, ...plan.argv], {
+                encoding: 'utf8',
+                env: process.env,
+              })
+            : {
+                status: null,
+                stdout: '',
+                stderr: 'SENSE_RUN_CHILD_REQUIRES_BOUND_WRITE_ADAPTER',
+              };
           const child = {
             command: `devai ${command.join(' ')}`,
             processStatus: result.status,
