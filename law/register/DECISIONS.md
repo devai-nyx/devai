@@ -2304,6 +2304,22 @@ The complete ladder and fresh literal `claude-opus-5` review remain mandatory be
 source push. No production argv, threshold, skip, release, publication, deployment,
 predecessor write, real-stynx write, or external human gate changes.
 
+### DII-174 — Rebind the R-0004 source close after T2 collateral correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 T2-corrected close; DII-172; DII-173; BL-152–153; R-0004-CORRECTED-CANDIDATE-T2-FAILURE; R-0004-CORRECTED-CANDIDATE-T2-CORRECTION; Auditor 6447d9c9202358905df04afc130d06c94fbf52e1 and 1ba28c7ccf760deb419c1684b742f89b8bf16ff0; Architect 691821aa362330ad6e738ebc06ff7385d2ce2ab2; Inspector 1c2793568045c1c5178ccae331f30ecad5159eb6`
+
+DII-174 supersedes DII-172 only as the R-0004 source-closing judgment. BL-152 and
+BL-153 are implemented with symmetric failure/correction evidence. The live trace now
+validates contract evidence at both invariant-binding and test-index levels. The
+test-only authority host admits only the governed fixed Vitest shapes, with seven direct
+allow/deny assertions and passing hermetic skills baselines.
+
+The clean candidate containing DII-174, the refreshed source-close handoff, and fresh
+deterministic projections must restart the complete local ladder from Stage 1 and then
+receive the mandated read-only close review through literal `claude-opus-5`, with no
+fallback. Any actionable finding reopens the role-pure red-first cycle; only PASS
+permits source push. The two-PR ceremony, `none-needed` release disposition, claims
+ceiling, and every external human gate remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

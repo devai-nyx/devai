@@ -368,6 +368,11 @@
         },
         {
           "suite": "unit",
+          "path": "packages/skills/tests/unit/authority-host-readonly.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/skills/tests/unit/cli-client.test.ts",
           "target_type": "test"
         },
@@ -888,6 +893,11 @@
         },
         {
           "suite": "unit",
+          "path": "packages/skills/tests/unit/authority-host-readonly.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/skills/tests/unit/round-utilities.test.ts",
           "target_type": "test"
         },
@@ -984,6 +994,11 @@
         {
           "suite": "unit",
           "path": "packages/effects-check/tests/unit/binding.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/authority-host-readonly.test.ts",
           "target_type": "test"
         },
         {
@@ -1727,6 +1742,16 @@
       "invariant_ids": [
         "INV-DEVAI-001",
         "INV-DEVAI-010"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/authority-host-readonly.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
       ],
       "lifecycle": "supported"
     },
