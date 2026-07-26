@@ -9,7 +9,7 @@ supersedes: R-0004-SOURCE-CI-REPORTER-PROGRESS-FAILURE
 superseded_by: null
 provenance:
   [
-    BL-180; Inspector 6c876f1 and 54e79a1; Engineer d694249; exact repaired snapshot 54e79a1d9b15170b885950c1371758867ac52024,
+    BL-180; Inspector 6c876f1 and 54e79a1; Engineer d694249; exact repaired snapshot 54e79a19a22e64ec8a6c6ea698087081872d70fd,
   ]
 ---
 
@@ -24,7 +24,7 @@ text, and all other content remain visible. Inspector `54e79a1` records the focu
 contract green.
 
 The committed R20 baseline was not recaptured. The complete ladder passed on exact clean
-snapshot `54e79a1d9b15170b885950c1371758867ac52024`: T1 passed 71 files / 838 tests, T2
+snapshot `54e79a19a22e64ec8a6c6ea698087081872d70fd`: T1 passed 71 files / 838 tests, T2
 passed 38 files / 240 tests plus one declared skip, root passed 127 files / 1,166 tests
 plus eight declared skips, coverage remained 71.23/61.79/77.62/73.25, and all eleven
 package dry-runs passed. Formatting, strict governance, and all generated checks were

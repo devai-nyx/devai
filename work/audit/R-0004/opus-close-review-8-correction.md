@@ -9,7 +9,7 @@ supersedes: R-0004-OPUS-CLOSE-REVIEW-8-FAILURE
 superseded_by: null
 provenance:
   [
-    BL-180; Inspector b4d895e and bf42be1; Engineer db75ddc; Architect 467b001; exact repaired snapshot dc64176017ad07c956548b47e59955862541db21,
+    BL-180; Inspector b4d895e and bf42be1; Engineer db75ddc; Architect 467b001; exact repaired snapshot dc64176ab75675a65e3c561576a2f5bb756b408f,
   ]
 ---
 
@@ -24,7 +24,7 @@ disposition from 54 to 55 schemas. Inspector `bf42be1` records both guards green
 recapturing the baseline.
 
 The complete ladder passed on exact clean snapshot
-`dc64176017ad07c956548b47e59955862541db21`: T1 passed 71 files / 838 tests, T2 passed
+`dc64176ab75675a65e3c561576a2f5bb756b408f`: T1 passed 71 files / 838 tests, T2 passed
 38 files / 239 tests plus one declared skip, the root porcelain passed 127 files / 1,165
 tests plus eight declared skips, merged T1+T3 coverage remained
 71.23/61.79/77.62/73.25, and all eleven package dry-runs passed. Formatting, strict

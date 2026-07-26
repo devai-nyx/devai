@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; source snapshot 54e79a1d9b15170b885950c1371758867ac52024,
+    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; source snapshot 54e79a19a22e64ec8a6c6ea698087081872d70fd,
   ]
 ---
 
@@ -18,7 +18,7 @@ provenance:
 ## Boundary and verdict
 
 R-0004 has completed B0 through B7 locally at source snapshot
-`54e79a1d9b15170b885950c1371758867ac52024`. The governed surface and package
+`54e79a19a22e64ec8a6c6ea698087081872d70fd`. The governed surface and package
 topology satisfy the round acceptance criteria at that snapshot. The round is not yet
 closed: the Architect closing record, exact-candidate Claude Opus 5 review, source PR,
 exact-SHA CI, source merge, exact-main CI, closure-only machine record, closure PR, and

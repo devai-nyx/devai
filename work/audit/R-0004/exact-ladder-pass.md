@@ -9,14 +9,14 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    R-0004-AS-BUILT; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; source snapshot 54e79a1d9b15170b885950c1371758867ac52024,
+    R-0004-AS-BUILT; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; source snapshot 54e79a19a22e64ec8a6c6ea698087081872d70fd,
   ]
 ---
 
 # R-0004 exact-candidate ladder pass
 
 The complete local R-0004 exit ladder passed on exact source snapshot
-`54e79a1d9b15170b885950c1371758867ac52024` with a clean worktree.
+`54e79a19a22e64ec8a6c6ea698087081872d70fd` with a clean worktree.
 
 - workflow lint: 2 workflow files passed;
 - action registry: 3 generated views reproduced byte-for-byte;

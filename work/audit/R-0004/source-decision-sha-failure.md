@@ -2,11 +2,11 @@
 id: R-0004-SOURCE-DECISION-SHA-FAILURE
 title: R-0004 governed decision SHA binding failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-SOURCE-DECISION-SHA-CORRECTION
 provenance:
   [
     R-0004 tenth exact-candidate Claude Opus 5 review of e0af282d368501127003e026bb66de1bfeef76e4; BL-181,
