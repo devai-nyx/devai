@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-162–185; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; R-0004-GOVERNANCE-RANGE-CORRECTION; Auditor 41d73a2,
+    DII-162–186; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-3-FAILURE; R-0004-GOVERNANCE-RANGE-CORRECTION; Auditor 41d73a2,
     a9c1dab,
     9da5b54,
     8f7581c,
@@ -66,9 +66,9 @@ provenance:
 
 ## Bound result
 
-DII-185 accepts the Auditor's B7 reconciliation, BL-141 through BL-162 corrections, and
-the repaired exact local ladder, supersedes DII-184 only as the closing judgment, and closes the local source
-implementation. The governed action surface is 147 keep / 38 fold / 1 tombstone; action
+DII-186 accepts the BL-163 through BL-165 red-first corrections, supersedes DII-185 only
+as the closing judgment, and rebinds the locally repaired source implementation. The
+governed action surface is 147 keep / 38 fold / 1 tombstone; action
 effects are 186/186 with zero findings; 59 live sensors retain their 50/9
 cell/diagnostic standing; the recursive canon contains 55 schemas; and the fixed public
 package group contains exactly eleven packages, including the export-only core façade.
@@ -90,6 +90,10 @@ suite reaches an exact production broker argv; the test host admits only the six
 configs; R20 fixture changes derive from the R-0003 base and contain real tests; build
 help is canonical; leaf help observes the real session store; active counts agree; and
 strict governance scans the exact closed-R-0003-base-to-HEAD range.
+The third review's active-text inconsistencies are also repaired: the surface contract
+names the exact production build/test argv and 55-schema live canon, and the direct
+`sense build` command description equals the canonical registry. Inspector guards now
+derive these claims from canonical sources.
 
 The complete repaired local ladder passed on exact source snapshot `31dfbaf`, including root
 build/test porcelain, required workflow pins and prewarm, semantic
@@ -99,11 +103,12 @@ Auditor's exact readings and role-pure commit map are in `work/audit/R-0004/as-b
 
 ## Review and ceremony gate
 
-The next clean commit containing this handoff, DII-185, updated population guards, and
-fresh deterministic projections is the review candidate. It must receive one read-only
-close review through literal `claude-opus-5`, with no fallback. Actionable findings
-return to red-first role-pure repair; PASS permits the shared source-PR and closure-only
-PR ceremony with exact-SHA CI evidence.
+The next clean commit containing this handoff, DII-186, the BL-163 through BL-165 guards,
+and the symmetric Auditor correction is the review candidate. It must restart the
+complete ladder and receive one read-only close review through literal
+`claude-opus-5`, with no fallback. Actionable findings return to red-first role-pure
+repair; PASS permits the shared source-PR and closure-only PR ceremony with exact-SHA CI
+evidence.
 
 No package publish, tag, GitHub Release, Pages deployment, real-stynx write, external
 R-0008 action, R-0009 activation, or R-0010 observation is authorized.

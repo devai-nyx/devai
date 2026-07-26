@@ -34,7 +34,7 @@ successor-local path recorded in the B0 enumeration. The nine diagnostic entries
 diagnostic and the other fifty retain their current cells; R-0004 creates no standing
 upgrade. Archived kinds retain typed retirement behavior.
 
-The full canon linter applies recursively across all 54 schemas. Complete object shapes
+The full canon linter applies recursively across all 55 schemas. Complete object shapes
 must be closed; conditional predicate fragments remain valid; shared vocabulary must
 resolve through `common-defs`; generated projections carry verified markers; and a
 dereferenced published copy must be byte-identical to its canonical materialization.
@@ -49,8 +49,8 @@ side effects. Pack dry-runs inspect exact contents; publication is forbidden.
 
 ## Bounded root porcelain
 
-The build action may execute only `pnpm -r --if-present build`. The test action may
-execute only `pnpm exec vitest run`. Both use registered argv arrays through the host
+The build action may execute only `pnpm -r build`.
+The test action may execute only `pnpm vitest run`. Both use registered argv arrays through the host
 process adapter: no shell, caller-selected executable, metacharacter expansion,
 additional argv, or recursive root-script call is accepted. Root `build` and `test`
 invoke these actions after CLI preparation.

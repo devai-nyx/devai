@@ -2483,6 +2483,23 @@ candidate. It must pass the complete ladder and a new read-only review through l
 `claude-opus-5`, with no fallback, before source push. The claims ceiling and every
 external human gate remain unchanged.
 
+### DII-186 — Rebind after the third Opus contract correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 third-Opus correction; DII-185; BL-163–165; R-0004-OPUS-CLOSE-REVIEW-3-FAILURE; Inspector b0af62c; Engineer ca6dff9`
+
+DII-186 supersedes DII-185 only as the R-0004 source-closing judgment. The third exact
+candidate Opus review independently reproduced the complete green ladder and all prior
+repairs, then found three remaining active-text inconsistencies. The governed surface
+contract now derives the exact fixed `pnpm -r build` and `pnpm vitest run` argv and the
+55-schema live canon; the direct `sense build` command definition now equals the
+canonical registry's fixed-recursive description. Inspector guards bind both contract
+claims to canonical sources and bind direct public command descriptions to the registry.
+
+The next clean commit containing DII-186 and its refreshed handoff must restart the
+complete local ladder, package dry-runs, and a fresh read-only close review through
+literal `claude-opus-5`, with no fallback. Only PASS permits source push. No external
+release, publication, deployment, real-stynx write, R-0008, R-0009, or R-0010 human gate
+changes.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
