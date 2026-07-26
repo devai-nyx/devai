@@ -11,7 +11,7 @@ interface Options {
 
 export const senseBuildCmd = defineCommand({
   name: 'sense build',
-  description: 'Run the fixed non-recursive workspace build; emit a SensorReading',
+  description: 'Run the fixed recursive project build (pnpm -r build); emit a SensorReading',
   authority: 'sensor',
   register(cli: CAC): void {
     cli
