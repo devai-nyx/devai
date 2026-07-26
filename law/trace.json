@@ -477,6 +477,11 @@
           "target_type": "test"
         },
         {
+          "suite": "contract",
+          "path": "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "e2e",
           "path": "tests/e2e/bare-domain-help.e2e.test.ts",
           "target_type": "test"
@@ -557,6 +562,11 @@
           "target_type": "test"
         },
         {
+          "suite": "contract",
+          "path": "tests/contract/governed-sequencing.contract.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "e2e",
           "path": "tests/e2e/inventory-sensors.smoke.test.ts",
           "target_type": "test"
@@ -584,6 +594,11 @@
         {
           "suite": "unit",
           "path": "packages/loop/tests/unit/backlog-tasks.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/governed-sequencing.contract.test.ts",
           "target_type": "test"
         }
       ]
@@ -863,6 +878,11 @@
         },
         {
           "suite": "unit",
+          "path": "packages/evidence/tests/unit/proof-epoch.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/loop/tests/unit/release-control.test.ts",
           "target_type": "test"
         },
@@ -910,6 +930,11 @@
           "suite": "contract",
           "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
           "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
+          "target_type": "test"
         }
       ]
     },
@@ -939,6 +964,11 @@
         {
           "suite": "unit",
           "path": "packages/evidence/tests/unit/local-evidence.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/evidence/tests/unit/proof-epoch.test.ts",
           "target_type": "test"
         },
         {
@@ -1004,6 +1034,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -1367,6 +1402,15 @@
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/evidence/tests/unit/proof-epoch.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-016",
+        "INV-DEVAI-018"
       ],
       "lifecycle": "supported"
     },
@@ -2029,9 +2073,28 @@
       "lifecycle": "supported"
     },
     {
+      "path": "tests/contract/governed-sequencing.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-003"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
       "suite": "contract",
       "invariant_ids": [
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
         "INV-DEVAI-017",
         "INV-DEVAI-020"
       ],
