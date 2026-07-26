@@ -1803,6 +1803,20 @@ are classified rather than silently treated as local commits; the two fabricated
 R-0004 expansions are replaced by their exact `git rev-parse` values; CI runs the check;
 focused and complete gates pass without deleting historical failure evidence.
 
+### BL-182 — Reconcile and exercise governed SHA-reference semantics
+
+`type: backlog-item · status: draft · authority: Auditor + Inspector + Architect · provenance: R-0004 eleventh exact-candidate Claude Opus 5 failure; candidate e79b283; R-0004-OPUS-CLOSE-REVIEW-11-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: snapshot-specific SHA readings name the snapshot that produced them; active
+law, audit, test, and backlog claims describe the implemented local-resolution or exact
+path-scoped exception behavior without claiming an absent local object-kind comparison;
+hermetic Inspector cases reject an unresolved identity, exception use outside allowed
+paths, a stale allowed path, and a stale exception; the failure/correction lifecycle is
+symmetric; a fresh atomic closing DII, complete ladder, and literal `claude-opus-5`
+review pass before source push.
+
 ## Carried guard map
 
 The original known-red mapping remains as historical provenance:
