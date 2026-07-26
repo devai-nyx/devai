@@ -113,11 +113,14 @@ export function checkSchemaCanon(repoRoot: string): SchemaCanonReport {
 
 export const checkSchemasCmd = defineCommand({
   name: 'check schemas',
-  description: 'Validate the complete recursive schema canon',
+  description: 'Validate the complete recursive schema canon and every governed schema rule.',
   authority: 'policy_firewall',
   register(cli: CAC): void {
     cli
-      .command('check-schemas', 'Validate the complete recursive schema canon')
+      .command(
+        'check-schemas',
+        'Validate the complete recursive schema canon and every governed schema rule.',
+      )
       .option('--repo-root <path>', 'Repository root (default: .)')
       .option('--format <format>', 'Output format: json or human')
       .option('--human', 'Human-readable output')

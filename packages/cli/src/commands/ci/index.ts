@@ -9,7 +9,7 @@ const CI_SCAFFOLD_MODES: readonly CiScaffoldMode[] = ['gate', 'verify'];
 export const ciScaffold = defineCommand({
   name: 'ci scaffold',
   description:
-    'Generate a starter .github/workflows/devai-gates.yml that calls the canonical reusable-evidence-gate.yml. Plan-only unless --execute; refuses to overwrite unless --force (D-123, item 5).',
+    'Generate a starter .github/workflows/devai-gates.yml that calls the canonical reusable-evidence-gate.yml. Plan-only unless --write; refuses to overwrite unless --force (D-123, item 5).',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
