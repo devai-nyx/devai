@@ -5,7 +5,7 @@ type: audit-report
 status: active
 date: 2026-07-26
 authority: Auditor
-supersedes: [R-0004-CORRECTED-CANDIDATE-GOVERNANCE-FAILURE; R-0004-ADR-SEAL-GOVERNANCE-FAILURE]
+supersedes: [R-0004-CORRECTED-CANDIDATE-GOVERNANCE-FAILURE, R-0004-ADR-SEAL-GOVERNANCE-FAILURE]
 superseded_by: null
 provenance:
   [

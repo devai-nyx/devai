@@ -5,7 +5,7 @@ type: audit-report
 status: active
 date: 2026-07-26
 authority: Auditor
-supersedes: null
+supersedes: R-0004-GOVERNANCE-RANGE-FAILURE
 superseded_by: null
 provenance:
   [BL-162; failed strict-governance reading after c530468; Inspector 3581591; Engineer ab04008]

@@ -7,7 +7,10 @@ date: 2026-07-26
 authority: Auditor
 supersedes: null
 superseded_by: null
-provenance: [R-0004-AS-BUILT; DII-186; source snapshot 7be9d31dcbfb07fffc2f8547af89c5b04e8b66f9]
+provenance:
+  [
+    R-0004-AS-BUILT; R-0004-FINAL-REPAIR-FORMATTING-CORRECTION; source snapshot 7be9d31dcbfb07fffc2f8547af89c5b04e8b66f9,
+  ]
 ---
 
 # R-0004 exact-candidate ladder pass

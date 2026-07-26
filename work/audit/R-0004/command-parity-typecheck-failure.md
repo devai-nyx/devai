@@ -2,11 +2,11 @@
 id: R-0004-COMMAND-PARITY-TYPECHECK-FAILURE
 title: R-0004 command-parity guard typecheck failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-COMMAND-PARITY-TYPECHECK-CORRECTION
 provenance: [Inspector bf9a690; BL-170; TS2345 at r0004-governed-surface.red.contract.test.ts:48]
 ---
 
