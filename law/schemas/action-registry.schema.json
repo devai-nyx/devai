@@ -3,6 +3,7 @@
   "$id": "https://devai.nyxk.com.br/schemas/action-registry.schema.json",
   "title": "Governed action registry",
   "description": "Canonical never-reminted identity, disposition, lifecycle, effects, and authority source for every public or historical action route.",
+  "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
   "required": [

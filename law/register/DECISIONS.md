@@ -2058,6 +2058,22 @@ byte-stable projections are bound by `law/policy/governed-surface.md`. None of t
 bindings grants external release, deployment, publication, real-stynx mutation, R-0008
 external action, R-0009 activation, or R-0010 observation.
 
+### DII-164 — Complete the B3 action-consumer authority handoff
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 B3 authority repair; DII-163; R-0004-B3-AUTHORITY-REPAIR; cb88dfdc0ff71760d698707ce115bff37e25fd28`
+
+The first B3 consumer build removed the action-effect identity mirror and exposed three
+canonical omissions. This decision corrects the authority source rather than weakening
+the consumer: `action-registry.schema.json` carries the required canon version marker;
+Mermaid rendering declares its bounded process capabilities; and the subprocess policy
+enumerates the observed Mermaid and doctor read shapes. The owner leaf description is
+also bound to the Inspector-pinned exact-segment wording.
+
+These corrections do not change the governed population or scalar effects. Counts remain
+146 keep, 38 fold, and one tombstone; the public effect distribution remains 83 read, 39
+harness-write, 23 local-write, and one remote-write. Engineer regeneration is required
+before the generated views are current. No external release or downstream human gate is
+altered.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

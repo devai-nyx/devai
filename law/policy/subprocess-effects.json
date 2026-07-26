@@ -235,6 +235,60 @@
       "effect": "read",
       "reason": "Doctor probes command availability through the login shell.",
       "owner": "architect"
+    },
+    {
+      "template_id": "which-mmdc",
+      "executable": "which",
+      "argv_shape": ["mmdc"],
+      "capabilities": ["proc:which"],
+      "effect": "read",
+      "reason": "Mermaid rendering checks for the configured renderer before a bounded local render.",
+      "owner": "architect"
+    },
+    {
+      "template_id": "mmdc-version",
+      "executable": "mmdc",
+      "argv_shape": ["--version"],
+      "capabilities": ["proc:mmdc"],
+      "effect": "read",
+      "reason": "Mermaid rendering reads the selected renderer version before local output.",
+      "owner": "architect"
+    },
+    {
+      "template_id": "git-doctor-log-records",
+      "executable": "git",
+      "argv_shape": ["log", "<dynamic>", "--pretty=format:%H%x00%an%x00%P%x00%B%x1e"],
+      "capabilities": ["proc:git-read"],
+      "effect": "read",
+      "reason": "Doctor reads bounded commit records for governance diagnostics.",
+      "owner": "architect"
+    },
+    {
+      "template_id": "git-doctor-rev-parse-pair",
+      "executable": "git",
+      "argv_shape": ["rev-parse", "<dynamic>", "<dynamic>"],
+      "capabilities": ["proc:git-read"],
+      "effect": "read",
+      "reason": "Doctor resolves two selected revision arguments without mutation.",
+      "owner": "architect"
+    },
+    {
+      "template_id": "git-doctor-diff-tree-names",
+      "executable": "git",
+      "argv_shape": ["diff-tree", "--root", "--no-commit-id", "--name-status", "-r", "-M", "-m", "<dynamic>"],
+      "capabilities": ["proc:git-read"],
+      "effect": "read",
+      "reason": "Doctor reads bounded path-change metadata for one selected revision.",
+      "owner": "architect"
+    },
+    {
+      "template_id": "git-doctor-diff-tree-patch",
+      "executable": "git",
+      "argv_shape": ["diff-tree", "--root", "--no-commit-id", "--no-ext-diff", "--unified=0", "-p", "-m", "<dynamic>"],
+      "capabilities": ["proc:git-read"],
+      "effect": "read",
+      "reason": "Doctor reads a zero-context patch for one selected revision.",
+      "owner": "architect"
     }
   ]
 }
