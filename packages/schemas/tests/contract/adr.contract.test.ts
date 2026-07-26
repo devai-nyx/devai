@@ -21,9 +21,9 @@ describe('ADR roster records', () => {
     .filter((f) => /^ADR-\d{3}-.+\.md$/.test(f))
     .sort();
 
-  it('roster is gapless ADR-001..013', () => {
+  it('roster is gapless ADR-001..014', () => {
     const nums = files.map((f) => Number(f.slice(4, 7)));
-    expect(nums).toEqual(Array.from({ length: 13 }, (_, i) => i + 1));
+    expect(nums).toEqual(Array.from({ length: 14 }, (_, i) => i + 1));
   });
 
   it('every front-matter validates against record-meta', () => {
@@ -52,6 +52,9 @@ describe('ADR roster records', () => {
       if (f === 'ADR-005-ci-economy.md') {
         expect(fm.status, f).toBe('superseded');
         expect(fm.superseded_by, f).toBe('ADR-013');
+      } else if (f === 'ADR-013-ci-economy-correction.md') {
+        expect(fm.status, f).toBe('superseded');
+        expect(fm.superseded_by, f).toBe('ADR-014');
       } else {
         expect(fm.status, f).toBe('active');
         expect(fm.superseded_by, f).toBeNull();
@@ -63,6 +66,7 @@ describe('ADR roster records', () => {
       expect(fm.provenance, f).toBeTruthy();
     }
     expect(frontMatter('ADR-013-ci-economy-correction.md').supersedes).toEqual(['ADR-005']);
+    expect(frontMatter('ADR-014-ci-checker-adr-association.md').supersedes).toEqual(['ADR-013']);
   });
 });
 // Invariants: INV-DEVAI-001

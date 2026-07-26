@@ -140,6 +140,73 @@ describe('scanForbiddenActions', () => {
     );
   }
 
+  function writeCiAdr(options?: {
+    readonly status?: 'active' | 'superseded';
+    readonly affectedRule?: string;
+    readonly malformed?: boolean;
+  }): void {
+    mkdirSync(join(dir, 'law/adr'), { recursive: true });
+    writeFileSync(
+      join(dir, 'law/adr/ADR-014-ci-checker.md'),
+      options?.malformed === true
+        ? '---\nid: ADR-014\nstatus active\n---\n'
+        : `---\nid: ADR-014\ntype: adr\nstatus: ${options?.status ?? 'active'}\naffected_rules:\n  - ${options?.affectedRule ?? 'scripts/check-workflows.mjs'}\n---\n`,
+    );
+  }
+
+  function commitCiCheckerChange(): string {
+    mkdirSync(join(dir, 'scripts'), { recursive: true });
+    writeFileSync(join(dir, 'scripts/check-workflows.mjs'), 'export const checked = true;\n');
+    execFileSync('git', ['add', 'scripts/check-workflows.mjs'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Engineer',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'fix: strengthen workflow checker',
+      ],
+      { cwd: dir },
+    );
+    return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: dir, encoding: 'utf8' }).trim();
+  }
+
+  it('accepts a CI checker change with exact active ADR affected-rule coverage', () => {
+    writeContextAwareRegistry();
+    writeCiAdr();
+    seedRepository();
+    commitCiCheckerChange();
+
+    expect(
+      scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings.filter(
+        (finding) => finding.forbidden_id === 'FORBID-CI-WITHOUT-ADR',
+      ),
+    ).toEqual([]);
+  });
+
+  it.each([
+    ['absent', undefined],
+    ['superseded', { status: 'superseded' as const }],
+    ['unrelated', { affectedRule: '.github/workflows/ci.yml' }],
+    ['malformed', { malformed: true }],
+  ])('rejects a CI checker change when ADR coverage is %s', (_label, options) => {
+    writeContextAwareRegistry();
+    if (options !== undefined) writeCiAdr(options);
+    seedRepository();
+    const sha = commitCiCheckerChange();
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-CI-WITHOUT-ADR',
+        source: 'commit-change',
+        ref: sha,
+      }),
+    );
+  });
+
   it('fails closed when the registry is missing or has no executable patterns', () => {
     expect(
       scanForbiddenActions({ repoRoot: dir, registryPath: join(dir, 'missing.json') }).findings,
