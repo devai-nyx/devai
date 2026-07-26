@@ -187,6 +187,56 @@ describe('scanForbiddenActions', () => {
     ).toEqual([]);
   });
 
+  it('scans every commit after an exact base even when a trailing window would omit it', () => {
+    writeContextAwareRegistry();
+    seedRepository();
+    const base = execFileSync('git', ['rev-parse', 'HEAD'], {
+      cwd: dir,
+      encoding: 'utf8',
+    }).trim();
+    writeFileSync(join(dir, 'unsafe.txt'), 'git push --force\n');
+    execFileSync('git', ['add', 'unsafe.txt'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=Fixture',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'fixture unsafe evidence',
+      ],
+      { cwd: dir },
+    );
+    writeFileSync(join(dir, 'later.txt'), 'safe\n');
+    execFileSync('git', ['add', 'later.txt'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=Fixture',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'later safe evidence',
+      ],
+      { cwd: dir },
+    );
+
+    expect(
+      scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings.some(
+        (finding) => finding.forbidden_id === 'FORBID-FORCE-PUSH',
+      ),
+    ).toBe(false);
+    expect(
+      scanForbiddenActions({ repoRoot: dir, sinceRef: base, maxCommits: 1 }).findings.some(
+        (finding) => finding.forbidden_id === 'FORBID-FORCE-PUSH',
+      ),
+    ).toBe(true);
+  });
+
   it.each([
     ['absent', undefined],
     ['superseded', { status: 'superseded' as const }],

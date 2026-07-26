@@ -200,17 +200,9 @@ describe('R-0004 governed surface red-first contracts', () => {
 
   it('BL-162 binds strict governance to a window covering the complete R-0004 range', () => {
     const root = readJson('package.json') as { scripts: Record<string, string> };
-    const match = /check forbidden actions --strict --repo-root \. --max-commits (\d+)/u.exec(
-      root.scripts['ci:governance'] ?? '',
+    expect(root.scripts['ci:governance']).toContain(
+      'check forbidden actions --strict --repo-root . --since-ref b60b4c52bff1779da84f48edc63cbf34652ab18e',
     );
-    expect(match).not.toBeNull();
-    const count = spawnSync(
-      'git',
-      ['rev-list', '--count', 'b60b4c52bff1779da84f48edc63cbf34652ab18e..HEAD'],
-      { cwd: ROOT, encoding: 'utf8' },
-    );
-    expect(count.status, count.stderr).toBe(0);
-    expect(Number(match?.[1] ?? '0')).toBeGreaterThanOrEqual(Number(count.stdout.trim()));
   });
 
   it('BL-030 keeps every public action and carries all folds and tombstones with migration', () => {
