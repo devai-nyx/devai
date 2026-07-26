@@ -20,6 +20,7 @@ affected_rules:
   - packages/loop/src/loop/worktrees.ts
   - packages/loop/src/round-lifecycle/index.ts
   - packages/skills/src/post-merge-auditor/index.ts
+  - packages/skills/src/forbidden-actions/index.ts
   - packages/skills/src/prompt-firewall/index.ts
   - scripts/check-governed-sequencing.mjs
   - scripts/detect-conditional-skips.mjs
