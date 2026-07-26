@@ -23,6 +23,7 @@ export interface ForbiddenActionEntry {
   readonly rationale: string;
   readonly severity: 'critical' | 'high' | 'medium';
   readonly detect_patterns?: readonly string[];
+  readonly allowed_change_line_patterns?: readonly string[];
   readonly safer_alternative?: string;
 }
 
@@ -105,6 +106,10 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
     rationale: 'Data loss',
     severity: 'critical',
     detect_patterns: ['\\bDROP\\s+TABLE\\b', '\\bDROP\\s+DATABASE\\b', '\\bTRUNCATE\\s+TABLE\\b'],
+    allowed_change_line_patterns: [
+      '\\bdevai_task_(?:[A-Za-z0-9_]+|<id>)',
+      '\\bdevai_template\\b',
+    ],
     safer_alternative: 'Soft-delete; run on dev with verified backup',
   },
   {
@@ -231,6 +236,20 @@ export interface ForbiddenCoverageResult {
   readonly ok: boolean;
 }
 
+function hasValidPatterns(value: unknown, required: boolean): value is readonly string[] {
+  if (value === undefined) return !required;
+  if (!Array.isArray(value) || value.length === 0) return false;
+  return value.every((pattern) => {
+    if (typeof pattern !== 'string') return false;
+    try {
+      new RegExp(pattern, 'i');
+      return true;
+    } catch {
+      return false;
+    }
+  });
+}
+
 /**
  * D-123 (item 6): compares a repo's actual registry against
  * `CANONICAL_FORBIDDEN_ACTIONS`. A canonical id can be absent for two
@@ -247,16 +266,8 @@ export function checkForbiddenRegistryCoverage(registryPath: string): ForbiddenC
     registry
       .filter(
         (entry) =>
-          Array.isArray(entry.detect_patterns) &&
-          entry.detect_patterns.length > 0 &&
-          entry.detect_patterns.every((pattern) => {
-            try {
-              new RegExp(pattern, 'i');
-              return true;
-            } catch {
-              return false;
-            }
-          }),
+          hasValidPatterns(entry.detect_patterns, true) &&
+          hasValidPatterns(entry.allowed_change_line_patterns, false),
       )
       .map((entry) => entry.id),
   );
@@ -354,10 +365,24 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
           }
         })
         .filter((p): p is RegExp => p !== null),
+      allowedChangeLinePatterns: Array.isArray(e.allowed_change_line_patterns)
+        ? e.allowed_change_line_patterns
+            .map((p) => {
+              try {
+                return new RegExp(p, 'i');
+              } catch {
+                return null;
+              }
+            })
+            .filter((p): p is RegExp => p !== null)
+        : [],
+      allowedChangeLinePatternsValid: hasValidPatterns(e.allowed_change_line_patterns, false),
     }));
   if (
     compiled.length !== registry.length ||
-    compiled.some((entry) => entry.patterns.length === 0)
+    compiled.some(
+      (entry) => entry.patterns.length === 0 || !entry.allowedChangeLinePatternsValid,
+    )
   ) {
     return {
       registry_entries: registry.length,
@@ -367,7 +392,8 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
           source: 'commit-change',
           ref: registryPath,
           matched: '',
-          message: 'every forbidden action must have at least one valid detection pattern',
+          message:
+            'every forbidden action must have valid detection patterns and valid non-empty allowed change-line patterns when provided',
         },
       ],
     };
@@ -543,7 +569,7 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
         re.lastIndex = 0;
         const changeMatch =
           messageMatch === null && !(inspectorTestOnly && !pathEvidenceIds.has(entry.id))
-            ? re.exec(changeEvidence)
+            ? firstUnallowedChangeMatch(re, changeEvidence, entry.allowedChangeLinePatterns)
             : null;
         const m = messageMatch ?? changeMatch;
         if (m === null) continue;
@@ -560,4 +586,29 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     }
   }
   return { registry_entries: registry.length, findings };
+}
+
+function firstUnallowedChangeMatch(
+  pattern: RegExp,
+  evidence: string,
+  allowedLinePatterns: readonly RegExp[],
+): RegExpExecArray | null {
+  if (allowedLinePatterns.length === 0) return pattern.exec(evidence);
+
+  const flags = pattern.flags.includes('g') ? pattern.flags : `${pattern.flags}g`;
+  const globalPattern = new RegExp(pattern.source, flags);
+  let match = globalPattern.exec(evidence);
+  while (match !== null) {
+    const lineStart = evidence.lastIndexOf('\n', Math.max(0, match.index - 1)) + 1;
+    const nextNewline = evidence.indexOf('\n', match.index);
+    const line = evidence.slice(lineStart, nextNewline === -1 ? evidence.length : nextNewline);
+    const isAllowed = allowedLinePatterns.some((allowedPattern) => {
+      allowedPattern.lastIndex = 0;
+      return allowedPattern.test(line);
+    });
+    if (!isAllowed) return match;
+    if (match[0].length === 0) globalPattern.lastIndex += 1;
+    match = globalPattern.exec(evidence);
+  }
+  return null;
 }
