@@ -46,12 +46,20 @@ describe('sense run readiness aggregation', () => {
     ).routeSensorChildArgv;
     expect(route, 'run-set must route child aliases before spawning').toBeTypeOf('function');
     if (route === undefined) throw new Error('routeSensorChildArgv is not implemented');
+    const entries = [
+      {
+        internal_name: 'sense-type-check',
+        path: ['sense', 'type', 'check'],
+        effects: 'read',
+        previous_name: 'sense type check',
+      },
+    ];
     expect(
-      route(['sense', 'run', 'type_check', '--repo-root', '/repo'], '/cli.js', [], '1.0.0'),
-    ).toEqual(['sense-type-check', '--repo-root', '/repo']);
+      route(['sense', 'run', 'type_check', '--repo-root', '/repo'], '/cli.js', entries, '1.0.0'),
+    ).toEqual(['sense', 'type', 'check', '--repo-root', '/repo']);
   });
 
-  it('admits only an exact read-only internal sensor child under the aggregate scope', () => {
+  it('admits only an exact read-only public sensor child under the aggregate scope', () => {
     const admits = (
       broker as unknown as {
         readOnlyDevaiChild?: (
@@ -76,7 +84,7 @@ describe('sense run readiness aggregation', () => {
     expect(
       admits(
         process.execPath,
-        [currentCli, 'sense-type-check', '--repo-root', '/repo'],
+        [currentCli, 'sense', 'type', 'check', '--repo-root', '/repo'],
         [readEntry],
         'sense run',
       ),
@@ -84,7 +92,7 @@ describe('sense run readiness aggregation', () => {
     expect(
       admits(
         process.execPath,
-        [currentCli, 'sense-unknown', '--repo-root', '/repo'],
+        [currentCli, 'sense', 'unknown', '--repo-root', '/repo'],
         [readEntry],
         'sense run',
       ),
@@ -92,7 +100,7 @@ describe('sense run readiness aggregation', () => {
     expect(
       admits(
         process.execPath,
-        [currentCli, 'sense-write', '--repo-root', '/repo'],
+        [currentCli, 'sense', 'write', '--repo-root', '/repo'],
         [writeEntry],
         'sense run',
       ),
@@ -100,7 +108,15 @@ describe('sense run readiness aggregation', () => {
     expect(
       admits(
         process.execPath,
-        [currentCli, 'sense-type-check', '--repo-root', '/repo', '--write'],
+        [currentCli, 'sense', 'type', 'check', '--repo-root', '/repo', '--write'],
+        [readEntry],
+        'sense run',
+      ),
+    ).toBe(false);
+    expect(
+      admits(
+        process.execPath,
+        [currentCli, 'sense-type-check', '--repo-root', '/repo'],
         [readEntry],
         'sense run',
       ),
