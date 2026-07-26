@@ -73,8 +73,8 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Disposition                         | Governed records                                                                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–119 |
-| Open in active R-0003               | BL-004–006, BL-120–140                                                                                                                           |
-| Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                                   |
+| Closed in R-0003                    | BL-004–006, BL-120–140                                                                                                                           |
+| Implemented in active R-0004        | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084; source and closure ceremonies pending                                            |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
 | Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                                       |
 | Open in prepared R-0007             | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                           |
@@ -104,51 +104,51 @@ primary round and prevents that round’s closure.
 
 ## Inherited records and current disposition
 
-| ID     | Short title                           | Current disposition                                                                     |
-| ------ | ------------------------------------- | --------------------------------------------------------------------------------------- |
-| BL-001 | Frozen genesis-attestation re-bind    | Closed in R-0002; R-0003 ratified the rebound attestation at `2026-07-25T22:08:05Z`     |
-| BL-002 | Pending predecessor changeset         | Closed from D-196/PC-0019 `none-needed`; no predecessor release                         |
-| BL-003 | Repository/site/archive transition    | Closed R-0002 slice; History/hash residuals remain assigned to R-0007                   |
-| BL-004 | Constitution 1.0.0                    | Active; R-0003 ceremony                                                                 |
-| BL-005 | ADR-001 through ADR-012               | Active; R-0003 ceremony                                                                 |
-| BL-006 | Successor glossary                    | Active; joint R-0003 ceremony                                                           |
-| BL-007 | Population guards and law re-bind     | R-0002 operational slice closed; registry-wide residual stays in R-0004/5/7             |
-| BL-008 | Registry-derived enums                | Active; R-0004                                                                          |
-| BL-009 | Full schema canon linter              | Active; R-0004                                                                          |
-| BL-010 | Proof-epoch JSONL writers             | Active; R-0005                                                                          |
-| BL-011 | SWEEP at round close                  | Active; R-0005 after BL-010                                                             |
-| BL-012 | F1:T1 reachability orphan             | Closed in R-0002                                                                        |
-| BL-013 | Stale-reading threshold               | Closed in R-0002 by BL-099's canonical bounded policy and precedence repair             |
-| BL-014 | Successor domains policy              | Closed in R-0002                                                                        |
-| BL-015 | Prompt overlays and 27 findings       | Active; R-0005                                                                          |
-| BL-016 | Effect extractor binding              | Active; R-0004                                                                          |
-| BL-017 | Merged coverage floors                | Closed early in R-0002 at the unchanged 70/60/70/70 policy                              |
-| BL-018 | Clean post-merge Auditor worktree     | Active; R-0005                                                                          |
-| BL-019 | Generated CLI reference               | Active; R-0007 after action identity stabilizes                                         |
-| BL-020 | Ratified release lane                 | Active; R-0008 repository work; external completion remains Owner-gated                 |
-| BL-021 | Post-freeze History page              | Active; R-0007                                                                          |
-| BL-022 | First-parent evidence authorization   | Active; R-0009 before any streak                                                        |
-| BL-023 | Auditor in role schemas               | Closed in R-0002                                                                        |
-| BL-024 | 0.7-to-1.0 adopter proof              | Active; R-0008 using hermetic fallback and read-only real-stynx comparison              |
-| BL-025 | Core compatibility façade             | Active; OM-002 selects an implementation-free 1.x façade and eleven-package fixed group |
-| BL-026 | Per-action output contracts           | Active; R-0006                                                                          |
-| BL-027 | Leaf-help routing                     | Active; R-0004                                                                          |
-| BL-028 | Registry-derived action IDs           | Active; R-0004                                                                          |
-| BL-029 | Sensor notes and diagnostics          | Active; R-0004                                                                          |
-| BL-030 | Action-surface disposition            | Active; R-0004; no numerical target cutting                                             |
-| BL-031 | Bounded root build/test porcelain     | Active; R-0004                                                                          |
-| BL-032 | Semantic docs re-bind and projections | Active; R-0007 risk-sliced P0/P1/P2                                                     |
-| BL-033 | Invariant `authority_docs` migration  | Active; R-0005 coordinated migration                                                    |
-| BL-034 | Operational-value extraction          | Active; R-0006 post-ratification amendment                                              |
-| BL-035 | Mutation strength and aggregation     | Active; R-0006 as separate decisions                                                    |
-| BL-036 | Deterministic semantic-review PASS    | Active; R-0009 retention decision unless qualifying evidence exists                     |
-| BL-037 | Scorecard-skill unification           | Active; R-0010 after real usage evidence                                                |
-| BL-038 | Actions-evidence re-earning           | Active; R-0010 genuine streak; activation remains separately Owner-gated                |
-| BL-039 | Successor site and 1.0 snapshot       | Active; R-0007 prepares, R-0008 external gate controls deployment                       |
-| BL-040 | Sense-wrapper collapse                | N/A; P4 collapse already shipped                                                        |
-| BL-041 | P2 handoffs                           | N/A; substantive work already guarded                                                   |
-| BL-042 | Bootstrap lint/typecheck baseline     | N/A; current gates own regressions                                                      |
-| BL-043 | Schema/examples/package-test handoffs | N/A; current guards own regressions                                                     |
+| ID     | Short title                           | Current disposition                                                                   |
+| ------ | ------------------------------------- | ------------------------------------------------------------------------------------- |
+| BL-001 | Frozen genesis-attestation re-bind    | Closed in R-0002; R-0003 ratified the rebound attestation at `2026-07-25T22:08:05Z`   |
+| BL-002 | Pending predecessor changeset         | Closed from D-196/PC-0019 `none-needed`; no predecessor release                       |
+| BL-003 | Repository/site/archive transition    | Closed R-0002 slice; History/hash residuals remain assigned to R-0007                 |
+| BL-004 | Constitution 1.0.0                    | Closed in R-0003                                                                      |
+| BL-005 | ADR-001 through ADR-012               | Closed in R-0003                                                                      |
+| BL-006 | Successor glossary                    | Closed in R-0003                                                                      |
+| BL-007 | Population guards and law re-bind     | R-0002 operational slice closed; registry-wide residual stays in R-0004/5/7           |
+| BL-008 | Registry-derived enums                | Implemented in R-0004; source and closure ceremonies pending                          |
+| BL-009 | Full schema canon linter              | Implemented in R-0004; source and closure ceremonies pending                          |
+| BL-010 | Proof-epoch JSONL writers             | Active; R-0005                                                                        |
+| BL-011 | SWEEP at round close                  | Active; R-0005 after BL-010                                                           |
+| BL-012 | F1:T1 reachability orphan             | Closed in R-0002                                                                      |
+| BL-013 | Stale-reading threshold               | Closed in R-0002 by BL-099's canonical bounded policy and precedence repair           |
+| BL-014 | Successor domains policy              | Closed in R-0002                                                                      |
+| BL-015 | Prompt overlays and 27 findings       | Active; R-0005                                                                        |
+| BL-016 | Effect extractor binding              | Implemented in R-0004; source and closure ceremonies pending                          |
+| BL-017 | Merged coverage floors                | Closed early in R-0002 at the unchanged 70/60/70/70 policy                            |
+| BL-018 | Clean post-merge Auditor worktree     | Active; R-0005                                                                        |
+| BL-019 | Generated CLI reference               | Active; R-0007 after action identity stabilizes                                       |
+| BL-020 | Ratified release lane                 | Active; R-0008 repository work; external completion remains Owner-gated               |
+| BL-021 | Post-freeze History page              | Active; R-0007                                                                        |
+| BL-022 | First-parent evidence authorization   | Active; R-0009 before any streak                                                      |
+| BL-023 | Auditor in role schemas               | Closed in R-0002                                                                      |
+| BL-024 | 0.7-to-1.0 adopter proof              | Active; R-0008 using hermetic fallback and read-only real-stynx comparison            |
+| BL-025 | Core compatibility façade             | Implemented in R-0004 as the OM-002 export-only façade and eleven-package fixed group |
+| BL-026 | Per-action output contracts           | Active; R-0006                                                                        |
+| BL-027 | Leaf-help routing                     | Implemented in R-0004; source and closure ceremonies pending                          |
+| BL-028 | Registry-derived action IDs           | Implemented in R-0004; source and closure ceremonies pending                          |
+| BL-029 | Sensor notes and diagnostics          | Implemented in R-0004 with the 50/9 standing unchanged                                |
+| BL-030 | Action-surface disposition            | Implemented in R-0004 as 146 keep / 38 fold / 1 tombstone; no target cutting          |
+| BL-031 | Bounded root build/test porcelain     | Implemented in R-0004; exact root build and test pass                                 |
+| BL-032 | Semantic docs re-bind and projections | Active; R-0007 risk-sliced P0/P1/P2                                                   |
+| BL-033 | Invariant `authority_docs` migration  | Active; R-0005 coordinated migration                                                  |
+| BL-034 | Operational-value extraction          | Active; R-0006 post-ratification amendment                                            |
+| BL-035 | Mutation strength and aggregation     | Active; R-0006 as separate decisions                                                  |
+| BL-036 | Deterministic semantic-review PASS    | Active; R-0009 retention decision unless qualifying evidence exists                   |
+| BL-037 | Scorecard-skill unification           | Active; R-0010 after real usage evidence                                              |
+| BL-038 | Actions-evidence re-earning           | Active; R-0010 genuine streak; activation remains separately Owner-gated              |
+| BL-039 | Successor site and 1.0 snapshot       | Active; R-0007 prepares, R-0008 external gate controls deployment                     |
+| BL-040 | Sense-wrapper collapse                | N/A; P4 collapse already shipped                                                      |
+| BL-041 | P2 handoffs                           | N/A; substantive work already guarded                                                 |
+| BL-042 | Bootstrap lint/typecheck baseline     | N/A; current gates own regressions                                                    |
+| BL-043 | Schema/examples/package-test handoffs | N/A; current guards own regressions                                                   |
 
 ## New records
 
