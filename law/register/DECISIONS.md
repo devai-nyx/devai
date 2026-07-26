@@ -1967,6 +1967,38 @@ exact-main CI establish the complete R-0003 close.
 R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
 promotes, re-earns, or declares ready nothing.
 
+### DII-161 — Rebind the R-0003 source close to portable replay evidence
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 fourth Opus correction; DII-160; BL-140; R-0003-OPUS-CLOSE-REVIEW-4-PORTABILITY-FAILURE; Auditor c8517aa; Inspector 5235fc1`
+
+DII-161 supersedes DII-160 only as the R-0003 source-closing judgment. The fourth exact
+`claude-opus-5` review of candidate `b21b1f1` confirmed every preceding correction but
+found that the BL-138 contract dynamically resolved seven sibling-original commits that
+exist only on an abandoned local branch. Exact-SHA CI would not receive those objects.
+The same review found the BL-001 current-disposition row stale after the founding act.
+BL-140 governs and closes both bounded portability corrections.
+
+Auditor `c8517aa` preserves the observed replay and original author/committer identities
+as durable repository evidence and corrects BL-001's current disposition. Inspector
+`5235fc1` rebinds the pair mapping to this active register and that durable evidence,
+uses live Git only for the seven replay commits that are candidate ancestors, and
+requires a symmetric independent correction audit. The historical human-committer replay
+defect remains disclosed. It does not waive the standing requirement that every new
+commit use the applicable DEVAI role for both author and committer identity.
+
+The exact candidate containing DII-161, the independent Auditor correction, and fresh
+deterministic projections must pass the complete ladder from Stage 1 and a fresh
+single-branch clone proof containing only the candidate branch. It must then receive a
+read-only review through literal `claude-opus-5`, with no fallback. Any actionable
+finding reopens the governed repair cycle; only a PASS authorizes source push.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-161 as the closing decision. Its release
+disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
+exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
