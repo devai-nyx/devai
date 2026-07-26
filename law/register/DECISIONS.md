@@ -2454,6 +2454,20 @@ read-only review through literal `claude-opus-5`, with no fallback. Only PASS pe
 source push. No external release, publication, deployment, real-stynx write, R-0008,
 R-0009, or R-0010 human gate changes.
 
+### DII-184 — Bind governance to the exact round range
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 exact-range correction; DII-183; BL-162; R-0004-GOVERNANCE-RANGE-CORRECTION; Inspector 3581591; Engineer ab04008; Auditor 212850a`
+
+DII-184 supersedes DII-183 only as the R-0004 source-closing judgment. A fixed trailing
+commit count is not the round boundary: a sufficiently broad count imports unrelated
+pre-round history, while a smaller count can omit in-round workflow changes. Strict
+governance now resolves the exact closed-R-0003 commit and scans its exclusive range
+through HEAD, failing closed if the base cannot be verified.
+
+Focused range tests, typecheck, and the full strict-governance composition pass with
+zero findings. The next clean commit containing DII-184 and the refreshed handoff must
+restart the complete ladder and literal `claude-opus-5` review. No waiver, external gate,
+publication, release, deployment, or real-stynx boundary changes.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
