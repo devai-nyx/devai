@@ -88,3 +88,16 @@ The bounded repair is authorized to restore exact Inspector parity before regene
 the Architect-owned projection. It may not exclude another file, normalize away a
 reference, weaken semantic classification, or change the generator. The cluster retires
 only when the focused test, `repository-reference:check`, and the complete floor pass.
+
+## KR-R5-013 — Exit-lint collateral
+
+The next B8 `ci:stage1` restart passed the deterministic projections and then found
+seven lint errors: five non-null assertions in the new proof-epoch adversarial fixture,
+one unused test import after KR-R5-012 reconciliation, and one unused production import
+left by the in-place round-close repair. Tests remain green; these are source-quality
+failures and block the candidate.
+
+The Inspector may replace only the five assertions with explicit fixture narrowing and
+remove the one unused test import. The Engineer may remove only the unused production
+import. No assertion value, runtime behavior, lint rule, or gate may change. The cluster
+retires only after focused tests, lint, and the complete floor pass.
