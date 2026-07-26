@@ -198,6 +198,61 @@ describe('governance record parsing and integrity', () => {
     );
   });
 
+  it('treats a copied successor as a new sealed-history boundary', () => {
+    const root = fixtureRoot();
+    const first = writeRecord(
+      root,
+      'ADR-001.md',
+      recordSource({ status: 'active', body: '# Shared doctrine\n\nOriginal active record.' }),
+    );
+    initGit(root);
+    commitAll(root, 'activate original');
+
+    writeFileSync(
+      first,
+      recordSource({
+        status: 'superseded',
+        supersededBy: 'ADR-002',
+        body: '# Shared doctrine\n\nOriginal active record.',
+      }),
+    );
+    const second = writeRecord(
+      root,
+      'ADR-002.md',
+      recordSource({
+        id: 'ADR-002',
+        status: 'active',
+        supersedes: '[ADR-001]',
+        body: '# Shared doctrine\n\nOriginal active record with one successor clarification.',
+      }),
+    );
+    commitAll(root, 'copy into successor');
+
+    writeFileSync(
+      second,
+      recordSource({
+        id: 'ADR-002',
+        status: 'superseded',
+        supersedes: '[ADR-001]',
+        supersededBy: 'ADR-003',
+        body: '# Shared doctrine\n\nOriginal active record with one successor clarification.',
+      }),
+    );
+    writeRecord(
+      root,
+      'ADR-003.md',
+      recordSource({ id: 'ADR-003', status: 'active', supersedes: '[ADR-002]' }),
+    );
+    commitAll(root, 'supersede copied successor');
+
+    expect(
+      decisionRecordIntegrity({ repoRoot: root }).findings.filter(
+        (finding) =>
+          finding.code === 'DECISION_LOCKED_BODY_MUTATED' && finding.path.endsWith('ADR-002.md'),
+      ),
+    ).toEqual([]);
+  });
+
   it('fails sealed-history verification closed when Git is unavailable', () => {
     const root = fixtureRoot();
     writeRecord(root, 'ADR-001.md', recordSource({ status: 'active' }));
