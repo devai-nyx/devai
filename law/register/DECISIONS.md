@@ -2438,6 +2438,22 @@ the mandated read-only close review through literal `claude-opus-5`, with no fal
 Actionable findings restart the governed red-first cycle; only PASS permits source push.
 No external gate, publication, release, deployment, or real-stynx boundary changes.
 
+### DII-183 — Rebind after the second Opus repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 second-Opus repair; DII-182; BL-156–162; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; Inspector 9ee3c0e and a544733; Architect c2d418b; Engineer c530468; Auditor d374fa0`
+
+DII-183 supersedes DII-182 only as the R-0004 source-closing judgment. The second exact
+candidate Opus review's seven blocking findings are governed and locally repaired:
+production and test-host suite argv now agree on exact fixed forms; the active as-built
+uses live counts; fixture deltas derive from the R-0003 base and execute real tests;
+canonical build help names fixed recursive argv; leaf help observes the real session
+store; and strict governance scans the full round range.
+
+The next clean commit containing DII-183, the refreshed source-close handoff, and fresh
+deterministic projections must restart the complete local ladder and receive a new
+read-only review through literal `claude-opus-5`, with no fallback. Only PASS permits
+source push. No external release, publication, deployment, real-stynx write, R-0008,
+R-0009, or R-0010 human gate changes.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-162–182; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; Auditor 41d73a2,
+    DII-162–183; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; Auditor 41d73a2,
     a9c1dab,
     9da5b54,
     8f7581c,
@@ -19,7 +19,8 @@ provenance:
     9e3480c,
     e7d4e48,
     ae8f508,
-    and a73993f; Inspector b7bf300,
+    a73993f,
+    and d374fa0; Inspector b7bf300,
     4c08b46,
     fbfb226,
     b3be172,
@@ -32,14 +33,17 @@ provenance:
     cc4e2c9,
     fceaa12,
     7a474ff,
-    and 4a56da2; Engineer d875b73,
+    4a56da2,
+    9ee3c0e,
+    and a544733; Engineer d875b73,
     b8d6c98,
     55ee8d0,
     2ef3936,
     0e80205,
     c3cd89c,
     cb2d58e,
-    and f134f26; Architect e1b952b,
+    f134f26,
+    and c530468; Architect e1b952b,
     96d2477,
     a1dbb5b,
     b187210,
@@ -49,7 +53,8 @@ provenance:
     ebe227d,
     9c7818d,
     b119515,
-    and 7e4248e,
+    7e4248e,
+    and c2d418b,
   ]
 ---
 
@@ -57,8 +62,8 @@ provenance:
 
 ## Bound result
 
-DII-182 accepts the Auditor's B7 reconciliation, BL-141 through BL-155 corrections, and
-the exact local ladder, supersedes DII-181 only as the closing judgment, and closes the local source
+DII-183 accepts the Auditor's B7 reconciliation, BL-141 through BL-162 corrections, and
+the exact local ladder, supersedes DII-182 only as the closing judgment, and closes the local source
 implementation. The governed action surface is 147 keep / 38 fold / 1 tombstone; action
 effects are 186/186 with zero findings; 59 live sensors retain their 50/9
 cell/diagnostic standing; the recursive canon contains 55 schemas; and the fixed public
@@ -76,6 +81,11 @@ Vitest argv forms, with hermetic characterization evidence refreshed.
 Exact active-ADR coverage now binds every governed CI path. Copy ancestry no longer
 inherits a source record's seal, restored endpoints remain fail-closed against mutation
 or replacement drift, and active ADR-015 carries the complete CI association.
+The second review's execution and evidence gaps are also closed: every advertised test
+suite reaches an exact production broker argv; the test host admits only the six tier
+configs; R20 fixture changes derive from the R-0003 base and contain real tests; build
+help is canonical; leaf help observes the real session store; active counts agree; and
+the governance window covers the complete round.
 
 The complete local ladder passed on exact source snapshot `6116635`, including root
 build/test porcelain, required workflow pins and prewarm, semantic
@@ -85,7 +95,7 @@ Auditor's exact readings and role-pure commit map are in `work/audit/R-0004/as-b
 
 ## Review and ceremony gate
 
-The next clean commit containing this handoff, DII-182, updated population guards, and
+The next clean commit containing this handoff, DII-183, updated population guards, and
 fresh deterministic projections is the review candidate. It must receive one read-only
 close review through literal `claude-opus-5`, with no fallback. Actionable findings
 return to red-first role-pure repair; PASS permits the shared source-PR and closure-only
