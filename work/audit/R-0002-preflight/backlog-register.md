@@ -1522,6 +1522,74 @@ copy isolation while the rename-mutation guard remains red; ADR-014 is restored 
 sealed body plus one terminal lifecycle transition; a gapless ADR-015 carries the
 complete active CI rule and exact affected paths; strict decision integrity passes.
 
+### BL-156 — Align governed test suites with production authority
+
+`type: backlog-item · status: draft · authority: Inspector + Engineer + Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F1; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: all five advertised `sense test` suite values execute through the production
+broker; its allowlist matches only the fixed argv emitted by the test sensor; unreachable
+legacy forms are removed; focused red-first contracts and the complete ladder pass.
+
+### BL-157 — Correct stale R-0004 as-built action counts
+
+`type: backlog-item · status: draft · authority: Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F2; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: every active as-built statement reports the live 186/186 action/effect and
+147/38/1 disposition readings consistently, with no stale 185 or 146 claim.
+
+### BL-158 — Derive and govern the real R20 fixture delta
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F3; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the R-0004 disposition names the two real skills, six changed fields, and
+three changed files; its guard derives the delta instead of comparing the record to a
+copy of itself; no baseline can pass vacuously through `passWithNoTests: true`.
+
+### BL-159 — Make build help describe the fixed recursive argv
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F4; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: canonical registry help for `sense build` describes fixed `pnpm -r build`,
+advertises no caller-selected override, and all three generated views reproduce exactly.
+
+### BL-160 — Bind leaf-help evidence to the real authority-session store
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F5; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the leaf-help contract checks the real `.devai/state/authority-sessions/`
+store before and after invocation and fails if help creates an authority session.
+
+### BL-161 — Restrict the test authority host to exact tier configs
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F6; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the test-only host admits only the exact T1, T2, T3, T4, T5, and T6 config
+paths used by governed tiers; coverage, arbitrary configs, added flags, and traversal
+remain denied.
+
+### BL-162 — Scan the complete round range for CI governance
+
+`type: backlog-item · status: draft · authority: Inspector + Engineer + Architect + Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F7; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: strict governance scans the complete R-0004 base-to-candidate history, not a
+fixed trailing window; a red-first guard proves the workflow-changing commit is included;
+active-ADR affected-rule coverage is exercised against every governed CI path changed in
+the round.
+
 ## Carried guard map
 
 The original known-red mapping remains as historical provenance:
