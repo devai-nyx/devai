@@ -12,13 +12,13 @@ export interface TestOptions {
 function defaultCommand(suite: TestSuite): readonly string[] {
   switch (suite) {
     case 'unit':
-      return ['pnpm', 'test'];
+      return ['pnpm', 'vitest', 'run', '--config', 'tests/config/t1.unit.config.ts'];
     case 'integration':
-      return ['pnpm', 'test:integration'];
+      return ['pnpm', 'vitest', 'run', '--config', 'tests/config/t3.integration.config.ts'];
     case 'regression':
-      return ['pnpm', 'test:regression'];
+      return ['pnpm', 'vitest', 'run', '--config', 'tests/config/t4.regression.config.ts'];
     case 'e2e':
-      return ['pnpm', 'test:e2e'];
+      return ['pnpm', 'vitest', 'run', '--config', 'tests/config/t5.e2e.config.ts'];
     case 'all':
       return ['pnpm', 'vitest', 'run'];
   }

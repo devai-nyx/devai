@@ -316,12 +316,6 @@ export function routeArgv(
     });
     return { kind: 'output', text: renderCliError(error, wantsJson(args)), exitCode: 2 };
   }
-  if (args[0] === 'policy' && args[1] === 'check' && args[2] === 'schemas') {
-    return {
-      kind: 'dispatch',
-      argv: [...argv.slice(0, 2), 'check-schemas', ...args.slice(3)],
-    };
-  }
   const obsoleteFlag = args.find((arg) => ['--execute', '--apply', '--human'].includes(arg));
   if (obsoleteFlag !== undefined) {
     const replacement = obsoleteFlag === '--human' ? '--format human' : '--write';

@@ -442,6 +442,12 @@ export const ACTION_EFFECT_CONTRACTS = [
     capabilities: [],
   },
   {
+    action_id: 'check schemas',
+    public_action_id: 'policy check schemas',
+    effect: 'read',
+    capabilities: [],
+  },
+  {
     action_id: 'check sensor-integrity',
     public_action_id: 'policy check sensor integrity',
     effect: 'read',

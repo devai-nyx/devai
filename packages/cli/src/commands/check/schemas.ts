@@ -3,6 +3,7 @@ import { join, resolve } from 'node:path';
 import type { CAC } from 'cac';
 import { ROSTER, checkSchemas, getValidator, listSchemaFiles, metaGate } from '@devai-nyx/schemas';
 import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
+import { defineCommand } from '../../define-command.js';
 
 interface Options {
   readonly repoRoot?: string;
@@ -110,32 +111,41 @@ export function checkSchemaCanon(repoRoot: string): SchemaCanonReport {
   };
 }
 
-export function registerCheckSchemas(cli: CAC): void {
-  cli
-    .command('check-schemas', 'Validate the complete recursive schema canon')
-    .option('--repo-root <path>', 'Repository root (default: .)')
-    .option('--format <format>', 'Output format: json or human')
-    .option('--human', 'Human-readable output')
-    .action((options: Options) => {
-      const report = checkSchemaCanon(options.repoRoot ?? '.');
-      if (options.human === true) {
-        process.stdout.write(
-          'policy check schemas: ' +
-            (report.ok ? 'OK' : 'FAIL') +
-            ' (' +
-            String(report.canonical_total) +
-            ' canonical schemas, ' +
-            String(report.findings.length) +
-            ' findings)\n',
-        );
-        for (const finding of report.findings) {
+export const checkSchemasCmd = defineCommand({
+  name: 'check schemas',
+  description: 'Validate the complete recursive schema canon',
+  authority: 'policy_firewall',
+  register(cli: CAC): void {
+    cli
+      .command('check-schemas', 'Validate the complete recursive schema canon')
+      .option('--repo-root <path>', 'Repository root (default: .)')
+      .option('--format <format>', 'Output format: json or human')
+      .option('--human', 'Human-readable output')
+      .action((options: Options) => {
+        const report = checkSchemaCanon(options.repoRoot ?? '.');
+        if (options.human === true) {
           process.stdout.write(
-            '  [' + finding.rule + '] ' + finding.path + ': ' + finding.message + '\n',
+            'policy check schemas: ' +
+              (report.ok ? 'OK' : 'FAIL') +
+              ' (' +
+              String(report.canonical_total) +
+              ' canonical schemas, ' +
+              String(report.findings.length) +
+              ' findings)\n',
           );
+          for (const finding of report.findings) {
+            process.stdout.write(
+              '  [' + finding.rule + '] ' + finding.path + ': ' + finding.message + '\n',
+            );
+          }
+        } else {
+          process.stdout.write(JSON.stringify(report) + '\n');
         }
-      } else {
-        process.stdout.write(JSON.stringify(report) + '\n');
-      }
-      process.exitCode = report.ok ? EXIT_PASS : EXIT_FAIL;
-    });
+        process.exitCode = report.ok ? EXIT_PASS : EXIT_FAIL;
+      });
+  },
+});
+
+export function registerCheckSchemas(cli: CAC): void {
+  checkSchemasCmd.register(cli);
 }

@@ -15,11 +15,11 @@ function compareUtf8Bytes(left, right) {
 }
 
 if (
-  registry?.counts?.keep !== 146 ||
+  registry?.counts?.keep !== 147 ||
   registry?.counts?.fold !== 38 ||
   registry?.counts?.tombstone !== 1 ||
   !Array.isArray(registry.entries) ||
-  registry.entries.length !== 185
+  registry.entries.length !== 186
 ) {
   throw new Error('ACTION_REGISTRY_COUNT_GUARD');
 }

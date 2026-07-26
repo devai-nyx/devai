@@ -26,7 +26,8 @@ const testFiles = execFileSync('git', ['ls-files', '-z'], { cwd: root })
 
 function invariantSuite(file) {
   if (file.includes('/tests/unit/')) return 'unit';
-  if (file.includes('/tests/contract/') || file.startsWith('tests/integration/')) return 'int';
+  if (file.includes('/tests/contract/') || file.startsWith('tests/contract/')) return 'contract';
+  if (file.startsWith('tests/integration/')) return 'int';
   if (file.startsWith('tests/e2e/')) return 'e2e';
   if (file.startsWith('tests/regression/')) return 'perf';
   if (file.startsWith('tests/containment/')) return 'sec';
@@ -35,7 +36,7 @@ function invariantSuite(file) {
 
 function corpusSuite(file) {
   if (file.includes('/tests/unit/')) return 'unit';
-  if (file.includes('/tests/contract/')) return 'contract';
+  if (file.includes('/tests/contract/') || file.startsWith('tests/contract/')) return 'contract';
   if (file.startsWith('tests/integration/')) return 'int';
   if (file.startsWith('tests/e2e/')) return file.includes('.smoke.') ? 'smoke' : 'e2e';
   if (file.startsWith('tests/regression/')) return 'regression';

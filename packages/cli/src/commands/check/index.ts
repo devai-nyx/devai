@@ -26,7 +26,7 @@ export { checkGlobGuardsCmd, checkGlobGuards } from './glob-guards.js';
 export type { CheckGlobGuardsReport, CheckGlobGuardsOptions } from './glob-guards.js';
 export { checkDependenciesCmd, checkDependencies } from './dependencies.js';
 export { checkActionEffectsCmd } from './action-effects.js';
-export { registerCheckSchemas, checkSchemaCanon } from './schemas.js';
+export { checkSchemasCmd, registerCheckSchemas, checkSchemaCanon } from './schemas.js';
 export type { SchemaCanonFinding, SchemaCanonReport } from './schemas.js';
 
 const DEFAULT_REPO_ROOT = '.';

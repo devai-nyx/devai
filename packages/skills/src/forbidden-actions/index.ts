@@ -106,7 +106,9 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
     rationale: 'Data loss',
     severity: 'critical',
     detect_patterns: ['\\bDROP\\s+TABLE\\b', '\\bDROP\\s+DATABASE\\b', '\\bTRUNCATE\\s+TABLE\\b'],
-    allowed_change_line_patterns: ['\\bdevai_task_(?:[A-Za-z0-9_]+|<id>)', '\\bdevai_template\\b'],
+    allowed_change_line_patterns: [
+      '\\b(?:DROP\\s+(?:TABLE|DATABASE)|TRUNCATE\\s+TABLE)\\s+(?:IF\\s+EXISTS\\s+)?(?:devai_task_(?:[A-Za-z0-9_]+|<id>)|devai_template)\\b(?=\\s*(?:[\\"\'`]|;|$))',
+    ],
     safer_alternative: 'Soft-delete; run on dev with verified backup',
   },
   {
@@ -597,9 +599,21 @@ function firstUnallowedChangeMatch(
     const lineStart = evidence.lastIndexOf('\n', Math.max(0, match.index - 1)) + 1;
     const nextNewline = evidence.indexOf('\n', match.index);
     const line = evidence.slice(lineStart, nextNewline === -1 ? evidence.length : nextNewline);
+    const relativeMatchStart = match.index - lineStart;
+    const relativeMatchEnd = relativeMatchStart + match[0].length;
     const isAllowed = allowedLinePatterns.some((allowedPattern) => {
-      allowedPattern.lastIndex = 0;
-      return allowedPattern.test(line);
+      const flags = allowedPattern.flags.includes('g')
+        ? allowedPattern.flags
+        : `${allowedPattern.flags}g`;
+      const globalAllowedPattern = new RegExp(allowedPattern.source, flags);
+      let allowedMatch = globalAllowedPattern.exec(line);
+      while (allowedMatch !== null) {
+        const allowedEnd = allowedMatch.index + allowedMatch[0].length;
+        if (allowedMatch.index <= relativeMatchStart && allowedEnd >= relativeMatchEnd) return true;
+        if (allowedMatch[0].length === 0) globalAllowedPattern.lastIndex += 1;
+        allowedMatch = globalAllowedPattern.exec(line);
+      }
+      return false;
     });
     if (!isAllowed) return match;
     if (match[0].length === 0) globalPattern.lastIndex += 1;

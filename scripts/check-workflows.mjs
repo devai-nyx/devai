@@ -28,6 +28,16 @@ function visit(value, path, file) {
 
 for (const file of files) {
   const source = readFileSync(join(workflowDir, file), 'utf8');
+  for (const match of source.matchAll(/^\s*(?:-\s*)?uses:\s*([^\s#]+)(.*)$/gmu)) {
+    const target = match[1] ?? '';
+    const suffix = match[2] ?? '';
+    if (target.startsWith('./.github/workflows/')) continue;
+    if (!/@[0-9a-f]{40}$/u.test(target)) {
+      findings.push(`${file}: ${target} must use an immutable 40-hex SHA`);
+    } else if (!/#\s*v[0-9]/u.test(suffix)) {
+      findings.push(`${file}: ${target} must carry a readable version comment`);
+    }
+  }
   const document = parseDocument(source, { uniqueKeys: true });
   if (document.errors.length > 0) {
     for (const error of document.errors) findings.push(`${file}: ${error.message}`);

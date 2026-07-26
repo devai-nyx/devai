@@ -3449,6 +3449,49 @@ export const ACTION_REGISTRY = [
     },
   },
   {
+    action_id: 'policy check schemas',
+    internal_binding: 'check schemas',
+    path: ['policy', 'check', 'schemas'],
+    disposition: 'keep',
+    lifecycle: 'supported',
+    lifecycle_reason:
+      'R-0004 binds the complete recursive schema-canon validator to the governed public action surface.',
+    migration: null,
+    never_remint: true,
+    visibility: 'advanced',
+    tier: 'plumbing',
+    profiles: ['tier1', 'tier2', 'tier3'],
+    effect: 'read',
+    authority: 'policy_firewall',
+    description: 'Validate the complete recursive schema canon and every governed schema rule.',
+    promotion_criteria: [],
+    authority_contract_version: '1.0.0',
+    authority_contract: {
+      schemaVersion: '1.0.0',
+      action_id: 'policy check schemas',
+      effect: 'read',
+      capabilities: [],
+      subject: {
+        kind: 'none',
+      },
+      consent: {
+        write: false,
+        allow_publish: false,
+        experimental: false,
+      },
+      planner: {
+        kind: 'none',
+      },
+      boundary: {
+        kind: 'none',
+      },
+      readiness: {
+        requires_binding: false,
+        independent_acceptance_required: true,
+      },
+    },
+  },
+  {
     action_id: 'policy check sensor integrity',
     internal_binding: 'check sensor-integrity',
     path: ['policy', 'check', 'sensor', 'integrity'],
