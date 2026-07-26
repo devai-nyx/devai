@@ -210,7 +210,10 @@ describe('governed sequencing', () => {
     const document = JSON.parse(readFileSync(documentPath, 'utf8')) as {
       bindings: Array<{ red_evidence: { evidence_sha256: string } }>;
     };
-    document.bindings[0]!.red_evidence.evidence_sha256 = 'f'.repeat(64);
+    const firstBinding = document.bindings[0];
+    expect(firstBinding).toBeDefined();
+    if (firstBinding === undefined) throw new Error('fixture binding missing');
+    firstBinding.red_evidence.evidence_sha256 = 'f'.repeat(64);
     writeFileSync(documentPath, `${JSON.stringify(document, null, 2)}\n`);
 
     const result = check(root, base);
