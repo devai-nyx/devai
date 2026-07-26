@@ -403,18 +403,27 @@ describe('R-0004 governed surface red-first contracts', () => {
   });
 
   it('BL-182 keeps snapshot readings and active SHA semantics exact', () => {
-    for (const [path, snapshot] of [
-      ['law/register/DECISIONS.md', 'fd99ab7deaa1702467b6d8f9c4d6a98f4372b87e'],
-      ['work/rounds/R-0004/source-close.md', 'exact source snapshot `fd99ab7`'],
+    for (const [path, snapshot, classifiedClaim] of [
+      [
+        'law/register/DECISIONS.md',
+        'fd99ab7deaa1702467b6d8f9c4d6a98f4372b87e',
+        'classified 8 historical specimens',
+      ],
+      [
+        'work/rounds/R-0004/source-close.md',
+        'exact source snapshot `fd99ab7`',
+        '8 path-classified historical specimens',
+      ],
     ] as const) {
       const text = readFileSync(join(ROOT, path), 'utf8');
       const index = text.indexOf(snapshot);
       expect(index).toBeGreaterThanOrEqual(0);
       const context = text.slice(index, index + 700);
-      expect(context).toContain('252 identities');
-      expect(context).toContain('244 local');
-      expect(context).toContain('8');
-      expect(context).not.toContain('245 local');
+      const normalizedContext = context.replace(/\s+/gu, ' ');
+      expect(normalizedContext).toContain('252 identities');
+      expect(normalizedContext).toContain('244 local');
+      expect(normalizedContext).toContain(classifiedClaim);
+      expect(normalizedContext).not.toContain('245 local');
     }
     for (const path of [
       'law/register/DECISIONS.md',
@@ -427,6 +436,20 @@ describe('R-0004 governed surface red-first contracts', () => {
       const text = readFileSync(join(ROOT, path), 'utf8');
       expect(text).not.toMatch(/declared (?:local )?Git object kind|wrong-kind/u);
     }
+  });
+
+  it('BL-183 keeps the eleventh-review audit supersession edge symmetric', () => {
+    const correction = readFileSync(
+      join(ROOT, 'work/audit/R-0004/source-decision-sha-correction.md'),
+      'utf8',
+    );
+    const failure = readFileSync(
+      join(ROOT, 'work/audit/R-0004/opus-close-review-11-failure.md'),
+      'utf8',
+    );
+    expect(failure).toMatch(/^supersedes: R-0004-SOURCE-DECISION-SHA-CORRECTION$/mu);
+    expect(correction).toMatch(/^status: superseded$/mu);
+    expect(correction).toMatch(/^superseded_by: R-0004-OPUS-CLOSE-REVIEW-11-FAILURE$/mu);
   });
 
   it('BL-182 rejects unresolved and stale or misplaced SHA exceptions', () => {

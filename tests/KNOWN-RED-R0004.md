@@ -35,6 +35,12 @@ identities, misplaced exceptions, stale allowed paths, and stale exceptions fail
 closed. Architect `cd51d1b` and Auditor `1f118e1` corrected the active claims; the
 complete BL-182 contract is now green.
 
+BL-183 preserves the twelfth-review red: the eleventh-review failure superseded the
+source-decision SHA correction without the correction recording the reverse lifecycle
+edge. The Inspector contract is intentionally red until Auditor repairs that metadata;
+the same batch tightens the snapshot check from a broad digit match to the exact
+classified-count phrase.
+
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at
 the exact B0 candidate `10b9f1b9e599b77d6123daef165210259f90a8eb`.
