@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0.0",
+  "entries": [
+    {
+      "sha": "05dd242bf72334bfd683096aed380e8240b6b9aa",
+      "object_kind": "commit",
+      "reason": "Immutable earlier-round terminal commit recorded from GitHub evidence but not retained in the current local object graph.",
+      "allowed_paths": [
+        "work/audit/R-0002-preflight/backlog-register.md",
+        "work/audit/R-0002-preflight/consolidated-audit.md",
+        "work/audit/R-0002/as-built.md",
+        "work/audit/R-0002/opening-audit.md",
+        "work/audit/R-0003/opening-audit.md"
+      ]
+    },
+    {
+      "sha": "0b374c9cde9471440d290153c387509b9b5eca23",
+      "object_kind": "intentionally-invalid commit specimen",
+      "reason": "Historical Opus failure report quotes the nonexistent identity whose rejection drove the R-0002 provenance repair.",
+      "allowed_paths": ["work/audit/R-0002/claude-opus-close-review-6.md"]
+    },
+    {
+      "sha": "386cbb500a795f17624442ebb2c416ed5f16b15d",
+      "object_kind": "tree",
+      "reason": "Frozen predecessor genesis tree recorded from the read-only predecessor repository.",
+      "allowed_paths": ["work/audit/R-0001/as-built.md"]
+    },
+    {
+      "sha": "54e79a1d9b15170b885950c1371758867ac52024",
+      "object_kind": "intentionally-invalid commit specimen",
+      "reason": "R-0004 failure report preserves the fabricated expansion whose rejection drove BL-181.",
+      "allowed_paths": ["work/audit/R-0004/source-decision-sha-failure.md"]
+    },
+    {
+      "sha": "a6d6bf5ba06d78e182792441dffac4ae554b684c",
+      "object_kind": "tree",
+      "reason": "Immutable earlier-round terminal tree recorded from GitHub evidence but not retained in the current local object graph.",
+      "allowed_paths": [
+        "work/audit/R-0002-preflight/consolidated-audit.md",
+        "work/audit/R-0002/as-built.md",
+        "work/audit/R-0002/opening-audit.md",
+        "work/audit/R-0003/opening-audit.md"
+      ]
+    },
+    {
+      "sha": "cb2e93490e3ac439f979f4d7986ae7ac9fe9695e",
+      "object_kind": "transient merge commit",
+      "reason": "Historical GitHub pull-request synthetic merge object that is not retained after the check run.",
+      "allowed_paths": ["law/register/DECISIONS.md", "work/audit/R-0002/as-built.md"]
+    },
+    {
+      "sha": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d",
+      "object_kind": "predecessor commit",
+      "reason": "Frozen read-only predecessor terminal commit outside the successor object graph.",
+      "allowed_paths": [
+        "work/audit/R-0001/as-built.md",
+        "work/audit/R-0002-preflight/consolidated-audit.md",
+        "work/audit/R-0002/as-built.md",
+        "work/audit/R-0002/opening-audit.md",
+        "work/audit/R-0003/opening-audit.md"
+      ]
+    },
+    {
+      "sha": "dc64176017ad07c956548b47e59955862541db21",
+      "object_kind": "intentionally-invalid commit specimen",
+      "reason": "R-0004 failure report preserves the fabricated expansion whose rejection drove BL-181.",
+      "allowed_paths": ["work/audit/R-0004/source-decision-sha-failure.md"]
+    }
+  ]
+}

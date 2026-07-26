@@ -2593,7 +2593,7 @@ canon, and the command-description guard is stated exactly as 144 literal AST
 definitions plus three exact init-factory invocations.
 
 The complete ladder passed on exact repaired snapshot
-`dc64176017ad07c956548b47e59955862541db21`: T1 passed 71 files / 838 tests, T2 passed
+`dc64176ab75675a65e3c561576a2f5bb756b408f`: T1 passed 71 files / 838 tests, T2 passed
 38 files / 239 tests plus one declared skip, the root porcelain passed 127 files / 1,165
 tests plus eight declared skips, merged T1+T3 coverage passed at 71.23% statements,
 61.79% branches, 77.62% functions, and 73.25% lines, and all eleven public-package
@@ -2613,7 +2613,7 @@ subprocess status, passed/failed metrics, summary text, and the unchanged baseli
 remain authoritative.
 
 The complete ladder passed on exact repaired snapshot
-`54e79a1d9b15170b885950c1371758867ac52024`: T1 passed 71 files / 838 tests, T2 passed
+`54e79a19a22e64ec8a6c6ea698087081872d70fd`: T1 passed 71 files / 838 tests, T2 passed
 38 files / 240 tests plus one declared skip, the root porcelain passed 127 files / 1,166
 tests plus eight declared skips, merged T1+T3 coverage passed at 71.23% statements,
 61.79% branches, 77.62% functions, and 73.25% lines, and all eleven public-package
