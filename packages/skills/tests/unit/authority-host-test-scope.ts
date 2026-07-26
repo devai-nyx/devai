@@ -43,7 +43,7 @@ const READ_PROCESS_VERBS: Readonly<Record<string, readonly string[]>> = {
   sh: ['-lc'],
 };
 
-function processIsReadOnly(request: AuthorityHostEffectRequest): boolean {
+export function processIsReadOnlyForTest(request: AuthorityHostEffectRequest): boolean {
   const executable = request.arguments[0];
   const args = request.arguments[1];
   if (typeof executable !== 'string' || !Array.isArray(args)) return false;
@@ -80,7 +80,12 @@ function processIsReadOnly(request: AuthorityHostEffectRequest): boolean {
         args[0] === 'run' &&
         ['build', 'test', 'test:t1', 'test:t3', 'test:t4', 'test:t5'].includes(String(args[1]))) ||
       (args.length === 2 && args[0] === '-r' && args[1] === 'build') ||
-      (args.length === 2 && args[0] === 'vitest' && args[1] === 'run'))
+      (args[0] === 'vitest' &&
+        args[1] === 'run' &&
+        (args.length === 2 ||
+          (args.length === 4 &&
+            args[2] === '--config' &&
+            /^tests\/config\/[A-Za-z0-9._-]+\.ts$/.test(String(args[3]))))))
   ) {
     return true;
   }
@@ -202,7 +207,9 @@ export async function withAuthorityHostTestScope<T>(callback: () => T | Promise<
     receipt_store: issuer,
     apply_effect: (request, apply) => {
       if (request.kind === 'process') {
-        if (!processIsReadOnly(request)) throw new Error('AUTHORITY_TEST_PROCESS_NOT_READ_ONLY');
+        if (!processIsReadOnlyForTest(request)) {
+          throw new Error('AUTHORITY_TEST_PROCESS_NOT_READ_ONLY');
+        }
         return apply();
       }
       const { target, repositoryRoot } = targetFor(request, descriptors);

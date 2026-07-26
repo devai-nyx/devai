@@ -118,7 +118,8 @@
       "strategy": "main-path",
       "inputs": {},
       "files": {
-        "package.json": "{\"name\":\"r20-fixture\",\"packageManager\":\"pnpm@10.0.0\",\"scripts\":{\"test\":\"node -e \\\"process.exit(0)\\\"\"}}"
+        "package.json": "{\"name\":\"r20-fixture\",\"packageManager\":\"pnpm@10.0.0\",\"scripts\":{\"test\":\"node -e \\\"process.exit(0)\\\"\"}}",
+        "tests/config/t1.unit.config.ts": "export default { test: { passWithNoTests: true } };\n"
       },
       "ctx": {}
     },
