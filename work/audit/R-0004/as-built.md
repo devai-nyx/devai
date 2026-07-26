@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-FINAL-REPAIR-FORMATTING-CORRECTION; source snapshot 7be9d31dcbfb07fffc2f8547af89c5b04e8b66f9,
+    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; source snapshot fd8c8b68e05f2fc7a305b6403373f2820d9b64bc,
   ]
 ---
 
@@ -18,7 +18,7 @@ provenance:
 ## Boundary and verdict
 
 R-0004 has completed B0 through B7 locally at source snapshot
-`7be9d31dcbfb07fffc2f8547af89c5b04e8b66f9`. The governed surface and package
+`fd8c8b68e05f2fc7a305b6403373f2820d9b64bc`. The governed surface and package
 topology satisfy the round acceptance criteria at that snapshot. The round is not yet
 closed: the Architect closing record, exact-candidate Claude Opus 5 review, source PR,
 exact-SHA CI, source merge, exact-main CI, closure-only machine record, closure PR, and
@@ -116,7 +116,7 @@ paths: four `dist/index` JavaScript/declaration artifacts, `package.json`, and
 
 ## Fresh tests and coverage
 
-The complete tiered exit ladder passed on exact source snapshot `7be9d31`:
+The complete tiered exit ladder passed on exact source snapshot `fd8c8b6`:
 
 - T1: 71 files / 837 tests;
 - T2: 38 files / 238 passed / 1 declared skip;
