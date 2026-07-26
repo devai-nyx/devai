@@ -129,3 +129,19 @@ byte-copy that exact validated product to the Architect-owned law mirror in a se
 commit. Add an Inspector contract that recomputes the current resolved policy and
 rejects future stale bytes. No rule may be hand-edited or relaxed. The cluster retires
 only when the production SWEEP and complete exit ladder pass.
+
+## KR-R5-016 — SWEEP child routing mismatch
+
+After current authority-policy materialization, the B8 SWEEP advanced past policy load
+and was refused with `AUTHORITY_HOST_PROCESS_ADAPTER_REQUIRED` before proof output. The
+aggregate runner spawns each public `sense run <kind>` alias unchanged. The parent
+broker therefore sees the harness-write aggregate action rather than the router's exact
+read-only internal sensor binding; an unchanged child would also demand a fresh human
+declaration instead of preserving the parent harness context.
+
+The Inspector must first bind public-to-internal child routing and the exact read-only
+broker recognition. The Engineer may then route only registry-derived sensor children
+to their existing internal bindings and admit only those bindings under the parent
+`sense run` scope. No arbitrary command, write flag, unknown sensor, external binary,
+or non-read action may pass. The cluster retires only after adversarial tests, a live
+59-sensor disposable SWEEP with a valid terminal epoch, and the complete ladder pass.
