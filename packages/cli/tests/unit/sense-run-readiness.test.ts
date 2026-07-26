@@ -1,6 +1,6 @@
 // Invariants: INV-DEVAI-019
 import { describe, expect, it } from 'vitest';
-import * as broker from '../../src/authority/broker.js';
+import { readOnlyDevaiChild } from '../../src/authority/sense-run-child.js';
 import * as runSet from '../../src/commands/sense/run-set.js';
 
 type Child = {
@@ -112,18 +112,7 @@ describe('sense run readiness aggregation', () => {
   });
 
   it('admits only an exact read-only public sensor child under the aggregate scope', () => {
-    const admits = (
-      broker as unknown as {
-        readOnlyDevaiChild?: (
-          executable: string,
-          args: readonly unknown[],
-          entries: readonly unknown[],
-          parentAction: string | undefined,
-        ) => boolean;
-      }
-    ).readOnlyDevaiChild;
-    expect(admits, 'broker must expose deterministic child recognition').toBeTypeOf('function');
-    if (admits === undefined) throw new Error('readOnlyDevaiChild is not implemented');
+    const admits = readOnlyDevaiChild;
     const currentCli = process.argv[1] ?? '';
     const readEntry = {
       internal_name: 'sense-type-check',

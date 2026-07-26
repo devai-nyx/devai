@@ -156,6 +156,7 @@ describe('round lifecycle filesystem behavior', () => {
       scaffoldGovernedRound({ repoRoot: repo, round: 5 });
       const closed = {
         ...record('R-0005'),
+        declared_by: 'DII-1',
         status: 'closed',
         closed_by: 'DII-2',
         phase_closure: 'PC-0001',
@@ -184,7 +185,6 @@ describe('round lifecycle filesystem behavior', () => {
         closed_at: '2026-07-26T00:00:00.000Z',
         merged_as: 'b'.repeat(40),
         release_disposition: 'none-preratification',
-        supersedes: null,
       });
       write(repo, 'record/derived/indexes/rounds.md', 'PC-0001\n');
 

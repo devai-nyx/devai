@@ -21,9 +21,9 @@ describe('ADR roster records', () => {
     .filter((f) => /^ADR-\d{3}-.+\.md$/.test(f))
     .sort();
 
-  it('roster is gapless ADR-001..016', () => {
+  it('roster is gapless ADR-001..017', () => {
     const nums = files.map((f) => Number(f.slice(4, 7)));
-    expect(nums).toEqual(Array.from({ length: 16 }, (_, i) => i + 1));
+    expect(nums).toEqual(Array.from({ length: 17 }, (_, i) => i + 1));
   });
 
   it('every front-matter validates against record-meta', () => {
@@ -46,7 +46,7 @@ describe('ADR roster records', () => {
     }
   });
 
-  it('lifecycle discipline preserves thirteen active ADRs and both replacements', () => {
+  it('lifecycle discipline preserves fourteen active ADRs and all replacements', () => {
     for (const f of files) {
       const fm = frontMatter(f);
       if (f === 'ADR-005-ci-economy.md') {
@@ -62,7 +62,10 @@ describe('ADR roster records', () => {
         expect(fm.status, f).toBe('active');
         expect(fm.superseded_by, f).toBeNull();
       }
-      if (f === 'ADR-014-ci-checker-adr-association.md') {
+      if (
+        f === 'ADR-014-ci-checker-adr-association.md' ||
+        f === 'ADR-017-r0005-independent-review-corrections.md'
+      ) {
         expect(fm.supersedes, `${f} preserves its first sealed source list`).toEqual([]);
       } else {
         expect(
@@ -78,6 +81,7 @@ describe('ADR roster records', () => {
     expect(frontMatter('ADR-016-bounded-authority-prompt-composition.md').supersedes).toEqual([
       'ADR-011',
     ]);
+    expect(frontMatter('ADR-017-r0005-independent-review-corrections.md').supersedes).toEqual([]);
   });
 });
 // Invariants: INV-DEVAI-001
