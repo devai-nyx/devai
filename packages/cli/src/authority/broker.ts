@@ -415,6 +415,10 @@ function readOnlyProcess(
   if (parentAction === 'sense test' && basename(executable) === 'pnpm') {
     if (
       (args.length === 2 && args[0] === 'vitest' && args[1] === 'run') ||
+      (args.length === 1 &&
+        ['test', 'test:integration', 'test:regression', 'test:e2e'].includes(
+          String(args[0]),
+        )) ||
       (args.length === 2 &&
         args[0] === 'run' &&
         ['test:t1', 'test:t3', 'test:t4', 'test:t5'].includes(String(args[1])))
