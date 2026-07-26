@@ -101,3 +101,16 @@ The Inspector may replace only the five assertions with explicit fixture narrowi
 remove the one unused test import. The Engineer may remove only the unused production
 import. No assertion value, runtime behavior, lint rule, or gate may change. The cluster
 retires only after focused tests, lint, and the complete floor pass.
+
+## KR-R5-014 — Exit-formatting collateral
+
+After KR-R5-012 and KR-R5-013 were repaired, the exit ladder passed stage 1, stage 2,
+T4, T5, T6, and changeset classification. The repository-wide Prettier check then
+identified exactly three refreshed R20 JSON baselines and the post-merge E2E test.
+
+The Inspector may apply the configured formatter to only those four files. Parsed JSON,
+snapshot meaning, test assertions, and runtime behavior must remain unchanged. The
+cluster retires only when exact fixture comparisons, the complete floor, and the
+repository-wide formatting check pass. KR-R5-012 and KR-R5-013 are retired at this same
+measurement: exact reference generation, lint, typecheck, and the complete floor are
+green.
