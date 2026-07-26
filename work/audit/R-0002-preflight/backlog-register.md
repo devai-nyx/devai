@@ -23,7 +23,7 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-142. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-143. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
@@ -54,6 +54,8 @@ BL-141 governs the R-0004 Inspector regex lint defect exposed by the first compl
 exact-candidate ladder.
 BL-142 governs the dev-scoped SQL false positive exposed by the corrected R-0004
 candidate's strict governance gate.
+BL-143 governs the cross-authority formatting debt exposed after the corrected R-0004
+candidate passed every functional tier.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -63,7 +65,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-119 |
 | R-0003        | BL-004, BL-005, BL-006, BL-120–BL-140                                                                                                                                                     |
-| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084, BL-141, BL-142                                                                            |
+| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084, BL-141, BL-142, BL-143                                                                    |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
 | R-0006        | BL-026, BL-034, BL-035, BL-081                                                                                                                                                            |
 | R-0007        | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                                                                    |
@@ -79,6 +81,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–119 |
 | Closed in R-0003                    | BL-004–006, BL-120–140                                                                                                                           |
 | Implemented in active R-0004        | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084, BL-141–142; source and closure ceremonies pending                                |
+| Open in active R-0004               | BL-143                                                                                                                                           |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
 | Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                                       |
 | Open in prepared R-0007             | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                           |
@@ -1373,6 +1376,19 @@ an unscoped or production-named occurrence in the same commit remains a finding;
 Engineer applies context per occurrence rather than suppressing a commit, file, role,
 or forbidden id; strict governance and the complete ladder pass; Auditor records the
 symmetric correction and Architect rebinds source close before Opus review.
+
+### BL-143 — Restore formatter-clean R-0004 source and generated views
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Engineer + Auditor · provenance: R-0004 exact ladder at 907ccd9 after T6; standalone Prettier gate; R-0004-EXIT-LADDER-FORMATTING-FAILURE`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: preserve the exact 13-file formatter finding set; Architect, Engineer, and
+Inspector format only their owned paths in separate commits; generated action views
+remain produced bytes rather than manual edits; the generator emits formatter-clean
+bytes deterministically; action/schema/effect and repository-reference projections
+remain exact; the complete ladder including standalone formatting passes; Auditor
+records the symmetric correction and Architect rebinds source close before Opus review.
 
 ## Carried guard map
 
