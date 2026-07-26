@@ -6,6 +6,7 @@
   "changed_files": [
     "fingerprint-behavior.json",
     "manifest-corpus.json",
+    "prompt-inventory.json",
     "round-corpus-backlog-audit.json",
     "round-corpus-orchestrate.json"
   ],

@@ -40,21 +40,23 @@
       "skill_id": "SKILL-fix-overrides"
     },
     {
-      "char_count": 936,
-      "file": "skills/index.ts",
+      "char_count": 943,
+      "file": "skills/round/scaffold.ts",
       "placeholder_names": [
-        "String(roundN)",
+        "roundId",
         "String(waveN)",
         "slug",
         "item.title ?? item.description ?? '(TODO: name the goal in one sentence)'",
+        "roundId",
+        "roundId",
         "item.id ?? '?'",
         "item.cell ?? '?'",
         "String(item.priority ?? '?')",
         "String(waveN).padStart(2, '0')",
         "slug"
       ],
-      "sha256": "339a71f661174959911a7fc0260e7796be2e586c04d8db115f0d08c01dcadd25",
-      "skill_id": "SKILL-fix-overrides"
+      "sha256": "ce6af62a1aea7afd2f1f7bfbb032476b45b6659629560f0ff0bcc63ae7228cd5",
+      "skill_id": "SKILL-round-backlog"
     },
     {
       "char_count": 124,
@@ -77,11 +79,11 @@
       "skill_id": "SKILL-fix-overrides"
     },
     {
-      "char_count": 2322,
-      "file": "skills/index.ts",
-      "placeholder_names": ["String(roundN)", "catalogBlock"],
-      "sha256": "8dbdd8c3aae3d88707d2e272f65df9adce02c7541100960afe1c9f3cc11abb50",
-      "skill_id": "SKILL-fix-overrides"
+      "char_count": 2243,
+      "file": "skills/round/scaffold.ts",
+      "placeholder_names": ["roundId", "roundId", "roundId", "roundId", "catalogBlock", "roundId"],
+      "sha256": "7f848c43443146a1734e2e66783b1f60a9625a37bb2a2cd5d51f1efdf5972b88",
+      "skill_id": "SKILL-round-backlog"
     },
     {
       "char_count": 350,
