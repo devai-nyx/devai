@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-162–188; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; R-0004-FINAL-REPAIR-FORMATTING-CORRECTION; R-0004-GOVERNANCE-RANGE-CORRECTION; Auditor 41d73a2,
+    DII-162–189; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; R-0004-FINAL-REPAIR-FORMATTING-CORRECTION; R-0004-GOVERNANCE-RANGE-CORRECTION; Auditor 41d73a2,
     a9c1dab,
     9da5b54,
     8f7581c,
@@ -28,7 +28,10 @@ provenance:
     ab888d0,
     6b4213c,
     fd8c8b6,
-    and cd59beb; Inspector b7bf300,
+    cd59beb,
+    46f3854,
+    1218970,
+    and dd0130c; Inspector b7bf300,
     4c08b46,
     fbfb226,
     b3be172,
@@ -48,7 +51,8 @@ provenance:
     bf9a690,
     48e2ccc,
     af91f7c,
-    and 7a1006b; Engineer d875b73,
+    7a1006b,
+    and b70d530; Engineer d875b73,
     b8d6c98,
     55ee8d0,
     2ef3936,
@@ -70,7 +74,8 @@ provenance:
     b119515,
     7e4248e,
     c2d418b,
-    and 735fb70,
+    735fb70,
+    and 4416eb9,
   ]
 ---
 
@@ -78,8 +83,8 @@ provenance:
 
 ## Bound result
 
-DII-188 accepts the BL-167 through BL-170 red-first corrections and exact repaired
-ladder, supersedes DII-187 only as the closing judgment, and rebinds the locally repaired source implementation. The
+DII-189 accepts the BL-171 through BL-173 record corrections and exact repaired ladder,
+supersedes DII-188 only as the closing judgment, and rebinds the locally repaired source implementation. The
 governed action surface is 147 keep / 38 fold / 1 tombstone; action
 effects are 186/186 with zero findings; 59 live sensors retain their 50/9
 cell/diagnostic standing; the recursive canon contains 55 schemas; and the fixed public
@@ -110,8 +115,12 @@ The fourth review's complete-parity and record gaps are repaired: all 147 keep b
 have canonical source descriptions, the owner factory is covered, all 14 known-red
 clusters are current, audit supersession links parse and pair, and the surface contract
 distinguishes all five admitted test routes with refreshed provenance.
+The fifth review's two blocking record inaccuracies are repaired: current-lineage prose
+states all fourteen clusters green while preserving the historical parity red, the
+active surface contract cites the terminal decision and third-review correction, and
+the paired audit provenance no longer refers forward to its own correction.
 
-The complete repaired local ladder passed on exact source snapshot `fd8c8b6`, including root
+The complete repaired local ladder passed on exact source snapshot `1218970`, including root
 build/test porcelain, required workflow pins and prewarm, semantic
 repository-reference generation, generated action views, package dry-runs, all six test
 tiers, the complete ordinary floor, and unchanged coverage floors are green. The
@@ -119,8 +128,8 @@ Auditor's exact readings and role-pure commit map are in `work/audit/R-0004/as-b
 
 ## Review and ceremony gate
 
-The next clean commit containing this handoff, DII-188, the BL-167 through BL-170 guards,
-and the symmetric Auditor corrections is the review candidate. It must restart the
+The next clean commit containing this handoff, DII-189, the BL-171 through BL-173 record
+corrections, and the symmetric Auditor pair is the review candidate. It must restart the
 complete ladder and receive one read-only close review through literal
 `claude-opus-5`, with no fallback. Actionable findings return to red-first role-pure
 repair; PASS permits the shared source-PR and closure-only PR ceremony with exact-SHA CI

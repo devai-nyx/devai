@@ -2532,6 +2532,23 @@ containing DII-188 and its refreshed handoff must pass the complete ladder and a
 read-only review through literal `claude-opus-5`, with no fallback, before source push.
 The claims ceiling and every external human gate remain unchanged.
 
+### DII-189 — Admit the fifth-review repaired exact ladder
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 fifth-Opus repaired close; DII-188; BL-171–173; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; R-0004-EXACT-LADDER-PASS; Auditor dd0130c`
+
+DII-189 supersedes DII-188 only as the R-0004 source-closing judgment. The Inspector
+known-red record now distinguishes all fourteen current green clusters from the
+historical `dfa5659` parity failure, the active surface contract cites terminal DII-188
+and the third-review correction, and the fifth-review and governance-range lifecycle
+records are symmetric and non-self-referential.
+
+The complete ladder passed on exact repaired snapshot
+`12189704dd49a0ef4bd989b4ad1070dc4de413e0`, including standalone formatting, exact
+round-range governance, unchanged coverage floors, root 127 files / 1,163 passing plus
+eight declared skips, and all eleven public-package dry-runs. The next clean commit
+containing DII-189 and its refreshed handoff must pass the complete ladder and a fresh
+read-only review through literal `claude-opus-5`, with no fallback, before source push.
+The claims ceiling and every external human gate remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
