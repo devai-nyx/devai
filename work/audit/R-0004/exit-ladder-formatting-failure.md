@@ -2,7 +2,7 @@
 id: R-0004-EXIT-LADDER-FORMATTING-FAILURE
 title: Exact-candidate cross-authority formatting failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null

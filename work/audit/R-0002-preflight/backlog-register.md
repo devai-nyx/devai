@@ -82,8 +82,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–119 |
 | Closed in R-0003                    | BL-004–006, BL-120–140                                                                                                                           |
-| Implemented in active R-0004        | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084, BL-141–143; source and closure ceremonies pending                                |
-| Open in active R-0004               | BL-144–151                                                                                                                                       |
+| Implemented in active R-0004        | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084, BL-141–151; source and closure ceremonies pending                                |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
 | Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                                       |
 | Open in prepared R-0007             | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                           |

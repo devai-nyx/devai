@@ -2,7 +2,7 @@
 id: R-0004-EXIT-LADDER-GOVERNANCE-FAILURE
 title: Exact-candidate dev-scoped SQL governance failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null
