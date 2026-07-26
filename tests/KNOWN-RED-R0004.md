@@ -13,6 +13,11 @@ produce the same deterministic R20 fingerprint without changing raw evidence. En
 and Architect `467b001` reconciled the surface disposition to the 55-schema exit canon.
 Both Inspector guards are green without a baseline recapture.
 
+Exact-head CI run `30209278971` exposed one further BL-180 red: Actions selected a
+nondeterministic per-file Vitest progress line for the fixture fingerprint. The new
+Inspector case is red in this batch until only that presentation line is normalized;
+raw output, summary metrics, and the committed baseline remain protected.
+
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at
 the exact B0 candidate `10b9f1b9e599b77d6123daef165210259f90a8eb`.
