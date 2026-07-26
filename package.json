@@ -32,7 +32,8 @@
     "ci:local": "node scripts/run-ci-stages.mjs",
     "ci:evidence-mode": "node scripts/refuse-evidence-mode.mjs",
     "ci:changesets": "node scripts/check-changesets.mjs",
-    "ci:governance": "pnpm devai:prepare && node packages/cli/dist/bin.js policy check forbidden actions --strict --repo-root . --since-ref b60b4c52bff1779da84f48edc63cbf34652ab18e && node packages/cli/dist/bin.js sense run decision_record_integrity --repo-root . && node packages/cli/dist/bin.js sense run decision_citation_resolution --repo-root . && node packages/cli/dist/bin.js sense trace resolve --repo-root . --no-emit-reading && node packages/cli/dist/bin.js sense docs drift --repo-root . --no-emit-reading",
+    "ci:sha-references": "node scripts/check-governed-sha-references.mjs",
+    "ci:governance": "pnpm run ci:sha-references && pnpm devai:prepare && node packages/cli/dist/bin.js policy check forbidden actions --strict --repo-root . --since-ref b60b4c52bff1779da84f48edc63cbf34652ab18e && node packages/cli/dist/bin.js sense run decision_record_integrity --repo-root . && node packages/cli/dist/bin.js sense run decision_citation_resolution --repo-root . && node packages/cli/dist/bin.js sense trace resolve --repo-root . --no-emit-reading && node packages/cli/dist/bin.js sense docs drift --repo-root . --no-emit-reading",
     "ci:workflows": "node scripts/check-workflows.mjs"
   },
   "devDependencies": {
