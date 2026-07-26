@@ -234,7 +234,10 @@ export function routeSensorChildArgv(
   if (routed.kind !== 'dispatch') {
     throw new Error('SENSE_RUN_CHILD_ROUTE_INVALID');
   }
-  return routed.argv.slice(2);
+  const internalName = routed.argv[2];
+  const entry = entries.find((candidate) => candidate.internal_name === internalName);
+  if (entry === undefined) throw new Error('SENSE_RUN_CHILD_BINDING_MISSING');
+  return [...entry.path, ...routed.argv.slice(3)];
 }
 
 const COMMAND_KINDS: Readonly<Record<string, string>> = {
