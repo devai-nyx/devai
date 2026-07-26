@@ -481,7 +481,7 @@ export const ACTION_EFFECT_CONTRACTS = [
     action_id: 'round archive',
     public_action_id: 'round archive',
     effect: 'local-write',
-    capabilities: ['fs:workspace', 'proc:git'],
+    capabilities: ['fs:workspace'],
   },
   {
     action_id: 'round declare',
@@ -720,8 +720,8 @@ export const ACTION_EFFECT_CONTRACTS = [
   {
     action_id: 'sense run',
     public_action_id: 'sense run',
-    effect: 'read',
-    capabilities: ['proc:dynamic'],
+    effect: 'harness-write',
+    capabilities: ['proc:dynamic', 'fs:proofs'],
   },
   {
     action_id: 'sense runtime-api',

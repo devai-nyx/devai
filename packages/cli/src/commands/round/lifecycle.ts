@@ -96,8 +96,7 @@ export const roundDeclare = defineCommand({
 
 export const roundStatus = defineCommand({
   name: 'round status',
-  description:
-    'Read one local or archived governed round and report its schema-valid canonical status.',
+  description: 'Read one governed round in place and report its schema-valid canonical status.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
@@ -125,7 +124,8 @@ export const roundStatus = defineCommand({
 
 export const roundArchive = defineCommand({
   name: 'round archive',
-  description: 'Archive a fully closed governed round after every binding precondition resolves.',
+  description:
+    'Close a governed round in place after every binding precondition resolves; the archive action name is a compatibility spelling only.',
   authority: 'specifier',
   register(cli: CAC): void {
     cli

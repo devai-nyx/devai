@@ -152,7 +152,23 @@ function overlaps(scope: string, reserved: string): boolean {
  * `evidence_only`.
  */
 function isEvidenceOnlyScope(scope: string): boolean {
-  return scope.startsWith('.devai/state/');
+  return (
+    scope.startsWith('.devai/state/') ||
+    scope.startsWith('record/proofs/work/skill-runs/') ||
+    scope.startsWith('record/proofs/work/rgr/')
+  );
+}
+
+function isArchitectDocumentWriter(m: SkillManifestShape, scope: string): boolean {
+  return (
+    m.authority_role === 'architect' &&
+    m.agent_class === 'review-agent' &&
+    m.permission_tier === 'write' &&
+    m.host_mutation_policy === 'write_requires_flag' &&
+    scope.startsWith('docs/') &&
+    !scope.endsWith('/') &&
+    !/[*?{}]/u.test(scope)
+  );
 }
 
 /**
@@ -267,9 +283,16 @@ export function checkPromptOverlays(opts: CheckPromptOverlaysOptions): PromptFir
         const exemptByAutofix = isAutofixSelfScope(m, s);
         const architectBoundDeterministicSkill =
           m.authority_role === 'architect' && m.deterministic === true && m.llm_backed === false;
+        const architectDocumentWriter = isArchitectDocumentWriter(m, s);
         for (const reserved of ARCHITECT_RESERVED) {
           if (overlaps(s, reserved)) {
-            if (exemptByDraft || exemptByAutofix || architectBoundDeterministicSkill) break;
+            if (
+              exemptByDraft ||
+              exemptByAutofix ||
+              architectBoundDeterministicSkill ||
+              architectDocumentWriter
+            )
+              break;
             findings.push({
               code: 'PROMPT_OVERLAY_AUTHORITY_INVERSION',
               severity: 'critical',

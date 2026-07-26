@@ -336,7 +336,7 @@ export const SENSOR_ACTION_KINDS = [
     internal_binding: 'sense run',
     disposition: 'keep',
     migration: null,
-    effect: 'read',
+    effect: 'harness-write',
   },
   {
     action_id: 'sense runtime api',

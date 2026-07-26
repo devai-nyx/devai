@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from '@devai-nyx/authority';
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, isAbsolute, join } from 'node:path';
+import { basename, dirname, isAbsolute, join } from 'node:path';
 import {
   appendDecisionRecord,
   appendResolutionRecord,
@@ -357,9 +357,9 @@ export function createRoundSkills(
       permission_tier: 'write',
       host_mutation_policy: 'write_requires_flag',
       allowed_write_scopes: [
-        'work/rounds/R-*/**',
         'record/proofs/work/skill-runs/**',
         '.devai/state/decisions.jsonl',
+        '.devai/state/round-runs/**',
       ],
       evidence_files: ['record/proofs/work/skill-runs/SKILL-round-orchestrate/*.json'],
       risk_level: 'high',
@@ -375,6 +375,12 @@ export function createRoundSkills(
       const roundDirAbs = isAbsolute(dir) ? dir : join(ctx.repoRoot, dir);
       const promptsDir = join(roundDirAbs, 'prompts');
       const orchestratorPath = join(promptsDir, '00-orchestrator.md');
+      const runDir = join(
+        ctx.repoRoot,
+        '.devai/state/round-runs',
+        `R-${String(roundN).padStart(4, '0')}`,
+        'orchestrate',
+      );
       const waveTimeoutMs = (ctx.inputs?.['wave_timeout_ms'] as number | undefined) ?? 3600000; // 1h default
 
       // R11 (closes R6 F-4) — unbacked-wave knobs. Pack-tune via:
@@ -455,6 +461,7 @@ export function createRoundSkills(
           },
         };
       }
+      mkdirSync(runDir, { recursive: true });
       const catalog = parseWaveCatalog(readFileSync(orchestratorPath, 'utf8'));
 
       // Dispatch loop — sequential.
@@ -471,7 +478,7 @@ export function createRoundSkills(
           pushIfId(id);
           continue;
         }
-        const logPath = promptPath.replace(/\.md$/, '.log');
+        const logPath = join(runDir, basename(promptPath).replace(/\.md$/, '.log'));
 
         // Idempotency: skip clean.
         const existingStatus = readWaveLogStatus(logPath);
@@ -706,7 +713,7 @@ export function createRoundSkills(
       allowed_write_scopes: [
         'record/proofs/work/skill-runs/**',
         '.devai/state/decisions.jsonl',
-        'work/rounds/R-*/**',
+        '.devai/state/round-runs/**',
       ],
       evidence_files: ['record/proofs/work/skill-runs/SKILL-round-verify-publish/*.json'],
       risk_level: 'medium',
@@ -721,7 +728,13 @@ export function createRoundSkills(
       const roundN = (ctx.inputs?.['round_n'] as number | string | undefined) ?? 0;
       const roundDirAbs = isAbsolute(dir) ? dir : join(ctx.repoRoot, dir);
       const auditDir = resolveAuditDir(ctx.repoRoot, dir);
-      const closeoutDir = join(roundDirAbs, 'closeout');
+      const runDir = join(
+        ctx.repoRoot,
+        '.devai/state/round-runs',
+        `R-${String(roundN).padStart(4, '0')}`,
+        'verify-publish',
+      );
+      const closeoutDir = join(runDir, 'closeout');
       const promptsDir = join(roundDirAbs, 'prompts');
 
       const plan: RoundPlan = {
@@ -918,7 +931,8 @@ export function createRoundSkills(
       }
 
       // 9. Materialize Closeout.md.
-      const closeoutPath = join(roundDirAbs, 'Closeout.md');
+      mkdirSync(runDir, { recursive: true });
+      const closeoutPath = join(runDir, 'Closeout.md');
       writeFileSync(
         closeoutPath,
         buildCloseoutMd({
@@ -1173,9 +1187,9 @@ export function createRoundSkills(
       permission_tier: 'write',
       host_mutation_policy: 'write_requires_flag',
       allowed_write_scopes: [
-        'work/rounds/R-*/**',
         'record/proofs/work/skill-runs/**',
         '.devai/state/decisions.jsonl',
+        '.devai/state/round-runs/**',
       ],
       evidence_files: ['record/proofs/work/skill-runs/SKILL-round-execute/*.json'],
       risk_level: 'high',
