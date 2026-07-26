@@ -75,14 +75,19 @@ function staticCommandDescriptions(path: string): Map<string, string> {
   if (path.endsWith('/init/index.ts')) {
     expect(sourceText).toContain('name: `init apply-${segment}`');
     expect(sourceText).toContain(
-      'description: `Apply only the ${segment} bootstrap segment under its declared authority.`',
+      '`Apply only the ${segment} bootstrap segment under its declared authority.`',
     );
+    const ownerExact =
+      sourceText.includes("segment === 'owner'") &&
+      sourceText.includes('Apply the exact owner bootstrap segment under its declared authority.');
     for (const match of sourceText.matchAll(/initApplyDefinition\('([^']+)'\)/gu)) {
       const segment = match[1];
       if (segment !== undefined) {
         descriptions.set(
           `init apply-${segment}`,
-          `Apply only the ${segment} bootstrap segment under its declared authority.`,
+          ownerExact && segment === 'owner'
+            ? 'Apply the exact owner bootstrap segment under its declared authority.'
+            : `Apply only the ${segment} bootstrap segment under its declared authority.`,
         );
       }
     }
