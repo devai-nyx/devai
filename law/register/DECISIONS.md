@@ -1999,6 +1999,42 @@ exact-main CI establish the complete R-0003 close.
 R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
 promotes, re-earns, or declares ready nothing.
 
+### DII-162 — Open R-0004 action identity and governed surface
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 declaration; OM-002; OM-003; R-0004-AUTHORIZATION; R-0004-PLAN digest dc50368c2080b38cccce3e799405aec797e0e11a1f8ba52a16af97e1fb272069; PC-0004; exact base b60b4c52bff1779da84f48edc63cbf34652ab18e; R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION`
+
+R-0004 opens only after the complete R-0003 two-PR ceremony. PC-0004 is present on
+exact base `b60b4c52bff1779da84f48edc63cbf34652ab18e`, and final exact-main CI run
+`30188270499` passed every required job. The frozen predecessor remains read-only and
+clean. This satisfies the conditional authorization without importing any predecessor
+standing.
+
+The scoped records are BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029,
+BL-030, BL-031, BL-065, BL-080, and BL-084. The exact measured surface contains 146
+public actions, all retained pending behavior-preserving implementation; 38 historical
+per-sensor wrappers are explicit folds and backlog compaction is an explicit tombstone.
+The surface-disposition record enumerates every route, all 59 live and five archived
+sensor kinds, the 54-schema canon, the ten-package starting topology, the selected core
+façade, and the exact bounded root-process contracts. Count movement without a governed
+disposition and migration is forbidden.
+
+The public action path is the never-reminted action identity. One Architect-owned action
+registry must feed CLI routing and help, effects, sensors, generated documentation, and
+tests. Generated views are byte-stable and locale-independent. Every live sensor gains a
+successor-local design note; the nine diagnostic standings and fifty existing cell
+bindings remain unchanged. Schema canon, the eleven-member fixed group, the acyclic
+implementation-free core façade, bounded build/test porcelain, immutable workflow pins,
+and fail-closed binary presence are governed by the R-0004 surface contract.
+
+Inspector B1 must first prove each absent behavior red. Engineer changes may follow only
+the B0/B2 authority and generated-source boundaries; acceptance cannot weaken counts,
+effects, authority, coverage, or adversarial denials. R-0004 closes only after a fresh
+Auditor reconciliation, later Architect closing decision, literal `claude-opus-5`
+read-only PASS with no fallback, exact-SHA source CI, and the shared closure-only PR.
+
+R-0004 may establish only that the governed surface and package topology are implemented
+and tested. It authorizes no package publication, tag, GitHub Release, Pages deployment,
+real-stynx mutation, readiness claim, evidence promotion, or R-0010 observation.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

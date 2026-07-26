@@ -1,0 +1,1649 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0004-SURFACE-DISPOSITION",
+  "type": "round-measurement",
+  "status": "active",
+  "date": "2026-07-26",
+  "authority": "Architect",
+  "base_sha": "b60b4c52bff1779da84f48edc63cbf34652ab18e",
+  "source_main_ci": {
+    "run_id": 30188270499,
+    "conclusion": "success"
+  },
+  "actions": {
+    "measured_total": 146,
+    "keep": [
+      {
+        "action_id": "catalog actions",
+        "internal_binding": "actions list",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec blueprint validate",
+        "internal_binding": "blueprint validate",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec blueprint diff",
+        "internal_binding": "blueprint diff",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec blueprint plan",
+        "internal_binding": "blueprint plan",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "govern rgr emit",
+        "internal_binding": "rgr emit",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "govern rgr list",
+        "internal_binding": "rgr list",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "govern rgr show",
+        "internal_binding": "rgr show",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "govern rgr resolve",
+        "internal_binding": "rgr resolve",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "release gate",
+        "internal_binding": "release gate",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "release postdeploy verify",
+        "internal_binding": "release postdeploy-verify",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "release runtime drift",
+        "internal_binding": "release runtime-drift",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "release list",
+        "internal_binding": "release list",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "sense runtime api",
+        "internal_binding": "sense runtime-api",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense runtime auth",
+        "internal_binding": "sense runtime-auth",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense runtime data",
+        "internal_binding": "sense runtime-data",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec rtd bundle",
+        "internal_binding": "rtd bundle",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "docs cli",
+        "internal_binding": "docs cli",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "docs decisions render",
+        "internal_binding": "docs decisions render",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "docs rounds render",
+        "internal_binding": "docs rounds render",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "docs links",
+        "internal_binding": "docs links",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "docs publish",
+        "internal_binding": "docs publish",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "remote-write"
+      },
+      {
+        "action_id": "docs render mermaid",
+        "internal_binding": "docs render-mermaid",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "docs synthesize",
+        "internal_binding": "docs synthesize",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "docs synthesize all",
+        "internal_binding": "docs synthesize-all",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "round scaffold",
+        "internal_binding": "round scaffold",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "round declare",
+        "internal_binding": "round declare",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "round status",
+        "internal_binding": "round status",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "round archive",
+        "internal_binding": "round archive",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "spec decision close",
+        "internal_binding": "decision close",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "govern phase close",
+        "internal_binding": "phase close",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "govern phase ledger",
+        "internal_binding": "phase ledger",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "evidence test matrix",
+        "internal_binding": "render matrix",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "evidence test record",
+        "internal_binding": "record run",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "evidence coverage aggregate",
+        "internal_binding": "coverage aggregate",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "sense mutation run",
+        "internal_binding": "mutation run",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "sense mutation verify",
+        "internal_binding": "mutation verify",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "policy check docs governance",
+        "internal_binding": "check docs-governance",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "doctor",
+        "internal_binding": "doctor",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "init plan",
+        "internal_binding": "init plan",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "init apply-owner",
+        "internal_binding": "init apply-owner",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "init apply-architect",
+        "internal_binding": "init apply-architect",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "init apply-f5",
+        "internal_binding": "init apply-f5",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "adopt upgrade",
+        "internal_binding": "upgrade",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "adopt ci scaffold",
+        "internal_binding": "ci scaffold",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "adopt hooks install",
+        "internal_binding": "hooks install",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "agent skill list",
+        "internal_binding": "skill list",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "agent skill run",
+        "internal_binding": "skill run",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "work state prune",
+        "internal_binding": "state prune",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work session start",
+        "internal_binding": "work session start",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work session end",
+        "internal_binding": "work session end",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "evidence chain head",
+        "internal_binding": "evidence chain-head",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "evidence actions verify",
+        "internal_binding": "evidence actions-verify",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "evidence local collect",
+        "internal_binding": "evidence collect-local",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "evidence emit",
+        "internal_binding": "evidence emit",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "evidence redact",
+        "internal_binding": "evidence redact",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "evidence chain verify",
+        "internal_binding": "evidence verify",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "evidence local verify",
+        "internal_binding": "evidence verify-local",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "inventory adherence",
+        "internal_binding": "inv adherence-reverse",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "inventory components",
+        "internal_binding": "inv components",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "inventory contracts",
+        "internal_binding": "inv contracts",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "inventory coverage",
+        "internal_binding": "inv coverage",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "inventory dependencies",
+        "internal_binding": "inv dependencies",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "inventory glossary",
+        "internal_binding": "inv glossary",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "inventory modules",
+        "internal_binding": "inv modules",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "inventory regen",
+        "internal_binding": "inv regen",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "inventory routes",
+        "internal_binding": "inv routes",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "inventory schemas",
+        "internal_binding": "inv schemas",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "inventory suggest",
+        "internal_binding": "inv suggest",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "inventory tests",
+        "internal_binding": "inv tests",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "work db start shared",
+        "internal_binding": "db start-shared",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "work db stop shared",
+        "internal_binding": "db stop-shared",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "work db status",
+        "internal_binding": "db status",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "work db rebuild template",
+        "internal_binding": "db rebuild-template",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "work db provision",
+        "internal_binding": "db provision",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "work db drop",
+        "internal_binding": "db drop",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "work lock acquire",
+        "internal_binding": "lock acquire",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work lock release",
+        "internal_binding": "lock release",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work lock list",
+        "internal_binding": "lock list",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "work lock reap",
+        "internal_binding": "lock reap",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work worktree create",
+        "internal_binding": "worktree create",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work worktree destroy",
+        "internal_binding": "worktree destroy",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work worktree list",
+        "internal_binding": "worktree list",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "work worktree adopt",
+        "internal_binding": "worktree adopt",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work worktree reap",
+        "internal_binding": "worktree reap",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work task spawn",
+        "internal_binding": "task spawn",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work task complete",
+        "internal_binding": "task complete",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work task escalate",
+        "internal_binding": "task escalate",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work task pause rgr",
+        "internal_binding": "task pause-rgr",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work task resume rgr",
+        "internal_binding": "task resume-rgr",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work task list",
+        "internal_binding": "task list",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "govern triage classify",
+        "internal_binding": "triage classify",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "govern triage tie break",
+        "internal_binding": "triage tie-break",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "govern triage dispatch",
+        "internal_binding": "triage dispatch",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "govern score compute",
+        "internal_binding": "score compute",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "govern score view",
+        "internal_binding": "score view",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "govern score assess",
+        "internal_binding": "score assess",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "govern score backlog refresh",
+        "internal_binding": "score backlog-refresh",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "agent prompt compose",
+        "internal_binding": "prompts compose",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "agent prompt diff",
+        "internal_binding": "prompts diff",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "agent prompt freeze",
+        "internal_binding": "prompts freeze",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "policy check ci economy",
+        "internal_binding": "check ci-economy",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "policy check sensor integrity",
+        "internal_binding": "check sensor-integrity",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "policy check glob guards",
+        "internal_binding": "check glob-guards",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "policy check dependencies",
+        "internal_binding": "check dependencies",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "policy check action effects",
+        "internal_binding": "check action-effects",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "policy check overrides",
+        "internal_binding": "check overrides",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "policy check pr compliance",
+        "internal_binding": "check pr-compliance",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "policy check adrs",
+        "internal_binding": "check adrs",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "policy check forbidden actions",
+        "internal_binding": "check forbidden-actions",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "policy check prompt overlays",
+        "internal_binding": "check prompt-overlays",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "govern auditor post-merge",
+        "internal_binding": "govern auditor-post-merge",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "agent llm probe",
+        "internal_binding": "llm probe",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "adopt pack graduate",
+        "internal_binding": "pack graduate-invariants",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "adopt pack resolve",
+        "internal_binding": "pack resolve",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "experimental loop run",
+        "internal_binding": "loop run",
+        "lifecycle": "experimental",
+        "tier": "plumbing",
+        "effect": "local-write"
+      },
+      {
+        "action_id": "work backlog add",
+        "internal_binding": "backlog add",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "work backlog list",
+        "internal_binding": "backlog list",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "work backlog next",
+        "internal_binding": "backlog next",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "work backlog complete",
+        "internal_binding": "backlog complete",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "sense build",
+        "internal_binding": "sense build",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense inventory api",
+        "internal_binding": "sense api",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense inventory data model",
+        "internal_binding": "sense data-model",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense inventory rbac",
+        "internal_binding": "sense rbac",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense judge",
+        "internal_binding": "sense judge",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense readings rebuild",
+        "internal_binding": "sense readings-rebuild",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "sense readings record",
+        "internal_binding": "sense readings-record",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "harness-write"
+      },
+      {
+        "action_id": "sense lint",
+        "internal_binding": "sense lint",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense docs drift",
+        "internal_binding": "sense docs-drift",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense site drift",
+        "internal_binding": "sense site-drift",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense inventory performance",
+        "internal_binding": "sense inventory-performance",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense spec idiomaticity",
+        "internal_binding": "sense spec-idiomaticity",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense migrate check",
+        "internal_binding": "sense migrate-check",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense test",
+        "internal_binding": "sense test",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense trace resolve",
+        "internal_binding": "sense trace-resolve",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense type check",
+        "internal_binding": "sense type-check",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "sense run",
+        "internal_binding": "sense run",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec validate action coverage",
+        "internal_binding": "spec validate-action-coverage",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec validate all",
+        "internal_binding": "spec validate-all",
+        "lifecycle": "supported",
+        "tier": "porcelain",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec validate glossary",
+        "internal_binding": "spec validate-glossary",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec validate invariants",
+        "internal_binding": "spec validate-invariants",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec validate invariant strategies",
+        "internal_binding": "spec validate-invariant-strategies",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec validate journeys",
+        "internal_binding": "spec validate-journeys",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec validate schema",
+        "internal_binding": "spec validate-schema",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec validate trace",
+        "internal_binding": "spec validate-trace",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "spec validate test trace",
+        "internal_binding": "spec validate-test-trace",
+        "lifecycle": "supported",
+        "tier": "plumbing",
+        "effect": "read"
+      },
+      {
+        "action_id": "verify translation",
+        "internal_binding": "verify translation",
+        "lifecycle": "experimental",
+        "tier": "plumbing",
+        "effect": "local-write"
+      }
+    ],
+    "fold": [
+      {
+        "internal_binding": "sense archive-immutability",
+        "replacement": "sense run archive_immutability"
+      },
+      {
+        "internal_binding": "sense coverage",
+        "replacement": "sense run coverage"
+      },
+      {
+        "internal_binding": "sense data-handling",
+        "replacement": "sense run data_handling"
+      },
+      {
+        "internal_binding": "sense decision-citation-resolution",
+        "replacement": "sense run decision_citation_resolution"
+      },
+      {
+        "internal_binding": "sense decision-record-integrity",
+        "replacement": "sense run decision_record_integrity"
+      },
+      {
+        "internal_binding": "sense dep-graph",
+        "replacement": "sense run dep_graph"
+      },
+      {
+        "internal_binding": "sense harness-coherence",
+        "replacement": "sense run harness_coherence"
+      },
+      {
+        "internal_binding": "sense harness-coverage",
+        "replacement": "sense run harness_coverage"
+      },
+      {
+        "internal_binding": "sense harness-depth",
+        "replacement": "sense run harness_depth"
+      },
+      {
+        "internal_binding": "sense harness-green-main",
+        "replacement": "sense run harness_green_main"
+      },
+      {
+        "internal_binding": "sense harness-idiomaticity",
+        "replacement": "sense run harness_idiomaticity"
+      },
+      {
+        "internal_binding": "sense harness-invariant-alignment",
+        "replacement": "sense run harness_invariant_alignment"
+      },
+      {
+        "internal_binding": "sense harness-performance",
+        "replacement": "sense run harness_performance"
+      },
+      {
+        "internal_binding": "sense harness-robustness",
+        "replacement": "sense run harness_robustness"
+      },
+      {
+        "internal_binding": "sense harness-security",
+        "replacement": "sense run harness_security"
+      },
+      {
+        "internal_binding": "sense inventory-adherence",
+        "replacement": "sense run inventory_adherence"
+      },
+      {
+        "internal_binding": "sense inventory-determinism",
+        "replacement": "sense run inventory_determinism"
+      },
+      {
+        "internal_binding": "sense perf-test",
+        "replacement": "sense run perf_test"
+      },
+      {
+        "internal_binding": "sense plant-coherence",
+        "replacement": "sense run plant_coherence"
+      },
+      {
+        "internal_binding": "sense plant-coverage",
+        "replacement": "sense run plant_coverage"
+      },
+      {
+        "internal_binding": "sense plant-depth",
+        "replacement": "sense run plant_depth"
+      },
+      {
+        "internal_binding": "sense round-record-integrity",
+        "replacement": "sense run round_record_integrity"
+      },
+      {
+        "internal_binding": "sense routes",
+        "replacement": "sense run routes"
+      },
+      {
+        "internal_binding": "sense security-scan",
+        "replacement": "sense run security_scan"
+      },
+      {
+        "internal_binding": "sense spec-alignment",
+        "replacement": "sense run spec_alignment"
+      },
+      {
+        "internal_binding": "sense spec-depth",
+        "replacement": "sense run spec_depth"
+      },
+      {
+        "internal_binding": "sense spec-freshness",
+        "replacement": "sense run spec_freshness"
+      },
+      {
+        "internal_binding": "sense spec-performance-targets",
+        "replacement": "sense run spec_performance_targets"
+      },
+      {
+        "internal_binding": "sense spec-robustness-targets",
+        "replacement": "sense run spec_robustness_targets"
+      },
+      {
+        "internal_binding": "sense spec-security-coverage",
+        "replacement": "sense run spec_security_coverage"
+      },
+      {
+        "internal_binding": "sense test-coherence",
+        "replacement": "sense run test_coherence"
+      },
+      {
+        "internal_binding": "sense test-coverage-depth",
+        "replacement": "sense run test_coverage_depth"
+      },
+      {
+        "internal_binding": "sense test-idiomaticity",
+        "replacement": "sense run test_idiomaticity"
+      },
+      {
+        "internal_binding": "sense test-invariant-alignment",
+        "replacement": "sense run test_invariant_alignment"
+      },
+      {
+        "internal_binding": "sense test-performance-coverage",
+        "replacement": "sense run test_performance_coverage"
+      },
+      {
+        "internal_binding": "sense test-robustness-coverage",
+        "replacement": "sense run test_robustness_coverage"
+      },
+      {
+        "internal_binding": "sense test-security-coverage",
+        "replacement": "sense run test_security_coverage"
+      },
+      {
+        "internal_binding": "sense test-weakening",
+        "replacement": "sense run test_weakening"
+      }
+    ],
+    "tombstone": [
+      {
+        "action_id": "work backlog compact",
+        "internal_binding": "backlog compact",
+        "replacement": "work backlog list"
+      }
+    ]
+  },
+  "sensors": {
+    "live_total": 59,
+    "archived_total": 5,
+    "entries": [
+      {
+        "sensor_id": "type_check",
+        "emitter_module": "packages/sensors/src/type-check.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/type_check.md"
+      },
+      {
+        "sensor_id": "lint",
+        "emitter_module": "packages/sensors/src/lint.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/lint.md"
+      },
+      {
+        "sensor_id": "build",
+        "emitter_module": "packages/sensors/src/build.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/build.md"
+      },
+      {
+        "sensor_id": "unit_test",
+        "emitter_module": "packages/sensors/src/test.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/unit_test.md"
+      },
+      {
+        "sensor_id": "integration_test",
+        "emitter_module": "packages/sensors/src/test.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/integration_test.md"
+      },
+      {
+        "sensor_id": "e2e_test",
+        "emitter_module": "packages/sensors/src/test.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/e2e_test.md"
+      },
+      {
+        "sensor_id": "migration_check",
+        "emitter_module": "packages/sensors/src/migrate-check.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/migration_check.md"
+      },
+      {
+        "sensor_id": "inventory_regeneration",
+        "emitter_module": "packages/cli/src/commands/sense/readings-rebuild.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/inventory_regeneration.md"
+      },
+      {
+        "sensor_id": "test_weakening_review",
+        "emitter_module": "packages/sensors/src/test-weakening.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/test_weakening_review.md"
+      },
+      {
+        "sensor_id": "trace_resolution",
+        "emitter_module": "packages/sensors/src/trace-resolve.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/trace_resolution.md"
+      },
+      {
+        "sensor_id": "security_scan",
+        "emitter_module": "packages/sensors/src/security-scan.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/security_scan.md"
+      },
+      {
+        "sensor_id": "perf_test",
+        "emitter_module": "packages/sensors/src/perf-test.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/perf_test.md"
+      },
+      {
+        "sensor_id": "llm_judge",
+        "emitter_module": "packages/sensors/src/judge.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/llm_judge.md"
+      },
+      {
+        "sensor_id": "runtime_probe_api",
+        "emitter_module": "packages/sensors/src/runtime-probe.ts",
+        "standing": "diagnostic",
+        "design_note_path": "law/policy/sensor-notes/runtime_probe_api.md"
+      },
+      {
+        "sensor_id": "runtime_probe_auth",
+        "emitter_module": "packages/sensors/src/runtime-probe.ts",
+        "standing": "diagnostic",
+        "design_note_path": "law/policy/sensor-notes/runtime_probe_auth.md"
+      },
+      {
+        "sensor_id": "runtime_probe_data",
+        "emitter_module": "packages/sensors/src/runtime-probe-data.ts",
+        "standing": "diagnostic",
+        "design_note_path": "law/policy/sensor-notes/runtime_probe_data.md"
+      },
+      {
+        "sensor_id": "inventory_api",
+        "emitter_module": "packages/sensors/src/inventory-api.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/inventory_api.md"
+      },
+      {
+        "sensor_id": "inventory_routes",
+        "emitter_module": "packages/sensors/src/inventory-routes.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/inventory_routes.md"
+      },
+      {
+        "sensor_id": "inventory_data_model",
+        "emitter_module": "packages/sensors/src/inventory-data-model.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/inventory_data_model.md"
+      },
+      {
+        "sensor_id": "inventory_rbac",
+        "emitter_module": "packages/sensors/src/inventory-rbac.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/inventory_rbac.md"
+      },
+      {
+        "sensor_id": "inventory_data_handling",
+        "emitter_module": "packages/sensors/src/inventory-data-handling.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/inventory_data_handling.md"
+      },
+      {
+        "sensor_id": "inventory_dep_graph",
+        "emitter_module": "packages/sensors/src/inventory-dep-graph.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/inventory_dep_graph.md"
+      },
+      {
+        "sensor_id": "inventory_coverage",
+        "emitter_module": "packages/sensors/src/inventory-coverage.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/inventory_coverage.md"
+      },
+      {
+        "sensor_id": "spec_depth",
+        "emitter_module": "packages/sensors/src/spec-depth.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/spec_depth.md"
+      },
+      {
+        "sensor_id": "spec_idiomaticity",
+        "emitter_module": "packages/sensors/src/spec-idiomaticity.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/spec_idiomaticity.md"
+      },
+      {
+        "sensor_id": "spec_freshness",
+        "emitter_module": "packages/sensors/src/spec-freshness.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/spec_freshness.md"
+      },
+      {
+        "sensor_id": "plant_coverage",
+        "emitter_module": "packages/sensors/src/plant-coverage.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/plant_coverage.md"
+      },
+      {
+        "sensor_id": "test_coverage_depth",
+        "emitter_module": "packages/sensors/src/test-coverage-depth.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/test_coverage_depth.md"
+      },
+      {
+        "sensor_id": "test_invariant_alignment",
+        "emitter_module": "packages/sensors/src/test-invariant-alignment.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/test_invariant_alignment.md"
+      },
+      {
+        "sensor_id": "inventory_adherence",
+        "emitter_module": "packages/sensors/src/inventory-adherence.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/inventory_adherence.md"
+      },
+      {
+        "sensor_id": "inventory_determinism",
+        "emitter_module": "packages/sensors/src/inventory-determinism.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/inventory_determinism.md"
+      },
+      {
+        "sensor_id": "harness_security",
+        "emitter_module": "packages/sensors/src/harness-security.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/harness_security.md"
+      },
+      {
+        "sensor_id": "harness_green_main",
+        "emitter_module": "packages/sensors/src/harness-green-main.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/harness_green_main.md"
+      },
+      {
+        "sensor_id": "spec_alignment",
+        "emitter_module": "packages/sensors/src/spec-alignment.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/spec_alignment.md"
+      },
+      {
+        "sensor_id": "spec_security_coverage",
+        "emitter_module": "packages/sensors/src/spec-security-coverage.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/spec_security_coverage.md"
+      },
+      {
+        "sensor_id": "spec_performance_targets",
+        "emitter_module": "packages/sensors/src/spec-performance-targets.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/spec_performance_targets.md"
+      },
+      {
+        "sensor_id": "spec_robustness_targets",
+        "emitter_module": "packages/sensors/src/spec-robustness-targets.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/spec_robustness_targets.md"
+      },
+      {
+        "sensor_id": "plant_depth",
+        "emitter_module": "packages/sensors/src/plant-depth.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/plant_depth.md"
+      },
+      {
+        "sensor_id": "plant_coherence",
+        "emitter_module": "packages/sensors/src/plant-coherence.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/plant_coherence.md"
+      },
+      {
+        "sensor_id": "test_coherence",
+        "emitter_module": "packages/sensors/src/test-coherence.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/test_coherence.md"
+      },
+      {
+        "sensor_id": "test_idiomaticity",
+        "emitter_module": "packages/sensors/src/test-idiomaticity.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/test_idiomaticity.md"
+      },
+      {
+        "sensor_id": "test_security_coverage",
+        "emitter_module": "packages/sensors/src/test-security-coverage.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/test_security_coverage.md"
+      },
+      {
+        "sensor_id": "test_performance_coverage",
+        "emitter_module": "packages/sensors/src/test-performance-coverage.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/test_performance_coverage.md"
+      },
+      {
+        "sensor_id": "test_robustness_coverage",
+        "emitter_module": "packages/sensors/src/test-robustness-coverage.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/test_robustness_coverage.md"
+      },
+      {
+        "sensor_id": "harness_coverage",
+        "emitter_module": "packages/sensors/src/harness-coverage.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/harness_coverage.md"
+      },
+      {
+        "sensor_id": "harness_depth",
+        "emitter_module": "packages/sensors/src/harness-depth.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/harness_depth.md"
+      },
+      {
+        "sensor_id": "harness_coherence",
+        "emitter_module": "packages/sensors/src/harness-coherence.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/harness_coherence.md"
+      },
+      {
+        "sensor_id": "harness_invariant_alignment",
+        "emitter_module": "packages/sensors/src/harness-invariant-alignment.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/harness_invariant_alignment.md"
+      },
+      {
+        "sensor_id": "harness_idiomaticity",
+        "emitter_module": "packages/sensors/src/harness-idiomaticity.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/harness_idiomaticity.md"
+      },
+      {
+        "sensor_id": "harness_performance",
+        "emitter_module": "packages/sensors/src/harness-performance.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/harness_performance.md"
+      },
+      {
+        "sensor_id": "harness_robustness",
+        "emitter_module": "packages/sensors/src/harness-robustness.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/harness_robustness.md"
+      },
+      {
+        "sensor_id": "inventory_performance",
+        "emitter_module": "packages/sensors/src/inventory-performance.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/inventory_performance.md"
+      },
+      {
+        "sensor_id": "decision_record_integrity",
+        "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
+        "standing": "diagnostic",
+        "design_note_path": "law/policy/sensor-notes/decision_record_integrity.md"
+      },
+      {
+        "sensor_id": "decision_citation_resolution",
+        "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
+        "standing": "diagnostic",
+        "design_note_path": "law/policy/sensor-notes/decision_citation_resolution.md"
+      },
+      {
+        "sensor_id": "archive_immutability",
+        "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
+        "standing": "diagnostic",
+        "design_note_path": "law/policy/sensor-notes/archive_immutability.md"
+      },
+      {
+        "sensor_id": "round_record_integrity",
+        "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
+        "standing": "diagnostic",
+        "design_note_path": "law/policy/sensor-notes/round_record_integrity.md"
+      },
+      {
+        "sensor_id": "docs_drift",
+        "emitter_module": "packages/sensors/src/docs-drift.ts",
+        "standing": "cell",
+        "design_note_path": "law/policy/sensor-notes/docs_drift.md"
+      },
+      {
+        "sensor_id": "site_drift",
+        "emitter_module": "packages/sensors/src/site-drift.ts",
+        "standing": "diagnostic",
+        "design_note_path": "law/policy/sensor-notes/site_drift.md"
+      },
+      {
+        "sensor_id": "action_effect_inference",
+        "emitter_module": "packages/sensors/src/action-effect-inference.ts",
+        "standing": "diagnostic",
+        "design_note_path": "law/policy/sensor-notes/action_effect_inference.md"
+      }
+    ],
+    "archived": [
+      {
+        "kind": "api_test",
+        "reason": "no-emitter-at-attested-pin",
+        "provenance": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "replacement": null
+      },
+      {
+        "kind": "db_test",
+        "reason": "no-emitter-at-attested-pin",
+        "provenance": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "replacement": null
+      },
+      {
+        "kind": "journey_test",
+        "reason": "no-emitter-at-attested-pin",
+        "provenance": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "replacement": null
+      },
+      {
+        "kind": "contract_validation",
+        "reason": "no-emitter-at-attested-pin",
+        "provenance": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "replacement": null
+      },
+      {
+        "kind": "mutation_test",
+        "reason": "no-emitter-at-attested-pin",
+        "provenance": "d76cd12d2241a1a28a32a0fe629c6531da7fe74d:packages/sensors/src/sensor-registry.ts",
+        "replacement": null
+      }
+    ]
+  },
+  "schemas": {
+    "canonical_total": 54,
+    "canon_rules": [
+      "recursive closed complete objects",
+      "predicate fragments remain valid",
+      "shared vocabulary references",
+      "generated enum marker integrity",
+      "dereferenced published-copy byte identity"
+    ]
+  },
+  "packages": {
+    "existing_public": [
+      "@devai-nyx/authority",
+      "@devai-nyx/cli",
+      "@devai-nyx/effects-check",
+      "@devai-nyx/evidence",
+      "@devai-nyx/loop",
+      "@devai-nyx/schemas",
+      "@devai-nyx/sensors",
+      "@devai-nyx/skills",
+      "@devai-nyx/spec",
+      "@devai-nyx/utils"
+    ],
+    "selected_core": "@devai-nyx/core",
+    "fixed_group": [
+      "@devai-nyx/authority",
+      "@devai-nyx/cli",
+      "@devai-nyx/core",
+      "@devai-nyx/effects-check",
+      "@devai-nyx/evidence",
+      "@devai-nyx/loop",
+      "@devai-nyx/schemas",
+      "@devai-nyx/sensors",
+      "@devai-nyx/skills",
+      "@devai-nyx/spec",
+      "@devai-nyx/utils"
+    ]
+  },
+  "root_porcelain": {
+    "build": {
+      "public_action": "sense build",
+      "argv": ["pnpm", "-r", "--if-present", "build"]
+    },
+    "test": {
+      "public_action": "sense test",
+      "argv": ["pnpm", "exec", "vitest", "run"]
+    },
+    "constraints": [
+      "exact argv only",
+      "no shell",
+      "no caller-selected executable",
+      "no recursive root-script invocation",
+      "host adapter final re-verification"
+    ]
+  },
+  "claims_ceiling": "Governed surface and package topology only; no publication, deployment, readiness, evidence promotion, or predecessor standing."
+}
