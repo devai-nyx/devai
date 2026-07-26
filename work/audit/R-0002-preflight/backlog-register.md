@@ -1830,6 +1830,21 @@ snapshot assertion matches the exact classified-count phrase; the twelfth-review
 failure/correction lifecycle is symmetric; a fresh atomic closing DII, complete ladder,
 and literal `claude-opus-5` review pass before source push.
 
+### BL-184 — Classify clean-checkout-only historical SHA objects
+
+`type: backlog-item · status: draft · authority: Auditor + Inspector + Architect · provenance: R-0004 source PR #6 exact-head CI failure; head 70b6092; run 30215723543; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-FAILURE`
+
+Priority: P0 before R-0004 source merge. Primary round: R-0004.
+
+Acceptance: a hermetic Inspector contract proves that the transient pull-request merge
+`3469026a503837de49d829c233bc7e9eb6b53620` is classified only at its existing Auditor
+path and rejected R-0003 candidate `46535a3c8939aad7a2bbc8fce981bdcc48757e54`
+is classified only at its two existing Auditor paths when absent from a clean object
+database; the exception registry records truthful object kinds and reasons; local and
+clean-checkout governance pass without deleting historical evidence or widening any
+exception, threshold, review replacement, or external gate; a symmetric correction and
+fresh atomic closing DII precede the next exact-head CI run.
+
 ## Carried guard map
 
 The original known-red mapping remains as historical provenance:
