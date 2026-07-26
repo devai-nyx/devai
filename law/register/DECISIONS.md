@@ -2761,6 +2761,26 @@ PASS is inferred. PC-0005 uses DII-162 as the declaration and DII-199 as the clo
 decision with `release_disposition: none-preratification`. Every external release,
 publication, deployment, real-stynx, R-0008, R-0009, and R-0010 gate remains closed.
 
+### DII-200 — Admit the lint-clean fixture-naming repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 clean-checkout fixture lint correction; OM-008; DII-199; BL-184; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-CORRECTION; Inspector 78320af; Auditor 2a8682d`
+
+DII-200 supersedes DII-199 only as the R-0004 source-closing judgment. The next
+complete-ladder restart rejected the fixture's non-null assertions under the unchanged
+lint policy. Inspector `78320af` names both exact objects before constructing the
+expectation array, so no indexing assertion is required. Lint, typecheck, and the
+focused clean-checkout contract pass with identical expected values and no production
+change.
+
+The exact candidate containing DII-200 and the atomically refreshed contract and
+handoff must pass the complete local ladder and every required exact-head GitHub check
+before source merge. Exact-main source CI, production PC-0005 emission, closure-head CI,
+closure merge, and final-main CI remain serial and mandatory.
+
+OM-008 continues to replace only the additional post-repair Opus review for R-0004; no
+PASS is inferred. PC-0005 uses DII-162 as the declaration and DII-200 as the closing
+decision with `release_disposition: none-preratification`. Every external release,
+publication, deployment, real-stynx, R-0008, R-0009, and R-0010 gate remains closed.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
