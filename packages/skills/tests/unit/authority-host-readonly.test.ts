@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { processIsReadOnlyForTest } from './authority-host-test-scope.js';
 
+// Invariants: INV-DEVAI-001, INV-DEVAI-017, INV-DEVAI-020
+
 const processRequest = (args: readonly string[]) => ({
   kind: 'process' as const,
   symbol: 'spawnSync',
