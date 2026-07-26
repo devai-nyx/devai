@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    OM-008; DII-162–200; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-FINAL-REPAIR-FORMATTING-CORRECTION; R-0004-GOVERNANCE-RANGE-CORRECTION; R-0004-SOURCE-CI-ANSI-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; R-0004-SOURCE-DECISION-SHA-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-11-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-CORRECTION; Auditor 41d73a2,
+    OM-008; DII-162–201; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-FINAL-REPAIR-FORMATTING-CORRECTION; R-0004-GOVERNANCE-RANGE-CORRECTION; R-0004-SOURCE-CI-ANSI-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; R-0004-SOURCE-DECISION-SHA-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-11-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-CORRECTION; Auditor 41d73a2,
     a9c1dab,
     9da5b54,
     8f7581c,
@@ -127,8 +127,8 @@ provenance:
 
 ## Bound result
 
-DII-200 accepts the BL-184 lint-clean fixture-naming repair, supersedes DII-199 only as
-the closing judgment, retains OM-008's R-0004-only final-review exception, and rebinds
+DII-201 accepts the complete BL-184 clean-checkout SHA path set, supersedes DII-200 only
+as the closing judgment, retains OM-008's R-0004-only final-review exception, and rebinds
 the locally repaired source
 implementation. The
 governed action surface is 147 keep / 38 fold / 1 tombstone; action
@@ -224,6 +224,12 @@ the expectation array. Lint, typecheck, and the focused contract pass without ch
 expected values. The active contract, this handoff, and the register now agree
 atomically on DII-200.
 
+Exact-head CI run `30216260434` then proved that the initial classification omitted the
+BL-184 backlog and failure/correction records' own truthful citations. The hermetic
+Inspector regression now exercises every current path, and the registry admits only
+those paths. Any new path fails closed. The active contract, this handoff, and the
+register now agree atomically on DII-201.
+
 The DII-194 ladder passed on exact source snapshot `fd99ab7`, including
 T1 at 71 files / 838 tests, T2 at 38 files / 241 passing plus one declared skip, root
 test at 127 files / 1,167 passing plus eight declared
@@ -251,7 +257,7 @@ Auditor's exact readings and role-pure commit map are in `work/audit/R-0004/as-b
 
 ## Review and ceremony gate
 
-OM-008 authorizes the clean commit containing this handoff, DII-200, the BL-183 and
+OM-008 authorizes the clean commit containing this handoff, DII-201, the BL-183 and
 BL-184 corrections, and the bounded SHA-reference guard to proceed without the otherwise
 required additional post-repair Opus review. It must restart and pass the complete
 local ladder. Source PR #6 may merge only after every required check passes at the

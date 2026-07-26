@@ -2781,6 +2781,26 @@ PASS is inferred. PC-0005 uses DII-162 as the declaration and DII-200 as the clo
 decision with `release_disposition: none-preratification`. Every external release,
 publication, deployment, real-stynx, R-0008, R-0009, and R-0010 gate remains closed.
 
+### DII-201 — Admit the complete clean-checkout SHA path set
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 clean-checkout SHA path completion; OM-008; DII-200; GitHub Actions run 30216260434@2c4f15bed4897de801295c7eb93e4f5c7aebcd72; BL-184; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-CORRECTION; Inspector cbd9eb3; Architect f46cf69; Auditor 53a0f75`
+
+DII-201 supersedes DII-200 only as the R-0004 source-closing judgment. Exact-head CI
+run `30216260434` proved that the initial clean-checkout classification omitted the
+BL-184 backlog and failure/correction records that truthfully cite the same historical
+objects. Inspector `cbd9eb3` extended the empty-repository regression red first to
+every current citation. Architect `f46cf69` adds only those already-existing Auditor
+paths. Any citation at a new path still fails closed.
+
+The exact candidate containing DII-201 and the atomically refreshed contract and
+handoff must pass the complete local ladder and every required exact-head GitHub check
+before source merge. Exact-main source CI, production PC-0005 emission, closure-head CI,
+closure merge, and final-main CI remain serial and mandatory.
+
+OM-008 continues to replace only the additional post-repair Opus review for R-0004; no
+PASS is inferred. PC-0005 uses DII-162 as the declaration and DII-201 as the closing
+decision with `release_disposition: none-preratification`. Every external release,
+publication, deployment, real-stynx, R-0008, R-0009, and R-0010 gate remains closed.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
