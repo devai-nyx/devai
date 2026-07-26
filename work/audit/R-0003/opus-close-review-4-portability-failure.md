@@ -2,11 +2,11 @@
 id: R-0003-OPUS-CLOSE-REVIEW-4-PORTABILITY-FAILURE
 title: Fourth exact-candidate Opus portability failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-25
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0003-OPUS-CLOSE-REVIEW-4-PORTABILITY-CORRECTION
 provenance:
   [
     candidate b21b1f13a09a6b550a2783ac1e4aebf0cd13e620; literal claude-opus-5 session d7af245f-5496-4726-a008-1fb6a18cad65; BL-140,
