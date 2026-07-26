@@ -2,11 +2,11 @@
 id: R-0004-CORRECTED-CANDIDATE-T2-FAILURE
 title: Corrected-candidate T2 collateral failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-CORRECTED-CANDIDATE-T2-CORRECTION
 provenance: [candidate 8d95fd020b4f27989596e7f7bd55c81f7e4b3100; Stage 2 T2; BL-152–153]
 ---
 
