@@ -23,7 +23,7 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-139. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-140. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
@@ -48,6 +48,8 @@ BL-131 governs the T2 formatting-exclusion guard exposed by the bounded BL-130 r
 BL-132 governs the stale active ADR roster index found by the second R-0003 Opus review.
 BL-133 through BL-138 govern the six blockers from the third R-0003 Opus review.
 BL-139 governs the deterministic trace staleness introduced by the six-contract Inspector file.
+BL-140 governs the non-portable sibling-commit identity contract exposed by the fourth
+R-0003 exact-candidate Opus review.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -56,7 +58,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Primary round | Records                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-119 |
-| R-0003        | BL-004, BL-005, BL-006, BL-120–BL-139                                                                                                                                                     |
+| R-0003        | BL-004, BL-005, BL-006, BL-120–BL-140                                                                                                                                                     |
 | R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084                                                                                            |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
 | R-0006        | BL-026, BL-034, BL-035, BL-081                                                                                                                                                            |
@@ -71,7 +73,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Disposition                         | Governed records                                                                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–119 |
-| Open in active R-0003               | BL-004–006, BL-120–139                                                                                                                           |
+| Open in active R-0003               | BL-004–006, BL-120–140                                                                                                                           |
 | Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                                   |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
 | Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                                       |
@@ -104,7 +106,7 @@ primary round and prevents that round’s closure.
 
 | ID     | Short title                           | Current disposition                                                                     |
 | ------ | ------------------------------------- | --------------------------------------------------------------------------------------- |
-| BL-001 | Frozen genesis-attestation re-bind    | Closed in R-0002; `ratified` remains null                                               |
+| BL-001 | Frozen genesis-attestation re-bind    | Closed in R-0002; R-0003 ratified the rebound attestation at `2026-07-25T22:08:05Z`     |
 | BL-002 | Pending predecessor changeset         | Closed from D-196/PC-0019 `none-needed`; no predecessor release                         |
 | BL-003 | Repository/site/archive transition    | Closed R-0002 slice; History/hash residuals remain assigned to R-0007                   |
 | BL-004 | Constitution 1.0.0                    | Active; R-0003 ceremony                                                                 |
@@ -1328,6 +1330,20 @@ Acceptance: Architect regenerates `law/trace.json` from the unchanged 34 invaria
 the new executable Inspector path; trace no-write and resolution checks pass with no
 missing or untraced invariant; the source-closing decision and complete ladder restart
 bind the refreshed candidate.
+
+### BL-140 — Make replay-identity evidence portable to exact-SHA CI
+
+`type: backlog-item · status: draft · authority: Auditor + Inspector + Architect · provenance: R-0003 fourth exact-candidate Claude Opus 5 review B1; candidate b21b1f1; BL-138 contract`
+
+Priority: P0 before R-0003 source push. Primary round: R-0003.
+
+Acceptance: a durable Auditor record preserves the observed author and committer identity
+for every BL-138 replay/original pair; the Inspector contract asserts the pair mapping
+from active DII-158 and the durable record, uses live Git only for the seven replay commits
+that are ancestors of the candidate, and passes in a fresh single-branch clone containing
+only the candidate branch. The failure/correction audit pair is symmetric, DII-161 binds
+the correction without waiving identity requirements, the complete ladder passes, and a
+fresh exact Opus review returns PASS before source push.
 
 ## Carried guard map
 
