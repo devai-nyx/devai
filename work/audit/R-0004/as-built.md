@@ -76,6 +76,7 @@ façade.
 | BL-180     | Implemented; ceremony pending              | ANSI SGR sequences are ignored in metric extraction and deterministic fingerprint normalization; raw subprocess output remains preserved.                                                                              |
 | BL-181     | Implemented; ceremony pending              | All governed forty-hex identities resolve as local Git objects or one of eight exact path-scoped historical specimens; the two active fabricated expansions are corrected.                                             |
 | BL-182     | Implemented; ceremony pending              | Snapshot readings bind their producing snapshot, active semantics match the resolve-or-exact-path-exception guard, and four hermetic rejection modes are covered.                                                      |
+| BL-183     | Implemented; ceremony pending              | The remaining audit supersession back-edge is symmetric, its Inspector guard is green, and active SHA scan wording names the exact governed files.                                                                     |
 
 No R-0005 through R-0010 item was absorbed into this round.
 
@@ -124,6 +125,7 @@ paths: four `dist/index` JavaScript/declaration artifacts, `package.json`, and
 | Second source CI repair | Auditor + Inspector + Engineer             | `9622e35`, `6c876f1`, `d694249`, `54e79a1`                                                                                                               | Repaired exact fixture progress-line variance without changing raw evidence, metrics, or baseline.                                                       |
 | Tenth Opus repair       | Auditor + Inspector + Engineer + Architect | `61e66b2`, `759014a`, `aee78a3`, `cb50655`, `7b44322`, `4047bec`, `fd53fe9`, `fd99ab7`                                                                   | Added the governed SHA-reference gate, bounded historical exceptions by exact path, corrected active evidence, and kept the full-suite check performant. |
 | Eleventh Opus repair    | Auditor + Inspector + Architect            | `9b68e02`, `deaa1b1`, `cd51d1b`, `8ff6c5a`, `1f118e1`, `2a86444`                                                                                         | Corrected snapshot-bound readings and active semantics, then added hermetic rejection coverage for every exception failure mode.                         |
+| Twelfth Opus repair     | Auditor + Inspector + Architect            | `b981d38`, `88062a8`, `745f0aa`, `2a24c79`, `4034db1`                                                                                                    | Closed the sole audit-lifecycle back-edge, tightened exact count evidence, and named the production guard's precise scan scope.                          |
 
 ## Fresh tests and coverage
 
