@@ -1750,7 +1750,9 @@ Priority: P2. Primary round: R-0005 documentation and record reconciliation.
 Acceptance: the entry measurement distinguishes its 146-action and 54-schema base
 readings from the complete 147-keep and 55-schema exit surface; disposition fields use
 names that cannot confuse base totals with exit totals; historical values remain
-immutable and correctly labelled.
+immutable and correctly labelled; each round as-built role-pure batch map represents
+every repair cycle in the governed range, including R-0004's sixth-review commits
+`12f67ed`, `7ca26c4`, and `c7dd9fb`.
 
 ### BL-178 — Bind anti-skip governance to test sources
 
