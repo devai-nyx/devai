@@ -2500,6 +2500,21 @@ literal `claude-opus-5`, with no fallback. Only PASS permits source push. No ext
 release, publication, deployment, real-stynx write, R-0008, R-0009, or R-0010 human gate
 changes.
 
+### DII-187 — Admit the final repaired exact ladder
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 final repaired exact-ladder close; DII-186; BL-163–166; R-0004-EXACT-LADDER-PASS; Auditor ab888d0`
+
+DII-187 supersedes DII-186 only as the R-0004 source-closing judgment. The complete
+ladder passed on exact repaired snapshot
+`7be9d31dcbfb07fffc2f8547af89c5b04e8b66f9`, including the exact round-range governance
+scan, standalone formatting, 71 T1 files / 837 tests, 38 T2 files / 238 passing plus one
+declared skip, root 127 files / 1,163 passing plus eight declared skips, unchanged
+coverage floors, and all eleven public-package dry-runs.
+
+The next clean commit containing DII-187 and its refreshed handoff is the final review
+candidate. It must pass the complete ladder and a fresh read-only review through literal
+`claude-opus-5`, with no fallback, before source push. The claims ceiling and every
+external human gate remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
