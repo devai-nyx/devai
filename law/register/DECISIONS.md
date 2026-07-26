@@ -2117,6 +2117,29 @@ R-0004 establishes only **governed surface and package topology implemented and 
 It publishes, tags, releases, deploys, promotes, re-earns, mutates real stynx, activates
 R-0009, or opens R-0010 observation nothing.
 
+### DII-166 — Rebind the R-0004 source close after the Inspector lint correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 corrected source close; DII-165; BL-141; R-0004-EXIT-LADDER-LINT-FAILURE; R-0004-EXIT-LADDER-LINT-CORRECTION; Auditor 0104a976c7def6a6e8c8085f5950cb25c75145eb and a9c1dabc0c119b093755e9c3c865cc232f06e62a; Inspector 4c08b4614ac3445d59ecef8fcd312a10ff0eef82`
+
+DII-166 supersedes DII-165 only as the R-0004 source-closing judgment. The first
+complete ladder on candidate `268e31f0169508a635bb58a06c6e1c6fe3075239`
+passed evidence-mode refusal and every deterministic projection, then correctly stopped
+at Stage 1 lint on one countable two-space regular-expression literal in the R-0004
+workflow assertion. BL-141 governs and closes that bounded defect.
+
+Inspector `4c08b46` rewrites only the exact two-space YAML boundary as ` {2}`. Focused
+ESLint and all nine R-0004 contracts pass without changing assertion meaning. Auditor
+`a9c1dab` records the symmetric correction. The ordinary floor then passed 1,126 tests
+and eight declared skips; its only two reds were the symmetric BL-064 projection checks
+for the two backlog-register locators moved by the Auditor record. This Architect batch
+regenerates that projection from current tracked source.
+
+The clean candidate containing DII-166 and the fresh repository-reference projection
+must restart the complete local ladder from Stage 1 and then receive the mandated
+read-only review through literal `claude-opus-5`, with no fallback. Any actionable
+finding reopens the role-pure red-first cycle; only PASS permits source push. The
+two-PR ceremony, `none-needed` release disposition, closing-record bindings, claims
+ceiling, and all external human gates remain exactly as DII-165 states.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
