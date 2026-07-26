@@ -144,7 +144,7 @@ describe('R-0003 first Opus review repairs', () => {
     expect(correction).toContain('exact candidate');
   });
 
-  it('preserves the closed R-0002 projection as a commit-scoped historical snapshot', () => {
+  it('keeps the current repository-reference projection exact without rewriting historical claims', () => {
     const scriptPath = join(ROOT, 'scripts/generate-repository-reference-triage.mjs');
     const source = readFileSync(scriptPath, 'utf8');
     expect(source).toContain('--check');
@@ -160,8 +160,8 @@ describe('R-0003 first Opus review repairs', () => {
       ],
       { cwd: ROOT, encoding: 'utf8' },
     );
-    expect(result.status).toBe(1);
-    expect(result.stderr).toContain('repository reference projection is stale');
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain('167 repository references verified');
     expect(text('work/rounds/R-0005/documentation-reconciliation.md')).toContain('commit-scoped');
   });
 });
