@@ -1677,6 +1677,37 @@ argument before object-literal inspection; exact typecheck passes; the focused g
 retains the same five-item intentional red evidence until Engineer repair; Auditor pairs
 the failure with a symmetric correction.
 
+### BL-171 — Reconcile the R-0004 known-red current-lineage statement
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 fifth exact-candidate Claude Opus 5 review F1; candidate 7d66471; R-0004-OPUS-CLOSE-REVIEW-5-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the Inspector known-red record states that all fourteen R-0004 clusters are
+green at the current lineage snapshot; BL-164/167 remains preserved as historical red
+characterization at `dfa5659` and names Engineer `d6369f9` as the production repair; no
+test, assertion, skip, threshold, or evidence source changes.
+
+### BL-172 — Refresh the active surface-contract closing provenance
+
+`type: backlog-item · status: draft · authority: Architect + Auditor · provenance: R-0004 fifth exact-candidate Claude Opus 5 review F2; candidate 7d66471; R-0004-OPUS-CLOSE-REVIEW-5-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the active surface contract names terminal DII-188 and
+`R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION`; the refreshed provenance remains acyclic and
+agrees with the active source-close handoff.
+
+### BL-173 — Pair the fifth-review record corrections
+
+`type: backlog-item · status: draft · authority: Auditor · provenance: R-0004 fifth exact-candidate Claude Opus 5 review; candidate 7d66471; R-0004-OPUS-CLOSE-REVIEW-5-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the fifth-review failure is paired with a symmetric active correction after
+BL-171 and BL-172; the governance-range failure does not cite its own future correction
+as provenance; no engineering claim or human gate changes.
+
 ## Carried guard map
 
 The original known-red mapping remains as historical provenance:
