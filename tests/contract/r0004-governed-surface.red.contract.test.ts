@@ -40,15 +40,17 @@ function staticCommandDescriptions(path: string): Map<string, string> {
   const source = ts.createSourceFile(path, sourceText, ts.ScriptTarget.Latest, true);
   const descriptions = new Map<string, string>();
   function visit(node: ts.Node): void {
+    const [definition] = ts.isCallExpression(node) ? node.arguments : [];
     if (
       ts.isCallExpression(node) &&
       ts.isIdentifier(node.expression) &&
       node.expression.text === 'defineCommand' &&
       node.arguments.length === 1 &&
-      ts.isObjectLiteralExpression(node.arguments[0])
+      definition !== undefined &&
+      ts.isObjectLiteralExpression(definition)
     ) {
       const fields = new Map<string, ts.Expression>();
-      for (const property of node.arguments[0].properties) {
+      for (const property of definition.properties) {
         if (
           ts.isPropertyAssignment(property) &&
           (ts.isIdentifier(property.name) || ts.isStringLiteral(property.name))
