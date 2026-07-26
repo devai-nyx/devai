@@ -403,6 +403,25 @@ function readOnlyProcess(
   ) {
     return true;
   }
+  if (
+    parentAction === 'sense build' &&
+    basename(executable) === 'pnpm' &&
+    args.length === 2 &&
+    args[0] === '-r' &&
+    args[1] === 'build'
+  ) {
+    return true;
+  }
+  if (parentAction === 'sense test' && basename(executable) === 'pnpm') {
+    if (
+      (args.length === 2 && args[0] === 'vitest' && args[1] === 'run') ||
+      (args.length === 2 &&
+        args[0] === 'run' &&
+        ['test:t1', 'test:t3', 'test:t4', 'test:t5'].includes(String(args[1])))
+    ) {
+      return true;
+    }
+  }
   if (['true', 'false'].includes(basename(executable)) && args.length === 0) return true;
   if (
     basename(executable) === 'node' &&

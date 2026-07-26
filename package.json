@@ -13,10 +13,10 @@
   "scripts": {
     "devai:prepare": "node scripts/generate-action-registry.mjs && pnpm --filter @devai-nyx/schemas build && pnpm --filter @devai-nyx/cli build",
     "action-registry:check": "node scripts/generate-action-registry.mjs --check",
-    "build": "pnpm -r build",
+    "build": "pnpm devai:prepare && node packages/cli/dist/bin.js sense build --repo-root . --no-emit-reading",
     "lint": "pnpm devai:prepare && node packages/cli/dist/bin.js sense lint --repo-root . --no-emit-reading",
     "typecheck": "pnpm devai:prepare && node packages/cli/dist/bin.js sense type check --repo-root . --project tsconfig.json --no-emit-reading",
-    "test": "vitest run",
+    "test": "pnpm devai:prepare && node packages/cli/dist/bin.js sense test all --repo-root . --no-emit-reading",
     "test:t1": "vitest run --config tests/config/t1.unit.config.ts",
     "test:t2": "vitest run --config tests/config/t2.contract.config.ts",
     "test:t3": "vitest run --config tests/config/t3.integration.config.ts",

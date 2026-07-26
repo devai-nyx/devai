@@ -7,29 +7,27 @@ export interface TestOptions {
   readonly cwd: string;
   readonly suite: TestSuite;
   readonly timeoutMs?: number;
-  /** Override the command (default chosen by suite). */
-  readonly command?: readonly string[];
 }
 
 function defaultCommand(suite: TestSuite): readonly string[] {
   switch (suite) {
     case 'unit':
-      return ['pnpm', 'test'];
+      return ['pnpm', 'run', 'test:t1'];
     case 'integration':
-      return ['pnpm', 'test:integration'];
+      return ['pnpm', 'run', 'test:t3'];
     case 'regression':
-      return ['pnpm', 'test:regression'];
+      return ['pnpm', 'run', 'test:t4'];
     case 'e2e':
-      return ['pnpm', 'test:e2e'];
+      return ['pnpm', 'run', 'test:t5'];
     case 'all':
-      return ['pnpm', 'test'];
+      return ['pnpm', 'vitest', 'run'];
   }
 }
 
 const VITEST_SUMMARY = /Tests\s+(\d+) passed(?:\s+\|\s+(\d+) failed)?/;
 
 export function senseTest(opts: TestOptions): SensorReading {
-  const args = [...(opts.command ?? defaultCommand(opts.suite))];
+  const args = [...defaultCommand(opts.suite)];
   const result = runCommand(args, { cwd: opts.cwd, timeoutMs: opts.timeoutMs ?? 600_000 });
 
   let passed = 0;
