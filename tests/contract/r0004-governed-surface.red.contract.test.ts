@@ -403,8 +403,10 @@ describe('R-0004 governed surface red-first contracts', () => {
   });
 
   it('BL-182 keeps snapshot readings and active SHA semantics exact', () => {
-    const snapshot = 'fd99ab7deaa1702467b6d8f9c4d6a98f4372b87e';
-    for (const path of ['law/register/DECISIONS.md', 'work/rounds/R-0004/source-close.md']) {
+    for (const [path, snapshot] of [
+      ['law/register/DECISIONS.md', 'fd99ab7deaa1702467b6d8f9c4d6a98f4372b87e'],
+      ['work/rounds/R-0004/source-close.md', 'exact source snapshot `fd99ab7`'],
+    ] as const) {
       const text = readFileSync(join(ROOT, path), 'utf8');
       const index = text.indexOf(snapshot);
       expect(index).toBeGreaterThanOrEqual(0);
