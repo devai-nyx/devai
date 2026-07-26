@@ -153,7 +153,12 @@ describe('sense run readiness aggregation', () => {
   });
 
   it('admits only an exact read-only public sensor child under the aggregate scope', () => {
-    const admits = readOnlyDevaiChild;
+    const admits = readOnlyDevaiChild as (
+      executable: string,
+      args: readonly string[],
+      entries: readonly unknown[],
+      parentAction: string,
+    ) => boolean;
     const currentCli = process.argv[1] ?? '';
     const readEntry = {
       internal_name: 'sense-type-check',
