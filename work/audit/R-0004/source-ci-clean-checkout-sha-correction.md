@@ -9,7 +9,9 @@ supersedes: R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-FAILURE
 superseded_by: null
 provenance:
   [
-    BL-184; GitHub Actions run 30215723543; Inspector 6b880b2 and 6c436be; Architect 808eba0; exact repaired snapshot 808eba01af556dbac37100f894c6706241bf6553,
+    BL-184; GitHub Actions run 30215723543; Inspector 6b880b2,
+    6c436be,
+    and 78320af; Architect 808eba0; exact repaired snapshot 808eba01af556dbac37100f894c6706241bf6553,
   ]
 ---
 
@@ -37,6 +39,12 @@ The first complete-ladder restart on closing snapshot `c80ea92` then failed stri
 typecheck because the new test fixture indexed its exact two-element expectation without
 non-null narrowing. Inspector `6c436be` adds only that TypeScript narrowing; exact
 typecheck and the BL-184 focused test pass without changing an assertion.
+
+The next complete-ladder restart on closing snapshot `cc8552b` failed lint because the
+strict narrowing used forbidden non-null assertions. Inspector `78320af` instead names
+the two exact fixture objects before constructing the expectation array. Lint,
+typecheck, and the focused BL-184 contract pass; assertion meaning and production code
+remain unchanged.
 
 BL-184 is repaired locally pending the final complete-ladder restart. Historical
 evidence remains byte-for-byte intact; no repository-wide waiver, threshold, review
