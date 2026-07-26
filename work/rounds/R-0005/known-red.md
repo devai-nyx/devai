@@ -185,10 +185,12 @@ clusters are now authorized for red-first role-pure repair:
 | KR-R5-025 | review P1    | Prospective sequencing must bind exact law and demonstrated failing Inspector evidence; unrelated or already-green predecessors fail.                                                                         |
 | KR-R5-026 | review P1    | Anti-skip enforcement must detect governed Vitest skip/conditional forms beyond literal `it.skip` and `describe.skip`, including aliases and wrappers.                                                        |
 | KR-R5-027 | local ladder | Forbidden-action scanning must classify repository-root protected paths semantically and must not treat a nested `record/` segment inside an Engineer-owned package path as the top-level Machine tree.       |
+| KR-R5-028 | local ladder | A public single-sensor `sense run <kind>` invocation must inherit a read boundary only for an exact registry-resolved `read` child; presets, unknown kinds, write consent, and non-read children remain authority-bound. |
 
 Each Inspector cluster must fail for its named absent behavior. KR-R5-027 is the
 strict-governance integration repair exposed after the independent-review batch. Law precedes every
-substantive implementation. No cluster authorizes destructive cleanup, a weaker source
+substantive implementation. KR-R5-028 is the strict-governance command-boundary repair
+exposed after the path-aware scanner repair. No cluster authorizes destructive cleanup, a weaker source
 set, threshold reduction, evidence reuse, history rewriting, external mutation, or a
 fabricated review PASS. This authority retires only after focused adversaries, the full
 ordinary floor, strict governance, fresh coverage, and a new exact-candidate independent
