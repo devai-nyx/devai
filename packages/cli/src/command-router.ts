@@ -235,7 +235,9 @@ export type RouteResult =
 
 function singleSensorRunIsReadOnly(args: readonly string[]): boolean {
   if (args.includes('--write') || args.includes('--allow-publish')) return false;
-  const senseIndex = args.findIndex((value, index) => value === 'sense' && args[index + 1] === 'run');
+  const senseIndex = args.findIndex(
+    (value, index) => value === 'sense' && args[index + 1] === 'run',
+  );
   if (senseIndex < 0) return false;
   const kind = args[senseIndex + 2];
   if (kind === undefined || kind.startsWith('-') || !isSensorKind(kind)) return false;
