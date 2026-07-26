@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-162–195; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-FINAL-REPAIR-FORMATTING-CORRECTION; R-0004-GOVERNANCE-RANGE-CORRECTION; R-0004-SOURCE-CI-ANSI-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; R-0004-SOURCE-DECISION-SHA-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-11-CORRECTION; Auditor 41d73a2,
+    DII-162–196; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-FINAL-REPAIR-FORMATTING-CORRECTION; R-0004-GOVERNANCE-RANGE-CORRECTION; R-0004-SOURCE-CI-ANSI-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; R-0004-SOURCE-DECISION-SHA-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-11-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION; Auditor 41d73a2,
     a9c1dab,
     9da5b54,
     8f7581c,
@@ -47,7 +47,11 @@ provenance:
     832da68,
     9b68e02,
     1f118e1,
-    and 19b957d; Inspector b7bf300,
+    19b957d,
+    b981d38,
+    745f0aa,
+    b10baed,
+    and 6bde01c; Inspector b7bf300,
     4c08b46,
     fbfb226,
     b3be172,
@@ -79,7 +83,9 @@ provenance:
     fd99ab7,
     deaa1b1,
     8ff6c5a,
-    and 2a86444; Engineer d875b73,
+    2a86444,
+    88062a8,
+    and 2a24c79; Engineer d875b73,
     b8d6c98,
     55ee8d0,
     2ef3936,
@@ -112,7 +118,8 @@ provenance:
     7ca26c4,
     467b001,
     cb50655,
-    and cd51d1b,
+    cd51d1b,
+    and 4034db1,
   ]
 ---
 
@@ -120,8 +127,8 @@ provenance:
 
 ## Bound result
 
-DII-195 accepts the complete BL-182 semantic and rejection-coverage repair, supersedes
-DII-194 only as the closing judgment, and rebinds the locally repaired source
+DII-196 accepts the complete BL-183 audit-lifecycle repair, supersedes DII-195 only as
+the closing judgment, and rebinds the locally repaired source
 implementation. The
 governed action surface is 147 keep / 38 fold / 1 tombstone; action
 effects are 186/186 with zero findings; 59 live sensors retain their 50/9
@@ -190,6 +197,13 @@ proved unresolved identities, misplaced exceptions, stale allowed paths, and sta
 exceptions all fail closed. The active contract, this handoff, and the register now
 agree atomically on DII-195.
 
+The twelfth review found the only asymmetric in-scope audit lifecycle edge: the
+eleventh-review failure superseded the source-decision SHA correction without the
+correction recording the reverse link. BL-183 repairs and tests that edge, tightens the
+classified-count assertion, and names the SHA guard's exact decision-register and
+Auditor-record scan scope. The active contract, this handoff, and the register now agree
+atomically on DII-196.
+
 The DII-194 ladder passed on exact source snapshot `fd99ab7`, including
 T1 at 71 files / 838 tests, T2 at 38 files / 241 passing plus one declared skip, root
 test at 127 files / 1,167 passing plus eight declared
@@ -205,12 +219,19 @@ including T1 at 71 files / 838 tests, T2 at 38 files / 243 passing plus one decl
 skip, root test at 127 files / 1,169 passing plus eight declared skips, unchanged merged
 T1+T3 coverage at 71.23% statements, 61.79% branches, 77.62% functions, and 73.25%
 lines, all eleven package dry-runs, and the governed SHA-reference check at 254
-identities / 246 local objects / 8 path-classified historical specimens. The
+identities / 246 local objects / 8 path-classified historical specimens.
+
+The complete repaired local ladder then passed on exact source snapshot `b10baed`,
+including T1 at 71 files / 838 tests, T2 at 38 files / 244 passing plus one declared
+skip, root test at 127 files / 1,170 passing plus eight declared skips, unchanged merged
+T1+T3 coverage at 71.23% statements, 61.79% branches, 77.62% functions, and 73.25%
+lines, all eleven package dry-runs, and the governed SHA-reference check at 256
+identities / 248 local objects / 8 path-classified historical specimens. The
 Auditor's exact readings and role-pure commit map are in `work/audit/R-0004/as-built.md`.
 
 ## Review and ceremony gate
 
-The clean commit containing this handoff, DII-195, the BL-182 correction, and the
+The clean commit containing this handoff, DII-196, the BL-183 correction, and the
 bounded SHA-reference guard is the review candidate. It must restart the
 complete ladder and receive one read-only close review through literal
 `claude-opus-5`, with no fallback. Actionable findings return to red-first role-pure

@@ -2670,6 +2670,29 @@ complete ladder and receive a fresh read-only review through literal `claude-opu
 with no fallback, before source push. The claims ceiling and every external human gate
 remain unchanged.
 
+### DII-196 — Admit the audit-lifecycle repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 twelfth-Opus repair; DII-195; BL-183; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION; Auditor 6bde01c`
+
+DII-196 supersedes DII-195 only as the R-0004 source-closing judgment. The twelfth
+exact-candidate Opus review independently verified the full implementation and found one
+blocking metadata back-edge: the eleventh-review failure superseded the source-decision
+SHA correction, but that correction remained active without the reverse link. The
+Auditor repaired the sole asymmetric in-scope edge, and the Inspector binds it exactly.
+The classified-count assertion now matches the complete phrase, and the active contract
+names the SHA guard's actual decision-register and Auditor-record scan scope.
+
+The complete ladder passed on exact repaired snapshot
+`b10baed06e21ed39f07b625a5993355a57526d63`: T1 passed 71 files / 838 tests, T2 passed
+38 files / 244 tests plus one declared skip, the root porcelain passed 127 files / 1,170
+tests plus eight declared skips, merged T1+T3 coverage passed at 71.23% statements,
+61.79% branches, 77.62% functions, and 73.25% lines, the governed SHA-reference check
+scanned 256 identities, resolved 248 local objects, and classified 8 historical
+specimens, and all eleven public-package dry-runs passed. The next clean commit
+containing DII-196, the refreshed contract, and the refreshed handoff must restart the
+complete ladder and receive a fresh read-only review through literal `claude-opus-5`,
+with no fallback, before source push. The claims ceiling and every external human gate
+remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
