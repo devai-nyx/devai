@@ -217,10 +217,15 @@ function recordHistory(repoRoot: string, path: string): HistoricalPath[] | null 
     } else if (line.length > 0 && commit !== undefined) {
       const fields = line.split('\t');
       const status = fields[0] ?? '';
-      const historicalPath = status.startsWith('R') ? fields[2] : fields[1];
+      const copied = status.startsWith('C');
+      const historicalPath = status.startsWith('R') || copied ? fields[2] : fields[1];
       if (historicalPath === undefined) continue;
       entries.push({ commit, path: historicalPath });
       commit = undefined;
+      // `--follow` traverses both renames and sufficiently similar copies. A rename is
+      // the same record and must retain its seal; a copy starts a distinct record whose
+      // source history must not be inherited.
+      if (copied) break;
     }
   }
   return entries.reverse();
