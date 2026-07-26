@@ -13,7 +13,8 @@ const RETIRED =
 
 export const senseReadingsRecordCmd = defineCommand({
   name: 'sense readings-record',
-  description: 'Refuse the retired aggregate-chain reading writer',
+  description:
+    'Validate and idempotently persist one exact SensorReading artifact with chained provenance',
   authority: 'sensor',
   register(cli: CAC): void {
     cli

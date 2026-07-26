@@ -23,7 +23,7 @@ const RETIRED =
 
 export const evidenceEmit = defineCommand({
   name: 'evidence emit',
-  description: 'Refuse writes to the retired aggregate evidence chain',
+  description: 'Append a new evidence record to the chain',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli

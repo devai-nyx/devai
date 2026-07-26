@@ -17,7 +17,8 @@ const RETIRED =
 
 export const evidenceRedact = defineCommand({
   name: 'evidence redact',
-  description: 'Refuse mutation of the retired aggregate evidence chain',
+  description:
+    'Apply a redaction policy to a record, re-link downstream, and log a redaction event',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
