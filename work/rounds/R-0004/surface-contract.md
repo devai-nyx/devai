@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    OM-002; DII-162; DII-190; BL-163; BL-165; BL-169; BL-172; BL-174; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION,
+    OM-002; DII-162; DII-191; BL-163; BL-165; BL-169; BL-172; BL-174; BL-180; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-SOURCE-CI-ANSI-CORRECTION,
   ]
 ---
 
@@ -68,6 +68,8 @@ All required remote jobs prewarm every declared package-manager identity, requir
 binaries rather than silently skipping suites, and pin third-party workflow actions by
 immutable commit with readable version comments. Generated action and sensor views are
 checked byte-for-byte in CI. Human help remains read-only and never supplies consent.
+Vitest summary parsing ignores ANSI SGR sequences only in its metric-extraction view;
+the subprocess output retained as evidence remains byte-for-byte raw.
 
 R-0004 implements a governed surface and package topology only. It publishes, tags,
 releases, deploys, promotes, re-earns, or declares ready nothing.

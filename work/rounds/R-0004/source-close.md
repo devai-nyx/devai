@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-162–190; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-FINAL-REPAIR-FORMATTING-CORRECTION; R-0004-GOVERNANCE-RANGE-CORRECTION; Auditor 41d73a2,
+    DII-162–191; R-0004-AS-BUILT; R-0004-EXACT-LADDER-PASS; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; R-0004-FINAL-REPAIR-FORMATTING-CORRECTION; R-0004-GOVERNANCE-RANGE-CORRECTION; R-0004-SOURCE-CI-ANSI-CORRECTION; Auditor 41d73a2,
     a9c1dab,
     9da5b54,
     8f7581c,
@@ -33,7 +33,10 @@ provenance:
     1218970,
     dd0130c,
     12f67ed,
-    and c7dd9fb; Inspector b7bf300,
+    c7dd9fb,
+    8a9ea09,
+    7b63f65,
+    and d63b0a5; Inspector b7bf300,
     4c08b46,
     fbfb226,
     b3be172,
@@ -54,7 +57,9 @@ provenance:
     48e2ccc,
     af91f7c,
     7a1006b,
-    and b70d530; Engineer d875b73,
+    b70d530,
+    a01e5d5,
+    and 016a3fa; Engineer d875b73,
     b8d6c98,
     55ee8d0,
     2ef3936,
@@ -64,7 +69,8 @@ provenance:
     f134f26,
     c530468,
     ab04008,
-    and d6369f9; Architect e1b952b,
+    d6369f9,
+    and a0dc396; Architect e1b952b,
     96d2477,
     a1dbb5b,
     b187210,
@@ -86,8 +92,8 @@ provenance:
 
 ## Bound result
 
-DII-190 accepts the BL-174 atomic terminal-provenance correction, supersedes DII-189
-only as the closing judgment, and rebinds the locally repaired source implementation. The
+DII-191 accepts the BL-180 exact-CI ANSI repair, supersedes DII-190 only as the closing
+judgment, and rebinds the locally repaired source implementation. The
 governed action surface is 147 keep / 38 fold / 1 tombstone; action
 effects are 186/186 with zero findings; 59 live sensors retain their 50/9
 cell/diagnostic standing; the recursive canon contains 55 schemas; and the fixed public
@@ -125,16 +131,22 @@ the paired audit provenance no longer refers forward to its own correction.
 The sixth review's terminal-provenance contradiction is repaired atomically: the active
 contract, this handoff, and the register agree on DII-190, while BL-172 through BL-174
 require future closing decisions to refresh the contract in the same Architect commit.
+The first source-PR CI failure is also repaired red first: ANSI SGR sequences are
+ignored only while extracting Vitest summary metrics, while raw subprocess output
+remains unchanged evidence. The active contract, this handoff, and the register now
+agree atomically on DII-191.
 
-The complete repaired local ladder passed on exact source snapshot `1218970`, including root
-build/test porcelain, required workflow pins and prewarm, semantic
+The complete repaired local ladder passed on exact source snapshot `7b63f65`, including
+T1 at 71 files / 838 tests, root test at 127 files / 1,164 passing plus eight declared
+skips, merged T1+T3 coverage at 71.23% statements, 61.79% branches, 77.62% functions,
+and 73.25% lines, root build/test porcelain, required workflow pins and prewarm, semantic
 repository-reference generation, generated action views, package dry-runs, all six test
 tiers, the complete ordinary floor, and unchanged coverage floors are green. The
 Auditor's exact readings and role-pure commit map are in `work/audit/R-0004/as-built.md`.
 
 ## Review and ceremony gate
 
-The clean commit containing this handoff, DII-190, the BL-174 correction, and the
+The clean commit containing this handoff, DII-191, the BL-180 correction, and the
 symmetric Auditor pair is the review candidate. It must restart the
 complete ladder and receive one read-only close review through literal
 `claude-opus-5`, with no fallback. Actionable findings return to red-first role-pure

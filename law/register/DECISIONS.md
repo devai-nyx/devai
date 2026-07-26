@@ -2563,6 +2563,25 @@ public-package dry-runs, and receive a fresh read-only review through literal
 `claude-opus-5`, with no fallback, before source push. The claims ceiling and every
 external human gate remain unchanged.
 
+### DII-191 — Admit the exact-CI ANSI repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 exact-CI repair; DII-190; BL-180; R-0004-SOURCE-CI-ANSI-CORRECTION; Auditor d63b0a5`
+
+DII-191 supersedes DII-190 only as the R-0004 source-closing judgment. Exact-head CI
+run 30206695586 exposed ANSI SGR sequences in Vitest output that caused the sensor
+metric parser to record zero passing tests despite a successful subprocess. The
+red-first BL-180 repair strips ANSI only from the metric-extraction view and preserves
+the raw output as evidence.
+
+The complete ladder passed on exact repaired snapshot
+`7b63f6548f19147c1a6226768b587634d45a1915`: T1 passed 71 files / 838 tests, the root
+porcelain passed 127 files / 1,164 tests plus eight declared skips, merged T1+T3
+coverage passed at 71.23% statements, 61.79% branches, 77.62% functions, and 73.25%
+lines, and all eleven public-package dry-runs passed. The next clean commit containing
+DII-191, the refreshed contract, and the refreshed handoff must restart the complete
+ladder and receive a fresh read-only review through literal `claude-opus-5`, with no
+fallback, before source push. The claims ceiling and every external human gate remain
+unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
