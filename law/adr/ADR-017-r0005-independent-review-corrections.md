@@ -5,7 +5,7 @@ type: adr
 status: active
 date: 2026-07-26
 authority: Architect
-supersedes: []
+supersedes: [DII-202; DII-203; R-0005-INDEPENDENT-CODEX-REVIEW-1-FAILURE]
 superseded_by: null
 provenance:
   - DII-202; DII-203; OM-009; R-0005-INDEPENDENT-CODEX-REVIEW-1-FAILURE; KR-R5-017 through KR-R5-026
