@@ -1944,6 +1944,29 @@ exact-main CI establish the complete R-0003 close.
 R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
 promotes, re-earns, or declares ready nothing.
 
+### DII-160 — Rebind the R-0003 source close after trace regeneration
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 deterministic trace close; DII-159; BL-139; R-0003-TRACE-PROJECTION-FAILURE; Auditor c6c3703`
+
+DII-160 supersedes DII-159 only as the R-0003 source-closing judgment. The exact ladder
+at candidate `8273349` passed workflow lint and then correctly stopped because the new
+third-review Inspector contract was absent from deterministic `law/trace.json`. BL-139
+governs the projection-only correction.
+
+Architect regeneration retains all 34 invariant sources and adds the new executable test
+path without deleting or weakening any trace relationship. The exact candidate containing
+DII-160 and both fresh deterministic projections must restart the complete ladder from
+Stage 1 and then receive a read-only review through literal `claude-opus-5`, with no
+fallback. Any actionable finding reopens the governed repair cycle; only a PASS
+authorizes source push.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-160 as the closing decision. Its release
+disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
+exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
