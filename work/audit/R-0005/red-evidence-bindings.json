@@ -33,6 +33,13 @@
         "tests/contract/r0005-independent-review.red.contract.test.ts"
       ],
       "failure_summary": "The independent-review contracts failed for unsafe worktree cleanup, incomplete lifecycle round-trip, self-invalidating evidence, live legacy writers, prompt bypass, missing attributable post-merge products, weak sequencing, and lexical anti-skip enforcement."
+    },
+    {
+      "commit": "7a17bc3a90c435e24692bb23ee86a67eb3264042",
+      "command": "pnpm vitest run packages/skills/tests/unit/forbidden-actions.test.ts -t KR-R5-027",
+      "exit_code": 1,
+      "tests": ["packages/skills/tests/unit/forbidden-actions.test.ts"],
+      "failure_summary": "The strict forbidden-action scanner falsely classified packages/cli/src/commands/record/run.ts as a mutation of the top-level Machine-owned record tree."
     }
   ]
 }
