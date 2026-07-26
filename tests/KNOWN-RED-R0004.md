@@ -1,9 +1,10 @@
 # R-0004 governed-surface known reds
 
 Resolution: the original nine red-first clusters and five later review-repair clusters
-are preserved below. The first thirteen are green through exact candidate `dfa5659`.
-The strengthened BL-164/167 parity guard is intentionally red until its stale production
-literals are aligned; this is characterization evidence, not a waiver.
+are preserved below. All fourteen are green at the current lineage snapshot. The
+strengthened BL-164/167 parity guard was historical red characterization at exact
+candidate `dfa5659`; Engineer `d6369f9` aligned the five exposed production literals,
+and the complete 147-binding guard is green. This history is evidence, not a waiver.
 
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at
