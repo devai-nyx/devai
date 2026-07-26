@@ -1,13 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import type { CAC } from 'cac';
-import {
-  ROSTER,
-  checkSchemas,
-  getValidator,
-  listSchemaFiles,
-  metaGate,
-} from '@devai-nyx/schemas';
+import { ROSTER, checkSchemas, getValidator, listSchemaFiles, metaGate } from '@devai-nyx/schemas';
 import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
 
 interface Options {
@@ -85,9 +79,7 @@ export function checkSchemaCanon(repoRoot: string): SchemaCanonReport {
     const target = join(root, relative);
     if (
       !existsSync(target) ||
-      !readFileSync(target, 'utf8').includes(
-        '@generated from law/policy/action-registry.json',
-      )
+      !readFileSync(target, 'utf8').includes('@generated from law/policy/action-registry.json')
     ) {
       findings.push({
         rule: 'generated-marker-integrity',

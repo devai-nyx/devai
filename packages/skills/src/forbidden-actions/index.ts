@@ -106,10 +106,7 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
     rationale: 'Data loss',
     severity: 'critical',
     detect_patterns: ['\\bDROP\\s+TABLE\\b', '\\bDROP\\s+DATABASE\\b', '\\bTRUNCATE\\s+TABLE\\b'],
-    allowed_change_line_patterns: [
-      '\\bdevai_task_(?:[A-Za-z0-9_]+|<id>)',
-      '\\bdevai_template\\b',
-    ],
+    allowed_change_line_patterns: ['\\bdevai_task_(?:[A-Za-z0-9_]+|<id>)', '\\bdevai_template\\b'],
     safer_alternative: 'Soft-delete; run on dev with verified backup',
   },
   {
@@ -380,9 +377,7 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     }));
   if (
     compiled.length !== registry.length ||
-    compiled.some(
-      (entry) => entry.patterns.length === 0 || !entry.allowedChangeLinePatternsValid,
-    )
+    compiled.some((entry) => entry.patterns.length === 0 || !entry.allowedChangeLinePatternsValid)
   ) {
     return {
       registry_entries: registry.length,

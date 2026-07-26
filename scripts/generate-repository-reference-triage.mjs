@@ -120,10 +120,7 @@ const fixtures = JSON.parse(
 );
 for (const fixture of fixtures) {
   const actual = disposition(fixture.file, fixture.matched);
-  if (
-    actual.classification !== fixture.classification ||
-    actual.action !== fixture.action
-  ) {
+  if (actual.classification !== fixture.classification || actual.action !== fixture.action) {
     throw new Error(`repository reference fixture failed: ${fixture.id}`);
   }
 }

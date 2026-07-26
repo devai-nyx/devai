@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
+import { format } from 'prettier';
 
 const rootArgument = process.argv.slice(2).find((argument) => !argument.startsWith('--'));
 const root = resolve(rootArgument ?? '.');
@@ -88,7 +89,7 @@ const sensorEntries = registry.entries
     effect: entry.effect,
   }));
 
-const outputs = new Map([
+const rawOutputs = new Map([
   [
     'packages/cli/src/generated/action-registry.ts',
     generatedModule(
@@ -109,6 +110,25 @@ const outputs = new Map([
     generatedModule('', 'SENSOR_ACTION_KINDS', sensorEntries),
   ],
 ]);
+
+const outputs = new Map(
+  await Promise.all(
+    [...rawOutputs].map(async ([relative, bytes]) => [
+      relative,
+      await format(bytes, {
+        parser: 'typescript',
+        semi: true,
+        singleQuote: true,
+        trailingComma: 'all',
+        printWidth: 100,
+        tabWidth: 2,
+        useTabs: false,
+        endOfLine: 'lf',
+        arrowParens: 'always',
+      }),
+    ]),
+  ),
+);
 
 let stale = false;
 for (const [relative, bytes] of outputs) {
