@@ -38,7 +38,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a53af5a43c17425edc1a447ae2c7b37fcdba6d7a68cf7b691ae7660b9db4a1d0",
+        "evidence_sha256": "d685b996d39c2d37c16b8f013b3d15a68fb32e32e1d962c427d0c1df265d354a",
         "tests": [
           "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
           "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts"
@@ -59,7 +59,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a53af5a43c17425edc1a447ae2c7b37fcdba6d7a68cf7b691ae7660b9db4a1d0",
+        "evidence_sha256": "d685b996d39c2d37c16b8f013b3d15a68fb32e32e1d962c427d0c1df265d354a",
         "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"]
       }
     },
@@ -80,7 +80,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/loop/tests/unit/worktrees-containment.test.ts packages/loop/tests/unit/scorecard-assess-narrative.test.ts packages/evidence/tests/unit/local-evidence.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a53af5a43c17425edc1a447ae2c7b37fcdba6d7a68cf7b691ae7660b9db4a1d0",
+        "evidence_sha256": "d685b996d39c2d37c16b8f013b3d15a68fb32e32e1d962c427d0c1df265d354a",
         "tests": [
           "packages/evidence/tests/unit/local-evidence.test.ts",
           "packages/loop/tests/unit/round-lifecycle-cases.ts",
@@ -98,20 +98,23 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/skills/tests/unit/forbidden-actions.test.ts -t KR-R5-027",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a53af5a43c17425edc1a447ae2c7b37fcdba6d7a68cf7b691ae7660b9db4a1d0",
+        "evidence_sha256": "d685b996d39c2d37c16b8f013b3d15a68fb32e32e1d962c427d0c1df265d354a",
         "tests": ["packages/skills/tests/unit/forbidden-actions.test.ts"]
       }
     },
     {
       "round": "R-0005",
-      "implementation_commits": ["3ca5c648209b0c29473923f7da5d45a36f8f1602"],
+      "implementation_commits": [
+        "3ca5c648209b0c29473923f7da5d45a36f8f1602",
+        "dedab28d74354070b4690968cbd99d226c65dc60"
+      ],
       "law_commits": ["d8ca53baca9b570fa025a7ab9dd74ba3b6167437"],
       "red_evidence": {
         "commit": "beb081d5160a57b36b59d97f813abc77ed99f3eb",
         "observed_exit": 1,
         "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a53af5a43c17425edc1a447ae2c7b37fcdba6d7a68cf7b691ae7660b9db4a1d0",
+        "evidence_sha256": "d685b996d39c2d37c16b8f013b3d15a68fb32e32e1d962c427d0c1df265d354a",
         "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"]
       }
     },
@@ -124,7 +127,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/loop/tests/unit/adherence-reverse.test.ts -t KR-R5-029",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a53af5a43c17425edc1a447ae2c7b37fcdba6d7a68cf7b691ae7660b9db4a1d0",
+        "evidence_sha256": "d685b996d39c2d37c16b8f013b3d15a68fb32e32e1d962c427d0c1df265d354a",
         "tests": ["packages/loop/tests/unit/governance-ledger-cases.ts"]
       }
     }
