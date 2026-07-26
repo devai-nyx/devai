@@ -74,7 +74,8 @@ façade.
 | BL-171–173 | Implemented; ceremony pending              | The fourteen-cluster lineage statement and active contract provenance are current; the fifth-review failure/correction pair and governance-range provenance are symmetric.                                             |
 | BL-174     | Implemented; ceremony pending              | The seventh exact-candidate Opus review passed before the source PR was opened.                                                                                                                                        |
 | BL-180     | Implemented; ceremony pending              | ANSI SGR sequences are ignored in metric extraction and deterministic fingerprint normalization; raw subprocess output remains preserved.                                                                              |
-| BL-181     | Implemented; ceremony pending              | All governed forty-hex identities resolve to their declared local Git object kind or one of eight exact path-scoped historical specimens; the two active fabricated expansions are corrected.                          |
+| BL-181     | Implemented; ceremony pending              | All governed forty-hex identities resolve as local Git objects or one of eight exact path-scoped historical specimens; the two active fabricated expansions are corrected.                                             |
+| BL-182     | Implemented; ceremony pending              | Snapshot readings bind their producing snapshot, active semantics match the resolve-or-exact-path-exception guard, and four hermetic rejection modes are covered.                                                      |
 
 No R-0005 through R-0010 item was absorbed into this round.
 

@@ -1796,8 +1796,8 @@ assertion weakening is permitted.
 Priority: P0 before R-0004 source merge. Primary round: R-0004.
 
 Acceptance: every standalone lowercase forty-hex token in the decision register and
-Auditor records either resolves to its declared local Git object kind or appears in an
-explicit governed exception set with object kind and reason; predecessor objects,
+Auditor records either resolves as a local Git object or appears in an explicit
+governed exception set with object-kind classification and reason; predecessor objects,
 historical intentionally-invalid specimens, trees, and transient GitHub merge objects
 are classified rather than silently treated as local commits; the two fabricated
 R-0004 expansions are replaced by their exact `git rev-parse` values; CI runs the check;
