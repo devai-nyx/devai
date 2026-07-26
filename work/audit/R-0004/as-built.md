@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; source snapshot 12189704dd49a0ef4bd989b4ad1070dc4de413e0,
+    R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; R-0004-SOURCE-CI-ANSI-CORRECTION; source snapshot 7b63f6548f19147c1a6226768b587634d45a1915,
   ]
 ---
 
@@ -18,7 +18,7 @@ provenance:
 ## Boundary and verdict
 
 R-0004 has completed B0 through B7 locally at source snapshot
-`12189704dd49a0ef4bd989b4ad1070dc4de413e0`. The governed surface and package
+`7b63f6548f19147c1a6226768b587634d45a1915`. The governed surface and package
 topology satisfy the round acceptance criteria at that snapshot. The round is not yet
 closed: the Architect closing record, exact-candidate Claude Opus 5 review, source PR,
 exact-SHA CI, source merge, exact-main CI, closure-only machine record, closure PR, and
@@ -72,6 +72,8 @@ façade.
 | BL-163–166 | Implemented; ceremony pending              | Active contract argv/schema claims and direct command metadata derive from canonical sources; role-owned formatting is reconciled and the complete ladder restarted green.                                       |
 | BL-167–170 | Implemented; ceremony pending              | All 147 command bindings have exact metadata parity; audit lifecycle links resolve; test variants/provenance are complete; strict AST typing is paired and green.                                                |
 | BL-171–173 | Implemented; ceremony pending              | The fourteen-cluster lineage statement and active contract provenance are current; the fifth-review failure/correction pair and governance-range provenance are symmetric.                                       |
+| BL-174     | Implemented; ceremony pending              | The seventh exact-candidate Opus review passed before the source PR was opened.                                                                                                                                  |
+| BL-180     | Implemented; ceremony pending              | ANSI SGR sequences are ignored only while parsing Vitest summary metrics; raw subprocess output remains preserved.                                                                                               |
 
 No R-0005 through R-0010 item was absorbed into this round.
 
@@ -115,32 +117,33 @@ paths: four `dist/index` JavaScript/declaration artifacts, `package.json`, and
 | Final formatting   | Auditor + Inspector                        | `6d6c7eb`, `965b007`, `7be9d31`                                                                                                                          | Preserved the exact two-file formatting failure and repaired each file only under its owning role.                |
 | Fourth Opus repair | Auditor + Inspector + Engineer + Architect | `93ebe91`, `bf9a690`, `6acb066`, `48e2ccc`, `af91f7c`, `d6369f9`, `6b4213c`, `7a1006b`, `735fb70`                                                        | Closed complete metadata parity, audit lifecycle, strict AST typing, and the five-route contract/provenance gaps. |
 | Fifth Opus repair  | Auditor + Inspector + Architect            | `46f3854`, `b70d530`, `4416eb9`, `1218970`                                                                                                               | Reconciled current-lineage wording, terminal contract provenance, and symmetric review/governance-range records.  |
+| Source CI repair   | Auditor + Inspector + Engineer             | `8a9ea09`, `a01e5d5`, `a0dc396`, `016a3fa`, `7b63f65`                                                                                                    | Preserved the exact ANSI CI failure and repaired Vitest metric parsing without altering raw evidence.             |
 
 ## Fresh tests and coverage
 
-The complete tiered exit ladder passed on exact source snapshot `1218970`:
+The complete tiered exit ladder passed on exact source snapshot `7b63f65`:
 
-- T1: 71 files / 837 tests;
+- T1: 71 files / 838 tests;
 - T2: 38 files / 238 passed / 1 declared skip;
 - T3: 9 files / 56 passed / 7 declared skips;
 - T4: 2 files / 4 tests;
 - T5: 6 files / 25 tests;
 - T6: 1 file / 3 tests.
 
-The root `pnpm run test` porcelain passed 127 files / 1,163 tests with 8 declared skips
+The root `pnpm run test` porcelain passed 127 files / 1,164 tests with 8 declared skips
 and zero failures. Root `pnpm run build` passed through
 the registered `pnpm -r build` process and built all thirteen applicable workspace
 projects, including core.
 
-Fresh merged T1+T3 coverage passed 80 files / 893 tests with 7 declared skips against
+Fresh merged T1+T3 coverage passed 80 files / 894 tests with 7 declared skips against
 the unchanged 70/60/70/70 policy:
 
 | Metric     |                  Reading | Floor |
 | ---------- | -----------------------: | ----: |
-| Statements | 71.21% (10,534 / 14,792) |   70% |
-| Branches   |  61.79% (7,633 / 12,353) |   60% |
-| Functions  |   77.61% (1,501 / 1,934) |   70% |
-| Lines      |  73.23% (9,716 / 13,267) |   70% |
+| Statements | 71.23% (10,538 / 14,794) |   70% |
+| Branches   |  61.79% (7,636 / 12,357) |   60% |
+| Functions  |   77.62% (1,502 / 1,935) |   70% |
+| Lines      |  73.25% (9,720 / 13,268) |   70% |
 
 No threshold, coverage source set, skip, or assertion was weakened. The R-0004
 contract's first action/effect subprocess test alone received a 30-second budget after
