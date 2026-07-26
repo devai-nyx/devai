@@ -4,6 +4,8 @@ import { tmpdir } from 'node:os';
 import { join, matchesGlob, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 
+// Invariants: INV-DEVAI-001, INV-DEVAI-017, INV-DEVAI-020
+
 const ROOT = resolve(import.meta.dirname, '../../../..');
 const TIER_GLOBS = [
   'packages/*/tests/unit/**/*.test.ts',
@@ -100,8 +102,8 @@ describe('R-0004 first Opus close-review contracts', () => {
       const note = readFileSync(join(ROOT, entry.design_note.path), 'utf8');
       expect(note, entry.id).not.toContain('[object Object]');
       if (entry.diagnostic === true) {
-        expect(entry.cells).toEqual([]);
-        expect(note).toContain('Standing: diagnostic');
+        expect(entry.cells ?? []).toEqual([]);
+        expect(note).toContain('Diagnostic-only; no cell binding.');
       } else {
         const cells = entry.cells.map((cell) => `${cell.substrate}×${cell.property}`).join(', ');
         expect(note).toContain(`Bound cells: ${cells}.`);

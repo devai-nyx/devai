@@ -117,8 +117,7 @@ describe('scanForbiddenActions', () => {
         ? {
             ...entry,
             allowed_change_line_patterns: [
-              '\\bdevai_task_(?:[A-Za-z0-9_]+|<id>)',
-              '\\bdevai_template\\b',
+              '\\b(?:DROP\\s+(?:TABLE|DATABASE)|TRUNCATE\\s+TABLE)\\s+(?:IF\\s+EXISTS\\s+)?(?:devai_task_[A-Za-z0-9_]+\\b|devai_task_<id>|devai_template\\b)(?=\\s*(?:[\\"\'`]|;|$))',
             ],
           }
         : entry,

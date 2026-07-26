@@ -49,8 +49,8 @@ describe('binding action-effect CLI', () => {
       expect(output.reading.status).toBe('pass');
       expect(output.report.findings).toEqual([]);
       expect(output.report.metrics).toMatchObject({
-        catalog_actions: 185,
-        extracted_actions: 185,
+        catalog_actions: 186,
+        extracted_actions: 186,
         unresolved_edges: 0,
       });
     },
