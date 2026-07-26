@@ -192,6 +192,8 @@ clusters are now authorized for red-first role-pure repair:
 | KR-R5-032 | Stage 1      | The sequencing adversary must satisfy the no-non-null-assertion lint rule while retaining its exact duplicate-binding mutation and expectations.                                                                         |
 | KR-R5-033 | Stage 1      | The pure child-authority adversary must use an explicit test-side structural function type so minimal registry fixtures typecheck without fabricating production registry fields.                                        |
 | KR-R5-034 | formatting   | Apply the configured formatter only to the five reported files, preserving parsed JSON, assertions, runtime behavior, role ownership, and all unchanged formatting rules.                                                |
+| KR-R5-035 | review-2 P1  | The public `@devai-nyx/evidence` root must not export legacy aggregate-chain mutation functions; direct internal imports remain test-only compatibility fixtures.                                                          |
+| KR-R5-036 | review-2 P1  | The prompt firewall must reject every Architect lifecycle writer scope outside ADR-016/019's exact evidence-only and single-document exceptions, including the four hard-coded skill identities.                         |
 
 Each Inspector cluster must fail for its named absent behavior. KR-R5-027 is the
 strict-governance integration repair exposed after the independent-review batch. Law precedes every
@@ -201,3 +203,9 @@ set, threshold reduction, evidence reuse, history rewriting, external mutation, 
 fabricated review PASS. This authority retires only after focused adversaries, the full
 ordinary floor, strict governance, fresh coverage, and a new exact-candidate independent
 Codex PASS.
+
+Auditor record `R-0005-INDEPENDENT-CODEX-REVIEW-2-FAILURE` is the governing observation
+for KR-R5-035 and KR-R5-036. Both corrections implement ADR-019's already-active
+reader-only legacy-chain and exact prompt-exception decisions; they do not amend or
+supersede sealed law. Their Inspector contracts must demonstrate the current public API
+and lifecycle-scope allowances failing before either production source is changed.
