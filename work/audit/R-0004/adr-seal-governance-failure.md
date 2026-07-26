@@ -2,11 +2,11 @@
 id: R-0004-ADR-SEAL-GOVERNANCE-FAILURE
 title: CI ADR seal and copied-history governance failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-CI-ADR-GOVERNANCE-CORRECTION
 provenance: [strict governance after 9c7818d6d8763b74b008e2756a6d0e45bad87b2b; BL-155]
 ---
 

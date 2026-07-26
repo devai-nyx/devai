@@ -2,11 +2,11 @@
 id: R-0004-CORRECTED-CANDIDATE-GOVERNANCE-FAILURE
 title: Corrected-candidate CI ADR governance failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-CI-ADR-GOVERNANCE-CORRECTION
 provenance: [candidate a8937f5297a5a5e300128f5959cb3245a237ac0b; strict governance; BL-154]
 ---
 
