@@ -1,6 +1,7 @@
 import type { RegistryEntry } from './define-command.js';
 import {
   ARCHIVED_SENSOR_KINDS,
+  SENSOR_ACTION_KINDS,
   SENSOR_READING_KINDS,
   isArchivedSensorKind,
   isSensorKind,
@@ -232,9 +233,26 @@ export type RouteResult =
   | { readonly kind: 'dispatch'; readonly argv: string[] }
   | { readonly kind: 'output'; readonly text: string; readonly exitCode: number };
 
+function singleSensorRunIsReadOnly(args: readonly string[]): boolean {
+  if (args.includes('--write') || args.includes('--allow-publish')) return false;
+  const senseIndex = args.findIndex((value, index) => value === 'sense' && args[index + 1] === 'run');
+  if (senseIndex < 0) return false;
+  const kind = args[senseIndex + 2];
+  if (kind === undefined || kind.startsWith('-') || !isSensorKind(kind)) return false;
+  const internal = SENSOR_INTERNAL_COMMAND[kind];
+  if (internal === undefined) return false;
+  const child = SENSOR_ACTION_KINDS.find(
+    (entry) =>
+      entry.migration === `sense run ${kind}` &&
+      entry.internal_binding.replaceAll(' ', '-') === internal[0],
+  );
+  return child?.effect === 'read';
+}
+
 export function invocationIsNonMutating(internalName: string, args: readonly string[]): boolean {
   if (args.includes('--check')) return true;
   if (internalName === 'mutation-verify' && !args.includes('--save-baseline')) return true;
+  if (internalName === 'sense-run' && singleSensorRunIsReadOnly(args)) return true;
   return (
     ['init', 'adopt', 'upgrade', 'ci-scaffold', 'hooks-install', 'state-prune'].includes(
       internalName,
