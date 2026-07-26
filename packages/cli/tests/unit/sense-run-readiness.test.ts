@@ -1,5 +1,6 @@
 // Invariants: INV-DEVAI-019
 import { describe, expect, it } from 'vitest';
+import * as broker from '../../src/authority/broker.js';
 import * as runSet from '../../src/commands/sense/run-set.js';
 
 type Child = {
@@ -32,6 +33,80 @@ function aggregate(children: readonly Child[]): Aggregate {
 }
 
 describe('sense run readiness aggregation', () => {
+  it('routes a registry-derived public sensor child to its internal binding', () => {
+    const route = (
+      runSet as unknown as {
+        routeSensorChildArgv?: (
+          command: readonly string[],
+          executable: string,
+          entries: readonly unknown[],
+          version: string,
+        ) => readonly string[];
+      }
+    ).routeSensorChildArgv;
+    expect(route, 'run-set must route child aliases before spawning').toBeTypeOf('function');
+    if (route === undefined) throw new Error('routeSensorChildArgv is not implemented');
+    expect(
+      route(['sense', 'run', 'type_check', '--repo-root', '/repo'], '/cli.js', [], '1.0.0'),
+    ).toEqual(['sense-type-check', '--repo-root', '/repo']);
+  });
+
+  it('admits only an exact read-only internal sensor child under the aggregate scope', () => {
+    const admits = (
+      broker as unknown as {
+        readOnlyDevaiChild?: (
+          executable: string,
+          args: readonly unknown[],
+          entries: readonly unknown[],
+          parentAction: string | undefined,
+        ) => boolean;
+      }
+    ).readOnlyDevaiChild;
+    expect(admits, 'broker must expose deterministic child recognition').toBeTypeOf('function');
+    if (admits === undefined) throw new Error('readOnlyDevaiChild is not implemented');
+    const currentCli = process.argv[1] ?? '';
+    const readEntry = {
+      internal_name: 'sense-type-check',
+      path: ['sense', 'type', 'check'],
+      effects: 'read',
+      previous_name: 'sense type check',
+    };
+    const writeEntry = { ...readEntry, internal_name: 'sense-write', effects: 'local-write' };
+
+    expect(
+      admits(
+        process.execPath,
+        [currentCli, 'sense-type-check', '--repo-root', '/repo'],
+        [readEntry],
+        'sense run',
+      ),
+    ).toBe(true);
+    expect(
+      admits(
+        process.execPath,
+        [currentCli, 'sense-unknown', '--repo-root', '/repo'],
+        [readEntry],
+        'sense run',
+      ),
+    ).toBe(false);
+    expect(
+      admits(
+        process.execPath,
+        [currentCli, 'sense-write', '--repo-root', '/repo'],
+        [writeEntry],
+        'sense run',
+      ),
+    ).toBe(false);
+    expect(
+      admits(
+        process.execPath,
+        [currentCli, 'sense-type-check', '--repo-root', '/repo', '--write'],
+        [readEntry],
+        'sense run',
+      ),
+    ).toBe(false);
+  });
+
   it('preserves N/A, REVIEW, and UNKNOWN without translating them to PASS or FAIL', () => {
     const result = aggregate([
       { command: 'one', processStatus: 0, stdout: reading('pass'), stderr: '' },
