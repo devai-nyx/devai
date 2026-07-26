@@ -22,7 +22,7 @@ blocking inconsistencies inside the active R-0004 claim:
   broker and different from the implemented argv;
 - the local `sense build` command definition retained a non-recursive description while
   the canonical registry and implementation correctly described recursive `pnpm -r
-  build`; and
+build`; and
 - the active surface contract stated 54 canonical schemas while the live canon is 55.
 
 BL-163 through BL-165 govern the minimum red-first role-pure repair. No source push, PR,

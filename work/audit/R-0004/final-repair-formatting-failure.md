@@ -2,11 +2,11 @@
 id: R-0004-FINAL-REPAIR-FORMATTING-FAILURE
 title: R-0004 third-review repair formatting failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-FINAL-REPAIR-FORMATTING-CORRECTION
 provenance: [R-0004 exact ladder at cf85bc0271ca62373ff1f067c359f0bc9515fe91; BL-166]
 ---
 
