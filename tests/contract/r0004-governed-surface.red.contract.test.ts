@@ -611,17 +611,40 @@ describe('R-0004 governed surface red-first contracts', () => {
   });
 
   it('BL-178 pins every source capable of introducing a conditional skip', () => {
-    const candidates = spawnSync('git', ['ls-files', '*test.ts'], {
+    const detector = join(ROOT, 'scripts/detect-conditional-skips.mjs');
+    const detection = spawnSync('node', [detector, '--repo-root', ROOT, '--json'], {
       cwd: ROOT,
       encoding: 'utf8',
-    })
-      .stdout.split('\n')
-      .filter(Boolean);
-    const observedConditionalSkipSources = candidates
-      .filter((path) =>
-        /\bit\.skip\b|\bdescribe\.skip\b/u.test(readFileSync(join(ROOT, path), 'utf8')),
-      )
-      .sort();
+    });
+    expect(detection.status, detection.stderr).toBe(0);
+    const observedConditionalSkipSources = (JSON.parse(detection.stdout) as { sources: string[] })
+      .sources;
     expect(observedConditionalSkipSources).toEqual([...CONDITIONAL_SKIP_SOURCE_ALLOWLIST].sort());
+
+    const fixture = mkdtempSync(join(tmpdir(), 'devai-conditional-skip-'));
+    const adversary = 'adversary.test.ts';
+    const benign = 'benign.test.ts';
+    writeFileSync(
+      join(fixture, adversary),
+      [
+        'test.skip("direct", () => {});',
+        'suite["skipIf"](true)("conditional", () => {});',
+        'const later = built ? test : test.skip;',
+        'skipWhenMissing("wrapper", () => {});',
+        'test.runIf(built)("inverse", () => {});',
+      ].join('\n'),
+    );
+    writeFileSync(join(fixture, benign), 'test("runs", () => {});\n');
+    const adversarial = spawnSync(
+      'node',
+      [detector, '--repo-root', fixture, '--file', adversary, '--file', benign, '--json'],
+      { cwd: ROOT, encoding: 'utf8' },
+    );
+    try {
+      expect(adversarial.status, adversarial.stderr).toBe(0);
+      expect(JSON.parse(adversarial.stdout)).toEqual({ sources: [adversary] });
+    } finally {
+      rmSync(fixture, { recursive: true, force: true });
+    }
   });
 });
