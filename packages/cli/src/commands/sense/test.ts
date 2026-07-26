@@ -8,7 +8,6 @@ const VALID_SUITES: readonly TestSuite[] = ['unit', 'integration', 'regression',
 
 interface Options {
   readonly repoRoot?: string;
-  readonly command?: string;
   readonly human?: boolean;
   readonly emitReading?: boolean;
 }
@@ -21,10 +20,6 @@ export const senseTestCmd = defineCommand({
     cli
       .command('sense-test <suite>', 'Run a test suite + emit SensorReading')
       .option('--repo-root <path>', `Working directory (default: ${DEFAULT_REPO_ROOT})`)
-      .option(
-        '--command <argv>',
-        'Override test command (space-separated), allowing root scripts to avoid self-recursion',
-      )
       .option(
         '--no-emit-reading',
         'Skip persisting the SensorReading under .devai/state/sensor-readings/ (default: persist on). Phase 23.G.',
@@ -41,7 +36,6 @@ export const senseTestCmd = defineCommand({
         const reading = senseTest({
           cwd: repoRoot,
           suite: suite as TestSuite,
-          ...(options.command !== undefined && { command: options.command.split(/\s+/) }),
         });
         finishSenseCommand(reading, {
           repoRoot,

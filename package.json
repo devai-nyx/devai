@@ -11,11 +11,12 @@
     "node": ">=24"
   },
   "scripts": {
-    "devai:prepare": "pnpm --filter @devai-nyx/cli build",
-    "build": "pnpm -r build",
+    "devai:prepare": "node scripts/generate-action-registry.mjs && pnpm --filter @devai-nyx/schemas build && pnpm --filter @devai-nyx/cli build",
+    "action-registry:check": "node scripts/generate-action-registry.mjs --check",
+    "build": "pnpm devai:prepare && node packages/cli/dist/bin.js sense build --repo-root . --no-emit-reading",
     "lint": "pnpm devai:prepare && node packages/cli/dist/bin.js sense lint --repo-root . --no-emit-reading",
     "typecheck": "pnpm devai:prepare && node packages/cli/dist/bin.js sense type check --repo-root . --project tsconfig.json --no-emit-reading",
-    "test": "vitest run",
+    "test": "pnpm devai:prepare && node packages/cli/dist/bin.js sense test all --repo-root . --no-emit-reading",
     "test:t1": "vitest run --config tests/config/t1.unit.config.ts",
     "test:t2": "vitest run --config tests/config/t2.contract.config.ts",
     "test:t3": "vitest run --config tests/config/t3.integration.config.ts",
@@ -25,13 +26,14 @@
     "test:coverage:t1-t3": "vitest run --config tests/config/t1-t3.coverage.config.ts --coverage.reportsDirectory=scratch/coverage/t1-t3",
     "trace:check": "node scripts/generate-trace.mjs . --check",
     "repository-reference:check": "node scripts/generate-repository-reference-triage.mjs . --check --target work/rounds/R-0002/repository-reference-triage.json",
-    "ci:stage1": "pnpm run ci:workflows && pnpm run trace:check && pnpm run repository-reference:check && pnpm run lint && pnpm run typecheck",
+    "ci:stage1": "pnpm run ci:workflows && pnpm run action-registry:check && pnpm run trace:check && pnpm run repository-reference:check && pnpm run lint && pnpm run typecheck",
     "ci:stage2": "pnpm run build && pnpm run test:t1 && pnpm run test:t2",
     "ci:stage3": "pnpm run build && pnpm run test:coverage:t1-t3",
     "ci:local": "node scripts/run-ci-stages.mjs",
     "ci:evidence-mode": "node scripts/refuse-evidence-mode.mjs",
     "ci:changesets": "node scripts/check-changesets.mjs",
-    "ci:governance": "pnpm devai:prepare && node packages/cli/dist/bin.js policy check forbidden actions --strict --repo-root . && node packages/cli/dist/bin.js sense run decision_record_integrity --repo-root . && node packages/cli/dist/bin.js sense run decision_citation_resolution --repo-root . && node packages/cli/dist/bin.js sense trace resolve --repo-root . --no-emit-reading && node packages/cli/dist/bin.js sense docs drift --repo-root . --no-emit-reading",
+    "ci:sha-references": "node scripts/check-governed-sha-references.mjs",
+    "ci:governance": "pnpm run ci:sha-references && pnpm devai:prepare && node packages/cli/dist/bin.js policy check forbidden actions --strict --repo-root . --since-ref b60b4c52bff1779da84f48edc63cbf34652ab18e && node packages/cli/dist/bin.js sense run decision_record_integrity --repo-root . && node packages/cli/dist/bin.js sense run decision_citation_resolution --repo-root . && node packages/cli/dist/bin.js sense trace resolve --repo-root . --no-emit-reading && node packages/cli/dist/bin.js sense docs drift --repo-root . --no-emit-reading",
     "ci:workflows": "node scripts/check-workflows.mjs"
   },
   "devDependencies": {

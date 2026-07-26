@@ -87,7 +87,7 @@
               "required": ["suite", "path"],
               "properties": {
                 "suite": {
-                  "enum": ["unit", "api", "int", "e2e", "sec", "perf", "journey", "db"]
+                  "enum": ["unit", "contract", "api", "int", "e2e", "sec", "perf", "journey", "db"]
                 },
                 "path": {
                   "type": "string",

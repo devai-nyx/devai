@@ -9,6 +9,8 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ROSTER, type SchemaName } from './roster.js';
+export { ROSTER } from './roster.js';
+export type { SchemaName } from './roster.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const BUNDLED_SCHEMAS_DIR = join(HERE, 'schemas');

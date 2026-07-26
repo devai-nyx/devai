@@ -114,6 +114,39 @@ importers:
         specifier: ^4.0.18
         version: 4.1.10(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@24.13.3)(yaml@2.9.0))
 
+  packages/core:
+    dependencies:
+      '@devai-nyx/authority':
+        specifier: workspace:*
+        version: link:../authority
+      '@devai-nyx/cli':
+        specifier: workspace:*
+        version: link:../cli
+      '@devai-nyx/effects-check':
+        specifier: workspace:*
+        version: link:../effects-check
+      '@devai-nyx/evidence':
+        specifier: workspace:*
+        version: link:../evidence
+      '@devai-nyx/loop':
+        specifier: workspace:*
+        version: link:../loop
+      '@devai-nyx/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+      '@devai-nyx/sensors':
+        specifier: workspace:*
+        version: link:../sensors
+      '@devai-nyx/skills':
+        specifier: workspace:*
+        version: link:../skills
+      '@devai-nyx/spec':
+        specifier: workspace:*
+        version: link:../spec
+      '@devai-nyx/utils':
+        specifier: workspace:*
+        version: link:../utils
+
   packages/effects-check:
     dependencies:
       typescript:
@@ -1816,7 +1849,7 @@ snapshots:
       obug: 2.1.4
       std-env: 4.2.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.10(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(yaml@2.9.0))
+      vitest: 4.1.10(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@24.13.3)(yaml@2.9.0))
 
   '@vitest/expect@4.1.10':
     dependencies:

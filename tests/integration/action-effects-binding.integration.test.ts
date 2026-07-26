@@ -15,7 +15,7 @@ const runIfBuilt = existsSync(BIN) ? it : it.skip;
 
 describe('binding action-effect CLI', () => {
   runIfBuilt(
-    'pins the collapsed-catalog extractor mismatch as a known-red',
+    'binds every kept, folded, and tombstoned action to the canonical effect registry',
     () => {
       const result = spawnSync(
         'node',
@@ -34,13 +34,25 @@ describe('binding action-effect CLI', () => {
         ],
         { cwd: REPO_ROOT, encoding: 'utf8' },
       );
-      expect(result.status).toBe(1);
-      expect(result.stderr).toContain('EFFECT_EXTRACTOR_CATALOG_MISMATCH missing=[]');
-      const extras =
-        result.stderr.match(/extra=\[(backlog compact,[^\]]+)\]/)?.[1]?.split(',') ?? [];
-      expect(extras).toHaveLength(39);
-      expect(extras).toContain('backlog compact');
-      expect(extras).toContain('sense test-weakening');
+      expect(result.status, result.stderr).toBe(0);
+      const output = JSON.parse(result.stdout) as {
+        reading: { status: string };
+        report: {
+          findings: unknown[];
+          metrics: {
+            catalog_actions: number;
+            extracted_actions: number;
+            unresolved_edges: number;
+          };
+        };
+      };
+      expect(output.reading.status).toBe('pass');
+      expect(output.report.findings).toEqual([]);
+      expect(output.report.metrics).toMatchObject({
+        catalog_actions: 186,
+        extracted_actions: 186,
+        unresolved_edges: 0,
+      });
     },
     30_000,
   );

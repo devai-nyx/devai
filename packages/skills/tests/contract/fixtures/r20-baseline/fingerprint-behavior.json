@@ -771,8 +771,8 @@
       },
       "behavior": {
         "evidence": {
-          "command": "pnpm run build",
-          "command_hash": "ce4dccceab6682814be8785fab6f7cc4c874a7a03ce125006766123b57dee5c8",
+          "command": "pnpm -r build",
+          "command_hash": "56228b1ade3a7f69b4d3d06d543ac355a66e24ad312a93e14d1c0dd3e0bbca23",
           "deterministic": true,
           "duration_ms": "<N>",
           "err_head": "",
@@ -1241,8 +1241,8 @@
       },
       "behavior": {
         "evidence": {
-          "command": "pnpm test",
-          "command_hash": "ae7aca4de98e885127fe392c0b60056f3472ed0f0be972870a06df422b3f140a",
+          "command": "pnpm vitest run --config tests/config/t1.unit.config.ts",
+          "command_hash": "0704690d6e566565569908c3ec6b482762917e09b566bec0f06698a1e24d90a2",
           "deterministic": true,
           "duration_ms": "<N>",
           "err_head": "",
@@ -1251,9 +1251,9 @@
           "killed": false,
           "metrics": {
             "tests_failed": 0,
-            "tests_passed": 0
+            "tests_passed": 1
           },
-          "out_head": "\n> r20-fixture@ test <FIXTURE>\n> node -e \"process.exit(0)\"\n\n",
+          "out_head": "\n RUN  v4.1.10 <FIXTURE>\n\n\n Test Files  1 passed (1)\n      Tests  1 passed (1)\n   Start at <TIME>\n   Duration <DURATION>\n\n",
           "schemaVersion": "1.0.0",
           "sensor": {
             "kind": "unit_test",

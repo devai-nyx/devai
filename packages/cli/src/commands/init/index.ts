@@ -161,7 +161,10 @@ export const initPlan = defineCommand({
 function initApplyDefinition(segment: InitSegment) {
   return defineCommand({
     name: `init apply-${segment}`,
-    description: `Apply only the ${segment} bootstrap segment under its declared authority.`,
+    description:
+      segment === 'owner'
+        ? 'Apply the exact owner bootstrap segment under its declared authority.'
+        : `Apply only the ${segment} bootstrap segment under its declared authority.`,
     authority: 'mesh_controller' as const,
     register(cli: CAC): void {
       addInitOptions(
@@ -199,7 +202,7 @@ export const initApplyF5 = initApplyDefinition('f5');
 
 export const upgrade = defineCommand({
   name: 'upgrade',
-  description: 'Plan an upgrade from one DEVAI version to another (no apply without --execute)',
+  description: 'Plan an upgrade from one DEVAI version to another (no apply without --write)',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli

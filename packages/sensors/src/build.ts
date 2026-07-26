@@ -3,13 +3,11 @@ import { buildSensorReading, type SensorReading, type SensorStatus } from './sen
 
 export interface BuildOptions {
   readonly cwd: string;
-  /** Override build command (default: pnpm run build). */
-  readonly command?: readonly string[];
   readonly timeoutMs?: number;
 }
 
 export function senseBuild(opts: BuildOptions): SensorReading {
-  const args = [...(opts.command ?? ['pnpm', 'run', 'build'])];
+  const args = ['pnpm', '-r', 'build'];
   const result = runCommand(args, { cwd: opts.cwd, timeoutMs: opts.timeoutMs ?? 300_000 });
   const status: SensorStatus = result.exit_code === 0 ? 'pass' : 'fail';
   return buildSensorReading({

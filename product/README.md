@@ -17,6 +17,7 @@ provenance:
     OM-005 active quota-window coverage-doubling rider recorded 2026-07-24,
     OM-006 active BL-017 ownership reconciliation recorded 2026-07-25,
     OM-007 active R-0002 final-review exception recorded 2026-07-25,
+    OM-008 active R-0004 final-review exception recorded 2026-07-26,
   ]
 ---
 
@@ -33,7 +34,9 @@ Architect-tier law (Article 12; see compilation.md).
   Claude-review model rider; OM-004 authorizes bounded pre-review coverage
   strengthening without closing BL-017; OM-005 requires iteration until every
   OM-004 reading is doubled; OM-006 records the resulting BL-017 closure; OM-007
-  authorizes the scoped R-0002 final-review exception and continuous two-PR closure)
+  authorizes the scoped R-0002 final-review exception and continuous two-PR closure;
+  OM-008 authorizes the scoped R-0004 final-review exception and source-closure
+  ceremony)
 - `stories/`, `rules/` — reserved, empty at genesis
 
 Every artifact carries §5.1 record fields natively (JSON: schema fields; markdown:

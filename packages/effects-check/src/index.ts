@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import ts from 'typescript';
+export { ACTION_EFFECT_CONTRACTS } from './generated/action-catalog.js';
 
 export type EffectCapability =
   'fs:unknown-write' | 'db:unclassified' | `proc:${string}` | `net:${string}`;

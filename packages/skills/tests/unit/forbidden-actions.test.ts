@@ -111,6 +111,152 @@ describe('loadForbiddenWaivers', () => {
 });
 
 describe('scanForbiddenActions', () => {
+  function writeContextAwareRegistry(): void {
+    const actions = CANONICAL_FORBIDDEN_ACTIONS.map((entry) =>
+      entry.id === 'FORBID-DROP-PROD'
+        ? {
+            ...entry,
+            allowed_change_line_patterns: [
+              '\\b(?:DROP\\s+(?:TABLE|DATABASE)|TRUNCATE\\s+TABLE)\\s+(?:IF\\s+EXISTS\\s+)?(?:devai_task_[A-Za-z0-9_]+\\b|devai_task_<id>|devai_template\\b)(?=\\s*(?:[\\"\'`]|;|$))',
+            ],
+          }
+        : entry,
+    );
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions }),
+    );
+  }
+
+  function seedRepository(): void {
+    writeFileSync(join(dir, 'README.md'), 'seed\n');
+    execFileSync('git', ['init', '-q'], { cwd: dir });
+    execFileSync('git', ['add', '.'], { cwd: dir });
+    execFileSync(
+      'git',
+      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com', 'commit', '-qm', 'seed'],
+      { cwd: dir },
+    );
+  }
+
+  function writeCiAdr(options?: {
+    readonly status?: 'active' | 'superseded';
+    readonly affectedRule?: string;
+    readonly malformed?: boolean;
+  }): void {
+    mkdirSync(join(dir, 'law/adr'), { recursive: true });
+    writeFileSync(
+      join(dir, 'law/adr/ADR-014-ci-checker.md'),
+      options?.malformed === true
+        ? '---\nid: ADR-014\nstatus active\n---\n'
+        : `---\nid: ADR-014\ntype: adr\nstatus: ${options?.status ?? 'active'}\naffected_rules:\n  - ${options?.affectedRule ?? 'scripts/check-workflows.mjs'}\n---\n`,
+    );
+  }
+
+  function commitCiCheckerChange(): string {
+    mkdirSync(join(dir, 'scripts'), { recursive: true });
+    writeFileSync(join(dir, 'scripts/check-workflows.mjs'), 'export const checked = true;\n');
+    execFileSync('git', ['add', 'scripts/check-workflows.mjs'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Engineer',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'fix: strengthen workflow checker',
+      ],
+      { cwd: dir },
+    );
+    return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: dir, encoding: 'utf8' }).trim();
+  }
+
+  it('accepts a CI checker change with exact active ADR affected-rule coverage', () => {
+    writeContextAwareRegistry();
+    writeCiAdr();
+    seedRepository();
+    commitCiCheckerChange();
+
+    expect(
+      scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings.filter(
+        (finding) => finding.forbidden_id === 'FORBID-CI-WITHOUT-ADR',
+      ),
+    ).toEqual([]);
+  });
+
+  it('scans every commit after an exact base even when a trailing window would omit it', () => {
+    writeContextAwareRegistry();
+    seedRepository();
+    const base = execFileSync('git', ['rev-parse', 'HEAD'], {
+      cwd: dir,
+      encoding: 'utf8',
+    }).trim();
+    writeFileSync(join(dir, 'unsafe.txt'), 'git push --force\n');
+    execFileSync('git', ['add', 'unsafe.txt'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=Fixture',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'fixture unsafe evidence',
+      ],
+      { cwd: dir },
+    );
+    writeFileSync(join(dir, 'later.txt'), 'safe\n');
+    execFileSync('git', ['add', 'later.txt'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=Fixture',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'later safe evidence',
+      ],
+      { cwd: dir },
+    );
+
+    expect(
+      scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings.some(
+        (finding) => finding.forbidden_id === 'FORBID-FORCE-PUSH',
+      ),
+    ).toBe(false);
+    expect(
+      scanForbiddenActions({ repoRoot: dir, sinceRef: base, maxCommits: 1 }).findings.some(
+        (finding) => finding.forbidden_id === 'FORBID-FORCE-PUSH',
+      ),
+    ).toBe(true);
+  });
+
+  it.each([
+    ['absent', undefined],
+    ['superseded', { status: 'superseded' as const }],
+    ['unrelated', { affectedRule: '.github/workflows/ci.yml' }],
+    ['malformed', { malformed: true }],
+  ])('rejects a CI checker change when ADR coverage is %s', (_label, options) => {
+    writeContextAwareRegistry();
+    if (options !== undefined) writeCiAdr(options);
+    seedRepository();
+    const sha = commitCiCheckerChange();
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-CI-WITHOUT-ADR',
+        source: 'commit-change',
+        ref: sha,
+      }),
+    );
+  });
+
   it('fails closed when the registry is missing or has no executable patterns', () => {
     expect(
       scanForbiddenActions({ repoRoot: dir, registryPath: join(dir, 'missing.json') }).findings,
@@ -549,6 +695,142 @@ describe('scanForbiddenActions', () => {
     expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
       expect.objectContaining({
         forbidden_id: 'FORBID-FORCE-PUSH',
+        source: 'commit-change',
+      }),
+    );
+  });
+
+  it('accepts a destructive SQL occurrence whose changed line is explicitly dev-scoped', () => {
+    writeContextAwareRegistry();
+    seedRepository();
+    mkdirSync(join(dir, 'packages/demo'), { recursive: true });
+    writeFileSync(
+      join(dir, 'packages/demo/action.txt'),
+      'Terminate connections + DROP DATABASE devai_task_<id>\n',
+    );
+    execFileSync('git', ['add', 'packages/demo/action.txt'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Engineer',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'feat: add bounded development cleanup',
+      ],
+      { cwd: dir },
+    );
+
+    expect(
+      scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings.filter(
+        (finding) => finding.forbidden_id === 'FORBID-DROP-PROD',
+      ),
+    ).toEqual([]);
+  });
+
+  it('still reports an unsafe occurrence when the same change contains safe dev SQL', () => {
+    writeContextAwareRegistry();
+    seedRepository();
+    mkdirSync(join(dir, 'packages/demo'), { recursive: true });
+    writeFileSync(
+      join(dir, 'packages/demo/action.txt'),
+      ['DROP DATABASE devai_task_<id>', 'TRUNCATE TABLE production_accounts', ''].join('\n'),
+    );
+    execFileSync('git', ['add', 'packages/demo/action.txt'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Engineer',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'feat: add cleanup actions',
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-DROP-PROD',
+        source: 'commit-change',
+        matched: 'TRUNCATE TABLE',
+      }),
+    );
+  });
+
+  it('never applies change-line context to commit-message evidence', () => {
+    writeContextAwareRegistry();
+    seedRepository();
+    writeFileSync(join(dir, 'README.md'), 'changed\n');
+    execFileSync('git', ['add', 'README.md'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Engineer',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'DROP DATABASE devai_task_<id>',
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-DROP-PROD',
+        source: 'commit-message',
+      }),
+    );
+  });
+
+  it('fails closed when an allowed change-line pattern is invalid', () => {
+    const actions = CANONICAL_FORBIDDEN_ACTIONS.map((entry) =>
+      entry.id === 'FORBID-DROP-PROD' ? { ...entry, allowed_change_line_patterns: ['['] } : entry,
+    );
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions }),
+    );
+    seedRepository();
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({ forbidden_id: 'FORBIDDEN-REGISTRY-INVALID' }),
+    );
+  });
+
+  it.each([
+    'DROP TABLE production_accounts; -- devai_template',
+    'DROP TABLE devai_task_x, customers',
+  ])('does not let an unrelated same-line dev identity suppress %s', (sql) => {
+    writeContextAwareRegistry();
+    seedRepository();
+    mkdirSync(join(dir, 'packages/demo'), { recursive: true });
+    writeFileSync(join(dir, 'packages/demo/action.txt'), `${sql}\n`);
+    execFileSync('git', ['add', 'packages/demo/action.txt'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Engineer',
+        '-c',
+        'user.email=fixture@example.com',
+        'commit',
+        '-qm',
+        'feat: add cleanup action',
+      ],
+      { cwd: dir },
+    );
+
+    expect(scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings).toContainEqual(
+      expect.objectContaining({
+        forbidden_id: 'FORBID-DROP-PROD',
         source: 'commit-change',
       }),
     );

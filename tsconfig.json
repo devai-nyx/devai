@@ -19,6 +19,7 @@
     { "path": "./packages/sensors" },
     { "path": "./packages/loop" },
     { "path": "./packages/skills" },
-    { "path": "./packages/cli" }
+    { "path": "./packages/cli" },
+    { "path": "./packages/core" }
   ]
 }

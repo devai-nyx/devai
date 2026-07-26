@@ -158,48 +158,17 @@
     "designNote": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["state", "path", "backlog_ref"],
+      "required": ["state", "path"],
       "properties": {
         "state": {
-          "enum": ["present", "backlogged"]
+          "const": "active"
         },
         "path": {
-          "type": ["string", "null"],
-          "minLength": 1
-        },
-        "backlog_ref": {
-          "type": ["string", "null"],
+          "type": "string",
+          "pattern": "^law/policy/sensor-notes/[a-z][a-z0-9_]*\\.md$",
           "minLength": 1
         }
-      },
-      "oneOf": [
-        {
-          "properties": {
-            "state": {
-              "const": "present"
-            },
-            "path": {
-              "type": "string"
-            },
-            "backlog_ref": {
-              "type": "null"
-            }
-          }
-        },
-        {
-          "properties": {
-            "state": {
-              "const": "backlogged"
-            },
-            "path": {
-              "type": "null"
-            },
-            "backlog_ref": {
-              "type": "string"
-            }
-          }
-        }
-      ]
+      }
     },
     "archivedKind": {
       "type": "object",
@@ -247,9 +216,8 @@
           "diagnostic": true,
           "tiers": ["SWEEP"],
           "design_note": {
-            "state": "backlogged",
-            "path": null,
-            "backlog_ref": "post-bootstrap/W05-design-notes"
+            "state": "active",
+            "path": "law/policy/sensor-notes/runtime_probe_api.md"
           }
         }
       ],

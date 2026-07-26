@@ -30,6 +30,15 @@ export function runCommand(argv: readonly string[], opts: RunOptions = {}): RunR
     ...(opts.input !== undefined && { input: opts.input }),
   });
   const duration_ms = Date.now() - start;
+  if (result.error !== undefined) {
+    return {
+      stdout: result.stdout ?? '',
+      stderr: result.error.message,
+      exit_code: 127,
+      duration_ms,
+      killed: false,
+    };
+  }
   return {
     stdout: result.stdout ?? '',
     stderr: result.stderr ?? '',

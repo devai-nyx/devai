@@ -113,6 +113,8 @@ const VOLATILE_KEYS = new Set([
   'cost_usd',
 ]);
 
+const ANSI_SEQUENCE = new RegExp(`${String.fromCharCode(27)}\\[[0-?]*[ -/]*[@-~]`, 'g');
+
 /**
  * Normalize a skill result for signature purposes: volatile keys masked,
  * absolute fixture paths rewritten to <FIXTURE>, 16-hex ids masked.
@@ -135,10 +137,20 @@ export function normalize(value: unknown, fixtureRoot: string): unknown {
       // mask names a specific volatile identifier class with its reason.
       // Semantic/evidence/content/stack hashes are PRESERVED — a drifting
       // content hash must fail parity, never vanish into a blanket mask.
-      let s = v;
+      let s = v.replace(ANSI_SEQUENCE, '');
       for (const alias of fixtureAliases) s = s.split(alias).join('<FIXTURE>');
+      // Vitest selects a per-file progress line in CI but omits it in the
+      // local non-interactive reporter. The exact R20 fixture has one fixed
+      // passing test; its progress duration is presentation, while summary
+      // metrics and raw SensorReading output remain unmodified.
+      s = s.replace(/^[ \t]*✓ tests\/fixture\.test\.ts \(1 test\) \d+ms\n/gmu, '');
       // ISO timestamps: wall-clock.
       s = s.replace(/\d{4}-\d{2}-\d{2}T[0-9:.]+Z/g, '<TS>');
+      // Vitest's human reporter embeds wall-clock start time and aggregate
+      // duration/phase timings in evidence heads even when assertions and
+      // fixtures are deterministic.
+      s = s.replace(/Start at\s+\d{2}:\d{2}:\d{2}/g, 'Start at <TIME>');
+      s = s.replace(/Duration\s+[^\n]+/g, 'Duration <DURATION>');
       // Compact timestamp ids (AS-/SC- record ids embed wall-clock even
       // under a pinned ctx.timestamp).
       s = s.replace(/\d{8}T\d{6}/g, '<TSC>');

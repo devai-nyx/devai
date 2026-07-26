@@ -4,6 +4,7 @@
 // after W2 slice 8 turns index.ts into `export { X } from ...` /
 // `export type { Y } from ...` façade statements. Red-proofed against a
 // synthetic re-export fixture before trusting it on the real module.
+import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -15,6 +16,33 @@ import { BASELINE_DIR, HERE, baseline, canonical } from './r20-harness.js';
 interface ExportRecord {
   readonly name: string;
   readonly kind: 'value' | 'type';
+}
+
+function changedLeafPaths(before: unknown, after: unknown, prefix = ''): string[] {
+  if (JSON.stringify(before) === JSON.stringify(after)) return [];
+  if (
+    before !== null &&
+    after !== null &&
+    typeof before === 'object' &&
+    typeof after === 'object' &&
+    !Array.isArray(before) &&
+    !Array.isArray(after)
+  ) {
+    const keys = new Set([
+      ...Object.keys(before as Record<string, unknown>),
+      ...Object.keys(after as Record<string, unknown>),
+    ]);
+    return [...keys]
+      .sort()
+      .flatMap((key) =>
+        changedLeafPaths(
+          (before as Record<string, unknown>)[key],
+          (after as Record<string, unknown>)[key],
+          prefix.length === 0 ? key : `${prefix}.${key}`,
+        ),
+      );
+  }
+  return [prefix];
 }
 
 export function exportInventory(entryFile: string): ExportRecord[] {
@@ -62,6 +90,77 @@ afterEach(() => {
 });
 
 describe('R20 baseline: skills module API surface (checker-based)', () => {
+  it('records the exact R-0004 bounded-build fixture delta', () => {
+    const disposition = JSON.parse(
+      readFileSync(join(BASELINE_DIR, 'r0004-disposition.json'), 'utf8'),
+    ) as {
+      round: string;
+      baseline_commit: string;
+      changed_files: string[];
+      changed_skills: Record<string, { changed_fields: string[] }>;
+    };
+    expect(disposition.round).toBe('R-0004');
+    expect(disposition.baseline_commit).toBe('b60b4c52bff1779da84f48edc63cbf34652ab18e');
+    expect(disposition.changed_files).toEqual([
+      'fingerprint-behavior.json',
+      'inputs/family-fix.json',
+      'inputs/family-workflow.json',
+    ]);
+    const changedFiles = execFileSync(
+      'git',
+      [
+        'diff',
+        '--name-only',
+        `${disposition.baseline_commit}..HEAD`,
+        '--',
+        'packages/skills/tests/contract/fixtures/r20-baseline',
+      ],
+      { cwd: resolve(HERE, '../../../..'), encoding: 'utf8' },
+    )
+      .trim()
+      .split('\n')
+      .filter(Boolean)
+      .map((path) => path.replace('packages/skills/tests/contract/fixtures/r20-baseline/', ''))
+      .filter((path) => path !== 'r0004-disposition.json')
+      .sort();
+    expect(changedFiles).toEqual([...disposition.changed_files].sort());
+    const baselineFingerprint = JSON.parse(
+      execFileSync(
+        'git',
+        [
+          'show',
+          `${disposition.baseline_commit}:packages/skills/tests/contract/fixtures/r20-baseline/fingerprint-behavior.json`,
+        ],
+        { cwd: resolve(HERE, '../../../..'), encoding: 'utf8' },
+      ),
+    ) as { skills: Record<string, unknown> };
+    const currentFingerprint = JSON.parse(
+      readFileSync(join(BASELINE_DIR, 'fingerprint-behavior.json'), 'utf8'),
+    ) as { skills: Record<string, unknown> };
+    const changedSkills = Object.keys(currentFingerprint.skills)
+      .filter(
+        (skillId) =>
+          JSON.stringify(currentFingerprint.skills[skillId]) !==
+          JSON.stringify(baselineFingerprint.skills[skillId]),
+      )
+      .sort();
+    expect(changedSkills).toEqual(Object.keys(disposition.changed_skills).sort());
+    for (const skillId of changedSkills) {
+      expect(disposition.changed_skills[skillId]?.changed_fields).toEqual(
+        changedLeafPaths(baselineFingerprint.skills[skillId], currentFingerprint.skills[skillId]),
+      );
+    }
+    expect(
+      Object.values(disposition.changed_skills).flatMap((entry) => entry.changed_fields),
+    ).toHaveLength(6);
+    expect(readFileSync(join(BASELINE_DIR, 'inputs/family-fix.json'), 'utf8')).not.toContain(
+      'passWithNoTests',
+    );
+    expect(readFileSync(join(BASELINE_DIR, 'inputs/family-workflow.json'), 'utf8')).not.toContain(
+      'passWithNoTests',
+    );
+  });
+
   it('records only the three explained post-fork fixture deltas', () => {
     const disposition = JSON.parse(
       readFileSync(join(BASELINE_DIR, 'rebase-disposition.json'), 'utf8'),

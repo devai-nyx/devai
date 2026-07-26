@@ -217,10 +217,15 @@ function recordHistory(repoRoot: string, path: string): HistoricalPath[] | null 
     } else if (line.length > 0 && commit !== undefined) {
       const fields = line.split('\t');
       const status = fields[0] ?? '';
-      const historicalPath = status.startsWith('R') ? fields[2] : fields[1];
+      const copied = status.startsWith('C');
+      const historicalPath = status.startsWith('R') || copied ? fields[2] : fields[1];
       if (historicalPath === undefined) continue;
       entries.push({ commit, path: historicalPath });
       commit = undefined;
+      // `--follow` traverses both renames and sufficiently similar copies. A rename is
+      // the same record and must retain its seal; a copy starts a distinct record whose
+      // source history must not be inherited.
+      if (copied) break;
     }
   }
   return entries.reverse();
@@ -303,7 +308,11 @@ function sealedHistoryFindings(
     }
   }
   if (sealed === undefined || sealIndex < 0) return [];
-  for (const entry of history.slice(sealIndex + 1)) {
+  const originalSeal = sealed;
+  let lockedMutationObserved = false;
+  const priorTerminalStates: string[] = [];
+  const laterHistory = history.slice(sealIndex + 1);
+  for (const [laterIndex, entry] of laterHistory.entries()) {
     const laterSource = gitFile(repoRoot, entry.commit, entry.path);
     if (laterSource === null) {
       return [
@@ -331,6 +340,34 @@ function sealedHistoryFindings(
       normalizedSealedFrontmatter(later) !== normalizedSealedFrontmatter(sealed) ||
       !sealedTransitionAllowed(sealed, later)
     ) {
+      lockedMutationObserved = true;
+    }
+    if (
+      laterIndex < laterHistory.length - 1 &&
+      ['superseded', 'tombstoned'].includes(String(later.frontmatter['status']))
+    ) {
+      priorTerminalStates.push(
+        `${String(later.frontmatter['status'])}:${replacementId(later) ?? ''}`,
+      );
+    }
+    sealed = later;
+  }
+  if (lockedMutationObserved) {
+    const bytesAndStableFieldsRestored =
+      sealed.body === originalSeal.body &&
+      normalizedSealedFrontmatter(sealed) === normalizedSealedFrontmatter(originalSeal);
+    const fullyRestored =
+      bytesAndStableFieldsRestored &&
+      String(sealed.frontmatter['status']) === String(originalSeal.frontmatter['status']) &&
+      replacementId(sealed) === replacementId(originalSeal);
+    const finalTerminalState = `${String(sealed.frontmatter['status'])}:${replacementId(sealed) ?? ''}`;
+    const restoredThroughTerminalTransition =
+      String(originalSeal.frontmatter['status']) === 'active' &&
+      priorTerminalStates.every((state) => state === finalTerminalState) &&
+      ['superseded', 'tombstoned'].includes(String(sealed.frontmatter['status'])) &&
+      bytesAndStableFieldsRestored &&
+      sealedTransitionAllowed(originalSeal, sealed);
+    if (!fullyRestored && !restoredThroughTerminalTransition) {
       return [
         {
           code: 'DECISION_LOCKED_BODY_MUTATED',
@@ -339,7 +376,6 @@ function sealedHistoryFindings(
         },
       ];
     }
-    sealed = later;
   }
   return [];
 }

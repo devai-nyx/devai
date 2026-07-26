@@ -1999,6 +1999,808 @@ exact-main CI establish the complete R-0003 close.
 R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
 promotes, re-earns, or declares ready nothing.
 
+### DII-162 — Open R-0004 action identity and governed surface
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 declaration; OM-002; OM-003; R-0004-AUTHORIZATION; R-0004-PLAN digest dc50368c2080b38cccce3e799405aec797e0e11a1f8ba52a16af97e1fb272069; PC-0004; exact base b60b4c52bff1779da84f48edc63cbf34652ab18e; R-0004-ENTRY-MEASUREMENT; R-0004-SURFACE-DISPOSITION`
+
+R-0004 opens only after the complete R-0003 two-PR ceremony. PC-0004 is present on
+exact base `b60b4c52bff1779da84f48edc63cbf34652ab18e`, and final exact-main CI run
+`30188270499` passed every required job. The frozen predecessor remains read-only and
+clean. This satisfies the conditional authorization without importing any predecessor
+standing.
+
+The scoped records are BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029,
+BL-030, BL-031, BL-065, BL-080, and BL-084. The exact measured surface contains 146
+public actions, all retained pending behavior-preserving implementation; 38 historical
+per-sensor wrappers are explicit folds and backlog compaction is an explicit tombstone.
+The surface-disposition record enumerates every route, all 59 live and five archived
+sensor kinds, the 54-schema canon, the ten-package starting topology, the selected core
+façade, and the exact bounded root-process contracts. Count movement without a governed
+disposition and migration is forbidden.
+
+The public action path is the never-reminted action identity. One Architect-owned action
+registry must feed CLI routing and help, effects, sensors, generated documentation, and
+tests. Generated views are byte-stable and locale-independent. Every live sensor gains a
+successor-local design note; the nine diagnostic standings and fifty existing cell
+bindings remain unchanged. Schema canon, the eleven-member fixed group, the acyclic
+implementation-free core façade, bounded build/test porcelain, immutable workflow pins,
+and fail-closed binary presence are governed by the R-0004 surface contract.
+
+Inspector B1 must first prove each absent behavior red. Engineer changes may follow only
+the B0/B2 authority and generated-source boundaries; acceptance cannot weaken counts,
+effects, authority, coverage, or adversarial denials. R-0004 closes only after a fresh
+Auditor reconciliation, later Architect closing decision, literal `claude-opus-5`
+read-only PASS with no fallback, exact-SHA source CI, and the shared closure-only PR.
+
+R-0004 may establish only that the governed surface and package topology are implemented
+and tested. It authorizes no package publication, tag, GitHub Release, Pages deployment,
+real-stynx mutation, readiness claim, evidence promotion, or R-0010 observation.
+
+### DII-163 — Bind canonical action and sensor authority for R-0004
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 B2; DII-162; R-0004-SURFACE-DISPOSITION; GOVERNED-SURFACE-POLICY; ACTION-REGISTRY; SENSOR-REGISTRY`
+
+The public action path is the permanent action identity. The canonical registry at
+`law/policy/action-registry.json` contains all 185 governed records: 146 retained public
+actions, 38 historical sensor-wrapper folds, and one tombstone. Every non-kept identity
+is never-reminted and carries migration guidance. Effect, tier, lifecycle, authority,
+and authority contract are attributes of this canonical identity; runtime tables and
+generated views may not independently define them.
+
+The 59 live sensor kinds each resolve an active successor-local design note. Their nine
+diagnostic and fifty cell-bound standings remain unchanged. The canonical schema corpus
+is now 55 files because `action-registry.schema.json` joins the prior 54-file baseline.
+Engineer B3 must derive runtime consumers and the recursive schema command from these
+Architect-owned sources; until that handoff is green, the action population guards
+remain declared rather than implemented.
+
+The exact eleven-package fixed group, implementation-free core façade, bounded root
+porcelain argv, fail-closed binary checks, immutable workflow references, and UTF-8
+byte-stable projections are bound by `law/policy/governed-surface.md`. None of these
+bindings grants external release, deployment, publication, real-stynx mutation, R-0008
+external action, R-0009 activation, or R-0010 observation.
+
+### DII-164 — Complete the B3 action-consumer authority handoff
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 B3 authority repair; DII-163; R-0004-B3-AUTHORITY-REPAIR; cb88dfdc0ff71760d698707ce115bff37e25fd28`
+
+The first B3 consumer build removed the action-effect identity mirror and exposed three
+canonical omissions. This decision corrects the authority source rather than weakening
+the consumer: `action-registry.schema.json` carries the required canon version marker;
+Mermaid rendering declares its bounded process capabilities; and the subprocess policy
+enumerates the observed Mermaid and doctor read shapes. The owner leaf description is
+also bound to the Inspector-pinned exact-segment wording.
+
+These corrections do not change the governed population or scalar effects. Counts remain
+146 keep, 38 fold, and one tombstone; the public effect distribution remains 83 read, 39
+harness-write, 23 local-write, and one remote-write. Engineer regeneration is required
+before the generated views are current. No external release or downstream human gate is
+altered.
+
+### DII-165 — Bind the R-0004 governed-surface source close
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 source close; DII-162–164; R-0004-AS-BUILT; Auditor 41d73a28012d3be387f912eb25da5834906bd0c2; Inspector b7bf300eec5b4a14181e1cfbb5e5e489e55cb55e; BL-008–009; BL-016; BL-025; BL-027–031; BL-065; BL-080; BL-084`
+
+DII-165 closes the local source implementation declared by DII-162. The canonical
+action registry now contains 185 never-reminted identities: 146 kept public actions, 38
+behavior-preserving folds, and one tombstone with migration guidance. Three generated
+consumers reproduce that authority byte-for-byte; the production effect analyzer reports
+185 catalog actions, 185 extracted actions, and zero findings or unresolved edges. The
+55-schema recursive canon passes every named rule. All 59 live sensor kinds resolve local
+design notes while retaining fifty cell-bound and nine diagnostic standings.
+
+The selected `@devai-nyx/core` package is an acyclic export-only façade over the other
+ten public packages, and Changesets binds exactly those eleven members. All eleven
+packages pass content-only pack dry-runs; no archive or publication was produced. Root
+build and test invoke only the registered non-recursive argv, required binaries fail
+closed, both workflows use immutable action SHAs and prewarm every install job, and 164
+repository references reproduce from explicit disposition semantics with UTF-8 byte
+ordering.
+
+Auditor `41d73a2` reconciles all twelve scoped backlog records and measures the unchanged
+coverage floors at 71.07% statements, 61.63% branches, 77.44% functions, and 73.07%
+lines. The exact ordinary floor and root test porcelain pass 125 files and 1,128 tests
+with eight declared skips; T1 through T6, build, schema canon, action/effect parity,
+workflow lint, generated-view checks, package dry-runs, and deterministic projections
+are green.
+
+This decision does not predeclare independent or remote evidence. The clean commit
+containing DII-165 and fresh deterministic projections must pass the complete local
+ladder and then a read-only close review through literal `claude-opus-5`, with no
+fallback. Any actionable finding reopens the red-first role-pure repair cycle. Only PASS
+permits the source PR. Every required check must pass at the exact source SHA; after
+source merge, exact-main CI must pass before the production closure verb may append the
+closure record in a closure-only PR.
+
+The closure record uses DII-162 as the declaring decision and DII-165 as the closing
+decision. Its release disposition is `none-needed`: R-0004 changes repository source and
+package topology but authorizes no external release. The scoped backlog records close
+only when that immutable closure record and final exact-main CI are observed.
+
+R-0004 establishes only **governed surface and package topology implemented and tested**.
+It publishes, tags, releases, deploys, promotes, re-earns, mutates real stynx, activates
+R-0009, or opens R-0010 observation nothing.
+
+### DII-166 — Rebind the R-0004 source close after the Inspector lint correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 corrected source close; DII-165; BL-141; R-0004-EXIT-LADDER-LINT-FAILURE; R-0004-EXIT-LADDER-LINT-CORRECTION; Auditor 0104a976c7def6a6e8c8085f5950cb25c75145eb and a9c1dabc0c119b093755e9c3c865cc232f06e62a; Inspector 4c08b4614ac3445d59ecef8fcd312a10ff0eef82`
+
+DII-166 supersedes DII-165 only as the R-0004 source-closing judgment. The first
+complete ladder on candidate `268e31f0169508a635bb58a06c6e1c6fe3075239`
+passed evidence-mode refusal and every deterministic projection, then correctly stopped
+at Stage 1 lint on one countable two-space regular-expression literal in the R-0004
+workflow assertion. BL-141 governs and closes that bounded defect.
+
+Inspector `4c08b46` rewrites only the exact two-space YAML boundary as ` {2}`. Focused
+ESLint and all nine R-0004 contracts pass without changing assertion meaning. Auditor
+`a9c1dab` records the symmetric correction. The ordinary floor then passed 1,126 tests
+and eight declared skips; its only two reds were the symmetric BL-064 projection checks
+for the two backlog-register locators moved by the Auditor record. This Architect batch
+regenerates that projection from current tracked source.
+
+The clean candidate containing DII-166 and the fresh repository-reference projection
+must restart the complete local ladder from Stage 1 and then receive the mandated
+read-only review through literal `claude-opus-5`, with no fallback. Any actionable
+finding reopens the role-pure red-first cycle; only PASS permits source push. The
+two-PR ceremony, `none-needed` release disposition, closing-record bindings, claims
+ceiling, and all external human gates remain exactly as DII-165 states.
+
+### DII-167 — Bind per-occurrence development context for forbidden SQL
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 governance repair; DII-166; BL-142; R-0004-EXIT-LADDER-GOVERNANCE-FAILURE; FORBID-DROP-PROD`
+
+`FORBID-DROP-PROD` forbids destructive SQL outside development. The history scanner
+must therefore evaluate an optional allowed development context on the same changed line
+as each detected occurrence. The only allowed identities are the established
+`devai_task_...` prefix and exact `devai_template` name, encoded in the canonical
+registry's `allowed_change_line_patterns`. This field applies only to commit-change
+evidence; it never suppresses commit-message evidence.
+
+The exception is per occurrence. If one changed line is explicitly dev-scoped and any
+other matching line in the same commit is unscoped or production-named, the latter must
+still produce the forbidden-action finding. Invalid or empty context patterns fail
+registry validation. No role, commit, path, file, action id, or complete forbidden rule
+may be waived by this mechanism.
+
+Inspector must first prove the safe development case red and preserve a mixed-evidence
+production finding. Engineer may then implement the registry-derived per-line filter.
+Strict governance and the complete local ladder must restart under a later Architect
+source-closing decision before the literal `claude-opus-5` review. No release or
+external human gate is altered.
+
+### DII-168 — Rebind the R-0004 source close after the governance correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 corrected governance close; DII-166; DII-167; BL-142; R-0004-EXIT-LADDER-GOVERNANCE-FAILURE; R-0004-EXIT-LADDER-GOVERNANCE-CORRECTION; Auditor 39a546feecca6d1e3d3e5c6da098b63bdcc50130 and 9da5b541cda63024da9b3ac09da531ae4b7c1465; Inspector fbfb226b19ef79d26def93afda24563aa2d3c210; Engineer d875b73c7b7479a610634ab7657780246731fda2`
+
+DII-168 supersedes DII-166 only as the R-0004 source-closing judgment. Candidate
+`0621f12794d4c2cab500d6098fe90a4d22023ee7` passed the complete Stage 1 through
+Stage 3 ladder and changeset classification, then correctly stopped at strict
+governance on two development-only database descriptions. BL-142 governs and closes
+that bounded false positive without weakening the underlying prohibition.
+
+Inspector `fbfb226` proves the safe development occurrence red, preserves the unsafe
+sibling and commit-message channels, and requires invalid context expressions to fail
+closed. Engineer `d875b73` materializes DII-167's two exact development identities and
+applies them independently to each changed-line occurrence. Auditor `9da5b54` records
+the symmetric correction. The focused scanner suite, lint, type-check, ordinary floor,
+and strict governance pass with all 16 canonical rules present, no waiver, and zero
+findings. This Architect batch regenerates deterministic projections from current
+tracked source.
+
+The clean candidate containing DII-168 and fresh projections must restart the complete
+local ladder and then receive the mandated read-only close review through literal
+`claude-opus-5`, with no fallback. Any actionable finding reopens the role-pure red-first
+cycle; only PASS permits source push. The two-PR ceremony, `none-needed` release
+disposition, closing-record bindings, claims ceiling, and every external human gate
+remain exactly as DII-165 established.
+
+### DII-169 — Authorize role-pure formatter closure for R-0004
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 formatter correction; DII-168; BL-143; R-0004-EXIT-LADDER-FORMATTING-FAILURE; Auditor 87a8ff9f37c835c725c1dbbbe9d8c71f4ea8245d`
+
+Candidate `907ccd94bad69c9a5c58709494ae24114412027c` passed every functional gate through
+T6 and then correctly stopped on the standalone formatter check's exact 13-file set.
+BL-143 authorizes a semantics-preserving, role-pure correction only.
+
+Architect may format the four reported `law/` files. Engineer may format the four
+reported hand-authored production/generator files, update the action-registry generator
+only as necessary to emit formatter-clean bytes, and regenerate its three owned views.
+Inspector may format the two reported test files without changing assertions. Each role
+must commit separately. Generated views must continue to byte-match their producer;
+schema, action, effect, trace, and repository-reference projections must remain exact.
+
+Auditor must preserve the symmetric correction and the complete ladder must restart
+under a later source-closing decision. This decision authorizes no behavior, threshold,
+skip, authority, release, publication, deployment, external R-0008 action, R-0009
+activation, R-0010 observation, or real-stynx change.
+
+### DII-170 — Rebind the R-0004 source close after formatter correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 formatter-corrected close; DII-168; DII-169; BL-143; R-0004-EXIT-LADDER-FORMATTING-FAILURE; R-0004-EXIT-LADDER-FORMATTING-CORRECTION; Auditor 87a8ff9f37c835c725c1dbbbe9d8c71f4ea8245d and 8f7581cb75da27ff4e173eeba26e05dcbb6b9c67; Architect e1b952bf023cd779bc4c3c18b11d71c32c1e70eb; Engineer b8d6c9827ed9629970c32606729cb3a5fe6f061f; Inspector b3be1720be63edd5ca88b74ce5a7a140e546c435`
+
+DII-170 supersedes DII-168 only as the R-0004 source-closing judgment. Candidate
+`907ccd94bad69c9a5c58709494ae24114412027c` passed all functional gates through T6
+and then correctly stopped on 13 formatter findings. BL-143 closes that bounded debt
+through separate Architect, Engineer, and Inspector commits.
+
+The action-registry producer now emits bytes under the repository's exact formatting
+contract; all three generated views reproduce exactly. The complete repository
+formatter check, focused scanner suite, lint, type-check, and action-registry projection
+pass without assertion or behavior change. This Architect batch regenerates the
+repository-reference projection after the formatter and Auditor locator movements.
+
+The clean candidate containing DII-170 and fresh deterministic projections must restart
+the complete local ladder and then receive the mandated read-only close review through
+literal `claude-opus-5`, with no fallback. Any actionable finding reopens the role-pure
+red-first cycle; only PASS permits source push. The two-PR ceremony, `none-needed`
+release disposition, claims ceiling, and every external human gate remain unchanged.
+
+### DII-171 — Bind the first R-0004 Opus review correction set
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 first-review correction; DII-170; BL-144–151; R-0004-OPUS-CLOSE-REVIEW-FAILURE; Auditor fdce9484bf0bb1d6c077c4a3fdfa4157b130b39b`
+
+The first exact-candidate review through literal `claude-opus-5` returned FAIL on eight
+actionable gaps. BL-144 through BL-151 are promoted in full; none is deferred.
+
+The governed public surface adds the already-live `policy check schemas` path as one
+supported, read-only, plumbing-tier `policy_firewall` action bound internally to
+`check schemas`. This corrects the authoritative counts to 147 keep, 38 fold, and one
+tombstone, 186 total; it does not invent behavior. The command must register through
+the canonical definition path and the router must derive its dispatch normally.
+
+The root R-0004 contract belongs to T2. Every tracked test must belong to at least one
+T1–T6 include set, and trace must identify the R-0004 file as contract. Sensor notes must
+render each cell as `<substrate>×<property>` in registry order, or state the diagnostic
+standing without cells. The root porcelain authority is the production fixed argv:
+build `pnpm -r build`; every test selection invokes `pnpm vitest run` with an explicit
+tier config where one exists, and `all` invokes `pnpm vitest run`. No route may invoke a
+root package script that re-enters itself.
+
+Allowed destructive-SQL context must cover the detected SQL occurrence and its target,
+not merely appear elsewhere on the same line. Exact dev-task and template targets remain
+allowed; production targets, additional unsafe targets, malformed contexts, and all
+commit-message evidence remain findings. Every declared byte-identical policy mirror
+must match law. Every remote workflow `uses:` must carry a 40-hex immutable SHA and a
+readable version comment; repository-local reusable workflow paths remain allowed.
+
+Inspector must prove these boundaries red before Engineer implementation. Architect may
+correct the action registry, surface declaration, trace, and 50 sensor notes. Engineer
+may correct registry-backed CLI dispatch, fixed test argv, policy materializations,
+SQL occurrence matching, workflow validation, and generated views. Auditor must
+normalize superseded record status and preserve symmetric correction evidence.
+
+The complete ladder and a fresh literal `claude-opus-5` review remain mandatory before
+source push. No release, publication, deployment, predecessor write, real-stynx write,
+external R-0008 action, R-0009 activation, or R-0010 observation is authorized.
+
+### DII-172 — Rebind the R-0004 source close after first Opus correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 corrected close; DII-170; DII-171; BL-144–151; R-0004-OPUS-CLOSE-REVIEW-FAILURE; R-0004-OPUS-CLOSE-REVIEW-CORRECTION; Auditor ab045184015f8cf6c796606e285045b52855662b`
+
+DII-172 supersedes DII-170 only as the R-0004 source-closing judgment. The first Opus
+review's eight findings are implemented through the role-pure red-first sequence bound
+by DII-171 and reconciled by the Auditor. The corrected surface is 147 keep, 38 fold,
+and one tombstone, 186 total, including the previously live but unregistered
+`policy check schemas` action.
+
+The correction also binds the root contract to T2 and trace, covers every tracked test
+by the T1–T6 union, restores every declared policy mirror, repairs exact sensor cell
+rendering, fixes non-recursive root test argv, scopes destructive-SQL allowance to the
+matched operation and target, normalizes superseded failure status, and validates every
+remote workflow action pin while retaining local reusable-workflow paths.
+
+The clean candidate containing DII-172, the refreshed source-close handoff, and fresh
+deterministic projections must restart the complete local ladder and then receive a new
+read-only close review through literal `claude-opus-5`, with no fallback. Any actionable
+finding reopens the role-pure red-first cycle; only PASS permits source push. The shared
+two-PR ceremony, `none-needed` release disposition, claims ceiling, and every external
+human gate remain unchanged.
+
+### DII-173 — Bind the corrected-candidate T2 collateral repairs
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 corrected-candidate repair; DII-172; BL-152–153; R-0004-CORRECTED-CANDIDATE-T2-FAILURE; Auditor 6447d9c9202358905df04afc130d06c94fbf52e1`
+
+The corrected candidate's first complete-ladder restart exposed two collateral contract
+gaps and stopped at T2. BL-152 and BL-153 are promoted in full; neither is deferred.
+
+The canonical trace invariant-binding suite enum must admit `contract`, matching the
+existing test index and the actual T2 runner. No path, lifecycle, target-type, invariant,
+or evidence-strength rule changes. The Inspector's authority test composition may admit
+the exact fixed read-only production shapes `pnpm vitest run` and
+`pnpm vitest run --config tests/config/<tier>.ts`; it must reject additional flags,
+arbitrary configs, scripts, shell text, and any other package-manager command.
+
+Architect owns the schema correction. Inspector owns the test-only host correction and
+its deny-boundary assertions. Auditor must record symmetric green correction evidence.
+The complete ladder and fresh literal `claude-opus-5` review remain mandatory before
+source push. No production argv, threshold, skip, release, publication, deployment,
+predecessor write, real-stynx write, or external human gate changes.
+
+### DII-174 — Rebind the R-0004 source close after T2 collateral correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 T2-corrected close; DII-172; DII-173; BL-152–153; R-0004-CORRECTED-CANDIDATE-T2-FAILURE; R-0004-CORRECTED-CANDIDATE-T2-CORRECTION; Auditor 6447d9c9202358905df04afc130d06c94fbf52e1 and 1ba28c7ccf760deb419c1684b742f89b8bf16ff0; Architect 691821aa362330ad6e738ebc06ff7385d2ce2ab2; Inspector 1c2793568045c1c5178ccae331f30ecad5159eb6`
+
+DII-174 supersedes DII-172 only as the R-0004 source-closing judgment. BL-152 and
+BL-153 are implemented with symmetric failure/correction evidence. The live trace now
+validates contract evidence at both invariant-binding and test-index levels. The
+test-only authority host admits only the governed fixed Vitest shapes, with seven direct
+allow/deny assertions and passing hermetic skills baselines.
+
+The clean candidate containing DII-174, the refreshed source-close handoff, and fresh
+deterministic projections must restart the complete local ladder from Stage 1 and then
+receive the mandated read-only close review through literal `claude-opus-5`, with no
+fallback. Any actionable finding reopens the role-pure red-first cycle; only PASS
+permits source push. The two-PR ceremony, `none-needed` release disposition, claims
+ceiling, and every external human gate remain unchanged.
+
+### DII-175 — Bind active ADR coverage for CI checker changes
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 CI ADR correction; DII-171; DII-174; BL-151; BL-154; ADR-014; R-0004-CORRECTED-CANDIDATE-GOVERNANCE-FAILURE; Auditor 9e3480c0e2d70d045a7a7cfa0b4941b36fab1c26`
+
+ADR-014 is accepted as the gapless active record for the workflow checker and its
+forbidden-action association. The live ADR roster becomes ADR-001 through ADR-014,
+thirteen active records, with only ADR-005 terminally superseded by ADR-013.
+
+Inspector must first prove that exact active-ADR `affected_rules` coverage accepts the
+governed checker path while absent, malformed, superseded, and unrelated ADR records do
+not. Engineer may then implement frontmatter-derived exact-path association in the
+forbidden-action scanner. No exact-commit waiver, generic ADR-exists bypass, author-only
+bypass, threshold change, or skip is permitted.
+
+After symmetric Auditor correction and Architect source-close rebind, the complete
+ladder and fresh literal `claude-opus-5` review remain mandatory before source push. No
+release, publication, deployment, predecessor write, real-stynx write, or external
+human gate changes.
+
+### DII-176 — Correct the ADR-014 lifecycle chain
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 ADR-014 lifecycle correction; DII-175; ADR validator reading after fee91e91714536c20727bd3d19960af3c1e912b1`
+
+DII-176 supersedes DII-175 only as the ADR roster and lifecycle judgment. The ADR schema
+requires every successor ADR to name at least one superseded source. ADR-014 therefore
+supersedes ADR-013, whose sealed body remains unchanged while its lifecycle frontmatter
+transitions terminally. ADR-014 preserves ADR-013's complete CI-economy doctrine and adds
+the checker-path association; no active rule is lost.
+
+The roster is gapless ADR-001 through ADR-014 with twelve active records. ADR-005 is
+superseded by ADR-013, and ADR-013 is superseded by ADR-014. All remaining DII-175
+implementation, red-first, review, ceremony, claims, and external-gate boundaries remain
+unchanged.
+
+### DII-177 — Complete ADR-014's machine-readable CI path set
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 ADR affected-rules correction; DII-176; strict governance reading after Engineer 0e802054a8f1c5dc6ab663815c4f4447fa3a880c`
+
+ADR-014's body preserved both live workflows and the CI-stage runner, but its initial
+frontmatter `affected_rules` omitted those three exact paths. DII-177 corrects that
+machine-readable projection to include `.github/workflows/ci.yml`,
+`.github/workflows/round-gates.yml`, and `scripts/run-ci-stages.mjs` alongside the
+workflow checker and scanner paths. The active doctrine and all DII-176 boundaries are
+unchanged.
+
+### DII-178 — Restore sealed ADR history through ADR-015
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 ADR seal correction; DII-176; DII-177; BL-155; ADR-015; R-0004-ADR-SEAL-GOVERNANCE-FAILURE; Auditor e7d4e48780a657bf02e166f8f90208c248e342f6; Inspector 2c2d8ece839c7df72d233971dfb105e615674c33`
+
+DII-178 supersedes DII-177 as the active CI-path projection judgment. ADR-014 is restored
+to its sealed bytes except for the one permitted terminal lifecycle transition naming
+ADR-015. ADR-015 is the gapless active replacement and carries the complete seven-path
+CI governance set plus the preserved CI-economy and workflow-pin doctrine.
+
+Inspector's red copy-history contract proves that Git copy ancestry must not be treated
+as the new record's sealed history. Engineer may correct history enumeration to stop at
+a copy boundary while continuing through true renames; the existing rename-mutation
+guard must remain green. The roster becomes ADR-001 through ADR-015, twelve active, with
+the terminal chain ADR-005 to ADR-013 to ADR-014 to ADR-015.
+
+After symmetric Auditor correction and source-close rebind, the full ladder and fresh
+literal `claude-opus-5` review remain mandatory. No waiver, history rewrite, threshold,
+skip, release, publication, deployment, predecessor write, real-stynx write, or external
+human gate changes.
+
+### DII-179 — Preserve ADR-014's actual first seal
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 first-seal correction; DII-178; strict decision-integrity reading after cb2d58e9c40d807aa13d88c2ba6e3afe7ccf8f8e`
+
+DII-179 corrects DII-178's assumed seal point. Governance record-meta sealed ADR-014 at
+its first commit even though the narrower ADR schema rejected its empty `supersedes`
+array. ADR-014 is therefore restored to those first-seal bytes plus the one terminal
+transition to ADR-015. ADR-013 returns to its unchanged active seal; it is not part of
+ADR-014's lifecycle chain.
+
+The ADR schema now requires a non-empty `supersedes` array for active records while
+allowing a terminal sealed record to preserve its original empty array. Active ADR-015
+absorbs ADR-014 and carries the corrected complete rule. The gapless roster is ADR-001
+through ADR-015 with thirteen active records, ADR-005 superseded by active ADR-013, and
+ADR-014 superseded by active ADR-015. All remaining DII-178 boundaries remain unchanged.
+
+### DII-180 — Rebind the R-0004 source close after CI governance correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 governance-corrected close; DII-174; DII-175–179; BL-154–155; R-0004-CI-ADR-GOVERNANCE-CORRECTION; Auditor ae8f508b40d2973ac53f27bbd1c2cfe0c0966373`
+
+DII-180 supersedes DII-174 only as the R-0004 source-closing judgment. BL-154 and
+BL-155 are implemented with exact active-ADR path association, copy-boundary history,
+restored-seal endpoint validation, and the gapless active ADR-015 replacement. Strict
+forbidden-action, decision-integrity, citation, trace, and docs-drift governance pass
+with zero blocking findings and no waiver.
+
+The clean candidate containing DII-180, the refreshed source-close handoff, and fresh
+deterministic projections must restart the complete local ladder from Stage 1 and then
+receive the mandated read-only close review through literal `claude-opus-5`, with no
+fallback. Any actionable finding reopens the role-pure red-first cycle; only PASS
+permits source push. The two-PR ceremony, `none-needed` release disposition, claims
+ceiling, and every external human gate remain unchanged.
+
+### DII-181 — Rebind after Inspector strictness correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 strictness-corrected close; DII-180; Inspector 4a56da2187d8f9281c39924898a99648c57907b6`
+
+DII-181 supersedes DII-180 only as the R-0004 source-closing judgment. The restarted
+Stage 1 found one optional-path TypeScript error in the new Inspector copy-history
+assertion. Inspector corrected only that nullability guard; exact typecheck and all 38
+focused governance-ledger tests pass. No production, law, assertion meaning, threshold,
+skip, or gate changed. The complete ladder and literal `claude-opus-5` review restart
+requirements remain unchanged.
+
+### DII-182 — Admit the exact local ladder
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 exact-ladder close; DII-181; R-0004-EXACT-LADDER-PASS; Auditor a73993fea5cb20b5278c47c6a95139c60909b7d9`
+
+DII-182 supersedes DII-181 only as the R-0004 source-closing judgment. The complete
+local ladder passed on exact snapshot
+`6116635a2e565c974e28b7dec5a4f664a97b6cb7`: all six tiers, strict governance,
+unchanged coverage floors, root build/test porcelain, deterministic projections,
+formatting, and all eleven public-package dry-runs are green. The Auditor's exact
+readings and claims ceiling are admitted without expanding the round.
+
+The next clean commit containing DII-182, its refreshed source-close handoff, and the
+fresh repository-reference projection is the Opus review candidate. It must receive
+the mandated read-only close review through literal `claude-opus-5`, with no fallback.
+Actionable findings restart the governed red-first cycle; only PASS permits source push.
+No external gate, publication, release, deployment, or real-stynx boundary changes.
+
+### DII-183 — Rebind after the second Opus repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 second-Opus repair; DII-182; BL-156–162; R-0004-OPUS-CLOSE-REVIEW-2-CORRECTION; Inspector 9ee3c0e and a544733; Architect c2d418b; Engineer c530468; Auditor d374fa0`
+
+DII-183 supersedes DII-182 only as the R-0004 source-closing judgment. The second exact
+candidate Opus review's seven blocking findings are governed and locally repaired:
+production and test-host suite argv now agree on exact fixed forms; the active as-built
+uses live counts; fixture deltas derive from the R-0003 base and execute real tests;
+canonical build help names fixed recursive argv; leaf help observes the real session
+store; and strict governance scans the full round range.
+
+The next clean commit containing DII-183, the refreshed source-close handoff, and fresh
+deterministic projections must restart the complete local ladder and receive a new
+read-only review through literal `claude-opus-5`, with no fallback. Only PASS permits
+source push. No external release, publication, deployment, real-stynx write, R-0008,
+R-0009, or R-0010 human gate changes.
+
+### DII-184 — Bind governance to the exact round range
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 exact-range correction; DII-183; BL-162; R-0004-GOVERNANCE-RANGE-CORRECTION; Inspector 3581591; Engineer ab04008; Auditor 212850a`
+
+DII-184 supersedes DII-183 only as the R-0004 source-closing judgment. A fixed trailing
+commit count is not the round boundary: a sufficiently broad count imports unrelated
+pre-round history, while a smaller count can omit in-round workflow changes. Strict
+governance now resolves the exact closed-R-0003 commit and scans its exclusive range
+through HEAD, failing closed if the base cannot be verified.
+
+Focused range tests, typecheck, and the full strict-governance composition pass with
+zero findings. The next clean commit containing DII-184 and the refreshed handoff must
+restart the complete ladder and literal `claude-opus-5` review. No waiver, external gate,
+publication, release, deployment, or real-stynx boundary changes.
+
+### DII-185 — Admit the repaired exact ladder
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 repaired exact-ladder close; DII-184; R-0004-EXACT-LADDER-PASS; Auditor 5cf3af6`
+
+DII-185 supersedes DII-184 only as the R-0004 source-closing judgment. The complete
+ladder passed on exact repaired snapshot
+`31dfbaf3d8b51e2089aef6aa01ea45b46d9b266c`, including the exact round-range governance
+scan, all five live suite routes, 71 T1 files / 837 tests, 38 T2 files / 236 passing plus
+one declared skip, root 127 files / 1,161 passing plus eight declared skips, unchanged
+coverage floors, and all eleven public-package dry-runs.
+
+The next clean commit containing DII-185 and its refreshed handoff is the review
+candidate. It must pass the complete ladder and a new read-only review through literal
+`claude-opus-5`, with no fallback, before source push. The claims ceiling and every
+external human gate remain unchanged.
+
+### DII-186 — Rebind after the third Opus contract correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 third-Opus correction; DII-185; BL-163–165; R-0004-OPUS-CLOSE-REVIEW-3-FAILURE; Inspector b0af62c; Engineer ca6dff9`
+
+DII-186 supersedes DII-185 only as the R-0004 source-closing judgment. The third exact
+candidate Opus review independently reproduced the complete green ladder and all prior
+repairs, then found three remaining active-text inconsistencies. The governed surface
+contract now derives the exact fixed `pnpm -r build` and `pnpm vitest run` argv and the
+55-schema live canon; the direct `sense build` command definition now equals the
+canonical registry's fixed-recursive description. Inspector guards bind both contract
+claims to canonical sources and bind direct public command descriptions to the registry.
+
+The next clean commit containing DII-186 and its refreshed handoff must restart the
+complete local ladder, package dry-runs, and a fresh read-only close review through
+literal `claude-opus-5`, with no fallback. Only PASS permits source push. No external
+release, publication, deployment, real-stynx write, R-0008, R-0009, or R-0010 human gate
+changes.
+
+### DII-187 — Admit the final repaired exact ladder
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 final repaired exact-ladder close; DII-186; BL-163–166; R-0004-EXACT-LADDER-PASS; Auditor ab888d0`
+
+DII-187 supersedes DII-186 only as the R-0004 source-closing judgment. The complete
+ladder passed on exact repaired snapshot
+`7be9d31dcbfb07fffc2f8547af89c5b04e8b66f9`, including the exact round-range governance
+scan, standalone formatting, 71 T1 files / 837 tests, 38 T2 files / 238 passing plus one
+declared skip, root 127 files / 1,163 passing plus eight declared skips, unchanged
+coverage floors, and all eleven public-package dry-runs.
+
+The next clean commit containing DII-187 and its refreshed handoff is the final review
+candidate. It must pass the complete ladder and a fresh read-only review through literal
+`claude-opus-5`, with no fallback, before source push. The claims ceiling and every
+external human gate remain unchanged.
+
+### DII-188 — Admit the fourth-review repaired exact ladder
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 fourth-Opus repaired close; DII-187; BL-167–170; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; R-0004-EXACT-LADDER-PASS; Auditor cd59beb`
+
+DII-188 supersedes DII-187 only as the R-0004 source-closing judgment. The complete
+147-binding command-description guard now covers both quote styles and the owner factory;
+all five observed source drifts equal canonical registry text. Audit lifecycle links are
+machine-readable and paired, the active contract binds one all-suite and four exact
+configured test routes, and the strict Inspector AST traversal typechecks.
+
+The complete ladder passed on exact repaired snapshot
+`fd8c8b68e05f2fc7a305b6403373f2820d9b64bc`, including standalone formatting, exact
+round-range governance, unchanged coverage floors, root 127 files / 1,163 passing plus
+eight declared skips, and all eleven public-package dry-runs. The next clean commit
+containing DII-188 and its refreshed handoff must pass the complete ladder and a fresh
+read-only review through literal `claude-opus-5`, with no fallback, before source push.
+The claims ceiling and every external human gate remain unchanged.
+
+### DII-189 — Admit the fifth-review repaired exact ladder
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 fifth-Opus repaired close; DII-188; BL-171–173; R-0004-OPUS-CLOSE-REVIEW-5-CORRECTION; R-0004-EXACT-LADDER-PASS; Auditor dd0130c`
+
+DII-189 supersedes DII-188 only as the R-0004 source-closing judgment. The Inspector
+known-red record now distinguishes all fourteen current green clusters from the
+historical `dfa5659` parity failure, the active surface contract cites this decision and
+the third-review correction, and the fifth-review and governance-range lifecycle
+records are symmetric and non-self-referential.
+
+The complete ladder passed on exact repaired snapshot
+`12189704dd49a0ef4bd989b4ad1070dc4de413e0`, including standalone formatting, exact
+round-range governance, unchanged coverage floors, root 127 files / 1,163 passing plus
+eight declared skips, and all eleven public-package dry-runs. The next clean commit
+containing DII-189 and its refreshed handoff must pass the complete ladder and a fresh
+read-only review through literal `claude-opus-5`, with no fallback, before source push.
+The claims ceiling and every external human gate remain unchanged.
+
+### DII-190 — Rebind atomic terminal provenance
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 sixth-Opus repaired close; DII-189; BL-174; R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION; Architect 7ca26c4; Auditor c7dd9fb`
+
+DII-190 supersedes DII-189 only as the R-0004 source-closing judgment. The active
+surface contract cites this decision in the same Architect commit, the source-close
+handoff names DII-190 as the sole latest judgment, and BL-172 through BL-174 require
+every future closing DII to preserve that atomic agreement.
+
+No engineering behavior, assertion, threshold, skip, evidence source, or human gate
+changed. This exact clean candidate must restart the complete ladder, pass all eleven
+public-package dry-runs, and receive a fresh read-only review through literal
+`claude-opus-5`, with no fallback, before source push. The claims ceiling and every
+external human gate remain unchanged.
+
+### DII-191 — Admit the exact-CI ANSI repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 exact-CI repair; DII-190; BL-180; R-0004-SOURCE-CI-ANSI-CORRECTION; Auditor d63b0a5`
+
+DII-191 supersedes DII-190 only as the R-0004 source-closing judgment. Exact-head CI
+run 30206695586 exposed ANSI SGR sequences in Vitest output that caused the sensor
+metric parser to record zero passing tests despite a successful subprocess. The
+red-first BL-180 repair strips ANSI only from the metric-extraction view and preserves
+the raw output as evidence.
+
+The complete ladder passed on exact repaired snapshot
+`7b63f6548f19147c1a6226768b587634d45a1915`: T1 passed 71 files / 838 tests, the root
+porcelain passed 127 files / 1,164 tests plus eight declared skips, merged T1+T3
+coverage passed at 71.23% statements, 61.79% branches, 77.62% functions, and 73.25%
+lines, and all eleven public-package dry-runs passed. The next clean commit containing
+DII-191, the refreshed contract, and the refreshed handoff must restart the complete
+ladder and receive a fresh read-only review through literal `claude-opus-5`, with no
+fallback, before source push. The claims ceiling and every external human gate remain
+unchanged.
+
+### DII-192 — Admit the complete ANSI fingerprint repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 eighth-Opus repair; DII-191; BL-180; R-0004-OPUS-CLOSE-REVIEW-8-CORRECTION; Auditor 3d33985`
+
+DII-192 supersedes DII-191 only as the R-0004 source-closing judgment. The repaired
+fingerprint normalization removes ANSI terminal presentation before masking reporter
+time and duration, while the sensor retains raw subprocess output byte-for-byte. The
+R20 baseline was not recaptured. The surface disposition now binds the 55-schema exit
+canon, and the command-description guard is stated exactly as 144 literal AST
+definitions plus three exact init-factory invocations.
+
+The complete ladder passed on exact repaired snapshot
+`dc64176ab75675a65e3c561576a2f5bb756b408f`: T1 passed 71 files / 838 tests, T2 passed
+38 files / 239 tests plus one declared skip, the root porcelain passed 127 files / 1,165
+tests plus eight declared skips, merged T1+T3 coverage passed at 71.23% statements,
+61.79% branches, 77.62% functions, and 73.25% lines, and all eleven public-package
+dry-runs passed. The next clean commit containing DII-192, the refreshed contract, and
+the refreshed handoff must restart the complete ladder and receive a fresh read-only
+review through literal `claude-opus-5`, with no fallback, before source push. The claims
+ceiling and every external human gate remain unchanged.
+
+### DII-193 — Admit the exact fixture-progress repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 second exact-CI repair; DII-192; BL-180; R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION; Auditor 29e5c41`
+
+DII-193 supersedes DII-192 only as the R-0004 source-closing judgment. Exact-head CI
+run 30209278971 selected a Vitest per-file progress line with a nondeterministic duration
+for the fixed one-test R20 fixture. The red-first repair removes only that exact
+presentation line inside deterministic fingerprint normalization. Raw sensor output,
+subprocess status, passed/failed metrics, summary text, and the unchanged baseline
+remain authoritative.
+
+The complete ladder passed on exact repaired snapshot
+`54e79a19a22e64ec8a6c6ea698087081872d70fd`: T1 passed 71 files / 838 tests, T2 passed
+38 files / 240 tests plus one declared skip, the root porcelain passed 127 files / 1,166
+tests plus eight declared skips, merged T1+T3 coverage passed at 71.23% statements,
+61.79% branches, 77.62% functions, and 73.25% lines, and all eleven public-package
+dry-runs passed. The next clean commit containing DII-193, the refreshed contract, and
+the refreshed handoff must restart the complete ladder and receive a fresh read-only
+review through literal `claude-opus-5`, with no fallback, before source push. The claims
+ceiling and every external human gate remain unchanged.
+
+### DII-194 — Admit the governed SHA-reference repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 tenth-Opus repair; DII-193; BL-181; R-0004-SOURCE-DECISION-SHA-CORRECTION; Auditor 832da68`
+
+DII-194 supersedes DII-193 only as the R-0004 source-closing judgment. The tenth exact
+candidate Opus review found two fabricated forty-hex commit expansions and the absence
+of a repository-wide recurrence guard. The red-first repair corrects both active
+references and requires every governed forty-hex identity to resolve locally to its
+Git object or to an exact path-scoped historical exception. The batched
+check is part of strict governance and treats no exception value as a repository-wide
+waiver.
+
+The complete ladder passed on exact repaired snapshot
+`fd99ab7deaa1702467b6d8f9c4d6a98f4372b87e`: T1 passed 71 files / 838 tests, T2 passed
+38 files / 241 tests plus one declared skip, the root porcelain passed 127 files / 1,167
+tests plus eight declared skips, merged T1+T3 coverage passed at 71.23% statements,
+61.79% branches, 77.62% functions, and 73.25% lines, the governed SHA-reference check
+scanned 252 identities, resolved 244 local objects, and classified 8 historical
+specimens, and all eleven
+public-package dry-runs passed. The next clean commit containing DII-194, the refreshed
+contract, and the refreshed handoff must restart the complete ladder and receive a fresh
+read-only review through literal `claude-opus-5`, with no fallback, before source push.
+The claims ceiling and every external human gate remain unchanged.
+
+### DII-195 — Admit the exact SHA-semantics repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 eleventh-Opus repair; DII-194; BL-182; R-0004-OPUS-CLOSE-REVIEW-11-CORRECTION; Auditor 19b957d`
+
+DII-195 supersedes DII-194 only as the R-0004 source-closing judgment. The eleventh
+exact-candidate Opus review found that DII-194 attached a later SHA-reference count to
+the earlier `fd99ab7` snapshot, active law claimed an unimplemented local object-kind
+comparison, and the Inspector contract did not exercise rejection paths. The repaired
+records bind each count to its producing snapshot and state the implemented local-Git-
+object or exact-path-scoped-exception semantics. Hermetic Inspector cases prove that an
+unresolved identity, an exception used outside its allowed paths, a stale allowed path,
+and a stale exception all fail closed. Production behavior and exception scope did not
+change.
+
+The complete ladder passed on exact repaired snapshot
+`2a864440c9178cc59834c961c132d3b5616d4bfa`: T1 passed 71 files / 838 tests, T2 passed
+38 files / 243 tests plus one declared skip, the root porcelain passed 127 files / 1,169
+tests plus eight declared skips, merged T1+T3 coverage passed at 71.23% statements,
+61.79% branches, 77.62% functions, and 73.25% lines, the governed SHA-reference check
+scanned 254 identities, resolved 246 local objects, and classified 8 historical
+specimens, and all eleven public-package dry-runs passed. The next clean commit
+containing DII-195, the refreshed contract, and the refreshed handoff must restart the
+complete ladder and receive a fresh read-only review through literal `claude-opus-5`,
+with no fallback, before source push. The claims ceiling and every external human gate
+remain unchanged.
+
+### DII-196 — Admit the audit-lifecycle repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 twelfth-Opus repair; DII-195; BL-183; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION; Auditor 6bde01c`
+
+DII-196 supersedes DII-195 only as the R-0004 source-closing judgment. The twelfth
+exact-candidate Opus review independently verified the full implementation and found one
+blocking metadata back-edge: the eleventh-review failure superseded the source-decision
+SHA correction, but that correction remained active without the reverse link. The
+Auditor repaired the sole asymmetric in-scope edge, and the Inspector binds it exactly.
+The classified-count assertion now matches the complete phrase, and the active contract
+names the SHA guard's actual decision-register and Auditor-record scan scope.
+
+The complete ladder passed on exact repaired snapshot
+`b10baed06e21ed39f07b625a5993355a57526d63`: T1 passed 71 files / 838 tests, T2 passed
+38 files / 244 tests plus one declared skip, the root porcelain passed 127 files / 1,170
+tests plus eight declared skips, merged T1+T3 coverage passed at 71.23% statements,
+61.79% branches, 77.62% functions, and 73.25% lines, the governed SHA-reference check
+scanned 256 identities, resolved 248 local objects, and classified 8 historical
+specimens, and all eleven public-package dry-runs passed. The next clean commit
+containing DII-196, the refreshed contract, and the refreshed handoff must restart the
+complete ladder and receive a fresh read-only review through literal `claude-opus-5`,
+with no fallback, before source push. The claims ceiling and every external human gate
+remain unchanged.
+
+### DII-197 — Apply the Owner's R-0004 final-review exception without weakening proof
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 Owner-exception source close; OM-008; DII-162; DII-196; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION@2a864440c9178cc59834c961c132d3b5616d4bfa; R-0004-LOCAL-EXIT-LADDER@bb34ce0d0dc29cbb5b16b179852b3ab81d35a90b`
+
+DII-197 supersedes DII-196 only as the R-0004 source-closing judgment. OM-008
+explicitly replaces the additional post-repair Opus review with reliance on the
+preserved twelfth exact-candidate assessment. That review returned FAIL on one
+blocking audit-lifecycle back-edge. BL-183 governed and repaired that finding red
+first, the focused Inspector guard passed, and the later exact candidate
+`bb34ce0d0dc29cbb5b16b179852b3ab81d35a90b` passed the complete local ladder.
+No PASS is inferred or fabricated.
+
+The exception changes no production or evidence threshold. The source candidate that
+contains OM-008 and DII-197 must pass the complete local source ladder and every
+required GitHub check at its exact SHA. Its exact source merge must then pass
+exact-main checks before the production closure verb may append PC-0005. Every
+closure-branch and final-main check must also pass.
+
+PC-0005 uses DII-162 as the R-0004 declaration and DII-197 as the closing decision.
+Its release disposition remains `none-preratification`. Nothing in this decision
+authorizes package publication, tags, GitHub Releases, Pages deployment, external
+release or deployment, real-stynx mutation, R-0008 external action, R-0009 activation,
+or R-0010 observation. The predecessor remains read-only.
+
+### DII-198 — Classify clean-checkout-only SHA objects after exact source CI
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 clean-checkout SHA repair; OM-008; DII-197; GitHub Actions run 30215723543@70b6092869b19631b845e6db79bfd0632871ab68; BL-184; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-CORRECTION; Inspector 6b880b2; Architect 808eba0; Auditor d03d48d`
+
+DII-198 supersedes DII-197 only as the R-0004 source-closing judgment. Exact-head CI
+run `30215723543` proved that two truthful historical identities resolved in the local
+development object database but not in GitHub's clean checkout. The repair classifies
+the transient pull-request merge and rejected amended R-0003 candidate only at their
+three existing Auditor paths. A hermetic Inspector fixture proves the classifications
+against an empty Git object database. Historical evidence is unchanged, and an
+identity used at any other path still fails closed.
+
+The environment-dependent local/classified split does not change the governed identity
+population or semantics. The exact candidate containing DII-198 and the refreshed
+contract and handoff must pass the complete local ladder and every required GitHub check
+before merge. Its exact source merge must pass exact-main CI before the production
+closure verb may append PC-0005; the closure-only PR and final main must also pass their
+exact-SHA checks.
+
+OM-008 continues to replace only the additional post-repair Opus review for R-0004; no
+PASS is inferred. PC-0005 uses DII-162 as the declaration and DII-198 as the closing
+decision with `release_disposition: none-preratification`. No publication, tag, GitHub
+Release, Pages deployment, external release or deployment, real-stynx mutation,
+R-0008 external action, R-0009 activation, or R-0010 observation is authorized.
+
+### DII-199 — Admit the strict fixture-narrowing repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 clean-checkout fixture correction; OM-008; DII-198; BL-184; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-CORRECTION; Inspector 6c436be; Auditor 69ea8c8`
+
+DII-199 supersedes DII-198 only as the R-0004 source-closing judgment. The first
+post-BL-184 complete-ladder restart passed through lint but failed strict typecheck on
+three possibly-undefined array accesses in the new Inspector fixture. Inspector
+`6c436be` narrows the two exact fixture entries before interpolation. Typecheck and the
+focused BL-184 contract pass without changing the exception set, assertion meaning, or
+production behavior.
+
+The exact candidate containing DII-199 and the atomically refreshed contract and
+handoff must pass the complete local ladder and every required exact-head GitHub check
+before source merge. Its exact source merge must pass exact-main CI before PC-0005 may
+be emitted through the production closure verb; closure-head and final-main checks
+remain mandatory.
+
+OM-008 continues to replace only the additional post-repair Opus review for R-0004; no
+PASS is inferred. PC-0005 uses DII-162 as the declaration and DII-199 as the closing
+decision with `release_disposition: none-preratification`. Every external release,
+publication, deployment, real-stynx, R-0008, R-0009, and R-0010 gate remains closed.
+
+### DII-200 — Admit the lint-clean fixture-naming repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 clean-checkout fixture lint correction; OM-008; DII-199; BL-184; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-CORRECTION; Inspector 78320af; Auditor 2a8682d`
+
+DII-200 supersedes DII-199 only as the R-0004 source-closing judgment. The next
+complete-ladder restart rejected the fixture's non-null assertions under the unchanged
+lint policy. Inspector `78320af` names both exact objects before constructing the
+expectation array, so no indexing assertion is required. Lint, typecheck, and the
+focused clean-checkout contract pass with identical expected values and no production
+change.
+
+The exact candidate containing DII-200 and the atomically refreshed contract and
+handoff must pass the complete local ladder and every required exact-head GitHub check
+before source merge. Exact-main source CI, production PC-0005 emission, closure-head CI,
+closure merge, and final-main CI remain serial and mandatory.
+
+OM-008 continues to replace only the additional post-repair Opus review for R-0004; no
+PASS is inferred. PC-0005 uses DII-162 as the declaration and DII-200 as the closing
+decision with `release_disposition: none-preratification`. Every external release,
+publication, deployment, real-stynx, R-0008, R-0009, and R-0010 gate remains closed.
+
+### DII-201 — Admit the complete clean-checkout SHA path set
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 clean-checkout SHA path completion; OM-008; DII-200; GitHub Actions run 30216260434@2c4f15bed4897de801295c7eb93e4f5c7aebcd72; BL-184; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-CORRECTION; Inspector cbd9eb3; Architect f46cf69; Auditor 53a0f75`
+
+DII-201 supersedes DII-200 only as the R-0004 source-closing judgment. Exact-head CI
+run `30216260434` proved that the initial clean-checkout classification omitted the
+BL-184 backlog and failure/correction records that truthfully cite the same historical
+objects. Inspector `cbd9eb3` extended the empty-repository regression red first to
+every current citation. Architect `f46cf69` adds only those already-existing Auditor
+paths. Any citation at a new path still fails closed.
+
+The exact candidate containing DII-201 and the atomically refreshed contract and
+handoff must pass the complete local ladder and every required exact-head GitHub check
+before source merge. Exact-main source CI, production PC-0005 emission, closure-head CI,
+closure merge, and final-main CI remain serial and mandatory.
+
+OM-008 continues to replace only the additional post-repair Opus review for R-0004; no
+PASS is inferred. PC-0005 uses DII-162 as the declaration and DII-201 as the closing
+decision with `release_disposition: none-preratification`. Every external release,
+publication, deployment, real-stynx, R-0008, R-0009, and R-0010 gate remains closed.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

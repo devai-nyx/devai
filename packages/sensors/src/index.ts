@@ -55,3 +55,4 @@ export * from './test-security-coverage.js';
 export * from './test-invariant-alignment.js';
 export * from './trace-resolve.js';
 export * from './type-check.js';
+export { SENSOR_ACTION_KINDS } from './generated/action-kinds.js';

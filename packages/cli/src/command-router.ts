@@ -111,7 +111,7 @@ export function renderHelp(
     (entry) =>
       entry.lifecycle !== 'retired' &&
       startsWithPath(entry.path, prefix) &&
-      (includeAll || entry.tier === 'porcelain'),
+      (includeAll || entry.tier === 'porcelain' || entry.path.length === prefix.length),
   );
   const lines = [`devai/${version}`, ''];
   lines.push(`Usage: devai${prefix.length > 0 ? ` ${prefix.join(' ')}` : ''} <command> [options]`);

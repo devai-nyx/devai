@@ -133,7 +133,7 @@ export interface FinishSenseOptions {
 
 export function finishSenseCommand(reading: SensorReading, opts: FinishSenseOptions): void {
   emit(reading, opts.human === true);
-  process.exit(exitFor(reading.status));
+  process.exitCode = exitFor(reading.status);
 }
 
 export type InventoryOutputMode = 'reading' | 'body';

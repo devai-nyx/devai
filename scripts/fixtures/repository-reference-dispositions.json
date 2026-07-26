@@ -1,0 +1,37 @@
+[
+  {
+    "id": "frozen-predecessor-retain",
+    "file": "AGENTS.md",
+    "matched": "devai-nyx/devai-original",
+    "classification": "frozen-predecessor",
+    "action": "retain"
+  },
+  {
+    "id": "package-metadata-retain",
+    "file": "packages/core/package.json",
+    "matched": "devai-nyx/devai",
+    "classification": "package-metadata",
+    "action": "retain"
+  },
+  {
+    "id": "historical-label-retain",
+    "file": "work/rounds/R-0001/plan.md",
+    "matched": "devai-nyx/devai",
+    "classification": "historical-label",
+    "action": "retain"
+  },
+  {
+    "id": "generated-view-regenerate",
+    "file": "packages/cli/src/generated/action-registry.ts",
+    "matched": "devai-nyx/devai",
+    "classification": "generated-output",
+    "action": "regenerate"
+  },
+  {
+    "id": "active-successor-retain",
+    "file": "docs/adopters/adoption.md",
+    "matched": "devai-nyx/devai",
+    "classification": "active-successor",
+    "action": "retain"
+  }
+]

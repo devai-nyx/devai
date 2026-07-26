@@ -132,7 +132,7 @@
       "id": "INV-BLUEPRINT-001",
       "tests": [
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/product.contract.test.ts",
           "target_type": "test"
         }
@@ -167,17 +167,22 @@
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/cli/tests/contract/action-coverage.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/cli/tests/contract/no-exit-after-emit.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
+          "path": "packages/cli/tests/contract/r0004-close-review.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "packages/cli/tests/contract/successor-operational-law.contract.test.ts",
           "target_type": "test"
         },
@@ -192,7 +197,7 @@
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/evidence/tests/contract/phase-closure.contract.test.ts",
           "target_type": "test"
         },
@@ -232,67 +237,67 @@
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/adr.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/backlog-current-disposition.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/constitution.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/founding-ratification.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/genesis-attestation-binding.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/governed-populations.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/r0003-opus-repairs.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/r0003-opus-review-3.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/register.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/repository-reference-triage.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/roster.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/trace-materialization.contract.test.ts",
           "target_type": "test"
         },
@@ -307,58 +312,63 @@
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/package-manager-prewarm.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/required-workflow-gates.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-api-surface.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-cycle-gate.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-facade-gate.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-fingerprint-behavior.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-ledger-corpus.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-manifest-corpus.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-prompt-inventory.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-rendered-prompts.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-round-corpus.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/authority-host-readonly.test.ts",
           "target_type": "test"
         },
         {
@@ -407,7 +417,7 @@
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/spec/tests/contract/r29-currentness-behavior.red.test.ts",
           "target_type": "test"
         },
@@ -542,7 +552,7 @@
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/spec/tests/contract/r29-currentness-behavior.red.test.ts",
           "target_type": "test"
         },
@@ -637,27 +647,27 @@
       "id": "INV-DEVAI-008",
       "tests": [
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/package-manager-prewarm.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/required-workflow-gates.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-fingerprint-behavior.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-prompt-inventory.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-rendered-prompts.test.ts",
           "target_type": "test"
         },
@@ -667,7 +677,7 @@
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/spec/tests/contract/r29-currentness-behavior.red.test.ts",
           "target_type": "test"
         }
@@ -687,22 +697,22 @@
       "id": "INV-DEVAI-010",
       "tests": [
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-fingerprint-behavior.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-ledger-corpus.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-manifest-corpus.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-round-corpus.test.ts",
           "target_type": "test"
         }
@@ -802,12 +812,12 @@
       "id": "INV-DEVAI-014",
       "tests": [
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/cli/tests/contract/successor-operational-law.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/schemas/tests/contract/governed-populations.contract.test.ts",
           "target_type": "test"
         },
@@ -822,12 +832,12 @@
       "id": "INV-DEVAI-015",
       "tests": [
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/feedback-iteration-bounded-replacements.red.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/skills-bounded-writer-corpus.test.ts",
           "target_type": "test"
         },
@@ -867,7 +877,12 @@
       "id": "INV-DEVAI-017",
       "tests": [
         {
-          "suite": "int",
+          "suite": "contract",
+          "path": "packages/cli/tests/contract/r0004-close-review.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "packages/evidence/tests/contract/actions-run-evidence.red.test.ts",
           "target_type": "test"
         },
@@ -878,12 +893,22 @@
         },
         {
           "suite": "unit",
+          "path": "packages/skills/tests/unit/authority-host-readonly.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/skills/tests/unit/round-utilities.test.ts",
           "target_type": "test"
         },
         {
           "suite": "unit",
           "path": "packages/utils/tests/unit/state-profile.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
           "target_type": "test"
         }
       ]
@@ -952,18 +977,33 @@
       "id": "INV-DEVAI-020",
       "tests": [
         {
-          "suite": "int",
+          "suite": "contract",
+          "path": "packages/cli/tests/contract/r0004-close-review.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "packages/effects-check/tests/contract/r24-effects.red.contract.test.ts",
           "target_type": "test"
         },
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/effects-check/tests/contract/r25-binding.red.contract.test.ts",
           "target_type": "test"
         },
         {
           "suite": "unit",
           "path": "packages/effects-check/tests/unit/binding.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/authority-host-readonly.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -977,7 +1017,7 @@
       "id": "INV-DEVAI-021",
       "tests": [
         {
-          "suite": "int",
+          "suite": "contract",
           "path": "packages/skills/tests/contract/mutating-llm-artifact-emission.red.test.ts",
           "target_type": "test"
         },
@@ -1161,6 +1201,16 @@
       "suite": "contract",
       "invariant_ids": [
         "INV-DEVAI-001"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/cli/tests/contract/r0004-close-review.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
       ],
       "lifecycle": "supported"
     },
@@ -1696,6 +1746,16 @@
       "lifecycle": "supported"
     },
     {
+      "path": "packages/skills/tests/unit/authority-host-readonly.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported"
+    },
+    {
       "path": "packages/skills/tests/unit/bootstrap.test.ts",
       "suite": "unit",
       "invariant_ids": [
@@ -1965,6 +2025,15 @@
       "suite": "sec",
       "invariant_ids": [
         "INV-DEVAI-015"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
       ],
       "lifecycle": "supported"
     },

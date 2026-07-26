@@ -1,5 +1,5 @@
 import { execFileSync } from '@devai-nyx/authority';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
@@ -23,6 +23,7 @@ export interface ForbiddenActionEntry {
   readonly rationale: string;
   readonly severity: 'critical' | 'high' | 'medium';
   readonly detect_patterns?: readonly string[];
+  readonly allowed_change_line_patterns?: readonly string[];
   readonly safer_alternative?: string;
 }
 
@@ -105,6 +106,9 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
     rationale: 'Data loss',
     severity: 'critical',
     detect_patterns: ['\\bDROP\\s+TABLE\\b', '\\bDROP\\s+DATABASE\\b', '\\bTRUNCATE\\s+TABLE\\b'],
+    allowed_change_line_patterns: [
+      '\\b(?:DROP\\s+(?:TABLE|DATABASE)|TRUNCATE\\s+TABLE)\\s+(?:IF\\s+EXISTS\\s+)?(?:devai_task_[A-Za-z0-9_]+\\b|devai_task_<id>|devai_template\\b)(?=\\s*(?:[\\"\'`]|;|$))',
+    ],
     safer_alternative: 'Soft-delete; run on dev with verified backup',
   },
   {
@@ -191,6 +195,8 @@ export interface ScanForbiddenOptions {
   readonly repoRoot: string;
   /** Max commits to scan. Default 50. */
   readonly maxCommits?: number;
+  /** Scan every commit strictly after this verified commit instead of a trailing count. */
+  readonly sinceRef?: string;
   /** Override the registry path. */
   readonly registryPath?: string;
 }
@@ -201,6 +207,40 @@ export interface ScanForbiddenResult {
 }
 
 const GIT_INSPECTION_MAX_BUFFER = 16 * 1024 * 1024;
+
+function activeAdrAffectedRules(repoRoot: string): ReadonlySet<string> {
+  const adrDir = join(repoRoot, 'law', 'adr');
+  if (!existsSync(adrDir)) return new Set();
+  const affected = new Set<string>();
+  let files: string[];
+  try {
+    files = readdirSync(adrDir).filter((file) => /^ADR-\d{3}-.+\.md$/u.test(file));
+  } catch {
+    return affected;
+  }
+  for (const file of files) {
+    let source: string;
+    try {
+      source = readFileSync(join(adrDir, file), 'utf8');
+    } catch {
+      continue;
+    }
+    const frontmatter = source.match(/^---\n([\s\S]*?)\n---(?:\n|$)/u)?.[1];
+    if (frontmatter === undefined) continue;
+    if (!/^id: ADR-\d{3}$/mu.test(frontmatter)) continue;
+    if (!/^type: adr$/mu.test(frontmatter)) continue;
+    if (!/^status: active$/mu.test(frontmatter)) continue;
+    const block = frontmatter.match(/^affected_rules:\n((?: {2}- .+\n?)+)/mu)?.[1];
+    if (block === undefined) continue;
+    for (const line of block.split('\n')) {
+      const rule = line.match(/^ {2}- ([^\s].*)$/u)?.[1];
+      if (rule !== undefined && !rule.startsWith('/') && !rule.split('/').includes('..')) {
+        affected.add(rule);
+      }
+    }
+  }
+  return affected;
+}
 
 export function loadForbiddenRegistry(path: string): ForbiddenActionEntry[] {
   if (!existsSync(path)) return [];
@@ -231,6 +271,20 @@ export interface ForbiddenCoverageResult {
   readonly ok: boolean;
 }
 
+function hasValidPatterns(value: unknown, required: boolean): value is readonly string[] {
+  if (value === undefined) return !required;
+  if (!Array.isArray(value) || value.length === 0) return false;
+  return value.every((pattern) => {
+    if (typeof pattern !== 'string') return false;
+    try {
+      new RegExp(pattern, 'i');
+      return true;
+    } catch {
+      return false;
+    }
+  });
+}
+
 /**
  * D-123 (item 6): compares a repo's actual registry against
  * `CANONICAL_FORBIDDEN_ACTIONS`. A canonical id can be absent for two
@@ -247,16 +301,8 @@ export function checkForbiddenRegistryCoverage(registryPath: string): ForbiddenC
     registry
       .filter(
         (entry) =>
-          Array.isArray(entry.detect_patterns) &&
-          entry.detect_patterns.length > 0 &&
-          entry.detect_patterns.every((pattern) => {
-            try {
-              new RegExp(pattern, 'i');
-              return true;
-            } catch {
-              return false;
-            }
-          }),
+          hasValidPatterns(entry.detect_patterns, true) &&
+          hasValidPatterns(entry.allowed_change_line_patterns, false),
       )
       .map((entry) => entry.id),
   );
@@ -354,10 +400,22 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
           }
         })
         .filter((p): p is RegExp => p !== null),
+      allowedChangeLinePatterns: Array.isArray(e.allowed_change_line_patterns)
+        ? e.allowed_change_line_patterns
+            .map((p) => {
+              try {
+                return new RegExp(p, 'i');
+              } catch {
+                return null;
+              }
+            })
+            .filter((p): p is RegExp => p !== null)
+        : [],
+      allowedChangeLinePatternsValid: hasValidPatterns(e.allowed_change_line_patterns, false),
     }));
   if (
     compiled.length !== registry.length ||
-    compiled.some((entry) => entry.patterns.length === 0)
+    compiled.some((entry) => entry.patterns.length === 0 || !entry.allowedChangeLinePatternsValid)
   ) {
     return {
       registry_entries: registry.length,
@@ -367,24 +425,31 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
           source: 'commit-change',
           ref: registryPath,
           matched: '',
-          message: 'every forbidden action must have at least one valid detection pattern',
+          message:
+            'every forbidden action must have valid detection patterns and valid non-empty allowed change-line patterns when provided',
         },
       ],
     };
   }
 
-  // Read recent commit log via git.
+  // Read either the explicitly bounded range or the recent commit log via git.
   let log: string;
   try {
-    log = execFileSync(
-      'git',
-      ['log', `-n${String(max)}`, '--pretty=format:%H%x00%an%x00%P%x00%B%x1e'],
-      {
-        cwd: opts.repoRoot,
-        encoding: 'utf8',
-        stdio: ['ignore', 'pipe', 'pipe'],
-      },
-    );
+    const revision =
+      opts.sinceRef === undefined
+        ? [`-n${String(max)}`]
+        : [
+            `${execFileSync('git', ['rev-parse', '--verify', `${opts.sinceRef}^{commit}`], {
+              cwd: opts.repoRoot,
+              encoding: 'utf8',
+              stdio: ['ignore', 'pipe', 'pipe'],
+            }).trim()}..HEAD`,
+          ];
+    log = execFileSync('git', ['log', ...revision, '--pretty=format:%H%x00%an%x00%P%x00%B%x1e'], {
+      cwd: opts.repoRoot,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
   } catch {
     return {
       registry_entries: registry.length,
@@ -403,6 +468,7 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     .split('\x1e')
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
+  const activeAdrRules = activeAdrAffectedRules(opts.repoRoot);
   for (const c of commits) {
     const nul = c.indexOf('\x00');
     if (nul === -1) continue;
@@ -525,12 +591,26 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
       ) {
         continue;
       }
-      if (
-        entry.id === 'FORBID-CI-WITHOUT-ADR' &&
-        author === 'DEVAI Engineer' &&
-        changedPaths.some((path) => path.startsWith('.github/workflows/'))
-      ) {
-        continue;
+      if (entry.id === 'FORBID-CI-WITHOUT-ADR') {
+        const changedCiPaths = changedPaths.filter((path) =>
+          entry.patterns.some((pattern) => {
+            const matches = pattern.test(path);
+            pattern.lastIndex = 0;
+            return matches;
+          }),
+        );
+        const messageNamesCiPath = entry.patterns.some((pattern) => {
+          const matches = pattern.test(body);
+          pattern.lastIndex = 0;
+          return matches;
+        });
+        if (
+          !messageNamesCiPath &&
+          changedCiPaths.length > 0 &&
+          changedCiPaths.every((path) => activeAdrRules.has(path))
+        ) {
+          continue;
+        }
       }
       const pathEvidenceIds = new Set([
         'FORBID-DELETE-AUTHORITY-DOCS',
@@ -543,7 +623,7 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
         re.lastIndex = 0;
         const changeMatch =
           messageMatch === null && !(inspectorTestOnly && !pathEvidenceIds.has(entry.id))
-            ? re.exec(changeEvidence)
+            ? firstUnallowedChangeMatch(re, changeEvidence, entry.allowedChangeLinePatterns)
             : null;
         const m = messageMatch ?? changeMatch;
         if (m === null) continue;
@@ -560,4 +640,41 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     }
   }
   return { registry_entries: registry.length, findings };
+}
+
+function firstUnallowedChangeMatch(
+  pattern: RegExp,
+  evidence: string,
+  allowedLinePatterns: readonly RegExp[],
+): RegExpExecArray | null {
+  if (allowedLinePatterns.length === 0) return pattern.exec(evidence);
+
+  const flags = pattern.flags.includes('g') ? pattern.flags : `${pattern.flags}g`;
+  const globalPattern = new RegExp(pattern.source, flags);
+  let match = globalPattern.exec(evidence);
+  while (match !== null) {
+    const lineStart = evidence.lastIndexOf('\n', Math.max(0, match.index - 1)) + 1;
+    const nextNewline = evidence.indexOf('\n', match.index);
+    const line = evidence.slice(lineStart, nextNewline === -1 ? evidence.length : nextNewline);
+    const relativeMatchStart = match.index - lineStart;
+    const relativeMatchEnd = relativeMatchStart + match[0].length;
+    const isAllowed = allowedLinePatterns.some((allowedPattern) => {
+      const flags = allowedPattern.flags.includes('g')
+        ? allowedPattern.flags
+        : `${allowedPattern.flags}g`;
+      const globalAllowedPattern = new RegExp(allowedPattern.source, flags);
+      let allowedMatch = globalAllowedPattern.exec(line);
+      while (allowedMatch !== null) {
+        const allowedEnd = allowedMatch.index + allowedMatch[0].length;
+        if (allowedMatch.index <= relativeMatchStart && allowedEnd >= relativeMatchEnd) return true;
+        if (allowedMatch[0].length === 0) globalAllowedPattern.lastIndex += 1;
+        allowedMatch = globalAllowedPattern.exec(line);
+      }
+      return false;
+    });
+    if (!isAllowed) return match;
+    if (match[0].length === 0) globalPattern.lastIndex += 1;
+    match = globalPattern.exec(evidence);
+  }
+  return null;
 }

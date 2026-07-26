@@ -129,6 +129,7 @@ import {
   checkPrComplianceCmd,
   checkPromptOverlaysCmd,
   checkSensorIntegrityCmd,
+  registerCheckSchemas,
 } from './commands/check/index.js';
 import { governAuditorPostMergeCmd } from './commands/govern/post-merge-auditor.js';
 import { llmProbe } from './commands/llm/index.js';
@@ -326,6 +327,7 @@ checkOverrides.register(cli);
 checkPrComplianceCmd.register(cli);
 checkPromptOverlaysCmd.register(cli);
 checkSensorIntegrityCmd.register(cli);
+registerCheckSchemas(cli);
 governAuditorPostMergeCmd.register(cli);
 llmProbe.register(cli);
 packGraduateInvariants.register(cli);

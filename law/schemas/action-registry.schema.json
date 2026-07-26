@@ -1,0 +1,756 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/action-registry.schema.json",
+  "title": "Governed action registry",
+  "description": "Canonical never-reminted identity, disposition, lifecycle, effects, and authority source for every public or historical action route.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "id",
+    "status",
+    "authority",
+    "base_sha",
+    "identity_rule",
+    "ordering",
+    "generated_views",
+    "counts",
+    "entries"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../schemas/action-registry.schema.json"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "const": "action-registry"
+    },
+    "status": {
+      "const": "active"
+    },
+    "authority": {
+      "const": "Architect"
+    },
+    "base_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "identity_rule": {
+      "const": "public-path-never-reminted"
+    },
+    "ordering": {
+      "const": "utf8-bytes"
+    },
+    "generated_views": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["keep", "fold", "tombstone"],
+      "properties": {
+        "keep": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fold": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tombstone": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "action_id",
+          "internal_binding",
+          "path",
+          "disposition",
+          "lifecycle",
+          "lifecycle_reason",
+          "migration",
+          "never_remint",
+          "visibility",
+          "tier",
+          "profiles",
+          "effect",
+          "authority",
+          "description",
+          "promotion_criteria",
+          "authority_contract_version",
+          "authority_contract"
+        ],
+        "properties": {
+          "action_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]*( [a-z0-9][a-z0-9_-]*)*$"
+          },
+          "internal_binding": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9_-]*$"
+            }
+          },
+          "disposition": {
+            "enum": ["keep", "fold", "tombstone"]
+          },
+          "lifecycle": {
+            "enum": ["supported", "experimental", "retired"]
+          },
+          "lifecycle_reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "migration": {
+            "type": ["string", "null"],
+            "minLength": 1
+          },
+          "never_remint": {
+            "const": true
+          },
+          "visibility": {
+            "enum": ["common", "standard", "advanced", "maintainer"]
+          },
+          "tier": {
+            "enum": ["porcelain", "plumbing"]
+          },
+          "profiles": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": ["tier1", "tier2", "tier3"]
+            }
+          },
+          "effect": {
+            "enum": ["read", "harness-write", "local-write", "remote-write"]
+          },
+          "authority": {
+            "type": ["string", "null"],
+            "enum": [
+              null,
+              "agent_runtime",
+              "host_tooling",
+              "mesh_controller",
+              "policy_firewall",
+              "release_controller",
+              "sensor",
+              "specifier"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "promotion_criteria": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "authority_contract_version": {
+            "const": "1.0.0"
+          },
+          "authority_contract": {
+            "$ref": "#/$defs/authorityContract"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "disposition": {
+                  "const": "keep"
+                }
+              },
+              "required": ["disposition"]
+            },
+            "then": {
+              "properties": {
+                "migration": {
+                  "type": "null"
+                },
+                "lifecycle": {
+                  "enum": ["supported", "experimental"]
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "migration": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "lifecycle": {
+                  "const": "retired"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "authorityContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "action_id",
+        "effect",
+        "subject",
+        "consent",
+        "planner",
+        "boundary",
+        "readiness"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "1.0.0"
+        },
+        "action_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*( [a-z][a-z0-9-]*)*$"
+        },
+        "effect": {
+          "enum": ["read", "harness-write", "local-write", "remote-write"]
+        },
+        "capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "oneOf": [
+              {
+                "enum": [
+                  "fs:f5-config",
+                  "fs:f5-state",
+                  "fs:proofs",
+                  "fs:f4-inventory",
+                  "fs:worktree-admin",
+                  "fs:workspace",
+                  "fs:unknown-write",
+                  "db:read",
+                  "db:write",
+                  "db:unclassified",
+                  "host-cache:write"
+                ]
+              },
+              {
+                "type": "string",
+                "pattern": "^proc:[a-z][a-z0-9-]*$"
+              },
+              {
+                "type": "string",
+                "pattern": "^net:[a-z][a-z0-9-]*$"
+              }
+            ]
+          },
+          "description": "Declared per-domain effect upper bound. Optional only for the R24 W01 compatibility window; the live consistency gate introduced red-first in W02 and completed in W03 rejects a catalogued action without this field. fs:unknown-write and db:unclassified are shadow-only migration values that R25 must eliminate."
+        },
+        "subject": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind"],
+              "properties": {
+                "kind": {
+                  "const": "none"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "allowed_roles"],
+              "properties": {
+                "kind": {
+                  "const": "human"
+                },
+                "allowed_roles": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": ["owner", "architect", "inspector", "engineer", "auditor"]
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "actor", "transition", "initiator"],
+              "properties": {
+                "kind": {
+                  "const": "derived-machine"
+                },
+                "actor": {
+                  "enum": ["harness", "upgrade", "release"],
+                  "description": "bootstrap is intentionally absent: it may plan/orchestrate but has no mutation authority."
+                },
+                "transition": {
+                  "enum": ["harness-write", "upgrade", "release"]
+                },
+                "initiator": {
+                  "oneOf": [
+                    {
+                      "const": "none"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["allowed_roles", "preserve_in_context"],
+                      "properties": {
+                        "allowed_roles": {
+                          "type": "array",
+                          "minItems": 1,
+                          "uniqueItems": true,
+                          "items": {
+                            "enum": ["owner", "architect", "inspector", "engineer", "auditor"]
+                          },
+                          "description": "The runtime binds exactly one actual initiated_by role from this set and requires it to match the invocation flag or session."
+                        },
+                        "preserve_in_context": {
+                          "const": true
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "oneOf": [
+                {
+                  "properties": {
+                    "actor": {
+                      "const": "harness"
+                    },
+                    "transition": {
+                      "const": "harness-write"
+                    }
+                  }
+                },
+                {
+                  "properties": {
+                    "actor": {
+                      "const": "upgrade"
+                    },
+                    "transition": {
+                      "const": "upgrade"
+                    },
+                    "initiator": {
+                      "type": "object",
+                      "required": ["allowed_roles"],
+                      "properties": {
+                        "allowed_roles": {
+                          "const": ["architect"]
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "properties": {
+                    "actor": {
+                      "const": "release"
+                    },
+                    "transition": {
+                      "const": "release"
+                    },
+                    "initiator": {
+                      "type": "object",
+                      "required": ["allowed_roles"],
+                      "properties": {
+                        "allowed_roles": {
+                          "const": ["architect"]
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "consent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["write", "allow_publish", "experimental"],
+          "properties": {
+            "write": {
+              "type": "boolean"
+            },
+            "allow_publish": {
+              "type": "boolean"
+            },
+            "experimental": {
+              "type": "boolean"
+            }
+          }
+        },
+        "planner": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind"],
+              "properties": {
+                "kind": {
+                  "const": "none"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "planner_id", "target_kinds", "atomicity"],
+              "properties": {
+                "kind": {
+                  "const": "exact-plan"
+                },
+                "planner_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "target_kinds": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": ["fs", "git-ref", "db", "remote"]
+                  }
+                },
+                "atomicity": {
+                  "const": "whole-plan"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "planner_id", "target_kinds", "bounds", "recovery"],
+              "properties": {
+                "kind": {
+                  "const": "bounded-batches"
+                },
+                "planner_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "target_kinds": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": ["fs", "git-ref", "db", "remote"]
+                  }
+                },
+                "bounds": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["max_batches", "max_targets_per_batch", "max_total_targets"],
+                  "properties": {
+                    "max_batches": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 10000
+                    },
+                    "max_targets_per_batch": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 10000
+                    },
+                    "max_total_targets": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 100000
+                    }
+                  }
+                },
+                "recovery": {
+                  "const": "preserve-and-report"
+                }
+              }
+            }
+          ]
+        },
+        "boundary": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind"],
+              "properties": {
+                "kind": {
+                  "const": "none"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "adapter_ids", "final_reverification"],
+              "properties": {
+                "kind": {
+                  "const": "mutation-adapters"
+                },
+                "adapter_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "final_reverification": {
+                  "const": true
+                }
+              }
+            }
+          ]
+        },
+        "readiness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requires_binding", "independent_acceptance_required"],
+          "properties": {
+            "requires_binding": {
+              "type": "boolean"
+            },
+            "independent_acceptance_required": {
+              "const": true
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "effect": {
+                "const": "read"
+              }
+            },
+            "required": ["effect"]
+          },
+          "then": {
+            "properties": {
+              "subject": {
+                "properties": {
+                  "kind": {
+                    "const": "none"
+                  }
+                }
+              },
+              "consent": {
+                "properties": {
+                  "write": {
+                    "const": false
+                  },
+                  "allow_publish": {
+                    "const": false
+                  }
+                }
+              },
+              "planner": {
+                "properties": {
+                  "kind": {
+                    "const": "none"
+                  }
+                }
+              },
+              "boundary": {
+                "properties": {
+                  "kind": {
+                    "const": "none"
+                  }
+                }
+              },
+              "readiness": {
+                "properties": {
+                  "requires_binding": {
+                    "const": false
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "subject": {
+                "not": {
+                  "properties": {
+                    "kind": {
+                      "const": "none"
+                    }
+                  },
+                  "required": ["kind"]
+                }
+              },
+              "consent": {
+                "properties": {
+                  "write": {
+                    "const": true
+                  }
+                }
+              },
+              "planner": {
+                "not": {
+                  "properties": {
+                    "kind": {
+                      "const": "none"
+                    }
+                  },
+                  "required": ["kind"]
+                }
+              },
+              "boundary": {
+                "not": {
+                  "properties": {
+                    "kind": {
+                      "const": "none"
+                    }
+                  },
+                  "required": ["kind"]
+                }
+              },
+              "readiness": {
+                "properties": {
+                  "requires_binding": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "effect": {
+                "const": "remote-write"
+              }
+            },
+            "required": ["effect"]
+          },
+          "then": {
+            "properties": {
+              "consent": {
+                "properties": {
+                  "allow_publish": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "examples": [
+    {
+      "$schema": "../schemas/action-registry.schema.json",
+      "schemaVersion": "1.0.0",
+      "id": "action-registry",
+      "status": "active",
+      "authority": "Architect",
+      "base_sha": "b60b4c52bff1779da84f48edc63cbf34652ab18e",
+      "identity_rule": "public-path-never-reminted",
+      "ordering": "utf8-bytes",
+      "generated_views": [
+        "packages/cli/src/generated/action-registry.ts",
+        "packages/effects-check/src/generated/action-catalog.ts",
+        "packages/sensors/src/generated/action-kinds.ts"
+      ],
+      "counts": {
+        "keep": 1,
+        "fold": 0,
+        "tombstone": 0
+      },
+      "entries": [
+        {
+          "action_id": "adopt ci scaffold",
+          "internal_binding": "ci scaffold",
+          "path": ["adopt", "ci", "scaffold"],
+          "disposition": "keep",
+          "lifecycle": "supported",
+          "lifecycle_reason": "Supported mesh_controller action in the 0.5 command contract.",
+          "migration": null,
+          "never_remint": true,
+          "visibility": "standard",
+          "tier": "plumbing",
+          "profiles": ["tier1", "tier2", "tier3"],
+          "effect": "local-write",
+          "authority": "mesh_controller",
+          "description": "Generate a starter .github/workflows/devai-gates.yml that calls the canonical reusable-evidence-gate.yml. Plan-only unless --write; refuses to overwrite unless --force (D-123, item 5).",
+          "promotion_criteria": [],
+          "authority_contract_version": "1.0.0",
+          "authority_contract": {
+            "schemaVersion": "1.0.0",
+            "action_id": "adopt ci scaffold",
+            "effect": "local-write",
+            "capabilities": ["fs:workspace"],
+            "subject": {
+              "kind": "human",
+              "allowed_roles": ["engineer"]
+            },
+            "consent": {
+              "write": true,
+              "allow_publish": false,
+              "experimental": false
+            },
+            "planner": {
+              "kind": "bounded-batches",
+              "planner_id": "ci-scaffold-bounded-plan",
+              "target_kinds": ["fs"],
+              "bounds": {
+                "max_batches": 128,
+                "max_targets_per_batch": 64,
+                "max_total_targets": 8192
+              },
+              "recovery": "preserve-and-report"
+            },
+            "boundary": {
+              "kind": "mutation-adapters",
+              "adapter_ids": ["fs-authority-boundary"],
+              "final_reverification": true
+            },
+            "readiness": {
+              "requires_binding": true,
+              "independent_acceptance_required": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

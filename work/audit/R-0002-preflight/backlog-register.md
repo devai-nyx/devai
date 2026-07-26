@@ -23,7 +23,7 @@ verification.
 
 ## Census
 
-The governed population is gapless BL-001 through BL-140. BL-051 through BL-058 were
+The governed population is gapless BL-001 through BL-155. BL-051 through BL-058 were
 added during the first R-0002 close-review correction cycles. BL-059 through BL-065
 record the first independent Opus 5 exact-candidate findings. BL-066 through BL-071
 record the second exact-candidate findings before remediation. BL-072 and BL-073 record
@@ -50,6 +50,17 @@ BL-133 through BL-138 govern the six blockers from the third R-0003 Opus review.
 BL-139 governs the deterministic trace staleness introduced by the six-contract Inspector file.
 BL-140 governs the non-portable sibling-commit identity contract exposed by the fourth
 R-0003 exact-candidate Opus review.
+BL-141 governs the R-0004 Inspector regex lint defect exposed by the first complete
+exact-candidate ladder.
+BL-142 governs the dev-scoped SQL false positive exposed by the corrected R-0004
+candidate's strict governance gate.
+BL-143 governs the cross-authority formatting debt exposed after the corrected R-0004
+candidate passed every functional tier.
+BL-144 through BL-151 govern the eight findings from the first R-0004 exact-candidate
+Claude Opus 5 close review. BL-152 and BL-153 govern the two collateral failures exposed
+when the corrected candidate restarted the complete T2 ladder. BL-154 governs the
+missing machine-verifiable ADR association exposed by the strict governance restart.
+BL-155 governs the copied-history seal false positive and the post-seal ADR-014 repair.
 
 No item is an ungoverned “later pool.” Every non-N/A record has one primary round.
 
@@ -59,7 +70,7 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R-0002        | BL-001, BL-002, BL-003, BL-007, BL-012, BL-013, BL-014, BL-017, BL-023, BL-046, BL-047, BL-048, BL-049, BL-051–BL-062, BL-064, BL-066–BL-079, BL-082–BL-083, BL-085–BL-105, BL-107–BL-119 |
 | R-0003        | BL-004, BL-005, BL-006, BL-120–BL-140                                                                                                                                                     |
-| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084                                                                                            |
+| R-0004        | BL-008, BL-009, BL-016, BL-025, BL-027, BL-028, BL-029, BL-030, BL-031, BL-065, BL-080, BL-084, BL-141–BL-155                                                                             |
 | R-0005        | BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                                                                    |
 | R-0006        | BL-026, BL-034, BL-035, BL-081                                                                                                                                                            |
 | R-0007        | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                                                                    |
@@ -73,8 +84,8 @@ No item is an ungoverned “later pool.” Every non-N/A record has one primary 
 | Disposition                         | Governed records                                                                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Closed in R-0002                    | BL-001–003, BL-007 operational slice, BL-012–014, BL-017, BL-023, BL-046–049, BL-051–062, BL-064, BL-066–079, BL-082–083, BL-085–105, BL-107–119 |
-| Open in active R-0003               | BL-004–006, BL-120–140                                                                                                                           |
-| Open in prepared R-0004             | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084                                                                                   |
+| Closed in R-0003                    | BL-004–006, BL-120–140                                                                                                                           |
+| Implemented in active R-0004        | BL-008–009, BL-016, BL-025, BL-027–031, BL-065, BL-080, BL-084, BL-141–155; source and closure ceremonies pending                                |
 | Open in prepared R-0005             | BL-010–011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063, BL-106                                                                               |
 | Open in prepared R-0006             | BL-026, BL-034–035, BL-081                                                                                                                       |
 | Open in prepared R-0007             | BL-019, BL-021, BL-032, BL-039, BL-044                                                                                                           |
@@ -104,51 +115,51 @@ primary round and prevents that round’s closure.
 
 ## Inherited records and current disposition
 
-| ID     | Short title                           | Current disposition                                                                     |
-| ------ | ------------------------------------- | --------------------------------------------------------------------------------------- |
-| BL-001 | Frozen genesis-attestation re-bind    | Closed in R-0002; R-0003 ratified the rebound attestation at `2026-07-25T22:08:05Z`     |
-| BL-002 | Pending predecessor changeset         | Closed from D-196/PC-0019 `none-needed`; no predecessor release                         |
-| BL-003 | Repository/site/archive transition    | Closed R-0002 slice; History/hash residuals remain assigned to R-0007                   |
-| BL-004 | Constitution 1.0.0                    | Active; R-0003 ceremony                                                                 |
-| BL-005 | ADR-001 through ADR-012               | Active; R-0003 ceremony                                                                 |
-| BL-006 | Successor glossary                    | Active; joint R-0003 ceremony                                                           |
-| BL-007 | Population guards and law re-bind     | R-0002 operational slice closed; registry-wide residual stays in R-0004/5/7             |
-| BL-008 | Registry-derived enums                | Active; R-0004                                                                          |
-| BL-009 | Full schema canon linter              | Active; R-0004                                                                          |
-| BL-010 | Proof-epoch JSONL writers             | Active; R-0005                                                                          |
-| BL-011 | SWEEP at round close                  | Active; R-0005 after BL-010                                                             |
-| BL-012 | F1:T1 reachability orphan             | Closed in R-0002                                                                        |
-| BL-013 | Stale-reading threshold               | Closed in R-0002 by BL-099's canonical bounded policy and precedence repair             |
-| BL-014 | Successor domains policy              | Closed in R-0002                                                                        |
-| BL-015 | Prompt overlays and 27 findings       | Active; R-0005                                                                          |
-| BL-016 | Effect extractor binding              | Active; R-0004                                                                          |
-| BL-017 | Merged coverage floors                | Closed early in R-0002 at the unchanged 70/60/70/70 policy                              |
-| BL-018 | Clean post-merge Auditor worktree     | Active; R-0005                                                                          |
-| BL-019 | Generated CLI reference               | Active; R-0007 after action identity stabilizes                                         |
-| BL-020 | Ratified release lane                 | Active; R-0008 repository work; external completion remains Owner-gated                 |
-| BL-021 | Post-freeze History page              | Active; R-0007                                                                          |
-| BL-022 | First-parent evidence authorization   | Active; R-0009 before any streak                                                        |
-| BL-023 | Auditor in role schemas               | Closed in R-0002                                                                        |
-| BL-024 | 0.7-to-1.0 adopter proof              | Active; R-0008 using hermetic fallback and read-only real-stynx comparison              |
-| BL-025 | Core compatibility façade             | Active; OM-002 selects an implementation-free 1.x façade and eleven-package fixed group |
-| BL-026 | Per-action output contracts           | Active; R-0006                                                                          |
-| BL-027 | Leaf-help routing                     | Active; R-0004                                                                          |
-| BL-028 | Registry-derived action IDs           | Active; R-0004                                                                          |
-| BL-029 | Sensor notes and diagnostics          | Active; R-0004                                                                          |
-| BL-030 | Action-surface disposition            | Active; R-0004; no numerical target cutting                                             |
-| BL-031 | Bounded root build/test porcelain     | Active; R-0004                                                                          |
-| BL-032 | Semantic docs re-bind and projections | Active; R-0007 risk-sliced P0/P1/P2                                                     |
-| BL-033 | Invariant `authority_docs` migration  | Active; R-0005 coordinated migration                                                    |
-| BL-034 | Operational-value extraction          | Active; R-0006 post-ratification amendment                                              |
-| BL-035 | Mutation strength and aggregation     | Active; R-0006 as separate decisions                                                    |
-| BL-036 | Deterministic semantic-review PASS    | Active; R-0009 retention decision unless qualifying evidence exists                     |
-| BL-037 | Scorecard-skill unification           | Active; R-0010 after real usage evidence                                                |
-| BL-038 | Actions-evidence re-earning           | Active; R-0010 genuine streak; activation remains separately Owner-gated                |
-| BL-039 | Successor site and 1.0 snapshot       | Active; R-0007 prepares, R-0008 external gate controls deployment                       |
-| BL-040 | Sense-wrapper collapse                | N/A; P4 collapse already shipped                                                        |
-| BL-041 | P2 handoffs                           | N/A; substantive work already guarded                                                   |
-| BL-042 | Bootstrap lint/typecheck baseline     | N/A; current gates own regressions                                                      |
-| BL-043 | Schema/examples/package-test handoffs | N/A; current guards own regressions                                                     |
+| ID     | Short title                           | Current disposition                                                                   |
+| ------ | ------------------------------------- | ------------------------------------------------------------------------------------- |
+| BL-001 | Frozen genesis-attestation re-bind    | Closed in R-0002; R-0003 ratified the rebound attestation at `2026-07-25T22:08:05Z`   |
+| BL-002 | Pending predecessor changeset         | Closed from D-196/PC-0019 `none-needed`; no predecessor release                       |
+| BL-003 | Repository/site/archive transition    | Closed R-0002 slice; History/hash residuals remain assigned to R-0007                 |
+| BL-004 | Constitution 1.0.0                    | Closed in R-0003                                                                      |
+| BL-005 | ADR-001 through ADR-012               | Closed in R-0003                                                                      |
+| BL-006 | Successor glossary                    | Closed in R-0003                                                                      |
+| BL-007 | Population guards and law re-bind     | R-0002 operational slice closed; registry-wide residual stays in R-0004/5/7           |
+| BL-008 | Registry-derived enums                | Implemented in R-0004; source and closure ceremonies pending                          |
+| BL-009 | Full schema canon linter              | Implemented in R-0004; source and closure ceremonies pending                          |
+| BL-010 | Proof-epoch JSONL writers             | Active; R-0005                                                                        |
+| BL-011 | SWEEP at round close                  | Active; R-0005 after BL-010                                                           |
+| BL-012 | F1:T1 reachability orphan             | Closed in R-0002                                                                      |
+| BL-013 | Stale-reading threshold               | Closed in R-0002 by BL-099's canonical bounded policy and precedence repair           |
+| BL-014 | Successor domains policy              | Closed in R-0002                                                                      |
+| BL-015 | Prompt overlays and 27 findings       | Active; R-0005                                                                        |
+| BL-016 | Effect extractor binding              | Implemented in R-0004; source and closure ceremonies pending                          |
+| BL-017 | Merged coverage floors                | Closed early in R-0002 at the unchanged 70/60/70/70 policy                            |
+| BL-018 | Clean post-merge Auditor worktree     | Active; R-0005                                                                        |
+| BL-019 | Generated CLI reference               | Active; R-0007 after action identity stabilizes                                       |
+| BL-020 | Ratified release lane                 | Active; R-0008 repository work; external completion remains Owner-gated               |
+| BL-021 | Post-freeze History page              | Active; R-0007                                                                        |
+| BL-022 | First-parent evidence authorization   | Active; R-0009 before any streak                                                      |
+| BL-023 | Auditor in role schemas               | Closed in R-0002                                                                      |
+| BL-024 | 0.7-to-1.0 adopter proof              | Active; R-0008 using hermetic fallback and read-only real-stynx comparison            |
+| BL-025 | Core compatibility façade             | Implemented in R-0004 as the OM-002 export-only façade and eleven-package fixed group |
+| BL-026 | Per-action output contracts           | Active; R-0006                                                                        |
+| BL-027 | Leaf-help routing                     | Implemented in R-0004; source and closure ceremonies pending                          |
+| BL-028 | Registry-derived action IDs           | Implemented in R-0004; source and closure ceremonies pending                          |
+| BL-029 | Sensor notes and diagnostics          | Implemented in R-0004 with the 50/9 standing unchanged                                |
+| BL-030 | Action-surface disposition            | Implemented in R-0004 as 146 keep / 38 fold / 1 tombstone; no target cutting          |
+| BL-031 | Bounded root build/test porcelain     | Implemented in R-0004; exact root build and test pass                                 |
+| BL-032 | Semantic docs re-bind and projections | Active; R-0007 risk-sliced P0/P1/P2                                                   |
+| BL-033 | Invariant `authority_docs` migration  | Active; R-0005 coordinated migration                                                  |
+| BL-034 | Operational-value extraction          | Active; R-0006 post-ratification amendment                                            |
+| BL-035 | Mutation strength and aggregation     | Active; R-0006 as separate decisions                                                  |
+| BL-036 | Deterministic semantic-review PASS    | Active; R-0009 retention decision unless qualifying evidence exists                   |
+| BL-037 | Scorecard-skill unification           | Active; R-0010 after real usage evidence                                              |
+| BL-038 | Actions-evidence re-earning           | Active; R-0010 genuine streak; activation remains separately Owner-gated              |
+| BL-039 | Successor site and 1.0 snapshot       | Active; R-0007 prepares, R-0008 external gate controls deployment                     |
+| BL-040 | Sense-wrapper collapse                | N/A; P4 collapse already shipped                                                      |
+| BL-041 | P2 handoffs                           | N/A; substantive work already guarded                                                 |
+| BL-042 | Bootstrap lint/typecheck baseline     | N/A; current gates own regressions                                                    |
+| BL-043 | Schema/examples/package-test handoffs | N/A; current guards own regressions                                                   |
 
 ## New records
 
@@ -1344,6 +1355,495 @@ that are ancestors of the candidate, and passes in a fresh single-branch clone c
 only the candidate branch. The failure/correction audit pair is symmetric, DII-161 binds
 the correction without waiving identity requirements, the complete ladder passes, and a
 fresh exact Opus review returns PASS before source push.
+
+### BL-141 — Restore lint-clean R-0004 workflow assertions
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor + Architect · provenance: R-0004 exact ladder at 268e31f Stage 1; R-0004-EXIT-LADDER-LINT-FAILURE`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: replace only the countable two-space regex literal in the R-0004 workflow
+contract with an equivalent exact-cardinality expression; preserve the YAML job-key
+boundary and every assertion; focused R-0004 tests, lint, the full floor, and the
+complete exact-candidate ladder pass; Auditor records the symmetric correction and a
+later Architect decision rebinds the source close before Opus review.
+
+### BL-142 — Preserve dev-scoped SQL while failing production drops closed
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Engineer + Auditor · provenance: R-0004 governance gate at 0621f12; R-0004-EXIT-LADDER-GOVERNANCE-FAILURE; FORBID-DROP-PROD`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: Architect binds the exact allowed development-database identities;
+Inspector red-first fixtures prove a matching dev-scoped SQL line is not a finding and
+an unscoped or production-named occurrence in the same commit remains a finding;
+Engineer applies context per occurrence rather than suppressing a commit, file, role,
+or forbidden id; strict governance and the complete ladder pass; Auditor records the
+symmetric correction and Architect rebinds source close before Opus review.
+
+### BL-143 — Restore formatter-clean R-0004 source and generated views
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Engineer + Auditor · provenance: R-0004 exact ladder at 907ccd9 after T6; standalone Prettier gate; R-0004-EXIT-LADDER-FORMATTING-FAILURE`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: preserve the exact 13-file formatter finding set; Architect, Engineer, and
+Inspector format only their owned paths in separate commits; generated action views
+remain produced bytes rather than manual edits; the generator emits formatter-clean
+bytes deterministically; action/schema/effect and repository-reference projections
+remain exact; the complete ladder including standalone formatting passes; Auditor
+records the symmetric correction and Architect rebinds source close before Opus review.
+
+### BL-144 — Put every tracked test under an executing tier
+
+`type: backlog-item · status: draft · authority: Inspector + Architect + Auditor · provenance: R-0004 first exact-candidate Claude Opus 5 review F1; candidate 1bcaf5d; R-0004-OPUS-CLOSE-REVIEW-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the R-0004 governed-surface contract is collected by its declared tier;
+an Inspector guard proves the union of T1 through T6 includes every tracked test file;
+trace suite classification agrees with the executable config; CI cannot omit the round
+contract while the root floor alone passes.
+
+### BL-145 — Register `policy check schemas` canonically
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Engineer + Auditor · provenance: R-0004 first exact-candidate Claude Opus 5 review F2; candidate 1bcaf5d; R-0004-OPUS-CLOSE-REVIEW-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the public path has one canonical action record with authority, effect,
+tier, lifecycle, and binding; CLI registration uses the registry-backed command path;
+the hard-coded router rewrite is removed; catalog, effects, generated views, counts,
+and no-escape contracts agree.
+
+### BL-146 — Enforce policy materialization byte identity
+
+`type: backlog-item · status: draft · authority: Inspector + Engineer + Auditor · provenance: R-0004 first exact-candidate Claude Opus 5 review F3; candidate 1bcaf5d; R-0004-OPUS-CLOSE-REVIEW-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: every declared byte-identical `law/policy` to `.devai/config` pair matches;
+the two stale mirrors are regenerated from authority; a production/Inspector guard
+fails on any future drift.
+
+### BL-147 — Repair and verify sensor-note cell bindings
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0004 first exact-candidate Claude Opus 5 review F4; candidate 1bcaf5d; R-0004-OPUS-CLOSE-REVIEW-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: no sensor note contains stringified-object corruption; all 50 cell-bound
+notes list the exact readable cells from the sensor registry; all nine diagnostic notes
+remain explicit and cell-free; the contract checks semantic equality, not existence.
+
+### BL-148 — Bind destructive-SQL context to the detected occurrence
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Engineer + Auditor · provenance: R-0004 first exact-candidate Claude Opus 5 review F5; candidate 1bcaf5d; R-0004-OPUS-CLOSE-REVIEW-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: an allowed SQL context must cover the detected destructive occurrence and
+its target; same-line production targets or unsafe siblings still find; exact dev-task
+and template targets remain allowed; commit-message evidence remains unsuppressed.
+
+### BL-149 — Reconcile declared and executed root porcelain argv
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Engineer + Auditor · provenance: R-0004 first exact-candidate Claude Opus 5 review F6; candidate 1bcaf5d; R-0004-OPUS-CLOSE-REVIEW-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: governed surface declaration and production argv agree byte-for-byte;
+unit selection cannot recurse through the root test script; every accepted route stays
+registered and caller-selected command text remains impossible.
+
+### BL-150 — Normalize superseded exit-ladder record status
+
+`type: backlog-item · status: draft · authority: Auditor · provenance: R-0004 first exact-candidate Claude Opus 5 review F7; candidate 1bcaf5d; R-0004-OPUS-CLOSE-REVIEW-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: every superseded R-0004 failure record is status `superseded`, points to
+one active symmetric correction, and no correction is ambiguously superseded.
+
+### BL-151 — Enforce immutable pins for every workflow action use
+
+`type: backlog-item · status: draft · authority: Inspector + Engineer + Auditor · provenance: R-0004 first exact-candidate Claude Opus 5 review F8; candidate 1bcaf5d; R-0004-OPUS-CLOSE-REVIEW-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the production workflow checker rejects every local or remote `uses:`
+without the policy-required immutable reference and readable version comment where
+applicable; the guard runs on both existing workflows and cannot depend on a nonexistent
+release file.
+
+### BL-152 — Admit contract evidence in trace invariant bindings
+
+`type: backlog-item · status: draft · authority: Architect + Auditor · provenance: R-0004 corrected-candidate T2 failure at 8d95fd0; trace.schema.json invariant test suite enum`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: the canonical trace schema accepts `contract` for invariant test bindings as
+it already does for the test index; the live 34-invariant / 126-test trace validates
+through schema and CLI resolution without weakening path or evidence requirements.
+
+### BL-153 — Recognize fixed Vitest argv in the authority test harness
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 corrected-candidate T2 failure at 8d95fd0; AUTHORITY_TEST_PROCESS_NOT_READ_ONLY`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: the test-only authority host accepts only the production fixed read-only
+`pnpm vitest run` shape, with an optional exact `--config <tests/config/*.ts>` suffix;
+arbitrary package-manager commands, scripts, flags, and caller-selected shell text remain
+denied; both skill baselines and the focused harness contract pass.
+
+### BL-154 — Bind CI-checker changes to machine-verifiable active ADR coverage
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Engineer + Auditor · provenance: R-0004 corrected-candidate strict-governance failure at a8937f5; FORBID-CI-WITHOUT-ADR on Engineer 55ee8d0`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: a gapless active ADR explicitly names `scripts/check-workflows.mjs` and the
+immutable-pin validation decision; the forbidden-action scanner accepts a matching CI
+path only when at least one active numbered ADR lists that exact path under
+`affected_rules`; absent, superseded, malformed, or unrelated ADR coverage remains a
+finding; focused tests prove both sides; the complete strict governance gate passes
+without an exact-commit waiver.
+
+### BL-155 — Separate copied-record history and preserve sealed ADR correction
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Engineer + Auditor · provenance: R-0004 governance integrity reading after 9c7818d; DECISION_LOCKED_BODY_MUTATED on ADR-013 and ADR-014`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: governance history follows renames but treats a Git copy as the new record's
+history boundary, so ADR-013 does not inherit ADR-005's sealed body; a focused test proves
+copy isolation while the rename-mutation guard remains red; ADR-014 is restored to its
+sealed body plus one terminal lifecycle transition; a gapless ADR-015 carries the
+complete active CI rule and exact affected paths; strict decision integrity passes.
+
+### BL-156 — Align governed test suites with production authority
+
+`type: backlog-item · status: draft · authority: Inspector + Engineer + Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F1; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: all five advertised `sense test` suite values execute through the production
+broker; its allowlist matches only the fixed argv emitted by the test sensor; unreachable
+legacy forms are removed; focused red-first contracts and the complete ladder pass.
+
+### BL-157 — Correct stale R-0004 as-built action counts
+
+`type: backlog-item · status: draft · authority: Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F2; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: every active as-built statement reports the live 186/186 action/effect and
+147/38/1 disposition readings consistently, with no stale 185 or 146 claim.
+
+### BL-158 — Derive and govern the real R20 fixture delta
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F3; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the R-0004 disposition names the two real skills, six changed fields, and
+three changed files; its guard derives the delta instead of comparing the record to a
+copy of itself; no baseline can pass vacuously through `passWithNoTests: true`.
+
+### BL-159 — Make build help describe the fixed recursive argv
+
+`type: backlog-item · status: draft · authority: Architect + Engineer + Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F4; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: canonical registry help for `sense build` describes fixed `pnpm -r build`,
+advertises no caller-selected override, and all three generated views reproduce exactly.
+
+### BL-160 — Bind leaf-help evidence to the real authority-session store
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F5; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the leaf-help contract checks the real `.devai/state/authority-sessions/`
+store before and after invocation and fails if help creates an authority session.
+
+### BL-161 — Restrict the test authority host to exact tier configs
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F6; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the test-only host admits only the exact T1, T2, T3, T4, T5, and T6 config
+paths used by governed tiers; coverage, arbitrary configs, added flags, and traversal
+remain denied.
+
+### BL-162 — Scan the complete round range for CI governance
+
+`type: backlog-item · status: draft · authority: Inspector + Engineer + Architect + Auditor · provenance: R-0004 corrected exact-candidate Opus 5 review F7; candidate cd536da; R-0004-OPUS-CLOSE-REVIEW-2-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: strict governance scans the complete R-0004 base-to-candidate history, not a
+fixed trailing window; a red-first guard proves the workflow-changing commit is included;
+active-ADR affected-rule coverage is exercised against every governed CI path changed in
+the round.
+
+### BL-163 — Reconcile the active surface contract with fixed root argv
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0004 third exact-candidate Claude Opus 5 review F1; candidate c100cc8b; R-0004-OPUS-CLOSE-REVIEW-3-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the active surface contract names exactly `pnpm -r build` and `pnpm vitest
+run`; both forms agree with the disposition, production sensors, and production broker;
+an Inspector guard derives and compares the contract rather than pinning an independent
+stale string.
+
+### BL-164 — Keep command-definition help equal to canonical registry help
+
+`type: backlog-item · status: draft · authority: Inspector + Engineer + Auditor · provenance: R-0004 third exact-candidate Claude Opus 5 review F2; candidate c100cc8b; R-0004-OPUS-CLOSE-REVIEW-3-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: every local `defineCommand` description equals its canonical action-registry
+description; the `sense build` literal describes fixed recursive `pnpm -r build`; a
+red-first guard prevents hidden metadata drift even where rendered help uses the registry.
+
+### BL-165 — Bind the surface-contract schema count to the live canon
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0004 third exact-candidate Claude Opus 5 review F3; candidate c100cc8b; R-0004-OPUS-CLOSE-REVIEW-3-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the active surface contract reports the exact live recursive canonical
+schema total, and an Inspector guard derives the total from the same production canon so
+future additions cannot leave the governed claim stale.
+
+### BL-166 — Reconcile third-review repair formatting by owner
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 exact ladder formatting failure at cf85bc0; R-0004-FINAL-REPAIR-FORMATTING-FAILURE`
+
+Priority: P0 before R-0004 close review. Primary round: R-0004.
+
+Acceptance: Inspector formats only the changed R-0004 contract test; Auditor formats
+only the changed third-review failure record and records a symmetric correction; no
+assertion, claim, threshold, skip, or generated source changes; standalone Prettier and
+the restarted complete ladder pass before a fresh Opus review.
+
+### BL-167 — Make command-description parity complete and non-vacuous
+
+`type: backlog-item · status: draft · authority: Inspector + Engineer + Auditor · provenance: R-0004 fourth exact-candidate Claude Opus 5 review F1; candidate dfa5659; R-0004-OPUS-CLOSE-REVIEW-4-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: description parity keys public keep records by `internal_binding`, covers
+every statically resolvable `defineCommand` literal including both quote styles and
+factory/template declarations, and pins exact expected coverage rather than a nonzero
+floor; all observed descriptions equal the canonical registry; the known-red map lists
+all 14 current R-0004 clusters and current role-pure implementation history.
+
+### BL-168 — Repair R-0004 audit lifecycle and machine-readable links
+
+`type: backlog-item · status: draft · authority: Auditor · provenance: R-0004 fourth exact-candidate Claude Opus 5 advisory findings 2, 3, and 5; R-0004-OPUS-CLOSE-REVIEW-4-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: multi-source audit `supersedes` uses the parser-supported flow sequence;
+the real governance-range failure has an immutable paired failure record and the active
+correction names it; current as-built and exact-ladder provenance does not create a
+forward DII-187 evidence cycle; failure/correction symmetry remains explicit.
+
+### BL-169 — Refresh the final surface contract and closing provenance
+
+`type: backlog-item · status: draft · authority: Architect + Inspector + Auditor · provenance: R-0004 fourth exact-candidate Claude Opus 5 advisory findings 4 and 6; R-0004-OPUS-CLOSE-REVIEW-4-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the active surface-contract provenance names the BL-163/165 correction and
+current closing decision; the bounded-test clause distinguishes the fixed all-suite root
+porcelain from the four exact configured suite variants; the source close is rebound by
+a new DII after all BL-167–169 corrections, without widening any human gate.
+
+### BL-170 — Narrow the command-parity AST argument under strict TypeScript
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 command-parity typecheck failure after Inspector bf9a690; R-0004-COMMAND-PARITY-TYPECHECK-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the Inspector AST traversal explicitly narrows the first `defineCommand`
+argument before object-literal inspection; exact typecheck passes; the focused guard
+retains the same five-item intentional red evidence until Engineer repair; Auditor pairs
+the failure with a symmetric correction.
+
+### BL-171 — Reconcile the R-0004 known-red current-lineage statement
+
+`type: backlog-item · status: draft · authority: Inspector + Auditor · provenance: R-0004 fifth exact-candidate Claude Opus 5 review F1; candidate 7d66471; R-0004-OPUS-CLOSE-REVIEW-5-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the Inspector known-red record states that all fourteen R-0004 clusters are
+green at the current lineage snapshot; BL-164/167 remains preserved as historical red
+characterization at `dfa5659` and names Engineer `d6369f9` as the production repair; no
+test, assertion, skip, threshold, or evidence source changes.
+
+### BL-172 — Refresh the active surface-contract closing provenance
+
+`type: backlog-item · status: draft · authority: Architect + Auditor · provenance: R-0004 fifth exact-candidate Claude Opus 5 review F2; candidate 7d66471; R-0004-OPUS-CLOSE-REVIEW-5-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the active surface contract names terminal DII-188 and
+`R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION`; the refreshed provenance remains acyclic and
+agrees with the active source-close handoff. Every future closing DII refreshes the
+contract provenance in the same Architect commit.
+
+### BL-173 — Pair the fifth-review record corrections
+
+`type: backlog-item · status: draft · authority: Auditor · provenance: R-0004 fifth exact-candidate Claude Opus 5 review; candidate 7d66471; R-0004-OPUS-CLOSE-REVIEW-5-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the fifth-review failure is paired with a symmetric active correction after
+BL-171 and BL-172; the governance-range failure does not cite its own future correction
+as provenance; future review-driven closing decisions update the active contract in the
+same Architect commit; no engineering claim or human gate changes.
+
+### BL-174 — Keep terminal contract provenance atomic with closing decisions
+
+`type: backlog-item · status: draft · authority: Architect + Auditor · provenance: R-0004 sixth exact-candidate Claude Opus 5 review F1; candidate ed345ba; R-0004-OPUS-CLOSE-REVIEW-6-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the active surface contract, terminal decision prose, and source-close
+handoff agree on one latest closing DII; the Architect refreshes them atomically; the
+sixth-review failure is paired with a symmetric correction before a new closing DII,
+complete ladder restart, and fresh literal `claude-opus-5` review.
+
+### BL-175 — Gate the eleven-package pack surface before R-0008
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector · provenance: R-0004 seventh exact-candidate Claude Opus 5 PASS F1–F2; candidate 344638a; R-0004-OPUS-CLOSE-REVIEW-7-PASS`
+
+Priority: P1 before R-0008. Primary round: R-0007 or R-0008 preparation.
+
+Acceptance: `@devai-nyx/core@1.0.0` has an intentional Changesets disposition; CI runs
+`npm pack --dry-run --ignore-scripts --json` for all eleven public packages and asserts
+the exact package set plus core's six-path archive contract; no publish occurs.
+
+### BL-176 — Scope historical closing claims to their commits
+
+`type: backlog-item · status: draft · authority: Architect + Auditor · provenance: R-0004 seventh exact-candidate Claude Opus 5 PASS F3; candidate 344638a; R-0004-OPUS-CLOSE-REVIEW-7-PASS`
+
+Priority: P2. Primary round: R-0005 documentation and record reconciliation.
+
+Acceptance: superseded closing decisions and paired audit corrections use explicitly
+commit-scoped wording when describing what the active contract cited at that snapshot;
+BL-174 retains the same scoped-phrasing requirement for future closing DIIs.
+
+### BL-177 — Reconcile entry measurement and disposition terminology
+
+`type: backlog-item · status: draft · authority: Architect + Auditor · provenance: R-0004 seventh exact-candidate Claude Opus 5 PASS F4; candidate 344638a; R-0004-OPUS-CLOSE-REVIEW-7-PASS`
+
+Priority: P2. Primary round: R-0005 documentation and record reconciliation.
+
+Acceptance: the entry measurement distinguishes its 146-action and 54-schema base
+readings from the complete 147-keep and 55-schema exit surface; disposition fields use
+names that cannot confuse base totals with exit totals; historical values remain
+immutable and correctly labelled; each round as-built role-pure batch map represents
+every repair cycle in the governed range, including R-0004's sixth-review commits
+`12f67ed`, `7ca26c4`, and `c7dd9fb`.
+
+### BL-178 — Bind anti-skip governance to test sources
+
+`type: backlog-item · status: draft · authority: Inspector · provenance: R-0004 seventh exact-candidate Claude Opus 5 PASS F5; candidate 344638a; R-0004-OPUS-CLOSE-REVIEW-7-PASS`
+
+Priority: P2. Primary round: R-0005 test-contract hardening.
+
+Acceptance: the R-0004 anti-skip contract scans the governed test sources where
+build-conditional skips can occur, rejects new undeclared patterns, and preserves the
+eight declared skips without weakening assertions or floors.
+
+### BL-179 — Normalize public-package repository metadata
+
+`type: backlog-item · status: draft · authority: Engineer + Inspector · provenance: R-0004 seventh exact-candidate Claude Opus 5 PASS F6; pre-existing package metadata; R-0004-OPUS-CLOSE-REVIEW-7-PASS`
+
+Priority: P1 before R-0008. Primary round: R-0007 or R-0008 preparation.
+
+Acceptance: all eleven public packages expose the canonical successor repository URL;
+an exact package-manifest guard prevents predecessor or alternate-repository drift; the
+change includes any required package-version disposition and no publish occurs.
+
+### BL-180 — Parse colored Vitest summaries in exact-SHA CI
+
+`type: backlog-item · status: draft · authority: Inspector + Engineer + Auditor · provenance: R-0004 source PR #6 exact-head CI failure; head 1eed402; run 30206695586; R-0004-SOURCE-CI-ANSI-FAILURE`
+
+Priority: P0 before R-0004 source merge. Primary round: R-0004.
+
+Acceptance: Inspector red-first cases prove ANSI SGR sequences cannot hide Vitest's
+passed/failed summary and cannot destabilize the R20 fingerprint's normalized reporter
+text, including environment-selected per-file progress lines; the production sensor
+extracts the same metrics from colored and plain output
+while preserving raw evidence heads; deterministic fingerprint normalization masks
+terminal presentation without masking semantic output; focused T1/T2 and the complete
+ladder pass locally and in exact-head CI; no baseline recapture, skip, threshold, or
+assertion weakening is permitted.
+
+### BL-181 — Resolve governed forty-hex evidence identities
+
+`type: backlog-item · status: draft · authority: Auditor + Inspector + Engineer + Architect · provenance: R-0004 tenth exact-candidate Claude Opus 5 failure; candidate e0af282; R-0004-SOURCE-DECISION-SHA-FAILURE`
+
+Priority: P0 before R-0004 source merge. Primary round: R-0004.
+
+Acceptance: every standalone lowercase forty-hex token in the decision register and
+Auditor records either resolves as a local Git object or appears in an explicit
+governed exception set with object-kind classification and reason; predecessor objects,
+historical intentionally-invalid specimens, trees, and transient GitHub merge objects
+are classified rather than silently treated as local commits; the two fabricated
+R-0004 expansions are replaced by their exact `git rev-parse` values; CI runs the check;
+focused and complete gates pass without deleting historical failure evidence.
+
+### BL-182 — Reconcile and exercise governed SHA-reference semantics
+
+`type: backlog-item · status: draft · authority: Auditor + Inspector + Architect · provenance: R-0004 eleventh exact-candidate Claude Opus 5 failure; candidate e79b283; R-0004-OPUS-CLOSE-REVIEW-11-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: snapshot-specific SHA readings name the snapshot that produced them; active
+law, audit, test, and backlog claims describe the implemented local-resolution or exact
+path-scoped exception behavior without claiming an absent local object-kind comparison;
+hermetic Inspector cases reject an unresolved identity, exception use outside allowed
+paths, a stale allowed path, and a stale exception; the failure/correction lifecycle is
+symmetric; a fresh atomic closing DII, complete ladder, and literal `claude-opus-5`
+review pass before source push.
+
+### BL-183 — Close the remaining audit supersession back-edge
+
+`type: backlog-item · status: draft · authority: Auditor + Inspector + Architect · provenance: R-0004 twelfth exact-candidate Claude Opus 5 failure; candidate 62bef48; R-0004-OPUS-CLOSE-REVIEW-12-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: `R-0004-SOURCE-DECISION-SHA-CORRECTION` is superseded by the eleventh-review
+failure on both sides of the lifecycle edge; an Inspector guard proves that exact
+relationship; SHA scan wording names the decision register and Auditor records; the
+snapshot assertion matches the exact classified-count phrase; the twelfth-review
+failure/correction lifecycle is symmetric; a fresh atomic closing DII, complete ladder,
+and literal `claude-opus-5` review pass before source push.
+
+### BL-184 — Classify clean-checkout-only historical SHA objects
+
+`type: backlog-item · status: draft · authority: Auditor + Inspector + Architect · provenance: R-0004 source PR #6 exact-head CI failure; head 70b6092; run 30215723543; R-0004-SOURCE-CI-CLEAN-CHECKOUT-SHA-FAILURE`
+
+Priority: P0 before R-0004 source merge. Primary round: R-0004.
+
+Acceptance: a hermetic Inspector contract proves that the transient pull-request merge
+`3469026a503837de49d829c233bc7e9eb6b53620` is classified only at its existing Auditor
+path and rejected R-0003 candidate `46535a3c8939aad7a2bbc8fce981bdcc48757e54`
+is classified only at its two existing Auditor paths when absent from a clean object
+database; the exception registry records truthful object kinds and reasons; local and
+clean-checkout governance pass without deleting historical evidence or widening any
+exception, threshold, review replacement, or external gate; a symmetric correction and
+fresh atomic closing DII precede the next exact-head CI run.
 
 ## Carried guard map
 

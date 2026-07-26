@@ -14,7 +14,7 @@ const DEFAULT_REPO_ROOT = '.';
 export const hooksInstall = defineCommand({
   name: 'hooks install',
   description:
-    'Wire a devai check into a local git hook (husky-aware, idempotent via a marker block). Plan-only unless --execute (D-123, item 5).',
+    'Wire a devai check into a local git hook (husky-aware, idempotent via a marker block). Plan-only unless --write (D-123, item 5).',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli

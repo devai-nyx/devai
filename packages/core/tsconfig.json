@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "types": ["node"]
+  },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../authority" },
+    { "path": "../cli" },
+    { "path": "../effects-check" },
+    { "path": "../evidence" },
+    { "path": "../loop" },
+    { "path": "../schemas" },
+    { "path": "../sensors" },
+    { "path": "../skills" },
+    { "path": "../spec" },
+    { "path": "../utils" }
+  ]
+}

@@ -26,6 +26,8 @@ export { checkGlobGuardsCmd, checkGlobGuards } from './glob-guards.js';
 export type { CheckGlobGuardsReport, CheckGlobGuardsOptions } from './glob-guards.js';
 export { checkDependenciesCmd, checkDependencies } from './dependencies.js';
 export { checkActionEffectsCmd } from './action-effects.js';
+export { checkSchemasCmd, registerCheckSchemas, checkSchemaCanon } from './schemas.js';
+export type { SchemaCanonFinding, SchemaCanonReport } from './schemas.js';
 
 const DEFAULT_REPO_ROOT = '.';
 const DEFAULT_INVARIANTS_DIR = 'law/invariants';
@@ -290,6 +292,7 @@ export const checkForbiddenActions = defineCommand({
       .command('check-forbidden-actions', 'Scan for forbidden-action signatures in git history')
       .option('--repo-root <path>', `Repo root (default: ${DEFAULT_REPO_ROOT})`)
       .option('--max-commits <n>', 'How many recent commits to scan (default: 50)')
+      .option('--since-ref <ref>', 'Scan every commit strictly after this verified commit')
       .option(
         '--strict',
         'Exit FAIL on any commit-history finding or unwaived canonical-coverage gap; --strict remains accepted for compatibility',
@@ -299,6 +302,7 @@ export const checkForbiddenActions = defineCommand({
         (options: {
           repoRoot?: string;
           maxCommits?: number;
+          sinceRef?: string;
           strict?: boolean;
           human?: boolean;
         }) => {
@@ -306,6 +310,7 @@ export const checkForbiddenActions = defineCommand({
           const result = scanForbiddenActions({
             repoRoot,
             ...(options.maxCommits !== undefined && { maxCommits: options.maxCommits }),
+            ...(options.sinceRef !== undefined && { sinceRef: options.sinceRef }),
           });
           // D-123 (item 6): extend-not-replace. A registry missing a
           // canonical entry without a recorded waiver is a finding,

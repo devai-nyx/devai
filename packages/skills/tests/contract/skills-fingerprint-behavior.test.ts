@@ -32,6 +32,34 @@ describe('R20 baseline: fingerprint + behavior corpus (52/52)', () => {
     }
   });
 
+  it('normalizes Vitest reporter wall-clock and duration text', () => {
+    expect(normalize('Start at  05:17:19\nDuration  108ms (tests 1ms)\n', '/fixture')).toBe(
+      'Start at <TIME>\nDuration <DURATION>\n',
+    );
+  });
+
+  it('normalizes ANSI-decorated Vitest reporter text without changing raw evidence', () => {
+    const colored =
+      '\u001b[1m Test Files \u001b[22m 1 passed\n' +
+      '\u001b[2m      Tests  \u001b[22m 1 passed\n' +
+      '\u001b[2m   Start at  \u001b[22m14:45:48\n' +
+      '\u001b[2m   Duration  \u001b[22m108ms (tests 1ms)\n';
+    expect(normalize(colored, '/fixture')).toBe(
+      ' Test Files  1 passed\n      Tests   1 passed\n   Start at <TIME>\n   Duration <DURATION>\n',
+    );
+    expect(colored).toContain('\u001b[22m14:45:48');
+  });
+
+  it('normalizes the CI-selected fixture progress line without masking summary metrics', () => {
+    const ciReporter =
+      '\n RUN  v4.1.10 /tmp/r20-skill\n\n ✓ tests/fixture.test.ts (1 test) 5ms\n\n' +
+      ' Test Files  1 passed (1)\n      Tests  1 passed (1)\n';
+    expect(normalize(ciReporter, '/tmp/r20-skill')).toBe(
+      '\n RUN  v4.1.10 <FIXTURE>\n\n\n Test Files  1 passed (1)\n      Tests  1 passed (1)\n',
+    );
+    expect(ciReporter).toContain('tests/fixture.test.ts (1 test) 5ms');
+  });
+
   it('pins every package fixture to the repository package-manager contract', () => {
     const packageFixtures = loadSpecs().flatMap((spec) =>
       Object.entries(spec.files)
