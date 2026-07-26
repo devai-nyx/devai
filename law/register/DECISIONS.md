@@ -2693,6 +2693,29 @@ complete ladder and receive a fresh read-only review through literal `claude-opu
 with no fallback, before source push. The claims ceiling and every external human gate
 remain unchanged.
 
+### DII-197 — Apply the Owner's R-0004 final-review exception without weakening proof
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 Owner-exception source close; OM-008; DII-162; DII-196; R-0004-OPUS-CLOSE-REVIEW-12-CORRECTION@2a864440c9178cc59834c961c132d3b5616d4bfa; R-0004-LOCAL-EXIT-LADDER@bb34ce0d0dc29cbb5b16b179852b3ab81d35a90b`
+
+DII-197 supersedes DII-196 only as the R-0004 source-closing judgment. OM-008
+explicitly replaces the additional post-repair Opus review with reliance on the
+preserved twelfth exact-candidate assessment. That review returned FAIL on one
+blocking audit-lifecycle back-edge. BL-183 governed and repaired that finding red
+first, the focused Inspector guard passed, and the later exact candidate
+`bb34ce0d0dc29cbb5b16b179852b3ab81d35a90b` passed the complete local ladder.
+No PASS is inferred or fabricated.
+
+The exception changes no production or evidence threshold. The source candidate that
+contains OM-008 and DII-197 must pass the complete local source ladder and every
+required GitHub check at its exact SHA. Its exact source merge must then pass
+exact-main checks before the production closure verb may append PC-0005. Every
+closure-branch and final-main check must also pass.
+
+PC-0005 uses DII-162 as the R-0004 declaration and DII-197 as the closing decision.
+Its release disposition remains `none-preratification`. Nothing in this decision
+authorizes package publication, tags, GitHub Releases, Pages deployment, external
+release or deployment, real-stynx mutation, R-0008 external action, R-0009 activation,
+or R-0010 observation. The predecessor remains read-only.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
