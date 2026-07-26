@@ -1,6 +1,6 @@
 import { createHash, createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
 import { existsSync, readFileSync, realpathSync, readdirSync } from 'node:fs';
-import { basename, dirname, join, resolve, sep } from 'node:path';
+import { basename, dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validators } from '@devai-nyx/schemas';
 import { createAuthorityDecisionIssuer } from '@devai-nyx/authority';
@@ -104,6 +104,13 @@ function git(repoRoot: string, args: readonly string[]) {
     cwd: repoRoot,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
+    env: {
+      ...process.env,
+      GIT_AUTHOR_NAME: 'DEVAI Auditor',
+      GIT_AUTHOR_EMAIL: 'aarusso@nyxk.com.br',
+      GIT_COMMITTER_NAME: 'DEVAI Auditor',
+      GIT_COMMITTER_EMAIL: 'aarusso@nyxk.com.br',
+    },
   });
 }
 
@@ -259,8 +266,37 @@ export function createPostMergeHostScope(
       throw new Error('POST_MERGE_PROCESS_FORBIDDEN');
     }
     const command = String(args[0]);
+    const auditPathPattern = /^work\/audit\/post-merge\/[0-9a-f]{40}$/u;
+    const exactAuditMutation =
+      (command === 'add' &&
+        args.length === 3 &&
+        args[1] === '--' &&
+        typeof args[2] === 'string' &&
+        auditPathPattern.test(args[2])) ||
+      (command === 'commit' &&
+        args.length === 3 &&
+        args[1] === '-m' &&
+        typeof args[2] === 'string' &&
+        /^audit\(post-merge\): observe [0-9a-f]{40}$/u.test(args[2])) ||
+      (command === 'update-ref' &&
+        args.length === 3 &&
+        typeof args[1] === 'string' &&
+        /^refs\/devai\/post-merge\/[0-9a-f]{40}$/u.test(args[1]) &&
+        args[2] === 'HEAD');
+    const exactAuditRead =
+      command === 'show' &&
+      args.length === 2 &&
+      typeof args[1] === 'string' &&
+      new RegExp(
+        `^refs/devai/post-merge/([0-9a-f]{40}):work/audit/post-merge/\\1/(?:inventory|scorecard|backlog|assessment|status)\\.json$`,
+        'u',
+      ).test(args[1]);
     if (
-      !['worktree', 'checkout', 'rev-list', 'rev-parse', 'merge-base', 'status'].includes(command)
+      !['worktree', 'checkout', 'rev-list', 'rev-parse', 'merge-base', 'status'].includes(
+        command,
+      ) &&
+      !exactAuditMutation &&
+      !exactAuditRead
     ) {
       throw new Error('POST_MERGE_PROCESS_FORBIDDEN');
     }
@@ -290,12 +326,12 @@ function observationErrorCode(error: unknown): string {
 
 const OBSERVATION_ARTIFACT_NAMES = ['inventory', 'scorecard', 'backlog', 'assessment'] as const;
 
-function completedObservationDigest(stateRoot: string, mergeSha: string): string | null {
-  const bundleRoot = join(stateRoot, mergeSha);
-  const statusPath = join(bundleRoot, 'status.json');
-  if (!existsSync(statusPath)) return null;
+function validateCompletedObservation(
+  mergeSha: string,
+  read: (name: string) => string,
+): string | null {
   try {
-    const status: unknown = JSON.parse(readFileSync(statusPath, 'utf8'));
+    const status: unknown = JSON.parse(read('status'));
     if (!isRecord(status)) return null;
     const observationDigest = status['observation_digest_sha256'];
     const previousDigest = status['previous_observation_digest_sha256'];
@@ -320,7 +356,7 @@ function completedObservationDigest(stateRoot: string, mergeSha: string): string
     if (canonicalSha256(unsignedStatus) !== observationDigest) return null;
     const artifacts = Object.fromEntries(
       OBSERVATION_ARTIFACT_NAMES.map((name) => {
-        const value: unknown = JSON.parse(readFileSync(join(bundleRoot, `${name}.json`), 'utf8'));
+        const value: unknown = JSON.parse(read(name));
         if (!isRecord(value)) throw new Error('invalid artifact');
         return [name, value];
       }),
@@ -337,6 +373,26 @@ function completedObservationDigest(stateRoot: string, mergeSha: string): string
   } catch {
     return null;
   }
+}
+
+function completedObservationDigest(stateRoot: string, mergeSha: string): string | null {
+  const bundleRoot = join(stateRoot, mergeSha);
+  const statusPath = join(bundleRoot, 'status.json');
+  if (!existsSync(statusPath)) return null;
+  return validateCompletedObservation(mergeSha, (name) =>
+    readFileSync(join(bundleRoot, `${name}.json`), 'utf8'),
+  );
+}
+
+function completedAuditObservationDigest(worktreeRoot: string, mergeSha: string): string | null {
+  const ref = `refs/devai/post-merge/${mergeSha}`;
+  return validateCompletedObservation(mergeSha, (name) =>
+    gitText(
+      worktreeRoot,
+      ['show', `${ref}:work/audit/post-merge/${mergeSha}/${name}.json`],
+      'POST_MERGE_AUDIT_BUNDLE_MISSING',
+    ),
+  );
 }
 
 function archiveIncompleteObservation(stateRoot: string, mergeSha: string): void {
@@ -486,6 +542,29 @@ async function writeBundle(
   }
 }
 
+function commitAuditBundle(worktreeRoot: string, stateRoot: string, mergeSha: string): void {
+  const auditRoot = join(worktreeRoot, 'work/audit/post-merge');
+  const auditBundle = join(auditRoot, mergeSha);
+  const runtimeBundle = join(stateRoot, mergeSha);
+  mkdirSync(auditBundle, { recursive: true });
+  for (const name of [...OBSERVATION_ARTIFACT_NAMES, 'status'] as const) {
+    writeFileSync(
+      join(auditBundle, `${name}.json`),
+      readFileSync(join(runtimeBundle, `${name}.json`)),
+    );
+  }
+  const auditPath = relative(worktreeRoot, auditBundle).split(sep).join('/');
+  if (git(worktreeRoot, ['add', '--', auditPath]).status !== 0) {
+    throw new Error('POST_MERGE_AUDIT_STAGE_FAILED');
+  }
+  if (git(worktreeRoot, ['commit', '-m', `audit(post-merge): observe ${mergeSha}`]).status !== 0) {
+    throw new Error('POST_MERGE_AUDIT_COMMIT_FAILED');
+  }
+  if (git(worktreeRoot, ['update-ref', `refs/devai/post-merge/${mergeSha}`, 'HEAD']).status !== 0) {
+    throw new Error('POST_MERGE_AUDIT_REF_FAILED');
+  }
+}
+
 export async function runPostMergeAuditor(
   opts: PostMergeAuditorOptions,
 ): Promise<PostMergeAuditorResult> {
@@ -540,7 +619,8 @@ export async function runPostMergeAuditor(
       let previousDigest: string | null = null;
       for (const mergeSha of merges) {
         const completedDigest = completedObservationDigest(stateRoot, mergeSha);
-        if (completedDigest !== null) {
+        const committedDigest = completedAuditObservationDigest(worktreeRoot, mergeSha);
+        if (completedDigest !== null && committedDigest === completedDigest) {
           previousMergeSha = mergeSha;
           previousDigest = completedDigest;
           continue;
@@ -557,6 +637,7 @@ export async function runPostMergeAuditor(
           previousDigest,
           opts.injectFailure === true,
         );
+        commitAuditBundle(worktreeRoot, stateRoot, mergeSha);
         previousMergeSha = mergeSha;
         processed.push(mergeSha);
       }
