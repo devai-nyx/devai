@@ -2412,6 +2412,16 @@ fallback. Any actionable finding reopens the role-pure red-first cycle; only PAS
 permits source push. The two-PR ceremony, `none-needed` release disposition, claims
 ceiling, and every external human gate remain unchanged.
 
+### DII-181 — Rebind after Inspector strictness correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 strictness-corrected close; DII-180; Inspector 4a56da2187d8f9281c39924898a99648c57907b6`
+
+DII-181 supersedes DII-180 only as the R-0004 source-closing judgment. The restarted
+Stage 1 found one optional-path TypeScript error in the new Inspector copy-history
+assertion. Inspector corrected only that nullability guard; exact typecheck and all 38
+focused governance-ledger tests pass. No production, law, assertion meaning, threshold,
+skip, or gate changed. The complete ladder and literal `claude-opus-5` review restart
+requirements remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
