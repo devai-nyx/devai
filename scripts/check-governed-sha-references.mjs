@@ -33,9 +33,12 @@ if (!existsSync(EXCEPTIONS_PATH)) {
       typeof entry?.object_kind !== 'string' ||
       entry.object_kind.length === 0 ||
       typeof entry?.reason !== 'string' ||
-      entry.reason.length === 0
+      entry.reason.length === 0 ||
+      !Array.isArray(entry?.allowed_paths) ||
+      entry.allowed_paths.length === 0 ||
+      entry.allowed_paths.some((path) => typeof path !== 'string' || path.length === 0)
     ) {
-      fail('every exception needs sha, object_kind, and reason');
+      fail('every exception needs sha, object_kind, reason, and non-empty allowed_paths');
       continue;
     }
     if (exceptions.has(entry.sha)) {
@@ -67,7 +70,17 @@ if (!existsSync(EXCEPTIONS_PATH)) {
       execFileSync('git', ['cat-file', '-e', sha], { cwd: ROOT, stdio: 'ignore' });
       resolved += 1;
     } catch {
-      if (exceptions.has(sha)) {
+      const exception = exceptions.get(sha);
+      if (exception !== undefined) {
+        const allowedPaths = new Set(exception.allowed_paths);
+        const unexpectedPaths = [...paths].filter((path) => !allowedPaths.has(path));
+        const stalePaths = [...allowedPaths].filter((path) => !paths.has(path));
+        if (unexpectedPaths.length > 0) {
+          fail(`exception ${sha} used outside allowed paths: ${unexpectedPaths.sort().join(', ')}`);
+        }
+        if (stalePaths.length > 0) {
+          fail(`exception ${sha} has stale allowed paths: ${stalePaths.sort().join(', ')}`);
+        }
         classified += 1;
       } else {
         fail(`unresolved ${sha} in ${[...paths].sort().join(', ')}`);
