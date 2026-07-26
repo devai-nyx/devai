@@ -340,6 +340,21 @@ describe('R-0004 governed surface red-first contracts', () => {
     expect(drift).toEqual([]);
   });
 
+  it('BL-181 resolves or explicitly classifies governed forty-hex evidence identities', () => {
+    const scriptPath = join(ROOT, 'scripts/check-governed-sha-references.mjs');
+    const exceptionsPath = join(ROOT, 'law/policy/governed-sha-reference-exceptions.json');
+    expect(existsSync(scriptPath)).toBe(true);
+    expect(existsSync(exceptionsPath)).toBe(true);
+    const root = readJson('package.json') as { scripts: Record<string, string> };
+    expect(root.scripts['ci:sha-references']).toBe(
+      'node scripts/check-governed-sha-references.mjs',
+    );
+    expect(root.scripts['ci:governance']).toContain('pnpm run ci:sha-references');
+    const result = spawnSync('node', [scriptPath], { cwd: ROOT, encoding: 'utf8' });
+    expect(result.status, result.stderr || result.stdout).toBe(0);
+    expect(result.stdout).toContain('governed SHA references: PASS');
+  });
+
   it('BL-162 binds strict governance to a window covering the complete R-0004 range', () => {
     const root = readJson('package.json') as { scripts: Record<string, string> };
     expect(root.scripts['ci:governance']).toContain(

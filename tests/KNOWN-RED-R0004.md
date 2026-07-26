@@ -19,6 +19,11 @@ Inspector case at `6c876f1` is green after Engineer `d694249` normalized only th
 fixture presentation line; raw output, summary metrics, and the committed baseline
 remain protected.
 
+BL-181 preserves the tenth-review red: governed forty-hex identities must resolve to
+their declared Git object kind or carry an explicit governed exception. The Inspector
+contract is red in this batch because no production check, CI binding, or exception set
+exists and two active R-0004 commit expansions are fabricated.
+
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at
 the exact B0 candidate `10b9f1b9e599b77d6123daef165210259f90a8eb`.
