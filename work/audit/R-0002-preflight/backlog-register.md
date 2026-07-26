@@ -1789,6 +1789,20 @@ terminal presentation without masking semantic output; focused T1/T2 and the com
 ladder pass locally and in exact-head CI; no baseline recapture, skip, threshold, or
 assertion weakening is permitted.
 
+### BL-181 — Resolve governed forty-hex evidence identities
+
+`type: backlog-item · status: draft · authority: Auditor + Inspector + Engineer + Architect · provenance: R-0004 tenth exact-candidate Claude Opus 5 failure; candidate e0af282; R-0004-SOURCE-DECISION-SHA-FAILURE`
+
+Priority: P0 before R-0004 source merge. Primary round: R-0004.
+
+Acceptance: every standalone lowercase forty-hex token in the decision register and
+Auditor records either resolves to its declared local Git object kind or appears in an
+explicit governed exception set with object kind and reason; predecessor objects,
+historical intentionally-invalid specimens, trees, and transient GitHub merge objects
+are classified rather than silently treated as local commits; the two fabricated
+R-0004 expansions are replaced by their exact `git rev-parse` values; CI runs the check;
+focused and complete gates pass without deleting historical failure evidence.
+
 ## Carried guard map
 
 The original known-red mapping remains as historical provenance:
