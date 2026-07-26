@@ -66,11 +66,17 @@ describe('sense run readiness aggregation', () => {
     ];
 
     expect(classify('sense-run', argv('decision_record_integrity'), entries)).toBe(true);
-    expect(classify('sense-run', argv('decision_record_integrity', '--write'), entries)).toBe(false);
+    expect(classify('sense-run', argv('decision_record_integrity', '--write'), entries)).toBe(
+      false,
+    );
     expect(classify('sense-run', argv('inventory_regeneration'), entries)).toBe(false);
     expect(classify('sense-run', argv('unknown_kind'), entries)).toBe(false);
     expect(
-      classify('sense-run', ['/usr/bin/node', '/cli.js', 'sense', 'run', '--set', 'sweep'], entries),
+      classify(
+        'sense-run',
+        ['/usr/bin/node', '/cli.js', 'sense', 'run', '--set', 'sweep'],
+        entries,
+      ),
     ).toBe(false);
   });
 

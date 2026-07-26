@@ -111,10 +111,7 @@ describe('governance record parsing and integrity', () => {
       recordSource({ id: 'ADR-003', status: 'active', supersedes: '[ADR-001; ADR-002]' }),
     );
 
-    expect(parseGovernanceRecord(path).frontmatter['supersedes']).toEqual([
-      'ADR-001',
-      'ADR-002',
-    ]);
+    expect(parseGovernanceRecord(path).frontmatter['supersedes']).toEqual(['ADR-001', 'ADR-002']);
   });
 
   it('accepts valid records and reports malformed, schema, filename, duplicate, and link defects', () => {
