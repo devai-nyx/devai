@@ -2,7 +2,7 @@
 id: R-0005-KNOWN-RED
 title: R-0005 bounded known-red ledger
 type: round-known-red
-status: retired
+status: active
 date: 2026-07-26
 authority: Architect
 supersedes: null
@@ -164,3 +164,30 @@ not committed.
 KR-R5-012 through KR-R5-014 were already retired by their named exact projection, lint,
 formatting, and full-floor measurements. This ledger now grants no active red authority.
 Any independent-review or CI finding requires a fresh Architect entry before repair.
+
+## Independent-review and exit-ladder repair authority
+
+Auditor record `R-0005-INDEPENDENT-CODEX-REVIEW-1-FAILURE` preserves the exact
+`7883c74` FAIL without conversion. The same frozen candidate also failed strict CI-path
+ADR association and the unchanged statement/branch coverage floors. The following ten
+clusters are now authorized for red-first role-pure repair:
+
+| ID        | Source       | Required red boundary                                                                                                                                                                                         |
+| --------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| KR-R5-017 | local ladder | The reusable evidence workflow lacks an exact active ADR `affected_rules` association.                                                                                                                        |
+| KR-R5-018 | local ladder | The deterministic child-authority test imports the entire broker and drives fresh T1+T3 statements/branches below 70/60. Extract a production-pure predicate; do not change thresholds or coverage inclusion. |
+| KR-R5-019 | review P0    | Managed cleanup must reject external, traversal, symlink, ID/path-divergent, unregistered, and corrupt registry targets before recursive fallback removal.                                                    |
+| KR-R5-020 | review P0    | A declared record must remain schema-valid, rereadable, closable through a canonical register DII decision, and idempotent through compliance closure selection.                                              |
+| KR-R5-021 | review P0    | Local evidence must survive its governed trailer commit and verify from a fresh checkout without caller-selected subject bytes.                                                                               |
+| KR-R5-022 | review P1    | Every production legacy `chain.json` mutation must be migrated to canonical epochs or fail closed; legacy read/verify compatibility remains.                                                                  |
+| KR-R5-023 | review P1    | Architect identity alone must not bypass reserved prompt scope; only ADR-016's exact bounded output cases pass.                                                                                               |
+| KR-R5-024 | review P1    | Attributable post-merge observation products must reconcile into an Auditor-owned `work/audit/` path; runtime locks/receipts remain state-only and retries stay clean.                                        |
+| KR-R5-025 | review P1    | Prospective sequencing must bind exact law and demonstrated failing Inspector evidence; unrelated or already-green predecessors fail.                                                                         |
+| KR-R5-026 | review P1    | Anti-skip enforcement must detect governed Vitest skip/conditional forms beyond literal `it.skip` and `describe.skip`, including aliases and wrappers.                                                        |
+
+Each Inspector cluster must fail for its named absent behavior. Law precedes every
+substantive implementation. No cluster authorizes destructive cleanup, a weaker source
+set, threshold reduction, evidence reuse, history rewriting, external mutation, or a
+fabricated review PASS. This authority retires only after focused adversaries, the full
+ordinary floor, strict governance, fresh coverage, and a new exact-candidate independent
+Codex PASS.
