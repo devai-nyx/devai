@@ -231,7 +231,7 @@ export function createPostMergeHostScope(
     now: () => new Date().toISOString(),
     receipt_ttl_ms: 30_000,
   });
-  const worktreeRoot = join(repoRoot, 'scratch/worktrees/auditor-post-merge');
+  const worktreeRoot = join(repoRoot, '.devai/worktrees/auditor-post-merge');
   const worktreesRoot = dirname(worktreeRoot);
   const runtimeRoot = join(repoRoot, '.git/devai');
   const applyEffect = (request: AuthorityHostEffectRequest, apply: () => unknown): unknown => {
@@ -394,13 +394,14 @@ function backlogDelta(current: JsonRecord, previous: JsonRecord | null): JsonRec
 
 async function writeBundle(
   worktreeRoot: string,
+  stateRoot: string,
   mergeSha: string,
   timestamp: string,
   previousMergeSha: string | null,
   previousDigest: string | null,
   injectFailure: boolean,
 ): Promise<string> {
-  const bundleRoot = join(worktreeRoot, 'work/audit/post-merge', mergeSha);
+  const bundleRoot = join(stateRoot, mergeSha);
   mkdirSync(bundleRoot, { recursive: true });
   try {
     if (injectFailure) throw new Error('POST_MERGE_OBSERVATION_INJECTED_FAILURE');
@@ -424,12 +425,7 @@ async function writeBundle(
     const backlogCurrent = await compileBacklogObservation(worktreeRoot, scorecard, timestamp);
     let previousBacklog: JsonRecord | null = null;
     if (previousMergeSha !== null) {
-      const previousPath = join(
-        worktreeRoot,
-        'work/audit/post-merge',
-        previousMergeSha,
-        'backlog.json',
-      );
+      const previousPath = join(stateRoot, previousMergeSha, 'backlog.json');
       if (existsSync(previousPath)) {
         const parsed: unknown = JSON.parse(readFileSync(previousPath, 'utf8'));
         if (isRecord(parsed) && isRecord(parsed['current'])) previousBacklog = parsed.current;
@@ -495,8 +491,8 @@ export async function runPostMergeAuditor(
 ): Promise<PostMergeAuditorResult> {
   const repoRoot = realpathSync(resolve(opts.repoRoot));
   const verified = verifyPostMergeHostReceipt({ ...opts, repoRoot });
-  const worktreeRoot = join(repoRoot, 'scratch/worktrees/auditor-post-merge');
-  const stateRoot = join(worktreeRoot, 'work/audit/post-merge');
+  const worktreeRoot = join(repoRoot, '.devai/worktrees/auditor-post-merge');
+  const stateRoot = join(repoRoot, '.git/devai/post-merge-observations');
   const lockPath = join(repoRoot, '.git/devai/post-merge.lock');
   return (async () => {
     try {
@@ -538,6 +534,7 @@ export async function runPostMergeAuditor(
         ]);
         if (added.status !== 0) throw new Error('POST_MERGE_WORKTREE_CREATE_FAILED');
       }
+      assertCleanObservationWorktree(worktreeRoot);
       const processed: string[] = [];
       let previousMergeSha: string | null = null;
       let previousDigest: string | null = null;
@@ -553,6 +550,7 @@ export async function runPostMergeAuditor(
         archiveIncompleteObservation(stateRoot, mergeSha);
         previousDigest = await writeBundle(
           worktreeRoot,
+          stateRoot,
           mergeSha,
           opts.now ?? new Date().toISOString(),
           previousMergeSha,
@@ -562,10 +560,7 @@ export async function runPostMergeAuditor(
         previousMergeSha = mergeSha;
         processed.push(mergeSha);
       }
-      const clean = git(worktreeRoot, ['status', '--porcelain']);
-      if (clean.status !== 0 || clean.stdout.trim().length > 0) {
-        throw new Error('POST_MERGE_WORKTREE_DIRTY');
-      }
+      assertCleanObservationWorktree(worktreeRoot);
       return {
         status: processed.length === 0 ? 'replayed' : 'completed',
         merge_sha: verified.mergeSha,
@@ -577,4 +572,11 @@ export async function runPostMergeAuditor(
       rmSync(lockPath, { recursive: true, force: true });
     }
   })();
+}
+
+export function assertCleanObservationWorktree(worktreeRoot: string): void {
+  const clean = git(worktreeRoot, ['status', '--porcelain']);
+  if (clean.status !== 0 || clean.stdout.trim().length > 0) {
+    throw new Error('POST_MERGE_WORKTREE_DIRTY');
+  }
 }

@@ -1,13 +1,9 @@
-import { createHash } from 'node:crypto';
 import {
-  execFileSync,
+  appendFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
   readdirSync,
-  renameSync,
-  rmSync,
-  statSync,
   writeFileSync,
 } from '@devai-nyx/authority';
 import { validators } from '@devai-nyx/schemas';
@@ -39,10 +35,6 @@ function localRoundDir(repoRoot: string, id: string): string {
   return join(resolve(repoRoot), 'work/rounds', id);
 }
 
-function archivedRoundDir(repoRoot: string, id: string): string {
-  return join(resolve(repoRoot), 'work/rounds/archive', id);
-}
-
 function roundNumber(id: string): string {
   return String(Number(id.slice('R-'.length)));
 }
@@ -61,7 +53,7 @@ export function scaffoldGovernedRound(options: {
   const repoRoot = resolve(options.repoRoot);
   const id = normalizeRoundId(options.round);
   const dir = localRoundDir(repoRoot, id);
-  if (existsSync(dir) || existsSync(archivedRoundDir(repoRoot, id))) {
+  if (existsSync(dir)) {
     fail('ROUND_ALREADY_EXISTS');
   }
   for (const child of ['inputs', 'audit', 'prompts']) {
@@ -190,22 +182,18 @@ export function governedRoundStatus(options: {
 }): Readonly<{
   ok: true;
   id: string;
-  location: 'local' | 'archived';
+  location: 'active' | 'closed';
   path: string;
   record: JsonRecord;
 }> {
   const repoRoot = resolve(options.repoRoot);
   const id = normalizeRoundId(options.round);
   const local = localRoundDir(repoRoot, id);
-  const archived = archivedRoundDir(repoRoot, id);
-  const location = existsSync(join(local, 'record.md'))
-    ? ('local' as const)
-    : existsSync(join(archived, 'record.md'))
-      ? ('archived' as const)
-      : fail('ROUND_RECORD_NOT_FOUND');
-  const path = join(location === 'local' ? local : archived, 'record.md');
+  const path = join(local, 'record.md');
+  if (!existsSync(path)) fail('ROUND_RECORD_NOT_FOUND');
   const parsed = parseGovernanceRecord(path);
   if (!validators.recordMeta(parsed.frontmatter)) fail('ROUND_RECORD_SCHEMA_INVALID');
+  const location = parsed.frontmatter['status'] === 'closed' ? 'closed' : 'active';
   return {
     ok: true,
     id,
@@ -213,19 +201,6 @@ export function governedRoundStatus(options: {
     path: relative(repoRoot, path),
     record: parsed.frontmatter as JsonRecord,
   };
-}
-
-function listFiles(root: string): string[] {
-  const files: string[] = [];
-  function walk(dir: string): void {
-    for (const name of readdirSync(dir).sort()) {
-      const path = join(dir, name);
-      if (statSync(path).isDirectory()) walk(path);
-      else files.push(relative(root, path).replaceAll('\\', '/'));
-    }
-  }
-  walk(root);
-  return files;
 }
 
 function readJson(path: string, code: string): JsonRecord {
@@ -236,7 +211,7 @@ function readJson(path: string, code: string): JsonRecord {
   }
 }
 
-function assertArchivePreconditions(repoRoot: string, id: string, source: string): JsonRecord {
+function assertClosePreconditions(repoRoot: string, id: string, source: string): JsonRecord {
   const recordPath = join(source, 'record.md');
   if (!existsSync(recordPath)) fail('ROUND_ARCHIVE_RECORD_MISSING');
   const parsed = parseGovernanceRecord(recordPath);
@@ -252,7 +227,7 @@ function assertArchivePreconditions(repoRoot: string, id: string, source: string
     }
   }
   const closureId = String(record['phase_closure']);
-  const closurePath = join(repoRoot, 'record/proofs/closures', `${closureId}.json`);
+  const closurePath = join(repoRoot, 'record/proofs/compliance/closures', `${closureId}.json`);
   if (!existsSync(closurePath)) fail(`ROUND_ARCHIVE_PHASE_CLOSURE_MISSING:${closureId}`);
   const closure = readJson(closurePath, 'ROUND_ARCHIVE_PHASE_CLOSURE_INVALID');
   if (!validators.phaseClosure(closure)) fail('ROUND_ARCHIVE_PHASE_CLOSURE_INVALID');
@@ -290,51 +265,45 @@ function assertArchivePreconditions(repoRoot: string, id: string, source: string
   return record;
 }
 
-export function archiveGovernedRound(options: {
+export function appendCloseState(source: string, record: JsonRecord): string {
+  const path = join(source, 'close-state.jsonl');
+  const state = {
+    schemaVersion: '1.0.0',
+    round_id: record['id'],
+    status: 'closed',
+    closing_decision: record['closed_by'],
+    phase_closure: record['phase_closure'],
+    merged_as: record['merged_as'],
+  };
+  const line = `${JSON.stringify(state)}\n`;
+  if (existsSync(path)) {
+    if (readFileSync(path, 'utf8') === line) return path;
+    fail('ROUND_CLOSE_STATE_CONFLICT');
+  }
+  appendFileSync(path, line, { encoding: 'utf8', flag: 'ax' });
+  return path;
+}
+
+export function closeGovernedRound(options: {
   readonly repoRoot: string;
   readonly round: string | number;
-}): Readonly<{ ok: true; id: string; source: string; destination: string; manifest: string }> {
+}): Readonly<{ ok: true; id: string; path: string; close_state: string }> {
   const repoRoot = resolve(options.repoRoot);
   const id = normalizeRoundId(options.round);
   const source = localRoundDir(repoRoot, id);
-  const destination = archivedRoundDir(repoRoot, id);
   if (!existsSync(source)) fail('ROUND_ARCHIVE_SOURCE_MISSING');
-  if (existsSync(destination)) fail('ROUND_ARCHIVE_DESTINATION_EXISTS');
-  assertArchivePreconditions(repoRoot, id, source);
-
-  const files = listFiles(source).map((path) => ({
-    path,
-    sha256: createHash('sha256')
-      .update(readFileSync(join(source, path)))
-      .digest('hex'),
-  }));
-  const manifest = {
-    schemaVersion: '1.0.0',
-    round_id: id,
-    files,
-  };
-  const manifestPath = join(source, 'MANIFEST.json');
-  writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
-  mkdirSync(dirname(destination), { recursive: true });
-  try {
-    renameSync(source, destination);
-    execFileSync('git', ['add', '-f', '-A', '--', relative(repoRoot, destination)], {
-      cwd: repoRoot,
-      stdio: ['ignore', 'ignore', 'pipe'],
-    });
-  } catch {
-    if (existsSync(destination) && !existsSync(source)) renameSync(destination, source);
-    if (existsSync(manifestPath)) rmSync(manifestPath, { force: true });
-    fail('ROUND_ARCHIVE_ATOMIC_COMMIT_FAILED');
-  }
+  const record = assertClosePreconditions(repoRoot, id, source);
+  const closeState = appendCloseState(source, record);
   return {
     ok: true,
     id,
-    source: relative(repoRoot, source),
-    destination: relative(repoRoot, destination),
-    manifest: relative(repoRoot, join(destination, 'MANIFEST.json')),
+    path: relative(repoRoot, source),
+    close_state: relative(repoRoot, closeState),
   };
 }
+
+/** @deprecated The public action name remains compatible; the implementation closes in place. */
+export const archiveGovernedRound = closeGovernedRound;
 
 export function scaffoldDecisionRecord(options: {
   readonly repoRoot: string;
