@@ -2140,6 +2140,28 @@ finding reopens the role-pure red-first cycle; only PASS permits source push. Th
 two-PR ceremony, `none-needed` release disposition, closing-record bindings, claims
 ceiling, and all external human gates remain exactly as DII-165 states.
 
+### DII-167 — Bind per-occurrence development context for forbidden SQL
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 governance repair; DII-166; BL-142; R-0004-EXIT-LADDER-GOVERNANCE-FAILURE; FORBID-DROP-PROD`
+
+`FORBID-DROP-PROD` forbids destructive SQL outside development. The history scanner
+must therefore evaluate an optional allowed development context on the same changed line
+as each detected occurrence. The only allowed identities are the established
+`devai_task_...` prefix and exact `devai_template` name, encoded in the canonical
+registry's `allowed_change_line_patterns`. This field applies only to commit-change
+evidence; it never suppresses commit-message evidence.
+
+The exception is per occurrence. If one changed line is explicitly dev-scoped and any
+other matching line in the same commit is unscoped or production-named, the latter must
+still produce the forbidden-action finding. Invalid or empty context patterns fail
+registry validation. No role, commit, path, file, action id, or complete forbidden rule
+may be waived by this mechanism.
+
+Inspector must first prove the safe development case red and preserve a mixed-evidence
+production finding. Engineer may then implement the registry-derived per-line filter.
+Strict governance and the complete local ladder must restart under a later Architect
+source-closing decision before the literal `claude-opus-5` review. No release or
+external human gate is altered.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

@@ -67,6 +67,10 @@
         "\\bDROP\\s+DATABASE\\b",
         "\\bTRUNCATE\\s+TABLE\\b"
       ],
+      "allowed_change_line_patterns": [
+        "\\bdevai_task_(?:[A-Za-z0-9_]+|<id>)",
+        "\\bdevai_template\\b"
+      ],
       "safer_alternative": "Soft-delete; run on dev with verified backup"
     },
     {
