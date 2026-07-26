@@ -2,11 +2,11 @@
 id: R-0004-SOURCE-DECISION-SHA-CORRECTION
 title: R-0004 governed decision SHA binding correction
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: R-0004-SOURCE-DECISION-SHA-FAILURE
-superseded_by: null
+superseded_by: R-0004-OPUS-CLOSE-REVIEW-11-FAILURE
 provenance: [BL-181; Inspector 759014a; Engineer aee78a3 and 7b44322; Architect cb50655]
 ---
 
