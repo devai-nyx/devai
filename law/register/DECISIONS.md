@@ -2381,6 +2381,21 @@ literal `claude-opus-5` review remain mandatory. No waiver, history rewrite, thr
 skip, release, publication, deployment, predecessor write, real-stynx write, or external
 human gate changes.
 
+### DII-179 — Preserve ADR-014's actual first seal
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 first-seal correction; DII-178; strict decision-integrity reading after cb2d58e9c40d807aa13d88c2ba6e3afe7ccf8f8e`
+
+DII-179 corrects DII-178's assumed seal point. Governance record-meta sealed ADR-014 at
+its first commit even though the narrower ADR schema rejected its empty `supersedes`
+array. ADR-014 is therefore restored to those first-seal bytes plus the one terminal
+transition to ADR-015. ADR-013 returns to its unchanged active seal; it is not part of
+ADR-014's lifecycle chain.
+
+The ADR schema now requires a non-empty `supersedes` array for active records while
+allowing a terminal sealed record to preserve its original empty array. Active ADR-015
+absorbs ADR-014 and carries the corrected complete rule. The gapless roster is ADR-001
+through ADR-015 with thirteen active records, ADR-005 superseded by active ADR-013, and
+ADR-014 superseded by active ADR-015. All remaining DII-178 boundaries remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

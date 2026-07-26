@@ -10,8 +10,8 @@ provenance: [DII-153; DII-175; DII-178; REV-0003]
 
 # ADR roster
 
-ADR-001..015 are gapless; twelve are active. ADR-005 is superseded by ADR-013, followed
-by ADR-014 and active ADR-015 under
+ADR-001..015 are gapless; thirteen are active. ADR-005 is superseded by active ADR-013;
+ADR-014 is independently superseded by active ADR-015 under
 the corrected R-0003 founding disposition. Each numbered ADR names the predecessor or
 successor input it supersedes and carries all six required body sections. Predecessor
 source texts remain under `predecessor/` as frozen historical inputs excluded from
@@ -29,6 +29,6 @@ superseded, `superseded_by: ADR-013`, and ADR-013 is the active replacement. Thi
 disclosure preserves the seal rather than treating the historical body phrase as live
 lifecycle state.
 
-ADR-013 and ADR-014 retain their sealed historical body wording. Lifecycle frontmatter
-controls current state: ADR-013 is superseded by ADR-014, which is superseded by active
-ADR-015 carrying the complete CI rule.
+ADR-013 remains the active CI-economy correction. ADR-014 retains its sealed historical
+body and empty absorbed-source list; lifecycle frontmatter controls its terminal state,
+with active ADR-015 carrying the complete CI-path association rule.
