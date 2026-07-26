@@ -7,13 +7,13 @@ date: 2026-07-26
 authority: Auditor
 supersedes: null
 superseded_by: null
-provenance: [R-0004-AS-BUILT; DII-184; source snapshot 31dfbaf3d8b51e2089aef6aa01ea45b46d9b266c]
+provenance: [R-0004-AS-BUILT; DII-186; source snapshot 7be9d31dcbfb07fffc2f8547af89c5b04e8b66f9]
 ---
 
 # R-0004 exact-candidate ladder pass
 
 The complete local R-0004 exit ladder passed on exact source snapshot
-`31dfbaf3d8b51e2089aef6aa01ea45b46d9b266c` with a clean worktree.
+`7be9d31dcbfb07fffc2f8547af89c5b04e8b66f9` with a clean worktree.
 
 - workflow lint: 2 workflow files passed;
 - action registry: 3 generated views reproduced byte-for-byte;
@@ -22,14 +22,14 @@ The complete local R-0004 exit ladder passed on exact source snapshot
 - lint, typecheck, recursive build, Changesets status, formatting, and strict governance:
   passed; strict governance reported zero forbidden-action findings;
 - T1: 71 files / 837 tests;
-- T2: 38 files / 236 passed / 1 declared skip;
+- T2: 38 files / 238 passed / 1 declared skip;
 - T3: 9 files / 56 passed / 7 declared skips;
 - T4: 2 files / 4 tests;
 - T5: 6 files / 25 tests;
 - T6: 1 file / 3 tests;
 - merged T1+T3 coverage: 80 files / 893 passed / 7 declared skips, with statements
   71.21%, branches 61.79%, functions 77.61%, and lines 73.23%;
-- root `pnpm run test`: 127 files / 1,161 passed / 8 declared skips;
+- root `pnpm run test`: 127 files / 1,163 passed / 8 declared skips;
 - all eleven public packages passed `npm pack --dry-run --ignore-scripts --json`.
 
 No threshold, test source set, skip, assertion, waiver, or governance gate was weakened.
