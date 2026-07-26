@@ -1696,7 +1696,8 @@ Priority: P0 before R-0004 source push. Primary round: R-0004.
 
 Acceptance: the active surface contract names terminal DII-188 and
 `R-0004-OPUS-CLOSE-REVIEW-3-CORRECTION`; the refreshed provenance remains acyclic and
-agrees with the active source-close handoff.
+agrees with the active source-close handoff. Every future closing DII refreshes the
+contract provenance in the same Architect commit.
 
 ### BL-173 — Pair the fifth-review record corrections
 
@@ -1706,7 +1707,19 @@ Priority: P0 before R-0004 source push. Primary round: R-0004.
 
 Acceptance: the fifth-review failure is paired with a symmetric active correction after
 BL-171 and BL-172; the governance-range failure does not cite its own future correction
-as provenance; no engineering claim or human gate changes.
+as provenance; future review-driven closing decisions update the active contract in the
+same Architect commit; no engineering claim or human gate changes.
+
+### BL-174 — Keep terminal contract provenance atomic with closing decisions
+
+`type: backlog-item · status: draft · authority: Architect + Auditor · provenance: R-0004 sixth exact-candidate Claude Opus 5 review F1; candidate ed345ba; R-0004-OPUS-CLOSE-REVIEW-6-FAILURE`
+
+Priority: P0 before R-0004 source push. Primary round: R-0004.
+
+Acceptance: the active surface contract, terminal decision prose, and source-close
+handoff agree on one latest closing DII; the Architect refreshes them atomically; the
+sixth-review failure is paired with a symmetric correction before a new closing DII,
+complete ladder restart, and fresh literal `claude-opus-5` review.
 
 ## Carried guard map
 
