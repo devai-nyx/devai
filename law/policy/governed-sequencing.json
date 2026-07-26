@@ -38,7 +38,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "1acb1bc0d8fdc3b031dcc65ae7c8eee5eff12d5e9f80e1a708b9848ec35d3226",
+        "evidence_sha256": "9038d5b9358194e6278ccacd28595179f8512f177e1605381b15dc7165303f4e",
         "tests": [
           "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
           "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts"
@@ -59,7 +59,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "1acb1bc0d8fdc3b031dcc65ae7c8eee5eff12d5e9f80e1a708b9848ec35d3226",
+        "evidence_sha256": "9038d5b9358194e6278ccacd28595179f8512f177e1605381b15dc7165303f4e",
         "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"]
       }
     },
@@ -80,13 +80,26 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/loop/tests/unit/worktrees-containment.test.ts packages/loop/tests/unit/scorecard-assess-narrative.test.ts packages/evidence/tests/unit/local-evidence.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "1acb1bc0d8fdc3b031dcc65ae7c8eee5eff12d5e9f80e1a708b9848ec35d3226",
+        "evidence_sha256": "9038d5b9358194e6278ccacd28595179f8512f177e1605381b15dc7165303f4e",
         "tests": [
           "packages/evidence/tests/unit/local-evidence.test.ts",
           "packages/loop/tests/unit/round-lifecycle-cases.ts",
           "packages/loop/tests/unit/worktrees-containment.test.ts",
           "tests/contract/r0005-independent-review.red.contract.test.ts"
         ]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["691a90d109ee595c5f5e9dccba4190dc3af65023"],
+      "law_commits": ["4ea2dbce2418042d4f9b9abd5813294470e57d19"],
+      "red_evidence": {
+        "commit": "7a17bc3a90c435e24692bb23ee86a67eb3264042",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/skills/tests/unit/forbidden-actions.test.ts -t KR-R5-027",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9038d5b9358194e6278ccacd28595179f8512f177e1605381b15dc7165303f4e",
+        "tests": ["packages/skills/tests/unit/forbidden-actions.test.ts"]
       }
     }
   ],
