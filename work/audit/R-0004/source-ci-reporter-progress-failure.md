@@ -2,11 +2,11 @@
 id: R-0004-SOURCE-CI-REPORTER-PROGRESS-FAILURE
 title: R-0004 source exact-head reporter-progress failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-SOURCE-CI-REPORTER-PROGRESS-CORRECTION
 provenance:
   [PR #6; exact head f4466a6b8ffc4fe0455893d1b9013a6f5f4f0f34; GitHub Actions run 30209278971; BL-180]
 ---
