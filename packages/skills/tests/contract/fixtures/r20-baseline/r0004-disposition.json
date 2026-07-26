@@ -1,13 +1,23 @@
 {
   "schemaVersion": "1.0.0",
   "round": "R-0004",
-  "changed_fixtures": {
-    "fingerprint-behavior.json": {
-      "implementation_commit": "2938b14e5d6ef3c4e5190af48e180dc4776c34f2",
-      "reason": "SKILL-build-project now observes the fixed non-recursive pnpm -r build argv required by BL-031.",
+  "baseline_commit": "b60b4c52bff1779da84f48edc63cbf34652ab18e",
+  "reason": "BL-031 replaces the build and unit-test skill subprocesses with fixed non-recursive argv; the unit fixture contains and executes one real test, and the workflow fixture carries the same non-vacuous tier contract.",
+  "changed_files": [
+    "fingerprint-behavior.json",
+    "inputs/family-fix.json",
+    "inputs/family-workflow.json"
+  ],
+  "changed_skills": {
+    "SKILL-fix-build": {
+      "changed_fields": ["behavior.evidence.command", "behavior.evidence.command_hash"]
+    },
+    "SKILL-fix-test": {
       "changed_fields": [
-        "SKILL-build-project.behavior.evidence.command",
-        "SKILL-build-project.behavior.evidence.command_hash"
+        "behavior.evidence.command",
+        "behavior.evidence.command_hash",
+        "behavior.evidence.metrics.tests_passed",
+        "behavior.evidence.out_head"
       ]
     }
   }

@@ -18,6 +18,33 @@ interface ExportRecord {
   readonly kind: 'value' | 'type';
 }
 
+function changedLeafPaths(before: unknown, after: unknown, prefix = ''): string[] {
+  if (JSON.stringify(before) === JSON.stringify(after)) return [];
+  if (
+    before !== null &&
+    after !== null &&
+    typeof before === 'object' &&
+    typeof after === 'object' &&
+    !Array.isArray(before) &&
+    !Array.isArray(after)
+  ) {
+    const keys = new Set([
+      ...Object.keys(before as Record<string, unknown>),
+      ...Object.keys(after as Record<string, unknown>),
+    ]);
+    return [...keys]
+      .sort()
+      .flatMap((key) =>
+        changedLeafPaths(
+          (before as Record<string, unknown>)[key],
+          (after as Record<string, unknown>)[key],
+          prefix.length === 0 ? key : `${prefix}.${key}`,
+        ),
+      );
+  }
+  return [prefix];
+}
+
 export function exportInventory(entryFile: string): ExportRecord[] {
   const program = ts.createProgram([entryFile], {
     target: ts.ScriptTarget.ES2022,
@@ -97,19 +124,35 @@ describe('R20 baseline: skills module API surface (checker-based)', () => {
       .filter((path) => path !== 'r0004-disposition.json')
       .sort();
     expect(changedFiles).toEqual([...disposition.changed_files].sort());
-    expect(disposition.changed_skills).toEqual({
-      'SKILL-fix-build': {
-        changed_fields: ['behavior.evidence.command', 'behavior.evidence.command_hash'],
-      },
-      'SKILL-fix-test': {
-        changed_fields: [
-          'behavior.evidence.command',
-          'behavior.evidence.command_hash',
-          'behavior.evidence.err_head',
-          'behavior.evidence.out_head',
+    const baselineFingerprint = JSON.parse(
+      execFileSync(
+        'git',
+        [
+          'show',
+          `${disposition.baseline_commit}:packages/skills/tests/contract/fixtures/r20-baseline/fingerprint-behavior.json`,
         ],
-      },
-    });
+        { cwd: resolve(HERE, '../../../..'), encoding: 'utf8' },
+      ),
+    ) as { skills: Record<string, unknown> };
+    const currentFingerprint = JSON.parse(
+      readFileSync(join(BASELINE_DIR, 'fingerprint-behavior.json'), 'utf8'),
+    ) as { skills: Record<string, unknown> };
+    const changedSkills = Object.keys(currentFingerprint.skills)
+      .filter(
+        (skillId) =>
+          JSON.stringify(currentFingerprint.skills[skillId]) !==
+          JSON.stringify(baselineFingerprint.skills[skillId]),
+      )
+      .sort();
+    expect(changedSkills).toEqual(Object.keys(disposition.changed_skills).sort());
+    for (const skillId of changedSkills) {
+      expect(disposition.changed_skills[skillId]?.changed_fields).toEqual(
+        changedLeafPaths(baselineFingerprint.skills[skillId], currentFingerprint.skills[skillId]),
+      );
+    }
+    expect(
+      Object.values(disposition.changed_skills).flatMap((entry) => entry.changed_fields),
+    ).toHaveLength(6);
     expect(readFileSync(join(BASELINE_DIR, 'inputs/family-fix.json'), 'utf8')).not.toContain(
       'passWithNoTests',
     );

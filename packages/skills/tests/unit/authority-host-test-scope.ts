@@ -85,7 +85,14 @@ export function processIsReadOnlyForTest(request: AuthorityHostEffectRequest): b
         (args.length === 2 ||
           (args.length === 4 &&
             args[2] === '--config' &&
-            /^tests\/config\/[A-Za-z0-9._-]+\.ts$/.test(String(args[3]))))))
+            [
+              'tests/config/t1.unit.config.ts',
+              'tests/config/t2.contract.config.ts',
+              'tests/config/t3.integration.config.ts',
+              'tests/config/t4.regression.config.ts',
+              'tests/config/t5.e2e.config.ts',
+              'tests/config/t6.containment.config.ts',
+            ].includes(String(args[3]))))))
   ) {
     return true;
   }

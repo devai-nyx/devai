@@ -1245,15 +1245,15 @@
           "command_hash": "0704690d6e566565569908c3ec6b482762917e09b566bec0f06698a1e24d90a2",
           "deterministic": true,
           "duration_ms": "<N>",
-          "err_head": "include: **/*.{test,spec}.?(c|m)[jt]s?(x)\nexclude:  **/node_modules/**, **/.git/**\n\n",
+          "err_head": "",
           "exit_code": 0,
           "id": "SR-<ID>",
           "killed": false,
           "metrics": {
             "tests_failed": 0,
-            "tests_passed": 0
+            "tests_passed": 1
           },
-          "out_head": "\n RUN  v4.1.10 <FIXTURE>\n\nNo test files found, exiting with code 0\n\n",
+          "out_head": "\n RUN  v4.1.10 <FIXTURE>\n\n\n Test Files  1 passed (1)\n      Tests  1 passed (1)\n   Start at <TIME>\n   Duration <DURATION>\n\n",
           "schemaVersion": "1.0.0",
           "sensor": {
             "kind": "unit_test",

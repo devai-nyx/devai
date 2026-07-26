@@ -17,7 +17,8 @@
         "wt/packages/.keep": "",
         "wt/packages/fix.ts": "export const ok = 0;\n",
         "wt/package.json": "{\"name\":\"r20-wt\",\"packageManager\":\"pnpm@10.0.0\",\"scripts\":{\"lint\":\"node -e \\\"\\\"\",\"typecheck\":\"node -e \\\"\\\"\",\"test\":\"node -e \\\"\\\"\"}}",
-        "wt/tests/config/t1.unit.config.ts": "export default { test: { passWithNoTests: true } };\n"
+        "wt/tests/config/t1.unit.config.ts": "export default { test: { include: ['tests/fixture.test.ts'], cache: false } };\n",
+        "wt/tests/fixture.test.ts": "import { expect, it } from 'vitest';\nit('runs a real test', () => expect(true).toBe(true));\n"
       },
       "ctx": { "timestamp": "2026-01-01T00:00:00.000Z" },
       "canned": {

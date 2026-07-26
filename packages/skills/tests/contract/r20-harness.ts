@@ -139,6 +139,11 @@ export function normalize(value: unknown, fixtureRoot: string): unknown {
       for (const alias of fixtureAliases) s = s.split(alias).join('<FIXTURE>');
       // ISO timestamps: wall-clock.
       s = s.replace(/\d{4}-\d{2}-\d{2}T[0-9:.]+Z/g, '<TS>');
+      // Vitest's human reporter embeds wall-clock start time and aggregate
+      // duration/phase timings in evidence heads even when assertions and
+      // fixtures are deterministic.
+      s = s.replace(/Start at\s+\d{2}:\d{2}:\d{2}/g, 'Start at <TIME>');
+      s = s.replace(/Duration\s+[^\n]+/g, 'Duration <DURATION>');
       // Compact timestamp ids (AS-/SC- record ids embed wall-clock even
       // under a pinned ctx.timestamp).
       s = s.replace(/\d{8}T\d{6}/g, '<TSC>');

@@ -32,6 +32,12 @@ describe('R20 baseline: fingerprint + behavior corpus (52/52)', () => {
     }
   });
 
+  it('normalizes Vitest reporter wall-clock and duration text', () => {
+    expect(normalize('Start at  05:17:19\nDuration  108ms (tests 1ms)\n', '/fixture')).toBe(
+      'Start at <TIME>\nDuration <DURATION>\n',
+    );
+  });
+
   it('pins every package fixture to the repository package-manager contract', () => {
     const packageFixtures = loadSpecs().flatMap((spec) =>
       Object.entries(spec.files)
