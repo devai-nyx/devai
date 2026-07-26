@@ -2,11 +2,11 @@
 id: R-0004-OPUS-CLOSE-REVIEW-6-FAILURE
 title: R-0004 sixth exact-candidate Opus close-review failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-OPUS-CLOSE-REVIEW-6-CORRECTION
 provenance: [Claude Opus 5 read-only review of ed345baa2c7ebf0a9a785025c23ef82ca1ac6d3b; BL-174]
 ---
 
