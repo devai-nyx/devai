@@ -1914,6 +1914,36 @@ dormant until PC-0004 and final exact-main CI establish the complete R-0003 clos
 R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
 promotes, re-earns, or declares ready nothing.
 
+### DII-159 — Bind the R-0003 source close after the third Opus correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0003 third Opus corrected source close; DII-158; BL-133–138; R-0003-CLAUDE-OPUS-CLOSE-REVIEW-3-CORRECTION; Auditor 223a4e8; Architect a911063`
+
+DII-159 supersedes DII-158 only as the R-0003 source-closing judgment. Auditor
+`223a4e8` independently confirms all six third-review blockers locally closed and makes
+the third review/correction lifecycle symmetric. The active register, ADR index,
+Constitution crosswalk, review manifest, and Auditor correction graph now agree with the
+ratified ceremony and current record lifecycles.
+
+The replay committer disclosure remains a recorded procedural defect, not an identity
+waiver. Every post-disclosure commit uses DEVAI role identity for both author and
+committer. The seven disclosed replay commits retain their exact role-pure authors,
+role-scoped paths, and role-pure sibling-original provenance; no additional replay
+anomaly is admitted.
+
+The exact candidate containing DII-159 and refreshed deterministic projections must
+restart the complete local ladder from Stage 1, including governance, T1 through T6,
+unchanged 70/60/70/70 coverage floors, changesets, formatting, trace, and
+repository-reference checks. It must then receive a fresh read-only review through
+literal `claude-opus-5`, with no fallback. Any actionable finding reopens the governed
+repair cycle; only a PASS authorizes source push and exact-SHA CI.
+
+After exact source merge and exact-main CI pass, PC-0004 uses DII-148 as the declaring
+decision, DII-150 as the founding act, and DII-159 as the closing decision. Its release
+disposition remains `none-needed`. R-0004 remains dormant until PC-0004 and final
+exact-main CI establish the complete R-0003 close.
+
+R-0003 establishes only **founding law ratified**. It releases, deploys, publishes,
+promotes, re-earns, or declares ready nothing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
