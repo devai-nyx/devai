@@ -37,9 +37,8 @@ complete BL-182 contract is now green.
 
 BL-183 preserves the twelfth-review red: the eleventh-review failure superseded the
 source-decision SHA correction without the correction recording the reverse lifecycle
-edge. The Inspector contract is intentionally red until Auditor repairs that metadata;
-the same batch tightens the snapshot check from a broad digit match to the exact
-classified-count phrase.
+edge. Auditor `745f0aa` repaired that metadata; the Inspector contract and the same
+batch's exact classified-count assertion are now green.
 
 The Inspector B1 contract
 `tests/contract/r0004-governed-surface.red.contract.test.ts` is intentionally red at
