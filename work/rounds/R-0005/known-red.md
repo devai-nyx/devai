@@ -114,3 +114,18 @@ cluster retires only when exact fixture comparisons, the complete floor, and the
 repository-wide formatting check pass. KR-R5-012 and KR-R5-013 are retired at this same
 measurement: exact reference generation, lint, typecheck, and the complete floor are
 green.
+
+## KR-R5-015 — Authority-policy materialization drift
+
+The B8 disposable SWEEP invocation reached the production authority broker and was
+correctly refused with `AUTHORITY_POLICY_RESOLVED_BYTES_MISMATCH` before writing proof.
+The committed config and law mirrors are byte-identical to each other, but both predate
+R-0005's changed action and scope rules. Constitution-only binding tests did not expose
+the resolved-rule drift.
+
+The governed repair is to run the existing `adopt upgrade` machine materializer as
+Architect, commit its `.devai/config/authority-policy.json` product as Engineer, then
+byte-copy that exact validated product to the Architect-owned law mirror in a separate
+commit. Add an Inspector contract that recomputes the current resolved policy and
+rejects future stale bytes. No rule may be hand-edited or relaxed. The cluster retires
+only when the production SWEEP and complete exit ladder pass.
