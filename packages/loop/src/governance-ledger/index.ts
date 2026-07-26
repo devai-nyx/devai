@@ -310,7 +310,7 @@ function sealedHistoryFindings(
   if (sealed === undefined || sealIndex < 0) return [];
   const originalSeal = sealed;
   let lockedMutationObserved = false;
-  let terminalObservedBeforeFinal = false;
+  const priorTerminalStates: string[] = [];
   const laterHistory = history.slice(sealIndex + 1);
   for (const [laterIndex, entry] of laterHistory.entries()) {
     const laterSource = gitFile(repoRoot, entry.commit, entry.path);
@@ -346,19 +346,28 @@ function sealedHistoryFindings(
       laterIndex < laterHistory.length - 1 &&
       ['superseded', 'tombstoned'].includes(String(later.frontmatter['status']))
     ) {
-      terminalObservedBeforeFinal = true;
+      priorTerminalStates.push(
+        `${String(later.frontmatter['status'])}:${replacementId(later) ?? ''}`,
+      );
     }
     sealed = later;
   }
   if (lockedMutationObserved) {
+    const bytesAndStableFieldsRestored =
+      sealed.body === originalSeal.body &&
+      normalizedSealedFrontmatter(sealed) === normalizedSealedFrontmatter(originalSeal);
+    const fullyRestored =
+      bytesAndStableFieldsRestored &&
+      String(sealed.frontmatter['status']) === String(originalSeal.frontmatter['status']) &&
+      replacementId(sealed) === replacementId(originalSeal);
+    const finalTerminalState = `${String(sealed.frontmatter['status'])}:${replacementId(sealed) ?? ''}`;
     const restoredThroughTerminalTransition =
       String(originalSeal.frontmatter['status']) === 'active' &&
-      !terminalObservedBeforeFinal &&
+      priorTerminalStates.every((state) => state === finalTerminalState) &&
       ['superseded', 'tombstoned'].includes(String(sealed.frontmatter['status'])) &&
-      sealed.body === originalSeal.body &&
-      normalizedSealedFrontmatter(sealed) === normalizedSealedFrontmatter(originalSeal) &&
+      bytesAndStableFieldsRestored &&
       sealedTransitionAllowed(originalSeal, sealed);
-    if (!restoredThroughTerminalTransition) {
+    if (!fullyRestored && !restoredThroughTerminalTransition) {
       return [
         {
           code: 'DECISION_LOCKED_BODY_MUTATED',
