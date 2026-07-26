@@ -5,6 +5,7 @@ import { computeSourceHash } from './source-hash.js';
 import { dirname } from 'node:path';
 import { resolveLocalEvidencePolicy, type LocalEvidencePolicy } from './config.js';
 import type { LocalEvidenceManifest } from './collect.js';
+import { deriveExactSubject } from './subject.js';
 
 const validateLocalEvidenceManifest = getValidator('local-evidence-manifest.schema.json');
 
@@ -119,6 +120,32 @@ function validateAge(manifest: LocalEvidenceManifest, now: number): void {
       `manifest is stale: ${ageHours.toFixed(2)}h old, max ${String(manifest.policy.maxAgeHours)}h`,
     );
   }
+  const expiresAt = Date.parse(manifest.expiresAt);
+  const expectedExpiresAt = generatedAt + manifest.policy.maxAgeHours * 60 * 60 * 1000;
+  if (!Number.isFinite(expiresAt) || expiresAt !== expectedExpiresAt) {
+    fail('manifest expiresAt does not equal generatedAt plus maxAgeHours');
+  }
+  if (now > expiresAt) fail('manifest has expired');
+}
+
+export function validateExactSubject(manifest: LocalEvidenceManifest, repoRoot: string): void {
+  const expected = deriveExactSubject(repoRoot);
+  if (manifest.subject.repository !== expected.repository) {
+    fail(
+      `manifest repository subject mismatch: expected ${expected.repository}, got ${manifest.subject.repository}`,
+    );
+  }
+  if (manifest.subject.commitSha !== expected.commitSha) {
+    fail(
+      `manifest commit subject mismatch: expected ${expected.commitSha}, got ${manifest.subject.commitSha}`,
+    );
+  }
+  if (
+    manifest.subject.tree.algorithm !== expected.tree.algorithm ||
+    manifest.subject.tree.value !== expected.tree.value
+  ) {
+    fail('manifest tree subject mismatch');
+  }
 }
 
 function validateSourceHash(
@@ -232,6 +259,7 @@ function validateManifest(
   const manifest = readManifest(join(inputs.repoRoot, manifestPath));
   validatePolicyAlignment(manifest, policy);
   validateAge(manifest, inputs.now ?? Date.now());
+  validateExactSubject(manifest, inputs.repoRoot);
   validateSourceHash(manifest, inputs.repoRoot, manifestPath);
   validateTools(manifest, inputs.repoRoot, policy);
   validateJobs(manifest, policy);
@@ -242,6 +270,9 @@ function validateManifest(
 }
 
 export function verifyLocalEvidence(inputs: VerifyLocalInputs): VerifyLocalResult {
+  if (inputs.mode === 'gate' && inputs.manifestPath !== undefined) {
+    fail('caller-selected manifest paths are forbidden in gate mode');
+  }
   const policy = resolveLocalEvidencePolicy(inputs.repoRoot);
   const trailer = parseTrailerPath(inputs.context.headMessage);
   const isPullRequest =

@@ -8,6 +8,11 @@ export {
 } from './config.js';
 export { computeSourceHash, type SourceHash } from './source-hash.js';
 export {
+  deriveExactSubject,
+  type EvidenceTreeIdentity,
+  type LocalEvidenceSubject,
+} from './subject.js';
+export {
   ACTIONS_FRESHNESS_JOBS,
   ACTIONS_REUSABLE_JOBS,
   ActionsEvidenceError,
@@ -43,6 +48,7 @@ export {
   LocalEvidenceError,
   normalizeActorList,
   parseTrailerPath,
+  validateExactSubject,
   verifyLocalEvidence,
   type VerifyContext,
   type VerifyLocalInputs,

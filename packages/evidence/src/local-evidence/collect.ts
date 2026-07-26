@@ -11,6 +11,7 @@ import { dirname, join, relative } from 'node:path';
 import { getValidator } from '@devai-nyx/schemas';
 import { computeSourceHash, type SourceHash } from './source-hash.js';
 import { resolveLocalEvidencePolicy, type LocalEvidencePolicy } from './config.js';
+import { deriveExactSubject, type LocalEvidenceSubject } from './subject.js';
 
 const validateLocalEvidenceManifest = getValidator('local-evidence-manifest.schema.json');
 
@@ -48,6 +49,8 @@ export interface LocalEvidenceManifest {
   readonly $schema: string;
   readonly schemaVersion: 1;
   readonly generatedAt: string;
+  readonly expiresAt: string;
+  readonly subject: LocalEvidenceSubject;
   readonly sourceHash: SourceHash;
   readonly policy: {
     readonly maxAgeHours: number;
@@ -207,10 +210,13 @@ export function collectLocalEvidence(inputs: CollectInputs): CollectResult {
   // the default location, and verify() must exclude the same
   // directory it actually reads from (its --manifest override) for
   // the two hashes to agree.
+  const generatedAt = inputs.now ?? new Date();
   const manifest: LocalEvidenceManifest = {
     $schema: 'https://devai.dev/schemas/local-evidence-manifest.schema.json',
     schemaVersion: 1,
-    generatedAt: (inputs.now ?? new Date()).toISOString(),
+    generatedAt: generatedAt.toISOString(),
+    expiresAt: new Date(generatedAt.getTime() + policy.maxAgeHours * 60 * 60 * 1000).toISOString(),
+    subject: deriveExactSubject(inputs.repoRoot),
     sourceHash: computeSourceHash(inputs.repoRoot, [dirname(outputPath)]),
     policy: {
       maxAgeHours: policy.maxAgeHours,
