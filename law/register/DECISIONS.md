@@ -2515,6 +2515,23 @@ candidate. It must pass the complete ladder and a fresh read-only review through
 `claude-opus-5`, with no fallback, before source push. The claims ceiling and every
 external human gate remain unchanged.
 
+### DII-188 — Admit the fourth-review repaired exact ladder
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0004 fourth-Opus repaired close; DII-187; BL-167–170; R-0004-OPUS-CLOSE-REVIEW-4-CORRECTION; R-0004-EXACT-LADDER-PASS; Auditor cd59beb`
+
+DII-188 supersedes DII-187 only as the R-0004 source-closing judgment. The complete
+147-binding command-description guard now covers both quote styles and the owner factory;
+all five observed source drifts equal canonical registry text. Audit lifecycle links are
+machine-readable and paired, the active contract binds one all-suite and four exact
+configured test routes, and the strict Inspector AST traversal typechecks.
+
+The complete ladder passed on exact repaired snapshot
+`fd8c8b68e05f2fc7a305b6403373f2820d9b64bc`, including standalone formatting, exact
+round-range governance, unchanged coverage floors, root 127 files / 1,163 passing plus
+eight declared skips, and all eleven public-package dry-runs. The next clean commit
+containing DII-188 and its refreshed handoff must pass the complete ladder and a fresh
+read-only review through literal `claude-opus-5`, with no fallback, before source push.
+The claims ceiling and every external human gate remain unchanged.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
