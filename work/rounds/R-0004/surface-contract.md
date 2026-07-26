@@ -7,7 +7,7 @@ date: 2026-07-26
 authority: Architect
 supersedes: null
 superseded_by: null
-provenance: [OM-002; DII-162; R-0004-SURFACE-DISPOSITION]
+provenance: [OM-002; DII-162; DII-187; BL-163; BL-165; BL-169; R-0004-SURFACE-DISPOSITION]
 ---
 
 # R-0004 governed surface and package contract
@@ -50,10 +50,14 @@ side effects. Pack dry-runs inspect exact contents; publication is forbidden.
 ## Bounded root porcelain
 
 The build action may execute only `pnpm -r build`.
-The test action may execute only `pnpm vitest run`. Both use registered argv arrays through the host
-process adapter: no shell, caller-selected executable, metacharacter expansion,
-additional argv, or recursive root-script call is accepted. Root `build` and `test`
-invoke these actions after CLI preparation.
+The root all-suite test action may execute only `pnpm vitest run`. The four named suite
+variants may add only `--config` followed by exactly one of
+`tests/config/t1.unit.config.ts`, `tests/config/t3.integration.config.ts`,
+`tests/config/t4.regression.config.ts`, or `tests/config/t5.e2e.config.ts`. All five test
+forms and the build form use registered argv arrays through the host process adapter: no
+shell, caller-selected executable, metacharacter expansion, additional argv, arbitrary
+config, or recursive root-script call is accepted. Root `build` and `test` invoke the
+fixed build and all-suite actions after CLI preparation.
 
 ## Workflow and output policy
 
