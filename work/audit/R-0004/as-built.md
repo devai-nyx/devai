@@ -62,6 +62,7 @@ implementation-free core façade.
 | BL-065 | Implemented R-0004 slice; ceremony pending | Generated mirrors are byte-checked, ordering is UTF-8 byte-stable, and every remote install job prewarms the pinned package-manager identity. |
 | BL-080 | Implemented; ceremony pending              | Repository-reference actions derive from explicit dispositions and fixtures; 164 current references reproduce exactly.                        |
 | BL-084 | Implemented; ceremony pending              | Both workflows pass lint, required suites fail closed, and checkout/setup-node uses are immutable-SHA pinned with readable version comments.  |
+| BL-141 | Implemented; ceremony pending              | The exact-candidate workflow assertion is lint-clean without changing its two-space YAML boundary.                                            |
 
 No R-0005 through R-0010 item was absorbed into this round.
 
@@ -84,15 +85,16 @@ paths: four `dist/index` JavaScript/declaration artifacts, `package.json`, and
 
 ## Role-pure batches
 
-| Batch | Role                 | Commit(s)                                  | Result                                                                                                            |
-| ----- | -------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| B0    | Architect            | `cb832ce`, `10b9f1b`                       | Declared the measured surface and corrected its deterministic projection.                                         |
-| B1    | Inspector            | `ba3ed1d`                                  | Established nine red-first contract clusters.                                                                     |
-| B2    | Architect            | `b8783e6`, `78cc594`                       | Bound the action registry, sensor notes, governed-surface law, and discovered authority repairs.                  |
-| B3    | Engineer             | `cb88dfd`, `903fb93`                       | Generated action consumers and implemented schema/effect/help behavior.                                           |
-| B4    | Engineer             | `d7d71b6`                                  | Added the export-only core façade and eleven-package fixed group.                                                 |
-| B5    | Engineer + Architect | `2938b14`, `e979839`, `a73d880`, `e693796` | Bound root porcelain, workflows, semantic references, adopter compatibility, and complete sensor-output drainage. |
-| B6    | Inspector            | `b7bf300`                                  | Closed exact guards, updated the governed fixture disposition, and restored the full floor.                       |
+| Batch       | Role                 | Commit(s)                                  | Result                                                                                                            |
+| ----------- | -------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| B0          | Architect            | `cb832ce`, `10b9f1b`                       | Declared the measured surface and corrected its deterministic projection.                                         |
+| B1          | Inspector            | `ba3ed1d`                                  | Established nine red-first contract clusters.                                                                     |
+| B2          | Architect            | `b8783e6`, `78cc594`                       | Bound the action registry, sensor notes, governed-surface law, and discovered authority repairs.                  |
+| B3          | Engineer             | `cb88dfd`, `903fb93`                       | Generated action consumers and implemented schema/effect/help behavior.                                           |
+| B4          | Engineer             | `d7d71b6`                                  | Added the export-only core façade and eleven-package fixed group.                                                 |
+| B5          | Engineer + Architect | `2938b14`, `e979839`, `a73d880`, `e693796` | Bound root porcelain, workflows, semantic references, adopter compatibility, and complete sensor-output drainage. |
+| B6          | Inspector            | `b7bf300`                                  | Closed exact guards, updated the governed fixture disposition, and restored the full floor.                       |
+| Exit ladder | Auditor + Inspector  | `0104a97`, `4c08b46`                       | Governed and corrected the countable-space regex lint defect without changing assertion meaning.                  |
 
 ## Fresh tests and coverage
 

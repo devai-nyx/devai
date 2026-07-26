@@ -2,11 +2,11 @@
 id: R-0004-EXIT-LADDER-LINT-FAILURE
 title: Exact-candidate Inspector lint failure
 type: audit-report
-status: active
+status: superseded
 date: 2026-07-26
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: R-0004-EXIT-LADDER-LINT-CORRECTION
 provenance: [candidate 268e31f0169508a635bb58a06c6e1c6fe3075239; Stage 1 lint; BL-141]
 ---
 
