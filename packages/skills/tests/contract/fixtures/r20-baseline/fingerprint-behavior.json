@@ -1300,13 +1300,14 @@
           "executed_artifacts": {
             "backlog_item_count": 2,
             "files": [
-              "work/rounds/R-0999/backlog.json",
-              "work/rounds/R-0999/backlog.md",
-              "work/rounds/R-0999/prompts/01-f1-t6-fail.md",
-              "work/rounds/R-0999/prompts/02-f3-t9-review.md",
-              "work/rounds/R-0999/prompts/00-orchestrator.md"
+              ".devai/state/round-runs/R-0999/backlog/backlog.json",
+              ".devai/state/round-runs/R-0999/backlog/backlog.md",
+              ".devai/state/round-runs/R-0999/backlog/prompts/01-f1-t6-fail.md",
+              ".devai/state/round-runs/R-0999/backlog/prompts/02-f3-t9-review.md",
+              ".devai/state/round-runs/R-0999/backlog/prompts/00-orchestrator.md"
             ],
-            "prompts_dir": "work/rounds/R-0999/prompts",
+            "prompts_dir": ".devai/state/round-runs/R-0999/backlog/prompts",
+            "proposal_dir": ".devai/state/round-runs/R-0999/backlog",
             "round_dir": "work/rounds/R-0999"
           },
           "next_phase": "orchestrate",
@@ -1344,11 +1345,11 @@
       },
       "fs_products": {
         "created": {
-          "work/rounds/R-0999/backlog.json": "ade4b839df15d9e213e10226d80eb2fd4d3325564408881b261a7016482ee2ac",
-          "work/rounds/R-0999/backlog.md": "65d50cdf64bae45e181fce77573e663ad12b633448934098ee3bad30175f63a0",
-          "work/rounds/R-0999/prompts/00-orchestrator.md": "734f47d3f142e5877d4b93dcc460a6bcfe37eb5d4ec0c7d426b63ba86eae45ed",
-          "work/rounds/R-0999/prompts/01-f1-t6-fail.md": "5eead139bcae9414bd4155aacbf7e87c819d671896ab942e0545f9d2b175ec22",
-          "work/rounds/R-0999/prompts/02-f3-t9-review.md": "bd9ff709fa2576c950095622fb385d6e2baf11a08fc3e32681c4d0264c272892"
+          ".devai/state/round-runs/R-0999/backlog/backlog.json": "ade4b839df15d9e213e10226d80eb2fd4d3325564408881b261a7016482ee2ac",
+          ".devai/state/round-runs/R-0999/backlog/backlog.md": "53a6f59b52148efd89fc4ea18a1d80c1a9e4c4ab9b31c48203ffe450f36ff9b4",
+          ".devai/state/round-runs/R-0999/backlog/prompts/00-orchestrator.md": "734f47d3f142e5877d4b93dcc460a6bcfe37eb5d4ec0c7d426b63ba86eae45ed",
+          ".devai/state/round-runs/R-0999/backlog/prompts/01-f1-t6-fail.md": "5eead139bcae9414bd4155aacbf7e87c819d671896ab942e0545f9d2b175ec22",
+          ".devai/state/round-runs/R-0999/backlog/prompts/02-f3-t9-review.md": "bd9ff709fa2576c950095622fb385d6e2baf11a08fc3e32681c4d0264c272892"
         },
         "modified": {}
       },

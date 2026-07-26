@@ -225,7 +225,7 @@ describe('R20 baseline: skills module API surface (checker-based)', () => {
     }
     expect(
       Object.values(disposition.changed_skills).flatMap((entry) => entry.changed_fields),
-    ).toHaveLength(5);
+    ).toHaveLength(18);
   });
 
   it('records only the three explained post-fork fixture deltas', () => {

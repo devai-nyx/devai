@@ -132,6 +132,7 @@ describe('R20 baseline: round-machinery corpus via public skills', () => {
           backlog: { status: backlog.status, evidence: backlog.evidence ?? null },
           audit: { status: audit.status, evidence: audit.evidence ?? null },
           round_files: tree('work/rounds/R-0777'),
+          proposal_files: tree('.devai/state/round-runs/R-0777/backlog'),
           audit_files: tree('work/audit/R-0777'),
         },
         repo,

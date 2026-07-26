@@ -1079,7 +1079,7 @@
     },
     {
       "agent_class": "coding-agent",
-      "allowed_write_scopes": ["record/proofs/work/skill-runs/**", "work/rounds/R-*/**"],
+      "allowed_write_scopes": ["record/proofs/work/skill-runs/**", ".devai/state/round-runs/**"],
       "authority_role": "architect",
       "cycle_level": "round",
       "cycle_role": "backlog",
@@ -1094,7 +1094,7 @@
       "permission_tier": "write",
       "risk_level": "medium",
       "schemaVersion": "1.0.0",
-      "summary": "Plan phase of the round loop. R4-W3 real execution: reads the audit scorecard, invokes SKILL-compile-backlog, and materializes backlog.json + backlog.md + per-item templated wave prompts under work/rounds/R-NNNN/{,prompts/}.",
+      "summary": "Plan phase of the round loop. R4-W3 real execution: reads the audit scorecard, invokes SKILL-compile-backlog, and materializes backlog.json + backlog.md + per-item templated wave prompt proposals under .devai/state/round-runs/R-NNNN/backlog/.",
       "tags": ["round", "backlog", "plan"],
       "title": "Round backlog",
       "version": "1.0.0"

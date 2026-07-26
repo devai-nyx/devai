@@ -176,7 +176,7 @@ describe('Skill manifest contracts', () => {
       findings: Array<{ code: string }>;
     };
     expect(parsed.ok).toBe(true);
-    expect(parsed.manifests_checked).toBe(55);
+    expect(parsed.manifests_checked).toBe(52);
     expect(parsed.findings).toEqual([]);
   });
 });
