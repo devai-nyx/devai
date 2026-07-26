@@ -195,6 +195,8 @@ export interface ScanForbiddenOptions {
   readonly repoRoot: string;
   /** Max commits to scan. Default 50. */
   readonly maxCommits?: number;
+  /** Scan every commit strictly after this verified commit instead of a trailing count. */
+  readonly sinceRef?: string;
   /** Override the registry path. */
   readonly registryPath?: string;
 }
@@ -430,18 +432,24 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     };
   }
 
-  // Read recent commit log via git.
+  // Read either the explicitly bounded range or the recent commit log via git.
   let log: string;
   try {
-    log = execFileSync(
-      'git',
-      ['log', `-n${String(max)}`, '--pretty=format:%H%x00%an%x00%P%x00%B%x1e'],
-      {
-        cwd: opts.repoRoot,
-        encoding: 'utf8',
-        stdio: ['ignore', 'pipe', 'pipe'],
-      },
-    );
+    const revision =
+      opts.sinceRef === undefined
+        ? [`-n${String(max)}`]
+        : [
+            `${execFileSync('git', ['rev-parse', '--verify', `${opts.sinceRef}^{commit}`], {
+              cwd: opts.repoRoot,
+              encoding: 'utf8',
+              stdio: ['ignore', 'pipe', 'pipe'],
+            }).trim()}..HEAD`,
+          ];
+    log = execFileSync('git', ['log', ...revision, '--pretty=format:%H%x00%an%x00%P%x00%B%x1e'], {
+      cwd: opts.repoRoot,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
   } catch {
     return {
       registry_entries: registry.length,
