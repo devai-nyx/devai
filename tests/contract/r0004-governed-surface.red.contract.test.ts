@@ -205,7 +205,7 @@ describe('R-0004 governed surface red-first contracts', () => {
         expect(match[2]).toMatch(/^[0-9a-f]{40}$/u);
         expect(match[3]).toMatch(/# v[0-9]/u);
       }
-      const jobs = source.split(/^  [a-zA-Z0-9_-]+:\s*$/gmu).slice(1);
+      const jobs = source.split(/^ {2}[a-zA-Z0-9_-]+:\s*$/gmu).slice(1);
       for (const job of jobs.filter((body) => body.includes('pnpm install'))) {
         expect(job).toContain('node scripts/prewarm-package-managers.mjs');
       }
