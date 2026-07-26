@@ -516,11 +516,13 @@ describe('R-0004 governed surface red-first contracts', () => {
       entries: typeof expected;
     };
     expect(registry.entries).toEqual(expect.arrayContaining(expected));
+    const transient = expected[0]!;
+    const rejected = expected[1]!;
 
     const result = runShaReferenceFixture('', expected, {
-      'work/audit/R-0002/as-built.md': `transient ${expected[0].sha}\n`,
-      'work/audit/R-0002-preflight/backlog-register.md': `rejected ${expected[1].sha}\n`,
-      'work/audit/R-0003/exit-ladder-adr-seal-failure.md': `rejected ${expected[1].sha}\n`,
+      'work/audit/R-0002/as-built.md': `transient ${transient.sha}\n`,
+      'work/audit/R-0002-preflight/backlog-register.md': `rejected ${rejected.sha}\n`,
+      'work/audit/R-0003/exit-ladder-adr-seal-failure.md': `rejected ${rejected.sha}\n`,
     });
     expect(result.status, result.stderr || result.stdout).toBe(0);
     expect(result.stdout).toContain('2 classified');
