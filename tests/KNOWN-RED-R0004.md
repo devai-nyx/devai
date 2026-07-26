@@ -19,7 +19,7 @@ the exact B0 candidate `10b9f1b9e599b77d6123daef165210259f90a8eb`.
 | Exact non-recursive root build/test porcelain                  | BL-031                 |
 | Every fixed production `sense test` suite route                | BL-156                 |
 | Fixed recursive canonical build help                           | BL-159                 |
-| Surface-contract argv and live schema count                    | BL-163, BL-165         |
+| Surface-contract argv, variants, provenance, and schema count  | BL-163, BL-165, BL-169 |
 | Complete command-description parity                            | BL-164, BL-167         |
 | Complete exact-range governance scan                           | BL-162                 |
 | Complete keep/fold/tombstone surface                           | BL-030                 |

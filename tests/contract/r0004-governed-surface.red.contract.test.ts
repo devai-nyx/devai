@@ -271,14 +271,22 @@ describe('R-0004 governed surface red-first contracts', () => {
     expect(description).not.toMatch(/default|override|caller-selected|pnpm run build/u);
   });
 
-  it('BL-163/165 derives active surface-contract argv and schema count from canonical sources', () => {
+  it('BL-163/165/169 derives active surface-contract argv and schema count from canonical sources', () => {
     const contract = readFileSync(join(ROOT, 'work/rounds/R-0004/surface-contract.md'), 'utf8');
     expect(contract).toContain(
       `The build action may execute only \`${DISPOSITION.root_porcelain.build.argv.join(' ')}\`.`,
     );
     expect(contract).toContain(
-      `The test action may execute only \`${DISPOSITION.root_porcelain.test.argv.join(' ')}\`.`,
+      `The root all-suite test action may execute only \`${DISPOSITION.root_porcelain.test.argv.join(' ')}\`.`,
     );
+    for (const config of [
+      'tests/config/t1.unit.config.ts',
+      'tests/config/t3.integration.config.ts',
+      'tests/config/t4.regression.config.ts',
+      'tests/config/t5.e2e.config.ts',
+    ]) {
+      expect(contract).toContain(`\`${config}\``);
+    }
 
     const result = spawnSync(
       'node',
