@@ -1,5 +1,5 @@
 import { execFileSync } from '@devai-nyx/authority';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
@@ -205,6 +205,40 @@ export interface ScanForbiddenResult {
 }
 
 const GIT_INSPECTION_MAX_BUFFER = 16 * 1024 * 1024;
+
+function activeAdrAffectedRules(repoRoot: string): ReadonlySet<string> {
+  const adrDir = join(repoRoot, 'law', 'adr');
+  if (!existsSync(adrDir)) return new Set();
+  const affected = new Set<string>();
+  let files: string[];
+  try {
+    files = readdirSync(adrDir).filter((file) => /^ADR-\d{3}-.+\.md$/u.test(file));
+  } catch {
+    return affected;
+  }
+  for (const file of files) {
+    let source: string;
+    try {
+      source = readFileSync(join(adrDir, file), 'utf8');
+    } catch {
+      continue;
+    }
+    const frontmatter = source.match(/^---\n([\s\S]*?)\n---(?:\n|$)/u)?.[1];
+    if (frontmatter === undefined) continue;
+    if (!/^id: ADR-\d{3}$/mu.test(frontmatter)) continue;
+    if (!/^type: adr$/mu.test(frontmatter)) continue;
+    if (!/^status: active$/mu.test(frontmatter)) continue;
+    const block = frontmatter.match(/^affected_rules:\n((?: {2}- .+\n?)+)/mu)?.[1];
+    if (block === undefined) continue;
+    for (const line of block.split('\n')) {
+      const rule = line.match(/^ {2}- ([^\s].*)$/u)?.[1];
+      if (rule !== undefined && !rule.startsWith('/') && !rule.split('/').includes('..')) {
+        affected.add(rule);
+      }
+    }
+  }
+  return affected;
+}
 
 export function loadForbiddenRegistry(path: string): ForbiddenActionEntry[] {
   if (!existsSync(path)) return [];
@@ -426,6 +460,7 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
     .split('\x1e')
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
+  const activeAdrRules = activeAdrAffectedRules(opts.repoRoot);
   for (const c of commits) {
     const nul = c.indexOf('\x00');
     if (nul === -1) continue;
@@ -548,12 +583,26 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
       ) {
         continue;
       }
-      if (
-        entry.id === 'FORBID-CI-WITHOUT-ADR' &&
-        author === 'DEVAI Engineer' &&
-        changedPaths.some((path) => path.startsWith('.github/workflows/'))
-      ) {
-        continue;
+      if (entry.id === 'FORBID-CI-WITHOUT-ADR') {
+        const changedCiPaths = changedPaths.filter((path) =>
+          entry.patterns.some((pattern) => {
+            const matches = pattern.test(path);
+            pattern.lastIndex = 0;
+            return matches;
+          }),
+        );
+        const messageNamesCiPath = entry.patterns.some((pattern) => {
+          const matches = pattern.test(body);
+          pattern.lastIndex = 0;
+          return matches;
+        });
+        if (
+          !messageNamesCiPath &&
+          changedCiPaths.length > 0 &&
+          changedCiPaths.every((path) => activeAdrRules.has(path))
+        ) {
+          continue;
+        }
       }
       const pathEvidenceIds = new Set([
         'FORBID-DELETE-AUTHORITY-DOCS',
