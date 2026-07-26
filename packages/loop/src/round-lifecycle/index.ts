@@ -7,7 +7,7 @@ import {
   writeFileSync,
 } from '@devai-nyx/authority';
 import { validators } from '@devai-nyx/schemas';
-import { dirname, join, relative, resolve } from 'node:path';
+import { join, relative, resolve } from 'node:path';
 import { parseGovernanceRecord } from '../governance-ledger/index.js';
 
 type JsonRecord = Record<string, unknown>;
