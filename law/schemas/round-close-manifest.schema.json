@@ -1,0 +1,263 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/round-close-manifest.schema.json",
+  "title": "Round close candidate manifest",
+  "description": "Deterministic source-close preflight manifest binding exact candidate identities, range, role/path attribution, projections, gates, coverage, candidate-only Git resolution, convergence, and closure rehearsal without granting release standing.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "round",
+    "exact_base",
+    "implementation_subject",
+    "review_candidate",
+    "published_head",
+    "candidate_tree",
+    "governed_range",
+    "role_path_commits",
+    "projection_materialization_digests",
+    "test_results",
+    "coverage",
+    "clean_clone",
+    "gate_results",
+    "convergence",
+    "closure_rehearsal",
+    "manifest_digest_sha256"
+  ],
+  "$defs": {
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "commandResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "argv", "exit_code", "outcome", "stdout_sha256", "stderr_sha256"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "argv": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "exit_code": { "type": "integer" },
+        "outcome": { "enum": ["pass", "fail"] },
+        "stdout_sha256": { "$ref": "#/$defs/sha256" },
+        "stderr_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+    "exact_base": { "$ref": "#/$defs/sha1" },
+    "implementation_subject": { "$ref": "#/$defs/sha1" },
+    "review_candidate": { "$ref": "#/$defs/sha1" },
+    "published_head": { "$ref": "#/$defs/sha1" },
+    "candidate_tree": { "$ref": "#/$defs/sha1" },
+    "governed_range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base", "head", "commits"],
+      "properties": {
+        "base": { "$ref": "#/$defs/sha1" },
+        "head": { "$ref": "#/$defs/sha1" },
+        "commits": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/sha1" }
+        }
+      }
+    },
+    "role_path_commits": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["commit", "author", "role", "paths", "path_authorized"],
+        "properties": {
+          "commit": { "$ref": "#/$defs/sha1" },
+          "author": { "type": "string", "minLength": 1 },
+          "role": { "enum": ["Architect", "Owner", "Engineer", "Inspector", "Auditor", "Machine"] },
+          "paths": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "$ref": "#/$defs/relativePath" }
+          },
+          "path_authorized": { "const": true }
+        }
+      }
+    },
+    "projection_materialization_digests": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "sources_sha256", "outputs_sha256"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "sources_sha256": { "$ref": "#/$defs/sha256" },
+          "outputs_sha256": { "$ref": "#/$defs/sha256" }
+        }
+      }
+    },
+    "test_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/commandResult" }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statements", "branches", "functions", "lines"],
+      "properties": {
+        "statements": { "type": "number", "minimum": 0, "maximum": 100 },
+        "branches": { "type": "number", "minimum": 0, "maximum": 100 },
+        "functions": { "type": "number", "minimum": 0, "maximum": 100 },
+        "lines": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "clean_clone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "alternates", "refs", "identities", "ok"],
+      "properties": {
+        "method": { "const": "bundle-single-branch" },
+        "alternates": { "const": false },
+        "refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "identities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["sha", "object_kind", "status", "paths"],
+            "properties": {
+              "sha": { "$ref": "#/$defs/sha1" },
+              "object_kind": { "type": "string", "minLength": 1 },
+              "status": { "enum": ["reachable", "classified"] },
+              "paths": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": { "$ref": "#/$defs/relativePath" }
+              }
+            }
+          }
+        },
+        "ok": { "const": true }
+      }
+    },
+    "gate_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/commandResult" }
+    },
+    "convergence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passes", "second_pass_no_write", "clean"],
+      "properties": {
+        "passes": { "const": 2 },
+        "second_pass_no_write": { "const": true },
+        "clean": { "const": true }
+      }
+    },
+    "closure_rehearsal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_merge", "closure_head", "schema_ancestor", "verb_ancestor", "ok"],
+      "properties": {
+        "source_merge": { "$ref": "#/$defs/sha1" },
+        "closure_head": { "$ref": "#/$defs/sha1" },
+        "schema_ancestor": { "$ref": "#/$defs/sha1" },
+        "verb_ancestor": { "$ref": "#/$defs/sha1" },
+        "ok": { "const": true }
+      }
+    },
+    "manifest_digest_sha256": { "$ref": "#/$defs/sha256" }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "round": "R-0006",
+      "exact_base": "0000000000000000000000000000000000000000",
+      "implementation_subject": "1111111111111111111111111111111111111111",
+      "review_candidate": "2222222222222222222222222222222222222222",
+      "published_head": "2222222222222222222222222222222222222222",
+      "candidate_tree": "3333333333333333333333333333333333333333",
+      "governed_range": {
+        "base": "0000000000000000000000000000000000000000",
+        "head": "2222222222222222222222222222222222222222",
+        "commits": [
+          "1111111111111111111111111111111111111111",
+          "2222222222222222222222222222222222222222"
+        ]
+      },
+      "role_path_commits": [
+        {
+          "commit": "1111111111111111111111111111111111111111",
+          "author": "DEVAI Engineer",
+          "role": "Engineer",
+          "paths": ["scripts/run-round-close-controls.mjs"],
+          "path_authorized": true
+        }
+      ],
+      "projection_materialization_digests": [
+        {
+          "id": "trace",
+          "sources_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+          "outputs_sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+        }
+      ],
+      "test_results": [
+        {
+          "id": "ordinary",
+          "argv": ["pnpm", "vitest", "run"],
+          "exit_code": 0,
+          "outcome": "pass",
+          "stdout_sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+          "stderr_sha256": "7777777777777777777777777777777777777777777777777777777777777777"
+        }
+      ],
+      "coverage": { "statements": 70, "branches": 60, "functions": 70, "lines": 70 },
+      "clean_clone": {
+        "method": "bundle-single-branch",
+        "alternates": false,
+        "refs": ["refs/heads/candidate"],
+        "identities": [],
+        "ok": true
+      },
+      "gate_results": [
+        {
+          "id": "stage1",
+          "argv": ["pnpm", "run", "ci:stage1"],
+          "exit_code": 0,
+          "outcome": "pass",
+          "stdout_sha256": "8888888888888888888888888888888888888888888888888888888888888888",
+          "stderr_sha256": "9999999999999999999999999999999999999999999999999999999999999999"
+        }
+      ],
+      "convergence": { "passes": 2, "second_pass_no_write": true, "clean": true },
+      "closure_rehearsal": {
+        "source_merge": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "closure_head": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "schema_ancestor": "cccccccccccccccccccccccccccccccccccccccc",
+        "verb_ancestor": "dddddddddddddddddddddddddddddddddddddddd",
+        "ok": true
+      },
+      "manifest_digest_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    }
+  ]
+}
