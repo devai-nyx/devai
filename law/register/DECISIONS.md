@@ -2878,6 +2878,35 @@ mutation, R-0008 external action, R-0009 activation, or R-0010 observation. OM-0
 independent Codex review substitution remains exact to R-0005 and creates no Claude or
 Opus PASS.
 
+### DII-204 — Accept the R-0005 source candidate
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0005 source close; DII-202; DII-203; OM-009; R-0005-AS-BUILT; R-0005-INDEPENDENT-CODEX-REVIEW-9-PASS; reviewed candidate b4002f0892f3bd288c72f6f7268ccc31bd941ce2`
+
+DII-204 accepts R-0005's role-pure evidence and lifecycle implementation and the ninth
+independent Codex review's explicit PASS. The reviewed range begins at exact base and
+merge-base `e9db37209ee879c0f6cc0e2ee6c7c5619c3cb190` and ends at exact clean
+candidate `b4002f0892f3bd288c72f6f7268ccc31bd941ce2`, spanning 185 commits. The
+review found no P0 or P1 blocker and verified the review-8 authority rematerialization,
+prospective committed-materialization sequencing, exact historical exception scope,
+role purity, and preserved nonclaims.
+
+The final local evidence passes 133 ordinary files with 1,228 tests and eight declared
+skips; T1 at 74/856; T2 at 41/284 plus one skip; T1+T3 at 83/912 plus seven skips and
+72.42/62.36/78.07/74.52 coverage; T4 at 2/4; T5 at 6/25; T6 at 1/3; 34 invariants /
+133 traced tests; 167 repository references; strict sequencing and governed identity
+checks; repository-wide formatting; `git diff --check`; and clean status. No threshold,
+test source, assertion, skip declaration, lint rule, or formatting rule was weakened.
+
+R-0005 source is authorized to enter its source PR and exact-head CI ceremony. Source
+merge remains forbidden until every required check is green at the exact PR head.
+Production PC-0006 emission remains forbidden until the exact source merge passes
+exact-main CI; its closure-only PR, merge, and final exact-main CI remain separate
+serial gates.
+
+This decision does not authorize evidence reuse or promotion, package publication,
+tags, GitHub Releases, Pages deployment, external release or deployment, real-stynx
+mutation, R-0008 external action, R-0009 activation, or R-0010 observation. The
+predecessor remains read-only.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
