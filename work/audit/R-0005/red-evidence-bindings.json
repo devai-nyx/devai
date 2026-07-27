@@ -81,6 +81,17 @@
       "exit_code": 1,
       "tests": ["packages/skills/tests/unit/skill-implementation-cases.ts"],
       "failure_summary": "Disposable backlog prompt proposals retained broken relative references instead of binding their governed round plan and Auditor inputs."
+    },
+    {
+      "commit": "67aa7940fd3b52daca219847fd11d7201e830f2f",
+      "command": "pnpm vitest run packages/skills/tests/unit/governance-skills.test.ts packages/skills/tests/unit/round-state-routing.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "packages/skills/tests/unit/governance-skills.test.ts",
+        "packages/skills/tests/unit/round-state-routing.test.ts",
+        "tests/contract/r0005-independent-review.red.contract.test.ts"
+      ],
+      "failure_summary": "The third-review contracts demonstrated agent-callable ADR mutation, split disposable round-state routing, and obsolete move-and-stage lifecycle documentation before the governed repairs."
     }
   ]
 }
