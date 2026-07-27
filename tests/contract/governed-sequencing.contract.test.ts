@@ -320,6 +320,7 @@ describe('governed sequencing', () => {
     'apps/fixture/index.ts',
     'pnpm-workspace.yaml',
     '.prettierignore',
+    'eslint.config.mjs',
     'vitest.workspace.ts',
   ])(
     'rejects unbound Engineer work on governed implementation surface %s',

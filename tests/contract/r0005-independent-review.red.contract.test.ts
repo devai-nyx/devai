@@ -125,4 +125,15 @@ describe('R-0005 independent-review red contracts', () => {
       expect(read(`docs/${relative}`), `docs/${relative}`).not.toMatch(obsolete);
     }
   });
+
+  it('KR-R5-048 keeps every final as-built snapshot claim exact and consistent', () => {
+    const asBuilt = read('work/audit/R-0005/as-built.md');
+    const snapshots = [
+      /implementation snapshot ([0-9a-f]{40})/u.exec(asBuilt)?.[1],
+      /through governed snapshot\s+`([0-9a-f]{40})`/u.exec(asBuilt)?.[1],
+      /clean status all pass at exact\s+candidate `([0-9a-f]{40})`/u.exec(asBuilt)?.[1],
+    ];
+    expect(snapshots.every((snapshot) => snapshot !== undefined)).toBe(true);
+    expect(new Set(snapshots).size).toBe(1);
+  });
 });
