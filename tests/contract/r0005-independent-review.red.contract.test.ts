@@ -82,4 +82,15 @@ describe('R-0005 independent-review red contracts', () => {
       'detect-conditional-skips.mjs',
     );
   });
+
+  it('KR-R5-039 documents the canonical governed round lifecycle', () => {
+    const guide = read('docs/adopters/governed-rounds.md');
+    expect(guide).toContain('work/rounds/R-NNNN/');
+    expect(guide).toContain('.devai/state/round-runs/R-NNNN/');
+    expect(guide).toContain('work/audit/R-NNNN/');
+    expect(guide).toContain('closes in place');
+    expect(guide).not.toContain('docs/work/round-N/');
+    expect(guide).not.toContain('docs/meta/rounds/round-N/');
+    expect(guide).not.toContain('moves the complete local dossier');
+  });
 });
