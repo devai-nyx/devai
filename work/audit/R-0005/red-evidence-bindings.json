@@ -100,6 +100,14 @@
       "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
       "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"],
       "failure_summary": "The fourth-review contract rejected neither unrelated semantic red scope nor an exact disclosed historical commit exception before the sequencing checker repair."
+    },
+    {
+      "commit": "1abffa844415f8abb4a83956e3ce60a50cfde8dc",
+      "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts",
+      "exit_code": 1,
+      "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"],
+      "failure_summary": "The fifth-review adversaries proved that application and root-tooling Engineer commits escaped the narrow implementation classifier and that a prospective round-wide exception bypassed every binding."
     }
   ]
 }
