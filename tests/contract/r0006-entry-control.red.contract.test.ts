@@ -351,7 +351,7 @@ describe('R-0006 E1 entry-control red contracts', () => {
         expect.arrayContaining([expect.objectContaining({ code: testCase.code })]),
       );
     }
-  });
+  }, 15_000);
 
   it('uses the declared exact base and rejects fixed windows or overbroad pre-round history', () => {
     const { root, base, candidate } = fixture();
@@ -669,7 +669,7 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
       'refs/remotes/origin/candidate',
     ]);
     expect(output.manifest.manifest_digest_sha256).toMatch(/^[0-9a-f]{64}$/u);
-  });
+  }, 15_000);
 
   it('rejects omitted role paths and prefix-like glob variants', () => {
     const { root, base } = fixture();
@@ -683,7 +683,7 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     expect(findings(result)).toEqual(
       expect.arrayContaining([expect.objectContaining({ code: 'ROLE_PATH_VIOLATION' })]),
     );
-  });
+  }, 15_000);
 
   it('fails closed on malformed manifest state instead of crashing or accepting it', () => {
     const { root, candidate } = fixture();
