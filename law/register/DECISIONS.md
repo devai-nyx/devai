@@ -3428,6 +3428,53 @@ record before source merge and exact-main CI, package publication, tag, GitHub R
 Pages deployment, external deployment, evidence reuse or promotion, real-stynx
 mutation, predecessor mutation, or R-0007+ work.
 
+### DII-223 — Accept R-0006 for the governed source-close ceremony
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 source close; DII-207–222; OM-002; R-0006-AUTHORIZATION; R-0006-PLAN; R-0006-AS-BUILT at Auditor 010007ed1e7bb6305a4c0688196ad6d718a9b1a9; R-0006-COVERAGE-DEPTH-EVIDENCE`
+
+R-0006's semantic implementation subject is exact Inspector commit
+`77da3986d424b8d0467f087f76d259d31b6cca37`. Architect
+`586fafab2c5cb28b97937fa14ac32e2e9000fff4` is its deterministic trace consequence,
+and Auditor `010007ed1e7bb6305a4c0688196ad6d718a9b1a9` binds the final pre-review as-built.
+The action surface remains 147 runnable identities, 38 folded identities, and one
+tombstone. The operational-value extraction remains 24 rows. Mutation-strength and
+evidence-aggregation decisions remain independent.
+
+The exact-hit complete-denominator coverage reading is statements 71.33%
+(15,975/22,393), branches 60.12% (11,654/19,382), functions 80.34%
+(2,469/3,073), and lines 72.78% (14,835/20,383), above the unchanged
+70/60/70/70 floors. All 378 eligible source files remain measured under the unchanged
+four exclusions. The ordinary suite passes 153 files, 1,441 tests, and eight declared
+skips. The trace projection binds 34 invariants, 153 test sources, and 2,739 assertion
+sites. The second Opus FAIL, containment correction, and honest interim coverage red
+remain immutable evidence; none is relabelled PASS.
+
+The governed-sequencing policy contains three R-0006 historical exception entries
+covering exactly four immutable implementation commits. The separate role-path policy
+classifies exactly two immutable commits and their exact mismatched test paths. Neither
+control grants a prospective bypass. Every post-DII-222 repair is role-pure, and no
+threshold, exclusion, source denominator, assertion, or skip declaration was weakened.
+
+This decision accepts the audited implementation only for the remaining serial B9
+controls. The complete source candidate must converge twice, rehearse the source and
+closure ancestry in isolation, generate a fresh candidate-only manifest, and receive a
+fresh read-only PASS through the literal `claude-opus-5` selector. Any finding returns
+to its owning role and invalidates all candidate state. After PASS, only the exact
+Auditor review record and its mechanically permitted deterministic projection
+consequences may form the review envelope. The resulting published head must converge
+twice again before push.
+
+The source PR may merge only after every required exact-head check passes. Its exact
+merge must then pass exact-main CI. Only from that merged source may the production
+phase-close verb append PC-0007 on a closure-only branch. PC-0007 uses DII-207 as the
+declaring decision and DII-223 as the closing decision, binds the exact source merge,
+and records release disposition `none-needed`. The closure-only PR, its merge, and final
+exact-main CI remain separate required gates.
+
+This decision does not itself claim independent-review PASS, source publishability,
+push, pull request, merge, exact-head or exact-main CI, PC-0007, final closure, package
+publication, tag, GitHub Release, Pages or other deployment, evidence reuse or
+promotion, real-stynx mutation, predecessor mutation, or R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
