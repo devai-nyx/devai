@@ -370,3 +370,18 @@ cluster authorizes a broader Engineer surface, a hand-maintained approximation, 
 weakening, history rewrite, fabricated review PASS, or external action. Retirement
 requires focused green, the complete ordinary floor, exact exit ladder, and a new
 independent Codex PASS.
+
+## Sixth-review repair retirement
+
+KR-R5-046 retires at exact implementation candidate
+`5cea65414187e8af940f3241f43040f5ba3f961c` through Auditor `f00104c`,
+Architect `53576a8`, Inspector red `c5ac6a8`, Engineer `4a41769`, Auditor `d573b98`,
+and Architect `5cea654`. The ordinary floor passes 133 files with 1,223 tests and eight
+declared skips. The exact exit ladder passes with T1 74/856, T2 41/279 plus one skip,
+T1+T3 83/912 plus seven skips, unchanged 72.42/62.36/78.07/74.52 coverage, T4 2/4,
+T5 6/25, T6 1/3, strict governance across 163 commits and 273 identities, formatting,
+diff, and clean-status gates.
+
+This ledger grants no active red authority. A fresh exact-candidate independent Codex
+review remains required. Any further actionable finding requires a fresh Architect
+entry and failing Inspector boundary before repair.
