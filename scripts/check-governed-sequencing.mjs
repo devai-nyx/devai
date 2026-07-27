@@ -42,15 +42,26 @@ function substantiveEngineer(commit) {
 
 let implementationSurfaces = null;
 
+function rootGlobMatches(path, glob) {
+  if (path.includes('/')) return false;
+  const expression = glob.replace(/[.+?^${}()|[\]\\]/gu, '\\$&').replaceAll('*', '.*');
+  return new RegExp(`^${expression}$`, 'u').test(path);
+}
+
+function canonicalRootEngineerPaths() {
+  const authorityPath = resolve(repoRoot, 'packages/cli/src/authority/policy.ts');
+  if (!existsSync(authorityPath)) return null;
+  const source = readFileSync(authorityPath, 'utf8');
+  const declaration = /const rootEngineerPaths = \[([\s\S]*?)\];/u.exec(source);
+  const body = declaration?.[1];
+  if (body === undefined) return null;
+  return [...body.matchAll(/'([^']+)'/gu)].map((match) => match[1]);
+}
+
 function substantiveImplementationPath(path) {
   if (implementationSurfaces === null) return false;
   if (implementationSurfaces.prefixes.some((prefix) => path.startsWith(prefix))) return true;
-  if (path.includes('/')) return false;
-  return (
-    implementationSurfaces.root_files.includes(path) ||
-    implementationSurfaces.root_suffixes.some((suffix) => path.endsWith(suffix)) ||
-    implementationSurfaces.root_name_prefixes.some((prefix) => path.startsWith(prefix))
-  );
+  return implementationSurfaces.root_globs.some((glob) => rootGlobMatches(path, glob));
 }
 
 function containedEvidencePath(value) {
@@ -85,15 +96,8 @@ if (
   typeof configuredSurfaces !== 'object' ||
   Array.isArray(configuredSurfaces) ||
   !Array.isArray(configuredSurfaces.prefixes) ||
-  !Array.isArray(configuredSurfaces.root_files) ||
-  !Array.isArray(configuredSurfaces.root_suffixes) ||
-  !Array.isArray(configuredSurfaces.root_name_prefixes) ||
-  [
-    configuredSurfaces.prefixes,
-    configuredSurfaces.root_files,
-    configuredSurfaces.root_suffixes,
-    configuredSurfaces.root_name_prefixes,
-  ].some(
+  !Array.isArray(configuredSurfaces.root_globs) ||
+  [configuredSurfaces.prefixes, configuredSurfaces.root_globs].some(
     (values) =>
       values.length === 0 ||
       values.some((value) => typeof value !== 'string' || value.length === 0),
@@ -102,16 +106,27 @@ if (
   findings.push({
     rule: 'implementation-surfaces',
     sha: null,
-    message: 'implementation_surfaces must contain four non-empty string arrays',
+    message: 'implementation_surfaces must contain non-empty prefixes and root_globs arrays',
   });
   implementationSurfaces = {
     prefixes: [],
-    root_files: [],
-    root_suffixes: [],
-    root_name_prefixes: [],
+    root_globs: [],
   };
 } else {
   implementationSurfaces = configuredSurfaces;
+}
+
+const canonicalRootGlobs = canonicalRootEngineerPaths();
+if (
+  canonicalRootGlobs === null ||
+  JSON.stringify(implementationSurfaces.root_globs) !== JSON.stringify(canonicalRootGlobs)
+) {
+  findings.push({
+    rule: 'implementation-surface-parity',
+    sha: null,
+    message:
+      'implementation_surfaces.root_globs must exactly match canonical rootEngineerPaths authority',
+  });
 }
 
 if (Array.isArray(policy.historical_exceptions) && policy.historical_exceptions.length > 0) {
