@@ -16,8 +16,8 @@ provenance:
 ## Finding and red
 
 The production PC-0006 rehearsal followed source PR 8 and exact-main CI correctly and
-emitted only the closure record. Post-commit governance rejected unpushed Machine commit
-`3c06a3e1026a3c30aa90ef50dcf16fa0facf0392` because
+emitted only the closure record. Post-commit governance rejected the local-only,
+unpublished Machine rehearsal object because
 `shape-before-machine-record` searched only the one-commit closure PR range. DII-205
 authorized the correction. Inspector commit
 `e9bb4d86a918b72e71d33b3153455fa7c7943fd9` added a valid closure-only ancestry
