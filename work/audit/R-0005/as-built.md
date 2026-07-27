@@ -93,7 +93,7 @@ with 909 tests and seven declared skips against the unchanged
 | Statements | 71.23% (10,832 / 15,205) |   70% |
 | Branches   |  61.64% (7,878 / 12,780) |   60% |
 | Functions  |   77.44% (1,552 / 2,004) |   70% |
-| Lines      |  73.33% (9,996 / 13,630) |   70% |
+| Lines      |  73.33% (9,995 / 13,629) |   70% |
 
 Stage 1 passed; Stage 2 passed with T1 at 73 files / 853 tests and T2 at 41 files /
 269 tests plus one declared skip; Stage 3 passed with the coverage above. Changeset
