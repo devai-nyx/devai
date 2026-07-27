@@ -305,6 +305,24 @@
         "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"]
       }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["77ac7cd2aaf238db96b29ee2430498febc210b14"],
+      "law_commits": ["b53bde0535aa9d61e22ccf08f3ca44f6650e444c"],
+      "red_evidence": {
+        "commit": "2e73c5d9c440ff2a2cf9e8b8c025df1a44ae9948",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0006/red-evidence.json",
+        "evidence_sha256": "7ea3039433a1491977dbb3a15cf622591d75151daaa68f85e15d129a71a8a712",
+        "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "packages/schemas/src/roster.ts",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [
