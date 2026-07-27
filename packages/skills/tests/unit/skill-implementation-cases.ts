@@ -309,9 +309,9 @@ describe('scaffolder and round skill envelopes', () => {
     });
 
     expect(existsSync(join(repo, 'work/rounds/R-0007'))).toBe(false);
-    expect(
-      existsSync(join(repo, '.devai/state/round-runs/R-0007/backlog/backlog.json')),
-    ).toBe(true);
+    expect(existsSync(join(repo, '.devai/state/round-runs/R-0007/backlog/backlog.json'))).toBe(
+      true,
+    );
     const proposedOrchestrator = readFileSync(
       join(repo, '.devai/state/round-runs/R-0007/backlog/prompts/00-orchestrator.md'),
       'utf8',
