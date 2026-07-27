@@ -3,14 +3,9 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import {
-  authorityBindings,
-  buildTrustedAuthoritySources,
-  canonicalSha256,
-} from '../../src/authority/policy.js';
-import { getFullRegistry } from '../../src/define-command.js';
-import { resolveCliVersion } from '../../src/version.js';
+import { authorityBindings, canonicalSha256 } from '../../src/authority/policy.js';
 
 const PKG_ROOT = join(import.meta.dirname, '..', '..');
 const ROOT = join(PKG_ROOT, '..', '..');
@@ -107,8 +102,42 @@ describe('successor operational law', () => {
     expect(JSON.parse(result.stdout)).toMatchObject({ ok: true, dry_run: true, set: 'sweep' });
   });
 
-  it('binds both authority-policy materializations to the current resolved rule set', () => {
-    const expected = buildTrustedAuthoritySources(getFullRegistry(), ROOT, resolveCliVersion());
+  cliIt('binds both authority-policy materializations to the current resolved rule set', () => {
+    const registryUrl = pathToFileURL(join(PKG_ROOT, 'dist', 'define-command.js')).href;
+    const policyUrl = pathToFileURL(join(PKG_ROOT, 'dist', 'authority', 'policy.js')).href;
+    const versionUrl = pathToFileURL(join(PKG_ROOT, 'dist', 'version.js')).href;
+    const probe = `
+      process.argv = [process.execPath, 'devai', '--help'];
+      const stdoutWrite = process.stdout.write.bind(process.stdout);
+      process.stdout.write = () => true;
+      await import(${JSON.stringify(pathToFileURL(BIN).href)});
+      process.stdout.write = stdoutWrite;
+      const { getFullRegistry } = await import(${JSON.stringify(registryUrl)});
+      const { buildTrustedAuthoritySources, canonicalSha256 } = await import(${JSON.stringify(policyUrl)});
+      const { resolveCliVersion } = await import(${JSON.stringify(versionUrl)});
+      const registry = getFullRegistry();
+      const expected = buildTrustedAuthoritySources(registry, ${JSON.stringify(ROOT)}, resolveCliVersion());
+      stdoutWrite(JSON.stringify({
+        registry_length: registry.length,
+        provenance: expected.provenance,
+        rules_digest_sha256: canonicalSha256(expected.rules),
+      }));
+    `;
+    const result = spawnSync(process.execPath, ['--input-type=module', '--eval', probe], {
+      cwd: ROOT,
+      encoding: 'utf8',
+    });
+    expect(result.status, result.stderr || result.stdout).toBe(0);
+    const expected = JSON.parse(result.stdout) as {
+      registry_length: number;
+      provenance: {
+        resolved_digest_sha256: string;
+        source_policy: unknown;
+        additive_extensions: unknown;
+      };
+      rules_digest_sha256: string;
+    };
+    expect(expected.registry_length).toBe(147);
     for (const path of [
       join(ROOT, 'law', 'policy', 'authority-policy.json'),
       join(ROOT, '.devai', 'config', 'authority-policy.json'),
@@ -123,7 +152,7 @@ describe('successor operational law', () => {
       expect(canonicalSha256(policy['additive_extensions']), path).toBe(
         canonicalSha256(expected.provenance.additive_extensions),
       );
-      expect(canonicalSha256(policy['rules']), path).toBe(canonicalSha256(expected.rules));
+      expect(canonicalSha256(policy['rules']), path).toBe(expected.rules_digest_sha256);
       expect(JSON.stringify(policy['rules']), path).toContain('eslint.config.*');
       expect(JSON.stringify(policy['rules']), path).not.toContain('eslint.config.js');
     }
