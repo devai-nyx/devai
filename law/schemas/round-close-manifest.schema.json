@@ -80,7 +80,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["commit", "author", "role", "paths", "path_authorized"],
+        "required": ["commit", "author", "role", "paths", "path_authorized", "role_path_exception"],
         "properties": {
           "commit": { "$ref": "#/$defs/sha1" },
           "author": { "type": "string", "minLength": 1 },
@@ -91,7 +91,26 @@
             "uniqueItems": true,
             "items": { "$ref": "#/$defs/relativePath" }
           },
-          "path_authorized": { "const": true }
+          "path_authorized": { "const": true },
+          "role_path_exception": {
+            "oneOf": [
+              { "type": "null" },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["decision_id", "paths"],
+                "properties": {
+                  "decision_id": { "type": "string", "pattern": "^DII-[0-9]{3}$" },
+                  "paths": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": { "$ref": "#/$defs/relativePath" }
+                  }
+                }
+              }
+            ]
+          }
         }
       }
     },
@@ -223,7 +242,8 @@
           "author": "DEVAI Engineer",
           "role": "Engineer",
           "paths": ["scripts/run-round-close-controls.mjs"],
-          "path_authorized": true
+          "path_authorized": true,
+          "role_path_exception": null
         }
       ],
       "projection_materialization_digests": [

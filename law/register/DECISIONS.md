@@ -3327,6 +3327,44 @@ fresh review PASS, closure record before source merge and exact-main CI, package
 publication, tag, GitHub Release, Pages deployment, external deployment, evidence
 reuse or promotion, real-stynx mutation, predecessor mutation, or R-0007+ work.
 
+### DII-220 — Close the final R-0006 independent-review gaps
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 Opus correction; DII-208; DII-211; DII-215; DII-216; DII-219; Inspector a1bedaa01813c626ac497fe9e6e85102c72d21db; Auditor R-0006-OPUS-B9-CORRECTION-RED-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-FAILURE`
+
+The first independent B9 review of the post-manifest-correction candidate returned
+FAIL with five P1 findings. Its verified positives have no standing across repair. The
+semantic anti-vacuity control must inspect every tracked file in each configured
+population and emit path-specific findings for governed fixed-count declarations,
+literal self-comparison assertions, and direct named-file-only content assertions. A
+nonempty glob alone is not evidence that its contents were checked. The four concrete
+anti-patterns identified by review must be derived or removed without weakening the
+population.
+
+The 39 folded or tombstoned action identities must declare exact `router-only` success
+and error modes. Registry-derived runtime tests must exercise at least one folded route
+and the tombstone and prove exit 2, empty stdout, and one structured stderr refusal.
+This establishes retirement routing behavior but does not claim end-to-end invocation
+coverage for every kept action; the as-built must state that residual honestly.
+
+A DII-219-classified role-path row may be accepted only under the existing exact-set
+checks and must disclose the classification in the manifest. Every role-path row now
+carries `role_path_exception`: `null` for an ordinarily authorized commit, or a closed
+object containing the resolving `decision_id` and exact otherwise-unauthorized paths.
+`path_authorized: true` alone must never hide the distinction. The schema and generator
+must agree, and the exact fixture classification must prove the disclosure.
+
+Inspector must record the final green dispositions for both B2 and the B9 role-path
+red. Auditor must correct assertion-site totals directly from `law/trace.json` and
+narrow output-totality prose to the evidence actually executed. Every affected
+projection and sequencing binding must be refreshed role-purely. B9 then restarts
+convergence, rehearsal, manifest generation, and literal `claude-opus-5` review at a
+fresh candidate.
+
+This decision authorizes no threshold or exclusion change, broad historical exception,
+source publication before fresh review PASS, closure record before source merge and
+exact-main CI, package publication, tag, GitHub Release, Pages deployment, external
+deployment, evidence reuse or promotion, real-stynx mutation, predecessor mutation,
+or R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
