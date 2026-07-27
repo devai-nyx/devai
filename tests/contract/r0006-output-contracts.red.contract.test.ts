@@ -10,9 +10,10 @@ const BIN = join(ROOT, 'packages/cli/dist/bin.js');
 
 interface ActionEntry {
   readonly action_id: string;
+  readonly path: readonly string[];
   readonly disposition: 'keep' | 'fold' | 'tombstone';
-  readonly output_contract?: unknown;
-  readonly error_contract?: unknown;
+  readonly output_contract?: { readonly mode?: string };
+  readonly error_contract?: { readonly mode?: string };
 }
 
 interface Registry {
@@ -72,9 +73,26 @@ describe('R-0006 BL-026 per-action contracts', () => {
   it('retired identities declare router-only output and error behavior', () => {
     const invalid = registry.entries
       .filter((entry) => entry.disposition !== 'keep')
-      .filter((entry) => entry.output_contract === undefined || entry.error_contract === undefined)
+      .filter(
+        (entry) =>
+          entry.output_contract?.mode !== 'router-only' ||
+          entry.error_contract?.mode !== 'router-only',
+      )
       .map((entry) => entry.action_id);
     expect(invalid).toEqual([]);
+  });
+
+  it('a folded alias and the tombstone refuse on stderr with exit 2 and no success channel', () => {
+    for (const disposition of ['fold', 'tombstone'] as const) {
+      const entry = registry.entries.find((candidate) => candidate.disposition === disposition);
+      expect(entry).toBeDefined();
+      const result = run([...(entry?.path ?? []), '--format', 'json']);
+      expect(result.status).toBe(2);
+      expect(result.stdout).toBe('');
+      const payload = parseSingleJson(result.stderr);
+      expect(payload).toMatchObject({ exit: 2 });
+      expect(typeof payload['code']).toBe('string');
+    }
   });
 
   it('the action-registry schema requires both contracts on every row', () => {

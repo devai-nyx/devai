@@ -5,6 +5,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { ROSTER } from '../../packages/schemas/src/roster.js';
 
 vi.setConfig({ testTimeout: 15_000 });
 
@@ -328,7 +329,7 @@ describe('R-0006 E1 entry-control red contracts', () => {
     expect(result.status).not.toBe(0);
     expect(
       findings(result).filter(({ code }) => code === 'GIT_IDENTITY_NOT_PUBLISHABLE'),
-    ).toHaveLength(4);
+    ).toHaveLength(localOnly.length);
   });
 
   it('rejects abbreviated, invented, wrong-kind, unresolved, and unclassified identities', () => {
@@ -598,9 +599,7 @@ describe('R-0006 E1 entry-control red contracts', () => {
 
   it('rejects fixed counts, self-comparison, narrow named scans, and policy mirror drift', () => {
     const { root } = fixture();
-    expect(readFileSync(join(ROOT, 'packages/schemas/src/roster.ts'), 'utf8')).toContain(
-      "'round-close-manifest.schema.json'",
-    );
+    expect(ROSTER).toContain('round-close-manifest.schema.json');
     const validAssertions = {
       population_sources: ['law/**/*.json', 'packages/**/*.ts', 'tests/**/*.ts'],
       fixed_counts_forbidden: true,
@@ -637,6 +636,39 @@ describe('R-0006 E1 entry-control red contracts', () => {
       expect.arrayContaining([expect.objectContaining({ code: 'POLICY_MIRROR_DRIFT' })]),
     );
   });
+
+  it.each([
+    [
+      'law/policy/fixture-fixed-count.json',
+      '{"fixed_count":7}\n',
+      'DEVAI Architect',
+      'SEMANTIC_FIXED_COUNT',
+    ],
+    [
+      'packages/fixture/self-comparison.ts',
+      'const value = 1; expect(value).toBe(value);\n',
+      'DEVAI Engineer',
+      'SEMANTIC_SELF_COMPARISON',
+    ],
+    [
+      'tests/fixture-named-file-only.test.ts',
+      "expect(readFileSync('tests/fixture.test.ts')).toContain('fixture');\n",
+      'DEVAI Inspector',
+      'SEMANTIC_NAMED_FILE_ONLY',
+    ],
+  ])(
+    'rejects semantic anti-pattern content in declared population %s',
+    (path, source, role, code) => {
+      const { root } = fixture();
+      put(root, path, source);
+      commit(root, role, 'test(r0006): inject semantic anti-pattern', [path]);
+      const result = run(root, ['policy-check']);
+      expect(result.status).not.toBe(0);
+      expect(findings(result)).toEqual(
+        expect.arrayContaining([expect.objectContaining({ code, path })]),
+      );
+    },
+  );
 });
 
 describe('R-0006 E4 entry-control acceptance and adversaries', () => {
@@ -650,7 +682,7 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     expect(mirror.rehearsal).toEqual(canonical.rehearsal);
     for (const path of [canonical.rehearsal.schema_path, canonical.rehearsal.verb_path]) {
       expect(existsSync(join(ROOT, path)), path).toBe(true);
-      expect(git(ROOT, ['ls-files', '--error-unmatch', path]), path).toBe(path);
+      expect(() => git(ROOT, ['ls-files', '--error-unmatch', path]), path).not.toThrow();
     }
   });
 
@@ -725,6 +757,22 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     prepareCloseState(current.root, current.base, candidate);
     const result = run(current.root, manifestArgs(candidate));
     expect(result.status, result.stderr).toBe(0);
+    const output = JSON.parse(result.stdout as string) as {
+      manifest: {
+        role_path_commits: Array<{
+          commit: string;
+          role_path_exception?: { decision_id: string; paths: string[] };
+        }>;
+      };
+    };
+    expect(output.manifest.role_path_commits.find(({ commit }) => commit === historical)).toEqual(
+      expect.objectContaining({
+        role_path_exception: {
+          decision_id: 'DII-207',
+          paths: ['tests/config/historical-provider.ts'],
+        },
+      }),
+    );
   }, 15_000);
 
   it('rejects a historical role-path exception with an unused extra path', () => {
