@@ -124,7 +124,7 @@ describe('governed sequencing', () => {
     const red = commit(
       root,
       'DEVAI Inspector',
-      'test(r0006): establish red',
+      'test(r0006): packages/fixture/index.ts',
       'tests/fixture.test.ts',
     );
     const implementation = commit(
@@ -200,7 +200,7 @@ describe('governed sequencing', () => {
     const red = commit(
       root,
       'DEVAI Inspector',
-      'test(r0006): establish red',
+      'test(r0006): packages/fixture/index.ts',
       'tests/fixture.test.ts',
     );
     const implementation = commit(
