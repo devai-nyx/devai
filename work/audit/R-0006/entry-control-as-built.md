@@ -15,9 +15,9 @@ provenance:
 
 # R-0006 E0-E5 entry-control as-built
 
-## Boundary and current verdict
+## Historical E5 boundary and verdict
 
-R-0006 remains bounded to its mandatory E0-E5 entry-control prelude. At the exact
+At this E5 checkpoint, R-0006 remained bounded to its mandatory E0-E5 entry-control prelude. At the exact
 pre-as-built evidence head `f7b7b856b68aac51b43a189a4abdd0b70efbacd6`, descended
 from exact base `7cf325625307a630344efe971bceccb011560301`, the prelude has
 implemented and tested candidate-only Git identity verification, exact-range candidate
@@ -25,8 +25,8 @@ manifests, exact-head two-pass convergence, manifest-bound review envelopes, eva
 semantic populations and mirrors, and production phase-close rehearsal in a disposable
 candidate-only clone.
 
-The bounded verdict is **entry-control prelude implemented and locally accepted,
-pending a fresh exact-candidate manifest and independent Opus PASS**. The first required
+The bounded verdict at this checkpoint was **entry-control prelude implemented and
+locally accepted, pending a fresh exact-candidate manifest and independent Opus PASS**. The first required
 `claude-opus-5` review returned FAIL at candidate
 `fcbeb2b69621d8de32fe90f34b8a1e1dbbb54cef`; its four P1 findings are repaired by
 Auditor `ce0bca412243cbb9d4bcc1fd10bd080d865018ab`, Inspector
@@ -39,9 +39,11 @@ range, identity population, two-pass readings, rehearsal identities, and manifes
 must be derived after this Auditor commit and supplied to a fresh read-only Opus review.
 No state for an earlier head may be reused.
 
-R-0006 B0 has not begun. No action/output inventory, substantive action contract,
-operational-value extraction, mutation-strength work, evidence aggregation, or coverage
-depth work occurred.
+R-0006 B0 had not begun at this checkpoint. No action/output inventory, substantive
+action contract, operational-value extraction, mutation-strength work, evidence
+aggregation, or coverage-depth work was part of E0-E5. The later exact-candidate PASS
+in `work/audit/R-0006/independent-review.md` closed this entry gate; subsequent B0-B9
+work does not change the historical scope of this report.
 
 ## Entry evidence
 
@@ -135,8 +137,9 @@ then an exact review envelope if PASS.
 
 ## Nonclaims and stop
 
-This report does not claim an independent PASS, a valid review envelope, source closure,
+This historical E5 report did not itself claim an independent PASS, a valid review envelope, source closure,
 PC-0007, push, PR, merge, exact-main CI for this local branch, publication, package
 release, tag, GitHub Release, Pages deployment, production readiness, evidence reuse or
 promotion, real-stynx mutation, predecessor mutation, or R-0007+ work. B0 through B9
-remain blocked. Execution must stop after a verified E5 PASS and before B0.
+were blocked at this checkpoint and could begin only after the separately recorded E5
+PASS. That stop was honored before later R-0006 execution began.
