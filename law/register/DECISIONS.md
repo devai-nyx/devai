@@ -3098,6 +3098,32 @@ action behavior or threshold and authorizes no B0 work, publication, push, merge
 closure, release, deployment, evidence reuse or promotion, predecessor mutation,
 real-stynx mutation, or R-0007+ work.
 
+### DII-211 — Continue R-0006 after the entry-control PASS
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B0 continuation; direct Owner continuation instruction in the active R-0006 task; DII-207; DII-208; DII-209; DII-210; R-0006-ENTRY-CONTROL-AS-BUILT; R-0006-INDEPENDENT-REVIEW; published entry-control head c6c9d4c11c99f63b54e21dd8f34e31a611a1856f`
+
+The exact E0-E5 entry-control candidate passed the mandatory literal
+`claude-opus-5` review at review candidate
+`790126e0a048927562173ee1c295a44003e027e4`, and its bounded Auditor review record
+produced published entry-control head
+`c6c9d4c11c99f63b54e21dd8f34e31a611a1856f`. The post-review envelope verifier,
+candidate-only identity checks, production closure rehearsal, and both final
+published-head convergence passes were green and clean. That PASS satisfies the
+amended plan's mandatory entry condition for B0.
+
+R-0006 therefore continues serially through B0-B9 under the already-granted
+R-0006 authorization and the Owner's continuation instruction. B0 freezes the exact
+action/output/error and coverage populations before B1 makes any policy decision.
+The starting coverage denominator is evidence, not a protected arithmetic shortcut:
+B6 must either prove the current loaded-module denominator correct or repair the
+measurement without excluding valid source. No threshold, assertion, test source,
+or exclusion may be weakened.
+
+The claims ceiling remains contracts and coverage depth implemented and tested, then
+published and closed only through the two-PR ceremony. This decision authorizes no
+package publication, tag, GitHub Release, Pages deployment, external deployment,
+evidence reuse or promotion, real-stynx mutation, predecessor mutation, or R-0007+
+work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
