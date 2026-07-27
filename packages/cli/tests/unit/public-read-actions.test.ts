@@ -134,8 +134,9 @@ const defaultCases: ReadonlyArray<readonly [readonly string[], string, number]> 
 ];
 
 describe('public read-action runtime seams', () => {
-  it('executes representative catalog, policy, inventory, sensor, and work actions in-process', async () => {
-    for (const [args, actionId] of cases) {
+  it.each(cases)(
+    '%s executes %s in-process',
+    async (args, actionId) => {
       const result = await run(args);
       expect(result.exit, `${actionId}: ${result.stderr}`).toBe(0);
       expect(result.stderr, actionId).toBe('');
@@ -144,8 +145,13 @@ describe('public read-action runtime seams', () => {
         action_id: actionId,
         ok: true,
       });
-    }
-    for (const [args, actionId, expectedExit] of defaultCases) {
+    },
+    30_000,
+  );
+
+  it.each(defaultCases)(
+    '%s executes %s with exit %s in-process',
+    async (args, actionId, expectedExit) => {
       const result = await run(args);
       expect(result.exit, `${actionId}: ${result.stderr}`).toBe(expectedExit);
       const channel = expectedExit === 0 ? result.stdout : result.stderr;
@@ -156,6 +162,7 @@ describe('public read-action runtime seams', () => {
         action_id: actionId,
         ok: expectedExit === 0,
       });
-    }
-  }, 120_000);
+    },
+    30_000,
+  );
 });

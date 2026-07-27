@@ -172,3 +172,25 @@ evidence under the final T1-T3 coverage artifact directory. They bind the exact 
 `tests/config/t1-t3.coverage.config.ts`. They authorize no containment inference,
 threshold reduction, exclusion growth, removal of valid source, PASS claim,
 publication, closure, release, or R-0007+ work.
+
+Coverage-integrity repair disposition: the focused command exits 0 with three passing
+tests. The canonical merge is callable and preserves a nested exact zero-hit statement
+and function, `coverage-final.json` is emitted, and 191 raw child-process JSON files
+remain under `scratch/coverage/t1-t3/subprocess-v8`. The public read-action matrix was
+split into 80 per-action tests with the same assertions so instrumentation cannot hide
+one slow case behind an aggregate timeout.
+
+The first honest merged reading then ran all 141 files and passed 1,372 tests with eight
+declared skips. It failed only the unchanged coverage floors:
+
+- statements: 63.35% (14,188/22,393), below 70%;
+- branches: 52.07% (10,093/19,382), below 60%;
+- functions: 72.24% (2,220/3,073), above 70%; and
+- lines: 64.70% (13,189/20,383), below 70%.
+
+The summary digest is
+`b419f26ad5a9465da09a595e3067dc00292f3ecff1099473ae96621c4b26f61c`;
+the statement-level artifact digest is
+`a0709bbb8d31b1f7c3d2244a7c3ff221d255530779c39a031676c85ad46dc84f`.
+This red is the required B7 test-depth input. It authorizes behavior-bearing Inspector
+tests only, with the same denominator, exclusions, thresholds, and exact-hit provider.

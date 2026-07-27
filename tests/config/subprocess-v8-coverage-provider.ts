@@ -7,6 +7,7 @@ import type { Profiler } from 'node:inspector';
 import type { CoverageProviderModule, ReportContext } from 'vitest/node';
 
 const subprocessCoverageDirectory = resolve('scratch/coverage/t1-t6-child-v8');
+const subprocessCoverageEvidenceDirectory = resolve('scratch/coverage/t1-t3/subprocess-v8');
 
 interface ProcessCoverage {
   readonly result: Array<Profiler.ScriptCoverage & { startOffset?: number }>;
@@ -47,30 +48,13 @@ interface MutableCoverageMap {
   filter(callback: (filename: string) => boolean): void;
 }
 
-function positionKey(location: Location): string {
-  return `${String(location.start.line)}:${String(location.start.column)}`;
-}
-
-function contains(location: Location, position: Position): boolean {
-  if (position.line < location.start.line || position.line > location.end.line) return false;
-  if (position.line === location.start.line && position.column < location.start.column)
-    return false;
-  if (position.line === location.end.line && position.column > location.end.column) return false;
-  return true;
-}
-
-function projectedHit(
-  exactHits: ReadonlyMap<string, number>,
-  ranges: ReadonlyArray<Readonly<{ location: Location; count: number }>>,
-  location: Location,
-): number | undefined {
-  return (
-    exactHits.get(positionKey(location)) ??
-    ranges.find((candidate) => contains(candidate.location, location.start))?.count
+function locationKey(location: Location): string {
+  return [location.start.line, location.start.column, location.end.line, location.end.column].join(
+    ':',
   );
 }
 
-function mergeCanonicalHits(
+export function mergeCanonicalHits(
   coverageMap: MutableCoverageMap,
   subprocessMap: MutableCoverageMap,
 ): void {
@@ -80,47 +64,35 @@ function mergeCanonicalHits(
     const current = coverageMap.fileCoverageFor(filename).toJSON() as FileCoverageData;
 
     const statementHits = new Map<string, number>();
-    const statementRanges: Array<{ location: Location; count: number }> = [];
     for (const [id, location] of Object.entries(candidate.statementMap)) {
       const count = candidate.s[id] ?? 0;
-      if (count > 0) {
-        statementHits.set(positionKey(location), count);
-        statementRanges.push({ location, count });
-      }
+      statementHits.set(locationKey(location), count);
     }
     for (const [id, location] of Object.entries(current.statementMap)) {
-      const count = projectedHit(statementHits, statementRanges, location);
+      const count = statementHits.get(locationKey(location));
       if (count !== undefined) current.s[id] = (current.s[id] ?? 0) + count;
     }
 
     const functionHits = new Map<string, number>();
-    const functionRanges: Array<{ location: Location; count: number }> = [];
     for (const [id, definition] of Object.entries(candidate.fnMap)) {
       const count = candidate.f[id] ?? 0;
-      if (count > 0) {
-        functionHits.set(positionKey(definition.decl), count);
-        functionRanges.push({ location: definition.loc, count });
-      }
+      functionHits.set(locationKey(definition.decl), count);
     }
     for (const [id, definition] of Object.entries(current.fnMap)) {
-      const count = projectedHit(functionHits, functionRanges, definition.decl);
+      const count = functionHits.get(locationKey(definition.decl));
       if (count !== undefined) current.f[id] = (current.f[id] ?? 0) + count;
     }
 
     const branchHits = new Map<string, number>();
-    const branchRanges: Array<{ location: Location; count: number }> = [];
     for (const [id, definition] of Object.entries(candidate.branchMap)) {
       for (const [index, location] of definition.locations.entries()) {
         const count = candidate.b[id]?.[index] ?? 0;
-        if (count > 0) {
-          branchHits.set(positionKey(location), count);
-          branchRanges.push({ location, count });
-        }
+        branchHits.set(locationKey(location), count);
       }
     }
     for (const [id, definition] of Object.entries(current.branchMap)) {
       for (const [index, location] of definition.locations.entries()) {
-        const count = projectedHit(branchHits, branchRanges, location);
+        const count = branchHits.get(locationKey(location));
         if (count !== undefined && current.b[id] !== undefined) {
           current.b[id][index] = (current.b[id][index] ?? 0) + count;
         }
@@ -197,6 +169,12 @@ class SubprocessV8CoverageProvider extends V8CoverageProvider {
       coverageMap.filter((filename) => super.isIncluded(filename));
       return coverageMap;
     } finally {
+      await promises.rm(subprocessCoverageEvidenceDirectory, { recursive: true, force: true });
+      if (existsSync(subprocessCoverageDirectory)) {
+        await promises.cp(subprocessCoverageDirectory, subprocessCoverageEvidenceDirectory, {
+          recursive: true,
+        });
+      }
       await promises.rm(subprocessCoverageDirectory, { recursive: true, force: true });
     }
   }

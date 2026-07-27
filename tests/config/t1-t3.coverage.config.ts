@@ -37,7 +37,7 @@ export default defineConfig({
       customProviderModule: resolve('tests/config/subprocess-v8-coverage-provider.ts'),
       enabled: true,
       reportsDirectory: 'coverage/t1-t3',
-      reporter: ['text', 'json-summary'],
+      reporter: ['text', 'json-summary', 'json'],
       include: ['packages/*/src/**/*.{ts,tsx,js,mjs,cjs}'],
       exclude: ['**/dist/**', '**/tests/**', '**/*.config.ts', '**/generated/**'],
       thresholds: {
