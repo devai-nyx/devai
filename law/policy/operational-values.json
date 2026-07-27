@@ -1,0 +1,277 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "operational-values",
+  "status": "active",
+  "authority": "Architect",
+  "decision": "DII-212",
+  "constitution_base_version": "1.0.0",
+  "doctrine_source": "law/constitution.md",
+  "semantics": "Each entry designates one operational setpoint home. Constitutional occurrences are explanatory founding snapshots; they do not create a second independently editable setpoint.",
+  "entries": [
+    {
+      "article": 1,
+      "key": "stack.resolution",
+      "canonical_home": "law/policy/operational-values.json#/values/stack",
+      "mode": "direct"
+    },
+    {
+      "article": 11,
+      "key": "invariant.identity-severity-readiness",
+      "canonical_home": "law/schemas/invariant.schema.json and law/schemas/common-defs.schema.json",
+      "mode": "reference"
+    },
+    {
+      "article": 13,
+      "key": "trace.location-and-completeness",
+      "canonical_home": "law/schemas/trace.schema.json and law/trace.json",
+      "mode": "reference"
+    },
+    {
+      "article": 14,
+      "key": "invariant.change-policy",
+      "canonical_home": "law/schemas/invariant.schema.json#/properties/change_policy",
+      "mode": "reference"
+    },
+    {
+      "article": 15,
+      "key": "triage.classes-and-routes",
+      "canonical_home": "law/schemas/triage.schema.json and law/policy/operational-values.json#/values/triage_routes",
+      "mode": "reference"
+    },
+    {
+      "article": 16,
+      "key": "cycles.composition",
+      "canonical_home": "law/policy/operational-values.json#/values/cycles",
+      "mode": "direct"
+    },
+    {
+      "article": 17,
+      "key": "gates.hard",
+      "canonical_home": "law/policy/operational-values.json#/values/hard_gate",
+      "mode": "direct"
+    },
+    {
+      "article": 18,
+      "key": "gates.soft",
+      "canonical_home": "law/policy/operational-values.json#/values/soft_gate",
+      "mode": "direct"
+    },
+    {
+      "article": 19,
+      "key": "iteration.bounds",
+      "canonical_home": "law/policy/operational-values.json#/values/iteration",
+      "mode": "direct"
+    },
+    {
+      "article": 21,
+      "key": "escalation.lifecycle",
+      "canonical_home": "law/policy/operational-values.json#/values/escalation",
+      "mode": "direct"
+    },
+    {
+      "article": 22,
+      "key": "rgr.lifecycle",
+      "canonical_home": "law/policy/operational-values.json#/values/rgr",
+      "mode": "direct"
+    },
+    {
+      "article": 23,
+      "key": "model-routing.ladder",
+      "canonical_home": "law/policy/operational-values.json#/values/model_routing",
+      "mode": "direct"
+    },
+    {
+      "article": 24,
+      "key": "triplets.choreography",
+      "canonical_home": "law/policy/operational-values.json#/values/orchestration",
+      "mode": "direct"
+    },
+    {
+      "article": 25,
+      "key": "locks.behavior",
+      "canonical_home": "law/policy/operational-values.json#/values/locks",
+      "mode": "direct"
+    },
+    {
+      "article": 26,
+      "key": "checkpoints.cadence",
+      "canonical_home": "law/policy/operational-values.json#/values/orchestration",
+      "mode": "direct"
+    },
+    {
+      "article": 27,
+      "key": "worktrees.layout-and-cap",
+      "canonical_home": "law/policy/operational-values.json#/values/worktrees",
+      "mode": "direct"
+    },
+    {
+      "article": 28,
+      "key": "repository.integration-branch",
+      "canonical_home": "law/policy/operational-values.json#/values/repository",
+      "mode": "direct"
+    },
+    {
+      "article": 30,
+      "key": "test-weakening.thresholds",
+      "canonical_home": "law/policy/thresholds.json and law/schemas/test-weakening-config.schema.json",
+      "mode": "reference"
+    },
+    {
+      "article": 31,
+      "key": "test-quarantine.lifecycle",
+      "canonical_home": "law/policy/operational-values.json#/values/test_quarantine",
+      "mode": "direct"
+    },
+    {
+      "article": 32,
+      "key": "sensor-reading.shape",
+      "canonical_home": "law/schemas/sensor-reading.schema.json",
+      "mode": "reference"
+    },
+    {
+      "article": 34,
+      "key": "auditor.cadence",
+      "canonical_home": "law/policy/operational-values.json#/values/auditor",
+      "mode": "direct"
+    },
+    {
+      "article": 37,
+      "key": "prompts.composition",
+      "canonical_home": "law/schemas/prompt-composition.schema.json",
+      "mode": "reference"
+    },
+    {
+      "article": 39,
+      "key": "results.uncertainty",
+      "canonical_home": "law/policy/operational-values.json#/values/result_vocabulary",
+      "mode": "direct"
+    },
+    {
+      "article": 40,
+      "key": "upgrade.mechanics",
+      "canonical_home": "law/policy/operational-values.json#/values/upgrade",
+      "mode": "direct"
+    }
+  ],
+  "values": {
+    "stack": {
+      "primary": ["nestjs", "angular", "postgres"],
+      "resolved_stack_count": 1,
+      "additional_stack_source": "F5 stack-adapter packs"
+    },
+    "triage_routes": {
+      "plant_bug": "engineer",
+      "sensor_error": "inspector",
+      "policy_issue": "harness_review",
+      "reference_gap": "rgr"
+    },
+    "cycles": {
+      "A": {
+        "checks": ["typecheck", "lint", "affected-unit"],
+        "iteration_advance": false
+      },
+      "B": {
+        "checks": ["full-hard-gate-task-scope"],
+        "iteration_advance": true
+      },
+      "C": {
+        "checks": ["full-scorecard", "soft-gates", "auditor-regeneration"],
+        "runs_per_merge": 1
+      }
+    },
+    "hard_gate": {
+      "required": [
+        "affected-typecheck",
+        "lint-errors-zero",
+        "affected-build",
+        "assigned-tests",
+        "empty-database-migrations",
+        "contract-validation",
+        "generated-byte-identity",
+        "inventory-regeneration",
+        "test-weakening-policy"
+      ]
+    },
+    "soft_gate": {
+      "rubrics": [
+        "spec-coherence",
+        "plant-idiomaticity",
+        "test-depth",
+        "spec-test-traceability",
+        "mutation-kill-rate-when-applicable"
+      ],
+      "evaluator_must_be_independent": true,
+      "thresholds": "law/policy/thresholds.json"
+    },
+    "iteration": {
+      "supported_default_attempts": 1,
+      "experimental_default_tier_attempts": 3,
+      "experimental_bumped_tier_attempts": 1,
+      "exhausted_status": "experimental_blocked"
+    },
+    "escalation": {
+      "branch_prefix": "escalated/",
+      "preserve_recoverable_work": true,
+      "release_locks": true,
+      "automatic_replacement": false,
+      "database_disposal_requires_evidence_retention": true
+    },
+    "rgr": {
+      "branch_prefix": "rgr/",
+      "task_status": "rgr-pending",
+      "release_locks": true,
+      "destroy_worktree": true,
+      "human_requeue_required": true
+    },
+    "model_routing": {
+      "steps": [
+        "different-family-same-context",
+        "larger-same-family",
+        "larger-alternate-family",
+        "human"
+      ],
+      "supported_invocation": "human-initiated"
+    },
+    "orchestration": {
+      "triplet_order": ["architect", "inspector", "engineer"],
+      "merge_order": ["architect", "inspector", "engineer"],
+      "mandatory_checkpoint": "task-completion"
+    },
+    "locks": {
+      "key": ["substrate", "module"],
+      "denial_action": "requeue-with-priority-bump",
+      "repeated_denial_action": "human-review"
+    },
+    "worktrees": {
+      "root": ".devai/worktrees",
+      "active_non_adopted_cap": 3,
+      "human_adopted_cap_exempt": true,
+      "lockfile_mismatch": "fresh-install"
+    },
+    "repository": {
+      "integration_branch": "main"
+    },
+    "test_quarantine": {
+      "trace_flags": ["flaky", "quarantine"],
+      "temporary": true,
+      "eventual_broken_state": "hard-gate-fail"
+    },
+    "auditor": {
+      "after_merge": true,
+      "human_on_demand": true,
+      "pre_batch_on_demand": true,
+      "timer": false
+    },
+    "result_vocabulary": {
+      "scorecard_uncertain": "unknown",
+      "triage_uncertain": "inconclusive",
+      "soft_gate_uncertainty": "confidence-interval"
+    },
+    "upgrade": {
+      "action": "adopt upgrade",
+      "client_explicit": true,
+      "implicit": false,
+      "history_preserved": true
+    }
+  }
+}

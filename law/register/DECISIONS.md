@@ -3124,6 +3124,78 @@ package publication, tag, GitHub Release, Pages deployment, external deployment,
 evidence reuse or promotion, real-stynx mutation, predecessor mutation, or R-0007+
 work.
 
+### DII-212 — Extract constitutional operational values into policy
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B1 operational-value extraction; DII-211; R-0001-LAW-ALTITUDE-SWEEP; BL-034; Constitution Articles 1, 11, 13-19, 21-28, 30-32, 34, 37, 39-40`
+
+The R-0001 altitude sweep identified mechanism values embedded in constitutional
+prose. R-0006 adopts `law/policy/operational-values.json` as their sole operational
+home. The Constitution remains the durable doctrine and anchor source; where it
+contains a concrete token, count, path, command composition, field list, or lifecycle
+choreography enumerated by this policy, that spelling is an explanatory founding
+snapshot rather than an independently editable second setpoint. A change to the
+policy cannot weaken or contradict the constitutional doctrine, and any doctrinal
+change still requires the full Article-40 amendment process.
+
+This extraction changes no doctrine and therefore does not rewrite or version-bump
+the ratified Constitution. It makes the already-ratified distinction between axiom and
+mechanism explicit and mechanically locatable. Existing schemas remain canonical for
+their record shapes; the policy points to them rather than restating their full
+definitions. Thresholds remain canonical in `law/policy/thresholds.json`.
+
+No operational value may be authoritative in two policy homes. The extraction
+registry names one canonical home for every altitude-sweep row and records whether the
+value is carried directly or by reference. Later implementation consumes those homes;
+it may not copy a value back into constitutional text or introduce an uncatalogued
+override.
+
+### DII-213 — Decide mutation-strength obligations
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B1 mutation-strength decision; DII-211; DII-212; ADR-004; BL-035; Constitution Articles 39 and 42; law/policy/thresholds.json`
+
+Mutation strength is a separately selected deterministic validation obligation, not a
+universal substitute for ordinary tests and not an aggregation rule. The canonical
+semantics are `law/policy/mutation-strength.json`. A mutation obligation exists only
+when an invariant, validation strategy, or governed risk selection marks a scope
+mutation-relevant. The selection must be nonempty, exact-candidate-bound, and enumerate
+its scenarios; an empty or caller-trimmed selection is UNKNOWN, never PASS.
+
+A mutation observation is PASS only when every required scenario executed, every
+required critical mutant was killed, no runtime or infrastructure error occurred, the
+canonical mutation score meets `thresholds.mutation.score_min`, and the survivor count
+does not exceed `thresholds.mutation.survived_max`. A surviving required critical
+mutant, score breach, or survivor breach is FAIL after a valid observation exists.
+Invalid reports, exact-subject mismatches, missing evidence, unavailable runners,
+timeouts, crashes, incomplete selections, and independently uncheckable results are
+UNKNOWN and block any required readiness conclusion without being relabelled FAIL.
+
+Mutation PASS is supporting evidence only. It cannot establish readiness by itself,
+and judge-only assessment cannot replace an executable mutation observation. This
+decision neither changes the existing 60/50 setpoints nor decides how heterogeneous
+evidence is aggregated.
+
+### DII-214 — Decide evidence-aggregation semantics
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B1 evidence-aggregation decision; DII-211; DII-212; ADR-004; BL-035; Constitution Articles 11, 39 and 42`
+
+Evidence aggregation is independent of mutation-strength selection. Its canonical
+semantics are `law/policy/evidence-aggregation.json`. Aggregation first derives a
+nonempty required population from policy, then groups observations by exact subject,
+kind, scope, and binding. A current readiness-bearing FAIL dominates the aggregate. If
+no current FAIL exists but any required observation is absent, stale, UNKNOWN,
+unavailable, conflicting, judge-only, or otherwise independently uncheckable, the
+aggregate is UNKNOWN and blocks PASS. PASS exists only when every required member has
+one current, independently checkable PASS.
+
+A recorded FAIL leaves the current same-kind population only when a newer valid
+observation of the same exact subject, kind, scope, and binding supersedes it. Filtering
+or omission cannot erase it. An error is an observation failure and maps to UNKNOWN,
+not to PASS or FAIL. N/A requires a policy-declared applicability record, remains
+visible with its reason, and cannot reduce a readiness-bearing population to empty.
+Advisory and experimental evidence may be reported but cannot satisfy a required
+readiness member.
+
+This decision supplies no readiness standing, does not activate evidence reuse or
+promotion, and does not convert predecessor or local rehearsal evidence into current
+standing.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
