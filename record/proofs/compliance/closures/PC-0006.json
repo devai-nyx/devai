@@ -1,0 +1,1693 @@
+{
+  "round_id": "R-0005",
+  "title": "Implemented governed evidence lifecycle and round mechanics",
+  "declaring_decision": "DII-202",
+  "closing_decision": "DII-206",
+  "batches": [
+    {
+      "id": "R5-001",
+      "roles": [
+        "Owner"
+      ],
+      "commit": "47d9ca8378950505520275a57134175b115f568f",
+      "headline": "product(r0005): authorize independent Codex review"
+    },
+    {
+      "id": "R5-002",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "f93b95748c179571c0cafb89b04046ee68a005e8",
+      "headline": "law(r0005): declare evidence lifecycle round"
+    },
+    {
+      "id": "R5-003",
+      "roles": [
+        "Owner"
+      ],
+      "commit": "861ca54006e33dd90f1fcaed658c3eb8b3699413",
+      "headline": "product(r0005): adopt three-tree round journey"
+    },
+    {
+      "id": "R5-004",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "99f6dbd24b19dc440608d718b074d2ea817aa71f",
+      "headline": "law(r0005): authorize bounded red clusters"
+    },
+    {
+      "id": "R5-005",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "6ecbfd90ec4aec39d352f4bcf474b53c7530bc62",
+      "headline": "test(r0005): establish evidence lifecycle reds"
+    },
+    {
+      "id": "R5-006",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "6ed9f724a8388469aeb40b0ec312ade13fbfc097",
+      "headline": "law(r0005): govern evidence and round mechanics"
+    },
+    {
+      "id": "R5-007",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "9de2ee173564597ad143391c4e1d4e9597963f4b",
+      "headline": "law(r0005): complete proof epoch vocabulary"
+    },
+    {
+      "id": "R5-008",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "02da3be1a0e242aa3938bf76482b29361aa7cc2e",
+      "headline": "feat(r0005): implement exact evidence epochs"
+    },
+    {
+      "id": "R5-009",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "584337d7e444ec1a24dfbf2b56ce13086938c35e",
+      "headline": "feat(r0005): close rounds and observations cleanly"
+    },
+    {
+      "id": "R5-010",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "e76d65f82056cfbdb6d7d89e93fcec659417eb1d",
+      "headline": "law(r0005): bind proof-writing sweep authority"
+    },
+    {
+      "id": "R5-011",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "1bfbfbbaea32223c7126eddd80d57c0edeac51ed",
+      "headline": "law(r0005): remove archived status wording"
+    },
+    {
+      "id": "R5-012",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "b167ce9ab815dd9183291538234137f282a15154",
+      "headline": "feat(r0005): enforce sweep and bounded authority"
+    },
+    {
+      "id": "R5-013",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "3b7fc2b6a4ed156864638a0267f0f5d732c9051f",
+      "headline": "test(r0005): verify evidence lifecycle repairs"
+    },
+    {
+      "id": "R5-014",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "3771e05d948e4e37fe1f975e9d68a3599999d409",
+      "headline": "law(r0005): retire bounded red authority"
+    },
+    {
+      "id": "R5-015",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "00f56cc101d8c340cb6876694c71f13cb4132cd0",
+      "headline": "law(r0005): refresh invariant trace projection"
+    },
+    {
+      "id": "R5-016",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "c717c73a43439b516b3b6271770e08da8619d053",
+      "headline": "law(r0005): bind repository projection repair"
+    },
+    {
+      "id": "R5-017",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "35bd9bd7bb26f3f9b5707cee8d89ecdf4c1c567d",
+      "headline": "test(r0005): require exact reference projection"
+    },
+    {
+      "id": "R5-018",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "30bf3eea3f7c0b30fe6787cd9af41ecb5d5995a0",
+      "headline": "law(r0005): refresh repository reference projection"
+    },
+    {
+      "id": "R5-019",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "54a0b5e01792ff304beb3da425823114864717e0",
+      "headline": "test(r0005): reconcile current reference projection"
+    },
+    {
+      "id": "R5-020",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "340360f45f9a99cf349e1c85c618b6d5c09044d4",
+      "headline": "law(r0005): bind exit lint repair"
+    },
+    {
+      "id": "R5-021",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "d869e1f8e9e15647cc2ed8ef036baef37a02457b",
+      "headline": "test(r0005): make adversarial fixtures lint clean"
+    },
+    {
+      "id": "R5-022",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "571d1cd07082a0bd1947591de7c5d9c449dce523",
+      "headline": "fix(r0005): remove retired lifecycle import"
+    },
+    {
+      "id": "R5-023",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "afe0e001eae24f31279f6ebc84e75ee75eef34eb",
+      "headline": "law(r0005): bind exit formatting repair"
+    },
+    {
+      "id": "R5-024",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "14fa5475a5af0a61e9dc6fcf98b2de3d421c9d18",
+      "headline": "test(r0005): format refreshed evidence fixtures"
+    },
+    {
+      "id": "R5-025",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "2929b4ffd94be740e1008fb46619d6006f465930",
+      "headline": "law(r0005): bind policy materialization repair"
+    },
+    {
+      "id": "R5-026",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "450bf79cf6a89cdbb01373c2dba8ca9cf3d10e62",
+      "headline": "test(r0005): bind current authority policy bytes"
+    },
+    {
+      "id": "R5-027",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "4d040c469d7ac9e82430a88eb261b9340fd63d57",
+      "headline": "build(r0005): materialize current authority policy"
+    },
+    {
+      "id": "R5-028",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "e03b8f941ca23bcdc436b8840a45234980c00f03",
+      "headline": "test(r0005): verify runtime policy resolution"
+    },
+    {
+      "id": "R5-029",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "4ea2c00f0eecf645d3945b0e0249ec4e09abd5bf",
+      "headline": "law(r0005): synchronize authority policy mirror"
+    },
+    {
+      "id": "R5-030",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "84be6f75181fe43b258f9007afb5b0e16438b686",
+      "headline": "law(r0005): bind sweep child routing repair"
+    },
+    {
+      "id": "R5-031",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "75b435278a8d7eff97287ff170cb06eeb315e6c1",
+      "headline": "test(r0005): bind sweep child routing"
+    },
+    {
+      "id": "R5-032",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "06e9af6b4f67d3278bf01c9aad4989438c042559",
+      "headline": "fix(r0005): route sweep children through read bindings"
+    },
+    {
+      "id": "R5-033",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "5a6521f094dd629561562b0e9001d9c8e6459fbb",
+      "headline": "test(r0005): require canonical sweep child routes"
+    },
+    {
+      "id": "R5-034",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "9ca6c4bba2de82f6a9e62ad81bd268be397b66c5",
+      "headline": "fix(r0005): preserve sweep child authority"
+    },
+    {
+      "id": "R5-035",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "e92be4df237fbe186d19a27c118473ecac13868c",
+      "headline": "test(r0005): require honest sweep child blockers"
+    },
+    {
+      "id": "R5-036",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "70bb4950cd39c5f6d2f50cac4d7951b6f9289bf5",
+      "headline": "fix(r0005): persist bounded sweep blockers"
+    },
+    {
+      "id": "R5-037",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "cc2eee2dacad8f4da17fdd93eed4f5bea74e7b65",
+      "headline": "test(r0005): require folded sensor blockers"
+    },
+    {
+      "id": "R5-038",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "2cb2ff31186e617e687febfa9eadab55fb7ad788",
+      "headline": "fix(r0005): bound folded sweep sensors"
+    },
+    {
+      "id": "R5-039",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "cc84024740c6c55ca486f94355227f00df651851",
+      "headline": "audit(r0005): record evidence lifecycle as-built"
+    },
+    {
+      "id": "R5-040",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "7883c74ce65149df246cab431e8d8b22b967aba4",
+      "headline": "law(r0005): retire sweep repair authority"
+    },
+    {
+      "id": "R5-041",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "f47ec0cd0fd82b3d58a1fb64d50ddd82e721ace9",
+      "headline": "audit(r0005): preserve independent Codex failure"
+    },
+    {
+      "id": "R5-042",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "396126279ca2d27a74476278165bbb7471541afc",
+      "headline": "law(r0005): govern independent review repairs"
+    },
+    {
+      "id": "R5-043",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "faad6fdfda023f523310f0d8b478bf13b5182dd2",
+      "headline": "test(r0005): expose independent review blockers"
+    },
+    {
+      "id": "R5-044",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "893213892750e0c5cdd3eea2fa4703a23783ba38",
+      "headline": "law(r0005): bind independent review corrections"
+    },
+    {
+      "id": "R5-045",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "d752bac23956ba1ff466b603cf0b523ce8ebe43e",
+      "headline": "fix(r0005): enforce reviewed lifecycle boundaries"
+    },
+    {
+      "id": "R5-046",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "627405113fa9d95f785b752fcef0342e846fe869",
+      "headline": "test(r0005): align reviewed lifecycle fixtures"
+    },
+    {
+      "id": "R5-047",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "c213b47602c75d7e4ae0bc7ce279a53731260b98",
+      "headline": "fix(r0005): retire legacy chain writers"
+    },
+    {
+      "id": "R5-048",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "e7b22100d6a5b0328cce58f338028f304ce85329",
+      "headline": "fix(r0005): commit attributable post-merge audits"
+    },
+    {
+      "id": "R5-049",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "486c326ea7ebfef9cb8e0920bb96dcea7c7d1ffd",
+      "headline": "test(r0005): verify attributable post-merge commits"
+    },
+    {
+      "id": "R5-050",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "52b3ec1d28189ea8e5ba6128871754efb7044562",
+      "headline": "fix(r0005): detect conditional skips by syntax"
+    },
+    {
+      "id": "R5-051",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "564adbd19584c830004dce44bc7e505e9c617aa2",
+      "headline": "test(r0005): prove conditional skip adversaries"
+    },
+    {
+      "id": "R5-052",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "f93a7e11d91d1fd0384839b127372111b9a08da2",
+      "headline": "fix(r0005): preserve command registry descriptions"
+    },
+    {
+      "id": "R5-053",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "f479b03d0b8e1d5ce4985f5f63f48fc69d3a7be6",
+      "headline": "fix(r0005): require exact sequencing evidence"
+    },
+    {
+      "id": "R5-054",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "27677c4ef651785dbb43c7ebbde6b4a8f496b49e",
+      "headline": "audit(r0005): bind observed red evidence"
+    },
+    {
+      "id": "R5-055",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "9e00f7e443cf5f70d721fe8be03f6df24848df40",
+      "headline": "law(r0005): bind exact sequencing evidence"
+    },
+    {
+      "id": "R5-056",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "df611233910a7631c55fbbfe6c8ebd5e5d71f0c6",
+      "headline": "test(r0005): reject sequencing evidence bypasses"
+    },
+    {
+      "id": "R5-057",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "c047a70e5574bb0dbfdf1f7434fa270d7ae98c95",
+      "headline": "test(r0005): cover worktree deletion adversaries"
+    },
+    {
+      "id": "R5-058",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "352b04b33a8e9a25ed30da0c6371c9d2187ea456",
+      "headline": "law(r0005): bind correction ADR sources"
+    },
+    {
+      "id": "R5-059",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "b875121d2c07ddba4e6a486e52299fbc893df70c",
+      "headline": "fix(r0005): allow exact lifecycle prompt scopes"
+    },
+    {
+      "id": "R5-060",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "977a2e3e435947b84f177ed8614686487f284aad",
+      "headline": "test(r0005): align correction ADR and prompt bounds"
+    },
+    {
+      "id": "R5-061",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "ac3f494d4d965e6db32237c888c18376e3c5229e",
+      "headline": "law(r0005): bind prompt scope repair sequence"
+    },
+    {
+      "id": "R5-062",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "4ea2dbce2418042d4f9b9abd5813294470e57d19",
+      "headline": "law(r0005): govern path-aware forbidden scanning"
+    },
+    {
+      "id": "R5-063",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "7a17bc3a90c435e24692bb23ee86a67eb3264042",
+      "headline": "test(r0005): expose nested protected-path false positive"
+    },
+    {
+      "id": "R5-064",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "691a90d109ee595c5f5e9dccba4190dc3af65023",
+      "headline": "fix(r0005): classify protected paths from repository root"
+    },
+    {
+      "id": "R5-065",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "94192b358e87eca193f9e242505bddfe71d2fde5",
+      "headline": "audit(r0005): bind strict governance red evidence"
+    },
+    {
+      "id": "R5-066",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "d71bcdab758c0c8f02d772f67cdb3e6e5bae22e0",
+      "headline": "law(r0005): bind strict governance repair sequence"
+    },
+    {
+      "id": "R5-067",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "fcc9a1baf94913e3e69c5f54ccbd44f50d4ef12e",
+      "headline": "law(r0005): govern single-sensor read projection"
+    },
+    {
+      "id": "R5-068",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "beb081d5160a57b36b59d97f813abc77ed99f3eb",
+      "headline": "test(r0005): expose single-sensor authority mismatch"
+    },
+    {
+      "id": "R5-069",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "c3eafce02dac925bc18ade3627f774b963b4adb2",
+      "headline": "law(r0005): preserve sealed ADR and govern read sensors"
+    },
+    {
+      "id": "R5-070",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "d8ca53baca9b570fa025a7ab9dd74ba3b6167437",
+      "headline": "law(r0005): supersede restored review decisions"
+    },
+    {
+      "id": "R5-071",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "63c917a849945a86016d0e8dc10e09bbf58d96c7",
+      "headline": "law(r0005): govern governance parser parity"
+    },
+    {
+      "id": "R5-072",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "f2a9d60bd8b7fc79ddd8bc09ffbd0d6d678652a1",
+      "headline": "test(r0005): expose governance inline-array drift"
+    },
+    {
+      "id": "R5-073",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "f3ba4dfb5264f000406bf790cb87293d560b9892",
+      "headline": "fix(r0005): align governance inline arrays"
+    },
+    {
+      "id": "R5-074",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "3ca5c648209b0c29473923f7da5d45a36f8f1602",
+      "headline": "fix(r0005): project read-only single sensors"
+    },
+    {
+      "id": "R5-075",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "dccc4d531173757067c69284148fa07746df1e1c",
+      "headline": "audit(r0005): bind authority and parser reds"
+    },
+    {
+      "id": "R5-076",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "4e9834847c2487a0a0d710706ed9e313b4fd0b77",
+      "headline": "law(r0005): bind authority and parser repair sequences"
+    },
+    {
+      "id": "R5-077",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "bdb1c93516db7265c85015fd6bc0e0a30ea2a92c",
+      "headline": "law(r0005): reconcile corrective ADR roster"
+    },
+    {
+      "id": "R5-078",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "f4de225c5c2080d8fb95cbe534faabe0cf377d50",
+      "headline": "test(r0005): bind corrective ADR roster"
+    },
+    {
+      "id": "R5-079",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "d69b9e0e6d34ffa83cb9a55907bef3029ff85767",
+      "headline": "test(r0005): align ADR index topology guard"
+    },
+    {
+      "id": "R5-080",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "2329e5914d59d5d7ac1fac7086a4dc7726dcfda9",
+      "headline": "law(r0005): govern review trace projection"
+    },
+    {
+      "id": "R5-081",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "182d39df032e44f89aed6ab70b768a62dca9b061",
+      "headline": "test(r0005): bind review contracts to invariants"
+    },
+    {
+      "id": "R5-082",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "30c2e277431fde670e1bfea8b6f3286b0e3eddd9",
+      "headline": "law(r0005): project review invariant coverage"
+    },
+    {
+      "id": "R5-083",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "cc41b6e693eb821aa92498518d3df22bd940e6f7",
+      "headline": "law(r0005): govern sequencing test lint repair"
+    },
+    {
+      "id": "R5-084",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "c7fc306755dea5c53c915eac2df70163761eaadc",
+      "headline": "test(r0005): remove sequencing non-null assertion"
+    },
+    {
+      "id": "R5-085",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "a56b3a860066231e2714d23a5889ef0fbf7f272d",
+      "headline": "law(r0005): govern child fixture type repair"
+    },
+    {
+      "id": "R5-086",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "26d9b0077bffaa44915dbbd481cc24ef2ace6bf4",
+      "headline": "test(r0005): type child authority fixtures structurally"
+    },
+    {
+      "id": "R5-087",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "0c0745f05ce546b7d9b1c18cfd33ee804292faf5",
+      "headline": "law(r0005): govern final formatting repair"
+    },
+    {
+      "id": "R5-088",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "dedab28d74354070b4690968cbd99d226c65dc60",
+      "headline": "fix(r0005): format single-sensor projection"
+    },
+    {
+      "id": "R5-089",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "1fde1c607dbbe6f8dd9efff660242d88bb3c065c",
+      "headline": "test(r0005): format reviewed adversaries"
+    },
+    {
+      "id": "R5-090",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "6b6d09e3ce0f775950b3676ecb8524072d2c2ce7",
+      "headline": "audit(r0005): format red evidence bindings"
+    },
+    {
+      "id": "R5-091",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "52a353b31fb680d981d6c2f1f947d22ec988e7dc",
+      "headline": "law(r0005): bind formatted sensor projection"
+    },
+    {
+      "id": "R5-092",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "4346bdbb2af4cc917eb197edfd212b4873283eae",
+      "headline": "audit(r0005): refresh final ladder evidence"
+    },
+    {
+      "id": "R5-093",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "249b749edcedf643f45c489d20b9806f6b1f1ffa",
+      "headline": "audit(r0005): preserve second Codex review failure"
+    },
+    {
+      "id": "R5-094",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "9201a78acd34c81d15e5e855b5b3b1740db0dfd6",
+      "headline": "govern(r0005): authorize second-review repairs"
+    },
+    {
+      "id": "R5-095",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "bf727194e9d1cdf84ceb8b6fd690a277423cef36",
+      "headline": "test(r0005): expose second-review authority gaps"
+    },
+    {
+      "id": "R5-096",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "94f46a25e96cad4ebd66d6e8eb43b4b54a5b0237",
+      "headline": "fix(r0005): close public writer and prompt exemptions"
+    },
+    {
+      "id": "R5-097",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "aec56d3c606bb3a3db52dea3badd3aa726b5d399",
+      "headline": "test(r0005): route lifecycle skills off authority paths"
+    },
+    {
+      "id": "R5-098",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "848da7abe9f368d5d771bac054354801fb4039bc",
+      "headline": "fix(r0005): separate lifecycle authority from skills"
+    },
+    {
+      "id": "R5-099",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "b687131e3fe1bcef6c32c561b13056ebfd688b35",
+      "headline": "fix(r0005): retire unsafe lifecycle skill entries"
+    },
+    {
+      "id": "R5-100",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "a32fb1e2c0951d6d0cd537ee776acb36890245f8",
+      "headline": "test(r0005): accept authority-safe lifecycle surface"
+    },
+    {
+      "id": "R5-101",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "a086ef48bb4b072260121a5c1ff83bcb50b4c828",
+      "headline": "test(r0005): bind proposal references to governed inputs"
+    },
+    {
+      "id": "R5-102",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "413b1d0d234e11489b6b2559ad25cc8ecc7cbf3a",
+      "headline": "fix(r0005): bind lifecycle proposals to governed paths"
+    },
+    {
+      "id": "R5-103",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "6f01d988802f13e9d8919ef211814c8d64f89768",
+      "headline": "fix(r0005): refresh lifecycle prompt provenance"
+    },
+    {
+      "id": "R5-104",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "e7bfabfd9e3c47450ccbaacc4661a7beb5708f42",
+      "headline": "test(r0005): reconcile governed proposal fixtures"
+    },
+    {
+      "id": "R5-105",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "d388120c26cdf73319249e549d665ad9ac3e3b1d",
+      "headline": "docs(r0005): clarify lifecycle authority boundary"
+    },
+    {
+      "id": "R5-106",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "db994959aeceb99ce977517dd13dc2b0dacc8dd6",
+      "headline": "audit(r0005): bind second-review red evidence"
+    },
+    {
+      "id": "R5-107",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "65382bddca7f4f487005c1b58cb357b038b0fab8",
+      "headline": "audit(r0005): correct red contract source paths"
+    },
+    {
+      "id": "R5-108",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "7f9f4aefcef26f752b0f7de696dfefc85fdabc0d",
+      "headline": "govern(r0005): bind second-review repair sequence"
+    },
+    {
+      "id": "R5-109",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "cf4c82fdeb005895c65af1a21a3851cc7a826e49",
+      "headline": "style(r0005): format lifecycle repair sources"
+    },
+    {
+      "id": "R5-110",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "cda6ac1414177b14c2267b3b36112eb7806aeef4",
+      "headline": "style(r0005): format lifecycle repair contract"
+    },
+    {
+      "id": "R5-111",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "4312c11aa8603f234e2d13b534f18337a42977d6",
+      "headline": "style(r0005): format repair authority ledger"
+    },
+    {
+      "id": "R5-112",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "2f3dc228fc1756325e922c873926d05d5e39e0d5",
+      "headline": "govern(r0005): bind formatting repair sequence"
+    },
+    {
+      "id": "R5-113",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "1207e297ecfc4be0c16ff3fcb34ef7df29122a85",
+      "headline": "audit(r0005): refresh second-review as-built"
+    },
+    {
+      "id": "R5-114",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "732a2562753991089737402a1f895c0d0a0aca30",
+      "headline": "audit(r0005): bind exact final line coverage"
+    },
+    {
+      "id": "R5-115",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "dddb863ec671f01d70130e55df5781d22bf5c808",
+      "headline": "audit(r0005): preserve third Codex review failure"
+    },
+    {
+      "id": "R5-116",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "1e2a05f2c8edfe0293d1e8d76929917514022c80",
+      "headline": "govern(r0005): authorize third-review repairs"
+    },
+    {
+      "id": "R5-117",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "67aa7940fd3b52daca219847fd11d7201e830f2f",
+      "headline": "test(r0005): expose third-review lifecycle gaps"
+    },
+    {
+      "id": "R5-118",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "02aaaf7b0ff932a44d8f1ed2628ca7ff207e48eb",
+      "headline": "fix(r0005): complete lifecycle authority routing"
+    },
+    {
+      "id": "R5-119",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "e6a0d9dba29c207968fa6c541dcdf342539c9f81",
+      "headline": "test(r0005): bind authority-safe lifecycle routing"
+    },
+    {
+      "id": "R5-120",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "29e3ff5ff1d0a74ea930a1b9e07958c9c80721b0",
+      "headline": "docs(r0005): reconcile in-place round lifecycle"
+    },
+    {
+      "id": "R5-121",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "3db563125c652bc7314ef1de5af3e06b8782ead0",
+      "headline": "audit(r0005): record third-review floor collateral"
+    },
+    {
+      "id": "R5-122",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "2bd5e0c17bef596e45822fe121d97392e7ac5d3a",
+      "headline": "govern(r0005): authorize prompt collateral repair"
+    },
+    {
+      "id": "R5-123",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "8651b26c04c3b80f4b83a2d7016873deed705bfd",
+      "headline": "fix(r0005): make docs recovery diagnose-only"
+    },
+    {
+      "id": "R5-124",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "3925a2f89f8f5ce041e247a29c00fd624b711765",
+      "headline": "fix(r0005): keep docs diagnosis self-contained"
+    },
+    {
+      "id": "R5-125",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "51587425d7acb70da0a801e63a2aaa4832ea4be1",
+      "headline": "test(r0005): bind diagnose-only docs recovery"
+    },
+    {
+      "id": "R5-126",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "d61a48e40062ad4dcb2007a7587af4d2758d62be",
+      "headline": "test(r0005): refresh lifecycle behavior corpus"
+    },
+    {
+      "id": "R5-127",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "c8885fd586affbd7e0d261c2eda60ea549f2a8fb",
+      "headline": "docs(r0005): refresh repository reference projection"
+    },
+    {
+      "id": "R5-128",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "e8dde2af0cd33035c5f808e2c611486ffbee46ca",
+      "headline": "test(r0005): bind canonical lifecycle documentation"
+    },
+    {
+      "id": "R5-129",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "7ad35369300044384987f7d4046c56e9e542cce4",
+      "headline": "test(r0005): reconcile exact lifecycle fixture delta"
+    },
+    {
+      "id": "R5-130",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "a8ae6e634b50f7e9a8ca44aa0c12ee4c054915d6",
+      "headline": "audit(r0005): bind third-review red evidence"
+    },
+    {
+      "id": "R5-131",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "77a706796775cd71a49e745375c667178c27862f",
+      "headline": "govern(r0005): bind third-review repair sequence"
+    },
+    {
+      "id": "R5-132",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "23a6adfbd561c1ad591a6aaee2f677904ac8ae13",
+      "headline": "audit(r0005): record trace projection failure"
+    },
+    {
+      "id": "R5-133",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "504bbf9aeb4dbf01fab444b25bdf5b8a10fc0abe",
+      "headline": "govern(r0005): refresh lifecycle trace projection"
+    },
+    {
+      "id": "R5-134",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "04e3b812c47e49c75ab01f00745f581d345a9577",
+      "headline": "audit(r0005): bind third-review correction evidence"
+    },
+    {
+      "id": "R5-135",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "0045bdb8182ebc4c1bf87815c4e74a7c292efa35",
+      "headline": "govern(r0005): retire third-review repair authority"
+    },
+    {
+      "id": "R5-136",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "46743433d6ec312fc12a36d6ce9ac480d4278bca",
+      "headline": "audit(r0005): preserve fourth Codex review failure"
+    },
+    {
+      "id": "R5-137",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "d906c947a93ceb9cd9e6e4aed28ca0acfa9335dd",
+      "headline": "govern(r0005): authorize fourth-review repairs"
+    },
+    {
+      "id": "R5-138",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "5d93c201dd3d7d830b7fef150108be92f8802018",
+      "headline": "test(r0005): expose fourth-review governance gaps"
+    },
+    {
+      "id": "R5-139",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "62b847749078aad2fb1836553881956147cd514c",
+      "headline": "docs(r0005): reconcile current lifecycle corpus"
+    },
+    {
+      "id": "R5-140",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "7693b2ba715e8781936fbb5fdaef8b83e053be4d",
+      "headline": "test(r0005): bind red fixtures to implementation scope"
+    },
+    {
+      "id": "R5-141",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "a0b82da6db6a0aa82df004f610e2d0f77ba962bf",
+      "headline": "fix(r0005): enforce semantic red scope"
+    },
+    {
+      "id": "R5-142",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "58b483e16fecf2a425d1309be8e8dfea74001cc2",
+      "headline": "audit(r0005): bind fourth-review red evidence"
+    },
+    {
+      "id": "R5-143",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "02d2d5de912b38de823d9134ef6e710c3408b10b",
+      "headline": "govern(r0005): bind semantic red evidence"
+    },
+    {
+      "id": "R5-144",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "1b68a2450a3b8d80c3808a822f7bbee8551c6eb4",
+      "headline": "audit(r0005): record fourth-review floor collateral"
+    },
+    {
+      "id": "R5-145",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "00c7af581deef6ad6e29d2293d58200b29cc4937",
+      "headline": "govern(r0005): authorize fourth-review projection repair"
+    },
+    {
+      "id": "R5-146",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "9f16613e42d43e81c3a843f750722bbc1f42f160",
+      "headline": "audit(r0005): correct projection failure direction"
+    },
+    {
+      "id": "R5-147",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "6968d039bc3ccc57d3a5412ad1f90ba59f56032e",
+      "headline": "govern(r0005): refresh fourth-review projection"
+    },
+    {
+      "id": "R5-148",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "f31324c5627b542c8327501ac507916530be1f50",
+      "headline": "audit(r0005): bind fourth-review correction evidence"
+    },
+    {
+      "id": "R5-149",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "6d1353e84d188d51a4bdbfbc7adfb59c2bd21a08",
+      "headline": "govern(r0005): retire fourth-review repair authority"
+    },
+    {
+      "id": "R5-150",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "c1ed4d450c899adcdf0dbafe1e68caebc658ec6d",
+      "headline": "audit(r0005): preserve fifth Codex review failure"
+    },
+    {
+      "id": "R5-151",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "b0b86df6285f2de9c4acb6f49b4ef610cc7eee8d",
+      "headline": "govern(r0005): declare complete sequencing surface"
+    },
+    {
+      "id": "R5-152",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "1abffa844415f8abb4a83956e3ce60a50cfde8dc",
+      "headline": "test(r0005): expose sequencing surface bypasses"
+    },
+    {
+      "id": "R5-153",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "455075997ee278362845a80bb7a85979bab8ea47",
+      "headline": "fix(r0005): cover complete sequencing surface"
+    },
+    {
+      "id": "R5-154",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "ae7d546953e39fbc3558575e9687699b5aee5d79",
+      "headline": "audit(r0005): bind fifth-review red evidence"
+    },
+    {
+      "id": "R5-155",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "86608b74a9f46df63c92e9ab161e4d4e5ab423a0",
+      "headline": "govern(r0005): bind complete sequencing repair"
+    },
+    {
+      "id": "R5-156",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "5bb998b1eb4a6b90db7ad447ae020cd343e48a8a",
+      "headline": "audit(r0005): bind fifth-review correction evidence"
+    },
+    {
+      "id": "R5-157",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "a1afd133378d9d309ea762bbaae00e113f1b4e80",
+      "headline": "govern(r0005): retire fifth-review repair authority"
+    },
+    {
+      "id": "R5-158",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "f00104cf84584e6492bf421be661945528e7d6ff",
+      "headline": "audit(r0005): preserve sixth Codex review failure"
+    },
+    {
+      "id": "R5-159",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "53576a8c3ccc7c4a1f4826ed91a5c01513b5d7e9",
+      "headline": "govern(r0005): bind sequencing to canonical root globs"
+    },
+    {
+      "id": "R5-160",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "c5ac6a86e994e0f31d47aa8a411929bab2a93e00",
+      "headline": "test(r0005): expose canonical root-glob drift"
+    },
+    {
+      "id": "R5-161",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "4a41769dcc5b29326ddc497524cdadc197378b1e",
+      "headline": "fix(r0005): enforce canonical root-glob parity"
+    },
+    {
+      "id": "R5-162",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "d573b98da9c4d1b1ae5892ce4febad71806656de",
+      "headline": "audit(r0005): bind sixth-review red evidence"
+    },
+    {
+      "id": "R5-163",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "5cea65414187e8af940f3241f43040f5ba3f961c",
+      "headline": "govern(r0005): bind canonical root-glob repair"
+    },
+    {
+      "id": "R5-164",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "ee2f29a7f8389980d5702535abff54fb331bc2ea",
+      "headline": "audit(r0005): bind sixth-review correction evidence"
+    },
+    {
+      "id": "R5-165",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "075d6127be7f931f0bd06a804441395f06b192b1",
+      "headline": "audit(r0005): refresh sixth-review as-built evidence"
+    },
+    {
+      "id": "R5-166",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "0f7bd2aaebb8ba53c0c21470c8306c4b54f75596",
+      "headline": "govern(r0005): retire sixth-review repair authority"
+    },
+    {
+      "id": "R5-167",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "5193c5a387d6177d36ae83b743fe2064de8f35fe",
+      "headline": "audit(r0005): preserve seventh Codex review failure"
+    },
+    {
+      "id": "R5-168",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "f3ffe4dec9ee588437d4731e120faa1a60f41e3c",
+      "headline": "govern(r0005): bind live ESLint sequencing surface"
+    },
+    {
+      "id": "R5-169",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "70450716da0e3fb065b48470dc4d732cd36a6296",
+      "headline": "test(r0005): expose live ESLint and snapshot drift"
+    },
+    {
+      "id": "R5-170",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "4f7ac65d6a8f66de86191bcb7be259d929ac4d7c",
+      "headline": "fix(r0005): govern live ESLint root config"
+    },
+    {
+      "id": "R5-171",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "5337e9565c17e4e1837849a388925f1a2fa9cc20",
+      "headline": "audit(r0005): bind seventh-review corrections"
+    },
+    {
+      "id": "R5-172",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "e167802a6669db873f96689fe666b3e12551944e",
+      "headline": "govern(r0005): bind seventh-review repair"
+    },
+    {
+      "id": "R5-173",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "e558e92165ee04b21a00195d9733b777fd269aa0",
+      "headline": "audit(r0005): bind seventh-review repair ladder"
+    },
+    {
+      "id": "R5-174",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "eb1958d7613574ed6c7022a3321c0fb9e41e9986",
+      "headline": "govern(r0005): retire seventh-review repair authority"
+    },
+    {
+      "id": "R5-175",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "5f7dfa9db158b60a2865496ab932720612b168da",
+      "headline": "audit(r0005): preserve eighth Codex review failure"
+    },
+    {
+      "id": "R5-176",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "e1351550109e7bb44c2d58a94bb4204b78d705cc",
+      "headline": "govern(r0005): bind committed authority materializations"
+    },
+    {
+      "id": "R5-177",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "58800330b23d6064d338813a07ebd8301941185f",
+      "headline": "test(r0005): expose stale authority materialization"
+    },
+    {
+      "id": "R5-178",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "bbe8c35bf359f2b36e9cf2565c9fa4239d3117b3",
+      "headline": "test(r0005): derive full authority materialization registry"
+    },
+    {
+      "id": "R5-179",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "50308359503d5d86c0ef9c7bb6ab243347fee0bc",
+      "headline": "build(r0005): rematerialize current authority policy"
+    },
+    {
+      "id": "R5-180",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "c311630abcc1fc9dc75f8df1600c877528ae61ca",
+      "headline": "law(r0005): mirror current authority policy"
+    },
+    {
+      "id": "R5-181",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "7b428416f4a3249738142d44fd35279bb40439a6",
+      "headline": "audit(r0005): bind eighth-review red evidence"
+    },
+    {
+      "id": "R5-182",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "60e8f2136fbee113120f7daf0b2a47df9dc615cf",
+      "headline": "test(r0005): literalize authority materialization paths"
+    },
+    {
+      "id": "R5-183",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "fdfada78284e66db0e24612c8c842121a1404f22",
+      "headline": "law(r0005): disclose rematerialization sequencing edge"
+    },
+    {
+      "id": "R5-184",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "57835ff78fdabd2a5ae5ff7575eb4d8a41be90af",
+      "headline": "audit(r0005): correct eighth-review as-built evidence"
+    },
+    {
+      "id": "R5-185",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "b4002f0892f3bd288c72f6f7268ccc31bd941ce2",
+      "headline": "govern(r0005): retire eighth-review repair authority"
+    },
+    {
+      "id": "R5-186",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "df323e9f1075e5a9f3db2c7efbcf8fc2cdb1bec3",
+      "headline": "audit(r0005): record independent Codex close PASS"
+    },
+    {
+      "id": "R5-187",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "f6bfac229f528e174f59812678ced13dff8b7751",
+      "headline": "govern(r0005): accept source close candidate"
+    },
+    {
+      "id": "R5-188",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "61b1aa9855e475a8b948727e63533aaa6dce6b7c",
+      "headline": "govern(r0005): authorize closure sequencing repair"
+    },
+    {
+      "id": "R5-189",
+      "roles": [
+        "Inspector"
+      ],
+      "commit": "e9bb4d86a918b72e71d33b3153455fa7c7943fd9",
+      "headline": "test(r0005): expose closure-only sequencing boundary"
+    },
+    {
+      "id": "R5-190",
+      "roles": [
+        "Engineer"
+      ],
+      "commit": "e5485add545ec550e104edc339d099181f4bc465",
+      "headline": "fix(r0005): honor merged closure prerequisites"
+    },
+    {
+      "id": "R5-191",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "c0d41983add2653fd82e587cc7cb5e7fcaf8d276",
+      "headline": "audit(r0005): bind closure sequencing red"
+    },
+    {
+      "id": "R5-192",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "3d0da6a0296046442e1433675967ef9c967014a8",
+      "headline": "govern(r0005): bind closure sequencing repair"
+    },
+    {
+      "id": "R5-193",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "dab95cca4074eda7290788bd1f09d70986b969e6",
+      "headline": "law(r0005): mark correction provenance"
+    },
+    {
+      "id": "R5-194",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "276d23d89386acc4c294f511f4a13ff1ac222063",
+      "headline": "audit(r0005): close closure sequencing repair"
+    },
+    {
+      "id": "R5-195",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "17f55e050268d9b1568fe877762c81198851cc69",
+      "headline": "audit(r0005): record correction review PASS"
+    },
+    {
+      "id": "R5-196",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "7d8b279a859f6e08e435cfb47ae4b5a22e072443",
+      "headline": "govern(r0005): accept corrected source close"
+    },
+    {
+      "id": "R5-197",
+      "roles": [
+        "Auditor"
+      ],
+      "commit": "09c979a3d033d66a6f7a2f7c9d7bb5819660a0be",
+      "headline": "audit(r0005): record clean-clone SHA failure"
+    },
+    {
+      "id": "R5-198",
+      "roles": [
+        "Architect"
+      ],
+      "commit": "ea3b5b143023ea0aec4440f01ec1bd4fb62a04d3",
+      "headline": "law(r0005): classify local-only rehearsal"
+    }
+  ],
+  "gates": {
+    "stage-1": {
+      "status": "pass",
+      "detail": "Exact source candidate and exact source merge passed Stage 1 static checks"
+    },
+    "stage-2": {
+      "status": "pass",
+      "detail": "Exact source candidate and exact source merge passed T1, T2, law, and record contracts"
+    },
+    "stage-3": {
+      "status": "pass",
+      "detail": "Exact source candidate and exact source merge passed merged T1+T3 coverage"
+    },
+    "tier-t4": {
+      "status": "pass",
+      "detail": "Exact source candidate and exact source merge passed T4 regression"
+    },
+    "tier-t5": {
+      "status": "pass",
+      "detail": "Exact source candidate and exact source merge passed T5 smoke and E2E"
+    },
+    "tier-t6": {
+      "status": "pass",
+      "detail": "Exact source candidate and exact source merge passed T6 containment"
+    },
+    "changesets": {
+      "status": "pass",
+      "detail": "Changeset classification passed with release disposition none-preratification"
+    },
+    "governance": {
+      "status": "pass",
+      "detail": "Governed repository enforcement passed at candidate and exact source merge"
+    },
+    "evidence-mode": {
+      "status": "pass",
+      "detail": "Evidence reuse and promotion remained fail-closed pending BL-022"
+    },
+    "local-exit-ladder": {
+      "status": "pass",
+      "detail": "Workflow lint, generated views, trace and repository references, lint, typecheck, build, governance, T1 through T6, changesets, formatting, package dry-runs, diff check, and cleanliness passed on exact candidate"
+    },
+    "coverage-t1-t3": {
+      "status": "pass",
+      "detail": "Statements 72.42%, branches 62.36%, functions 78.07%, lines 74.52%"
+    },
+    "independent-codex-review": {
+      "status": "pass",
+      "detail": "OM-009 replaced Claude review for R-0005 with an independent Codex reviewer; review 9 passed original candidate b4002f0892f3bd288c72f6f7268ccc31bd941ce2 and review 10 passed correction candidate 276d23d89386acc4c294f511f4a13ff1ac222063, each with no P0 or P1 blocker"
+    },
+    "remote-source-pr": {
+      "status": "pass",
+      "detail": "PR 8 exact head f6bfac229f528e174f59812678ced13dff8b7751 passed all nine required jobs in CI run 30233942296"
+    },
+    "remote-exact-main": {
+      "status": "pass",
+      "detail": "Original source merge c449710298e2a51e3938d9dcb17b5d03a2823759 passed run 30234222364; correction PR 9 exact head ea3b5b143023ea0aec4440f01ec1bd4fb62a04d3 passed run 30235897828 and exact correction merge b6ccf6f49b901fefd80041420e8dbd6cb68b1ad4 passed all nine main jobs in CI run 30236133410"
+    },
+    "predecessor-clean": {
+      "status": "pass",
+      "detail": "Read-only predecessor remained clean at d76cd12d2241a1a28a32a0fe629c6531da7fe74d"
+    }
+  },
+  "source_repo_deleted": false,
+  "validation_criteria": [
+    {
+      "criterion": "Canonical evidence and round lifecycle mechanics are implemented and governed",
+      "verdict": "pass",
+      "evidence": "DII-206, R-0005 source-close, and as-built evidence bind per-round/per-kind proof epochs, exact local-evidence subjects, bounded prompt composition, corrected in-place round close, safe managed-worktree convergence, authority_docs migration, and closure-only sequencing"
+    },
+    {
+      "criterion": "Every R-0005 source and correction commit is role-pure and represented",
+      "verdict": "pass",
+      "evidence": "All 198 exact role-pure source and correction commits are recorded: 187 from closed R-0004 main e9db37209ee879c0f6cc0e2ee6c7c5619c3cb190 through source head f6bfac229f528e174f59812678ced13dff8b7751, plus 11 from original source merge c449710298e2a51e3938d9dcb17b5d03a2823759 through correction head ea3b5b143023ea0aec4440f01ec1bd4fb62a04d3"
+    },
+    {
+      "criterion": "The Owner-authorized independent Codex review substitution is applied truthfully",
+      "verdict": "pass",
+      "evidence": "OM-009 applies only to R-0005; reviews 9 and 10 record explicit PASS verdicts, prior independent review FAIL records and governed repairs remain immutable, and no Claude or Opus PASS is fabricated"
+    },
+    {
+      "criterion": "Exact source candidate and exact merged main satisfy every required local and remote check",
+      "verdict": "pass",
+      "evidence": "PR 8 head f6bfac229f528e174f59812678ced13dff8b7751 passed run 30233942296, original source merge c449710298e2a51e3938d9dcb17b5d03a2823759 passed run 30234222364, PR 9 head ea3b5b143023ea0aec4440f01ec1bd4fb62a04d3 passed run 30235897828, and correction merge b6ccf6f49b901fefd80041420e8dbd6cb68b1ad4 passed run 30236133410"
+    },
+    {
+      "criterion": "coverage-t1-t3 satisfies the unchanged 70/60/70/70 policy",
+      "verdict": "pass",
+      "evidence": "Statements 72.42%, branches 62.36%, functions 78.07%, and lines 74.52%"
+    },
+    {
+      "criterion": "Evidence reuse or promotion, external release, deployment, publication, real-stynx mutation, R-0008, R-0009, and R-0010",
+      "verdict": "n/a",
+      "evidence": "Outside R-0005 and still human-gated; R-0005 establishes only governed evidence and lifecycle mechanics implemented and tested"
+    }
+  ],
+  "merged_as": "b6ccf6f49b901fefd80041420e8dbd6cb68b1ad4",
+  "release_disposition": "none-preratification",
+  "notes": "R-0005 establishes only governed evidence and lifecycle mechanics implemented and tested. It performs no evidence reuse or promotion, package publish, tag, GitHub Release, Pages deployment, external release or deployment, real-stynx mutation, R-0008 action, R-0009 activation, R-0010 observation, or readiness declaration. The predecessor remains read-only and clean.",
+  "schemaVersion": "1.0.0",
+  "id": "PC-0006",
+  "closed_at": "2026-07-27T04:11:18.091Z"
+}
