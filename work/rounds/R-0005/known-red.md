@@ -337,3 +337,17 @@ commit, command, tests, and checker path. No cluster authorizes a wildcard excep
 test weakening, history rewrite, fabricated review PASS, or external action. Retirement
 requires focused green, the complete ordinary floor, exact exit ladder, and a new
 independent Codex PASS.
+
+## Fifth-review repair retirement
+
+KR-R5-045 retires at exact implementation candidate
+`86608b74a9f46df63c92e9ab161e4d4e5ab423a0` through Auditor `c1ed4d4`,
+Architect `b0b86df`, Inspector red `1abffa8`, Engineer `4550759`, Auditor `ae7d546`,
+and Architect `86608b7`. The ordinary floor passes 133 files with 1,220 tests and eight
+declared skips. The exit ladder passes with T1 74/856, T2 41/276 plus one skip, T1+T3
+83/912 plus seven skips, unchanged 72.42/62.36/78.07/74.52 coverage, T4 2/4, T5 6/25,
+T6 1/3, strict governance across 155 commits and 271 identities, formatting, diff, and
+clean-status gates.
+
+This ledger grants no active red authority. Any further actionable finding requires a
+fresh Architect entry and failing Inspector boundary before repair.
