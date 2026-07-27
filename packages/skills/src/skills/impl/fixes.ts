@@ -1,6 +1,6 @@
 import { spawnSync, writeFileSync } from '@devai-nyx/authority';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { senseTypeCheck } from '@devai-nyx/sensors';
 import { validateAdrs } from '@devai-nyx/spec';
 import { scanForbiddenActions } from '../../forbidden-actions/index.js';
@@ -172,6 +172,58 @@ export function createFixSkills(resolveSkills: () => readonly SkillEntry[]): rea
   // =====================================================================
   // SKILL-fix-docs-links is diagnose-only. Documentation is Architect-owned;
   // the skill may report link findings but cannot rewrite authored Markdown.
+  interface BrokenDocsLink {
+    readonly source: string;
+    readonly target: string;
+    readonly resolved: string;
+    readonly reason: 'target not found';
+  }
+
+  function diagnoseDocsLinks(repoRoot: string, scanRel: string): BrokenDocsLink[] {
+    const scanRoot = isAbsolute(scanRel) ? scanRel : resolve(repoRoot, scanRel);
+    if (!existsSync(scanRoot)) return [];
+    const markdown: string[] = [];
+    const walk = (dir: string): void => {
+      for (const name of readdirSync(dir)) {
+        if (['node_modules', '.git', 'dist', 'coverage'].includes(name)) continue;
+        const path = join(dir, name);
+        const stat = statSync(path);
+        if (stat.isDirectory()) walk(path);
+        else if (stat.isFile() && path.endsWith('.md')) markdown.push(path);
+      }
+    };
+    walk(scanRoot);
+    const findings: BrokenDocsLink[] = [];
+    const link = /\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/gu;
+    for (const file of markdown) {
+      const source = readFileSync(file, 'utf8');
+      let match: RegExpExecArray | null;
+      while ((match = link.exec(source)) !== null) {
+        const target = match[1];
+        if (
+          target === undefined ||
+          ['http://', 'https://', 'mailto:', 'data:', '#'].some((prefix) =>
+            target.startsWith(prefix),
+          )
+        ) {
+          continue;
+        }
+        const pathPart = target.split('#')[0]?.split('?')[0] ?? '';
+        if (pathPart.length === 0) continue;
+        const absolute = isAbsolute(pathPart) ? pathPart : resolve(dirname(file), pathPart);
+        if (!existsSync(absolute)) {
+          findings.push({
+            source: relative(repoRoot, file),
+            target,
+            resolved: relative(repoRoot, absolute),
+            reason: 'target not found',
+          });
+        }
+      }
+    }
+    return findings;
+  }
+
   const skillFixDocsLinks: SkillEntry = {
     manifest: fixSkillManifest('docs-links', {
       title: 'Diagnose docs-links gate',
@@ -181,11 +233,14 @@ export function createFixSkills(resolveSkills: () => readonly SkillEntry[]): rea
       tags: ['docs-links', 'diagnose'],
     }),
     async run(ctx) {
-      const result = runDevaiVerb(['docs', 'links', '--repo-root', ctx.repoRoot], ctx.repoRoot);
+      const broken = diagnoseDocsLinks(
+        ctx.repoRoot,
+        (ctx.inputs?.['dir'] as string | undefined) ?? 'docs',
+      );
       return {
         skill_id: 'SKILL-fix-docs-links',
-        status: result.status,
-        evidence: result.evidence,
+        status: broken.length === 0 ? 'pass' : 'fail',
+        evidence: { ok: broken.length === 0, broken_count: broken.length, broken },
       };
     },
   };
