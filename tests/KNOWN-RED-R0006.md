@@ -194,3 +194,25 @@ the statement-level artifact digest is
 `a0709bbb8d31b1f7c3d2244a7c3ff221d255530779c39a031676c85ad46dc84f`.
 This red is the required B7 test-depth input. It authorizes behavior-bearing Inspector
 tests only, with the same denominator, exclusions, thresholds, and exact-hit provider.
+
+Final B7 depth disposition: the Inspector added behavior-bearing tests across the
+public read-action routes, authority broker, doctor, translation, mutation verification,
+release, RGR recording, dependency policy, sensor inputs, security and performance,
+migration and type judging, site drift, and harness alignment. No production source,
+coverage configuration, threshold, denominator, or exclusion changed in that batch.
+
+The authoritative unchanged command then exits 0 with 153 passing files, 1,441 passing
+tests, and eight declared skips. Its exact merged reading is:
+
+- statements: 71.33% (15,975/22,393);
+- branches: 60.12% (11,654/19,382);
+- functions: 80.34% (2,469/3,073); and
+- lines: 72.78% (14,835/20,383).
+
+The summary digest is
+`7c394f2c539b5844349f95ec4e8073065689e7f3cc415a9f7ea28fcc52883f0b`;
+the statement-level artifact digest is
+`031f6cd3cf8dd037ab9e75f4f0cb2717c105da2a5dbdb4c5e4f39040a0415dad`.
+The retained subprocess population remains 191 raw JSON files. This is the first honest
+all-green B7 coverage reading after the exact-hit provider correction; it does not
+waive later B8-B9 gates, independent review, publication, closure, or release controls.
