@@ -177,12 +177,24 @@
     "closure_rehearsal": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["source_merge", "closure_head", "schema_ancestor", "verb_ancestor", "ok"],
+      "required": [
+        "source_merge",
+        "closure_head",
+        "schema_ancestor",
+        "verb_ancestor",
+        "production_verb_exercised",
+        "record_schema_valid",
+        "exact_range_valid",
+        "ok"
+      ],
       "properties": {
         "source_merge": { "$ref": "#/$defs/sha1" },
         "closure_head": { "$ref": "#/$defs/sha1" },
         "schema_ancestor": { "$ref": "#/$defs/sha1" },
         "verb_ancestor": { "$ref": "#/$defs/sha1" },
+        "production_verb_exercised": { "const": true },
+        "record_schema_valid": { "const": true },
+        "exact_range_valid": { "const": true },
         "ok": { "const": true }
       }
     },
@@ -255,6 +267,9 @@
         "closure_head": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
         "schema_ancestor": "cccccccccccccccccccccccccccccccccccccccc",
         "verb_ancestor": "dddddddddddddddddddddddddddddddddddddddd",
+        "production_verb_exercised": true,
+        "record_schema_valid": true,
+        "exact_range_valid": true,
         "ok": true
       },
       "manifest_digest_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"

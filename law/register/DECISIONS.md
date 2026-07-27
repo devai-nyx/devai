@@ -3059,6 +3059,45 @@ no closure record, and does not authorize B0, threshold or exclusion changes, ev
 promotion, publication, merge, release, deployment, predecessor mutation,
 real-stynx mutation, or R-0007+ work.
 
+### DII-210 — Repair entry controls after independent diagnostic review
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 E4 repair; DII-207; DII-208; DII-209; R-0006 Inspector ea00313bd8552389c4bd8608c6f8e7e6b4952af7; R-0006-INDEPENDENT-REVIEW-REPAIR-RED-EVIDENCE@sha256:bea949a59118cce5b4b721777793d6d872ef1140fda207eb05365fd0d10d5a01; R-0006-INDEPENDENT-CODEX-REVIEW-FAILURE`
+
+The first read-only diagnostic review of the E0-E5 candidate returned six P1 findings.
+Its positives remain evidence, but its FAIL grants no review standing. Before the
+execution contract's mandatory literal `claude-opus-5` review, the complete close
+control must repair all six classes under the existing red-first and role-pure sequence.
+
+Convergence is valid only when the working checkout remains the caller-named exact head
+before, during, and after both ordered passes. Each pass includes the ordinary
+`pnpm vitest run` floor. The immediate second pass must reproduce the same ordered
+command identities, arguments, exit outcomes, and coverage bytes without changing any
+relevant tracked, untracked, ignored, or generated workspace content. A manifest may
+report convergence only after revalidating that complete ignored-state record against
+the canonical policy, exact candidate, current coverage artifact, and clean boundary.
+
+Closure rehearsal must run the policy-bound production phase-close command in an
+isolated candidate-only clone against a schema-valid non-standing draft. It must consume
+the command's actual Machine record bytes, create exactly one closure-only Machine
+descendant, and run the production sequencing check across that exact one-commit range.
+Existence checks and hand-written placeholder records are not rehearsal evidence.
+
+The review envelope derives its frozen candidate only from the deterministic candidate
+manifest and an exact Auditor-authored review record. That record must declare verdict
+`PASS`, literal reviewer model `claude-opus-5`, the same full review-candidate SHA, and
+the manifest's internally recomputed SHA-256 digest. Caller-selected reviewed identity,
+FAIL or malformed records, and mismatched candidate or digest fail closed.
+
+Semantic non-vacuity evaluates every governed population glob against the exact tracked
+candidate and requires every population to be nonempty. Every declared source/mirror
+pair must exist and be byte-identical; checking only one hard-coded pair is forbidden.
+These requirements are additive to the existing fixed-count, self-comparison, and
+named-file-only prohibitions.
+
+This repair changes only pre-R-0006 entry-control machinery. It changes no public
+action behavior or threshold and authorizes no B0 work, publication, push, merge,
+closure, release, deployment, evidence reuse or promotion, predecessor mutation,
+real-stynx mutation, or R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

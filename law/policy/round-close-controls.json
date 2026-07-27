@@ -82,6 +82,7 @@
         "argv": ["node", "scripts/run-round-close-controls.mjs", "policy-check"]
       },
       { "id": "diff-check", "argv": ["git", "diff", "--check"] },
+      { "id": "ordinary", "argv": ["pnpm", "vitest", "run"] },
       { "id": "stage1", "argv": ["pnpm", "run", "ci:stage1"] },
       { "id": "stage2", "argv": ["pnpm", "run", "ci:stage2"] },
       { "id": "t4", "argv": ["pnpm", "run", "test:t4"] },
@@ -104,13 +105,22 @@
     ],
     "record": "work/audit/R-0006/independent-review.md",
     "record_author": "DEVAI Auditor",
+    "required_verdict": "PASS",
+    "required_model": "claude-opus-5",
+    "manifest_state": ".devai/state/round-runs/R-0006/close/candidate-manifest.json",
     "projection_only": true,
     "allowed_projection_ids": []
   },
   "rehearsal": {
     "schema_path": "law/schemas/phase-closure.schema.json",
     "verb_path": "packages/cli/src/commands/phase/index.ts",
-    "closure_path": "record/proofs/compliance/closures/PC-9999.json"
+    "closure_path_glob": "record/proofs/compliance/closures/PC-*.json",
+    "prepare": [
+      ["pnpm", "install", "--offline", "--frozen-lockfile"],
+      ["pnpm", "run", "devai:prepare"]
+    ],
+    "command": ["node", "packages/cli/dist/bin.js", "govern", "phase", "close"],
+    "range_check": ["node", "scripts/check-governed-sequencing.mjs"]
   },
   "semantic_assertions": {
     "population_sources": [
