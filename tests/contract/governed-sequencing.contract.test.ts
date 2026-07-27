@@ -9,6 +9,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 const repositoryRoot = resolve(import.meta.dirname, '../..');
 const script = join(repositoryRoot, 'scripts/check-governed-sequencing.mjs');
 const policy = join(repositoryRoot, 'law/policy/governed-sequencing.json');
+const canonicalAuthorityPolicy = join(repositoryRoot, 'packages/cli/src/authority/policy.ts');
 const roots: string[] = [];
 
 function put(root: string, relativePath: string, contents: string): void {
@@ -95,6 +96,7 @@ function fixture(): { root: string; base: string } {
   roots.push(root);
   git(root, ['init', '-q']);
   put(root, 'law/policy/governed-sequencing.json', readFileSync(policy, 'utf8'));
+  put(root, 'packages/cli/src/authority/policy.ts', readFileSync(canonicalAuthorityPolicy, 'utf8'));
   commit(root, 'DEVAI Architect', 'chore: establish fixture', 'README.md');
   return { root, base: git(root, ['rev-parse', 'HEAD']) };
 }
@@ -314,7 +316,12 @@ describe('governed sequencing', () => {
     expect(JSON.parse(result.stdout as string)).toMatchObject({ ok: true, commits_checked: 1 });
   });
 
-  it.each(['apps/fixture/index.ts', 'pnpm-workspace.yaml'])(
+  it.each([
+    'apps/fixture/index.ts',
+    'pnpm-workspace.yaml',
+    '.prettierignore',
+    'vitest.workspace.ts',
+  ])(
     'rejects unbound Engineer work on governed implementation surface %s',
     (implementationPath) => {
       const { root, base } = fixture();
@@ -331,6 +338,27 @@ describe('governed sequencing', () => {
       });
     },
   );
+
+  it('rejects root-glob policy divergence from canonical Engineer authority', () => {
+    const { root, base } = fixture();
+    configureBindings(root, []);
+    const documentPath = join(root, 'law/policy/governed-sequencing.json');
+    const document = JSON.parse(readFileSync(documentPath, 'utf8')) as {
+      implementation_surfaces: { root_globs: string[] };
+    };
+    document.implementation_surfaces.root_globs =
+      document.implementation_surfaces.root_globs.filter((glob) => glob !== '.prettier*');
+    writeFileSync(documentPath, `${JSON.stringify(document, null, 2)}\n`);
+
+    const result = check(root, base);
+    expect(result.status).toBe(1);
+    expect(JSON.parse(result.stdout as string)).toMatchObject({
+      ok: false,
+      findings: expect.arrayContaining([
+        expect.objectContaining({ rule: 'implementation-surface-parity' }),
+      ]),
+    });
+  });
 
   it('rejects a prospective round-wide historical exception', () => {
     const { root, base } = fixture();
