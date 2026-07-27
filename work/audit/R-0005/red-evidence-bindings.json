@@ -138,6 +138,14 @@
       ],
       "exercised_implementation_paths": [".devai/config/authority-policy.json"],
       "failure_summary": "The eighth-review contract proved that both committed authority-policy materializations retained the obsolete eslint.config.js root rule and stale provenance after the canonical policy changed to eslint.config.*."
+    },
+    {
+      "commit": "e9bb4d86a918b72e71d33b3153455fa7c7943fd9",
+      "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts",
+      "exit_code": 1,
+      "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"],
+      "failure_summary": "The closure-sequencing correction contract proved that a valid closure-only Machine range could not see its already-merged Architect schema and Engineer production verb, while the missing-prerequisite refusal remained green."
     }
   ]
 }

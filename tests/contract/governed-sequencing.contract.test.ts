@@ -387,4 +387,52 @@ describe('governed sequencing', () => {
       ]),
     });
   });
+
+  it('accepts a closure-only Machine range when shape and verb precede the range base', () => {
+    const { root } = fixture();
+    commit(
+      root,
+      'DEVAI Architect',
+      'law(r0006): define closure shape',
+      'law/schemas/fixture.schema.json',
+    );
+    commit(
+      root,
+      'DEVAI Engineer',
+      'feat(r0006): implement closure verb',
+      'packages/fixture/index.ts',
+    );
+    const closureBase = git(root, ['rev-parse', 'HEAD']);
+    commit(
+      root,
+      'DEVAI Machine',
+      'record(r0006): emit closure proof',
+      'record/proofs/compliance/closures/PC-9999.json',
+    );
+    configureBindings(root, []);
+
+    const result = check(root, closureBase);
+    expect(result.status).toBe(0);
+    expect(JSON.parse(result.stdout as string)).toMatchObject({ ok: true, commits_checked: 1 });
+  });
+
+  it('rejects a closure-only Machine range when governed prerequisites are absent from ancestry', () => {
+    const { root, base } = fixture();
+    commit(
+      root,
+      'DEVAI Machine',
+      'record(r0006): emit ungoverned proof',
+      'record/proofs/compliance/closures/PC-9999.json',
+    );
+    configureBindings(root, []);
+
+    const result = check(root, base);
+    expect(result.status).toBe(1);
+    expect(JSON.parse(result.stdout as string)).toMatchObject({
+      ok: false,
+      findings: expect.arrayContaining([
+        expect.objectContaining({ rule: 'shape-before-machine-record' }),
+      ]),
+    });
+  });
 });
