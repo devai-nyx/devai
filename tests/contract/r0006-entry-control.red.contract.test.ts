@@ -1,6 +1,6 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -530,6 +530,20 @@ describe('R-0006 E1 entry-control red contracts', () => {
 });
 
 describe('R-0006 E4 entry-control acceptance and adversaries', () => {
+  it('binds closure N-to-N+1 rehearsal to tracked canonical prerequisites', () => {
+    const canonical = JSON.parse(
+      readFileSync(join(ROOT, 'law/policy/round-close-controls.json'), 'utf8'),
+    ) as { rehearsal: { schema_path: string; verb_path: string } };
+    const mirror = JSON.parse(
+      readFileSync(join(ROOT, '.devai/config/round-close-controls.json'), 'utf8'),
+    ) as { rehearsal: { schema_path: string; verb_path: string } };
+    expect(mirror.rehearsal).toEqual(canonical.rehearsal);
+    for (const path of [canonical.rehearsal.schema_path, canonical.rehearsal.verb_path]) {
+      expect(existsSync(join(ROOT, path)), path).toBe(true);
+      expect(git(ROOT, ['ls-files', '--error-unmatch', path]), path).toBe(path);
+    }
+  });
+
   it('emits a deterministic exact-range manifest from a candidate-only fresh clone', () => {
     const { root, base, candidate } = fixture();
     prepareCloseState(root, base, candidate);
