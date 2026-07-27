@@ -159,42 +159,46 @@ class SubprocessV8CoverageProvider extends V8CoverageProvider {
 
   private async generateMergedCoverage(context: ReportContext): Promise<unknown> {
     const coverageMap = (await super.generateCoverage(context)) as unknown as MutableCoverageMap;
-    if (!existsSync(subprocessCoverageDirectory)) return coverageMap;
+    try {
+      if (!existsSync(subprocessCoverageDirectory)) return coverageMap;
 
-    const subprocessCoverages: ProcessCoverage[] = [];
-    for (const name of await promises.readdir(subprocessCoverageDirectory)) {
-      if (!name.endsWith('.json')) continue;
-      let raw: ProcessCoverage;
-      try {
-        raw = JSON.parse(
-          await promises.readFile(resolve(subprocessCoverageDirectory, name), 'utf8'),
-        ) as ProcessCoverage;
-      } catch {
-        continue;
+      const subprocessCoverages: ProcessCoverage[] = [];
+      for (const name of await promises.readdir(subprocessCoverageDirectory)) {
+        if (!name.endsWith('.json')) continue;
+        let raw: ProcessCoverage;
+        try {
+          raw = JSON.parse(
+            await promises.readFile(resolve(subprocessCoverageDirectory, name), 'utf8'),
+          ) as ProcessCoverage;
+        } catch {
+          continue;
+        }
+        if (!Array.isArray(raw.result)) continue;
+        subprocessCoverages.push(raw);
       }
-      if (!Array.isArray(raw.result)) continue;
-      subprocessCoverages.push(raw);
-    }
-    if (subprocessCoverages.length === 0) return coverageMap;
+      if (subprocessCoverages.length === 0) return coverageMap;
 
-    const provider = this as unknown as {
-      convertCoverage(
-        coverage: ProcessCoverage,
-        project?: unknown,
-        environment?: string,
-      ): Promise<unknown>;
-    };
-    const merged = mergeProcessCovs(subprocessCoverages) as ProcessCoverage;
-    merged.result.splice(
-      0,
-      merged.result.length,
-      ...merged.result.filter((result) => result.url.startsWith('file://')),
-    );
-    for (const result of merged.result) result.startOffset ??= 0;
-    const subprocessMap = (await provider.convertCoverage(merged)) as MutableCoverageMap;
-    mergeCanonicalHits(coverageMap, subprocessMap);
-    coverageMap.filter((filename) => super.isIncluded(filename));
-    return coverageMap;
+      const provider = this as unknown as {
+        convertCoverage(
+          coverage: ProcessCoverage,
+          project?: unknown,
+          environment?: string,
+        ): Promise<unknown>;
+      };
+      const merged = mergeProcessCovs(subprocessCoverages) as ProcessCoverage;
+      merged.result.splice(
+        0,
+        merged.result.length,
+        ...merged.result.filter((result) => result.url.startsWith('file://')),
+      );
+      for (const result of merged.result) result.startOffset ??= 0;
+      const subprocessMap = (await provider.convertCoverage(merged)) as MutableCoverageMap;
+      mergeCanonicalHits(coverageMap, subprocessMap);
+      coverageMap.filter((filename) => super.isIncluded(filename));
+      return coverageMap;
+    } finally {
+      await promises.rm(subprocessCoverageDirectory, { recursive: true, force: true });
+    }
   }
 }
 
