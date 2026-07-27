@@ -147,3 +147,28 @@ by the focus filter. The complete suite separately passes 140 files / 1,290 test
 eight declared skips. The green reading retains both original role defects as
 classified history; it does not make either Engineer commit role-pure or broaden
 Engineer authority over `tests/**`.
+
+## B9 second Opus coverage-integrity red
+
+The second mandatory `claude-opus-5` review of candidate
+`b9d300913ef92e1af72e7fc8f24d54d9134dc6c2` returned FAIL with a P0 measurement
+finding. The subprocess provider projected a positive enclosing range onto nested
+zero-hit statements and functions, while the coverage run emitted no statement-level
+JSON artifact and destroyed its raw child-process inputs after conversion.
+
+The Inspector adds three bounded contracts before law or repair:
+
+```text
+pnpm vitest run tests/contract/r0006-coverage-integrity.red.contract.test.ts
+```
+
+The exact pre-repair command exits 1 with one collected file and three failing tests:
+the merge is not exported and therefore cannot prove the zero-hit case, the reporter
+omits `json`, and no retained subprocess-evidence directory or copy/rename exists. The
+contracts require an independently callable canonical merge that preserves exact zero
+hits, the `json` reporter that emits `coverage-final.json`, and retained raw subprocess
+evidence under the final T1-T3 coverage artifact directory. They bind the exact semantic repair path
+`tests/config/subprocess-v8-coverage-provider.ts` and configuration path
+`tests/config/t1-t3.coverage.config.ts`. They authorize no containment inference,
+threshold reduction, exclusion growth, removal of valid source, PASS claim,
+publication, closure, release, or R-0007+ work.
