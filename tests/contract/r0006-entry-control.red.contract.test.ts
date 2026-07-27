@@ -155,7 +155,11 @@ function fixture(): Fixture {
   put(root, 'law/schemas/phase-closure.schema.json', '{}\n');
   put(root, 'law/schemas/round-close-manifest.schema.json', '{}\n');
   put(root, 'packages/cli/src/commands/govern/phase-close.ts', 'export const phaseClose = true;\n');
-  put(root, 'fixture/gate.mjs', 'process.exit(0);\n');
+  put(
+    root,
+    'fixture/gate.mjs',
+    "import { mkdirSync, writeFileSync } from 'node:fs';\nif (process.argv[2] === 'ordinary') { mkdirSync('scratch/coverage/t1-t3', { recursive: true }); writeFileSync('scratch/coverage/t1-t3/coverage-summary.json', JSON.stringify({ total: Object.fromEntries(['statements', 'branches', 'functions', 'lines'].map((key) => [key, { pct: 100 }])) }) + '\\n'); }\n",
+  );
   put(root, 'fixture/projection.mjs', 'process.exit(0);\n');
   put(
     root,
