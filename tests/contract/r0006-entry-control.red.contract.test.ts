@@ -1208,6 +1208,35 @@ if (process.argv[2] === 'ordinary') {
     );
   });
 
+  it('rejects absent, broad, and expanded runtime-artifact normalization policy', () => {
+    const cases = [
+      undefined,
+      ['scratch/**'],
+      [
+        'scratch/coverage/t1-t3/coverage-final.json',
+        'scratch/coverage/t1-t3/subprocess-v8/**',
+        'scratch/coverage/t1-t3/coverage-summary.json',
+      ],
+    ];
+    for (const normalizedRuntimeArtifacts of cases) {
+      const current = fixture();
+      const document = JSON.parse(policy()) as {
+        convergence: { normalized_runtime_artifacts?: string[] };
+      };
+      if (normalizedRuntimeArtifacts === undefined)
+        delete document.convergence.normalized_runtime_artifacts;
+      else document.convergence.normalized_runtime_artifacts = normalizedRuntimeArtifacts;
+      const source = `${JSON.stringify(document, null, 2)}\n`;
+      put(current.root, 'law/policy/round-close-controls.json', source);
+      put(current.root, '.devai/config/round-close-controls.json', source);
+      expect(findings(run(current.root, ['policy-check']))).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ code: 'POLICY_CONVERGENCE_RUNTIME_ARTIFACTS_INVALID' }),
+        ]),
+      );
+    }
+  });
+
   it('rejects a caller-selected reviewed SHA even when the review record is valid', () => {
     const current = fixture();
     const digest = putReviewManifest(current.root, current.candidate);

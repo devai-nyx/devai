@@ -244,3 +244,14 @@ exits 1 with one failing test and 32 focus-filtered tests. The failure binds
 `scripts/run-round-close-controls.mjs`; it authorizes no broad `scratch/**` exclusion,
 coverage-summary drift, threshold or denominator change, raw-evidence deletion, review,
 publication, closure, release, or R-0007+ work.
+
+Fixpoint repair disposition: DII-224 classifies only
+`scratch/coverage/t1-t3/coverage-final.json` and
+`scratch/coverage/t1-t3/subprocess-v8/**` as normalized runtime output. Engineer
+`bad810ca82b4b958399860534e12a98e42a2c5c0` derives that exact set from policy,
+retains byte-level summary comparison, and keeps every other path in the workspace
+snapshot. The focused retained-evidence and ordinary-drift cases both pass. Additional
+Inspector adversaries reject an absent set, broad `scratch/**`, and an expanded set that
+would hide the summary. The complete ordinary suite passes 1,443 tests with eight
+declared skips; no raw evidence, threshold, exclusion, denominator, assertion, or prior
+drift check was removed.
