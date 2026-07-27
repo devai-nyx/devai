@@ -2907,6 +2907,31 @@ tags, GitHub Releases, Pages deployment, external release or deployment, real-st
 mutation, R-0008 external action, R-0009 activation, or R-0010 observation. The
 predecessor remains read-only.
 
+### DII-205 — Repair closure-only sequencing across the merged-source boundary
+`type: decision · status: active · authority: Architect · provenance: R-0005 closure rehearsal 3c06a3e; DII-202; DII-203; DII-204; R-0005-SOURCE-CLOSE`
+
+The first production PC-0006 rehearsal correctly waited for source PR 8 and exact-main
+CI run 30234222364, then emitted only the Machine closure record. The strict sequencing
+checker rejected that valid closure-only shape because it searched only the current
+`base..head` range for the already-merged schema and production verb. A closure-only PR
+contains neither by design, making its one permitted Machine record impossible to merge.
+
+R-0005 must repair this boundary before PC-0006 publication. For a Machine record, the
+checker must evaluate prior commit ancestry, ending strictly before the Machine commit,
+for both an Architect-owned `law/schemas/` shape and an Engineer-owned `packages/`
+implementation verb. The current-range law-first and red-first requirements for new
+Engineer implementation remain unchanged. An Inspector contract must first reproduce
+both the valid closure-only ancestry case and the missing-ancestor refusal; the Engineer
+repair may then change only the sequencer. Auditor evidence and an independent Codex
+review must precede the corrected source close.
+
+The unpushed rehearsal record is not standing and must not be published. The corrected
+source merge and its exact-main CI replace the original source merge only as PC-0006's
+`merged_as` ceremony binding; PR 8 and its evidence remain immutable history. No step
+authorizes evidence reuse or promotion, package publication, tags, GitHub Releases,
+Pages deployment, external release or deployment, real-stynx mutation, R-0008 external
+action, R-0009 activation, or R-0010 observation. The predecessor remains read-only.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
