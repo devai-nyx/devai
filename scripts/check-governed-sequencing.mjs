@@ -40,8 +40,17 @@ function substantiveEngineer(commit) {
   return commit.author === 'DEVAI Engineer' && commit.paths.some(substantiveImplementationPath);
 }
 
+let implementationSurfaces = null;
+
 function substantiveImplementationPath(path) {
-  return /^(?:packages\/|scripts\/|\.github\/|package\.json$|pnpm-lock\.yaml$)/u.test(path);
+  if (implementationSurfaces === null) return false;
+  if (implementationSurfaces.prefixes.some((prefix) => path.startsWith(prefix))) return true;
+  if (path.includes('/')) return false;
+  return (
+    implementationSurfaces.root_files.includes(path) ||
+    implementationSurfaces.root_suffixes.some((suffix) => path.endsWith(suffix)) ||
+    implementationSurfaces.root_name_prefixes.some((prefix) => path.startsWith(prefix))
+  );
 }
 
 function containedEvidencePath(value) {
@@ -61,7 +70,6 @@ const head = option('--head') ?? 'HEAD';
 const policy = JSON.parse(
   readFileSync(resolve(repoRoot, 'law/policy/governed-sequencing.json'), 'utf8'),
 );
-const exceptions = new Set(policy.historical_exceptions.map((entry) => entry.round));
 const commits =
   base.length === 0
     ? []
@@ -71,6 +79,57 @@ const commits =
 const observations = commits.map(observation);
 const bySha = new Map(observations.map((commit, index) => [commit.sha, { commit, index }]));
 const findings = [];
+const configuredSurfaces = policy.implementation_surfaces;
+if (
+  configuredSurfaces === null ||
+  typeof configuredSurfaces !== 'object' ||
+  Array.isArray(configuredSurfaces) ||
+  !Array.isArray(configuredSurfaces.prefixes) ||
+  !Array.isArray(configuredSurfaces.root_files) ||
+  !Array.isArray(configuredSurfaces.root_suffixes) ||
+  !Array.isArray(configuredSurfaces.root_name_prefixes) ||
+  [
+    configuredSurfaces.prefixes,
+    configuredSurfaces.root_files,
+    configuredSurfaces.root_suffixes,
+    configuredSurfaces.root_name_prefixes,
+  ].some(
+    (values) =>
+      values.length === 0 ||
+      values.some((value) => typeof value !== 'string' || value.length === 0),
+  )
+) {
+  findings.push({
+    rule: 'implementation-surfaces',
+    sha: null,
+    message: 'implementation_surfaces must contain four non-empty string arrays',
+  });
+  implementationSurfaces = {
+    prefixes: [],
+    root_files: [],
+    root_suffixes: [],
+    root_name_prefixes: [],
+  };
+} else {
+  implementationSurfaces = configuredSurfaces;
+}
+
+if (Array.isArray(policy.historical_exceptions) && policy.historical_exceptions.length > 0) {
+  findings.push({
+    rule: 'round-exception-bypass',
+    sha: null,
+    message: 'round-wide historical exceptions are disclosure-only and cannot bypass binding',
+  });
+} else if (
+  policy.historical_exceptions !== undefined &&
+  !Array.isArray(policy.historical_exceptions)
+) {
+  findings.push({
+    rule: 'round-exception-bypass',
+    sha: null,
+    message: 'historical_exceptions, when present for migration rejection, must be an array',
+  });
+}
 const bindings = Array.isArray(policy.bindings) ? policy.bindings : [];
 if (!Array.isArray(policy.bindings)) {
   findings.push({
@@ -312,7 +371,6 @@ for (const binding of bindings) {
 }
 
 for (const commit of observations.filter(substantiveEngineer)) {
-  if (commit.round !== null && exceptions.has(commit.round)) continue;
   const owners = implementationOwners.get(commit.sha) ?? [];
   const exceptionOwners = exactExceptionOwners.get(commit.sha) ?? [];
   if (exceptionOwners.length > 1 || (exceptionOwners.length === 1 && owners.length > 0)) {
