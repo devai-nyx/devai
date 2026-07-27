@@ -20,8 +20,8 @@ and failed exactly two existing repository-reference projection contracts. The r
 was 1,215 passing tests, eight declared skips, and two failures.
 
 Both failures report the same deterministic one-line displacement in
-`docs/dev/security/authority-enforcement.md`: its current GitHub reference moved from
-line 124 to line 123 after the governed lifecycle table correction. No schema,
+`docs/dev/security/authority-enforcement.md`: the current GitHub reference is at line
+124 while the stale committed projection still names line 123. No schema,
 implementation, authority behavior, assertion, source set, threshold, or skip failed.
 The active semantic projection remains stale by that exact locator and must be
 regenerated under Architect authority before the floor restarts.
