@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-202; DII-203; OM-009; R-0005-ENTRY-INVENTORY; R-0005-DOCUMENTATION-RECONCILIATION; implementation snapshot 6968d039bc3ccc57d3a5412ad1f90ba59f56032e,
+    DII-202; DII-203; OM-009; R-0005-ENTRY-INVENTORY; R-0005-DOCUMENTATION-RECONCILIATION; implementation snapshot 86608b74a9f46df63c92e9ab161e4d4e5ab423a0,
   ]
 ---
 
@@ -17,9 +17,9 @@ provenance:
 
 ## Boundary and verdict
 
-R-0005 B0 through B8 and all four completed independent-review/exit-ladder repair
+R-0005 B0 through B8 and all five completed independent-review/exit-ladder repair
 cycles are implemented through governed snapshot
-`6968d039bc3ccc57d3a5412ad1f90ba59f56032e`. The source is not closed by this
+`86608b74a9f46df63c92e9ab161e4d4e5ab423a0`. The source is not closed by this
 report: a fresh independent Codex review, source PR and exact-head CI, source merge and
 exact-main CI, machine PC-0006 emission, closure-only PR, closure merge, and final
 exact-main CI remain serial gates.
@@ -83,12 +83,13 @@ until the exact source merge passes exact-main CI.
 | Trace projection repair   | Auditor + Architect                        | `23a6adf`, `504bbf9`                                                                              | The unchanged round-state invariant marker was projected into the 34-invariant / 133-test trace without changing the test, invariant, generator, or runtime behavior.                                                |
 | Fourth-review repair      | Auditor + Architect + Inspector + Engineer | `4674343` through `02d2d5d`                                                                       | All current documentation is corpus-guarded against obsolete lifecycle paths; semantic red scope is exact-path bound; and the two historical docs-link commits are disclosed rather than falsely attributed.         |
 | Fourth projection repair  | Auditor + Architect                        | `1b68a24` through `6968d03`                                                                       | The exact one-line current reference displacement was preserved, corrected, authorized, and regenerated without changing another locator or the generator.                                                           |
+| Fifth-review repair       | Auditor + Architect + Inspector + Engineer | `c1ed4d4` through `86608b7`                                                                       | The implementation classifier now derives the complete governed plant/root-tooling surface from policy, and round-wide historical entries are disclosure-only with no machine bypass.                                |
 
 Combined-role rows are serial role-pure commits, never shared-authority commits.
 
 ## Fresh regression evidence
 
-The final pre-review ordinary floor passed 133 files with 1,217 tests passing, eight
+The final pre-review ordinary floor passed 133 files with 1,220 tests passing, eight
 declared skips, and zero failures. The merged T1+T3 coverage reading passed 83 files
 with 912 tests and seven declared skips against the unchanged
 70/60/70/70 policy:
@@ -101,11 +102,11 @@ with 912 tests and seven declared skips against the unchanged
 | Lines      |  74.52% (9,984 / 13,396) |   70% |
 
 Stage 1 passed; Stage 2 passed with T1 at 74 files / 856 tests and T2 at 41 files /
-273 tests plus one declared skip; Stage 3 passed with the coverage above. Changeset
+276 tests plus one declared skip; Stage 3 passed with the coverage above. Changeset
 classification, T4 (2 files / 4 tests), T5 (6 files / 25 tests), T6 (1 file / 3 tests),
-strict governance (34 invariants, 133 traced tests, 147 governed commits),
+strict governance (34 invariants, 133 traced tests, 155 governed commits),
 repository-wide Prettier, `git diff --check`, and a clean status all pass at exact
-candidate `6968d039bc3ccc57d3a5412ad1f90ba59f56032e`. No threshold, source set,
+candidate `86608b74a9f46df63c92e9ab161e4d4e5ab423a0`. No threshold, source set,
 conditional skip, assertion, lint rule, or formatting rule was weakened.
 
 ## Remaining ceremony
