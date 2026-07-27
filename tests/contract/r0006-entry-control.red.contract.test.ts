@@ -811,18 +811,18 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
         'fixture/projection.mjs',
       ],
     );
-    put(current.root, 'work/audit/R-0006/review.md', 'PASS\n');
+    const manifestDigest = putReviewManifest(current.root, reviewed);
+    const reviewRecord = `---\nverdict: PASS\nreviewer_model: claude-opus-5\nreview_candidate: ${reviewed}\nmanifest_digest_sha256: ${manifestDigest}\n---\n\n# Independent review\n`;
+    put(current.root, 'work/audit/R-0006/review.md', reviewRecord);
     commit(current.root, 'DEVAI Auditor', 'audit(r0006): record independent review', [
       'work/audit/R-0006/review.md',
     ]);
-    put(current.root, 'docs/generated/review.md', 'PASS\n');
+    put(current.root, 'docs/generated/review.md', reviewRecord);
     commit(current.root, 'DEVAI Architect', 'docs(r0006): reproduce review projection', [
       'docs/generated/review.md',
     ]);
     const result = run(current.root, [
       'envelope',
-      '--reviewed-sha',
-      reviewed,
       '--head',
       git(current.root, ['rev-parse', 'HEAD']),
       '--review-record',
