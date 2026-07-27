@@ -194,6 +194,27 @@ trace still verifies 34 invariants and 140 test sources. This is a deterministic
 resource allowance for the same assertion contract, not a skipped test, retry, or
 semantic relaxation. The failed candidate retains no standing.
 
+At exact candidate `970651a5f49fa6e2bb7f979d53371a147ef0e109`, fresh convergence
+subsequently passed all 16 gates in both passes. Both passes were clean before and
+after, retained coverage digest
+`668853a175141f371d61ae7f01f2b246f885f3fc2abdc9e403a9d0eb25a75801`,
+and produced identical relevant-workspace digest
+`74d291caeb797feb4229cab9144b19f4bc0735d8916c0ddbce20186ccfde1383`.
+The candidate-only closure rehearsal also passed and exercised the production phase
+verb with schema-valid, exact-range output.
+
+The following candidate-manifest attempt nevertheless failed closed and wrote no new
+valid manifest. Its whole governed-range role map found two immutable B6 Engineer
+commits that touched Inspector-owned paths: `d41c648b184ae63c2ed473ae1a44725eb3cb26dc`
+changed `tests/config/t1-t3.coverage.config.ts`, while
+`8e7a44b70a3e13b85293de48af8284889daea7e3` changed that path and
+`tests/config/subprocess-v8-coverage-provider.ts` alongside Engineer-owned files. The
+manifest returned `ROLE_PATH_VIOLATION` for both commits and
+`MANIFEST_SCHEMA_INVALID`; green convergence and rehearsal do not override that
+result. Any correction must name only those exact historical commits and mismatched
+paths, reject stale or overbroad use, and retain the standing `tests/**` Inspector
+boundary. The candidate has no review or publication standing.
+
 ## Action output and error totality
 
 The canonical registry remains 186 never-reminted identities: 147 `keep`, 38 `fold`,
