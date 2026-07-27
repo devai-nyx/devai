@@ -98,3 +98,12 @@ generic validated envelope and deterministic trace measurement without adding
 test-only production branches. The red does not authorize threshold reduction,
 coverage exclusion growth, publication, release, evidence reuse or promotion, or any
 R-0007+ work.
+
+At B5, the action boundary makes the first seven output-contract assertions green.
+The Inspector retains adversarial coverage for success and failure channel separation,
+schema validation, exact routed identity, pre-dispatch authority refusal, human-mode
+compatibility, malformed envelope combinations, and per-action payload validation.
+The trace materialization contract now also proves that assertion-free files fail and
+that a non-assertion source-byte change invalidates the digest. Until the Architect
+regenerates `law/trace.json`, only trace-materialization-dependent assertions remain
+red; that staleness is the required role-pure projection handoff, not a red exception.

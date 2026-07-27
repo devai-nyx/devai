@@ -66,7 +66,8 @@ describe('R-0005 evidence and lifecycle red-first contracts', () => {
       { cwd: ROOT, encoding: 'utf8' },
     );
     expect(result.status, result.stderr).toBe(0);
-    const output = JSON.parse(result.stdout) as { ok: boolean; findings: unknown[] };
+    const envelope = JSON.parse(result.stdout) as { result: { value: unknown } };
+    const output = envelope.result.value as { ok: boolean; findings: unknown[] };
     expect(output.ok).toBe(true);
     expect(output.findings).toEqual([]);
   });

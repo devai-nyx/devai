@@ -219,7 +219,10 @@ describe('R-0004 governed surface red-first contracts', () => {
       { cwd: ROOT, encoding: 'utf8' },
     );
     expect(result.status, result.stderr).toBe(0);
-    const output = JSON.parse(result.stdout) as {
+    const envelope = JSON.parse(result.stdout) as {
+      result: { value: unknown };
+    };
+    const output = envelope.result.value as {
       ok: boolean;
       canonical_total: number;
       rules: string[];
@@ -366,7 +369,8 @@ describe('R-0004 governed surface red-first contracts', () => {
       { cwd: ROOT, encoding: 'utf8' },
     );
     expect(result.status, result.stderr).toBe(0);
-    const { canonical_total: canonicalTotal } = JSON.parse(result.stdout) as {
+    const envelope = JSON.parse(result.stdout) as { result: { value: unknown } };
+    const { canonical_total: canonicalTotal } = envelope.result.value as {
       canonical_total: number;
     };
     const canonicalSchemas = readdirSync(join(ROOT, 'law/schemas')).filter((file) =>

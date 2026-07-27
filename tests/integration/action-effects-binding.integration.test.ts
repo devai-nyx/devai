@@ -35,7 +35,17 @@ describe('binding action-effect CLI', () => {
         { cwd: REPO_ROOT, encoding: 'utf8' },
       );
       expect(result.status, result.stderr).toBe(0);
-      const output = JSON.parse(result.stdout) as {
+      const envelope = JSON.parse(result.stdout) as {
+        action_id: string;
+        ok: boolean;
+        result: { media_type: string; value: unknown };
+      };
+      expect(envelope).toMatchObject({
+        action_id: 'policy check action effects',
+        ok: true,
+        result: { media_type: 'application/json' },
+      });
+      const output = envelope.result.value as {
         reading: { status: string };
         report: {
           findings: unknown[];

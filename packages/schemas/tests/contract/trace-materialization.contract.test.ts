@@ -28,7 +28,11 @@ describe('canonical trace materialization', () => {
     roots.push(root);
     execFileSync('git', ['init', '-q'], { cwd: root });
     put(root, 'law/invariants/INV-A-001.json', '{}\n');
-    put(root, 'packages/demo/tests/unit/a.test.ts', '// Invariants: INV-A-001\nexport {};\n');
+    put(
+      root,
+      'packages/demo/tests/unit/a.test.ts',
+      '// Invariants: INV-A-001\nexpect(true).toBe(true);\n',
+    );
     track(root);
     execFileSync(process.execPath, [generator, root]);
     const canonical = join(root, 'law/trace.json');
@@ -43,7 +47,11 @@ describe('canonical trace materialization', () => {
     expect(incomplete.stderr).toContain('INV-B-001');
     expect(readFileSync(canonical, 'utf8')).toBe(baseline);
 
-    put(root, 'packages/demo/tests/unit/b.test.ts', '// Invariants: INV-B-001\nexport {};\n');
+    put(
+      root,
+      'packages/demo/tests/unit/b.test.ts',
+      '// Invariants: INV-B-001\nexpect(true).toBe(true);\n',
+    );
     track(root);
     const stale = spawnSync(process.execPath, [generator, root, '--check'], {
       encoding: 'utf8',
@@ -68,5 +76,40 @@ describe('canonical trace materialization', () => {
     expect(
       spawnSync(process.execPath, [generator, root, '--check'], { encoding: 'utf8' }).status,
     ).toBe(0);
+  });
+
+  it('rejects assertion-free rows and binds assertion evidence to exact source bytes', () => {
+    const root = mkdtempSync(join(tmpdir(), 'devai-trace-assertions-'));
+    roots.push(root);
+    execFileSync('git', ['init', '-q'], { cwd: root });
+    put(root, 'law/invariants/INV-A-001.json', '{}\n');
+    const testPath = 'packages/demo/tests/unit/a.test.ts';
+    put(root, testPath, '// Invariants: INV-A-001\nexport {};\n');
+    track(root);
+    const assertionFree = spawnSync(process.execPath, [generator, root], { encoding: 'utf8' });
+    expect(assertionFree.status).not.toBe(0);
+    expect(assertionFree.stderr).toContain('no executable assertion sites');
+
+    put(root, testPath, '// Invariants: INV-A-001\nexpect(true).toBe(true);\n');
+    track(root);
+    execFileSync(process.execPath, [generator, root]);
+    const trace = JSON.parse(readFileSync(join(root, 'law/trace.json'), 'utf8')) as {
+      test_corpus: Array<{
+        assertion_count: number;
+        assertion_digest_sha256: string;
+      }>;
+    };
+    expect(trace.test_corpus[0]).toMatchObject({ assertion_count: 1 });
+    expect(trace.test_corpus[0]?.assertion_digest_sha256).toMatch(/^[a-f0-9]{64}$/u);
+
+    put(
+      root,
+      testPath,
+      '// Invariants: INV-A-001\n// exact-source drift\nexpect(true).toBe(true);\n',
+    );
+    track(root);
+    const stale = spawnSync(process.execPath, [generator, root, '--check'], { encoding: 'utf8' });
+    expect(stale.status).not.toBe(0);
+    expect(stale.stderr).toContain('stale');
   });
 });
