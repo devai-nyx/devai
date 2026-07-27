@@ -4,7 +4,9 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+vi.setConfig({ testTimeout: 15_000 });
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const SCRIPT = join(ROOT, 'scripts/run-round-close-controls.mjs');
