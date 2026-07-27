@@ -251,3 +251,24 @@ regenerate only the Architect-owned `law/trace.json` projection so the new Inspe
 round-state routing test is represented by its unchanged invariant marker. No test,
 invariant, generator, or source behavior may change. The cluster retires when
 `trace:check` and the restarted complete ladder pass.
+
+## Third-review repair retirement
+
+KR-R5-037 through KR-R5-041 retire at exact candidate
+`504bbf9aeb4dbf01fab444b25bdf5b8a10fc0abe`. The repair sequence is Auditor
+`dddb863`, Architect `1e2a05f`, Inspector red `67aa794`, Engineer `02aaaf7`,
+Inspector `e6a0d9d`, Architect `29e3ff5`, Auditor `3db5631`, Architect `2bd5e0c`,
+Engineer `8651b26` and `3925a2f`, Inspector `5158742`, `d61a48e`, `e8dde2a`, and
+`7ad3536`, Architect `c8885fd`, Auditor `a8ae6e6`, Architect `77a7067`, Auditor
+`23a6adf`, and Architect `504bbf9`.
+
+The complete ordinary floor passes 133 files with 1,214 tests, eight declared skips,
+and zero failures. The exact exit ladder passes Stage 1; Stage 2 with T1 at 74 files /
+856 tests and T2 at 41 files / 270 passing plus one declared skip; Stage 3 with 83
+files / 912 passing plus seven declared skips and 72.42/62.36/78.07/74.52 coverage;
+changeset classification; T4, T5, and T6; strict governance with all 34 invariants and
+133 tests traced; repository-wide formatting; `git diff --check`; and clean status.
+
+This ledger now grants no active red authority. A new exact-candidate independent Codex
+review remains required, and any actionable finding from that review requires a fresh
+Architect entry and failing Inspector boundary before repair.
