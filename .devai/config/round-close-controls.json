@@ -109,7 +109,7 @@
   },
   "rehearsal": {
     "schema_path": "law/schemas/phase-closure.schema.json",
-    "verb_path": "packages/cli/src/commands/govern/phase-close.ts",
+    "verb_path": "packages/cli/src/commands/phase/index.ts",
     "closure_path": "record/proofs/compliance/closures/PC-9999.json"
   },
   "semantic_assertions": {
