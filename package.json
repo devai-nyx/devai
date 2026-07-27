@@ -38,6 +38,7 @@
     "ci:workflows": "node scripts/check-workflows.mjs"
   },
   "devDependencies": {
+    "@bcoe/v8-coverage": "1.0.2",
     "@eslint/js": "^9.0.0",
     "@types/node": "^26.1.1",
     "@vitest/coverage-v8": "4.1.10",

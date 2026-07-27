@@ -458,8 +458,17 @@ if (authorityResult !== undefined) {
       // args, which previously escaped as a raw stack trace with exit 1.
       // Usage failures exit 2 with a one-line message, at every layer.
       if (err instanceof Error && err.name === 'CACError') {
-        process.stderr.write(`devai: ${err.message}\n`);
-        process.exitCode = 2;
+        const text = `devai: ${err.message}\n`;
+        if (
+          !emitPreDispatchActionResult(machineAction, {
+            exit: 2,
+            stdout: '',
+            stderr: text,
+          })
+        ) {
+          process.stderr.write(text);
+          process.exitCode = 2;
+        }
       } else {
         throw err;
       }
