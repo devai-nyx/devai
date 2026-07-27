@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "round": "R-0005",
   "baseline_commit": "e9db37209ee879c0f6cc0e2ee6c7c5619c3cb190",
-  "reason": "BL-025, BL-029, and KR-R5-036 remove governed prompt-overlay false positives and move disposable round backlog proposals plus orchestration logs out of Architect-owned round records while preserving the canonical behavior corpus.",
+  "reason": "KR-R5-036 through KR-R5-040 remove governed authority inversions, make ADR and documentation recovery diagnose-only, and route disposable backlog, orchestration, and verification products through canonical round state while preserving the reviewed behavior corpus.",
   "changed_files": [
     "fingerprint-behavior.json",
     "manifest-corpus.json",
@@ -11,6 +11,30 @@
     "round-corpus-orchestrate.json"
   ],
   "changed_skills": {
+    "SKILL-fix-adrs": {
+      "changed_fields": [
+        "behavior.evidence.adrs",
+        "behavior.evidence.after",
+        "behavior.evidence.before",
+        "behavior.evidence.errors",
+        "behavior.evidence.files_scanned",
+        "behavior.evidence.fix_log",
+        "behavior.evidence.iteration",
+        "behavior.evidence.ok",
+        "fs_products.modified.law/adr/ADR-001-fixture.md"
+      ]
+    },
+    "SKILL-fix-docs-links": {
+      "changed_fields": [
+        "behavior.evidence.broken",
+        "behavior.evidence.broken_after",
+        "behavior.evidence.broken_before",
+        "behavior.evidence.broken_count",
+        "behavior.evidence.fix_log",
+        "behavior.evidence.iteration",
+        "behavior.evidence.ok"
+      ]
+    },
     "SKILL-fix-prompt-overlays": {
       "changed_fields": ["behavior.evidence.findings", "behavior.evidence.ok", "behavior.status"]
     },
@@ -19,6 +43,7 @@
         "behavior.evidence.executed_artifacts.files",
         "behavior.evidence.executed_artifacts.prompts_dir",
         "behavior.evidence.executed_artifacts.proposal_dir",
+        "behavior.evidence.steps",
         "fs_products.created..devai/state/round-runs/R-0999/backlog/backlog.json",
         "fs_products.created..devai/state/round-runs/R-0999/backlog/backlog.md",
         "fs_products.created..devai/state/round-runs/R-0999/backlog/prompts/00-orchestrator.md",
@@ -36,6 +61,9 @@
         "fs_products.created..devai/state/round-runs/R-0999/orchestrate/01-fixture-wave.log",
         "fs_products.created.work/rounds/R-0999/prompts/01-fixture-wave.log"
       ]
+    },
+    "SKILL-round-verify-publish": {
+      "changed_fields": ["behavior.evidence.steps"]
     }
   }
 }
