@@ -188,7 +188,27 @@
         },
         {
           "suite": "unit",
+          "path": "packages/cli/tests/unit/authority-cli-harness.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/cli/tests/unit/forbidden-actions-help.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/governed-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-read-actions.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-surface-bootstrap.test.ts",
           "target_type": "test"
         },
         {
@@ -892,6 +912,26 @@
       "id": "INV-DEVAI-015",
       "tests": [
         {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/authority-cli-harness.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/governed-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-read-actions.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-surface-bootstrap.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "contract",
           "path": "packages/skills/tests/contract/feedback-iteration-bounded-replacements.red.test.ts",
           "target_type": "test"
@@ -954,6 +994,26 @@
         {
           "suite": "contract",
           "path": "packages/cli/tests/contract/r0004-close-review.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/authority-cli-harness.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/governed-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-read-actions.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-surface-bootstrap.test.ts",
           "target_type": "test"
         },
         {
@@ -1028,6 +1088,11 @@
         },
         {
           "suite": "unit",
+          "path": "packages/cli/tests/unit/governed-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/cli/tests/unit/hooks-install.test.ts",
           "target_type": "test"
         },
@@ -1094,6 +1159,26 @@
         {
           "suite": "contract",
           "path": "packages/cli/tests/contract/r0004-close-review.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/authority-cli-harness.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/governed-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-read-actions.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-surface-bootstrap.test.ts",
           "target_type": "test"
         },
         {
@@ -1354,7 +1439,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 27,
-      "assertion_digest_sha256": "692c8a4a98caee1789ab465773749001db4789307388419355048777eb45172f"
+      "assertion_digest_sha256": "e96ef8b578bdd016fdce5ad0e2712ffea645c5c342bb903533f8e5e14025d478"
     },
     {
       "path": "packages/cli/tests/contract/no-exit-after-emit.contract.test.ts",
@@ -1387,7 +1472,20 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 33,
-      "assertion_digest_sha256": "2ea2e486df45e4cbbfd59061351fd67487348bcdd1b5b88c2a80820aba39863d"
+      "assertion_digest_sha256": "e9d0184dd04ca086d0288c416da0dd1fe74ae7a2b5d7ebd08ff95459132afbc3"
+    },
+    {
+      "path": "packages/cli/tests/unit/authority-cli-harness.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 11,
+      "assertion_digest_sha256": "cd1c1763bffc99109261ad96d61c126136c01493af0fede3c43608ade70529a4"
     },
     {
       "path": "packages/cli/tests/unit/dependency-security.sec.test.ts",
@@ -1410,6 +1508,20 @@
       "assertion_digest_sha256": "d1c990b11d1da7206017bc66511836b0d5f55cc05b26484c1930a723d284df5f"
     },
     {
+      "path": "packages/cli/tests/unit/governed-command-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-018",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 19,
+      "assertion_digest_sha256": "cffba7116660c9b82a04f9039945b5bdf3ecf4e40eb09029871915d6254b545d"
+    },
+    {
       "path": "packages/cli/tests/unit/hooks-install.test.ts",
       "suite": "unit",
       "invariant_ids": [
@@ -1419,6 +1531,32 @@
       "lifecycle": "supported",
       "assertion_count": 26,
       "assertion_digest_sha256": "c3523492a2cde2209e0f06e8817e6b421352b9a993483c1f42f57b2c69b9c319"
+    },
+    {
+      "path": "packages/cli/tests/unit/public-read-actions.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 7,
+      "assertion_digest_sha256": "2bbf419a3865abbd28471528819afc8e400fd5f12876faa2bb24185bad7c34b8"
+    },
+    {
+      "path": "packages/cli/tests/unit/public-surface-bootstrap.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 6,
+      "assertion_digest_sha256": "ca10da3f07091ece3200ced4114829a7f7bebc182512e47411c4a7da78cdc571"
     },
     {
       "path": "packages/cli/tests/unit/render-mermaid.test.ts",
@@ -2451,7 +2589,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 48,
-      "assertion_digest_sha256": "1c591a6540ceaeababfb2f004f3f3955b3f73f8b668d996cd58fc100353993d8"
+      "assertion_digest_sha256": "03c820117e0a707efde87f3d7e0b9e9a0c278055a0e0bc69518d8d21bd3ee1a8"
     },
     {
       "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
@@ -2491,7 +2629,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 22,
-      "assertion_digest_sha256": "398a30043b856bcd3cd2a125980adf0f05346aeeee10769b37d1f41d7de69da5"
+      "assertion_digest_sha256": "4beb90ccb5d75c7b7736e121c5599f6497abd540a6f682591b1afe3b36b2daf5"
     },
     {
       "path": "tests/contract/r0006-output-contracts.red.contract.test.ts",
@@ -2504,7 +2642,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 17,
-      "assertion_digest_sha256": "53c675d1cac7d7b7a14ffb75b560e248f06ee7d7e59e5461c7609224a9b8d497"
+      "assertion_digest_sha256": "24db25ed844116b623445d384184345b3982f73358aa84604f6871e31523f16a"
     },
     {
       "path": "tests/e2e/bare-domain-help.e2e.test.ts",
@@ -2514,7 +2652,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 11,
-      "assertion_digest_sha256": "868228dbcf0c7431ddbdf13635bc2bfb3544feb549a8493c993db3c2ced24fde"
+      "assertion_digest_sha256": "35767bfdb6db848a3c0b94354b58b77700151868e827e830f379abc4c1e0b0b6"
     },
     {
       "path": "tests/e2e/built-cli-guard.e2e.test.ts",
@@ -2534,7 +2672,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 20,
-      "assertion_digest_sha256": "611e8d8ccaf7f28744eb2f8071c453bd165eb2a67f2c04d7262e177507f024e1"
+      "assertion_digest_sha256": "1b3529c194a21d6f22e14a70fdb03ac71c21e0e50eb5e4272c3d80cf7d2e3ffd"
     },
     {
       "path": "tests/e2e/inventory-sensors.smoke.test.ts",
@@ -2565,7 +2703,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 10,
-      "assertion_digest_sha256": "b09f4d7e1cb081ee9f00e40d98b3162abb973ce4621346d3ce3900337c837ac2"
+      "assertion_digest_sha256": "a4107d97b708cabaac6248575181c39e203b3b299da220dcddef98160376609d"
     },
     {
       "path": "tests/integration/action-effects-binding.integration.test.ts",
@@ -2575,7 +2713,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 5,
-      "assertion_digest_sha256": "4a02aceae95afb0ee8ff49eccce05261964413d6130f1c55c969ae500962daa9"
+      "assertion_digest_sha256": "3dec36d041c078c3dd235be3356843df238d82be42eefae1afba94ffcab68cca"
     },
     {
       "path": "tests/integration/ci-scaffold.integration.test.ts",
@@ -2586,7 +2724,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 14,
-      "assertion_digest_sha256": "495b2f831d489cc788175b3113228a1e2a93e744217152e7bb56e7ac0d43c0cb"
+      "assertion_digest_sha256": "81eb33ced1b08a45d4db22b604b96df0370c4b0d8c16a94d592e4cd4717882fc"
     },
     {
       "path": "tests/integration/hooks-install.integration.test.ts",
@@ -2596,7 +2734,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 30,
-      "assertion_digest_sha256": "7bb06fa206cb6aac6ead505e1eb188bafc5ee54364f8bfdf4b1c3e6c2caf05b1"
+      "assertion_digest_sha256": "5fc779466a8794299dd5a26aef6614cbf6e29599dbdfa8e0097e2be722832562"
     },
     {
       "path": "tests/integration/mutation-candidate-provenance.red.integration.test.ts",
@@ -2638,7 +2776,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 5,
-      "assertion_digest_sha256": "dec823865364df630c8dca9722f2a11f363b07b08209d89c87833dea31bfce7a"
+      "assertion_digest_sha256": "22574290481d55582f8b026548d9bf03ce09f02bcffe079e6d72841e0e3b288e"
     },
     {
       "path": "tests/integration/sensor-standing.integration.test.ts",
