@@ -26,6 +26,7 @@ export default defineConfig({
       enabled: true,
       reportsDirectory: 'coverage/t1-t3',
       reporter: ['text', 'json-summary'],
+      include: ['packages/*/src/**/*.{ts,tsx,js,mjs,cjs}'],
       exclude: ['**/dist/**', '**/tests/**', '**/*.config.ts', '**/generated/**'],
       thresholds: {
         lines: policy.coverage.lines,
