@@ -209,3 +209,22 @@ for KR-R5-035 and KR-R5-036. Both corrections implement ADR-019's already-active
 reader-only legacy-chain and exact prompt-exception decisions; they do not amend or
 supersede sealed law. Their Inspector contracts must demonstrate the current public API
 and lifecycle-scope allowances failing before either production source is changed.
+
+## Third-review repair authority
+
+Auditor record `R-0005-INDEPENDENT-CODEX-REVIEW-3-FAILURE` preserves the exact
+`732a2562753991089737402a1f895c0d0a0aca30` FAIL without conversion. The following
+clusters are authorized for one further red-first role-pure repair:
+
+| ID        | Source      | Required red boundary                                                                                                                                                                                                    |
+| --------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| KR-R5-037 | review-3 P1 | No agent-callable skill may mutate, rename, or claim wildcard scope over `law/adr/**`; `SKILL-fix-adrs` must be absent or diagnose-only, and no prompt-firewall autofix exemption may restore that authority.            |
+| KR-R5-038 | review-3 P1 | Backlog proposal, orchestration log, and verify/defer consumption must share canonical `.devai/state/round-runs/**` routing, while governed references use `work/audit/**` and lowercase `work/rounds/**/plan.md`.       |
+| KR-R5-039 | review-3 P1 | The governed-round adopter guide and repository-reference contracts must describe in-place `work/rounds/R-NNNN`, disposable `.devai/state/round-runs/**`, and attributable `work/audit/R-NNNN` without archive movement. |
+
+KR-R5-037 and KR-R5-038 require failing Inspector contracts before production repair.
+KR-R5-039 requires a failing Inspector documentation/reference contract before the
+Architect edits the guide. No cluster authorizes ADR mutation by an agent, round intent
+movement, governed output from a runtime skill, weaker assertions, a fabricated review
+PASS, or any external action. Retirement requires focused adversaries, the complete
+floor and exact ladder, and a new independent Codex PASS on the repaired exact candidate.
