@@ -445,3 +445,24 @@ the already-approved `eslint.config.*` correction, weakening runtime validation,
 fabricating a review PASS, or external action. Retirement requires focused green, both
 materializations byte-identical and current, the complete ordinary floor, exact exit
 ladder, and a new independent Codex PASS.
+
+## Eighth-review repair retirement
+
+KR-R5-049 and KR-R5-050 retire at exact implementation candidate
+`fdfada78284e66db0e24612c8c842121a1404f22` through Auditor `5f7dfa9`, Architect
+`e135155`, Inspector red `5880033`, Inspector harness correction `bbe8c35`, Engineer
+`5030835`, Architect mirror `c311630`, Auditor `7b42841`, Inspector literal-scope
+hardening `60e8f21`, and Architect disclosure `fdfada7`. Both committed policy
+materializations are byte-identical and current. The exact immutable Engineer commit
+whose prior red source assembled its path from segments is disclosed without granting
+any prospective exception; later tests carry exact repository-relative literals.
+
+The focused group passes 22 tests. The ordinary floor passes 133 files with 1,228 tests
+and eight declared skips. The exact exit ladder passes with T1 74/856, T2 41/284 plus
+one skip, T1+T3 83/912 plus seven skips, unchanged 72.42/62.36/78.07/74.52 coverage,
+T4 2/4, T5 6/25, T6 1/3, strict governance across 183 commits and 276 identities,
+repository-wide formatting, `git diff --check`, and clean status.
+
+This ledger grants no active red authority. A fresh exact-candidate independent Codex
+review remains required. Any further actionable finding requires a fresh Architect
+entry and failing Inspector boundary before repair.
