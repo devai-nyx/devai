@@ -163,12 +163,8 @@ export function getFullRegistry(): readonly RegistryEntry[] {
 
 /** Mechanical W05.e surface guard over the post-collapse public catalog. */
 export function validateActionSurface(entries: readonly RegistryEntry[]): void {
-  const ACTION_FLOOR = 147;
-  const ACTION_CEILING = 147;
-  if (entries.length < ACTION_FLOOR || entries.length > ACTION_CEILING) {
-    throw new Error(
-      `ACTION_COUNT_GUARD: expected ${String(ACTION_FLOOR)}..${String(ACTION_CEILING)}, received ${String(entries.length)}`,
-    );
+  if (entries.length === 0) {
+    throw new Error('ACTION_COUNT_GUARD: expected a nonempty canonical population');
   }
   const paths = entries.map((entry) => entry.path.join(' '));
   if (new Set(paths).size !== paths.length) {

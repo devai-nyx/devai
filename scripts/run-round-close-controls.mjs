@@ -132,10 +132,14 @@ function matches(path, glob) {
 }
 
 function trackedPaths(root, revision = 'HEAD') {
+  if (revision === 'WORKTREE') {
+    return git(root, ['ls-files']).split('\n').filter(Boolean).sort();
+  }
   return git(root, ['ls-tree', '-r', '--name-only', revision]).split('\n').filter(Boolean).sort();
 }
 
 function candidateFile(root, revision, path) {
+  if (revision === 'WORKTREE') return readFileSync(join(root, path), 'utf8');
   return git(root, ['show', `${revision}:${path}`]);
 }
 
@@ -203,6 +207,90 @@ function readState(root, round, name) {
   }
 }
 
+function semanticCodeShape(source) {
+  let output = '';
+  for (let index = 0; index < source.length; index += 1) {
+    const character = source[index];
+    const next = source[index + 1];
+    if (character === '/' && next === '/') {
+      while (index < source.length && source[index] !== '\n') index += 1;
+      output += '\n';
+      continue;
+    }
+    if (character === '/' && next === '*') {
+      index += 2;
+      while (index < source.length - 1 && !(source[index] === '*' && source[index + 1] === '/')) {
+        if (source[index] === '\n') output += '\n';
+        index += 1;
+      }
+      index += 1;
+      continue;
+    }
+    if (character === "'" || character === '"' || character === '`') {
+      const quote = character;
+      output += '__STRING__';
+      for (index += 1; index < source.length; index += 1) {
+        if (source[index] === '\\') index += 1;
+        else if (source[index] === quote) break;
+        else if (source[index] === '\n') output += '\n';
+      }
+      continue;
+    }
+    output += character;
+  }
+  return output;
+}
+
+function containsJsonKey(value, key) {
+  if (Array.isArray(value)) return value.some((entry) => containsJsonKey(entry, key));
+  if (value !== null && typeof value === 'object') {
+    return (
+      Object.hasOwn(value, key) || Object.values(value).some((entry) => containsJsonKey(entry, key))
+    );
+  }
+  return false;
+}
+
+function semanticContentFindings(root, revision, paths) {
+  const findings = [];
+  for (const path of paths) {
+    const source = candidateFile(root, revision, path);
+    if (path.endsWith('.json')) {
+      try {
+        if (containsJsonKey(JSON.parse(source), 'fixed_count')) {
+          findings.push(
+            finding('SEMANTIC_FIXED_COUNT', 'fixed governed count in population', { path }),
+          );
+        }
+      } catch {
+        // Syntax validity is enforced by the owning schema or compiler gate.
+      }
+      continue;
+    }
+    const shape = semanticCodeShape(source);
+    if (
+      /\b(?:ACTION_(?:FLOOR|CEILING)|(?:FIXED|GOVERNED)_[A-Z0-9_]*COUNT)\s*=\s*\d+/u.test(shape)
+    ) {
+      findings.push(
+        finding('SEMANTIC_FIXED_COUNT', 'fixed governed count in population', { path }),
+      );
+    }
+    if (/\bexpect\(\s*([A-Za-z_$][\w$]*)\s*\)\.(?:toBe|toEqual)\(\s*\1\s*\)/u.test(shape)) {
+      findings.push(
+        finding('SEMANTIC_SELF_COMPARISON', 'literal self-comparison in population', { path }),
+      );
+    }
+    if (/\breadFileSync\(\s*__STRING__\s*\)\s*\)?\s*\.toContain\(/u.test(shape)) {
+      findings.push(
+        finding('SEMANTIC_NAMED_FILE_ONLY', 'direct named-file-only assertion in population', {
+          path,
+        }),
+      );
+    }
+  }
+  return findings;
+}
+
 function policyFindings(policy, root = repoRoot, revision = 'HEAD', options = {}) {
   const findings = [];
   const assertions = policy?.semantic_assertions;
@@ -245,6 +333,8 @@ function policyFindings(policy, root = repoRoot, revision = 'HEAD', options = {}
       );
     }
   }
+  const populationPaths = [...new Set(pathsForGlobs(root, revision, populations))];
+  findings.push(...semanticContentFindings(root, revision, populationPaths));
   if (options.skipMirrorPairs !== true) {
     for (const pair of assertions.mirror_pairs ?? []) {
       const source = typeof pair?.source === 'string' ? join(root, pair.source) : '';
@@ -294,7 +384,7 @@ function policyFindings(policy, root = repoRoot, revision = 'HEAD', options = {}
 function policyCheck() {
   const findings = [];
   const policy = loadPolicy(findings);
-  if (policy !== null) findings.push(...policyFindings(policy));
+  if (policy !== null) findings.push(...policyFindings(policy, repoRoot, 'WORKTREE'));
   emit({ ok: findings.length === 0, command: 'policy-check', findings });
 }
 
@@ -302,11 +392,11 @@ function materialize() {
   const findings = [];
   const policy = loadPolicy(findings);
   if (policy !== null)
-    findings.push(...policyFindings(policy, repoRoot, 'HEAD', { skipMirrorPairs: true }));
+    findings.push(...policyFindings(policy, repoRoot, 'WORKTREE', { skipMirrorPairs: true }));
   if (findings.length === 0) {
     mkdirSync(dirname(mirrorPath), { recursive: true });
     writeFileSync(mirrorPath, readFileSync(policyPath));
-    findings.push(...policyFindings(policy));
+    findings.push(...policyFindings(policy, repoRoot, 'WORKTREE'));
   }
   emit({
     ok: findings.length === 0,
@@ -609,7 +699,16 @@ function rolePathMap(root, base, head, policy, findings) {
         finding('ROLE_PATH_VIOLATION', `${sha} is not role-pure`, { sha, author, role, paths }),
       );
     }
-    return { commit: sha, author, role: role ?? 'Unknown', paths, path_authorized: pathAuthorized };
+    return {
+      commit: sha,
+      author,
+      role: role ?? 'Unknown',
+      paths,
+      path_authorized: pathAuthorized,
+      role_path_exception: exceptionAuthorized
+        ? { decision_id: exception.decision_id, paths: [...exception.paths].sort() }
+        : null,
+    };
   });
 }
 
