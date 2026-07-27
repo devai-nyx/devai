@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-202; DII-203; OM-009; R-0005-ENTRY-INVENTORY; R-0005-DOCUMENTATION-RECONCILIATION; implementation snapshot 2f3dc228fc1756325e922c873926d05d5e39e0d5,
+    DII-202; DII-203; OM-009; R-0005-ENTRY-INVENTORY; R-0005-DOCUMENTATION-RECONCILIATION; implementation snapshot 504bbf9aeb4dbf01fab444b25bdf5b8a10fc0abe,
   ]
 ---
 
@@ -17,11 +17,12 @@ provenance:
 
 ## Boundary and verdict
 
-R-0005 B0 through B8 and both independent-review/exit-ladder repair cycles are
-implemented through governed snapshot `2f3dc228fc1756325e922c873926d05d5e39e0d5`.
-The source is not closed by this report: the fresh independent Codex review, complete exit ladder, source PR and exact-head
-CI, source merge and exact-main CI, machine PC-0006 emission, closure-only PR, closure
-merge, and final exact-main CI remain serial gates.
+R-0005 B0 through B8 and all three completed independent-review/exit-ladder repair
+cycles are implemented through governed snapshot
+`504bbf9aeb4dbf01fab444b25bdf5b8a10fc0abe`. The source is not closed by this
+report: a fresh independent Codex review, source PR and exact-head CI, source merge and
+exact-main CI, machine PC-0006 emission, closure-only PR, closure merge, and final
+exact-main CI remain serial gates.
 
 The bounded claim is **evidence and lifecycle machinery implemented and tested**.
 Evidence reuse and promotion remain disabled pending BL-022. No package was published;
@@ -78,27 +79,31 @@ until the exact source merge passes exact-main CI.
 | Strict governance repair  | Architect + Inspector + Engineer + Auditor | `4ea2dbc`, `7a17bc3`, `691a90d`, `94192b3`, `d71bcda`                                             | Protected-path scanning now classifies repository-root ownership without nested-path false positives.                                                                                                                |
 | Final ladder repair       | Architect + Inspector + Engineer + Auditor | `fcc9a1b` through `52a353b`                                                                       | Sealed ADR history was repaired by canonical supersession; single read sensors use bounded read authority; parser, roster, trace, lint, typecheck, and formatting gates are exact-green.                             |
 | Second-review repair      | Auditor + Architect + Inspector + Engineer | `249b749` through `2f3dc22`                                                                       | Public aggregate-chain writers were removed, lifecycle prompt exemptions were deleted, unsafe governance adapters left the skill catalog, and disposable backlog proposals moved under `.devai/state/round-runs/**`. |
+| Third-review repair       | Auditor + Architect + Inspector + Engineer | `dddb863` through `77a7067`                                                                       | ADR and documentation repair skills became diagnose-only, prompt exemptions were removed, round state routing became end-to-end canonical, and current lifecycle documentation was reconciled.                       |
+| Trace projection repair   | Auditor + Architect                        | `23a6adf`, `504bbf9`                                                                              | The unchanged round-state invariant marker was projected into the 34-invariant / 133-test trace without changing the test, invariant, generator, or runtime behavior.                                                |
 
 Combined-role rows are serial role-pure commits, never shared-authority commits.
 
 ## Fresh regression evidence
 
-The final pre-review ordinary floor passed 132 files with 1,210 tests passing, eight
-declared skips, and zero failures. The merged T1+T3 coverage reading passed 82 files
-with 909 tests and seven declared skips against the unchanged
+The final pre-review ordinary floor passed 133 files with 1,214 tests passing, eight
+declared skips, and zero failures. The merged T1+T3 coverage reading passed 83 files
+with 912 tests and seven declared skips against the unchanged
 70/60/70/70 policy:
 
 | Metric     |                  Reading | Floor |
 | ---------- | -----------------------: | ----: |
-| Statements | 71.23% (10,832 / 15,205) |   70% |
-| Branches   |  61.64% (7,878 / 12,780) |   60% |
-| Functions  |   77.44% (1,552 / 2,004) |   70% |
-| Lines      |  73.33% (9,995 / 13,629) |   70% |
+| Statements | 72.42% (10,821 / 14,940) |   70% |
+| Branches   |  62.36% (7,867 / 12,615) |   60% |
+| Functions  |   78.07% (1,556 / 1,993) |   70% |
+| Lines      |  74.52% (9,984 / 13,396) |   70% |
 
-Stage 1 passed; Stage 2 passed with T1 at 73 files / 853 tests and T2 at 41 files /
-269 tests plus one declared skip; Stage 3 passed with the coverage above. Changeset
+Stage 1 passed; Stage 2 passed with T1 at 74 files / 856 tests and T2 at 41 files /
+270 tests plus one declared skip; Stage 3 passed with the coverage above. Changeset
 classification, T4 (2 files / 4 tests), T5 (6 files / 25 tests), T6 (1 file / 3 tests),
-strict governance, repository-wide Prettier, and `git diff --check` all pass. No threshold, source set,
+strict governance (34 invariants, 133 traced tests, 133 governed commits),
+repository-wide Prettier, `git diff --check`, and a clean status all pass at exact
+candidate `504bbf9aeb4dbf01fab444b25bdf5b8a10fc0abe`. No threshold, source set,
 conditional skip, assertion, lint rule, or formatting rule was weakened.
 
 ## Remaining ceremony
