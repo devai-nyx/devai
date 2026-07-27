@@ -3,12 +3,18 @@ import { spawnSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { validators } from '../../packages/schemas/src/index.js';
+import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const BIN = resolve(ROOT, 'packages/cli/dist/bin.js');
 
 function run(args: readonly string[]) {
-  return spawnSync('node', [BIN, ...args], { cwd: ROOT, encoding: 'utf8', timeout: 15_000 });
+  return spawnSync('node', [BIN, ...args], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    env: subprocessCoverageEnvironment(),
+    timeout: 15_000,
+  });
 }
 
 function parsed(text: string): Record<string, unknown> {

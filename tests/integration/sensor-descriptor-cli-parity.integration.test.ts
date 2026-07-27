@@ -5,6 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SENSOR_DESCRIPTORS } from '../../packages/sensors/src/index.js';
 import { describe, expect, it } from 'vitest';
+import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const BIN = join(
@@ -21,7 +22,10 @@ const skipIfNotBuilt = existsSync(BIN) ? it : it.skip;
 
 describe('R29 sensor descriptor CLI parity', () => {
   skipIfNotBuilt('binds all 59 descriptors through the one live `sense run <kind>` action', () => {
-    const result = spawnSync('node', [BIN, 'catalog', 'actions'], { encoding: 'utf8' });
+    const result = spawnSync('node', [BIN, 'catalog', 'actions'], {
+      encoding: 'utf8',
+      env: subprocessCoverageEnvironment(),
+    });
     expect(result.status, result.stderr).toBe(0);
     const actions = new Set(
       (JSON.parse(result.stdout) as Array<{ name: string }>).map((action) => action.name),

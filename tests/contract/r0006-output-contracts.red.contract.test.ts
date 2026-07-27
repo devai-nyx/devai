@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const BIN = join(ROOT, 'packages/cli/dist/bin.js');
@@ -37,6 +38,7 @@ function run(args: readonly string[]): {
   const result = spawnSync('node', [BIN, ...args], {
     cwd: ROOT,
     encoding: 'utf8',
+    env: subprocessCoverageEnvironment(),
     timeout: 15_000,
   });
   return { status: result.status, stdout: result.stdout, stderr: result.stderr };

@@ -4,6 +4,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import './effects-check-cases.js';
+import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
 // Invariants: INV-DEVAI-020
 
@@ -32,7 +33,7 @@ describe('binding action-effect CLI', () => {
           '--format',
           'json',
         ],
-        { cwd: REPO_ROOT, encoding: 'utf8' },
+        { cwd: REPO_ROOT, encoding: 'utf8', env: subprocessCoverageEnvironment() },
       );
       expect(result.status, result.stderr).toBe(0);
       const envelope = JSON.parse(result.stdout) as {

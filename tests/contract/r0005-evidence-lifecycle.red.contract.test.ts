@@ -3,6 +3,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
 // Invariants: INV-DEVAI-001, INV-DEVAI-017, INV-DEVAI-020
 
@@ -63,7 +64,7 @@ describe('R-0005 evidence and lifecycle red-first contracts', () => {
     const result = spawnSync(
       'node',
       [BIN, 'policy', 'check', 'prompt', 'overlays', '--format', 'json'],
-      { cwd: ROOT, encoding: 'utf8' },
+      { cwd: ROOT, encoding: 'utf8', env: subprocessCoverageEnvironment() },
     );
     expect(result.status, result.stderr).toBe(0);
     const envelope = JSON.parse(result.stdout) as { result: { value: unknown } };

@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
 /**
  * Smoke tests (Phase 16.H). Post-build sanity that the binary
@@ -20,7 +21,10 @@ const BIN = join(HERE, '..', '..', 'packages', 'cli', 'dist', 'bin.js');
 const skipIfNotBuilt = existsSync(BIN) ? it : it.skip;
 
 function run(args: readonly string[]): { status: number | null; stdout: string; stderr: string } {
-  const r = spawnSync('node', [BIN, ...args], { encoding: 'utf8' });
+  const r = spawnSync('node', [BIN, ...args], {
+    encoding: 'utf8',
+    env: subprocessCoverageEnvironment(),
+  });
   return { status: r.status, stdout: r.stdout, stderr: r.stderr };
 }
 
