@@ -45,13 +45,13 @@ This is not a metaphor. It governs:
 
 Five roles, declared at session start (per D-3, Article 6):
 
-| Role          | Owns                                                                                                  | Cannot touch                                       |
-| ------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| **Owner**     | Business specs (`product/`), joint glossary                                                           | Engineering specs, code, tests                     |
-| **Architect** | Engineering specs, invariants, trace, ADRs, schemas, ops + security specs                             | Code, tests                                        |
-| **Engineer**  | Application code (`packages/`, `apps/`)                                                               | Specs, tests, harness state                        |
-| **Inspector** | Tests at all levels (unit, int, e2e, sec, perf)                                                       | Code, specs                                        |
-| **Auditor**   | Read-only toward product/reference state; emits observations under `scratch/sessions/rounds/*/audit/` | Anything that actuates or ratifies reference state |
+| Role          | Owns                                                                             | Cannot touch                                       |
+| ------------- | -------------------------------------------------------------------------------- | -------------------------------------------------- |
+| **Owner**     | Business specs (`product/`), joint glossary                                      | Engineering specs, code, tests                     |
+| **Architect** | Engineering specs, invariants, trace, ADRs, schemas, ops + security specs        | Code, tests                                        |
+| **Engineer**  | Application code (`packages/`, `apps/`)                                          | Specs, tests, harness state                        |
+| **Inspector** | Tests at all levels (unit, int, e2e, sec, perf)                                  | Code, specs                                        |
+| **Auditor**   | Read-only toward product/reference state; emits observations under `work/audit/` | Anything that actuates or ratifies reference state |
 
 The chain is enforced inside the **DEVAI CLI/runtime**. Arbitrary shell/editor enforcement requires a declared host adapter; instructions alone are advisory. See [`security/authority-enforcement.md`](../dev/security/authority-enforcement.md) for the boundary.
 

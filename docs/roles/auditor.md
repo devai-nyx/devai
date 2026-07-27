@@ -2,9 +2,9 @@
 
 **Authority over:** read-only observation. The Auditor **does not actuate** — that's the whole point of the role.
 
-**May emit:** scorecards, backlogs, assessments, and post-hoc reports under `scratch/sessions/rounds/*/audit/**`. These are derived observations and carry no authority over the reference signal.
+**May emit:** scorecards, backlogs, assessments, and post-hoc reports under `work/audit/**`. These are derived observations and carry no authority over the reference signal.
 
-**Cannot touch:** any human-authored artifact outside `scratch/sessions/rounds/*/audit/**`. Runtime F5 records are attributed to the DEVAI verb, not hand-authored by the Auditor.
+**Cannot touch:** any human-authored artifact outside `work/audit/**`. Runtime F5 records are attributed to the DEVAI verb, not hand-authored by the Auditor.
 
 ## What the Auditor does
 
@@ -107,10 +107,10 @@ The Auditor's hand-off mechanism is **the backlog** plus the assessment report. 
 
 ## Authority files
 
-| Path                                 | Editable by Auditor?                             |
-| ------------------------------------ | ------------------------------------------------ |
-| `scratch/sessions/rounds/*/audit/**` | ✅ Yes (constitutional Auditor observation path) |
-| Everything else                      | ❌ No                                            |
+| Path            | Editable by Auditor?                             |
+| --------------- | ------------------------------------------------ |
+| `work/audit/**` | ✅ Yes (constitutional Auditor observation path) |
+| Everything else | ❌ No                                            |
 
 ## See also
 

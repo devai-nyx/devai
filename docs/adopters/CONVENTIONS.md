@@ -28,7 +28,6 @@ docs/
 ├── user/             ← personas, training, demo, release notes (user-facing — pt-BR allowed)
 ├── gov/              ← optional: keep local OR delegate to ../devai/
 ├── security/         ← threat models, controls
-├── work/             ← transient working files (diagnostics, inventories, phased-out plans) — git-tracked but ephemeral
 ├── prototypes/       ← only for ports-from-prototype evidence
 └── glossary/         ← canonical terminology
 ```
@@ -36,7 +35,10 @@ docs/
 Rules:
 
 - Names are stable. Do **not** introduce parallel forms (`docs/governance/` plus `docs/gov/` is a violation).
-- `docs/work/` is transient. Do not promote `work/` content into adopter-facing locations without explicit ADR.
+- Governed round intent stays under `work/rounds/R-NNNN/`; disposable runtime material
+  stays under `.devai/state/round-runs/R-NNNN/`; attributable observations stay under
+  `work/audit/R-NNNN/`. Promotion into adopter-facing documentation requires explicit
+  Architect authority.
 - An adopter may keep `gov/` locally OR delegate to a sibling DEVAI checkout (TEAT-style). Both supported; declare which in repo `README.md` or `AGENTS.md`.
 
 ## 2. Canonical `./database/` layout

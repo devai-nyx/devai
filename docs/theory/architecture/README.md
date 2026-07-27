@@ -54,9 +54,12 @@ inventory rather than a count copied into prose.
 
 ## Responsibility boundaries
 
-This directory contains current F1 architecture specifications. Round plans,
-prompts, observations, and closeout evidence are local scratch under
-`docs/work/` and are not architecture authority. Current
+This directory contains current F1 architecture specifications. Governed round intent
+and prompts remain in place under `work/rounds/R-NNNN/`; disposable backlog proposals,
+orchestration logs, and local closeout remain under
+`.devai/state/round-runs/R-NNNN/`; attributable Auditor observations live under
+`work/audit/R-NNNN/`; and machine compliance closures live under
+`record/proofs/compliance/closures/`. None of those paths is architecture authority.
 Canonical D-records and ADRs live under
 [`../../meta/adr/`](../../../law/adr/README.md). Their authority is determined by
 the Constitution and each record's frontmatter; the generated projections are
