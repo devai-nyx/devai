@@ -12,6 +12,10 @@ const ROOT = join(PKG_ROOT, '..', '..');
 const BIN = join(PKG_ROOT, 'dist', 'bin.js');
 const DRIVER = join(PKG_ROOT, 'tests', 'fixtures', 'authorized-cli-test-driver.mjs');
 const cliIt = existsSync(BIN) ? it : it.skip;
+const AUTHORITY_POLICY_PATHS = [
+  'law/policy/authority-policy.json',
+  '.devai/config/authority-policy.json',
+] as const;
 
 function run(args: readonly string[]): { status: number | null; stdout: string; stderr: string } {
   const result = spawnSync(process.execPath, [DRIVER, ...args], { encoding: 'utf8' });
@@ -72,10 +76,8 @@ describe('successor operational law', () => {
     const digest = createHash('sha256').update(constitution).digest('hex');
 
     expect(pinned).toEqual(constitution);
-    for (const path of [
-      join(ROOT, 'law', 'policy', 'authority-policy.json'),
-      join(ROOT, '.devai', 'config', 'authority-policy.json'),
-    ]) {
+    for (const relativePath of AUTHORITY_POLICY_PATHS) {
+      const path = join(ROOT, relativePath);
       const policy = JSON.parse(readFileSync(path, 'utf8')) as {
         constitution: { digest_sha256: string };
       };
@@ -138,10 +140,8 @@ describe('successor operational law', () => {
       rules_digest_sha256: string;
     };
     expect(expected.registry_length).toBe(147);
-    for (const path of [
-      join(ROOT, 'law', 'policy', 'authority-policy.json'),
-      join(ROOT, '.devai', 'config', 'authority-policy.json'),
-    ]) {
+    for (const relativePath of AUTHORITY_POLICY_PATHS) {
+      const path = join(ROOT, relativePath);
       const policy = JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>;
       expect(policy['resolved_digest_sha256'], path).toBe(
         expected.provenance.resolved_digest_sha256,
