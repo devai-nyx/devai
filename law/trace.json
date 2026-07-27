@@ -2615,8 +2615,8 @@
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported",
-      "assertion_count": 57,
-      "assertion_digest_sha256": "2279bfc559f91f52554bcef57054b7b8e88ef93023bdf5d2fa862b1e7a887a5b"
+      "assertion_count": 64,
+      "assertion_digest_sha256": "2dbd2d74739f321411c76e4f864136e4ae151743af9ebf1adb5bf57cd7607a39"
     },
     {
       "path": "tests/contract/r0006-output-contracts.adversarial.contract.test.ts",

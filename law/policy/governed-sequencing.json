@@ -382,6 +382,23 @@
           "scripts/run-round-close-controls.mjs"
         ]
       }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["b51de82cf519ad47e29e15ad0960ffdfd7e99c2d"],
+      "law_commits": ["ac97a17942ff04202cfbf192b1c4979c6eb82834"],
+      "red_evidence": {
+        "commit": "fb37d09255cd1a7fbf383a8b4af8404ce744b34b",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts -t \"historical role-path exception\"",
+        "evidence_path": "work/audit/R-0006/red-evidence-role-path-exceptions.json",
+        "evidence_sha256": "d470aa7c55d6ceb1cbb43e1dd7bb54c3cf61a6f86694769cdd2d92270ca070bd",
+        "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [
