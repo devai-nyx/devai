@@ -320,3 +320,20 @@ repository-wide formatting; `git diff --check`; and clean status.
 This ledger grants no active red authority. A new exact-candidate independent Codex
 review remains required. Any further actionable finding requires a fresh Architect
 entry and failing Inspector boundary before repair.
+
+## Fifth-review repair authority
+
+Auditor record `R-0005-INDEPENDENT-CODEX-REVIEW-5-FAILURE` preserves the exact
+`6d1353e84d188d51a4bdbfbc7adfb59c2bd21a08` FAIL without conversion and
+authorizes KR-R5-045. Inspector must first commit hermetic failures proving that an
+unbound post-boundary Engineer commit under an application/root-tooling surface is
+rejected and that a prospective round-wide historical exception cannot bypass binding.
+
+The Architect may declare the complete current implementation surface and convert the
+R-0002 round entry to disclosure-only semantics. Engineer may then make the checker
+derive its classifier from that exact policy and reject any machine-active round-wide
+exception. The later Auditor observation and Architect binding must name the exact red
+commit, command, tests, and checker path. No cluster authorizes a wildcard exception,
+test weakening, history rewrite, fabricated review PASS, or external action. Retirement
+requires focused green, the complete ordinary floor, exact exit ladder, and a new
+independent Codex PASS.

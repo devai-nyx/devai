@@ -23,6 +23,36 @@
     "required_after_commit": "3925a2f89f8f5ce041e247a29c00fd624b711765",
     "description": "Every later substantive Engineer implementation must bind its exact changed implementation paths to both the prior failing Inspector sources and the durable Auditor observation."
   },
+  "implementation_surfaces": {
+    "prefixes": [
+      "packages/",
+      "apps/",
+      "libs/",
+      "db/migrations/",
+      "db/seeds/",
+      "database/ddl/",
+      "database/seed/",
+      "database/migrations/",
+      "database/policies/",
+      "database/views/",
+      "database/functions/",
+      "iac/",
+      "scripts/",
+      ".github/"
+    ],
+    "root_files": ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", ".npmrc"],
+    "root_suffixes": [".json", ".yml", ".yaml"],
+    "root_name_prefixes": [
+      "eslint.config.",
+      "prettier.config.",
+      "rollup.config.",
+      "tsconfig.",
+      "turbo.",
+      "vite.config.",
+      "vitest.config.",
+      "webpack.config."
+    ]
+  },
   "bindings": [
     {
       "round": "R-0005",
@@ -229,10 +259,10 @@
       "reason": "Fourth independent review disclosed that these docs-link diagnose-only repairs followed a full-floor observation but lacked a prior Inspector red that exercised packages/skills/src/skills/impl/fixes.ts. The false 67aa794 binding is removed; history is not rewritten and this exact-commit disclosure grants no prospective exception."
     }
   ],
-  "historical_exceptions": [
+  "historical_round_disclosures": [
     {
       "round": "R-0002",
-      "reason": "Immutable ordering inversions disclosed by DII-113 and BL-106; no history is rewritten and the exception does not apply prospectively."
+      "reason": "Immutable ordering inversions disclosed by DII-113 and BL-106; this entry is descriptive only, grants no machine bypass, and does not apply prospectively."
     }
   ]
 }
