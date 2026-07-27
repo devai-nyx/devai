@@ -577,6 +577,11 @@
           "target_type": "test"
         },
         {
+          "suite": "contract",
+          "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "e2e",
           "path": "tests/e2e/inventory-sensors.smoke.test.ts",
           "target_type": "test"
@@ -609,6 +614,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/governed-sequencing.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
           "target_type": "test"
         }
       ]
@@ -970,6 +980,11 @@
           "suite": "contract",
           "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
           "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
+          "target_type": "test"
         }
       ]
     },
@@ -1084,6 +1099,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -2171,6 +2191,17 @@
         "INV-DEVAI-005",
         "INV-DEVAI-017",
         "INV-DEVAI-018",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-003",
+        "INV-DEVAI-017",
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported"
