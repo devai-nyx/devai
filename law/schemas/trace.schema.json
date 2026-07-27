@@ -164,7 +164,14 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["path", "suite", "invariant_ids", "lifecycle"],
+        "required": [
+          "path",
+          "suite",
+          "invariant_ids",
+          "lifecycle",
+          "assertion_count",
+          "assertion_digest_sha256"
+        ],
         "properties": {
           "path": {
             "type": "string",
@@ -184,6 +191,16 @@
           },
           "lifecycle": {
             "enum": ["supported", "experimental"]
+          },
+          "assertion_count": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Deterministic count of executable assertion call sites in the exact traced source bytes."
+          },
+          "assertion_digest_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "SHA-256 of the canonical ordered assertion-site projection for this exact test source."
           }
         }
       }

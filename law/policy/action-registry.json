@@ -69,6 +69,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -122,6 +136,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -175,6 +203,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -217,6 +259,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -270,6 +326,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -312,6 +382,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -354,6 +438,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -396,6 +494,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -438,6 +550,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -480,6 +606,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -537,6 +677,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -579,6 +733,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": "law/schemas/actions-list-output.schema.json"
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -632,6 +800,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -674,6 +856,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -716,6 +912,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -785,6 +995,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -838,6 +1062,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -880,6 +1118,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -933,6 +1185,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -986,6 +1252,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1028,6 +1308,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1086,6 +1380,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1144,6 +1452,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1186,6 +1508,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1244,6 +1580,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1302,6 +1652,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1360,6 +1724,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1402,6 +1780,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1460,6 +1852,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1518,6 +1924,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1576,6 +1996,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1643,6 +2077,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1698,6 +2146,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1756,6 +2218,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1798,6 +2274,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1856,6 +2346,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1898,6 +2402,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1956,6 +2474,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -1998,6 +2530,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2040,6 +2586,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2082,6 +2642,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2124,6 +2698,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2166,6 +2754,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2208,6 +2810,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2250,6 +2866,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2292,6 +2922,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2340,6 +2984,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2393,6 +3051,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2441,6 +3113,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2483,6 +3169,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2525,6 +3225,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2567,6 +3281,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2609,6 +3337,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2651,6 +3393,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2693,6 +3449,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2735,6 +3505,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2777,6 +3561,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2819,6 +3617,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2861,6 +3673,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2903,6 +3729,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -2961,6 +3801,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3003,6 +3857,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3048,6 +3916,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3090,6 +3972,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3132,6 +4028,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3174,6 +4084,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3216,6 +4140,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3258,6 +4196,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3300,6 +4252,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3342,6 +4308,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3384,6 +4364,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3426,6 +4420,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3468,6 +4476,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3510,6 +4532,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3568,6 +4604,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3626,6 +4676,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3684,6 +4748,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3742,6 +4820,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3795,6 +4887,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3848,6 +4954,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3901,6 +5021,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3943,6 +5077,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -3985,6 +5133,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4027,6 +5189,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -4069,6 +5245,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4111,6 +5301,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4153,6 +5357,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -4195,6 +5413,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4237,6 +5469,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4279,6 +5525,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4321,6 +5581,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4363,6 +5637,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4405,6 +5693,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4447,6 +5749,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4489,6 +5805,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4531,6 +5861,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4573,6 +5917,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4615,6 +5973,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -4657,6 +6029,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4699,6 +6085,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4741,6 +6141,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -4783,6 +6197,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4825,6 +6253,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4867,6 +6309,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -4909,6 +6365,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -4951,6 +6421,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -4993,6 +6477,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5035,6 +6533,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5077,6 +6589,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5135,6 +6661,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5188,6 +6728,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5230,6 +6784,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -5272,6 +6840,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -5314,6 +6896,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -5356,6 +6952,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -5414,6 +7024,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5472,6 +7096,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5514,6 +7152,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -5572,6 +7224,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5614,6 +7280,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5656,6 +7336,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5698,6 +7392,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5740,6 +7448,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -5782,6 +7504,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5824,6 +7560,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -5866,6 +7616,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -5908,6 +7672,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -5950,6 +7728,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -5992,6 +7784,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -6034,6 +7840,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -6076,6 +7896,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -6118,6 +7952,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -6160,6 +8008,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -6202,6 +8064,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -6244,6 +8120,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -6286,6 +8176,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -6328,6 +8232,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -6370,6 +8288,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -6412,6 +8344,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -6454,6 +8400,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -6496,6 +8456,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -6538,6 +8512,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -6580,6 +8568,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -6622,6 +8624,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -6664,6 +8680,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -6722,6 +8752,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -6780,6 +8824,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -6822,6 +8880,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -6864,6 +8936,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -6906,6 +8992,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -6948,6 +9048,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -6990,6 +9104,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7032,6 +9160,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7074,6 +9216,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7116,6 +9272,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7158,6 +9328,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7229,6 +9413,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7287,6 +9485,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7345,6 +9557,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "success_channel": "none",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "router-only",
+        "envelope_schema": null,
+        "error_schema": null,
+        "error_channel": "none"
       }
     },
     {
@@ -7403,6 +9629,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7445,6 +9685,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7487,6 +9741,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7540,6 +9808,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7593,6 +9875,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7646,6 +9942,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7699,6 +10009,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7741,6 +10065,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7794,6 +10132,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7852,6 +10204,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7894,6 +10260,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -7952,6 +10332,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8010,6 +10404,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8068,6 +10476,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8126,6 +10548,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8184,6 +10620,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8242,6 +10692,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8300,6 +10764,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8342,6 +10820,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8400,6 +10892,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8458,6 +10964,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8520,6 +11040,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8578,6 +11112,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8636,6 +11184,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8694,6 +11256,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8736,6 +11312,20 @@
           "requires_binding": false,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     },
     {
@@ -8794,6 +11384,20 @@
           "requires_binding": true,
           "independent_acceptance_required": true
         }
+      },
+      "output_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "action-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "success_channel": "stdout",
+        "payload_schema": null
+      },
+      "error_contract": {
+        "schemaVersion": "1.0.0",
+        "mode": "structured-error-envelope",
+        "envelope_schema": "law/schemas/action-result.schema.json",
+        "error_schema": "law/schemas/error.schema.json",
+        "error_channel": "stderr"
       }
     }
   ]

@@ -3196,6 +3196,47 @@ This decision supplies no readiness standing, does not activate evidence reuse o
 promotion, and does not convert predecessor or local rehearsal evidence into current
 standing.
 
+### DII-215 — Close every public action output and error boundary
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B3 contract decision; DII-211; BL-026; INV-DEVAI-001; INV-DEVAI-015; INV-DEVAI-017; law/policy/action-registry.json`
+
+Every runnable public action has one action-bound machine result contract and one
+structured error contract declared on its canonical registry row. In machine mode,
+success is exactly one `action-result.schema.json` object on stdout with `ok: true`,
+the canonical never-reminted `action_id`, and a closed transport result frame. Failure
+is exactly one object of the same envelope on stderr with `ok: false`, the same action
+identity, and an `error.schema.json` value. The opposite channel is empty. Human-mode
+presentation is not evidence for this contract.
+
+The common result frame closes the transport shape and preserves a typed media kind.
+Where a domain payload schema already exists, the registry row binds it explicitly;
+an absent payload schema means the action's JSON value is opaque to this transport
+layer, not that the outer envelope is open or optional. A consumer must validate the
+common envelope and every non-null per-action payload schema. It may not infer action
+identity from argv, prose, or a handler implementation after validation.
+
+Folded and tombstoned identities are router-only. Their registry contracts therefore
+declare no runnable success or error channel and no envelope or payload schema. Their
+migration string remains the only supported route. This prevents a retired identity
+from silently acquiring an independently executable output contract or being reminted.
+
+### DII-216 — Bind trace depth to executable assertion sites
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B3 trace-depth decision; DII-211; BL-081; INV-DEVAI-020; law/trace.json; law/schemas/trace.schema.json`
+
+Every canonical `test_corpus` row must bind the exact traced source to a positive
+deterministic assertion count and a SHA-256 digest of its ordered assertion-site
+projection. The generator derives both values from tracked source bytes; callers may
+not supply, trim, or reuse them. A missing source, zero assertion sites, an unsupported
+or ambiguous assertion form, or a digest mismatch fails closed and cannot contribute
+trace coverage.
+
+This evidence proves that the named executable contains assertion-bearing control
+points at the exact materialized source revision. It does not, by count alone, prove
+that each assertion is strong or that every listed invariant is semantically established.
+Invariant markers, ordinary tests, contract tests, coverage, independent review, and
+the applicable validation strategy remain separate required evidence. Documentary
+mentions, snapshots without an executable matcher, and configuration-only presence do
+not satisfy the assertion-bearing corpus rule.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
