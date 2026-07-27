@@ -308,8 +308,14 @@
     },
     {
       "round": "R-0006",
-      "implementation_commits": ["77ac7cd2aaf238db96b29ee2430498febc210b14"],
-      "law_commits": ["b53bde0535aa9d61e22ccf08f3ca44f6650e444c"],
+      "implementation_commits": [
+        "77ac7cd2aaf238db96b29ee2430498febc210b14",
+        "ae68840a11f2caebaacdc774931627ddf712c446"
+      ],
+      "law_commits": [
+        "b53bde0535aa9d61e22ccf08f3ca44f6650e444c",
+        "3655fd63921baf1607581d205df3076ff7d8bc40"
+      ],
       "red_evidence": {
         "commit": "2e73c5d9c440ff2a2cf9e8b8c025df1a44ae9948",
         "observed_exit": 1,
