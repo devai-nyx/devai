@@ -765,6 +765,91 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     );
   }, 15_000);
 
+  it.each([
+    ['wrong actual role', 'Auditor', 'DII-207', 'ROLE_PATH_EXCEPTION_ROLE_MISMATCH'],
+    [
+      'unresolved decision',
+      'Engineer',
+      'DII-NOT-PRESENT',
+      'ROLE_PATH_EXCEPTION_DECISION_UNRESOLVED',
+    ],
+  ])(
+    'rejects a role-path exception with %s',
+    (_label, role, decisionId, code) => {
+      const current = fixture();
+      put(current.root, 'tests/config/historical-provider.ts', 'export const provider = true;\n');
+      const historical = commit(
+        current.root,
+        'DEVAI Engineer',
+        'test(r0006): preserve historical ownership mismatch',
+        ['tests/config/historical-provider.ts'],
+      );
+      const configured = policy({
+        role_path_exceptions: [
+          {
+            commit: historical,
+            role,
+            paths: ['tests/config/historical-provider.ts'],
+            decision_id: decisionId,
+            reason: 'Adversarial exact-history fixture.',
+          },
+        ],
+      });
+      put(current.root, 'law/policy/round-close-controls.json', configured);
+      commit(current.root, 'DEVAI Architect', 'law(r0006): classify fixture mismatch', [
+        'law/policy/round-close-controls.json',
+      ]);
+      put(current.root, '.devai/config/round-close-controls.json', configured);
+      const candidate = commit(current.root, 'DEVAI Engineer', 'build(r0006): materialize policy', [
+        '.devai/config/round-close-controls.json',
+      ]);
+      prepareCloseState(current.root, current.base, candidate);
+      const result = run(current.root, manifestArgs(candidate));
+      expect(result.status).not.toBe(0);
+      expect(findings(result)).toEqual(expect.arrayContaining([expect.objectContaining({ code })]));
+    },
+    30_000,
+  );
+
+  it.each([
+    [
+      'an out-of-range commit',
+      'f'.repeat(40),
+      ['tests/config/historical-provider.ts'],
+      'ROLE_PATH_EXCEPTION_UNUSED',
+    ],
+    ['a globbed path', 'e'.repeat(40), ['tests/config/**'], 'ROLE_PATH_EXCEPTION_INVALID'],
+  ])(
+    'rejects a role-path exception containing %s',
+    (_label, commitSha, paths, code) => {
+      const current = fixture();
+      const configured = policy({
+        role_path_exceptions: [
+          {
+            commit: commitSha,
+            role: 'Engineer',
+            paths,
+            decision_id: 'DII-207',
+            reason: 'Adversarial exact-history fixture.',
+          },
+        ],
+      });
+      put(current.root, 'law/policy/round-close-controls.json', configured);
+      commit(current.root, 'DEVAI Architect', 'law(r0006): classify fixture mismatch', [
+        'law/policy/round-close-controls.json',
+      ]);
+      put(current.root, '.devai/config/round-close-controls.json', configured);
+      const candidate = commit(current.root, 'DEVAI Engineer', 'build(r0006): materialize policy', [
+        '.devai/config/round-close-controls.json',
+      ]);
+      prepareCloseState(current.root, current.base, candidate);
+      const result = run(current.root, manifestArgs(candidate));
+      expect(result.status).not.toBe(0);
+      expect(findings(result)).toEqual(expect.arrayContaining([expect.objectContaining({ code })]));
+    },
+    30_000,
+  );
+
   it('fails closed on malformed manifest state instead of crashing or accepting it', () => {
     const { root, candidate } = fixture();
     put(root, '.devai/state/round-runs/R-0006/close/convergence.json', '{not-json\n');
