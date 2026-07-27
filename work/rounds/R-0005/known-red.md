@@ -405,3 +405,18 @@ already-recorded exact `5cea654` implementation candidate. No cluster authorizes
 broader root surface, history rewrite, weakened parity, synthetic review PASS, or
 external action. Retirement requires focused green, the complete ordinary floor, exact
 exit ladder, and a new independent Codex PASS.
+
+## Seventh-review repair retirement
+
+KR-R5-047 and KR-R5-048 retire at exact implementation candidate
+`e167802a6669db873f96689fe666b3e12551944e` through Auditor `5193c5a`, Architect
+`f3ffe4d`, Inspector red `7045071`, Engineer `4f7ac65`, Auditor `5337e95`, and
+Architect `e167802`. The ordinary floor passes 133 files with 1,225 tests and eight
+declared skips. The exact exit ladder passes with T1 74/856, T2 41/281 plus one skip,
+T1+T3 83/912 plus seven skips, unchanged 72.42/62.36/78.07/74.52 coverage, T4 2/4,
+T5 6/25, T6 1/3, strict governance across 172 commits and 275 identities, formatting,
+diff, and clean-status gates.
+
+This ledger grants no active red authority. A fresh exact-candidate independent Codex
+review remains required. Any further actionable finding requires a fresh Architect
+entry and failing Inspector boundary before repair.
