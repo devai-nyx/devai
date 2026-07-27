@@ -2908,7 +2908,7 @@ mutation, R-0008 external action, R-0009 activation, or R-0010 observation. The
 predecessor remains read-only.
 
 ### DII-205 — Repair closure-only sequencing across the merged-source boundary
-`type: decision · status: active · authority: Architect · provenance: R-0005 closure rehearsal 3c06a3e; DII-202; DII-203; DII-204; R-0005-SOURCE-CLOSE`
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0005 closure rehearsal 3c06a3e; DII-202; DII-203; DII-204; R-0005-SOURCE-CLOSE`
 
 The first production PC-0006 rehearsal correctly waited for source PR 8 and exact-main
 CI run 30234222364, then emitted only the Machine closure record. The strict sequencing
