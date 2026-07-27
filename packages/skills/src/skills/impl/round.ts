@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from '@devai-nyx/authority';
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, isAbsolute, join } from 'node:path';
+import { basename, dirname, isAbsolute, join } from 'node:path';
 import {
   appendDecisionRecord,
   appendResolutionRecord,
@@ -14,7 +14,6 @@ import {
   buildOrchestratorTemplate,
   buildWavePromptTemplate,
   ensureAuditDir,
-  ensurePromptsDir,
   resolveAuditDir,
   roundDir,
   type RoundPlan,
@@ -170,7 +169,7 @@ export function createRoundSkills(
       summary:
         'Plan phase of the round loop. R4-W3 real execution: reads the audit scorecard, invokes ' +
         'SKILL-compile-backlog, and materializes backlog.json + backlog.md + per-item templated ' +
-        'wave prompts under work/rounds/R-NNNN/{,prompts/}.',
+        'wave prompt proposals under .devai/state/round-runs/R-NNNN/backlog/.',
       kind: 'workflow',
       authority_role: 'architect',
       deterministic: true,
@@ -178,7 +177,7 @@ export function createRoundSkills(
       agent_class: 'coding-agent',
       permission_tier: 'write',
       host_mutation_policy: 'write_requires_flag',
-      allowed_write_scopes: ['record/proofs/work/skill-runs/**', 'work/rounds/R-*/**'],
+      allowed_write_scopes: ['record/proofs/work/skill-runs/**', '.devai/state/round-runs/**'],
       evidence_files: ['record/proofs/work/skill-runs/SKILL-round-backlog/*.json'],
       risk_level: 'medium',
       tags: ['round', 'backlog', 'plan'],
@@ -191,7 +190,16 @@ export function createRoundSkills(
       const dir = roundDir(ctx);
       const roundDirAbs = isAbsolute(dir) ? dir : join(ctx.repoRoot, dir);
       const auditDir = resolveAuditDir(ctx.repoRoot, dir);
-      const promptsDir = ensurePromptsDir(ctx.repoRoot, dir);
+      const proposalDir = join(
+        ctx.repoRoot,
+        '.devai/state/round-runs',
+        basename(roundDirAbs),
+        'backlog',
+      );
+      const proposalDirRel = `.devai/state/round-runs/${basename(roundDirAbs)}/backlog`;
+      const auditDirRel = `work/audit/${basename(roundDirAbs)}`;
+      const promptsDir = join(proposalDir, 'prompts');
+      mkdirSync(promptsDir, { recursive: true });
       const filesWritten: string[] = [];
 
       // Read the scorecard baseline if present (audit must have run first).
@@ -224,7 +232,7 @@ export function createRoundSkills(
       }
 
       // Write backlog.json (raw) + backlog.md (narrative).
-      const backlogJsonPath = join(roundDirAbs, 'backlog.json');
+      const backlogJsonPath = join(proposalDir, 'backlog.json');
       mkdirSync(dirname(backlogJsonPath), { recursive: true });
       writeFileSync(
         backlogJsonPath,
@@ -232,8 +240,8 @@ export function createRoundSkills(
       );
       filesWritten.push(backlogJsonPath);
 
-      const backlogMdPath = join(roundDirAbs, 'backlog.md');
-      writeFileSync(backlogMdPath, buildBacklogMd(dir, items));
+      const backlogMdPath = join(proposalDir, 'backlog.md');
+      writeFileSync(backlogMdPath, buildBacklogMd(proposalDirRel, items));
       filesWritten.push(backlogMdPath);
 
       // Materialize per-item templated wave prompts under prompts/.
@@ -282,7 +290,7 @@ export function createRoundSkills(
         steps: [
           {
             id: 'backlog.1',
-            description: `Read ${dir}/audit/scratch.md and run SKILL-compile-backlog for the failing-cell list.`,
+            description: `Read ${auditDirRel}/scratch.md and run SKILL-compile-backlog for the failing-cell list.`,
           },
           {
             id: 'backlog.2',
@@ -290,11 +298,11 @@ export function createRoundSkills(
           },
           {
             id: 'backlog.3',
-            description: `Materialize ${dir}/prompts/00-orchestrator.md from B3 template.`,
+            description: `Materialize ${proposalDirRel}/prompts/00-orchestrator.md from B3 template.`,
           },
           {
             id: 'backlog.4',
-            description: `Materialize ${dir}/prompts/NN-<slug>.md per backlog item from B1/B2 templates.`,
+            description: `Materialize ${proposalDirRel}/prompts/NN-<slug>.md per backlog item from B1/B2 templates.`,
           },
           {
             id: 'backlog.5',
@@ -315,7 +323,8 @@ export function createRoundSkills(
           ...plan,
           executed_artifacts: {
             round_dir: dir,
-            prompts_dir: `${dir}/prompts`,
+            proposal_dir: proposalDirRel,
+            prompts_dir: `${proposalDirRel}/prompts`,
             backlog_item_count: items.length,
             files: filesWritten.map((f) => f.replace(`${ctx.repoRoot}/`, '')),
           },
@@ -357,9 +366,9 @@ export function createRoundSkills(
       permission_tier: 'write',
       host_mutation_policy: 'write_requires_flag',
       allowed_write_scopes: [
-        'work/rounds/R-*/**',
         'record/proofs/work/skill-runs/**',
         '.devai/state/decisions.jsonl',
+        '.devai/state/round-runs/**',
       ],
       evidence_files: ['record/proofs/work/skill-runs/SKILL-round-orchestrate/*.json'],
       risk_level: 'high',
@@ -373,8 +382,23 @@ export function createRoundSkills(
       const dir = roundDir(ctx);
       const roundN = (ctx.inputs?.['round_n'] as number | string | undefined) ?? 0;
       const roundDirAbs = isAbsolute(dir) ? dir : join(ctx.repoRoot, dir);
-      const promptsDir = join(roundDirAbs, 'prompts');
+      const proposedPromptsDir = join(
+        ctx.repoRoot,
+        '.devai/state/round-runs',
+        basename(roundDirAbs),
+        'backlog/prompts',
+      );
+      const promptsDir = existsSync(proposedPromptsDir)
+        ? proposedPromptsDir
+        : join(roundDirAbs, 'prompts');
+      const promptsDirRel = promptsDir.replace(`${ctx.repoRoot}/`, '');
       const orchestratorPath = join(promptsDir, '00-orchestrator.md');
+      const runDir = join(
+        ctx.repoRoot,
+        '.devai/state/round-runs',
+        `R-${String(roundN).padStart(4, '0')}`,
+        'orchestrate',
+      );
       const waveTimeoutMs = (ctx.inputs?.['wave_timeout_ms'] as number | undefined) ?? 3600000; // 1h default
 
       // R11 (closes R6 F-4) — unbacked-wave knobs. Pack-tune via:
@@ -404,7 +428,7 @@ export function createRoundSkills(
         steps: [
           {
             id: 'orch.1',
-            description: `Read ${dir}/prompts/00-orchestrator.md (wave fan-out + gates).`,
+            description: `Read ${promptsDirRel}/00-orchestrator.md (wave fan-out + gates).`,
           },
           {
             id: 'orch.2',
@@ -455,6 +479,7 @@ export function createRoundSkills(
           },
         };
       }
+      mkdirSync(runDir, { recursive: true });
       const catalog = parseWaveCatalog(readFileSync(orchestratorPath, 'utf8'));
 
       // Dispatch loop — sequential.
@@ -471,7 +496,7 @@ export function createRoundSkills(
           pushIfId(id);
           continue;
         }
-        const logPath = promptPath.replace(/\.md$/, '.log');
+        const logPath = join(runDir, basename(promptPath).replace(/\.md$/, '.log'));
 
         // Idempotency: skip clean.
         const existingStatus = readWaveLogStatus(logPath);
@@ -706,7 +731,7 @@ export function createRoundSkills(
       allowed_write_scopes: [
         'record/proofs/work/skill-runs/**',
         '.devai/state/decisions.jsonl',
-        'work/rounds/R-*/**',
+        '.devai/state/round-runs/**',
       ],
       evidence_files: ['record/proofs/work/skill-runs/SKILL-round-verify-publish/*.json'],
       risk_level: 'medium',
@@ -721,8 +746,20 @@ export function createRoundSkills(
       const roundN = (ctx.inputs?.['round_n'] as number | string | undefined) ?? 0;
       const roundDirAbs = isAbsolute(dir) ? dir : join(ctx.repoRoot, dir);
       const auditDir = resolveAuditDir(ctx.repoRoot, dir);
-      const closeoutDir = join(roundDirAbs, 'closeout');
-      const promptsDir = join(roundDirAbs, 'prompts');
+      const runDir = join(
+        ctx.repoRoot,
+        '.devai/state/round-runs',
+        `R-${String(roundN).padStart(4, '0')}`,
+        'verify-publish',
+      );
+      const stateRoundDir = join(
+        ctx.repoRoot,
+        '.devai/state/round-runs',
+        `R-${String(roundN).padStart(4, '0')}`,
+      );
+      const orchestrateRunDir = join(stateRoundDir, 'orchestrate');
+      const backlogStateDir = join(stateRoundDir, 'backlog');
+      const closeoutDir = join(runDir, 'closeout');
 
       const plan: RoundPlan = {
         round_dir: dir,
@@ -735,11 +772,11 @@ export function createRoundSkills(
           },
           {
             id: 'verify.2',
-            description: `Diff current scorecard vs ${dir}/audit/scorecard.baseline.json — flag regressions.`,
+            description: `Diff current scorecard vs work/audit/${basename(roundDirAbs)}/scorecard.baseline.json — flag regressions.`,
           },
           {
             id: 'verify.3',
-            description: `Write ${dir}/closeout.md with verdict + scorecard delta + outstanding blockers.`,
+            description: `Write .devai/state/round-runs/${basename(roundDirAbs)}/verify-publish/Closeout.md with verdict + scorecard delta + outstanding blockers.`,
           },
           {
             id: 'verify.4',
@@ -845,14 +882,14 @@ export function createRoundSkills(
       const blockers = readOpenBlockersForRound(ctx.repoRoot, roundN);
 
       // 6. Read wave statuses.
-      const waveStatuses = readWaveLogStatuses(promptsDir);
+      const waveStatuses = readWaveLogStatuses(orchestrateRunDir);
 
       // 7. Compute deferred count (used by verdict + ledger pass below).
       //    A backlog item is "deferred" when its corresponding wave (by
       //    index) didn't close clean/skipped. Matches the F-3 suppression
       //    rule: if NO waves dispatched, deferred=0 (first-run state).
       const orchestrateDispatchedForVerdict = waveStatuses.length > 0;
-      const backlogPathForCount = join(roundDirAbs, 'backlog.json');
+      const backlogPathForCount = join(backlogStateDir, 'backlog.json');
       let deferredCount = 0;
       const deferredItemIndices: number[] = [];
       if (orchestrateDispatchedForVerdict && existsSync(backlogPathForCount)) {
@@ -886,15 +923,15 @@ export function createRoundSkills(
         deferredCount,
       });
 
-      // 8. Read Plan.md goal if available. R6-W2 (closes F-2) — fallback
-      //    chain when **Goal:** line absent or Plan.md absent entirely.
+      // 8. Read plan.md goal if available. R6-W2 (closes F-2) — fallback
+      //    chain when **Goal:** line absent or plan.md absent entirely.
       //    Pre-fix: "R<n> (goal not extracted)" — misleading; suggested
       //    the substrate failed when actually the operator just hadn't
-      //    authored a Plan.md yet (legitimate state on first invocation).
+      //    authored a plan.md yet (legitimate state on first invocation).
       let goal: string;
-      const planPath = join(roundDirAbs, 'Plan.md');
+      const planPath = join(roundDirAbs, 'plan.md');
       if (!existsSync(planPath)) {
-        goal = `R${String(roundN)} (auto-materialized; no Plan.md authored)`;
+        goal = `R${String(roundN)} (auto-materialized; no plan.md authored)`;
       } else {
         let planText = '';
         try {
@@ -906,19 +943,20 @@ export function createRoundSkills(
         if (goalMatch !== null) {
           goal = goalMatch[1] as string;
         } else {
-          // Plan.md exists but no **Goal:** line — fall back to first H1
+          // plan.md exists but no **Goal:** line — fall back to first H1
           // (the round's title heading).
           const h1Match = /^#\s+(.+?)$/m.exec(planText);
           if (h1Match !== null) {
             goal = (h1Match[1] as string).trim();
           } else {
-            goal = `R${String(roundN)} (Plan.md present but no **Goal:** or H1 found)`;
+            goal = `R${String(roundN)} (plan.md present but no **Goal:** or H1 found)`;
           }
         }
       }
 
       // 9. Materialize Closeout.md.
-      const closeoutPath = join(roundDirAbs, 'Closeout.md');
+      mkdirSync(runDir, { recursive: true });
+      const closeoutPath = join(runDir, 'Closeout.md');
       writeFileSync(
         closeoutPath,
         buildCloseoutMd({
@@ -1027,14 +1065,15 @@ export function createRoundSkills(
       //     didn't close clean. backlog.json is materialized by SKILL-round-backlog;
       //     waves are numbered 01..NN matching backlog item index 0..NN-1.
       //
-      // R6-W3 (closes F-3): if NO wave .log files exist under promptsDir at
+      // R6-W3 (closes F-3): if NO wave .log files exist under the canonical
+      // orchestrate state directory at
       // all, this is a first-run state where orchestrate hasn't dispatched
       // anything yet — backlog items haven't been ATTEMPTED, much less
       // deferred. Suppress the entire defer pass to avoid false positives.
       // (waveStatuses comes from readWaveLogStatuses which scans .log files
       // — an empty array means no logs exist.)
       const orchestrateDispatched = waveStatuses.length > 0;
-      const backlogPath = join(roundDirAbs, 'backlog.json');
+      const backlogPath = join(backlogStateDir, 'backlog.json');
       if (orchestrateDispatched && existsSync(backlogPath)) {
         try {
           const bl = JSON.parse(readFileSync(backlogPath, 'utf8')) as {
@@ -1173,9 +1212,9 @@ export function createRoundSkills(
       permission_tier: 'write',
       host_mutation_policy: 'write_requires_flag',
       allowed_write_scopes: [
-        'work/rounds/R-*/**',
         'record/proofs/work/skill-runs/**',
         '.devai/state/decisions.jsonl',
+        '.devai/state/round-runs/**',
       ],
       evidence_files: ['record/proofs/work/skill-runs/SKILL-round-execute/*.json'],
       risk_level: 'high',

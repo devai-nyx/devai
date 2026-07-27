@@ -14,13 +14,14 @@ There are exactly five caller-declarable human roles: `owner`, `architect`, `ins
 | ------------------------------ | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | F1 business reference          | Owner                       | `product/`; `law/glossary/` jointly with Architect                                                                                                       |
 | F1 engineering reference       | Architect                   | `docs/start/`, `docs/theory/`, `docs/theory/framework/` except `product/`, `docs/roles/`, `docs/adopters/`, `docs/reference/`, `docs/meta/`, `README.md` |
-| F1 working papers              | Architect                   | `docs/work/`, except the Auditor path below                                                                                                              |
-| F1 observations                | Auditor                     | `docs/work/*/audit/` and descendants; observation does not ratify the reference signal                                                                   |
+| F1 governed round intent       | Architect                   | `work/rounds/R-NNNN/`; committed intent closes in place                                                                                                  |
+| F1 observations                | Auditor                     | `work/audit/` and descendants; observation does not ratify the reference signal                                                                          |
 | F2 plant                       | Engineer                    | `apps/`, `libs/`, `db/migrations/`, `db/seeds/`, `iac/`, root build scripts, and project-specific additive source paths                                  |
 | F3 sensors                     | Inspector                   | `**/*.spec.ts`, `**/*.test.ts`, `tests/`, `e2e/`, and test-intent configuration                                                                          |
 | F4 inventory                   | Derived inventory subsystem | `record/derived/inventory/`; never hand-edited                                                                                                           |
 | F5 configuration and machinery | Derived upgrade subsystem   | `.devai/` excluding `inventory/`, `worktrees/`, and `state/`                                                                                             |
 | F5 runtime state               | Executing DEVAI verb        | `record/proofs/`; attributed to the verb and never hand-edited                                                                                           |
+| F5 disposable round state      | Executing DEVAI verb        | `.devai/state/round-runs/R-NNNN/`; backlog proposals, orchestration logs, and local closeout never become governed intent without Architect promotion    |
 
 Client extensions are additive. They may narrow a specialization, add project paths, or add a higher-precedence deny; they cannot replace, weaken, or tie-conflict with the immutable core.
 
@@ -103,7 +104,7 @@ Cross-role work uses explicit boundaries and role-clean commits:
 1. Architect authors reference changes.
 2. Inspector authors tests.
 3. Engineer implements code.
-4. Auditor independently observes under `docs/work/*/audit/`.
+4. Auditor independently observes under `work/audit/`.
 
 Changing roles means ending the current authority context and starting a new direct declaration or session. DEVAI never infers the next role from the files being touched.
 

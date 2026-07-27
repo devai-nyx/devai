@@ -14,7 +14,7 @@
     "required_suites": ["int", "e2e"],
     "oracle": "tests"
   },
-  "authority": {
+  "authority_docs": {
     "docs": [
       {
         "doc": "CONSTITUTION.md",

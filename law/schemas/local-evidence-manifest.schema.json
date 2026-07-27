@@ -28,6 +28,8 @@
   "required": [
     "schemaVersion",
     "generatedAt",
+    "expiresAt",
+    "subject",
     "sourceHash",
     "policy",
     "tools",
@@ -175,6 +177,36 @@
       "format": "date-time",
       "description": "When the manifest was collected. Verification rejects manifests older than policy.maxAgeHours or timestamped in the future (beyond a 5-minute clock-skew allowance)."
     },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Explicit terminal validity instant derived by the producer from generatedAt plus the declared maximum age. The verifier recomputes and binds this value."
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "commitSha", "tree"],
+      "description": "Exact committed subject proven by this manifest. It is producer-derived and verifier-recomputed; callers cannot select or substitute it.",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commitSha": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "tree": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["algorithm", "value"],
+          "properties": {
+            "algorithm": { "enum": ["sha1", "sha256"] },
+            "value": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" }
+          }
+        }
+      }
+    },
     "sourceHash": {
       "type": "object",
       "additionalProperties": false,
@@ -311,6 +343,15 @@
     {
       "schemaVersion": 1,
       "generatedAt": "2026-07-18T06:02:06.771Z",
+      "expiresAt": "2026-07-19T06:02:06.771Z",
+      "subject": {
+        "repository": "devai-nyx/devai",
+        "commitSha": "bafdaf27de19fe1e03d3e6fdc0b62f043cb8a308",
+        "tree": {
+          "algorithm": "sha1",
+          "value": "3376e906ec36322b76607501e2330225b8fd0f2d"
+        }
+      },
       "origin": "actions-run",
       "sourceHash": {
         "algorithm": "sha256",

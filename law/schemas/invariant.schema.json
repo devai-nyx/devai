@@ -15,7 +15,7 @@
     "statement",
     "status",
     "verification",
-    "authority",
+    "authority_docs",
     "scope",
     "change_policy"
   ],
@@ -153,7 +153,7 @@
         }
       }
     },
-    "authority": {
+    "authority_docs": {
       "type": "object",
       "additionalProperties": false,
       "required": ["docs"],
@@ -348,7 +348,7 @@
           "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
         }
       },
-      "authority": {
+      "authority_docs": {
         "docs": [
           {
             "doc": "CONSTITUTION.md",
@@ -392,5 +392,5 @@
       "provenance": ["ex-INV-AUTH-001@devai-original"]
     }
   ],
-  "$comment": "W02 DECIDED, DEFERRED: invariant `authority` (anchor-docs object) will be renamed to `authority_docs`; execution is deferred because it re-anchors trace and requires coordinated consumer migration. Record-meta `authority` remains the authoring-role field."
+  "$comment": "R-0005/BL-033 APPLIED: invariant anchor-doc objects use `authority_docs`; record-meta `authority` remains the distinct authoring-role field."
 }

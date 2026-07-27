@@ -1,4 +1,12 @@
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -289,10 +297,33 @@ describe('scaffolder and round skill envelopes', () => {
       expect(
         await skill('SKILL-round-audit').run({ repoRoot: repo, inputs: { round_n: 7 } }),
       ).toMatchObject({ status: 'pass' });
+      writeFileSync(
+        join(repo, 'work/audit/R-0007/scorecard.baseline.json'),
+        JSON.stringify({
+          cells: [{ substrate: 'F1', property: 'T6', verdict: 'FAIL' }],
+        }),
+      );
       expect(
         await skill('SKILL-round-backlog').run({ repoRoot: repo, inputs: { round_n: 7 } }),
       ).toMatchObject({ status: 'pass' });
     });
+
+    expect(existsSync(join(repo, 'work/rounds/R-0007'))).toBe(false);
+    expect(existsSync(join(repo, '.devai/state/round-runs/R-0007/backlog/backlog.json'))).toBe(
+      true,
+    );
+    const proposedOrchestrator = readFileSync(
+      join(repo, '.devai/state/round-runs/R-0007/backlog/prompts/00-orchestrator.md'),
+      'utf8',
+    );
+    const proposedWave = readFileSync(
+      join(repo, '.devai/state/round-runs/R-0007/backlog/prompts/01-f1-t6-fail.md'),
+      'utf8',
+    );
+    expect(proposedOrchestrator).toContain('work/rounds/R-0007/plan.md');
+    expect(proposedOrchestrator).not.toContain('../Plan.md');
+    expect(proposedWave).toContain('work/audit/R-0007/');
+    expect(proposedWave).not.toContain('../audit/');
 
     expect(
       await skill('SKILL-round-orchestrate').run({

@@ -1,0 +1,322 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "governed-sequencing",
+  "status": "active",
+  "date": "2026-07-26",
+  "authority": "Architect",
+  "prospective_from": "DII-202",
+  "rules": [
+    {
+      "id": "law-before-implementation",
+      "description": "A substantive Engineer implementation commit must follow the Architect decision or schema that authorizes its contract."
+    },
+    {
+      "id": "red-before-repair",
+      "description": "A substantive Engineer repair must follow a failing Inspector contract whose exact semantic implementation scope is bound, or an explicit exact-commit governed exception."
+    },
+    {
+      "id": "shape-before-machine-record",
+      "description": "A Machine record emission must follow the Architect-owned schema and validated verb that govern its shape."
+    }
+  ],
+  "semantic_red_scope": {
+    "required_after_commit": "3925a2f89f8f5ce041e247a29c00fd624b711765",
+    "description": "Every later substantive Engineer implementation must bind its exact changed implementation paths to both the prior failing Inspector sources and the durable Auditor observation."
+  },
+  "implementation_surfaces": {
+    "prefixes": [
+      "packages/",
+      "apps/",
+      "libs/",
+      "db/migrations/",
+      "db/seeds/",
+      "database/ddl/",
+      "database/seed/",
+      "database/migrations/",
+      "database/policies/",
+      "database/views/",
+      "database/functions/",
+      "iac/",
+      "scripts/",
+      ".github/",
+      ".devai/config/",
+      ".devai/pin/"
+    ],
+    "root_globs": [
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "tsconfig*.json",
+      "vitest*.ts",
+      "eslint.config.*",
+      ".prettier*"
+    ]
+  },
+  "bindings": [
+    {
+      "round": "R-0005",
+      "implementation_commits": [
+        "02da3be1a0e242aa3938bf76482b29361aa7cc2e",
+        "584337d7e444ec1a24dfbf2b56ce13086938c35e",
+        "b167ce9ab815dd9183291538234137f282a15154",
+        "571d1cd07082a0bd1947591de7c5d9c449dce523"
+      ],
+      "law_commits": [
+        "99f6dbd24b19dc440608d718b074d2ea817aa71f",
+        "6ed9f724a8388469aeb40b0ec312ade13fbfc097",
+        "9de2ee173564597ad143391c4e1d4e9597963f4b"
+      ],
+      "red_evidence": {
+        "commit": "6ecbfd90ec4aec39d352f4bcf474b53c7530bc62",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": [
+          "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
+          "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts"
+        ]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": [
+        "06e9af6b4f67d3278bf01c9aad4989438c042559",
+        "9ca6c4bba2de82f6a9e62ad81bd268be397b66c5",
+        "70bb4950cd39c5f6d2f50cac4d7951b6f9289bf5",
+        "2cb2ff31186e617e687febfa9eadab55fb7ad788"
+      ],
+      "law_commits": ["84be6f75181fe43b258f9007afb5b0e16438b686"],
+      "red_evidence": {
+        "commit": "75b435278a8d7eff97287ff170cb06eeb315e6c1",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": [
+        "d752bac23956ba1ff466b603cf0b523ce8ebe43e",
+        "c213b47602c75d7e4ae0bc7ce279a53731260b98",
+        "e7b22100d6a5b0328cce58f338028f304ce85329",
+        "52b3ec1d28189ea8e5ba6128871754efb7044562",
+        "f93a7e11d91d1fd0384839b127372111b9a08da2",
+        "f479b03d0b8e1d5ce4985f5f63f48fc69d3a7be6",
+        "b875121d2c07ddba4e6a486e52299fbc893df70c"
+      ],
+      "law_commits": ["893213892750e0c5cdd3eea2fa4703a23783ba38"],
+      "red_evidence": {
+        "commit": "faad6fdfda023f523310f0d8b478bf13b5182dd2",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/loop/tests/unit/worktrees-containment.test.ts packages/loop/tests/unit/scorecard-assess-narrative.test.ts packages/evidence/tests/unit/local-evidence.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": [
+          "packages/evidence/tests/unit/local-evidence.test.ts",
+          "packages/loop/tests/unit/round-lifecycle-cases.ts",
+          "packages/loop/tests/unit/worktrees-containment.test.ts",
+          "tests/contract/r0005-independent-review.red.contract.test.ts"
+        ]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["691a90d109ee595c5f5e9dccba4190dc3af65023"],
+      "law_commits": ["4ea2dbce2418042d4f9b9abd5813294470e57d19"],
+      "red_evidence": {
+        "commit": "7a17bc3a90c435e24692bb23ee86a67eb3264042",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/skills/tests/unit/forbidden-actions.test.ts -t KR-R5-027",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": ["packages/skills/tests/unit/forbidden-actions.test.ts"]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": [
+        "3ca5c648209b0c29473923f7da5d45a36f8f1602",
+        "dedab28d74354070b4690968cbd99d226c65dc60"
+      ],
+      "law_commits": ["d8ca53baca9b570fa025a7ab9dd74ba3b6167437"],
+      "red_evidence": {
+        "commit": "beb081d5160a57b36b59d97f813abc77ed99f3eb",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["f3ba4dfb5264f000406bf790cb87293d560b9892"],
+      "law_commits": ["63c917a849945a86016d0e8dc10e09bbf58d96c7"],
+      "red_evidence": {
+        "commit": "f2a9d60bd8b7fc79ddd8bc09ffbd0d6d678652a1",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/loop/tests/unit/adherence-reverse.test.ts -t KR-R5-029",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": ["packages/loop/tests/unit/governance-ledger-cases.ts"]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["94f46a25e96cad4ebd66d6e8eb43b4b54a5b0237"],
+      "law_commits": ["9201a78acd34c81d15e5e855b5b3b1740db0dfd6"],
+      "red_evidence": {
+        "commit": "bf727194e9d1cdf84ceb8b6fd690a277423cef36",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0005-independent-review.red.contract.test.ts packages/skills/tests/unit/prompt-firewall.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": [
+          "tests/contract/r0005-independent-review.red.contract.test.ts",
+          "packages/skills/tests/unit/prompt-firewall.test.ts"
+        ]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": [
+        "848da7abe9f368d5d771bac054354801fb4039bc",
+        "b687131e3fe1bcef6c32c561b13056ebfd688b35",
+        "cf4c82fdeb005895c65af1a21a3851cc7a826e49"
+      ],
+      "law_commits": ["9201a78acd34c81d15e5e855b5b3b1740db0dfd6"],
+      "red_evidence": {
+        "commit": "aec56d3c606bb3a3db52dea3badd3aa726b5d399",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/skills/tests/unit/governance-skills.test.ts packages/skills/tests/unit/llm.test.ts -t \"KR-R5-036|materializes audit/backlog\"",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": [
+          "packages/skills/tests/unit/governance-skills.test.ts",
+          "packages/skills/tests/unit/skill-implementation-cases.ts"
+        ]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": [
+        "413b1d0d234e11489b6b2559ad25cc8ecc7cbf3a",
+        "6f01d988802f13e9d8919ef211814c8d64f89768"
+      ],
+      "law_commits": ["9201a78acd34c81d15e5e855b5b3b1740db0dfd6"],
+      "red_evidence": {
+        "commit": "a086ef48bb4b072260121a5c1ff83bcb50b4c828",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/skills/tests/unit/llm.test.ts -t \"materializes audit/backlog\"",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": ["packages/skills/tests/unit/skill-implementation-cases.ts"]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["02aaaf7b0ff932a44d8f1ed2628ca7ff207e48eb"],
+      "law_commits": ["1e2a05f2c8edfe0293d1e8d76929917514022c80"],
+      "red_evidence": {
+        "commit": "67aa7940fd3b52daca219847fd11d7201e830f2f",
+        "observed_exit": 1,
+        "command": "pnpm vitest run packages/skills/tests/unit/governance-skills.test.ts packages/skills/tests/unit/round-state-routing.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": [
+          "packages/skills/tests/unit/governance-skills.test.ts",
+          "packages/skills/tests/unit/round-state-routing.test.ts",
+          "tests/contract/r0005-independent-review.red.contract.test.ts"
+        ]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["a0b82da6db6a0aa82df004f610e2d0f77ba962bf"],
+      "law_commits": ["d906c947a93ceb9cd9e6e4aed28ca0acfa9335dd"],
+      "red_evidence": {
+        "commit": "7693b2ba715e8781936fbb5fdaef8b83e053be4d",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0005-independent-review.red.contract.test.ts tests/contract/governed-sequencing.contract.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["455075997ee278362845a80bb7a85979bab8ea47"],
+      "law_commits": ["b0b86df6285f2de9c4acb6f49b4ef610cc7eee8d"],
+      "red_evidence": {
+        "commit": "1abffa844415f8abb4a83956e3ce60a50cfde8dc",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["4a41769dcc5b29326ddc497524cdadc197378b1e"],
+      "law_commits": ["53576a8c3ccc7c4a1f4826ed91a5c01513b5d7e9"],
+      "red_evidence": {
+        "commit": "c5ac6a86e994e0f31d47aa8a411929bab2a93e00",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["4f7ac65d6a8f66de86191bcb7be259d929ac4d7c"],
+      "law_commits": ["f3ffe4dec9ee588437d4731e120faa1a60f41e3c"],
+      "red_evidence": {
+        "commit": "70450716da0e3fb065b48470dc4d732cd36a6296",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
+        "tests": [
+          "tests/contract/governed-sequencing.contract.test.ts",
+          "tests/contract/r0005-independent-review.red.contract.test.ts"
+        ],
+        "exercised_implementation_paths": ["packages/cli/src/authority/policy.ts"]
+      }
+    }
+  ],
+  "historical_commit_exceptions": [
+    {
+      "round": "R-0005",
+      "implementation_commits": [
+        "8651b26c04c3b80f4b83a2d7016873deed705bfd",
+        "3925a2f89f8f5ce041e247a29c00fd624b711765"
+      ],
+      "reason": "Fourth independent review disclosed that these docs-link diagnose-only repairs followed a full-floor observation but lacked a prior Inspector red that exercised packages/skills/src/skills/impl/fixes.ts. The false 67aa794 binding is removed; history is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["4d040c469d7ac9e82430a88eb261b9340fd63d57"],
+      "reason": "Eighth independent review disclosed that the first authority-policy materialization predates committed-materialization sequencing classification. KR-R5-015 and Inspector 450bf79 governed that immutable repair; this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["50308359503d5d86c0ef9c7bb6ab243347fee0bc"],
+      "reason": "The eighth-review red at 5880033 semantically exercised the exact runtime authority materialization, but its immutable Inspector source constructed .devai/config/authority-policy.json from path segments before the strict literal-scope contract was understood. Inspector 60e8f21 hardens future tests with exact literals; this exact-commit disclosure grants no prospective exception."
+    }
+  ],
+  "historical_round_disclosures": [
+    {
+      "round": "R-0002",
+      "reason": "Immutable ordering inversions disclosed by DII-113 and BL-106; this entry is descriptive only, grants no machine bypass, and does not apply prospectively."
+    }
+  ]
+}

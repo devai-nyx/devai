@@ -167,26 +167,17 @@ describe('Skill manifest contracts', () => {
     }
   });
 
-  skipIfNotBuilt('pins the exact 27-finding prompt-overlay known-red', () => {
+  skipIfNotBuilt('keeps the bounded prompt-overlay policy green', () => {
     const r = run(['policy', 'check', 'prompt', 'overlays']);
-    expect(r.status).toBe(2);
+    expect(r.status).toBe(0);
     const parsed = JSON.parse(r.stdout) as {
       ok: boolean;
       manifests_checked: number;
       findings: Array<{ code: string }>;
     };
-    expect(parsed.ok).toBe(false);
-    expect(parsed.manifests_checked).toBe(55);
-    expect(parsed.findings).toHaveLength(27);
-    expect(
-      parsed.findings.reduce<Record<string, number>>((counts, finding) => {
-        counts[finding.code] = (counts[finding.code] ?? 0) + 1;
-        return counts;
-      }, {}),
-    ).toEqual({
-      READ_TIER_WITH_WRITE_SCOPES: 10,
-      PROMPT_OVERLAY_AUTHORITY_INVERSION: 17,
-    });
+    expect(parsed.ok).toBe(true);
+    expect(parsed.manifests_checked).toBe(52);
+    expect(parsed.findings).toEqual([]);
   });
 });
 // Invariants: INV-DEVAI-001

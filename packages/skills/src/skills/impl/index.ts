@@ -3,17 +3,11 @@ import type { SkillEntry } from '../types.js';
 import { createSkillRegistry } from '../registry.js';
 import { coreSkills } from './core.js';
 import { createFixSkills } from './fixes.js';
-import { governanceSkills } from './governance.js';
 import { createRoundSkills } from './round.js';
 import { scaffolderSkills } from './scaffolders.js';
 import { writerSkills } from './writers.js';
 
-const initialSkills: readonly SkillEntry[] = [
-  ...coreSkills,
-  ...writerSkills,
-  ...scaffolderSkills,
-  ...governanceSkills,
-];
+const initialSkills: readonly SkillEntry[] = [...coreSkills, ...writerSkills, ...scaffolderSkills];
 
 let resolvedSkills: readonly SkillEntry[] = initialSkills;
 

@@ -1,6 +1,6 @@
-import { execFileSync, spawnSync, writeFileSync } from '@devai-nyx/authority';
+import { spawnSync, writeFileSync } from '@devai-nyx/authority';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { dirname, isAbsolute, join } from 'node:path';
+import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { senseTypeCheck } from '@devai-nyx/sensors';
 import { validateAdrs } from '@devai-nyx/spec';
 import { scanForbiddenActions } from '../../forbidden-actions/index.js';
@@ -170,317 +170,80 @@ export function createFixSkills(resolveSkills: () => readonly SkillEntry[]): rea
   };
 
   // =====================================================================
-  // SKILL-fix-docs-links — autofix (R11-W6.07, R2-Δ1 first batch).
-  //
-  // Diagnose: scan docs/**/*.md for broken markdown file links (mirrors
-  // packages/cli/src/commands/docs/links.ts audit()).
-  //
-  // Autofix: for each broken link target whose path was *renamed* in git
-  // history, rewrite the link to the current path. Uses
-  //   git log --follow --diff-filter=R --name-only -- <original-path>
-  // to identify rename chains. Only auto-applies when:
-  //   - the path-history walk yields exactly one current file that exists,
-  //   - the rewritten link is unambiguous (single candidate).
-  // Multi-candidate, no-rename-history, and deleted-target cases escalate
-  // (remain reported in evidence.broken_after; next-iteration retry won't
-  // help so the iteration loop will hit max attempts and the orchestrator
-  // will surface the blocker).
-  //
-  // Idempotency: a second run after a successful fix finds zero broken
-  // links → returns pass, makes no edits, writes nothing.
-  // =====================================================================
-
-  interface DocsLinkBrokenItem {
-    readonly source: string; // repo-relative .md path
-    readonly target: string; // raw link target as written
-    readonly resolved: string; // repo-relative resolved path that doesn't exist
-  }
-
-  interface DocsLinkFixAttempt {
+  // SKILL-fix-docs-links is diagnose-only. Documentation is Architect-owned;
+  // the skill may report link findings but cannot rewrite authored Markdown.
+  interface BrokenDocsLink {
     readonly source: string;
     readonly target: string;
     readonly resolved: string;
-    readonly outcome:
-      'rewritten' | 'no-rename-history' | 'multiple-candidates' | 'rename-target-missing';
-    readonly new_target?: string;
+    readonly reason: 'target not found';
   }
 
-  const DOCS_LINK_MD_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
-  const DOCS_LINK_EXTERNAL_PREFIXES = ['http://', 'https://', 'mailto:', 'data:', '#'];
-  const DOCS_LINK_SKIP_DIRS: ReadonlySet<string> = new Set([
-    'node_modules',
-    '.git',
-    'dist',
-    'coverage',
-    '.vitest-cache',
-  ]);
-
-  function docsLinkWalkMd(dir: string, out: string[]): void {
-    let entries: string[];
-    try {
-      entries = readdirSync(dir);
-    } catch {
-      return;
-    }
-    for (const name of entries) {
-      if (DOCS_LINK_SKIP_DIRS.has(name)) continue;
-      const full = join(dir, name);
-      let st;
-      try {
-        st = statSync(full);
-      } catch {
-        continue;
+  function diagnoseDocsLinks(repoRoot: string, scanRel: string): BrokenDocsLink[] {
+    const scanRoot = isAbsolute(scanRel) ? scanRel : resolve(repoRoot, scanRel);
+    if (!existsSync(scanRoot)) return [];
+    const markdown: string[] = [];
+    const walk = (dir: string): void => {
+      for (const name of readdirSync(dir)) {
+        if (['node_modules', '.git', 'dist', 'coverage'].includes(name)) continue;
+        const path = join(dir, name);
+        const stat = statSync(path);
+        if (stat.isDirectory()) walk(path);
+        else if (stat.isFile() && path.endsWith('.md')) markdown.push(path);
       }
-      if (st.isDirectory()) {
-        docsLinkWalkMd(full, out);
-      } else if (st.isFile() && full.endsWith('.md')) {
-        out.push(full);
-      }
-    }
-  }
-
-  function docsLinkScan(repoRoot: string, scanRel: string): DocsLinkBrokenItem[] {
-    const broken: DocsLinkBrokenItem[] = [];
-    const scanAbs = isAbsolute(scanRel) ? scanRel : join(repoRoot, scanRel);
-    if (!existsSync(scanAbs)) return broken;
-    const files: string[] = [];
-    docsLinkWalkMd(scanAbs, files);
-    for (const file of files) {
-      let text: string;
-      try {
-        text = readFileSync(file, 'utf8');
-      } catch {
-        continue;
-      }
-      let m: RegExpExecArray | null;
-      DOCS_LINK_MD_RE.lastIndex = 0;
-      while ((m = DOCS_LINK_MD_RE.exec(text)) !== null) {
-        const target = m[2];
-        if (target === undefined || target.length === 0) continue;
-        if (DOCS_LINK_EXTERNAL_PREFIXES.some((p) => target.startsWith(p))) continue;
+    };
+    walk(scanRoot);
+    const findings: BrokenDocsLink[] = [];
+    const link = /\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/gu;
+    for (const file of markdown) {
+      const source = readFileSync(file, 'utf8');
+      let match: RegExpExecArray | null;
+      while ((match = link.exec(source)) !== null) {
+        const target = match[1];
+        if (
+          target === undefined ||
+          ['http://', 'https://', 'mailto:', 'data:', '#'].some((prefix) =>
+            target.startsWith(prefix),
+          )
+        ) {
+          continue;
+        }
         const pathPart = target.split('#')[0]?.split('?')[0] ?? '';
         if (pathPart.length === 0) continue;
-        const resolved = isAbsolute(pathPart) ? pathPart : join(dirname(file), pathPart);
-        if (!existsSync(resolved)) {
-          // Repo-relative repr for stable cross-platform identity.
-          const sourceRel = relativePath(repoRoot, file);
-          const resolvedRel = relativePath(repoRoot, resolved);
-          broken.push({ source: sourceRel, target, resolved: resolvedRel });
+        const absolute = isAbsolute(pathPart) ? pathPart : resolve(dirname(file), pathPart);
+        if (!existsSync(absolute)) {
+          findings.push({
+            source: relative(repoRoot, file),
+            target,
+            resolved: relative(repoRoot, absolute),
+            reason: 'target not found',
+          });
         }
       }
     }
-    return broken;
-  }
-
-  function relativePath(from: string, to: string): string {
-    // Avoid importing `relative` at top-of-file (keeps the diff small);
-    // node:path's relative is available via the dynamic join + slice
-    // approach below. Use a small inline polyfill via posix-style.
-    // Normalize both to absolute first.
-    const a = isAbsolute(from) ? from : join(process.cwd(), from);
-    const b = isAbsolute(to) ? to : join(process.cwd(), to);
-    if (b.startsWith(a + '/')) return b.slice(a.length + 1);
-    if (b === a) return '.';
-    // Fall back to node:path relative via require-less path arithmetic.
-    // Compute common prefix.
-    const aParts = a.split('/');
-    const bParts = b.split('/');
-    let i = 0;
-    while (i < aParts.length && i < bParts.length && aParts[i] === bParts[i]) i++;
-    const up = aParts.length - i;
-    const down = bParts.slice(i);
-    const segs: string[] = [];
-    for (let k = 0; k < up; k++) segs.push('..');
-    for (const s of down) segs.push(s);
-    return segs.join('/') || '.';
-  }
-
-  /**
-   * Walk git rename history to find the current path of a file that was
-   * once at `originalRepoRel`. Returns the current path after rename(s),
-   * or a typed escalation reason.
-   *
-   * `git log --follow` only works on paths that CURRENTLY EXIST — after
-   * a rename, the original path is gone, so we can't `--follow` from
-   * there. Instead: enumerate all renames in the repo's history with
-   * `git log --all --diff-filter=R --name-status --pretty=format:` and
-   * scan for rename entries whose OLD side matches `originalRepoRel`.
-   * Chain through transitive renames (A → B → C) until we land on a
-   * path that exists on disk.
-   */
-  function docsLinkFindRenameTarget(
-    repoRoot: string,
-    originalRepoRel: string,
-  ):
-    | { kind: 'ok'; newRepoRel: string }
-    | { kind: 'no-history' }
-    | { kind: 'multiple' }
-    | { kind: 'missing' } {
-    let stdout: string;
-    try {
-      stdout = execFileSync(
-        'git',
-        ['log', '--all', '--diff-filter=R', '--name-status', '--pretty=format:'],
-        { cwd: repoRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] },
-      );
-    } catch {
-      return { kind: 'no-history' };
-    }
-    // Each rename line: `R<score>\t<old>\t<new>` (score may be e.g. R100).
-    const renamesFrom = new Map<string, Set<string>>();
-    for (const rawLine of stdout.split('\n')) {
-      const line = rawLine.trim();
-      if (line.length === 0) continue;
-      const parts = line.split('\t');
-      if (parts.length < 3) continue;
-      const op = parts[0] ?? '';
-      if (!op.startsWith('R')) continue;
-      const oldPath = parts[1];
-      const newPath = parts[2];
-      if (oldPath === undefined || newPath === undefined) continue;
-      const set = renamesFrom.get(oldPath) ?? new Set<string>();
-      set.add(newPath);
-      renamesFrom.set(oldPath, set);
-    }
-    const direct = renamesFrom.get(originalRepoRel);
-    if (direct === undefined || direct.size === 0) {
-      return { kind: 'no-history' };
-    }
-
-    // Walk transitive rename chains. BFS so we collect all reachable
-    // end-points that currently exist.
-    const seen = new Set<string>([originalRepoRel]);
-    const queue: string[] = [...direct];
-    for (const n of direct) seen.add(n);
-    const endpoints = new Set<string>();
-    while (queue.length > 0) {
-      const cur = queue.shift();
-      if (cur === undefined) break;
-      const nexts = renamesFrom.get(cur);
-      if (nexts === undefined || nexts.size === 0) {
-        // Terminal in the rename graph.
-        endpoints.add(cur);
-        continue;
-      }
-      for (const n of nexts) {
-        if (seen.has(n)) continue;
-        seen.add(n);
-        queue.push(n);
-      }
-      // A node with outgoing renames is also a valid endpoint candidate
-      // IF the file still exists at that node (a file can be renamed
-      // away and back).
-      endpoints.add(cur);
-    }
-    const existing = [...endpoints].filter((n) => existsSync(join(repoRoot, n)));
-    if (existing.length === 0) return { kind: 'missing' };
-    if (existing.length > 1) return { kind: 'multiple' };
-    const newRel = existing[0];
-    if (newRel === undefined) return { kind: 'missing' };
-    return { kind: 'ok', newRepoRel: newRel };
-  }
-
-  /**
-   * Rewrite a markdown link target in `sourceAbs`. Replaces only the
-   * exact (target) substring occurrences inside `[label](target...)`
-   * patterns. Returns the number of replacements performed.
-   */
-  function docsLinkRewriteInFile(sourceAbs: string, oldTarget: string, newTarget: string): number {
-    const text = readFileSync(sourceAbs, 'utf8');
-    let replacements = 0;
-    // Escape regex metachars in oldTarget for literal match inside the
-    // capture group. We require the link to be inside `](...)`.
-    const escaped = oldTarget.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const re = new RegExp(`(\\]\\()${escaped}(?=(\\s+"[^"]*")?\\))`, 'g');
-    const next = text.replace(re, (_match, p1: string) => {
-      replacements++;
-      return `${p1}${newTarget}`;
-    });
-    if (replacements > 0) writeFileSync(sourceAbs, next);
-    return replacements;
+    return findings;
   }
 
   const skillFixDocsLinks: SkillEntry = {
     manifest: fixSkillManifest('docs-links', {
-      title: 'Autofix docs-links gate',
+      title: 'Diagnose docs-links gate',
       authorityRole: 'architect',
-      autoFix: 'partial',
-      summary:
-        'Diagnose broken markdown links in docs/**; auto-rewrite stale paths via git rename history (R11-W6.07; R2-Δ1 first batch).',
-      tags: ['docs-links', 'autofix'],
-      mutation: {
-        hostMutationPolicy: 'write_requires_flag',
-        permissionTier: 'write',
-        // R12 W3 (per ADR-FIREWALL-OVERLAPS-GLOB-AWARE + R11 W6.07 + R12 W2):
-        // the autofix only rewrites markdown link targets *inside* files
-        // discovered by `docsLinkScan(ctx.repoRoot, scanRel)`, whose default
-        // root is `docs/` (and the only honest write surface for this
-        // gate's autofix). Narrowing from `**/*.md` to `docs/**/*.md`
-        // qualifies under the W2-hardened `isAutofixSelfScope` (literal
-        // `docs/` directory prefix before the first `**`, file-extension
-        // restriction `.md`).
-        allowedWriteScopes: ['docs/**/*.md'],
-      },
+      autoFix: 'none',
+      summary: 'Diagnose broken documentation links without mutating Architect-owned files.',
+      tags: ['docs-links', 'diagnose'],
     }),
     async run(ctx) {
-      const scanRel = (ctx.inputs?.['dir'] as string | undefined) ?? 'docs';
-      const before = docsLinkScan(ctx.repoRoot, scanRel);
-      if (before.length === 0) {
-        return {
-          skill_id: 'SKILL-fix-docs-links',
-          status: 'pass',
-          evidence: { broken_before: [], broken_after: [], fix_log: [] },
-        };
-      }
-      const fixLog: DocsLinkFixAttempt[] = [];
-      for (const item of before) {
-        const result = docsLinkFindRenameTarget(ctx.repoRoot, item.resolved);
-        if (result.kind === 'no-history') {
-          fixLog.push({ ...item, outcome: 'no-rename-history' });
-          continue;
-        }
-        if (result.kind === 'missing') {
-          fixLog.push({ ...item, outcome: 'rename-target-missing' });
-          continue;
-        }
-        if (result.kind === 'multiple') {
-          fixLog.push({ ...item, outcome: 'multiple-candidates' });
-          continue;
-        }
-        // Compute new link target relative to source file's directory.
-        const sourceAbs = join(ctx.repoRoot, item.source);
-        const newAbs = join(ctx.repoRoot, result.newRepoRel);
-        const newRel = relativePath(dirname(sourceAbs), newAbs);
-        // Preserve any anchor/query suffix from the original target.
-        const anchorIdx = item.target.search(/[#?]/);
-        const suffix = anchorIdx === -1 ? '' : item.target.slice(anchorIdx);
-        const newTarget = `${newRel}${suffix}`;
-        try {
-          const n = docsLinkRewriteInFile(sourceAbs, item.target, newTarget);
-          if (n > 0) {
-            fixLog.push({ ...item, outcome: 'rewritten', new_target: newTarget });
-          } else {
-            // Couldn't find the literal target inside `](...)` — escalate.
-            fixLog.push({ ...item, outcome: 'no-rename-history' });
-          }
-        } catch {
-          fixLog.push({ ...item, outcome: 'no-rename-history' });
-        }
-      }
-      const after = docsLinkScan(ctx.repoRoot, scanRel);
+      const broken = diagnoseDocsLinks(
+        ctx.repoRoot,
+        (ctx.inputs?.['dir'] as string | undefined) ?? 'docs',
+      );
       return {
         skill_id: 'SKILL-fix-docs-links',
-        status: after.length === 0 ? 'pass' : 'fail',
-        evidence: {
-          broken_before: before,
-          broken_after: after,
-          fix_log: fixLog,
-          iteration: ctx.iteration,
-        },
+        status: broken.length === 0 ? 'pass' : 'fail',
+        evidence: { ok: broken.length === 0, broken_count: broken.length, broken },
       };
     },
   };
-
   const skillFixPromptOverlays: SkillEntry = {
     manifest: fixSkillManifest('prompt-overlays', { title: 'Diagnose prompt-overlays gate' }),
     async run() {
@@ -506,361 +269,26 @@ export function createFixSkills(resolveSkills: () => readonly SkillEntry[]): rea
   };
 
   // =====================================================================
-  // SKILL-fix-adrs — autofix (R11-W6.07 extension, R2-Δ1 ship-now batch).
-  //
-  // Diagnose: validateAdrs({adrsDir: docs/adr}) reports missing/malformed
-  // YAML front-matter, schema violations, filename-vs-adr_id mismatch,
-  // missing mandatory body sections, non-sequential numbering.
-  //
-  // Autofix — two mechanical patterns (taxonomy: 'partial'):
-  //   (a) Missing-section scaffolding: when validateAdrs reports a body
-  //       missing a mandatory section, append `\n## <Section>\n\n(TBD)\n`
-  //       at end of file (with proper blank-line padding). Stubs are
-  //       human-searchable via the `(TBD)` marker. Idempotent: after the
-  //       first run, the section header exists and validateAdrs no longer
-  //       reports it.
-  //   (b) Filename rename: when an ADR's front-matter has a valid,
-  //       unique `adr_id` but the filename doesn't start with
-  //       `<adr_id>-`, rename via `git mv` to preserve history. The
-  //       canonical target is `<adr_id>-<slug-from-title>.md`. Skipped
-  //       when not in a git repo OR when target filename already exists.
-  //
-  // Escalates (no autofix): malformed YAML, schema violations (other
-  // than missing required), missing adr_id field, duplicate adr_id,
-  // numbering gaps. The diagnose path's errors already pinpoint these.
-  //
-  // Idempotency: stub injection includes `(TBD)`; on second run the
-  // section header exists so validateAdrs no longer reports missing;
-  // filename matches after first rename so the mismatch finding is gone.
-  // =====================================================================
-
-  interface AdrFixAttempt {
-    readonly file: string;
-    readonly outcome:
-      | 'section-scaffolded'
-      | 'renamed'
-      | 'rename-skipped-target-exists'
-      | 'rename-skipped-not-git'
-      | 'escalate-malformed-front-matter'
-      | 'escalate-missing-adr-id'
-      | 'escalate-schema-violation'
-      | 'escalate-numbering-gap';
-    readonly detail?: string;
-  }
-
-  const ADR_FRONT_MATTER_RE = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-  const ADR_ID_RE = /^ADR-([0-9]{3,})$/;
-  const ADR_CANONICAL_FILENAME_RE = /^ADR-[0-9]{3,}-.+\.md$/;
-
-  /**
-   * Mirror of the validator's parseFrontMatter — kept private to the
-   * autofix path so we can read adr_id/title without re-exporting parser
-   * internals from the validator module.
-   */
-  function parseAdrFrontMatter(text: string): Record<string, string> {
-    const out: Record<string, string> = {};
-    for (const line of text.split('\n')) {
-      if (line.trim() === '' || line.trim().startsWith('#')) continue;
-      const m = /^([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(.*)$/.exec(line);
-      if (m === null) continue;
-      const key = m[1] ?? '';
-      const value = m[2] ?? '';
-      if (value === '' || /^\[.*\]$/.test(value.trim())) continue;
-      out[key] = value.trim().replace(/^['"]|['"]$/g, '');
-    }
-    return out;
-  }
-
-  function slugifyAdrTitle(title: string): string {
-    return (
-      title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '')
-        .slice(0, 60) || 'untitled'
-    );
-  }
-
-  /**
-   * Append a section stub at end of file with proper padding. Ensures
-   * exactly one blank line before the new heading.
-   */
-  function appendSectionStub(absPath: string, sectionLabel: string): void {
-    const current = readFileSync(absPath, 'utf8');
-    const trimmedEnd = current.replace(/\s+$/, '');
-    const stub = `\n\n## ${sectionLabel}\n\n(TBD)\n`;
-    writeFileSync(absPath, trimmedEnd + stub);
-  }
-
-  /**
-   * Returns true if the directory is inside a git work-tree.
-   */
-  function isInsideGitWorkTree(cwd: string): boolean {
-    try {
-      const r = spawnSync('git', ['rev-parse', '--is-inside-work-tree'], {
-        cwd,
-        encoding: 'utf8',
-      });
-      return r.status === 0 && (r.stdout ?? '').trim() === 'true';
-    } catch {
-      return false;
-    }
-  }
-
-  function gitMv(repoRoot: string, fromAbs: string, toAbs: string): boolean {
-    try {
-      const r = spawnSync('git', ['mv', fromAbs, toAbs], {
-        cwd: repoRoot,
-        encoding: 'utf8',
-      });
-      return r.status === 0;
-    } catch {
-      return false;
-    }
-  }
-
+  // SKILL-fix-adrs is deliberately diagnose-only. ADR authorship and lifecycle
+  // mutation belong directly to the Architect; an agent skill may report validator
+  // findings but may not append sections, rename files, or claim law/adr scope.
   const skillFixAdrs: SkillEntry = {
     manifest: fixSkillManifest('adrs', {
-      title: 'Autofix ADRs gate',
+      title: 'Diagnose ADRs gate',
       authorityRole: 'architect',
-      autoFix: 'partial',
-      summary:
-        'Diagnose ADRs gate; auto-scaffold missing mandatory sections and normalize filenames via git mv (R11-W6.07 extension; R2-Δ1 ship-now).',
-      tags: ['adrs', 'autofix'],
-      mutation: {
-        hostMutationPolicy: 'write_requires_flag',
-        permissionTier: 'write',
-        allowedWriteScopes: ['law/adr/**/*.md'],
-      },
+      autoFix: 'none',
+      summary: 'Diagnose the ADR validation gate without mutating governed law.',
+      tags: ['adrs', 'diagnose'],
     }),
     async run(ctx) {
-      const adrsDir = join(ctx.repoRoot, 'law/adr');
-      const fixLog: AdrFixAttempt[] = [];
-
-      // Pass A: diagnose via validator (covers files matching the
-      // canonical `ADR-NNN-*.md` filename pattern).
-      const before = validateAdrs({ adrsDir });
-
-      // Pass B: scan for off-pattern .md files that nonetheless contain
-      // valid ADR front-matter — these need filename normalization
-      // (rename) before the validator can even see them.
-      const offPatternCandidates: { file: string; adr_id: string; title: string }[] = [];
-      if (existsSync(adrsDir)) {
-        let entries: string[] = [];
-        try {
-          entries = readdirSync(adrsDir);
-        } catch {
-          entries = [];
-        }
-        for (const name of entries) {
-          if (
-            !name.endsWith('.md') ||
-            ADR_CANONICAL_FILENAME_RE.test(name) ||
-            name === 'README.md'
-          ) {
-            continue;
-          }
-          const abs = join(adrsDir, name);
-          let body: string;
-          try {
-            body = readFileSync(abs, 'utf8');
-          } catch {
-            continue;
-          }
-          const m = ADR_FRONT_MATTER_RE.exec(body);
-          if (m === null) continue;
-          const fm = parseAdrFrontMatter(m[1] ?? '');
-          const adrId = fm['adr_id'];
-          const title = fm['title'];
-          if (adrId === undefined || title === undefined) continue;
-          if (!ADR_ID_RE.test(adrId)) continue;
-          offPatternCandidates.push({ file: abs, adr_id: adrId, title });
-        }
-      }
-
-      // Apply Pass-B renames first so the subsequent validator pass sees
-      // the renamed files.
-      const inGit = isInsideGitWorkTree(ctx.repoRoot);
-      for (const cand of offPatternCandidates) {
-        if (!inGit) {
-          fixLog.push({ file: cand.file, outcome: 'rename-skipped-not-git' });
-          continue;
-        }
-        const targetName = `${cand.adr_id}-${slugifyAdrTitle(cand.title)}.md`;
-        const targetAbs = join(adrsDir, targetName);
-        if (existsSync(targetAbs)) {
-          fixLog.push({
-            file: cand.file,
-            outcome: 'rename-skipped-target-exists',
-            detail: targetName,
-          });
-          continue;
-        }
-        const ok = gitMv(ctx.repoRoot, cand.file, targetAbs);
-        if (ok) {
-          fixLog.push({
-            file: cand.file,
-            outcome: 'renamed',
-            detail: targetName,
-          });
-        } else {
-          fixLog.push({
-            file: cand.file,
-            outcome: 'rename-skipped-not-git',
-            detail: targetName,
-          });
-        }
-      }
-
-      // Pass C: handle in-pattern rename mismatches (validator reports
-      // `filename ... does not start with adr_id '...'-`) and
-      // missing-section findings. Process file-by-file so multiple
-      // section-stub appends collapse into a single re-write.
-      //
-      // Re-run validator to get post-rename state. Missing sections etc.
-      // are reported here, and any filename mismatches still present
-      // (after Pass B) are reported as
-      // `filename '<X>' does not start with adr_id '<Y>-'`.
-      const mid = validateAdrs({ adrsDir });
-
-      // Group errors by file for missing-section scaffolding.
-      const missingSectionsByFile = new Map<string, string[]>();
-      const inPatternRenamesByFile = new Map<string, string>(); // file -> adr_id
-      for (const err of mid.errors) {
-        const sectionMatch = /^body missing mandatory section '## ([^']+)'$/.exec(err.message);
-        if (sectionMatch !== null) {
-          const label = sectionMatch[1] ?? '';
-          const arr = missingSectionsByFile.get(err.file) ?? [];
-          // The validator labels Decision(s) as 'Decision(s)' — emit a
-          // safe canonical heading instead.
-          const canonical = label === 'Decision(s)' ? 'Decisions' : label;
-          if (!arr.includes(canonical)) arr.push(canonical);
-          missingSectionsByFile.set(err.file, arr);
-          continue;
-        }
-        const renameMatch = /^filename '([^']+)' does not start with adr_id '([^']+)-'$/.exec(
-          err.message,
-        );
-        if (renameMatch !== null) {
-          const adrId = renameMatch[2] ?? '';
-          if (ADR_ID_RE.test(adrId)) {
-            inPatternRenamesByFile.set(err.file, adrId);
-          }
-          continue;
-        }
-        // Numbering gap, schema violation, missing front-matter, etc.
-        if (/ADR numbering gap/.test(err.message)) {
-          fixLog.push({
-            file: err.file,
-            outcome: 'escalate-numbering-gap',
-            detail: err.message,
-          });
-          continue;
-        }
-        if (/missing YAML front-matter/.test(err.message)) {
-          fixLog.push({
-            file: err.file,
-            outcome: 'escalate-malformed-front-matter',
-            detail: err.message,
-          });
-          continue;
-        }
-        // Schema violations (including missing required adr_id) — we
-        // can't synthesize an adr_id, so escalate.
-        const isMissingAdrId =
-          err.pointer === '' && /must have required property 'adr_id'/.test(err.message);
-        if (isMissingAdrId || /required property/.test(err.message)) {
-          fixLog.push({
-            file: err.file,
-            outcome: 'escalate-missing-adr-id',
-            detail: err.message,
-          });
-          continue;
-        }
-        fixLog.push({
-          file: err.file,
-          outcome: 'escalate-schema-violation',
-          detail: err.message,
-        });
-      }
-
-      // Apply section-scaffolding fixes (idempotent: each stub adds the
-      // missing header so the next validator pass no longer reports it).
-      for (const [file, labels] of missingSectionsByFile.entries()) {
-        for (const label of labels) {
-          try {
-            appendSectionStub(file, label);
-            fixLog.push({
-              file,
-              outcome: 'section-scaffolded',
-              detail: label,
-            });
-          } catch {
-            fixLog.push({
-              file,
-              outcome: 'escalate-schema-violation',
-              detail: `failed to append section '${label}'`,
-            });
-          }
-        }
-      }
-
-      // Apply in-pattern filename renames. The file currently exists
-      // under its old name (which matched the validator's ADR-NNN-*.md
-      // shape but with the wrong NNN prefix). Compute the canonical
-      // target from the front-matter title.
-      for (const [file, adrId] of inPatternRenamesByFile.entries()) {
-        if (!inGit) {
-          fixLog.push({ file, outcome: 'rename-skipped-not-git' });
-          continue;
-        }
-        let body: string;
-        try {
-          body = readFileSync(file, 'utf8');
-        } catch {
-          continue;
-        }
-        const m = ADR_FRONT_MATTER_RE.exec(body);
-        const fm = m === null ? {} : parseAdrFrontMatter(m[1] ?? '');
-        const title = fm['title'] ?? adrId;
-        const targetName = `${adrId}-${slugifyAdrTitle(title)}.md`;
-        const targetAbs = join(adrsDir, targetName);
-        if (existsSync(targetAbs)) {
-          fixLog.push({
-            file,
-            outcome: 'rename-skipped-target-exists',
-            detail: targetName,
-          });
-          continue;
-        }
-        const ok = gitMv(ctx.repoRoot, file, targetAbs);
-        if (ok) {
-          fixLog.push({ file, outcome: 'renamed', detail: targetName });
-        } else {
-          fixLog.push({
-            file,
-            outcome: 'rename-skipped-not-git',
-            detail: targetName,
-          });
-        }
-      }
-
-      const after = validateAdrs({ adrsDir });
-      const status: 'pass' | 'fail' = after.errors.length === 0 ? 'pass' : 'fail';
+      const result = validateAdrs({ adrsDir: join(ctx.repoRoot, 'law/adr') });
       return {
         skill_id: 'SKILL-fix-adrs',
-        status,
-        evidence: {
-          before,
-          after,
-          fix_log: fixLog,
-          iteration: ctx.iteration,
-        },
+        status: result.errors.length === 0 ? 'pass' : 'fail',
+        evidence: result,
       };
     },
   };
-
-  // =====================================================================
   // SKILL-fix-overrides — autofix (R11-W6.07, R2-Δ1 first batch).
   //
   // Diagnose: scan packages/** for `inv-override:` annotation blocks via

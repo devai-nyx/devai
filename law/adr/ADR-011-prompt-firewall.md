@@ -2,11 +2,11 @@
 id: ADR-011
 title: Prompt firewall
 type: adr
-status: active
+status: superseded
 date: 2026-07-25
 authority: Architect
 supersedes: [ADR-FIREWALL-OVERLAPS-GLOB-AWARE.md; ADR-FIX-SKILL-AUTOFIX-FIREWALL-EXEMPTION.md]
-superseded_by: null
+superseded_by: ADR-016
 provenance:
   - REV-0003 disposition map; predecessor firewall ADRs; DII-120
 affected_rules:

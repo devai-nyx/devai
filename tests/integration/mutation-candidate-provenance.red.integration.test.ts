@@ -102,7 +102,7 @@ function fixture(): { readonly repo: string; readonly baseSha: string } {
         semantic_review_justification: 'Candidate semantics remain report-only.',
       },
     },
-    authority: { docs: [{ doc: 'fixture.md', anchor: 'candidate-provenance' }] },
+    authority_docs: { docs: [{ doc: 'fixture.md', anchor: 'candidate-provenance' }] },
     scope: { components: ['fixture'], code_areas: ['src/value.ts'] },
     change_policy: {
       breaking_change_requires: ['test_update', 'human_approval'],

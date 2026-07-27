@@ -9,8 +9,8 @@ This library holds the operational templates that the [round-execute skill](../.
 | File                                           | Phase   | Skill                                                                          | When to read                                                            |
 | ---------------------------------------------- | ------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
 | [B0-audit.md](./B0-audit.md)                   | measure | [`SKILL-round-audit`](../../reference/skills/round-audit.md)                   | Round opens. Snapshot the state.                                        |
-| [B1-backlog.md](./B1-backlog.md)               | plan    | [`SKILL-round-backlog`](../../reference/skills/round-backlog.md)               | Audit complete. Materialize the backlog.                                |
-| [B2-wave-plan.md](./B2-wave-plan.md)           | plan    | [`SKILL-round-backlog`](../../reference/skills/round-backlog.md)               | Backlog drafted. Group into waves with effort hints.                    |
+| [B1-backlog.md](./B1-backlog.md)               | plan    | [`SKILL-round-backlog`](../../reference/skills/round-backlog.md)               | Audit complete. Materialize a disposable backlog proposal.              |
+| [B2-wave-plan.md](./B2-wave-plan.md)           | plan    | [`SKILL-round-backlog`](../../reference/skills/round-backlog.md)               | Backlog proposed. Group disposable prompts into waves for review.       |
 | [B3-orchestrate.md](./B3-orchestrate.md)       | execute | [`SKILL-round-orchestrate`](../../reference/skills/round-orchestrate.md)       | Worker prompts materialized. Drive the wave loop.                       |
 | [B4-verify-publish.md](./B4-verify-publish.md) | compare | [`SKILL-round-verify-publish`](../../reference/skills/round-verify-publish.md) | Round work complete. Verify and close the disposable workspace locally. |
 

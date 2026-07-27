@@ -13,8 +13,8 @@ import {
 const R = join(import.meta.dirname, '..', '..', '..', '..');
 
 describe('roster', () => {
-  it('bijects with law/schemas (count guard: 55)', () => {
-    expect(ROSTER.length).toBe(55);
+  it('bijects with law/schemas (count guard: 56)', () => {
+    expect(ROSTER.length).toBe(56);
     expect(new Set(ROSTER).size).toBe(ROSTER.length);
     expect(listSchemaFiles()).toEqual([...ROSTER].sort());
   });

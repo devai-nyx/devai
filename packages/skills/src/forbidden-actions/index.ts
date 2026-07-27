@@ -577,6 +577,20 @@ export function scanForbiddenActions(opts: ScanForbiddenOptions): ScanForbiddenR
           (path) =>
             /(?:^|\/)tests\//u.test(path) || /\.(?:test|spec)\.(?:[cm]?[jt]s|[jt]sx)$/u.test(path),
         );
+      const messageNamesInvariantMutation =
+        entry.id === 'FORBID-MUTATE-INVARIANTS' &&
+        entry.patterns.some((pattern) => {
+          const matches = pattern.test(body);
+          pattern.lastIndex = 0;
+          return matches;
+        });
+      if (
+        entry.id === 'FORBID-MUTATE-INVARIANTS' &&
+        protectedPaths.length === 0 &&
+        !messageNamesInvariantMutation
+      ) {
+        continue;
+      }
       if (
         entry.id === 'FORBID-MUTATE-INVARIANTS' &&
         protectedPaths.length > 0 &&

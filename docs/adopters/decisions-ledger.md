@@ -7,7 +7,7 @@
 
 ## Purpose
 
-Every project accumulates **decisions that are real but not actioned**: items deferred to a later round, alternatives considered and rejected, blockers escalated for human input, supersession chains. Today these live in commit messages, Plan.md prose, audit scratch notes — findable, but not queryable, not aggregatable, not auditable.
+Every project accumulates **decisions that are real but not actioned**: items deferred to a later round, alternatives considered and rejected, blockers escalated for human input, supersession chains. Today these live in commit messages, `plan.md` prose, and audit observations — findable, but not queryable, not aggregatable, not auditable.
 
 The decisions ledger gives every adopter one place to record those calls in a structured form. Each round's `Closeout.md` can lift "deferred" + "blockers" entries into the ledger; future rounds can query for open defers expiring soon, supersession chains, decisions by a given owner.
 

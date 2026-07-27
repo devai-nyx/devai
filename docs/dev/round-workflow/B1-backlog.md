@@ -6,8 +6,8 @@
 
 ## Required inputs
 
-- `scratch/sessions/rounds/round-{{round_n}}/audit/scratch.md` (from [B0](./B0-audit.md)).
-- `scratch/sessions/rounds/round-{{round_n}}/audit/scorecard.baseline.json`.
+- `work/audit/R-{{round_n}}/scratch.md` (from [B0](./B0-audit.md)).
+- `work/audit/R-{{round_n}}/scorecard.baseline.json`.
 
 ## Goal
 
@@ -19,15 +19,18 @@ Convert audit findings into a prioritized backlog. The backlog drives [B2-wave-p
    ```bash
    devai agent skill run SKILL-compile-backlog --repo-root .
    ```
-   The skill reads the latest scorecard and emits one item per FAIL/REVIEW cell. Persist to `scratch/sessions/rounds/round-{{round_n}}/backlog.json`.
+   The skill reads the latest scorecard and emits one item per FAIL/REVIEW cell. It persists only a disposable proposal at `.devai/state/round-runs/R-{{round_n}}/backlog/backlog.json`.
 2. **Augment with carryovers and open questions.** From `scratch.md`'s "Carryovers" and "Open questions" sections, add backlog items. Carryovers inherit their prior priority; open questions become **blockers** unless an operator resolves them in this phase.
-3. **Prioritize.** Sort by: (a) blockers first, (b) FAIL > REVIEW, (c) substrate criticality (F1 spec > F2 plant > F3 test > F4 inventory > F5 harness), (d) cost. Document priority rationale in `scratch/sessions/rounds/round-{{round_n}}/backlog.md` (a human-readable narrative companion to the machine-readable backlog.json).
+3. **Prioritize.** Sort by: (a) blockers first, (b) FAIL > REVIEW, (c) substrate criticality (F1 spec > F2 plant > F3 test > F4 inventory > F5 harness), (d) cost. Document priority rationale in `.devai/state/round-runs/R-{{round_n}}/backlog/backlog.md` (a human-readable proposal companion to the machine-readable backlog.json).
 4. **Group into rough waves** — typically 1–4 waves per round depending on backlog size. A wave is "items that can ship as one bundled gate-passing batch." Don't pre-assign workers to waves yet; that happens in B2.
 
 ## Deliverables
 
-- `scratch/sessions/rounds/round-{{round_n}}/backlog.json` — machine-readable list of items with `{id, title, priority, substrate, verdict_before, proposed_action}`.
-- `scratch/sessions/rounds/round-{{round_n}}/backlog.md` — human narrative + priority rationale.
+- `.devai/state/round-runs/R-{{round_n}}/backlog/backlog.json` — disposable machine-readable proposal with `{id, title, priority, substrate, verdict_before, proposed_action}`.
+- `.devai/state/round-runs/R-{{round_n}}/backlog/backlog.md` — disposable narrative proposal and priority rationale.
+
+Neither file is committed Architect intent. An Architect must review and explicitly
+promote accepted content into `work/rounds/R-{{round_n}}/`.
 
 ## Acceptance
 

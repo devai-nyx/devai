@@ -2,6 +2,8 @@ import { spawnSync } from '@devai-nyx/authority';
 import type { CAC } from 'cac';
 import {
   canonicalSha256,
+  appendProofEpochRecord,
+  closeProofEpoch,
   computeSensorInputDigest,
   evaluateSensorInputIntegrity,
   loadScorecardNaConfig,
@@ -14,12 +16,13 @@ import {
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { validators } from '@devai-nyx/schemas';
-import type { SensorReading } from '@devai-nyx/sensors';
+import { sensorTierKinds, type SensorReading } from '@devai-nyx/sensors';
 import { EXIT_FAIL, EXIT_PASS, EXIT_REVIEW, EXIT_USAGE } from '@devai-nyx/utils';
-import { defineCommand } from '../../define-command.js';
+import { routeArgv } from '../../command-router.js';
+import { defineCommand, getFullRegistry, type RegistryEntry } from '../../define-command.js';
 import { resolveCliVersion } from '../../version.js';
 
-type SensorSet = 'baseline' | 'tier1' | 'tier2' | 'tier3' | 'all';
+type SensorSet = 'baseline' | 'tier1' | 'tier2' | 'tier3' | 'all' | 'sweep';
 
 type ReadinessStatus = 'pass' | 'review' | 'fail' | 'unknown' | 'na';
 type StructuredStatus = Exclude<ReadinessStatus, 'na'> | 'skipped' | 'error' | 'killed';
@@ -69,6 +72,7 @@ interface IncrementalOptions {
   readonly sensorInputs?: string;
   readonly baselineReport?: string;
   readonly timingsReport?: string;
+  readonly round?: string;
 }
 
 const STRUCTURED_STATUSES = new Set([
@@ -212,9 +216,40 @@ const TIER3_ADDITIONS: readonly (readonly string[])[] = [
 ];
 
 export function expandSensorSet(set: SensorSet): readonly (readonly string[])[] {
+  if (set === 'sweep') {
+    return sensorTierKinds('SWEEP').map((kind) => ['sense', 'run', kind]);
+  }
   if (set === 'baseline' || set === 'tier1') return BASELINE;
   if (set === 'tier2') return [...BASELINE, ...TIER2_ADDITIONS];
   return [...BASELINE, ...TIER2_ADDITIONS, ...TIER3_ADDITIONS];
+}
+
+export function planSensorChild(
+  command: readonly string[],
+  executable: string,
+  entries: readonly RegistryEntry[],
+  version: string,
+): { readonly argv: readonly string[]; readonly runnable: boolean } {
+  const routed = routeArgv([process.execPath, executable, ...command], entries, version);
+  if (routed.kind !== 'dispatch') {
+    throw new Error('SENSE_RUN_CHILD_ROUTE_INVALID');
+  }
+  const internalName = routed.argv[2];
+  const entry = entries.find((candidate) => candidate.internal_name === internalName);
+  if (entry === undefined) return { argv: [], runnable: false };
+  return {
+    argv: [...entry.path, ...routed.argv.slice(3)],
+    runnable: entry.effects === 'read',
+  };
+}
+
+export function routeSensorChildArgv(
+  command: readonly string[],
+  executable: string,
+  entries: readonly RegistryEntry[],
+  version: string,
+): readonly string[] {
+  return planSensorChild(command, executable, entries, version).argv;
 }
 
 const COMMAND_KINDS: Readonly<Record<string, string>> = {
@@ -404,7 +439,8 @@ export const senseRunSetCmd = defineCommand({
   register(cli: CAC): void {
     cli
       .command('sense-run', 'Run a deterministic sensor preset')
-      .option('--set <name>', 'baseline | tier1 | tier2 | tier3 | all (default: baseline)')
+      .option('--set <name>', 'baseline | tier1 | tier2 | tier3 | all | sweep (default: baseline)')
+      .option('--round <id>', 'Proof epoch round id; required for an executing sweep')
       .option('--repo-root <path>', 'Repository root (default: .)')
       .option('--dry-run', 'Print the expansion without running sensors')
       .option('--incremental', 'R26 report-only input-digest measurement; requires --dry-run')
@@ -417,14 +453,23 @@ export const senseRunSetCmd = defineCommand({
       .option('--human', 'Human-readable summary')
       .action((options: IncrementalOptions) => {
         const set = options.set ?? 'baseline';
-        if (!['baseline', 'tier1', 'tier2', 'tier3', 'all'].includes(set)) {
+        if (!['baseline', 'tier1', 'tier2', 'tier3', 'all', 'sweep'].includes(set)) {
           process.stderr.write(
-            `devai sense run: unknown set '${set}'; expected baseline | tier1 | tier2 | tier3 | all\n`,
+            `devai sense run: unknown set '${set}'; expected baseline | tier1 | tier2 | tier3 | all | sweep\n`,
           );
           process.exitCode = EXIT_USAGE;
           return;
         }
         const commands = expandSensorSet(set as SensorSet);
+        if (
+          set === 'sweep' &&
+          options.dryRun !== true &&
+          (options.round === undefined || !/^R-[0-9]{4}$/u.test(options.round))
+        ) {
+          process.stderr.write('devai sense run: executing --set sweep requires --round R-NNNN\n');
+          process.exitCode = EXIT_USAGE;
+          return;
+        }
         if (options.incremental === true && options.dryRun !== true) {
           process.stderr.write(
             'devai sense run: --incremental is report-only in R26 and requires --dry-run\n',
@@ -466,21 +511,50 @@ export const senseRunSetCmd = defineCommand({
         const repoRoot = options.repoRoot ?? '.';
         const naCells = scorecardNaCellSet(loadScorecardNaConfig(resolveScorecardNaPath(repoRoot)));
         const executable = process.argv[1] ?? '';
+        const proofEpoch =
+          set === 'sweep' && options.round !== undefined
+            ? { repoRoot, roundId: options.round, kind: 'sweep' }
+            : null;
         const results = commands.map((command) => {
           const args = [...command, '--repo-root', repoRoot];
-          const result = spawnSync(process.execPath, [executable, ...args], {
-            encoding: 'utf8',
-            env: process.env,
-          });
-          return {
+          const plan = planSensorChild(args, executable, getFullRegistry(), resolveCliVersion());
+          const result = plan.runnable
+            ? spawnSync(process.execPath, [executable, ...plan.argv], {
+                encoding: 'utf8',
+                env: process.env,
+              })
+            : {
+                status: null,
+                stdout: '',
+                stderr: 'SENSE_RUN_CHILD_REQUIRES_BOUND_WRITE_ADAPTER',
+              };
+          const child = {
             command: `devai ${command.join(' ')}`,
             processStatus: result.status,
             stdout: result.stdout,
             stderr: result.stderr,
             na: readingIsNa(result.stdout, naCells),
           };
+          if (proofEpoch !== null) {
+            appendProofEpochRecord({
+              ...proofEpoch,
+              payload: {
+                sensor_kind: command[2] ?? null,
+                command: child.command,
+                process_status: child.processStatus,
+                stdout: child.stdout,
+                stderr: child.stderr,
+                honest_blocker:
+                  child.processStatus === null || parseStructuredStatus(child.stdout) === undefined,
+              },
+            });
+          }
+          return child;
         });
         const aggregate = aggregateSensorRunResults(results);
+        if (proofEpoch !== null) {
+          closeProofEpoch({ ...proofEpoch, payload: { aggregate } });
+        }
         const ok = aggregate.execution_status === 'pass' && aggregate.readiness_status === 'pass';
         if (options.human === true) {
           process.stdout.write(

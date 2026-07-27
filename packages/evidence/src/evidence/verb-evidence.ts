@@ -1,7 +1,4 @@
-import { join } from 'node:path';
-import { appendRecord, loadChain, type EvidenceArtifact } from './chain.js';
-import { deriveEvidenceId } from './id-generator.js';
-import { gatherGitContext } from './git-context.js';
+import type { EvidenceArtifact } from './chain.js';
 
 /**
  * Best-effort evidence-chain append for CLI verbs (D-120): `sense *`,
@@ -38,38 +35,10 @@ export interface VerbEvidenceResult {
 export const VERB_EVIDENCE_ACTOR = 'devai-cli';
 
 export function appendVerbEvidence(inputs: VerbEvidenceInputs): VerbEvidenceResult {
-  if (inputs.automatic === true && process.env['DEVAI_EVIDENCE_AUTOCHAIN'] === '0') {
-    return { ok: true };
-  }
-  const chainPath = inputs.chainPath ?? join(inputs.repoRoot, 'record/proofs/chain.json');
-  try {
-    const chain = loadChain(chainPath);
-    const timestamp = new Date().toISOString();
-    const gitCtx = gatherGitContext(inputs.repoRoot);
-    const artifacts = [...(inputs.artifacts ?? [])];
-    const id = deriveEvidenceId({
-      timestamp,
-      actor: VERB_EVIDENCE_ACTOR,
-      actor_role: 'harness',
-      action: inputs.action,
-      status: inputs.status,
-      git_head_sha: gitCtx.head_sha,
-      artifact_sha256s: artifacts.map((a) => a.sha256),
-      previous_run_hash: chain.head,
-    });
-    const record = appendRecord(chainPath, {
-      id,
-      timestamp,
-      actor: VERB_EVIDENCE_ACTOR,
-      actor_role: 'harness',
-      action: inputs.action,
-      status: inputs.status,
-      context: { repo_root: inputs.repoRoot, git: gitCtx },
-      artifacts,
-      ...(inputs.notes !== undefined && inputs.notes.length > 0 && { notes: [...inputs.notes] }),
-    });
-    return { ok: true, id: record.id };
-  } catch (err) {
-    return { ok: false, error: err instanceof Error ? err.message : String(err) };
-  }
+  if (inputs.automatic === true) return { ok: true };
+  return {
+    ok: false,
+    error:
+      'LEGACY_EVIDENCE_WRITER_RETIRED: use a governed round-bound proof epoch; chain.json is read-only compatibility state',
+  };
 }

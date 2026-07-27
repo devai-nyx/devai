@@ -3783,14 +3783,15 @@ export const ACTION_REGISTRY = [
     profiles: ['tier1', 'tier2', 'tier3'],
     effect: 'local-write',
     authority: 'specifier',
-    description: 'Archive a fully closed governed round after every binding precondition resolves.',
+    description:
+      'Close a governed round in place after every binding precondition resolves; the archive action name is a compatibility spelling only.',
     promotion_criteria: [],
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
       action_id: 'round archive',
       effect: 'local-write',
-      capabilities: ['fs:workspace', 'proc:git'],
+      capabilities: ['fs:workspace'],
       subject: {
         kind: 'human',
         allowed_roles: ['architect'],
@@ -3803,7 +3804,7 @@ export const ACTION_REGISTRY = [
       planner: {
         kind: 'bounded-batches',
         planner_id: 'round-archive-bounded-plan',
-        target_kinds: ['fs', 'git-ref'],
+        target_kinds: ['fs'],
         bounds: {
           max_batches: 128,
           max_targets_per_batch: 64,
@@ -3813,7 +3814,7 @@ export const ACTION_REGISTRY = [
       },
       boundary: {
         kind: 'mutation-adapters',
-        adapter_ids: ['fs-authority-boundary', 'git-ref-authority-boundary'],
+        adapter_ids: ['fs-authority-boundary'],
         final_reverification: true,
       },
       readiness: {
@@ -3943,8 +3944,7 @@ export const ACTION_REGISTRY = [
     profiles: ['tier1', 'tier2', 'tier3'],
     effect: 'read',
     authority: 'mesh_controller',
-    description:
-      'Read one local or archived governed round and report its schema-valid canonical status.',
+    description: 'Read one governed round in place and report its schema-valid canonical status.',
     promotion_criteria: [],
     authority_contract_version: '1.0.0',
     authority_contract: {
@@ -5587,7 +5587,7 @@ export const ACTION_REGISTRY = [
     visibility: 'standard',
     tier: 'porcelain',
     profiles: ['tier1', 'tier2', 'tier3'],
-    effect: 'read',
+    effect: 'harness-write',
     authority: 'sensor',
     description:
       'Run a deterministic sensor preset for an adoption tier; --dry-run prints the exact expansion.',
@@ -5596,24 +5596,40 @@ export const ACTION_REGISTRY = [
     authority_contract: {
       schemaVersion: '1.0.0',
       action_id: 'sense run',
-      effect: 'read',
-      capabilities: ['proc:dynamic'],
+      effect: 'harness-write',
+      capabilities: ['proc:dynamic', 'fs:proofs'],
       subject: {
-        kind: 'none',
+        kind: 'derived-machine',
+        actor: 'harness',
+        transition: 'harness-write',
+        initiator: {
+          allowed_roles: ['owner', 'architect', 'inspector', 'engineer', 'auditor'],
+          preserve_in_context: true,
+        },
       },
       consent: {
-        write: false,
+        write: true,
         allow_publish: false,
         experimental: false,
       },
       planner: {
-        kind: 'none',
+        kind: 'bounded-batches',
+        planner_id: 'sense-run-sweep-bounded-plan',
+        target_kinds: ['fs'],
+        bounds: {
+          max_batches: 128,
+          max_targets_per_batch: 64,
+          max_total_targets: 8192,
+        },
+        recovery: 'preserve-and-report',
       },
       boundary: {
-        kind: 'none',
+        kind: 'mutation-adapters',
+        adapter_ids: ['fs-authority-boundary'],
+        final_reverification: true,
       },
       readiness: {
-        requires_binding: false,
+        requires_binding: true,
         independent_acceptance_required: true,
       },
     },

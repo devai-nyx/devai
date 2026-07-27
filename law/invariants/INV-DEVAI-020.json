@@ -19,7 +19,7 @@
       "rationale": "The declared static analyzer deterministically evaluates this invariant against repository structure."
     }
   },
-  "authority": {
+  "authority_docs": {
     "docs": [
       {
         "doc": "DESIGN-DECISIONS.md",

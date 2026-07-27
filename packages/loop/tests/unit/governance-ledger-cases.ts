@@ -103,6 +103,17 @@ describe('governance record parsing and integrity', () => {
     expect(() => parseGovernanceRecord(invalid)).toThrow('frontmatter is required');
   });
 
+  it('KR-R5-029 parses validator-accepted semicolon inline arrays for supersession', () => {
+    const root = fixtureRoot();
+    const path = writeRecord(
+      root,
+      'ADR-003.md',
+      recordSource({ id: 'ADR-003', status: 'active', supersedes: '[ADR-001; ADR-002]' }),
+    );
+
+    expect(parseGovernanceRecord(path).frontmatter['supersedes']).toEqual(['ADR-001', 'ADR-002']);
+  });
+
   it('accepts valid records and reports malformed, schema, filename, duplicate, and link defects', () => {
     const root = fixtureRoot();
     writeRecord(root, 'README.md', '# ignored\n');

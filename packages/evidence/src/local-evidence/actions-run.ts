@@ -71,6 +71,12 @@ export interface ActionsRunIdentity {
 export interface ActionsRunEvidenceManifest {
   readonly schemaVersion: 1;
   readonly generatedAt: string;
+  readonly expiresAt: string;
+  readonly subject: {
+    readonly repository: string;
+    readonly commitSha: string;
+    readonly tree: ActionsTreeIdentity;
+  };
   readonly origin: 'actions-run';
   readonly sourceHash: ActionsSourceHash;
   readonly policy: {
@@ -213,7 +219,20 @@ function asActionsManifest(value: unknown): ActionsRunEvidenceManifest | null {
   ) {
     return null;
   }
-  return value as ActionsRunEvidenceManifest;
+  const manifest = value as ActionsRunEvidenceManifest;
+  const generatedAt = Date.parse(manifest.generatedAt);
+  const expiresAt = Date.parse(manifest.expiresAt);
+  if (
+    !Number.isFinite(generatedAt) ||
+    !Number.isFinite(expiresAt) ||
+    expiresAt !== generatedAt + manifest.policy.maxAgeHours * 60 * 60 * 1000 ||
+    manifest.subject.repository !== manifest.actionsRun.repository ||
+    manifest.subject.commitSha !== manifest.actionsRun.testedCommitSha ||
+    !sameTree(manifest.subject.tree, manifest.actionsRun.testedTree)
+  ) {
+    return null;
+  }
+  return manifest;
 }
 
 function sameTree(left: ActionsTreeIdentity, right: ActionsTreeIdentity): boolean {

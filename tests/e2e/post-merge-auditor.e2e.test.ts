@@ -75,7 +75,7 @@ function install() {
 beforeEach(() => {
   repo = mkdtempSync(join(tmpdir(), 'devai-r21-post-merge-e2e-'));
   expect(git(['init', '-b', 'main']).status).toBe(0);
-  writeFileSync(join(repo, '.gitignore'), '.devai/state/\nscratch/worktrees/\n');
+  writeFileSync(join(repo, '.gitignore'), '.devai/state/\n.devai/worktrees/\nscratch/worktrees/\n');
   mkdirSync(join(repo, 'law'), { recursive: true });
   writeFileSync(join(repo, 'law', 'constitution.md'), readFileSync(CONSTITUTION, 'utf8'));
   commitFile('README.md', 'initial\n');
@@ -123,7 +123,7 @@ describe('Article 34 post-merge Auditor composite', () => {
       expect(result.status).not.toBe(0);
       expect(result.stderr).toMatch(/host receipt missing/i);
       expect(existsSync(join(repo, '.devai/state/post-merge-auditor'))).toBe(false);
-      expect(existsSync(join(repo, 'scratch/worktrees/auditor-post-merge'))).toBe(false);
+      expect(existsSync(join(repo, '.devai/worktrees/auditor-post-merge'))).toBe(false);
     },
     90_000,
   );
@@ -151,7 +151,7 @@ describe('Article 34 post-merge Auditor composite', () => {
       expect(result.status).not.toBe(0);
       expect(result.stderr).toMatch(/host receipt (?:invalid|unverified)/i);
       expect(existsSync(join(repo, '.devai/state/post-merge-auditor'))).toBe(false);
-      expect(existsSync(join(repo, 'scratch/worktrees/auditor-post-merge'))).toBe(false);
+      expect(existsSync(join(repo, '.devai/worktrees/auditor-post-merge'))).toBe(false);
     },
     90_000,
   );
@@ -177,26 +177,23 @@ describe('Article 34 post-merge Auditor composite', () => {
         expect(merged.status, merged.stderr).toBe(0);
       }
 
-      const stateRoot = join(repo, 'scratch/worktrees/auditor-post-merge/work/audit/post-merge');
+      const stateRoot = join(repo, '.git/devai/post-merge-observations');
       const bundles = readdirSync(stateRoot).filter((entry) => /^[0-9a-f]{40}$/.test(entry));
       expect(bundles).toHaveLength(2);
-      expect(existsSync(join(repo, 'scratch/worktrees/auditor-post-merge/.git'))).toBe(true);
+      expect(existsSync(join(repo, '.devai/worktrees/auditor-post-merge/.git'))).toBe(true);
 
       const replays = await Promise.all([runHookAsync(), runHookAsync()]);
-      expect(replays.map((result) => result.status)).toContain(2);
-      expect(replays.every((result) => result.status === 0 || result.status === 2)).toBe(true);
-      expect(replays.map((result) => result.stderr).join('\n')).toContain(
-        'POST_MERGE_WORKTREE_DIRTY',
-      );
+      expect(replays.every((result) => result.status === 0)).toBe(true);
+      expect(replays.map((result) => result.stderr).join('\n')).toBe('\n');
       expect(readdirSync(stateRoot).filter((entry) => /^[0-9a-f]{40}$/.test(entry))).toHaveLength(
         2,
       );
       expect(git(['status', '--porcelain']).stdout).toBe('');
       const worktreeStatus = spawnSync('git', ['status', '--porcelain'], {
-        cwd: join(repo, 'scratch/worktrees/auditor-post-merge'),
+        cwd: join(repo, '.devai/worktrees/auditor-post-merge'),
         encoding: 'utf8',
       }).stdout;
-      expect(worktreeStatus).toBe('?? work/\n');
+      expect(worktreeStatus).toBe('');
     },
     90_000,
   );
@@ -216,7 +213,7 @@ describe('Article 34 post-merge Auditor composite', () => {
       mkdirSync(lockPath);
       const merged = git(['merge', '--no-ff', 'feature-lock', '-m', 'merge lock fixture']);
       expect(merged.status, merged.stderr).toBe(0);
-      expect(existsSync(join(repo, 'scratch/worktrees/auditor-post-merge'))).toBe(false);
+      expect(existsSync(join(repo, '.devai/worktrees/auditor-post-merge'))).toBe(false);
 
       const locked = spawnSync(join(repo, '.git/hooks/post-merge'), [], {
         cwd: repo,
@@ -225,7 +222,7 @@ describe('Article 34 post-merge Auditor composite', () => {
       });
       expect(locked.status, locked.stderr).toBe(0);
       expect(locked.stdout).toContain('"status":"busy"');
-      expect(existsSync(join(repo, 'scratch/worktrees/auditor-post-merge'))).toBe(false);
+      expect(existsSync(join(repo, '.devai/worktrees/auditor-post-merge'))).toBe(false);
 
       rmSync(lockPath, { recursive: true, force: true });
       const replay = spawnSync(join(repo, '.git/hooks/post-merge'), [], {
@@ -233,18 +230,12 @@ describe('Article 34 post-merge Auditor composite', () => {
         env: gitEnv,
         encoding: 'utf8',
       });
-      expect(replay.status).toBe(2);
-      expect(replay.stderr).toContain('POST_MERGE_WORKTREE_DIRTY');
+      expect(replay.status, replay.stderr).toBe(0);
       const mergeSha = git(['rev-parse', 'HEAD']).stdout.trim();
       expect(
         JSON.parse(
           readFileSync(
-            join(
-              repo,
-              'scratch/worktrees/auditor-post-merge/work/audit/post-merge',
-              mergeSha,
-              'status.json',
-            ),
+            join(repo, '.git/devai/post-merge-observations', mergeSha, 'status.json'),
             'utf8',
           ),
         ),
@@ -274,12 +265,7 @@ describe('Article 34 post-merge Auditor composite', () => {
       expect(after).not.toBe(before);
       expect(git(['merge-base', '--is-ancestor', before, after]).status).toBe(0);
       expect(`${merged.stdout}${merged.stderr}`).toMatch(/post-merge.*fail/i);
-      const failed = join(
-        repo,
-        'scratch/worktrees/auditor-post-merge/work/audit/post-merge',
-        after,
-        'status.json',
-      );
+      const failed = join(repo, '.git/devai/post-merge-observations', after, 'status.json');
       expect(JSON.parse(readFileSync(failed, 'utf8'))).toMatchObject({ status: 'error' });
     },
     90_000,
@@ -302,11 +288,7 @@ describe('Article 34 post-merge Auditor composite', () => {
       expect(merged.status).toBe(0);
 
       const mergeSha = git(['rev-parse', 'HEAD']).stdout.trim();
-      const bundle = join(
-        repo,
-        'scratch/worktrees/auditor-post-merge/work/audit/post-merge',
-        mergeSha,
-      );
+      const bundle = join(repo, '.git/devai/post-merge-observations', mergeSha);
       expect(JSON.parse(readFileSync(join(bundle, 'status.json'), 'utf8'))).toMatchObject({
         status: 'error',
       });
@@ -319,8 +301,7 @@ describe('Article 34 post-merge Auditor composite', () => {
         env: gitEnv,
         encoding: 'utf8',
       });
-      expect(retry.status).toBe(2);
-      expect(retry.stderr).toContain('POST_MERGE_WORKTREE_DIRTY');
+      expect(retry.status, retry.stderr).toBe(0);
       expect(JSON.parse(readFileSync(join(bundle, 'status.json'), 'utf8'))).toMatchObject({
         status: 'completed',
       });

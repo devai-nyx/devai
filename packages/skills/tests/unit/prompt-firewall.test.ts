@@ -115,6 +115,36 @@ describe('checkPromptOverlays', () => {
     expect(v.findings[0]?.code).toBe('PROMPT_OVERLAY_AUTHORITY_INVERSION');
   });
 
+  it('KR-R5-036 rejects Architect lifecycle writers outside the bounded exceptions', () => {
+    const exact = {
+      id: 'SKILL-round-scaffold',
+      authority_role: 'architect',
+      agent_class: 'coding-agent',
+      permission_tier: 'write',
+      host_mutation_policy: 'write_requires_flag',
+      deterministic: true,
+      llm_backed: false,
+    } as const;
+    for (const manifest of [
+      { ...exact, allowed_write_scopes: ['work/rounds/R-*/**'] },
+      {
+        ...exact,
+        id: 'SKILL-round-archive',
+        allowed_write_scopes: ['work/rounds/archive/**'],
+      },
+      { ...exact, id: 'SKILL-adr-new', allowed_write_scopes: ['law/adr/D-*.md'] },
+      {
+        ...exact,
+        id: 'SKILL-round-backlog',
+        allowed_write_scopes: ['work/rounds/R-*/**'],
+      },
+    ]) {
+      const verdict = checkPromptOverlays({ manifests: [manifest] });
+      expect(verdict.ok, manifest.id).toBe(false);
+      expect(verdict.findings[0]?.code).toBe('PROMPT_OVERLAY_AUTHORITY_INVERSION');
+    }
+  });
+
   it('flags read tier with host_mutation scopes', () => {
     const v = checkPromptOverlays({
       manifests: [

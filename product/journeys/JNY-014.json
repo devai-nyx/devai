@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
   "id": "JNY-014",
-  "title": "Maintainer governs a round from local declaration through sealed archive",
-  "summary": "A maintainer uses deterministic, role-bounded round commands to create disposable local working state, observe its declared status, and archive a fully closed round as durable governance history.",
+  "title": "Maintainer governs a round from declaration through append-in-place close",
+  "summary": "A maintainer uses deterministic, role-bounded round commands to preserve committed intent under work/rounds, record observations under work/audit, emit machine proof under record/proofs, and close without moving authority between those trees.",
   "lifecycle": "supported",
   "lifecycle_reason": "The round lifecycle is deterministic, human-directed governance; it does not invoke the experimental autonomous controller.",
   "promotion_criteria": [],
@@ -15,7 +15,7 @@
     ]
   },
   "preconditions": [
-    "DEVAI adoption has seeded the local and durable round directories",
+    "DEVAI adoption has seeded work/rounds, work/audit, record/proofs, and the managed .devai/worktrees root",
     "The maintainer has selected an unused round identifier",
     "The repository has a materialized binding authority policy"
   ],
@@ -23,42 +23,43 @@
     {
       "seq": 1,
       "actor": "DEVAI maintainer",
-      "action": "Scaffold the selected round in disposable local state",
-      "expected_outcome": "A deterministic conforming skeleton is created under the gitignored local round workspace without creating durable governance claims"
+      "action": "Create a managed worktree and scaffold the selected committed round intent",
+      "expected_outcome": "The task executes under .devai/worktrees and a deterministic conforming skeleton is created under work/rounds without creating audit or proof claims"
     },
     {
       "seq": 2,
       "actor": "DEVAI maintainer",
       "action": "Declare the round under the required role and inspect its status",
-      "expected_outcome": "The declaration and status are schema-valid, role-attributed, and report only the state actually present"
+      "expected_outcome": "The declaration remains under work/rounds, is schema-valid and role-attributed, and status reports only the state actually present"
     },
     {
       "seq": 3,
       "actor": "Round participants",
       "action": "Complete the declared waves, gates, close decision, and phase-closure evidence",
-      "expected_outcome": "The local workspace contains the complete attributable inputs, prompts, audit observations, and closure evidence required for archival"
+      "expected_outcome": "Committed intent and appendices remain under work/rounds, attributable observations remain under work/audit, and validated verbs emit closure evidence under record/proofs"
     },
     {
       "seq": 4,
       "actor": "DEVAI maintainer",
-      "action": "Archive the closed round with Architect authority and explicit write consent",
-      "expected_outcome": "DEVAI refuses every incomplete close; otherwise it seals the record, moves the whole local workspace to the durable round ledger, pins hashes, and leaves a reviewable post-close change"
+      "action": "Close the round with Architect authority and explicit write consent",
+      "expected_outcome": "DEVAI refuses every incomplete close; otherwise it appends attributable close state without moving committed intent, validates the separate audit and proof trees, and leaves a reviewable post-close change"
     }
   ],
   "postconditions": [
-    "The closed round has one schema-valid immutable durable record",
-    "The local round workspace is absent after successful archival",
+    "The closed round retains schema-valid committed intent with attributable appendices plus separate audit and machine-proof records",
+    "The managed .devai/worktrees task directory can be cleaned without moving or deleting committed round intent",
+    "Any unified round ledger is derived reproducibly from the three authoritative trees",
     "No supported round command invokes or promotes experimental autonomous execution"
   ],
   "acceptance_criteria": [
     {
       "id": "AC-001",
-      "statement": "Scaffold, declare, and status are deterministic and preserve the disposable-local versus durable-archive boundary.",
+      "statement": "Scaffold, declare, and status are deterministic and preserve committed intent, separate observations, separate machine proof, and the managed-worktree boundary.",
       "measurable_via": ["INV-DEVAI-001"]
     },
     {
       "id": "AC-002",
-      "statement": "Archive fails closed until the binding gates, close decision, phase closure, and complete round record are present.",
+      "statement": "Close fails closed until the binding gates, close decision, phase closure, and complete attributable three-tree record are present, and it never moves committed intent.",
       "measurable_via": ["INV-DEVAI-001"]
     },
     {
@@ -68,16 +69,18 @@
     },
     {
       "id": "AC-004",
-      "statement": "A fresh or upgraded adopter receives the scratch/archive layout and ignore boundary needed to execute the journey.",
+      "statement": "A fresh or upgraded adopter receives the work/rounds, work/audit, record/proofs, .devai/worktrees, and ignore boundaries needed to execute the journey.",
       "measurable_via": ["INV-DEVAI-001"]
     }
   ],
   "related_invariants": ["INV-DEVAI-001", "INV-DEVAI-015"],
   "status": "active",
-  "tags": ["r30", "round-lifecycle", "governance-ledger", "archive", "supported"],
+  "tags": ["round-lifecycle", "three-tree", "append-in-place", "managed-worktree", "supported"],
   "provenance": [
     "ex-JNY-014@devai-original",
-    "supersedes JNY-007 (Owner mark 2026-07-23): round governance is the successor process"
+    "supersedes JNY-007 (Owner mark 2026-07-23): round governance is the successor process",
+    "OM-002 (Owner mark 2026-07-24): three-tree doctrine and .devai/worktrees are approved",
+    "R-0005 B1 (Owner mark 2026-07-26): archive-move semantics replaced by append-in-place close"
   ],
   "supersedes": ["JNY-007"]
 }

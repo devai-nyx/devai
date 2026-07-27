@@ -10,7 +10,7 @@ import type { SpecValidationError, SpecValidationResult } from './types.js';
 export interface ValidateInvariantsOptions {
   readonly invariantsDir: string;
   readonly domains: DomainTaxonomy;
-  /** Repo root for resolving authority.docs[].doc relative paths. */
+  /** Repo root for resolving authority_docs.docs[].doc relative paths. */
   readonly repoRoot: string;
   /**
    * When true, flag `statement:` fields that lack a recognized
@@ -64,7 +64,7 @@ interface InvariantRecord {
   readonly id: string;
   readonly domain: string;
   readonly statement?: string;
-  readonly authority?: {
+  readonly authority_docs?: {
     readonly docs?: ReadonlyArray<{ readonly doc: string; readonly anchor: string }>;
   };
 }
@@ -149,7 +149,7 @@ export function validateInvariants(opts: ValidateInvariantsOptions): InvariantsR
     }
 
     // Authority anchor resolution.
-    for (const [i, d] of (record.authority?.docs ?? []).entries()) {
+    for (const [i, d] of (record.authority_docs?.docs ?? []).entries()) {
       const docPath = isAbsolute(d.doc) ? d.doc : resolve(dirname(file), '..', '..', '..', d.doc);
       // Simpler resolution: prefer repo-root anchor.
       const repoDocPath = resolve(opts.repoRoot, d.doc);
@@ -164,7 +164,7 @@ export function validateInvariants(opts: ValidateInvariantsOptions): InvariantsR
       if (!resolved) {
         errors.push({
           file,
-          pointer: `/authority/docs/${String(i)}/anchor`,
+          pointer: `/authority_docs/docs/${String(i)}/anchor`,
           message: `cannot resolve anchor '${d.anchor}' in doc '${d.doc}' (tried ${candidates.join(', ')})`,
         });
       }

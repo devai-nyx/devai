@@ -11,11 +11,12 @@ const ROOT = join(import.meta.dirname, '..', '..', '..', '..');
 const ACTIVE_CAMPAIGN_INSTRUCTIONS = [
   'work/rounds/CAMPAIGN.md',
   'work/rounds/EXECUTION-CONTRACT.md',
-  ...Array.from(
-    { length: 9 },
-    (_, index) => `work/rounds/R-${String(index + 2).padStart(4, '0')}/prompts/00-orchestrator.md`,
+  ...[2, 3, 4, 6, 7, 8, 9, 10].map(
+    (round) => `work/rounds/R-${String(round).padStart(4, '0')}/prompts/00-orchestrator.md`,
   ),
 ];
+
+const R0005_CODEX_INSTRUCTION = 'work/rounds/R-0005/prompts/00-orchestrator.md';
 
 const BL017_RETIREMENT_INSTRUCTIONS = [
   'AGENTS.md',
@@ -64,6 +65,18 @@ describe('Owner-selected Claude review model', () => {
       expect(instruction).not.toMatch(/(?:Claude )?Fable 5|claude-fable-5/iu);
     },
   );
+
+  it('applies the narrow OM-009 independent Codex-review exception only to R-0005', () => {
+    const mandate = readFileSync(join(ROOT, 'product/owner-mandates/OM-009.md'), 'utf8');
+    const instruction = readFileSync(join(ROOT, R0005_CODEX_INSTRUCTION), 'utf8');
+
+    expect(mandate).toContain('For R-0005 only');
+    expect(mandate).toContain('independent Codex');
+    expect(instruction).toContain('independent Codex agent');
+    expect(instruction).toContain('Do not call Claude');
+    expect(instruction).not.toContain('claude-opus-5');
+    expect(instruction).not.toMatch(/(?:Claude )?Fable 5|claude-fable-5/iu);
+  });
 
   it.each(BL017_RETIREMENT_INSTRUCTIONS)(
     '%s contains no retired BL-017 red permission or R-0006 ownership',

@@ -2801,6 +2801,112 @@ PASS is inferred. PC-0005 uses DII-162 as the declaration and DII-201 as the clo
 decision with `release_disposition: none-preratification`. Every external release,
 publication, deployment, real-stynx, R-0008, R-0009, and R-0010 gate remains closed.
 
+### DII-202 — Open R-0005 evidence and corrected round mechanics
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0005 declaration; R-0005-AUTHORIZATION; R-0005-PLAN@sha256:2a2e6bfcf375c5e5fbbd04c41260e465af2a72112cbdbfd15ebe22abeb456273; R-0005-ENTRY-INVENTORY; OM-002; OM-009; DII-201; PC-0005; successor e9db37209ee879c0f6cc0e2ee6c7c5619c3cb190`
+
+R-0005 is declared from exact successor base
+`e9db37209ee879c0f6cc0e2ee6c7c5619c3cb190` after PC-0005 and its exact-main CI.
+The round owns BL-010, BL-011, BL-015, BL-018, BL-033, BL-045, BL-050, BL-063,
+BL-106, and carry-ins BL-176 through BL-178 under the plan whose exact SHA-256 is
+bound above. The entry inventory is the no-hidden-source map; discovery of another
+writer, consumer, lifecycle, worktree, anchor, or sequencing authority requires an
+Architect amendment before implementation continues.
+
+The implementation must remain law-first and red-first prospectively. Inspector reds
+must precede the substantive Engineer repairs, except for an explicit later governed
+exception. Machine proof may be emitted only by validated verbs. Committed round intent
+stays in place; audit and proof remain separate; managed worktrees converge on
+`.devai/worktrees`; invariant anchor-doc objects migrate totally to `authority_docs`
+without renaming record-meta authoring authority.
+
+OM-009 replaces only R-0005's unavailable Claude close review with an independent,
+read-only Codex-agent review of the exact source candidate and governed range. Its
+identity, commit, range, findings, and verdict must be recorded truthfully, all
+actionable findings must be repaired, and no Claude, Opus, or cross-provider PASS may
+be inferred.
+
+The closing decision and PC-0006 must bind the exact role-pure batch range, complete
+gate results, exact source merge, and exact-main CI. R-0005 cannot authorize evidence
+reuse or promotion, package publication, tags, GitHub Releases, Pages deployment,
+external release or deployment, real-stynx mutation, R-0008 external action, R-0009
+activation, or R-0010 observation. The predecessor remains read-only.
+
+### DII-203 — Govern the R-0005 evidence and lifecycle contract
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0005 governed semantics; DII-202; ADR-016; BL-010; BL-011; BL-015; BL-018; BL-033; BL-045; BL-050; BL-063; BL-106; BL-176; BL-177; BL-178; R-0005-KNOWN-RED`
+
+R-0005 adopts `proof-epoch.schema.json` as the canonical line shape for per-round,
+per-kind JSONL evidence. Every record and erratum binds the previous line; exactly one
+terminal line binds the last non-terminal hash and record count. Reordering, mutation,
+truncation, duplicate terminals, post-terminal data, forward errata, and cross-round or
+cross-kind lines fail closed. The old aggregate chain remains a bounded compatibility
+reader only and cannot become a second canonical writer.
+
+Local-evidence manifests now require producer-derived `subject` and `expiresAt` values.
+The verifier recomputes repository, commit, tree, source hash, required jobs, and expiry
+from the canonical policy path. A caller may not select a manifest, subject, job set, or
+freshness window for gate standing. This machinery is implemented in R-0005, but BL-022
+remains the independent authorization required before reuse or promotion.
+
+ADR-016 replaces sealed ADR-011 and permits only two bounded prompt cases: evidence-only
+machine output under the two named `record/proofs/work` roots, and an exact single-file
+`docs/` output from an Architect-bound review-agent writer with explicit write consent.
+Experimental round composers lose direct `work/rounds/**` scope and use disposable
+`.devai/state/round-runs/**` output. All reserved-root overlap and final runtime authority
+checks remain binding.
+
+Round close retains committed intent in `work/rounds/R-NNNN`, appends attributable close
+state, reads machine closure only from `record/proofs/compliance/closures`, and keeps
+Auditor observations in `work/audit`. Managed worktrees use `.devai/worktrees`; mutable
+registry state uses `.devai/state/worktrees.json`; cleanup must preserve unrelated or
+human-adopted worktrees and committed config/pin materializations.
+
+Invariant anchor-doc objects are renamed totally from `authority` to `authority_docs` in
+the schema, all 34 current invariants, and every consumer. Record-meta `authority` is a
+different authoring-role field and is unchanged. The prospective sequencing policy binds
+law before implementation, a failing Inspector contract before repair, and an authorized
+shape before Machine emission. R-0002's disclosed inversions remain immutable historical
+exceptions, not reusable waivers.
+
+Historical closing language is interpreted only at its cited commit. R-0004's
+146-action/54-schema base and 147-action/55-schema exit are distinct measurement epochs;
+later canon growth does not rewrite them. The current Auditor map must append the omitted
+`12f67ed` / `7ca26c4` / `c7dd9fb` repair cycle before R-0005 close.
+
+Nothing in this decision authorizes evidence reuse, promotion, package publication,
+tags, GitHub Releases, Pages deployment, external release or deployment, real-stynx
+mutation, R-0008 external action, R-0009 activation, or R-0010 observation. OM-009's
+independent Codex review substitution remains exact to R-0005 and creates no Claude or
+Opus PASS.
+
+### DII-204 — Accept the R-0005 source candidate
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0005 source close; DII-202; DII-203; OM-009; R-0005-AS-BUILT; R-0005-INDEPENDENT-CODEX-REVIEW-9-PASS; reviewed candidate b4002f0892f3bd288c72f6f7268ccc31bd941ce2`
+
+DII-204 accepts R-0005's role-pure evidence and lifecycle implementation and the ninth
+independent Codex review's explicit PASS. The reviewed range begins at exact base and
+merge-base `e9db37209ee879c0f6cc0e2ee6c7c5619c3cb190` and ends at exact clean
+candidate `b4002f0892f3bd288c72f6f7268ccc31bd941ce2`, spanning 185 commits. The
+review found no P0 or P1 blocker and verified the review-8 authority rematerialization,
+prospective committed-materialization sequencing, exact historical exception scope,
+role purity, and preserved nonclaims.
+
+The final local evidence passes 133 ordinary files with 1,228 tests and eight declared
+skips; T1 at 74/856; T2 at 41/284 plus one skip; T1+T3 at 83/912 plus seven skips and
+72.42/62.36/78.07/74.52 coverage; T4 at 2/4; T5 at 6/25; T6 at 1/3; 34 invariants /
+133 traced tests; 167 repository references; strict sequencing and governed identity
+checks; repository-wide formatting; `git diff --check`; and clean status. No threshold,
+test source, assertion, skip declaration, lint rule, or formatting rule was weakened.
+
+R-0005 source is authorized to enter its source PR and exact-head CI ceremony. Source
+merge remains forbidden until every required check is green at the exact PR head.
+Production PC-0006 emission remains forbidden until the exact source merge passes
+exact-main CI; its closure-only PR, merge, and final exact-main CI remain separate
+serial gates.
+
+This decision does not authorize evidence reuse or promotion, package publication,
+tags, GitHub Releases, Pages deployment, external release or deployment, real-stynx
+mutation, R-0008 external action, R-0009 activation, or R-0010 observation. The
+predecessor remains read-only.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

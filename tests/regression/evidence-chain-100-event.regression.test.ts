@@ -4,13 +4,13 @@ import { join } from 'node:path';
 import { afterEach, aroundEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   appendRecord,
-  deriveEvidenceId,
   initChain,
   loadChain,
   verifyChain,
   type DraftEvidence,
   type EvidenceContext,
-} from '../../packages/evidence/src/evidence/index.js';
+} from '../../packages/evidence/src/evidence/chain.js';
+import { deriveEvidenceId } from '../../packages/evidence/src/evidence/id-generator.js';
 import { withAuthorityHostTestScope } from '../../packages/authority/tests/unit/authority-host-test-scope.js';
 
 aroundEach((runTest) => withAuthorityHostTestScope(runTest));

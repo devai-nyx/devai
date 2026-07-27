@@ -2,9 +2,10 @@
 
 Read OM-002, OM-003, the shared execution contract, R-0005 authorization/plan,
 R-0004 close,
-ADR-004/005/012, JNY-014, evidence and phase-closure schemas, proof writers, local
+ADR-004/005/012, JNY-014, OM-009, evidence and phase-closure schemas, proof writers, local
 evidence implementation, scorecard registry, prompt-firewall guards, worktree/round
-lifecycle code, and invariant schema/trace consumers.
+lifecycle code, invariant schema/trace consumers, prospective sequence checks, the
+R-0004 anti-skip guard, and BL-176 through BL-178.
 
 Execute B0 through B9 serially. The Owner batch changes only JNY-014 and only according
 to OM-002. The Inspector commits adversarial reds first. The Architect owns semantics
@@ -15,12 +16,17 @@ sentinels are tracked.
 
 Keep reuse and promotion disabled. Test round close in disposable fixtures until the
 source/closure PR ceremony itself is ready; never invoke the old archive-move semantics.
-Ask Claude Opus 5 through literal `claude-opus-5` to review evidence trust boundaries,
-round immutability, worktree cleanup, and anchor migration; no fallback to another model
-is permitted. Resolve all findings before merge.
+Enforce BL-106 prospectively and close BL-176 through BL-178 without rewriting historical
+evidence. Under OM-009, ask an independent Codex agent to perform a read-only review of
+the exact candidate and governed range, including evidence trust boundaries, round
+immutability, worktree cleanup, anchor migration, sequence enforcement, carry-in
+reconciliation, role purity, and the complete gate ladder. Record the reviewer identity,
+exact commit, exact range, findings, and verdict truthfully. Resolve all actionable
+findings before merge. Do not call Claude and do not label this a Claude, Opus, or
+cross-provider PASS.
 
 Final report:
 
 `EVIDENCE PROTOCOL / LOCAL GATE / SWEEP / PROMPT OVERLAYS / AUTHORITY_DOCS MIGRATION /
 ROUND LIFECYCLE / WORKTREE ROOT / MACHINE PROOF / BATCH COMMITS / TESTS / COVERAGE /
-EXACT-MAIN CI / CLOSURE / CLAUDE REVIEW / STANDING NONCLAIM`.
+EXACT-MAIN CI / CLOSURE / INDEPENDENT CODEX REVIEW / STANDING NONCLAIM`.

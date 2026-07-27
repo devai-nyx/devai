@@ -88,6 +88,22 @@ function initialize(repo: string): void {
   execFileSync('git', ['add', '.devai/config/project.json', 'package.json', 'src/index.ts'], {
     cwd: repo,
   });
+  execFileSync(
+    'git',
+    [
+      '-c',
+      'user.name=DEVAI Inspector',
+      '-c',
+      'user.email=inspector@example.test',
+      'commit',
+      '-qm',
+      'fixture',
+    ],
+    { cwd: repo },
+  );
+  execFileSync('git', ['remote', 'add', 'origin', 'https://github.com/devai-nyx/fixture.git'], {
+    cwd: repo,
+  });
 }
 
 function context(overrides: Partial<VerifyContext> = {}): VerifyContext {
@@ -199,6 +215,12 @@ describe('local evidence policy and collection', () => {
     );
     expect(result.outputPath).toBe('proofs/override.json');
     expect(result.manifest.generatedAt).toBe(NOW.toISOString());
+    expect(result.manifest.expiresAt).toBe('2026-07-25T12:00:00.000Z');
+    expect(result.manifest.subject).toMatchObject({
+      repository: 'devai-nyx/fixture',
+      commitSha: expect.stringMatching(/^[a-f0-9]{40}$/u),
+      tree: { algorithm: 'sha1', value: expect.stringMatching(/^[a-f0-9]{40}$/u) },
+    });
     expect(result.manifest.sourceHash.fileCount).toBe(3);
     expect(result.manifest.jobs['unit']?.artifactChecksum.fileCount).toBe(2);
     expect(result.manifest.tools).toMatchObject({
@@ -277,6 +299,48 @@ describe('local evidence verification', () => {
       expect(
         verifyLocalEvidence({
           repoRoot: repo,
+          mode: 'gate',
+          context: context(),
+          trustedActors: ['trusted'],
+          now: NOW.getTime(),
+        }),
+      ).toMatchObject({ outcome: 'evidence-valid', evidenceMode: true });
+    });
+  });
+
+  it('KR-R5-021 survives its trailer commit and verifies from a fresh checkout', async () => {
+    const repo = root();
+    initialize(repo);
+    await collected(repo);
+    execFileSync('git', ['add', MANIFEST], { cwd: repo });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Inspector',
+        '-c',
+        'user.email=inspector@example.test',
+        'commit',
+        '-qm',
+        `test: bind evidence\n\nLocal-CI-Evidence: ${MANIFEST}`,
+      ],
+      { cwd: repo },
+    );
+    const fresh = root();
+    rmSync(fresh, { recursive: true, force: true });
+    execFileSync('git', ['clone', '-q', repo, fresh]);
+    execFileSync(
+      'git',
+      ['remote', 'set-url', 'origin', 'https://github.com/devai-nyx/fixture.git'],
+      {
+        cwd: fresh,
+      },
+    );
+
+    await withAuthorityHostTestScope(() => {
+      expect(
+        verifyLocalEvidence({
+          repoRoot: fresh,
           mode: 'gate',
           context: context(),
           trustedActors: ['trusted'],
@@ -396,6 +460,29 @@ describe('local evidence verification', () => {
         error: /source hash mismatch/,
       },
       {
+        name: 'explicit expiry',
+        mutate: (m) => ({ ...m, expiresAt: '2026-07-25T11:59:59.000Z' }),
+        error: /expiresAt/,
+      },
+      {
+        name: 'repository subject',
+        mutate: (m) => ({ ...m, subject: { ...m.subject, repository: 'other/repository' } }),
+        error: /repository subject mismatch/,
+      },
+      {
+        name: 'commit subject',
+        mutate: (m) => ({ ...m, subject: { ...m.subject, commitSha: 'f'.repeat(40) } }),
+        error: /commit subject mismatch/,
+      },
+      {
+        name: 'tree subject',
+        mutate: (m) => ({
+          ...m,
+          subject: { ...m.subject, tree: { ...m.subject.tree, value: 'f'.repeat(40) } },
+        }),
+        error: /tree subject mismatch/,
+      },
+      {
         name: 'source file count',
         mutate: (m) => ({
           ...m,
@@ -513,6 +600,16 @@ describe('local evidence verification', () => {
           now: NOW.getTime(),
         }),
       ).toThrow(LocalEvidenceError);
+      expect(() =>
+        verifyLocalEvidence({
+          repoRoot: repo,
+          mode: 'gate',
+          manifestPath: MANIFEST,
+          context: context(),
+          trustedActors: ['trusted'],
+          now: NOW.getTime(),
+        }),
+      ).toThrow(/caller-selected manifest paths are forbidden/);
     });
   });
 });

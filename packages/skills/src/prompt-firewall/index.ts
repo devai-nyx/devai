@@ -152,7 +152,23 @@ function overlaps(scope: string, reserved: string): boolean {
  * `evidence_only`.
  */
 function isEvidenceOnlyScope(scope: string): boolean {
-  return scope.startsWith('.devai/state/');
+  return (
+    scope.startsWith('.devai/state/') ||
+    scope.startsWith('record/proofs/work/skill-runs/') ||
+    scope.startsWith('record/proofs/work/rgr/')
+  );
+}
+
+function isArchitectDocumentWriter(m: SkillManifestShape, scope: string): boolean {
+  return (
+    m.authority_role === 'architect' &&
+    m.agent_class === 'review-agent' &&
+    m.permission_tier === 'write' &&
+    m.host_mutation_policy === 'write_requires_flag' &&
+    scope.startsWith('docs/') &&
+    !scope.endsWith('/') &&
+    !/[*?{}]/u.test(scope)
+  );
 }
 
 /**
@@ -166,68 +182,10 @@ function isDraftSubpath(scope: string): boolean {
 }
 
 /**
- * Fix-skill autofix exemption (R11-W6.07 extension, R2-Δ1 ship-now).
- *
- * A `family: 'fix'` skill with `auto_fix_capable: 'partial'` (or 'full')
- * and `agent_class: 'review-agent'` may write to its own gate's
- * authority-reserved surface, provided the declared scope is a tight
- * sub-glob (file-type-restricted) of a single reserved prefix. The
- * autofix is constitutionally constrained to mechanical edits — the
- * same way `fix-lint` mechanically edits TypeScript source — so naming
- * the gate's own surface in `allowed_write_scopes` is not authority
- * inversion. Each fix-skill's autofix logic is reviewed in code, and
- * the `host_mutation_policy: write_requires_flag` keeps the runtime
- * gate intact.
- *
- * The check requires strict containment: a scope like
- * `law/adr/<star><star>/<star>.md` is accepted because it's under
- * `law/adr/`, but a bare `law/adr/` or `law/adr/<star><star>`
- * without a file-extension restriction is rejected. This keeps the
- * exemption narrow.
+ * Agent-callable autofix never grants authority over Architect- or Owner-owned
+ * surfaces. Diagnose-only fix skills may inspect those paths with read authority;
+ * mutation requires the owning human role and governed ceremony.
  */
-function isAutofixSelfScope(m: SkillManifestShape, scope: string): boolean {
-  if (m.family !== 'fix') return false;
-  if (m.agent_class !== 'review-agent') return false;
-  if (m.auto_fix_capable !== 'partial' && m.auto_fix_capable !== 'full') return false;
-  // Require a file-extension restriction within the scope to prove the
-  // pattern targets specific authored artifacts, not the directory at
-  // large.
-  const hasFileExt = /\.[a-zA-Z]+(\{[^}]+\})?$/.test(scope) || /\{[^}]+\}$/.test(scope);
-  if (!hasFileExt) return false;
-  // R12 W2 hardening (per ADR-FIREWALL-OVERLAPS-GLOB-AWARE §Decision /
-  // "Exemption preservation"): the exemption requires strict containment
-  // of the scope's coverage set within a single reserved subtree. A
-  // wildcard-rooted glob (e.g. `**/*.md`) covers the whole repo and
-  // must NOT qualify — otherwise the broad-glob class re-enters the
-  // firewall through the exemption rather than through the
-  // (now-strengthened) overlap check.
-  //
-  // The path-segment prefix up to the first `**` wildcard must be a
-  // non-empty, non-trivial literal directory. Scopes whose first
-  // segment is `**` (or whose only literal segment before `**` is
-  // empty / `./`) are rejected.
-  const firstDoubleStar = scope.indexOf('**');
-  if (firstDoubleStar === -1) {
-    // No `**` present — the scope is a literal or single-segment
-    // pattern. The file-extension check above already ensures it
-    // targets a specific artifact type; any literal scope is fine.
-    return true;
-  }
-  const prefix = scope.slice(0, firstDoubleStar).replace(/\/+$/, '');
-  if (prefix.length === 0) return false;
-  // Reject prefixes that contain wildcards before the first `**`
-  // (e.g. `*/foo/**/*.md`). The exemption is for scopes rooted at a
-  // literal directory the skill plausibly governs, not patterns whose
-  // root segment is itself wild.
-  if (/[*?]/.test(prefix)) return false;
-  return true;
-}
-
-// reservedTagOf intentionally inlined into the rule branches below;
-// the explicit dispatch makes the authority attribution obvious in
-// each finding's `reserved_to` field. Kept as a comment marker so
-// future maintainers know the lookup table is intentional.
-
 export interface CheckPromptOverlaysOptions {
   readonly manifests: readonly SkillManifestShape[];
 }
@@ -264,12 +222,10 @@ export function checkPromptOverlays(opts: CheckPromptOverlaysOptions): PromptFir
     if (tier === 'write' || tier === 'act') {
       for (const s of scopes) {
         const exemptByDraft = cls === 'review-agent' && isDraftSubpath(s);
-        const exemptByAutofix = isAutofixSelfScope(m, s);
-        const architectBoundDeterministicSkill =
-          m.authority_role === 'architect' && m.deterministic === true && m.llm_backed === false;
+        const architectDocumentWriter = isArchitectDocumentWriter(m, s);
         for (const reserved of ARCHITECT_RESERVED) {
           if (overlaps(s, reserved)) {
-            if (exemptByDraft || exemptByAutofix || architectBoundDeterministicSkill) break;
+            if (exemptByDraft || architectDocumentWriter) break;
             findings.push({
               code: 'PROMPT_OVERLAY_AUTHORITY_INVERSION',
               severity: 'critical',
@@ -283,7 +239,7 @@ export function checkPromptOverlays(opts: CheckPromptOverlaysOptions): PromptFir
         }
         for (const reserved of OWNER_RESERVED) {
           if (overlaps(s, reserved)) {
-            if (exemptByDraft || exemptByAutofix) break;
+            if (exemptByDraft) break;
             findings.push({
               code: 'PROMPT_OVERLAY_AUTHORITY_INVERSION',
               severity: 'critical',

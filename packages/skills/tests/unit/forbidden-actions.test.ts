@@ -370,6 +370,53 @@ describe('scanForbiddenActions', () => {
     );
   });
 
+  it('KR-R5-027 does not classify a nested record segment as the top-level record tree', () => {
+    const source = join(dir, 'packages/cli/src/commands/record/run.ts');
+    mkdirSync(join(dir, '.devai/config'), { recursive: true });
+    mkdirSync(join(dir, 'packages/cli/src/commands/record'), { recursive: true });
+    writeFileSync(
+      join(dir, '.devai/config/forbidden-actions.json'),
+      JSON.stringify({ schemaVersion: '1.0.0', actions: CANONICAL_FORBIDDEN_ACTIONS }),
+    );
+    writeFileSync(source, 'export const value = 1;\n');
+    execFileSync('git', ['init', '-q'], { cwd: dir });
+    execFileSync('git', ['add', '.'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Engineer',
+        '-c',
+        'user.email=engineer@example.com',
+        'commit',
+        '-qm',
+        'seed',
+      ],
+      { cwd: dir },
+    );
+    writeFileSync(source, 'export const value = 2;\n');
+    execFileSync('git', ['add', 'packages/cli/src/commands/record/run.ts'], { cwd: dir });
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=DEVAI Engineer',
+        '-c',
+        'user.email=engineer@example.com',
+        'commit',
+        '-qm',
+        'fix(r0005): change nested record command',
+      ],
+      { cwd: dir },
+    );
+
+    expect(
+      scanForbiddenActions({ repoRoot: dir, maxCommits: 1 }).findings.filter(
+        (finding) => finding.forbidden_id === 'FORBID-MUTATE-INVARIANTS',
+      ),
+    ).toEqual([]);
+  });
+
   it.each([
     ['law/constitution.md', 'governed\n', 'changed\n'],
     ['law/trace.json', '{}\n', '{"changed":true}\n'],

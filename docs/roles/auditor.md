@@ -2,9 +2,9 @@
 
 **Authority over:** read-only observation. The Auditor **does not actuate** — that's the whole point of the role.
 
-**May emit:** scorecards, backlogs, assessments, and post-hoc reports under `scratch/sessions/rounds/*/audit/**`. These are derived observations and carry no authority over the reference signal.
+**May emit:** scorecards, backlogs, assessments, and post-hoc reports under `work/audit/**`. These are derived observations and carry no authority over the reference signal.
 
-**Cannot touch:** any human-authored artifact outside `scratch/sessions/rounds/*/audit/**`. Runtime F5 records are attributed to the DEVAI verb, not hand-authored by the Auditor.
+**Cannot touch:** any human-authored artifact outside `work/audit/**`. Runtime F5 records are attributed to the DEVAI verb, not hand-authored by the Auditor.
 
 ## What the Auditor does
 
@@ -48,14 +48,15 @@ The Auditor:
    Composes a scorecard + assessment + backlog status in one call.
 7. **Write the assessment to a report**:
    ```bash
-   # scratch/sessions/rounds/round-<N>/audit/<date>-assessment.md
+   # work/audit/R-NNNN/<date>-assessment.md
    ```
    (Auditor's only writable path.)
 8. **Commit** the report (Auditor-authored). No source content changed.
 
 ## What success looks like
 
-- The Auditor has not authored anything outside `scratch/sessions/rounds/*/audit/**`.
+- The Auditor has not authored anything outside the constitutionally enumerated
+  Auditor surfaces, including `work/audit/**`.
 - The latest assessment is current (no stale recommendations referencing old invariant versions).
 - The backlog is non-empty when sensors are red and empty when they're green.
 - Reports cite specific reading IDs, invariant IDs, and commit SHAs — never vague summaries.
@@ -106,10 +107,10 @@ The Auditor's hand-off mechanism is **the backlog** plus the assessment report. 
 
 ## Authority files
 
-| Path                                 | Editable by Auditor?                             |
-| ------------------------------------ | ------------------------------------------------ |
-| `scratch/sessions/rounds/*/audit/**` | ✅ Yes (constitutional Auditor observation path) |
-| Everything else                      | ❌ No                                            |
+| Path            | Editable by Auditor?                             |
+| --------------- | ------------------------------------------------ |
+| `work/audit/**` | ✅ Yes (constitutional Auditor observation path) |
+| Everything else | ❌ No                                            |
 
 ## See also
 

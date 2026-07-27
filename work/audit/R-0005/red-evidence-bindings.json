@@ -1,0 +1,143 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0005-RED-EVIDENCE-BINDINGS",
+  "round": "R-0005",
+  "authority": "Auditor",
+  "date": "2026-07-26",
+  "observations": [
+    {
+      "commit": "6ecbfd90ec4aec39d352f4bcf474b53c7530bc62",
+      "command": "pnpm vitest run packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
+        "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts"
+      ],
+      "failure_summary": "The initial R-0005 lifecycle contracts failed against absent exact evidence epochs, governed lifecycle, SWEEP, and review-selector behavior."
+    },
+    {
+      "commit": "75b435278a8d7eff97287ff170cb06eeb315e6c1",
+      "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
+      "exit_code": 1,
+      "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"],
+      "failure_summary": "The SWEEP child-routing contract failed before the registry-derived read-only child planner and broker predicate existed."
+    },
+    {
+      "commit": "faad6fdfda023f523310f0d8b478bf13b5182dd2",
+      "command": "pnpm vitest run packages/loop/tests/unit/worktrees-containment.test.ts packages/loop/tests/unit/scorecard-assess-narrative.test.ts packages/evidence/tests/unit/local-evidence.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "packages/evidence/tests/unit/local-evidence.test.ts",
+        "packages/loop/tests/unit/round-lifecycle-cases.ts",
+        "packages/loop/tests/unit/worktrees-containment.test.ts",
+        "tests/contract/r0005-independent-review.red.contract.test.ts"
+      ],
+      "failure_summary": "The independent-review contracts failed for unsafe worktree cleanup, incomplete lifecycle round-trip, self-invalidating evidence, live legacy writers, prompt bypass, missing attributable post-merge products, weak sequencing, and lexical anti-skip enforcement."
+    },
+    {
+      "commit": "7a17bc3a90c435e24692bb23ee86a67eb3264042",
+      "command": "pnpm vitest run packages/skills/tests/unit/forbidden-actions.test.ts -t KR-R5-027",
+      "exit_code": 1,
+      "tests": ["packages/skills/tests/unit/forbidden-actions.test.ts"],
+      "failure_summary": "The strict forbidden-action scanner falsely classified packages/cli/src/commands/record/run.ts as a mutation of the top-level Machine-owned record tree."
+    },
+    {
+      "commit": "beb081d5160a57b36b59d97f813abc77ed99f3eb",
+      "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
+      "exit_code": 1,
+      "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"],
+      "failure_summary": "The public single-sensor projection retained the parent harness-write authority even when the exact registry-derived child was read-only."
+    },
+    {
+      "commit": "f2a9d60bd8b7fc79ddd8bc09ffbd0d6d678652a1",
+      "command": "pnpm vitest run packages/loop/tests/unit/adherence-reverse.test.ts -t KR-R5-029",
+      "exit_code": 1,
+      "tests": ["packages/loop/tests/unit/governance-ledger-cases.ts"],
+      "failure_summary": "The governance-history YAML subset parser treated a validator-accepted semicolon-separated inline array as one scalar and could not resolve canonical supersession links."
+    },
+    {
+      "commit": "bf727194e9d1cdf84ceb8b6fd690a277423cef36",
+      "command": "pnpm vitest run tests/contract/r0005-independent-review.red.contract.test.ts packages/skills/tests/unit/prompt-firewall.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "tests/contract/r0005-independent-review.red.contract.test.ts",
+        "packages/skills/tests/unit/prompt-firewall.test.ts"
+      ],
+      "failure_summary": "The second-review contracts demonstrated that legacy aggregate-chain writers remained public and exact lifecycle skill identities still bypassed reserved prompt scopes."
+    },
+    {
+      "commit": "aec56d3c606bb3a3db52dea3badd3aa726b5d399",
+      "command": "pnpm vitest run packages/skills/tests/unit/governance-skills.test.ts packages/skills/tests/unit/llm.test.ts -t \"KR-R5-036|materializes audit/backlog\"",
+      "exit_code": 1,
+      "tests": [
+        "packages/skills/tests/unit/governance-skills.test.ts",
+        "packages/skills/tests/unit/skill-implementation-cases.ts"
+      ],
+      "failure_summary": "Unsafe governance adapters remained in the agent-skill catalog and round backlog materialization still wrote directly into Architect-owned round intent."
+    },
+    {
+      "commit": "a086ef48bb4b072260121a5c1ff83bcb50b4c828",
+      "command": "pnpm vitest run packages/skills/tests/unit/llm.test.ts -t \"materializes audit/backlog\"",
+      "exit_code": 1,
+      "tests": ["packages/skills/tests/unit/skill-implementation-cases.ts"],
+      "failure_summary": "Disposable backlog prompt proposals retained broken relative references instead of binding their governed round plan and Auditor inputs."
+    },
+    {
+      "commit": "67aa7940fd3b52daca219847fd11d7201e830f2f",
+      "command": "pnpm vitest run packages/skills/tests/unit/governance-skills.test.ts packages/skills/tests/unit/round-state-routing.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "packages/skills/tests/unit/governance-skills.test.ts",
+        "packages/skills/tests/unit/round-state-routing.test.ts",
+        "tests/contract/r0005-independent-review.red.contract.test.ts"
+      ],
+      "failure_summary": "The third-review contracts demonstrated agent-callable ADR mutation, split disposable round-state routing, and obsolete move-and-stage lifecycle documentation before the governed repairs."
+    },
+    {
+      "commit": "7693b2ba715e8781936fbb5fdaef8b83e053be4d",
+      "command": "pnpm vitest run tests/contract/r0005-independent-review.red.contract.test.ts tests/contract/governed-sequencing.contract.test.ts",
+      "exit_code": 1,
+      "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"],
+      "failure_summary": "The fourth-review contract rejected neither unrelated semantic red scope nor an exact disclosed historical commit exception before the sequencing checker repair."
+    },
+    {
+      "commit": "1abffa844415f8abb4a83956e3ce60a50cfde8dc",
+      "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts",
+      "exit_code": 1,
+      "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"],
+      "failure_summary": "The fifth-review adversaries proved that application and root-tooling Engineer commits escaped the narrow implementation classifier and that a prospective round-wide exception bypassed every binding."
+    },
+    {
+      "commit": "c5ac6a86e994e0f31d47aa8a411929bab2a93e00",
+      "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts",
+      "exit_code": 1,
+      "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"],
+      "failure_summary": "The sixth-review adversaries proved that .prettierignore and vitest.workspace.ts escaped the root implementation classifier and that sequencing policy could diverge from canonical rootEngineerPaths authority."
+    },
+    {
+      "commit": "70450716da0e3fb065b48470dc4d732cd36a6296",
+      "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "tests/contract/governed-sequencing.contract.test.ts",
+        "tests/contract/r0005-independent-review.red.contract.test.ts"
+      ],
+      "exercised_implementation_paths": ["packages/cli/src/authority/policy.ts"],
+      "failure_summary": "The seventh-review adversaries proved that the live eslint.config.mjs escaped root sequencing and that the R-0005 as-built carried two mutually inconsistent implementation snapshots."
+    },
+    {
+      "commit": "58800330b23d6064d338813a07ebd8301941185f",
+      "command": "pnpm vitest run packages/cli/tests/contract/successor-operational-law.contract.test.ts tests/contract/governed-sequencing.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "packages/cli/tests/contract/successor-operational-law.contract.test.ts",
+        "tests/contract/governed-sequencing.contract.test.ts"
+      ],
+      "exercised_implementation_paths": [".devai/config/authority-policy.json"],
+      "failure_summary": "The eighth-review contract proved that both committed authority-policy materializations retained the obsolete eslint.config.js root rule and stale provenance after the canonical policy changed to eslint.config.*."
+    }
+  ]
+}

@@ -19,7 +19,7 @@
       "rationale": "Red-first schema, frame, isolation, and CLI contracts exercise the report-only validator boundary."
     }
   },
-  "authority": {
+  "authority_docs": {
     "docs": [
       {
         "doc": "docs/meta/adr/ADR-006-independent-completion-evidence.md",

@@ -19,7 +19,7 @@
       "rationale": "The registered test corpus provides deterministic regression evidence for this invariant."
     }
   },
-  "authority": {
+  "authority_docs": {
     "docs": [
       {
         "doc": "docs/meta/adr/ADR-004-published-truth-operational-self-adoption.md",

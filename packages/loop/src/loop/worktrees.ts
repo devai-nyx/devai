@@ -1,13 +1,13 @@
 import { execFileSync } from '@devai-nyx/authority';
 import {
   existsSync,
+  lstatSync,
   mkdirSync,
   readFileSync,
-  readdirSync,
   rmSync,
   writeFileSync,
 } from '@devai-nyx/authority';
-import { join, resolve } from 'node:path';
+import { join, resolve, sep } from 'node:path';
 
 export interface WorktreeRecord {
   readonly id: string;
@@ -31,7 +31,7 @@ export interface CreateWorktreeOptions {
 }
 
 function worktreesDir(repoRoot: string): string {
-  return join(repoRoot, 'scratch/worktrees');
+  return join(repoRoot, '.devai/worktrees');
 }
 
 function registryPath(repoRoot: string): string {
@@ -75,6 +75,9 @@ function activeNonAdoptedCount(registry: WorktreeRegistry): number {
 }
 
 export function createWorktree(opts: CreateWorktreeOptions): WorktreeRecord {
+  if (!/^WT-[A-Za-z0-9._-]+$/u.test(opts.id)) {
+    throw new Error(`invalid managed worktree id: ${opts.id}`);
+  }
   const registry = loadRegistry(opts.repoRoot);
 
   // Cap enforcement (D-52). Human-adopted worktrees are cap-exempt.
@@ -116,19 +119,50 @@ export function createWorktree(opts: CreateWorktreeOptions): WorktreeRecord {
   return record;
 }
 
-export function destroyWorktree(opts: { repoRoot: string; id: string }): void {
+export function destroyWorktree(opts: {
+  repoRoot: string;
+  id: string;
+  forceHumanAdopted?: boolean;
+}): void {
+  if (!/^WT-[A-Za-z0-9._-]+$/u.test(opts.id)) {
+    throw new Error(`invalid managed worktree id: ${opts.id}`);
+  }
   const registry = loadRegistry(opts.repoRoot);
   const record = registry.worktrees.find((w) => w.id === opts.id);
+  if (record?.human_adopted === true && opts.forceHumanAdopted !== true) {
+    throw new Error(`refusing to destroy human-adopted worktree: ${opts.id}`);
+  }
   if (record !== undefined) {
+    const managedRoot = resolve(worktreesDir(opts.repoRoot));
+    const expectedPath = resolve(managedRoot, opts.id);
+    const recordedPath = resolve(record.path);
+    if (
+      recordedPath !== expectedPath ||
+      !recordedPath.startsWith(`${managedRoot}${sep}`) ||
+      lstatSync(recordedPath).isSymbolicLink()
+    ) {
+      throw new Error('WORKTREE_REGISTRY_PATH_INVALID');
+    }
+    const registeredPaths = execFileSync('git', ['worktree', 'list', '--porcelain'], {
+      cwd: opts.repoRoot,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    })
+      .split('\n')
+      .filter((line) => line.startsWith('worktree '))
+      .map((line) => resolve(line.slice('worktree '.length)));
+    if (!registeredPaths.includes(recordedPath)) {
+      throw new Error('WORKTREE_GIT_REGISTRATION_MISSING');
+    }
     try {
-      execFileSync('git', ['worktree', 'remove', record.path, '--force'], {
+      execFileSync('git', ['worktree', 'remove', expectedPath, '--force'], {
         cwd: opts.repoRoot,
         stdio: ['ignore', 'pipe', 'pipe'],
       });
     } catch {
       // Fall back to manual rm.
       try {
-        rmSync(record.path, { recursive: true, force: true });
+        rmSync(expectedPath, { recursive: true, force: true });
       } catch {
         // give up
       }
@@ -171,24 +205,8 @@ export function reapWorktrees(opts: { repoRoot: string }): readonly string[] {
     }
     remaining.push(w);
   }
-  // Also detect directories under scratch/worktrees/ that the registry doesn't know about.
-  const wtRoot = worktreesDir(opts.repoRoot);
-  if (existsSync(wtRoot)) {
-    for (const name of readdirSync(wtRoot)) {
-      if (!remaining.some((w) => w.id === name)) {
-        const fullPath = join(wtRoot, name);
-        try {
-          execFileSync('git', ['worktree', 'remove', fullPath, '--force'], {
-            cwd: opts.repoRoot,
-            stdio: ['ignore', 'pipe', 'pipe'],
-          });
-        } catch {
-          rmSync(fullPath, { recursive: true, force: true });
-        }
-        reaped.push(name);
-      }
-    }
-  }
+  // Unknown directories are deliberately preserved: they may be unrelated or
+  // human-managed worktrees and the registry has no authority to delete them.
   registry.worktrees = remaining;
   saveRegistry(opts.repoRoot, registry);
   return reaped.sort();

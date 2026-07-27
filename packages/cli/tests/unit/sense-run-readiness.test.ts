@@ -1,5 +1,7 @@
 // Invariants: INV-DEVAI-019
 import { describe, expect, it } from 'vitest';
+import { readOnlyDevaiChild } from '../../src/authority/sense-run-child.js';
+import { invocationIsNonMutating } from '../../src/command-router.js';
 import * as runSet from '../../src/commands/sense/run-set.js';
 
 type Child = {
@@ -32,6 +34,188 @@ function aggregate(children: readonly Child[]): Aggregate {
 }
 
 describe('sense run readiness aggregation', () => {
+  it('KR-R5-028 projects only an exact registry-resolved read sensor to a read boundary', () => {
+    const classify = invocationIsNonMutating as (
+      internalName: string,
+      args: readonly string[],
+      entries: readonly unknown[],
+    ) => boolean;
+    const entries = [
+      {
+        internal_name: 'sense-decision-record-integrity',
+        path: ['sense', 'decision', 'record-integrity'],
+        effects: 'read',
+        previous_name: 'sense decision-record-integrity',
+      },
+      {
+        internal_name: 'sense-readings-rebuild',
+        path: ['sense', 'readings', 'rebuild'],
+        effects: 'local-write',
+        previous_name: 'sense readings rebuild',
+      },
+    ];
+    const argv = (kind: string, ...extra: string[]) => [
+      '/usr/bin/node',
+      '/repo/packages/cli/dist/bin.js',
+      'sense',
+      'run',
+      kind,
+      '--repo-root',
+      '/repo',
+      ...extra,
+    ];
+
+    expect(classify('sense-run', argv('decision_record_integrity'), entries)).toBe(true);
+    expect(classify('sense-run', argv('decision_record_integrity', '--write'), entries)).toBe(
+      false,
+    );
+    expect(classify('sense-run', argv('inventory_regeneration'), entries)).toBe(false);
+    expect(classify('sense-run', argv('unknown_kind'), entries)).toBe(false);
+    expect(
+      classify(
+        'sense-run',
+        ['/usr/bin/node', '/cli.js', 'sense', 'run', '--set', 'sweep'],
+        entries,
+      ),
+    ).toBe(false);
+  });
+
+  it('plans non-read registry children as honest blockers instead of spawning them', () => {
+    const plan = (
+      runSet as unknown as {
+        planSensorChild?: (
+          command: readonly string[],
+          executable: string,
+          entries: readonly unknown[],
+          version: string,
+        ) => { readonly argv: readonly string[]; readonly runnable: boolean };
+      }
+    ).planSensorChild;
+    expect(plan, 'run-set must expose deterministic child planning').toBeTypeOf('function');
+    if (plan === undefined) throw new Error('planSensorChild is not implemented');
+    const entries = [
+      {
+        internal_name: 'sense-type-check',
+        path: ['sense', 'type', 'check'],
+        effects: 'read',
+        previous_name: 'sense type check',
+      },
+      {
+        internal_name: 'sense-readings-rebuild',
+        path: ['sense', 'readings', 'rebuild'],
+        effects: 'local-write',
+        previous_name: 'sense readings rebuild',
+      },
+    ];
+
+    expect(
+      plan(['sense', 'run', 'type_check', '--repo-root', '/repo'], '/cli.js', entries, '1.0.0'),
+    ).toEqual({ argv: ['sense', 'type', 'check', '--repo-root', '/repo'], runnable: true });
+    expect(
+      plan(
+        ['sense', 'run', 'inventory_regeneration', '--repo-root', '/repo'],
+        '/cli.js',
+        entries,
+        '1.0.0',
+      ),
+    ).toEqual({
+      argv: ['sense', 'readings', 'rebuild', '--repo-root', '/repo'],
+      runnable: false,
+    });
+    expect(
+      plan(
+        ['sense', 'run', 'test_weakening_review', '--repo-root', '/repo'],
+        '/cli.js',
+        entries,
+        '1.0.0',
+      ),
+    ).toEqual({ argv: [], runnable: false });
+  });
+
+  it('routes a registry-derived public sensor child to its internal binding', () => {
+    const route = (
+      runSet as unknown as {
+        routeSensorChildArgv?: (
+          command: readonly string[],
+          executable: string,
+          entries: readonly unknown[],
+          version: string,
+        ) => readonly string[];
+      }
+    ).routeSensorChildArgv;
+    expect(route, 'run-set must route child aliases before spawning').toBeTypeOf('function');
+    if (route === undefined) throw new Error('routeSensorChildArgv is not implemented');
+    const entries = [
+      {
+        internal_name: 'sense-type-check',
+        path: ['sense', 'type', 'check'],
+        effects: 'read',
+        previous_name: 'sense type check',
+      },
+    ];
+    expect(
+      route(['sense', 'run', 'type_check', '--repo-root', '/repo'], '/cli.js', entries, '1.0.0'),
+    ).toEqual(['sense', 'type', 'check', '--repo-root', '/repo']);
+  });
+
+  it('admits only an exact read-only public sensor child under the aggregate scope', () => {
+    const admits = readOnlyDevaiChild as (
+      executable: string,
+      args: readonly string[],
+      entries: readonly unknown[],
+      parentAction: string,
+    ) => boolean;
+    const currentCli = process.argv[1] ?? '';
+    const readEntry = {
+      internal_name: 'sense-type-check',
+      path: ['sense', 'type', 'check'],
+      effects: 'read',
+      previous_name: 'sense type check',
+    };
+    const writeEntry = { ...readEntry, internal_name: 'sense-write', effects: 'local-write' };
+
+    expect(
+      admits(
+        process.execPath,
+        [currentCli, 'sense', 'type', 'check', '--repo-root', '/repo'],
+        [readEntry],
+        'sense run',
+      ),
+    ).toBe(true);
+    expect(
+      admits(
+        process.execPath,
+        [currentCli, 'sense', 'unknown', '--repo-root', '/repo'],
+        [readEntry],
+        'sense run',
+      ),
+    ).toBe(false);
+    expect(
+      admits(
+        process.execPath,
+        [currentCli, 'sense', 'write', '--repo-root', '/repo'],
+        [writeEntry],
+        'sense run',
+      ),
+    ).toBe(false);
+    expect(
+      admits(
+        process.execPath,
+        [currentCli, 'sense', 'type', 'check', '--repo-root', '/repo', '--write'],
+        [readEntry],
+        'sense run',
+      ),
+    ).toBe(false);
+    expect(
+      admits(
+        process.execPath,
+        [currentCli, 'sense-type-check', '--repo-root', '/repo'],
+        [readEntry],
+        'sense run',
+      ),
+    ).toBe(false);
+  });
+
   it('preserves N/A, REVIEW, and UNKNOWN without translating them to PASS or FAIL', () => {
     const result = aggregate([
       { command: 'one', processStatus: 0, stdout: reading('pass'), stderr: '' },

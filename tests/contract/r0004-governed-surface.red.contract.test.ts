@@ -21,6 +21,19 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '../..');
 const BIN = join(ROOT, 'packages/cli/dist/bin.js');
 const DRIVER = join(ROOT, 'packages/cli/tests/fixtures/authorized-cli-test-driver.mjs');
+const CONDITIONAL_SKIP_SOURCE_ALLOWLIST = [
+  'packages/cli/tests/contract/action-coverage.contract.test.ts',
+  'packages/cli/tests/contract/successor-operational-law.contract.test.ts',
+  'tests/e2e/bare-domain-help.e2e.test.ts',
+  'tests/e2e/cli-help.smoke.test.ts',
+  'tests/e2e/post-merge-auditor.e2e.test.ts',
+  'tests/e2e/usage-exit-codes.e2e.test.ts',
+  'tests/integration/action-effects-binding.integration.test.ts',
+  'tests/integration/ci-scaffold.integration.test.ts',
+  'tests/integration/hooks-install.integration.test.ts',
+  'tests/integration/runtime-probe-data.integration.test.ts',
+  'tests/integration/sensor-descriptor-cli-parity.integration.test.ts',
+] as const;
 const DISPOSITION = JSON.parse(
   readFileSync(join(ROOT, 'work/rounds/R-0004/surface-disposition.json'), 'utf8'),
 ) as {
@@ -212,8 +225,8 @@ describe('R-0004 governed surface red-first contracts', () => {
       rules: string[];
     };
     expect(output.ok).toBe(true);
-    expect(output.canonical_total).toBe(55);
-    expect(DISPOSITION.schemas.canonical_total).toBe(output.canonical_total);
+    expect(output.canonical_total).toBe(56);
+    expect(DISPOSITION.schemas.canonical_total).toBe(55);
     expect(output.rules).toEqual(
       expect.arrayContaining([
         'recursive-closed-complete-objects',
@@ -352,7 +365,11 @@ describe('R-0004 governed surface red-first contracts', () => {
     const { canonical_total: canonicalTotal } = JSON.parse(result.stdout) as {
       canonical_total: number;
     };
-    expect(contract).toContain(`across all ${canonicalTotal} schemas`);
+    expect(canonicalTotal).toBe(56);
+    expect(contract).toContain('across all 55 schemas');
+    expect(
+      readFileSync(join(ROOT, 'work/rounds/R-0005/documentation-reconciliation.md'), 'utf8'),
+    ).toContain('55-schema exit');
   });
 
   it('BL-164/167 keeps resolvable public command descriptions equal to the canonical registry', () => {
@@ -591,5 +608,43 @@ describe('R-0004 governed surface red-first contracts', () => {
     expect(source).toContain('disposition');
     expect(source).not.toContain('localeCompare');
     expect(source).toContain('compareUtf8Bytes');
+  });
+
+  it('BL-178 pins every source capable of introducing a conditional skip', () => {
+    const detector = join(ROOT, 'scripts/detect-conditional-skips.mjs');
+    const detection = spawnSync('node', [detector, '--repo-root', ROOT, '--json'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+    });
+    expect(detection.status, detection.stderr).toBe(0);
+    const observedConditionalSkipSources = (JSON.parse(detection.stdout) as { sources: string[] })
+      .sources;
+    expect(observedConditionalSkipSources).toEqual([...CONDITIONAL_SKIP_SOURCE_ALLOWLIST].sort());
+
+    const fixture = mkdtempSync(join(tmpdir(), 'devai-conditional-skip-'));
+    const adversary = 'adversary.test.ts';
+    const benign = 'benign.test.ts';
+    writeFileSync(
+      join(fixture, adversary),
+      [
+        'test.skip("direct", () => {});',
+        'suite["skipIf"](true)("conditional", () => {});',
+        'const later = built ? test : test.skip;',
+        'skipWhenMissing("wrapper", () => {});',
+        'test.runIf(built)("inverse", () => {});',
+      ].join('\n'),
+    );
+    writeFileSync(join(fixture, benign), 'test("runs", () => {});\n');
+    const adversarial = spawnSync(
+      'node',
+      [detector, '--repo-root', fixture, '--file', adversary, '--file', benign, '--json'],
+      { cwd: ROOT, encoding: 'utf8' },
+    );
+    try {
+      expect(adversarial.status, adversarial.stderr).toBe(0);
+      expect(JSON.parse(adversarial.stdout)).toEqual({ sources: [adversary] });
+    } finally {
+      rmSync(fixture, { recursive: true, force: true });
+    }
   });
 });

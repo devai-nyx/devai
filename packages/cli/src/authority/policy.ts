@@ -609,7 +609,7 @@ export function buildTrustedAuthoritySources(
     'pnpm-workspace.yaml',
     'tsconfig*.json',
     'vitest*.ts',
-    'eslint.config.js',
+    'eslint.config.*',
     '.prettier*',
   ];
   const rootArchitectPaths = [

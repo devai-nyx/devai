@@ -119,9 +119,6 @@
       "lifecycle": "prompt-bearing",
       "asset": "skills.json#SKILL-plan-blueprint"
     },
-    { "skill_id": "SKILL-round-scaffold", "lifecycle": "non-prompt-bearing", "asset": null },
-    { "skill_id": "SKILL-round-archive", "lifecycle": "non-prompt-bearing", "asset": null },
-    { "skill_id": "SKILL-adr-new", "lifecycle": "non-prompt-bearing", "asset": null },
     { "skill_id": "SKILL-fix-typecheck", "lifecycle": "non-prompt-bearing", "asset": null },
     { "skill_id": "SKILL-fix-coverage", "lifecycle": "non-prompt-bearing", "asset": null },
     { "skill_id": "SKILL-fix-mutation", "lifecycle": "non-prompt-bearing", "asset": null },

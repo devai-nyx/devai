@@ -6,10 +6,10 @@
 
 ## Required inputs
 
-- `scratch/sessions/rounds/round-{{round_n}}/audit/scorecard.baseline.json` (the pre-round snapshot).
+- `work/audit/R-{{round_n}}/scorecard.baseline.json` (the attributable pre-round snapshot).
 - All worker outputs from the orchestrate phase.
-- `scratch/sessions/rounds/round-{{round_n}}/log.txt`.
-- `scratch/sessions/rounds/round-{{round_n}}/blockers.md` (if any).
+- `.devai/state/round-runs/R-{{round_n}}/orchestrate/*.log`.
+- `.devai/state/decisions.jsonl` (if any runtime blockers exist).
 
 ## Goal
 
@@ -29,25 +29,25 @@ Verify the round's claimed outcomes by re-running all gates and comparing the cu
    ```bash
    devai agent skill run SKILL-compute-scorecard --repo-root .
    ```
-   Persist to `scratch/sessions/rounds/round-{{round_n}}/closeout/scorecard.after.json`.
+   Persist to `.devai/state/round-runs/R-{{round_n}}/verify-publish/closeout/scorecard.after.json`.
 3. **Diff against baseline.**
    ```bash
-   diff <(jq -S . scratch/sessions/rounds/round-{{round_n}}/audit/scorecard.baseline.json) \
-        <(jq -S . scratch/sessions/rounds/round-{{round_n}}/closeout/scorecard.after.json)
+   diff <(jq -S . work/audit/R-{{round_n}}/scorecard.baseline.json) \
+        <(jq -S . .devai/state/round-runs/R-{{round_n}}/verify-publish/closeout/scorecard.after.json)
    ```
    Document the cell-by-cell delta: which cells flipped PASS → FAIL (regressions), REVIEW → PASS (resolutions), UNKNOWN → PASS (newly measurable), N/A overrides added.
-4. **Write `scratch/sessions/rounds/round-{{round_n}}/closeout.md`** with:
+4. **Write `.devai/state/round-runs/R-{{round_n}}/verify-publish/Closeout.md`** with:
    - **Verdict** — round closed clean, closed with blockers, or aborted.
    - **Scorecard delta** — table of flipped cells.
    - **Backlog disposition** — each backlog item: shipped, deferred to round N+1, or escalated.
    - **Blockers** — open from `blockers.md`.
    - **Next round prep** — what should be on round N+1's audit reading list.
-5. **STOP.** The human operator reviews `closeout.md` and either re-opens the round or independently promotes a durable result through the result's owning schema, role, and verification ceremony. Never stage, cite, or publish `.devai/local/` content.
+5. **STOP.** The human operator reviews `Closeout.md` and either re-opens the round or independently promotes a durable result through the result's owning schema, role, and verification ceremony. Never stage, cite, or publish `.devai/state/` content.
 
 ## Deliverables
 
-- `scratch/sessions/rounds/round-{{round_n}}/closeout/scorecard.after.json`.
-- `scratch/sessions/rounds/round-{{round_n}}/closeout.md`.
+- `.devai/state/round-runs/R-{{round_n}}/verify-publish/closeout/scorecard.after.json`.
+- `.devai/state/round-runs/R-{{round_n}}/verify-publish/Closeout.md`.
 
 ## Acceptance
 

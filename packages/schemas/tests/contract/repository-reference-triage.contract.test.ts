@@ -50,7 +50,7 @@ function trackedReferenceLocators(): string[] {
 }
 
 describe('repository-name reference triage', () => {
-  it('classifies every committed post-rename reference exactly once', () => {
+  it('reproduces every current tracked reference exactly once', () => {
     expect(existsSync(TRIAGE), 'BL-047 requires a committed semantic reference map').toBe(true);
     if (!existsSync(TRIAGE)) return;
     const report = JSON.parse(readFileSync(TRIAGE, 'utf8')) as {

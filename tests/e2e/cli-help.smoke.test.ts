@@ -48,7 +48,7 @@ describe('CLI binary smoke', () => {
     expect(parsed.every((a) => typeof a.name === 'string')).toBe(true);
   });
 
-  skipIfNotBuilt('`skill list` produces 55 skill manifests', () => {
+  skipIfNotBuilt('`skill list` produces 52 skill manifests', () => {
     // DEVAI R2 bumped 37 → 42 (added 5 round-execute composers).
     // DEVAI R3-W3 bumped 42 → 52 (added 10 SKILL-fix-<gate-id> catalog-fill skills:
     // typecheck, coverage, mutation, spec-validate, action-coverage, docs-links,
@@ -56,7 +56,7 @@ describe('CLI binary smoke', () => {
     const r = run(['agent', 'skill', 'list']);
     expect(r.status).toBe(0);
     const parsed = JSON.parse(r.stdout) as { count: number };
-    expect(parsed.count).toBe(55);
+    expect(parsed.count).toBe(52);
   });
 
   skipIfNotBuilt('an unknown command fails closed with a suggestion', () => {
