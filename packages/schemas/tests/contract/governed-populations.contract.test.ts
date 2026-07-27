@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
 import { getValidator, listSchemaFiles } from '../../src/index.js';
+import { ROSTER } from '../../src/roster.js';
 
 const ROOT = join(import.meta.dirname, '..', '..', '..', '..');
 
@@ -14,6 +16,17 @@ describe('governed population count guards', () => {
     const files = readdirSync(join(ROOT, 'law', 'schemas'))
       .filter((file) => file.endsWith('.schema.json'))
       .sort();
+    const tracked = execFileSync('git', ['ls-files', ':(glob)law/schemas/*.schema.json'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+    })
+      .trim()
+      .split('\n')
+      .filter((file) => file.endsWith('.schema.json'))
+      .map((file) => basename(file))
+      .sort();
+    expect(files).toEqual([...ROSTER].sort());
+    expect(files).toEqual(tracked);
     expect(files).toEqual(listSchemaFiles());
     expect(new Set(files).size).toBe(files.length);
     expect(files.length).toBeGreaterThan(0);

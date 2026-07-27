@@ -118,6 +118,7 @@ function policy(overrides: Record<string, unknown> = {}): string {
         verb_path: 'packages/cli/src/commands/govern/phase-close.ts',
         closure_path: 'record/proofs/compliance/closures/PC-9999.json',
         command: ['node', 'fixture/phase-close.mjs'],
+        range_check: ['node', 'fixture/range-check.mjs'],
       },
       semantic_assertions: {
         population_sources: ['law/**/*.json', 'packages/**/*.ts', 'tests/**/*.ts'],
@@ -168,6 +169,11 @@ function fixture(): Fixture {
     'fixture/phase-close.mjs',
     "import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';\nconst draft = JSON.parse(readFileSync(0, 'utf8'));\nconst path = 'record/proofs/compliance/closures/PC-9999.json';\nconst record = { ...draft, schemaVersion: '1.0.0', id: 'PC-9999' };\nmkdirSync('record/proofs/compliance/closures', { recursive: true });\nwriteFileSync(path, JSON.stringify(record) + '\\n');\nprocess.stdout.write(JSON.stringify({ ok: true, path, record }) + '\\n');\n",
   );
+  put(
+    root,
+    'fixture/range-check.mjs',
+    "const value = (name) => process.argv[process.argv.indexOf(name) + 1];\nprocess.stdout.write(JSON.stringify({ ok: true, base: value('--base'), head: value('--head'), commits_checked: 1, findings: [] }) + '\\n');\n",
+  );
   put(root, 'product/fixture.json', '{}\n');
   put(root, 'packages/fixture/index.ts', 'export const fixture = true;\n');
   put(root, 'tests/fixture.test.ts', 'export const fixtureTest = true;\n');
@@ -183,6 +189,7 @@ function fixture(): Fixture {
     'fixture/gate.mjs',
     'fixture/projection.mjs',
     'fixture/phase-close.mjs',
+    'fixture/range-check.mjs',
     'product/fixture.json',
     'packages/fixture/index.ts',
     'tests/fixture.test.ts',
@@ -926,6 +933,91 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     const drift = run(current.root, ['policy-check']);
     expect(findings(drift)).toEqual(
       expect.arrayContaining([expect.objectContaining({ code: 'POLICY_MIRROR_DRIFT' })]),
+    );
+  });
+
+  it('rejects second-pass workspace, coverage-byte, and command-outcome drift', () => {
+    const current = fixture();
+    put(
+      current.root,
+      'fixture/gate.mjs',
+      "import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';\nconst gate = process.argv[2];\nconst counterPath = 'scratch/pass-counter';\nif (gate === 'formatting') { mkdirSync('scratch', { recursive: true }); const pass = existsSync(counterPath) ? Number(readFileSync(counterPath, 'utf8')) + 1 : 1; writeFileSync(counterPath, String(pass)); if (pass === 2) process.exitCode = 1; }\nif (gate === 'ordinary') { const pass = Number(readFileSync(counterPath, 'utf8')); mkdirSync('scratch/coverage/t1-t3', { recursive: true }); writeFileSync('scratch/coverage/t1-t3/coverage-summary.json', JSON.stringify({ total: Object.fromEntries(['statements', 'branches', 'functions', 'lines'].map((key) => [key, { pct: pass === 1 ? 100 : 99 }])) }) + '\\n'); }\n",
+    );
+    const head = commit(current.root, 'DEVAI Engineer', 'test: introduce pass-two drift', [
+      'fixture/gate.mjs',
+    ]);
+    const result = run(current.root, [
+      'converge',
+      '--round',
+      'R-0006',
+      '--base',
+      current.base,
+      '--head',
+      head,
+    ]);
+    expect(result.status).not.toBe(0);
+    expect(findings(result)).toEqual(
+      expect.arrayContaining(
+        [
+          'CONVERGENCE_WRITE_DETECTED',
+          'CONVERGENCE_COVERAGE_DRIFT',
+          'CONVERGENCE_RESULT_DRIFT',
+        ].map((code) => expect.objectContaining({ code })),
+      ),
+    );
+  });
+
+  it('rejects a caller-selected reviewed SHA even when the review record is valid', () => {
+    const current = fixture();
+    const digest = putReviewManifest(current.root, current.candidate);
+    put(
+      current.root,
+      'work/audit/R-0006/review.md',
+      `---\nverdict: PASS\nreviewer_model: claude-opus-5\nreview_candidate: ${current.candidate}\nmanifest_digest_sha256: ${digest}\n---\n`,
+    );
+    commit(current.root, 'DEVAI Auditor', 'audit(r0006): record independent review', [
+      'work/audit/R-0006/review.md',
+    ]);
+    const result = run(current.root, [
+      'envelope',
+      '--reviewed-sha',
+      current.candidate,
+      '--head',
+      git(current.root, ['rev-parse', 'HEAD']),
+      '--review-record',
+      'work/audit/R-0006/review.md',
+    ]);
+    expect(result.status).not.toBe(0);
+    expect(findings(result)).toEqual(
+      expect.arrayContaining([expect.objectContaining({ code: 'REVIEWED_SHA_CALLER_FORBIDDEN' })]),
+    );
+  });
+
+  it('rejects a closure rehearsal when the configured exact-range checker rejects', () => {
+    const current = fixture();
+    put(
+      current.root,
+      'fixture/range-check.mjs',
+      "process.stdout.write(JSON.stringify({ ok: false, commits_checked: 1, findings: [{ rule: 'fixture-reject' }] }) + '\\n');\nprocess.exitCode = 1;\n",
+    );
+    const candidate = commit(current.root, 'DEVAI Engineer', 'test: reject fixture range', [
+      'fixture/range-check.mjs',
+    ]);
+    const result = run(current.root, [
+      'rehearse',
+      '--round',
+      'R-0006',
+      '--base',
+      current.base,
+      '--candidate',
+      candidate,
+    ]);
+    expect(result.status).not.toBe(0);
+    expect(findings(result)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: 'CLOSURE_REHEARSAL_RANGE_INVALID' }),
+        expect.objectContaining({ code: 'CLOSURE_REHEARSAL_NOT_PC_ONLY' }),
+      ]),
     );
   });
 });

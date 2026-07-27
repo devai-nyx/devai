@@ -54,3 +54,22 @@ pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts
 It exits 1 with 7 failures and 13 passes before the new law or Engineer repair. These
 reds authorize only the independent-review corrections inside the E0-E5 prelude; B0
 and every publication/release action remain forbidden.
+
+The mandatory `claude-opus-5` review of candidate
+`fcbeb2b69621d8de32fe90f34b8a1e1dbbb54cef` returned FAIL and identified an
+independent-population tautology plus missing negative coverage for the review-repair
+branches. On exact parent `ce0bca412243cbb9d4bcc1fd10bd080d865018ab`, the Inspector
+replaced the tautology with a three-way filesystem/ROSTER/tracked-path bijection and
+added adversaries for second-pass ignored/generated writes, coverage-byte drift,
+cross-pass result drift, caller-selected reviewed identity, and configured exact-range
+rehearsal rejection. The combined command was read directly:
+
+```text
+pnpm vitest run packages/schemas/tests/contract/governed-populations.contract.test.ts tests/contract/r0006-entry-control.red.contract.test.ts
+```
+
+It exits 0 with 46 passed tests across two files: 23 population contracts and 23
+R-0006 entry-control contracts. Each new adversary observes the required fail-closed
+diagnostic. No implementation change, threshold change, assertion removal, skip, or
+B0 scope follows from this disposition; the earlier red observations and both
+independent-review FAIL records remain immutable evidence.
