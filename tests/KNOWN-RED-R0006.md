@@ -73,3 +73,28 @@ R-0006 entry-control contracts. Each new adversary observes the required fail-cl
 diagnostic. No implementation change, threshold change, assertion removal, skip, or
 B0 scope follows from this disposition; the earlier red observations and both
 independent-review FAIL records remain immutable evidence.
+
+## B2 contracts-and-depth red
+
+After B0 froze all 186 action identities and the 377-path eligible source population,
+and B1 separately decided operational extraction, mutation strength, and evidence
+aggregation, the Inspector added:
+
+```text
+pnpm vitest run tests/contract/r0006-output-contracts.red.contract.test.ts
+```
+
+The required pre-B3 reading is nine behavior-first failures. The action registry has
+no per-action output or error contracts; its schema does not require them; the common
+action-result envelope is absent; successful `catalog actions --format json` emits a
+raw array rather than an action-bound envelope; its invalid-authority route emits prose
+rather than a structured action-bound error; and trace rows/schema prove only file
+markers, not a positive assertion population bound to exact source bytes.
+
+The selected risk branches are invalid or missing payload contracts, success/error
+channel separation, exact action identity, retired-route behavior, and assertion-free
+or stale trace evidence. B3 may define law for only those reds. B4 may implement the
+generic validated envelope and deterministic trace measurement without adding
+test-only production branches. The red does not authorize threshold reduction,
+coverage exclusion growth, publication, release, evidence reuse or promotion, or any
+R-0007+ work.
