@@ -59,6 +59,7 @@ function configureBindings(
   root: string,
   bindings: readonly BindingSpec[],
   historicalCommitExceptions: readonly CommitException[] = [],
+  legacyRoundExceptions: readonly { readonly round: string; readonly reason: string }[] = [],
 ): void {
   const evidencePath = 'work/audit/fixture/red-evidence.json';
   const evidence = `${JSON.stringify(
@@ -85,6 +86,7 @@ function configureBindings(
     },
   }));
   document['historical_commit_exceptions'] = historicalCommitExceptions;
+  document['historical_exceptions'] = legacyRoundExceptions;
   put(root, 'law/policy/governed-sequencing.json', `${JSON.stringify(document, null, 2)}\n`);
 }
 
@@ -310,5 +312,48 @@ describe('governed sequencing', () => {
     const result = check(root, base);
     expect(result.status).toBe(0);
     expect(JSON.parse(result.stdout as string)).toMatchObject({ ok: true, commits_checked: 1 });
+  });
+
+  it.each(['apps/fixture/index.ts', 'pnpm-workspace.yaml'])(
+    'rejects unbound Engineer work on governed implementation surface %s',
+    (implementationPath) => {
+      const { root, base } = fixture();
+      commit(root, 'DEVAI Engineer', 'feat(r0006): bypass narrow classifier', implementationPath);
+      configureBindings(root, []);
+
+      const result = check(root, base);
+      expect(result.status).toBe(1);
+      expect(JSON.parse(result.stdout as string)).toMatchObject({
+        ok: false,
+        findings: expect.arrayContaining([
+          expect.objectContaining({ rule: 'implementation-binding' }),
+        ]),
+      });
+    },
+  );
+
+  it('rejects a prospective round-wide historical exception', () => {
+    const { root, base } = fixture();
+    commit(
+      root,
+      'DEVAI Engineer',
+      'feat(r0006): request round-wide bypass',
+      'packages/fixture/index.ts',
+    );
+    configureBindings(
+      root,
+      [],
+      [],
+      [{ round: 'R-0006', reason: 'Prospective rounds must never receive this bypass.' }],
+    );
+
+    const result = check(root, base);
+    expect(result.status).toBe(1);
+    expect(JSON.parse(result.stdout as string)).toMatchObject({
+      ok: false,
+      findings: expect.arrayContaining([
+        expect.objectContaining({ rule: 'round-exception-bypass' }),
+      ]),
+    });
   });
 });
