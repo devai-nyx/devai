@@ -399,6 +399,23 @@
           "scripts/run-round-close-controls.mjs"
         ]
       }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["bad810ca82b4b958399860534e12a98e42a2c5c0"],
+      "law_commits": ["5260972110a8685362c3f7b32aebe2c7aae85173"],
+      "red_evidence": {
+        "commit": "b3186cbd3579ade5321ce8f42686e10d4dabf967",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts -t \"normalizes only retained coverage runtime evidence\"",
+        "evidence_path": "work/audit/R-0006/red-evidence-retained-coverage-fixpoint.json",
+        "evidence_sha256": "01b020fee80777df7dd7322359b3dbdac3b95f43d2e7ee365ab85ff189cf6944",
+        "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [
