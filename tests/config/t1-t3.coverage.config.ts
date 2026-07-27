@@ -15,9 +15,7 @@ const policy = JSON.parse(
   readFileSync(resolve('law/policy/thresholds.json'), 'utf8'),
 ) as ThresholdPolicy;
 
-process.env['DEVAI_V8_SUBPROCESS_COVERAGE_DIR'] = resolve(
-  'scratch/coverage/t1-t6-child-v8',
-);
+process.env['DEVAI_V8_SUBPROCESS_COVERAGE_DIR'] = resolve('scratch/coverage/t1-t6-child-v8');
 
 export default defineConfig({
   test: {

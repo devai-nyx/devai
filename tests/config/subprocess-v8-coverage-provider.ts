@@ -3,7 +3,6 @@ import { resolve } from 'node:path';
 import v8Module from '@vitest/coverage-v8';
 import { V8CoverageProvider } from '@vitest/coverage-v8/dist/provider.js';
 import { mergeProcessCovs } from '@bcoe/v8-coverage';
-import type { CoverageMap } from 'istanbul-lib-coverage';
 import type { Profiler } from 'node:inspector';
 import type { CoverageProviderModule, ReportContext } from 'vitest/node';
 
@@ -23,13 +22,39 @@ interface Location {
   readonly end: Position;
 }
 
+interface FunctionMapping {
+  readonly decl: Location;
+  readonly loc: Location;
+}
+
+interface BranchMapping {
+  readonly locations: readonly Location[];
+}
+
+interface FileCoverageData {
+  readonly statementMap: Readonly<Record<string, Location>>;
+  readonly fnMap: Readonly<Record<string, FunctionMapping>>;
+  readonly branchMap: Readonly<Record<string, BranchMapping>>;
+  readonly s: Record<string, number>;
+  readonly f: Record<string, number>;
+  readonly b: Record<string, number[]>;
+}
+
+interface MutableCoverageMap {
+  files(): string[];
+  fileCoverageFor(filename: string): { toJSON(): object };
+  addFileCoverage(coverage: FileCoverageData): void;
+  filter(callback: (filename: string) => boolean): void;
+}
+
 function positionKey(location: Location): string {
   return `${String(location.start.line)}:${String(location.start.column)}`;
 }
 
 function contains(location: Location, position: Position): boolean {
   if (position.line < location.start.line || position.line > location.end.line) return false;
-  if (position.line === location.start.line && position.column < location.start.column) return false;
+  if (position.line === location.start.line && position.column < location.start.column)
+    return false;
   if (position.line === location.end.line && position.column > location.end.column) return false;
   return true;
 }
@@ -45,11 +70,14 @@ function projectedHit(
   );
 }
 
-function mergeCanonicalHits(coverageMap: CoverageMap, subprocessMap: CoverageMap): void {
+function mergeCanonicalHits(
+  coverageMap: MutableCoverageMap,
+  subprocessMap: MutableCoverageMap,
+): void {
   for (const filename of subprocessMap.files()) {
     if (!coverageMap.files().includes(filename)) continue;
-    const candidate = subprocessMap.fileCoverageFor(filename).toJSON();
-    const current = coverageMap.fileCoverageFor(filename).toJSON();
+    const candidate = subprocessMap.fileCoverageFor(filename).toJSON() as FileCoverageData;
+    const current = coverageMap.fileCoverageFor(filename).toJSON() as FileCoverageData;
 
     const statementHits = new Map<string, number>();
     const statementRanges: Array<{ location: Location; count: number }> = [];
@@ -121,8 +149,16 @@ class SubprocessV8CoverageProvider extends V8CoverageProvider {
     return super.isIncluded(filename, root);
   }
 
-  override async generateCoverage(context: ReportContext): Promise<CoverageMap> {
-    const coverageMap = await super.generateCoverage(context);
+  override generateCoverage(
+    ...args: Parameters<V8CoverageProvider['generateCoverage']>
+  ): ReturnType<V8CoverageProvider['generateCoverage']> {
+    return this.generateMergedCoverage(...args) as ReturnType<
+      V8CoverageProvider['generateCoverage']
+    >;
+  }
+
+  private async generateMergedCoverage(context: ReportContext): Promise<unknown> {
+    const coverageMap = (await super.generateCoverage(context)) as unknown as MutableCoverageMap;
     if (!existsSync(subprocessCoverageDirectory)) return coverageMap;
 
     const subprocessCoverages: ProcessCoverage[] = [];
@@ -146,7 +182,7 @@ class SubprocessV8CoverageProvider extends V8CoverageProvider {
         coverage: ProcessCoverage,
         project?: unknown,
         environment?: string,
-      ): Promise<CoverageMap>;
+      ): Promise<unknown>;
     };
     const merged = mergeProcessCovs(subprocessCoverages) as ProcessCoverage;
     merged.result.splice(
@@ -155,16 +191,18 @@ class SubprocessV8CoverageProvider extends V8CoverageProvider {
       ...merged.result.filter((result) => result.url.startsWith('file://')),
     );
     for (const result of merged.result) result.startOffset ??= 0;
-    const subprocessMap = await provider.convertCoverage(merged);
+    const subprocessMap = (await provider.convertCoverage(merged)) as MutableCoverageMap;
     mergeCanonicalHits(coverageMap, subprocessMap);
     coverageMap.filter((filename) => super.isIncluded(filename));
     return coverageMap;
   }
 }
 
-const providerModule: CoverageProviderModule = {
+// pnpm exposes the provider's bundled Vitest type instance separately from the
+// workspace Vitest type instance. The runtime interface is the same module contract.
+const providerModule = {
   ...v8Module,
   getProvider: () => new SubprocessV8CoverageProvider(),
-};
+} as unknown as CoverageProviderModule;
 
 export default providerModule;

@@ -1,14 +1,9 @@
 // Invariants: INV-DEVAI-001, INV-DEVAI-015, INV-DEVAI-017, INV-DEVAI-018, INV-DEVAI-020
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
+import Ajv2020 from 'ajv/dist/2020.js';
 import { cac } from 'cac';
 import { checkDependencies } from '../../src/commands/check/dependencies.js';
 import { checkDocsGovernance } from '../../src/commands/check/docs-governance.js';
@@ -62,7 +57,10 @@ describe('governed command depth', () => {
     expect(report.verdict).toBe('fail');
     expect(report.findings).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ ruleId: 'docs-governance.opt-out-adr-required', severity: 'pass' }),
+        expect.objectContaining({
+          ruleId: 'docs-governance.opt-out-adr-required',
+          severity: 'pass',
+        }),
         expect.objectContaining({ ruleId: 'docs-governance.site-dir-shape', severity: 'pass' }),
         expect.objectContaining({ ruleId: 'docs-governance.no-ci-publish', severity: 'fail' }),
       ]),
@@ -153,7 +151,10 @@ describe('governed command depth', () => {
         DEVAI_TEST_NPM_DEPENDENCY_SCAN_FIXTURE: fixture,
       },
     });
-    expect(result).toMatchObject({ status: 'pass', universes: [{ ecosystem: 'pnpm' }, { ecosystem: 'npm' }] });
+    expect(result).toMatchObject({
+      status: 'pass',
+      universes: [{ ecosystem: 'pnpm' }, { ecosystem: 'npm' }],
+    });
 
     expect(
       checkDependencies({
@@ -191,7 +192,7 @@ describe('governed command depth', () => {
     write(validPath, JSON.stringify(scenario));
     write(duplicatePath, JSON.stringify(scenario));
     write(malformedPath, '{');
-    const validator = Object.assign((value: unknown) => value !== null, { errors: null });
+    const validator = new Ajv2020().compile({ type: 'object' });
     const loaded = loadScenarios([validPath, duplicatePath, malformedPath], validator, {
       strict: true,
     });
@@ -236,10 +237,7 @@ describe('governed command depth', () => {
       join(root, '.devai/config/test-matrix.json'),
       JSON.stringify({ tiers: ['unit', 'coverage'], scopes_include: ['fixture'] }),
     );
-    write(
-      join(root, '.devai/config/thresholds.json'),
-      JSON.stringify({ coverage: { lines: 70 } }),
-    );
+    write(join(root, '.devai/config/thresholds.json'), JSON.stringify({ coverage: { lines: 70 } }));
 
     const output = join(root, 'reports/matrix.html');
     const priorExitCode = process.exitCode;

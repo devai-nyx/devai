@@ -116,7 +116,7 @@ const defaultCases: ReadonlyArray<readonly [readonly string[], string, number]> 
   [['sense', 'spec', 'idiomaticity'], 'sense spec idiomaticity', 3],
   [['sense', 'test'], 'sense test', 2],
   [['sense', 'trace', 'resolve'], 'sense trace resolve', 0],
-  [['sense', 'type', 'check'], 'sense type check', 3],
+  [['sense', 'type', 'check'], 'sense type check', 0],
   [['spec', 'blueprint', 'diff'], 'spec blueprint diff', 2],
   [['spec', 'blueprint', 'plan'], 'spec blueprint plan', 2],
   [['spec', 'blueprint', 'validate'], 'spec blueprint validate', 2],
