@@ -3044,6 +3044,21 @@ public action behavior, and do not authorize B0, action/output contract work, co
 depth work, threshold or exclusion changes, evidence reuse or promotion, release,
 publication, deployment, predecessor mutation, real-stynx mutation, or R-0007+ work.
 
+### DII-209 — Correct the closure-rehearsal production-verb binding
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 E4 repair; DII-208; R-0006 Inspector f9ff51ed2181a9ed2ae09981e2e61e8af5695bbe; R-0006-CLOSURE-PREREQUISITE-RED-EVIDENCE`
+
+The R-0006 isolated real-candidate rehearsal proved that DII-208's canonical policy
+named an absent closure-verb path. The already validated and action-registered
+production implementation is `packages/cli/src/commands/phase/index.ts`; the rehearsal
+must bind that tracked path together with `law/schemas/phase-closure.schema.json` before
+constructing its non-standing source merge and closure-only descendant. The generated
+policy mirror must reproduce this correction byte-for-byte.
+
+This is a path-binding correction only. It changes no public action behavior, authorizes
+no closure record, and does not authorize B0, threshold or exclusion changes, evidence
+promotion, publication, merge, release, deployment, predecessor mutation,
+real-stynx mutation, or R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
