@@ -48,9 +48,12 @@ afterEach(() => {
 describe('fix skill behavior expansion', () => {
   it('diagnoses empty docs and unresolved local links while skipping external targets', async () => {
     const repo = root();
-    expect(await skill('SKILL-fix-docs-links').run({ repoRoot: repo })).toMatchObject({
-      status: 'pass',
-      evidence: { broken_before: [], broken_after: [], fix_log: [] },
+    put(repo, 'docs/.gitkeep', '');
+    await withAuthorityHostTestScope(async () => {
+      expect(await skill('SKILL-fix-docs-links').run({ repoRoot: repo })).toMatchObject({
+        status: 'pass',
+        evidence: { ok: true, broken_count: 0, broken: [] },
+      });
     });
     put(
       repo,
@@ -70,16 +73,14 @@ describe('fix skill behavior expansion', () => {
         inputs: { dir: 'docs' },
         iteration: { current: 2, max: 3 },
       });
-      expect(result).toMatchObject({ status: 'fail' });
-      expect(
-        (result.evidence as { fix_log: Array<{ outcome: string }> }).fix_log.map(
-          ({ outcome }) => outcome,
-        ),
-      ).toEqual(['no-rename-history', 'no-rename-history']);
+      expect(result).toMatchObject({
+        status: 'fail',
+        evidence: { ok: false, broken_count: 2, broken: expect.any(Array) },
+      });
     });
   });
 
-  it('rewrites an unambiguous git rename and preserves the link suffix', async () => {
+  it('reports an unambiguous renamed target without rewriting the source', async () => {
     const repo = root();
     git(repo, ['init', '-q']);
     put(repo, 'docs/old.md', '# Old');
@@ -91,12 +92,12 @@ describe('fix skill behavior expansion', () => {
 
     await withAuthorityHostTestScope(async () => {
       const result = await skill('SKILL-fix-docs-links').run({ repoRoot: repo });
-      expect(result).toMatchObject({ status: 'pass' });
+      expect(result).toMatchObject({
+        status: 'fail',
+        evidence: { ok: false, broken_count: 1, broken: expect.any(Array) },
+      });
       expect(readFileSync(join(repo, 'docs/guide.md'), 'utf8')).toContain(
-        '[moved](new.md#section)',
-      );
-      expect((result.evidence as { fix_log: Array<{ outcome: string }> }).fix_log[0]?.outcome).toBe(
-        'rewritten',
+        '[moved](old.md#section)',
       );
     });
   });
