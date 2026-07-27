@@ -385,3 +385,23 @@ diff, and clean-status gates.
 This ledger grants no active red authority. A fresh exact-candidate independent Codex
 review remains required. Any further actionable finding requires a fresh Architect
 entry and failing Inspector boundary before repair.
+
+## Seventh-review repair authority
+
+Auditor record `R-0005-INDEPENDENT-CODEX-REVIEW-7-FAILURE` preserves the exact
+`0f7bd2aaebb8ba53c0c21470c8306c4b54f75596` FAIL without conversion and
+authorizes KR-R5-047 and KR-R5-048.
+
+KR-R5-047 binds the canonical root Engineer authority to the already-governed
+`eslint.config.*` surface in INV-RBAC-001. Inspector must first demonstrate that an
+unbound post-boundary Engineer commit touching the tracked `eslint.config.mjs` escapes
+sequencing. Engineer may then correct only the canonical `rootEngineerPaths` entry;
+the existing checker parity must fail on every later source/policy divergence.
+
+KR-R5-048 requires a hermetic Inspector contract that rejects disagreement among the
+R-0005 as-built provenance snapshot, opening boundary snapshot, and final pre-review
+evidence snapshot. Auditor may then correct only the two stale `86608b7` claims to the
+already-recorded exact `5cea654` implementation candidate. No cluster authorizes a
+broader root surface, history rewrite, weakened parity, synthetic review PASS, or
+external action. Retirement requires focused green, the complete ordinary floor, exact
+exit ladder, and a new independent Codex PASS.
