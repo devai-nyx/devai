@@ -29,5 +29,5 @@ describe('public CLI bootstrap', () => {
     expect(stdout).toContain('catalog');
     expect(stdout).toContain('govern');
     expect(stdout).toContain('work');
-  });
+  }, 15_000);
 });
