@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE",
+  "round": "R-0006",
+  "authority": "Auditor",
+  "date": "2026-07-27",
+  "observations": [
+    {
+      "candidate": "95abe603ee86e82e99ba0498b56d49cac292ab45",
+      "command": "node scripts/run-round-close-controls.mjs converge --round R-0006 --base 7cf325625307a630344efe971bceccb011560301 --head 95abe603ee86e82e99ba0498b56d49cac292ab45 --json",
+      "exit_code": 1,
+      "passes": 2,
+      "ordered_gates_per_pass": 16,
+      "all_gate_outcomes_pass": true,
+      "result_equivalent": true,
+      "clean_boundaries": true,
+      "coverage_summary_sha256": "7c394f2c539b5844349f95ec4e8073065689e7f3cc415a9f7ea28fcc52883f0b",
+      "pass_1_workspace_sha256": "1c6aa430790a79f1a6db1c5e6dabced0b974d473298f8ea65b646265d2461af7",
+      "pass_2_workspace_sha256": "2c7bc6ebe0b2ff2d54c3e15f8c6ddbebdadce28d6f5398fa35556a55d1d3a1e5",
+      "finding": "CONVERGENCE_WRITE_DETECTED"
+    },
+    {
+      "commit": "ebf10882d2ea55d83a773cd88c3c9b667fd42c91",
+      "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts -t \"normalizes only retained coverage runtime evidence\"",
+      "exit_code": 1,
+      "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+      "test_sha256": "5c9b881761467922997815cb6b38d9d5a2765ef9c164e364910a17dd81ae86a0",
+      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "failure_summary": "The focused fixture retains a stable summary, statement-level artifact, and PID/time-named raw subprocess evidence. Both gate passes are otherwise equivalent and clean, but the current controller treats those exact runtime artifacts as relevant-workspace drift. The full floor has only this one intentional red while 1,441 tests pass and eight declared skips remain."
+    }
+  ],
+  "repair_boundary": "Normalize only scratch/coverage/t1-t3/coverage-final.json and scratch/coverage/t1-t3/subprocess-v8 runtime artifacts inside the convergence workspace snapshot. Keep coverage-summary bytes independently bound, keep every other scratch and ignored path observable, and retain the raw evidence after execution."
+}
