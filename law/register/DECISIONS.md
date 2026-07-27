@@ -3365,6 +3365,30 @@ exact-main CI, package publication, tag, GitHub Release, Pages deployment, exter
 deployment, evidence reuse or promotion, real-stynx mutation, predecessor mutation,
 or R-0007+ work.
 
+### DII-221 — Disclose the final immutable R-0006 sequencing defect
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 sequencing correction; DII-202; DII-220; Inspector a1bedaa01813c626ac497fe9e6e85102c72d21db; Auditor R-0006-OPUS-B9-CORRECTION-RED-EVIDENCE; Engineer 63b2238ddf22e542ba3e755108477ddd903ea137; governed sequencing FAIL`
+
+Governed sequencing failed after the final Opus repair because Engineer
+`63b2238ddf22e542ba3e755108477ddd903ea137` changed both
+`scripts/run-round-close-controls.mjs` and `packages/cli/src/define-command.ts`, while
+the immutable failing Inspector source literally named only the controller path. The
+Auditor evidence was corrected before implementation to bind both exact paths, DII-220
+authorized both repairs, the population adversary semantically exposed the fixed-count
+class, and all focused and ordinary tests passed after implementation. Those facts do
+not make the missing literal Inspector path retrospectively present.
+
+The exact Engineer commit is therefore a historical commit exception in
+`law/policy/governed-sequencing.json`. This is a disclosed sequencing defect, not a
+claim of prospective compliance. It grants no exception to any later commit, test,
+path, law-before-implementation rule, threshold, exclusion, review gate, or role
+boundary. The failed governance observation has no convergence or review standing.
+B9 must use a fresh candidate and rerun its complete exit ladder.
+
+This decision authorizes no source publication before fresh review PASS, closure
+record before source merge and exact-main CI, package publication, tag, GitHub Release,
+Pages deployment, external deployment, evidence reuse or promotion, real-stynx
+mutation, predecessor mutation, or R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

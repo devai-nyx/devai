@@ -432,6 +432,11 @@
       "round": "R-0006",
       "implementation_commits": ["8e7a44b70a3e13b85293de48af8284889daea7e3"],
       "reason": "The first B9 convergence disclosed that the B6 subprocess-coverage integration followed DII-217 and the preserved corrected whole-source red reading, but no prior committed Inspector source and durable Auditor JSON bound every exact implementation path. The red denominator evidence remains visible and thresholds and exclusions remain unchanged; history is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["63b2238ddf22e542ba3e755108477ddd903ea137"],
+      "reason": "The final B9 Opus correction followed the four-failure Inspector red, durable Auditor evidence and DII-220, but the immutable failing Inspector source literally named scripts/run-round-close-controls.mjs and not the separately corrected packages/cli/src/define-command.ts fixed-count guard. The Auditor JSON names both exact paths and the repair is tested green; this is a real sequencing defect, history is not rewritten, and this exact-commit disclosure grants no prospective exception."
     }
   ],
   "historical_round_disclosures": [
