@@ -116,6 +116,17 @@
       "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
       "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"],
       "failure_summary": "The sixth-review adversaries proved that .prettierignore and vitest.workspace.ts escaped the root implementation classifier and that sequencing policy could diverge from canonical rootEngineerPaths authority."
+    },
+    {
+      "commit": "70450716da0e3fb065b48470dc4d732cd36a6296",
+      "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "tests/contract/governed-sequencing.contract.test.ts",
+        "tests/contract/r0005-independent-review.red.contract.test.ts"
+      ],
+      "exercised_implementation_paths": ["packages/cli/src/authority/policy.ts"],
+      "failure_summary": "The seventh-review adversaries proved that the live eslint.config.mjs escaped root sequencing and that the R-0005 as-built carried two mutually inconsistent implementation snapshots."
     }
   ]
 }

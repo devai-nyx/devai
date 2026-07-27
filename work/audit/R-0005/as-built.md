@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-202; DII-203; OM-009; R-0005-ENTRY-INVENTORY; R-0005-DOCUMENTATION-RECONCILIATION; implementation snapshot 86608b74a9f46df63c92e9ab161e4d4e5ab423a0,
+    DII-202; DII-203; OM-009; R-0005-ENTRY-INVENTORY; R-0005-DOCUMENTATION-RECONCILIATION; implementation snapshot 5cea65414187e8af940f3241f43040f5ba3f961c,
   ]
 ---
 
@@ -19,7 +19,7 @@ provenance:
 
 R-0005 B0 through B8 and all six completed independent-review/exit-ladder repair
 cycles are implemented through governed snapshot
-`86608b74a9f46df63c92e9ab161e4d4e5ab423a0`. The source is not closed by this
+`5cea65414187e8af940f3241f43040f5ba3f961c`. The source is not closed by this
 report: a fresh independent Codex review, source PR and exact-head CI, source merge and
 exact-main CI, machine PC-0006 emission, closure-only PR, closure merge, and final
 exact-main CI remain serial gates.
