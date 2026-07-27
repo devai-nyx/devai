@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-211; DII-212; DII-213; DII-214; DII-215; DII-216; DII-217; R-0006-ENTRY-INVENTORY; BL-026; BL-034; BL-035; BL-081; implementation snapshot 012fdb9a56f93bcc2a5eca126b43f5878a1f1928,
+    DII-211; DII-212; DII-213; DII-214; DII-215; DII-216; DII-217; DII-218; R-0006-ENTRY-INVENTORY; BL-026; BL-034; BL-035; BL-081; implementation snapshot 012fdb9a56f93bcc2a5eca126b43f5878a1f1928; exit-ladder correction snapshot 69ac5ab52444cac4ced11bd7a8b353e0403ab86d,
   ]
 ---
 
@@ -17,13 +17,17 @@ provenance:
 
 ## Boundary and verdict
 
-R-0006 B0 through B7 are implemented and tested through exact pre-audit snapshot
-`012fdb9a56f93bcc2a5eca126b43f5878a1f1928`. The B8 audit finds **no coverage or
+R-0006 B0 through B7 are implemented and tested through exact implementation snapshot
+`012fdb9a56f93bcc2a5eca126b43f5878a1f1928`. B8 and the first B9 exit-ladder
+correction are audited through exact pre-amendment snapshot
+`69ac5ab52444cac4ced11bd7a8b353e0403ab86d`. The audit finds **no coverage or
 semantics laundering**. The complete eligible package-source denominator is measured,
 the four 70/60/70/70 floors and all four pre-existing exclusions are unchanged, all
 186 action identities have an explicit disposition-correct output/error contract, the
 24-row operational-value extraction has one canonical home per row, and mutation
-strength remains separate from evidence aggregation.
+strength remains separate from evidence aggregation. The first B9 convergence FAIL and
+its three immutable sequencing defects remain visible rather than being relabelled
+green.
 
 This is an implementation as-built, not a B9 review or publication verdict. The exact
 B9 implementation subject, two convergence passes, candidate-only clone, closure
@@ -63,15 +67,16 @@ DII-217 correctly rejected that denominator. Adding the explicit complete source
 include exposed the expected red first reading—48.33% statements, 40.59% branches,
 50.66% functions, and 48.99% lines—rather than restoring the loaded-only shortcut.
 Behavioral tests and governed subprocess observation then raised the same complete
-denominator above the unchanged floors. The final repeated raw summary has SHA-256
-`f418079a625ca796176821d25795f09b4dcaa964f8bbce854d884cb3372ff7e8`:
+denominator above the unchanged floors. After the exit-ladder type correctness repair,
+the fresh raw summary has SHA-256
+`668853a175141f371d61ae7f01f2b246f885f3fc2abdc9e403a9d0eb25a75801`:
 
 | Metric     | Final complete-denominator reading | Floor |
 | ---------- | ---------------------------------: | ----: |
-| Statements |           78.89% (17,669 / 22,395) |   70% |
-| Branches   |           61.37% (11,897 / 19,384) |   60% |
+| Statements |           78.89% (17,668 / 22,395) |   70% |
+| Branches   |           61.35% (11,894 / 19,384) |   60% |
 | Functions  |             82.32% (2,530 / 3,073) |   70% |
-| Lines      |           80.49% (16,408 / 20,385) |   70% |
+| Lines      |           80.48% (16,407 / 20,385) |   70% |
 
 The current tracked population contains 378 eligible files, and the final JSON summary
 contains all 378. The increase from B0 is the new shipped Engineer source
@@ -104,8 +109,44 @@ produced identical summary bytes. This is execution observation, not synthetic l
 credit.
 
 The report retains genuinely low and zero-covered valid files. Their presence, the
-corrected red first reading, the unchanged exclusions, and the exact denominator parity
-are positive evidence against suspicious-zero filtering or arithmetic laundering.
+corrected red first reading, the unchanged exclusions, the exact denominator parity,
+and the small observable reading change after the type-check behavior became green are
+positive evidence against suspicious-zero filtering or arithmetic laundering.
+
+## First B9 convergence failure and correction
+
+The first B9 convergence attempt at exact candidate
+`c5b2c770107fc7684d689d4158ecb092aab2969d` failed closed on its first pass and wrote
+no valid convergence state. Formatting found four Inspector-owned files. Stage 1 found
+16 root TypeScript errors in the new tests and coverage provider. Governance found
+three substantive Engineer commits with zero sequencing binding. Ordinary tests,
+stage 2, T4-T6, changesets, and complete coverage remained green, but a partial green
+set cannot override any failed required gate.
+
+Inspector `0cf442d310f1be130e90a85a7622f7950e06f83f` made all new tests and provider code
+repository-formatted and root-typecheck clean, supplied a local type contract for the
+untyped V8 merger, and made the public type-check action assertion follow its actual
+deterministic green result. A fresh ordinary run passed 140 files / 1,280 tests / eight
+declared skips, and the complete 378-file denominator remained green at the exact
+readings above.
+
+DII-218 records the sequencing result without inventing retrospective compliance:
+
+- `a0292658a7322066ba70b91c80f0c3d751ab69dc` and
+  `58b175d3b751c52fe55a97aa17b78f2c55e14d2c` followed the B2 failing action contract
+  and DII-215, but the immutable red source did not literally bind every implementation
+  path later changed.
+- `8e7a44b70a3e13b85293de48af8284889daea7e3` followed DII-217 and the observed
+  corrected whole-source red reading, but lacked a prior committed Inspector source
+  plus durable Auditor JSON binding every exact changed path.
+
+The policy therefore lists only these exact immutable commits as historical commit
+exceptions. They grant no prospective bypass. After Architect
+`69ac5ab52444cac4ced11bd7a8b353e0403ab86d` added the disclosures and refreshed the
+caused trace projection, governed sequencing passed all 52 commits, trace verified 34
+invariants / 140 tests, root typecheck passed, repository-wide Prettier passed, and the
+ordinary suite remained green. All prior convergence, rehearsal, and manifest state is
+stale; B9 must restart from the post-amendment candidate.
 
 ## Action output and error totality
 
@@ -166,26 +207,28 @@ independent review remain separate evidence.
 
 ## Role-pure batch map
 
-| Batch | Role                  | Commit(s)                       | Result                                                                                                              |
-| ----- | --------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| B0    | Architect             | `6e3a2b9`                       | Froze the 186-action and 377-file entry population, including all 154 unmeasured files.                             |
-| B1    | Architect             | `81ff63e`                       | Extracted operational values and separately decided mutation strength and evidence aggregation.                     |
-| B2    | Inspector             | `a3e95af`                       | Preserved behavior-first red contracts for output closure and assertion-bearing trace depth.                        |
-| B3    | Architect             | `e308b2a`                       | Defined the shared action envelope, per-action registry bindings, and trace-depth schema.                           |
-| B4    | Engineer              | `a029265`, `58b175d`            | Implemented fail-closed machine envelopes and kept the output boundary effects-analyzable.                          |
-| B5    | Inspector + Architect | `a8ab361`, `69145ad`, `bad45b4` | Added adversarial action/trace tests and materialized the assertion-bearing projection.                             |
-| B6    | Architect + Engineer  | `9124f50`, `d41c648`, `8e7a44b` | Rejected the loaded-only denominator, included all valid source, and integrated real governed subprocess execution. |
-| B7    | Inspector + Architect | `2ad1fc5`, `012fdb9`            | Proved runtime depth across T1-T6 and refreshed the exact 34-invariant / 140-test trace.                            |
+| Batch               | Role                  | Commit(s)                       | Result                                                                                                                                                   |
+| ------------------- | --------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| B0                  | Architect             | `6e3a2b9`                       | Froze the 186-action and 377-file entry population, including all 154 unmeasured files.                                                                  |
+| B1                  | Architect             | `81ff63e`                       | Extracted operational values and separately decided mutation strength and evidence aggregation.                                                          |
+| B2                  | Inspector             | `a3e95af`                       | Preserved behavior-first red contracts for output closure and assertion-bearing trace depth.                                                             |
+| B3                  | Architect             | `e308b2a`                       | Defined the shared action envelope, per-action registry bindings, and trace-depth schema.                                                                |
+| B4                  | Engineer              | `a029265`, `58b175d`            | Implemented fail-closed machine envelopes and kept the output boundary effects-analyzable.                                                               |
+| B5                  | Inspector + Architect | `a8ab361`, `69145ad`, `bad45b4` | Added adversarial action/trace tests and materialized the assertion-bearing projection.                                                                  |
+| B6                  | Architect + Engineer  | `9124f50`, `d41c648`, `8e7a44b` | Rejected the loaded-only denominator, included all valid source, and integrated real governed subprocess execution.                                      |
+| B7                  | Inspector + Architect | `2ad1fc5`, `012fdb9`            | Proved runtime depth across T1-T6 and refreshed the exact 34-invariant / 140-test trace.                                                                 |
+| B8                  | Auditor               | `c5b2c77`                       | Recorded denominator, exclusion, threshold, contract-totality, law-extraction, and evidence-semantics findings without publication standing.             |
+| First B9 correction | Inspector + Architect | `0cf442d`, `69ac5ab`            | Closed formatting/typecheck nondeterminism, disclosed three immutable sequencing defects, and refreshed trace; the failed candidate retains no standing. |
 
 Combined-role rows are serial role-pure commits, never shared-authority commits.
 
-## Fresh B7 evidence
+## Fresh pre-review evidence
 
-The ordinary workspace suite passed 140 files with 1,280 tests passing, eight declared
-skips, and zero failures. The complete-denominator coverage command passed all four
-floors with the exact numerator/denominator readings above. `pnpm run trace:check`
-reported 34 invariants and 140 tests verified. `pnpm run devai:prepare` and
-`git diff --check` passed before the final B7 commit. B8 reran `pnpm run devai:prepare`,
-the full 140-file ordinary suite, `pnpm run trace:check`, and `git diff --check` before
-its Auditor commit; B9 must generate fresh candidate-bound convergence evidence rather
-than reuse these observations.
+The corrected ordinary workspace suite passed 140 files with 1,280 tests passing,
+eight declared skips, and zero failures. The complete-denominator coverage command
+passed all four floors with the exact numerator/denominator readings above. Root
+typecheck, repository-wide Prettier, governed sequencing across 52 commits,
+`pnpm run trace:check` at 34 invariants / 140 tests, `pnpm run devai:prepare`, and
+`git diff --check` passed after the first B9 correction. This amendment will rerun the
+mandatory commit floor; B9 must then generate fresh candidate-bound convergence
+evidence rather than reuse any earlier observation.
