@@ -38,6 +38,13 @@ for (const entry of registry.entries) {
   ) {
     throw new Error('ACTION_MIGRATION_MISSING:' + entry.action_id);
   }
+  const runnable = entry.disposition === 'keep';
+  if (
+    entry.output_contract?.mode !== (runnable ? 'action-envelope' : 'router-only') ||
+    entry.error_contract?.mode !== (runnable ? 'structured-error-envelope' : 'router-only')
+  ) {
+    throw new Error('ACTION_RESULT_CONTRACT_MISSING:' + entry.action_id);
+  }
 }
 
 function generatedModule(preamble, valueName, value) {
@@ -70,6 +77,8 @@ const cliEntries = registry.entries.map((entry) => ({
   authority: entry.authority,
   description: entry.description,
   promotion_criteria: entry.promotion_criteria,
+  output_contract: entry.output_contract,
+  error_contract: entry.error_contract,
   authority_contract_version: entry.authority_contract_version,
   authority_contract: entry.authority_contract,
 }));

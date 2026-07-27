@@ -21,6 +21,22 @@ export type ActionCapability =
   | `net:${string}`;
 export type AdoptionProfile = 'tier1' | 'tier2' | 'tier3';
 
+export interface ActionOutputContract {
+  readonly schemaVersion: '1.0.0';
+  readonly mode: 'action-envelope' | 'router-only';
+  readonly envelope_schema: 'law/schemas/action-result.schema.json' | null;
+  readonly success_channel: 'stdout' | 'none';
+  readonly payload_schema: string | null;
+}
+
+export interface ActionErrorContract {
+  readonly schemaVersion: '1.0.0';
+  readonly mode: 'structured-error-envelope' | 'router-only';
+  readonly envelope_schema: 'law/schemas/action-result.schema.json' | null;
+  readonly error_schema: 'law/schemas/error.schema.json' | null;
+  readonly error_channel: 'stderr' | 'none';
+}
+
 export interface CommandMetadata {
   readonly path: readonly string[];
   readonly lifecycle: ActionLifecycle;
@@ -30,6 +46,8 @@ export interface CommandMetadata {
   readonly tier: ActionTier;
   readonly profiles: readonly AdoptionProfile[];
   readonly effects: ActionEffect;
+  readonly output_contract: ActionOutputContract;
+  readonly error_contract: ActionErrorContract;
   readonly authority_contract_version: '1.0.0';
   readonly authority_contract: AuthorityActionContract;
 }
@@ -105,6 +123,8 @@ export interface RegistryActionRecord {
   readonly authority: ActionAuthority | null;
   readonly description: string;
   readonly promotion_criteria: readonly string[];
+  readonly output_contract: ActionOutputContract;
+  readonly error_contract: ActionErrorContract;
   readonly authority_contract_version: '1.0.0';
   readonly authority_contract: AuthorityActionContract;
 }
@@ -202,6 +222,8 @@ export function metadataFor(
     tier: entry.tier,
     profiles: entry.profiles,
     effects: entry.effect,
+    output_contract: entry.output_contract,
+    error_contract: entry.error_contract,
     authority_contract_version: entry.authority_contract_version,
     authority_contract: entry.authority_contract,
   };

@@ -14,6 +14,11 @@ import {
   validateLiveAuthorityActionRegistry,
 } from './authority/index.js';
 import { resolveCliVersion } from './version.js';
+import {
+  attachActionOutputBoundaries,
+  emitPreDispatchActionResult,
+  publicActionForArgv,
+} from './action-output.js';
 import { actionsList } from './commands/actions-list.js';
 import { blueprintDiff, blueprintPlan, blueprintValidate } from './commands/blueprint/index.js';
 import { rgrEmit, rgrList, rgrResolve, rgrShow } from './commands/rgr/index.js';
@@ -410,21 +415,41 @@ const registry = getFullRegistry();
 validateActionSurface(registry);
 validateLiveAuthorityActionRegistry(registry);
 attachAuthorityCommandBoundaries(cli.commands, registry);
+attachActionOutputBoundaries(cli.commands, registry);
 const authorityResult = authorizeCliArgv(
   process.argv,
   registry,
   (skillId) => getSkill(skillId)?.manifest.authority_role,
 );
+const machineAction = publicActionForArgv(process.argv, registry);
 if (authorityResult !== undefined) {
-  const stream = authorityResult.stdout.length > 0 ? process.stdout : process.stderr;
-  stream.write(authorityResult.stdout.length > 0 ? authorityResult.stdout : authorityResult.stderr);
-  process.exitCode = authorityResult.exit_code;
+  if (
+    !emitPreDispatchActionResult(machineAction, {
+      exit: authorityResult.exit_code,
+      stdout: authorityResult.stdout,
+      stderr: authorityResult.stderr,
+    })
+  ) {
+    const stream = authorityResult.stdout.length > 0 ? process.stdout : process.stderr;
+    stream.write(
+      authorityResult.stdout.length > 0 ? authorityResult.stdout : authorityResult.stderr,
+    );
+    process.exitCode = authorityResult.exit_code;
+  }
 } else {
   const route = routeArgv(stripAuthorityArgv(process.argv), registry, pkgVersion);
   if (route.kind === 'output') {
-    const stream = route.exitCode === 0 ? process.stdout : process.stderr;
-    stream.write(route.text);
-    process.exitCode = route.exitCode;
+    if (
+      !emitPreDispatchActionResult(machineAction, {
+        exit: route.exitCode,
+        stdout: route.exitCode === 0 ? route.text : '',
+        stderr: route.exitCode === 0 ? '' : route.text,
+      })
+    ) {
+      const stream = route.exitCode === 0 ? process.stdout : process.stderr;
+      stream.write(route.text);
+      process.exitCode = route.exitCode;
+    }
   } else {
     try {
       cli.parse(route.argv);

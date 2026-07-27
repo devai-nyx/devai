@@ -19,6 +19,20 @@ export const ACTION_REGISTRY = [
     description:
       'Generate a starter .github/workflows/devai-gates.yml that calls the canonical reusable-evidence-gate.yml. Plan-only unless --write; refuses to overwrite unless --force (D-123, item 5).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -73,6 +87,20 @@ export const ACTION_REGISTRY = [
     description:
       'Wire a devai check into a local git hook (husky-aware, idempotent via a marker block). Plan-only unless --write (D-123, item 5).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -126,6 +154,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: "Copy a stack-adapter pack's seed_invariants into law/invariants/.",
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -180,6 +222,20 @@ export const ACTION_REGISTRY = [
     description:
       'Resolve which stack-adapter pack matches the current repo (or --adopter-root); report match + priority.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -222,6 +278,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Plan an upgrade from one DEVAI version to another (no apply without --write)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -276,6 +346,20 @@ export const ACTION_REGISTRY = [
     description:
       'Round-trip a prompt through the configured LLM provider; print response + usage telemetry.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -318,6 +402,20 @@ export const ACTION_REGISTRY = [
     authority: 'agent_runtime',
     description: 'Compose a deterministic prompt stack from named components',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -360,6 +458,20 @@ export const ACTION_REGISTRY = [
     authority: 'agent_runtime',
     description: 'Diff two prompt compositions; report changed component names',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -402,6 +514,20 @@ export const ACTION_REGISTRY = [
     authority: 'agent_runtime',
     description: 'Snapshot a prompt composition for governed loops (Article 37)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -444,6 +570,20 @@ export const ACTION_REGISTRY = [
     authority: 'agent_runtime',
     description: 'List registered DEVAI skill manifests.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -486,6 +626,20 @@ export const ACTION_REGISTRY = [
     authority: 'agent_runtime',
     description: 'Run a single skill by id; persist its evidence under .devai/state/skills/',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -543,6 +697,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'List registered DEVAI actions as JSON.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: 'law/schemas/actions-list-output.schema.json',
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -586,6 +754,20 @@ export const ACTION_REGISTRY = [
     description:
       'Generate the CLI reference under docs/reference/cli/ from the action catalog. --check fails on drift (byte-identity gate, Phase 13.C).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -640,6 +822,20 @@ export const ACTION_REGISTRY = [
     description:
       'Render the canonical per-record decision ledger to stdout; --out writes the same deterministic bytes with explicit consent.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -683,6 +879,20 @@ export const ACTION_REGISTRY = [
     description:
       'Audit markdown cross-references across docs/** plus root-level markdown (README.md, CONTRIBUTING.md, ...). Reports broken file links (in-page anchors are not checked). Phase 13.C; root-level scan per D-131.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -726,6 +936,20 @@ export const ACTION_REGISTRY = [
     description:
       'Build and force-push docs/site to the gh-pages branch (orphan + with-lease). Three-stage flow: detect → build → publish. Per ADR-LOCAL-PUBLISH-WORKFLOW.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -795,6 +1019,20 @@ export const ACTION_REGISTRY = [
     authority: 'host_tooling',
     description: 'Extract ```mermaid blocks from docs/*.md and render each to PNG/SVG/PDF via mmdc',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -849,6 +1087,20 @@ export const ACTION_REGISTRY = [
     description:
       'Render sealed round records to stdout; --out writes the same deterministic bytes with explicit consent.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -892,6 +1144,20 @@ export const ACTION_REGISTRY = [
     description:
       'Synthesize a brownfield doc from inventory sensor bodies via a SKILL-write-* writer',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -945,6 +1211,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Synthesize every brownfield doc by running each SKILL-write-* in sequence.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -999,6 +1279,20 @@ export const ACTION_REGISTRY = [
     description:
       'Composite repo health check. Posture: --self (full DEVAI checks), --adopter (subset that applies to adopter repos), --auto (default; sniff repo-root for DEVAI shape).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1042,6 +1336,20 @@ export const ACTION_REGISTRY = [
     description:
       'Validate an imported Actions shadow tuple and append its byte-exact digests to the Article-32 evidence chain.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1100,6 +1408,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Print the current head hash of the evidence chain',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1158,6 +1480,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Verify the evidence chain (hash + link integrity)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1201,6 +1537,20 @@ export const ACTION_REGISTRY = [
     description:
       'Aggregate per-package Istanbul coverage-summary.json files into one composite summary feeding `render matrix` and `score compute`. Example: `devai evidence coverage aggregate --in coverage --out .devai/state/coverage/summary.json --per-package`.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1259,6 +1609,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Append a new evidence record to the chain',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1317,6 +1681,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Assemble a local-CI evidence manifest from per-job artifact directories',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1375,6 +1753,20 @@ export const ACTION_REGISTRY = [
     authority: 'policy_firewall',
     description: 'Verify a local-CI evidence manifest against the declared policy (fail-closed)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1418,6 +1810,20 @@ export const ACTION_REGISTRY = [
     description:
       'Apply a redaction policy to a record, re-link downstream, and log a redaction event',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1477,6 +1883,20 @@ export const ACTION_REGISTRY = [
     description:
       'Render a (scope × tier) test-result matrix as Markdown or HTML. Reads test-result.schema.json-conformant records under .devai/state/test-results/. Example: `devai evidence test matrix --format md --out reports/matrix.md`.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1536,6 +1956,20 @@ export const ACTION_REGISTRY = [
     description:
       'Run a test command, capture stdout/stderr + exit code, and emit a test-result.schema.json record under .devai/state/test-results/. Example: `devai evidence test record --tier unit --scope @my/pkg --cmd "pnpm --filter @my/pkg test:unit" --chain`.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1599,6 +2033,20 @@ export const ACTION_REGISTRY = [
       'Task-specific acceptance and complete hard-gate enforcement',
       'Deterministic full-loop E2E and a supervised live-adopter pilot',
     ],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1663,6 +2111,20 @@ export const ACTION_REGISTRY = [
     description:
       'Process merge-bound observations through the verified persistent post-merge host adapter',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1719,6 +2181,20 @@ export const ACTION_REGISTRY = [
     description:
       'Validate and record a phase/round closure (phase-closure.schema.json) under record/proofs/compliance/closures/',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1778,6 +2254,20 @@ export const ACTION_REGISTRY = [
     description:
       'Compute the closure ledger (no-deletion streak, batch counts, gate history) from recorded closures',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1821,6 +2311,20 @@ export const ACTION_REGISTRY = [
     description:
       'Emit a Reference Gap Report (RGR) draft. Persists under .devai/state/rgr/RGR-NNNN.json. Per Article 22 and Phase 11.C / D-39.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1879,6 +2383,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'List Reference Gap Reports under .devai/state/rgr/',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1921,6 +2439,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Apply a resolution to an existing RGR',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -1979,6 +2511,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Print a single RGR record by id',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2021,6 +2567,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Generate a narrative assessment from a scorecard',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2063,6 +2623,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Refresh the backlog from scorecard deltas (Phase-6 MVP: prints plan)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2105,6 +2679,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Compute the F×T scorecard from SensorReadings',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2147,6 +2735,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Render a scorecard artifact with grid, narrative, or JSON view modes',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2190,6 +2792,20 @@ export const ACTION_REGISTRY = [
     description:
       'Classify a SensorReading failure (plant_bug | sensor_error | policy_issue | reference_gap | inconclusive)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2232,6 +2848,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Print the discipline a classification should route to',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2274,6 +2904,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Pick the higher-confidence of two TriageVerdicts (Article 23 MVP)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2316,6 +2960,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Apply only the architect bootstrap segment under its declared authority.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2364,6 +3022,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Apply only the f5 bootstrap segment under its declared authority.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2417,6 +3089,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Apply the exact owner bootstrap segment under its declared authority.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2465,6 +3151,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Build the exact segmented bootstrap plan without authorizing a mutation.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2508,6 +3208,20 @@ export const ACTION_REGISTRY = [
     description:
       'Reverse-direction adherence audit: surfaces from the inventory that are not claimed by any invariant.code_areas in trace.json. Per Phase 11.F (D-39).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2550,6 +3264,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'List Angular/Nest @Component/@Directive/@Pipe/@Injectable/@Controller classes',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2592,6 +3320,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Validate contract files (JSON Schemas + OpenAPI)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2635,6 +3377,20 @@ export const ACTION_REGISTRY = [
     description:
       'Normalize coverage-final.json into a flat summary. With --fail-under, gate against thresholds.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2677,6 +3433,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Build the import graph (sorted nodes + edges) and compute its SHA-256 hash',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2719,6 +3489,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Compute usage coverage for each glossary term against the source tree',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2761,6 +3545,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'List NestJS @Module and Angular @NgModule classes (AST extraction)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2803,6 +3601,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Emit every inventory slice as one schema-conformant record to stdout',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2845,6 +3657,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'List NestJS HTTP routes (controller decorator walk)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2887,6 +3713,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Discover JSON Schema, OpenAPI files, and (optionally) Postgres tables/views',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2930,6 +3770,20 @@ export const ACTION_REGISTRY = [
     description:
       'Propose INV-CANDIDATE records from inventory sensor outputs (the brownfield-adoption bridge)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -2988,6 +3842,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Discover *.test.ts/*.spec.ts files; classify by suite; extract invariant markers',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3035,6 +3903,20 @@ export const ACTION_REGISTRY = [
       'R24 ADR-EFFECTS records go after extractor equality, complete dispositions, subprocess classification, and the 10-second wall-clock gate.',
       'R25 independently binds static findings and runtime seam enforcement.',
     ],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3078,6 +3960,20 @@ export const ACTION_REGISTRY = [
     description:
       'Validate ADR shape (front-matter + mandatory sections + sequential numbering). Absorbs LAW-14.ADR.*.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3121,6 +4017,20 @@ export const ACTION_REGISTRY = [
     description:
       'Validate .github/workflows/ against ADR-CI-ECONOMY: cancel-in-progress concurrency on PR workflows, no macOS on pull_request, no pull_request+push+schedule triple triggers, evidence gate wired. Rules 1-3 always hard-fail; rule 4 (evidence-gate-wired) is hard under the default "full" CI-economy profile and downgrades to advisory (still reported) when the target repo declares ci_economy.profile: "gate-staged" in .devai/config/project.json (D-116). Judgment rules (path filters, cron cadence, macOS cost, scheduled audit, DB isolation) are advisory.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3164,6 +4074,20 @@ export const ACTION_REGISTRY = [
     description:
       'Evaluate pinned pnpm@10.0.0 and npm@11.14.1 audit output over pnpm-lock.yaml and docs/site/package-lock.json; block high/critical advisories and invalid waivers, and fail closed on unavailable, malformed, stale, or mismatched provenance.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3207,6 +4131,20 @@ export const ACTION_REGISTRY = [
     description:
       'Validate repo against ADR-DOCS-GOVERNANCE: classification, builder choice, opt-out ADR, site-dir shape, build toolchain, gh-pages branch, and no-CI-publish rule. Hard-fail gate per ADR-DOCS-GOVERNANCE Decision 6.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3250,6 +4188,20 @@ export const ACTION_REGISTRY = [
     description:
       'Scan recent git commits for matches against .devai/config/forbidden-actions.json. Absorbs LAW-12.FORBID.1.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3293,6 +4245,20 @@ export const ACTION_REGISTRY = [
     description:
       'Evaluate .devai/config/glob-guards.json: every registered pattern must still match at least min_matches files. Catches a CI trigger path, generator input dir, or validation-loop target silently degrading to zero matches after a rename or format migration.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3336,6 +4302,20 @@ export const ACTION_REGISTRY = [
     description:
       'Scan source for inv-override annotations; validate against invariant catalog + severity + expiry. Absorbs LAW-00.OVERRIDE.1.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3379,6 +4359,20 @@ export const ACTION_REGISTRY = [
     description:
       'Parse + validate the Inv-Compliance: PR trailer. Absorbs LAW-00.READING.2 / LAW-12.CITE.1.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3422,6 +4416,20 @@ export const ACTION_REGISTRY = [
     description:
       'Inspect skill manifests for authority-inversion: scopes granting Constructor-tier writes over Architect/Owner/Inspector-reserved paths. Per Phase 12.B (D-42).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3465,6 +4473,20 @@ export const ACTION_REGISTRY = [
     authority: 'policy_firewall',
     description: 'Validate the complete recursive schema canon and every governed schema rule.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3508,6 +4530,20 @@ export const ACTION_REGISTRY = [
     description:
       'Flag SensorReadings that share a command_hash across distinct sensor.kind values (relabeled, not independently measured). Advisory: exits REVIEW on findings, never FAIL.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3551,6 +4587,20 @@ export const ACTION_REGISTRY = [
     description:
       'Compute a deploy-gate decision from scorecard + sensor evidence + invariant state. Persists under .devai/state/releases/REL-NNNN.json. Per Phase 11.B (D-39).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3609,6 +4659,20 @@ export const ACTION_REGISTRY = [
     authority: 'release_controller',
     description: 'List release-control records under .devai/state/releases/',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3668,6 +4732,20 @@ export const ACTION_REGISTRY = [
     description:
       'Verify the deployed runtime matches the artifact-of-record. Either record form (operator supplies --artifact-chain-head + --audit-chain-head) or detector form (operator supplies --runtime-charter <path> to an api-kind charter that probes the deployed runtime; charter pass → release pass, any fail/error → block + rollback_recommended).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3727,6 +4805,20 @@ export const ACTION_REGISTRY = [
     description:
       'Detect or record runtime drift. Either record form (operator supplies --observation surface=delta pairs) or detector form (operator supplies --runtime-charter <path> to an api/auth charter; each failed/errored probe is translated into a drift observation).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3786,6 +4878,20 @@ export const ACTION_REGISTRY = [
     description:
       'Close a governed round in place after every binding precondition resolves; the archive action name is a compatibility spelling only.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3840,6 +4946,20 @@ export const ACTION_REGISTRY = [
     description:
       'Validate a public round-record JSON input and declare it in the local round workspace.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3893,6 +5013,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Create a deterministic governed-round skeleton under work/rounds.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3946,6 +5080,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Read one governed round in place and report its schema-valid canonical status.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -3989,6 +5137,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run archive_immutability.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4031,6 +5193,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Run the fixed recursive project build (pnpm -r build); emit a SensorReading',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4074,6 +5250,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run decision_citation_resolution.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4117,6 +5307,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run decision_record_integrity.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4160,6 +5364,20 @@ export const ACTION_REGISTRY = [
     description:
       'Cross-check machine-derivable reference-doc claims against ground truth; emit a docs_drift SensorReading (F5×T3)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4203,6 +5421,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run harness_coherence.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4246,6 +5478,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run harness_coverage.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4289,6 +5535,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run harness_depth.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4332,6 +5592,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run harness_green_main.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4375,6 +5649,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run harness_idiomaticity.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4418,6 +5706,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run harness_invariant_alignment.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4461,6 +5763,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run harness_performance.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4504,6 +5820,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run harness_robustness.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4547,6 +5877,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run harness_security.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4590,6 +5934,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run inventory_adherence.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4633,6 +5991,20 @@ export const ACTION_REGISTRY = [
     description:
       'Static backend-API inventory (NestJS adapter, tier L0); emit SensorReading + api-map body',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4676,6 +6048,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run coverage.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4719,6 +6105,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run data_handling.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4762,6 +6162,20 @@ export const ACTION_REGISTRY = [
     description:
       'Static data-model inventory (Postgres SQL migration parser, tier L0); emit SensorReading + body',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4805,6 +6219,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run dep_graph.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4848,6 +6276,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run inventory_determinism.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4891,6 +6333,20 @@ export const ACTION_REGISTRY = [
     description:
       'Aggregate persisted inventory_* SR durations into a p95-based verdict (F4×T7, Phase 29.F / R-1)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4934,6 +6390,20 @@ export const ACTION_REGISTRY = [
     description:
       'Static RBAC inventory inferred from data-model output (tier L0); emit SensorReading + rbac body',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -4977,6 +6447,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run routes.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5019,6 +6503,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'LLM-backed soft-gate evaluator. Phase-9 Batch 9.C — real implementation.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5061,6 +6559,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Wrap eslint --format=json; emit a SensorReading with per-message findings',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5103,6 +6615,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Apply every db/migrations/*.sql to a Postgres URL; emit a SensorReading',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5146,6 +6672,20 @@ export const ACTION_REGISTRY = [
     description:
       'Run mutation scenarios and emit `.devai/state/mutation/current.json` in the shape `verify-mutation` consumes. Per D-A-44 / ADR-MUTATION-SCENARIOS.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5205,6 +6745,20 @@ export const ACTION_REGISTRY = [
     description:
       'Compare the current mutation report with its baseline and thresholds. Exits non-zero on regression or threshold breach.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5259,6 +6813,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run perf_test.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5302,6 +6870,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run plant_coherence.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5345,6 +6927,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run plant_coverage.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5388,6 +6984,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run plant_depth.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5431,6 +7041,20 @@ export const ACTION_REGISTRY = [
     description:
       'Synthesize SensorReadings from existing .devai/state/sensors/<verb>/ bodies into .devai/state/sensor-readings/ (Phase 21.E).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5490,6 +7114,20 @@ export const ACTION_REGISTRY = [
     description:
       'Validate and idempotently persist one exact SensorReading artifact with chained provenance',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5549,6 +7187,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run round_record_integrity.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5592,6 +7244,20 @@ export const ACTION_REGISTRY = [
     description:
       'Run a deterministic sensor preset for an adoption tier; --dry-run prints the exact expansion.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5651,6 +7317,20 @@ export const ACTION_REGISTRY = [
     description:
       'Execute an HTTP/RPC runtime-probe charter against a deployed runtime and emit a SensorReading. Per Phase 11.A (D-39).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5694,6 +7374,20 @@ export const ACTION_REGISTRY = [
     description:
       'Execute an auth/RBAC/protected-surface runtime-probe charter and emit a SensorReading. Per Phase 11.A (D-39).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5737,6 +7431,20 @@ export const ACTION_REGISTRY = [
     description:
       'Execute a data/state/consistency runtime-probe charter and emit a SensorReading. DB driver placeholder; --dry-run validates the charter without executing. Per Phase 11.A (D-39).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5780,6 +7488,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run security_scan.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5823,6 +7545,20 @@ export const ACTION_REGISTRY = [
     description:
       'Compare local gh-pages provenance with repository and package history; emit a site_drift SensorReading',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5866,6 +7602,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run spec_alignment.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5909,6 +7659,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run spec_depth.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5952,6 +7716,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run spec_freshness.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -5995,6 +7773,20 @@ export const ACTION_REGISTRY = [
     description:
       'Run invariant validator with --strict-cnl and emit a spec_idiomaticity SensorReading (F1×T5)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6038,6 +7830,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run spec_performance_targets.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6081,6 +7887,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run spec_robustness_targets.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6124,6 +7944,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run spec_security_coverage.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6166,6 +8000,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Run a test suite (unit|integration|regression|e2e|all); emit a SensorReading',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6209,6 +8057,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run test_coherence.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6252,6 +8114,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run test_coverage_depth.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6295,6 +8171,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run test_idiomaticity.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6338,6 +8228,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run test_invariant_alignment.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6381,6 +8285,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run test_performance_coverage.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6424,6 +8342,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run test_robustness_coverage.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6467,6 +8399,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run test_security_coverage.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6510,6 +8456,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Retired compatibility identity; use sense run test_weakening.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6552,6 +8512,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Resolve trace.json against the invariant catalog and check coverage',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6594,6 +8568,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Wrap tsc --noEmit; emit a SensorReading with per-error findings',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6637,6 +8625,20 @@ export const ACTION_REGISTRY = [
     description:
       'Compare a module-blueprint to brownfield inventory; emit deltas (the bridge between brownfield and greenfield)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6679,6 +8681,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Emit a deterministic scaffold plan from a module-blueprint (no file writes)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6721,6 +8737,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Validate a module-blueprint against schema + INV-BLUEPRINT-001/-002/-003',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6764,6 +8794,20 @@ export const ACTION_REGISTRY = [
     description:
       'Append a resolution record to the decisions ledger (closed | superseded | invalidated). Original DEC record is not modified. Per D-A-42.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6823,6 +8867,20 @@ export const ACTION_REGISTRY = [
     description:
       'Build a hash-stamped RTD manifest aggregating invariants, trace, journeys, glossary, tombstones, ADRs, and forbidden-actions. Per Phase 12.A (D-41).',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6882,6 +8940,20 @@ export const ACTION_REGISTRY = [
     description:
       'Gate: every registered action is claimed by at least one invariant.measurable_via. Closes Batch 9.A.3.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6924,6 +8996,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Run every spec validator and aggregate the result',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -6966,6 +9052,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Validate glossary entries (schema, duplicate terms, invariant references)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7008,6 +9108,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Validate non-vacuous completion strategies for readiness-bearing invariants',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7050,6 +9164,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Validate invariant files (schema, ID uniqueness, domains, anchors)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7092,6 +9220,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Validate journey files (schema, ID uniqueness, invariant references)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7134,6 +9276,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Validate one JSON instance against one explicit Draft 2020-12 schema',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7176,6 +9332,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Validate complete test-to-invariant trace mappings and lifecycle provenance',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7218,6 +9388,20 @@ export const ACTION_REGISTRY = [
     authority: 'specifier',
     description: 'Validate trace.json (schema, invariant references, well-formed test paths)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7260,6 +9444,20 @@ export const ACTION_REGISTRY = [
     authority: 'sensor',
     description: 'Independently validate an untrusted translation witness (report-only)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7331,6 +9529,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Append a task to the backlog.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7389,6 +9601,20 @@ export const ACTION_REGISTRY = [
     authority: null,
     description: 'Tombstoned identity; use work backlog list.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      success_channel: 'none',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'router-only',
+      envelope_schema: null,
+      error_schema: null,
+      error_channel: 'none',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7447,6 +9673,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Mark a backlog entry completed.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7505,6 +9745,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'List backlog entries sorted by priority descending.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7547,6 +9801,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Peek the highest-priority queued backlog entry.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7589,6 +9857,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Terminate connections + DROP DATABASE devai_task_<id>',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7642,6 +9924,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'CREATE DATABASE devai_task_<id> TEMPLATE devai_template',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7695,6 +9991,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Drop+recreate the devai_template database',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7748,6 +10058,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Start the shared dev Postgres cluster via Docker.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7801,6 +10125,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Report shared-cluster + per-task DB status.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7843,6 +10181,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Stop the shared dev Postgres cluster Docker container.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7896,6 +10248,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Acquire module-level locks for a task',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7954,6 +10320,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'List all currently-held locks',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -7996,6 +10376,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Remove expired locks (TTL janitor)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8054,6 +10448,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Release every lock held by a task',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8112,6 +10520,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Revoke the explicitly selected authority session.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8170,6 +10592,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Start an explicit repository- and policy-bound authority session.',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8228,6 +10664,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Preview or delete expired disposable outputs while preserving canonical evidence',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8286,6 +10736,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Mark a task completed (releases locks; optionally tears down worktree + DB)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8344,6 +10808,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Escalate a task to human (renames branch + releases locks; optional tear-down)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8402,6 +10880,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'List all task records',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8444,6 +10936,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Pause a task on a Reference Gap Report',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8502,6 +11008,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Resume the task paused on an RGR',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8561,6 +11081,20 @@ export const ACTION_REGISTRY = [
     description:
       'Spawn a task: acquire locks; optionally create worktree and provision per-task DB (atomic with rollback on failure)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8623,6 +11157,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Adopt an existing branch into a human-flagged worktree (cap-exempt)',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8681,6 +11229,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Create a git worktree under .devai/worktrees/<id>',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8739,6 +11301,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Remove a git worktree and unregister it',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8797,6 +11373,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'List registered worktrees',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
@@ -8839,6 +11429,20 @@ export const ACTION_REGISTRY = [
     authority: 'mesh_controller',
     description: 'Remove orphan worktrees not in the registry',
     promotion_criteria: [],
+    output_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'action-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      success_channel: 'stdout',
+      payload_schema: null,
+    },
+    error_contract: {
+      schemaVersion: '1.0.0',
+      mode: 'structured-error-envelope',
+      envelope_schema: 'law/schemas/action-result.schema.json',
+      error_schema: 'law/schemas/error.schema.json',
+      error_channel: 'stderr',
+    },
     authority_contract_version: '1.0.0',
     authority_contract: {
       schemaVersion: '1.0.0',
