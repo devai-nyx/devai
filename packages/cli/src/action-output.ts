@@ -175,7 +175,7 @@ export function attachActionOutputBoundaries(
     const original = command?.commandAction;
     if (!command || !original) continue;
     command.commandAction = function actionOutputBoundary(...args: unknown[]) {
-      if (!wantsMachineJson(process.argv)) return Reflect.apply(original, this, args);
+      if (!wantsMachineJson(process.argv)) return original(...args);
       let stdout = '';
       let stderr = '';
       let explicitExit: number | undefined;
@@ -211,7 +211,7 @@ export function attachActionOutputBoundaries(
       };
 
       try {
-        const value = Reflect.apply(original, this, args);
+        const value = original(...args);
         if (value && typeof (value as PromiseLike<unknown>).then === 'function') {
           return Promise.resolve(value).then(finish, fail);
         }
