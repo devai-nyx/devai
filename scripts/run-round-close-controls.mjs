@@ -1,7 +1,17 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  readlinkSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -145,6 +155,32 @@ function cleanStatus(root) {
   return git(root, ['status', '--porcelain', '--untracked-files=all']);
 }
 
+function workspaceSnapshot(root) {
+  const entries = [];
+  const excluded = new Set(['.git', 'node_modules']);
+  function visit(directory, prefix = '') {
+    for (const name of readdirSync(directory).sort()) {
+      const path = prefix.length === 0 ? name : `${prefix}/${name}`;
+      if (excluded.has(name) || path === '.devai/state' || path.startsWith('.devai/state/'))
+        continue;
+      const absolute = join(directory, name);
+      const stat = lstatSync(absolute);
+      if (stat.isDirectory()) visit(absolute, path);
+      else if (stat.isSymbolicLink())
+        entries.push({ path, kind: 'symlink', value: readlinkSync(absolute) });
+      else if (stat.isFile())
+        entries.push({ path, kind: 'file', digest: sha256(readFileSync(absolute)) });
+    }
+  }
+  visit(root);
+  return sha256(canonical(entries));
+}
+
+function coverageDigest(root) {
+  const path = join(root, 'scratch/coverage/t1-t3/coverage-summary.json');
+  return existsSync(path) ? sha256(readFileSync(path)) : null;
+}
+
 function stateDirectory(root, round) {
   return join(root, '.devai/state/round-runs', round, 'close');
 }
@@ -167,7 +203,7 @@ function readState(root, round, name) {
   }
 }
 
-function policyFindings(policy) {
+function policyFindings(policy, root = repoRoot, revision = 'HEAD', options = {}) {
   const findings = [];
   const assertions = policy?.semantic_assertions;
   if (assertions === null || typeof assertions !== 'object' || Array.isArray(assertions)) {
@@ -195,6 +231,39 @@ function policyFindings(policy) {
         'fixed counts, self-comparisons, and named-file-only populations are forbidden',
       ),
     );
+  }
+  for (const source of populations) {
+    if (
+      typeof source === 'string' &&
+      source.includes('*') &&
+      pathsForGlobs(root, revision, [source]).length === 0
+    ) {
+      findings.push(
+        finding('SEMANTIC_POPULATION_EMPTY', `semantic population ${source} is empty`, {
+          path: source,
+        }),
+      );
+    }
+  }
+  if (options.skipMirrorPairs !== true) {
+    for (const pair of assertions.mirror_pairs ?? []) {
+      const source = typeof pair?.source === 'string' ? join(root, pair.source) : '';
+      const mirror = typeof pair?.mirror === 'string' ? join(root, pair.mirror) : '';
+      if (
+        source.length === 0 ||
+        mirror.length === 0 ||
+        !existsSync(source) ||
+        !existsSync(mirror) ||
+        !readFileSync(source).equals(readFileSync(mirror))
+      ) {
+        findings.push(
+          finding('POLICY_MIRROR_DRIFT', 'governed source and mirror must be byte-identical', {
+            source: pair?.source,
+            mirror: pair?.mirror,
+          }),
+        );
+      }
+    }
   }
   const identities = policy?.identities;
   if (
@@ -226,28 +295,18 @@ function policyCheck() {
   const findings = [];
   const policy = loadPolicy(findings);
   if (policy !== null) findings.push(...policyFindings(policy));
-  if (
-    !existsSync(mirrorPath) ||
-    !existsSync(policyPath) ||
-    !readFileSync(policyPath).equals(readFileSync(mirrorPath))
-  ) {
-    findings.push(
-      finding(
-        'POLICY_MIRROR_DRIFT',
-        'round close control policy and committed materialization must be byte-identical',
-      ),
-    );
-  }
   emit({ ok: findings.length === 0, command: 'policy-check', findings });
 }
 
 function materialize() {
   const findings = [];
   const policy = loadPolicy(findings);
-  if (policy !== null) findings.push(...policyFindings(policy));
+  if (policy !== null)
+    findings.push(...policyFindings(policy, repoRoot, 'HEAD', { skipMirrorPairs: true }));
   if (findings.length === 0) {
     mkdirSync(dirname(mirrorPath), { recursive: true });
     writeFileSync(mirrorPath, readFileSync(policyPath));
+    findings.push(...policyFindings(policy));
   }
   emit({
     ok: findings.length === 0,
@@ -498,15 +557,87 @@ function coverageReading(root) {
   return Object.values(result).every(Number.isFinite) ? result : null;
 }
 
+function validCommandResult(actual, expected) {
+  return (
+    actual?.id === expected?.id &&
+    JSON.stringify(actual?.argv) === JSON.stringify(expected?.argv) &&
+    actual?.exit_code === 0 &&
+    actual?.outcome === 'pass' &&
+    /^[0-9a-f]{64}$/u.test(actual?.stdout_sha256 ?? '') &&
+    /^[0-9a-f]{64}$/u.test(actual?.stderr_sha256 ?? '')
+  );
+}
+
+function semanticResults(results) {
+  return (results ?? []).map(({ id, argv, exit_code, outcome }) => ({
+    id,
+    argv,
+    exit_code,
+    outcome,
+  }));
+}
+
+function validateConvergenceState(state, policy, base, head, root) {
+  if (
+    state?.ok !== true ||
+    state?.base !== base ||
+    state?.head !== head ||
+    !Array.isArray(state?.passes) ||
+    state.passes.length !== 2 ||
+    !Array.isArray(state?.findings) ||
+    state.findings.length !== 0 ||
+    state?.result_equivalent !== true
+  )
+    return false;
+  const expected = policy.convergence.commands ?? [];
+  const coverageSha = coverageDigest(root);
+  if (coverageSha === null) return false;
+  for (const [index, pass] of state.passes.entries()) {
+    if (
+      pass?.pass !== index + 1 ||
+      pass?.clean_before !== true ||
+      pass?.clean_after !== true ||
+      pass?.head_before !== head ||
+      pass?.head_after !== head ||
+      pass?.coverage_sha256 !== coverageSha ||
+      typeof pass?.workspace_sha256 !== 'string' ||
+      !Array.isArray(pass?.results) ||
+      pass.results.length !== expected.length ||
+      !pass.results.every((result, resultIndex) =>
+        validCommandResult(result, expected[resultIndex]),
+      )
+    )
+      return false;
+  }
+  return (
+    state.passes[0].workspace_sha256 === state.passes[1].workspace_sha256 &&
+    canonical(semanticResults(state.passes[0].results)) ===
+      canonical(semanticResults(state.passes[1].results))
+  );
+}
+
+function validRehearsalResult(result) {
+  return (
+    SHA40.test(result?.source_merge ?? '') &&
+    SHA40.test(result?.closure_head ?? '') &&
+    SHA40.test(result?.schema_ancestor ?? '') &&
+    SHA40.test(result?.verb_ancestor ?? '') &&
+    result?.production_verb_exercised === true &&
+    result?.record_schema_valid === true &&
+    result?.exact_range_valid === true &&
+    result?.ok === true
+  );
+}
+
 function manifest() {
   const findings = [];
   const policy = loadPolicy(findings);
   if (policy === null) return emit({ ok: false, command: 'manifest', findings });
-  findings.push(...policyFindings(policy));
   const round = option('--round') ?? '';
   const implementationSubject = option('--implementation-subject') ?? '';
   const reviewCandidate = option('--review-candidate') ?? '';
   const publishedHead = option('--published-head') ?? '';
+  findings.push(...policyFindings(policy, repoRoot, publishedHead || 'HEAD'));
   if (process.argv.includes('--history-window')) {
     findings.push(
       finding('FIXED_HISTORY_WINDOW_FORBIDDEN', 'candidate range must never use a last-N window'),
@@ -587,6 +718,16 @@ function manifest() {
         actual_head: convergenceState.value?.head,
       }),
     );
+  if (
+    convergenceState.status === 'valid' &&
+    !validateConvergenceState(convergenceState.value, policy, base, publishedHead, repoRoot)
+  )
+    findings.push(
+      finding(
+        'CONVERGENCE_STATE_INVALID',
+        'convergence state does not prove two exact equivalent clean passes',
+      ),
+    );
   const rehearsalState = readState(repoRoot, round, 'closure-rehearsal.json');
   if (rehearsalState.status === 'missing')
     findings.push(finding('CLOSURE_REHEARSAL_MISSING', 'run rehearse first'));
@@ -609,6 +750,31 @@ function manifest() {
         actual_candidate: rehearsalState.value?.candidate,
       }),
     );
+  if (rehearsalState.status === 'valid' && !validRehearsalResult(rehearsalState.value?.result)) {
+    findings.push(
+      finding('CLOSURE_REHEARSAL_INVALID', 'closure rehearsal state is not production evidence'),
+    );
+  } else if (
+    rehearsalState.status === 'valid' &&
+    rehearsalState.value?.base === base &&
+    rehearsalState.value?.candidate === publishedHead
+  ) {
+    const replayFindings = [];
+    const replay = performRehearsal(policy, round, base, publishedHead, replayFindings);
+    if (
+      replayFindings.length > 0 ||
+      replay === null ||
+      canonical(replay) !== canonical(rehearsalState.value.result)
+    ) {
+      findings.push(
+        finding(
+          'CLOSURE_REHEARSAL_INVALID',
+          'closure rehearsal cannot be reproduced from the exact candidate',
+          { replay_findings: replayFindings },
+        ),
+      );
+    }
+  }
   const convergence = convergenceState.value;
   const rehearsal = rehearsalState.value;
   const coverage = coverageReading(repoRoot);
@@ -629,7 +795,7 @@ function manifest() {
       .filter(Boolean);
     const rolePathCommits = rolePathMap(repoRoot, base, publishedHead, policy, findings);
     const results = convergence.passes.flatMap((pass) => pass.results);
-    const testIds = new Set(['stage2', 't4', 't5', 't6', 'coverage']);
+    const testIds = new Set(['ordinary', 'stage2', 't4', 't5', 't6', 'coverage']);
     const body = {
       schemaVersion: '1.0.0',
       round,
@@ -692,6 +858,15 @@ function converge() {
   const base = option('--base') ?? '';
   const head = option('--head') ?? 'HEAD';
   const exactHead = git(repoRoot, ['rev-parse', head]);
+  const checkedOutHead = git(repoRoot, ['rev-parse', 'HEAD']);
+  if (checkedOutHead !== exactHead) {
+    findings.push(
+      finding('CONVERGENCE_HEAD_MISMATCH', 'checkout does not equal the convergence head', {
+        expected: exactHead,
+        actual: checkedOutHead,
+      }),
+    );
+  }
   const declared = declaredBase(repoRoot, policy, exactHead, findings);
   if (base !== declared) {
     findings.push(
@@ -703,6 +878,17 @@ function converge() {
   }
   const passes = [];
   for (let passNumber = 1; passNumber <= 2; passNumber += 1) {
+    const headBefore = git(repoRoot, ['rev-parse', 'HEAD']);
+    if (headBefore !== exactHead) {
+      findings.push(
+        finding('CONVERGENCE_HEAD_MISMATCH', `pass ${String(passNumber)} head drifted`, {
+          pass: passNumber,
+          expected: exactHead,
+          actual: headBefore,
+        }),
+      );
+      break;
+    }
     const before = cleanStatus(repoRoot);
     if (before.length > 0) {
       findings.push(
@@ -714,6 +900,15 @@ function converge() {
     }
     const results = [];
     for (const gate of policy.convergence.commands ?? []) {
+      if (git(repoRoot, ['rev-parse', 'HEAD']) !== exactHead) {
+        findings.push(
+          finding('CONVERGENCE_HEAD_MISMATCH', `head drifted before gate ${gate.id}`, {
+            pass: passNumber,
+            gate: gate.id,
+          }),
+        );
+        break;
+      }
       const [program, ...args] = gate.argv ?? [];
       const result = run(program, args, { cwd: repoRoot });
       results.push(commandResult(gate.id, gate.argv, result));
@@ -726,12 +921,31 @@ function converge() {
           }),
         );
       }
+      if (git(repoRoot, ['rev-parse', 'HEAD']) !== exactHead) {
+        findings.push(
+          finding('CONVERGENCE_HEAD_MISMATCH', `gate ${gate.id} changed HEAD`, {
+            pass: passNumber,
+            gate: gate.id,
+          }),
+        );
+        break;
+      }
     }
     const after = cleanStatus(repoRoot);
+    const headAfter = git(repoRoot, ['rev-parse', 'HEAD']);
     if (after.length > 0) {
       findings.push(
         finding('CONVERGENCE_DIRTY_TREE', `pass ${String(passNumber)} wrote repository paths`, {
           pass: passNumber,
+        }),
+      );
+    }
+    if (headAfter !== exactHead) {
+      findings.push(
+        finding('CONVERGENCE_HEAD_MISMATCH', `pass ${String(passNumber)} ended at another head`, {
+          pass: passNumber,
+          expected: exactHead,
+          actual: headAfter,
         }),
       );
     }
@@ -740,11 +954,43 @@ function converge() {
       results,
       clean_before: before.length === 0,
       clean_after: after.length === 0,
+      head_before: headBefore,
+      head_after: headAfter,
+      coverage_sha256: coverageDigest(repoRoot),
+      workspace_sha256: workspaceSnapshot(repoRoot),
     });
     if (findings.length > 0) break;
   }
+  const resultEquivalent =
+    passes.length === 2 &&
+    canonical(semanticResults(passes[0].results)) === canonical(semanticResults(passes[1].results));
+  if (passes.length === 2 && passes[0].workspace_sha256 !== passes[1].workspace_sha256) {
+    findings.push(
+      finding(
+        'CONVERGENCE_WRITE_DETECTED',
+        'the second pass changed relevant tracked, untracked, ignored, or generated content',
+      ),
+    );
+  }
+  if (passes.length === 2 && passes[0].coverage_sha256 !== passes[1].coverage_sha256) {
+    findings.push(
+      finding('CONVERGENCE_COVERAGE_DRIFT', 'coverage bytes differ across convergence passes'),
+    );
+  }
+  if (passes.length === 2 && !resultEquivalent) {
+    findings.push(
+      finding('CONVERGENCE_RESULT_DRIFT', 'ordered command outcomes differ across passes'),
+    );
+  }
   const ok = findings.length === 0 && passes.length === 2;
-  const state = { ok, base, head: exactHead, passes, findings };
+  const state = {
+    ok,
+    base,
+    head: exactHead,
+    passes,
+    result_equivalent: resultEquivalent,
+    findings,
+  };
   if (ok) writeState(repoRoot, round, 'convergence.json', state);
   emit({ ...state, command: 'converge' });
 }
@@ -762,18 +1008,90 @@ function changedCommits(root, base, head) {
     }));
 }
 
+function parseReviewRecord(source) {
+  const match = /^---\n([\s\S]*?)\n---(?:\n|$)/u.exec(source);
+  if (match === null) return null;
+  const fields = {};
+  for (const line of match[1].split('\n')) {
+    const separator = line.indexOf(':');
+    if (separator <= 0) return null;
+    fields[line.slice(0, separator).trim()] = line.slice(separator + 1).trim();
+  }
+  return fields;
+}
+
+function reviewManifest(policy, findings) {
+  const relativePath =
+    policy?.review?.manifest_state ??
+    '.devai/state/round-runs/R-0006/close/candidate-manifest.json';
+  const path = join(repoRoot, relativePath);
+  if (!existsSync(path)) {
+    findings.push(finding('REVIEW_RECORD_INVALID', 'candidate manifest state is missing'));
+    return null;
+  }
+  try {
+    const manifestValue = readJson(path);
+    const { manifest_digest_sha256: claimed, ...body } = manifestValue;
+    const recomputed = sha256(canonical(body));
+    if (!SHA40.test(manifestValue.review_candidate ?? '') || claimed !== recomputed) {
+      findings.push(
+        finding('REVIEW_RECORD_INVALID', 'candidate manifest identity or digest is invalid'),
+      );
+      return null;
+    }
+    return { value: manifestValue, digest: recomputed };
+  } catch (error) {
+    findings.push(finding('REVIEW_RECORD_INVALID', `candidate manifest is malformed: ${error}`));
+    return null;
+  }
+}
+
 function envelope() {
   const findings = [];
   const policy = loadPolicy(findings);
   if (policy === null) return emit({ ok: false, command: 'envelope', findings });
-  const reviewedSha = option('--reviewed-sha') ?? '';
   const head = option('--head') ?? 'HEAD';
   const reviewRecord = option('--review-record') ?? '';
   const exactHead = SHA40.test(head) ? head : git(repoRoot, ['rev-parse', head]);
+  if (process.argv.includes('--reviewed-sha')) {
+    findings.push(
+      finding(
+        'REVIEWED_SHA_CALLER_FORBIDDEN',
+        'the reviewed identity must be derived from the candidate manifest and review record',
+      ),
+    );
+  }
   if (reviewRecord !== policy.review.record) {
     findings.push(finding('REVIEW_RECORD_NOT_EXACT', 'review record differs from policy'));
   }
-  const commits = changedCommits(repoRoot, reviewedSha, exactHead);
+  const manifestState = reviewManifest(policy, findings);
+  const reviewedSha = manifestState?.value?.review_candidate ?? option('--reviewed-sha') ?? '';
+  let reviewFields = null;
+  try {
+    reviewFields = parseReviewRecord(candidateFile(repoRoot, exactHead, reviewRecord));
+  } catch (error) {
+    findings.push(finding('REVIEW_RECORD_INVALID', `review record is unavailable: ${error}`));
+  }
+  const requiredVerdict = policy.review.required_verdict ?? 'PASS';
+  const requiredModel = policy.review.required_model ?? 'claude-opus-5';
+  if (
+    reviewFields === null ||
+    reviewFields.verdict !== requiredVerdict ||
+    reviewFields.reviewer_model !== requiredModel ||
+    reviewFields.review_candidate !== reviewedSha ||
+    reviewFields.manifest_digest_sha256 !== manifestState?.digest
+  ) {
+    findings.push(
+      finding(
+        'REVIEW_RECORD_INVALID',
+        'review record must bind exact PASS, model, candidate, and manifest digest',
+      ),
+    );
+  }
+  const commits =
+    SHA40.test(reviewedSha) && SHA40.test(exactHead)
+      ? changedCommits(repoRoot, reviewedSha, exactHead)
+      : [];
   let reviewCommits = 0;
   const projectionOutputs = new Map();
   const projections = new Map();
@@ -919,6 +1237,250 @@ function commitTree(root, tree, parents, message, author) {
   });
 }
 
+function schemaAccepts(root, schemaPath, value) {
+  try {
+    const ajv = new Ajv2020({ strict: false });
+    addFormats(ajv);
+    const commonPath = join(root, 'law/schemas/common-defs.schema.json');
+    if (existsSync(commonPath)) ajv.addSchema(readJson(commonPath));
+    return ajv.compile(readJson(join(root, schemaPath)))(value) === true;
+  } catch {
+    return false;
+  }
+}
+
+function performRehearsal(policy, round, base, candidate, findings) {
+  let isolated;
+  try {
+    isolated = isolatedClone(repoRoot, candidate);
+  } catch (error) {
+    findings.push(finding('CANDIDATE_CLONE_FAILED', String(error)));
+    return null;
+  }
+  try {
+    const schemaPath = policy.rehearsal.schema_path;
+    const verbPath = policy.rehearsal.verb_path;
+    for (const [path, label] of [
+      [schemaPath, 'closure schema'],
+      [verbPath, 'closure verb'],
+    ]) {
+      if (gitResult(isolated.checkout, ['cat-file', '-e', `${candidate}:${path}`]).status !== 0) {
+        findings.push(
+          finding('CLOSURE_PREREQUISITE_MISSING', `${label} absent from candidate`, { path }),
+        );
+      }
+    }
+    if (findings.length > 0) return null;
+
+    for (const argv of policy.rehearsal.prepare ?? []) {
+      const [program, ...args] = argv;
+      const prepared = run(program, args, { cwd: isolated.checkout });
+      if (prepared.status !== 0) {
+        findings.push(
+          finding(
+            'CLOSURE_REHEARSAL_PREPARE_FAILED',
+            `rehearsal prepare failed: ${argv.join(' ')}`,
+            {
+              exit_code: prepared.status ?? 1,
+              stdout: prepared.stdout,
+              stderr: prepared.stderr,
+            },
+          ),
+        );
+        return null;
+      }
+    }
+
+    const tree = git(isolated.checkout, ['rev-parse', `${candidate}^{tree}`]);
+    const sourceMerge = commitTree(
+      isolated.checkout,
+      tree,
+      [base, candidate],
+      `${round} non-standing source merge rehearsal`,
+      'DEVAI Architect',
+    );
+    const draft = {
+      round_id: `${round}-rehearsal`,
+      title: 'Non-standing entry-control closure rehearsal',
+      declaring_decision: 'DII-207',
+      closing_decision: 'DII-210',
+      batches: [
+        {
+          id: 'entry-control-rehearsal',
+          roles: ['Architect'],
+          commit: candidate,
+          headline: 'Non-standing exact candidate input',
+        },
+      ],
+      gates: { rehearsal: { status: 'pass', detail: 'isolated candidate-only execution' } },
+      source_repo_deleted: false,
+      validation_criteria: [
+        {
+          criterion: 'production closure verb and exact Machine-only range',
+          verdict: 'pass',
+          evidence: 'non-standing isolated rehearsal',
+        },
+      ],
+      closed_at: '2000-01-01T00:00:00.000Z',
+      merged_as: sourceMerge,
+      release_disposition: 'none-preratification',
+    };
+    const [program, ...args] = policy.rehearsal.command ?? [];
+    const closure =
+      typeof program === 'string' && program.length > 0
+        ? run(
+            program,
+            [
+              ...args,
+              '--repo-root',
+              isolated.checkout,
+              '--stdin',
+              '--as-role',
+              'auditor',
+              '--write',
+            ],
+            { cwd: isolated.checkout, input: `${JSON.stringify(draft)}\n` },
+          )
+        : { status: 1, stdout: '', stderr: 'rehearsal command is empty' };
+    if (closure.status !== 0) {
+      findings.push(
+        finding('CLOSURE_REHEARSAL_VERB_FAILED', 'production phase-close command failed', {
+          exit_code: closure.status ?? 1,
+          stdout: closure.stdout,
+          stderr: closure.stderr,
+        }),
+      );
+      return null;
+    }
+    let emitted;
+    try {
+      emitted = JSON.parse(closure.stdout);
+    } catch (error) {
+      findings.push(finding('CLOSURE_REHEARSAL_VERB_FAILED', `invalid verb output: ${error}`));
+      return null;
+    }
+    const absoluteRecordPath = resolve(isolated.checkout, emitted.path ?? '');
+    const recordPath = relative(isolated.checkout, absoluteRecordPath);
+    if (
+      emitted?.ok !== true ||
+      !matches(
+        recordPath,
+        policy.rehearsal.closure_path_glob ?? policy.rehearsal.closure_path ?? '',
+      ) ||
+      recordPath.startsWith('..') ||
+      !existsSync(absoluteRecordPath) ||
+      canonical(readJson(absoluteRecordPath)) !== canonical(emitted.record)
+    ) {
+      findings.push(
+        finding('CLOSURE_REHEARSAL_VERB_FAILED', 'verb did not emit one canonical closure record'),
+      );
+      return null;
+    }
+    const recordSchemaValid = schemaAccepts(isolated.checkout, schemaPath, emitted.record);
+    if (!recordSchemaValid) {
+      findings.push(
+        finding('CLOSURE_REHEARSAL_SCHEMA_INVALID', 'production record failed closure schema'),
+      );
+      return null;
+    }
+
+    const indexPath = join(isolated.temporary, 'closure.index');
+    git(isolated.checkout, ['read-tree', sourceMerge], { env: { GIT_INDEX_FILE: indexPath } });
+    const blob = git(isolated.checkout, ['hash-object', '-w', '--stdin'], {
+      input: readFileSync(absoluteRecordPath),
+    });
+    git(isolated.checkout, ['update-index', '--add', '--cacheinfo', '100644', blob, recordPath], {
+      env: { GIT_INDEX_FILE: indexPath },
+    });
+    const closureTree = git(isolated.checkout, ['write-tree'], {
+      env: { GIT_INDEX_FILE: indexPath },
+    });
+    const closureHead = commitTree(
+      isolated.checkout,
+      closureTree,
+      [sourceMerge],
+      `${round} non-standing closure-only rehearsal`,
+      'DEVAI Machine',
+    );
+    const closurePaths = git(isolated.checkout, [
+      'diff-tree',
+      '--no-commit-id',
+      '--name-only',
+      '-r',
+      closureHead,
+    ])
+      .split('\n')
+      .filter(Boolean);
+    const exactPath =
+      closurePaths.length === 1 &&
+      closurePaths[0] === recordPath &&
+      matches(
+        recordPath,
+        policy.rehearsal.closure_path_glob ?? policy.rehearsal.closure_path ?? '',
+      );
+    let exactRangeValid =
+      exactPath &&
+      git(isolated.checkout, ['show', '-s', '--format=%an', closureHead]) === 'DEVAI Machine';
+    const rangeCommand = policy.rehearsal.range_check ?? [];
+    if (exactRangeValid && rangeCommand.length > 0) {
+      const [rangeProgram, ...rangeArgs] = rangeCommand;
+      const checked = run(
+        rangeProgram,
+        [
+          ...rangeArgs,
+          '--repo-root',
+          isolated.checkout,
+          '--base',
+          sourceMerge,
+          '--head',
+          closureHead,
+          '--json',
+        ],
+        { cwd: isolated.checkout },
+      );
+      let checkedOutput = null;
+      try {
+        checkedOutput = JSON.parse(checked.stdout);
+      } catch {
+        // The failed exact-range result is reported below.
+      }
+      exactRangeValid =
+        checked.status === 0 &&
+        checkedOutput?.ok === true &&
+        checkedOutput?.commits_checked === 1 &&
+        checkedOutput?.base === sourceMerge &&
+        checkedOutput?.head === closureHead;
+      if (!exactRangeValid) {
+        findings.push(
+          finding('CLOSURE_REHEARSAL_RANGE_INVALID', 'production sequencing rejected exact range', {
+            exit_code: checked.status ?? 1,
+            stdout: checked.stdout,
+            stderr: checked.stderr,
+          }),
+        );
+      }
+    }
+    if (!exactRangeValid) {
+      findings.push(
+        finding('CLOSURE_REHEARSAL_NOT_PC_ONLY', 'rehearsal range is not one Machine PC path'),
+      );
+    }
+    const result = {
+      source_merge: sourceMerge,
+      closure_head: closureHead,
+      schema_ancestor: lastPathCommit(isolated.checkout, candidate, schemaPath),
+      verb_ancestor: lastPathCommit(isolated.checkout, candidate, verbPath),
+      production_verb_exercised: true,
+      record_schema_valid: recordSchemaValid,
+      exact_range_valid: exactRangeValid,
+      ok: findings.length === 0,
+    };
+    return result;
+  } finally {
+    rmSync(isolated.temporary, { recursive: true, force: true });
+  }
+}
+
 function rehearse() {
   const findings = [];
   const policy = loadPolicy(findings);
@@ -935,91 +1497,7 @@ function rehearse() {
       }),
     );
   }
-  let isolated;
-  try {
-    isolated = isolatedClone(repoRoot, candidate);
-  } catch (error) {
-    findings.push(finding('CANDIDATE_CLONE_FAILED', String(error)));
-    return emit({ ok: false, command: 'rehearse', findings });
-  }
-  let result = null;
-  try {
-    const schemaPath = policy.rehearsal.schema_path;
-    const verbPath = policy.rehearsal.verb_path;
-    const schemaExists = gitResult(isolated.checkout, [
-      'cat-file',
-      '-e',
-      `${candidate}:${schemaPath}`,
-    ]);
-    const verbExists = gitResult(isolated.checkout, ['cat-file', '-e', `${candidate}:${verbPath}`]);
-    if (schemaExists.status !== 0) {
-      findings.push(
-        finding('CLOSURE_PREREQUISITE_MISSING', 'closure schema absent from candidate', {
-          path: schemaPath,
-        }),
-      );
-    }
-    if (verbExists.status !== 0) {
-      findings.push(
-        finding('CLOSURE_PREREQUISITE_MISSING', 'closure verb absent from candidate', {
-          path: verbPath,
-        }),
-      );
-    }
-    if (findings.length === 0) {
-      const tree = git(isolated.checkout, ['rev-parse', `${candidate}^{tree}`]);
-      const sourceMerge = commitTree(
-        isolated.checkout,
-        tree,
-        [base, candidate],
-        `${round} non-standing source merge rehearsal`,
-        'DEVAI Architect',
-      );
-      const indexPath = join(isolated.temporary, 'closure.index');
-      git(isolated.checkout, ['read-tree', sourceMerge], { env: { GIT_INDEX_FILE: indexPath } });
-      const blob = git(isolated.checkout, ['hash-object', '-w', '--stdin'], {
-        input: '{"rehearsal":true}\n',
-      });
-      git(
-        isolated.checkout,
-        ['update-index', '--add', '--cacheinfo', '100644', blob, policy.rehearsal.closure_path],
-        { env: { GIT_INDEX_FILE: indexPath } },
-      );
-      const closureTree = git(isolated.checkout, ['write-tree'], {
-        env: { GIT_INDEX_FILE: indexPath },
-      });
-      const closureHead = commitTree(
-        isolated.checkout,
-        closureTree,
-        [sourceMerge],
-        `${round} non-standing closure-only rehearsal`,
-        'DEVAI Machine',
-      );
-      const closurePaths = git(isolated.checkout, [
-        'diff-tree',
-        '--no-commit-id',
-        '--name-only',
-        '-r',
-        closureHead,
-      ])
-        .split('\n')
-        .filter(Boolean);
-      if (JSON.stringify(closurePaths) !== JSON.stringify([policy.rehearsal.closure_path])) {
-        findings.push(
-          finding('CLOSURE_REHEARSAL_NOT_PC_ONLY', 'rehearsal closure range is not one PC path'),
-        );
-      }
-      result = {
-        source_merge: sourceMerge,
-        closure_head: closureHead,
-        schema_ancestor: lastPathCommit(isolated.checkout, candidate, schemaPath),
-        verb_ancestor: lastPathCommit(isolated.checkout, candidate, verbPath),
-        ok: findings.length === 0,
-      };
-    }
-  } finally {
-    rmSync(isolated.temporary, { recursive: true, force: true });
-  }
+  const result = performRehearsal(policy, round, base, candidate, findings);
   const ok = findings.length === 0 && result?.ok === true;
   if (ok) writeState(repoRoot, round, 'closure-rehearsal.json', { ok, base, candidate, result });
   emit({ ok, command: 'rehearse', result, findings });
