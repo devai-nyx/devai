@@ -148,6 +148,18 @@ invariants / 140 tests, root typecheck passed, repository-wide Prettier passed, 
 ordinary suite remained green. All prior convergence, rehearsal, and manifest state is
 stale; B9 must restart from the post-amendment candidate.
 
+The next fresh attempt at exact candidate
+`3c8f2fb3f90ee2c506e2a29edd03499cf642e04e` passed 15 of 16 first-pass gates but
+returned exit 1 for stage 2, so it also produced no valid convergence state. Formatting,
+preparation, projections, diff, ordinary tests, stage 1, T4-T6, changesets, complete
+coverage, and governance all passed at that exact candidate. An immediate untouched
+standalone rerun of the same stage-2 command passed: build was green, T1 passed 78 files
+and 866 tests, and T2 passed 44 files and 326 tests with one declared skip. This is
+evidence of intermittent stage-2 instability, not permission to reuse the failed pass
+or omit the gate. B9 still requires two fresh exact-candidate passes, and independent
+review must challenge this observation rather than treating a later green run as proof
+that the failure did not occur.
+
 ## Action output and error totality
 
 The canonical registry remains 186 never-reminted identities: 147 `keep`, 38 `fold`,
