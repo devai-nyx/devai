@@ -2962,6 +2962,33 @@ tags, GitHub Releases, Pages deployment, external release or deployment, real-st
 mutation, R-0008 external action, R-0009 activation, or R-0010 observation. The
 predecessor remains read-only.
 
+### DII-207 — Open the R-0006 entry-control prelude
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 E0 declaration; R-0006-AUTHORIZATION; ROUND-EXECUTION-CONTRACT@sha256:1fd6384fe303d24a329a06b9fe0144f1d8dac1de2dc8e57b52d223f9b4176a64; R-0006-PLAN@sha256:c87ff86156f3d56ede6ee79775255b0c82d0d1112303929bf51c9bc9d2d3d73f; R-0006-ORCHESTRATOR@sha256:c7b652c7874d53ea9b42687e81a43a36bd3feebd0f63e41b01b47578547853ab; OM-010; PC-0006; successor 7cf325625307a630344efe971bceccb011560301; exact-main CI 30239216258`
+
+R-0006 is declared from exact successor base
+`7cf325625307a630344efe971bceccb011560301` after PC-0006 closed R-0005 and the
+pre-R-0006 governance-alignment merge passed exact-main CI run `30239216258`. The
+exact shared execution contract, amended R-0006 plan, and amended orchestrator prompt
+are bound by the SHA-256 digests above. Their mandatory E0 through E5 sequence is the
+complete authorized scope of this entry-control prelude.
+
+The known-red posture is explicit: candidate-only publishability, full Git identity,
+exact candidate range, two-pass convergence, post-review mutation freeze, the exact
+review envelope, isolated closure rehearsal, and non-vacuous semantic assertions do
+not yet have the complete behavioral enforcement required by OM-010. E1 must preserve
+failing Inspector contracts for those admitted defects before E2 semantics or E3
+workspace-tooling implementation. No existing threshold, source set, assertion,
+forbidden-action rule, sequencing rule, role authority, public action behavior, or
+release boundary may be weakened.
+
+The claims ceiling is entry-control machinery implemented and tested only if E5 records
+an exact Auditor observation and an independent read-only PASS for a clean, publishable
+prelude candidate. This decision does not inventory, decide, implement, or test R-0006
+action/output contracts, operational-value extraction, mutation strength, evidence
+aggregation, or coverage depth. B0 through B9 remain blocked. Execution must stop after
+E5 and before substantive B0, and no release, publication, deployment, evidence reuse
+or promotion, real-stynx mutation, predecessor mutation, or R-0007+ work is authorized.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
