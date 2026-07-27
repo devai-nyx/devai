@@ -575,6 +575,18 @@ function manifest() {
         error: convergenceState.error,
       }),
     );
+  if (
+    convergenceState.status === 'valid' &&
+    (convergenceState.value?.base !== base || convergenceState.value?.head !== publishedHead)
+  )
+    findings.push(
+      finding('CONVERGENCE_RESULT_STALE', 'convergence result belongs to another candidate', {
+        expected_base: base,
+        expected_head: publishedHead,
+        actual_base: convergenceState.value?.base,
+        actual_head: convergenceState.value?.head,
+      }),
+    );
   const rehearsalState = readState(repoRoot, round, 'closure-rehearsal.json');
   if (rehearsalState.status === 'missing')
     findings.push(finding('CLOSURE_REHEARSAL_MISSING', 'run rehearse first'));
@@ -583,6 +595,18 @@ function manifest() {
       finding('MANIFEST_STATE_MALFORMED', 'closure rehearsal result is malformed', {
         state: 'closure-rehearsal.json',
         error: rehearsalState.error,
+      }),
+    );
+  if (
+    rehearsalState.status === 'valid' &&
+    (rehearsalState.value?.base !== base || rehearsalState.value?.candidate !== publishedHead)
+  )
+    findings.push(
+      finding('CLOSURE_REHEARSAL_STALE', 'closure rehearsal belongs to another candidate', {
+        expected_base: base,
+        expected_candidate: publishedHead,
+        actual_base: rehearsalState.value?.base,
+        actual_candidate: rehearsalState.value?.candidate,
       }),
     );
   const convergence = convergenceState.value;
@@ -997,7 +1021,7 @@ function rehearse() {
     rmSync(isolated.temporary, { recursive: true, force: true });
   }
   const ok = findings.length === 0 && result?.ok === true;
-  if (ok) writeState(repoRoot, round, 'closure-rehearsal.json', { ok, result });
+  if (ok) writeState(repoRoot, round, 'closure-rehearsal.json', { ok, base, candidate, result });
   emit({ ok, command: 'rehearse', result, findings });
 }
 
