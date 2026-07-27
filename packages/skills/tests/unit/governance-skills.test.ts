@@ -36,4 +36,11 @@ describe('governance skill adapters', () => {
       }),
     ]);
   });
+
+  it('KR-R5-040 keeps documentation recovery diagnose-only', () => {
+    const docsFix = getSkill('SKILL-fix-docs-links');
+    expect(docsFix?.manifest.permission_tier).toBe('read');
+    expect(docsFix?.manifest.auto_fix_capable).toBe('none');
+    expect(docsFix?.manifest.allowed_write_scopes).toEqual([]);
+  });
 });

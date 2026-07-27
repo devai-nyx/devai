@@ -92,5 +92,21 @@ describe('R-0005 independent-review red contracts', () => {
     expect(guide).not.toContain('docs/work/round-N/');
     expect(guide).not.toContain('docs/meta/rounds/round-N/');
     expect(guide).not.toContain('moves the complete local dossier');
+
+    for (const path of [
+      'docs/adopters/CONVENTIONS.md',
+      'docs/adopters/build-plan-convention.md',
+      'docs/adopters/round-break.md',
+      'docs/dev/process.md',
+      'docs/dev/round-workflow/B0-audit.md',
+      'docs/dev/round-workflow/B3-orchestrate.md',
+      'docs/dev/round-workflow/B4-verify-publish.md',
+      'docs/roles/auditor.md',
+    ]) {
+      const source = read(path);
+      expect(source, path).not.toMatch(
+        /docs\/work\/round-|docs\/meta\/rounds\/round-|scratch\/sessions\/rounds\/round-|Plan\.md/u,
+      );
+    }
   });
 });
