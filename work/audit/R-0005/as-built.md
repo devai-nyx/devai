@@ -17,7 +17,7 @@ provenance:
 
 ## Boundary and verdict
 
-R-0005 B0 through B8 and all five completed independent-review/exit-ladder repair
+R-0005 B0 through B8 and all six completed independent-review/exit-ladder repair
 cycles are implemented through governed snapshot
 `86608b74a9f46df63c92e9ab161e4d4e5ab423a0`. The source is not closed by this
 report: a fresh independent Codex review, source PR and exact-head CI, source merge and
@@ -84,12 +84,13 @@ until the exact source merge passes exact-main CI.
 | Fourth-review repair      | Auditor + Architect + Inspector + Engineer | `4674343` through `02d2d5d`                                                                       | All current documentation is corpus-guarded against obsolete lifecycle paths; semantic red scope is exact-path bound; and the two historical docs-link commits are disclosed rather than falsely attributed.         |
 | Fourth projection repair  | Auditor + Architect                        | `1b68a24` through `6968d03`                                                                       | The exact one-line current reference displacement was preserved, corrected, authorized, and regenerated without changing another locator or the generator.                                                           |
 | Fifth-review repair       | Auditor + Architect + Inspector + Engineer | `c1ed4d4` through `86608b7`                                                                       | The implementation classifier now derives the complete governed plant/root-tooling surface from policy, and round-wide historical entries are disclosure-only with no machine bypass.                                |
+| Sixth-review repair       | Auditor + Architect + Inspector + Engineer | `f00104c` through `5cea654`                                                                       | Root implementation matching now follows the canonical Engineer glob declaration exactly and fails closed on policy/source parity drift.                                                                             |
 
 Combined-role rows are serial role-pure commits, never shared-authority commits.
 
 ## Fresh regression evidence
 
-The final pre-review ordinary floor passed 133 files with 1,220 tests passing, eight
+The final pre-review ordinary floor passed 133 files with 1,223 tests passing, eight
 declared skips, and zero failures. The merged T1+T3 coverage reading passed 83 files
 with 912 tests and seven declared skips against the unchanged
 70/60/70/70 policy:
@@ -102,11 +103,11 @@ with 912 tests and seven declared skips against the unchanged
 | Lines      |  74.52% (9,984 / 13,396) |   70% |
 
 Stage 1 passed; Stage 2 passed with T1 at 74 files / 856 tests and T2 at 41 files /
-276 tests plus one declared skip; Stage 3 passed with the coverage above. Changeset
+279 tests plus one declared skip; Stage 3 passed with the coverage above. Changeset
 classification, T4 (2 files / 4 tests), T5 (6 files / 25 tests), T6 (1 file / 3 tests),
-strict governance (34 invariants, 133 traced tests, 155 governed commits),
+strict governance (34 invariants, 133 traced tests, 163 governed commits),
 repository-wide Prettier, `git diff --check`, and a clean status all pass at exact
-candidate `86608b74a9f46df63c92e9ab161e4d4e5ab423a0`. No threshold, source set,
+candidate `5cea65414187e8af940f3241f43040f5ba3f961c`. No threshold, source set,
 conditional skip, assertion, lint rule, or formatting rule was weakened.
 
 ## Remaining ceremony
