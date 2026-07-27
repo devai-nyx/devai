@@ -69,7 +69,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": [
           "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
           "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts"
@@ -90,7 +90,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"]
       }
     },
@@ -111,7 +111,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/loop/tests/unit/worktrees-containment.test.ts packages/loop/tests/unit/scorecard-assess-narrative.test.ts packages/evidence/tests/unit/local-evidence.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": [
           "packages/evidence/tests/unit/local-evidence.test.ts",
           "packages/loop/tests/unit/round-lifecycle-cases.ts",
@@ -129,7 +129,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/skills/tests/unit/forbidden-actions.test.ts -t KR-R5-027",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": ["packages/skills/tests/unit/forbidden-actions.test.ts"]
       }
     },
@@ -145,7 +145,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"]
       }
     },
@@ -158,7 +158,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/loop/tests/unit/adherence-reverse.test.ts -t KR-R5-029",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": ["packages/loop/tests/unit/governance-ledger-cases.ts"]
       }
     },
@@ -171,7 +171,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run tests/contract/r0005-independent-review.red.contract.test.ts packages/skills/tests/unit/prompt-firewall.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": [
           "tests/contract/r0005-independent-review.red.contract.test.ts",
           "packages/skills/tests/unit/prompt-firewall.test.ts"
@@ -191,7 +191,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/skills/tests/unit/governance-skills.test.ts packages/skills/tests/unit/llm.test.ts -t \"KR-R5-036|materializes audit/backlog\"",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": [
           "packages/skills/tests/unit/governance-skills.test.ts",
           "packages/skills/tests/unit/skill-implementation-cases.ts"
@@ -210,7 +210,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/skills/tests/unit/llm.test.ts -t \"materializes audit/backlog\"",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": ["packages/skills/tests/unit/skill-implementation-cases.ts"]
       }
     },
@@ -223,7 +223,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/skills/tests/unit/governance-skills.test.ts packages/skills/tests/unit/round-state-routing.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": [
           "packages/skills/tests/unit/governance-skills.test.ts",
           "packages/skills/tests/unit/round-state-routing.test.ts",
@@ -240,7 +240,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run tests/contract/r0005-independent-review.red.contract.test.ts tests/contract/governed-sequencing.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"]
       }
@@ -254,7 +254,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"]
       }
@@ -268,9 +268,26 @@
         "observed_exit": 1,
         "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "602beea17adfa08e8310b72a7538f5c9ccbc95a02bc978f24b4041aef2e17cdc",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
         "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"]
+      }
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["4f7ac65d6a8f66de86191bcb7be259d929ac4d7c"],
+      "law_commits": ["f3ffe4dec9ee588437d4731e120faa1a60f41e3c"],
+      "red_evidence": {
+        "commit": "70450716da0e3fb065b48470dc4d732cd36a6296",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
+        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "tests": [
+          "tests/contract/governed-sequencing.contract.test.ts",
+          "tests/contract/r0005-independent-review.red.contract.test.ts"
+        ],
+        "exercised_implementation_paths": ["packages/cli/src/authority/policy.ts"]
       }
     }
   ],
