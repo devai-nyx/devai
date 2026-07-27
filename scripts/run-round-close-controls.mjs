@@ -20,6 +20,10 @@ import addFormats from 'ajv-formats';
 
 const SCRIPT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SHA40 = /^[0-9a-f]{40}$/u;
+const NORMALIZED_RUNTIME_ARTIFACTS = [
+  'scratch/coverage/t1-t3/coverage-final.json',
+  'scratch/coverage/t1-t3/subprocess-v8/**',
+];
 
 function option(name) {
   const index = process.argv.indexOf(name);
@@ -159,7 +163,7 @@ function cleanStatus(root) {
   return git(root, ['status', '--porcelain', '--untracked-files=all']);
 }
 
-function workspaceSnapshot(root) {
+function workspaceSnapshot(root, normalizedRuntimeArtifacts) {
   const entries = [];
   const excluded = new Set(['.git', 'node_modules']);
   function visit(directory, prefix = '') {
@@ -167,6 +171,7 @@ function workspaceSnapshot(root) {
       const path = prefix.length === 0 ? name : `${prefix}/${name}`;
       if (excluded.has(name) || path === '.devai/state' || path.startsWith('.devai/state/'))
         continue;
+      if (normalizedRuntimeArtifacts.some((glob) => matches(path, glob))) continue;
       const absolute = join(directory, name);
       const stat = lstatSync(absolute);
       if (stat.isDirectory()) visit(absolute, path);
@@ -376,6 +381,17 @@ function policyFindings(policy, root = repoRoot, revision = 'HEAD', options = {}
   if (policy?.convergence?.passes !== 2 || policy?.convergence?.second_pass !== 'no-write-clean') {
     findings.push(
       finding('POLICY_CONVERGENCE_INVALID', 'two passes with a no-write second pass are required'),
+    );
+  }
+  if (
+    JSON.stringify(policy?.convergence?.normalized_runtime_artifacts) !==
+    JSON.stringify(NORMALIZED_RUNTIME_ARTIFACTS)
+  ) {
+    findings.push(
+      finding(
+        'POLICY_CONVERGENCE_RUNTIME_ARTIFACTS_INVALID',
+        'only the exact retained coverage runtime artifacts may be normalized',
+      ),
     );
   }
   return findings;
@@ -1134,7 +1150,10 @@ function converge() {
       head_before: headBefore,
       head_after: headAfter,
       coverage_sha256: coverageDigest(repoRoot),
-      workspace_sha256: workspaceSnapshot(repoRoot),
+      workspace_sha256: workspaceSnapshot(
+        repoRoot,
+        policy.convergence.normalized_runtime_artifacts,
+      ),
     });
     if (findings.length > 0) break;
   }
