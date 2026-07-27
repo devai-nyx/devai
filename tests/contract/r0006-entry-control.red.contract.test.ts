@@ -1,5 +1,6 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -91,6 +92,7 @@ function policy(overrides: Record<string, unknown> = {}): string {
           { id: 'materializations', argv: ['node', 'fixture/gate.mjs', 'materializations'] },
           { id: 'lint', argv: ['node', 'fixture/gate.mjs', 'lint'] },
           { id: 'typecheck', argv: ['node', 'fixture/gate.mjs', 'typecheck'] },
+          { id: 'ordinary', argv: ['node', 'fixture/gate.mjs', 'ordinary'] },
         ],
         passes: 2,
         second_pass: 'no-write-clean',
@@ -113,6 +115,7 @@ function policy(overrides: Record<string, unknown> = {}): string {
         schema_path: 'law/schemas/phase-closure.schema.json',
         verb_path: 'packages/cli/src/commands/govern/phase-close.ts',
         closure_path: 'record/proofs/compliance/closures/PC-9999.json',
+        command: ['node', 'fixture/phase-close.mjs'],
       },
       semantic_assertions: {
         population_sources: ['law/**/*.json', 'packages/**/*.ts', 'tests/**/*.ts'],
@@ -154,6 +157,14 @@ function fixture(): Fixture {
   put(root, 'packages/cli/src/commands/govern/phase-close.ts', 'export const phaseClose = true;\n');
   put(root, 'fixture/gate.mjs', 'process.exit(0);\n');
   put(root, 'fixture/projection.mjs', 'process.exit(0);\n');
+  put(
+    root,
+    'fixture/phase-close.mjs',
+    "import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';\nconst draft = JSON.parse(readFileSync(0, 'utf8'));\nconst path = 'record/proofs/compliance/closures/PC-9999.json';\nconst record = { ...draft, schemaVersion: '1.0.0', id: 'PC-9999' };\nmkdirSync('record/proofs/compliance/closures', { recursive: true });\nwriteFileSync(path, JSON.stringify(record) + '\\n');\nprocess.stdout.write(JSON.stringify({ ok: true, path, record }) + '\\n');\n",
+  );
+  put(root, 'product/fixture.json', '{}\n');
+  put(root, 'packages/fixture/index.ts', 'export const fixture = true;\n');
+  put(root, 'tests/fixture.test.ts', 'export const fixtureTest = true;\n');
   const base = commit(root, 'DEVAI Architect', 'chore: establish fixture base', [
     '.gitignore',
     '.devai/state/.gitkeep',
@@ -165,6 +176,10 @@ function fixture(): Fixture {
     'packages/cli/src/commands/govern/phase-close.ts',
     'fixture/gate.mjs',
     'fixture/projection.mjs',
+    'fixture/phase-close.mjs',
+    'product/fixture.json',
+    'packages/fixture/index.ts',
+    'tests/fixture.test.ts',
   ]);
   put(
     root,
@@ -208,6 +223,35 @@ function manifestArgs(candidate: string): string[] {
     '--published-head',
     candidate,
   ];
+}
+
+function canonicalValue(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonicalValue);
+  if (value !== null && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.keys(value as Record<string, unknown>)
+        .sort()
+        .map((key) => [key, canonicalValue((value as Record<string, unknown>)[key])]),
+    );
+  }
+  return value;
+}
+
+function digestBody(value: unknown): string {
+  return createHash('sha256')
+    .update(`${JSON.stringify(canonicalValue(value))}\n`)
+    .digest('hex');
+}
+
+function putReviewManifest(root: string, candidate: string): string {
+  const body = { review_candidate: candidate, published_head: candidate };
+  const digest = digestBody(body);
+  put(
+    root,
+    '.devai/state/round-runs/R-0006/close/candidate-manifest.json',
+    `${JSON.stringify({ ...body, manifest_digest_sha256: digest })}\n`,
+  );
+  return digest;
 }
 
 function prepareCloseState(root: string, base: string, candidate: string): void {
@@ -324,6 +368,37 @@ describe('R-0006 E1 entry-control red contracts', () => {
         ]),
       );
     }
+  });
+
+  it('refuses to label convergence with a head other than the checked-out candidate', () => {
+    const current = fixture();
+    put(current.root, 'law/policy/after-candidate.json', '{}\n');
+    commit(current.root, 'DEVAI Architect', 'law(r0006): advance fixture head', [
+      'law/policy/after-candidate.json',
+    ]);
+    const result = run(current.root, [
+      'converge',
+      '--round',
+      'R-0006',
+      '--base',
+      current.base,
+      '--head',
+      current.candidate,
+    ]);
+    expect(result.status).not.toBe(0);
+    expect(findings(result)).toEqual(
+      expect.arrayContaining([expect.objectContaining({ code: 'CONVERGENCE_HEAD_MISMATCH' })]),
+    );
+  });
+
+  it('requires the ordinary full Vitest floor in each convergence pass', () => {
+    const canonical = JSON.parse(
+      readFileSync(join(ROOT, 'law/policy/round-close-controls.json'), 'utf8'),
+    ) as { convergence: { commands: Array<{ id: string; argv: string[] }> } };
+    expect(canonical.convergence.commands).toContainEqual({
+      id: 'ordinary',
+      argv: ['pnpm', 'vitest', 'run'],
+    });
   });
 
   it('blocks the second convergence pass on every stale projection/gate and on dirtiness', () => {
@@ -473,6 +548,11 @@ describe('R-0006 E1 entry-control red contracts', () => {
     expect(rehearsal.result.source_merge).toMatch(/^[0-9a-f]{40}$/u);
     expect(rehearsal.result.closure_head).toMatch(/^[0-9a-f]{40}$/u);
     expect(rehearsal.result.closure_head).not.toBe(rehearsal.result.source_merge);
+    expect(rehearsal.result).toMatchObject({
+      production_verb_exercised: true,
+      record_schema_valid: true,
+      exact_range_valid: true,
+    });
 
     for (const missing of [
       'law/schemas/phase-closure.schema.json',
@@ -508,10 +588,27 @@ describe('R-0006 E1 entry-control red contracts', () => {
     expect(readFileSync(join(ROOT, 'packages/schemas/src/roster.ts'), 'utf8')).toContain(
       "'round-close-manifest.schema.json'",
     );
+    const validAssertions = {
+      population_sources: ['law/**/*.json', 'packages/**/*.ts', 'tests/**/*.ts'],
+      fixed_counts_forbidden: true,
+      self_comparisons_forbidden: true,
+      named_file_only_forbidden: true,
+      mirror_pairs: [
+        {
+          source: 'law/policy/round-close-controls.json',
+          mirror: '.devai/config/round-close-controls.json',
+        },
+      ],
+    };
     const invalidPolicies = [
-      { semantic_assertions: { fixed_count: 56 } },
-      { semantic_assertions: { compare: ['law/trace.json', 'law/trace.json'] } },
-      { semantic_assertions: { population_sources: ['tests/one.test.ts'] } },
+      { semantic_assertions: { ...validAssertions, fixed_count: 56 } },
+      {
+        semantic_assertions: {
+          ...validAssertions,
+          compare: ['law/trace.json', 'law/trace.json'],
+        },
+      },
+      { semantic_assertions: { ...validAssertions, population_sources: ['tests/one.test.ts'] } },
     ];
     for (const invalid of invalidPolicies) {
       put(root, 'law/policy/round-close-controls.json', policy(invalid));
@@ -594,6 +691,69 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     );
   });
 
+  it('rejects well-formed but forged convergence and rehearsal state', () => {
+    const current = fixture();
+    const fakeResult = {
+      id: 'stage2',
+      argv: ['pnpm', 'run', 'ci:stage2'],
+      exit_code: 0,
+      outcome: 'pass',
+      stdout_sha256: '1'.repeat(64),
+      stderr_sha256: '2'.repeat(64),
+    };
+    put(
+      current.root,
+      '.devai/state/round-runs/R-0006/close/convergence.json',
+      `${JSON.stringify({
+        ok: true,
+        base: current.base,
+        head: current.candidate,
+        passes: [
+          {
+            pass: 1,
+            results: [fakeResult],
+            clean_before: true,
+            clean_after: true,
+          },
+        ],
+        findings: [],
+      })}\n`,
+    );
+    put(
+      current.root,
+      '.devai/state/round-runs/R-0006/close/closure-rehearsal.json',
+      `${JSON.stringify({
+        ok: true,
+        base: current.base,
+        candidate: current.candidate,
+        result: {
+          source_merge: '1'.repeat(40),
+          closure_head: '2'.repeat(40),
+          schema_ancestor: '3'.repeat(40),
+          verb_ancestor: '4'.repeat(40),
+          ok: true,
+        },
+      })}\n`,
+    );
+    put(
+      current.root,
+      'scratch/coverage/t1-t3/coverage-summary.json',
+      `${JSON.stringify({
+        total: Object.fromEntries(
+          ['statements', 'branches', 'functions', 'lines'].map((key) => [key, { pct: 100 }]),
+        ),
+      })}\n`,
+    );
+    const result = run(current.root, manifestArgs(current.candidate));
+    expect(result.status).not.toBe(0);
+    expect(findings(result)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: 'CONVERGENCE_STATE_INVALID' }),
+        expect.objectContaining({ code: 'CLOSURE_REHEARSAL_INVALID' }),
+      ]),
+    );
+  });
+
   it('rejects convergence and closure evidence from a prior candidate head', () => {
     const current = fixture();
     prepareCloseState(current.root, current.base, current.candidate);
@@ -669,5 +829,97 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
       'work/audit/R-0006/review.md',
     ]);
     expect(result.status, result.stderr).toBe(0);
+  });
+
+  it('derives the frozen candidate from an exact PASS review record and manifest', () => {
+    const current = fixture();
+    const digest = putReviewManifest(current.root, current.candidate);
+    put(
+      current.root,
+      'work/audit/R-0006/review.md',
+      `---\nverdict: PASS\nreviewer_model: claude-opus-5\nreview_candidate: ${current.candidate}\nmanifest_digest_sha256: ${digest}\n---\n\n# Independent review\n`,
+    );
+    commit(current.root, 'DEVAI Auditor', 'audit(r0006): record independent review', [
+      'work/audit/R-0006/review.md',
+    ]);
+    const result = run(current.root, [
+      'envelope',
+      '--head',
+      git(current.root, ['rev-parse', 'HEAD']),
+      '--review-record',
+      'work/audit/R-0006/review.md',
+    ]);
+    expect(result.status, result.stderr).toBe(0);
+  });
+
+  it('rejects FAIL, malformed, wrong-candidate, and wrong-digest review records', () => {
+    for (const review of [
+      'verdict: FAIL\n',
+      'not front matter\n',
+      `---\nverdict: PASS\nreviewer_model: claude-opus-5\nreview_candidate: ${'1'.repeat(40)}\nmanifest_digest_sha256: ${'2'.repeat(64)}\n---\n`,
+    ]) {
+      const current = fixture();
+      putReviewManifest(current.root, current.candidate);
+      put(current.root, 'work/audit/R-0006/review.md', review);
+      commit(current.root, 'DEVAI Auditor', 'audit(r0006): record invalid review', [
+        'work/audit/R-0006/review.md',
+      ]);
+      const result = run(current.root, [
+        'envelope',
+        '--reviewed-sha',
+        current.candidate,
+        '--head',
+        git(current.root, ['rev-parse', 'HEAD']),
+        '--review-record',
+        'work/audit/R-0006/review.md',
+      ]);
+      expect(result.status).not.toBe(0);
+      expect(findings(result)).toEqual(
+        expect.arrayContaining([expect.objectContaining({ code: 'REVIEW_RECORD_INVALID' })]),
+      );
+    }
+  });
+
+  it('rejects empty wildcard populations and drift in every governed mirror pair', () => {
+    const current = fixture();
+    const validAssertions = {
+      population_sources: ['missing/**/*.json'],
+      fixed_counts_forbidden: true,
+      self_comparisons_forbidden: true,
+      named_file_only_forbidden: true,
+      mirror_pairs: [
+        {
+          source: 'law/policy/round-close-controls.json',
+          mirror: '.devai/config/round-close-controls.json',
+        },
+      ],
+    };
+    const emptyPolicy = policy({ semantic_assertions: validAssertions });
+    put(current.root, 'law/policy/round-close-controls.json', emptyPolicy);
+    put(current.root, '.devai/config/round-close-controls.json', emptyPolicy);
+    const empty = run(current.root, ['policy-check']);
+    expect(findings(empty)).toEqual(
+      expect.arrayContaining([expect.objectContaining({ code: 'SEMANTIC_POPULATION_EMPTY' })]),
+    );
+
+    const pairs = [
+      validAssertions.mirror_pairs[0],
+      { source: 'law/policy/second.json', mirror: '.devai/config/second.json' },
+    ];
+    const pairPolicy = policy({
+      semantic_assertions: {
+        ...validAssertions,
+        population_sources: ['law/**/*.json'],
+        mirror_pairs: pairs,
+      },
+    });
+    put(current.root, 'law/policy/round-close-controls.json', pairPolicy);
+    put(current.root, '.devai/config/round-close-controls.json', pairPolicy);
+    put(current.root, 'law/policy/second.json', '{"value":1}\n');
+    put(current.root, '.devai/config/second.json', '{"value":2}\n');
+    const drift = run(current.root, ['policy-check']);
+    expect(findings(drift)).toEqual(
+      expect.arrayContaining([expect.objectContaining({ code: 'POLICY_MIRROR_DRIFT' })]),
+    );
   });
 });

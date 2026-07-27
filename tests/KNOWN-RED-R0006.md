@@ -38,3 +38,19 @@ the two R-0004 recursive-canon callers, the explicit package roster bijection, a
 Inspector population guard. The Inspector therefore completed the E1 semantic-scope
 binding for `packages/schemas/src/roster.ts` before E3 implementation. The exact full
 reading was 12 failed, 1,226 passed, and eight skipped; no prior behavior regressed.
+
+The first independent Codex review of E0-E5 candidate
+`2f423bbde5dab29840561f6b23b2d4f92e89e024` returned FAIL with six P1 control
+findings. The subsequent Inspector batch adds seven focused reds for
+the complete same-class repair surface: exact checkout/candidate convergence, the
+ordinary full floor in every pass, production closure-verb execution, forged ignored
+state, manifest-bound PASS review records, independent review-record invalid cases, and
+evaluated nonempty populations/all mirror pairs. The exact focused command remains:
+
+```text
+pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts
+```
+
+It exits 1 with 7 failures and 13 passes before the new law or Engineer repair. These
+reds authorize only the independent-review corrections inside the E0-E5 prelude; B0
+and every publication/release action remain forbidden.
