@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-207; DII-211–224; R-0006-AS-BUILT; Auditor 010007ed1e7bb6305a4c0688196ad6d718a9b1a9; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE,
+    DII-207; DII-211–224; R-0006-AS-BUILT; Auditor 1da53310b202b46ee54e0b1e5f4df9ab0012fefb; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; sequencing binding 5fb17269fe3b17cf4d0de9733b6fd3b1146106d9,
   ]
 ---
 
@@ -19,10 +19,11 @@ provenance:
 
 DII-223 accepts R-0006's audited contracts-and-coverage implementation for the
 remaining governed source-close ceremony. The exact semantic implementation subject is
-Inspector `77da3986d424b8d0467f087f76d259d31b6cca37`; Architect
-`586fafab2c5cb28b97937fa14ac32e2e9000fff4` refreshes only its caused trace
-projection, and Auditor `010007ed1e7bb6305a4c0688196ad6d718a9b1a9` binds the honest
-pre-review evidence.
+Inspector `ce61864e29c1a04b57dd37ae482f7c42aa08a6b0`; Architect
+`f677cd83db9d1dffdc4dc6cd301cef6c27778b3b` refreshes only its caused trace and
+source-close projection, Architect `5fb17269fe3b17cf4d0de9733b6fd3b1146106d9`
+binds the final Engineer implementation to its exact law and red source, and Auditor
+`1da53310b202b46ee54e0b1e5f4df9ab0012fefb` binds the honest pre-review evidence.
 
 All 186 never-reminted action identities have disposition-correct output and error
 contracts. The 24-row operational-value extraction has one canonical home per row.

@@ -3429,12 +3429,14 @@ Pages deployment, external deployment, evidence reuse or promotion, real-stynx
 mutation, predecessor mutation, or R-0007+ work.
 
 ### DII-223 — Accept R-0006 for the governed source-close ceremony
-`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 source close; DII-207–222; OM-002; R-0006-AUTHORIZATION; R-0006-PLAN; R-0006-AS-BUILT at Auditor 010007ed1e7bb6305a4c0688196ad6d718a9b1a9; R-0006-COVERAGE-DEPTH-EVIDENCE`
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 source close; DII-207–224; OM-002; R-0006-AUTHORIZATION; R-0006-PLAN; R-0006-AS-BUILT at Auditor 1da53310b202b46ee54e0b1e5f4df9ab0012fefb; R-0006-COVERAGE-DEPTH-EVIDENCE; sequencing binding 5fb17269fe3b17cf4d0de9733b6fd3b1146106d9`
 
 R-0006's semantic implementation subject is exact Inspector commit
-`77da3986d424b8d0467f087f76d259d31b6cca37`. Architect
-`586fafab2c5cb28b97937fa14ac32e2e9000fff4` is its deterministic trace consequence,
-and Auditor `010007ed1e7bb6305a4c0688196ad6d718a9b1a9` binds the final pre-review as-built.
+`ce61864e29c1a04b57dd37ae482f7c42aa08a6b0`. Architect
+`f677cd83db9d1dffdc4dc6cd301cef6c27778b3b` is its deterministic trace and close
+projection, Architect `5fb17269fe3b17cf4d0de9733b6fd3b1146106d9` binds the final
+Engineer implementation to its exact law and red source, and Auditor
+`1da53310b202b46ee54e0b1e5f4df9ab0012fefb` binds the final pre-review as-built.
 The action surface remains 147 runnable identities, 38 folded identities, and one
 tombstone. The operational-value extraction remains 24 rows. Mutation-strength and
 evidence-aggregation decisions remain independent.
