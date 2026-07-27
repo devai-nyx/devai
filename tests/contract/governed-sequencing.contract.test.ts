@@ -322,6 +322,8 @@ describe('governed sequencing', () => {
     '.prettierignore',
     'eslint.config.mjs',
     'vitest.workspace.ts',
+    '.devai/config/fixture.json',
+    '.devai/pin/fixture.json',
   ])(
     'rejects unbound Engineer work on governed implementation surface %s',
     (implementationPath) => {
