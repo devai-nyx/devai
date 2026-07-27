@@ -37,12 +37,11 @@ function observation(sha) {
 }
 
 function substantiveEngineer(commit) {
-  return (
-    commit.author === 'DEVAI Engineer' &&
-    commit.paths.some((path) =>
-      /^(?:packages\/|scripts\/|\.github\/|package\.json$|pnpm-lock\.yaml$)/u.test(path),
-    )
-  );
+  return commit.author === 'DEVAI Engineer' && commit.paths.some(substantiveImplementationPath);
+}
+
+function substantiveImplementationPath(path) {
+  return /^(?:packages\/|scripts\/|\.github\/|package\.json$|pnpm-lock\.yaml$)/u.test(path);
 }
 
 function containedEvidencePath(value) {
@@ -79,6 +78,63 @@ if (!Array.isArray(policy.bindings)) {
     sha: null,
     message: 'policy.bindings must be an array',
   });
+}
+
+const semanticBoundarySha = policy.semantic_red_scope?.required_after_commit;
+const semanticBoundary =
+  typeof semanticBoundarySha === 'string' ? bySha.get(semanticBoundarySha) : undefined;
+if (typeof semanticBoundarySha !== 'string' || semanticBoundarySha.length === 0) {
+  findings.push({
+    rule: 'semantic-scope-policy',
+    sha: null,
+    message: 'semantic_red_scope.required_after_commit must be an exact commit',
+  });
+}
+const semanticBoundaryIndex = semanticBoundary?.index ?? -1;
+
+const historicalCommitExceptions = Array.isArray(policy.historical_commit_exceptions)
+  ? policy.historical_commit_exceptions
+  : [];
+if (!Array.isArray(policy.historical_commit_exceptions)) {
+  findings.push({
+    rule: 'historical-commit-exception',
+    sha: null,
+    message: 'historical_commit_exceptions must be an array',
+  });
+}
+const exactExceptionOwners = new Map();
+for (const exception of historicalCommitExceptions) {
+  if (
+    exception === null ||
+    typeof exception !== 'object' ||
+    Array.isArray(exception) ||
+    typeof exception.round !== 'string' ||
+    !Array.isArray(exception.implementation_commits) ||
+    exception.implementation_commits.length === 0 ||
+    typeof exception.reason !== 'string' ||
+    exception.reason.trim().length === 0
+  ) {
+    findings.push({
+      rule: 'historical-commit-exception',
+      sha: null,
+      message: 'exact historical exception fields are incomplete',
+    });
+    continue;
+  }
+  for (const sha of exception.implementation_commits) {
+    const candidate = bySha.get(sha);
+    if (!candidate) continue;
+    const owners = exactExceptionOwners.get(sha) ?? [];
+    owners.push(exception);
+    exactExceptionOwners.set(sha, owners);
+    if (!substantiveEngineer(candidate.commit) || candidate.commit.round !== exception.round) {
+      findings.push({
+        rule: 'historical-commit-exception',
+        sha,
+        message: 'exception must name an exact substantive Engineer commit in its round',
+      });
+    }
+  }
 }
 
 const implementationOwners = new Map();
@@ -150,6 +206,19 @@ for (const binding of bindings) {
 
   const redCommit = typeof redEvidence.commit === 'string' ? bySha.get(redEvidence.commit) : null;
   const redTests = Array.isArray(redEvidence.tests) ? redEvidence.tests : [];
+  const requiresSemanticScope = inRangeImplementations.some(
+    ({ index }) => index > semanticBoundaryIndex,
+  );
+  const actualImplementationPaths = [
+    ...new Set(
+      inRangeImplementations.flatMap(({ commit }) =>
+        commit.paths.filter(substantiveImplementationPath),
+      ),
+    ),
+  ].sort();
+  const exercisedImplementationPaths = Array.isArray(redEvidence.exercised_implementation_paths)
+    ? [...new Set(redEvidence.exercised_implementation_paths)].sort()
+    : [];
   if (
     !redCommit ||
     redCommit.commit.author !== 'DEVAI Inspector' ||
@@ -171,6 +240,32 @@ for (const binding of bindings) {
       sha: redEvidence.commit ?? null,
       message: 'bound red evidence must be an exact prior failing Inspector test commit',
     });
+  }
+
+  if (requiresSemanticScope) {
+    const redSources =
+      redCommit === null
+        ? []
+        : redTests.flatMap((path) => {
+            try {
+              return [git(['show', `${redCommit.commit.sha}:${path}`])];
+            } catch {
+              return [];
+            }
+          });
+    const exactScope =
+      JSON.stringify(actualImplementationPaths) === JSON.stringify(exercisedImplementationPaths);
+    const testsBindScope = exercisedImplementationPaths.every((path) =>
+      redSources.some((source) => source.includes(path)),
+    );
+    if (exercisedImplementationPaths.length === 0 || !exactScope || !testsBindScope) {
+      findings.push({
+        rule: 'red-semantic-scope',
+        sha: redEvidence.commit ?? null,
+        message:
+          'prospective red evidence must bind every exact implementation path in its failing Inspector sources',
+      });
+    }
   }
 
   const evidencePath = containedEvidencePath(redEvidence.evidence_path);
@@ -203,7 +298,10 @@ for (const binding of bindings) {
   if (
     observed?.command !== redEvidence.command ||
     observed?.exit_code !== redEvidence.observed_exit ||
-    JSON.stringify(observed?.tests) !== JSON.stringify(redTests)
+    JSON.stringify(observed?.tests) !== JSON.stringify(redTests) ||
+    (requiresSemanticScope &&
+      JSON.stringify([...(observed?.exercised_implementation_paths ?? [])].sort()) !==
+        JSON.stringify(exercisedImplementationPaths))
   ) {
     findings.push({
       rule: 'red-evidence-artifact',
@@ -216,7 +314,14 @@ for (const binding of bindings) {
 for (const commit of observations.filter(substantiveEngineer)) {
   if (commit.round !== null && exceptions.has(commit.round)) continue;
   const owners = implementationOwners.get(commit.sha) ?? [];
-  if (owners.length !== 1) {
+  const exceptionOwners = exactExceptionOwners.get(commit.sha) ?? [];
+  if (exceptionOwners.length > 1 || (exceptionOwners.length === 1 && owners.length > 0)) {
+    findings.push({
+      rule: 'historical-commit-exception',
+      sha: commit.sha,
+      message: 'implementation must have one binding or one exact exception, never both',
+    });
+  } else if (owners.length !== 1 && exceptionOwners.length !== 1) {
     findings.push({
       rule: 'implementation-binding',
       sha: commit.sha,
