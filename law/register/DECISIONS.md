@@ -3237,6 +3237,28 @@ the applicable validation strategy remain separate required evidence. Documentar
 mentions, snapshots without an executable matcher, and configuration-only presence do
 not satisfy the assertion-bearing corpus rule.
 
+### DII-217 — Measure the complete eligible source denominator
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B6 coverage-correctness decision; DII-211; R-0006-B0-BASELINE; BL-017; law/policy/thresholds.json`
+
+The B0 V8 report measured 223 of 377 then-eligible non-generated package source files
+because its source include was implicit and therefore limited to modules loaded by the
+selected tests. The 154 omitted files, including 150 CLI files, are valid shipped source.
+That loaded-module denominator is incorrect for repository-wide coverage and cannot be
+used for an all-source threshold claim.
+
+The canonical coverage configuration must explicitly include
+`packages/*/src/**/*.{ts,tsx,js,mjs,cjs}` and retain the pre-existing exclusions only
+for distribution output, tests, configuration files, and generated source. Every
+tracked file matching that include and not an exclusion belongs to the denominator,
+whether or not a test loads it. New valid source joins automatically. B6 may repair
+that instrumentation and provider integration; B7 must add real assertion-bearing
+tests until the unchanged 70/60/70/70 lines/branches/functions/statements floors pass.
+
+No threshold may fall, no valid source may be excluded, and no uncovered file may be
+removed or relabelled generated to manufacture a pass. The corrected first reading is
+expected to be red and is evidence for missing tests, not permission to restore the
+loaded-module shortcut.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
