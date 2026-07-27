@@ -12,13 +12,17 @@
     },
     {
       "id": "red-before-repair",
-      "description": "A substantive Engineer repair must follow a failing Inspector contract or an explicit governed exception."
+      "description": "A substantive Engineer repair must follow a failing Inspector contract whose exact semantic implementation scope is bound, or an explicit exact-commit governed exception."
     },
     {
       "id": "shape-before-machine-record",
       "description": "A Machine record emission must follow the Architect-owned schema and validated verb that govern its shape."
     }
   ],
+  "semantic_red_scope": {
+    "required_after_commit": "3925a2f89f8f5ce041e247a29c00fd624b711765",
+    "description": "Every later substantive Engineer implementation must bind its exact changed implementation paths to both the prior failing Inspector sources and the durable Auditor observation."
+  },
   "bindings": [
     {
       "round": "R-0005",
@@ -199,26 +203,16 @@
           "tests/contract/r0005-independent-review.red.contract.test.ts"
         ]
       }
-    },
+    }
+  ],
+  "historical_commit_exceptions": [
     {
       "round": "R-0005",
       "implementation_commits": [
         "8651b26c04c3b80f4b83a2d7016873deed705bfd",
         "3925a2f89f8f5ce041e247a29c00fd624b711765"
       ],
-      "law_commits": ["2bd5e0c17bef596e45822fe121d97392e7ac5d3a"],
-      "red_evidence": {
-        "commit": "67aa7940fd3b52daca219847fd11d7201e830f2f",
-        "observed_exit": 1,
-        "command": "pnpm vitest run packages/skills/tests/unit/governance-skills.test.ts packages/skills/tests/unit/round-state-routing.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
-        "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "e659b0ad91e37952a2162e6f509c858291b6dac1fafbde3622591a9a904fb367",
-        "tests": [
-          "packages/skills/tests/unit/governance-skills.test.ts",
-          "packages/skills/tests/unit/round-state-routing.test.ts",
-          "tests/contract/r0005-independent-review.red.contract.test.ts"
-        ]
-      }
+      "reason": "Fourth independent review disclosed that these docs-link diagnose-only repairs followed a full-floor observation but lacked a prior Inspector red that exercised packages/skills/src/skills/impl/fixes.ts. The false 67aa794 binding is removed; history is not rewritten and this exact-commit disclosure grants no prospective exception."
     }
   ],
   "historical_exceptions": [

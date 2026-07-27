@@ -272,3 +272,23 @@ changeset classification; T4, T5, and T6; strict governance with all 34 invarian
 This ledger now grants no active red authority. A new exact-candidate independent Codex
 review remains required, and any actionable finding from that review requires a fresh
 Architect entry and failing Inspector boundary before repair.
+
+## Fourth-review repair authority
+
+Auditor record `R-0005-INDEPENDENT-CODEX-REVIEW-4-FAILURE` preserves the exact
+`0045bdb8182ebc4c1bf87815c4e74a7c292efa35` FAIL without conversion. The
+following clusters are authorized for one further red-first role-pure repair:
+
+| ID        | Source      | Required red boundary                                                                                                                                                                                                                                                                                                                                                |
+| --------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| KR-R5-042 | review-4 P1 | A corpus-wide Inspector contract must fail on every CURRENT document that assigns governed round intent, disposable runtime material, or Auditor observations to obsolete `docs/work/**` or `scratch/sessions/rounds/**` paths, including wildcard and generic forms.                                                                                                |
+| KR-R5-043 | review-4 P1 | A hermetic sequencing contract must prove that prospective red evidence names the exact substantive implementation paths, that the named failing tests contain those path bindings, and that the Auditor observation agrees. The historical `8651b26` / `3925a2f` docs-link inversion must be an exact disclosed exception rather than a false binding to `67aa794`. |
+
+The Architect may first declare the prospective semantic-scope policy and exact
+historical exception. Inspector must then commit failing contracts for both clusters.
+Architect may correct only CURRENT documentation; Engineer may correct only the
+sequencing checker. The later Auditor evidence binding and Architect policy projection
+must cite the exact new red commit and command. No cluster authorizes a rewritten
+historical commit, a blanket round exception, a weaker documentation classification, a
+synthetic PASS, or external action. Retirement requires focused green, the complete
+ordinary floor, the exact exit ladder, and a new independent Codex PASS.
