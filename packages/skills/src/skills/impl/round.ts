@@ -177,10 +177,7 @@ export function createRoundSkills(
       agent_class: 'coding-agent',
       permission_tier: 'write',
       host_mutation_policy: 'write_requires_flag',
-      allowed_write_scopes: [
-        'record/proofs/work/skill-runs/**',
-        '.devai/state/round-runs/**',
-      ],
+      allowed_write_scopes: ['record/proofs/work/skill-runs/**', '.devai/state/round-runs/**'],
       evidence_files: ['record/proofs/work/skill-runs/SKILL-round-backlog/*.json'],
       risk_level: 'medium',
       tags: ['round', 'backlog', 'plan'],

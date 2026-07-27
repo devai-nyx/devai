@@ -284,8 +284,7 @@ export function checkPromptOverlays(opts: CheckPromptOverlaysOptions): PromptFir
         const architectDocumentWriter = isArchitectDocumentWriter(m, s);
         for (const reserved of ARCHITECT_RESERVED) {
           if (overlaps(s, reserved)) {
-            if (exemptByDraft || exemptByAutofix || architectDocumentWriter)
-              break;
+            if (exemptByDraft || exemptByAutofix || architectDocumentWriter) break;
             findings.push({
               code: 'PROMPT_OVERLAY_AUTHORITY_INVERSION',
               severity: 'critical',

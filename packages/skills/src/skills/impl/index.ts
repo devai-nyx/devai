@@ -7,11 +7,7 @@ import { createRoundSkills } from './round.js';
 import { scaffolderSkills } from './scaffolders.js';
 import { writerSkills } from './writers.js';
 
-const initialSkills: readonly SkillEntry[] = [
-  ...coreSkills,
-  ...writerSkills,
-  ...scaffolderSkills,
-];
+const initialSkills: readonly SkillEntry[] = [...coreSkills, ...writerSkills, ...scaffolderSkills];
 
 let resolvedSkills: readonly SkillEntry[] = initialSkills;
 
