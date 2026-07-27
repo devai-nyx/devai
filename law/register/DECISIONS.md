@@ -3475,6 +3475,43 @@ push, pull request, merge, exact-head or exact-main CI, PC-0007, final closure, 
 publication, tag, GitHub Release, Pages or other deployment, evidence reuse or
 promotion, real-stynx mutation, predecessor mutation, or R-0007+ work.
 
+### DII-224 — Normalize only retained coverage runtime artifacts at convergence
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 fixpoint correction; DII-208; DII-222; DII-223; Inspector ebf10882d2ea55d83a773cd88c3c9b667fd42c91; Auditor R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; failed convergence at 95abe603ee86e82e99ba0498b56d49cac292ab45`
+
+The first post-DII-223 convergence attempt ran every one of the 16 ordered gates green
+in both passes, began and ended both passes Git-clean, retained identical coverage
+summary bytes, and produced equivalent ordered outcomes. It still failed closed because
+the relevant-workspace digest changed. DII-222 requires the current run's raw
+subprocess inputs to remain under `scratch/coverage/t1-t3/subprocess-v8`, whose runtime
+names contain process and time values, and requires the statement-level
+`scratch/coverage/t1-t3/coverage-final.json` artifact. Treating those exact per-run
+artifacts as immutable workspace source makes the retained-evidence and two-pass
+contracts impossible to satisfy together.
+
+The convergence policy therefore classifies only those two exact paths as normalized
+runtime artifacts. They remain present and independently inspectable after the final
+coverage execution, but their per-run filenames and bytes do not enter the generic
+relevant-workspace snapshot. The separate coverage digest continues to bind
+`scratch/coverage/t1-t3/coverage-summary.json` byte-for-byte across both passes. Every
+other tracked, untracked, ignored, generated, scratch, materialization, projection, and
+coverage path remains part of the workspace snapshot. A prefix or broad `scratch/**`
+exception is forbidden.
+
+Engineer may update only `scripts/run-round-close-controls.mjs` and the committed policy
+materialization needed to enforce this exact classification. The implementation must be
+policy-derived, reject malformed or broad runtime-artifact declarations, and keep the
+existing coverage-byte, command-result, dirty-tree, and workspace-drift adversaries
+green. Inspector must make the new focused red green and rerun the same-class entry
+control suite. Auditor must preserve the failed convergence and refresh the as-built.
+All convergence, rehearsal, manifest, review, and source-publication state for the
+failed candidate is invalid.
+
+This decision authorizes no raw-evidence deletion, threshold or exclusion change,
+denominator change, broad ignored-path waiver, retained PASS, source publication before
+fresh convergence and literal `claude-opus-5` PASS, closure before source merge and
+exact-main CI, package publication, tag, GitHub Release, Pages or other deployment,
+evidence reuse or promotion, real-stynx mutation, predecessor mutation, or R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

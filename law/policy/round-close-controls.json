@@ -87,6 +87,10 @@
   "convergence": {
     "passes": 2,
     "second_pass": "no-write-clean",
+    "normalized_runtime_artifacts": [
+      "scratch/coverage/t1-t3/coverage-final.json",
+      "scratch/coverage/t1-t3/subprocess-v8/**"
+    ],
     "commands": [
       { "id": "formatting", "argv": ["pnpm", "exec", "prettier", "--check", "."] },
       { "id": "preparation", "argv": ["pnpm", "run", "devai:prepare"] },
