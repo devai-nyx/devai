@@ -243,3 +243,11 @@ remove mutation but may not add an exemption or suppress a finding. Inspector ma
 only behavior/manifest/prompt corpora proven by the new source, and the Architect may
 regenerate only the semantic repository-reference projection. Retirement requires the
 complete ordinary floor and exact ladder to pass.
+
+## Third-review trace projection collateral
+
+Auditor record `R-0005-THIRD-REVIEW-TRACE-PROJECTION-FAILURE` authorizes KR-R5-041:
+regenerate only the Architect-owned `law/trace.json` projection so the new Inspector
+round-state routing test is represented by its unchanged invariant marker. No test,
+invariant, generator, or source behavior may change. The cluster retires when
+`trace:check` and the restarted complete ladder pass.

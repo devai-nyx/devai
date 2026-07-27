@@ -417,6 +417,11 @@
           "target_type": "test"
         },
         {
+          "suite": "unit",
+          "path": "packages/skills/tests/unit/round-state-routing.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "contract",
           "path": "packages/spec/tests/contract/r29-currentness-behavior.red.test.ts",
           "target_type": "test"
@@ -1976,6 +1981,14 @@
       "suite": "unit",
       "invariant_ids": [
         "INV-DEVAI-008"
+      ],
+      "lifecycle": "supported"
+    },
+    {
+      "path": "packages/skills/tests/unit/round-state-routing.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001"
       ],
       "lifecycle": "supported"
     },
