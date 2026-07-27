@@ -296,7 +296,7 @@
       "rationale": "Live successor reference; the active repository keeps the devai identity."
     },
     {
-      "locator": "docs/dev/security/authority-enforcement.md:123:63:devai-nyx/devai",
+      "locator": "docs/dev/security/authority-enforcement.md:124:63:devai-nyx/devai",
       "classification": "active-successor",
       "action": "retain",
       "rationale": "Live successor reference; the active repository keeps the devai identity."

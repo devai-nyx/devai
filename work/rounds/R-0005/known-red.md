@@ -297,7 +297,7 @@ ordinary floor, the exact exit ladder, and a new independent Codex PASS.
 
 Auditor record `R-0005-FOURTH-REVIEW-REPAIR-FLOOR-FAILURE` authorizes KR-R5-044:
 regenerate only the Architect-owned semantic repository-reference projection after the
-governed authority-document correction moved one current GitHub locator from line 124
-to line 123. The two existing projection contracts are the failing Inspector boundary.
+governed authority-document correction left one current GitHub locator at line 124
+while the stale projection names line 123. The two existing projection contracts are the failing Inspector boundary.
 No generator, document, test, classification, rationale, or other locator may change.
 The cluster retires when both focused contracts and the restarted complete floor pass.
