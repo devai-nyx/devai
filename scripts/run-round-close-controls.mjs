@@ -514,6 +514,47 @@ function rolePathMap(root, base, head, policy, findings) {
   const commits = git(root, ['rev-list', '--reverse', `${base}..${head}`])
     .split('\n')
     .filter(Boolean);
+  const commitSet = new Set(commits);
+  const exceptions = new Map();
+  const exceptionEntries = Array.isArray(policy.role_path_exceptions)
+    ? policy.role_path_exceptions
+    : [];
+  const decisions = readFileSync(join(root, 'law/register/DECISIONS.md'), 'utf8');
+
+  for (const entry of exceptionEntries) {
+    const structurallyValid =
+      entry !== null &&
+      typeof entry === 'object' &&
+      SHA40.test(entry.commit ?? '') &&
+      typeof entry.role === 'string' &&
+      Array.isArray(entry.paths) &&
+      entry.paths.length > 0 &&
+      new Set(entry.paths).size === entry.paths.length &&
+      entry.paths.every(
+        (path) => typeof path === 'string' && path.length > 0 && !/[?*[\]{}]/u.test(path),
+      ) &&
+      typeof entry.decision_id === 'string' &&
+      entry.decision_id.length > 0 &&
+      typeof entry.reason === 'string' &&
+      entry.reason.trim().length > 0;
+    if (!structurallyValid || exceptions.has(entry?.commit)) {
+      findings.push(
+        finding('ROLE_PATH_EXCEPTION_INVALID', 'role-path exception is malformed or duplicated', {
+          commit: entry?.commit ?? null,
+        }),
+      );
+      continue;
+    }
+    exceptions.set(entry.commit, entry);
+    if (!commitSet.has(entry.commit)) {
+      findings.push(
+        finding('ROLE_PATH_EXCEPTION_UNUSED', 'role-path exception commit is outside the range', {
+          commit: entry.commit,
+        }),
+      );
+    }
+  }
+
   return commits.map((sha) => {
     const author = git(root, ['show', '-s', '--format=%an', sha]);
     const role = authorRole(author);
@@ -522,10 +563,47 @@ function rolePathMap(root, base, head, policy, findings) {
       .filter(Boolean)
       .sort();
     const allowed = role === null ? [] : (policy.role_paths?.[role] ?? []);
+    const unauthorizedPaths = paths.filter((path) => !allowed.some((glob) => matches(path, glob)));
+    const exception = exceptions.get(sha);
+    let exceptionAuthorized = false;
+    if (exception !== undefined) {
+      const declaredPaths = [...exception.paths].sort();
+      const pathSetMatches =
+        declaredPaths.length === unauthorizedPaths.length &&
+        declaredPaths.every((path, index) => path === unauthorizedPaths[index]);
+      const roleMatches = role !== null && exception.role === role;
+      const decisionResolves = decisions.includes(`### ${exception.decision_id} `);
+      if (!roleMatches) {
+        findings.push(
+          finding('ROLE_PATH_EXCEPTION_ROLE_MISMATCH', 'role-path exception role is not actual', {
+            sha,
+            actual_role: role,
+            declared_role: exception.role,
+          }),
+        );
+      }
+      if (!pathSetMatches) {
+        findings.push(
+          finding(
+            'ROLE_PATH_EXCEPTION_PATH_MISMATCH',
+            'role-path exception paths do not equal the exact unauthorized path set',
+            { sha, declared_paths: declaredPaths, unauthorized_paths: unauthorizedPaths },
+          ),
+        );
+      }
+      if (!decisionResolves) {
+        findings.push(
+          finding(
+            'ROLE_PATH_EXCEPTION_DECISION_UNRESOLVED',
+            'role-path exception decision does not resolve',
+            { sha, decision_id: exception.decision_id },
+          ),
+        );
+      }
+      exceptionAuthorized = roleMatches && pathSetMatches && decisionResolves;
+    }
     const pathAuthorized =
-      role !== null &&
-      paths.length > 0 &&
-      paths.every((path) => allowed.some((glob) => matches(path, glob)));
+      role !== null && paths.length > 0 && (unauthorizedPaths.length === 0 || exceptionAuthorized);
     if (!pathAuthorized) {
       findings.push(
         finding('ROLE_PATH_VIOLATION', `${sha} is not role-pure`, { sha, author, role, paths }),
