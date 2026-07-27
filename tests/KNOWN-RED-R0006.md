@@ -107,3 +107,26 @@ The trace materialization contract now also proves that assertion-free files fai
 that a non-assertion source-byte change invalidates the digest. Until the Architect
 regenerates `law/trace.json`, only trace-materialization-dependent assertions remain
 red; that staleness is the required role-pure projection handoff, not a red exception.
+
+## B9 manifest role-boundary red
+
+After exact candidate `970651a5f49fa6e2bb7f979d53371a147ef0e109` passed both
+convergence passes and closure rehearsal, manifest generation failed closed because
+immutable Engineer commits `d41c648b184ae63c2ed473ae1a44725eb3cb26dc` and
+`8e7a44b70a3e13b85293de48af8284889daea7e3` touched Inspector-owned
+`tests/config/**` paths. The Inspector adds focused contracts requiring any historical
+classification to bind an exact commit, the actual author role, exact mismatched paths,
+a governing decision, and a nonempty reason. An unused extra path must fail closed.
+
+The exact red command is:
+
+```text
+pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts -t "historical role-path exception"
+```
+
+Before law or implementation it exits nonzero because the valid exact exception still
+returns `ROLE_PATH_VIOLATION`, while the unused-extra-path case lacks the required
+`ROLE_PATH_EXCEPTION_PATH_MISMATCH` finding. This red authorizes only an exact
+historical-classification mechanism for those two immutable commits. It does not move
+`tests/**` into Engineer authority, authorize globs or prefixes, excuse later commits,
+or restore review/publication standing to the failed candidate.
