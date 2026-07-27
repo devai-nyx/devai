@@ -70,10 +70,12 @@ describe('R-0005 canonical round-state routing', () => {
       },
     });
 
-    const orchestrated = await skill('SKILL-round-orchestrate').run({
-      repoRoot: repo,
-      inputs: { round_n: 7 },
-    });
+    const orchestrated = await withAuthorityHostTestScope(() =>
+      skill('SKILL-round-orchestrate').run({
+        repoRoot: repo,
+        inputs: { round_n: 7 },
+      }),
+    );
     expect(orchestrated).toMatchObject({
       status: 'pass',
       evidence: {
@@ -82,6 +84,20 @@ describe('R-0005 canonical round-state routing', () => {
         },
       },
     });
+
+    write(
+      repo,
+      '.devai/config/project.json',
+      JSON.stringify({
+        hardFailGates: {
+          lint: null,
+          typecheck: null,
+          test: null,
+          'docs-links': null,
+          'action-coverage': null,
+        },
+      }),
+    );
 
     const verified = await withAuthorityHostTestScope(() =>
       skill('SKILL-round-verify-publish').run({ repoRoot: repo, inputs: { round_n: 7 } }),

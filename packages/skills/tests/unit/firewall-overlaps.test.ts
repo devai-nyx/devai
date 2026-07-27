@@ -114,7 +114,7 @@ describe('R12 W2 — ADR-mandated overlap cases', () => {
     expect(v.findings).toHaveLength(0);
   });
 
-  it('case 3: autofix exemption — fix-family review-agent `docs/meta/adr/**/*.md` carries (overlap=true, exempt=true)', () => {
+  it('case 3: fix-family review-agent cannot borrow ADR write authority', () => {
     const v = checkPromptOverlays({
       manifests: [
         {
@@ -127,8 +127,8 @@ describe('R12 W2 — ADR-mandated overlap cases', () => {
         },
       ],
     });
-    expect(v.ok).toBe(true);
-    expect(v.findings).toHaveLength(0);
+    expect(v.ok).toBe(false);
+    expect(firstArchitectFinding(v)).toBeDefined();
   });
 
   it('case 4: broad-glob WITH autofix exemption attempted — finding fires (hardening case)', () => {
@@ -148,10 +148,7 @@ describe('R12 W2 — ADR-mandated overlap cases', () => {
     expect(firstArchitectFinding(v)).toBeDefined();
   });
 
-  it('case 4-variant: narrow fix-family scope outside arch territory does not fire', () => {
-    // The narrow scope `docs/meta/adr/**/*.md` against the *non-overlapping*
-    // reserved entry `docs/framework/arch/` should produce no finding for
-    // `docs/framework/arch/` (it does for `docs/meta/adr/`, but `exemptByAutofix` carries).
+  it('case 4-variant: narrow ADR scope remains Architect-owned', () => {
     const v = checkPromptOverlays({
       manifests: [
         {
@@ -164,8 +161,8 @@ describe('R12 W2 — ADR-mandated overlap cases', () => {
         },
       ],
     });
-    expect(v.ok).toBe(true);
-    expect(v.findings).toHaveLength(0);
+    expect(v.ok).toBe(false);
+    expect(firstArchitectFinding(v)).toBeDefined();
   });
 
   it('one-finding-per-scope: a scope overlapping multiple reserveds yields one finding (the existing `break`)', () => {
@@ -190,12 +187,7 @@ describe('R12 W2 — ADR-mandated overlap cases', () => {
   });
 });
 
-describe('R12 W2 — isAutofixSelfScope hardened gate', () => {
-  // The exemption is exercised via checkPromptOverlays. To assert
-  // the gate accept/rejects, we feed scopes one-at-a-time through a
-  // fix-family review-agent and observe whether the overlap-derived
-  // finding is suppressed (accepted) or still fires (rejected).
-
+describe('R-0005 — autofix does not confer reserved-path authority', () => {
   const fixSkill = (id: string, scope: string) => ({
     id,
     family: 'fix' as const,
@@ -210,9 +202,9 @@ describe('R12 W2 — isAutofixSelfScope hardened gate', () => {
     expect(v.ok).toBe(false);
   });
 
-  it('ACCEPTS `docs/meta/adr/**/*.md` (literal dir prefix + file ext)', () => {
+  it('REJECTS `docs/meta/adr/**/*.md` even with a literal prefix and file extension', () => {
     const v = checkPromptOverlays({ manifests: [fixSkill('b', 'docs/meta/adr/**/*.md')] });
-    expect(v.ok).toBe(true);
+    expect(v.ok).toBe(false);
   });
 
   it('REJECTS `docs/meta/adr/**` (no file-extension restriction)', () => {

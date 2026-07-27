@@ -129,7 +129,7 @@ describe('fix skill behavior expansion', () => {
     });
   });
 
-  it('scaffolds missing ADR sections and escalates malformed and off-pattern records', async () => {
+  it('diagnoses ADR defects without mutating governed law', async () => {
     const repo = root();
     const frontmatter = [
       '---',
@@ -155,20 +155,17 @@ describe('fix skill behavior expansion', () => {
       ['---', 'adr_id: ADR-003', 'title: Legacy title', '---', 'body'].join('\n'),
     );
 
-    await withAuthorityHostTestScope(async () => {
-      const result = await skill('SKILL-fix-adrs').run({
-        repoRoot: repo,
-        iteration: { current: 3, max: 3 },
-      });
-      expect(result).toMatchObject({ status: 'fail' });
-      const outcomes = (result.evidence as { fix_log: Array<{ outcome: string }> }).fix_log.map(
-        ({ outcome }) => outcome,
-      );
-      expect(outcomes).toContain('section-scaffolded');
-      expect(outcomes).toContain('escalate-malformed-front-matter');
-      expect(outcomes).toContain('rename-skipped-not-git');
-      expect(readFileSync(canonical, 'utf8')).toContain('## Affected Rules');
+    const before = readFileSync(canonical, 'utf8');
+    const result = await skill('SKILL-fix-adrs').run({
+      repoRoot: repo,
+      iteration: { current: 3, max: 3 },
     });
+    expect(result).toMatchObject({
+      status: 'fail',
+      evidence: { errors: expect.arrayContaining([expect.objectContaining({ file: canonical })]) },
+    });
+    expect(readFileSync(canonical, 'utf8')).toBe(before);
+    expect(readFileSync(canonical, 'utf8')).not.toContain('## Affected Rules');
   });
 
   it('runs prompt-overlay and forbidden-action diagnostic envelopes', async () => {
