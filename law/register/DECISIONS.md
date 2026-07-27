@@ -2932,6 +2932,36 @@ authorizes evidence reuse or promotion, package publication, tags, GitHub Releas
 Pages deployment, external release or deployment, real-stynx mutation, R-0008 external
 action, R-0009 activation, or R-0010 observation. The predecessor remains read-only.
 
+### DII-206 — Accept the R-0005 closure-sequencing correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0005 corrected source close; DII-202; DII-203; DII-204; DII-205; OM-009; R-0005-CLOSURE-SEQUENCING-CORRECTION-AUDIT; R-0005-INDEPENDENT-CODEX-REVIEW-10-PASS`
+
+DII-206 accepts the seven-commit closure-sequencing correction reviewed at exact clean
+candidate `276d23d89386acc4c294f511f4a13ff1ac222063` from exact base and merge-base
+`c449710298e2a51e3938d9dcb17b5d03a2823759`. Independent Codex review 10 returned an
+explicit PASS with no P0 or P1 finding. The repair is bounded to prior ancestry strictly
+before each Machine record; it accepts a closure-only range only when an Architect
+schema and Engineer production verb already exist, and continues to fail closed when
+either prerequisite is absent. Existing implementation classification, semantic red
+scope, law-first/red-first rules, and exact historical exceptions are unchanged.
+
+The corrected local ladder passes 133 ordinary files with 1,230 tests and eight declared
+skips; T1 at 74/856; T2 at 41/286 plus one skip; T1+T3 at 83/912 plus seven skips and
+72.42/62.36/78.07/74.52 coverage; T4 at 2/4; T5 at 6/25; T6 at 1/3; all 34 invariants,
+167 repository references, strict governance, formatting, diff, and cleanliness checks.
+No threshold, test source, assertion, skip declaration, lint rule, or formatting rule
+was weakened.
+
+The correction branch may enter a ready source-repair PR. Merge remains forbidden until
+all nine required jobs pass at the exact PR head; PC-0006 regeneration remains forbidden
+until that correction merge passes exact-main CI. The closure-only PR, closure merge,
+and final exact-main CI remain distinct gates. PR 8, its source merge, and its evidence
+remain immutable history but no longer supply PC-0006's terminal `merged_as` value.
+
+This decision does not authorize evidence reuse or promotion, package publication,
+tags, GitHub Releases, Pages deployment, external release or deployment, real-stynx
+mutation, R-0008 external action, R-0009 activation, or R-0010 observation. The
+predecessor remains read-only.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
