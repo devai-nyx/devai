@@ -40,17 +40,14 @@
       "scripts/",
       ".github/"
     ],
-    "root_files": ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", ".npmrc"],
-    "root_suffixes": [".json", ".yml", ".yaml"],
-    "root_name_prefixes": [
-      "eslint.config.",
-      "prettier.config.",
-      "rollup.config.",
-      "tsconfig.",
-      "turbo.",
-      "vite.config.",
-      "vitest.config.",
-      "webpack.config."
+    "root_globs": [
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "tsconfig*.json",
+      "vitest*.ts",
+      "eslint.config.js",
+      ".prettier*"
     ]
   },
   "bindings": [

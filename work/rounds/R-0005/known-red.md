@@ -351,3 +351,22 @@ clean-status gates.
 
 This ledger grants no active red authority. Any further actionable finding requires a
 fresh Architect entry and failing Inspector boundary before repair.
+
+## Sixth-review repair authority
+
+Auditor record `R-0005-INDEPENDENT-CODEX-REVIEW-6-FAILURE` preserves the exact
+`a1afd133378d9d309ea762bbaae00e113f1b4e80` FAIL without conversion and
+authorizes KR-R5-046. The canonical authority source already assigns Engineer authority
+to the repository-root globs `tsconfig*.json`, `vitest*.ts`, `eslint.config.js`, and
+`.prettier*`; the sequencing policy must represent those exact globs rather than a
+parallel approximation.
+
+Inspector must first commit hermetic failures proving that unbound post-boundary
+Engineer commits touching `.prettierignore` and `vitest.workspace.ts` are rejected and
+that any future policy divergence from the canonical `rootEngineerPaths` declaration is
+reported. Engineer may then make the checker derive root matching from the exact policy
+globs and validate byte-level list parity with the canonical authority source. No
+cluster authorizes a broader Engineer surface, a hand-maintained approximation, a test
+weakening, history rewrite, fabricated review PASS, or external action. Retirement
+requires focused green, the complete ordinary floor, exact exit ladder, and a new
+independent Codex PASS.
