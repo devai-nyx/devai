@@ -108,6 +108,14 @@
       "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
       "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"],
       "failure_summary": "The fifth-review adversaries proved that application and root-tooling Engineer commits escaped the narrow implementation classifier and that a prospective round-wide exception bypassed every binding."
+    },
+    {
+      "commit": "c5ac6a86e994e0f31d47aa8a411929bab2a93e00",
+      "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts",
+      "exit_code": 1,
+      "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"],
+      "failure_summary": "The sixth-review adversaries proved that .prettierignore and vitest.workspace.ts escaped the root implementation classifier and that sequencing policy could diverge from canonical rootEngineerPaths authority."
     }
   ]
 }
