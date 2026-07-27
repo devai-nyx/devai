@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0006-CLOSE-EVIDENCE-FRESHNESS-RED",
+  "round": "R-0006",
+  "authority": "Auditor",
+  "date": "2026-07-27",
+  "observations": [
+    {
+      "commit": "1ca2bd61ca2c5b3d8ac14a3bfc68e3bcd11efa31",
+      "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "failure_summary": "The exact-candidate adversary proved that a changed semantic head could reuse prior convergence and closure-rehearsal state and still receive a successful manifest."
+    }
+  ]
+}
