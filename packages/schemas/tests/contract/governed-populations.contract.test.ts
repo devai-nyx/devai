@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { getValidator } from '../../src/index.js';
+import { getValidator, listSchemaFiles } from '../../src/index.js';
 
 const ROOT = join(import.meta.dirname, '..', '..', '..', '..');
 
@@ -10,11 +10,13 @@ function json(path: string): unknown {
 }
 
 describe('governed population count guards', () => {
-  it('guards the 56-schema canonical roster', () => {
+  it('guards the complete schema population without a maintained count literal', () => {
     const files = readdirSync(join(ROOT, 'law', 'schemas'))
       .filter((file) => file.endsWith('.schema.json'))
       .sort();
-    expect(files).toHaveLength(56);
+    expect(files).toEqual(listSchemaFiles());
+    expect(new Set(files).size).toBe(files.length);
+    expect(files.length).toBeGreaterThan(0);
   });
 
   it('guards the 34-invariant roster', () => {

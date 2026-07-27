@@ -13,8 +13,7 @@ import {
 const R = join(import.meta.dirname, '..', '..', '..', '..');
 
 describe('roster', () => {
-  it('bijects with law/schemas (count guard: 56)', () => {
-    expect(ROSTER.length).toBe(56);
+  it('bijects with the complete law/schemas population', () => {
     expect(new Set(ROSTER).size).toBe(ROSTER.length);
     expect(listSchemaFiles()).toEqual([...ROSTER].sort());
   });
@@ -23,6 +22,11 @@ describe('roster', () => {
   });
   it('infrastructure schemas are roster members', () => {
     for (const i of INFRASTRUCTURE) expect(ROSTER).toContain(i);
+  });
+  it('rejects a malformed round-close manifest', () => {
+    const validate = getValidator('round-close-manifest.schema.json');
+    expect(validate({ schemaVersion: '1.0.0' })).toBe(false);
+    expect(validate.errors?.length).toBeGreaterThan(0);
   });
 });
 // Invariants: INV-DEVAI-001

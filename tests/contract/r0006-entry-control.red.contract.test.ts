@@ -28,7 +28,11 @@ function git(root: string, args: readonly string[], input?: string): string {
 }
 
 function commit(root: string, author: string, subject: string, paths: readonly string[]): string {
-  git(root, ['add', ...paths]);
+  const staged = new Set(
+    git(root, ['diff', '--cached', '--name-only']).split('\n').filter(Boolean),
+  );
+  const unstaged = paths.filter((path) => !staged.has(path));
+  if (unstaged.length > 0) git(root, ['add', '--', ...unstaged]);
   git(root, [
     '-c',
     `user.name=${author}`,
@@ -55,6 +59,7 @@ function policy(overrides: Record<string, unknown> = {}): string {
         publishability: 'candidate-only-no-alternates',
         historical_classification: 'exact-sha-kind-reason-paths',
       },
+      manifest_schema: 'law/schemas/round-close-manifest.schema.json',
       governed_range: { mode: 'exact-base-to-published-head', fixed_windows_forbidden: true },
       governed_identity_sources: ['law/register/DECISIONS.md', 'work/audit/**/*.md'],
       role_paths: {
@@ -135,7 +140,7 @@ function fixture(): Fixture {
   git(root, ['config', 'core.logAllRefUpdates', 'true']);
   put(root, 'README.md', 'fixture seed\n');
   commit(root, 'DEVAI Architect', 'chore: seed fixture history', ['README.md']);
-  put(root, '.gitignore', '.devai/state/**\n!.devai/state/.gitkeep\n');
+  put(root, '.gitignore', '.devai/state/**\n!.devai/state/.gitkeep\nscratch/**\n');
   put(root, '.devai/state/.gitkeep', '');
   put(root, 'law/policy/round-close-controls.json', policy());
   put(root, '.devai/config/round-close-controls.json', policy());
@@ -145,6 +150,7 @@ function fixture(): Fixture {
     '{"schemaVersion":"1.0.0","entries":[]}\n',
   );
   put(root, 'law/schemas/phase-closure.schema.json', '{}\n');
+  put(root, 'law/schemas/round-close-manifest.schema.json', '{}\n');
   put(root, 'packages/cli/src/commands/govern/phase-close.ts', 'export const phaseClose = true;\n');
   put(root, 'fixture/gate.mjs', 'process.exit(0);\n');
   put(root, 'fixture/projection.mjs', 'process.exit(0);\n');
@@ -155,6 +161,7 @@ function fixture(): Fixture {
     '.devai/config/round-close-controls.json',
     'law/policy/governed-sha-reference-exceptions.json',
     'law/schemas/phase-closure.schema.json',
+    'law/schemas/round-close-manifest.schema.json',
     'packages/cli/src/commands/govern/phase-close.ts',
     'fixture/gate.mjs',
     'fixture/projection.mjs',
@@ -201,6 +208,38 @@ function manifestArgs(candidate: string): string[] {
     '--published-head',
     candidate,
   ];
+}
+
+function prepareCloseState(root: string, base: string, candidate: string): void {
+  const convergence = run(root, [
+    'converge',
+    '--round',
+    'R-0006',
+    '--base',
+    base,
+    '--head',
+    candidate,
+  ]);
+  expect(convergence.status, convergence.stderr).toBe(0);
+  const rehearsal = run(root, [
+    'rehearse',
+    '--round',
+    'R-0006',
+    '--base',
+    base,
+    '--candidate',
+    candidate,
+  ]);
+  expect(rehearsal.status, rehearsal.stderr).toBe(0);
+  put(
+    root,
+    'scratch/coverage/t1-t3/coverage-summary.json',
+    `${JSON.stringify({
+      total: Object.fromEntries(
+        ['statements', 'branches', 'functions', 'lines'].map((key) => [key, { pct: 100 }]),
+      ),
+    })}\n`,
+  );
 }
 
 afterEach(() => {
@@ -427,6 +466,13 @@ describe('R-0006 E1 entry-control red contracts', () => {
       valid.candidate,
     ]);
     expect(accepted.status, accepted.stderr).toBe(0);
+    const rehearsal = JSON.parse(accepted.stdout as string) as {
+      result: { source_merge: string; closure_head: string; ok: boolean };
+    };
+    expect(rehearsal.result.ok).toBe(true);
+    expect(rehearsal.result.source_merge).toMatch(/^[0-9a-f]{40}$/u);
+    expect(rehearsal.result.closure_head).toMatch(/^[0-9a-f]{40}$/u);
+    expect(rehearsal.result.closure_head).not.toBe(rehearsal.result.source_merge);
 
     for (const missing of [
       'law/schemas/phase-closure.schema.json',
@@ -480,5 +526,113 @@ describe('R-0006 E1 entry-control red contracts', () => {
     expect(findings(mirror)).toEqual(
       expect.arrayContaining([expect.objectContaining({ code: 'POLICY_MIRROR_DRIFT' })]),
     );
+  });
+});
+
+describe('R-0006 E4 entry-control acceptance and adversaries', () => {
+  it('emits a deterministic exact-range manifest from a candidate-only fresh clone', () => {
+    const { root, base, candidate } = fixture();
+    prepareCloseState(root, base, candidate);
+    const first = run(root, manifestArgs(candidate));
+    const second = run(root, manifestArgs(candidate));
+    expect(first.status, first.stderr).toBe(0);
+    expect(second.status, second.stderr).toBe(0);
+    expect(second.stdout).toBe(first.stdout);
+    const output = JSON.parse(first.stdout as string) as {
+      manifest: {
+        exact_base: string;
+        governed_range: { commits: string[] };
+        clean_clone: { alternates: boolean; refs: string[] };
+        manifest_digest_sha256: string;
+      };
+    };
+    expect(output.manifest.exact_base).toBe(base);
+    expect(output.manifest.governed_range.commits).toEqual([candidate]);
+    expect(output.manifest.clean_clone.alternates).toBe(false);
+    expect(output.manifest.clean_clone.refs).toEqual([
+      'refs/heads/candidate',
+      'refs/remotes/origin/candidate',
+    ]);
+    expect(output.manifest.manifest_digest_sha256).toMatch(/^[0-9a-f]{64}$/u);
+  });
+
+  it('rejects omitted role paths and prefix-like glob variants', () => {
+    const { root, base } = fixture();
+    put(root, 'packages2/escape.ts', 'export const escaped = true;\n');
+    const candidate = commit(root, 'DEVAI Engineer', 'build(r0006): try prefix escape', [
+      'packages2/escape.ts',
+    ]);
+    prepareCloseState(root, base, candidate);
+    const result = run(root, manifestArgs(candidate));
+    expect(result.status).not.toBe(0);
+    expect(findings(result)).toEqual(
+      expect.arrayContaining([expect.objectContaining({ code: 'ROLE_PATH_VIOLATION' })]),
+    );
+  });
+
+  it('fails closed on malformed manifest state instead of crashing or accepting it', () => {
+    const { root, candidate } = fixture();
+    put(root, '.devai/state/round-runs/R-0006/close/convergence.json', '{not-json\n');
+    const result = run(root, manifestArgs(candidate));
+    expect(result.status).not.toBe(0);
+    expect(findings(result)).toEqual(
+      expect.arrayContaining([expect.objectContaining({ code: 'MANIFEST_STATE_MALFORMED' })]),
+    );
+  });
+
+  it('admits one exact Auditor record and only a reproducible Architect projection', () => {
+    const current = fixture();
+    const admittedPolicy = policy({
+      review: {
+        frozen_paths: [
+          'law/**',
+          'product/**',
+          'packages/**',
+          'tests/**',
+          'docs/**',
+          'work/rounds/**',
+          'work/audit/R-0006/as-built.md',
+        ],
+        record: 'work/audit/R-0006/review.md',
+        record_author: 'DEVAI Auditor',
+        projection_only: true,
+        allowed_projection_ids: ['fixture-projection'],
+      },
+    });
+    put(current.root, 'law/policy/round-close-controls.json', admittedPolicy);
+    put(current.root, '.devai/config/round-close-controls.json', admittedPolicy);
+    put(
+      current.root,
+      'fixture/projection.mjs',
+      "import { readFileSync } from 'node:fs';\nconst source = readFileSync('work/audit/R-0006/review.md', 'utf8');\nconst output = readFileSync('docs/generated/review.md', 'utf8');\nprocess.exitCode = source === output ? 0 : 1;\n",
+    );
+    const reviewed = commit(
+      current.root,
+      'DEVAI Architect',
+      'law(r0006): admit fixture projection',
+      [
+        'law/policy/round-close-controls.json',
+        '.devai/config/round-close-controls.json',
+        'fixture/projection.mjs',
+      ],
+    );
+    put(current.root, 'work/audit/R-0006/review.md', 'PASS\n');
+    commit(current.root, 'DEVAI Auditor', 'audit(r0006): record independent review', [
+      'work/audit/R-0006/review.md',
+    ]);
+    put(current.root, 'docs/generated/review.md', 'PASS\n');
+    commit(current.root, 'DEVAI Architect', 'docs(r0006): reproduce review projection', [
+      'docs/generated/review.md',
+    ]);
+    const result = run(current.root, [
+      'envelope',
+      '--reviewed-sha',
+      reviewed,
+      '--head',
+      git(current.root, ['rev-parse', 'HEAD']),
+      '--review-record',
+      'work/audit/R-0006/review.md',
+    ]);
+    expect(result.status, result.stderr).toBe(0);
   });
 });

@@ -225,7 +225,11 @@ describe('R-0004 governed surface red-first contracts', () => {
       rules: string[];
     };
     expect(output.ok).toBe(true);
-    expect(output.canonical_total).toBe(56);
+    const canonicalSchemas = readdirSync(join(ROOT, 'law/schemas')).filter((file) =>
+      file.endsWith('.schema.json'),
+    );
+    expect(output.canonical_total).toBe(canonicalSchemas.length);
+    expect(canonicalSchemas.length).toBeGreaterThan(0);
     expect(DISPOSITION.schemas.canonical_total).toBe(55);
     expect(output.rules).toEqual(
       expect.arrayContaining([
@@ -365,7 +369,11 @@ describe('R-0004 governed surface red-first contracts', () => {
     const { canonical_total: canonicalTotal } = JSON.parse(result.stdout) as {
       canonical_total: number;
     };
-    expect(canonicalTotal).toBe(56);
+    const canonicalSchemas = readdirSync(join(ROOT, 'law/schemas')).filter((file) =>
+      file.endsWith('.schema.json'),
+    );
+    expect(canonicalTotal).toBe(canonicalSchemas.length);
+    expect(canonicalSchemas.length).toBeGreaterThan(0);
     expect(contract).toContain('across all 55 schemas');
     expect(
       readFileSync(join(ROOT, 'work/rounds/R-0005/documentation-reconciliation.md'), 'utf8'),
