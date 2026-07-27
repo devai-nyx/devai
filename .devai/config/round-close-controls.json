@@ -3,7 +3,7 @@
   "manifest_schema": "law/schemas/round-close-manifest.schema.json",
   "declaration": {
     "decision_id": "DII-207",
-    "base_pattern": "exact successor base `([0-9a-f]{40})`"
+    "base_pattern": "exact successor base\\s+`([0-9a-f]{40})`"
   },
   "identities": {
     "fields": ["implementation_subject", "review_candidate", "published_head"],
