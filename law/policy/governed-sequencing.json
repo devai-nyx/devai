@@ -151,7 +151,8 @@
       "round": "R-0005",
       "implementation_commits": [
         "848da7abe9f368d5d771bac054354801fb4039bc",
-        "b687131e3fe1bcef6c32c561b13056ebfd688b35"
+        "b687131e3fe1bcef6c32c561b13056ebfd688b35",
+        "cf4c82fdeb005895c65af1a21a3851cc7a826e49"
       ],
       "law_commits": ["9201a78acd34c81d15e5e855b5b3b1740db0dfd6"],
       "red_evidence": {
