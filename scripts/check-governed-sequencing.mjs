@@ -36,6 +36,17 @@ function observation(sha) {
   return { sha, author, subject, paths, round: token === undefined ? null : `R-${token}` };
 }
 
+function priorHistoryHasRolePath(sha, author, path) {
+  try {
+    return git(['log', '--format=%an', `${sha}^`, '--', path])
+      .split('\n')
+      .filter(Boolean)
+      .includes(author);
+  } catch {
+    return false;
+  }
+}
+
 function substantiveEngineer(commit) {
   return commit.author === 'DEVAI Engineer' && commit.paths.some(substantiveImplementationPath);
 }
@@ -403,21 +414,12 @@ for (const commit of observations.filter(substantiveEngineer)) {
   }
 }
 
-for (const [index, commit] of observations.entries()) {
+for (const commit of observations) {
   const machineRecord =
     commit.author === 'DEVAI Machine' && commit.paths.some((path) => path.startsWith('record/'));
   if (!machineRecord) continue;
-  const prior = observations.slice(0, index);
-  const hasShape = prior.some(
-    (candidate) =>
-      candidate.author === 'DEVAI Architect' &&
-      candidate.paths.some((path) => path.startsWith('law/schemas/')),
-  );
-  const hasVerb = prior.some(
-    (candidate) =>
-      candidate.author === 'DEVAI Engineer' &&
-      candidate.paths.some((path) => path.startsWith('packages/')),
-  );
+  const hasShape = priorHistoryHasRolePath(commit.sha, 'DEVAI Architect', 'law/schemas');
+  const hasVerb = priorHistoryHasRolePath(commit.sha, 'DEVAI Engineer', 'packages');
   if (!hasShape || !hasVerb) {
     findings.push({
       rule: 'shape-before-machine-record',
