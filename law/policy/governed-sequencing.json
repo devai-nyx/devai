@@ -38,7 +38,9 @@
       "database/functions/",
       "iac/",
       "scripts/",
-      ".github/"
+      ".github/",
+      ".devai/config/",
+      ".devai/pin/"
     ],
     "root_globs": [
       "package.json",
@@ -299,6 +301,11 @@
         "3925a2f89f8f5ce041e247a29c00fd624b711765"
       ],
       "reason": "Fourth independent review disclosed that these docs-link diagnose-only repairs followed a full-floor observation but lacked a prior Inspector red that exercised packages/skills/src/skills/impl/fixes.ts. The false 67aa794 binding is removed; history is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["4d040c469d7ac9e82430a88eb261b9340fd63d57"],
+      "reason": "Eighth independent review disclosed that the first authority-policy materialization predates committed-materialization sequencing classification. KR-R5-015 and Inspector 450bf79 governed that immutable repair; this exact-commit disclosure grants no prospective exception."
     }
   ],
   "historical_round_disclosures": [

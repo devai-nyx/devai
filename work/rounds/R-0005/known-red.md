@@ -420,3 +420,28 @@ diff, and clean-status gates.
 This ledger grants no active red authority. A fresh exact-candidate independent Codex
 review remains required. Any further actionable finding requires a fresh Architect
 entry and failing Inspector boundary before repair.
+
+## Eighth-review repair authority
+
+Auditor record `R-0005-INDEPENDENT-CODEX-REVIEW-8-FAILURE` preserves the exact
+`eb1958d7613574ed6c7022a3321c0fb9e41e9986` FAIL without conversion and
+authorizes KR-R5-049 and KR-R5-050.
+
+KR-R5-049 requires an Inspector contract that recomputes the complete trusted authority
+sources from current production code and rejects either committed authority-policy
+materialization when its resolved digest, source policy, additive extensions, or rules
+diverge. The existing `adopt upgrade` machine materializer must regenerate
+`.devai/config/authority-policy.json`; the Engineer commits that exact product, then the
+Architect byte-copies it to `law/policy/authority-policy.json` in a separate commit.
+
+KR-R5-050 classifies committed `.devai/config/**` and `.devai/pin/**` products as
+substantive Engineer materialization surfaces. Inspector must prove that prospective
+unbound commits under both roots are rejected. The immutable first materialization
+`4d040c4` is disclosed as an exact historical commit because its KR-R5-015 law and red
+preceded the later sequencing classifier; the exception grants no prospective bypass.
+
+No cluster authorizes hand-editing generated policy, changing authority semantics beyond
+the already-approved `eslint.config.*` correction, weakening runtime validation,
+fabricating a review PASS, or external action. Retirement requires focused green, both
+materializations byte-identical and current, the complete ordinary floor, exact exit
+ladder, and a new independent Codex PASS.
