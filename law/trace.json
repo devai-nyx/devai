@@ -513,6 +513,11 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/r0006-output-contracts.adversarial.contract.test.ts",
           "target_type": "test"
         },
@@ -905,6 +910,11 @@
           "suite": "unit",
           "path": "packages/utils/tests/unit/glob-guards.test.ts",
           "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+          "target_type": "test"
         }
       ]
     },
@@ -1059,6 +1069,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-coverage-integrity.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -2604,6 +2619,18 @@
       "lifecycle": "supported",
       "assertion_count": 26,
       "assertion_digest_sha256": "68e97ac5d73146bd3cf85e641834b3a35149437f081417db213d3ba31fb5b305"
+    },
+    {
+      "path": "tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-014",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 6,
+      "assertion_digest_sha256": "b62c718f41fcf41dcad7cad031c6fe52fb12662ccecfa257c75ed4ddc6d96da1"
     },
     {
       "path": "tests/contract/r0006-entry-control.red.contract.test.ts",

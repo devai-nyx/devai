@@ -3389,6 +3389,45 @@ record before source merge and exact-main CI, package publication, tag, GitHub R
 Pages deployment, external deployment, evidence reuse or promotion, real-stynx
 mutation, predecessor mutation, or R-0007+ work.
 
+### DII-222 — Require auditable exact-hit coverage measurement
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 second B9 Opus correction; DII-217; DII-219; DII-221; Inspector 49a89b433799823cc4e9d8f0baa8d6068959ae24; Auditor R-0006-COVERAGE-INTEGRITY-RED-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-2-FAILURE`
+
+The second independent B9 review returned FAIL because the subprocess coverage
+provider treated a positive containing range as evidence that a nested exact zero-hit
+statement or function executed. A coverage numerator may contain only measured hits.
+The canonical merge must therefore match complete source locations exactly, carry
+explicit zero-hit locations as zero, and add no count when the source maps do not
+identify the same canonical location. Containment, nearest-range, parent-range, line,
+or other inferred projection is forbidden for statements, functions, and branches.
+
+The merged coverage run must leave independently inspectable evidence. It emits the
+Istanbul statement-level `coverage-final.json` beside the summary and preserves the
+raw child-process V8 JSON inputs under `scratch/coverage/t1-t3/subprocess-v8` after the
+merge completes. A later run may clean the previous ephemeral artifact before
+measurement, but the provider must not unconditionally destroy the current inputs at
+the end of conversion. The evidence paths are runtime scratch material and are not
+committed.
+
+The 378-file denominator, source include, four existing exclusions, and
+70/60/70/70 lines/branches/functions/statements floors remain unchanged. The first
+honest reading after repair is evidence, whether green or red. If a floor is red, B7
+adds behavior-bearing Inspector tests against real risk paths until it passes; no
+threshold reduction, exclusion growth, valid-source removal, generated relabeling, or
+replacement inference is permitted.
+
+Both bounded repair paths are under `tests/config/**` and remain Inspector-owned.
+DII-219 explicitly grants no prospective Engineer waiver, so the correction must be
+committed as Inspector despite the historical B6 role label. No new role-path
+exception is authorized. The final Auditor record must re-read the corrected coverage
+digest, numerator, denominator, percentages, governed-range counts, and all exception
+claims from current machine sources before a fresh convergence, rehearsal, manifest,
+and literal `claude-opus-5` review.
+
+This decision authorizes no source publication before fresh review PASS, closure
+record before source merge and exact-main CI, package publication, tag, GitHub Release,
+Pages deployment, external deployment, evidence reuse or promotion, real-stynx
+mutation, predecessor mutation, or R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
