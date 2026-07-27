@@ -92,6 +92,14 @@
         "tests/contract/r0005-independent-review.red.contract.test.ts"
       ],
       "failure_summary": "The third-review contracts demonstrated agent-callable ADR mutation, split disposable round-state routing, and obsolete move-and-stage lifecycle documentation before the governed repairs."
+    },
+    {
+      "commit": "7693b2ba715e8781936fbb5fdaef8b83e053be4d",
+      "command": "pnpm vitest run tests/contract/r0005-independent-review.red.contract.test.ts tests/contract/governed-sequencing.contract.test.ts",
+      "exit_code": 1,
+      "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"],
+      "failure_summary": "The fourth-review contract rejected neither unrelated semantic red scope nor an exact disclosed historical commit exception before the sequencing checker repair."
     }
   ]
 }
