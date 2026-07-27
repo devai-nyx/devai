@@ -45,10 +45,21 @@ interface BindingSpec {
     readonly observed_exit: number;
     readonly command: string;
     readonly tests: string[];
+    readonly exercised_implementation_paths: string[];
   };
 }
 
-function configureBindings(root: string, bindings: readonly BindingSpec[]): void {
+interface CommitException {
+  readonly round: string;
+  readonly implementation_commits: string[];
+  readonly reason: string;
+}
+
+function configureBindings(
+  root: string,
+  bindings: readonly BindingSpec[],
+  historicalCommitExceptions: readonly CommitException[] = [],
+): void {
   const evidencePath = 'work/audit/fixture/red-evidence.json';
   const evidence = `${JSON.stringify(
     {
@@ -57,6 +68,7 @@ function configureBindings(root: string, bindings: readonly BindingSpec[]): void
         command: red.command,
         exit_code: red.observed_exit,
         tests: red.tests,
+        exercised_implementation_paths: red.exercised_implementation_paths,
       })),
     },
     null,
@@ -72,6 +84,7 @@ function configureBindings(root: string, bindings: readonly BindingSpec[]): void
       evidence_sha256: createHash('sha256').update(evidence).digest('hex'),
     },
   }));
+  document['historical_commit_exceptions'] = historicalCommitExceptions;
   put(root, 'law/policy/governed-sequencing.json', `${JSON.stringify(document, null, 2)}\n`);
 }
 
@@ -130,6 +143,7 @@ describe('governed sequencing', () => {
           observed_exit: 1,
           command: 'pnpm vitest run tests/fixture.test.ts',
           tests: ['tests/fixture.test.ts'],
+          exercised_implementation_paths: ['packages/fixture/index.ts'],
         },
       },
     ]);
@@ -159,6 +173,7 @@ describe('governed sequencing', () => {
           observed_exit: 1,
           command: 'pnpm vitest run tests/fixture.test.ts',
           tests: ['tests/fixture.test.ts'],
+          exercised_implementation_paths: ['packages/fixture/index.ts'],
         },
       },
     ]);
@@ -203,6 +218,7 @@ describe('governed sequencing', () => {
         observed_exit: 0,
         command: 'pnpm vitest run tests/fixture.test.ts',
         tests: ['tests/unrelated.test.ts'],
+        exercised_implementation_paths: ['packages/fixture/index.ts'],
       },
     };
     configureBindings(root, [binding, binding]);
@@ -226,5 +242,73 @@ describe('governed sequencing', () => {
         expect.objectContaining({ rule: 'implementation-binding' }),
       ]),
     });
+  });
+
+  it('rejects red evidence that does not exercise the exact implementation paths', () => {
+    const { root, base } = fixture();
+    const law = commit(
+      root,
+      'DEVAI Architect',
+      'law(r0006): declare fixture',
+      'law/decisions/D-999.md',
+    );
+    const red = commit(
+      root,
+      'DEVAI Inspector',
+      'test(r0006): packages/unrelated/index.ts',
+      'tests/fixture.test.ts',
+    );
+    const implementation = commit(
+      root,
+      'DEVAI Engineer',
+      'feat(r0006): repair fixture',
+      'packages/fixture/index.ts',
+    );
+    configureBindings(root, [
+      {
+        round: 'R-0006',
+        implementation_commits: [implementation],
+        law_commits: [law],
+        red_evidence: {
+          commit: red,
+          observed_exit: 1,
+          command: 'pnpm vitest run tests/fixture.test.ts',
+          tests: ['tests/fixture.test.ts'],
+          exercised_implementation_paths: ['packages/unrelated/index.ts'],
+        },
+      },
+    ]);
+
+    const result = check(root, base);
+    expect(result.status).toBe(1);
+    expect(JSON.parse(result.stdout as string)).toMatchObject({
+      ok: false,
+      findings: expect.arrayContaining([expect.objectContaining({ rule: 'red-semantic-scope' })]),
+    });
+  });
+
+  it('admits only an exact disclosed historical implementation exception', () => {
+    const { root, base } = fixture();
+    const implementation = commit(
+      root,
+      'DEVAI Engineer',
+      'fix(r0006): disclose historical inversion',
+      'packages/fixture/index.ts',
+    );
+    configureBindings(
+      root,
+      [],
+      [
+        {
+          round: 'R-0006',
+          implementation_commits: [implementation],
+          reason: 'An independent review disclosed this exact historical inversion.',
+        },
+      ],
+    );
+
+    const result = check(root, base);
+    expect(result.status).toBe(0);
+    expect(JSON.parse(result.stdout as string)).toMatchObject({ ok: true, commits_checked: 1 });
   });
 });

@@ -11,6 +11,14 @@ function read(path: string): string {
   return readFileSync(join(ROOT, path), 'utf8');
 }
 
+function markdownFiles(root: string, prefix = ''): string[] {
+  return readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
+    const relative = join(prefix, entry.name);
+    if (entry.isDirectory()) return markdownFiles(join(root, entry.name), relative);
+    return entry.isFile() && entry.name.endsWith('.md') ? [relative] : [];
+  });
+}
+
 describe('R-0005 independent-review red contracts', () => {
   it('KR-R5-017 binds the reusable evidence workflow to an active ADR', () => {
     const activeAffectedRules = readdirSync(join(ROOT, 'law/adr'))
@@ -107,6 +115,14 @@ describe('R-0005 independent-review red contracts', () => {
       expect(source, path).not.toMatch(
         /docs\/work\/round-|docs\/meta\/rounds\/round-|scratch\/sessions\/rounds\/round-|Plan\.md/u,
       );
+    }
+  });
+
+  it('KR-R5-042 excludes obsolete round paths from the complete current docs corpus', () => {
+    const obsolete =
+      /docs\/work(?:\/|\b)|docs\/meta\/rounds(?:\/|\b)|scratch\/sessions\/rounds(?:\/|\b)|Plan\.md/u;
+    for (const relative of markdownFiles(join(ROOT, 'docs'))) {
+      expect(read(`docs/${relative}`), `docs/${relative}`).not.toMatch(obsolete);
     }
   });
 });
