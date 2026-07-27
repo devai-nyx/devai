@@ -25,7 +25,10 @@
       "exit_code": 1,
       "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
       "test_sha256": "938e99e476deca7c4e8f152a333b1fba9938470e8a38f0f2669b8804cca9a263",
-      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "exercised_implementation_paths": [
+        ".devai/config/round-close-controls.json",
+        "scripts/run-round-close-controls.mjs"
+      ],
       "failure_summary": "The focused fixture retains a stable summary, statement-level artifact, and PID/time-named raw subprocess evidence. Both gate passes are otherwise equivalent and clean, but the current controller treats those exact runtime artifacts as relevant-workspace drift. The full floor has only this one intentional red while 1,441 tests pass and eight declared skips remain."
     }
   ],

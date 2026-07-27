@@ -4,12 +4,12 @@
   "round": "R-0006",
   "authority": "Auditor",
   "date": "2026-07-27",
-  "implementation_subject": "77da3986d424b8d0467f087f76d259d31b6cca37",
+  "implementation_subject": "ce61864e29c1a04b57dd37ae482f7c42aa08a6b0",
   "command": "pnpm run test:coverage:t1-t3",
   "exit_code": 0,
   "test_result": {
     "files_passed": 153,
-    "tests_passed": 1441,
+    "tests_passed": 1443,
     "tests_skipped": 8
   },
   "coverage": {
@@ -25,7 +25,7 @@
     "functions": { "covered": 2469, "total": 3073, "pct": 80.34 },
     "statements": { "covered": 15975, "total": 22393, "pct": 71.33 },
     "summary_sha256": "7c394f2c539b5844349f95ec4e8073065689e7f3cc415a9f7ea28fcc52883f0b",
-    "coverage_final_sha256": "031f6cd3cf8dd037ab9e75f4f0cb2717c105da2a5dbdb4c5e4f39040a0415dad",
+    "coverage_final_sha256": "6afc83635427b4eecca2d40802d78565c973f61273ce5ba2a1252a8cadd0b7f6",
     "raw_subprocess_json_files": 191
   },
   "disposition": "The exact-hit provider, unchanged complete denominator, unchanged exclusions, and unchanged 70/60/70/70 floors all pass after behavior-bearing Inspector depth tests. No containment inference, threshold reduction, exclusion growth, valid-source removal, or generated relabeling contributes to this result."
