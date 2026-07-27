@@ -1,6 +1,6 @@
 // The explicit schema roster (W02.c: explicitness is a feature; laziness is the mechanic).
-// 53 contract schemas + 3 infrastructure (common-defs, record-meta, meta).
-// Guarded: the roster-dir bijection is a T2 contract test; count guard 56.
+// 54 contract schemas + 3 infrastructure (common-defs, record-meta, meta).
+// Guarded: the roster-dir bijection is a T2 contract; cardinality derives from the directory.
 export const ROSTER = [
   'action-registry.schema.json',
   'actions-evidence-gate-authorization.schema.json',
@@ -40,6 +40,7 @@ export const ROSTER = [
   'release-control.schema.json',
   'repo-introspection.schema.json',
   'rgr.schema.json',
+  'round-close-manifest.schema.json',
   'routes-inventory.schema.json',
   'rtd-manifest.schema.json',
   'runtime-charter.schema.json',

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "1.0.0",
+  "manifest_schema": "law/schemas/round-close-manifest.schema.json",
+  "declaration": {
+    "decision_id": "DII-207",
+    "base_pattern": "exact successor base `([0-9a-f]{40})`"
+  },
+  "identities": {
+    "fields": ["implementation_subject", "review_candidate", "published_head"],
+    "required_kind": "commit",
+    "publishability": "candidate-only-no-alternates",
+    "historical_classification": "exact-sha-kind-reason-paths"
+  },
+  "governed_range": {
+    "mode": "exact-declared-base-to-published-head",
+    "fixed_windows_forbidden": true
+  },
+  "governed_identity_sources": ["law/register/DECISIONS.md", "work/audit/**/*.md"],
+  "role_paths": {
+    "Architect": ["law/**", "work/rounds/**", "docs/**"],
+    "Owner": ["product/**"],
+    "Engineer": [
+      ".devai/config/**",
+      ".devai/pin/**",
+      ".github/**",
+      "packages/**",
+      "scripts/**",
+      "*.json",
+      "*.yml",
+      "*.yaml",
+      "eslint.config.*",
+      "tsconfig.*"
+    ],
+    "Inspector": ["tests/**", "**/tests/**", "**/*.test.ts", "**/*.spec.ts"],
+    "Auditor": ["work/audit/**"],
+    "Machine": ["record/**"]
+  },
+  "projections": [
+    {
+      "id": "action-registry",
+      "command": ["pnpm", "run", "action-registry:check"],
+      "sources": ["law/policy/action-registry.json"],
+      "outputs": [
+        "packages/cli/src/generated/action-registry.ts",
+        "packages/effects-check/src/generated/action-catalog.ts",
+        "packages/sensors/src/generated/action-kinds.ts"
+      ]
+    },
+    {
+      "id": "trace",
+      "command": ["pnpm", "run", "trace:check"],
+      "sources": ["law/invariants/**/*.json", "tests/**/*.ts", "packages/**/tests/**/*.ts"],
+      "outputs": ["law/trace.json"]
+    },
+    {
+      "id": "repository-references",
+      "command": ["pnpm", "run", "repository-reference:check"],
+      "sources": ["**/*"],
+      "outputs": ["work/rounds/R-0002/repository-reference-triage.json"]
+    },
+    {
+      "id": "round-close-policy-materialization",
+      "command": ["node", "scripts/run-round-close-controls.mjs", "policy-check"],
+      "sources": ["law/policy/round-close-controls.json"],
+      "outputs": [".devai/config/round-close-controls.json"]
+    }
+  ],
+  "convergence": {
+    "passes": 2,
+    "second_pass": "no-write-clean",
+    "commands": [
+      { "id": "formatting", "argv": ["pnpm", "exec", "prettier", "--check", "."] },
+      { "id": "preparation", "argv": ["pnpm", "run", "devai:prepare"] },
+      { "id": "action-registry", "argv": ["pnpm", "run", "action-registry:check"] },
+      { "id": "trace", "argv": ["pnpm", "run", "trace:check"] },
+      {
+        "id": "repository-references",
+        "argv": ["pnpm", "run", "repository-reference:check"]
+      },
+      {
+        "id": "materializations",
+        "argv": ["node", "scripts/run-round-close-controls.mjs", "policy-check"]
+      },
+      { "id": "diff-check", "argv": ["git", "diff", "--check"] },
+      { "id": "stage1", "argv": ["pnpm", "run", "ci:stage1"] },
+      { "id": "stage2", "argv": ["pnpm", "run", "ci:stage2"] },
+      { "id": "t4", "argv": ["pnpm", "run", "test:t4"] },
+      { "id": "t5", "argv": ["pnpm", "run", "test:t5"] },
+      { "id": "t6", "argv": ["pnpm", "run", "test:t6"] },
+      { "id": "changesets", "argv": ["pnpm", "run", "ci:changesets"] },
+      { "id": "coverage", "argv": ["pnpm", "run", "test:coverage:t1-t3"] },
+      { "id": "governance", "argv": ["pnpm", "run", "ci:governance"] }
+    ]
+  },
+  "review": {
+    "frozen_paths": [
+      "law/**",
+      "product/**",
+      "packages/**",
+      "tests/**",
+      "docs/**",
+      "work/rounds/**",
+      "work/audit/R-0006/entry-control-as-built.md"
+    ],
+    "record": "work/audit/R-0006/independent-review.md",
+    "record_author": "DEVAI Auditor",
+    "projection_only": true,
+    "allowed_projection_ids": []
+  },
+  "rehearsal": {
+    "schema_path": "law/schemas/phase-closure.schema.json",
+    "verb_path": "packages/cli/src/commands/govern/phase-close.ts",
+    "closure_path": "record/proofs/compliance/closures/PC-9999.json"
+  },
+  "semantic_assertions": {
+    "population_sources": [
+      "law/**/*.json",
+      "product/**/*.json",
+      "packages/**/*.ts",
+      "scripts/**/*.mjs",
+      "tests/**/*.ts"
+    ],
+    "fixed_counts_forbidden": true,
+    "self_comparisons_forbidden": true,
+    "named_file_only_forbidden": true,
+    "mirror_pairs": [
+      {
+        "source": "law/policy/round-close-controls.json",
+        "mirror": ".devai/config/round-close-controls.json"
+      }
+    ]
+  }
+}
