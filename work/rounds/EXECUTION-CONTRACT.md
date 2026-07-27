@@ -3,13 +3,13 @@ id: ROUND-EXECUTION-CONTRACT
 title: Shared execution contract for R-0002 through R-0010
 type: execution-contract
 status: draft
-date: 2026-07-24
+date: 2026-07-27
 authority: Architect
 supersedes: null
 superseded_by: null
 provenance:
   [
-    OM-002; OM-003; Constitution Articles 6–10 and 27; R-0001 rehearsal lessons; R-0002-PREFLIGHT-AUDIT,
+    OM-002; OM-003; OM-010; Constitution Articles 6–10 and 27; R-0001 rehearsal lessons; R-0002-PREFLIGHT-AUDIT; R-0006-PREFLIGHT-ALIGNMENT-AUDIT,
   ]
 ---
 
@@ -109,12 +109,71 @@ A command that cannot run is a blocker or a newly governed defect, never a green
 Declared DB skips remain skips only under their existing contract and are exercised with
 the configured PostgreSQL service at release-candidate time.
 
+## Candidate identity, convergence, and review freeze
+
+Every source close distinguishes three Git identities:
+
+- `implementation_subject` is the last commit that changes semantic law, product,
+  plant, or tests. Auditor evidence and deterministic projections are not the
+  implementation subject.
+- `review_candidate` is the complete source candidate submitted to an independent
+  read-only review. It includes final current documentation, as-built evidence,
+  source-close handoff, and closing decision, and it descends from
+  `implementation_subject`.
+- `published_head` is the exact head proposed for source publication. It equals
+  `review_candidate` plus only the mechanically bounded review envelope below.
+
+Before final review, the candidate must converge twice consecutively. Each pass starts
+clean and runs repository formatting checks, `devai:prepare`, every deterministic
+projection in no-write/check mode, the minimum commit floor, the complete exit floor,
+coverage, affected production commands, and governed reference checks. The second pass
+immediately repeats the same ordered suite without a commit or edit between passes and
+must make no tracked or untracked write. A write, changed result, or dirty boundary
+restarts convergence from a newly committed candidate.
+
+The final review binds the exact `review_candidate`. After PASS, the mutation freeze
+prohibits every law, product, plant, test, current-documentation, as-built, source-close,
+or closing-decision change. Any such change invalidates PASS and requires convergence
+and a fresh independent review of the new exact candidate.
+
+The only permitted post-PASS review envelope is:
+
+1. the exact Auditor-owned review record for that PASS; and
+2. deterministic Architect-owned projection regeneration caused solely by references
+   introduced by that exact review record.
+
+The envelope may not change a generator, policy, test, source locator unrelated to the
+review record, or any other source. Its commits and paths are enumerated mechanically,
+and projection output is checked against regeneration from `review_candidate` plus the
+review record. Any other delta invalidates PASS. `published_head` must then pass both
+consecutive convergence passes, including the second no-write/clean pass, before push.
+
+A review finding is dispositioned before PASS. A genuinely nonblocking finding is
+either placed under an already-valid governed later-work record or repaired before the
+reviewer issues PASS. Repair after PASS while retaining that PASS is forbidden. After
+any finding, the owning role sweeps the complete same-class population or invariant,
+records the sweep boundary, repairs every in-scope instance, reconverges, and obtains a
+fresh review; a point correction alone cannot return to review.
+
+Shared-object-store resolution is not publishability evidence. Every governed Git
+identity in `published_head` must resolve in an isolated candidate-only clone whose
+object database and refs contain only history reachable from that candidate and use no
+alternates, or be classified as an exact historical specimen with its precise paths.
+The same reference checks run in that clone. A local pass followed by a clean-clone
+failure is a source failure, never an environment exception.
+
 ## Review, push, and merge
 
 Before push:
 
 - inspect the complete diff and role attribution;
 - prove every backlog item in scope has acceptance evidence or remains blocking;
+- record exact `implementation_subject`, `review_candidate`, `published_head`, bounded
+  envelope commits and paths, both convergence passes, and the candidate-only clone
+  result;
+- rehearse source ancestry and the closure-only PC branch in an isolated clone before
+  final review; the rehearsal must prove that the source merge ancestry exposes every
+  governed prerequisite and that a PC-only branch passes its exact range checks;
 - after quota recovery, ask Claude Opus 5 through the explicit `claude-opus-5` selector
   for an independent read-only close review and resolve every actionable finding; no fallback
   to another model is permitted;
@@ -137,6 +196,11 @@ PR boundaries:
 The PC record binds the source merge SHA, names all gates and the honest non-release
 disposition, and never pretends the later closure-only SHA was the tested source
 candidate. Any red gate blocks the ceremony rather than becoming an exception.
+
+The isolated ceremony rehearsal is non-standing evidence. It must not publish a branch
+or preserve a rehearsal object as a governed identity, and its generated PC bytes are
+discarded. Only the production closure verb run after the all-green source merge and
+exact-main CI may append the real closure record.
 
 Rollback is batch-local: revert the last role-pure batch or abandon its branch before
 continuing. Never use destructive reset against a dirty or shared worktree. Preserve
