@@ -108,6 +108,14 @@ that a non-assertion source-byte change invalidates the digest. Until the Archit
 regenerates `law/trace.json`, only trace-materialization-dependent assertions remain
 red; that staleness is the required role-pure projection handoff, not a red exception.
 
+Final B9 correction disposition: after the common envelope, trace projection, and
+router-only proof repairs, the exact command
+`pnpm vitest run tests/contract/r0006-output-contracts.red.contract.test.ts` exits 0
+with one file and 10 passing tests. It now checks exact `router-only` modes for all 39
+non-keep identities and executes a registry-derived folded alias plus the tombstone,
+both at exit 2 with empty stdout and one structured stderr refusal. This green reading
+does not claim that all 147 kept actions have individual end-to-end invocation tests.
+
 ## B9 manifest role-boundary red
 
 After exact candidate `970651a5f49fa6e2bb7f979d53371a147ef0e109` passed both
@@ -130,3 +138,12 @@ returns `ROLE_PATH_VIOLATION`, while the unused-extra-path case lacks the requir
 historical-classification mechanism for those two immutable commits. It does not move
 `tests/**` into Engineer authority, authorize globs or prefixes, excuse later commits,
 or restore review/publication standing to the failed candidate.
+
+Final B9 correction disposition: after DII-219, exact-set implementation, manifest
+exception disclosure, and expanded adversaries, the exact command
+`pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts -t
+"role-path exception"` exits 0 with one file, six passing tests, and 26 tests skipped
+by the focus filter. The complete suite separately passes 140 files / 1,290 tests with
+eight declared skips. The green reading retains both original role defects as
+classified history; it does not make either Engineer commit role-pure or broaden
+Engineer authority over `tests/**`.
