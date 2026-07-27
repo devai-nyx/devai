@@ -1556,7 +1556,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 6,
-      "assertion_digest_sha256": "ca10da3f07091ece3200ced4114829a7f7bebc182512e47411c4a7da78cdc571"
+      "assertion_digest_sha256": "b45cbb18271628eaa2c23be2d972613093688773af66f467bcd4b37ee278229f"
     },
     {
       "path": "packages/cli/tests/unit/render-mermaid.test.ts",
