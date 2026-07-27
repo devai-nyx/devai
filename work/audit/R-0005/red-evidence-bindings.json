@@ -54,6 +54,33 @@
       "exit_code": 1,
       "tests": ["packages/loop/tests/unit/governance-ledger-cases.ts"],
       "failure_summary": "The governance-history YAML subset parser treated a validator-accepted semicolon-separated inline array as one scalar and could not resolve canonical supersession links."
+    },
+    {
+      "commit": "bf727194e9d1cdf84ceb8b6fd690a277423cef36",
+      "command": "pnpm vitest run tests/contract/r0005-independent-review.red.contract.test.ts packages/skills/tests/unit/prompt-firewall.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "tests/contract/r0005-independent-review.red.contract.test.ts",
+        "packages/skills/tests/unit/prompt-firewall.test.ts"
+      ],
+      "failure_summary": "The second-review contracts demonstrated that legacy aggregate-chain writers remained public and exact lifecycle skill identities still bypassed reserved prompt scopes."
+    },
+    {
+      "commit": "aec56d3c606bb3a3db52dea3badd3aa726b5d399",
+      "command": "pnpm vitest run packages/skills/tests/unit/governance-skills.test.ts packages/skills/tests/unit/llm.test.ts -t \"KR-R5-036|materializes audit/backlog\"",
+      "exit_code": 1,
+      "tests": [
+        "packages/skills/tests/unit/governance-skills.test.ts",
+        "packages/skills/tests/unit/llm.test.ts"
+      ],
+      "failure_summary": "Unsafe governance adapters remained in the agent-skill catalog and round backlog materialization still wrote directly into Architect-owned round intent."
+    },
+    {
+      "commit": "a086ef48bb4b072260121a5c1ff83bcb50b4c828",
+      "command": "pnpm vitest run packages/skills/tests/unit/llm.test.ts -t \"materializes audit/backlog\"",
+      "exit_code": 1,
+      "tests": ["packages/skills/tests/unit/llm.test.ts"],
+      "failure_summary": "Disposable backlog prompt proposals retained broken relative references instead of binding their governed round plan and Auditor inputs."
     }
   ]
 }
