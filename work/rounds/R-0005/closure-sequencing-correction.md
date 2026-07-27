@@ -8,7 +8,7 @@ authority: Architect
 supersedes: null
 superseded_by: null
 provenance:
-  - DII-202; DII-203; DII-204; DII-205; R-0005-SOURCE-CLOSE; local closure rehearsal 3c06a3e
+  - DII-202; DII-203; DII-204; DII-205; R-0005-SOURCE-CLOSE; local-only unpublished closure rehearsal
 ---
 
 # Closure-only sequencing boundary correction
@@ -18,8 +18,8 @@ provenance:
 After source PR 8 merged as `c449710298e2a51e3938d9dcb17b5d03a2823759`
 and exact-main CI run `30234222364` passed all nine jobs, the production
 `govern phase close` verb emitted the single permitted PC-0006 file in a closure-only
-branch. The first post-commit `pnpm run ci:governance` rehearsal rejected local Machine
-commit `3c06a3e1026a3c30aa90ef50dcf16fa0facf0392` with
+branch. The first post-commit `pnpm run ci:governance` rehearsal rejected its local-only,
+unpublished Machine object with
 `shape-before-machine-record`: the checker searched only the closure PR's one-commit
 range, so it could not see the schema and production verb already merged in ancestry.
 The rehearsal branch was never pushed and provides no standing closure.
