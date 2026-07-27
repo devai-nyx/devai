@@ -3294,6 +3294,39 @@ package publication, tag, GitHub Release, Pages deployment, external deployment,
 evidence reuse or promotion, real-stynx mutation, predecessor mutation, or R-0007+
 work.
 
+### DII-219 — Classify exact immutable R-0006 role-path defects
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 manifest correction; DII-207; DII-211; DII-217; DII-218; Inspector fb37d09255cd1a7fbf383a8b4af8404ce744b34b; Auditor R-0006-ROLE-PATH-EXCEPTION-RED-EVIDENCE; failed manifest at 970651a5f49fa6e2bb7f979d53371a147ef0e109`
+
+The candidate manifest failed closed after convergence and rehearsal because two
+immutable B6 commits were authored as Engineer while changing Inspector-owned
+`tests/config/**` paths. Commit `d41c648b184ae63c2ed473ae1a44725eb3cb26dc`
+changed only `tests/config/t1-t3.coverage.config.ts`. Commit
+`8e7a44b70a3e13b85293de48af8284889daea7e3` changed Engineer-owned package and
+workspace files plus `tests/config/t1-t3.coverage.config.ts` and
+`tests/config/subprocess-v8-coverage-provider.ts`. This is an ownership defect in
+immutable history; coverage purpose does not make the test paths Engineer-owned.
+
+`law/policy/round-close-controls.json` therefore classifies only those two full commit
+identities and only their exact mismatched paths. A classification is valid only when
+the governed commit exists, its actual author role equals the declared role, its exact
+otherwise-unauthorized path set equals the declared path set, `decision_id` resolves
+to this decision, and the reason is nonempty. A missing commit, wrong role, omitted
+path, unused extra path, glob, prefix, or already-authorized path fails closed. The
+manifest may mark the commit path-authorized only after all those conditions hold.
+
+This classification does not rewrite history or call the original commits role-pure.
+It preserves `tests/**` and `**/tests/**` as Inspector authority, grants no prospective
+waiver, and cannot be inherited by another commit or path. The failed manifest and its
+preceding green convergence remain audit evidence without review or publication
+standing. B9 must restart convergence, rehearsal, manifest generation, and literal
+`claude-opus-5` review at a fresh candidate after implementation and adversarial tests
+pass.
+
+This decision authorizes no threshold or exclusion change, source publication before
+fresh review PASS, closure record before source merge and exact-main CI, package
+publication, tag, GitHub Release, Pages deployment, external deployment, evidence
+reuse or promotion, real-stynx mutation, predecessor mutation, or R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

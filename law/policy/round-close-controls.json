@@ -35,6 +35,25 @@
     "Auditor": ["work/audit/**"],
     "Machine": ["record/**"]
   },
+  "role_path_exceptions": [
+    {
+      "commit": "d41c648b184ae63c2ed473ae1a44725eb3cb26dc",
+      "role": "Engineer",
+      "paths": ["tests/config/t1-t3.coverage.config.ts"],
+      "decision_id": "DII-219",
+      "reason": "Immutable B6 ownership defect; the exact coverage configuration path remains Inspector-owned."
+    },
+    {
+      "commit": "8e7a44b70a3e13b85293de48af8284889daea7e3",
+      "role": "Engineer",
+      "paths": [
+        "tests/config/subprocess-v8-coverage-provider.ts",
+        "tests/config/t1-t3.coverage.config.ts"
+      ],
+      "decision_id": "DII-219",
+      "reason": "Immutable B6 ownership defect; both exact coverage-provider paths remain Inspector-owned."
+    }
+  ],
   "projections": [
     {
       "id": "action-registry",
