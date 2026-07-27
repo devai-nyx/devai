@@ -123,6 +123,15 @@ const NON_PROMPT_LITERAL_DISPOSITIONS = [
     rationale:
       'round-plan artifact description; it is returned as deterministic evidence and is never sent to an LLM',
   },
+  {
+    file: 'skills/impl/round.ts',
+    skill_id: 'SKILL-round-verify-publish',
+    char_count: 138,
+    sha256: 'b91865c36e8be08b01ee319a5493d06977189334f5cbaba2d5ee0b8d36c1f58d',
+    placeholder_names: ['basename(roundDirAbs)'],
+    rationale:
+      'round-plan state-path description; it is returned as deterministic evidence and is never sent to an LLM',
+  },
 ] as const;
 
 describe('R20 baseline: static prompt-literal inventory (supplemental)', () => {

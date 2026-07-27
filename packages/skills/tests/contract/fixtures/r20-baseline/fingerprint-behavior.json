@@ -674,93 +674,42 @@
       },
       "behavior": {
         "evidence": {
-          "after": {
-            "adrs": [],
-            "errors": [
-              {
-                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-                "message": "must have required property 'type' (required)"
-              }
-            ],
-            "files_scanned": 1,
-            "ok": false
-          },
-          "before": {
-            "adrs": [],
-            "errors": [
-              {
-                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-                "message": "body missing mandatory section '## Status'"
-              },
-              {
-                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-                "message": "body missing mandatory section '## Decision(s)'"
-              },
-              {
-                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-                "message": "body missing mandatory section '## Consequences'"
-              },
-              {
-                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-                "message": "body missing mandatory section '## Alternatives Considered'"
-              },
-              {
-                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-                "message": "body missing mandatory section '## Affected Rules'"
-              },
-              {
-                "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-                "message": "must have required property 'type' (required)"
-              }
-            ],
-            "files_scanned": 1,
-            "ok": false
-          },
-          "fix_log": [
+          "adrs": [],
+          "errors": [
             {
-              "detail": "must have required property 'type' (required)",
               "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-              "outcome": "escalate-missing-adr-id"
+              "message": "body missing mandatory section '## Status'"
             },
             {
-              "detail": "Status",
               "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-              "outcome": "section-scaffolded"
+              "message": "body missing mandatory section '## Decision(s)'"
             },
             {
-              "detail": "Decisions",
               "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-              "outcome": "section-scaffolded"
+              "message": "body missing mandatory section '## Consequences'"
             },
             {
-              "detail": "Consequences",
               "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-              "outcome": "section-scaffolded"
+              "message": "body missing mandatory section '## Alternatives Considered'"
             },
             {
-              "detail": "Alternatives Considered",
               "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-              "outcome": "section-scaffolded"
+              "message": "body missing mandatory section '## Affected Rules'"
             },
             {
-              "detail": "Affected Rules",
               "file": "<FIXTURE>/law/adr/ADR-001-fixture.md",
-              "outcome": "section-scaffolded"
+              "message": "must have required property 'type' (required)"
             }
           ],
-          "iteration": {
-            "current": 1,
-            "max": 3
-          }
+          "files_scanned": 1,
+          "ok": false
         },
         "notes": [],
         "status": "fail"
       },
       "fs_products": {
         "created": {},
-        "modified": {
-          "law/adr/ADR-001-fixture.md": "3d844106b37823b45ac0ef3b93010b0fe60ab10b1bdf23d329bb57c0b155fd1d"
-        }
+        "modified": {}
       },
       "strategy": "main-path"
     },
@@ -824,32 +773,16 @@
       },
       "behavior": {
         "evidence": {
-          "broken_after": [
+          "broken": [
             {
+              "reason": "target not found",
               "resolved": "docs/missing.md",
               "source": "docs/a.md",
               "target": "./missing.md"
             }
           ],
-          "broken_before": [
-            {
-              "resolved": "docs/missing.md",
-              "source": "docs/a.md",
-              "target": "./missing.md"
-            }
-          ],
-          "fix_log": [
-            {
-              "outcome": "no-rename-history",
-              "resolved": "docs/missing.md",
-              "source": "docs/a.md",
-              "target": "./missing.md"
-            }
-          ],
-          "iteration": {
-            "current": 1,
-            "max": 3
-          }
+          "broken_count": 1,
+          "ok": false
         },
         "notes": [],
         "status": "fail"
@@ -1319,7 +1252,7 @@
           "round_dir": "work/rounds/R-0999",
           "steps": [
             {
-              "description": "Read work/rounds/R-0999/audit/scratch.md and run SKILL-compile-backlog for the failing-cell list.",
+              "description": "Read work/audit/R-0999/scratch.md and run SKILL-compile-backlog for the failing-cell list.",
               "id": "backlog.1"
             },
             {
@@ -1327,11 +1260,11 @@
               "id": "backlog.2"
             },
             {
-              "description": "Materialize work/rounds/R-0999/prompts/00-orchestrator.md from B3 template.",
+              "description": "Materialize .devai/state/round-runs/R-0999/backlog/prompts/00-orchestrator.md from B3 template.",
               "id": "backlog.3"
             },
             {
-              "description": "Materialize work/rounds/R-0999/prompts/NN-<slug>.md per backlog item from B1/B2 templates.",
+              "description": "Materialize .devai/state/round-runs/R-0999/backlog/prompts/NN-<slug>.md per backlog item from B1/B2 templates.",
               "id": "backlog.4"
             },
             {
@@ -1500,11 +1433,11 @@
               "id": "verify.1"
             },
             {
-              "description": "Diff current scorecard vs work/rounds/R-0999/audit/scorecard.baseline.json — flag regressions.",
+              "description": "Diff current scorecard vs work/audit/R-0999/scorecard.baseline.json — flag regressions.",
               "id": "verify.2"
             },
             {
-              "description": "Write work/rounds/R-0999/closeout.md with verdict + scorecard delta + outstanding blockers.",
+              "description": "Write .devai/state/round-runs/R-0999/verify-publish/Closeout.md with verdict + scorecard delta + outstanding blockers.",
               "id": "verify.3"
             },
             {

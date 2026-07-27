@@ -72,7 +72,7 @@
       "round_dir": "work/rounds/R-0777",
       "steps": [
         {
-          "description": "Read work/rounds/R-0777/audit/scratch.md and run SKILL-compile-backlog for the failing-cell list.",
+          "description": "Read work/audit/R-0777/scratch.md and run SKILL-compile-backlog for the failing-cell list.",
           "id": "backlog.1"
         },
         {
@@ -80,11 +80,11 @@
           "id": "backlog.2"
         },
         {
-          "description": "Materialize work/rounds/R-0777/prompts/00-orchestrator.md from B3 template.",
+          "description": "Materialize .devai/state/round-runs/R-0777/backlog/prompts/00-orchestrator.md from B3 template.",
           "id": "backlog.3"
         },
         {
-          "description": "Materialize work/rounds/R-0777/prompts/NN-<slug>.md per backlog item from B1/B2 templates.",
+          "description": "Materialize .devai/state/round-runs/R-0777/backlog/prompts/NN-<slug>.md per backlog item from B1/B2 templates.",
           "id": "backlog.4"
         },
         {

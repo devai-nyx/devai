@@ -8,6 +8,14 @@
       "rationale": "round-plan artifact description; it is returned as deterministic evidence and is never sent to an LLM",
       "sha256": "5d0285608713dffb47acf28b56f0c4fc97c77b16ecb44d8cc9770d9b698d4148",
       "skill_id": "SKILL-compute-scorecard"
+    },
+    {
+      "char_count": 138,
+      "file": "skills/impl/round.ts",
+      "placeholder_names": ["basename(roundDirAbs)"],
+      "rationale": "round-plan state-path description; it is returned as deterministic evidence and is never sent to an LLM",
+      "sha256": "b91865c36e8be08b01ee319a5493d06977189334f5cbaba2d5ee0b8d36c1f58d",
+      "skill_id": "SKILL-round-verify-publish"
     }
   ],
   "records": [
