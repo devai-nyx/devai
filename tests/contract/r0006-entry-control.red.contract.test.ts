@@ -83,6 +83,10 @@ function policy(overrides: Record<string, unknown> = {}): string {
         },
       ],
       convergence: {
+        normalized_runtime_artifacts: [
+          'scratch/coverage/t1-t3/coverage-final.json',
+          'scratch/coverage/t1-t3/subprocess-v8/**',
+        ],
         commands: [
           { id: 'formatting', argv: ['node', 'fixture/gate.mjs', 'formatting'] },
           { id: 'preparation', argv: ['node', 'fixture/gate.mjs', 'preparation'] },
