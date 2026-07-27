@@ -20,9 +20,10 @@ provenance:
 R-0005 B0 through B8 and all eight completed independent-review/exit-ladder repair
 cycles are implemented through governed snapshot
 `fdfada78284e66db0e24612c8c842121a1404f22`. The source is not closed by this
-report: a fresh independent Codex review, source PR and exact-head CI, source merge and
-exact-main CI, machine PC-0006 emission, closure-only PR, closure merge, and final
-exact-main CI remain serial gates.
+report. Independent Codex review 9 passed exact clean candidate
+`b4002f0892f3bd288c72f6f7268ccc31bd941ce2`; source PR and exact-head CI, source
+merge and exact-main CI, machine PC-0006 emission, closure-only PR, closure merge, and
+final exact-main CI remain serial gates.
 
 The bounded claim is **evidence and lifecycle machinery implemented and tested**.
 Evidence reuse and promotion remain disabled pending BL-022. No package was published;
@@ -114,8 +115,8 @@ conditional skip, assertion, lint rule, or formatting rule was weakened.
 
 ## Remaining ceremony
 
-OM-009 requires an independent Codex agent to review the exact candidate and governed
-range. Every actionable finding must be red-first repaired before the source PR. The
-review evidence must name the agent, candidate, range, findings, and verdict without
-claiming Claude, Opus, or cross-provider review. Source and closure PRs remain separate,
+OM-009's independent Codex close gate is satisfied by review 9 PASS at exact candidate
+`b4002f0892f3bd288c72f6f7268ccc31bd941ce2`: five focused files / 49 tests, 133
+ordinary files / 1,228 passing / eight declared skips, sequencing across 185 commits,
+277 governed identities, and no P0/P1 blockers. Source and closure PRs remain separate,
 and PC-0006 may be produced only from the exact source merge after exact-main CI.
