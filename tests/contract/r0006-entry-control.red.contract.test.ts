@@ -594,6 +594,27 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     );
   });
 
+  it('rejects convergence and closure evidence from a prior candidate head', () => {
+    const current = fixture();
+    prepareCloseState(current.root, current.base, current.candidate);
+    put(
+      current.root,
+      'law/register/DECISIONS.md',
+      `${readFileSync(join(current.root, 'law/register/DECISIONS.md'), 'utf8')}\nsemantic change\n`,
+    );
+    const changed = commit(current.root, 'DEVAI Architect', 'law(r0006): change candidate', [
+      'law/register/DECISIONS.md',
+    ]);
+    const result = run(current.root, manifestArgs(changed));
+    expect(result.status).not.toBe(0);
+    expect(findings(result)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: 'CONVERGENCE_RESULT_STALE' }),
+        expect.objectContaining({ code: 'CLOSURE_REHEARSAL_STALE' }),
+      ]),
+    );
+  });
+
   it('admits one exact Auditor record and only a reproducible Architect projection', () => {
     const current = fixture();
     const admittedPolicy = policy({
