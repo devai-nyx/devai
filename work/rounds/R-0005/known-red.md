@@ -301,3 +301,22 @@ governed authority-document correction left one current GitHub locator at line 1
 while the stale projection names line 123. The two existing projection contracts are the failing Inspector boundary.
 No generator, document, test, classification, rationale, or other locator may change.
 The cluster retires when both focused contracts and the restarted complete floor pass.
+
+## Fourth-review repair retirement
+
+KR-R5-042 through KR-R5-044 retire at exact candidate
+`6968d039bc3ccc57d3a5412ad1f90ba59f56032e`. The correction sequence is Auditor
+`4674343`; Architect `d906c94`; Inspector red `5d93c20`; Architect `62b8477`;
+Inspector `7693b2b`; Engineer `a0b82da`; Auditor `58b483e`; Architect `02d2d5d`;
+Auditor `1b68a24` and `9f16613`; and Architect `00c7af5` and `6968d03`.
+
+The complete ordinary floor passes 133 files with 1,217 tests, eight declared skips,
+and zero failures. The exact exit ladder passes Stage 1; Stage 2 with T1 at 74 files /
+856 tests and T2 at 41 files / 273 passing plus one declared skip; Stage 3 with 83
+files / 912 passing plus seven declared skips and 72.42/62.36/78.07/74.52 coverage;
+changeset classification; T4, T5, and T6; strict governance across 147 commits;
+repository-wide formatting; `git diff --check`; and clean status.
+
+This ledger grants no active red authority. A new exact-candidate independent Codex
+review remains required. Any further actionable finding requires a fresh Architect
+entry and failing Inspector boundary before repair.
