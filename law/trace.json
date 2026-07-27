@@ -1519,7 +1519,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 19,
-      "assertion_digest_sha256": "cffba7116660c9b82a04f9039945b5bdf3ecf4e40eb09029871915d6254b545d"
+      "assertion_digest_sha256": "3c6313dbd5a6d4afc0cd43cd318b48ff0c01dade678f28e7e37d5ce0faad3f6e"
     },
     {
       "path": "packages/cli/tests/unit/hooks-install.test.ts",
@@ -1543,7 +1543,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 7,
-      "assertion_digest_sha256": "2bbf419a3865abbd28471528819afc8e400fd5f12876faa2bb24185bad7c34b8"
+      "assertion_digest_sha256": "e8deab1ddab09c2236786eb9bd680986e26bcdf407b1212051d318db19d6a56a"
     },
     {
       "path": "packages/cli/tests/unit/public-surface-bootstrap.test.ts",
@@ -2629,7 +2629,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 22,
-      "assertion_digest_sha256": "4beb90ccb5d75c7b7736e121c5599f6497abd540a6f682591b1afe3b36b2daf5"
+      "assertion_digest_sha256": "cef4f65f5d3dcb3e407ffdc7b86f069810e12bd755d05aa98227c0860e7934fc"
     },
     {
       "path": "tests/contract/r0006-output-contracts.red.contract.test.ts",

@@ -3259,6 +3259,41 @@ removed or relabelled generated to manufacture a pass. The corrected first readi
 expected to be red and is evidence for missing tests, not permission to restore the
 loaded-module shortcut.
 
+### DII-218 — Disclose immutable R-0006 sequencing gaps
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 exit-ladder correction; DII-202; DII-211; DII-215; DII-217; Inspector a3e95afe069f4aafad880832bd0eec29d078e437; Inspector 0cf442d310f1be130e90a85a7622f7950e06f83f; first B9 convergence FAIL at c5b2c770107fc7684d689d4158ecb092aab2969d`
+
+The first B9 convergence failed closed before review. Formatting and root typecheck
+exposed correctable Inspector quality defects, while governed sequencing disclosed
+that three already-committed Engineer changes had no exact prospective binding. The
+failed convergence has no standing and must not be reused.
+
+The action-envelope commits
+`a0292658a7322066ba70b91c80f0c3d751ab69dc` and
+`58b175d3b751c52fe55a97aa17b78f2c55e14d2c` followed the B2 failing contract and
+DII-215, but the immutable failing Inspector source did not literally enumerate every
+implementation path later changed. The subprocess-coverage commit
+`8e7a44b70a3e13b85293de48af8284889daea7e3` followed DII-217 and the observed
+corrected whole-source red reading, but no prior committed Inspector source plus durable
+Auditor JSON bound every exact changed path. These are real sequencing defects; neither
+conceptual test relevance nor a later green run can be relabelled as compliant prior
+red evidence.
+
+The exact three commits are therefore recorded as historical commit exceptions in
+`law/policy/governed-sequencing.json`. The exceptions describe immutable history only,
+grant no prospective bypass, and do not weaken the law-before-implementation,
+red-before-repair, semantic-scope, threshold, exclusion, or review rules. Inspector
+`0cf442d310f1be130e90a85a7622f7950e06f83f` repairs the formatting, typechecking, and
+deterministic runtime-test defects without changing plant behavior. The Architect must
+refresh the caused trace projection, the Auditor must amend the as-built with the failed
+gate and exact disclosures, and B9 must restart from a new implementation subject and
+review candidate with two fresh convergence passes.
+
+This decision authorizes no source publication before fresh convergence and literal
+`claude-opus-5` PASS, no closure record before source merge and exact-main CI, and no
+package publication, tag, GitHub Release, Pages deployment, external deployment,
+evidence reuse or promotion, real-stynx mutation, predecessor mutation, or R-0007+
+work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

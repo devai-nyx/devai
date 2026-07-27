@@ -402,6 +402,19 @@
       "round": "R-0005",
       "implementation_commits": ["50308359503d5d86c0ef9c7bb6ab243347fee0bc"],
       "reason": "The eighth-review red at 5880033 semantically exercised the exact runtime authority materialization, but its immutable Inspector source constructed .devai/config/authority-policy.json from path segments before the strict literal-scope contract was understood. Inspector 60e8f21 hardens future tests with exact literals; this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": [
+        "a0292658a7322066ba70b91c80f0c3d751ab69dc",
+        "58b175d3b751c52fe55a97aa17b78f2c55e14d2c"
+      ],
+      "reason": "The first B9 convergence disclosed that the B4 action-envelope implementation followed the B2 failing contract and DII-215, but its immutable Inspector source did not literally enumerate every changed implementation path required by the prospective exact-scope binding rule. The behavior-first red, law-before-implementation order, and full green repair are preserved; history is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["8e7a44b70a3e13b85293de48af8284889daea7e3"],
+      "reason": "The first B9 convergence disclosed that the B6 subprocess-coverage integration followed DII-217 and the preserved corrected whole-source red reading, but no prior committed Inspector source and durable Auditor JSON bound every exact implementation path. The red denominator evidence remains visible and thresholds and exclusions remain unchanged; history is not rewritten and this exact-commit disclosure grants no prospective exception."
     }
   ],
   "historical_round_disclosures": [
