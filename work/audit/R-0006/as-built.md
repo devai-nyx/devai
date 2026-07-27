@@ -160,6 +160,24 @@ or omit the gate. B9 still requires two fresh exact-candidate passes, and indepe
 review must challenge this observation rather than treating a later green run as proof
 that the failure did not occur.
 
+The following attempt at exact candidate
+`eb19bd6a1d31242ef5f9a49df8ac54a21f9c104e` ran all 16 gates green in both passes,
+with identical coverage summary digest
+`668853a175141f371d61ae7f01f2b246f885f3fc2abdc9e403a9d0eb25a75801`
+and equivalent ordered outcomes, but still failed closed because the relevant-workspace
+digest changed between passes. Inspection found 189 ignored raw child-process coverage
+files under `scratch/coverage/t1-t6-child-v8`; their names encode process IDs and times,
+so retaining them made the no-write proof nondeterministic even though the merged
+coverage bytes were stable.
+
+Inspector `86566d9033c348da099b935498b829faeb19ac6e` now removes that ephemeral raw directory
+in a `finally` boundary after real child hits have been merged into the canonical map.
+A fresh complete coverage run retained the exact 378-file denominator and readings
+above, then left the raw directory absent. The ordinary 140-file / 1,280-test / eight-skip
+floor, root typecheck, repository-wide formatting, and diff check also passed. The two
+green-but-drifting passes remain failed evidence and cannot be reused; B9 must converge
+again at the new exact candidate.
+
 ## Action output and error totality
 
 The canonical registry remains 186 never-reminted identities: 147 `keep`, 38 `fold`,
@@ -231,6 +249,7 @@ independent review remain separate evidence.
 | B7                  | Inspector + Architect | `2ad1fc5`, `012fdb9`            | Proved runtime depth across T1-T6 and refreshed the exact 34-invariant / 140-test trace.                                                                 |
 | B8                  | Auditor               | `c5b2c77`                       | Recorded denominator, exclusion, threshold, contract-totality, law-extraction, and evidence-semantics findings without publication standing.             |
 | First B9 correction | Inspector + Architect | `0cf442d`, `69ac5ab`            | Closed formatting/typecheck nondeterminism, disclosed three immutable sequencing defects, and refreshed trace; the failed candidate retains no standing. |
+| Convergence cleanup | Inspector             | `86566d9`                       | Removed ephemeral PID-named child coverage inputs after merging real hits, preserving the denominator while making the no-write proof reproducible.      |
 
 Combined-role rows are serial role-pure commits, never shared-authority commits.
 
