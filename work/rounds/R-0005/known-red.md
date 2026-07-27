@@ -228,3 +228,18 @@ Architect edits the guide. No cluster authorizes ADR mutation by an agent, round
 movement, governed output from a runtime skill, weaker assertions, a fabricated review
 PASS, or any external action. Retirement requires focused adversaries, the complete
 floor and exact ladder, and a new independent Codex PASS on the repaired exact candidate.
+
+## Third-review full-floor collateral
+
+Auditor record `R-0005-THIRD-REVIEW-REPAIR-FLOOR-FAILURE` preserves the first complete
+post-repair floor without conversion. It authorizes one additional bounded cluster:
+
+| ID        | Source     | Required red boundary                                                                                                                                                                                                             |
+| --------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| KR-R5-040 | full floor | `SKILL-fix-docs-links` must retain read-only diagnosis while losing broad `docs/**/*.md` mutation authority; the prompt-overlay gate must return zero, and deterministic fixtures/projections must reflect the reviewed behavior. |
+
+The existing prompt-overlay contract is the failing Inspector boundary. The Engineer may
+remove mutation but may not add an exemption or suppress a finding. Inspector may refresh
+only behavior/manifest/prompt corpora proven by the new source, and the Architect may
+regenerate only the semantic repository-reference projection. Retirement requires the
+complete ordinary floor and exact ladder to pass.
