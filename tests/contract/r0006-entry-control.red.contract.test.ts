@@ -7,8 +7,8 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const SCRIPT = join(ROOT, 'scripts/run-round-close-controls.mjs');
-// E1 exercised implementation paths: scripts/run-round-close-controls.mjs and
-// .devai/config/round-close-controls.json.
+// E1 exercised implementation paths: scripts/run-round-close-controls.mjs,
+// .devai/config/round-close-controls.json, and packages/schemas/src/roster.ts.
 const roots: string[] = [];
 
 interface Fixture {
@@ -459,6 +459,9 @@ describe('R-0006 E1 entry-control red contracts', () => {
 
   it('rejects fixed counts, self-comparison, narrow named scans, and policy mirror drift', () => {
     const { root } = fixture();
+    expect(readFileSync(join(ROOT, 'packages/schemas/src/roster.ts'), 'utf8')).toContain(
+      "'round-close-manifest.schema.json'",
+    );
     const invalidPolicies = [
       { semantic_assertions: { fixed_count: 56 } },
       { semantic_assertions: { compare: ['law/trace.json', 'law/trace.json'] } },

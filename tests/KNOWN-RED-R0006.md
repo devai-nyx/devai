@@ -31,3 +31,10 @@ The common immediate cause was the intentionally absent Engineer-owned
 surface for that script and the generated
 `.devai/config/round-close-controls.json` materialization. They authorize no B0 work,
 threshold change, public action, release, or retained red at E5.
+
+After E2 added the necessary canonical manifest schema, the full floor retained the
+same eight control failures and exposed four expected schema-roster integration reds:
+the two R-0004 recursive-canon callers, the explicit package roster bijection, and the
+Inspector population guard. The Inspector therefore completed the E1 semantic-scope
+binding for `packages/schemas/src/roster.ts` before E3 implementation. The exact full
+reading was 12 failed, 1,226 passed, and eight skipped; no prior behavior regressed.
