@@ -1171,6 +1171,39 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     );
   });
 
+  it('normalizes only retained coverage runtime evidence during the no-write pass', () => {
+    const current = fixture();
+    put(
+      current.root,
+      'fixture/gate.mjs',
+      `import { mkdirSync, writeFileSync } from 'node:fs';
+if (process.argv[2] === 'ordinary') {
+  mkdirSync('scratch/coverage/t1-t3/subprocess-v8', { recursive: true });
+  const total = Object.fromEntries(['statements', 'branches', 'functions', 'lines'].map((key) => [key, { pct: 100 }]));
+  writeFileSync('scratch/coverage/t1-t3/coverage-summary.json', JSON.stringify({ total }) + '\\n');
+  writeFileSync('scratch/coverage/t1-t3/coverage-final.json', JSON.stringify({ '/fixture.ts': { path: '/fixture.ts', s: { 0: 1 } } }) + '\\n');
+  writeFileSync(\`scratch/coverage/t1-t3/subprocess-v8/coverage-\${process.pid}-\${Date.now()}.json\`, JSON.stringify({ result: [] }) + '\\n');
+}
+`,
+    );
+    const head = commit(current.root, 'DEVAI Engineer', 'test: retain runtime coverage inputs', [
+      'fixture/gate.mjs',
+    ]);
+    const result = run(current.root, [
+      'converge',
+      '--round',
+      'R-0006',
+      '--base',
+      current.base,
+      '--head',
+      head,
+    ]);
+    expect(result.status).toBe(0);
+    expect(findings(result)).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ code: 'CONVERGENCE_WRITE_DETECTED' })]),
+    );
+  });
+
   it('rejects a caller-selected reviewed SHA even when the review record is valid', () => {
     const current = fixture();
     const digest = putReviewManifest(current.root, current.candidate);

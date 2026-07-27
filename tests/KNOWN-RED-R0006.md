@@ -216,3 +216,31 @@ the statement-level artifact digest is
 The retained subprocess population remains 191 raw JSON files. This is the first honest
 all-green B7 coverage reading after the exact-hit provider correction; it does not
 waive later B8-B9 gates, independent review, publication, closure, or release controls.
+
+## B9 retained-coverage fixpoint red
+
+At exact candidate `95abe603ee86e82e99ba0498b56d49cac292ab45`, the production
+convergence controller ran all 16 ordered gates green in both passes. Both passes began
+and ended Git-clean, retained identical summary digest
+`7c394f2c539b5844349f95ec4e8073065689e7f3cc415a9f7ea28fcc52883f0b`,
+and produced equivalent ordered outcomes. The controller nevertheless failed closed
+with `CONVERGENCE_WRITE_DETECTED`: the relevant-workspace digest changed from
+`1c6aa430790a79f1a6db1c5e6dabced0b974d473298f8ea65b646265d2461af7`
+to `2c7bc6ebe0b2ff2d54c3e15f8c6ddbebdadce28d6f5398fa35556a55d1d3a1e5`.
+The retained `scratch/coverage/t1-t3/subprocess-v8` population contains 191 files whose
+names carry process and time values; `coverage-final.json` also changes bytes while
+the exact summary and measured totals remain stable.
+
+The Inspector adds a bounded adversary requiring convergence to normalize only the
+exact declared runtime coverage outputs while retaining detection for every other
+ignored, generated, coverage-summary, command-result, tracked, and untracked drift.
+Before law or repair, the focused command
+
+```text
+pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts -t "normalizes only retained coverage runtime evidence"
+```
+
+exits 1 with one failing test and 32 focus-filtered tests. The failure binds
+`scripts/run-round-close-controls.mjs`; it authorizes no broad `scratch/**` exclusion,
+coverage-summary drift, threshold or denominator change, raw-evidence deletion, review,
+publication, closure, release, or R-0007+ work.
