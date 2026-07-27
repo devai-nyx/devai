@@ -365,6 +365,23 @@
         "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
       }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["0e7f2240b9a10c2e864e5f08749be786c5f7e505"],
+      "law_commits": ["d9351279131f9c459a3e363a0db2460ae0ac5ab3"],
+      "red_evidence": {
+        "commit": "ea00313bd8552389c4bd8608c6f8e7e6b4952af7",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0006/red-evidence-independent-review.json",
+        "evidence_sha256": "bea949a59118cce5b4b721777793d6d872ef1140fda207eb05365fd0d10d5a01",
+        "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [
