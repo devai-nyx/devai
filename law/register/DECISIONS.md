@@ -3443,8 +3443,8 @@ The exact-hit complete-denominator coverage reading is statements 71.33%
 (15,975/22,393), branches 60.12% (11,654/19,382), functions 80.34%
 (2,469/3,073), and lines 72.78% (14,835/20,383), above the unchanged
 70/60/70/70 floors. All 378 eligible source files remain measured under the unchanged
-four exclusions. The ordinary suite passes 153 files, 1,441 tests, and eight declared
-skips. The trace projection binds 34 invariants, 153 test sources, and 2,739 assertion
+four exclusions. The ordinary suite passes 153 files, 1,443 tests, and eight declared
+skips. The trace projection binds 34 invariants, 153 test sources, and 2,742 assertion
 sites. The second Opus FAIL, containment correction, and honest interim coverage red
 remain immutable evidence; none is relabelled PASS.
 

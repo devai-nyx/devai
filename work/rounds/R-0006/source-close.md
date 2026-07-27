@@ -8,7 +8,9 @@ authority: Architect
 supersedes: null
 superseded_by: null
 provenance:
-  [DII-207; DII-211–223; R-0006-AS-BUILT; Auditor 010007ed1e7bb6305a4c0688196ad6d718a9b1a9]
+  [
+    DII-207; DII-211–224; R-0006-AS-BUILT; Auditor 010007ed1e7bb6305a4c0688196ad6d718a9b1a9; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE,
+  ]
 ---
 
 # R-0006 source-close handoff
@@ -28,8 +30,8 @@ Mutation strength and evidence aggregation remain separate fail-closed decisions
 complete 378-file denominator passes the unchanged coverage floors at 71.33%
 statements, 60.12% branches, 80.34% functions, and 72.78% lines after exact-hit
 measurement and behavior-bearing Inspector depth. The ordinary suite passes 153 files,
-1,441 tests, and eight declared skips. Trace binds 34 invariants, 153 test sources, and
-2,739 assertion sites.
+1,443 tests, and eight declared skips. Trace binds 34 invariants, 153 test sources, and
+2,742 assertion sites.
 
 Both mandatory Opus FAILs remain active historical evidence with no retained standing.
 The second review's coverage-inflation finding was corrected by exact-location-only
@@ -38,6 +40,16 @@ unchanged floors. The current policy separately discloses four R-0006 historical
 sequencing-exception commits and two exact role-path-classified commits. No prospective
 waiver, threshold change, exclusion growth, source removal, or assertion weakening is
 carried into this handoff.
+
+The first post-DII-223 convergence attempt then ran all 16 gates green in both passes
+but failed closed on relevant-workspace drift caused by DII-222's retained per-run
+coverage artifacts. Inspector `ebf1088` and `b3186cb` plus Auditor `e4335b7` and
+`60d0cbf` preserve the failure and exact red source. DII-224 classifies only
+`coverage-final.json` and the raw subprocess directory as normalized runtime output;
+Engineer `bad810c` implements that exact policy-derived set, and Inspector `ce61864`
+proves retained evidence converges while absent, broad, expanded, ordinary-scratch,
+summary-byte, and command-outcome drift still fail closed. That failed candidate and
+all of its convergence state remain without standing.
 
 ## Identity and review boundary
 
