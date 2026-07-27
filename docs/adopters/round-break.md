@@ -22,40 +22,43 @@ ROUND   R<n>             first-tier division; strictly sequential; ≥1 wave
 
 ## 2. Round artifacts
 
-The active round tree is ignored, local, and non-authoritative. It guides a
-supervised session but must not be staged or durably cited while the round is
-open. After factual close, `devai round archive` moves the complete dossier to
-`docs/meta/rounds/round-<n>/`, adds `record.md` plus `MANIFEST.json`, and stages
-that first durable archive commit. See the
-[governed-round ceremony](./governed-rounds.md).
+Committed round intent remains in place for its entire lifecycle. Disposable composer
+products are kept separately and never become durable merely by existing. After factual
+close, `devai round archive` validates the closure preconditions and appends idempotent
+close state to the same round directory; the action name is compatibility vocabulary,
+not a filesystem move. See the [governed-round ceremony](./governed-rounds.md).
 
 ```
-docs/work/round-<n>/                 ← ACTIVE, GITIGNORED
-├── Plan.md                          ← required local plan
-├── record.md                        ← schema-authoritative after declaration
+work/rounds/R-NNNN/                  ← COMMITTED ARCHITECT INTENT, CLOSES IN PLACE
+├── plan.md                          ← required governed plan
+├── record.json                      ← schema-authoritative after declaration
 ├── prompts/
 │   ├── 00-orchestrator.md
-│   ├── 00-orchestrator.log
-│   └── <nn>-<wave>.{md,log}
-├── audit/                            ← Auditor-attributed observations
-├── inputs/                           ← bounded round inputs
-└── inv/                              ← optional measurements
+│   └── <nn>-<wave>.md
+└── close-state.jsonl                ← idempotent in-place close state
 
-docs/meta/rounds/round-<n>/          ← CLOSED, DURABLE, HASH-SEALED
-├── record.md
-├── MANIFEST.json
-└── <the complete former local tree>
+work/audit/R-NNNN/                   ← AUDITOR-ATTRIBUTED OBSERVATIONS
+├── as-built.md
+└── <bounded audit reports>
+
+.devai/state/round-runs/R-NNNN/      ← IGNORED, DISPOSABLE RUNTIME STATE
+├── backlog/                          ← backlog + prompt proposals
+├── orchestrate/                      ← per-wave runtime logs
+└── verify-publish/                   ← local closeout material
+
+record/proofs/compliance/closures/
+└── PC-NNNN.json                      ← MACHINE-EMITTED CLOSURE
 ```
 
 ### `inv/` vs `diag/` — sharp role split
 
 - **`inv/`** holds machine-readable measurements. Round-open snapshot, round-close snapshot. The diff between them is the round's measurable outcome. Cheap; pulls from existing `record/proofs/sensor-readings/` whenever possible. Only synthesize new measurements when the round explicitly needs them.
-- **`audit/`** holds Auditor-authored observation prose. It remains local while
-  active and enters Git only with the complete sealed dossier.
+- **`work/audit/R-NNNN/`** holds Auditor-authored observation prose in separate,
+  role-pure commits.
 - When `inv/` is absent, the closure record and gate evidence carry the verdict
   by other means.
 
-## 3. Plan.md
+## 3. plan.md
 
 The round's _why_, _what_, and acceptance criteria. Reads as a one-pager an outside reviewer can understand. Stable for the round's duration (re-edit only on scope changes, document the change at the bottom).
 
@@ -82,9 +85,9 @@ The round's _how_. Wave dispatch, gate declarations, fix-up policy, close proced
 Required sections:
 
 - **Header** (YAML front matter; see [prompt-header.md](./prompt-header.md)).
-- **Round goal** (cite Plan.md).
+- **Round goal** (cite `plan.md`).
 - **Orchestrator role** statement (non-worker).
-- **Wave catalog** — table mirroring Plan.md's scope, plus depends-on column.
+- **Wave catalog** — table mirroring `plan.md`'s scope, plus depends-on column.
 - **Gate declarations** — mandatory minimum + scope-conditional.
 - **Dispatch sequencing** — DAG or serial order.
 - **Fix-up policy** — `max_iterations`, escalation.
@@ -125,16 +128,17 @@ See [prompt-header.md](./prompt-header.md) for the spec, semantics, and authorin
 
 ## 7. Log templates
 
-### Per-wave log — `prompts/<nn>-<slug>.log`
+### Per-wave log — `.devai/state/round-runs/R-NNNN/orchestrate/<nn>-<slug>.log`
 
 > **Gitignore trap.** A common `.gitignore` rule is `*.log` (catches every log file repo-wide), which silently swallows these mandatory wave logs. Adopters MUST add an exception:
 >
 > ```gitignore
 > *.log
-> !scratch/sessions/rounds/round-*/prompts/*.log
+> !.devai/state/round-runs/R-*/orchestrate/*.log
 > ```
 >
-> Without the exception, wave logs are written locally but never tracked, breaking round artifact discipline. DEVAI hit this trap in R3 — caught at round close, fixed in-place; canon now calls it out.
+> Runtime logs are intentionally ignored and must not be force-added. Attributable
+> observations derived from them belong in `work/audit/R-NNNN/` under Auditor authority.
 
 Created on wave completion. Minimum mandatory template:
 
@@ -177,7 +181,7 @@ Optional extensions (when relevant):
 
 Auto-generation: most fields populate from `git diff --name-status` between wave-open and wave-close commits plus gate exit codes.
 
-### Orchestrator log — `prompts/00-orchestrator.log`
+### Orchestrator log — `.devai/state/round-runs/R-NNNN/orchestrate/00-orchestrator.log`
 
 Different schema — captures dispatch + gate-rerun + escalation events rather than file actions. One row per event:
 
@@ -200,9 +204,11 @@ Entry types: DISPATCH, COMPLETE, GATE-RUN, GATE-FAIL, FIX-INVOKE, BLOCKER, CLOSE
 
 The orchestrator log accumulates from round open to round close; never overwritten.
 
-## 8. Closeout.md
+## 8. Disposable Closeout.md
 
-Mandatory at round close. Template:
+The experimental composer writes this local comparison artifact under
+`.devai/state/round-runs/R-NNNN/verify-publish/Closeout.md`. It is not the machine
+phase closure and cannot establish durable standing. Template:
 
 ```markdown
 # R<n> Closeout — <round-goal>
@@ -213,7 +219,7 @@ Mandatory at round close. Template:
 
 ## Goal
 
-<one-sentence restatement from Plan.md>
+<one-sentence restatement from plan.md>
 
 ## Outcome
 
@@ -308,9 +314,9 @@ for gate in effective_gate_set:
 
 The round is _done_ inside the working repo:
 
-- Every wave has a `.log` file with `status: clean` or `status: blocked`.
-- `Closeout.md` exists.
-- All gates declared in `00-orchestrator.md` were re-run; results captured in `Closeout.md`.
+- Every attempted wave has a runtime `.log` with an attributable status.
+- The disposable `Closeout.md` exists under `.devai/state/round-runs/R-NNNN/verify-publish/`.
+- All gates declared in `00-orchestrator.md` were re-run; results are captured locally.
 - The product is in a valid usable state (gates green, or all reds are tracked as blockers).
 
 ### Publishable close
@@ -319,14 +325,14 @@ The round is also shareable externally:
 
 - Local close, plus
 - A commit named with the round identifier (commit message starts with `R<n>` or `Round-<n>`).
-- SHA(s) of closing commit(s) listed in `Closeout.md`.
+- SHA(s) of closing commit(s) are bound by the governed handoff and machine closure.
 
 ### Sequential close
 
 The round unlocks `R<n+1>`:
 
 - Publishable close (or local close, per the **liberal** sequentiality rule).
-- `R<n+1>/Plan.md` may now be drafted.
+- `work/rounds/R-NNNN/plan.md` for the successor may now be drafted under fresh authority.
 
 ### Verdict semantics
 
@@ -356,32 +362,30 @@ Effort affects fix-skill iteration policy (a low-effort wave's gate failure may 
 
 ## 13. Worked example — R3 anatomy
 
-Round 3 ships this canon. Its own directory is the canonical reference:
+The canonical shape for a current round is:
 
 ```
-scratch/sessions/rounds/round-3/
-├── Plan.md
+work/rounds/R-NNNN/
+├── plan.md
 ├── prompts/
 │   ├── 00-orchestrator.md
-│   ├── 00-orchestrator.log
 │   ├── 01-work-break-canon.md
-│   ├── 01-work-break-canon.log
 │   ├── 02-skill-manifest-bump-and-rename.md
-│   ├── 02-skill-manifest-bump-and-rename.log
 │   ├── 03-catalog-fill-fix-skills.md
-│   ├── 03-catalog-fill-fix-skills.log
 │   ├── 04-state-extensions.md
-│   ├── 04-state-extensions.log
 │   ├── 05-build-plan-convention.md
-│   ├── 05-build-plan-convention.log
 │   ├── 06-decisions-ledger.md
-│   ├── 06-decisions-ledger.log
-│   ├── 07-absorb-pre-work.md
-│   └── 07-absorb-pre-work.log
-└── Closeout.md
+│   └── 07-absorb-pre-work.md
+└── close-state.jsonl
+
+.devai/state/round-runs/R-NNNN/
+├── orchestrate/<wave>.log
+└── verify-publish/Closeout.md
 ```
 
-Eight waves. No `inv/` or `diag/` — R3 is doc-substrate work; before/after measurements are gate exit codes captured in Closeout.md directly.
+Governed intent and close state remain committed in place. Runtime logs and the
+composer closeout remain disposable; an Auditor promotes only attributable
+observations into `work/audit/R-NNNN/`.
 
 ## 14. Cross-references
 

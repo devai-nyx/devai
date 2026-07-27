@@ -130,7 +130,10 @@ Rules:
 
 - A ROUND has an objective goal and at least one WAVE. Simple rounds have one wave; complex rounds have several.
 - ROUNDS are strictly sequential — `R<n+1>` may start only after `R<n>` reaches local close.
-- Each ROUND materializes under `scratch/sessions/rounds/round-<n>/` in the adopter repo with mandatory `Plan.md`, `prompts/00-orchestrator.{md,log}`, ≥1 `prompts/<nn>-<wave-desc>.{md,log}` pair, and `Closeout.md`. Optional `inv/` (machine-readable measurements) and `diag/` (interpretive findings).
+- Each ROUND keeps governed intent under `work/rounds/R-NNNN/` with lowercase
+  `plan.md` and governed prompts. Runtime backlog proposals, wave logs, and local
+  closeout stay under `.devai/state/round-runs/R-NNNN/`; attributable Auditor
+  observations stay under `work/audit/R-NNNN/`. Closing occurs in place.
 - The orchestrator is strictly non-worker: it declares, dispatches, gates, and closes. Waves do the editing.
 - Every prompt under `prompts/` carries a metadata header (`role`, `effort`, optional `model` + `vendor`). See [prompt-header.md](./prompt-header.md).
 

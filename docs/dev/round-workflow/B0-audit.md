@@ -21,25 +21,25 @@ Snapshot the current state of `{{repo_name}}` before any planning begins, produc
    ```bash
    devai agent skill run SKILL-compute-scorecard --repo-root .
    ```
-   The output lands at `record/proofs/skills/SKILL-compute-scorecard/<ts>.json`. Copy the latest to `scratch/sessions/rounds/round-{{round_n}}/audit/scorecard.baseline.json`.
+   The output lands at `record/proofs/skills/SKILL-compute-scorecard/<ts>.json`. Record the attributable baseline at `work/audit/R-{{round_n}}/scorecard.baseline.json`.
 3. **Generate the assessment narrative.**
    ```bash
    devai agent skill run SKILL-assess-state --repo-root .
    ```
-   Persist the output to `scratch/sessions/rounds/round-{{round_n}}/audit/assessment.json`.
-4. **Author `scratch/sessions/rounds/round-{{round_n}}/audit/scratch.md`** with these sections:
+   Persist the output to `work/audit/R-{{round_n}}/assessment.json`.
+4. **Author `work/audit/R-{{round_n}}/scratch.md`** with these sections:
    - **Current state** — one paragraph summarizing PASS / REVIEW / FAIL / UNKNOWN counts.
    - **Failing cells** — table of (F, T) cells with verdict + measurable_via + suggested fix.
    - **Open questions** — anything the audit can't resolve without an operator decision.
    - **Carryovers from round N-1** — anything explicitly deferred from the prior round.
-5. **Snapshot relevant gov docs.** Copy any `docs/gov/audit/*.md` referenced by the assessment into `scratch/sessions/rounds/round-{{round_n}}/audit/inputs/` for traceability.
+5. **Cite relevant governed inputs.** Reference canonical paths and exact SHAs; do not
+   copy authority documents into the audit tree.
 
 ## Deliverables
 
-- `scratch/sessions/rounds/round-{{round_n}}/audit/scorecard.baseline.json`
-- `scratch/sessions/rounds/round-{{round_n}}/audit/assessment.json`
-- `scratch/sessions/rounds/round-{{round_n}}/audit/scratch.md`
-- `scratch/sessions/rounds/round-{{round_n}}/audit/inputs/*` (snapshotted)
+- `work/audit/R-{{round_n}}/scorecard.baseline.json`
+- `work/audit/R-{{round_n}}/assessment.json`
+- `work/audit/R-{{round_n}}/scratch.md`
 
 ## Acceptance
 

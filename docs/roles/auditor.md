@@ -48,14 +48,15 @@ The Auditor:
    Composes a scorecard + assessment + backlog status in one call.
 7. **Write the assessment to a report**:
    ```bash
-   # scratch/sessions/rounds/round-<N>/audit/<date>-assessment.md
+   # work/audit/R-NNNN/<date>-assessment.md
    ```
    (Auditor's only writable path.)
 8. **Commit** the report (Auditor-authored). No source content changed.
 
 ## What success looks like
 
-- The Auditor has not authored anything outside `scratch/sessions/rounds/*/audit/**`.
+- The Auditor has not authored anything outside the constitutionally enumerated
+  Auditor surfaces, including `work/audit/**`.
 - The latest assessment is current (no stale recommendations referencing old invariant versions).
 - The backlog is non-empty when sensors are red and empty when they're green.
 - Reports cite specific reading IDs, invariant IDs, and commit SHAs — never vague summaries.

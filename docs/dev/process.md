@@ -24,11 +24,13 @@ Cross-role work requires **a session boundary**: commit, declare a new role, the
 
 DEVAI's own work is organised into **rounds**. Each round:
 
-- Has a `docs/work/round-<n>/Plan.md` declaring goal + scope + waves.
-- Has a `prompts/00-orchestrator.md` declaring gates + dispatch sequencing.
-- Has per-wave `prompts/<NN>-<slug>.md` worker prompts.
-- Has per-wave `prompts/<NN>-<slug>.log` close records.
-- Has a `Closeout.md` recording verdict + gate results + closing commit SHAs.
+- Has a committed `work/rounds/R-NNNN/plan.md` declaring goal + scope + waves.
+- Has `work/rounds/R-NNNN/prompts/00-orchestrator.md` declaring gates + dispatch sequencing.
+- Has per-wave governed prompts under `work/rounds/R-NNNN/prompts/`.
+- Keeps runtime wave logs and composer closeout under ignored
+  `.devai/state/round-runs/R-NNNN/`.
+- Keeps attributable observations under `work/audit/R-NNNN/` and machine closure
+  under `record/proofs/compliance/closures/`.
 
 The full canon lives at [adopters/round-break](../adopters/round-break.md). DEVAI eats its own dogfood here: R14 itself (the round that established the published IA) used the canon and produced these very artifacts.
 
@@ -71,7 +73,7 @@ DEVAI uses two parallel numberings:
 
 - **Phases** (0 through 39 at time of writing) — substrate-level work. Each phase is a coherent set of capabilities (e.g., Phase 4 — sensor execution; Phase 13 — user docs).
 - **Rounds** — work organised through the round-break canon after phase
-  numbering closed. Query `work/rounds/R-0001/plan.md` and `docs/work/` rather than relying
+  numbering closed. Query `work/rounds/R-0001/plan.md` and `work/rounds/` rather than relying
   on a prose endpoint count.
 
 The [build plan](./round-ledger.md) records the current phase + recent rounds with their closing commit SHAs.

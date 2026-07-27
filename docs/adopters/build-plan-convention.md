@@ -88,10 +88,10 @@ The recap is **stylized**. It builds a forensic trail readable forward (most rec
 
 **The word "phase" appears at TWO scopes.** This is load-bearing — the canon does NOT rename either; readers must rely on context.
 
-| Scope                                                    | "Phase" means                                                    | Identifier                             | Lives in                                                                  |
-| -------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
-| **Project lifecycle** (this doc)                         | A multi-week / multi-wave milestone in the project's overall arc | `Phase NN` (integer)                   | `work/rounds/R-0001/plan.md` Status block + per-phase sections            |
-| **Round execution** ([round-break.md](./round-break.md)) | An optional grouping of steps within a single wave               | `R<n>-W<m>-<L>` (letter within a wave) | `scratch/sessions/rounds/round-<n>/prompts/<nn>-<wave>.md` Phases section |
+| Scope                                                    | "Phase" means                                                    | Identifier                             | Lives in                                                       |
+| -------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------- |
+| **Project lifecycle** (this doc)                         | A multi-week / multi-wave milestone in the project's overall arc | `Phase NN` (integer)                   | `work/rounds/R-0001/plan.md` Status block + per-phase sections |
+| **Round execution** ([round-break.md](./round-break.md)) | An optional grouping of steps within a single wave               | `R<n>-W<m>-<L>` (letter within a wave) | `work/rounds/R-NNNN/prompts/<nn>-<wave>.md` Phases section     |
 
 **Disambiguation rule:** when context could be ambiguous, qualify:
 
@@ -108,7 +108,7 @@ The DEVAI canon uses **four** nested work-break terms across two orthogonal hier
 
 ```
 Project lifecycle ladder                     Round execution ladder
-(work/rounds/R-0001/plan.md)                              (docs/work/round-<n>/)
+(work/rounds/R-0001/plan.md)                 (work/rounds/R-NNNN/)
 
 Phase NN                  ──orthogonal──►    Round    R<n>
   └─ sub-batch NN.A                            └─ Wave    R<n>-W<m>
@@ -120,14 +120,14 @@ Phase NN                  ──orthogonal──►    Round    R<n>
 
 **Where each term lives:**
 
-| Tier                       | Lives in                                                             | Belongs to                                           |
-| -------------------------- | -------------------------------------------------------------------- | ---------------------------------------------------- |
-| `Phase NN`                 | `work/rounds/R-0001/plan.md` Status block + per-phase sections       | project-lifecycle ladder                             |
-| `sub-batch NN.A`           | `work/rounds/R-0001/plan.md` per-phase section + commit messages     | project-lifecycle ladder (nests under Phase NN ONLY) |
-| `Round R<n>`               | `docs/work/round-<n>/Plan.md`, then sealed under `docs/meta/rounds/` | round-execution ladder                               |
-| `Wave R<n>-W<m>`           | `docs/work/round-<n>/prompts/<nn>-<slug>.md`                         | round-execution ladder                               |
-| `Phase R<n>-W<m>-<L>`      | wave prompt's optional Phases section                                | round-execution ladder                               |
-| `Step R<n>-W<m>-<L>.<num>` | wave prompt's optional Steps section                                 | round-execution ladder                               |
+| Tier                       | Lives in                                                         | Belongs to                                           |
+| -------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------- |
+| `Phase NN`                 | `work/rounds/R-0001/plan.md` Status block + per-phase sections   | project-lifecycle ladder                             |
+| `sub-batch NN.A`           | `work/rounds/R-0001/plan.md` per-phase section + commit messages | project-lifecycle ladder (nests under Phase NN ONLY) |
+| `Round R<n>`               | `work/rounds/R-NNNN/plan.md`, closed in place                    | round-execution ladder                               |
+| `Wave R<n>-W<m>`           | `work/rounds/R-NNNN/prompts/<nn>-<slug>.md`                      | round-execution ladder                               |
+| `Phase R<n>-W<m>-<L>`      | wave prompt's optional Phases section                            | round-execution ladder                               |
+| `Step R<n>-W<m>-<L>.<num>` | wave prompt's optional Steps section                             | round-execution ladder                               |
 
 **Sub-batch nests under (project-lifecycle) Phase ONLY.** A sub-batch does NOT nest under a round, a wave, or a round-execution Phase. If you find yourself writing `R3-W2-A.1.sub-batch-32.B` you have crossed the ladders — the two work-break disciplines are separate.
 
@@ -142,7 +142,7 @@ Adopter docs MAY use their own vocabulary at the project-lifecycle level. PEC, f
 ```
 Project lifecycle      Round execution
 ─────────────────      ───────────────
-work/rounds/R-0001/plan.md          docs/work/round-<n>/
+work/rounds/R-0001/plan.md          work/rounds/R-NNNN/
 ─────────────────      ───────────────
 Phase NN               Round    R<n>
   sub-batch NN.A         Wave   R<n>-W<m>
