@@ -20,11 +20,11 @@
       "finding": "CONVERGENCE_WRITE_DETECTED"
     },
     {
-      "commit": "ebf10882d2ea55d83a773cd88c3c9b667fd42c91",
+      "commit": "b3186cbd3579ade5321ce8f42686e10d4dabf967",
       "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts -t \"normalizes only retained coverage runtime evidence\"",
       "exit_code": 1,
       "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
-      "test_sha256": "5c9b881761467922997815cb6b38d9d5a2765ef9c164e364910a17dd81ae86a0",
+      "test_sha256": "938e99e476deca7c4e8f152a333b1fba9938470e8a38f0f2669b8804cca9a263",
       "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
       "failure_summary": "The focused fixture retains a stable summary, statement-level artifact, and PID/time-named raw subprocess evidence. Both gate passes are otherwise equivalent and clean, but the current controller treats those exact runtime artifacts as relevant-workspace drift. The full floor has only this one intentional red while 1,441 tests pass and eight declared skips remain."
     }
