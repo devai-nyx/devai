@@ -71,7 +71,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": [
           "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
           "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts"
@@ -92,7 +92,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"]
       }
     },
@@ -113,7 +113,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/loop/tests/unit/worktrees-containment.test.ts packages/loop/tests/unit/scorecard-assess-narrative.test.ts packages/evidence/tests/unit/local-evidence.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": [
           "packages/evidence/tests/unit/local-evidence.test.ts",
           "packages/loop/tests/unit/round-lifecycle-cases.ts",
@@ -131,7 +131,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/skills/tests/unit/forbidden-actions.test.ts -t KR-R5-027",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": ["packages/skills/tests/unit/forbidden-actions.test.ts"]
       }
     },
@@ -147,7 +147,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/cli/tests/unit/sense-run-readiness.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": ["packages/cli/tests/unit/sense-run-readiness.test.ts"]
       }
     },
@@ -160,7 +160,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/loop/tests/unit/adherence-reverse.test.ts -t KR-R5-029",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": ["packages/loop/tests/unit/governance-ledger-cases.ts"]
       }
     },
@@ -173,7 +173,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run tests/contract/r0005-independent-review.red.contract.test.ts packages/skills/tests/unit/prompt-firewall.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": [
           "tests/contract/r0005-independent-review.red.contract.test.ts",
           "packages/skills/tests/unit/prompt-firewall.test.ts"
@@ -193,7 +193,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/skills/tests/unit/governance-skills.test.ts packages/skills/tests/unit/llm.test.ts -t \"KR-R5-036|materializes audit/backlog\"",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": [
           "packages/skills/tests/unit/governance-skills.test.ts",
           "packages/skills/tests/unit/skill-implementation-cases.ts"
@@ -212,7 +212,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/skills/tests/unit/llm.test.ts -t \"materializes audit/backlog\"",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": ["packages/skills/tests/unit/skill-implementation-cases.ts"]
       }
     },
@@ -225,7 +225,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run packages/skills/tests/unit/governance-skills.test.ts packages/skills/tests/unit/round-state-routing.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": [
           "packages/skills/tests/unit/governance-skills.test.ts",
           "packages/skills/tests/unit/round-state-routing.test.ts",
@@ -242,7 +242,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run tests/contract/r0005-independent-review.red.contract.test.ts tests/contract/governed-sequencing.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"]
       }
@@ -256,7 +256,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"]
       }
@@ -270,7 +270,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"]
       }
@@ -284,7 +284,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run tests/contract/governed-sequencing.contract.test.ts tests/contract/r0005-independent-review.red.contract.test.ts",
         "evidence_path": "work/audit/R-0005/red-evidence-bindings.json",
-        "evidence_sha256": "a96caaa596f25069be332d4c2a33c382175b7ba9f151269a64e59b2d5fea711d",
+        "evidence_sha256": "9555c2e5f7c3b86ae7092abb1ea20eba3e7ee02df66fb38e285a9b3184124281",
         "tests": [
           "tests/contract/governed-sequencing.contract.test.ts",
           "tests/contract/r0005-independent-review.red.contract.test.ts"
@@ -306,6 +306,11 @@
       "round": "R-0005",
       "implementation_commits": ["4d040c469d7ac9e82430a88eb261b9340fd63d57"],
       "reason": "Eighth independent review disclosed that the first authority-policy materialization predates committed-materialization sequencing classification. KR-R5-015 and Inspector 450bf79 governed that immutable repair; this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0005",
+      "implementation_commits": ["50308359503d5d86c0ef9c7bb6ab243347fee0bc"],
+      "reason": "The eighth-review red at 5880033 semantically exercised the exact runtime authority materialization, but its immutable Inspector source constructed .devai/config/authority-policy.json from path segments before the strict literal-scope contract was understood. Inspector 60e8f21 hardens future tests with exact literals; this exact-commit disclosure grants no prospective exception."
     }
   ],
   "historical_round_disclosures": [
