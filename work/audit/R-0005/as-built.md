@@ -24,9 +24,10 @@ Codex review 9 passed the original source candidate, source PR 8 merged as
 `c449710298e2a51e3938d9dcb17b5d03a2823759`, and exact-main CI run 30234222364 passed
 all nine jobs. The first production PC-0006
 rehearsal then exposed the closure-only range defect governed by DII-205; its unpushed
-Machine commit has no standing. A fresh independent Codex review of the correction,
-replacement source PR and exact-SHA CI, regenerated PC-0006, closure-only PR, closure
-merge, and final exact-main CI remain serial gates.
+Machine commit has no standing. Independent Codex review 10 passed the exact seven-commit
+correction candidate `276d23d89386acc4c294f511f4a13ff1ac222063` with no P0/P1
+finding. The replacement source PR and exact-SHA CI, regenerated PC-0006, closure-only
+PR, closure merge, and final exact-main CI remain serial gates.
 
 The bounded claim is **evidence and lifecycle machinery implemented and tested**.
 Evidence reuse and promotion remain disabled pending BL-022. No package was published;
@@ -120,7 +121,9 @@ conditional skip, assertion, lint rule, or formatting rule was weakened.
 ## Remaining ceremony
 
 OM-009's independent Codex review 9 PASS remains immutable evidence for the original
-source candidate. DII-205 requires a fresh independent Codex review of the six-commit
-closure-sequencing correction before its replacement source PR. Source and closure PRs
-remain separate, and PC-0006 may be regenerated only from the corrected exact source
-merge after exact-main CI.
+source candidate. Review 10 passed the exact seven-commit closure-sequencing correction
+candidate `276d23d89386acc4c294f511f4a13ff1ac222063`: 5 focused files / 51 tests,
+133 ordinary files / 1,230 passing / 8 declared skips, sequencing across 7 commits, 284
+governed identities, and no P0/P1 blocker. Source and closure PRs remain separate, and
+PC-0006 may be regenerated only from the corrected exact source merge after exact-main
+CI.
