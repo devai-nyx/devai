@@ -127,6 +127,17 @@
       ],
       "exercised_implementation_paths": ["packages/cli/src/authority/policy.ts"],
       "failure_summary": "The seventh-review adversaries proved that the live eslint.config.mjs escaped root sequencing and that the R-0005 as-built carried two mutually inconsistent implementation snapshots."
+    },
+    {
+      "commit": "58800330b23d6064d338813a07ebd8301941185f",
+      "command": "pnpm vitest run packages/cli/tests/contract/successor-operational-law.contract.test.ts tests/contract/governed-sequencing.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "packages/cli/tests/contract/successor-operational-law.contract.test.ts",
+        "tests/contract/governed-sequencing.contract.test.ts"
+      ],
+      "exercised_implementation_paths": [".devai/config/authority-policy.json"],
+      "failure_summary": "The eighth-review contract proved that both committed authority-policy materializations retained the obsolete eslint.config.js root rule and stale provenance after the canonical policy changed to eslint.config.*."
     }
   ]
 }
