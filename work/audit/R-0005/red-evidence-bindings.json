@@ -71,7 +71,7 @@
       "exit_code": 1,
       "tests": [
         "packages/skills/tests/unit/governance-skills.test.ts",
-        "packages/skills/tests/unit/llm.test.ts"
+        "packages/skills/tests/unit/skill-implementation-cases.ts"
       ],
       "failure_summary": "Unsafe governance adapters remained in the agent-skill catalog and round backlog materialization still wrote directly into Architect-owned round intent."
     },
@@ -79,7 +79,7 @@
       "commit": "a086ef48bb4b072260121a5c1ff83bcb50b4c828",
       "command": "pnpm vitest run packages/skills/tests/unit/llm.test.ts -t \"materializes audit/backlog\"",
       "exit_code": 1,
-      "tests": ["packages/skills/tests/unit/llm.test.ts"],
+      "tests": ["packages/skills/tests/unit/skill-implementation-cases.ts"],
       "failure_summary": "Disposable backlog prompt proposals retained broken relative references instead of binding their governed round plan and Auditor inputs."
     }
   ]
