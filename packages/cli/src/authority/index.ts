@@ -132,7 +132,7 @@ function authorityErrorCode(error: unknown): string | undefined {
 function handleBoundaryError(error: unknown): undefined {
   const code = authorityErrorCode(error);
   if (code === undefined) throw error;
-  const format = flagValue(process.argv, '--format') === 'json' ? 'json' : 'human';
+  const format = formatFor(process.argv);
   const category: FailureCategory = code.endsWith('_UNAVAILABLE') ? 'dependency-error' : 'refused';
   const rendered = renderAuthorityResult(taggedFailure(category, code), format);
   const stream = rendered.stdout.length > 0 ? process.stdout : process.stderr;
@@ -601,8 +601,7 @@ export function authorizeCliArgv(
     }
   }
   if (entry.name === 'govern auditor post-merge') {
-    const format =
-      argv.includes('--format') && flagValue(argv, '--format') === 'json' ? 'json' : 'human';
+    const format = formatFor(argv);
     if (
       argv.includes('--as-role') ||
       argv.includes('--authority-session') ||
@@ -661,16 +660,14 @@ export function authorizeCliArgv(
     } catch (error) {
       const code = authorityErrorCode(error);
       if (code === undefined) throw error;
-      const format =
-        argv.includes('--format') && flagValue(argv, '--format') === 'json' ? 'json' : 'human';
+      const format = formatFor(argv);
       return renderAuthorityResult(taggedFailure('refused', code), format);
     }
     return undefined;
   }
   const asRole = flagValue(argv, '--as-role');
   const sessionId = flagValue(argv, '--authority-session');
-  const format =
-    argv.includes('--format') && flagValue(argv, '--format') === 'json' ? 'json' : 'human';
+  const format = formatFor(argv);
   const governedRenderWrite =
     ['docs decisions render', 'docs rounds render'].includes(entry.name) &&
     flagValue(argv, '--out') !== undefined;
