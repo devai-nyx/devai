@@ -42,7 +42,7 @@ manifest, review-scope manifest, and every publication or closure claim. It auth
 only the complete-class role-pure repair, fresh convergence, rehearsal and manifests,
 followed by the one allowed cycle-2 complete re-review.
 
-## P1 — stale current coverage, suite, trace, and range readings
+### P1 — stale current coverage, suite, trace, and range readings
 
 The active, non-superseded
 `work/audit/R-0006/as-built.md` and
@@ -64,7 +64,7 @@ and a 119-commit range. Auditor must sweep and correct the as-built; Architect m
 sweep and correct the source-close handoff. Historical readings remain valid only when
 bound to their exact historical subject.
 
-## P2 — stale governed-sequencing exception census
+### P2 — stale governed-sequencing exception census
 
 The current governed-sequencing policy has four R-0006 historical-exception entries
 covering five exact implementation commits:
