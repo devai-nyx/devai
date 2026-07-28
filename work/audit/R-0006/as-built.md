@@ -467,3 +467,34 @@ rehearsal, and manifest. Its corrected successor had to pass fresh smart converg
 rehearsal, candidate-manifest, and review-scope generation. No earlier PASS or task
 result could be carried across changed inputs except through an OM-011-valid content
 address. OM-012 now governs any later repair-and-review continuation.
+
+## Seventh-review complete-class correction
+
+Literal `claude-opus-5` cycle 3 independently regenerated the exact 238-topic census
+for rejected candidate `ee98663d639f7728ef07a3d097310659777b92ab` and returned FAIL
+on three topics. Auditor `aa57003a7ddb2d744f80ec358b534c8285f399e2` preserves all
+235 passing and three failing dispositions. The defect was one complete class: the
+active Architect source-close handoff was outside the enumerated current-claim document
+population and therefore retained stale trace and prior-review readings after the two
+Auditor documents had been reconciled.
+
+Inspector `c4c1758ccf40a7269721b7cacde1a2fafa6cdbec` preserves the missing-population
+red, including a stale-block behavioral adversary. Auditor
+`ee09665867b7d1b2ebe6725cb43b47493488e1fa` binds the full-floor red and exact
+prospective repair paths. Architect `17eb61fce741336f97da10d9b0734a0479cee40d`
+extends the same machine-derived block contract to the source-close handoff, exact-binds
+historical quantitative prose, and regenerates the trace projection. This audit
+reconciles the resulting projection only through the governed block above. Engineer
+`508ce0ec00915133a349c51ee7c1ce2b753c1b33` materializes the canonical policy
+byte-for-byte; Architect `1f6f95fc7c97b4f9081aad1d9e183d01f85b6ed1` binds that
+implementation prospectively to the exact Inspector red and Auditor artifact without a
+sequencing exception.
+
+At exact Engineer subject `508ce0ec00915133a349c51ee7c1ce2b753c1b33`, the focused
+smart-convergence contract passes 24/24 and the complete ordinary floor passes 156 test
+files with 1,483 tests passing and eight governed skips. At exact Architect subject
+`1f6f95fc7c97b4f9081aad1d9e183d01f85b6ed1`, canonical policy-check, trace check, and
+governed sequencing pass; the sequencing gate observes 163 commits. These values are
+exact-subject validation history. They authorize a fresh reacceptance decision and
+fresh candidate machinery only; they do not restore the invalidated cycle-3 candidate
+or claim review PASS, publication, merge, closure, release, or later-round standing.
