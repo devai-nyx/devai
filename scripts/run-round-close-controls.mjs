@@ -212,6 +212,173 @@ function readState(root, round, name) {
   }
 }
 
+function configuredStatePath(template, round) {
+  return String(template ?? '').replaceAll('{round}', round);
+}
+
+function nulPaths(result) {
+  return String(result.stdout ?? '')
+    .split('\0')
+    .filter(Boolean);
+}
+
+function worktreeInputEntries(root, globs) {
+  const paths = new Set([
+    ...nulPaths(gitResult(root, ['ls-files', '-z'])),
+    ...nulPaths(gitResult(root, ['ls-files', '--others', '--exclude-standard', '-z'])),
+  ]);
+  const entries = [];
+  for (const path of [...paths].sort()) {
+    if (!(globs ?? []).some((glob) => matches(path, glob))) continue;
+    const absolute = join(root, path);
+    if (!existsSync(absolute)) {
+      entries.push({ path, kind: 'deleted', digest: sha256('DELETED\n') });
+      continue;
+    }
+    const stat = lstatSync(absolute);
+    if (stat.isSymbolicLink())
+      entries.push({ path, kind: 'symlink', digest: sha256(readlinkSync(absolute)) });
+    else if (stat.isFile())
+      entries.push({ path, kind: 'file', digest: sha256(readFileSync(absolute)) });
+  }
+  return entries;
+}
+
+function filesystemPaths(root, includeState = false) {
+  const paths = [];
+  function visit(directory, prefix = '') {
+    for (const name of readdirSync(directory).sort()) {
+      const path = prefix.length === 0 ? name : `${prefix}/${name}`;
+      if (name === '.git' || name === 'node_modules') continue;
+      if (!includeState && (path === '.devai/state' || path.startsWith('.devai/state/'))) continue;
+      const absolute = join(directory, name);
+      const stat = lstatSync(absolute);
+      if (stat.isDirectory()) visit(absolute, path);
+      else if (stat.isFile() || stat.isSymbolicLink()) paths.push(path);
+    }
+  }
+  visit(root);
+  return paths;
+}
+
+function outputEntries(root, specs) {
+  const paths = filesystemPaths(root);
+  const outputs = [];
+  const missing = [];
+  for (const spec of specs ?? []) {
+    const matchesForSpec = paths.filter((path) => matches(path, spec));
+    if (matchesForSpec.length === 0) missing.push(spec);
+    for (const path of matchesForSpec) {
+      if (outputs.some((entry) => entry.path === path)) continue;
+      const absolute = join(root, path);
+      const stat = lstatSync(absolute);
+      outputs.push({
+        path,
+        digest: sha256(stat.isSymbolicLink() ? readlinkSync(absolute) : readFileSync(absolute)),
+      });
+    }
+  }
+  return { outputs: outputs.sort((left, right) => left.path.localeCompare(right.path)), missing };
+}
+
+function toolchainFingerprint(policy, findings) {
+  const readings = [];
+  for (const tool of policy?.freshness?.toolchain ?? []) {
+    const [program, ...args] = tool.argv ?? [];
+    const result = run(program, args, { cwd: repoRoot });
+    readings.push({
+      id: tool.id,
+      argv: tool.argv,
+      exit_code: result.status ?? 1,
+      stdout_sha256: sha256(result.stdout ?? ''),
+      stderr_sha256: sha256(result.stderr ?? ''),
+    });
+    if (result.status !== 0)
+      findings.push(
+        finding('FRESHNESS_TOOLCHAIN_BLOCKED', `toolchain probe ${tool.id} failed`, {
+          tool: tool.id,
+          exit_code: result.status ?? 1,
+        }),
+      );
+  }
+  return sha256(canonical(readings));
+}
+
+function environmentFingerprint(policy) {
+  const readings = (policy?.freshness?.environment_allowlist ?? []).map((entry) => {
+    const value = process.env[entry.name];
+    return {
+      name: entry.name,
+      mode: entry.mode,
+      value:
+        entry.mode === 'presence'
+          ? value === undefined
+            ? 'absent'
+            : 'present'
+          : sha256(value ?? 'UNSET'),
+    };
+  });
+  return sha256(canonical(readings));
+}
+
+function freshnessCachePath(policy, round, taskId) {
+  const root = configuredStatePath(policy?.freshness?.state_root, round);
+  const safe = taskId.replaceAll(/[^a-zA-Z0-9._-]/gu, '_');
+  return join(repoRoot, root, 'tasks', `${safe}.json`);
+}
+
+function freshnessRecordDigest(record) {
+  const { result_digest: _ignored, ...body } = record;
+  return sha256(canonical(body));
+}
+
+function readFreshnessCache(path, schemaPath) {
+  if (!existsSync(path)) return null;
+  try {
+    const value = readJson(path);
+    const ajv = new Ajv2020({ strict: false, allErrors: true });
+    addFormats(ajv);
+    const validate = ajv.compile(readJson(schemaPath));
+    if (!validate(value) || value.result_digest !== freshnessRecordDigest(value)) return null;
+    return value;
+  } catch {
+    return null;
+  }
+}
+
+function writeFreshnessCache(path, value) {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, canonical(value));
+}
+
+function taskInputGlobs(policy, task) {
+  const sets = policy?.freshness?.input_sets ?? {};
+  return [
+    ...new Set(
+      (task.input_sets ?? []).flatMap((set) => (Array.isArray(sets[set]) ? sets[set] : [])),
+    ),
+  ].sort();
+}
+
+function remoteEnvironment(policy) {
+  return (policy?.freshness?.remote_environment_indicators ?? []).some((name) => {
+    const value = String(process.env[name] ?? '').toLowerCase();
+    return value !== '' && value !== '0' && value !== 'false';
+  });
+}
+
+function blockedResults(policy) {
+  return (policy?.convergence?.commands ?? []).map((gate) => ({
+    id: gate.id,
+    task_id: gate.id,
+    argv: gate.argv,
+    exit_code: null,
+    outcome: 'BLOCKED',
+    stdout_sha256: sha256(''),
+    stderr_sha256: sha256(''),
+  }));
+}
+
 function semanticCodeShape(source) {
   let output = '';
   for (let index = 0; index < source.length; index += 1) {
@@ -751,23 +918,27 @@ function coverageReading(root) {
 }
 
 function validCommandResult(actual, expected) {
+  const successful = ['pass', 'EXECUTED_PASS', 'SKIPPED_FRESH'].includes(actual?.outcome);
   return (
     actual?.id === expected?.id &&
     JSON.stringify(actual?.argv) === JSON.stringify(expected?.argv) &&
     actual?.exit_code === 0 &&
-    actual?.outcome === 'pass' &&
+    successful &&
     /^[0-9a-f]{64}$/u.test(actual?.stdout_sha256 ?? '') &&
     /^[0-9a-f]{64}$/u.test(actual?.stderr_sha256 ?? '')
   );
 }
 
 function semanticResults(results) {
-  return (results ?? []).map(({ id, argv, exit_code, outcome }) => ({
-    id,
-    argv,
-    exit_code,
-    outcome,
-  }));
+  return (results ?? []).map(
+    ({ id, argv, exit_code, outcome, result_digest, reused_result_digest }) => ({
+      id,
+      argv,
+      exit_code,
+      outcome: ['pass', 'EXECUTED_PASS', 'SKIPPED_FRESH'].includes(outcome) ? 'pass' : 'fail',
+      effective_result_digest: reused_result_digest ?? result_digest ?? null,
+    }),
+  );
 }
 
 function validateConvergenceState(state, policy, base, head, root) {
@@ -987,7 +1158,18 @@ function manifest() {
       .split('\n')
       .filter(Boolean);
     const rolePathCommits = rolePathMap(repoRoot, base, publishedHead, policy, findings);
-    const results = convergence.passes.flatMap((pass) => pass.results);
+    const results = convergence.passes
+      .flatMap((pass) => pass.results)
+      .map((result) => ({
+        id: result.id,
+        argv: result.argv,
+        exit_code: result.exit_code ?? 1,
+        outcome: ['pass', 'EXECUTED_PASS', 'SKIPPED_FRESH'].includes(result.outcome)
+          ? 'pass'
+          : 'fail',
+        stdout_sha256: result.stdout_sha256,
+        stderr_sha256: result.stderr_sha256,
+      }));
     const testIds = new Set(['ordinary', 'stage2', 't4', 't5', 't6', 'coverage']);
     const body = {
       schemaVersion: '1.0.0',
@@ -1025,6 +1207,24 @@ function manifest() {
   }
   const ok = findings.length === 0 && output !== null;
   if (ok && process.argv.includes('--write')) {
+    const previous = readState(repoRoot, round, 'candidate-manifest.json');
+    if (
+      previous.status === 'valid' &&
+      previous.value?.manifest_digest_sha256 !== output.manifest_digest_sha256
+    ) {
+      const historyDirectory = join(stateDirectory(repoRoot, round), 'candidate-manifests');
+      mkdirSync(historyDirectory, { recursive: true });
+      const identity = SHA40.test(previous.value?.review_candidate ?? '')
+        ? previous.value.review_candidate
+        : 'unknown-candidate';
+      writeFileSync(
+        join(
+          historyDirectory,
+          `${identity}-${previous.value.manifest_digest_sha256 ?? 'unknown'}.json`,
+        ),
+        canonical(previous.value),
+      );
+    }
     writeState(repoRoot, round, 'candidate-manifest.json', output);
   }
   emit({ ok, command: 'manifest', manifest: output, findings });
@@ -1191,6 +1391,308 @@ function converge() {
   emit({ ...state, command: 'converge' });
 }
 
+function smartConverge() {
+  const findings = [];
+  const policy = loadPolicy(findings);
+  if (policy === null) return emit({ ok: false, command: 'smart-converge', findings });
+  const freshness = policy.freshness;
+  const round = option('--round') ?? '';
+  const base = option('--base') ?? '';
+  const head = option('--head') ?? 'HEAD';
+  const exactHead = git(repoRoot, ['rev-parse', head]);
+  const checkedOutHead = git(repoRoot, ['rev-parse', 'HEAD']);
+  const declared = declaredBase(repoRoot, policy, exactHead, findings);
+  if (checkedOutHead !== exactHead)
+    findings.push(
+      finding('CONVERGENCE_HEAD_MISMATCH', 'checkout does not equal the smart-convergence head', {
+        expected: exactHead,
+        actual: checkedOutHead,
+      }),
+    );
+  if (base !== declared)
+    findings.push(
+      finding('CANDIDATE_RANGE_MISMATCH', 'smart-convergence base differs from declaration', {
+        expected: declared,
+        actual: base,
+      }),
+    );
+  if (
+    freshness === null ||
+    typeof freshness !== 'object' ||
+    freshness.partial_coverage_merge !== 'forbidden' ||
+    freshness.coverage_reuse !== 'whole-identical-inputs-and-outputs-only' ||
+    freshness.remote_cache_trusted !== false
+  )
+    findings.push(
+      finding('FRESHNESS_POLICY_INVALID', 'OM-011 freshness policy is missing or weakened'),
+    );
+
+  const commands = policy?.convergence?.commands ?? [];
+  const tasks = freshness?.tasks ?? [];
+  const taskById = new Map(tasks.map((task) => [task.id, task]));
+  if (
+    commands.length === 0 ||
+    commands.length !== tasks.length ||
+    commands.some((gate) => !taskById.has(gate.id)) ||
+    tasks.some((task) => !commands.some((gate) => gate.id === task.id))
+  )
+    findings.push(
+      finding(
+        'FRESHNESS_TASK_CENSUS_INVALID',
+        'freshness tasks and convergence commands must form an exact population',
+      ),
+    );
+  const coverageTask = taskById.get('coverage');
+  if (
+    coverageTask !== undefined &&
+    (coverageTask.coverage_mode !== 'whole-only' ||
+      !(coverageTask.input_sets ?? []).includes('coverage'))
+  )
+    findings.push(
+      finding('FRESHNESS_COVERAGE_POLICY_INVALID', 'coverage must remain a whole-only task'),
+    );
+
+  const toolchainDigest = toolchainFingerprint(policy, findings);
+  const environmentDigest = environmentFingerprint(policy);
+  const schemaPath = join(repoRoot, policy.freshness_schema ?? '');
+  if (!existsSync(schemaPath))
+    findings.push(finding('FRESHNESS_SCHEMA_MISSING', 'task freshness schema is missing'));
+  const remote = remoteEnvironment(policy);
+  const producedThisInvocation = new Set();
+  const passes = [];
+
+  for (let passNumber = 1; passNumber <= 2; passNumber += 1) {
+    const headBefore = git(repoRoot, ['rev-parse', 'HEAD']);
+    const before = cleanStatus(repoRoot);
+    if (headBefore !== exactHead || before.length > 0 || findings.length > 0) {
+      if (before.length > 0)
+        findings.push(
+          finding('CONVERGENCE_DIRTY_TREE', `pass ${String(passNumber)} did not start clean`, {
+            pass: passNumber,
+          }),
+        );
+      if (headBefore !== exactHead)
+        findings.push(
+          finding('CONVERGENCE_HEAD_MISMATCH', `pass ${String(passNumber)} head drifted`, {
+            pass: passNumber,
+            expected: exactHead,
+            actual: headBefore,
+          }),
+        );
+      passes.push({
+        pass: passNumber,
+        results: blockedResults(policy),
+        clean_before: before.length === 0,
+        clean_after: before.length === 0,
+        head_before: headBefore,
+        head_after: headBefore,
+        coverage_sha256: coverageDigest(repoRoot),
+        workspace_sha256: workspaceSnapshot(
+          repoRoot,
+          policy.convergence.normalized_runtime_artifacts ?? [],
+        ),
+      });
+      break;
+    }
+
+    const results = [];
+    const resultById = new Map();
+    for (const gate of commands) {
+      const task = taskById.get(gate.id);
+      if (task === undefined) continue;
+      const dependencies = {};
+      let dependencyBlocked = false;
+      for (const dependency of task.dependencies ?? []) {
+        const result = resultById.get(dependency);
+        if (
+          result === undefined ||
+          !['EXECUTED_PASS', 'SKIPPED_FRESH'].includes(result.outcome) ||
+          typeof result.task_key !== 'string'
+        ) {
+          dependencyBlocked = true;
+          break;
+        }
+        dependencies[dependency] = result.task_key;
+      }
+      if (dependencyBlocked) {
+        const blocked = {
+          id: gate.id,
+          task_id: gate.id,
+          argv: gate.argv,
+          exit_code: null,
+          outcome: 'BLOCKED',
+          stdout_sha256: sha256(''),
+          stderr_sha256: sha256(''),
+        };
+        results.push(blocked);
+        resultById.set(gate.id, blocked);
+        findings.push(
+          finding('FRESHNESS_DEPENDENCY_BLOCKED', `task ${gate.id} has no fresh dependency`, {
+            gate: gate.id,
+            pass: passNumber,
+          }),
+        );
+        continue;
+      }
+
+      const inputGlobs = taskInputGlobs(policy, task);
+      const inputEntries = worktreeInputEntries(repoRoot, inputGlobs);
+      const inputDigest = sha256(canonical({ globs: inputGlobs, entries: inputEntries }));
+      const keyBody = {
+        policy_version: freshness.policy_version,
+        task_id: gate.id,
+        argv: gate.argv,
+        cwd: '.',
+        input_digest: inputDigest,
+        dependency_keys: dependencies,
+        output_specs: task.outputs ?? [],
+        toolchain_digest: toolchainDigest,
+        environment_digest: environmentDigest,
+      };
+      const taskKey = sha256(canonical(keyBody));
+      const cachePath = freshnessCachePath(policy, round, gate.id);
+      const cache = existsSync(schemaPath) ? readFreshnessCache(cachePath, schemaPath) : null;
+      const currentOutputs = outputEntries(repoRoot, task.outputs ?? []);
+      const trustedCache = !remote || producedThisInvocation.has(gate.id);
+      const reusable =
+        trustedCache &&
+        cache?.outcome === 'EXECUTED_PASS' &&
+        cache.task_key === taskKey &&
+        currentOutputs.missing.length === 0 &&
+        canonical(cache.outputs ?? []) === canonical(currentOutputs.outputs);
+
+      if (reusable) {
+        const body = {
+          schemaVersion: '1.0.0',
+          policy_version: freshness.policy_version,
+          task_id: gate.id,
+          argv: gate.argv,
+          cwd: '.',
+          task_key: taskKey,
+          input_digest: inputDigest,
+          dependency_keys: dependencies,
+          toolchain_digest: toolchainDigest,
+          environment_digest: environmentDigest,
+          producing_candidate: cache.producing_candidate,
+          outcome: 'SKIPPED_FRESH',
+          exit_code: 0,
+          stdout_sha256: cache.stdout_sha256,
+          stderr_sha256: cache.stderr_sha256,
+          reused_result_digest: cache.result_digest,
+          outputs: currentOutputs.outputs,
+          freshness_reason:
+            'identical content-addressed PASS, fresh dependencies, and byte-identical outputs',
+        };
+        const skipped = { ...body, result_digest: freshnessRecordDigest(body), id: gate.id };
+        results.push(skipped);
+        resultById.set(gate.id, skipped);
+        continue;
+      }
+
+      const [program, ...args] = gate.argv ?? [];
+      const executed = run(program, args, { cwd: repoRoot });
+      const exitCode = executed.status ?? 1;
+      const afterOutputs = outputEntries(repoRoot, task.outputs ?? []);
+      const body = {
+        schemaVersion: '1.0.0',
+        policy_version: freshness.policy_version,
+        task_id: gate.id,
+        argv: gate.argv,
+        cwd: '.',
+        task_key: taskKey,
+        input_digest: inputDigest,
+        dependency_keys: dependencies,
+        toolchain_digest: toolchainDigest,
+        environment_digest: environmentDigest,
+        producing_candidate: exactHead,
+        outcome:
+          exitCode === 0 && afterOutputs.missing.length === 0 ? 'EXECUTED_PASS' : 'EXECUTED_FAIL',
+        exit_code: exitCode,
+        stdout_sha256: sha256(executed.stdout ?? ''),
+        stderr_sha256: sha256(executed.stderr ?? ''),
+        reused_result_digest: null,
+        outputs: afterOutputs.outputs,
+        freshness_reason: 'task executed for the current content-addressed key',
+      };
+      const cacheRecord = { ...body, result_digest: freshnessRecordDigest(body) };
+      writeFreshnessCache(cachePath, cacheRecord);
+      const runtimeResult = { ...cacheRecord, id: gate.id };
+      results.push(runtimeResult);
+      resultById.set(gate.id, runtimeResult);
+      producedThisInvocation.add(gate.id);
+      if (runtimeResult.outcome !== 'EXECUTED_PASS')
+        findings.push(
+          finding('CONVERGENCE_GATE_FAILED', `gate ${gate.id} failed or omitted outputs`, {
+            pass: passNumber,
+            gate: gate.id,
+            exit_code: exitCode,
+            missing_outputs: afterOutputs.missing,
+          }),
+        );
+    }
+
+    const after = cleanStatus(repoRoot);
+    const headAfter = git(repoRoot, ['rev-parse', 'HEAD']);
+    if (after.length > 0)
+      findings.push(
+        finding('CONVERGENCE_DIRTY_TREE', `pass ${String(passNumber)} wrote repository paths`, {
+          pass: passNumber,
+        }),
+      );
+    if (headAfter !== exactHead)
+      findings.push(
+        finding('CONVERGENCE_HEAD_MISMATCH', `pass ${String(passNumber)} ended at another head`, {
+          pass: passNumber,
+          expected: exactHead,
+          actual: headAfter,
+        }),
+      );
+    passes.push({
+      pass: passNumber,
+      results,
+      clean_before: before.length === 0,
+      clean_after: after.length === 0,
+      head_before: headBefore,
+      head_after: headAfter,
+      coverage_sha256: coverageDigest(repoRoot),
+      workspace_sha256: workspaceSnapshot(
+        repoRoot,
+        policy.convergence.normalized_runtime_artifacts ?? [],
+      ),
+    });
+    if (findings.length > 0) break;
+  }
+
+  const resultEquivalent =
+    passes.length === 2 &&
+    canonical(semanticResults(passes[0].results)) === canonical(semanticResults(passes[1].results));
+  if (passes.length === 2 && passes[0].workspace_sha256 !== passes[1].workspace_sha256)
+    findings.push(
+      finding('CONVERGENCE_WRITE_DETECTED', 'smart-convergence workspace digests differ'),
+    );
+  if (passes.length === 2 && passes[0].coverage_sha256 !== passes[1].coverage_sha256)
+    findings.push(
+      finding('CONVERGENCE_COVERAGE_DRIFT', 'smart-convergence coverage digests differ'),
+    );
+  if (passes.length === 2 && !resultEquivalent)
+    findings.push(
+      finding('CONVERGENCE_RESULT_DRIFT', 'smart-convergence effective results differ'),
+    );
+  const ok = findings.length === 0 && passes.length === 2;
+  const state = {
+    ok,
+    mode: 'content-addressed',
+    base,
+    head: exactHead,
+    remote_cache_trusted: false,
+    passes,
+    result_equivalent: resultEquivalent,
+    findings,
+  };
+  if (ok) writeState(repoRoot, round, 'convergence.json', state);
+  emit({ ...state, command: 'smart-converge' });
+}
+
 function changedCommits(root, base, head) {
   return git(root, ['rev-list', '--reverse', `${base}..${head}`])
     .split('\n')
@@ -1202,6 +1704,420 @@ function changedCommits(root, base, head) {
         .split('\n')
         .filter(Boolean),
     }));
+}
+
+function optionalCandidateFile(root, revision, path) {
+  try {
+    return candidateFile(root, revision, path);
+  } catch {
+    return null;
+  }
+}
+
+function contentStatus(current, previous) {
+  if (previous === null) return 'added';
+  if (current === null) return 'removed';
+  return current === previous ? 'unchanged' : 'changed';
+}
+
+function reviewTopicId(kind, key) {
+  return `${kind}:${sha256(key).slice(0, 24)}`;
+}
+
+function markdownRequirements(source) {
+  const requirements = [];
+  const modal =
+    /\b(?:must|requires?|required|may not|do not|never|only|stop|blocked|forbidden)\b/iu;
+  for (const [index, line] of source.split('\n').entries()) {
+    const trimmed = line.trim();
+    if (trimmed.length === 0 || /^[-|: ]+$/u.test(trimmed)) continue;
+    const listed = /^(?:[-*]|\d+\.)\s+/u.test(trimmed);
+    const table = trimmed.startsWith('|') && trimmed.endsWith('|') && !trimmed.includes('---');
+    if (!listed && !table && !modal.test(trimmed)) continue;
+    requirements.push({ line: index + 1, claim: trimmed.replace(/^[-*]\s+/u, '') });
+  }
+  return requirements;
+}
+
+function priorReviewFindings(source) {
+  return source
+    .split('\n')
+    .map((line, index) => ({ line: index + 1, match: /^###\s+(P[0-3]\s+—\s+.+)$/u.exec(line) }))
+    .filter(({ match }) => match !== null)
+    .map(({ line, match }) => ({ line, claim: match[1] }));
+}
+
+function candidateManifestValue(path) {
+  try {
+    const value = readJson(path);
+    const { manifest_digest_sha256: claimed, ...body } = value;
+    const digest = sha256(canonical(body));
+    if (claimed !== digest || !SHA40.test(value.review_candidate ?? '')) return null;
+    return { value, digest };
+  } catch {
+    return null;
+  }
+}
+
+function reviewScopeManifest() {
+  const findings = [];
+  const policy = loadPolicy(findings);
+  if (policy === null) return emit({ ok: false, command: 'review-scope', findings });
+  const round = option('--round') ?? '';
+  const base = option('--base') ?? '';
+  const candidate = option('--candidate') ?? '';
+  const reviewPolicy = policy.review_scope;
+  const declared = declaredBase(repoRoot, policy, candidate || 'HEAD', findings);
+  if (base !== declared)
+    findings.push(
+      finding('CANDIDATE_RANGE_MISMATCH', 'review-scope base differs from declaration', {
+        expected: declared,
+        actual: base,
+      }),
+    );
+  if (
+    !SHA40.test(candidate) ||
+    gitResult(repoRoot, ['cat-file', '-e', `${candidate}^{commit}`]).status !== 0
+  )
+    findings.push(
+      finding('REVIEW_SCOPE_CANDIDATE_INVALID', 'review candidate is not an exact commit'),
+    );
+  if (reviewPolicy === null || typeof reviewPolicy !== 'object')
+    findings.push(finding('REVIEW_SCOPE_POLICY_INVALID', 'review-scope policy is missing'));
+
+  const currentManifestPath = join(
+    repoRoot,
+    configuredStatePath(reviewPolicy?.candidate_manifest_state, round),
+  );
+  const currentManifest = candidateManifestValue(currentManifestPath);
+  if (currentManifest === null || currentManifest.value.review_candidate !== candidate)
+    findings.push(
+      finding(
+        'REVIEW_SCOPE_CANDIDATE_MANIFEST_INVALID',
+        'current candidate manifest is missing, malformed, or stale',
+      ),
+    );
+
+  const historyPattern = configuredStatePath(reviewPolicy?.candidate_manifest_history, round);
+  const historyPaths = filesystemPaths(repoRoot, true)
+    .filter((path) => matches(path, historyPattern))
+    .sort();
+  const previousManifests = historyPaths
+    .map((path) => candidateManifestValue(join(repoRoot, path)))
+    .filter((value) => value !== null && value.digest !== currentManifest?.digest);
+  const previousCandidate = previousManifests.at(-1)?.value?.review_candidate ?? base;
+  const convergenceState = readState(repoRoot, round, 'convergence.json');
+  const taskKeys = [
+    ...new Set(
+      (convergenceState.value?.passes ?? [])
+        .flatMap((pass) => pass.results ?? [])
+        .filter((result) => ['EXECUTED_PASS', 'SKIPPED_FRESH'].includes(result.outcome))
+        .map((result) => result.task_key)
+        .filter((key) => /^[0-9a-f]{64}$/u.test(key ?? '')),
+    ),
+  ].sort();
+  const topics = [];
+
+  const addTopic = ({
+    kind,
+    key,
+    claim,
+    paths,
+    current,
+    previous,
+    adversaries,
+    findings: prior = [],
+  }) => {
+    const status = contentStatus(current, previous);
+    const pathDigests = paths.map((path) => ({
+      path,
+      digest: sha256(optionalCandidateFile(repoRoot, candidate, path) ?? 'MISSING\n'),
+    }));
+    topics.push({
+      topic_id: reviewTopicId(kind, key),
+      claim,
+      governing_paths: [...new Set(paths)].sort(),
+      current_digest: sha256(current ?? 'MISSING\n'),
+      previous_digest: previous === null ? null : sha256(previous),
+      changed_status: status,
+      required_adversaries: [...new Set(adversaries)].sort(),
+      previous_findings: [...new Set(prior)].sort(),
+      freshness_proof: {
+        method:
+          status === 'unchanged' && taskKeys.length > 0 ? 'content-addressed' : 'recheck-required',
+        inputs_digest: sha256(canonical(pathDigests)),
+        task_keys: taskKeys,
+        independent_recomputation_required: true,
+      },
+      required_disposition: status === 'unchanged' ? 'REUSED_FRESH_PASS' : 'RECHECKED_PASS',
+    });
+  };
+
+  if (SHA40.test(base) && SHA40.test(candidate)) {
+    const changed = git(repoRoot, ['diff', '--name-only', base, candidate])
+      .split('\n')
+      .filter(Boolean)
+      .sort();
+    for (const path of changed) {
+      addTopic({
+        kind: 'changed-path',
+        key: path,
+        claim: `Inspect the exact candidate change at ${path}`,
+        paths: [path],
+        current: optionalCandidateFile(repoRoot, candidate, path),
+        previous: optionalCandidateFile(repoRoot, previousCandidate, path),
+        adversaries: ['inspect-exact-diff', 'exercise-affected-behavior'],
+      });
+    }
+  }
+
+  for (const path of reviewPolicy?.requirement_sources ?? []) {
+    const current = optionalCandidateFile(repoRoot, candidate, path);
+    const previous = optionalCandidateFile(repoRoot, previousCandidate, path);
+    if (current === null) {
+      findings.push(
+        finding('REVIEW_SCOPE_SOURCE_MISSING', 'requirement source is missing', { path }),
+      );
+      continue;
+    }
+    for (const requirement of markdownRequirements(current)) {
+      const existed = previous?.includes(requirement.claim) === true ? requirement.claim : null;
+      addTopic({
+        kind: 'requirement',
+        key: `${path}:${String(requirement.line)}:${requirement.claim}`,
+        claim: requirement.claim,
+        paths: [path],
+        current: requirement.claim,
+        previous: existed,
+        adversaries: ['recheck-requirement', 'challenge-counterexample'],
+      });
+    }
+  }
+
+  for (const path of reviewPolicy?.controlling_sources ?? []) {
+    const current = optionalCandidateFile(repoRoot, candidate, path);
+    const previous = optionalCandidateFile(repoRoot, previousCandidate, path);
+    if (current === null) {
+      findings.push(
+        finding('REVIEW_SCOPE_SOURCE_MISSING', 'controlling source is missing', { path }),
+      );
+      continue;
+    }
+    addTopic({
+      kind: 'control',
+      key: path,
+      claim: `Recheck controlling source ${path}`,
+      paths: [path],
+      current,
+      previous,
+      adversaries: ['recompute-control-digest', 'challenge-policy-bypass'],
+    });
+  }
+
+  for (const path of reviewPolicy?.prior_reviews ?? []) {
+    const current = optionalCandidateFile(repoRoot, candidate, path);
+    if (current === null) {
+      findings.push(finding('REVIEW_SCOPE_SOURCE_MISSING', 'prior review is missing', { path }));
+      continue;
+    }
+    for (const prior of priorReviewFindings(current)) {
+      addTopic({
+        kind: 'previous-finding',
+        key: `${path}:${String(prior.line)}:${prior.claim}`,
+        claim: `Recheck prior finding class: ${prior.claim}`,
+        paths: [path],
+        current: prior.claim,
+        previous: prior.claim,
+        adversaries: ['reproduce-defect-class', 'sweep-same-class-population'],
+        findings: [prior.claim],
+      });
+    }
+  }
+
+  if (currentManifest !== null) {
+    addTopic({
+      kind: 'candidate-manifest',
+      key: 'current',
+      claim: 'Recompute the current candidate manifest identity and digest',
+      paths: [configuredStatePath(reviewPolicy.candidate_manifest_state, round)],
+      current: currentManifest.digest,
+      previous: previousManifests.at(-1)?.digest ?? null,
+      adversaries: ['recompute-manifest-digest', 'compare-candidate-identity'],
+    });
+  }
+
+  topics.sort((left, right) => left.topic_id.localeCompare(right.topic_id));
+  if (new Set(topics.map(({ topic_id }) => topic_id)).size !== topics.length)
+    findings.push(finding('REVIEW_TOPIC_DUPLICATED', 'generated review topic IDs are not unique'));
+  const body =
+    currentManifest === null || !SHA40.test(candidate)
+      ? null
+      : {
+          schemaVersion: '1.0.0',
+          policy_version: reviewPolicy.policy_version,
+          round,
+          exact_base: base,
+          review_candidate: candidate,
+          candidate_tree: git(repoRoot, ['rev-parse', `${candidate}^{tree}`]),
+          current_candidate_manifest_digest: currentManifest.digest,
+          previous_candidate_manifest_digests: previousManifests.map(({ digest }) => digest).sort(),
+          topic_count: topics.length,
+          topics,
+        };
+  const manifestValue =
+    body === null ? null : { ...body, manifest_digest_sha256: sha256(canonical(body)) };
+  if (manifestValue !== null) {
+    try {
+      const ajv = new Ajv2020({ strict: false, allErrors: true });
+      addFormats(ajv);
+      const validate = ajv.compile(readJson(join(repoRoot, policy.review_scope_schema)));
+      if (!validate(manifestValue))
+        findings.push(
+          finding('REVIEW_SCOPE_SCHEMA_INVALID', 'review-scope manifest failed schema validation', {
+            errors: validate.errors,
+          }),
+        );
+    } catch (error) {
+      findings.push(finding('REVIEW_SCOPE_SCHEMA_INVALID', String(error)));
+    }
+  }
+  const ok = findings.length === 0 && manifestValue !== null && topics.length > 0;
+  if (ok)
+    writeState(
+      repoRoot,
+      round,
+      configuredStatePath(reviewPolicy.manifest_state, round).split('/').at(-1),
+      manifestValue,
+    );
+  emit({ ok, command: 'review-scope', manifest: manifestValue, findings });
+}
+
+function parseReviewDispositions(source, markers) {
+  const start = source.indexOf(markers.start);
+  const end = source.indexOf(markers.end);
+  if (start === -1 || end === -1 || end <= start) return null;
+  const serialized = source.slice(start + markers.start.length, end).trim();
+  try {
+    const value = JSON.parse(serialized);
+    return Array.isArray(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function reviewCheck() {
+  const findings = [];
+  const policy = loadPolicy(findings);
+  if (policy === null) return emit({ ok: false, command: 'review-check', findings });
+  const reviewPolicy = policy.review_scope;
+  const round = option('--round') ?? '';
+  const candidate = option('--candidate') ?? '';
+  const record = option('--review-record') ?? '';
+  const cycle = Number(option('--cycle') ?? '1');
+  if (!Number.isInteger(cycle) || cycle < 1 || cycle > (reviewPolicy?.review_cycles?.maximum ?? 0))
+    findings.push(
+      finding(
+        'REVIEW_CYCLE_BUDGET_EXHAUSTED',
+        'review cycle is outside the OM-011 two-cycle budget',
+        { cycle },
+      ),
+    );
+  const manifestPath = join(repoRoot, configuredStatePath(reviewPolicy?.manifest_state, round));
+  let manifestValue = null;
+  try {
+    manifestValue = readJson(manifestPath);
+    const { manifest_digest_sha256: claimed, ...body } = manifestValue;
+    if (
+      claimed !== sha256(canonical(body)) ||
+      manifestValue.review_candidate !== candidate ||
+      manifestValue.topic_count !== manifestValue.topics?.length
+    )
+      throw new Error('review-scope manifest identity or digest mismatch');
+  } catch (error) {
+    findings.push(finding('REVIEW_SCOPE_MANIFEST_INVALID', String(error)));
+  }
+  let dispositions = null;
+  try {
+    dispositions = parseReviewDispositions(
+      readFileSync(join(repoRoot, record), 'utf8'),
+      reviewPolicy.review_record_markers,
+    );
+    if (dispositions === null) throw new Error('review disposition block is missing or malformed');
+  } catch (error) {
+    findings.push(finding('REVIEW_TOPIC_DISPOSITIONS_INVALID', String(error)));
+  }
+  if (manifestValue !== null && dispositions !== null) {
+    const topics = new Map(manifestValue.topics.map((topic) => [topic.topic_id, topic]));
+    const seen = new Set();
+    for (const disposition of dispositions) {
+      if (seen.has(disposition?.topic_id))
+        findings.push(
+          finding('REVIEW_TOPIC_DUPLICATED', 'review topic has more than one disposition', {
+            topic_id: disposition?.topic_id,
+          }),
+        );
+      seen.add(disposition?.topic_id);
+      const topic = topics.get(disposition?.topic_id);
+      if (topic === undefined) {
+        findings.push(
+          finding('REVIEW_TOPIC_UNKNOWN', 'review record contains an unknown topic', {
+            topic_id: disposition?.topic_id,
+          }),
+        );
+        continue;
+      }
+      if (!(reviewPolicy.dispositions ?? []).includes(disposition?.disposition))
+        findings.push(
+          finding('REVIEW_TOPIC_DISPOSITION_INVALID', 'review topic disposition is invalid', {
+            topic_id: disposition.topic_id,
+          }),
+        );
+      if (disposition?.recomputed_digest !== topic.current_digest)
+        findings.push(
+          finding('REVIEW_TOPIC_DIGEST_INVALID', 'reviewer digest does not match current topic', {
+            topic_id: disposition.topic_id,
+          }),
+        );
+      if (
+        disposition?.disposition === 'REUSED_FRESH_PASS' &&
+        (topic.changed_status !== 'unchanged' ||
+          topic.freshness_proof?.method !== 'content-addressed' ||
+          disposition?.freshness_verified !== true ||
+          typeof disposition?.rationale !== 'string' ||
+          disposition.rationale.trim().length < 20 ||
+          /^unchanged\.?$/iu.test(disposition.rationale.trim()))
+      )
+        findings.push(
+          finding(
+            'REVIEW_TOPIC_FRESHNESS_UNVERIFIED',
+            'reused topic lacks independent digest, freshness, or invariant reasoning',
+            { topic_id: disposition.topic_id },
+          ),
+        );
+      if (['RECHECKED_FAIL', 'BLOCKED'].includes(disposition?.disposition))
+        findings.push(
+          finding('REVIEW_TOPIC_NOT_PASSING', 'review topic is failed or blocked', {
+            topic_id: disposition.topic_id,
+          }),
+        );
+    }
+    for (const topicId of topics.keys()) {
+      if (!seen.has(topicId))
+        findings.push(
+          finding('REVIEW_TOPIC_OMITTED', 'mandatory review topic has no disposition', {
+            topic_id: topicId,
+          }),
+        );
+    }
+  }
+  emit({
+    ok: findings.length === 0,
+    command: 'review-check',
+    round,
+    candidate,
+    cycle,
+    findings,
+  });
 }
 
 function parseReviewRecord(source) {
@@ -1712,6 +2628,15 @@ switch (command) {
   case 'converge':
     converge();
     break;
+  case 'smart-converge':
+    smartConverge();
+    break;
+  case 'review-scope':
+    reviewScopeManifest();
+    break;
+  case 'review-check':
+    reviewCheck();
+    break;
   case 'envelope':
     envelope();
     break;
@@ -1725,7 +2650,7 @@ switch (command) {
       findings: [
         finding(
           'COMMAND_INVALID',
-          'expected policy-check, materialize, manifest, converge, envelope, or rehearse',
+          'expected policy-check, materialize, manifest, converge, smart-converge, review-scope, review-check, envelope, or rehearse',
         ),
       ],
     });
