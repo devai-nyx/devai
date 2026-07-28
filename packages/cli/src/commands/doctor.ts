@@ -712,9 +712,8 @@ interface CliProbe {
 
 function probeCli(cli: 'claude' | 'codex'): CliProbe {
   const family = (cli === 'claude' ? 'claude-cli' : 'codex-cli') as CliProbe['family'];
-  const which = spawnSync('command', ['-v', cli], {
+  const which = spawnSync('sh', ['-lc', `command -v ${cli}`], {
     encoding: 'utf8',
-    shell: true,
   });
   const onPath =
     which.status === 0 && typeof which.stdout === 'string' && which.stdout.trim().length > 0;

@@ -12,6 +12,10 @@ class CommandExit extends Error {
   }
 }
 
+export function isActionOutputExit(error: unknown): boolean {
+  return error instanceof CommandExit;
+}
+
 function wantsMachineJson(argv: readonly string[]): boolean {
   const format = argv.lastIndexOf('--format');
   return argv.includes('--json') || (format >= 0 && argv[format + 1] === 'json');
@@ -191,7 +195,7 @@ function restoreAndEmit(
   process.stdout.write = originalStdout;
   process.stderr.write = originalStderr;
   process.exit = originalExit;
-  if (exit === 0 && stderr.length === 0) {
+  if (exit === 0 && stdout.length > 0) {
     originalStdout.call(process.stdout, renderActionSuccess(entry, stdout));
     process.exitCode = 0;
     return;

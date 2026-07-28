@@ -5,6 +5,7 @@ import { hostname } from 'node:os';
 import type { CAC } from 'cac';
 import { EXIT_FAIL, EXIT_PASS, EXIT_USAGE } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
+import { isActionOutputExit } from '../../action-output.js';
 
 const DEFAULT_OUT_DIR = '.devai/state/test-results';
 const VALID_TIERS = new Set([
@@ -202,6 +203,7 @@ export const recordRun = defineCommand({
           // run is a wrapper, not a swallower.
           process.exit(child.exitCode === 0 ? EXIT_PASS : child.exitCode);
         } catch (err) {
+          if (isActionOutputExit(err)) throw err;
           const msg = err instanceof Error ? err.message : String(err);
           process.stderr.write(`devai evidence test record: ${msg}\n`);
           process.exit(EXIT_FAIL);
