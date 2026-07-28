@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0006-OM-011-CYCLE-1-RETENTION-CANDIDATE-FAILURE",
+  "round": "R-0006",
+  "date": "2026-07-28",
+  "authority": "Auditor",
+  "candidate": "6a581a9a9c1586d73a604108b845e5af5ef573c8",
+  "command": "node scripts/run-round-close-controls.mjs smart-converge --round R-0006 --base 7cf325625307a630344efe971bceccb011560301 --head 6a581a9a9c1586d73a604108b845e5af5ef573c8 --json",
+  "exit_code": 1,
+  "pass_1": {
+    "tasks_executed_pass": 13,
+    "tasks_executed_fail": 3,
+    "second_pass_started": false,
+    "clean_before": true,
+    "clean_after": true,
+    "coverage_summary_sha256": "ac29412270641af7c8f3ca8276fcf3ae4cc48a81c425fe904c185f4c7c79e08c",
+    "workspace_sha256": "aaa91bd79321329701a8fd24099d04a5b2cf97ce8156d1bc30e729c9e9de8605"
+  },
+  "findings": [
+    {
+      "gate": "trace",
+      "exit_code": 1,
+      "finding": "law/trace.json differs from deterministic inputs after Inspector 1771b0b added the cycle-1 retention contract"
+    },
+    {
+      "gate": "stage1",
+      "exit_code": 1,
+      "finding": "ci:stage1 reached trace:check and failed on the same stale deterministic trace projection"
+    },
+    {
+      "gate": "governance",
+      "exit_code": 1,
+      "finding": "implementation-binding 6a581a9a9c1586d73a604108b845e5af5ef573c8: substantive Engineer commit must have exactly one binding; observed 0"
+    }
+  ],
+  "sequencing": {
+    "implementation_commit": "6a581a9a9c1586d73a604108b845e5af5ef573c8",
+    "implementation_paths": [".devai/config/round-close-controls.json"],
+    "prior_law_commit": "4d58f5dcaf895648cb9e4a30e9755a8a8b12d2c0",
+    "prior_inspector_red": {
+      "commit": "1771b0b3dcd882d868888f64d8bc385454240f41",
+      "test": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
+      "behaviorally_exercised": true,
+      "literal_exact_implementation_paths_present": [],
+      "literal_exact_implementation_paths_absent": [".devai/config/round-close-controls.json"]
+    }
+  },
+  "required_disposition": "Do not invent a prospective binding or rewrite history. Classify only Engineer 6a581a9a9c1586d73a604108b845e5af5ef573c8 as an exact historical sequencing defect, add an Inspector guard that literally binds the canonical and materialized review-retention paths for future changes, regenerate the deterministic trace, and grant no prospective exception.",
+  "standing": "failed convergence evidence only; no candidate, review, publication, or closure standing"
+}
