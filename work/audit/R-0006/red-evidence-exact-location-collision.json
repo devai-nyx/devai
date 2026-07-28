@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE",
+  "round": "R-0006",
+  "authority": "Auditor",
+  "date": "2026-07-27",
+  "review_failure": {
+    "candidate": "c7ab49f5fbeffae3d8f58be0137f4c8f11d356fa",
+    "manifest_digest_sha256": "0999fa99259b82cd27003a1add804ab3b360ec83f2c8c6ea307121a1010349fb",
+    "record": "work/audit/R-0006/independent-opus-b9-review-4-failure.md",
+    "verdict": "FAIL",
+    "p0": 0,
+    "p1": 1,
+    "p2_actionable": 1,
+    "p3_actionable": 2
+  },
+  "observations": [
+    {
+      "commit": "9b8b288bf83dea1342d1b7084a2253a4fd16e78a",
+      "command": "pnpm vitest run tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+      "exit_code": 1,
+      "files_collected": 1,
+      "tests_passed": 6,
+      "tests_failed": 1,
+      "test_sha256": "5f53beca84c6b90bc4a29d8d6d9203fcc0bdc2dfdfeaea9a0e9b7bfc9235678c",
+      "implementation_before_sha256": "ceb78df8733e95c8a38c9994fad6bd507d09ffc40c03114d15d8b8f48a3d87d5",
+      "exercised_implementation_paths": ["tests/config/subprocess-v8-coverage-provider.ts"],
+      "failure_summary": "Repeat invocation is already cumulative and exact at 2 + 3 + 3 = 8. Distinct statement, function, or branch entries with the same complete location in either the parent or subprocess map are silently accepted instead of failing closed."
+    },
+    {
+      "commit": "9b8b288bf83dea1342d1b7084a2253a4fd16e78a",
+      "command": "pnpm vitest run",
+      "exit_code": 1,
+      "files_passed": 154,
+      "files_failed": 1,
+      "tests_passed": 1456,
+      "tests_failed": 1,
+      "tests_skipped": 8,
+      "failure_scope": "Only the newly declared duplicate exact-location fail-closed adversary fails."
+    }
+  ],
+  "repair_boundary": "Preserve cumulative exact counters across repeat invocation; reject duplicate complete same-kind locations in either map before any mutation; continue skipping incomplete locations conservatively; and make no threshold, exclusion, denominator, source, generated-label, skip, or assertion-mechanism change."
+}
