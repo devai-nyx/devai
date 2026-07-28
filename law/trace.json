@@ -3019,8 +3019,8 @@
         "INV-DEVAI-017"
       ],
       "lifecycle": "supported",
-      "assertion_count": 11,
-      "assertion_digest_sha256": "4236f468fa68c0c3c4e717feea9ca83c6bd63ae2279774bdf3e1bacad2791fac"
+      "assertion_count": 17,
+      "assertion_digest_sha256": "fe6d1efd4f6374ffc8694af200b3251708fb09695aed6323ddefd9dbcc1de0d0"
     },
     {
       "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
