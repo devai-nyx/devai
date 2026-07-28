@@ -113,8 +113,16 @@ router-only proof repairs, the exact command
 `pnpm vitest run tests/contract/r0006-output-contracts.red.contract.test.ts` exits 0
 with one file and 10 passing tests. It now checks exact `router-only` modes for all 39
 non-keep identities and executes a registry-derived folded alias plus the tombstone,
-both at exit 2 with empty stdout and one structured stderr refusal. This green reading
-does not claim that all 147 kept actions have individual end-to-end invocation tests.
+both at exit 2 with empty stdout and one structured stderr refusal. That historical
+green reading did not claim that all 147 kept actions had individual end-to-end
+invocation tests. The cycle-5 output-totality repair supersedes only that limitation:
+Inspector executable `tests/contract/r0006-output-totality-population.mjs` now runs all
+147 retained actions in isolated fixtures, all 59 `sense run <kind>` identities plus
+list under both machine spellings, all 13 noncanonical-exit producers, and all five
+pre-dispatch throw stages. Its durable Auditor artifact is
+`work/audit/R-0006/output-totality-population.json`. This does not convert any rejected
+candidate or prior independent-review FAIL into PASS and does not authorize formal
+cycle 6, publication, merge, closure, release, or R-0007+ work.
 
 ## B9 manifest role-boundary red
 
