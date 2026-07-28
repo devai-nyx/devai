@@ -423,6 +423,15 @@
       {
         "path": "work/audit/R-0006/om011-convergence-control-audit.md",
         "claims": ["prior_b9_failure_records"]
+      },
+      {
+        "path": "work/rounds/R-0006/source-close.md",
+        "claims": [
+          "trace_invariants",
+          "trace_test_sources",
+          "trace_assertion_sites",
+          "prior_b9_failure_records"
+        ]
       }
     ]
   },

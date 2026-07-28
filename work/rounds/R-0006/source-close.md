@@ -31,21 +31,30 @@ historically binds the remaining KNOWN-RED reading. The candidate manifest deriv
 formal last semantic implementation subject from the final committed Architect head;
 no earlier candidate identity survives these repairs.
 
-All 186 never-reminted action identities have disposition-correct output and error
-contracts. The 24-row operational-value extraction has one canonical home per row.
-Mutation strength and evidence aggregation remain separate fail-closed decisions. The
-complete 378-file denominator passes the unchanged coverage floors at 71.87%
-statements, 60.15% branches, 80.67% functions, and 73.27% lines after collision-free
-exact-hit measurement and behavior-bearing Inspector depth. The ordinary suite passes
-156 files, 1,480 tests, and eight declared skips. Trace binds 34 invariants, 156 test
-sources, and 2,845 lexical assertion sites.
+At exact Architect subject `5b76908865da9319859b9931598647a51eb41625`, all 186
+never-reminted action identities had disposition-correct output and error contracts;
+the 24-row operational-value extraction had one canonical home per row; the complete
+378-file denominator passed at 71.87% statements, 60.15% branches, 80.67% functions,
+and 73.27% lines; the ordinary suite passed 156 files and 1,482 tests with eight
+declared skips; trace bound 34 invariants, 156 test sources, and 2,853 lexical assertion
+sites. Those are exact-subject historical readings, not manually copied current
+authority.
 
-All five mandatory B9 Opus FAILs remain active historical evidence with no retained
+The live handoff derives its volatile trace and prior-review readings from the same
+machine sources enforced by `policy-check`:
+
+<!-- governed-current-claims:start -->
+
+{"prior_b9_failure_records":7,"trace_assertion_sites":2857,"trace_invariants":34,"trace_test_sources":156}
+<!-- governed-current-claims:end -->
+
+All mandatory B9 Opus FAIL records remain active historical evidence with no retained
 standing.
 The second review's coverage-inflation finding was corrected by exact-location-only
 measurement; its first honest reading remained red until real behavior tests closed the
-unchanged floors. The current policy separately discloses six R-0006 historical
-sequencing-exception commits and two exact role-path-classified commits. No prospective
+unchanged floors. At exact Architect subject
+`5b76908865da9319859b9931598647a51eb41625`, the policy separately disclosed six R-0006
+historical sequencing-exception commits and two exact role-path-classified commits. No prospective
 waiver, threshold change, exclusion growth, source removal, or assertion weakening is
 carried into this handoff.
 
@@ -65,8 +74,9 @@ evidence, and non-behavioral coverage-integrity guards. Inspector `f93d8f6` pres
 four exact reds; Inspector `2087572` makes them green without changing source,
 threshold, exclusion, or denominator; the first honest corrected run failed branches
 at 59.62%. Inspector `a7814b4` closes the 73-branch deficit with ten workflow-parser
-and data-probe behavior tests. Auditor `0b0be11` binds that then-current stable summary and
-explicitly refuses a stable-byte identity for that runtime-variable statement artifact.
+and data-probe behavior tests. Auditor `0b0be11c0cdd833add8bc5b7756f730bcda85a75`
+binds that then-current stable summary and explicitly refuses a stable-byte identity for
+that runtime-variable statement artifact.
 The E0-E5 PASS is preserved separately before the final policy review-record slot is
 replaced.
 
@@ -79,8 +89,9 @@ coverage command then exposed a legitimate subprocess branch-location convergenc
 preserved by Inspector `9fe0386` and Auditor `968099c`. DII-227 distinguishes the
 unique canonical parent from convergent subprocess observations; Inspector `e284a6c`
 aggregates the latter within kind and keeps parent collisions fail-closed. Auditor
-`72fac68` removes the stale current digests and binds every invalidated reading to its
-historical evidence. Those readings remain historical at their exact candidate.
+`72fac684750a157a26b6b867beaa56d045569960` removes the stale current digests and binds
+every invalidated reading to its historical evidence. Those readings remain historical
+at their exact candidate.
 
 OM-011 then replaced all-or-nothing local reruns with the conservative content-addressed
 task DAG and mandatory exhaustive review census. The first smart convergence exposed
@@ -92,10 +103,11 @@ rehearsal, candidate-only manifest, and the 207-topic review census were green.
 
 Literal `claude-opus-5` exhaustive cycle 1 nevertheless returned FAIL on four topics:
 this handoff and the active as-built still presented superseded coverage, suite, trace,
-range, and sequencing-exception readings as current. Auditor `2e02d31`, Auditor
-`7c0fc17`, and Inspector `5846718` preserve the verdict and repair the complete defect
-class without changing production, thresholds, exclusions, denominator, or test
-behavior. At the committed DII-231 candidate, the exact governed range contains 135
+range, and sequencing-exception readings as current. Auditor
+`2e02d31c9504d4ee63dbe05f40084466292aff99`, Auditor `7c0fc17`, and Inspector `5846718`
+preserve the verdict and repair the complete defect class without changing production,
+thresholds, exclusions, denominator, or test behavior. At the committed DII-231
+candidate, the exact governed range contains 135
 commits: 41 Architect, 41 Auditor, 13 Engineer, 39 Inspector, and one Owner. Fresh
 machine-derived convergence, rehearsal and manifests must confirm that prospective
 count before cycle 2; this prose grants it no independent standing.
@@ -116,7 +128,7 @@ confirm every count and reading before cycle 2.
 The behavior implementation subject above does not include later Auditor evidence or
 Architect projection and close documents. The exact formal `implementation_subject`
 and `review_candidate` must be derived from the committed clean head containing this
-handoff, DII-233, and every final current audit artifact. Its
+handoff, DII-233, and every final closing audit artifact. Its
 candidate-only manifest must derive the exact base, tree, governed range, identity
 population, role/path map, gate outcomes, convergence passes, and rehearsal from that
 head; no earlier candidate state may be reused.
@@ -141,8 +153,10 @@ The source merge must then pass exact-main CI before the production phase-close 
 append PC-0007 on a closure-only branch derived from that merge.
 
 PC-0007 is the only permitted file in the closure-only PR. It uses DII-207 as the
-declaration and DII-235 as the closing decision, binds the exact source merge rather
-than the later closure commit, and records `none-needed` release disposition. The
+declaration and the fresh post-repair Architect reacceptance decision as the closing
+decision, binds the exact source merge rather than the later closure commit, and records
+`none-needed` release disposition. DII-235 was invalidated by the cycle-3 review FAIL;
+DII-236 governs its complete-class repair but does not yet reaccept the round. The
 closure-only head, closure merge, and final main must each pass their required exact-SHA
 checks. A rehearsal PC has no standing and must never be published.
 

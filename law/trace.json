@@ -3091,8 +3091,8 @@
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported",
-      "assertion_count": 67,
-      "assertion_digest_sha256": "9649d4685bb9ec8d60bf3b600055a0c0c9dd75fd5a4563fcc5e46ffdcebd0ca1"
+      "assertion_count": 71,
+      "assertion_digest_sha256": "8bb07119c27b6ebd1a9a48bbabda6ce10b6118ce8021e31aace38ee846ffa08c"
     },
     {
       "path": "tests/e2e/bare-domain-help.e2e.test.ts",

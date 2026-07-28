@@ -4024,6 +4024,45 @@ This decision authorizes no package publication, tag, GitHub Release, Pages or o
 deployment, evidence promotion or reuse, real-stynx mutation, predecessor mutation, or
 R-0007+ work.
 
+### DII-236 — Govern the complete active-document current-claim population
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 cycle-3 complete-class correction; R-0006-INDEPENDENT-OPUS-B9-REVIEW-7-FAILURE at Auditor aa57003; Inspector c4c1758; Auditor ee09665 and 888d530`
+
+The literal cycle-3 review of exact candidate
+`ee98663d639f7728ef07a3d097310659777b92ab` regenerated all 238 mandatory topics and
+returned FAIL on three. The exact defect class was the same stale-current class reported
+in cycles 1 and 2: the active Architect source-close handoff retained a 2,845-site trace
+reading and five-record review census after machine truth had moved to 2,853 sites and
+six preserved failure records. The controller correctly governed two Auditor documents
+but its enumerated document population omitted the active Architect handoff.
+
+Auditor `aa57003` preserves the complete 235/3/0 disposition census. Inspector
+`c4c1758ccf40a7269721b7cacde1a2fafa6cdbec` proves that the active source-close path is
+absent from the policy and binds the canonical policy, committed materialization, and
+source-close repair paths. Auditor `ee09665` preserves the exact full-floor red with 155
+files and 1,482 tests passing, one expected failure, and eight skips; Auditor `888d530`
+reconciles the now-seven-record failure population before implementation.
+
+The governed current-claim population covers every active document that asserts the
+selected volatile trace or prior-review values, regardless of role ownership. The
+Architect source-close handoff therefore carries the same structured machine-derived
+block as the Auditor material and removes unbound volatile suite, trace, and
+review-census numerics from current prose. Exact-subject historical readings remain
+permitted and are explicitly non-current. A stale, missing, malformed, or extra
+source-close block must fail `policy-check` with the same closed behavior as an Auditor
+document.
+
+The canonical policy now names `work/rounds/R-0006/source-close.md` with trace invariant,
+test-source, assertion-site, and prior-failure claims. The executing Engineer must
+materialize that canonical policy byte-for-byte into `.devai/config/` before acceptance.
+After materialization, the focused contract and full floor must turn green, an Auditor
+must confirm the complete-class population, and a fresh later Architect decision must
+reaccept the round before candidate machinery restarts. DII-235 is invalidated as the
+closing decision by the cycle-3 FAIL; DII-207 remains the declaration.
+
+This decision claims no green materialization, fresh candidate, convergence, rehearsal,
+manifest, review PASS, publication, remote CI, merge, PC-0007, closure, release,
+evidence promotion, predecessor mutation, or R-0007+ authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
