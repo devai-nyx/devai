@@ -378,6 +378,11 @@
         },
         {
           "suite": "unit",
+          "path": "packages/sensors/tests/unit/runtime-probe-data-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/sensors/tests/unit/security-perf-depth.test.ts",
           "target_type": "test"
         },
@@ -389,6 +394,11 @@
         {
           "suite": "unit",
           "path": "packages/sensors/tests/unit/trace-resolve.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/workflow-parser-depth.test.ts",
           "target_type": "test"
         },
         {
@@ -898,6 +908,11 @@
         },
         {
           "suite": "unit",
+          "path": "packages/sensors/tests/unit/runtime-probe-data-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/sensors/tests/unit/runtime-probe.test.ts",
           "target_type": "test"
         },
@@ -924,6 +939,11 @@
         {
           "suite": "unit",
           "path": "packages/sensors/tests/unit/test-weakening-config.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/workflow-parser-depth.test.ts",
           "target_type": "test"
         },
         {
@@ -1203,12 +1223,22 @@
         },
         {
           "suite": "unit",
+          "path": "packages/sensors/tests/unit/runtime-probe-data-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/sensors/tests/unit/security-perf-depth.test.ts",
           "target_type": "test"
         },
         {
           "suite": "unit",
           "path": "packages/sensors/tests/unit/site-drift-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/workflow-parser-depth.test.ts",
           "target_type": "test"
         },
         {
@@ -2318,6 +2348,18 @@
       "assertion_digest_sha256": "1bdcebdb25423ce15bb54f5e464c6c936aaa96c65343cea1eb18348b9078c6f3"
     },
     {
+      "path": "packages/sensors/tests/unit/runtime-probe-data-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-012",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 16,
+      "assertion_digest_sha256": "8d82cc9ad0089b343a43310bbf0caad2fd2f61b64a62324f2496c2bd19f6b741"
+    },
+    {
       "path": "packages/sensors/tests/unit/runtime-probe.test.ts",
       "suite": "unit",
       "invariant_ids": [
@@ -2397,6 +2439,18 @@
       "lifecycle": "supported",
       "assertion_count": 11,
       "assertion_digest_sha256": "9af67de24bf68fe795b75b44ffc97f4373342939029b9d94990457204c9b26b2"
+    },
+    {
+      "path": "packages/sensors/tests/unit/workflow-parser-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-012",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 15,
+      "assertion_digest_sha256": "b24b1c655f1f73c435ba647117690b7c3edf9098b5cd81997801c0f51ddabf51"
     },
     {
       "path": "packages/skills/tests/contract/feedback-iteration-bounded-replacements.red.test.ts",
@@ -2965,8 +3019,8 @@
         "INV-DEVAI-017"
       ],
       "lifecycle": "supported",
-      "assertion_count": 6,
-      "assertion_digest_sha256": "b62c718f41fcf41dcad7cad031c6fe52fb12662ccecfa257c75ed4ddc6d96da1"
+      "assertion_count": 11,
+      "assertion_digest_sha256": "4236f468fa68c0c3c4e717feea9ca83c6bd63ae2279774bdf3e1bacad2791fac"
     },
     {
       "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
