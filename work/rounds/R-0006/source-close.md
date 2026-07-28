@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-207; DII-211–233; OM-011; R-0006-AS-BUILT; Auditor 72fac684750a157a26b6b867beaa56d045569960; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; Auditor 2e02d31c9504d4ee63dbe05f40084466292aff99,
+    DII-207; DII-211–244; OM-011; R-0006-AS-BUILT; Auditor 72fac684750a157a26b6b867beaa56d045569960; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; R-0006-INDEPENDENT-CODEX-B9-REVIEW-5-FAILURE; Auditor 2e02d31c9504d4ee63dbe05f40084466292aff99,
     7c0fc17e4c9543c31db9f3f563e5b9e65d220c67,
     and 0f22cfa5bb56e418086c14ef834a2e56590f6793; Inspector 5846718c3947ddce6b3bb67b296796bcc275dcb9 and 547351f7d87086b601d4c11a811855ce9d2f57af; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE; R-0006-OM-011-CYCLE-1-RETENTION-CANDIDATE-FAILURE,
   ]
@@ -45,7 +45,7 @@ machine sources enforced by `policy-check`:
 
 <!-- governed-current-claims:start -->
 
-{"prior_b9_failure_records":8,"trace_assertion_sites":2890,"trace_invariants":34,"trace_test_sources":157}
+{"prior_b9_failure_records":8,"trace_assertion_sites":2899,"trace_invariants":34,"trace_test_sources":158}
 <!-- governed-current-claims:end -->
 
 All mandatory B9 Opus FAIL records remain active historical evidence with no retained
