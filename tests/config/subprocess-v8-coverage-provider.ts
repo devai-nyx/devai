@@ -14,8 +14,8 @@ interface ProcessCoverage {
 }
 
 interface Position {
-  readonly line: number;
-  readonly column: number;
+  readonly line?: number;
+  readonly column?: number;
 }
 
 interface Location {
@@ -48,10 +48,15 @@ interface MutableCoverageMap {
   filter(callback: (filename: string) => boolean): void;
 }
 
-function locationKey(location: Location): string {
-  return [location.start.line, location.start.column, location.end.line, location.end.column].join(
-    ':',
-  );
+function locationKey(location: Location): string | undefined {
+  const positions = [
+    location.start.line,
+    location.start.column,
+    location.end.line,
+    location.end.column,
+  ];
+  if (!positions.every((position) => Number.isInteger(position))) return undefined;
+  return positions.join(':');
 }
 
 export function mergeCanonicalHits(
@@ -66,20 +71,24 @@ export function mergeCanonicalHits(
     const statementHits = new Map<string, number>();
     for (const [id, location] of Object.entries(candidate.statementMap)) {
       const count = candidate.s[id] ?? 0;
-      statementHits.set(locationKey(location), count);
+      const key = locationKey(location);
+      if (key !== undefined) statementHits.set(key, count);
     }
     for (const [id, location] of Object.entries(current.statementMap)) {
-      const count = statementHits.get(locationKey(location));
+      const key = locationKey(location);
+      const count = key === undefined ? undefined : statementHits.get(key);
       if (count !== undefined) current.s[id] = (current.s[id] ?? 0) + count;
     }
 
     const functionHits = new Map<string, number>();
     for (const [id, definition] of Object.entries(candidate.fnMap)) {
       const count = candidate.f[id] ?? 0;
-      functionHits.set(locationKey(definition.decl), count);
+      const key = locationKey(definition.decl);
+      if (key !== undefined) functionHits.set(key, count);
     }
     for (const [id, definition] of Object.entries(current.fnMap)) {
-      const count = functionHits.get(locationKey(definition.decl));
+      const key = locationKey(definition.decl);
+      const count = key === undefined ? undefined : functionHits.get(key);
       if (count !== undefined) current.f[id] = (current.f[id] ?? 0) + count;
     }
 
@@ -87,20 +96,31 @@ export function mergeCanonicalHits(
     for (const [id, definition] of Object.entries(candidate.branchMap)) {
       for (const [index, location] of definition.locations.entries()) {
         const count = candidate.b[id]?.[index] ?? 0;
-        branchHits.set(locationKey(location), count);
+        const key = locationKey(location);
+        if (key !== undefined) branchHits.set(key, count);
       }
     }
     for (const [id, definition] of Object.entries(current.branchMap)) {
       for (const [index, location] of definition.locations.entries()) {
-        const count = branchHits.get(locationKey(location));
+        const key = locationKey(location);
+        const count = key === undefined ? undefined : branchHits.get(key);
         if (count !== undefined && current.b[id] !== undefined) {
           current.b[id][index] = (current.b[id][index] ?? 0) + count;
         }
       }
     }
-
-    coverageMap.addFileCoverage(current);
   }
+}
+
+export async function retainSubprocessCoverageInputs(
+  sourceDirectory = subprocessCoverageDirectory,
+  evidenceDirectory = subprocessCoverageEvidenceDirectory,
+): Promise<number> {
+  await promises.rm(evidenceDirectory, { recursive: true, force: true });
+  if (!existsSync(sourceDirectory)) return 0;
+  await promises.cp(sourceDirectory, evidenceDirectory, { recursive: true });
+  return (await promises.readdir(evidenceDirectory)).filter((name) => name.endsWith('.json'))
+    .length;
 }
 
 /**
@@ -112,7 +132,9 @@ export function mergeCanonicalHits(
 class SubprocessV8CoverageProvider extends V8CoverageProvider {
   override async clean(clean = true): Promise<void> {
     await super.clean(clean);
-    await promises.rm(subprocessCoverageDirectory, { recursive: true, force: true });
+    if (clean) {
+      await promises.rm(subprocessCoverageDirectory, { recursive: true, force: true });
+    }
     await promises.mkdir(subprocessCoverageDirectory, { recursive: true });
   }
 
@@ -142,10 +164,12 @@ class SubprocessV8CoverageProvider extends V8CoverageProvider {
           raw = JSON.parse(
             await promises.readFile(resolve(subprocessCoverageDirectory, name), 'utf8'),
           ) as ProcessCoverage;
-        } catch {
-          continue;
+        } catch (error) {
+          throw new Error(`malformed subprocess coverage input ${name}: ${String(error)}`);
         }
-        if (!Array.isArray(raw.result)) continue;
+        if (!Array.isArray(raw.result)) {
+          throw new Error(`malformed subprocess coverage input ${name}: result is not an array`);
+        }
         subprocessCoverages.push(raw);
       }
       if (subprocessCoverages.length === 0) return coverageMap;
@@ -166,15 +190,10 @@ class SubprocessV8CoverageProvider extends V8CoverageProvider {
       for (const result of merged.result) result.startOffset ??= 0;
       const subprocessMap = (await provider.convertCoverage(merged)) as MutableCoverageMap;
       mergeCanonicalHits(coverageMap, subprocessMap);
-      coverageMap.filter((filename) => super.isIncluded(filename));
       return coverageMap;
     } finally {
-      await promises.rm(subprocessCoverageEvidenceDirectory, { recursive: true, force: true });
-      if (existsSync(subprocessCoverageDirectory)) {
-        await promises.cp(subprocessCoverageDirectory, subprocessCoverageEvidenceDirectory, {
-          recursive: true,
-        });
-      }
+      coverageMap.filter((filename) => super.isIncluded(filename));
+      await retainSubprocessCoverageInputs();
       await promises.rm(subprocessCoverageDirectory, { recursive: true, force: true });
     }
   }
