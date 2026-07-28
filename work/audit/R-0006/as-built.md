@@ -26,10 +26,20 @@ coverage or semantics laundering**. The complete eligible package-source denomin
 the four 70/60/70/70 floors and all four pre-existing exclusions are unchanged, all
 186 action identities have an explicit disposition-correct output/error contract, the
 24-row operational-value extraction has one canonical home per row, and mutation
-strength remains separate from evidence aggregation. All five mandatory B9 Opus FAILs,
+strength remains separate from evidence aggregation. All mandatory B9 Opus FAILs,
 every exact-hit and collision-semantics correction, every honest post-correction red,
-and all five R-0006 historical sequencing-exception commits remain visible rather than
+and every governed R-0006 historical sequencing exception remain visible rather than
 being relabelled green.
+
+The following block is the sole current numeric authority in this audit for its named
+volatile populations. `policy-check` derives every value from canonical machine sources
+and rejects drift, missing or extra fields, malformed blocks, and unbound current numeric
+prose.
+
+<!-- governed-current-claims:start -->
+
+{"trace_invariants":34,"trace_test_sources":156,"trace_assertion_sites":2845,"r0006_sequencing_exception_entries":5,"r0006_sequencing_exception_commits":6,"operational_direct_rows":17,"operational_distinct_direct_value_homes":16,"operational_total_value_homes":17}
+<!-- governed-current-claims:end -->
 
 This is an implementation as-built, not a B9 review or publication verdict. The exact
 B9 implementation subject, two convergence passes, candidate-only clone, closure
@@ -41,20 +51,21 @@ real-stynx mutation, predecessor mutation, or R-0007+ work is claimed.
 
 ## Backlog disposition before ceremony
 
-| Record | As-built disposition                       | Evidence                                                                                                                                                                                       |
-| ------ | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| BL-026 | Implemented with bounded behavioral census | The registry binds all identities to exact contracts; tests prove shared kept-action envelopes plus folded/tombstoned refusal, without claiming one end-to-end invocation per kept action.     |
-| BL-034 | Implemented                                | DII-212 and `law/policy/operational-values.json` assign all 24 altitude-sweep rows one canonical operational home without creating a second policy setpoint.                                   |
-| BL-035 | Implemented as two decisions               | DII-213 governs mutation selection and observations; DII-214 separately governs heterogeneous evidence aggregation. Neither can manufacture PASS from absent or uncheckable evidence.          |
-| BL-081 | Implemented                                | Every one of the 156 traced test sources binds a positive assertion count and ordered assertion-site digest; the current projection totals 2,839 lexical assertion sites across 34 invariants. |
+| Record | As-built disposition                       | Evidence                                                                                                                                                                                   |
+| ------ | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| BL-026 | Implemented with bounded behavioral census | The registry binds all identities to exact contracts; tests prove shared kept-action envelopes plus folded/tombstoned refusal, without claiming one end-to-end invocation per kept action. |
+| BL-034 | Implemented                                | DII-212 and `law/policy/operational-values.json` assign all 24 altitude-sweep rows one canonical operational home without creating a second policy setpoint.                               |
+| BL-035 | Implemented as two decisions               | DII-213 governs mutation selection and observations; DII-214 separately governs heterogeneous evidence aggregation. Neither can manufacture PASS from absent or uncheckable evidence.      |
+| BL-081 | Implemented                                | Every traced test source binds a positive assertion count and ordered assertion-site digest; the governed claim block above is derived from `law/trace.json`.                              |
 
 Backlog closure standing remains subject to B9 review, publication, exact-main CI, and
 the closure-only machine verb.
 
 ## Coverage denominator audit
 
-B0 preserved the then-current loaded-module report instead of silently treating it as
-whole-source evidence. That report covered 223 of 377 eligible source files and omitted
+B0 at exact subject `6e3a2b9f7f5c76b742a546be0f9dd2fc6dfece06` preserved the
+then-current loaded-module report instead of silently treating it as whole-source
+evidence. That report covered 223 of 377 eligible source files and omitted
 154 valid shipped files: 150 in CLI, one in core, and three in skills. Its raw reading
 passed only against that incomplete population:
 
@@ -72,8 +83,9 @@ The second mandatory Opus review later rejected a containment-based subprocess
 numerator and required exact-location measurement. DII-222 and the Inspector repair
 preserve explicit zero hits, emit statement-level JSON, and retain 191 raw subprocess
 V8 JSON inputs. The first honest exact-hit reading was red; behavior-bearing Inspector
-depth tests then raised that same denominator above the unchanged floors. The latest
-candidate-bound raw summary has SHA-256
+depth tests then raised that same denominator above the unchanged floors. At exact
+reviewed candidate `ab4721b09ef3dde327c5d660fdf78b542cc85a66`, the candidate-bound
+raw summary has SHA-256
 `ac29412270641af7c8f3ca8276fcf3ae4cc48a81c425fe904c185f4c7c79e08c`:
 
 | Metric     | Final complete-denominator reading | Floor |
@@ -83,8 +95,9 @@ candidate-bound raw summary has SHA-256
 | Functions  |             80.67% (2,479 / 3,073) |   70% |
 | Lines      |           73.27% (14,936 / 20,383) |   70% |
 
-The current tracked population contains 378 eligible files, and the final JSON summary
-contains all 378. The increase from B0 is the new shipped Engineer source
+At exact reviewed candidate `ab4721b09ef3dde327c5d660fdf78b542cc85a66`, the tracked
+population contains 378 eligible files and the final JSON summary contains all 378. The
+increase from B0 is the new shipped Engineer source
 `packages/cli/src/action-output.ts`; it joined automatically under the explicit include
 and was not removed from the denominator.
 
@@ -330,11 +343,10 @@ invariants, 155 test sources, and 2,784 lexical assertion sites. Those readings 
 historical and bound to those exact subjects; they are not the current candidate
 population.
 
-The current governed-sequencing policy contains four R-0006 exception entries covering
-five exact immutable implementation commits: `a0292658…`, `58b175d3…`, `8e7a44b7…`,
-`63b2238d…`, and `ec680862…`. Separately, the role-path policy contains two exact historical
-classifications for `d41c648b…` and `8e7a44b7…`. These are distinct controls and grant
-no prospective bypass.
+The governed claim block derives the R-0006 sequencing-exception entry and
+commit populations directly from `law/policy/governed-sequencing.json`. Separately, the
+role-path policy contains exact historical classifications. These are distinct controls
+and grant no prospective bypass.
 
 ## Action output and error totality
 
@@ -353,8 +365,9 @@ unknown identities, structured handler failures, usage failures, opposite-channe
 silence, and the common command harness. Human rendering remains presentation and is
 not used as machine evidence.
 
-The non-keep census now asserts exact `router-only` output and error modes for all 39
-rows. A registry-derived folded alias and the tombstone are both executed and prove
+At exact reviewed candidate `ab4721b09ef3dde327c5d660fdf78b542cc85a66`, the non-keep
+census asserts exact `router-only` output and error modes for all 39 rows. A
+registry-derived folded alias and the tombstone are both executed and prove
 exit 2, empty stdout, and one structured stderr refusal. The kept-action envelope is
 tested generically plus across the existing public-read and command suites, but this
 audit does not claim a dedicated end-to-end invocation for each of the 147 kept
@@ -363,10 +376,12 @@ identities. Contract totality and per-identity invocation coverage are distinct.
 ## Law extraction and evidence semantics
 
 `law/policy/operational-values.json` contains the complete 24-row altitude-sweep
-population: 17 values are carried directly and seven point to an existing canonical
-schema or policy. The 17 direct value groups are held once under the policy's `values`
-object. DII-212 keeps constitutional doctrine and deliberate anchors while making each
-concrete operational spelling a single independently editable setpoint.
+population: 17 rows carry values directly and seven point to an existing canonical
+schema or policy. The direct rows resolve to 16 distinct direct `values` homes; the
+seventeenth `values` home, `triage_routes`, is reached by a reference row. The governed
+block derives all three populations and preserves the invariant of one independently
+editable canonical home per row. DII-212 keeps constitutional doctrine and deliberate
+anchors while making each concrete operational spelling a single setpoint.
 
 DII-213 and DII-214 remain deliberately separate:
 
@@ -377,10 +392,10 @@ DII-213 and DII-214 remain deliberately separate:
   a valid observation exists. Missing, invalid, stale-subject, incomplete, unavailable,
   crashed, timed-out, or independently uncheckable evidence is UNKNOWN and blocks a
   required readiness conclusion.
-- Evidence aggregation derives a nonempty required population from policy. A current
+- Evidence aggregation derives a nonempty required population from policy. A fresh
   readiness-bearing FAIL dominates; otherwise any absent, stale, UNKNOWN, unavailable,
   conflicting, judge-only, erroneous, or independently uncheckable required member
-  yields UNKNOWN. PASS requires one current independently checkable PASS for every
+  yields UNKNOWN. PASS requires one fresh independently checkable PASS for every
   required member. Omission and filtering never supersede evidence, and N/A requires a
   visible policy-declared reason and may not empty a readiness population.
 
@@ -392,8 +407,8 @@ reuse and promotion remain disabled.
 The trace schema and generator require a positive `assertion_count` and SHA-256
 `assertion_digest` for every test-corpus row. The generator derives both from exact
 tracked bytes and rejects missing sources, zero assertion sites, unsupported or
-ambiguous forms, and digest drift. The current trace verifies 34 invariants and 156
-test sources containing 2,839 projected lexical assertion sites.
+ambiguous forms, and digest drift. The governed claim block derives the trace
+population directly from `law/trace.json`.
 
 This is stronger than filename presence or documentary mention, but the audit does not
 misstate assertion count as semantic sufficiency by itself. Invariant markers,
@@ -446,9 +461,9 @@ preserves all 207 dispositions and the exact four-topic failure. This same-class
 updates every current Auditor-owned occurrence while retaining older values only inside
 exact-subject historical narratives and immutable review/evidence records.
 
-This repair invalidates every earlier convergence, rehearsal and manifest. Architect
-must now perform the corresponding source-close sweep, Inspector must bind the
-KNOWN-RED coverage paragraph to its exact historical candidate, and the corrected head
-must pass fresh smart convergence, rehearsal, candidate-manifest and review-scope
-generation before the one permitted cycle-2 review. No earlier PASS or task result may
-be carried across changed inputs except through an OM-011-valid content address.
+The repair at exact cycle-1 candidate
+`93894da782af3943e2447f43e81e5e69cbdc73fa` invalidated every earlier convergence,
+rehearsal, and manifest. Its corrected successor had to pass fresh smart convergence,
+rehearsal, candidate-manifest, and review-scope generation. No earlier PASS or task
+result could be carried across changed inputs except through an OM-011-valid content
+address. OM-012 now governs any later repair-and-review continuation.

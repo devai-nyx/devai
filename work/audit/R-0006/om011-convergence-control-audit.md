@@ -96,16 +96,26 @@ source set, denominator, or exclusion.
 
 ## Review-topic census
 
-The policy names four requirement sources, five controlling sources, all four prior B9
-Opus failure records, the exact base-to-candidate changed-path population, and current
-plus retained previous candidate manifests. The generator assigns stable topic IDs and
+The following claim is derived from the complete governed B9 review-record population;
+`policy-check` rejects any stale, missing, extra, or malformed value.
+
+<!-- governed-current-claims:start -->
+
+{"prior_b9_failure_records":6}
+<!-- governed-current-claims:end -->
+
+The policy names its requirement and controlling sources, every prior governed B9 Opus
+failure record, the exact base-to-candidate changed-path population, and current plus
+retained previous candidate manifests. The generator assigns stable topic IDs and
 emits every required field: claim, governing paths, current/previous digest, changed
 status, adversaries, prior findings, freshness proof, and required disposition.
 
 The record verifier enforces a topic-to-disposition bijection, independent current digest
-matching, substantive freshness reasoning for `REUSED_FRESH_PASS`, rejection of unknown,
-omitted, duplicated, failed, or blocked topics, and the maximum two-cycle budget. Cycle
-3 is structurally refused. Previous P0–P3 headings remain census topics after repair.
+matching, substantive freshness reasoning for `REUSED_FRESH_PASS`, and rejection of
+unknown, omitted, duplicated, failed, or blocked topics. Under OM-012 every positive
+integer cycle is structurally admitted, while each FAIL still invalidates the candidate
+and requires complete-class repair. Previous P0–P3 headings remain census topics after
+repair.
 
 ## Validation read before this audit
 
