@@ -328,10 +328,13 @@ pnpm vitest run tests/contract/r0006-coverage-integrity.red.contract.test.ts
 
 Before repair, the new repeat-merge adversary is green and proves cumulative counters
 `2 + 3 + 3 = 8`, distinguishing the intended behavior from both self-doubling and
-accidental idempotence. The focused run collects one file, passes six tests, and fails
-the duplicate-location adversary because statements, functions, and branch arms in
-either the parent or subprocess map are silently accepted instead of failing closed.
-This red binds only the focused Inspector contract and
+accidental idempotence. The initial focused run collected one file, passed six tests,
+and failed the duplicate-location adversary because canonical parent collisions were
+silently accepted. DII-226's first implementation made that case green, but the
+unchanged coverage command exposed a legitimate duplicate subprocess branch observation
+at exact location `404:9:406:3`. The refined contract therefore requires duplicate
+subprocess observations to aggregate into one canonical hit while duplicate canonical
+parent identities fail closed. This red binds only the focused Inspector contract and
 `tests/config/subprocess-v8-coverage-provider.ts`. It authorizes no numerator inference,
 threshold, exclusion, denominator, source-population, generated-label, skip, assertion,
 publication, closure, release, predecessor, real-stynx, or R-0007+ change.

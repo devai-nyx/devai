@@ -182,7 +182,47 @@ describe('R-0006 coverage measurement integrity', () => {
     expect(current.data().f.outer).toBe(8);
   });
 
-  it('fails closed on duplicate complete locations in either coverage map', async () => {
+  it('aggregates duplicate subprocess observations at one canonical location', async () => {
+    const provider = (await import('../config/subprocess-v8-coverage-provider.js')) as unknown as {
+      mergeCanonicalHits?: (current: FixtureCoverageMap, subprocess: FixtureCoverageMap) => void;
+    };
+    const duplicateStatement = {
+      ...fixtureCoverage(0, 0),
+      statementMap: { first: outer, second: outer },
+      s: { first: 1, second: 2 },
+    };
+    const duplicateFunction = {
+      ...fixtureCoverage(0, 0),
+      fnMap: {
+        first: { decl: outer, loc: outer },
+        second: { decl: outer, loc: outer },
+      },
+      f: { first: 1, second: 2 },
+    };
+    const duplicateBranch = {
+      ...fixtureCoverage(0, 0),
+      branchMap: { duplicate: { locations: [outer, outer] } },
+      b: { duplicate: [1, 2] },
+    };
+
+    const statementCurrent = new FixtureCoverageMap(fixtureCoverage(0, 0));
+    provider.mergeCanonicalHits?.(statementCurrent, new FixtureCoverageMap(duplicateStatement));
+    expect(statementCurrent.data().s.outer).toBe(3);
+
+    const functionCurrent = new FixtureCoverageMap(fixtureCoverage(0, 0));
+    provider.mergeCanonicalHits?.(functionCurrent, new FixtureCoverageMap(duplicateFunction));
+    expect(functionCurrent.data().f.outer).toBe(3);
+
+    const branchCurrent = new FixtureCoverageMap({
+      ...fixtureCoverage(0, 0),
+      branchMap: { canonical: { locations: [outer] } },
+      b: { canonical: [0] },
+    });
+    provider.mergeCanonicalHits?.(branchCurrent, new FixtureCoverageMap(duplicateBranch));
+    expect(branchCurrent.data().b.canonical).toEqual([3]);
+  });
+
+  it('fails closed on duplicate complete locations in the canonical parent map', async () => {
     const provider = (await import('../config/subprocess-v8-coverage-provider.js')) as unknown as {
       mergeCanonicalHits?: (current: FixtureCoverageMap, subprocess: FixtureCoverageMap) => void;
     };
@@ -206,12 +246,6 @@ describe('R-0006 coverage measurement integrity', () => {
     };
 
     for (const duplicate of [duplicateStatement, duplicateFunction, duplicateBranch]) {
-      expect(() =>
-        provider.mergeCanonicalHits?.(
-          new FixtureCoverageMap(fixtureCoverage(0, 0)),
-          new FixtureCoverageMap(duplicate),
-        ),
-      ).toThrow(/duplicate exact .* location/u);
       expect(() =>
         provider.mergeCanonicalHits?.(
           new FixtureCoverageMap(duplicate),
