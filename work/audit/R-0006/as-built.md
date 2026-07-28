@@ -38,12 +38,12 @@ prose.
 
 <!-- governed-current-claims:start -->
 
-{"trace_invariants":34,"trace_test_sources":156,"trace_assertion_sites":2857,"r0006_sequencing_exception_entries":5,"r0006_sequencing_exception_commits":6,"operational_direct_rows":17,"operational_distinct_direct_value_homes":16,"operational_total_value_homes":17}
+{"trace_invariants":34,"trace_test_sources":156,"trace_assertion_sites":2869,"r0006_sequencing_exception_entries":5,"r0006_sequencing_exception_commits":6,"operational_direct_rows":17,"operational_distinct_direct_value_homes":16,"operational_total_value_homes":17}
 <!-- governed-current-claims:end -->
 
 This is an implementation as-built, not a B9 review or publication verdict. The exact
 B9 implementation subject, two convergence passes, candidate-only clone, closure
-rehearsal, candidate manifest, literal `claude-opus-5` review, review envelope,
+rehearsal, candidate manifest, OM-013 independent `gpt-5.6-sol` review, review envelope,
 published head, source PR, exact-head and exact-main CI, closure-only PR, closure merge,
 and final exact-main CI remain serial gates. No release, package publication, tag,
 GitHub Release, Pages deployment, external deployment, evidence promotion or reuse,
