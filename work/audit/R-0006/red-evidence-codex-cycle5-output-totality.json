@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0006-CODEX-CYCLE5-OUTPUT-TOTALITY-RED-EVIDENCE",
+  "round": "R-0006",
+  "date": "2026-07-28",
+  "authority": "Auditor",
+  "mandates": ["OM-012", "OM-013"],
+  "inspector_red_commit": "c1cbf28639464de6889ccdd3d37a75867e2d5f9c",
+  "focused_red": {
+    "command": "pnpm vitest run tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+    "exit_code": 1,
+    "output_sha256": "6aec9b5f9c95cb430a63be5d0c5576f98bf5b85667424a3b374b210d37e37d5d",
+    "test_files_failed": 1,
+    "tests_failed": 5,
+    "tests_passed": 1
+  },
+  "tests": [
+    {
+      "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+      "sha256": "4074b3e1e7f452e8e817c0990016c3b51bc08e3c8fb04dd48665b5385263a78d"
+    }
+  ],
+  "observations": [
+    {
+      "commit": "c1cbf28639464de6889ccdd3d37a75867e2d5f9c",
+      "command": "pnpm vitest run tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": ["tests/contract/r0006-output-totality-cycle5.red.contract.test.ts"],
+      "exercised_implementation_paths": [
+        "packages/cli/src/action-output.ts",
+        "packages/cli/src/authority/index.ts",
+        "packages/cli/src/bin.ts",
+        "packages/cli/src/command-router.ts"
+      ],
+      "failure_summary": "Five of six complete-class adversaries fail: noncanonical handler status contradicts the structured error exit; bare --json loses domain meaning; 59-kind sense-run routing is incomplete across both machine spellings; parameterized sensor and list results bypass the public action envelope; and a non-allowlisted pre-dispatch ENOENT escapes as a raw Node stack. The retained-action route census is already structurally complete."
+    }
+  ],
+  "observed_failure_classes": [
+    "canonical process status and structured error exit equality across all 13 known noncanonical producers",
+    "human and machine REVIEW semantic equivalence",
+    "bare --json consumption across the complete retained public surface",
+    "both machine spellings across all 59 registered sensor kinds and the list path",
+    "machine-aware normalization of non-allowlisted pre-dispatch exceptions"
+  ],
+  "prospective_implementation_paths": [
+    "packages/cli/src/action-output.ts",
+    "packages/cli/src/authority/index.ts",
+    "packages/cli/src/bin.ts",
+    "packages/cli/src/command-router.ts"
+  ],
+  "repair_boundary": "Repair the complete reported output-boundary population without weakening the closed action-result schema, authority fail-closed behavior, human presentation, sensor registry census, role purity, review-topic completeness, or predecessor immutability.",
+  "standing": "historical red evidence only; no candidate, review, publication, or closure standing"
+}
