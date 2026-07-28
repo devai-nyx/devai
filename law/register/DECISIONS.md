@@ -3429,26 +3429,25 @@ Pages deployment, external deployment, evidence reuse or promotion, real-stynx
 mutation, predecessor mutation, or R-0007+ work.
 
 ### DII-223 — Accept R-0006 for the governed source-close ceremony
-`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 source close; DII-207–224; OM-002; R-0006-AUTHORIZATION; R-0006-PLAN; R-0006-AS-BUILT at Auditor 1da53310b202b46ee54e0b1e5f4df9ab0012fefb; R-0006-COVERAGE-DEPTH-EVIDENCE; sequencing binding 5fb17269fe3b17cf4d0de9733b6fd3b1146106d9`
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 source close; DII-207–225; OM-002; R-0006-AUTHORIZATION; R-0006-PLAN; R-0006-AS-BUILT at Auditor 0b0be11c0cdd833add8bc5b7756f730bcda85a75; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-3-FAILURE`
 
 R-0006's semantic implementation subject is exact Inspector commit
-`ce61864e29c1a04b57dd37ae482f7c42aa08a6b0`. Architect
-`f677cd83db9d1dffdc4dc6cd301cef6c27778b3b` is its deterministic trace and close
-projection, Architect `5fb17269fe3b17cf4d0de9733b6fd3b1146106d9` binds the final
-Engineer implementation to its exact law and red source, and Auditor
-`1da53310b202b46ee54e0b1e5f4df9ab0012fefb` binds the final pre-review as-built.
+`a7814b4384c20dbbe33c830649a52f94ae5e36c5`. Architect
+`694bc725f869947c443def37e7eebad22ab83442` is its deterministic trace projection,
+and Auditor `0b0be11c0cdd833add8bc5b7756f730bcda85a75` binds the final pre-review
+as-built.
 The action surface remains 147 runnable identities, 38 folded identities, and one
 tombstone. The operational-value extraction remains 24 rows. Mutation-strength and
 evidence-aggregation decisions remain independent.
 
-The exact-hit complete-denominator coverage reading is statements 71.33%
-(15,975/22,393), branches 60.12% (11,654/19,382), functions 80.34%
-(2,469/3,073), and lines 72.78% (14,835/20,383), above the unchanged
+The collision-free exact-hit complete-denominator coverage reading is statements 71.86%
+(16,093/22,393), branches 60.14% (11,658/19,382), functions 80.67%
+(2,479/3,073), and lines 73.27% (14,936/20,383), above the unchanged
 70/60/70/70 floors. All 378 eligible source files remain measured under the unchanged
-four exclusions. The ordinary suite passes 153 files, 1,443 tests, and eight declared
-skips. The trace projection binds 34 invariants, 153 test sources, and 2,742 assertion
-sites. The second Opus FAIL, containment correction, and honest interim coverage red
-remain immutable evidence; none is relabelled PASS.
+four exclusions. The ordinary suite passes 155 files, 1,455 tests, and eight declared
+skips. The trace projection binds 34 invariants, 155 test sources, and 2,778 lexical
+assertion sites. All three B9 Opus FAILs and both honest interim coverage reds remain
+immutable evidence; none is relabelled PASS.
 
 The governed-sequencing policy contains three R-0006 historical exception entries
 covering exactly four immutable implementation commits. The separate role-path policy
@@ -3461,9 +3460,9 @@ controls. The complete source candidate must converge twice, rehearse the source
 closure ancestry in isolation, generate a fresh candidate-only manifest, and receive a
 fresh read-only PASS through the literal `claude-opus-5` selector. Any finding returns
 to its owning role and invalidates all candidate state. After PASS, only the exact
-Auditor review record and its mechanically permitted deterministic projection
-consequences may form the review envelope. The resulting published head must converge
-twice again before push.
+Auditor review record may form the review envelope; current policy admits no
+deterministic projection consequence. The resulting published head must converge twice
+again before push.
 
 The source PR may merge only after every required exact-head check passes. Its exact
 merge must then pass exact-main CI. Only from that merged source may the production
@@ -3513,6 +3512,59 @@ denominator change, broad ignored-path waiver, retained PASS, source publication
 fresh convergence and literal `claude-opus-5` PASS, closure before source merge and
 exact-main CI, package publication, tag, GitHub Release, Pages or other deployment,
 evidence reuse or promotion, real-stynx mutation, predecessor mutation, or R-0007+ work.
+
+### DII-225 — Correct branch exact-hit measurement and reaccept R-0006
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 third B9 Opus correction; DII-222–224; R-0006-INDEPENDENT-OPUS-B9-REVIEW-3-FAILURE at candidate 3c6c2d3bdde6bc6d505a6a29fb92d120a36c0050; Inspector f93d8f6508706b3bbb9c9bd423581512626bf88f; Auditor 2ee11660d0dd17ce01ddf540dd38888ca2267160; Inspector 2087572909813282086a48a823017e3ed74f39cf; Auditor 05d883ea30f5624cd94dbabcdc492ccebf3b8bad; Inspector a7814b4384c20dbbe33c830649a52f94ae5e36c5; Architect 694bc725f869947c443def37e7eebad22ab83442; Auditor 0b0be11c0cdd833add8bc5b7756f730bcda85a75`
+
+The third literal `claude-opus-5` B9 review returned FAIL with one P0, three P1,
+nine P2, and four P3 findings. That verdict remains exact historical evidence and
+invalidates candidate `3c6c2d3bdde6bc6d505a6a29fb92d120a36c0050`, its convergence,
+rehearsal, manifest, and every publication claim. The earlier E0–E5 PASS remains in a
+separate immutable Auditor record rather than occupying the final policy review-record
+slot.
+
+An incomplete Istanbul branch location is not a merge identity. Empty or partially
+specified branch positions must never collapse into a shared key, inherit a foreign
+hit, or otherwise contribute inferred coverage. Complete integer locations remain the
+only exact-hit identity for statements, functions, and branches. The live Istanbul
+coverage object may be updated exactly once; it must not be additively re-added to the
+map after in-place mutation. Raw subprocess inputs and the statement-level artifact
+remain retained run evidence, but their runtime-variable bytes are not a stable
+cross-run identity. Retention, exact counters, repeat merging, degenerate branches,
+every return-path filter, and malformed-input failure are behaviorally exercised.
+
+Inspector `f93d8f6508706b3bbb9c9bd423581512626bf88f` preserves four exact reds.
+Auditor `2ee11660d0dd17ce01ddf540dd38888ca2267160` binds that observation, and Inspector
+`2087572909813282086a48a823017e3ed74f39cf` makes it green within the existing
+Inspector-owned provider path. The first honest corrected complete-denominator run
+then failed only branches at 59.62% (11,557/19,382), 73 hits below the unchanged floor;
+Auditor `05d883ea30f5624cd94dbabcdc492ccebf3b8bad` preserves that red. Inspector
+`a7814b4384c20dbbe33c830649a52f94ae5e36c5` adds ten behavior-bearing workflow-parser
+and runtime-probe-data tests. The resulting reading is statements 71.86%
+(16,093/22,393), branches 60.14% (11,658/19,382), functions 80.67%
+(2,479/3,073), and lines 73.27% (14,936/20,383) across the unchanged 378-file
+denominator, four exclusions, and 70/60/70/70 floors. The ordinary suite passes 155
+files and 1,455 tests with eight declared skips; Architect
+`694bc725f869947c443def37e7eebad22ab83442` binds 34 invariants, 155 test sources,
+and 2,778 lexical assertion sites; Auditor
+`0b0be11c0cdd833add8bc5b7756f730bcda85a75` binds the current as-built and stable
+coverage-summary digest.
+
+The remaining P2 and P3 observations stay visible as bounded nonblocking observations;
+they are not restated as implemented controls or readiness claims. Candidate-file
+boundary whitespace is preserved, the final review envelope admits only the exact
+Auditor review record and no deterministic projection, and malformed subprocess
+evidence fails closed. DII-223's acceptance is refreshed only for a new complete B9
+ceremony: fresh two-pass convergence, isolated source/closure rehearsal,
+candidate-only manifest, and literal `claude-opus-5` review. Any fresh finding returns
+to its owning role and invalidates all candidate state.
+
+This decision authorizes no threshold, exclusion, denominator, source-set, generated
+classification, skip, or assertion-mechanism weakening; no reuse of the failed
+candidate; no source publication before fresh review PASS; no closure before source
+merge and exact-main CI; no package publication, tag, GitHub Release, Pages or other
+deployment, evidence reuse or promotion, real-stynx mutation, predecessor mutation,
+or R-0007+ work.
 
 ## Appendix — Register-consistency guard
 
