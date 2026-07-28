@@ -3844,6 +3844,35 @@ request, remote exact-head CI, merge, exact-main CI, PC-0007, closure, package
 publication, tag, GitHub Release, Pages or other deployment, evidence promotion,
 real-stynx mutation, predecessor mutation, or R-0007+ work.
 
+### DII-232 — Bind cycle-1 failure classes into the cycle-2 review census
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 cycle-1 finding-retention correction; OM-011; DII-229–231; Inspector 1771b0b; Auditor 2591fe9`
+
+OM-011 requires the one permitted cycle-2 review to recheck every mandatory topic and
+every defect class found by cycle 1. The canonical review-scope policy nevertheless
+listed only independent-review failure records 1 through 4. Consequently, the fresh
+208-topic scope generated at Architect `66020a3414212104354d4dcb805161981e3cd96c`
+omitted the two P1/P2 classes preserved by cycle-1 failure record 5 even though the
+policy declared prior findings mandatory.
+
+Inspector `1771b0b` preserves the exact red contract: the canonical policy must include
+failure record 5, and that record must expose both findings through the governed
+machine-readable heading form. Auditor `2591fe9` changes only those two heading levels;
+the preserved FAIL verdict, topic dispositions, evidence, and review-cycle accounting
+remain unchanged. This decision adds failure record 5 to the canonical prior-review
+population. The executing Engineer must regenerate the committed machine mirror from
+this source before any fresh candidate machinery may pass.
+
+Cycle 2 has not begun. It may begin only after a fresh committed head passes the full
+floor, smart convergence, isolated rehearsal, candidate-manifest generation, and a
+complete review-scope census that includes both cycle-1 finding classes. A cycle-2 FAIL
+or BLOCKED result stops and escalates to the Owner; no cycle 3 is authorized.
+
+This decision does not claim green materialization, convergence, rehearsal, candidate
+identity, review-scope generation, cycle-2 PASS, publication, merge, PC-0007, closure,
+release, deployment, evidence promotion, real-stynx mutation, predecessor mutation, or
+R-0007+ work. DII-231 remains the closing decision unless a later Architect decision
+reaccepts the final corrected candidate.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
