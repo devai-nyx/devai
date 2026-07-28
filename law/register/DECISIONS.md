@@ -4128,6 +4128,39 @@ This decision claims no fresh candidate yet, review PASS, publication, remote CI
 PC-0007, closure, release, package publication, tag, GitHub Release, Pages deployment,
 evidence promotion, predecessor mutation, or R-0007+ authority.
 
+### DII-239 — Reaccept R-0006 after clean-runner portability repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 remote-CI repair; OM-012; source PR #12 run 30391126864; Auditor 4228116; Inspector 3887da0`
+
+Source PR #12 failed Stage 2 at exact source head
+`3bd2faec178ef1d37d9ae37973dc0b2971658f5d`. Auditor
+`42281167e3932edf5e1926e36e906e552cb3cc90` preserves the exact failed run: two
+fixture-only `git commit-tree` calls relied on ambient Git identity, while a freshness
+fixture inherited remote-CI indicators in a test intended to exercise locally trusted
+cache behavior. Stage 1, changeset classification, governed repository enforcement,
+and fail-closed evidence mode passed; Stage 3 and round gates correctly did not run.
+
+Inspector `3887da00ff3ebc42e026f3a4284ce580e546413d` repairs the complete test-fixture
+population. Every raw `commit-tree` call now supplies fixture-local identity, and the
+smart-convergence subprocess helper removes inherited `CI` and `GITHUB_ACTIONS`
+indicators unless a test explicitly supplies them. With global Git identity disabled
+and both remote indicators present in the parent environment, the two affected files
+pass all 58 tests. The ordinary full floor remains 156 files with 1,483 tests passing
+and eight governed skips. This decision regenerates `law/trace.json` from the repaired
+Inspector sources; the population remains 34 invariants, 156 test sources, and 2,857
+lexical assertion sites.
+
+The remote failure invalidates cycle-4 candidate
+`ccf1907c42267108192bc69122708cf48cf6d378`, its PASS record, review envelope,
+published head, and all publication or closure standing. DII-239 replaces DII-238 as
+the Architect closing decision for production PC-0007; DII-207 remains the
+declaration. A fresh exact candidate must pass the complete local controls and a fresh
+literal `claude-opus-5` exhaustive review under OM-012 before source publication may
+resume.
+
+This decision claims no fresh candidate, review PASS, publication, merge, exact-main
+CI, PC-0007, closure, release, package publication, tag, GitHub Release, Pages
+deployment, evidence promotion, predecessor mutation, or R-0007+ authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

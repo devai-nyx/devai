@@ -3053,7 +3053,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 72,
-      "assertion_digest_sha256": "1bddad765a395d24a36b49d80c2e44c9d3130176c62e5143439e52840e039f9c"
+      "assertion_digest_sha256": "43860ec7108e9eb12464bec434f6b92a2b102d7a07da635f457964f5d41c383c"
     },
     {
       "path": "tests/contract/r0006-output-contracts.adversarial.contract.test.ts",
@@ -3092,7 +3092,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 71,
-      "assertion_digest_sha256": "8bb07119c27b6ebd1a9a48bbabda6ce10b6118ce8021e31aace38ee846ffa08c"
+      "assertion_digest_sha256": "646e9f3ebbf0168adf052a752ae2c010956b0161a70dad78fac7a7344f44030f"
     },
     {
       "path": "tests/e2e/bare-domain-help.e2e.test.ts",

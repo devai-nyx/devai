@@ -128,7 +128,7 @@ confirm every count and reading before cycle 2.
 The behavior implementation subject above does not include later Auditor evidence or
 Architect projection and close documents. The exact formal `implementation_subject`
 and `review_candidate` must be derived from the committed clean head containing this
-handoff, DII-233, and every final closing audit artifact. Its
+handoff, DII-239, and every final closing audit artifact. Its
 candidate-only manifest must derive the exact base, tree, governed range, identity
 population, role/path map, gate outcomes, convergence passes, and rehearsal from that
 head; no earlier candidate state may be reused.
@@ -153,12 +153,13 @@ The source merge must then pass exact-main CI before the production phase-close 
 append PC-0007 on a closure-only branch derived from that merge.
 
 PC-0007 is the only permitted file in the closure-only PR. It uses DII-207 as the
-declaration and DII-238 as the closing decision, binds the exact source merge rather
+declaration and DII-239 as the closing decision, binds the exact source merge rather
 than the later closure commit, and records `none-needed` release disposition. DII-235
 was invalidated by the cycle-3 review FAIL; DII-236 governs its complete-class repair;
 DII-237 reaccepted the repaired machinery before the cycle-3 finding-heading
-normalization; DII-238 reaccepts the resulting exhaustive-census candidate. The closure-only head,
-closure merge, and final main must each pass their required exact-SHA checks. A
+normalization; DII-238 reaccepted the resulting exhaustive-census candidate; DII-239
+reaccepts the clean-runner portability repair after the cycle-4 source PR CI failure.
+The closure-only head, closure merge, and final main must each pass their required exact-SHA checks. A
 rehearsal PC has no standing and must never be published.
 
 No step authorizes package publication, tag, GitHub Release, Pages or external
