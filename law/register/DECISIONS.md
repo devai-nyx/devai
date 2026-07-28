@@ -4265,6 +4265,55 @@ This decision claims no fresh candidate yet, review PASS, publication, merge,
 exact-main CI, PC-0007, closure, release, package publication, tag, GitHub Release,
 Pages deployment, evidence promotion, predecessor mutation, or R-0007+ authority.
 
+### DII-243 — Close the cycle-5 public output-totality gaps
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 Codex cycle-5 complete-class correction; OM-012; OM-013; DII-215; DII-242; R-0006-INDEPENDENT-CODEX-B9-REVIEW-5-FAILURE; Inspector c1cbf28639464de6889ccdd3d37a75867e2d5f9c; Auditor aeb72277213c4cb4d2b38378388731e131ab07d8`
+
+The independent Codex cycle-5 review rejects candidate
+`57a736a7db4a54e62a489fdeb647c462e855c17c` on three complete P1 classes. The public
+machine-output boundary does not consume bare `--json` on the retained surface,
+parameterized `sense run` bypasses its public action identity and authority projection,
+and noncanonical handler exits or pre-dispatch exceptions can make the process status
+contradict the action-result envelope or escape it entirely. Inspector
+`c1cbf28639464de6889ccdd3d37a75867e2d5f9c` exposes all three populations; Auditor
+`aeb72277213c4cb4d2b38378388731e131ab07d8` preserves the literal five-failure result
+and its exact four-path semantic scope.
+
+DII-215's one-envelope rule applies to the whole public invocation, including
+initialization, authority, routing, and handler dispatch. Both `--json` and `--format
+json` select the same machine mode and are consumed before the retained handler sees
+them. A machine invocation emits exactly one action-result envelope bound to the
+canonical public action identity; no internal folded identity, raw SensorReading,
+router prose, CAC diagnostic, exception message, or stack may bypass that boundary.
+Every error envelope's `error.exit` is the operating-system process status. A legacy
+domain or strict exit outside the closed 2–7 transport range maps to contract exit 7,
+but its human-mode domain result remains represented truthfully in the structured
+error rather than being replaced by fabricated transport prose.
+
+Every one of the 59 registered `sense run <kind>` forms is a read-only projection of
+the single public `sense run` action when no write or publication consent is present.
+The public parent authority scope may execute the exact registered internal sensor
+emitter without reminting the child as a public action. Both machine spellings and
+`sense run --list` use the same parent action-result envelope. The registry census,
+sensor result semantics, and fail-closed authority boundary remain unchanged.
+
+The Engineer repair is limited to `packages/cli/src/action-output.ts`,
+`packages/cli/src/authority/index.ts`, `packages/cli/src/bin.ts`, and
+`packages/cli/src/command-router.ts`. It must make the exact Inspector red green,
+retain human presentation, and pass the full ordinary floor. A later Architect commit
+must bind the Engineer commit to this decision, the prior Inspector red, and the
+durable Auditor artifact before R-0006 may be reaccepted.
+
+DII-243 replaces DII-242 as the Architect closing decision for production PC-0007;
+DII-207 remains the declaration. Candidate `57a736a…`, its convergence, rehearsal,
+manifests, and review have no standing. Only complete role-pure repair, audit,
+sequencing binding, and a fresh exhaustive OM-013 Codex PASS can restore publication
+eligibility.
+
+This decision claims no green repair, fresh candidate, review PASS, publication,
+merge, exact-main CI, PC-0007, closure, release, package publication, tag, GitHub
+Release, Pages deployment, evidence promotion, predecessor mutation, or R-0007+
+authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

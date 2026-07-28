@@ -597,6 +597,11 @@
           "target_type": "test"
         },
         {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "e2e",
           "path": "tests/e2e/bare-domain-help.e2e.test.ts",
           "target_type": "test"
@@ -1115,6 +1120,11 @@
           "suite": "contract",
           "path": "tests/contract/r0006-output-contracts.red.contract.test.ts",
           "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+          "target_type": "test"
         }
       ]
     },
@@ -1303,6 +1313,11 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
           "target_type": "test"
         }
@@ -1479,6 +1494,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/r0006-output-contracts.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -3080,6 +3100,19 @@
       "lifecycle": "supported",
       "assertion_count": 22,
       "assertion_digest_sha256": "82c54a5796f82ab0b49f05196500823ed5c9b9eb7b254953b88390c7331fce47"
+    },
+    {
+      "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 21,
+      "assertion_digest_sha256": "f311695448071f686deedbd4c12de150117323bea286a2cc06991084b640946b"
     },
     {
       "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
