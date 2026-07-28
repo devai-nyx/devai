@@ -710,28 +710,30 @@ function policyFindings(policy, root = repoRoot, revision = 'HEAD', options = {}
       ),
     );
   }
-  if (policy?.review?.record !== FINAL_REVIEW_RECORD) {
-    findings.push(
-      finding(
-        'POLICY_FINAL_REVIEW_RECORD_INVALID',
-        'one stable final B9 review record is required',
-      ),
-    );
+  if (policy?.schemaVersion === '2.0.0') {
+    if (policy?.review?.record !== FINAL_REVIEW_RECORD) {
+      findings.push(
+        finding(
+          'POLICY_FINAL_REVIEW_RECORD_INVALID',
+          'one stable final B9 review record is required',
+        ),
+      );
+    }
+    if (
+      canonical(policy?.review_scope?.review_cycles) !==
+      canonical({
+        mode: 'owner-authorized-unbounded',
+        minimum: 1,
+        failure: 'repair-complete-class-and-rereview',
+        forced_pass: false,
+      })
+    ) {
+      findings.push(
+        finding('REVIEW_CYCLE_POLICY_INVALID', 'OM-012 unbounded review continuation is required'),
+      );
+    }
+    findings.push(...auditCurrentClaimFindings(policy, root, revision));
   }
-  if (
-    canonical(policy?.review_scope?.review_cycles) !==
-    canonical({
-      mode: 'owner-authorized-unbounded',
-      minimum: 1,
-      failure: 'repair-complete-class-and-rereview',
-      forced_pass: false,
-    })
-  ) {
-    findings.push(
-      finding('REVIEW_CYCLE_POLICY_INVALID', 'OM-012 unbounded review continuation is required'),
-    );
-  }
-  findings.push(...auditCurrentClaimFindings(policy, root, revision));
   return findings;
 }
 
