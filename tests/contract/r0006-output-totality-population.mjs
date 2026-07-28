@@ -1,5 +1,6 @@
 // Inspector executable: full behavioral population gate for the R-0006 cycle-5 repair.
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import {
   copyFileSync,
   cpSync,
@@ -135,6 +136,52 @@ function sameSemantic(left, right) {
   return JSON.stringify(semantic(left)) === JSON.stringify(semantic(right));
 }
 
+function compactChannel(value) {
+  return {
+    bytes: Buffer.byteLength(value),
+    sha256: createHash('sha256').update(value).digest('hex'),
+  };
+}
+
+function compactResult(result) {
+  return {
+    status: result.status,
+    signal: result.signal,
+    timed_out: result.timed_out,
+    stdout: compactChannel(result.stdout),
+    stderr: compactChannel(result.stderr),
+  };
+}
+
+function compactMachineResult(result, inspection) {
+  const envelope = inspection.envelope;
+  const envelopeSummary =
+    envelope?.ok === true
+      ? {
+          action_id: envelope.action_id,
+          ok: true,
+          result: {
+            media_type: envelope.result?.media_type,
+            value_sha256: createHash('sha256')
+              .update(JSON.stringify(envelope.result?.value))
+              .digest('hex'),
+          },
+        }
+      : {
+          action_id: envelope?.action_id,
+          ok: false,
+          error: {
+            code: envelope?.error?.code,
+            class: envelope?.error?.class,
+            exit: envelope?.error?.exit,
+            message_sha256: createHash('sha256')
+              .update(String(envelope?.error?.message ?? ''))
+              .digest('hex'),
+          },
+        };
+  return { ...compactResult(result), envelope: envelopeSummary };
+}
+
 function humanMachineEquivalent(human, machine) {
   const value = machine.envelope;
   if (value?.ok === true) return human.status === 0;
@@ -200,9 +247,9 @@ function executeProducer(
     producer_id: actionId,
     action_id: actionId,
     invocation_fixture: { root, strategy: fixtureStrategy, argv: args },
-    human_result: human,
-    machine_json_result: json,
-    machine_format_json_result: format,
+    human_result: compactResult(human),
+    machine_json_result: compactMachineResult(json, jsonInspection),
+    machine_format_json_result: compactMachineResult(format, formatInspection),
     envelope_validation: {
       bare_json: jsonInspection.envelope_valid,
       format_json: formatInspection.envelope_valid,
@@ -281,10 +328,11 @@ try {
             ? 'isolated-safe-handler-or-input-failure'
             : 'authority-refusal-before-mutation',
         refusal,
+        human_argv: human.argv,
       },
-      human_result: human,
-      machine_json_result: json,
-      machine_format_json_result: format,
+      human_result: compactResult(human),
+      machine_json_result: compactMachineResult(json, jsonInspection),
+      machine_format_json_result: compactMachineResult(format, formatInspection),
       envelope_validation: {
         bare_json: jsonInspection.envelope_valid,
         format_json: formatInspection.envelope_valid,
@@ -320,10 +368,14 @@ try {
       return {
         sensor_kind: entry.kind,
         action_id: 'sense run',
-        invocation_fixture: { root, strategy: 'isolated-canonical-law-fixture' },
-        human_result: human,
-        machine_json_result: json,
-        machine_format_json_result: format,
+        invocation_fixture: {
+          root,
+          strategy: 'isolated-canonical-law-fixture',
+          human_argv: human.argv,
+        },
+        human_result: compactResult(human),
+        machine_json_result: compactMachineResult(json, jsonInspection),
+        machine_format_json_result: compactMachineResult(format, formatInspection),
         envelope_validation: {
           bare_json: jsonInspection.envelope_valid,
           format_json: formatInspection.envelope_valid,
@@ -358,10 +410,14 @@ try {
   const listRow = {
     sensor_kind: '--list',
     action_id: 'sense run',
-    invocation_fixture: { root, strategy: 'isolated-canonical-law-fixture' },
-    human_result: listHuman,
-    machine_json_result: listJson,
-    machine_format_json_result: listFormat,
+    invocation_fixture: {
+      root,
+      strategy: 'isolated-canonical-law-fixture',
+      human_argv: listHuman.argv,
+    },
+    human_result: compactResult(listHuman),
+    machine_json_result: compactMachineResult(listJson, listJsonInspection),
+    machine_format_json_result: compactMachineResult(listFormat, listFormatInspection),
     envelope_validation: {
       bare_json: listJsonInspection.envelope_valid,
       format_json: listFormatInspection.envelope_valid,
