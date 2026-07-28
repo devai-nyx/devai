@@ -13,6 +13,7 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
+import { format } from 'prettier';
 import { ACTION_REGISTRY } from '../../packages/cli/dist/generated/action-registry.js';
 import { runCliStage } from '../../packages/cli/dist/action-output.js';
 import { validators } from '../../packages/schemas/dist/index.js';
@@ -791,7 +792,7 @@ try {
 
 if (outputPath !== undefined) {
   mkdirSync(dirname(outputPath), { recursive: true });
-  writeFileSync(outputPath, `${JSON.stringify(artifact, null, 2)}\n`);
+  writeFileSync(outputPath, await format(JSON.stringify(artifact), { parser: 'json' }));
 }
 process.stdout.write(
   `${JSON.stringify({
