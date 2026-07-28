@@ -3566,6 +3566,47 @@ merge and exact-main CI; no package publication, tag, GitHub Release, Pages or o
 deployment, evidence reuse or promotion, real-stynx mutation, predecessor mutation,
 or R-0007+ work.
 
+### DII-226 — Fail closed on duplicate exact coverage locations
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 fourth B9 Opus correction; DII-222; DII-225; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE at candidate c7ab49f5fbeffae3d8f58be0137f4c8f11d356fa; Inspector 9b8b288bf83dea1342d1b7084a2253a4fd16e78a; Auditor dbb1ea5840cb5c3cde8c0e503c199008f7ff5441`
+
+The fourth literal `claude-opus-5` B9 review returned FAIL with zero P0, one P1, one
+actionable P2, and two actionable P3 findings. That verdict remains exact historical
+evidence and invalidates candidate `c7ab49f5fbeffae3d8f58be0137f4c8f11d356fa`, its
+convergence, rehearsal, manifest, and every publication claim. The reviewer independently
+measured zero complete-location collisions across the current 378-file statement,
+function, and branch population, so the current numerator is not retroactively relabelled
+inflated.
+
+Exact-location merging nevertheless must not rely on last-wins map insertion. Within
+each coverage kind, every complete location is a unique identity in both the parent map
+and the subprocess map. Two statement entries, two function entries, or two branch arms
+with the same complete start and end location in one map are malformed evidence and must
+fail before any counter is mutated. Cross-kind location reuse remains valid because a
+statement, function, and branch may legitimately begin and end at the same positions.
+Empty or incomplete locations remain conservatively excluded from merge identity and do
+not collide.
+
+Repeat invocation is cumulative, not idempotent: each supplied subprocess observation
+is added exactly once to the then-current parent counter. For a parent count of two and
+a subprocess count of three, two invocations produce eight. It must produce neither the
+self-doubled legacy result nor five through accidental deduplication. Inspector
+`9b8b288bf83dea1342d1b7084a2253a4fd16e78a` executes that repeat behavior and preserves
+the duplicate-location failure; Auditor `dbb1ea5840cb5c3cde8c0e503c199008f7ff5441`
+binds the red.
+
+The Auditor must separately sweep every current coverage value in the as-built, remove
+unbounded runtime-variable artifact digests, and bind invalidated intermediate readings
+to their exact historical evidence rather than the current table. The repair does not
+change the unchanged 378-file denominator, four exclusions, 70/60/70/70 floors, source
+set, generated classification, skips, or assertion mechanism. B9 must restart at a fresh
+candidate with new convergence, rehearsal, manifest, and literal-model review evidence.
+
+This decision authorizes no inferred numerator, broad collision waiver, evidence-value
+rewrite outside the exact Auditor sweep, source publication before fresh review PASS,
+closure before source merge and exact-main CI, package publication, tag, GitHub Release,
+Pages or other deployment, evidence reuse or promotion, real-stynx mutation,
+predecessor mutation, or R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
