@@ -168,6 +168,59 @@ describe('R-0006 coverage measurement integrity', () => {
     expect(current.data().f.outer).toBe(5);
   });
 
+  it('adds each repeated subprocess observation exactly once', async () => {
+    const provider = (await import('../config/subprocess-v8-coverage-provider.js')) as unknown as {
+      mergeCanonicalHits?: (current: FixtureCoverageMap, subprocess: FixtureCoverageMap) => void;
+    };
+    const current = new FixtureCoverageMap(fixtureCoverage(2, 0));
+    const subprocess = new FixtureCoverageMap(fixtureCoverage(3, 0));
+
+    provider.mergeCanonicalHits?.(current, subprocess);
+    provider.mergeCanonicalHits?.(current, subprocess);
+
+    expect(current.data().s.outer).toBe(8);
+    expect(current.data().f.outer).toBe(8);
+  });
+
+  it('fails closed on duplicate complete locations in either coverage map', async () => {
+    const provider = (await import('../config/subprocess-v8-coverage-provider.js')) as unknown as {
+      mergeCanonicalHits?: (current: FixtureCoverageMap, subprocess: FixtureCoverageMap) => void;
+    };
+    const duplicateStatement = {
+      ...fixtureCoverage(0, 0),
+      statementMap: { first: outer, second: outer },
+      s: { first: 1, second: 2 },
+    };
+    const duplicateFunction = {
+      ...fixtureCoverage(0, 0),
+      fnMap: {
+        first: { decl: outer, loc: outer },
+        second: { decl: outer, loc: outer },
+      },
+      f: { first: 1, second: 2 },
+    };
+    const duplicateBranch = {
+      ...fixtureCoverage(0, 0),
+      branchMap: { duplicate: { locations: [outer, outer] } },
+      b: { duplicate: [1, 2] },
+    };
+
+    for (const duplicate of [duplicateStatement, duplicateFunction, duplicateBranch]) {
+      expect(() =>
+        provider.mergeCanonicalHits?.(
+          new FixtureCoverageMap(fixtureCoverage(0, 0)),
+          new FixtureCoverageMap(duplicate),
+        ),
+      ).toThrow(/duplicate exact .* location/u);
+      expect(() =>
+        provider.mergeCanonicalHits?.(
+          new FixtureCoverageMap(duplicate),
+          new FixtureCoverageMap(fixtureCoverage(0, 0)),
+        ),
+      ).toThrow(/duplicate exact .* location/u);
+    }
+  });
+
   it('configures an auditable statement-level coverage artifact', async () => {
     const config = (await import('../config/t1-t3.coverage.config.js')).default as {
       test?: { coverage?: { reporter?: string[] } };

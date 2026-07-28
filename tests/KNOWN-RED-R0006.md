@@ -309,3 +309,29 @@ passing, and eight declared skips. Its exact reading is statements 71.86%
 `c4d75618fbc39602b4b01e9059e74249cf1e78a862f7176f770511ea177aa17b`.
 The 191 raw subprocess inputs and the statement-level artifact remain retained runtime
 evidence; their per-run filenames and bytes are not represented as stable identities.
+
+## Fourth B9 Opus repeat-merge and collision-guard red
+
+Literal-model review of exact candidate
+`c7ab49f5fbeffae3d8f58be0137f4c8f11d356fa` failed with one P1, one actionable P2,
+and two actionable P3 findings. The existing exact-counter adversary executed one merge
+only, and the provider silently overwrote a prior hit if two same-kind entries carried
+the same complete location. The reviewer independently measured zero such collisions in
+the current 378-file artifact, so this is a prospective fail-closed integrity gap rather
+than evidence that the current numerator is inflated.
+
+The Inspector extends the exact focused command:
+
+```text
+pnpm vitest run tests/contract/r0006-coverage-integrity.red.contract.test.ts
+```
+
+Before repair, the new repeat-merge adversary is green and proves cumulative counters
+`2 + 3 + 3 = 8`, distinguishing the intended behavior from both self-doubling and
+accidental idempotence. The focused run collects one file, passes six tests, and fails
+the duplicate-location adversary because statements, functions, and branch arms in
+either the parent or subprocess map are silently accepted instead of failing closed.
+This red binds only the focused Inspector contract and
+`tests/config/subprocess-v8-coverage-provider.ts`. It authorizes no numerator inference,
+threshold, exclusion, denominator, source-population, generated-label, skip, assertion,
+publication, closure, release, predecessor, real-stynx, or R-0007+ change.
