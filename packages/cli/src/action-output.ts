@@ -133,7 +133,7 @@ export function emitPreDispatchActionResult(
       result.exit,
     ),
   );
-  process.exitCode = result.exit === 0 ? 7 : result.exit;
+  process.exitCode = result.exit === 0 ? 7 : normalizeExit(result.exit);
   return true;
 }
 
@@ -154,12 +154,16 @@ function restoreAndEmit(
     process.exitCode = 0;
     return;
   }
-  const effectiveExit = exit === 0 ? 7 : exit;
+  const effectiveExit = exit === 0 ? 7 : normalizeExit(exit);
   originalStderr.call(
     process.stderr,
     renderActionFailure(
       entry,
-      stderr.length > 0 ? stderr : 'successful action emitted unexpected stderr',
+      stderr.length > 0
+        ? stderr
+        : stdout.length > 0
+          ? stdout
+          : 'action failed without a diagnostic',
       effectiveExit,
     ),
   );
@@ -170,8 +174,9 @@ export function attachActionOutputBoundaries(
   commands: readonly Command[],
   entries: readonly RegistryEntry[],
 ): void {
-  for (const entry of entries) {
-    const command = commands.find((candidate) => candidate.name === entry.internal_name);
+  const entry = publicActionForArgv(process.argv, entries);
+  if (entry === undefined) return;
+  for (const command of commands) {
     const original = command?.commandAction;
     if (!command || !original) continue;
     command.commandAction = function actionOutputBoundary(...args: unknown[]) {

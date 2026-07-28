@@ -412,31 +412,12 @@ verifyTranslation.register(cli);
 
 attachRuntimeContracts(cli.commands);
 const registry = getFullRegistry();
-validateActionSurface(registry);
-validateLiveAuthorityActionRegistry(registry);
-attachAuthorityCommandBoundaries(cli.commands, registry);
-attachActionOutputBoundaries(cli.commands, registry);
-const authorityResult = authorizeCliArgv(
-  process.argv,
-  registry,
-  (skillId) => getSkill(skillId)?.manifest.authority_role,
-);
 const machineAction = publicActionForArgv(process.argv, registry);
-if (authorityResult !== undefined) {
-  if (
-    !emitPreDispatchActionResult(machineAction, {
-      exit: authorityResult.exit_code,
-      stdout: authorityResult.stdout,
-      stderr: authorityResult.stderr,
-    })
-  ) {
-    const stream = authorityResult.stdout.length > 0 ? process.stdout : process.stderr;
-    stream.write(
-      authorityResult.stdout.length > 0 ? authorityResult.stdout : authorityResult.stderr,
-    );
-    process.exitCode = authorityResult.exit_code;
-  }
-} else {
+try {
+  validateActionSurface(registry);
+  validateLiveAuthorityActionRegistry(registry);
+  attachAuthorityCommandBoundaries(cli.commands, registry);
+  attachActionOutputBoundaries(cli.commands, registry);
   const route = routeArgv(stripAuthorityArgv(process.argv), registry, pkgVersion);
   if (route.kind === 'output') {
     if (
@@ -451,27 +432,41 @@ if (authorityResult !== undefined) {
       process.exitCode = route.exitCode;
     }
   } else {
-    try {
-      cli.parse(route.argv);
-    } catch (err) {
-      // R18.C.4 (D-133/M3): cac throws CACError on missing/excess required
-      // args, which previously escaped as a raw stack trace with exit 1.
-      // Usage failures exit 2 with a one-line message, at every layer.
-      if (err instanceof Error && err.name === 'CACError') {
-        const text = `devai: ${err.message}\n`;
-        if (
-          !emitPreDispatchActionResult(machineAction, {
-            exit: 2,
-            stdout: '',
-            stderr: text,
-          })
-        ) {
-          process.stderr.write(text);
-          process.exitCode = 2;
-        }
-      } else {
-        throw err;
+    const authorityResult = authorizeCliArgv(
+      process.argv,
+      registry,
+      (skillId) => getSkill(skillId)?.manifest.authority_role,
+    );
+    if (authorityResult !== undefined) {
+      if (
+        !emitPreDispatchActionResult(machineAction, {
+          exit: authorityResult.exit_code,
+          stdout: authorityResult.stdout,
+          stderr: authorityResult.stderr,
+        })
+      ) {
+        const stream = authorityResult.stdout.length > 0 ? process.stdout : process.stderr;
+        stream.write(
+          authorityResult.stdout.length > 0 ? authorityResult.stdout : authorityResult.stderr,
+        );
+        process.exitCode = authorityResult.exit_code;
       }
+    } else {
+      cli.parse(route.argv);
+    }
+  }
+} catch (err) {
+  // R18.C.4 (D-133/M3) and DII-243: every failure before or during dispatch
+  // remains inside the selected public action's machine boundary.
+  const usage = err instanceof Error && err.name === 'CACError';
+  const exit = usage ? 2 : 6;
+  const text = `devai: ${err instanceof Error ? err.message : String(err)}\n`;
+  if (!emitPreDispatchActionResult(machineAction, { exit, stdout: '', stderr: text })) {
+    if (usage) {
+      process.stderr.write(text);
+      process.exitCode = exit;
+    } else {
+      throw err;
     }
   }
 }

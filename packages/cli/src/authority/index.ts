@@ -22,7 +22,7 @@ import {
 } from '@devai-nyx/skills/post-merge-auditor';
 import type { RegistryEntry } from '../define-command.js';
 import { validateDeclaredCapabilityConsistency } from '../command-manifest.js';
-import { invocationIsNonMutating } from '../command-router.js';
+import { invocationIsNonMutating, invocationUsesSensorInternal } from '../command-router.js';
 import { createAuthorityHostBroker } from './broker.js';
 import {
   runWithAuthorityPolicyMaterialization,
@@ -530,7 +530,12 @@ export function attachAuthorityCommandBoundaries(
       if (
         !scope ||
         !dispose ||
-        scope.action_id !== entry.name ||
+        (scope.action_id !== entry.name &&
+          !(
+            scope.action_id === 'sense run' &&
+            scope.effect === 'read' &&
+            invocationUsesSensorInternal(entry.internal_name, process.argv)
+          )) ||
         scope.effect !== (dryRun ? 'read' : entry.effects)
       ) {
         throw new Error('AUTHORITY_FINAL_BOUNDARY_REQUIRED');
