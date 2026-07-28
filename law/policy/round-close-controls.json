@@ -1,6 +1,8 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "2.0.0",
   "manifest_schema": "law/schemas/round-close-manifest.schema.json",
+  "freshness_schema": "law/schemas/task-freshness.schema.json",
+  "review_scope_schema": "law/schemas/review-scope-manifest.schema.json",
   "declaration": {
     "decision_id": "DII-207",
     "base_pattern": "exact successor base\\s+`([0-9a-f]{40})`"
@@ -84,6 +86,264 @@
       "outputs": [".devai/config/round-close-controls.json"]
     }
   ],
+  "freshness": {
+    "policy_version": "1.0.0",
+    "state_root": ".devai/state/round-runs/{round}/close/freshness",
+    "local_cache_trusted": true,
+    "remote_cache_trusted": false,
+    "remote_environment_indicators": ["CI", "GITHUB_ACTIONS"],
+    "outcomes": ["EXECUTED_PASS", "SKIPPED_FRESH", "EXECUTED_FAIL", "BLOCKED"],
+    "environment_allowlist": [
+      { "name": "CI", "mode": "value-sha256" },
+      { "name": "GITHUB_ACTIONS", "mode": "value-sha256" },
+      { "name": "NODE_ENV", "mode": "value-sha256" },
+      { "name": "DATABASE_URL", "mode": "presence" },
+      { "name": "DEVAI_TEST_DATABASE_URL", "mode": "presence" }
+    ],
+    "toolchain": [
+      { "id": "node", "argv": ["node", "--version"] },
+      { "id": "pnpm", "argv": ["pnpm", "--version"] },
+      { "id": "vitest", "argv": ["pnpm", "exec", "vitest", "--version"] },
+      { "id": "typescript", "argv": ["pnpm", "exec", "tsc", "--version"] },
+      { "id": "git", "argv": ["git", "--version"] }
+    ],
+    "input_sets": {
+      "package_graph": [
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "packages/**/package.json"
+      ],
+      "typescript": ["tsconfig*.json", "packages/**/tsconfig*.json"],
+      "vitest": ["vitest*.ts", "tests/config/**", "tests/helpers/**", "packages/**/vitest*.ts"],
+      "production": ["packages/**/*.ts", "scripts/**/*.mjs"],
+      "tests": [
+        "tests/**/*.ts",
+        "packages/**/tests/**/*.ts",
+        "packages/**/*.test.ts",
+        "packages/**/*.spec.ts"
+      ],
+      "law": ["law/policy/**", "law/schemas/**", "law/invariants/**", "law/register/DECISIONS.md"],
+      "governance": ["product/**", "work/rounds/**", "work/audit/**", "record/**", ".github/**"],
+      "formatting": ["**/*"],
+      "coverage": [
+        "packages/**/*.ts",
+        "scripts/**/*.mjs",
+        "tests/**/*.ts",
+        "packages/**/tests/**/*.ts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "vitest*.ts",
+        "tsconfig*.json",
+        "packages/**/package.json",
+        "packages/**/tsconfig*.json",
+        "law/policy/thresholds.json",
+        "law/policy/round-close-controls.json"
+      ]
+    },
+    "tasks": [
+      {
+        "id": "formatting",
+        "input_sets": ["formatting"],
+        "dependencies": [],
+        "outputs": [],
+        "graph": "complete"
+      },
+      {
+        "id": "preparation",
+        "input_sets": ["package_graph", "typescript", "production", "law"],
+        "dependencies": [],
+        "outputs": [
+          "packages/cli/dist/**",
+          "packages/schemas/dist/**",
+          "packages/*/src/generated/**"
+        ],
+        "graph": "conservative"
+      },
+      {
+        "id": "action-registry",
+        "input_sets": ["package_graph", "production", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [
+          "packages/cli/src/generated/action-registry.ts",
+          "packages/effects-check/src/generated/action-catalog.ts",
+          "packages/sensors/src/generated/action-kinds.ts"
+        ],
+        "graph": "complete"
+      },
+      {
+        "id": "trace",
+        "input_sets": ["production", "tests", "law"],
+        "dependencies": ["preparation"],
+        "outputs": ["law/trace.json"],
+        "graph": "complete"
+      },
+      {
+        "id": "repository-references",
+        "input_sets": ["formatting"],
+        "dependencies": [],
+        "outputs": ["work/rounds/R-0002/repository-reference-triage.json"],
+        "graph": "conservative"
+      },
+      {
+        "id": "materializations",
+        "input_sets": ["production", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [".devai/config/round-close-controls.json"],
+        "graph": "complete"
+      },
+      {
+        "id": "diff-check",
+        "input_sets": ["formatting"],
+        "dependencies": [],
+        "outputs": [],
+        "graph": "complete"
+      },
+      {
+        "id": "ordinary",
+        "input_sets": ["package_graph", "typescript", "vitest", "production", "tests", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "stage1",
+        "input_sets": [
+          "package_graph",
+          "typescript",
+          "vitest",
+          "production",
+          "tests",
+          "law",
+          "governance"
+        ],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "stage2",
+        "input_sets": ["package_graph", "typescript", "vitest", "production", "tests", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "t4",
+        "input_sets": ["package_graph", "typescript", "vitest", "production", "tests", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "t5",
+        "input_sets": ["package_graph", "typescript", "vitest", "production", "tests", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "t6",
+        "input_sets": ["package_graph", "typescript", "vitest", "production", "tests", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "changesets",
+        "input_sets": ["package_graph", "production", "governance"],
+        "dependencies": [],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "coverage",
+        "input_sets": ["coverage"],
+        "dependencies": ["preparation"],
+        "outputs": [
+          "scratch/coverage/t1-t3/coverage-summary.json",
+          "scratch/coverage/t1-t3/coverage-final.json",
+          "scratch/coverage/t1-t3/subprocess-v8/**"
+        ],
+        "graph": "complete",
+        "coverage_mode": "whole-only"
+      },
+      {
+        "id": "governance",
+        "input_sets": ["package_graph", "typescript", "production", "tests", "law", "governance"],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      }
+    ],
+    "unknown_dependency": "execute-broader-suite",
+    "dynamic_import_ambiguity": "execute-broader-suite",
+    "failed_or_malformed_cache": "execute",
+    "dirty_untracked_deleted_renamed_inputs": "included-in-key",
+    "coverage_reuse": "whole-identical-inputs-and-outputs-only",
+    "partial_coverage_merge": "forbidden"
+  },
+  "review_scope": {
+    "policy_version": "1.0.0",
+    "manifest_state": ".devai/state/round-runs/{round}/close/review-scope-manifest.json",
+    "candidate_manifest_state": ".devai/state/round-runs/{round}/close/candidate-manifest.json",
+    "candidate_manifest_history": ".devai/state/round-runs/{round}/close/candidate-manifests/*.json",
+    "exact_range": "declared-base-to-candidate",
+    "requirement_sources": [
+      "work/rounds/R-0006/AUTHORIZATION.md",
+      "work/rounds/R-0006/plan.md",
+      "work/rounds/R-0006/prompts/00-orchestrator.md",
+      "product/owner-mandates/OM-011.md"
+    ],
+    "controlling_sources": [
+      "work/rounds/EXECUTION-CONTRACT.md",
+      "law/policy/round-close-controls.json",
+      "law/schemas/task-freshness.schema.json",
+      "law/schemas/review-scope-manifest.schema.json",
+      "law/register/DECISIONS.md"
+    ],
+    "prior_reviews": [
+      "work/audit/R-0006/independent-opus-b9-review-failure.md",
+      "work/audit/R-0006/independent-opus-b9-review-2-failure.md",
+      "work/audit/R-0006/independent-opus-b9-review-3-failure.md",
+      "work/audit/R-0006/independent-opus-b9-review-4-failure.md"
+    ],
+    "topic_sources": [
+      "changed-path",
+      "requirement",
+      "control",
+      "previous-finding",
+      "candidate-manifest"
+    ],
+    "topic_fields": [
+      "topic_id",
+      "claim",
+      "governing_paths",
+      "current_digest",
+      "previous_digest",
+      "changed_status",
+      "required_adversaries",
+      "previous_findings",
+      "freshness_proof",
+      "required_disposition"
+    ],
+    "dispositions": ["RECHECKED_PASS", "RECHECKED_FAIL", "REUSED_FRESH_PASS", "BLOCKED"],
+    "unchanged_requires_recomputation": true,
+    "exactly_once": true,
+    "previous_findings_mandatory": true,
+    "review_record_markers": {
+      "start": "<!-- review-topic-dispositions:start -->",
+      "end": "<!-- review-topic-dispositions:end -->"
+    },
+    "review_cycles": {
+      "maximum": 2,
+      "cycle_1": "exhaustive-discovery",
+      "cycle_2": "complete-rereview",
+      "cycle_2_failure": "stop-and-owner-escalation",
+      "forced_pass": false
+    }
+  },
   "convergence": {
     "passes": 2,
     "second_pass": "no-write-clean",

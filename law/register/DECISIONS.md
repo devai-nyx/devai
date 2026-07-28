@@ -3695,6 +3695,74 @@ request, merge, exact-head or exact-main CI, PC-0007, final closure, package pub
 tag, GitHub Release, Pages or other deployment, evidence reuse or promotion,
 real-stynx mutation, predecessor mutation, or R-0007+ work.
 
+### DII-229 — Require content-addressed convergence and an exhaustive review census
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 OM-011 convergence-control correction; Owner interruption before independent-review iteration 5; DII-207; DII-208; DII-222–228`
+
+R-0006 B9 replaces all-or-nothing local re-execution with a conservative
+content-addressed task DAG. This decision narrowly supersedes DII-227 only where its
+nonclaim against evidence reuse would prohibit reuse of a byte-identical local PASS;
+DII-227's exact-location aggregation, collision, denominator, exclusion, and coverage
+semantics remain unchanged. OM-010 remains active except for the same OM-011-bounded
+local execution-result reuse.
+
+Each task key binds the freshness-policy version, task ID, exact argv and repository-
+relative cwd, its complete configured input population from the live worktree including
+dirty, untracked, deleted, and renamed states, dependency task keys, required output
+paths and digests, package manifests and lockfile, TypeScript and Vitest configuration,
+setup/helpers/generators, controlling law/policy/schema inputs, toolchain versions, and
+an allowlisted environment fingerprint. Values of secret-bearing environment entries
+are never emitted; the policy admits presence or a one-way digest only. Runtime cache
+lives exclusively below ignored `.devai/state/` and timestamps have no standing.
+
+A task may be `SKIPPED_FRESH` only from a schema-valid prior `EXECUTED_PASS` or
+transitively valid `SKIPPED_FRESH` result with the identical task key, fresh dependency
+keys, and still-present byte-identical required outputs. Every skip records its task key,
+input digest, producing candidate, and reused result digest. All other tasks report
+`EXECUTED_PASS`, `EXECUTED_FAIL`, or `BLOCKED`. FAIL, stale, malformed, tampered,
+unknown, dynamically ambiguous, or incomplete graph state cannot skip and widens to the
+configured broader task population. Remote CI detects its untrusted context and executes
+the complete authoritative gate set without accepting local cache.
+
+The task graph is conservative: a changed test executes itself; a changed source
+executes every known transitive dependent test; shared helpers, configuration, lockfile,
+or toolchain inputs invalidate their complete dependent population; and any unresolved
+relationship selects the broader suite. The ordinary and tier tasks therefore admit
+broad input populations when exact static dependency knowledge is incomplete. This is a
+correctness boundary, not an optimization failure.
+
+Coverage is an indivisible whole-only task. Its key binds every production, test,
+provider, coverage-configuration, threshold, denominator, package, toolchain,
+environment, and policy input. Reuse additionally requires every configured retained
+artifact to exist at its recorded digest. Any such input or output change reruns complete
+coverage. Partial coverage merging is forbidden and no threshold, source set, or
+exclusion changes.
+
+Before review, workspace tooling generates a deterministic review-scope manifest from
+the exact declared-base-to-candidate changed-path population, the configured R-0006
+requirement sources, controlling law/policy, all four prior B9 review failures, and the
+current plus retained previous candidate manifests. Every topic has exactly one stable
+topic ID and the required claim, governing paths, current and previous digests, changed
+status, required adversaries, previous findings, freshness proof, and required
+disposition. Previous finding classes remain topics after repair.
+
+The review record is invalid unless the manifest topic population and record
+dispositions are a bijection. Each topic receives exactly one `RECHECKED_PASS`,
+`RECHECKED_FAIL`, `REUSED_FRESH_PASS`, or `BLOCKED`; omission and duplication fail.
+Unchanged does not permit omission. `REUSED_FRESH_PASS` requires the reviewer to
+independently recompute the topic digest, inspect the freshness proof, and explain why
+the invariant still holds in the current candidate.
+
+The first review cycle is exhaustive discovery and continues after finding a blocker so
+all findings and same-class populations are returned together. Repairs cover the whole
+defect classes in role-pure batches. The second cycle is one complete re-review. A
+cycle-2 failure stops and escalates with a process/root-cause report; no third automatic
+cycle begins. The two-cycle budget never forces PASS.
+
+This decision does not itself claim that the task DAG, cache, review census, schemas,
+tests, audit, smart convergence, review candidate, review PASS, publication, remote CI,
+merge, PC-0007, closure, or release exists or passes. Review iteration 5 remains blocked
+until the complete OM-011 correction is committed and green.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
