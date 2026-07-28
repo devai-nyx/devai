@@ -3763,6 +3763,40 @@ tests, audit, smart convergence, review candidate, review PASS, publication, rem
 merge, PC-0007, closure, or release exists or passes. Review iteration 5 remains blocked
 until the complete OM-011 correction is committed and green.
 
+### DII-230 — Disclose the immutable OM-011 exact-scope sequencing defect
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 OM-011 smart-convergence failure at candidate a81969865cf237e5a13c351de828dec066f5b065; DII-229; Inspector 0215430f21649fb81650df312cbddef9e1e92b4c; Engineer ec68086260b0f9d5e13656c05504681ab253d1a7; Auditor 8748242782fb265359ea28cec4e640741f700a90`
+
+The first authoritative OM-011 smart-convergence pass executed fifteen tasks green,
+including whole coverage, then failed closed at `ci:governance`. The exact sequencing
+finding was that substantive Engineer commit
+`ec68086260b0f9d5e13656c05504681ab253d1a7` had zero admitted bindings.
+
+That commit followed DII-229 and the prior 16-case Inspector red
+`0215430f21649fb81650df312cbddef9e1e92b4c`. The red behaviorally exercises the task
+cache, package commands, schema integration, and controller, and it later passes with the
+complete suite. Its immutable source nevertheless names only `package.json` and
+`scripts/run-round-close-controls.mjs` from the Engineer commit's exact four-path
+population. It does not literally name `.devai/config/round-close-controls.json` or
+`packages/schemas/src/roster.ts`, as required by the prospective semantic-scope rule.
+
+No truthful binding can be created after implementation because the missing literal
+scope was not present in the prior Inspector source. The governed-sequencing policy
+therefore classifies only exact commit `ec68086260b0f9d5e13656c05504681ab253d1a7`
+as a historical commit exception. Auditor
+`8748242782fb265359ea28cec4e640741f700a90` preserves the exact failed gate, complete
+implementation paths, coverage reading, and missing-literal population. History is not
+rewritten, the real defect remains visible, and this classification grants no
+prospective exception to any later Engineer commit.
+
+The failed smart-convergence state remains invalid and must be rerun at a fresh head.
+All content-addressed key, output-digest, remote-cache, whole-coverage, review-census,
+two-cycle, exact-candidate, candidate-only clone, review-freeze, publication, and remote
+CI gates remain unchanged.
+
+This decision does not claim a green smart convergence, rehearsal, candidate or review-
+scope manifest, ready-to-review SHA, independent review, PASS, publication, merge,
+PC-0007, closure, or release. Review iteration 5 remains blocked.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

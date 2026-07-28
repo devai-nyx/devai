@@ -454,6 +454,11 @@
       "round": "R-0006",
       "implementation_commits": ["63b2238ddf22e542ba3e755108477ddd903ea137"],
       "reason": "The final B9 Opus correction followed the four-failure Inspector red, durable Auditor evidence and DII-220, but the immutable failing Inspector source literally named scripts/run-round-close-controls.mjs and not the separately corrected packages/cli/src/define-command.ts fixed-count guard. The Auditor JSON names both exact paths and the repair is tested green; this is a real sequencing defect, history is not rewritten, and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["ec68086260b0f9d5e13656c05504681ab253d1a7"],
+      "reason": "The first OM-011 smart-convergence run disclosed that the content-addressed controller implementation followed Architect DII-229 and the 16-case Inspector red 0215430, but that immutable Inspector source literally named only package.json and scripts/run-round-close-controls.mjs from the four-path Engineer commit; it omitted .devai/config/round-close-controls.json and packages/schemas/src/roster.ts under the prospective exact-scope rule. Auditor 8748242 preserves the failed governance gate and exact population. The behavior-first red and full green correction remain real; history is not rewritten and this exact-commit disclosure grants no prospective exception."
     }
   ],
   "historical_round_disclosures": [
