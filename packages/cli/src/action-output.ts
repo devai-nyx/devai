@@ -137,6 +137,48 @@ export function emitPreDispatchActionResult(
   return true;
 }
 
+export type CliExecutionStage =
+  'initialization' | 'registry-validation' | 'authorization' | 'routing' | 'handler-dispatch';
+
+export type CliStageResult<T> =
+  Readonly<{ ok: true; value: T }> | Readonly<{ ok: false; stage: CliExecutionStage }>;
+
+/**
+ * Execute one real CLI orchestration stage inside the selected public
+ * machine boundary. The explicit stage seam lets acceptance inject an
+ * ordinary non-allowlisted throw at every boundary without introducing
+ * test-only production behavior.
+ */
+export function runCliStage<T>(
+  entry: RegistryEntry | undefined,
+  stage: CliExecutionStage,
+  operation: () => T,
+): CliStageResult<T> {
+  try {
+    return { ok: true, value: operation() };
+  } catch (error) {
+    const usage = error instanceof Error && error.name === 'CACError';
+    const exit = usage ? 2 : 6;
+    const message = error instanceof Error ? error.message : String(error);
+    if (entry === undefined) {
+      if (!usage) throw error;
+      process.stderr.write(`devai: ${message}\n`);
+      process.exitCode = exit;
+      return { ok: false, stage };
+    }
+    if (
+      !emitPreDispatchActionResult(entry, {
+        exit,
+        stdout: '',
+        stderr: `devai: ${message}\n`,
+      })
+    ) {
+      throw error;
+    }
+    return { ok: false, stage };
+  }
+}
+
 function restoreAndEmit(
   entry: RegistryEntry,
   stdout: string,
