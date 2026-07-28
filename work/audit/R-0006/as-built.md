@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-211; DII-212; DII-213; DII-214; DII-215; DII-216; DII-217; DII-218; DII-219; DII-220; DII-221; DII-222; DII-223; DII-224; R-0006-ENTRY-INVENTORY; BL-026; BL-034; BL-035; BL-081; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; implementation subject ce61864e29c1a04b57dd37ae482f7c42aa08a6b0; trace projection f677cd83db9d1dffdc4dc6cd301cef6c27778b3b; sequencing binding 5fb17269fe3b17cf4d0de9733b6fd3b1146106d9,
+    DII-211; DII-212; DII-213; DII-214; DII-215; DII-216; DII-217; DII-218; DII-219; DII-220; DII-221; DII-222; DII-223; DII-224; R-0006-ENTRY-INVENTORY; BL-026; BL-034; BL-035; BL-081; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; R-0006-BRANCH-COVERAGE-INTEGRITY-RED-EVIDENCE; R-0006-HONEST-BRANCH-COVERAGE-DEPTH-RED-EVIDENCE; implementation subject a7814b4384c20dbbe33c830649a52f94ae5e36c5; trace projection 694bc725f869947c443def37e7eebad22ab83442; sequencing binding 5fb17269fe3b17cf4d0de9733b6fd3b1146106d9,
   ]
 ---
 
@@ -17,17 +17,17 @@ provenance:
 
 ## Boundary and verdict
 
-R-0006 B0 through B7 and the final B9 fixpoint correction are implemented and tested
-through exact implementation subject `ce61864e29c1a04b57dd37ae482f7c42aa08a6b0`;
-its caused trace and close projection is exact Architect commit
-`f677cd83db9d1dffdc4dc6cd301cef6c27778b3b`. B8 and the B9
+R-0006 B0 through B7 and the final B9 coverage correction are implemented and tested
+through exact implementation subject `a7814b4384c20dbbe33c830649a52f94ae5e36c5`;
+its caused trace projection is exact Architect commit
+`694bc725f869947c443def37e7eebad22ab83442`. B8 and the B9
 exit-ladder corrections are audited through that projection. The audit finds **no
 coverage or semantics laundering**. The complete eligible package-source denominator is measured,
 the four 70/60/70/70 floors and all four pre-existing exclusions are unchanged, all
 186 action identities have an explicit disposition-correct output/error contract, the
 24-row operational-value extraction has one canonical home per row, and mutation
-strength remains separate from evidence aggregation. Both mandatory B9 Opus FAILs,
-the exact-hit correction, the honest post-correction coverage red, and all four R-0006
+strength remains separate from evidence aggregation. All three mandatory B9 Opus FAILs,
+both exact-hit corrections, both honest post-correction coverage reds, and all four R-0006
 historical sequencing-exception commits remain visible rather than being relabelled
 green.
 
@@ -46,7 +46,7 @@ real-stynx mutation, predecessor mutation, or R-0007+ work is claimed.
 | BL-026 | Implemented with bounded behavioral census | The registry binds all identities to exact contracts; tests prove shared kept-action envelopes plus folded/tombstoned refusal, without claiming one end-to-end invocation per kept action. |
 | BL-034 | Implemented                                | DII-212 and `law/policy/operational-values.json` assign all 24 altitude-sweep rows one canonical operational home without creating a second policy setpoint.                               |
 | BL-035 | Implemented as two decisions               | DII-213 governs mutation selection and observations; DII-214 separately governs heterogeneous evidence aggregation. Neither can manufacture PASS from absent or uncheckable evidence.      |
-| BL-081 | Implemented                                | Every one of the 153 traced test sources binds a positive assertion count and ordered assertion-site digest; the current projection totals 2,742 assertion sites across 34 invariants.     |
+| BL-081 | Implemented                                | Every one of the 155 traced test sources binds a positive assertion count and ordered assertion-site digest; the current projection totals 2,778 assertion sites across 34 invariants.     |
 
 Backlog closure standing remains subject to B9 review, publication, exact-main CI, and
 the closure-only machine verb.
@@ -74,14 +74,14 @@ preserve explicit zero hits, emit statement-level JSON, and retain 191 raw subpr
 V8 JSON inputs. The first honest exact-hit reading was red; behavior-bearing Inspector
 depth tests then raised that same denominator above the unchanged floors. The final raw
 summary has SHA-256
-`7c394f2c539b5844349f95ec4e8073065689e7f3cc415a9f7ea28fcc52883f0b`:
+`c4d75618fbc39602b4b01e9059e74249cf1e78a862f7176f770511ea177aa17b`:
 
 | Metric     | Final complete-denominator reading | Floor |
 | ---------- | ---------------------------------: | ----: |
-| Statements |           71.33% (15,975 / 22,393) |   70% |
-| Branches   |           60.12% (11,654 / 19,382) |   60% |
-| Functions  |             80.34% (2,469 / 3,073) |   70% |
-| Lines      |           72.78% (14,835 / 20,383) |   70% |
+| Statements |           71.86% (16,093 / 22,393) |   70% |
+| Branches   |           60.14% (11,658 / 19,382) |   60% |
+| Functions  |             80.67% (2,479 / 3,073) |   70% |
+| Lines      |           73.27% (14,936 / 20,383) |   70% |
 
 The current tracked population contains 378 eligible files, and the final JSON summary
 contains all 378. The increase from B0 is the new shipped Engineer source
@@ -278,7 +278,27 @@ Engineer `bad810ca82b4b958399860534e12a98e42a2c5c0` implements the policy-derive
 boundary, and Inspector `ce61864e29c1a04b57dd37ae482f7c42aa08a6b0` proves absent,
 broad, expanded, summary-byte, command-result, ordinary scratch, and other workspace
 drift still fail closed. The full suite now passes 1,443 tests with eight skips, and the
-coverage reading above remains unchanged. The failed convergence has no standing.
+then-current coverage reading remained unchanged. The failed convergence has no standing.
+
+The third literal `claude-opus-5` B9 review at candidate
+`3c6c2d3bdde6bc6d505a6a29fb92d120a36c0050` returned FAIL with one P0, three P1,
+nine P2, and four P3 findings. Its immutable record is
+`work/audit/R-0006/independent-opus-b9-review-3-failure.md`. The P0 showed that empty
+Istanbul implicit-branch locations collapsed to one merge key, cross-attributing at
+least 97 false covered branches. The P1 set found a runtime-variable artifact digest
+presented as durable evidence, a live coverage object additively merged into itself,
+and focused tests that did not exercise branch or retention behavior. Inspector
+`f93d8f6508706b3bbb9c9bd423581512626bf88f` preserves four exact red failures;
+Inspector `2087572909813282086a48a823017e3ed74f39cf` rejects incomplete location keys,
+mutates the live map without re-adding it, filters every return path, fails on malformed
+raw inputs, and exposes behaviorally tested retention. The first honest corrected
+reading then failed only branches at 59.62% (11,557/19,382), 73 short of the unchanged
+floor. Inspector `a7814b4384c20dbbe33c830649a52f94ae5e36c5` adds ten
+behavior-bearing workflow-parser and data-probe tests; Architect
+`694bc725f869947c443def37e7eebad22ab83442` refreshes the caused trace. The current
+reading above is green without threshold, exclusion, denominator, source, generated,
+skip, or assertion-mechanism change. Runtime-variable raw artifacts remain retained but
+are no longer represented as stable byte identities.
 
 The current governed-sequencing policy contains three R-0006 exception entries covering
 four exact immutable implementation commits: `a0292658…`, `58b175d3…`, `8e7a44b7…`,
@@ -342,8 +362,8 @@ reuse and promotion remain disabled.
 The trace schema and generator require a positive `assertion_count` and SHA-256
 `assertion_digest` for every test-corpus row. The generator derives both from exact
 tracked bytes and rejects missing sources, zero assertion sites, unsupported or
-ambiguous forms, and digest drift. The current trace verifies 34 invariants and 153
-test sources containing 2,742 projected assertion sites.
+ambiguous forms, and digest drift. The current trace verifies 34 invariants and 155
+test sources containing 2,778 projected assertion sites.
 
 This is stronger than filename presence or documentary mention, but the audit does not
 misstate assertion count as semantic sufficiency by itself. Invariant markers,
@@ -370,20 +390,21 @@ independent review remain separate evidence.
 | Final Opus correction     | Auditor + Inspector + Architect + Engineer | `fc454ea`, `a1bedaa`, `6887b1f`, `0cb264b`, `fb829c3`, `63b2238`, `8e5b3db`, `575bdc5`            | Preserved the five-P1 FAIL, closed population scanning and exception disclosure, tightened router-only proof, recorded green dispositions, and disclosed the final sequencing defect.                                                           |
 | Second Opus correction    | Auditor + Inspector + Architect            | `89d7463`, `49a89b4`, `5878c28`, `7a94d38`, `4edba5b`, `3a2f94f`, `77da398`, `586fafa`            | Preserved the P0/P1/P2 FAIL, replaced containment inference with exact hits, retained auditable artifacts, preserved the honest red, added behavioral depth, and refreshed trace.                                                               |
 | Final fixpoint correction | Inspector + Auditor + Architect + Engineer | `ebf1088`, `e4335b7`, `5260972`, `b3186cb`, `60d0cbf`, `bad810c`, `ce61864`, `f677cd8`, `5fb1726` | Preserved the all-gates-green convergence FAIL, normalized only exact runtime coverage artifacts, rejected broad policy, refreshed the final trace and close projection, and bound the Engineer implementation to its exact law and red source. |
+| Third Opus correction     | Auditor + Inspector + Architect            | `dc5e80c`, `f93d8f6`, `2ee1166`, `2087572`, `05d883e`, `a7814b4`, `694bc72`                       | Preserved the P0/P1/P2/P3 FAIL and E0-E5 PASS, removed degenerate branch cross-attribution and additive self-merge, retained an honest 59.62% branch red, added behavior-only depth, and refreshed trace.                                       |
 
 Combined-role rows are serial role-pure commits, never shared-authority commits.
 
 ## Fresh pre-review evidence
 
-The corrected ordinary workspace suite passes 153 files with 1,443 tests passing,
+The corrected ordinary workspace suite passes 155 files with 1,455 tests passing,
 eight declared skips, and zero failures. The complete-denominator coverage command
 passes all four floors with the exact numerator/denominator readings and digests above.
 Root typecheck, repository formatting for every changed test, `pnpm run devai:prepare`,
-the focused 42 close-control contracts, `pnpm run trace:check` at 34 invariants / 153
+the focused close-control and coverage-integrity contracts, `pnpm run trace:check` at 34 invariants / 155
 tests, and `git diff --check` pass. At exact pre-Auditor Architect head
-`5fb17269fe3b17cf4d0de9733b6fd3b1146106d9`, the governed range has 98 commits: 29
-Architect, 28 Auditor, 12 Engineer, and 29 Inspector commits. The current trace contains
-2,742 assertion sites. This Auditor amendment will rerun the mandatory commit floor;
+`694bc725f869947c443def37e7eebad22ab83442`, the governed range has 107 commits: 31
+Architect, 32 Auditor, 12 Engineer, and 32 Inspector commits. The current trace contains
+2,778 assertion sites. This Auditor amendment will rerun the mandatory commit floor;
 B9 must then refresh the closing decision and source-close handoff, run two fresh
 candidate-bound convergence passes, rehearse closure, generate a fresh manifest, and
 obtain a fresh literal `claude-opus-5` review. No earlier state may be reused.
