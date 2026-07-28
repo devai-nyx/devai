@@ -3039,8 +3039,8 @@
         "INV-DEVAI-017"
       ],
       "lifecycle": "supported",
-      "assertion_count": 17,
-      "assertion_digest_sha256": "fe6d1efd4f6374ffc8694af200b3251708fb09695aed6323ddefd9dbcc1de0d0"
+      "assertion_count": 19,
+      "assertion_digest_sha256": "6f96b72fb5e97f063572327029577a1926d82b2d381ed55f0c4e51f225c4536f"
     },
     {
       "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
@@ -3091,8 +3091,8 @@
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported",
-      "assertion_count": 61,
-      "assertion_digest_sha256": "a756ccbbb8935de49353ee2f3dd4b66245f1cf72da123cf1ef5ad0e694c719cf"
+      "assertion_count": 67,
+      "assertion_digest_sha256": "9649d4685bb9ec8d60bf3b600055a0c0c9dd75fd5a4563fcc5e46ffdcebd0ca1"
     },
     {
       "path": "tests/e2e/bare-domain-help.e2e.test.ts",

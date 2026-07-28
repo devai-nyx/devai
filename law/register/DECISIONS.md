@@ -3920,7 +3920,7 @@ tag, GitHub Release, Pages or other deployment, evidence promotion, real-stynx
 mutation, predecessor mutation, or R-0007+ work.
 
 ### DII-234 — Govern OM-012 complete-class repair and review-until-PASS continuation
-`type: decision · status: active · authority: Architect · provenance: OM-012; R-0006-INDEPENDENT-OPUS-B9-REVIEW-6 at Auditor 33d1fa3; Inspector ab471b4; R-0006-OM-012-COMPLETE-CLASS-REPAIR-RED-EVIDENCE at Auditor 1856372`
+`type: decision · status: active · authority: Architect · provenance: session-draft OM-012 complete-class correction; R-0006-INDEPENDENT-OPUS-B9-REVIEW-6 at Auditor 33d1fa3; Inspector ab471b4; R-0006-OM-012-COMPLETE-CLASS-REPAIR-RED-EVIDENCE at Auditor 1856372`
 
 The literal cycle-2 review of candidate
 `ab4721b09ef3dde327c5d660fdf78b542cc85a66` dispositioned all 211 mandatory topics

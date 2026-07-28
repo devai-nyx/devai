@@ -416,6 +416,29 @@
           "scripts/run-round-close-controls.mjs"
         ]
       }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": [
+        "4f1af9e1b5f897c3c756e9b139ea96d697bd0e24",
+        "69dc9b8972f15dda5ad73384a666527c5e7bbee7"
+      ],
+      "law_commits": ["424a1615c2446fb30aa7e749bb2f4982637568ce"],
+      "red_evidence": {
+        "commit": "ab471b48066853085f4978536aade0a7605142c1",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-coverage-integrity.red.contract.test.ts tests/contract/r0006-smart-convergence.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0006/red-evidence-om012-complete-class-repair.json",
+        "evidence_sha256": "2547496f973d0467b4d11ca579d73958528f5e5c9601945da2b7c1fdf827baf3",
+        "tests": [
+          "tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+          "tests/contract/r0006-smart-convergence.red.contract.test.ts"
+        ],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [
