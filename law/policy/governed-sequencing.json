@@ -459,6 +459,11 @@
       "round": "R-0006",
       "implementation_commits": ["ec68086260b0f9d5e13656c05504681ab253d1a7"],
       "reason": "The first OM-011 smart-convergence run disclosed that the content-addressed controller implementation followed Architect DII-229 and the 16-case Inspector red 0215430, but that immutable Inspector source literally named only package.json and scripts/run-round-close-controls.mjs from the four-path Engineer commit; it omitted .devai/config/round-close-controls.json and packages/schemas/src/roster.ts under the prospective exact-scope rule. Auditor 8748242 preserves the failed governance gate and exact population. The behavior-first red and full green correction remain real; history is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["6a581a9a9c1586d73a604108b845e5af5ef573c8"],
+      "reason": "The cycle-1 finding-retention materialization followed Architect DII-232 and the behavior-first Inspector red 1771b0b, but that immutable failing Inspector source named law/policy/round-close-controls.json and the fifth-review record rather than the exact Engineer path .devai/config/round-close-controls.json required by the prospective semantic-scope rule. Auditor 0f22cfa preserves the failed smart-convergence governance gate and exact path. Inspector 547351f now binds both canonical and materialized paths prospectively; history is not rewritten and this exact-commit disclosure grants no prospective exception."
     }
   ],
   "historical_round_disclosures": [

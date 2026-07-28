@@ -3873,6 +3873,52 @@ release, deployment, evidence promotion, real-stynx mutation, predecessor mutati
 R-0007+ work. DII-231 remains the closing decision unless a later Architect decision
 reaccepts the final corrected candidate.
 
+### DII-233 — Reaccept R-0006 after the retention-close failure
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 retention-close correction; OM-011; DII-229–232; Engineer 6a581a9a9c1586d73a604108b845e5af5ef573c8; Auditor 0f22cfa5bb56e418086c14ef834a2e56590f6793; Inspector 547351f7d87086b601d4c11a811855ce9d2f57af; R-0006-OM-011-CYCLE-1-RETENTION-CANDIDATE-FAILURE`
+
+The first candidate after DII-232, exact head
+`6a581a9a9c1586d73a604108b845e5af5ef573c8`, kept a clean worktree and passed 13
+of 16 smart-convergence tasks. It failed `trace` and dependent `stage1` because the
+new Inspector retention contract had not yet been projected into `law/trace.json`. It
+also failed `governance` because the committed policy materialization was substantive
+Engineer work with zero governed-sequencing bindings. No second convergence pass,
+rehearsal, manifest, review, publication, or closure step began.
+
+Auditor `0f22cfa5bb56e418086c14ef834a2e56590f6793` preserves the complete failed
+candidate evidence. Engineer `6a581a9a9c1586d73a604108b845e5af5ef573c8` followed
+this register's DII-232 law and the real Inspector red at `1771b0b`, but the immutable
+failing Inspector source did not literally name the exact implementation path
+`.devai/config/round-close-controls.json`. A prospective binding cannot be invented
+after implementation. The governed-sequencing policy therefore classifies only that
+exact Engineer commit as a historical exception. Inspector
+`547351f7d87086b601d4c11a811855ce9d2f57af` now binds both canonical and materialized
+paths for every prospective retention change; the classification grants no future
+bypass. This commit also regenerates the deterministic trace from the complete current
+Inspector source population.
+
+At this decision's committed candidate, the exact declared-base range contains 142
+commits: 43 Architect, 43 Auditor, 14 Engineer, 41 Inspector, and one Owner. The
+ordinary suite passes 156 files and 1,480 tests with eight governed skips. Trace binds
+34 invariants, 156 test sources, and 2,845 lexical assertion sites. The unchanged
+coverage summary remains statements 16,094/22,393 (71.87%), branches 11,659/19,382
+(60.15%), functions 2,479/3,073 (80.67%), and lines 14,936/20,383 (73.27%), with
+summary digest `ac29412270641af7c8f3ca8276fcf3ae4cc48a81c425fe904c185f4c7c79e08c`.
+The sequencing policy now has five R-0006 exception entries covering six exact
+immutable implementation commits; the separate role-path policy retains two exact
+classifications.
+
+DII-233 is the closing decision for production PC-0007; DII-207 remains the
+declaration. This candidate has no standing until fresh smart convergence, isolated
+rehearsal, candidate-manifest generation, and the complete review-scope census pass.
+Cycle 2 remains the one permitted complete re-review through literal
+`claude-opus-5`; FAIL or BLOCKED stops and escalates to the Owner, and no cycle 3 is
+authorized.
+
+This decision does not itself claim convergence, rehearsal, candidate identity,
+cycle-2 PASS, publication, remote CI, merge, PC-0007, closure, package publication,
+tag, GitHub Release, Pages or other deployment, evidence promotion, real-stynx
+mutation, predecessor mutation, or R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

@@ -9,7 +9,9 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-207; DII-211–231; OM-011; R-0006-AS-BUILT; Auditor 72fac684750a157a26b6b867beaa56d045569960; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; Auditor 2e02d31c9504d4ee63dbe05f40084466292aff99 and 7c0fc17e4c9543c31db9f3f563e5b9e65d220c67; Inspector 5846718c3947ddce6b3bb67b296796bcc275dcb9; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE,
+    DII-207; DII-211–233; OM-011; R-0006-AS-BUILT; Auditor 72fac684750a157a26b6b867beaa56d045569960; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; Auditor 2e02d31c9504d4ee63dbe05f40084466292aff99,
+    7c0fc17e4c9543c31db9f3f563e5b9e65d220c67,
+    and 0f22cfa5bb56e418086c14ef834a2e56590f6793; Inspector 5846718c3947ddce6b3bb67b296796bcc275dcb9 and 547351f7d87086b601d4c11a811855ce9d2f57af; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE; R-0006-OM-011-CYCLE-1-RETENTION-CANDIDATE-FAILURE,
   ]
 ---
 
@@ -17,8 +19,9 @@ provenance:
 
 ## Bound result
 
-DII-231 reaccepts R-0006's audited contracts-and-coverage implementation after the
-OM-011 exhaustive cycle-1 evidence sweep. The behavior implementation subject remains
+DII-233 reaccepts R-0006's audited contracts-and-coverage implementation after the
+OM-011 exhaustive cycle-1 evidence sweep and retention-close correction. The behavior
+implementation subject remains
 Inspector `e284a6cb9b2d23eaf5713c34ecf29e324397b355`; Architect
 `cef0540a70a62de2222078c63455cd763fa92703` is its caused trace projection. Auditor
 `2e02d31c9504d4ee63dbe05f40084466292aff99` preserves the fifth-review FAIL, Auditor
@@ -34,14 +37,14 @@ Mutation strength and evidence aggregation remain separate fail-closed decisions
 complete 378-file denominator passes the unchanged coverage floors at 71.87%
 statements, 60.15% branches, 80.67% functions, and 73.27% lines after collision-free
 exact-hit measurement and behavior-bearing Inspector depth. The ordinary suite passes
-156 files, 1,479 tests, and eight declared skips. Trace binds 34 invariants, 156 test
-sources, and 2,839 lexical assertion sites.
+156 files, 1,480 tests, and eight declared skips. Trace binds 34 invariants, 156 test
+sources, and 2,845 lexical assertion sites.
 
 All five mandatory B9 Opus FAILs remain active historical evidence with no retained
 standing.
 The second review's coverage-inflation finding was corrected by exact-location-only
 measurement; its first honest reading remained red until real behavior tests closed the
-unchanged floors. The current policy separately discloses five R-0006 historical
+unchanged floors. The current policy separately discloses six R-0006 historical
 sequencing-exception commits and two exact role-path-classified commits. No prospective
 waiver, threshold change, exclusion growth, source removal, or assertion weakening is
 carried into this handoff.
@@ -97,12 +100,23 @@ commits: 41 Architect, 41 Auditor, 13 Engineer, 39 Inspector, and one Owner. Fre
 machine-derived convergence, rehearsal and manifests must confirm that prospective
 count before cycle 2; this prose grants it no independent standing.
 
+The next prospective candidate at Engineer `6a581a9a9c1586d73a604108b845e5af5ef573c8`
+failed smart convergence on a stale trace projection and one missing exact-path
+sequencing binding. Auditor `0f22cfa5bb56e418086c14ef834a2e56590f6793`
+preserves the clean failed attempt. Because Inspector `1771b0b` did not literally name
+the materialized Engineer path, DII-233 classifies only `6a581a9…` as a historical
+sequencing exception. Inspector `547351f` binds both canonical and materialized paths
+prospectively, and the current trace is regenerated from that complete source. At the
+committed DII-233 candidate, the exact range contains 142 commits: 43 Architect, 43
+Auditor, 14 Engineer, 41 Inspector, and one Owner. Fresh machinery must independently
+confirm every count and reading before cycle 2.
+
 ## Identity and review boundary
 
 The behavior implementation subject above does not include later Auditor evidence or
 Architect projection and close documents. The exact formal `implementation_subject`
 and `review_candidate` must be derived from the committed clean head containing this
-handoff, DII-231, and every final current audit artifact. Its
+handoff, DII-233, and every final current audit artifact. Its
 candidate-only manifest must derive the exact base, tree, governed range, identity
 population, role/path map, gate outcomes, convergence passes, and rehearsal from that
 head; no earlier candidate state may be reused.
@@ -127,7 +141,7 @@ The source merge must then pass exact-main CI before the production phase-close 
 append PC-0007 on a closure-only branch derived from that merge.
 
 PC-0007 is the only permitted file in the closure-only PR. It uses DII-207 as the
-declaration and DII-231 as the closing decision, binds the exact source merge rather
+declaration and DII-233 as the closing decision, binds the exact source merge rather
 than the later closure commit, and records `none-needed` release disposition. The
 closure-only head, closure merge, and final main must each pass their required exact-SHA
 checks. A rehearsal PC has no standing and must never be published.
