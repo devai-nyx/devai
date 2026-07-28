@@ -153,12 +153,12 @@ The source merge must then pass exact-main CI before the production phase-close 
 append PC-0007 on a closure-only branch derived from that merge.
 
 PC-0007 is the only permitted file in the closure-only PR. It uses DII-207 as the
-declaration and the fresh post-repair Architect reacceptance decision as the closing
-decision, binds the exact source merge rather than the later closure commit, and records
-`none-needed` release disposition. DII-235 was invalidated by the cycle-3 review FAIL;
-DII-236 governs its complete-class repair but does not yet reaccept the round. The
-closure-only head, closure merge, and final main must each pass their required exact-SHA
-checks. A rehearsal PC has no standing and must never be published.
+declaration and DII-237 as the closing decision, binds the exact source merge rather
+than the later closure commit, and records `none-needed` release disposition. DII-235
+was invalidated by the cycle-3 review FAIL; DII-236 governs its complete-class repair;
+DII-237 reaccepts only the repaired source candidate machinery. The closure-only head,
+closure merge, and final main must each pass their required exact-SHA checks. A
+rehearsal PC has no standing and must never be published.
 
 No step authorizes package publication, tag, GitHub Release, Pages or external
 deployment, evidence reuse or promotion, real-stynx mutation, predecessor mutation, or

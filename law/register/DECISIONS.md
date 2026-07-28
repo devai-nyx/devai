@@ -4063,6 +4063,45 @@ This decision claims no green materialization, fresh candidate, convergence, reh
 manifest, review PASS, publication, remote CI, merge, PC-0007, closure, release,
 evidence promotion, predecessor mutation, or R-0007+ authority.
 
+### DII-237 — Reaccept R-0006 after the cycle-3 complete-class correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 cycle-3 reacceptance; DII-236; Inspector c4c1758; Auditor aa57003, ee09665, 888d530, 25d622c, 81c514b, 1246d1a, and b4e8e7a; Architect 17eb61f and 1f6f95f; Engineer 508ce0e`
+
+The cycle-3 complete-class correction is implemented and audited. Inspector
+`c4c1758ccf40a7269721b7cacde1a2fafa6cdbec` exposes the omitted active Architect
+source-close population and proves stale structured values fail closed. Architect
+`17eb61fce741336f97da10d9b0734a0479cee40d` adds that exact path and claim set to the
+canonical policy, converts its volatile handoff values to a machine-derived block,
+exact-binds historical quantitative prose, and regenerates trace. Engineer
+`508ce0ec00915133a349c51ee7c1ce2b753c1b33` materializes the canonical policy
+byte-for-byte. Architect `1f6f95fc7c97b4f9081aad1d9e183d01f85b6ed1` binds the
+Engineer commit to its exact prior Inspector red and durable Auditor artifact without
+an exception.
+
+Auditor `25d622ca1d33f760047688c4dd01887d54f8ce78` reconciles the regenerated trace claim,
+Auditor `81c514bb0872bc5ed812bc361bfbd03bb61471c5` normalizes the immutable red observation
+for machine sequencing, and Auditor `1246d1a5e99325083f414b82e9b6b4a3d03699cb` audits the
+whole repair population. At exact Engineer subject
+`508ce0ec00915133a349c51ee7c1ce2b753c1b33`, the focused contract passed 24 cases and
+the complete ordinary floor passed 156 files with 1,483 tests passing and eight governed
+skips. At exact Architect subject `1f6f95fc7c97b4f9081aad1d9e183d01f85b6ed1`, trace
+verified 34 invariants, 156 test sources, and 2,857 lexical assertion sites while
+governed sequencing passed its 163-commit population. Auditor
+`b4e8e7a67256318adefcb9a26513af0f67cd9f76` corrected the one invented SHA expansion
+found by the full floor; the governed SHA gate then passed. Fresh candidate machinery,
+not this prose, must derive every later population and result.
+
+DII-237 replaces invalidated DII-235 as the Architect closing decision for production
+PC-0007; DII-207 remains the declaration. This decision authorizes fresh smart
+convergence, candidate-only identity verification, isolated rehearsal, candidate and
+review-scope manifest generation, and a fresh literal `claude-opus-5` exhaustive review.
+It does not reuse candidate `ee98663d639f7728ef07a3d097310659777b92ab` or any of its
+state. Only a mechanically valid PASS may enter the governed review envelope and serial
+source/closure ceremony.
+
+This decision claims no fresh candidate yet, review PASS, publication, remote CI, merge,
+PC-0007, closure, release, package publication, tag, GitHub Release, Pages deployment,
+evidence promotion, predecessor mutation, or R-0007+ authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
