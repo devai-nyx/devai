@@ -439,6 +439,20 @@
           "scripts/run-round-close-controls.mjs"
         ]
       }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["508ce0ec00915133a349c51ee7c1ce2b753c1b33"],
+      "law_commits": ["17eb61fce741336f97da10d9b0734a0479cee40d"],
+      "red_evidence": {
+        "commit": "c4c1758ccf40a7269721b7cacde1a2fafa6cdbec",
+        "observed_exit": 1,
+        "command": "pnpm vitest run",
+        "evidence_path": "work/audit/R-0006/red-evidence-om012-source-close-current-claims.json",
+        "evidence_sha256": "ba26987bd47578724e9e4f5136d97326ba90eec829a8d21518bc12860fd38914",
+        "tests": ["tests/contract/r0006-smart-convergence.red.contract.test.ts"],
+        "exercised_implementation_paths": [".devai/config/round-close-controls.json"]
+      }
     }
   ],
   "historical_commit_exceptions": [
