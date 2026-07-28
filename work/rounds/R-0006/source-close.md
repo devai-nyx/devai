@@ -141,7 +141,7 @@ The source merge must then pass exact-main CI before the production phase-close 
 append PC-0007 on a closure-only branch derived from that merge.
 
 PC-0007 is the only permitted file in the closure-only PR. It uses DII-207 as the
-declaration and DII-233 as the closing decision, binds the exact source merge rather
+declaration and DII-235 as the closing decision, binds the exact source merge rather
 than the later closure commit, and records `none-needed` release disposition. The
 closure-only head, closure merge, and final main must each pass their required exact-SHA
 checks. A rehearsal PC has no standing and must never be published.

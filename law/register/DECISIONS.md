@@ -3975,6 +3975,55 @@ convergence, rehearsal, candidate identity, review PASS, publication, remote CI,
 PC-0007, closure, release, evidence promotion, real-stynx mutation, predecessor
 mutation, or R-0007+ authority.
 
+### DII-235 — Reaccept R-0006 after the OM-012 complete-class correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 OM-012 reacceptance; DII-234; Inspector ab471b4 and f749995; Auditor 1856372, 3c0879a, 1075c20, and c7b525f; Engineer 4f1af9e and 69dc9b8; Architect 5b76908`
+
+The complete-class repair ordered by the literal cycle-2 FAIL is implemented. Inspector
+`ab471b48066853085f4978536aade0a7605142c1` preserved four failing adversaries across
+the whole-parent coverage population, stable final-review destination, machine-derived
+Auditor claims, and Owner-authorized cycle continuation. Inspector
+`f749995` validates every complete parent file before any subprocess aggregate, while
+preserving DII-227 same-kind subprocess summation and every denominator, threshold,
+include, and exclusion rule.
+
+Engineer `4f1af9e` and `69dc9b8` implement the version-2 close policy: the prior-review
+population is derived at the exact candidate revision, every positive review-cycle
+number is admitted under OM-012, the final PASS record has one stable path, and
+`policy-check` derives the governed Auditor claim block from canonical trace,
+sequencing, operational-value, and prior-review sources. The committed
+`.devai/config/round-close-controls.json` mirror is byte-identical to its Architect
+source. The behavior is scoped to the successor version-2 policy and does not rewrite
+the frozen version-1 entry-control fixtures.
+
+Auditor `3c0879a` removes the complete stale-current prose population, corrects the
+17-direct-row versus 16-distinct-direct-home arithmetic, and makes structured
+machine-derived blocks the only current numeric authority for the governed values.
+Auditor `1075c20` exposes the exact sequencing observation required by the prospective
+binding. Architect `5b76908` binds both Engineer commits to the prior two-test red,
+regenerates the trace, and preserves all historical exceptions. Auditor `c7b525f`
+demonstrates the control by reconciling the resulting 2,853-site trace reading only
+after `policy-check` rejected the prior 2,845 value.
+
+At exact Architect subject `5b76908865da9319859b9931598647a51eb41625`, the minimum
+floor passes 156 test files with 1,482 tests passing and eight governed skips. Trace
+verifies 34 invariants, 156 test sources, and 2,853 lexical assertion sites. The focused
+OM-012 population passes 32/32, entry-control plus smart-convergence passes 57/57,
+canonical policy-check passes, and governed sequencing passes its exact 152-commit
+population. These readings authorize fresh candidate machinery only; they
+do not reuse the invalidated candidate `ab4721b09ef3dde327c5d660fdf78b542cc85a66`
+or any of its manifests, convergence, rehearsal, or review standing.
+
+DII-235 is the current closing decision for production PC-0007; DII-207 remains the
+declaration. R-0006 must still pass complete smart convergence, whole coverage,
+candidate-only manifest generation, isolated source/closure rehearsal, exhaustive
+review-scope generation, literal `claude-opus-5` read-only PASS, exact review envelope,
+published-head reconvergence, source PR and exact-SHA CI, source merge and exact-main
+CI, then the closure-only PC-0007 PR, merge, and final exact-main CI.
+
+This decision authorizes no package publication, tag, GitHub Release, Pages or other
+deployment, evidence promotion or reuse, real-stynx mutation, predecessor mutation, or
+R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
