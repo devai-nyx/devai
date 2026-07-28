@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0006-OM-011-GOVERNED-SEQUENCING-FAILURE",
+  "round": "R-0006",
+  "date": "2026-07-28",
+  "authority": "Auditor",
+  "candidate": "a81969865cf237e5a13c351de828dec066f5b065",
+  "command": "pnpm run ci:governance",
+  "exit_code": 1,
+  "failed_stage": "ci:sequencing",
+  "finding": {
+    "rule": "implementation-binding",
+    "implementation_commit": "ec68086260b0f9d5e13656c05504681ab253d1a7",
+    "message": "substantive Engineer commit must have exactly one binding; observed 0"
+  },
+  "implementation_paths": [
+    ".devai/config/round-close-controls.json",
+    "package.json",
+    "packages/schemas/src/roster.ts",
+    "scripts/run-round-close-controls.mjs"
+  ],
+  "prior_inspector_red": {
+    "commit": "0215430f21649fb81650df312cbddef9e1e92b4c",
+    "test": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
+    "behaviorally_exercised": true,
+    "literal_exact_paths_present": ["package.json", "scripts/run-round-close-controls.mjs"],
+    "literal_exact_paths_absent": [
+      ".devai/config/round-close-controls.json",
+      "packages/schemas/src/roster.ts"
+    ]
+  },
+  "smart_convergence_attempt": {
+    "tasks_executed_pass": 15,
+    "tasks_executed_fail": 1,
+    "second_pass_started": false,
+    "coverage": {
+      "statements": { "covered": 16094, "total": 22393, "pct": 71.87 },
+      "branches": { "covered": 11659, "total": 19382, "pct": 60.15 },
+      "functions": { "covered": 2479, "total": 3073, "pct": 80.67 },
+      "lines": { "covered": 14936, "total": 20383, "pct": 73.27 }
+    }
+  },
+  "required_disposition": "Do not invent a prospective binding or rewrite history. Classify only ec68086260b0f9d5e13656c05504681ab253d1a7 as an exact historical sequencing defect, preserve the real red and full green behavior evidence, and grant no prospective exception.",
+  "standing": "failed convergence evidence only; no candidate, review, publication, or closure standing"
+}
