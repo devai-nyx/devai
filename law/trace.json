@@ -602,6 +602,11 @@
           "target_type": "test"
         },
         {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-mocked-producers.contract.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "e2e",
           "path": "tests/e2e/bare-domain-help.e2e.test.ts",
           "target_type": "test"
@@ -1125,6 +1130,11 @@
           "suite": "contract",
           "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
           "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-mocked-producers.contract.test.ts",
+          "target_type": "test"
         }
       ]
     },
@@ -1318,6 +1328,11 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-mocked-producers.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
           "target_type": "test"
         }
@@ -1499,6 +1514,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-mocked-producers.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -3111,8 +3131,21 @@
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported",
-      "assertion_count": 21,
-      "assertion_digest_sha256": "bd9104f97cd062ba2ee7cce07454ede118e03ba5360bae60d124a36865f69f0e"
+      "assertion_count": 22,
+      "assertion_digest_sha256": "b6f0524f6fb50fbc8767faf0d173659652da48ca26bac1c11c07b87908f3b816"
+    },
+    {
+      "path": "tests/contract/r0006-output-totality-mocked-producers.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 8,
+      "assertion_digest_sha256": "7b96e02b70de6db107645e629feb55bbf8537bd40ebd9339afa4715dd9f0c87a"
     },
     {
       "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
