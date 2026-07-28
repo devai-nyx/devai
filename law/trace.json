@@ -2209,8 +2209,8 @@
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported",
-      "assertion_count": 29,
-      "assertion_digest_sha256": "b53ee480bc17ba134e2e1c9fafd4c83ceca8fc478e5a43d25b87e3fa0899330d"
+      "assertion_count": 40,
+      "assertion_digest_sha256": "cbe903e3accb7f2bb06b612c99cd68d7258149df8983deb19c5525291cfb6d72"
     },
     {
       "path": "packages/schemas/tests/contract/constitution.contract.test.ts",
@@ -3053,7 +3053,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 72,
-      "assertion_digest_sha256": "43860ec7108e9eb12464bec434f6b92a2b102d7a07da635f457964f5d41c383c"
+      "assertion_digest_sha256": "d9be940be402971dcf9d4ecc9f60c023877fe6050413c88667bcc22c1411d4ed"
     },
     {
       "path": "tests/contract/r0006-output-contracts.adversarial.contract.test.ts",
@@ -3091,8 +3091,8 @@
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported",
-      "assertion_count": 71,
-      "assertion_digest_sha256": "646e9f3ebbf0168adf052a752ae2c010956b0161a70dad78fac7a7344f44030f"
+      "assertion_count": 72,
+      "assertion_digest_sha256": "289b0bd5df4e18c336c2df7b161fa4965f9da1e363cbb0797bb39592798d22fe"
     },
     {
       "path": "tests/e2e/bare-domain-help.e2e.test.ts",

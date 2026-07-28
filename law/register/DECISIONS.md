@@ -4194,6 +4194,43 @@ This decision claims no fresh candidate, review PASS, publication, merge, exact-
 CI, PC-0007, closure, release, package publication, tag, GitHub Release, Pages
 deployment, evidence promotion, predecessor mutation, or R-0007+ authority.
 
+### DII-241 — Reaccept R-0006 under the independent Codex review control
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 Codex-review reacceptance; OM-013; DII-240; Owner 15fa84c63a2aee72f26881172be93b1914113c41; Architect 9e7718a7628153d482b3203e65154f007d10a7e3; Auditor aae5d538d98cead86863d7f8f4a97c68a4342b77 and 4dfcfcefe44c6091e4dc53af0f512c8a2fb3561b; Engineer 5c290bedf335d4cd65813370e26218588eb8ac2f; Inspector 7edc33b3a4c18e14d02c87ce51c7df0d9f35edf1`
+
+The R-0006-only Codex substitution is implemented and audited. Owner
+`15fa84c63a2aee72f26881172be93b1914113c41` records OM-013. Architect
+`9e7718a7628153d482b3203e65154f007d10a7e3` binds explicit `gpt-5.6-sol`, the truthful
+stable Codex review path, both historical Opus and prospective Codex review
+populations, and the unchanged exhaustive PASS threshold. Auditor
+`aae5d538d98cead86863d7f8f4a97c68a4342b77` preserves the two stale selector-contract
+failures before repair.
+
+Engineer `5c290bedf335d4cd65813370e26218588eb8ac2f` materializes the canonical policy
+byte-for-byte and aligns the controller's stable record and model check. Inspector
+`7edc33b3a4c18e14d02c87ce51c7df0d9f35edf1` makes the complete active-campaign
+selector contract model both narrow Owner exceptions, updates every review-record
+fixture to the exact model, and retains literal Opus-only enforcement for unaffected
+rounds. Auditor `4dfcfcefe44c6091e4dc53af0f512c8a2fb3561b` reconciles the resulting current claim.
+
+The minimum floor passes 156 test files with 1,482 tests passing and eight governed
+skips. The focused selector plus entry-control and smart-convergence population passes
+81 tests. Policy-check passes with byte-identical canonical and materialized policy.
+The regenerated trace covers 34 invariants, 156 test sources, and 2,869 lexical
+assertion sites. Fresh candidate machinery must independently derive every later
+identity, digest, gate, census, convergence, and rehearsal result from the final clean
+head.
+
+DII-241 replaces DII-240 as the Architect closing decision for production PC-0007;
+DII-207 remains the declaration. It authorizes a fresh exact candidate, two-pass smart
+convergence, isolated source/closure rehearsal, candidate and review-scope manifests,
+and the independent read-only `gpt-5.6-sol` exhaustive review required by OM-013. Only
+a mechanically valid PASS may enter the review envelope and serial source/closure
+ceremony.
+
+This decision claims no fresh candidate yet, review PASS, publication, merge,
+exact-main CI, PC-0007, closure, release, package publication, tag, GitHub Release,
+Pages deployment, evidence promotion, predecessor mutation, or R-0007+ authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
