@@ -201,7 +201,7 @@ function policy(): string {
         },
       },
       review: {
-        record: 'work/audit/R-0006/independent-opus-b9-review-final.md',
+        record: 'work/audit/R-0006/independent-codex-b9-review-final.md',
       },
       audit_current_claims: {
         markers: {
@@ -590,13 +590,16 @@ describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
     const materializedPolicy = JSON.parse(
       readFileSync(join(ROOT, '.devai/config/round-close-controls.json'), 'utf8'),
     ) as typeof livePolicy;
-    const finalRecord = 'work/audit/R-0006/independent-opus-b9-review-final.md';
+    const finalRecord = 'work/audit/R-0006/independent-codex-b9-review-final.md';
     const reviewGlob = 'work/audit/R-0006/independent-opus-b9-review*.md';
     const cycleTwoRecord = 'work/audit/R-0006/independent-opus-b9-review-6.md';
     expect(livePolicy.review_scope.previous_findings_mandatory).toBe(true);
     expect(livePolicy.review.record).toBe(finalRecord);
     expect(livePolicy.review_scope.requirement_sources).toContain(
       'product/owner-mandates/OM-012.md',
+    );
+    expect(livePolicy.review_scope.requirement_sources).toContain(
+      'product/owner-mandates/OM-013.md',
     );
     expect(livePolicy.review_scope.prior_review_globs).toContain(reviewGlob);
     expect(livePolicy.review_scope.review_cycles).toEqual({

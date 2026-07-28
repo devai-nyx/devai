@@ -1048,7 +1048,7 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
       ],
     );
     const manifestDigest = putReviewManifest(current.root, reviewed);
-    const reviewRecord = `---\nverdict: PASS\nreviewer_model: claude-opus-5\nreview_candidate: ${reviewed}\nmanifest_digest_sha256: ${manifestDigest}\n---\n\n# Independent review\n`;
+    const reviewRecord = `---\nverdict: PASS\nreviewer_model: gpt-5.6-sol\nreview_candidate: ${reviewed}\nmanifest_digest_sha256: ${manifestDigest}\n---\n\n# Independent review\n`;
     put(current.root, 'work/audit/R-0006/review.md', reviewRecord);
     commit(current.root, 'DEVAI Auditor', 'audit(r0006): record independent review', [
       'work/audit/R-0006/review.md',
@@ -1073,7 +1073,7 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     put(
       current.root,
       'work/audit/R-0006/review.md',
-      `---\nverdict: PASS\nreviewer_model: claude-opus-5\nreview_candidate: ${current.candidate}\nmanifest_digest_sha256: ${digest}\n---\n\n# Independent review\n`,
+      `---\nverdict: PASS\nreviewer_model: gpt-5.6-sol\nreview_candidate: ${current.candidate}\nmanifest_digest_sha256: ${digest}\n---\n\n# Independent review\n`,
     );
     commit(current.root, 'DEVAI Auditor', 'audit(r0006): record independent review', [
       'work/audit/R-0006/review.md',
@@ -1092,7 +1092,7 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     for (const review of [
       'verdict: FAIL\n',
       'not front matter\n',
-      `---\nverdict: PASS\nreviewer_model: claude-opus-5\nreview_candidate: ${'1'.repeat(40)}\nmanifest_digest_sha256: ${'2'.repeat(64)}\n---\n`,
+      `---\nverdict: PASS\nreviewer_model: gpt-5.6-sol\nreview_candidate: ${'1'.repeat(40)}\nmanifest_digest_sha256: ${'2'.repeat(64)}\n---\n`,
     ]) {
       const current = fixture();
       putReviewManifest(current.root, current.candidate);
@@ -1258,7 +1258,7 @@ if (process.argv[2] === 'ordinary') {
     put(
       current.root,
       'work/audit/R-0006/review.md',
-      `---\nverdict: PASS\nreviewer_model: claude-opus-5\nreview_candidate: ${current.candidate}\nmanifest_digest_sha256: ${digest}\n---\n`,
+      `---\nverdict: PASS\nreviewer_model: gpt-5.6-sol\nreview_candidate: ${current.candidate}\nmanifest_digest_sha256: ${digest}\n---\n`,
     );
     commit(current.root, 'DEVAI Auditor', 'audit(r0006): record independent review', [
       'work/audit/R-0006/review.md',

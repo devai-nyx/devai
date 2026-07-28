@@ -10,13 +10,16 @@ const ROOT = join(import.meta.dirname, '..', '..', '..', '..');
 
 const ACTIVE_CAMPAIGN_INSTRUCTIONS = [
   'work/rounds/CAMPAIGN.md',
-  'work/rounds/EXECUTION-CONTRACT.md',
-  ...[2, 3, 4, 6, 7, 8, 9, 10].map(
+  ...[2, 3, 4, 7, 8, 9, 10].map(
     (round) => `work/rounds/R-${String(round).padStart(4, '0')}/prompts/00-orchestrator.md`,
   ),
 ];
 
 const R0005_CODEX_INSTRUCTION = 'work/rounds/R-0005/prompts/00-orchestrator.md';
+const R0006_CODEX_INSTRUCTIONS = [
+  'work/rounds/EXECUTION-CONTRACT.md',
+  'work/rounds/R-0006/prompts/00-orchestrator.md',
+];
 
 const BL017_RETIREMENT_INSTRUCTIONS = [
   'AGENTS.md',
@@ -76,6 +79,36 @@ describe('Owner-selected Claude review model', () => {
     expect(instruction).toContain('Do not call Claude');
     expect(instruction).not.toContain('claude-opus-5');
     expect(instruction).not.toMatch(/(?:Claude )?Fable 5|claude-fable-5/iu);
+  });
+
+  it('applies OM-013 independent Codex review only to R-0006', () => {
+    const mandate = readFileSync(join(ROOT, 'product/owner-mandates/OM-013.md'), 'utf8');
+    const frontmatter = mandate.match(/^---\n([\s\S]*?)\n---\n/);
+
+    expect(frontmatter).toBeTruthy();
+    const metadata = parse(frontmatter?.[1] ?? '') as Record<string, unknown>;
+    const validate = getValidator('record-meta.schema.json');
+    expect(validate(metadata), JSON.stringify(validate.errors)).toBe(true);
+    expect(metadata).toMatchObject({
+      id: 'OM-013',
+      type: 'mandate-rider',
+      status: 'active',
+      authority: 'Owner',
+    });
+    expect(mandate).toContain('For R-0006 only');
+    expect(mandate).toContain('independent Codex');
+    expect(mandate).toContain('gpt-5.6-sol');
+
+    for (const path of R0006_CODEX_INSTRUCTIONS) {
+      const instruction = readFileSync(join(ROOT, path), 'utf8');
+      expect(instruction).toContain('gpt-5.6-sol');
+      expect(instruction).toMatch(/R-0006.only/isu);
+      expect(instruction).not.toMatch(/(?:Claude )?Fable 5|claude-fable-5/iu);
+    }
+
+    const roundSixPrompt = readFileSync(join(ROOT, R0006_CODEX_INSTRUCTIONS[1] ?? ''), 'utf8');
+    expect(roundSixPrompt).toMatch(/independent\s+Codex/u);
+    expect(roundSixPrompt).not.toContain('claude-opus-5');
   });
 
   it.each(BL017_RETIREMENT_INSTRUCTIONS)(
