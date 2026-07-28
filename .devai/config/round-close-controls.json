@@ -294,7 +294,8 @@
       "work/rounds/R-0006/AUTHORIZATION.md",
       "work/rounds/R-0006/plan.md",
       "work/rounds/R-0006/prompts/00-orchestrator.md",
-      "product/owner-mandates/OM-011.md"
+      "product/owner-mandates/OM-011.md",
+      "product/owner-mandates/OM-012.md"
     ],
     "controlling_sources": [
       "work/rounds/EXECUTION-CONTRACT.md",
@@ -303,13 +304,7 @@
       "law/schemas/review-scope-manifest.schema.json",
       "law/register/DECISIONS.md"
     ],
-    "prior_reviews": [
-      "work/audit/R-0006/independent-opus-b9-review-failure.md",
-      "work/audit/R-0006/independent-opus-b9-review-2-failure.md",
-      "work/audit/R-0006/independent-opus-b9-review-3-failure.md",
-      "work/audit/R-0006/independent-opus-b9-review-4-failure.md",
-      "work/audit/R-0006/independent-opus-b9-review-5-failure.md"
-    ],
+    "prior_review_globs": ["work/audit/R-0006/independent-opus-b9-review*.md"],
     "topic_sources": [
       "changed-path",
       "requirement",
@@ -338,10 +333,9 @@
       "end": "<!-- review-topic-dispositions:end -->"
     },
     "review_cycles": {
-      "maximum": 2,
-      "cycle_1": "exhaustive-discovery",
-      "cycle_2": "complete-rereview",
-      "cycle_2_failure": "stop-and-owner-escalation",
+      "mode": "owner-authorized-unbounded",
+      "minimum": 1,
+      "failure": "repair-complete-class-and-rereview",
       "forced_pass": false
     }
   },
@@ -387,7 +381,7 @@
       "work/rounds/**",
       "work/audit/R-0006/entry-control-as-built.md"
     ],
-    "record": "work/audit/R-0006/independent-review.md",
+    "record": "work/audit/R-0006/independent-opus-b9-review-final.md",
     "record_author": "DEVAI Auditor",
     "required_verdict": "PASS",
     "required_model": "claude-opus-5",
@@ -405,6 +399,32 @@
     ],
     "command": ["node", "packages/cli/dist/bin.js", "govern", "phase", "close"],
     "range_check": ["node", "scripts/check-governed-sequencing.mjs"]
+  },
+  "audit_current_claims": {
+    "markers": {
+      "start": "<!-- governed-current-claims:start -->",
+      "end": "<!-- governed-current-claims:end -->"
+    },
+    "volatile_current_numeric_prose_forbidden": true,
+    "documents": [
+      {
+        "path": "work/audit/R-0006/as-built.md",
+        "claims": [
+          "trace_invariants",
+          "trace_test_sources",
+          "trace_assertion_sites",
+          "r0006_sequencing_exception_entries",
+          "r0006_sequencing_exception_commits",
+          "operational_direct_rows",
+          "operational_distinct_direct_value_homes",
+          "operational_total_value_homes"
+        ]
+      },
+      {
+        "path": "work/audit/R-0006/om011-convergence-control-audit.md",
+        "claims": ["prior_b9_failure_records"]
+      }
+    ]
   },
   "semantic_assertions": {
     "population_sources": [

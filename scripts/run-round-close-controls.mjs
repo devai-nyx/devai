@@ -24,6 +24,11 @@ const NORMALIZED_RUNTIME_ARTIFACTS = [
   'scratch/coverage/t1-t3/coverage-final.json',
   'scratch/coverage/t1-t3/subprocess-v8/**',
 ];
+const FINAL_REVIEW_RECORD = 'work/audit/R-0006/independent-opus-b9-review-final.md';
+const AUDIT_CLAIM_IMPLEMENTATION_PATHS = [
+  'scripts/run-round-close-controls.mjs',
+  '.devai/config/round-close-controls.json',
+];
 
 function option(name) {
   const index = process.argv.indexOf(name);
@@ -463,6 +468,150 @@ function semanticContentFindings(root, revision, paths) {
   return findings;
 }
 
+function priorReviewPaths(reviewPolicy, root, revision) {
+  return [
+    ...new Set([
+      ...(reviewPolicy?.prior_reviews ?? []),
+      ...pathsForGlobs(root, revision, reviewPolicy?.prior_review_globs ?? []),
+    ]),
+  ].sort();
+}
+
+function markedJson(source, markers) {
+  const start = source.indexOf(markers?.start ?? '');
+  const end = source.indexOf(markers?.end ?? '');
+  if (start < 0 || end <= start) return null;
+  try {
+    const value = JSON.parse(source.slice(start + markers.start.length, end).trim());
+    return value !== null && typeof value === 'object' && !Array.isArray(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function expectedAuditCurrentClaims(policy, root, revision) {
+  const trace = JSON.parse(candidateFile(root, revision, 'law/trace.json'));
+  const sequencing = JSON.parse(
+    candidateFile(root, revision, 'law/policy/governed-sequencing.json'),
+  );
+  const operational = JSON.parse(
+    candidateFile(root, revision, 'law/policy/operational-values.json'),
+  );
+  const roundExceptions = (sequencing.historical_commit_exceptions ?? []).filter(
+    (entry) => entry?.round === 'R-0006',
+  );
+  const directEntries = (operational.entries ?? []).filter((entry) => entry?.mode === 'direct');
+  const failureRecords = priorReviewPaths(policy.review_scope, root, revision).filter(
+    (path) =>
+      path.includes('failure') ||
+      /^verdict:\s*FAIL\s*$/mu.test(candidateFile(root, revision, path)),
+  );
+  return {
+    trace_invariants: (trace.invariants ?? []).length,
+    trace_test_sources: (trace.test_corpus ?? []).length,
+    trace_assertion_sites: (trace.test_corpus ?? []).reduce(
+      (total, entry) => total + Number(entry?.assertion_count ?? 0),
+      0,
+    ),
+    r0006_sequencing_exception_entries: roundExceptions.length,
+    r0006_sequencing_exception_commits: roundExceptions.reduce(
+      (total, entry) => total + (entry.implementation_commits ?? []).length,
+      0,
+    ),
+    operational_direct_rows: directEntries.length,
+    operational_distinct_direct_value_homes: new Set(
+      directEntries.map((entry) => entry.canonical_home),
+    ).size,
+    operational_total_value_homes: Object.keys(operational.values ?? {}).length,
+    prior_b9_failure_records: failureRecords.length,
+  };
+}
+
+function auditCurrentClaimFindings(policy, root, revision) {
+  const findings = [];
+  const currentPolicy = policy?.audit_current_claims;
+  if (
+    currentPolicy === null ||
+    typeof currentPolicy !== 'object' ||
+    !Array.isArray(currentPolicy.documents) ||
+    currentPolicy.documents.length === 0 ||
+    currentPolicy.volatile_current_numeric_prose_forbidden !== true
+  ) {
+    return [
+      finding('AUDIT_CURRENT_CLAIM_POLICY_INVALID', 'governed current-claim policy is missing'),
+    ];
+  }
+  let expected;
+  try {
+    expected = expectedAuditCurrentClaims(policy, root, revision);
+  } catch (error) {
+    return [
+      finding('AUDIT_CURRENT_CLAIM_SOURCE_INVALID', `cannot derive current claims: ${error}`),
+    ];
+  }
+  for (const document of currentPolicy.documents) {
+    let source;
+    try {
+      source = candidateFile(root, revision, document.path);
+    } catch (error) {
+      findings.push(
+        finding('AUDIT_CURRENT_CLAIM_DRIFT', `governed audit document is unavailable: ${error}`, {
+          path: document.path,
+          implementation_paths: AUDIT_CLAIM_IMPLEMENTATION_PATHS,
+        }),
+      );
+      continue;
+    }
+    const actual = markedJson(source, currentPolicy.markers);
+    const selected = Object.fromEntries(
+      (document.claims ?? []).map((claim) => [claim, expected[claim]]),
+    );
+    if (actual === null || canonical(actual) !== canonical(selected)) {
+      findings.push(
+        finding(
+          'AUDIT_CURRENT_CLAIM_DRIFT',
+          'governed Auditor current claims differ from their machine sources',
+          {
+            path: document.path,
+            expected: selected,
+            actual,
+            implementation_paths: AUDIT_CLAIM_IMPLEMENTATION_PATHS,
+            details: {
+              path: document.path,
+              implementation_paths: AUDIT_CLAIM_IMPLEMENTATION_PATHS,
+            },
+          },
+        ),
+      );
+    }
+    const start = source.indexOf(currentPolicy.markers.start);
+    const end = source.indexOf(currentPolicy.markers.end);
+    const prose =
+      start >= 0 && end > start
+        ? `${source.slice(0, start)}${source.slice(end + currentPolicy.markers.end.length)}`
+        : source;
+    for (const paragraph of prose.split(/\n\s*\n/u)) {
+      if (
+        /\b(?:current|currently|latest|now)\b/iu.test(paragraph) &&
+        /\b\d[\d,.]*%?\b/u.test(paragraph) &&
+        /\b(?:trace|sequenc|review|coverage|suite|range|population|assertion|test source)\w*/iu.test(
+          paragraph,
+        ) &&
+        !/\b[0-9a-f]{40}\b/u.test(paragraph)
+      ) {
+        findings.push(
+          finding(
+            'AUDIT_CURRENT_PROSE_UNBOUND',
+            'volatile current numeric audit prose must be machine-claimed or exact-subject-bound',
+            { path: document.path, implementation_paths: AUDIT_CLAIM_IMPLEMENTATION_PATHS },
+          ),
+        );
+      }
+    }
+  }
+  return findings;
+}
+
 function policyFindings(policy, root = repoRoot, revision = 'HEAD', options = {}) {
   const findings = [];
   const assertions = policy?.semantic_assertions;
@@ -561,6 +710,28 @@ function policyFindings(policy, root = repoRoot, revision = 'HEAD', options = {}
       ),
     );
   }
+  if (policy?.review?.record !== FINAL_REVIEW_RECORD) {
+    findings.push(
+      finding(
+        'POLICY_FINAL_REVIEW_RECORD_INVALID',
+        'one stable final B9 review record is required',
+      ),
+    );
+  }
+  if (
+    canonical(policy?.review_scope?.review_cycles) !==
+    canonical({
+      mode: 'owner-authorized-unbounded',
+      minimum: 1,
+      failure: 'repair-complete-class-and-rereview',
+      forced_pass: false,
+    })
+  ) {
+    findings.push(
+      finding('REVIEW_CYCLE_POLICY_INVALID', 'OM-012 unbounded review continuation is required'),
+    );
+  }
+  findings.push(...auditCurrentClaimFindings(policy, root, revision));
   return findings;
 }
 
@@ -1914,7 +2085,7 @@ function reviewScopeManifest() {
     });
   }
 
-  for (const path of reviewPolicy?.prior_reviews ?? []) {
+  for (const path of priorReviewPaths(reviewPolicy, repoRoot, candidate)) {
     const current = optionalCandidateFile(repoRoot, candidate, path);
     if (current === null) {
       findings.push(finding('REVIEW_SCOPE_SOURCE_MISSING', 'prior review is missing', { path }));
@@ -2014,11 +2185,15 @@ function reviewCheck() {
   const candidate = option('--candidate') ?? '';
   const record = option('--review-record') ?? '';
   const cycle = Number(option('--cycle') ?? '1');
-  if (!Number.isInteger(cycle) || cycle < 1 || cycle > (reviewPolicy?.review_cycles?.maximum ?? 0))
+  if (
+    !Number.isInteger(cycle) ||
+    cycle < (reviewPolicy?.review_cycles?.minimum ?? Number.POSITIVE_INFINITY) ||
+    reviewPolicy?.review_cycles?.mode !== 'owner-authorized-unbounded'
+  )
     findings.push(
       finding(
         'REVIEW_CYCLE_BUDGET_EXHAUSTED',
-        'review cycle is outside the OM-011 two-cycle budget',
+        'review cycle is outside the OM-012 review-until-PASS protocol',
         { cycle },
       ),
     );
