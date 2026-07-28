@@ -124,6 +124,13 @@ export function mergeCanonicalHits(
   coverageMap: MutableCoverageMap,
   subprocessMap: MutableCoverageMap,
 ): void {
+  for (const filename of coverageMap.files()) {
+    const current = coverageMap.fileCoverageFor(filename).toJSON() as FileCoverageData;
+    statementLocationHits(current, 'parent');
+    functionLocationHits(current, 'parent');
+    branchLocationHits(current, 'parent');
+  }
+
   for (const filename of subprocessMap.files()) {
     if (!coverageMap.files().includes(filename)) continue;
     const candidate = subprocessMap.fileCoverageFor(filename).toJSON() as FileCoverageData;
@@ -132,9 +139,6 @@ export function mergeCanonicalHits(
     const statementHits = statementLocationHits(candidate, 'subprocess');
     const functionHits = functionLocationHits(candidate, 'subprocess');
     const branchHits = branchLocationHits(candidate, 'subprocess');
-    statementLocationHits(current, 'parent');
-    functionLocationHits(current, 'parent');
-    branchLocationHits(current, 'parent');
 
     for (const [id, location] of Object.entries(current.statementMap)) {
       const key = locationKey(location);
