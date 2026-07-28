@@ -501,6 +501,11 @@
       "round": "R-0006",
       "implementation_commits": ["6a581a9a9c1586d73a604108b845e5af5ef573c8"],
       "reason": "The cycle-1 finding-retention materialization followed Architect DII-232 and the behavior-first Inspector red 1771b0b, but that immutable failing Inspector source named law/policy/round-close-controls.json and the fifth-review record rather than the exact Engineer path .devai/config/round-close-controls.json required by the prospective semantic-scope rule. Auditor 0f22cfa preserves the failed smart-convergence governance gate and exact path. Inspector 547351f now binds both canonical and materialized paths prospectively; history is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["5c290bedf335d4cd65813370e26218588eb8ac2f"],
+      "reason": "The OM-013 Codex-review controller and materialization followed Architect DII-240 and an observed two-test selector failure preserved by Auditor aae5d53, but the repairing Inspector commit 7edc33b followed the Engineer commit and therefore cannot be relabelled as a qualifying prior semantic red. Fresh smart convergence at b3d3236 stopped on the missing binding, and Auditor 48a9779 preserves the exact governance failure. History is not rewritten; this exact-commit disclosure grants no prospective exception."
     }
   ],
   "historical_round_disclosures": [

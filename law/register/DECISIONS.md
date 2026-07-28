@@ -4231,6 +4231,40 @@ This decision claims no fresh candidate yet, review PASS, publication, merge,
 exact-main CI, PC-0007, closure, release, package publication, tag, GitHub Release,
 Pages deployment, evidence promotion, predecessor mutation, or R-0007+ authority.
 
+### DII-242 — Contain the Codex substitution sequencing defect
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 Codex-substitution governance correction; OM-013; DII-240; DII-241; Auditor 48a97795b6225e2c67f90b32add5abb6431efb95; Engineer 5c290bedf335d4cd65813370e26218588eb8ac2f; Inspector 7edc33b3a4c18e14d02c87ce51c7df0d9f35edf1`
+
+Fresh smart convergence at exact candidate
+`b3d323605834d1f8fea679920c2933701a96ee16` executed the governance task and stopped
+on one complete-class finding: substantive Engineer commit
+`5c290bedf335d4cd65813370e26218588eb8ac2f` had zero governed sequencing bindings.
+Auditor `48a97795b6225e2c67f90b32add5abb6431efb95` preserves the exact task key, input
+digest, exit, reproduction, and invalidated candidate standing.
+
+The implementation followed DII-240 and a real two-test selector failure preserved by
+Auditor `aae5d538d98cead86863d7f8f4a97c68a4342b77`, but the repairing Inspector commit
+`7edc33b3a4c18e14d02c87ce51c7df0d9f35edf1` followed the Engineer commit. It is not
+relabelled as a qualifying prior semantic red. Rewriting the role-pure published branch
+history would erase the failure chronology, so the governed sequencing policy records
+one exact historical commit exception for `5c290bed…`, with no round-wide or
+prospective bypass. The complete affected population is that single Engineer commit.
+
+The machine-derived current claim now reports six R-0006 exception entries covering
+seven exact commits. Policy-check and governed sequencing must pass from the new clean
+head before any candidate, manifest, rehearsal, or review is regenerated. Candidate
+`b3d3236…` and its partial convergence have no standing.
+
+DII-242 replaces DII-241 as the Architect closing decision for production PC-0007;
+DII-207 remains the declaration. After the exact correction passes, it authorizes only
+a fresh candidate, two-pass convergence, isolated rehearsal, new manifests, and the
+OM-013 independent `gpt-5.6-sol` exhaustive review. Any new substantive implementation
+still requires an ordinary exact prior semantic-red binding; this exception cannot be
+copied forward.
+
+This decision claims no fresh candidate yet, review PASS, publication, merge,
+exact-main CI, PC-0007, closure, release, package publication, tag, GitHub Release,
+Pages deployment, evidence promotion, predecessor mutation, or R-0007+ authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
