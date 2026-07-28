@@ -3,13 +3,13 @@ id: R-0006-AS-BUILT
 title: R-0006 contracts and coverage depth as-built
 type: audit-report
 status: active
-date: 2026-07-27
+date: 2026-07-28
 authority: Auditor
 supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-211–230; OM-011; R-0006-ENTRY-INVENTORY; BL-026; BL-034; BL-035; BL-081; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; R-0006-BRANCH-COVERAGE-INTEGRITY-RED-EVIDENCE; R-0006-HONEST-BRANCH-COVERAGE-DEPTH-RED-EVIDENCE; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; implementation subject e284a6cb9b2d23eaf5713c34ecf29e324397b355; trace projection cef0540a70a62de2222078c63455cd763fa92703; sequencing binding 5fb17269fe3b17cf4d0de9733b6fd3b1146106d9; fifth-review failure evidence 2e02d31c9504d4ee63dbe05f40084466292aff99,
+    DII-211–230; DII-243; OM-011; R-0006-ENTRY-INVENTORY; BL-026; BL-034; BL-035; BL-081; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; R-0006-BRANCH-COVERAGE-INTEGRITY-RED-EVIDENCE; R-0006-HONEST-BRANCH-COVERAGE-DEPTH-RED-EVIDENCE; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; R-0006-OUTPUT-TOTALITY-POPULATION; implementation subjects a8bec1c66379449c1b3d82879c765fc062cb49a0, f8886676d81e560fc85be3914e7f2e129ebb61c3, 3be16cb1dca53a2614ced355f9de35bb1b65f752, and 2f1a24b4e0f42dd2eacbce1da83ea741b66a2486; population artifact 6461aadb0185450b30bfb3101230a78760e929a75b8a91c40ece250dfb7a3afe,
   ]
 ---
 
@@ -17,8 +17,8 @@ provenance:
 
 ## Boundary and verdict
 
-R-0006 B0 through B7 and the final B9 coverage correction are implemented and tested
-through exact implementation subject `e284a6cb9b2d23eaf5713c34ecf29e324397b355`;
+R-0006 B0 through B7 and the final B9 coverage correction were implemented and tested
+through historical implementation subject `e284a6cb9b2d23eaf5713c34ecf29e324397b355`;
 its caused trace projection is exact Architect commit
 `cef0540a70a62de2222078c63455cd763fa92703`. B8 and the B9
 exit-ladder corrections are audited through that projection. The audit finds **no
@@ -29,7 +29,12 @@ the four 70/60/70/70 floors and all four pre-existing exclusions are unchanged, 
 strength remains separate from evidence aggregation. All mandatory B9 Opus FAILs,
 every exact-hit and collision-semantics correction, every honest post-correction red,
 and every governed R-0006 historical sequencing exception remain visible rather than
-being relabelled green.
+being relabelled green. The later cycle-5 output-totality repair is separately bound to
+exact Engineer subjects `a8bec1c66379449c1b3d82879c765fc062cb49a0`,
+`f8886676d81e560fc85be3914e7f2e129ebb61c3`,
+`3be16cb1dca53a2614ced355f9de35bb1b65f752`, and
+`2f1a24b4e0f42dd2eacbce1da83ea741b66a2486`. It does not restore a rejected candidate
+or alter any historical independent-review verdict.
 
 The following block is the sole current numeric authority in this audit for its named
 volatile populations. `policy-check` derives every value from canonical machine sources
@@ -365,13 +370,38 @@ unknown identities, structured handler failures, usage failures, opposite-channe
 silence, and the common command harness. Human rendering remains presentation and is
 not used as machine evidence.
 
-At exact reviewed candidate `ab4721b09ef3dde327c5d660fdf78b542cc85a66`, the non-keep
+At historical reviewed candidate `ab4721b09ef3dde327c5d660fdf78b542cc85a66`, the non-keep
 census asserts exact `router-only` output and error modes for all 39 rows. A
 registry-derived folded alias and the tombstone are both executed and prove
 exit 2, empty stdout, and one structured stderr refusal. The kept-action envelope is
-tested generically plus across the existing public-read and command suites, but this
-audit does not claim a dedicated end-to-end invocation for each of the 147 kept
-identities. Contract totality and per-identity invocation coverage are distinct.
+tested generically plus across the existing public-read and command suites. That
+candidate did not have a dedicated behavioral invocation for each of the 147 kept
+identities.
+
+The cycle-5 repair closes that later evidence gap. Inspector executables `86934e7` and
+`fd2ea61` generated `output-totality-population.json` under `CI=true` and
+`GITHUB_ACTIONS=true` in isolated Git fixtures with no ambient Git identity, trusted
+local cache, alternates, or real external mutation. The artifact SHA-256 is
+`6461aadb0185450b30bfb3101230a78760e929a75b8a91c40ece250dfb7a3afe` and its verdict is
+PASS with an empty failure set. Expected and unique observed populations match exactly:
+
+- 147 retained actions, each executed in human mode and both machine spellings, with
+  45 `EXECUTED_SAFE_SUCCESS`, four `EXECUTED_SAFE_FAILURE`, and 98
+  `EXECUTED_FAIL_CLOSED_REFUSAL` dispositions;
+- all 59 `sense run <kind>` identities plus the list path under both machine spellings;
+- all 13 actual noncanonical-exit producers, including mocked external skill boundaries
+  only for the three otherwise unreachable REVIEW/strict-exit branches; and
+- initialization, registry validation, routing, authorization, and handler-dispatch
+  non-allowlisted throws.
+
+Every executed row records its fixture and channel digests and proves one schema-valid
+action-result envelope, exact public `action_id`, opposite-channel silence, process
+status equal to `error.exit` on failure, semantic equivalence between `--json` and
+`--format json`, and human/machine domain-semantic equivalence. Contract totality and
+per-identity behavioral coverage are now both observed for the retained population.
+This finding is only the pre-review semantic gate: formal cycle 6, clean-runner parity,
+fresh convergence, rehearsal, manifests, candidate freeze, publication, merge, and
+round closure remain unclaimed here.
 
 ## Law extraction and evidence semantics
 
