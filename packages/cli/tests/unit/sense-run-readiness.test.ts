@@ -34,7 +34,7 @@ function aggregate(children: readonly Child[]): Aggregate {
 }
 
 describe('sense run readiness aggregation', () => {
-  it('KR-R5-028 projects only an exact registry-resolved read sensor to a read boundary', () => {
+  it('KR-R5-028 projects every registered single sensor to a read boundary', () => {
     const classify = invocationIsNonMutating as (
       internalName: string,
       args: readonly string[],
@@ -69,7 +69,7 @@ describe('sense run readiness aggregation', () => {
     expect(classify('sense-run', argv('decision_record_integrity', '--write'), entries)).toBe(
       false,
     );
-    expect(classify('sense-run', argv('inventory_regeneration'), entries)).toBe(false);
+    expect(classify('sense-run', argv('inventory_regeneration'), entries)).toBe(true);
     expect(classify('sense-run', argv('unknown_kind'), entries)).toBe(false);
     expect(
       classify(

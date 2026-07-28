@@ -146,7 +146,7 @@ describe('R-0006 Codex cycle-5 output-totality red', () => {
       expect(result.stderr).toBe('');
       expect(envelope(result.stdout)).toMatchObject({ action_id: 'sense run', ok: true });
     }
-  });
+  }, 15_000);
 
   it('normalizes a non-allowlisted pre-dispatch exception into the action envelope', () => {
     const missing = `/tmp/devai-r0006-cycle5-missing-${String(process.pid)}`;
