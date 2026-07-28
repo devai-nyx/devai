@@ -687,6 +687,11 @@
           "target_type": "test"
         },
         {
+          "suite": "contract",
+          "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "e2e",
           "path": "tests/e2e/inventory-sensors.smoke.test.ts",
           "target_type": "test"
@@ -724,6 +729,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
           "target_type": "test"
         }
       ]
@@ -1290,6 +1300,11 @@
           "suite": "contract",
           "path": "tests/contract/r0006-output-contracts.red.contract.test.ts",
           "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
+          "target_type": "test"
         }
       ]
     },
@@ -1464,6 +1479,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/r0006-output-contracts.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -3060,6 +3080,19 @@
       "lifecycle": "supported",
       "assertion_count": 22,
       "assertion_digest_sha256": "82c54a5796f82ab0b49f05196500823ed5c9b9eb7b254953b88390c7331fce47"
+    },
+    {
+      "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-003",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 55,
+      "assertion_digest_sha256": "b6ba2d5e4c69b367c4706fa5b83b2c427e1464d285de149442b1e059806862d8"
     },
     {
       "path": "tests/e2e/bare-domain-help.e2e.test.ts",
