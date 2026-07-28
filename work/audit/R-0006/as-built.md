@@ -38,7 +38,7 @@ prose.
 
 <!-- governed-current-claims:start -->
 
-{"trace_invariants":34,"trace_test_sources":156,"trace_assertion_sites":2853,"r0006_sequencing_exception_entries":5,"r0006_sequencing_exception_commits":6,"operational_direct_rows":17,"operational_distinct_direct_value_homes":16,"operational_total_value_homes":17}
+{"trace_invariants":34,"trace_test_sources":156,"trace_assertion_sites":2857,"r0006_sequencing_exception_entries":5,"r0006_sequencing_exception_commits":6,"operational_direct_rows":17,"operational_distinct_direct_value_homes":16,"operational_total_value_homes":17}
 <!-- governed-current-claims:end -->
 
 This is an implementation as-built, not a B9 review or publication verdict. The exact
