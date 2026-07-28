@@ -3607,6 +3607,45 @@ closure before source merge and exact-main CI, package publication, tag, GitHub 
 Pages or other deployment, evidence reuse or promotion, real-stynx mutation,
 predecessor mutation, or R-0007+ work.
 
+### DII-227 — Aggregate convergent subprocess observations into unique canonical locations
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 DII-226 live-population correction; DII-222; DII-225; DII-226; Inspector 912092f0d3d042fd932b077aa3bd06089de11bb2; authoritative coverage FAIL at branch location 404:9:406:3; Inspector 9fe038682f35674f8cfe26eda6c3e271eb2ee21c; Auditor 968099c2582e8812bb1bcd6e6de9cbdb3985336d`
+
+DII-226 correctly requires unique complete locations in the canonical parent map and
+exact cumulative repeat behavior. Its prospective requirement to reject duplicate
+subprocess locations is too broad and is superseded only for that subprocess-map case.
+The first implementation made all seven then-current focused contracts green, but the
+unchanged authoritative coverage command failed on two legitimate source-mapped branch
+observations converging at exact location `404:9:406:3`. That failed run has no coverage
+or review standing and is preserved as red evidence.
+
+The canonical Istanbul parent map remains the denominator and therefore must contain at
+most one complete location per coverage kind. Duplicate complete statement entries,
+function entries, or branch arms in that parent map remain malformed and fail before
+any mutation. The fourth review measured zero such parent collisions across the real
+378-file population.
+
+The subprocess map is observation input rather than the canonical denominator. Multiple
+same-kind subprocess observations may source-map to one complete canonical location.
+They must be summed within their kind before the aggregate is applied exactly once to
+the matching parent counter. A subprocess statement, function, or branch pair carrying
+counts one and two at the same complete location therefore contributes three, not the
+last observed count, not a duplicate-evidence failure, and not a cross-kind sum.
+Incomplete locations remain excluded and contribute nothing.
+
+Inspector `9fe038682f35674f8cfe26eda6c3e271eb2ee21c` preserves the refined red while
+keeping canonical-parent rejection, repeat accumulation, degenerate-location exclusion,
+exact counters, retention, and reporter behavior green. Auditor
+`968099c2582e8812bb1bcd6e6de9cbdb3985336d` binds both the real coverage-command
+failure and the focused red. Inspector may correct only the existing provider and must
+rerun the focused, ordinary, and unchanged complete-denominator coverage commands.
+
+This correction authorizes no parent collision, cross-kind aggregation, inferred hit,
+threshold or exclusion change, denominator or source change, generated relabeling,
+skip or assertion-mechanism change, reuse of the failed coverage run, source publication
+before fresh review PASS, closure before source merge and exact-main CI, package
+publication, tag, GitHub Release, Pages or other deployment, evidence reuse or
+promotion, real-stynx mutation, predecessor mutation, or R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
