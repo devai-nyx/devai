@@ -509,9 +509,14 @@ describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
         previous_findings_mandatory: boolean;
       };
     };
+    const materializedPolicy = JSON.parse(
+      readFileSync(join(ROOT, '.devai/config/round-close-controls.json'), 'utf8'),
+    ) as typeof livePolicy;
     const cycleOneRecord = 'work/audit/R-0006/independent-opus-b9-review-5-failure.md';
     expect(livePolicy.review_scope.previous_findings_mandatory).toBe(true);
     expect(livePolicy.review_scope.prior_reviews).toContain(cycleOneRecord);
+    expect(materializedPolicy).toEqual(livePolicy);
+    expect(materializedPolicy.review_scope.prior_reviews).toContain(cycleOneRecord);
     const source = readFileSync(join(ROOT, cycleOneRecord), 'utf8');
     expect(source).toContain('### P1 — stale current coverage, suite, trace, and range readings');
     expect(source).toContain('### P2 — stale governed-sequencing exception census');
