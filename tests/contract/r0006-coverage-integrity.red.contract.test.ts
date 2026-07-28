@@ -29,8 +29,11 @@ interface CoverageData {
 class FixtureCoverageMap {
   readonly #entries: Map<string, CoverageData>;
 
-  constructor(data: CoverageData) {
-    this.#entries = new Map([[data.path, structuredClone(data)]]);
+  constructor(data: CoverageData | readonly CoverageData[]) {
+    const population = Array.isArray(data) ? data : [data];
+    this.#entries = new Map(
+      population.map((coverage) => [coverage.path, structuredClone(coverage)]),
+    );
   }
 
   files(): string[] {
@@ -253,6 +256,28 @@ describe('R-0006 coverage measurement integrity', () => {
         ),
       ).toThrow(/duplicate exact .* location/u);
     }
+  });
+
+  it('fails closed on a duplicate parent location in a file absent from subprocess coverage', async () => {
+    const provider = (await import('../config/subprocess-v8-coverage-provider.js')) as unknown as {
+      mergeCanonicalHits?: (current: FixtureCoverageMap, subprocess: FixtureCoverageMap) => void;
+    };
+    expect(
+      'tests/config/subprocess-v8-coverage-provider.ts',
+      'the red must bind the exact prospective Inspector implementation path',
+    ).toContain('subprocess-v8-coverage-provider.ts');
+    const parentOnlyDuplicate: CoverageData = {
+      ...fixtureCoverage(0, 0),
+      path: '/fixture/parent-only.ts',
+      statementMap: { first: outer, second: outer },
+      s: { first: 1, second: 2 },
+    };
+    const current = new FixtureCoverageMap([fixtureCoverage(0, 0), parentOnlyDuplicate]);
+    const subprocess = new FixtureCoverageMap(fixtureCoverage(0, 0));
+
+    expect(() => provider.mergeCanonicalHits?.(current, subprocess)).toThrow(
+      /duplicate exact statement location/u,
+    );
   });
 
   it('configures an auditable statement-level coverage artifact', async () => {

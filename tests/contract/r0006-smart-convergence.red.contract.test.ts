@@ -75,6 +75,15 @@ function policy(): string {
         decision_id: 'DII-207',
         base_pattern: 'exact successor base `([0-9a-f]{40})`',
       },
+      identities: {
+        fields: ['implementation_subject', 'review_candidate', 'published_head'],
+        required_kind: 'commit',
+        publishability: 'candidate-only-no-alternates',
+      },
+      governed_range: {
+        mode: 'exact-declared-base-to-published-head',
+        fixed_windows_forbidden: true,
+      },
       freshness_schema: 'law/schemas/task-freshness.schema.json',
       review_scope_schema: 'law/schemas/review-scope-manifest.schema.json',
       freshness: {
@@ -130,7 +139,10 @@ function policy(): string {
       convergence: {
         passes: 2,
         second_pass: 'no-write-clean',
-        normalized_runtime_artifacts: [],
+        normalized_runtime_artifacts: [
+          'scratch/coverage/t1-t3/coverage-final.json',
+          'scratch/coverage/t1-t3/subprocess-v8/**',
+        ],
         commands: [
           { id: 'ordinary', argv: ['node', 'fixture/gate.mjs', 'ordinary'] },
           { id: 'coverage', argv: ['node', 'fixture/gate.mjs', 'coverage'] },
@@ -151,8 +163,9 @@ function policy(): string {
         ],
         controlling_sources: ['law/policy/round-close-controls.json', 'law/register/DECISIONS.md'],
         prior_reviews: [1, 2, 3, 4].map(
-          (number) => `work/audit/R-0006/review-${String(number)}-failure.md`,
+          (number) => `work/audit/R-0006/independent-opus-b9-review-${String(number)}-failure.md`,
         ),
+        prior_review_globs: ['work/audit/R-0006/independent-opus-b9-review*-failure.md'],
         topic_sources: [
           'changed-path',
           'requirement',
@@ -181,12 +194,47 @@ function policy(): string {
           end: '<!-- review-topic-dispositions:end -->',
         },
         review_cycles: {
-          maximum: 2,
-          cycle_1: 'exhaustive-discovery',
-          cycle_2: 'complete-rereview',
-          cycle_2_failure: 'stop-and-owner-escalation',
+          mode: 'owner-authorized-unbounded',
+          minimum: 1,
+          failure: 'repair-complete-class-and-rereview',
           forced_pass: false,
         },
+      },
+      review: {
+        record: 'work/audit/R-0006/independent-opus-b9-review-final.md',
+      },
+      audit_current_claims: {
+        markers: {
+          start: '<!-- governed-current-claims:start -->',
+          end: '<!-- governed-current-claims:end -->',
+        },
+        volatile_current_numeric_prose_forbidden: true,
+        documents: [
+          {
+            path: 'work/audit/R-0006/as-built.md',
+            claims: [
+              'trace_invariants',
+              'trace_test_sources',
+              'trace_assertion_sites',
+              'r0006_sequencing_exception_entries',
+              'r0006_sequencing_exception_commits',
+              'operational_direct_rows',
+              'operational_distinct_direct_value_homes',
+              'operational_total_value_homes',
+            ],
+          },
+          {
+            path: 'work/audit/R-0006/om011-convergence-control-audit.md',
+            claims: ['prior_b9_failure_records'],
+          },
+        ],
+      },
+      semantic_assertions: {
+        population_sources: ['tests/**/*.ts'],
+        fixed_counts_forbidden: true,
+        self_comparisons_forbidden: true,
+        named_file_only_forbidden: true,
+        mirror_pairs: [],
       },
     },
     null,
@@ -213,16 +261,33 @@ function fixture(): Fixture {
     "import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';\nconst id=process.argv[2]; const dir='.devai/state/executions'; mkdirSync(dir,{recursive:true}); const path=dir+'/'+id; const count=Number((()=>{try{return readFileSync(path,'utf8')}catch{return '0'}})()); writeFileSync(path,String(count+1)); if(id==='coverage'){mkdirSync('scratch/coverage',{recursive:true}); writeFileSync('scratch/coverage/coverage-summary.json','{\\\"ok\\\":true}\\n')}\n",
   );
   put(root, 'law/policy/round-close-controls.json', policy());
+  put(root, 'law/trace.json', '{"invariants":[{}],"test_corpus":[{"assertion_count":1}]}\n');
+  put(root, 'law/policy/governed-sequencing.json', '{"historical_commit_exceptions":[]}\n');
+  put(
+    root,
+    'law/policy/operational-values.json',
+    '{"entries":[{"mode":"direct","canonical_home":"law/policy/operational-values.json#/values/one"}],"values":{"one":{}}}\n',
+  );
   put(root, 'law/schemas/task-freshness.schema.json', '{}\n');
   put(root, 'law/schemas/review-scope-manifest.schema.json', '{}\n');
   put(root, 'work/rounds/R-0006/AUTHORIZATION.md', '# Authorization\n- Every gate passes.\n');
   put(root, 'work/rounds/R-0006/plan.md', '# Plan\n- Coverage stays whole.\n');
   put(root, 'work/rounds/R-0006/prompts/00-orchestrator.md', '# Prompt\n- Review every topic.\n');
   put(root, 'product/owner-mandates/OM-011.md', '# OM-011\n- Cache only exact PASS.\n');
+  put(
+    root,
+    'work/audit/R-0006/as-built.md',
+    '# As built\n<!-- governed-current-claims:start -->\n{"trace_invariants":1,"trace_test_sources":1,"trace_assertion_sites":1,"r0006_sequencing_exception_entries":0,"r0006_sequencing_exception_commits":0,"operational_direct_rows":1,"operational_distinct_direct_value_homes":1,"operational_total_value_homes":1}\n<!-- governed-current-claims:end -->\n',
+  );
+  put(
+    root,
+    'work/audit/R-0006/om011-convergence-control-audit.md',
+    '# Control audit\n<!-- governed-current-claims:start -->\n{"prior_b9_failure_records":4}\n<!-- governed-current-claims:end -->\n',
+  );
   for (const number of [1, 2, 3, 4]) {
     put(
       root,
-      `work/audit/R-0006/review-${String(number)}-failure.md`,
+      `work/audit/R-0006/independent-opus-b9-review-${String(number)}-failure.md`,
       `# Review ${String(number)}\n### P1 — defect class ${String(number)}\nFinding ${String(number)}.\n`,
     );
   }
@@ -238,13 +303,20 @@ function fixture(): Fixture {
     'fixture/tool-version.mjs',
     'fixture/gate.mjs',
     'law/policy/round-close-controls.json',
+    'law/trace.json',
+    'law/policy/governed-sequencing.json',
+    'law/policy/operational-values.json',
     'law/schemas/task-freshness.schema.json',
     'law/schemas/review-scope-manifest.schema.json',
     'work/rounds/R-0006/AUTHORIZATION.md',
     'work/rounds/R-0006/plan.md',
     'work/rounds/R-0006/prompts/00-orchestrator.md',
     'product/owner-mandates/OM-011.md',
-    ...[1, 2, 3, 4].map((number) => `work/audit/R-0006/review-${String(number)}-failure.md`),
+    'work/audit/R-0006/as-built.md',
+    'work/audit/R-0006/om011-convergence-control-audit.md',
+    ...[1, 2, 3, 4].map(
+      (number) => `work/audit/R-0006/independent-opus-b9-review-${String(number)}-failure.md`,
+    ),
   ]);
   put(
     root,
@@ -500,26 +572,74 @@ describe('R-0006 OM-011 content-addressed freshness red contracts', () => {
 });
 
 describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
-  it('makes the cycle-1 failure classes mandatory in the cycle-2 census', () => {
+  it('binds OM-012 continuation, review-6 retention, and one stable final PASS destination', () => {
     const livePolicy = JSON.parse(
       readFileSync(join(ROOT, 'law/policy/round-close-controls.json'), 'utf8'),
     ) as {
+      review: { record: string };
       review_scope: {
-        prior_reviews: string[];
+        requirement_sources: string[];
+        prior_review_globs: string[];
+        review_cycles: Record<string, unknown>;
         previous_findings_mandatory: boolean;
       };
     };
     const materializedPolicy = JSON.parse(
       readFileSync(join(ROOT, '.devai/config/round-close-controls.json'), 'utf8'),
     ) as typeof livePolicy;
-    const cycleOneRecord = 'work/audit/R-0006/independent-opus-b9-review-5-failure.md';
+    const finalRecord = 'work/audit/R-0006/independent-opus-b9-review-final.md';
+    const reviewGlob = 'work/audit/R-0006/independent-opus-b9-review*.md';
+    const cycleTwoRecord = 'work/audit/R-0006/independent-opus-b9-review-6.md';
     expect(livePolicy.review_scope.previous_findings_mandatory).toBe(true);
-    expect(livePolicy.review_scope.prior_reviews).toContain(cycleOneRecord);
+    expect(livePolicy.review.record).toBe(finalRecord);
+    expect(livePolicy.review_scope.requirement_sources).toContain(
+      'product/owner-mandates/OM-012.md',
+    );
+    expect(livePolicy.review_scope.prior_review_globs).toContain(reviewGlob);
+    expect(livePolicy.review_scope.review_cycles).toEqual({
+      mode: 'owner-authorized-unbounded',
+      minimum: 1,
+      failure: 'repair-complete-class-and-rereview',
+      forced_pass: false,
+    });
     expect(materializedPolicy).toEqual(livePolicy);
-    expect(materializedPolicy.review_scope.prior_reviews).toContain(cycleOneRecord);
-    const source = readFileSync(join(ROOT, cycleOneRecord), 'utf8');
-    expect(source).toContain('### P1 — stale current coverage, suite, trace, and range readings');
-    expect(source).toContain('### P2 — stale governed-sequencing exception census');
+    expect(readFileSync(join(ROOT, cycleTwoRecord), 'utf8')).toContain(
+      '### P1 — the active as-built again presents superseded readings as current',
+    );
+    expect(readFileSync(join(ROOT, 'scripts/run-round-close-controls.mjs'), 'utf8')).toContain(
+      finalRecord,
+    );
+    expect(readFileSync(join(ROOT, '.devai/config/round-close-controls.json'), 'utf8')).toContain(
+      finalRecord,
+    );
+  });
+
+  it('fails the policy gate when a governed current claim drifts from machine sources', () => {
+    const current = fixture();
+    const valid = run(current.root, ['policy-check']);
+    expect(valid.status, valid.stderr).toBe(0);
+
+    put(
+      current.root,
+      'law/trace.json',
+      '{"invariants":[{},{}],"test_corpus":[{"assertion_count":3}]}\n',
+    );
+    const stale = run(current.root, ['policy-check']);
+    expect(stale.status).not.toBe(0);
+    expect(output(stale).findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'AUDIT_CURRENT_CLAIM_DRIFT',
+          details: expect.objectContaining({
+            path: 'work/audit/R-0006/as-built.md',
+            implementation_paths: expect.arrayContaining([
+              'scripts/run-round-close-controls.mjs',
+              '.devai/config/round-close-controls.json',
+            ]),
+          }),
+        }),
+      ]),
+    );
   });
 
   it('emits every exact-range, requirement, control, manifest, and prior-finding topic exactly once', () => {
@@ -612,7 +732,7 @@ describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
     },
   );
 
-  it('retains every prior finding class after repair and blocks review cycle 3', () => {
+  it('retains every prior finding class after repair and admits Owner-authorized cycle 3', () => {
     const current = fixture();
     const generated = generateScope(current);
     const manifest = generated.manifest as {
@@ -638,7 +758,7 @@ describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
       '3',
     ]);
     expect(result.status).not.toBe(0);
-    expect(output(result).findings).toEqual(
+    expect(output(result).findings).not.toEqual(
       expect.arrayContaining([expect.objectContaining({ code: 'REVIEW_CYCLE_BUDGET_EXHAUSTED' })]),
     );
   });
