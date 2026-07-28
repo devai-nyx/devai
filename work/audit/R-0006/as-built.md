@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-211–230; DII-243; OM-011; R-0006-ENTRY-INVENTORY; BL-026; BL-034; BL-035; BL-081; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; R-0006-BRANCH-COVERAGE-INTEGRITY-RED-EVIDENCE; R-0006-HONEST-BRANCH-COVERAGE-DEPTH-RED-EVIDENCE; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; R-0006-OUTPUT-TOTALITY-POPULATION; implementation subjects a8bec1c66379449c1b3d82879c765fc062cb49a0, f8886676d81e560fc85be3914e7f2e129ebb61c3, 3be16cb1dca53a2614ced355f9de35bb1b65f752, and 2f1a24b4e0f42dd2eacbce1da83ea741b66a2486; population artifact 6461aadb0185450b30bfb3101230a78760e929a75b8a91c40ece250dfb7a3afe,
+    DII-211–230; DII-243; DII-244; OM-011; R-0006-ENTRY-INVENTORY; BL-026; BL-034; BL-035; BL-081; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; R-0006-BRANCH-COVERAGE-INTEGRITY-RED-EVIDENCE; R-0006-HONEST-BRANCH-COVERAGE-DEPTH-RED-EVIDENCE; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; R-0006-OUTPUT-TOTALITY-POPULATION; implementation subjects a8bec1c66379449c1b3d82879c765fc062cb49a0, f8886676d81e560fc85be3914e7f2e129ebb61c3, 3be16cb1dca53a2614ced355f9de35bb1b65f752, and 2f1a24b4e0f42dd2eacbce1da83ea741b66a2486; population artifact 6461aadb0185450b30bfb3101230a78760e929a75b8a91c40ece250dfb7a3afe,
   ]
 ---
 
@@ -34,7 +34,9 @@ exact Engineer subjects `a8bec1c66379449c1b3d82879c765fc062cb49a0`,
 `f8886676d81e560fc85be3914e7f2e129ebb61c3`,
 `3be16cb1dca53a2614ced355f9de35bb1b65f752`, and
 `2f1a24b4e0f42dd2eacbce1da83ea741b66a2486`. It does not restore a rejected candidate
-or alter any historical independent-review verdict.
+or alter any historical independent-review verdict. DII-244 preserves the exact
+sequencing exception for `2f1a24b…`; the other three commits retain their ordinary
+prior-law and prior-red binding.
 
 The following block is the sole current numeric authority in this audit for its named
 volatile populations. `policy-check` derives every value from canonical machine sources
@@ -43,7 +45,7 @@ prose.
 
 <!-- governed-current-claims:start -->
 
-{"trace_invariants":34,"trace_test_sources":156,"trace_assertion_sites":2869,"r0006_sequencing_exception_entries":6,"r0006_sequencing_exception_commits":7,"operational_direct_rows":17,"operational_distinct_direct_value_homes":16,"operational_total_value_homes":17}
+{"trace_invariants":34,"trace_test_sources":158,"trace_assertion_sites":2899,"r0006_sequencing_exception_entries":7,"r0006_sequencing_exception_commits":8,"operational_direct_rows":17,"operational_distinct_direct_value_homes":16,"operational_total_value_homes":17}
 <!-- governed-current-claims:end -->
 
 This is an implementation as-built, not a B9 review or publication verdict. The exact
@@ -397,8 +399,9 @@ PASS with an empty failure set. Expected and unique observed populations match e
 Every executed row records its fixture and channel digests and proves one schema-valid
 action-result envelope, exact public `action_id`, opposite-channel silence, process
 status equal to `error.exit` on failure, semantic equivalence between `--json` and
-`--format json`, and human/machine domain-semantic equivalence. Contract totality and
-per-identity behavioral coverage are now both observed for the retained population.
+`--format json`, and human/machine domain-semantic equivalence. At exact Auditor
+subject `145cf2989480fd3eac9a51bafa415645acc1b371`, contract totality and per-identity
+behavioral coverage are both observed for the retained population.
 This finding is only the pre-review semantic gate: formal cycle 6, clean-runner parity,
 fresh convergence, rehearsal, manifests, candidate freeze, publication, merge, and
 round closure remain unclaimed here.
