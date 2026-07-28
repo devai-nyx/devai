@@ -295,7 +295,8 @@
       "work/rounds/R-0006/plan.md",
       "work/rounds/R-0006/prompts/00-orchestrator.md",
       "product/owner-mandates/OM-011.md",
-      "product/owner-mandates/OM-012.md"
+      "product/owner-mandates/OM-012.md",
+      "product/owner-mandates/OM-013.md"
     ],
     "controlling_sources": [
       "work/rounds/EXECUTION-CONTRACT.md",
@@ -304,7 +305,10 @@
       "law/schemas/review-scope-manifest.schema.json",
       "law/register/DECISIONS.md"
     ],
-    "prior_review_globs": ["work/audit/R-0006/independent-opus-b9-review*.md"],
+    "prior_review_globs": [
+      "work/audit/R-0006/independent-opus-b9-review*.md",
+      "work/audit/R-0006/independent-codex-b9-review*.md"
+    ],
     "topic_sources": [
       "changed-path",
       "requirement",
@@ -381,10 +385,10 @@
       "work/rounds/**",
       "work/audit/R-0006/entry-control-as-built.md"
     ],
-    "record": "work/audit/R-0006/independent-opus-b9-review-final.md",
+    "record": "work/audit/R-0006/independent-codex-b9-review-final.md",
     "record_author": "DEVAI Auditor",
     "required_verdict": "PASS",
-    "required_model": "claude-opus-5",
+    "required_model": "gpt-5.6-sol",
     "manifest_state": ".devai/state/round-runs/R-0006/close/candidate-manifest.json",
     "projection_only": true,
     "allowed_projection_ids": []

@@ -24,7 +24,7 @@ const NORMALIZED_RUNTIME_ARTIFACTS = [
   'scratch/coverage/t1-t3/coverage-final.json',
   'scratch/coverage/t1-t3/subprocess-v8/**',
 ];
-const FINAL_REVIEW_RECORD = 'work/audit/R-0006/independent-opus-b9-review-final.md';
+const FINAL_REVIEW_RECORD = 'work/audit/R-0006/independent-codex-b9-review-final.md';
 const AUDIT_CLAIM_IMPLEMENTATION_PATHS = [
   'scripts/run-round-close-controls.mjs',
   '.devai/config/round-close-controls.json',
@@ -2362,7 +2362,7 @@ function envelope() {
     findings.push(finding('REVIEW_RECORD_INVALID', `review record is unavailable: ${error}`));
   }
   const requiredVerdict = policy.review.required_verdict ?? 'PASS';
-  const requiredModel = policy.review.required_model ?? 'claude-opus-5';
+  const requiredModel = policy.review.required_model ?? 'gpt-5.6-sol';
   if (
     reviewFields === null ||
     reviewFields.verdict !== requiredVerdict ||
