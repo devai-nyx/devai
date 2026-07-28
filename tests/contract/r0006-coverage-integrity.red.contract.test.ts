@@ -1,9 +1,9 @@
 // Invariants: INV-DEVAI-001, INV-DEVAI-014, INV-DEVAI-017
-import { readFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
-const ROOT = join(import.meta.dirname, '..', '..');
 const FILE = '/fixture/source.ts';
 
 interface Position {
@@ -40,11 +40,27 @@ class FixtureCoverageMap {
   fileCoverageFor(filename: string): { toJSON(): CoverageData } {
     const coverage = this.#entries.get(filename);
     if (coverage === undefined) throw new Error(`missing fixture coverage for ${filename}`);
-    return { toJSON: () => structuredClone(coverage) };
+    return { toJSON: () => coverage };
   }
 
   addFileCoverage(coverage: CoverageData): void {
-    this.#entries.set(coverage.path, structuredClone(coverage));
+    const current = this.#entries.get(coverage.path);
+    if (current === undefined) {
+      this.#entries.set(coverage.path, structuredClone(coverage));
+      return;
+    }
+    for (const [id, count] of Object.entries(coverage.s)) {
+      current.s[id] = (current.s[id] ?? 0) + count;
+    }
+    for (const [id, count] of Object.entries(coverage.f)) {
+      current.f[id] = (current.f[id] ?? 0) + count;
+    }
+    for (const [id, counts] of Object.entries(coverage.b)) {
+      current.b[id] ??= [];
+      for (const [index, count] of counts.entries()) {
+        current.b[id][index] = (current.b[id][index] ?? 0) + count;
+      }
+    }
   }
 
   filter(callback: (filename: string) => boolean): void {
@@ -54,7 +70,7 @@ class FixtureCoverageMap {
   }
 
   data(): CoverageData {
-    return this.fileCoverageFor(FILE).toJSON();
+    return structuredClone(this.fileCoverageFor(FILE).toJSON());
   }
 }
 
@@ -66,6 +82,19 @@ const inner: Location = {
   start: { line: 4, column: 2 },
   end: { line: 6, column: 3 },
 };
+const second: Location = {
+  start: { line: 8, column: 2 },
+  end: { line: 10, column: 3 },
+};
+const degenerate = { start: {}, end: {} } as Location;
+
+const temporaryDirectories: string[] = [];
+
+afterEach(() => {
+  for (const directory of temporaryDirectories.splice(0)) {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
 
 function fixtureCoverage(outerHit: number, innerHit: number): CoverageData {
   return {
@@ -100,20 +129,70 @@ describe('R-0006 coverage measurement integrity', () => {
     expect(current.data().f).toEqual({ outer: 1, inner: 0 });
   });
 
-  it('configures an auditable statement-level coverage artifact', () => {
-    const config = readFileSync(join(ROOT, 'tests/config/t1-t3.coverage.config.ts'), 'utf8');
-    const reporter = config.match(/reporter:\s*\[([^\]]+)\]/u)?.[1] ?? '';
-    expect(reporter).toMatch(/['"]json['"]/u);
+  it('does not cross-attribute multiple degenerate implicit branch locations', async () => {
+    const provider = (await import('../config/subprocess-v8-coverage-provider.js')) as unknown as {
+      mergeCanonicalHits?: (current: FixtureCoverageMap, subprocess: FixtureCoverageMap) => void;
+    };
+    const current = new FixtureCoverageMap({
+      ...fixtureCoverage(0, 0),
+      branchMap: {
+        currentFirst: { locations: [outer, degenerate] },
+        currentSecond: { locations: [second, degenerate] },
+      },
+      b: { currentFirst: [0, 0], currentSecond: [0, 0] },
+    });
+    const subprocess = new FixtureCoverageMap({
+      ...fixtureCoverage(0, 0),
+      branchMap: {
+        subprocessAlpha: { locations: [outer, degenerate] },
+        subprocessBeta: { locations: [second, degenerate] },
+      },
+      b: { subprocessAlpha: [3, 1], subprocessBeta: [7, 9] },
+    });
+
+    provider.mergeCanonicalHits?.(current, subprocess);
+
+    expect(current.data().b).toEqual({ currentFirst: [3, 0], currentSecond: [7, 0] });
   });
 
-  it('retains the raw subprocess inputs beside the final coverage artifact', () => {
-    const provider = readFileSync(
-      join(ROOT, 'tests/config/subprocess-v8-coverage-provider.ts'),
-      'utf8',
-    );
-    expect(provider).toContain("resolve('scratch/coverage/t1-t3/subprocess-v8')");
-    expect(provider).toMatch(
-      /promises\.(?:cp|rename)\(subprocessCoverageDirectory,\s*subprocessCoverageEvidenceDirectory/u,
-    );
+  it('preserves exact counters instead of additively re-merging the live coverage object', async () => {
+    const provider = (await import('../config/subprocess-v8-coverage-provider.js')) as unknown as {
+      mergeCanonicalHits?: (current: FixtureCoverageMap, subprocess: FixtureCoverageMap) => void;
+    };
+    const current = new FixtureCoverageMap(fixtureCoverage(2, 0));
+    const subprocess = new FixtureCoverageMap(fixtureCoverage(3, 0));
+
+    provider.mergeCanonicalHits?.(current, subprocess);
+
+    expect(current.data().s.outer).toBe(5);
+    expect(current.data().f.outer).toBe(5);
+  });
+
+  it('configures an auditable statement-level coverage artifact', async () => {
+    const config = (await import('../config/t1-t3.coverage.config.js')).default as {
+      test?: { coverage?: { reporter?: string[] } };
+    };
+    expect(config.test?.coverage?.reporter).toContain('json');
+  });
+
+  it('retains observable raw subprocess inputs beside the final coverage artifact', async () => {
+    const provider = (await import('../config/subprocess-v8-coverage-provider.js')) as unknown as {
+      retainSubprocessCoverageInputs?: (source: string, evidence: string) => Promise<number>;
+    };
+    expect(provider.retainSubprocessCoverageInputs).toBeTypeOf('function');
+    const root = mkdtempSync(join(tmpdir(), 'devai-r0006-coverage-retention-'));
+    temporaryDirectories.push(root);
+    const source = join(root, 'source');
+    const evidence = join(root, 'evidence');
+    const raw = join(source, 'coverage-fixture.json');
+    const payload = `${JSON.stringify({ result: [{ url: 'file:///fixture/source.ts' }] })}\n`;
+    await import('node:fs/promises').then(({ mkdir }) => mkdir(source, { recursive: true }));
+    writeFileSync(raw, payload);
+
+    const retained = await provider.retainSubprocessCoverageInputs?.(source, evidence);
+
+    expect(retained).toBe(1);
+    expect(existsSync(join(evidence, 'coverage-fixture.json'))).toBe(true);
+    expect(readFileSync(join(evidence, 'coverage-fixture.json'), 'utf8')).toBe(payload);
   });
 });

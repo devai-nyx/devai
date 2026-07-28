@@ -255,3 +255,31 @@ Inspector adversaries reject an absent set, broad `scratch/**`, and an expanded 
 would hide the summary. The complete ordinary suite passes 1,443 tests with eight
 declared skips; no raw evidence, threshold, exclusion, denominator, assertion, or prior
 drift check was removed.
+
+## Third B9 Opus coverage-integrity red
+
+Literal-model review of exact candidate
+`3c6c2d3bdde6bc6d505a6a29fb92d120a36c0050` failed with one P0 and three P1
+coverage-integrity findings. Empty Istanbul implicit-branch locations all collapsed to
+the same `:::` key, the live statement-level map was additively merged into itself,
+and the focused contract did not exercise either defect or observe retained evidence
+behaviorally.
+
+The Inspector extends the exact focused command:
+
+```text
+pnpm vitest run tests/contract/r0006-coverage-integrity.red.contract.test.ts
+```
+
+The pre-repair command exits 1 with one collected file, four failing tests, and one
+passing test. It observes the original exact statement/function result doubled from 1
+to 2; two distinct degenerate branch arms incorrectly receive 18 rather than zero;
+parent-plus-subprocess counters produce 10 rather than 5; and the behavioral raw-input
+retention helper is absent. The configuration-object assertion remains green and
+confirms the `json` reporter without a source-text grep.
+
+This red binds only `tests/config/subprocess-v8-coverage-provider.ts` and the focused
+Inspector contract. It requires exact, collision-free location handling, no additive
+self-merge, and observable retained raw inputs. It authorizes no threshold, exclusion,
+denominator, source-population, generated-label, skip, assertion, publication, closure,
+release, predecessor, real-stynx, or R-0007+ change.
