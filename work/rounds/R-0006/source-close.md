@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-207; DII-211–225; R-0006-AS-BUILT; Auditor 0b0be11c0cdd833add8bc5b7756f730bcda85a75; R-0006-BRANCH-COVERAGE-INTEGRITY-RED-EVIDENCE; R-0006-HONEST-BRANCH-COVERAGE-DEPTH-RED-EVIDENCE,
+    DII-207; DII-211–228; R-0006-AS-BUILT; Auditor 72fac684750a157a26b6b867beaa56d045569960; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE,
   ]
 ---
 
@@ -19,9 +19,9 @@ provenance:
 
 DII-223 accepts R-0006's audited contracts-and-coverage implementation for the
 remaining governed source-close ceremony. The exact semantic implementation subject is
-Inspector `a7814b4384c20dbbe33c830649a52f94ae5e36c5`; Architect
-`694bc725f869947c443def37e7eebad22ab83442` refreshes only its caused trace
-projection, and Auditor `0b0be11c0cdd833add8bc5b7756f730bcda85a75` binds the honest
+Inspector `e284a6cb9b2d23eaf5713c34ecf29e324397b355`; Architect
+`cef0540a70a62de2222078c63455cd763fa92703` refreshes only its caused trace
+projection, and Auditor `72fac684750a157a26b6b867beaa56d045569960` binds the honest
 pre-review evidence.
 
 All 186 never-reminted action identities have disposition-correct output and error
@@ -30,10 +30,10 @@ Mutation strength and evidence aggregation remain separate fail-closed decisions
 complete 378-file denominator passes the unchanged coverage floors at 71.86%
 statements, 60.14% branches, 80.67% functions, and 73.27% lines after collision-free
 exact-hit measurement and behavior-bearing Inspector depth. The ordinary suite passes
-155 files, 1,455 tests, and eight declared skips. Trace binds 34 invariants, 155 test
-sources, and 2,778 lexical assertion sites.
+155 files, 1,458 tests, and eight declared skips. Trace binds 34 invariants, 155 test
+sources, and 2,784 lexical assertion sites.
 
-All three mandatory B9 Opus FAILs remain active historical evidence with no retained
+All four mandatory B9 Opus FAILs remain active historical evidence with no retained
 standing.
 The second review's coverage-inflation finding was corrected by exact-location-only
 measurement; its first honest reading remained red until real behavior tests closed the
@@ -58,10 +58,22 @@ evidence, and non-behavioral coverage-integrity guards. Inspector `f93d8f6` pres
 four exact reds; Inspector `2087572` makes them green without changing source,
 threshold, exclusion, or denominator; the first honest corrected run failed branches
 at 59.62%. Inspector `a7814b4` closes the 73-branch deficit with ten workflow-parser
-and data-probe behavior tests. Auditor `0b0be11` binds the final stable summary and
-explicitly refuses a stable-byte identity for the runtime-variable statement artifact.
+and data-probe behavior tests. Auditor `0b0be11` binds that then-current stable summary and
+explicitly refuses a stable-byte identity for that runtime-variable statement artifact.
 The E0-E5 PASS is preserved separately before the final policy review-record slot is
 replaced.
+
+The fourth B9 review independently confirmed the exact range, clone, manifest,
+denominator, coverage arithmetic, branch-collision correction, and behavior depth, but
+returned FAIL on two stale as-built claims and missing repeat/collision proof. Auditor
+`9a0443c` preserves that verdict. Inspector `9b8b288` preserves the canonical-parent
+collision red, and Inspector `912092f` made its first focused form green. The unchanged
+coverage command then exposed a legitimate subprocess branch-location convergence,
+preserved by Inspector `9fe0386` and Auditor `968099c`. DII-227 distinguishes the
+unique canonical parent from convergent subprocess observations; Inspector `e284a6c`
+aggregates the latter within kind and keeps parent collisions fail-closed. Auditor
+`72fac68` removes the stale current digests and binds every invalidated reading to its
+historical evidence. The stable summary and all exact totals remain unchanged.
 
 ## Identity and review boundary
 

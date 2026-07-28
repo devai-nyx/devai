@@ -3429,12 +3429,12 @@ Pages deployment, external deployment, evidence reuse or promotion, real-stynx
 mutation, predecessor mutation, or R-0007+ work.
 
 ### DII-223 — Accept R-0006 for the governed source-close ceremony
-`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 source close; DII-207–225; OM-002; R-0006-AUTHORIZATION; R-0006-PLAN; R-0006-AS-BUILT at Auditor 0b0be11c0cdd833add8bc5b7756f730bcda85a75; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-3-FAILURE`
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 source close; DII-207–228; OM-002; R-0006-AUTHORIZATION; R-0006-PLAN; R-0006-AS-BUILT at Auditor 72fac684750a157a26b6b867beaa56d045569960; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE`
 
 R-0006's semantic implementation subject is exact Inspector commit
-`a7814b4384c20dbbe33c830649a52f94ae5e36c5`. Architect
-`694bc725f869947c443def37e7eebad22ab83442` is its deterministic trace projection,
-and Auditor `0b0be11c0cdd833add8bc5b7756f730bcda85a75` binds the final pre-review
+`e284a6cb9b2d23eaf5713c34ecf29e324397b355`. Architect
+`cef0540a70a62de2222078c63455cd763fa92703` is its deterministic trace projection,
+and Auditor `72fac684750a157a26b6b867beaa56d045569960` binds the final pre-review
 as-built.
 The action surface remains 147 runnable identities, 38 folded identities, and one
 tombstone. The operational-value extraction remains 24 rows. Mutation-strength and
@@ -3444,9 +3444,9 @@ The collision-free exact-hit complete-denominator coverage reading is statements
 (16,093/22,393), branches 60.14% (11,658/19,382), functions 80.67%
 (2,479/3,073), and lines 73.27% (14,936/20,383), above the unchanged
 70/60/70/70 floors. All 378 eligible source files remain measured under the unchanged
-four exclusions. The ordinary suite passes 155 files, 1,455 tests, and eight declared
-skips. The trace projection binds 34 invariants, 155 test sources, and 2,778 lexical
-assertion sites. All three B9 Opus FAILs and both honest interim coverage reds remain
+four exclusions. The ordinary suite passes 155 files, 1,458 tests, and eight declared
+skips. The trace projection binds 34 invariants, 155 test sources, and 2,784 lexical
+assertion sites. All four B9 Opus FAILs and every honest interim correction red remain
 immutable evidence; none is relabelled PASS.
 
 The governed-sequencing policy contains three R-0006 historical exception entries
@@ -3547,7 +3547,7 @@ denominator, four exclusions, and 70/60/70/70 floors. The ordinary suite passes 
 files and 1,455 tests with eight declared skips; Architect
 `694bc725f869947c443def37e7eebad22ab83442` binds 34 invariants, 155 test sources,
 and 2,778 lexical assertion sites; Auditor
-`0b0be11c0cdd833add8bc5b7756f730bcda85a75` binds the current as-built and stable
+`0b0be11c0cdd833add8bc5b7756f730bcda85a75` binds that then-current as-built and stable
 coverage-summary digest.
 
 The remaining P2 and P3 observations stay visible as bounded nonblocking observations;
@@ -3558,6 +3558,11 @@ evidence fails closed. DII-223's acceptance is refreshed only for a new complete
 ceremony: fresh two-pass convergence, isolated source/closure rehearsal,
 candidate-only manifest, and literal `claude-opus-5` review. Any fresh finding returns
 to its owning role and invalidates all candidate state.
+
+The fourth review did return findings and therefore invalidated this decision's
+then-current acceptance identity and all associated candidate state. DII-226 through
+DII-228 preserve and correct that later sequence; the historical counts above are not
+the current source-close identity.
 
 This decision authorizes no threshold, exclusion, denominator, source-set, generated
 classification, skip, or assertion-mechanism weakening; no reuse of the failed
@@ -3645,6 +3650,50 @@ skip or assertion-mechanism change, reuse of the failed coverage run, source pub
 before fresh review PASS, closure before source merge and exact-main CI, package
 publication, tag, GitHub Release, Pages or other deployment, evidence reuse or
 promotion, real-stynx mutation, predecessor mutation, or R-0007+ work.
+
+### DII-228 — Reaccept the collision-guarded R-0006 source candidate
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 fourth B9 correction close; DII-223; DII-225–227; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE; Inspector e284a6cb9b2d23eaf5713c34ecf29e324397b355; Architect cef0540a70a62de2222078c63455cd763fa92703; Auditor 72fac684750a157a26b6b867beaa56d045569960`
+
+R-0006's exact semantic implementation subject is Inspector
+`e284a6cb9b2d23eaf5713c34ecf29e324397b355`. It preserves incomplete-location
+exclusion, exact cumulative repeat merging, and non-additive live-map mutation; rejects
+duplicate complete canonical parent identities before mutation; and aggregates
+same-kind subprocess observations that converge on one complete canonical location.
+Architect `cef0540a70a62de2222078c63455cd763fa92703` is the caused trace projection,
+and Auditor `72fac684750a157a26b6b867beaa56d045569960` binds the final pre-review
+as-built and coverage evidence.
+
+The unchanged 378-file denominator and four exclusions pass the unchanged 70/60/70/70
+floors at statements 71.86% (16,093/22,393), branches 60.14% (11,658/19,382),
+functions 80.67% (2,479/3,073), and lines 73.27% (14,936/20,383). The stable summary
+digest is `c4d75618fbc39602b4b01e9059e74249cf1e78a862f7176f770511ea177aa17b`;
+the retained statement artifact is runtime-variable and has no durable cross-run
+digest. The ordinary and coverage suites pass 155 files and 1,458 tests with eight
+declared skips. Trace binds 34 invariants, 155 test sources, and 2,784 lexical assertion
+sites. The action surface remains 147 runnable, 38 folded, and one tombstoned identity;
+the operational-value extraction remains 24 rows; mutation strength and evidence
+aggregation remain separate.
+
+All four B9 Opus FAILs, the overbroad DII-226 implementation red, the refined
+subprocess-aggregation red, and every earlier honest coverage red remain immutable
+evidence without review standing. The fourth review's P1 and P2 evidence-value defects
+are removed by a same-class Auditor sweep. Its repeat-merge and collision findings are
+exercised behaviorally across statements, functions, and branches. DII-225's remaining
+bounded nonblocking observations stay visible and are not restated as implemented
+controls or readiness claims.
+
+DII-223 is refreshed as the closing decision used by the production phase-close verb;
+this decision supplies its final correction provenance. The complete source candidate
+must still converge twice, rehearse source and closure ancestry in isolation, generate
+a fresh candidate-only manifest, and receive a fresh read-only PASS through the literal
+`claude-opus-5` selector. Any finding or failed required gate stops execution and
+invalidates all candidate state. After PASS, only the exact Auditor review record may
+form the review envelope, and the published head must converge twice again before push.
+
+This decision does not itself claim review PASS, source publishability, push, pull
+request, merge, exact-head or exact-main CI, PC-0007, final closure, package publication,
+tag, GitHub Release, Pages or other deployment, evidence reuse or promotion,
+real-stynx mutation, predecessor mutation, or R-0007+ work.
 
 ## Appendix — Register-consistency guard
 
