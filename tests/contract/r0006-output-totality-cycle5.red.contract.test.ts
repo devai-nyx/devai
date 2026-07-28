@@ -11,7 +11,8 @@ import { SENSOR_READING_KINDS } from '../../packages/sensors/src/index.js';
 import { validators } from '../../packages/schemas/src/index.js';
 import { emitPreDispatchActionResult } from '../../packages/cli/src/action-output.js';
 import { invocationIsNonMutating, routeArgv } from '../../packages/cli/src/command-router.js';
-import { getFullRegistry, type RegistryEntry } from '../../packages/cli/src/define-command.js';
+import type { RegistryEntry } from '../../packages/cli/src/define-command.js';
+import { ACTION_REGISTRY } from '../../packages/cli/src/generated/action-registry.js';
 import { resolveCliVersion } from '../../packages/cli/src/version.js';
 import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
@@ -55,7 +56,15 @@ afterEach(() => {
 });
 
 describe('R-0006 Codex cycle-5 output-totality red', () => {
-  const registry = getFullRegistry();
+  const registry = ACTION_REGISTRY.filter((entry) => entry.disposition === 'keep').map(
+    (entry) =>
+      ({
+        name: entry.action_id,
+        path: entry.path,
+        internal_name: entry.internal_binding.replaceAll(' ', '-'),
+        effects: entry.effect,
+      }) as RegistryEntry,
+  );
   const version = resolveCliVersion();
 
   it('canonicalizes every noncanonical producer status and preserves its domain output', () => {
@@ -95,21 +104,31 @@ describe('R-0006 Codex cycle-5 output-totality red', () => {
     expect(error['message']).toContain(human.stdout.trim());
   });
 
-  it('consumes bare --json for every retained public action outside parameterized sense run', () => {
+  it('consumes both machine spellings for all 147 retained public actions', () => {
+    expect(registry).toHaveLength(147);
     const invalid: string[] = [];
-    for (const entry of registry.filter((candidate) => candidate.name !== 'sense run')) {
+    for (const entry of registry) {
       const consent =
         entry.effects === 'remote-write'
           ? ['--write', '--allow-publish']
           : entry.effects === 'local-write' || entry.effects === 'harness-write'
             ? ['--write']
             : [];
-      const route = routeArgv(
-        ['node', 'devai', ...entry.path, ...consent, '--json'],
-        registry,
-        version,
-      );
-      if (route.kind !== 'dispatch' || route.argv.includes('--json')) invalid.push(entry.name);
+      for (const machine of [['--json'], ['--format', 'json']] as const) {
+        const route = routeArgv(
+          ['node', 'devai', ...entry.path, ...consent, ...machine],
+          registry,
+          version,
+        );
+        if (
+          route.kind !== 'dispatch' ||
+          route.argv.includes('--json') ||
+          route.argv.includes('--format') ||
+          route.argv.includes('json')
+        ) {
+          invalid.push(`${entry.name}:${machine.join(' ')}`);
+        }
+      }
     }
     expect(invalid).toEqual([]);
   });
