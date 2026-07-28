@@ -46,7 +46,7 @@ candidate manifest, review-scope manifest, and all publication or closure standi
 authorizes only complete-class role-pure repair, a fresh candidate, and a fresh
 exhaustive review under OM-012.
 
-## Finding — the active source-close handoff escaped the current-claim population
+### P1 — the active source-close handoff escaped the current-claim population
 
 `work/rounds/R-0006/source-close.md` is active, Architect-owned, and not superseded. Its
 present-tense handoff still states 2,845 lexical assertion sites and five prior B9 Opus
