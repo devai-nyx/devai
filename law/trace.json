@@ -1924,7 +1924,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 24,
-      "assertion_digest_sha256": "5f5b415e5f7e46c6e3dce16fc2b819c61fbb29e839f4f1445b47c43d89e0a332"
+      "assertion_digest_sha256": "27414a1815a89879e094ddf0b36caaa192f485abb345d69ab7b3cd18064f0764"
     },
     {
       "path": "packages/cli/tests/unit/translation-command-depth.test.ts",
@@ -3112,7 +3112,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 21,
-      "assertion_digest_sha256": "f311695448071f686deedbd4c12de150117323bea286a2cc06991084b640946b"
+      "assertion_digest_sha256": "bd9104f97cd062ba2ee7cce07454ede118e03ba5360bae60d124a36865f69f0e"
     },
     {
       "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",

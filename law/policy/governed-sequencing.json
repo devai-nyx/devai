@@ -453,6 +453,25 @@
         "tests": ["tests/contract/r0006-smart-convergence.red.contract.test.ts"],
         "exercised_implementation_paths": [".devai/config/round-close-controls.json"]
       }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["a8bec1c66379449c1b3d82879c765fc062cb49a0"],
+      "law_commits": ["34784bdc46557ace60bd86c86c16616fa93aaf72"],
+      "red_evidence": {
+        "commit": "c1cbf28639464de6889ccdd3d37a75867e2d5f9c",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0006/red-evidence-codex-cycle5-output-totality.json",
+        "evidence_sha256": "67469df20e0a33e341e32f760bcb969ad11c42fa235a49af8d384d4c41f4828d",
+        "tests": ["tests/contract/r0006-output-totality-cycle5.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          "packages/cli/src/action-output.ts",
+          "packages/cli/src/authority/index.ts",
+          "packages/cli/src/bin.ts",
+          "packages/cli/src/command-router.ts"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [
