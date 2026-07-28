@@ -4161,6 +4161,39 @@ This decision claims no fresh candidate, review PASS, publication, merge, exact-
 CI, PC-0007, closure, release, package publication, tag, GitHub Release, Pages
 deployment, evidence promotion, predecessor mutation, or R-0007+ authority.
 
+### DII-240 — Apply the R-0006 independent Codex-review substitution
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 Codex-review substitution; OM-013; DII-207; DII-239; external claude-opus-5 session quota blocker`
+
+OM-013 replaces the otherwise-required Claude Opus 5 selector for R-0006 only. The
+fresh exhaustive close review must be performed by an independent Codex agent using
+explicit `gpt-5.6-sol` in read-only mode. The review record must state that exact model
+truthfully and bind the exact candidate, candidate-manifest digest, review-scope digest,
+governed range, findings, and every mandatory topic disposition. It must not claim or
+reuse Claude, Opus, cross-provider, cycle-4, or prior-candidate review standing.
+
+All OM-011 and OM-012 controls remain binding. The independent reviewer must recompute
+the complete machine-generated census, continue after blockers, recheck every prior
+finding class including all cycle-4 advisories, disposition every topic exactly once,
+and issue PASS only with zero failed or blocked topics and zero P0 or P1 findings. Any
+FAIL or BLOCKED result invalidates the candidate and returns to complete-class
+role-pure repair with no forced PASS and no numeric cycle cap.
+
+The canonical close-control policy admits `gpt-5.6-sol`, the truthful stable Auditor
+record at `work/audit/R-0006/independent-codex-b9-review-final.md`, and both the
+historical Opus and new Codex review populations. The executing Engineer must
+materialize that policy byte-for-byte and align the workspace controller before the
+Inspector accepts the substitution. Fresh convergence, rehearsal, candidate manifest,
+and review-scope generation must run from the final reaccepted head; no earlier
+candidate state survives these semantic changes.
+
+DII-240 replaces DII-239 as the Architect closing decision for production PC-0007;
+DII-207 remains the declaration. Only a mechanically valid exhaustive Codex PASS may
+enter the exact review envelope and the existing source and closure-only PR ceremony.
+
+This decision claims no fresh candidate, review PASS, publication, merge, exact-main
+CI, PC-0007, closure, release, package publication, tag, GitHub Release, Pages
+deployment, evidence promotion, predecessor mutation, or R-0007+ authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

@@ -135,10 +135,10 @@ head; no earlier candidate state may be reused.
 
 Before each review, that exact candidate must pass two consecutive smart-convergence
 passes, with the second pass making no tracked or untracked relevant-workspace write,
-and must pass the isolated source/closure rehearsal. The independent reviewer must use
-the literal `claude-opus-5` selector in read-only mode. Every failed or blocked review
-invalidates that candidate and returns to complete-class role-pure repair under OM-012;
-there is no numeric cycle cap and no forced PASS.
+and must pass the isolated source/closure rehearsal. Under OM-013, the independent
+reviewer must use explicit `gpt-5.6-sol` in read-only mode. Every failed or blocked
+review invalidates that candidate and returns to complete-class role-pure repair under
+OM-012; there is no numeric cycle cap and no forced PASS.
 
 After PASS, the only permitted source delta is the exact stable Auditor review record. Current
 policy admits no deterministic Architect projection in the review envelope. The
@@ -153,12 +153,13 @@ The source merge must then pass exact-main CI before the production phase-close 
 append PC-0007 on a closure-only branch derived from that merge.
 
 PC-0007 is the only permitted file in the closure-only PR. It uses DII-207 as the
-declaration and DII-239 as the closing decision, binds the exact source merge rather
+declaration and DII-240 as the closing decision, binds the exact source merge rather
 than the later closure commit, and records `none-needed` release disposition. DII-235
 was invalidated by the cycle-3 review FAIL; DII-236 governs its complete-class repair;
 DII-237 reaccepted the repaired machinery before the cycle-3 finding-heading
 normalization; DII-238 reaccepted the resulting exhaustive-census candidate; DII-239
-reaccepts the clean-runner portability repair after the cycle-4 source PR CI failure.
+reaccepted the clean-runner portability repair after the cycle-4 source PR CI failure;
+DII-240 applies OM-013's R-0006-only independent Codex substitution.
 The closure-only head, closure merge, and final main must each pass their required exact-SHA checks. A
 rehearsal PC has no standing and must never be published.
 

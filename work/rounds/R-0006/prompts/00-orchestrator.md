@@ -1,6 +1,6 @@
 # R-0006 ORCHESTRATOR — contracts and coverage depth
 
-Read OM-002, OM-003, OM-010, OM-011, OM-012, the shared execution contract,
+Read OM-002, OM-003, OM-010, OM-011, OM-012, OM-013, the shared execution contract,
 authorization/plan, R-0005
 close, the R-0006 preflight alignment audit, Constitution operational-value findings,
 thresholds policy, coverage config, current coverage JSON, all action
@@ -32,7 +32,7 @@ envelope, reconverge `published_head`, and invalidate PASS on any other mutation
 
 OM-011 interrupts B9 before review iteration 5. Preserve the already role-pure
 Inspector coverage-provider correction. Before creating any new review candidate or
-invoking `claude-opus-5`, commit and validate OM-011's Architect policy/schema,
+invoking an independent reviewer, commit and validate OM-011's Architect policy/schema,
 Inspector-red, Engineer, Inspector-green, and Auditor batches.
 
 Use content-addressed task freshness, never timestamps. A task key binds exact task
@@ -60,9 +60,10 @@ OM-012 suspends the numeric review quota for R-0006 only; it never manufactures 
 permits reuse across changed inputs.
 
 Exercise DB-gated integration tests with PostgreSQL. Inspect per-package/file coverage
-for suspicious zeroes and suspiciously excluded code. Ask Claude Opus 5 through literal
-`claude-opus-5` to challenge test quality, denominator integrity, output totality, and
-policy semantics; no fallback to another model is permitted.
+for suspicious zeroes and suspiciously excluded code. Under OM-013, ask an independent
+Codex agent through explicit `gpt-5.6-sol` to challenge test quality, denominator
+integrity, output totality, and policy semantics. The substitution is R-0006-only and
+does not weaken exhaustive topic accounting or the PASS threshold.
 
 Do not close until all four exact floors pass on the normal command and remote stage 3
 passes on the exact SHA.
@@ -71,4 +72,4 @@ Final report:
 
 `BASELINE DENOMINATOR / LAW EXTRACTIONS / MUTATION-STRENGTH DECISION / AGGREGATION
 DECISION / OUTPUT CONTRACT CENSUS / TEST DEPTH / COVERAGE 4-METRIC RESULT / EXCLUSIONS /
-BATCH COMMITS / T1–T6 / REMOTE STAGE 3 / CLOSURE / CLAUDE REVIEW / NONCLAIMS`.
+BATCH COMMITS / T1–T6 / REMOTE STAGE 3 / CLOSURE / CODEX REVIEW / NONCLAIMS`.

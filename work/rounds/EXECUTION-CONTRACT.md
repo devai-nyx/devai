@@ -174,9 +174,10 @@ Before push:
 - rehearse source ancestry and the closure-only PC branch in an isolated clone before
   final review; the rehearsal must prove that the source merge ancestry exposes every
   governed prerequisite and that a PC-only branch passes its exact range checks;
-- after quota recovery, ask Claude Opus 5 through the explicit `claude-opus-5` selector
-  for an independent read-only close review and resolve every actionable finding; no fallback
-  to another model is permitted;
+- ask the independently selected close reviewer for a read-only exact-candidate review
+  and resolve every actionable finding; OM-013 replaces the otherwise-required
+  `claude-opus-5` selector with explicit `gpt-5.6-sol` for R-0006 only and does not
+  weaken any review-content, verdict, or evidence requirement;
 - leave no untracked product or evidence artifacts.
 
 After push, inspect the exact candidate’s GitHub checks. Merge only when every required
