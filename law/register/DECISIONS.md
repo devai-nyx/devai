@@ -4102,6 +4102,32 @@ This decision claims no fresh candidate yet, review PASS, publication, remote CI
 PC-0007, closure, release, package publication, tag, GitHub Release, Pages deployment,
 evidence promotion, predecessor mutation, or R-0007+ authority.
 
+### DII-238 — Reaccept the cycle-3 finding-class census
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 exhaustive-census reacceptance; DII-237; Auditor b7f41ef`
+
+Auditor `b7f41eff8b58d2e4bc6a1ce0d7b5a494a20811be` normalizes the preserved cycle-3
+complete-class heading to the governed `### P1` form. The review-scope generator derives
+prior defect classes from that structural form; without this correction the exact
+cycle-3 source-close population remained disclosed in prose and dispositions but did
+not become a mandatory `previous-finding` topic in the next census. No review was
+invoked against that incomplete census.
+
+The correction changes no finding, disposition, digest for the rejected candidate,
+source repair, policy, materialization, test, trace, sequencing binding, coverage
+reading, threshold, exclusion, or denominator. It makes the already-preserved defect
+class mechanically mandatory for every later candidate. DII-238 replaces DII-237 as the
+Architect closing decision for production PC-0007; DII-207 remains the declaration.
+
+Fresh smart convergence, isolated rehearsal, candidate-manifest generation, and
+review-scope generation must run from the exact DII-238 head. The resulting census must
+contain the cycle-3 P1 class before literal `claude-opus-5` is invoked. No state from
+candidate `764bc54ab23abb6c09b303bd82e94fb59b9a8ea5` survives this audit and closing-decision
+change.
+
+This decision claims no fresh candidate yet, review PASS, publication, remote CI, merge,
+PC-0007, closure, release, package publication, tag, GitHub Release, Pages deployment,
+evidence promotion, predecessor mutation, or R-0007+ authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
