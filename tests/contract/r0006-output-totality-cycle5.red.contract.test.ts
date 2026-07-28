@@ -63,7 +63,7 @@ describe('R-0006 Codex cycle-5 output-totality red', () => {
         path: entry.path,
         internal_name: entry.internal_binding.replaceAll(' ', '-'),
         effects: entry.effect,
-      }) as RegistryEntry,
+      }) as unknown as RegistryEntry,
   );
   const version = resolveCliVersion();
 
