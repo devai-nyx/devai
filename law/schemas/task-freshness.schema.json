@@ -82,5 +82,28 @@
         "properties": { "reused_result_digest": { "$ref": "#/$defs/sha256" } }
       }
     }
+  ],
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "policy_version": "1.0.0",
+      "task_id": "ordinary",
+      "argv": ["pnpm", "vitest", "run"],
+      "cwd": ".",
+      "task_key": "0000000000000000000000000000000000000000000000000000000000000000",
+      "input_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "dependency_keys": {},
+      "toolchain_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+      "environment_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "producing_candidate": "4444444444444444444444444444444444444444",
+      "outcome": "EXECUTED_PASS",
+      "exit_code": 0,
+      "stdout_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "stderr_sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+      "result_digest": "7777777777777777777777777777777777777777777777777777777777777777",
+      "reused_result_digest": null,
+      "outputs": [],
+      "freshness_reason": "task executed for the current content-addressed key"
+    }
   ]
 }

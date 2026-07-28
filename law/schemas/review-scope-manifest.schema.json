@@ -108,5 +108,38 @@
       }
     },
     "manifest_digest_sha256": { "$ref": "#/$defs/sha256" }
-  }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "policy_version": "1.0.0",
+      "round": "R-0006",
+      "exact_base": "0000000000000000000000000000000000000000",
+      "review_candidate": "1111111111111111111111111111111111111111",
+      "candidate_tree": "2222222222222222222222222222222222222222",
+      "current_candidate_manifest_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "previous_candidate_manifest_digests": [],
+      "topic_count": 1,
+      "topics": [
+        {
+          "topic_id": "requirement:example",
+          "claim": "Every mandatory review topic is dispositioned exactly once.",
+          "governing_paths": ["work/rounds/R-0006/plan.md"],
+          "current_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "previous_digest": null,
+          "changed_status": "added",
+          "required_adversaries": ["omit-topic", "duplicate-topic"],
+          "previous_findings": [],
+          "freshness_proof": {
+            "method": "recheck-required",
+            "inputs_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+            "task_keys": [],
+            "independent_recomputation_required": true
+          },
+          "required_disposition": "RECHECKED_PASS"
+        }
+      ],
+      "manifest_digest_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    }
+  ]
 }
