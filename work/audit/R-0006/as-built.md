@@ -472,7 +472,7 @@ address. OM-012 now governs any later repair-and-review continuation.
 
 Literal `claude-opus-5` cycle 3 independently regenerated the exact 238-topic census
 for rejected candidate `ee98663d639f7728ef07a3d097310659777b92ab` and returned FAIL
-on three topics. Auditor `aa57003a7ddb2d744f80ec358b534c8285f399e2` preserves all
+on three topics. Auditor `aa57003e76b8f20a9852fd17499260739f4865bb` preserves all
 235 passing and three failing dispositions. The defect was one complete class: the
 active Architect source-close handoff was outside the enumerated current-claim document
 population and therefore retained stale trace and prior-review readings after the two
