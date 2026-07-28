@@ -500,6 +500,23 @@ describe('R-0006 OM-011 content-addressed freshness red contracts', () => {
 });
 
 describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
+  it('makes the cycle-1 failure classes mandatory in the cycle-2 census', () => {
+    const livePolicy = JSON.parse(
+      readFileSync(join(ROOT, 'law/policy/round-close-controls.json'), 'utf8'),
+    ) as {
+      review_scope: {
+        prior_reviews: string[];
+        previous_findings_mandatory: boolean;
+      };
+    };
+    const cycleOneRecord = 'work/audit/R-0006/independent-opus-b9-review-5-failure.md';
+    expect(livePolicy.review_scope.previous_findings_mandatory).toBe(true);
+    expect(livePolicy.review_scope.prior_reviews).toContain(cycleOneRecord);
+    const source = readFileSync(join(ROOT, cycleOneRecord), 'utf8');
+    expect(source).toContain('### P1 — stale current coverage, suite, trace, and range readings');
+    expect(source).toContain('### P2 — stale governed-sequencing exception census');
+  });
+
   it('emits every exact-range, requirement, control, manifest, and prior-finding topic exactly once', () => {
     const current = fixture();
     const result = generateScope(current);
