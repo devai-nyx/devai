@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-211–227; R-0006-ENTRY-INVENTORY; BL-026; BL-034; BL-035; BL-081; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; R-0006-BRANCH-COVERAGE-INTEGRITY-RED-EVIDENCE; R-0006-HONEST-BRANCH-COVERAGE-DEPTH-RED-EVIDENCE; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE; implementation subject e284a6cb9b2d23eaf5713c34ecf29e324397b355; trace projection cef0540a70a62de2222078c63455cd763fa92703; sequencing binding 5fb17269fe3b17cf4d0de9733b6fd3b1146106d9,
+    DII-211–230; OM-011; R-0006-ENTRY-INVENTORY; BL-026; BL-034; BL-035; BL-081; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; R-0006-BRANCH-COVERAGE-INTEGRITY-RED-EVIDENCE; R-0006-HONEST-BRANCH-COVERAGE-DEPTH-RED-EVIDENCE; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; implementation subject e284a6cb9b2d23eaf5713c34ecf29e324397b355; trace projection cef0540a70a62de2222078c63455cd763fa92703; sequencing binding 5fb17269fe3b17cf4d0de9733b6fd3b1146106d9; fifth-review failure evidence 2e02d31c9504d4ee63dbe05f40084466292aff99,
   ]
 ---
 
@@ -26,9 +26,9 @@ coverage or semantics laundering**. The complete eligible package-source denomin
 the four 70/60/70/70 floors and all four pre-existing exclusions are unchanged, all
 186 action identities have an explicit disposition-correct output/error contract, the
 24-row operational-value extraction has one canonical home per row, and mutation
-strength remains separate from evidence aggregation. All four mandatory B9 Opus FAILs,
+strength remains separate from evidence aggregation. All five mandatory B9 Opus FAILs,
 every exact-hit and collision-semantics correction, every honest post-correction red,
-and all four R-0006 historical sequencing-exception commits remain visible rather than
+and all five R-0006 historical sequencing-exception commits remain visible rather than
 being relabelled green.
 
 This is an implementation as-built, not a B9 review or publication verdict. The exact
@@ -46,7 +46,7 @@ real-stynx mutation, predecessor mutation, or R-0007+ work is claimed.
 | BL-026 | Implemented with bounded behavioral census | The registry binds all identities to exact contracts; tests prove shared kept-action envelopes plus folded/tombstoned refusal, without claiming one end-to-end invocation per kept action.     |
 | BL-034 | Implemented                                | DII-212 and `law/policy/operational-values.json` assign all 24 altitude-sweep rows one canonical operational home without creating a second policy setpoint.                                   |
 | BL-035 | Implemented as two decisions               | DII-213 governs mutation selection and observations; DII-214 separately governs heterogeneous evidence aggregation. Neither can manufacture PASS from absent or uncheckable evidence.          |
-| BL-081 | Implemented                                | Every one of the 155 traced test sources binds a positive assertion count and ordered assertion-site digest; the current projection totals 2,784 lexical assertion sites across 34 invariants. |
+| BL-081 | Implemented                                | Every one of the 156 traced test sources binds a positive assertion count and ordered assertion-site digest; the current projection totals 2,839 lexical assertion sites across 34 invariants. |
 
 Backlog closure standing remains subject to B9 review, publication, exact-main CI, and
 the closure-only machine verb.
@@ -72,14 +72,14 @@ The second mandatory Opus review later rejected a containment-based subprocess
 numerator and required exact-location measurement. DII-222 and the Inspector repair
 preserve explicit zero hits, emit statement-level JSON, and retain 191 raw subprocess
 V8 JSON inputs. The first honest exact-hit reading was red; behavior-bearing Inspector
-depth tests then raised that same denominator above the unchanged floors. The final raw
-summary has SHA-256
-`c4d75618fbc39602b4b01e9059e74249cf1e78a862f7176f770511ea177aa17b`:
+depth tests then raised that same denominator above the unchanged floors. The latest
+candidate-bound raw summary has SHA-256
+`ac29412270641af7c8f3ca8276fcf3ae4cc48a81c425fe904c185f4c7c79e08c`:
 
 | Metric     | Final complete-denominator reading | Floor |
 | ---------- | ---------------------------------: | ----: |
-| Statements |           71.86% (16,093 / 22,393) |   70% |
-| Branches   |           60.14% (11,658 / 19,382) |   60% |
+| Statements |           71.87% (16,094 / 22,393) |   70% |
+| Branches   |           60.15% (11,659 / 19,382) |   60% |
 | Functions  |             80.67% (2,479 / 3,073) |   70% |
 | Lines      |           73.27% (14,936 / 20,383) |   70% |
 
@@ -113,8 +113,8 @@ are forbidden. Complete canonical parent locations are unique; same-kind subproc
 observations that source-map to one canonical location are summed before one exact
 application. It never adds a file or location to, or removes one from, that canonical
 map; the explicit 378-file include therefore remains the denominator. The stable
-summary digest is
-`c4d75618fbc39602b4b01e9059e74249cf1e78a862f7176f770511ea177aa17b`.
+candidate-bound summary digest is
+`ac29412270641af7c8f3ca8276fcf3ae4cc48a81c425fe904c185f4c7c79e08c`.
 The statement-level artifact is retained run evidence but is byte-unstable and has no
 durable cross-run digest. This is auditable execution observation, not synthetic line
 credit.
@@ -322,15 +322,17 @@ subprocess branch observations converged at exact location `404:9:406:3`. Inspec
 `968099c2582e8812bb1bcd6e6de9cbdb3985336d` preserve the refined aggregation red.
 DII-227 retains parent uniqueness while requiring same-kind subprocess observations to
 sum before one exact application. Inspector
-`e284a6cb9b2d23eaf5713c34ecf29e324397b355` makes all eight focused cases green; the
-ordinary and unchanged coverage suites pass 155 files and 1,458 tests with eight skips,
-and the exact coverage counts and stable summary digest remain unchanged. Architect
-`cef0540a70a62de2222078c63455cd763fa92703` refreshes the caused trace to 34
-invariants, 155 test sources, and 2,784 lexical assertion sites.
+`e284a6cb9b2d23eaf5713c34ecf29e324397b355` made all eight focused cases green. At
+that exact implementation boundary, the ordinary and unchanged coverage suites passed
+155 files and 1,458 tests with eight skips, and Architect
+`cef0540a70a62de2222078c63455cd763fa92703` refreshed the caused trace to 34
+invariants, 155 test sources, and 2,784 lexical assertion sites. Those readings are
+historical and bound to those exact subjects; they are not the current candidate
+population.
 
-The current governed-sequencing policy contains three R-0006 exception entries covering
-four exact immutable implementation commits: `a0292658…`, `58b175d3…`, `8e7a44b7…`,
-and `63b2238d…`. Separately, the role-path policy contains two exact historical
+The current governed-sequencing policy contains four R-0006 exception entries covering
+five exact immutable implementation commits: `a0292658…`, `58b175d3…`, `8e7a44b7…`,
+`63b2238d…`, and `ec680862…`. Separately, the role-path policy contains two exact historical
 classifications for `d41c648b…` and `8e7a44b7…`. These are distinct controls and grant
 no prospective bypass.
 
@@ -390,8 +392,8 @@ reuse and promotion remain disabled.
 The trace schema and generator require a positive `assertion_count` and SHA-256
 `assertion_digest` for every test-corpus row. The generator derives both from exact
 tracked bytes and rejects missing sources, zero assertion sites, unsupported or
-ambiguous forms, and digest drift. The current trace verifies 34 invariants and 155
-test sources containing 2,784 projected lexical assertion sites.
+ambiguous forms, and digest drift. The current trace verifies 34 invariants and 156
+test sources containing 2,839 projected lexical assertion sites.
 
 This is stronger than filename presence or documentary mention, but the audit does not
 misstate assertion count as semantic sufficiency by itself. Invariant markers,
@@ -423,18 +425,30 @@ independent review remain separate evidence.
 
 Combined-role rows are serial role-pure commits, never shared-authority commits.
 
-## Fresh pre-review evidence
+## Fifth-review evidence and complete-class correction
 
-The corrected ordinary workspace suite passes 155 files with 1,458 tests passing,
-eight declared skips, and zero failures. The complete-denominator coverage command
-passes all four floors with the exact numerator/denominator readings and stable summary
-digest above; the runtime-variable statement artifact has no current stable digest.
-Root typecheck, repository formatting for every changed test, `pnpm run devai:prepare`,
-the focused close-control and coverage-integrity contracts, `pnpm run trace:check` at
-34 invariants / 155 tests, and `git diff --check` pass. At exact pre-Auditor Architect
-head `cef0540a70a62de2222078c63455cd763fa92703`, the governed range has 119 commits:
-35 Architect, 36 Auditor, 12 Engineer, and 36 Inspector commits. The current trace
-contains 2,784 lexical assertion sites. This Auditor amendment will rerun the mandatory commit floor;
-B9 must then refresh the closing decision and source-close handoff, run two fresh
-candidate-bound convergence passes, rehearse closure, generate a fresh manifest, and
-obtain a fresh literal `claude-opus-5` review. No earlier state may be reused.
+At rejected cycle-1 review candidate
+`93894da782af3943e2447f43e81e5e69cbdc73fa`, the ordinary workspace suite passed 156
+files with 1,479 tests passing, eight declared skips, and zero failures. The complete
+378-file denominator passed at statements 16,094/22,393 (71.87%), branches
+11,659/19,382 (60.15%), functions 2,479/3,073 (80.67%), and lines 14,936/20,383
+(73.27%), with stable summary digest
+`ac29412270641af7c8f3ca8276fcf3ae4cc48a81c425fe904c185f4c7c79e08c`. Trace verified
+34 invariants, 156 test sources, and 2,839 lexical assertion sites. The exact governed
+range contained 131 commits: 40 Architect, 39 Auditor, 13 Engineer, 38 Inspector, and
+one Owner commit.
+
+Literal `claude-opus-5` cycle 1 independently reproduced those readings and the complete
+207-topic census, then returned FAIL because this active as-built and the active
+source-close handoff still presented older readings as current and omitted the fifth
+sequencing-exception commit. Auditor `2e02d31c9504d4ee63dbe05f40084466292aff99`
+preserves all 207 dispositions and the exact four-topic failure. This same-class sweep
+updates every current Auditor-owned occurrence while retaining older values only inside
+exact-subject historical narratives and immutable review/evidence records.
+
+This repair invalidates every earlier convergence, rehearsal and manifest. Architect
+must now perform the corresponding source-close sweep, Inspector must bind the
+KNOWN-RED coverage paragraph to its exact historical candidate, and the corrected head
+must pass fresh smart convergence, rehearsal, candidate-manifest and review-scope
+generation before the one permitted cycle-2 review. No earlier PASS or task result may
+be carried across changed inputs except through an OM-011-valid content address.
