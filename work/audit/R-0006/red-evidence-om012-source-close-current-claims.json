@@ -26,6 +26,15 @@
     ],
     "status": "both passed before the authoritative full red rerun"
   },
+  "observations": [
+    {
+      "commit": "c4c1758ccf40a7269721b7cacde1a2fafa6cdbec",
+      "command": "pnpm vitest run",
+      "exit_code": 1,
+      "tests": ["tests/contract/r0006-smart-convergence.red.contract.test.ts"],
+      "exercised_implementation_paths": [".devai/config/round-close-controls.json"]
+    }
+  ],
   "prospective_implementation_paths": [
     "law/policy/round-close-controls.json",
     ".devai/config/round-close-controls.json",
