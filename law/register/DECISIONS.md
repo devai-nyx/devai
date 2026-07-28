@@ -4314,6 +4314,48 @@ merge, exact-main CI, PC-0007, closure, release, package publication, tag, GitHu
 Release, Pages deployment, evidence promotion, predecessor mutation, or R-0007+
 authority.
 
+### DII-244 — Contain and reaccept the complete-population output repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 complete-population correction; OM-012; OM-013; DII-215; DII-243; Engineer a8bec1c66379449c1b3d82879c765fc062cb49a0, f8886676d81e560fc85be3914e7f2e129ebb61c3, 3be16cb1dca53a2614ced355f9de35bb1b65f752, and 2f1a24b4e0f42dd2eacbce1da83ea741b66a2486; Inspector 86934e7, fd2ea61, and aa3e180; Auditor 145cf2989480fd3eac9a51bafa415645acc1b371`
+
+The Owner's pre-review stop condition required observable execution of every retained
+public output identity rather than route-only or synthetic evidence. The resulting
+machine-readable population executes all 147 retained actions, all 59 `sense run`
+kinds plus list under both machine spellings, the actual failure paths of all 13
+noncanonical-exit producers, and separate initialization, registry-validation,
+authorization, routing, and handler-dispatch throws. It reports no missing, duplicate,
+structurally-only, unexecuted, envelope-invalid, exit-mismatched, or semantically
+divergent row. Auditor `145cf2989480fd3eac9a51bafa415645acc1b371`
+preserves the exact artifact with SHA-256
+`6461aadb0185450b30bfb3101230a78760e929a75b8a91c40ece250dfb7a3afe`.
+
+The complete execution also disclosed an immutable sequencing defect in Engineer
+`2f1a24b4e0f42dd2eacbce1da83ea741b66a2486`. A post-envelope doctor warning and two
+handler catches that swallowed the canonical action-output exit sentinel required
+corrections in `packages/cli/src/commands/doctor.ts`,
+`packages/cli/src/commands/mutation/run.ts`, and
+`packages/cli/src/commands/record/run.ts`, in addition to
+`packages/cli/src/action-output.ts`. Those paths exceeded DII-243's exact four-path
+limit, and the complete executable Inspector population at `86934e7` followed the
+Engineer commit. It is not relabelled as prior red. The sequencing policy therefore
+records one exact historical-commit exception for `2f1a24b…`; it grants no round-wide
+or prospective bypass.
+
+The three earlier Engineer commits `a8bec1c…`, `f888667…`, and `3be16cb…` remain
+ordinarily bound to prior Architect `34784bd…`, Inspector `c1cbf28…`, and Auditor
+`aeb7227…`. Their union changes exactly the four implementation paths enumerated by
+that prior red. The exception population is exactly one later Engineer commit.
+
+DII-244 replaces DII-243 as the Architect closing decision for production PC-0007;
+DII-207 remains the declaration. It reaccepts the verified behavior only for the
+remaining pre-review gates: governed checks, focused and ordinary suites, isolated
+clean-runner parity, smart convergence, rehearsal, and fresh manifests. The formal
+cycle-6 Codex review remains stopped until every such gate is green.
+
+This decision claims no completed pre-review gate set, fresh candidate, review PASS,
+publication, merge, exact-main CI, PC-0007, closure, release, package publication, tag,
+GitHub Release, Pages deployment, evidence promotion, predecessor mutation, real
+external mutation, or R-0007+ authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
