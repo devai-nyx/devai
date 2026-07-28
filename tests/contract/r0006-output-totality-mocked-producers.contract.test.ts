@@ -1,3 +1,4 @@
+// Invariants: INV-DEVAI-001, INV-DEVAI-015, INV-DEVAI-017, INV-DEVAI-020
 // Inspector executable: unreachable noncanonical branches with mocked external skill boundaries.
 import { writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
