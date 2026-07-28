@@ -69,7 +69,11 @@ function exactLocationHits(
     const key = locationKey(location);
     if (key === undefined) continue;
     if (hits.has(key)) {
-      throw new Error(`duplicate exact ${kind} location ${key} in ${mapName} coverage map`);
+      if (mapName === 'parent') {
+        throw new Error(`duplicate exact ${kind} location ${key} in ${mapName} coverage map`);
+      }
+      hits.set(key, (hits.get(key) ?? 0) + count);
+      continue;
     }
     hits.set(key, count);
   }
