@@ -59,6 +59,63 @@ function locationKey(location: Location): string | undefined {
   return positions.join(':');
 }
 
+function exactLocationHits(
+  kind: 'statement' | 'function' | 'branch',
+  mapName: 'parent' | 'subprocess',
+  entries: ReadonlyArray<readonly [Location, number]>,
+): Map<string, number> {
+  const hits = new Map<string, number>();
+  for (const [location, count] of entries) {
+    const key = locationKey(location);
+    if (key === undefined) continue;
+    if (hits.has(key)) {
+      throw new Error(`duplicate exact ${kind} location ${key} in ${mapName} coverage map`);
+    }
+    hits.set(key, count);
+  }
+  return hits;
+}
+
+function statementLocationHits(
+  coverage: FileCoverageData,
+  mapName: 'parent' | 'subprocess',
+): Map<string, number> {
+  return exactLocationHits(
+    'statement',
+    mapName,
+    Object.entries(coverage.statementMap).map(([id, location]) => [location, coverage.s[id] ?? 0]),
+  );
+}
+
+function functionLocationHits(
+  coverage: FileCoverageData,
+  mapName: 'parent' | 'subprocess',
+): Map<string, number> {
+  return exactLocationHits(
+    'function',
+    mapName,
+    Object.entries(coverage.fnMap).map(([id, definition]) => [
+      definition.decl,
+      coverage.f[id] ?? 0,
+    ]),
+  );
+}
+
+function branchLocationHits(
+  coverage: FileCoverageData,
+  mapName: 'parent' | 'subprocess',
+): Map<string, number> {
+  return exactLocationHits(
+    'branch',
+    mapName,
+    Object.entries(coverage.branchMap).flatMap(([id, definition]) =>
+      definition.locations.map(
+        (location, index) => [location, coverage.b[id]?.[index] ?? 0] as const,
+      ),
+    ),
+  );
+}
+
 export function mergeCanonicalHits(
   coverageMap: MutableCoverageMap,
   subprocessMap: MutableCoverageMap,
@@ -68,38 +125,25 @@ export function mergeCanonicalHits(
     const candidate = subprocessMap.fileCoverageFor(filename).toJSON() as FileCoverageData;
     const current = coverageMap.fileCoverageFor(filename).toJSON() as FileCoverageData;
 
-    const statementHits = new Map<string, number>();
-    for (const [id, location] of Object.entries(candidate.statementMap)) {
-      const count = candidate.s[id] ?? 0;
-      const key = locationKey(location);
-      if (key !== undefined) statementHits.set(key, count);
-    }
+    const statementHits = statementLocationHits(candidate, 'subprocess');
+    const functionHits = functionLocationHits(candidate, 'subprocess');
+    const branchHits = branchLocationHits(candidate, 'subprocess');
+    statementLocationHits(current, 'parent');
+    functionLocationHits(current, 'parent');
+    branchLocationHits(current, 'parent');
+
     for (const [id, location] of Object.entries(current.statementMap)) {
       const key = locationKey(location);
       const count = key === undefined ? undefined : statementHits.get(key);
       if (count !== undefined) current.s[id] = (current.s[id] ?? 0) + count;
     }
 
-    const functionHits = new Map<string, number>();
-    for (const [id, definition] of Object.entries(candidate.fnMap)) {
-      const count = candidate.f[id] ?? 0;
-      const key = locationKey(definition.decl);
-      if (key !== undefined) functionHits.set(key, count);
-    }
     for (const [id, definition] of Object.entries(current.fnMap)) {
       const key = locationKey(definition.decl);
       const count = key === undefined ? undefined : functionHits.get(key);
       if (count !== undefined) current.f[id] = (current.f[id] ?? 0) + count;
     }
 
-    const branchHits = new Map<string, number>();
-    for (const [id, definition] of Object.entries(candidate.branchMap)) {
-      for (const [index, location] of definition.locations.entries()) {
-        const count = candidate.b[id]?.[index] ?? 0;
-        const key = locationKey(location);
-        if (key !== undefined) branchHits.set(key, count);
-      }
-    }
     for (const [id, definition] of Object.entries(current.branchMap)) {
       for (const [index, location] of definition.locations.entries()) {
         const key = locationKey(location);
