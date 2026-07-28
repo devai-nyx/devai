@@ -3919,6 +3919,62 @@ cycle-2 PASS, publication, remote CI, merge, PC-0007, closure, package publicati
 tag, GitHub Release, Pages or other deployment, evidence promotion, real-stynx
 mutation, predecessor mutation, or R-0007+ work.
 
+### DII-234 — Govern OM-012 complete-class repair and review-until-PASS continuation
+`type: decision · status: active · authority: Architect · provenance: OM-012; R-0006-INDEPENDENT-OPUS-B9-REVIEW-6 at Auditor 33d1fa3; Inspector ab471b4; R-0006-OM-012-COMPLETE-CLASS-REPAIR-RED-EVIDENCE at Auditor 1856372`
+
+The literal cycle-2 review of candidate
+`ab4721b09ef3dde327c5d660fdf78b542cc85a66` dispositioned all 211 mandatory topics
+and returned FAIL on five. The failure invalidates that candidate, convergence,
+rehearsal, manifests, and publication standing. OM-012 supersedes only OM-011's numeric
+two-cycle cap and terminal stop, authorizing R-0006 to continue through complete-class
+repairs and as many fresh exhaustive reviews as are required for a real PASS.
+
+Every review remains read-only through literal `claude-opus-5` with no fallback,
+continues after blockers, and dispositions every machine-censused topic exactly once.
+Any FAIL or BLOCKED disposition invalidates its exact candidate and returns to
+role-pure complete-class repair, full gates, two-pass content-addressed convergence,
+candidate-only identity proof, isolated closure rehearsal, fresh manifests, and a new
+complete review. No failed result, omitted topic, stale input, transport failure, or
+cycle count may manufacture PASS.
+
+The review-scope population is no longer maintained as an enumerated list that can omit
+the newest failure. It is derived from the exact governed B9 review-record glob at the
+candidate revision, so every preserved prior P0-P3 class remains mandatory. The final
+PASS always lands at
+`work/audit/R-0006/independent-opus-b9-review-final.md`, independent of its cycle
+number; canonical policy, committed materialization, review-check, and review-envelope
+behavior must agree on that one destination.
+
+Active Auditor documents that state volatile trace, sequencing, review-census,
+coverage, suite, range, or operational-value readings must not rely on manually copied
+current prose. The policy names their structured claim blocks. The close controller
+must derive each governed value from `law/trace.json`,
+`law/policy/governed-sequencing.json`,
+`law/policy/operational-values.json`, and the candidate's complete prior-review
+population, reject missing, extra, malformed, or unequal claims, and reject unbound
+current numeric prose outside the block. Historical values remain permitted only when
+bound to an exact 40-hex subject in their paragraph.
+
+DII-226 parent-location uniqueness applies to the whole complete parent coverage map,
+not only files also observed by a subprocess. The Inspector provider must validate all
+parent files before applying any subprocess aggregate; subprocess same-kind duplicate
+observations still sum once at one canonical parent location. This changes no hit,
+denominator, threshold, include, exclusion, or whole-coverage rule for the current
+artifact, whose independently reviewed parent population had zero collisions.
+
+Inspector `ab471b48066853085f4978536aade0a7605142c1` establishes four exact red
+adversaries and literally binds `scripts/run-round-close-controls.mjs`,
+`.devai/config/round-close-controls.json`, and
+`tests/config/subprocess-v8-coverage-provider.ts`. Auditor evidence at `1856372`
+preserves the focused and full-floor failures. Implementation may now proceed only in
+those exact role-owned paths, followed by Auditor claim reconciliation and a fresh
+Architect reacceptance decision before another candidate is reviewed.
+
+This decision does not claim green implementation, corrected Auditor prose,
+convergence, rehearsal, candidate identity, review PASS, publication, remote CI, merge,
+PC-0007, closure, release, evidence promotion, real-stynx mutation, predecessor
+mutation, or R-0007+ authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

@@ -1,6 +1,6 @@
 # R-0006 ORCHESTRATOR — contracts and coverage depth
 
-Read OM-002, OM-003, OM-010, OM-011, the shared execution contract,
+Read OM-002, OM-003, OM-010, OM-011, OM-012, the shared execution contract,
 authorization/plan, R-0005
 close, the R-0006 preflight alignment audit, Constitution operational-value findings,
 thresholds policy, coverage config, current coverage JSON, all action
@@ -53,10 +53,11 @@ manifests. Require every topic exactly once with one of `RECHECKED_PASS`,
 `RECHECKED_FAIL`, `REUSED_FRESH_PASS`, or `BLOCKED`; unchanged topics still require
 independent digest recomputation, freshness inspection, and a current invariant reason.
 
-Review cycle 1 is exhaustive discovery and continues after blockers. Repair the full
-same-class populations, then perform one complete cycle-2 review. If cycle 2 fails,
-stop and give the Owner a process/root-cause report; do not begin review 3. The budget
-never manufactures PASS.
+Every review cycle is exhaustive discovery and continues after blockers. On FAIL,
+preserve the literal record, repair every complete same-class population role-purely,
+regenerate all invalidated candidate evidence, and perform another complete review.
+OM-012 suspends the numeric review quota for R-0006 only; it never manufactures PASS or
+permits reuse across changed inputs.
 
 Exercise DB-gated integration tests with PostgreSQL. Inspect per-package/file coverage
 for suspicious zeroes and suspiciously excluded code. Ask Claude Opus 5 through literal

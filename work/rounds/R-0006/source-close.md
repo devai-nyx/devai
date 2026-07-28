@@ -121,14 +121,14 @@ candidate-only manifest must derive the exact base, tree, governed range, identi
 population, role/path map, gate outcomes, convergence passes, and rehearsal from that
 head; no earlier candidate state may be reused.
 
-Before cycle-2 review, that exact candidate must pass two consecutive smart-convergence
+Before each review, that exact candidate must pass two consecutive smart-convergence
 passes, with the second pass making no tracked or untracked relevant-workspace write,
 and must pass the isolated source/closure rehearsal. The independent reviewer must use
-the literal `claude-opus-5` selector in read-only mode. Cycle 2 is the one complete
-re-review. Any failed or blocked cycle-2 topic stops execution and escalates to the
-Owner; no automatic cycle 3 exists.
+the literal `claude-opus-5` selector in read-only mode. Every failed or blocked review
+invalidates that candidate and returns to complete-class role-pure repair under OM-012;
+there is no numeric cycle cap and no forced PASS.
 
-After PASS, the only permitted source delta is the exact Auditor review record. Current
+After PASS, the only permitted source delta is the exact stable Auditor review record. Current
 policy admits no deterministic Architect projection in the review envelope. The
 manifest-bound review-envelope check must reject every other change. The resulting exact
 `published_head` must pass two fresh convergence passes before push.

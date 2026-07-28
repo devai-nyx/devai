@@ -43,18 +43,18 @@ received an Auditor plus independent-review PASS.
 
 ## Batches
 
-| Batch | Role                     | Work                                                                                                                                                                                                  | Commit gate                                                                              |
-| ----- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| B0    | Architect                | Inventory operational values and every action in the current registry with its output/error shapes; record baseline coverage by package/file                                                          | E5 PASS; no hidden denominator or stale count                                            |
-| B1    | Architect                | Amend law for BL-034 extractions; record mutation-strength and aggregation as separate BL-035 decisions with FAIL/UNKNOWN rules                                                                       | No doctrine duplicated in two homes                                                      |
-| B2    | Inspector                | Commit red contracts for every missing/invalid action payload and each untested branch selected by risk                                                                                               | Reds assert behavior, not line execution alone                                           |
-| B3    | Architect                | Define closed per-action output/error schemas and common envelope relationships                                                                                                                       | All actions have authoritative shapes                                                    |
-| B4    | Engineer                 | Implement BL-026 typed `--json` emissions and validation; fix genuine defects exposed by tests without embedding test-only branches                                                                   | Unknown/invalid payloads fail closed                                                     |
-| B5    | Inspector                | Add unit/integration/adversarial/DB tests for contract depth and BL-081; preserve production code independence                                                                                        | Tests prove behavior and mutation resistance                                             |
-| B6    | Engineer                 | Repair coverage instrumentation/provider integration only where measurement is incorrect; do not exclude valid source                                                                                 | Provider/version and merged reports reproducible                                         |
-| B7    | Inspector                | Run full T1–T6, DB-enabled T3, mutation-relevant checks, trace-depth checks, and merged coverage                                                                                                      | All prior coverage floors remain green                                                   |
-| B8    | Auditor                  | Audit denominator, exclusions, thresholds, output totality, and law extraction; write as-built                                                                                                        | No coverage or semantics laundering                                                      |
-| B9    | Architect + machine verb | Converge with content-addressed task freshness, generate the exhaustive review-scope census, rehearse, review within the two-cycle budget, publish, and close through the source and closure-only PRs | Every identity, cache decision, review topic, clone, envelope, and exact-SHA check green |
+| Batch | Role                     | Work                                                                                                                                                                                                                  | Commit gate                                                                              |
+| ----- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| B0    | Architect                | Inventory operational values and every action in the current registry with its output/error shapes; record baseline coverage by package/file                                                                          | E5 PASS; no hidden denominator or stale count                                            |
+| B1    | Architect                | Amend law for BL-034 extractions; record mutation-strength and aggregation as separate BL-035 decisions with FAIL/UNKNOWN rules                                                                                       | No doctrine duplicated in two homes                                                      |
+| B2    | Inspector                | Commit red contracts for every missing/invalid action payload and each untested branch selected by risk                                                                                                               | Reds assert behavior, not line execution alone                                           |
+| B3    | Architect                | Define closed per-action output/error schemas and common envelope relationships                                                                                                                                       | All actions have authoritative shapes                                                    |
+| B4    | Engineer                 | Implement BL-026 typed `--json` emissions and validation; fix genuine defects exposed by tests without embedding test-only branches                                                                                   | Unknown/invalid payloads fail closed                                                     |
+| B5    | Inspector                | Add unit/integration/adversarial/DB tests for contract depth and BL-081; preserve production code independence                                                                                                        | Tests prove behavior and mutation resistance                                             |
+| B6    | Engineer                 | Repair coverage instrumentation/provider integration only where measurement is incorrect; do not exclude valid source                                                                                                 | Provider/version and merged reports reproducible                                         |
+| B7    | Inspector                | Run full T1–T6, DB-enabled T3, mutation-relevant checks, trace-depth checks, and merged coverage                                                                                                                      | All prior coverage floors remain green                                                   |
+| B8    | Auditor                  | Audit denominator, exclusions, thresholds, output totality, and law extraction; write as-built                                                                                                                        | No coverage or semantics laundering                                                      |
+| B9    | Architect + machine verb | Converge with content-addressed task freshness, generate the exhaustive review-scope census, rehearse, review under the OM-012 review-until-PASS protocol, publish, and close through the source and closure-only PRs | Every identity, cache decision, review topic, clone, envelope, and exact-SHA check green |
 
 ## B9 convergence-control correction
 
@@ -81,9 +81,10 @@ Inspector-green, and Auditor commits establish and verify the correction below.
   every R-0006 requirement, controlling law/policy, every finding class from B9 reviews
   1–4, and current/previous candidate manifests. Every topic appears exactly once and
   receives exactly one governed disposition.
-- Review cycle 1 is exhaustive discovery and continues after blockers. Complete
-  same-class repair is followed by one complete cycle-2 review. A cycle-2 failure stops
-  and escalates to the Owner; the budget never forces PASS.
+- Every review is exhaustive and continues after blockers. A FAIL invalidates the
+  candidate and requires complete-class role-pure repair, fresh convergence, fresh
+  manifests, rehearsal, and another complete review. OM-012 removes the numeric cycle
+  cap without weakening any topic, freshness, candidate, or PASS requirement.
 
 ## Acceptance
 
@@ -108,8 +109,8 @@ closure ancestry, or any release action.
 
 Also stop on a cache decision that cannot prove its complete key or required outputs,
 partial coverage reuse, a remote-CI skip, an omitted/duplicated/unverified review topic,
-review-cycle-2 failure, or any attempt to begin review iteration 5 before the OM-011
-correction is committed and green.
+or any failed review candidate that has not been preserved and repaired as a complete
+class under OM-012.
 
 ## Exit claim
 
