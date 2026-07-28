@@ -4,7 +4,9 @@ import { createHash } from 'node:crypto';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const SCRIPT = join(ROOT, 'scripts/run-round-close-controls.mjs');
@@ -326,6 +328,7 @@ describe('R-0006 OM-011 content-addressed freshness red contracts', () => {
   it('invalidates dependent tests for source changes and all dependents for shared inputs', () => {
     for (const path of [
       'packages/source.ts',
+      'tests/unit.test.ts',
       'tests/helpers/shared.ts',
       'vitest.config.ts',
       'pnpm-lock.yaml',
@@ -401,26 +404,34 @@ describe('R-0006 OM-011 content-addressed freshness red contracts', () => {
     expect(outcomes(policyDrift).slice(0, 2)).toEqual(['EXECUTED_PASS', 'EXECUTED_PASS']);
   });
 
-  it.each(['failed', 'malformed', 'tampered'])('never skips from a %s cache entry', (mode) => {
-    const current = fixture();
-    const initial = run(current.root, smartArgs(current.base, current.candidate));
-    expect(initial.status, initial.stderr).toBe(0);
-    const cachePath = join(
-      current.root,
-      '.devai/state/round-runs/R-0006/close/freshness/tasks/ordinary.json',
-    );
-    if (mode === 'malformed') writeFileSync(cachePath, '{');
-    else {
-      const cache = JSON.parse(readFileSync(cachePath, 'utf8')) as Record<string, unknown>;
-      if (mode === 'failed') cache.outcome = 'EXECUTED_FAIL';
-      else cache.task_key = '0'.repeat(64);
-      writeFileSync(cachePath, canonical(cache));
-    }
-    const result = run(current.root, smartArgs(current.base, current.candidate));
-    expect(result.status, result.stderr).toBe(0);
-    expect(outcomes(result)[0]).toBe('EXECUTED_PASS');
-    expect(executionCount(current.root, 'ordinary')).toBe(2);
-  });
+  it.each(['failed', 'stale', 'malformed', 'tampered'])(
+    'never skips from a %s cache entry',
+    (mode) => {
+      const current = fixture();
+      const initial = run(current.root, smartArgs(current.base, current.candidate));
+      expect(initial.status, initial.stderr).toBe(0);
+      const cachePath = join(
+        current.root,
+        '.devai/state/round-runs/R-0006/close/freshness/tasks/ordinary.json',
+      );
+      if (mode === 'malformed') writeFileSync(cachePath, '{');
+      else {
+        const cache = JSON.parse(readFileSync(cachePath, 'utf8')) as Record<string, unknown>;
+        if (mode === 'failed') cache.outcome = 'EXECUTED_FAIL';
+        else cache.task_key = '0'.repeat(64);
+        if (mode === 'stale') {
+          const body = { ...cache };
+          delete body.result_digest;
+          cache.result_digest = sha256(canonical(body));
+        }
+        writeFileSync(cachePath, canonical(cache));
+      }
+      const result = run(current.root, smartArgs(current.base, current.candidate));
+      expect(result.status, result.stderr).toBe(0);
+      expect(outcomes(result)[0]).toBe('EXECUTED_PASS');
+      expect(executionCount(current.root, 'ordinary')).toBe(2);
+    },
+  );
 
   it('widens unknown or dynamic dependency knowledge and reruns whole coverage after provider change', () => {
     const current = fixture();
@@ -437,6 +448,54 @@ describe('R-0006 OM-011 content-addressed freshness red contracts', () => {
     expect(outcomes(result).slice(0, 2)).toEqual(['EXECUTED_PASS', 'EXECUTED_PASS']);
     expect(executionCount(current.root, 'ordinary')).toBe(2);
     expect(executionCount(current.root, 'coverage')).toBe(2);
+  });
+
+  it('reruns coverage when a required retained output is missing or tampered', () => {
+    const current = fixture();
+    const initial = run(current.root, smartArgs(current.base, current.candidate));
+    expect(initial.status, initial.stderr).toBe(0);
+    put(current.root, 'scratch/coverage/coverage-summary.json', '{"tampered":true}\n');
+    const result = run(current.root, smartArgs(current.base, current.candidate));
+    expect(result.status, result.stderr).toBe(0);
+    expect(outcomes(result).slice(0, 2)).toEqual(['SKIPPED_FRESH', 'EXECUTED_PASS']);
+    expect(executionCount(current.root, 'ordinary')).toBe(1);
+    expect(executionCount(current.root, 'coverage')).toBe(2);
+  });
+
+  it('distrusts pre-existing local cache on remote CI and executes the full gate set', () => {
+    const current = fixture();
+    const local = run(current.root, smartArgs(current.base, current.candidate));
+    expect(local.status, local.stderr).toBe(0);
+    const remote = run(current.root, smartArgs(current.base, current.candidate), {
+      CI: 'true',
+      GITHUB_ACTIONS: 'true',
+    });
+    expect(remote.status, remote.stderr).toBe(0);
+    expect(outcomes(remote)).toEqual([
+      'EXECUTED_PASS',
+      'EXECUTED_PASS',
+      'SKIPPED_FRESH',
+      'SKIPPED_FRESH',
+    ]);
+    expect(executionCount(current.root, 'ordinary')).toBe(2);
+    expect(executionCount(current.root, 'coverage')).toBe(2);
+  });
+
+  it('exposes governed package commands and keeps cache below ignored state', () => {
+    const scripts = (
+      JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as {
+        scripts: Record<string, string>;
+      }
+    ).scripts;
+    expect(scripts).toMatchObject({
+      'round-close:smart-converge': expect.stringContaining('smart-converge'),
+      'round-close:review-scope': expect.stringContaining('review-scope'),
+      'round-close:review-check': expect.stringContaining('review-check'),
+    });
+    const current = fixture();
+    const result = run(current.root, smartArgs(current.base, current.candidate));
+    expect(result.status, result.stderr).toBe(0);
+    expect(git(current.root, ['status', '--porcelain', '--untracked-files=all'])).toBe('');
   });
 });
 
@@ -560,5 +619,29 @@ describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
     expect(output(result).findings).toEqual(
       expect.arrayContaining([expect.objectContaining({ code: 'REVIEW_CYCLE_BUDGET_EXHAUSTED' })]),
     );
+  });
+
+  it('binds retained previous candidate-manifest history into the census', () => {
+    const current = fixture();
+    const previousBody = { review_candidate: current.base, published_head: current.base };
+    const previous = {
+      ...previousBody,
+      manifest_digest_sha256: sha256(canonical(previousBody)),
+    };
+    put(
+      current.root,
+      `.devai/state/round-runs/R-0006/close/candidate-manifests/${current.base}-${previous.manifest_digest_sha256}.json`,
+      canonical(previous),
+    );
+    const generated = generateScope(current);
+    const manifest = generated.manifest as {
+      previous_candidate_manifest_digests: string[];
+      topics: { topic_id: string; previous_digest: string | null }[];
+    };
+    expect(manifest.previous_candidate_manifest_digests).toEqual([previous.manifest_digest_sha256]);
+    expect(
+      manifest.topics.find(({ topic_id }) => topic_id.startsWith('candidate-manifest:'))
+        ?.previous_digest,
+    ).not.toBeNull();
   });
 });
