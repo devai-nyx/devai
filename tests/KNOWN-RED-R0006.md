@@ -302,10 +302,12 @@ query errors, credential substitution and fallback, idempotent writes, and best-
 close. No production, policy, threshold, exclusion, denominator, skip, generated label,
 or assertion-count mechanism changes in the depth batch.
 
-The authoritative unchanged coverage command then exits 0 with 155 files, 1,455 tests
-passing, and eight declared skips. Its exact reading is statements 71.86%
+At exact fourth-review candidate
+`c7ab49f5fbeffae3d8f58be0137f4c8f11d356fa`, the then-authoritative unchanged
+coverage command exited 0 with 155 files, 1,455 tests passing, and eight declared
+skips. That historical candidate's exact reading was statements 71.86%
 (16,093/22,393), branches 60.14% (11,658/19,382), functions 80.67%
-(2,479/3,073), and lines 73.27% (14,936/20,383). The stable summary digest is
+(2,479/3,073), and lines 73.27% (14,936/20,383). Its stable summary digest was
 `c4d75618fbc39602b4b01e9059e74249cf1e78a862f7176f770511ea177aa17b`.
 The 191 raw subprocess inputs and the statement-level artifact remain retained runtime
 evidence; their per-run filenames and bytes are not represented as stable identities.
