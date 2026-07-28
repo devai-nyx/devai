@@ -283,3 +283,29 @@ Inspector contract. It requires exact, collision-free location handling, no addi
 self-merge, and observable retained raw inputs. It authorizes no threshold, exclusion,
 denominator, source-population, generated-label, skip, assertion, publication, closure,
 release, predecessor, real-stynx, or R-0007+ change.
+
+Branch-integrity repair disposition: the five focused integrity contracts pass. The
+corrected provider rejects incomplete locations as merge identities, mutates the live
+coverage object without additively re-merging it, filters excluded dist paths on every
+return path, fails on malformed raw subprocess inputs, and exposes behaviorally tested
+retention. The first honest corrected coverage run passes all 153 files and 1,445 tests
+with eight declared skips, then fails only branches at 59.62% (11,557/19,382), 73
+covered branches below the unchanged 60% floor. Its stable summary digest is
+`d6de0c743d69efabc9af69ea9a86d1e9947bf049d117be5f0abe20bbcec27f6b`.
+
+The Inspector closes that real deficit with ten behavior-bearing tests only. Five
+workflow-parser cases exercise sorted YAML discovery, path filters, matrices, steps,
+cache detection, inline and block runs, reusable workflows, composite action expansion,
+missing composites, and relative/absolute paths. Five data-probe cases exercise shared
+connection failure, missing and write-refused queries, expectation grading, independent
+query errors, credential substitution and fallback, idempotent writes, and best-effort
+close. No production, policy, threshold, exclusion, denominator, skip, generated label,
+or assertion-count mechanism changes in the depth batch.
+
+The authoritative unchanged coverage command then exits 0 with 155 files, 1,455 tests
+passing, and eight declared skips. Its exact reading is statements 71.86%
+(16,093/22,393), branches 60.14% (11,658/19,382), functions 80.67%
+(2,479/3,073), and lines 73.27% (14,936/20,383). The stable summary digest is
+`c4d75618fbc39602b4b01e9059e74249cf1e78a862f7176f770511ea177aa17b`.
+The 191 raw subprocess inputs and the statement-level artifact remain retained runtime
+evidence; their per-run filenames and bytes are not represented as stable identities.
