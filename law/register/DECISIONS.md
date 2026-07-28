@@ -3797,6 +3797,53 @@ This decision does not claim a green smart convergence, rehearsal, candidate or 
 scope manifest, ready-to-review SHA, independent review, PASS, publication, merge,
 PC-0007, closure, or release. Review iteration 5 remains blocked.
 
+### DII-231 — Reaccept R-0006 after the exhaustive cycle-1 evidence sweep
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 exhaustive cycle-1 correction; OM-011; DII-207; DII-223; DII-228–230; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE at Auditor 2e02d31c9504d4ee63dbe05f40084466292aff99; Auditor 7c0fc17e4c9543c31db9f3f563e5b9e65d220c67; Inspector 5846718c3947ddce6b3bb67b296796bcc275dcb9`
+
+The first OM-011 exhaustive review cycle bound exact candidate
+`93894da782af3943e2447f43e81e5e69cbdc73fa` and independently regenerated all 207
+mandatory topics. It returned FAIL on four topics in one complete defect class: active
+Auditor as-built and Architect source-close prose still presented superseded coverage,
+suite, trace, governed-range, and sequencing-exception readings as current. The review
+continued after the first blocker, preserved 203 passing dispositions, and disclosed
+the complete stale-current-evidence population rather than issuing a partial verdict.
+
+Auditor `2e02d31c9504d4ee63dbe05f40084466292aff99` preserves the exact FAIL and all
+207 topic dispositions. Auditor `7c0fc17e4c9543c31db9f3f563e5b9e65d220c67` refreshes
+every Auditor-owned current claim and binds older figures only to their exact historical
+subjects. Inspector `5846718c3947ddce6b3bb67b296796bcc275dcb9` performs the same
+historical binding for the KNOWN-RED coverage narrative. This decision and the amended
+source-close handoff complete the Architect-owned sweep. No production, threshold,
+exclusion, denominator, skip, assertion mechanism, task result, or prior immutable
+evidence is changed.
+
+At this decision's committed candidate, the exact declared-base range contains 135
+commits: 41 Architect, 41 Auditor, 13 Engineer, 39 Inspector, and one Owner. The current
+378-file coverage summary remains statements 16,094/22,393 (71.87%), branches
+11,659/19,382 (60.15%), functions 2,479/3,073 (80.67%), and lines 14,936/20,383
+(73.27%), above unchanged 70/60/70/70 floors, with stable summary digest
+`ac29412270641af7c8f3ca8276fcf3ae4cc48a81c425fe904c185f4c7c79e08c`. The ordinary
+suite has 156 files, 1,479 passing tests, and eight governed skips. Trace has 34
+invariants, 156 test sources, and 2,839 lexical assertion sites. The sequencing policy
+has four R-0006 exception entries covering five exact immutable implementation commits;
+the separate role-path policy still has two exact classifications.
+
+These values have no candidate standing until the committed head passes fresh
+content-addressed smart convergence, isolated rehearsal, candidate-manifest generation,
+and complete review-scope generation. Cycle 2 is the one permitted complete re-review
+through literal `claude-opus-5`. A failed or blocked cycle-2 topic stops and escalates
+to the Owner; no cycle 3 is authorized. After PASS, only the exact Auditor review record
+may form the review envelope, and the published head must reconverge before push.
+
+DII-231 is the closing decision for production PC-0007; DII-207 remains the declaration.
+PC-0007 may be emitted only from an all-green exact-main source merge, on a closure-only
+branch, and must bind that source merge with release disposition `none-needed`.
+
+This decision does not itself claim cycle-2 PASS, source publishability, push, pull
+request, remote exact-head CI, merge, exact-main CI, PC-0007, closure, package
+publication, tag, GitHub Release, Pages or other deployment, evidence promotion,
+real-stynx mutation, predecessor mutation, or R-0007+ work.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
