@@ -31,6 +31,21 @@ function git(root: string, args: readonly string[], input?: string): string {
   return execFileSync('git', args, { cwd: root, encoding: 'utf8', input }).trim();
 }
 
+function commitTree(root: string, tree: string, parent: string, subject: string): string {
+  return git(root, [
+    '-c',
+    'user.name=DEVAI Fixture',
+    '-c',
+    'user.email=fixture@example.test',
+    'commit-tree',
+    tree,
+    '-p',
+    parent,
+    '-m',
+    subject,
+  ]);
+}
+
 function commit(root: string, author: string, subject: string, paths: readonly string[]): string {
   const staged = new Set(
     git(root, ['diff', '--cached', '--name-only']).split('\n').filter(Boolean),
@@ -314,11 +329,11 @@ describe('R-0006 E1 entry-control red contracts', () => {
     const tree = git(root, ['rev-parse', `${candidate}^{tree}`]);
     const localOnly: string[] = [];
     for (const ref of ['refs/heads/other', 'refs/heads/reflog-source', 'refs/stash']) {
-      const sha = git(root, ['commit-tree', tree, '-p', candidate, '-m', `local only ${ref}`]);
+      const sha = commitTree(root, tree, candidate, `local only ${ref}`);
       git(root, ['update-ref', ref, sha]);
       localOnly.push(sha);
     }
-    const dangling = git(root, ['commit-tree', tree, '-p', candidate, '-m', 'shared object only']);
+    const dangling = commitTree(root, tree, candidate, 'shared object only');
     localOnly.push(dangling);
     put(
       root,
@@ -339,7 +354,7 @@ describe('R-0006 E1 entry-control red contracts', () => {
   it('rejects abbreviated, invented, wrong-kind, unresolved, and unclassified identities', () => {
     const { root, base, candidate } = fixture();
     const tree = git(root, ['rev-parse', `${candidate}^{tree}`]);
-    const localOnly = git(root, ['commit-tree', tree, '-p', candidate, '-m', 'unclassified']);
+    const localOnly = commitTree(root, tree, candidate, 'unclassified');
     const cases = [
       { value: candidate.slice(0, 12), code: 'GIT_IDENTITY_NOT_FULL' },
       { value: '1'.repeat(40), code: 'GIT_IDENTITY_UNRESOLVED' },

@@ -340,10 +340,13 @@ function run(
   args: readonly string[],
   environment: NodeJS.ProcessEnv = {},
 ): RunResult {
+  const inheritedEnvironment = { ...process.env };
+  delete inheritedEnvironment.CI;
+  delete inheritedEnvironment.GITHUB_ACTIONS;
   return spawnSync(process.execPath, [SCRIPT, ...args, '--repo-root', root, '--json'], {
     cwd: root,
     encoding: 'utf8',
-    env: { ...process.env, ...environment },
+    env: { ...inheritedEnvironment, ...environment },
   }) as RunResult;
 }
 
