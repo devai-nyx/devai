@@ -101,7 +101,7 @@ The following claim is derived from the complete governed B9 review-record popul
 
 <!-- governed-current-claims:start -->
 
-{"prior_b9_failure_records":6}
+{"prior_b9_failure_records":7}
 <!-- governed-current-claims:end -->
 
 The policy names its requirement and controlling sources, every prior governed B9 Opus
