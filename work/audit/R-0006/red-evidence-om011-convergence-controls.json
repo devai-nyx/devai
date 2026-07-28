@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0006-OM-011-CONVERGENCE-CONTROL-RED-EVIDENCE",
+  "round": "R-0006",
+  "date": "2026-07-28",
+  "authority": "Auditor",
+  "mandate": "OM-011",
+  "architect_policy_commit": "caa6d583ddee74786c11fb6aedd56fc20e75e3b7",
+  "inspector_red_commit": "0215430f21649fb81650df312cbddef9e1e92b4c",
+  "focused_red": {
+    "command": "pnpm vitest run tests/contract/r0006-smart-convergence.red.contract.test.ts",
+    "exit_code": 1,
+    "test_files_failed": 1,
+    "tests_failed": 16,
+    "tests_passed": 0,
+    "defect": "smart-converge, review-scope, and review-check were absent; every behavioral contract reached the missing machinery and failed before implementation"
+  },
+  "full_floor_red": {
+    "command": "pnpm vitest run",
+    "exit_code": 1,
+    "test_files_failed": 5,
+    "test_files_passed": 151,
+    "tests_failed": 21,
+    "tests_passed": 1453,
+    "tests_skipped": 8,
+    "breakdown": {
+      "om011_behavioral_reds": 16,
+      "unregistered_schema_integration_reds": 5
+    }
+  },
+  "implementation_scope_named_by_red": [
+    ".devai/config/round-close-controls.json",
+    "package.json",
+    "packages/schemas/src/roster.ts",
+    "scripts/run-round-close-controls.mjs"
+  ],
+  "required_adversary_classes": [
+    "unchanged task reuse",
+    "changed test and transitive source invalidation",
+    "shared helper configuration lockfile toolchain environment and policy invalidation",
+    "dirty untracked deleted and renamed input rejection",
+    "failed stale malformed and tampered cache rejection",
+    "retained-output digest verification",
+    "unknown and dynamic dependency widening",
+    "whole coverage invalidation",
+    "remote cache distrust",
+    "exact-once review topic census",
+    "omitted duplicated and unverified unchanged topic rejection",
+    "previous finding retention",
+    "two-cycle review budget"
+  ],
+  "standing": "historical red evidence only; no review, convergence, publication, or closure standing"
+}
