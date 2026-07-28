@@ -642,6 +642,64 @@ describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
     );
   });
 
+  it('governs the active Architect source-close handoff against the complete volatile-claim population', () => {
+    const livePolicy = JSON.parse(
+      readFileSync(join(ROOT, 'law/policy/round-close-controls.json'), 'utf8'),
+    ) as {
+      audit_current_claims: {
+        documents: { path: string; claims: string[] }[];
+      };
+    };
+    const sourceClosePolicy = livePolicy.audit_current_claims.documents.find(
+      ({ path }) => path === 'work/rounds/R-0006/source-close.md',
+    );
+    expect(sourceClosePolicy).toEqual({
+      path: 'work/rounds/R-0006/source-close.md',
+      claims: [
+        'trace_invariants',
+        'trace_test_sources',
+        'trace_assertion_sites',
+        'prior_b9_failure_records',
+      ],
+    });
+    if (sourceClosePolicy === undefined) {
+      throw new Error('active source-close handoff is absent from current-claim policy');
+    }
+    expect(readFileSync(join(ROOT, sourceClosePolicy.path), 'utf8')).toContain(
+      '<!-- governed-current-claims:start -->',
+    );
+
+    const current = fixture();
+    const fixturePolicy = JSON.parse(
+      readFileSync(join(current.root, 'law/policy/round-close-controls.json'), 'utf8'),
+    ) as typeof livePolicy;
+    fixturePolicy.audit_current_claims = livePolicy.audit_current_claims;
+    put(
+      current.root,
+      'law/policy/round-close-controls.json',
+      `${JSON.stringify(fixturePolicy, null, 2)}\n`,
+    );
+    put(
+      current.root,
+      sourceClosePolicy.path,
+      '# Source close\n<!-- governed-current-claims:start -->\n{"trace_invariants":1,"trace_test_sources":1,"trace_assertion_sites":999,"prior_b9_failure_records":4}\n<!-- governed-current-claims:end -->\n',
+    );
+    commit(current.root, 'DEVAI Architect', 'test: stale source-close claims', [
+      'law/policy/round-close-controls.json',
+      sourceClosePolicy.path,
+    ]);
+    const stale = run(current.root, ['policy-check']);
+    expect(stale.status).not.toBe(0);
+    expect(output(stale).findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'AUDIT_CURRENT_CLAIM_DRIFT',
+          details: expect.objectContaining({ path: sourceClosePolicy.path }),
+        }),
+      ]),
+    );
+  });
+
   it('emits every exact-range, requirement, control, manifest, and prior-finding topic exactly once', () => {
     const current = fixture();
     const result = generateScope(current);
