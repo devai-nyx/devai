@@ -98,5 +98,58 @@
       "items": { "$ref": "#/$defs/pass" }
     },
     "execution_digest_sha256": { "$ref": "#/$defs/sha256" }
-  }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "round": "R-9999",
+      "exact_base": "1111111111111111111111111111111111111111",
+      "candidate_sha": "2222222222222222222222222222222222222222",
+      "policy_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "graph_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+      "passes": [
+        {
+          "pass_number": 1,
+          "plan_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+          "result_population_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+          "nodes": [
+            {
+              "node_id": "ordinary",
+              "outcome": "EXECUTE",
+              "result": "EXECUTED_PASS",
+              "reason_codes": ["SOURCE_CHANGED"],
+              "changed_inputs": ["packages/example/src/index.ts"],
+              "task_key": "7777777777777777777777777777777777777777777777777777777777777777",
+              "dependency_keys": {},
+              "fallback_population": null,
+              "outputs_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+              "result_digest": "9999999999999999999999999999999999999999999999999999999999999999"
+            }
+          ],
+          "pass_digest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "pass_number": 2,
+          "plan_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "result_population_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "nodes": [
+            {
+              "node_id": "ordinary",
+              "outcome": "REUSE_FRESH",
+              "result": "REUSED_FRESH_PASS",
+              "reason_codes": ["UNCHANGED_FRESH_PASS"],
+              "changed_inputs": [],
+              "task_key": "7777777777777777777777777777777777777777777777777777777777777777",
+              "dependency_keys": {},
+              "fallback_population": null,
+              "outputs_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+              "result_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            }
+          ],
+          "pass_digest_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+        }
+      ],
+      "execution_digest_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }
+  ]
 }

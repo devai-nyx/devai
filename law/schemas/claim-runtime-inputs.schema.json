@@ -44,5 +44,27 @@
       }
     },
     "inputs_digest_sha256": { "$ref": "#/$defs/sha256" }
-  }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "round": "R-9999",
+      "phase": "pre-review",
+      "candidate": "1111111111111111111111111111111111111111",
+      "inputs": [
+        {
+          "input_id": "site_artifact_path",
+          "value": "scratch/site/R-9999.tgz",
+          "evidence_manifest": [
+            {
+              "ref": "scratch/site/R-9999.tgz",
+              "content_digest": "2222222222222222222222222222222222222222222222222222222222222222"
+            }
+          ],
+          "input_digest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+        }
+      ],
+      "inputs_digest_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+    }
+  ]
 }
