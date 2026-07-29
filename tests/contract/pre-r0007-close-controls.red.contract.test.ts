@@ -11,6 +11,7 @@ const ROOT = resolve(import.meta.dirname, '../..');
 const SCRIPT = resolve(ROOT, 'scripts/run-round-close-controls.mjs');
 const BASE = '722e8a3438f3534260ac4f24c3eecc59e76f905b';
 const CANDIDATE_MANIFEST = '.devai/state/round-runs/R-0007/close/candidate-manifest.json';
+const CONVERGENCE_EVIDENCE = '.devai/state/round-runs/R-0007/close/convergence-evidence.json';
 const REVIEW_SCOPE = '.devai/state/round-runs/R-0007/close/review-scope-manifest.json';
 const APPROVED_ENGINEER_SURFACE = [
   '.devai/config/round-close-controls.json',
@@ -73,12 +74,69 @@ function git(args: readonly string[]): string {
 
 function freezeExactCandidate(): void {
   const candidate = git(['rev-parse', 'HEAD']);
-  const body = {
+  const tree = git(['rev-parse', `${candidate}^{tree}`]);
+  const policy = json('law/policy/round-close-controls.json');
+  const profile = json('work/rounds/R-0007/close-control-profile.json');
+  const graph = json('work/rounds/R-0007/affected-test-graph.json');
+  const claims = json('work/rounds/R-0007/current-claims.json');
+  const sha256 = (value: unknown) => createHash('sha256').update(canonical(value)).digest('hex');
+  const candidateIdentity = sha256({ round: 'R-0007', base: BASE, candidate, tree });
+  const gateIds = (
+    (policy.convergence as Record<string, unknown>).commands as Array<{ id: string }>
+  ).map(({ id }) => id);
+  const semanticPopulation = sha256(gateIds);
+  const pass = (passNumber: 1 | 2) => {
+    const passBody = {
+      pass_number: passNumber,
+      head_before: candidate,
+      head_after: candidate,
+      tree_sha: tree,
+      clean_before: true,
+      clean_after: true,
+      writes: [],
+      gate_results: gateIds.map((gate_id) => ({
+        gate_id,
+        outcome: passNumber === 1 ? 'EXECUTED_PASS' : 'REUSED_FRESH_PASS',
+        task_key: sha256({ gate_id, candidate }),
+        output_digest: sha256({ gate_id, output: 'pass' }),
+        result_digest: sha256({ gate_id, result: 'pass' }),
+      })),
+      semantic_population_digest: semanticPopulation,
+    };
+    return { ...passBody, pass_digest_sha256: sha256(passBody) };
+  };
+  const convergenceBody = {
     schemaVersion: '1.0.0',
+    round: 'R-0007',
+    exact_base: BASE,
+    candidate_sha: candidate,
+    candidate_tree: tree,
+    candidate_identity_digest: candidateIdentity,
+    policy_digest: sha256(policy),
+    profile_digest: sha256(profile),
+    authoritative_gate_ids: gateIds,
+    authoritative_population_digest: semanticPopulation,
+    passes: [pass(1), pass(2)],
+  };
+  const convergence = {
+    ...convergenceBody,
+    convergence_digest_sha256: sha256(convergenceBody),
+  };
+  const convergencePath = resolve(ROOT, CONVERGENCE_EVIDENCE);
+  mkdirSync(dirname(convergencePath), { recursive: true });
+  writeFileSync(convergencePath, canonical(convergence));
+  const body = {
+    schemaVersion: '2.0.0',
     round: 'R-0007',
     base_sha: BASE,
     candidate_sha: candidate,
-    tree_sha: git(['rev-parse', `${candidate}^{tree}`]),
+    tree_sha: tree,
+    profile_digest: sha256(profile),
+    policy_digest: sha256(policy),
+    graph_digest: sha256(graph),
+    candidate_identity_digest: candidateIdentity,
+    convergence_digest: convergence.convergence_digest_sha256,
+    claims_digest: sha256(claims),
   };
   const path = resolve(ROOT, CANDIDATE_MANIFEST);
   mkdirSync(dirname(path), { recursive: true });
@@ -228,7 +286,7 @@ describe('pre-R-0007 generic close-control red contracts', () => {
   });
 
   it('generates a scope containing every registered semantic obligation', () => {
-    const restore = preserveRuntimeFiles([CANDIDATE_MANIFEST, REVIEW_SCOPE]);
+    const restore = preserveRuntimeFiles([CANDIDATE_MANIFEST, CONVERGENCE_EVIDENCE, REVIEW_SCOPE]);
     try {
       freezeExactCandidate();
       const result = run('review-scope', ['--base', BASE, '--candidate', 'HEAD', '--cycle', '1']);

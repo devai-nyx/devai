@@ -82,6 +82,10 @@ function copy(root: string, relativePath: string): void {
   copyFileSync(join(ROOT, relativePath), target);
 }
 
+function sourceJson(relativePath: string): Record<string, unknown> {
+  return JSON.parse(readFileSync(join(ROOT, relativePath), 'utf8')) as Record<string, unknown>;
+}
+
 function git(root: string, args: readonly string[]): string {
   return execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
 }
@@ -138,20 +142,6 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
   roots.push(root);
   git(root, ['init', '-q']);
   put(root, '.gitignore', '.devai/state/\nfixture/out/**\n');
-  for (const name of [
-    'affected-test-graph.schema.json',
-    'common-defs.schema.json',
-    'current-claims.schema.json',
-    'review-obligations.schema.json',
-    'review-result.schema.json',
-    'review-scope-manifest.schema.json',
-    'round-close-manifest.schema.json',
-    'round-close-profile.schema.json',
-    'task-freshness.schema.json',
-  ]) {
-    copy(root, `law/schemas/${name}`);
-  }
-
   const convergenceCommands = [
     'formatting',
     'preparation',
@@ -170,54 +160,25 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
     'coverage',
     'governance',
   ].map((id) => ({ id, argv: ['node', 'fixture/gate.mjs', id] }));
-  const policy = {
-    schemaVersion: '3.0.0',
-    policy_id: 'cycle-1-fixture',
-    policy_version: 'fixture-v3',
-    profile_discovery: {
-      path_template: 'work/rounds/{round}/close-control-profile.json',
-      round_pattern: '^R-[0-9]{4}$',
-    },
-    schemas: {
-      round_profile: 'law/schemas/round-close-profile.schema.json',
-      affected_test_graph: 'law/schemas/affected-test-graph.schema.json',
-      task_freshness: 'law/schemas/task-freshness.schema.json',
-      semantic_obligations: 'law/schemas/review-obligations.schema.json',
-      current_claims: 'law/schemas/current-claims.schema.json',
-      candidate_manifest: 'law/schemas/round-close-manifest.schema.json',
-      review_scope: 'law/schemas/review-scope-manifest.schema.json',
-      review_result: 'law/schemas/review-result.schema.json',
-    },
-    freshness: {
-      policy_version: 'fixture-freshness-v2',
-      remote_environment_indicators: ['CI', 'GITHUB_ACTIONS'],
-      environment_allowlist: [],
-      toolchain: [],
-      partial_coverage_merge: 'forbidden',
-    },
-    review_scope: {
-      policy_version: 'fixture-review-v2',
-      topic_sources: [
-        'semantic-obligation',
-        'changed-path',
-        'active-control',
-        'current-claim',
-        'previous-finding-class',
-        'candidate-identity',
-        'convergence-evidence',
-      ],
-    },
-    convergence: { passes: 2, second_pass: 'no-write-clean', commands: convergenceCommands },
-  };
+  const policy = sourceJson('law/policy/round-close-controls.json');
+  policy.policy_id = 'cycle-1-fixture';
+  const convergencePolicy = policy.convergence as Record<string, unknown>;
+  convergencePolicy.commands = convergenceCommands;
+  const freshnessPolicy = policy.freshness as Record<string, unknown>;
+  freshnessPolicy.environment_allowlist = [];
+  freshnessPolicy.toolchain = [];
+  for (const relativePath of new Set<string>([
+    'law/schemas/common-defs.schema.json',
+    ...Object.values(policy.schemas as Record<string, string>),
+  ]))
+    copy(root, relativePath);
   putJson(root, 'law/policy/round-close-controls.json', policy);
   putJson(root, '.devai/config/round-close-controls.json', policy);
 
-  const profile = {
-    schemaVersion: '1.0.0',
+  const profile = sourceJson('work/rounds/R-0007/close-control-profile.json');
+  Object.assign(profile, {
     round: ROUND,
-    policy_version: 'fixture-v3',
     decision_id: 'DII-900',
-    phase: 'pre-entry-preparation',
     sources: {
       authorization: `work/rounds/${ROUND}/AUTHORIZATION.md`,
       plan: `work/rounds/${ROUND}/plan.md`,
@@ -227,12 +188,18 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
       current_claims: `work/rounds/${ROUND}/current-claims.json`,
       additional_controls: ['product/owner-mandates/OM-900.md'],
       prior_findings: ['DF-PRIOR'],
+      prior_finding_registry: `work/rounds/${ROUND}/prior-finding-registry.json`,
     },
     runtime: {
       state_root: `.devai/state/round-runs/${ROUND}/close`,
       candidate_manifest: `.devai/state/round-runs/${ROUND}/close/candidate-manifest.json`,
+      convergence_evidence: `.devai/state/round-runs/${ROUND}/close/convergence-evidence.json`,
       review_scope: `.devai/state/round-runs/${ROUND}/close/review-scope-manifest.json`,
       review_result: `.devai/state/round-runs/${ROUND}/close/review-result.json`,
+      materialized_claims: `.devai/state/round-runs/${ROUND}/close/current-claims.json`,
+      review_state: `.devai/state/round-runs/${ROUND}/close/review-state.json`,
+      review_transport: `.devai/state/round-runs/${ROUND}/close/review-transport.json`,
+      review_repair_evidence: `.devai/state/round-runs/${ROUND}/close/review-repair-evidence.json`,
     },
     reviewer: {
       binding: 'owner-mandate-required',
@@ -249,7 +216,7 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
     },
     remote_ci: { local_cache_trusted: false, gate_population: 'complete-authoritative' },
     deployment: 'forbidden',
-  };
+  });
   putJson(root, `work/rounds/${ROUND}/close-control-profile.json`, profile);
   put(root, `work/rounds/${ROUND}/AUTHORIZATION.md`, '# authorization\n');
   put(root, `work/rounds/${ROUND}/plan.md`, '# plan\n');
@@ -324,12 +291,28 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
       },
     ],
   });
-  putJson(root, `work/rounds/${ROUND}/current-claims.json`, {
+  putJson(root, `work/rounds/${ROUND}/prior-finding-registry.json`, {
     schemaVersion: '1.0.0',
+    round: ROUND,
+    registry_version: 'fixture-prior-v1',
+    finding_classes: [
+      {
+        defect_class_id: 'DF-PRIOR',
+        severity: 'P1',
+        topic_ids: ['obligation:r9000-p0-identity'],
+        population_query: 'Enumerate the fixture population.',
+        affected_population: ['fixture-instance'],
+        repair_condition: 'The fixture instance is repaired.',
+      },
+    ],
+  });
+  putJson(root, `work/rounds/${ROUND}/current-claims.json`, {
+    schemaVersion: '2.0.0',
     ledger_version: 'fixture-claims-v1',
     round: ROUND,
     mode: 'registry',
     candidate: null,
+    claims_digest_sha256: null,
     claims: [
       {
         claim_id: 'suite.population',
@@ -365,12 +348,144 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
 }
 
 function freezeCandidate(fixtureValue: Fixture, candidate: string): void {
-  const body = {
+  const policy = sourceJson('law/policy/round-close-controls.json');
+  policy.policy_id = 'cycle-1-fixture';
+  const convergencePolicy = policy.convergence as Record<string, unknown>;
+  convergencePolicy.commands = (convergencePolicy.commands as Array<{ id: string }>).map(
+    (command) => ({
+      id: command.id,
+      argv: ['node', 'fixture/gate.mjs', command.id],
+    }),
+  );
+  const freshnessPolicy = policy.freshness as Record<string, unknown>;
+  freshnessPolicy.environment_allowlist = [];
+  freshnessPolicy.toolchain = [];
+  const profile = JSON.parse(
+    readFileSync(
+      join(fixtureValue.root, `work/rounds/${ROUND}/close-control-profile.json`),
+      'utf8',
+    ),
+  );
+  const graph = JSON.parse(
+    readFileSync(join(fixtureValue.root, `work/rounds/${ROUND}/affected-test-graph.json`), 'utf8'),
+  );
+  const claimsRegistry = JSON.parse(
+    readFileSync(join(fixtureValue.root, `work/rounds/${ROUND}/current-claims.json`), 'utf8'),
+  );
+  const claimsBody = {
+    ...claimsRegistry,
+    mode: 'materialized',
+    candidate,
+    claims: claimsRegistry.claims.map((claim: Record<string, unknown>) => ({
+      ...claim,
+      resolved_producer: claim.producer,
+      source_manifest: [
+        {
+          path: 'tests/a.test.ts',
+          state: 'present',
+          content_digest: digest(readFileSync(join(fixtureValue.root, 'tests/a.test.ts'), 'utf8')),
+        },
+      ],
+      source_digest: digest(
+        canonical([
+          {
+            path: 'tests/a.test.ts',
+            state: 'present',
+            content_digest: digest(
+              readFileSync(join(fixtureValue.root, 'tests/a.test.ts'), 'utf8'),
+            ),
+          },
+        ]),
+      ),
+      producer_output_digest: digest(JSON.stringify({ count: 1 })),
+      extracted_value: 1,
+      value_digest: digest(canonical(1)),
+      rendered_proofs: [
+        {
+          location: `work/audit/${ROUND}/as-built.md`,
+          claim_marker: 'DEVAI_CLAIM:suite.population=',
+          content_digest: digest('DEVAI_CLAIM:suite.population=1\n'),
+          extracted_rendered_value_digest: digest(canonical(1)),
+          verification_digest: digest(
+            canonical({
+              claim_id: 'suite.population',
+              location: `work/audit/${ROUND}/as-built.md`,
+              value: 1,
+            }),
+          ),
+        },
+      ],
+      rendered_verification_digest: digest(
+        canonical([
+          { claim_id: 'suite.population', location: `work/audit/${ROUND}/as-built.md`, value: 1 },
+        ]),
+      ),
+    })),
+  };
+  delete claimsBody.claims_digest_sha256;
+  const claims = { ...claimsBody, claims_digest_sha256: digest(canonical(claimsBody)) };
+  put(fixtureValue.root, `work/audit/${ROUND}/as-built.md`, 'DEVAI_CLAIM:suite.population=1\n');
+  putJson(fixtureValue.root, `.devai/state/round-runs/${ROUND}/close/current-claims.json`, claims);
+  const tree = git(fixtureValue.root, ['rev-parse', `${candidate}^{tree}`]);
+  const candidateIdentity = digest(
+    canonical({ round: ROUND, base: fixtureValue.base, candidate, tree }),
+  );
+  const gateIds = (convergencePolicy.commands as Array<{ id: string }>).map(({ id }) => id);
+  const semanticPopulation = digest(canonical(gateIds));
+  const pass = (passNumber: 1 | 2) => {
+    const passBody = {
+      pass_number: passNumber,
+      head_before: candidate,
+      head_after: candidate,
+      tree_sha: tree,
+      clean_before: true,
+      clean_after: true,
+      writes: [],
+      gate_results: gateIds.map((gate_id) => ({
+        gate_id,
+        outcome: passNumber === 1 ? 'EXECUTED_PASS' : 'REUSED_FRESH_PASS',
+        task_key: digest(canonical({ gate_id, candidate })),
+        output_digest: digest(canonical({ gate_id, output: 'pass' })),
+        result_digest: digest(canonical({ gate_id, result: 'pass' })),
+      })),
+      semantic_population_digest: semanticPopulation,
+    };
+    return { ...passBody, pass_digest_sha256: digest(canonical(passBody)) };
+  };
+  const convergenceBody = {
     schemaVersion: '1.0.0',
+    round: ROUND,
+    exact_base: fixtureValue.base,
+    candidate_sha: candidate,
+    candidate_tree: tree,
+    candidate_identity_digest: candidateIdentity,
+    policy_digest: digest(canonical(policy)),
+    profile_digest: digest(canonical(profile)),
+    authoritative_gate_ids: gateIds,
+    authoritative_population_digest: semanticPopulation,
+    passes: [pass(1), pass(2)],
+  };
+  const convergence = {
+    ...convergenceBody,
+    convergence_digest_sha256: digest(canonical(convergenceBody)),
+  };
+  putJson(
+    fixtureValue.root,
+    `.devai/state/round-runs/${ROUND}/close/convergence-evidence.json`,
+    convergence,
+  );
+  const body = {
+    schemaVersion: '2.0.0',
     round: ROUND,
     base_sha: fixtureValue.base,
     candidate_sha: candidate,
-    tree_sha: git(fixtureValue.root, ['rev-parse', `${candidate}^{tree}`]),
+    tree_sha: tree,
+    profile_digest: digest(canonical(profile)),
+    policy_digest: digest(canonical(policy)),
+    graph_digest: digest(canonical(graph)),
+    candidate_identity_digest: candidateIdentity,
+    convergence_digest: convergence.convergence_digest_sha256,
+    claims_digest: claims.claims_digest_sha256,
   };
   putJson(fixtureValue.root, `.devai/state/round-runs/${ROUND}/close/candidate-manifest.json`, {
     ...body,

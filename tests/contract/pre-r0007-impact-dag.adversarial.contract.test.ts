@@ -28,6 +28,10 @@ function copy(root: string, relativePath: string): void {
   copyFileSync(join(ROOT, relativePath), target);
 }
 
+function sourceJson(relativePath: string): Record<string, unknown> {
+  return JSON.parse(readFileSync(join(ROOT, relativePath), 'utf8')) as Record<string, unknown>;
+}
+
 function git(root: string, args: readonly string[]): string {
   return execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
 }
@@ -67,94 +71,69 @@ function fixture(): Fixture {
   roots.push(root);
   git(root, ['init', '-q']);
   put(root, '.gitignore', '.devai/state/\nfixture/output-a.txt\n');
-  for (const name of [
-    'affected-test-graph.schema.json',
-    'common-defs.schema.json',
-    'current-claims.schema.json',
-    'review-obligations.schema.json',
-    'review-result.schema.json',
-    'review-scope-manifest.schema.json',
-    'round-close-profile.schema.json',
-    'task-freshness.schema.json',
-  ]) {
-    copy(root, `law/schemas/${name}`);
-  }
-  put(
-    root,
-    'law/policy/round-close-controls.json',
-    `${JSON.stringify(
-      {
-        schemaVersion: '3.0.0',
-        policy_id: 'fixture',
-        policy_version: 'fixture-v3',
-        profile_discovery: {
-          path_template: 'work/rounds/{round}/close-control-profile.json',
-          round_pattern: '^R-[0-9]{4}$',
-        },
-        schemas: {
-          round_profile: 'law/schemas/round-close-profile.schema.json',
-          affected_test_graph: 'law/schemas/affected-test-graph.schema.json',
-          task_freshness: 'law/schemas/task-freshness.schema.json',
-          semantic_obligations: 'law/schemas/review-obligations.schema.json',
-          current_claims: 'law/schemas/current-claims.schema.json',
-          review_scope: 'law/schemas/review-scope-manifest.schema.json',
-          review_result: 'law/schemas/review-result.schema.json',
-        },
-        freshness: {
-          policy_version: 'fixture-freshness-v2',
-          remote_environment_indicators: ['CI', 'GITHUB_ACTIONS'],
-          environment_allowlist: [],
-          toolchain: [],
-        },
-        review_scope: { policy_version: 'fixture-review-v2' },
-      },
-      null,
-      2,
-    )}\n`,
+  const policy = sourceJson('law/policy/round-close-controls.json');
+  policy.policy_id = 'impact-fixture';
+  const convergencePolicy = policy.convergence as Record<string, unknown>;
+  convergencePolicy.commands = (convergencePolicy.commands as Array<{ id: string }>).map(
+    (command) => ({
+      id: command.id,
+      argv: ['node', 'fixture/gate.mjs', command.id],
+    }),
   );
+  const freshnessPolicy = policy.freshness as Record<string, unknown>;
+  freshnessPolicy.environment_allowlist = [];
+  freshnessPolicy.toolchain = [];
+  for (const relativePath of new Set<string>([
+    'law/schemas/common-defs.schema.json',
+    ...Object.values(policy.schemas as Record<string, string>),
+  ]))
+    copy(root, relativePath);
+  put(root, 'law/policy/round-close-controls.json', `${JSON.stringify(policy, null, 2)}\n`);
+  put(root, '.devai/config/round-close-controls.json', `${JSON.stringify(policy, null, 2)}\n`);
+  const profile = sourceJson('work/rounds/R-0007/close-control-profile.json');
+  Object.assign(profile, {
+    round: 'R-9000',
+    decision_id: 'DII-900',
+    sources: {
+      authorization: 'work/rounds/R-9000/AUTHORIZATION.md',
+      plan: 'work/rounds/R-9000/plan.md',
+      orchestrator: 'work/rounds/R-9000/prompts/00-orchestrator.md',
+      affected_test_graph: 'work/rounds/R-9000/affected-test-graph.json',
+      obligations: 'work/rounds/R-9000/review-obligations.json',
+      current_claims: 'work/rounds/R-9000/current-claims.json',
+      prior_finding_registry: 'work/rounds/R-9000/prior-finding-registry.json',
+    },
+    runtime: {
+      state_root: '.devai/state/round-runs/R-9000/close',
+      candidate_manifest: '.devai/state/round-runs/R-9000/close/candidate-manifest.json',
+      convergence_evidence: '.devai/state/round-runs/R-9000/close/convergence-evidence.json',
+      review_scope: '.devai/state/round-runs/R-9000/close/review-scope-manifest.json',
+      review_result: '.devai/state/round-runs/R-9000/close/review-result.json',
+      materialized_claims: '.devai/state/round-runs/R-9000/close/current-claims.json',
+      review_state: '.devai/state/round-runs/R-9000/close/review-state.json',
+      review_transport: '.devai/state/round-runs/R-9000/close/review-transport.json',
+      review_repair_evidence: '.devai/state/round-runs/R-9000/close/review-repair-evidence.json',
+    },
+    reviewer: {
+      binding: 'owner-mandate-required',
+      mandate_id: null,
+      model_selector: null,
+      role: 'independent-read-only',
+      fallback: 'forbidden',
+    },
+    review_budget: {
+      substantive_cycles: 2,
+      transport_retries_per_cycle: 1,
+      cycle_three: 'forbidden',
+      cycle_two_failure: 'ESCALATION_REQUIRED',
+    },
+    remote_ci: { local_cache_trusted: false, gate_population: 'complete-authoritative' },
+    deployment: 'forbidden',
+  });
   put(
     root,
     'work/rounds/R-9000/close-control-profile.json',
-    `${JSON.stringify(
-      {
-        schemaVersion: '1.0.0',
-        round: 'R-9000',
-        policy_version: 'fixture-v3',
-        decision_id: 'DII-900',
-        phase: 'pre-entry-preparation',
-        sources: {
-          authorization: 'work/rounds/R-9000/AUTHORIZATION.md',
-          plan: 'work/rounds/R-9000/plan.md',
-          orchestrator: 'work/rounds/R-9000/prompts/00-orchestrator.md',
-          affected_test_graph: 'work/rounds/R-9000/affected-test-graph.json',
-          obligations: 'work/rounds/R-9000/review-obligations.json',
-          current_claims: 'work/rounds/R-9000/current-claims.json',
-        },
-        runtime: {
-          state_root: '.devai/state/round-runs/R-9000/close',
-          candidate_manifest: '.devai/state/round-runs/R-9000/close/candidate-manifest.json',
-          review_scope: '.devai/state/round-runs/R-9000/close/review-scope-manifest.json',
-          review_result: '.devai/state/round-runs/R-9000/close/review-result.json',
-        },
-        reviewer: {
-          binding: 'owner-mandate-required',
-          mandate_id: null,
-          model_selector: null,
-          role: 'independent-read-only',
-          fallback: 'forbidden',
-        },
-        review_budget: {
-          substantive_cycles: 2,
-          transport_retries_per_cycle: 1,
-          cycle_three: 'forbidden',
-          cycle_two_failure: 'ESCALATION_REQUIRED',
-        },
-        remote_ci: { local_cache_trusted: false, gate_population: 'complete-authoritative' },
-        deployment: 'forbidden',
-      },
-      null,
-      2,
-    )}\n`,
+    `${JSON.stringify(profile, null, 2)}\n`,
   );
   const node = (
     id: string,
@@ -227,7 +206,12 @@ function fixture(): Fixture {
   put(
     root,
     'work/rounds/R-9000/current-claims.json',
-    '{"schemaVersion":"1.0.0","ledger_version":"fixture","round":"R-9000","mode":"registry","candidate":null,"claims":[{"claim_id":"suite.population","volatility":"tree","producer":["node","fixture/gate.mjs"],"extractor":"$","source_paths":["tests/**"],"rendered_locations":[],"source_digest":null,"value_digest":null}]}\n',
+    '{"schemaVersion":"2.0.0","ledger_version":"fixture","round":"R-9000","mode":"registry","candidate":null,"claims":[{"claim_id":"suite.population","volatility":"tree","producer":["node","fixture/gate.mjs"],"extractor":"$","source_paths":["tests/**"],"rendered_locations":[],"source_digest":null,"value_digest":null}],"claims_digest_sha256":null}\n',
+  );
+  put(
+    root,
+    'work/rounds/R-9000/prior-finding-registry.json',
+    '{"schemaVersion":"1.0.0","round":"R-9000","registry_version":"fixture","finding_classes":[]}\n',
   );
   put(
     root,
