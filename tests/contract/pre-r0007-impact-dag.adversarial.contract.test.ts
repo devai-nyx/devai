@@ -1,5 +1,6 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -14,6 +15,7 @@ const roots: string[] = [];
 interface Fixture {
   readonly root: string;
   readonly base: string;
+  readonly impactBase: string;
 }
 
 function put(root: string, relativePath: string, contents: string): void {
@@ -32,6 +34,10 @@ function sourceJson(relativePath: string): Record<string, unknown> {
   return JSON.parse(readFileSync(join(ROOT, relativePath), 'utf8')) as Record<string, unknown>;
 }
 
+function digest(value: string | Buffer): string {
+  return createHash('sha256').update(value).digest('hex');
+}
+
 function v5GraphControls(gateIds: readonly string[]): Record<string, unknown> {
   return {
     change_detection: {
@@ -44,11 +50,18 @@ function v5GraphControls(gateIds: readonly string[]): Record<string, unknown> {
     gate_freshness_profiles: gateIds.map((gate_id) => ({
       gate_id,
       input_selectors: ['**/*'],
-      dependency_selectors: ['package.json'],
+      dependency_selectors: ['**/*'],
       toolchain_probe_ids: ['node'],
-      environment_input_ids: ['CI'],
+      environment_input_ids: ['__ALL_ENVIRONMENT__'],
       output_contract: 'none',
       required_outputs: [],
+      universal_input_proof: 'tracked-candidate-tree',
+      output_observation: 'declared-plus-observed',
+    })),
+    command_closure: gateIds.map((gate_id) => ({
+      gate_id,
+      scripts: [`fixture:${gate_id}`],
+      programs: ['node'],
     })),
   };
 }
@@ -110,6 +123,7 @@ function fixture(): Fixture {
   put(root, '.gitignore', '.devai/state/\nfixture/output-a.txt\n');
   const policy = sourceJson('law/policy/round-close-controls.json');
   policy.policy_id = 'impact-fixture';
+  policy.decision_id = 'DII-900';
   const convergencePolicy = policy.convergence as Record<string, unknown>;
   convergencePolicy.commands = (convergencePolicy.commands as Array<{ id: string }>).map(
     (command) => ({
@@ -144,6 +158,7 @@ function fixture(): Fixture {
       affected_test_graph: 'work/rounds/R-9000/affected-test-graph.json',
       obligations: 'work/rounds/R-9000/review-obligations.json',
       current_claims: 'work/rounds/R-9000/current-claims.json',
+      control_provenance: 'work/rounds/R-9000/control-provenance.json',
       additional_controls: ['product/owner-mandates/OM-900.md'],
       prior_finding_registry: 'work/rounds/R-9000/prior-finding-registry.json',
     },
@@ -187,6 +202,9 @@ function fixture(): Fixture {
     'work/rounds/R-9000/close-control-profile.json',
     `${JSON.stringify(profile, null, 2)}\n`,
   );
+  put(root, 'work/rounds/R-9000/AUTHORIZATION.md', '# authorization\n');
+  put(root, 'work/rounds/R-9000/plan.md', '# plan\n');
+  put(root, 'work/rounds/R-9000/prompts/00-orchestrator.md', '# orchestrator\n');
   const node = (
     id: string,
     selectors: string[],
@@ -212,6 +230,7 @@ function fixture(): Fixture {
         graph_version: 'fixture-v1',
         round: 'R-9000',
         population: {
+          all_tracked: ['**/*'],
           production: ['packages/*/src/**/*.ts'],
           tests: ['tests/**/*.test.ts'],
           classification: 'complete-or-full-suite-fallback',
@@ -256,7 +275,31 @@ function fixture(): Fixture {
   put(
     root,
     'work/rounds/R-9000/review-obligations.json',
-    '{"schemaVersion":"1.0.0","registry_version":"fixture","round":"R-9000","obligations":[{"obligation_id":"R9000-P0-IDENTITY","claim":"Exact identity","risk":"P0","source_refs":["plan"],"governing_paths":["packages/**"],"required_evidence":["manifest"],"required_adversaries":["wrong-sha"],"reuse_policy":"always-recheck","finding_classes":[]}]}\n',
+    `${JSON.stringify({
+      schemaVersion: '1.0.0',
+      registry_version: 'fixture',
+      round: 'R-9000',
+      normative_sources: [
+        {
+          path: 'work/rounds/R-9000/plan.md',
+          source_digest_sha256: digest(readFileSync(join(root, 'work/rounds/R-9000/plan.md'))),
+          obligation_ids: ['R9000-P0-IDENTITY'],
+        },
+      ],
+      obligations: [
+        {
+          obligation_id: 'R9000-P0-IDENTITY',
+          claim: 'Exact identity',
+          risk: 'P0',
+          source_refs: ['work/rounds/R-9000/plan.md'],
+          governing_paths: ['packages/**'],
+          required_evidence: ['candidate manifest'],
+          required_adversaries: ['wrong-sha'],
+          reuse_policy: 'always-recheck',
+          finding_classes: [],
+        },
+      ],
+    })}\n`,
   );
   put(
     root,
@@ -266,7 +309,7 @@ function fixture(): Fixture {
   put(
     root,
     'work/rounds/R-9000/prior-finding-registry.json',
-    '{"schemaVersion":"1.0.0","round":"R-9000","registry_version":"fixture","finding_classes":[{"finding_id":"F001","defect_class_id":"IMPACT_PRECISION","severity":"P1","origin_cycle":1,"origin_evidence":"fixture prior review","topic_ids":["impact-planning"],"population_query":"Exercise every affected-test edge.","affected_population":["fixture graph"],"repair_condition":"Every declared edge is planned exactly.","disposition":"REPAIRED_PENDING_REVIEW"}]}\n',
+    '{"schemaVersion":"1.0.0","round":"R-9000","registry_version":"fixture","finding_classes":[{"finding_id":"F001","defect_class_id":"IMPACT_PRECISION","severity":"P1","origin_cycle":1,"origin_evidence":"work/audit/R-9000/prior-review.md","topic_ids":["impact-planning"],"population_query":"Exercise every affected-test edge.","affected_population":["fixture graph"],"repair_condition":"Every declared edge is planned exactly.","disposition":"REPAIRED_PENDING_REVIEW"}]}\n',
   );
   put(
     root,
@@ -278,10 +321,46 @@ function fixture(): Fixture {
   put(root, 'packages/b/src/index.ts', 'export const b = 1;\n');
   put(root, 'tests/a.test.ts', 'export const testA = true;\n');
   put(root, 'tests/b.test.ts', 'export const testB = true;\n');
+  put(root, 'work/audit/R-9000/prior-review.md', '# prior review\n');
   put(
     root,
     'product/owner-mandates/OM-900.md',
     `---\nid: OM-900\nstatus: active\nauthority: Owner\n---\n\n\`\`\`json\n${JSON.stringify(reviewerBindingMarker(), null, 2)}\n\`\`\`\n`,
+  );
+  put(
+    root,
+    'work/rounds/R-9000/control-provenance.json',
+    `${JSON.stringify(
+      {
+        schemaVersion: '1.0.0',
+        round: 'R-9000',
+        root_decision: 'DII-900',
+        decision_register: 'law/register/DECISIONS.md',
+        decisions: [{ decision_id: 'DII-900', status: 'active', depends_on: [] }],
+        owner_mandates: [
+          {
+            mandate_id: 'OM-900',
+            path: 'product/owner-mandates/OM-900.md',
+            required_status: 'active',
+          },
+        ],
+        manifest_roots: [
+          'work/rounds/R-9000/AUTHORIZATION.md',
+          'work/rounds/R-9000/plan.md',
+          'work/rounds/R-9000/prompts/00-orchestrator.md',
+        ],
+        normative_source_roots: ['work/rounds/R-9000/plan.md'],
+        derived_sources: [
+          'policy-schema-map',
+          'round-profile-sources',
+          'round-declaration-when-bound',
+          'prior-finding-origin-evidence',
+          'obligation-source-references',
+        ],
+      },
+      null,
+      2,
+    )}\n`,
   );
   const base = commit(root, 'fixture opening base');
   profile.declaration = {
@@ -297,7 +376,7 @@ function fixture(): Fixture {
   put(
     root,
     'law/register/DECISIONS.md',
-    `# Fixture decisions\n\n### DII-900\n\n\`\`\`json\n${JSON.stringify(
+    `# Fixture decisions\n\n### DII-900 — Fixture round declaration\n\`type: decision · status: active · authority: Architect · provenance: fixture\`\n\n\`\`\`json\n${JSON.stringify(
       {
         schemaVersion: '1.0.0',
         devai_round_declaration: true,
@@ -311,8 +390,8 @@ function fixture(): Fixture {
       2,
     )}\n\`\`\`\n`,
   );
-  commit(root, 'fixture B0 declaration');
-  return { root, base };
+  const impactBase = commit(root, 'fixture B0 declaration');
+  return { root, base, impactBase };
 }
 
 function executed(value: Record<string, unknown>): string[] {
@@ -337,7 +416,7 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const current = fixture();
     put(current.root, 'tests/a.test.ts', 'export const testA = "changed";\n');
     const candidate = commit(current.root, 'change test a');
-    const value = run(current, 'impact-plan', ['--base', current.base, '--head', candidate]);
+    const value = run(current, 'impact-plan', ['--base', current.impactBase, '--head', candidate]);
     expect(value.ok).toBe(true);
     expect(executed(value)).toEqual(['unit-a']);
   });
@@ -346,7 +425,7 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const current = fixture();
     put(current.root, 'packages/a/src/index.ts', 'export const a = 2;\n');
     const candidate = commit(current.root, 'change source a');
-    const value = run(current, 'impact-plan', ['--base', current.base, '--head', candidate]);
+    const value = run(current, 'impact-plan', ['--base', current.impactBase, '--head', candidate]);
     expect(value.ok).toBe(true);
     expect(executed(value)).toEqual(['unit-a', 'unit-b']);
   });
@@ -355,7 +434,7 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const current = fixture();
     put(current.root, 'packages/c/src/index.ts', 'export const c = 1;\n');
     const candidate = commit(current.root, 'add unknown source');
-    const value = run(current, 'impact-plan', ['--base', current.base, '--head', candidate]);
+    const value = run(current, 'impact-plan', ['--base', current.impactBase, '--head', candidate]);
     expect(value.ok).toBe(true);
     expect(executed(value)).toEqual(['full-suite']);
     expect(nodes(value).find(({ node_id }) => node_id === 'full-suite')).toEqual(
@@ -370,17 +449,22 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const current = fixture();
     put(current.root, 'package.json', '{"name":"fixture","private":true,"version":"1.0.0"}\n');
     const candidate = commit(current.root, 'change workspace manifest');
-    const value = run(current, 'impact-plan', ['--base', current.base, '--head', candidate]);
+    const value = run(current, 'impact-plan', ['--base', current.impactBase, '--head', candidate]);
     expect(value.ok).toBe(true);
     expect(executed(value)).toEqual(['full-coverage', 'full-suite']);
   });
 
   it('forces every graph node and distrusts cache in remote mode', () => {
     const current = fixture();
-    const value = run(current, 'impact-plan', ['--base', current.base, '--head', current.base], {
-      CI: 'true',
-      GITHUB_ACTIONS: 'true',
-    });
+    const value = run(
+      current,
+      'impact-plan',
+      ['--base', current.impactBase, '--head', current.impactBase],
+      {
+        CI: 'true',
+        GITHUB_ACTIONS: 'true',
+      },
+    );
     expect(value.ok).toBe(true);
     expect(value).toMatchObject({ remote: true, cache_trusted: false });
     expect(executed(value)).toEqual(['full-coverage', 'full-suite', 'unit-a', 'unit-b']);
@@ -394,7 +478,7 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     put(current.root, 'packages/a/src/index.ts', 'export const a = 2;\n');
     const candidate = commit(current.root, 'change source a');
     const first = run(current, 'smart-converge', ['--base', current.base, '--head', candidate]);
-    expect(first).toMatchObject({ ok: true, executed_test_nodes: 2 });
+    expect(first).toMatchObject({ ok: true, executed_test_nodes: 3 });
     expect(readFileSync(join(current.root, 'fixture/output-a.txt'), 'utf8')).toBe(
       'stable-output\n',
     );

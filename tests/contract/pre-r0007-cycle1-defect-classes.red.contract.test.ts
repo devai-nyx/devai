@@ -99,11 +99,18 @@ function v5GraphControls(gateIds: readonly string[]): Record<string, unknown> {
     gate_freshness_profiles: gateIds.map((gate_id) => ({
       gate_id,
       input_selectors: ['**/*'],
-      dependency_selectors: ['package.json'],
+      dependency_selectors: ['**/*'],
       toolchain_probe_ids: ['node'],
-      environment_input_ids: ['CI'],
+      environment_input_ids: ['__ALL_ENVIRONMENT__'],
       output_contract: 'none',
       required_outputs: [],
+      universal_input_proof: 'tracked-candidate-tree',
+      output_observation: 'declared-plus-observed',
+    })),
+    command_closure: gateIds.map((gate_id) => ({
+      gate_id,
+      scripts: [`fixture:${gate_id}`],
+      programs: ['node'],
     })),
   };
 }
@@ -200,6 +207,7 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
   ].map((id) => ({ id, argv: ['node', 'fixture/gate.mjs', id], freshness_profile: id }));
   const policy = sourceJson('law/policy/round-close-controls.json');
   policy.policy_id = 'cycle-1-fixture';
+  policy.decision_id = 'DII-900';
   const convergencePolicy = policy.convergence as Record<string, unknown>;
   convergencePolicy.commands = convergenceCommands;
   const freshnessPolicy = policy.freshness as Record<string, unknown>;
@@ -229,6 +237,7 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
       affected_test_graph: `work/rounds/${ROUND}/affected-test-graph.json`,
       obligations: `work/rounds/${ROUND}/review-obligations.json`,
       current_claims: `work/rounds/${ROUND}/current-claims.json`,
+      control_provenance: `work/rounds/${ROUND}/control-provenance.json`,
       additional_controls: ['product/owner-mandates/OM-900.md'],
       prior_findings: ['DF-PRIOR'],
       prior_finding_registry: `work/rounds/${ROUND}/prior-finding-registry.json`,
@@ -292,6 +301,7 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
     graph_version: 'fixture-graph-v1',
     round: ROUND,
     population: {
+      all_tracked: ['**/*'],
       production: ['packages/*/src/**/*.ts'],
       tests: ['tests/**/*.test.ts'],
       classification: 'complete-or-full-suite-fallback',
@@ -327,6 +337,13 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
     schemaVersion: '1.0.0',
     registry_version: 'fixture-obligations-v1',
     round: ROUND,
+    normative_sources: [
+      {
+        path: `work/rounds/${ROUND}/plan.md`,
+        source_digest_sha256: digest(readFileSync(join(root, `work/rounds/${ROUND}/plan.md`))),
+        obligation_ids: ['R9000-P0-IDENTITY'],
+      },
+    ],
     obligations: [
       {
         obligation_id: 'R9000-P0-IDENTITY',
@@ -351,7 +368,7 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
         defect_class_id: 'DF-PRIOR',
         severity: 'P1',
         origin_cycle: 1,
-        origin_evidence: 'fixture cycle-1 independent review',
+        origin_evidence: `work/audit/${ROUND}/prior-review.md`,
         topic_ids: ['obligation:r9000-p0-identity'],
         population_query: 'Enumerate the fixture population.',
         affected_population: ['fixture-instance'],
@@ -394,6 +411,7 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
   put(root, 'tests/a.test.ts', 'export const testA = true;\n');
   put(root, 'tests/b.test.ts', 'export const testB = true;\n');
   put(root, `work/audit/${ROUND}/as-built.md`, 'DEVAI_CLAIM:suite.population=1\n');
+  put(root, `work/audit/${ROUND}/prior-review.md`, '# prior review\n');
   if (options.bound) {
     put(
       root,
@@ -401,6 +419,35 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
       `---\nid: OM-900\nstatus: active\nauthority: Owner\n---\n\n\`\`\`json\n${JSON.stringify(reviewerBindingMarker(), null, 2)}\n\`\`\`\n`,
     );
   }
+  putJson(root, `work/rounds/${ROUND}/control-provenance.json`, {
+    schemaVersion: '1.0.0',
+    round: ROUND,
+    root_decision: 'DII-900',
+    decision_register: 'law/register/DECISIONS.md',
+    decisions: [{ decision_id: 'DII-900', status: 'active', depends_on: [] }],
+    owner_mandates: options.bound
+      ? [
+          {
+            mandate_id: 'OM-900',
+            path: 'product/owner-mandates/OM-900.md',
+            required_status: 'active',
+          },
+        ]
+      : [],
+    manifest_roots: [
+      `work/rounds/${ROUND}/AUTHORIZATION.md`,
+      `work/rounds/${ROUND}/plan.md`,
+      `work/rounds/${ROUND}/prompts/00-orchestrator.md`,
+    ],
+    normative_source_roots: [`work/rounds/${ROUND}/plan.md`],
+    derived_sources: [
+      'policy-schema-map',
+      'round-profile-sources',
+      'round-declaration-when-bound',
+      'prior-finding-origin-evidence',
+      'obligation-source-references',
+    ],
+  });
   const base = commit(root, 'fixture opening base');
   profile.declaration = {
     binding: 'b0-decision-required',
@@ -411,7 +458,7 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
   put(
     root,
     'law/register/DECISIONS.md',
-    `# Fixture decisions\n\n### DII-900\n\n\`\`\`json\n${JSON.stringify(
+    `# Fixture decisions\n\n### DII-900 — Fixture round declaration\n\`type: decision · status: active · authority: Architect · provenance: fixture\`\n\n\`\`\`json\n${JSON.stringify(
       {
         schemaVersion: '1.0.0',
         devai_round_declaration: true,
@@ -561,7 +608,7 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
     ]);
     expect(
       readFileSync(join(current.root, '.devai/state/gates.log'), 'utf8').trim().split('\n'),
-    ).toEqual(expected);
+    ).toEqual(['full-suite', ...expected]);
     expect(git(current.root, ['status', '--porcelain', '--untracked-files=all'])).toBe('');
     expect(result.value).toMatchObject({
       exact_head_before: candidate,

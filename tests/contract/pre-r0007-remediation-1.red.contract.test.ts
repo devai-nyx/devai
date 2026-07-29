@@ -116,11 +116,18 @@ function v5GraphControls(gateIds: readonly string[]): Record<string, unknown> {
     gate_freshness_profiles: gateIds.map((gate_id) => ({
       gate_id,
       input_selectors: ['**/*'],
-      dependency_selectors: ['package.json'],
+      dependency_selectors: ['**/*'],
       toolchain_probe_ids: ['node'],
-      environment_input_ids: ['CI'],
+      environment_input_ids: ['__ALL_ENVIRONMENT__'],
       output_contract: 'none',
       required_outputs: [],
+      universal_input_proof: 'tracked-candidate-tree',
+      output_observation: 'declared-plus-observed',
+    })),
+    command_closure: gateIds.map((gate_id) => ({
+      gate_id,
+      scripts: [`fixture:${gate_id}`],
+      programs: ['node'],
     })),
   };
 }
@@ -214,6 +221,7 @@ function buildFixture(bound = true, register = true): Fixture {
 
   const policy = structuredClone(sourceJson('law/policy/round-close-controls.json'));
   policy.policy_id = 'remediation-1-fixture';
+  policy.decision_id = 'DII-900';
   const convergence = policy.convergence as Record<string, unknown>;
   convergence.commands = (convergence.commands as Array<{ id: string }>).map(({ id }) => ({
     id,
@@ -247,6 +255,7 @@ function buildFixture(bound = true, register = true): Fixture {
       affected_test_graph: `work/rounds/${ROUND}/affected-test-graph.json`,
       obligations: `work/rounds/${ROUND}/review-obligations.json`,
       current_claims: `work/rounds/${ROUND}/current-claims.json`,
+      control_provenance: `work/rounds/${ROUND}/control-provenance.json`,
       additional_controls: ['product/owner-mandates/OM-900.md'],
       prior_findings: [],
       prior_finding_registry: `work/rounds/${ROUND}/prior-finding-registry.json`,
@@ -296,6 +305,7 @@ function buildFixture(bound = true, register = true): Fixture {
     graph_version: 'remediation-1-fixture',
     round: ROUND,
     population: {
+      all_tracked: ['**/*'],
       production: ['packages/*/src/**/*.ts'],
       tests: ['tests/**/*.test.ts'],
       classification: 'complete-or-full-suite-fallback',
@@ -328,6 +338,13 @@ function buildFixture(bound = true, register = true): Fixture {
     schemaVersion: '1.0.0',
     registry_version: 'remediation-1-fixture',
     round: ROUND,
+    normative_sources: [
+      {
+        path: `work/rounds/${ROUND}/plan.md`,
+        source_digest_sha256: digestBytes(readFileSync(join(root, `work/rounds/${ROUND}/plan.md`))),
+        obligation_ids: ['R9000-P0-IDENTITY'],
+      },
+    ],
     obligations: [
       {
         obligation_id: 'R9000-P0-IDENTITY',
@@ -358,7 +375,7 @@ function buildFixture(bound = true, register = true): Fixture {
         defect_class_id: 'C2-F005',
         severity: 'P0',
         origin_cycle: 1,
-        origin_evidence: 'fixture prior review cycle 1',
+        origin_evidence: `work/audit/${ROUND}/prior-review.md`,
         topic_ids: ['candidate-identity'],
         population_query: 'Mutate every candidate and convergence proof field.',
         affected_population: ['candidate manifest', 'convergence evidence'],
@@ -370,7 +387,7 @@ function buildFixture(bound = true, register = true): Fixture {
         defect_class_id: 'C2-F006',
         severity: 'P1',
         origin_cycle: 1,
-        origin_evidence: 'fixture prior review cycle 1',
+        origin_evidence: `work/audit/${ROUND}/prior-review.md`,
         topic_ids: ['obligation:r9000-p0-identity'],
         population_query: 'Mutate every reused-topic proof.',
         affected_population: ['input manifest', 'evidence manifest', 'task keys'],
@@ -408,7 +425,37 @@ function buildFixture(bound = true, register = true): Fixture {
   put(root, 'packages/a/src/secondary.ts', 'export const secondary = 1;\n');
   put(root, 'tests/a.test.ts', 'export const testA = true;\n');
   put(root, `work/audit/${ROUND}/as-built.md`, 'DEVAI_CLAIM:suite.population=1\n');
+  put(root, `work/audit/${ROUND}/prior-review.md`, '# prior review\n');
   if (bound) put(root, 'product/owner-mandates/OM-900.md', mandate(bindingMarker()));
+  putJson(root, `work/rounds/${ROUND}/control-provenance.json`, {
+    schemaVersion: '1.0.0',
+    round: ROUND,
+    root_decision: 'DII-900',
+    decision_register: 'law/register/DECISIONS.md',
+    decisions: [{ decision_id: 'DII-900', status: 'active', depends_on: [] }],
+    owner_mandates: bound
+      ? [
+          {
+            mandate_id: 'OM-900',
+            path: 'product/owner-mandates/OM-900.md',
+            required_status: 'active',
+          },
+        ]
+      : [],
+    manifest_roots: [
+      `work/rounds/${ROUND}/AUTHORIZATION.md`,
+      `work/rounds/${ROUND}/plan.md`,
+      `work/rounds/${ROUND}/prompts/00-orchestrator.md`,
+    ],
+    normative_source_roots: [`work/rounds/${ROUND}/plan.md`],
+    derived_sources: [
+      'policy-schema-map',
+      'round-profile-sources',
+      'round-declaration-when-bound',
+      'prior-finding-origin-evidence',
+      'obligation-source-references',
+    ],
+  });
   const base = commit(root, 'fixture opening base');
   profile.declaration = {
     binding: 'b0-decision-required',
@@ -419,7 +466,7 @@ function buildFixture(bound = true, register = true): Fixture {
   put(
     root,
     'law/register/DECISIONS.md',
-    `# Fixture decisions\n\n### DII-900\n\n\`\`\`json\n${JSON.stringify(
+    `# Fixture decisions\n\n### DII-900 — Fixture round declaration\n\`type: decision · status: active · authority: Architect · provenance: fixture\`\n\n\`\`\`json\n${JSON.stringify(
       {
         schemaVersion: '1.0.0',
         devai_round_declaration: true,
@@ -703,16 +750,8 @@ function passingResult(
         ...(topic.required_evidence as string[]),
       ]),
     ];
-    const evidence = evidenceRefs.map(
-      (ref) =>
-        topicEvidenceRef(frozen, frozen, ref) ?? {
-          ref,
-          digest: digestCanonical({
-            ref,
-            topic_id: topic.topic_id,
-            declaration: 'mechanical-evidence-obligation',
-          }),
-        },
+    const evidence = evidenceRefs.map((ref) =>
+      required(topicEvidenceRef(frozen, frozen, ref), `typed topic evidence is unresolved: ${ref}`),
     );
     const resolvedEvidenceRefs = evidence.map(({ ref }) => ref);
     const requiredGateIds = (topic.required_evidence as string[])
@@ -1043,17 +1082,62 @@ function topicEvidenceRef(
   frozen: Frozen,
   ref: string,
 ): { ref: string; digest: string } | null {
-  if (ref === 'candidate manifest') {
+  const runtimeAliases = new Map<string, string>([
+    ['candidate manifest', `${STATE}/candidate-manifest.json`],
+    ['candidate-manifest', `${STATE}/candidate-manifest.json`],
+    ['convergence evidence', `${STATE}/convergence-evidence.json`],
+    ['convergence-evidence', `${STATE}/convergence-evidence.json`],
+    ['impact-execution', `${STATE}/affected-test-execution.json`],
+    ['active-control-census', `${STATE}/active-control-census.json`],
+    ['current-claims', `${STATE}/current-claims.json`],
+    ['claim-runtime-inputs', `${STATE}/claim-inputs-pre-review.json`],
+    ['review-scope', `${STATE}/review-scope-manifest.json`],
+    ['review-state', `${STATE}/review-state.json`],
+    ['review-transport', `${STATE}/review-transport.json`],
+  ]);
+  const runtimePath =
+    runtimeAliases.get(ref) ??
+    [...runtimeAliases.values()].find((configuredPath) => configuredPath === ref);
+  if (runtimePath !== undefined) {
+    const absolute = join(fixtureValue.root, runtimePath);
+    return existsSync(absolute) ? { ref, digest: digestBytes(readFileSync(absolute)) } : null;
+  }
+  if (ref === 'reviewer-binding') return { ref, digest: digestCanonical(bindingMarker()) };
+  if (ref === 'prior-finding-registry') {
+    const path = `work/rounds/${ROUND}/prior-finding-registry.json`;
     return {
-      ref: `${STATE}/candidate-manifest.json`,
-      digest: digestCanonical(frozen.candidateManifest),
+      ref,
+      digest: digestBytes(gitBytes(fixtureValue.root, ['show', `${frozen.candidate}:${path}`])),
     };
   }
-  if (ref === 'convergence evidence') {
-    return {
-      ref: `${STATE}/convergence-evidence.json`,
-      digest: digestCanonical(frozen.convergence),
-    };
+  if (ref === 'git:exact-range') {
+    const base = frozen.convergence.exact_base as string;
+    const records = git(fixtureValue.root, [
+      'diff',
+      '--name-status',
+      '-M',
+      '--find-renames',
+      base,
+      frozen.candidate,
+    ])
+      .split('\n')
+      .filter(Boolean)
+      .map((line) => {
+        const [status, first, second] = line.split('\t');
+        const preimage = status === 'A' ? null : first;
+        const postimage = status === 'D' ? null : (second ?? first);
+        const paths = [...new Set([preimage, postimage].filter((path) => path !== null))];
+        return {
+          record_id: digestCanonical(
+            /^[RC]/u.test(status) ? { status, preimage, postimage } : { status, path: first },
+          ),
+          status,
+          preimage,
+          postimage,
+          paths,
+        };
+      });
+    return { ref, digest: digestCanonical(records) };
   }
   if (ref.startsWith('gate:')) {
     const gateId = ref.slice('gate:'.length);
@@ -1067,15 +1151,38 @@ function topicEvidenceRef(
     if (gate === undefined) return null;
     return { ref, digest: gate.result_digest as string };
   }
-  const path = ref.split('#', 1)[0];
+  if (ref.startsWith('claim:')) {
+    const ledger = readJson(fixtureValue.root, `${STATE}/current-claims.json`);
+    const claim = (ledger.claims as Array<Record<string, unknown>>).find(
+      ({ claim_id }) => `claim:${String(claim_id)}` === ref,
+    );
+    return claim === undefined ? null : { ref, digest: digestCanonical(claim) };
+  }
+  const normalizedRef = ref.startsWith('path:') ? ref.slice('path:'.length) : ref;
+  const path = normalizedRef.split('#', 1)[0];
   if (path === undefined || path === '') return null;
+  let revision = frozen.candidate;
   try {
     return {
       ref,
-      digest: digestBytes(gitBytes(fixtureValue.root, ['show', `${frozen.candidate}:${path}`])),
+      digest: digestCanonical({
+        revision,
+        blob: digestBytes(gitBytes(fixtureValue.root, ['show', `${revision}:${path}`])),
+      }),
     };
   } catch {
-    return null;
+    revision = frozen.convergence.exact_base as string;
+    try {
+      return {
+        ref,
+        digest: digestCanonical({
+          revision,
+          blob: digestBytes(gitBytes(fixtureValue.root, ['show', `${revision}:${path}`])),
+        }),
+      };
+    } catch {
+      return null;
+    }
   }
 }
 
@@ -1093,14 +1200,10 @@ function completeTopicEvidence(
   return [
     ...new Map(
       refs.map((ref) => {
-        const evidence = topicEvidenceRef(fixtureValue, frozen, ref) ?? {
-          ref,
-          digest: digestCanonical({
-            ref,
-            topic_id: topic.topic_id,
-            declaration: 'mechanical-evidence-obligation',
-          }),
-        };
+        const evidence = required(
+          topicEvidenceRef(fixtureValue, frozen, ref),
+          `typed topic evidence is unresolved: ${ref}`,
+        );
         return [evidence.ref, evidence];
       }),
     ).values(),

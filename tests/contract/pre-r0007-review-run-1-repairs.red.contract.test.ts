@@ -422,13 +422,22 @@ describe('OM-015 review run 1 complete-class repair populations', () => {
       expectRuntimeGuards(...new Set(population.map(({ code }) => code)));
     });
 
-    it('derives DII-246, DII-248, every schema, round registry, declaration, and referenced manifest from raw candidate blobs', () => {
+    it('derives transitive decisions, every schema, round registry, declaration, and referenced manifest from raw candidate blobs', () => {
       const controller = text(CONTROLLER_PATH);
-      expect(controller.includes('DII-246')).toBe(true);
-      expect(controller.includes('DII-248')).toBe(true);
+      const provenance = json('work/rounds/R-0007/control-provenance.json');
+      const decisions = requireRecords(provenance.decisions, 'control provenance decisions');
+      expect(decisions.map(({ decision_id }) => decision_id)).toEqual([
+        'DII-246',
+        'DII-247',
+        'DII-248',
+        'DII-249',
+      ]);
+      expect(controller.includes("'DII-246'")).toBe(false);
+      expect(controller.includes("'DII-248'")).toBe(false);
       expect(controller.includes('active_control_census_digest')).toBe(true);
       expect(/cat-file['"],\s*['"]blob/u.test(controller)).toBe(true);
       expectRuntimeGuards(
+        'deriveControlProvenanceV6',
         'deriveActiveControlCensusV5',
         'ACTIVE_CONTROL_CENSUS_RAW_IDENTITY_INVALID',
       );

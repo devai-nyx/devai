@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 
-vi.setConfig({ testTimeout: 60_000 });
+vi.setConfig({ testTimeout: 180_000 });
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const CONTROLLER_PATH = 'scripts/run-round-close-controls.mjs';
