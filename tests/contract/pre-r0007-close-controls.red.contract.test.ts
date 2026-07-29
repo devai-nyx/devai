@@ -12,6 +12,7 @@ const SCRIPT = resolve(ROOT, 'scripts/run-round-close-controls.mjs');
 const BASE = '722e8a3438f3534260ac4f24c3eecc59e76f905b';
 const CANDIDATE_MANIFEST = '.devai/state/round-runs/R-0007/close/candidate-manifest.json';
 const CONVERGENCE_EVIDENCE = '.devai/state/round-runs/R-0007/close/convergence-evidence.json';
+const MATERIALIZED_CLAIMS = '.devai/state/round-runs/R-0007/close/current-claims.json';
 const REVIEW_SCOPE = '.devai/state/round-runs/R-0007/close/review-scope-manifest.json';
 const APPROVED_ENGINEER_SURFACE = [
   '.devai/config/round-close-controls.json',
@@ -53,10 +54,11 @@ function json(relativePath: string): Record<string, unknown> {
 function stable(value: unknown): unknown {
   if (Array.isArray(value)) return value.map(stable);
   if (value !== null && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
     return Object.fromEntries(
-      Object.entries(value as Record<string, unknown>)
-        .sort(([left], [right]) => left.localeCompare(right))
-        .map(([key, child]) => [key, stable(child)]),
+      Object.keys(record)
+        .sort()
+        .map((key) => [key, stable(record[key])]),
     );
   }
   return value;
@@ -78,9 +80,75 @@ function freezeExactCandidate(): void {
   const policy = json('law/policy/round-close-controls.json');
   const profile = json('work/rounds/R-0007/close-control-profile.json');
   const graph = json('work/rounds/R-0007/affected-test-graph.json');
-  const claims = json('work/rounds/R-0007/current-claims.json');
+  const claimsRegistry = json('work/rounds/R-0007/current-claims.json');
   const sha256 = (value: unknown) => createHash('sha256').update(canonical(value)).digest('hex');
-  const candidateIdentity = sha256({ round: 'R-0007', base: BASE, candidate, tree });
+  const policyDigest = sha256(policy);
+  const profileDigest = sha256(profile);
+  const graphDigest = sha256(graph);
+  const candidateIdentity = sha256({
+    round: 'R-0007',
+    base_sha: BASE,
+    candidate_sha: candidate,
+    tree_sha: tree,
+    profile_digest: profileDigest,
+    policy_digest: policyDigest,
+    graph_digest: graphDigest,
+  });
+  const claimsBody = {
+    ...claimsRegistry,
+    mode: 'materialized',
+    candidate,
+    pre_review_claims_digest: null,
+    claims: (claimsRegistry.claims as Array<Record<string, unknown>>).map((claim) => {
+      if (claim.availability === 'post-publication') {
+        return {
+          ...claim,
+          proof_status: 'DEFERRED_POST_PUBLICATION',
+          deferred_proof: {
+            required_at: 'post-publication',
+            declaration_digest: sha256(claim),
+          },
+        };
+      }
+      const extracted = { fixture: claim.claim_id };
+      const sourceManifest = (claim.source_paths as string[]).map((source) => ({
+        path: source,
+        state: 'present',
+        content_digest: sha256({ source, candidate }),
+      }));
+      const renderedProofs = (claim.rendered_locations as string[]).map((location) => {
+        const proofBody = {
+          location,
+          claim_marker: `DEVAI_CLAIM:${String(claim.claim_id)}=`,
+          content_digest: sha256({ location, fixture: true }),
+          extracted_rendered_value_digest: sha256(extracted),
+        };
+        return { ...proofBody, verification_digest: sha256(proofBody) };
+      });
+      return {
+        ...claim,
+        proof_status: 'PROVEN',
+        resolved_producer: (claim.producer as string[]).map((argument) =>
+          argument
+            .replaceAll('{exact_base}', BASE)
+            .replaceAll('{candidate_sha}', candidate)
+            .replaceAll('{site_artifact_path}', 'scratch/site-artifact.zip'),
+        ),
+        source_manifest: sourceManifest,
+        source_digest: sha256(sourceManifest),
+        producer_output_digest: sha256({ claim_id: claim.claim_id, output: 'fixture' }),
+        extracted_value: extracted,
+        value_digest: sha256(extracted),
+        rendered_proofs: renderedProofs,
+        rendered_verification_digest: sha256(renderedProofs),
+      };
+    }),
+  };
+  delete claimsBody.claims_digest_sha256;
+  const claims = { ...claimsBody, claims_digest_sha256: sha256(claimsBody) };
+  const claimsPath = resolve(ROOT, MATERIALIZED_CLAIMS);
+  mkdirSync(dirname(claimsPath), { recursive: true });
+  writeFileSync(claimsPath, canonical(claims));
   const gateIds = (
     (policy.convergence as Record<string, unknown>).commands as Array<{ id: string }>
   ).map(({ id }) => id);
@@ -112,8 +180,8 @@ function freezeExactCandidate(): void {
     candidate_sha: candidate,
     candidate_tree: tree,
     candidate_identity_digest: candidateIdentity,
-    policy_digest: sha256(policy),
-    profile_digest: sha256(profile),
+    policy_digest: policyDigest,
+    profile_digest: profileDigest,
     authoritative_gate_ids: gateIds,
     authoritative_population_digest: semanticPopulation,
     passes: [pass(1), pass(2)],
@@ -131,12 +199,12 @@ function freezeExactCandidate(): void {
     base_sha: BASE,
     candidate_sha: candidate,
     tree_sha: tree,
-    profile_digest: sha256(profile),
-    policy_digest: sha256(policy),
-    graph_digest: sha256(graph),
+    profile_digest: profileDigest,
+    policy_digest: policyDigest,
+    graph_digest: graphDigest,
     candidate_identity_digest: candidateIdentity,
     convergence_digest: convergence.convergence_digest_sha256,
-    claims_digest: sha256(claims),
+    claims_digest: claims.claims_digest_sha256,
   };
   const path = resolve(ROOT, CANDIDATE_MANIFEST);
   mkdirSync(dirname(path), { recursive: true });
@@ -195,7 +263,7 @@ describe('pre-R-0007 generic close-control red contracts', () => {
 
   it('accepts the generic policy during pre-entry preparation and reports the unbound diagnostic', () => {
     const result = run('policy-check', ['--phase', 'pre-entry-preparation']);
-    expect(result.status).toBe(0);
+    expect(result.status, JSON.stringify(result.value, null, 2)).toBe(0);
     expect(result.value).toMatchObject({
       ok: true,
       command: 'policy-check',
@@ -286,7 +354,12 @@ describe('pre-R-0007 generic close-control red contracts', () => {
   });
 
   it('generates a scope containing every registered semantic obligation', () => {
-    const restore = preserveRuntimeFiles([CANDIDATE_MANIFEST, CONVERGENCE_EVIDENCE, REVIEW_SCOPE]);
+    const restore = preserveRuntimeFiles([
+      CANDIDATE_MANIFEST,
+      CONVERGENCE_EVIDENCE,
+      MATERIALIZED_CLAIMS,
+      REVIEW_SCOPE,
+    ]);
     try {
       freezeExactCandidate();
       const result = run('review-scope', ['--base', BASE, '--candidate', 'HEAD', '--cycle', '1']);

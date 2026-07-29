@@ -49,10 +49,11 @@ interface Result {
 function stable(value: unknown): unknown {
   if (Array.isArray(value)) return value.map(stable);
   if (value !== null && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
     return Object.fromEntries(
-      Object.entries(value as Record<string, unknown>)
-        .sort(([left], [right]) => left.localeCompare(right))
-        .map(([key, child]) => [key, stable(child)]),
+      Object.keys(record)
+        .sort()
+        .map((key) => [key, stable(record[key])]),
     );
   }
   return value;
@@ -213,6 +214,9 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
       review_scope: `.devai/state/round-runs/${ROUND}/close/review-scope-manifest.json`,
       review_result: `.devai/state/round-runs/${ROUND}/close/review-result.json`,
       materialized_claims: `.devai/state/round-runs/${ROUND}/close/current-claims.json`,
+      post_publication_claims: `.devai/state/round-runs/${ROUND}/close/current-claims-post-publication.json`,
+      pre_review_claim_inputs: `.devai/state/round-runs/${ROUND}/close/claim-inputs-pre-review.json`,
+      post_publication_claim_inputs: `.devai/state/round-runs/${ROUND}/close/claim-inputs-post-publication.json`,
       review_state: `.devai/state/round-runs/${ROUND}/close/review-state.json`,
       review_transport: `.devai/state/round-runs/${ROUND}/close/review-transport.json`,
       review_repair_evidence: `.devai/state/round-runs/${ROUND}/close/review-repair-evidence.json`,
@@ -333,10 +337,12 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
     mode: 'registry',
     candidate: null,
     claims_digest_sha256: null,
+    pre_review_claims_digest: null,
     claims: [
       {
         claim_id: 'suite.population',
         volatility: 'tree',
+        availability: 'pre-review',
         producer: ['node', 'fixture/claim.mjs'],
         extractor: '$.count',
         source_paths: ['tests/**/*.test.ts'],
@@ -357,6 +363,7 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
   put(root, 'packages/b/src/index.ts', 'export const b = 1;\n');
   put(root, 'tests/a.test.ts', 'export const testA = true;\n');
   put(root, 'tests/b.test.ts', 'export const testB = true;\n');
+  put(root, `work/audit/${ROUND}/as-built.md`, 'DEVAI_CLAIM:suite.population=1\n');
   if (options.bound) {
     put(
       root,
@@ -413,8 +420,10 @@ function freezeCandidate(fixtureValue: Fixture, candidate: string): void {
     ...claimsRegistry,
     mode: 'materialized',
     candidate,
+    pre_review_claims_digest: null,
     claims: claimsRegistry.claims.map((claim: Record<string, unknown>) => ({
       ...claim,
+      proof_status: 'PROVEN',
       resolved_producer: claim.producer,
       source_manifest: sourceManifest,
       source_digest: digest(canonical(sourceManifest)),
@@ -590,7 +599,7 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
     );
     commit(current.root, 'track prose-only mandate references');
     const result = run(current, 'entry-check');
-    expect(result.status).toBe(0);
+    expect(result.status, JSON.stringify(result.value, null, 2)).toBe(0);
     expect(findingCodes(result)).not.toEqual(
       expect.arrayContaining([
         'ENTRY_BLOCKED_REVIEWER_BINDING_AMBIGUOUS',
@@ -601,10 +610,10 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
   });
 
   it('F-002 represents and executes all 16 policy gates across clean equivalent passes', () => {
-    const current = fixture();
+    const current = fixture({ bound: true });
     const candidate = git(current.root, ['rev-parse', 'HEAD']);
     const result = run(current, 'smart-converge', ['--base', current.base, '--head', candidate]);
-    expect(result.status).toBe(0);
+    expect(result.status, JSON.stringify(result.value, null, 2)).toBe(0);
     const passes = result.value.passes as Array<{ results: Array<{ node_id: string }> }>;
     expect(passes).toHaveLength(2);
     const expected = [

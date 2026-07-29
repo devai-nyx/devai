@@ -110,6 +110,11 @@ function fixture(): Fixture {
       review_scope: '.devai/state/round-runs/R-9000/close/review-scope-manifest.json',
       review_result: '.devai/state/round-runs/R-9000/close/review-result.json',
       materialized_claims: '.devai/state/round-runs/R-9000/close/current-claims.json',
+      post_publication_claims:
+        '.devai/state/round-runs/R-9000/close/current-claims-post-publication.json',
+      pre_review_claim_inputs: '.devai/state/round-runs/R-9000/close/claim-inputs-pre-review.json',
+      post_publication_claim_inputs:
+        '.devai/state/round-runs/R-9000/close/claim-inputs-post-publication.json',
       review_state: '.devai/state/round-runs/R-9000/close/review-state.json',
       review_transport: '.devai/state/round-runs/R-9000/close/review-transport.json',
       review_repair_evidence: '.devai/state/round-runs/R-9000/close/review-repair-evidence.json',
@@ -206,12 +211,12 @@ function fixture(): Fixture {
   put(
     root,
     'work/rounds/R-9000/current-claims.json',
-    '{"schemaVersion":"2.0.0","ledger_version":"fixture","round":"R-9000","mode":"registry","candidate":null,"claims":[{"claim_id":"suite.population","volatility":"tree","producer":["node","fixture/gate.mjs"],"extractor":"$","source_paths":["tests/**"],"rendered_locations":[],"source_digest":null,"value_digest":null}],"claims_digest_sha256":null}\n',
+    '{"schemaVersion":"2.0.0","ledger_version":"fixture","round":"R-9000","mode":"registry","candidate":null,"claims":[{"claim_id":"suite.population","volatility":"tree","availability":"pre-review","producer":["node","fixture/gate.mjs"],"extractor":"$","source_paths":["tests/**"],"rendered_locations":[],"source_digest":null,"value_digest":null}],"claims_digest_sha256":null,"pre_review_claims_digest":null}\n',
   );
   put(
     root,
     'work/rounds/R-9000/prior-finding-registry.json',
-    '{"schemaVersion":"1.0.0","round":"R-9000","registry_version":"fixture","finding_classes":[]}\n',
+    '{"schemaVersion":"1.0.0","round":"R-9000","registry_version":"fixture","finding_classes":[{"finding_id":"F001","defect_class_id":"IMPACT_PRECISION","severity":"P1","origin_cycle":1,"origin_evidence":"fixture prior review","topic_ids":["impact-planning"],"population_query":"Exercise every affected-test edge.","affected_population":["fixture graph"],"repair_condition":"Every declared edge is planned exactly.","disposition":"REPAIRED_PENDING_REVIEW"}]}\n',
   );
   put(
     root,

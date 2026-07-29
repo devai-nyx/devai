@@ -45,10 +45,11 @@ interface Frozen {
 function stable(value: unknown): unknown {
   if (Array.isArray(value)) return value.map(stable);
   if (value !== null && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
     return Object.fromEntries(
-      Object.entries(value as Record<string, unknown>)
-        .sort(([left], [right]) => left.localeCompare(right))
-        .map(([key, child]) => [key, stable(child)]),
+      Object.keys(record)
+        .sort()
+        .map((key) => [key, stable(record[key])]),
     );
   }
   return value;
@@ -212,6 +213,9 @@ function fixture(bound = true): Fixture {
       review_scope: `${STATE}/review-scope-manifest.json`,
       review_result: `${STATE}/review-result.json`,
       materialized_claims: `${STATE}/current-claims.json`,
+      post_publication_claims: `${STATE}/current-claims-post-publication.json`,
+      pre_review_claim_inputs: `${STATE}/claim-inputs-pre-review.json`,
+      post_publication_claim_inputs: `${STATE}/claim-inputs-post-publication.json`,
       review_state: `${STATE}/review-state.json`,
       review_transport: `${STATE}/review-transport.json`,
       review_repair_evidence: `${STATE}/review-repair-evidence.json`,
@@ -248,7 +252,13 @@ function fixture(bound = true): Fixture {
       tests: ['tests/**/*.test.ts'],
       classification: 'complete-or-full-suite-fallback',
     },
-    shared_inputs: [],
+    shared_inputs: [
+      {
+        id: 'workspace-policy',
+        selectors: ['package.json'],
+        invalidates: ['full-suite', 'full-coverage'],
+      },
+    ],
     nodes: [
       node('unit-a', ['packages/a/src/**/*.ts', 'tests/a.test.ts']),
       { ...node('full-suite', ['packages/**/*.ts', 'tests/**/*.ts']), kind: 'fallback' },
@@ -289,20 +299,28 @@ function fixture(bound = true): Fixture {
     registry_version: 'remediation-1-fixture',
     finding_classes: [
       {
+        finding_id: 'F005',
         defect_class_id: 'C2-F005',
         severity: 'P0',
+        origin_cycle: 1,
+        origin_evidence: 'fixture prior review cycle 1',
         topic_ids: ['candidate-identity'],
         population_query: 'Mutate every candidate and convergence proof field.',
         affected_population: ['candidate manifest', 'convergence evidence'],
         repair_condition: 'Every proof independently authenticates and cross-binds.',
+        disposition: 'REPAIRED_PENDING_REVIEW',
       },
       {
+        finding_id: 'F006',
         defect_class_id: 'C2-F006',
         severity: 'P1',
+        origin_cycle: 1,
+        origin_evidence: 'fixture prior review cycle 1',
         topic_ids: ['obligation:r9000-p0-identity'],
         population_query: 'Mutate every reused-topic proof.',
         affected_population: ['input manifest', 'evidence manifest', 'task keys'],
         repair_condition: 'Every current proof recomputes independently.',
+        disposition: 'REPAIRED_PENDING_REVIEW',
       },
     ],
   });
@@ -313,10 +331,12 @@ function fixture(bound = true): Fixture {
     mode: 'registry',
     candidate: null,
     claims_digest_sha256: null,
+    pre_review_claims_digest: null,
     claims: [
       {
         claim_id: 'suite.population',
         volatility: 'tree',
+        availability: 'pre-review',
         producer: ['node', 'fixture/claim.mjs'],
         extractor: '$.count',
         source_paths: ['tests/a.test.ts'],
@@ -365,10 +385,13 @@ function materializeClaims(fixtureValue: Fixture, candidate: string): Record<str
     round: ROUND,
     mode: 'materialized',
     candidate,
+    pre_review_claims_digest: null,
     claims: [
       {
         claim_id: 'suite.population',
         volatility: 'tree',
+        availability: 'pre-review',
+        proof_status: 'PROVEN',
         producer: ['node', 'fixture/claim.mjs'],
         resolved_producer: ['node', 'fixture/claim.mjs'],
         extractor: '$.count',
@@ -415,16 +438,26 @@ function freeze(fixtureValue: Fixture, candidate = 'HEAD'): Frozen {
     (policy.convergence as Record<string, unknown>).commands as Array<{ id: string }>
   ).map(({ id }) => id);
   const semanticPopulation = digestCanonical(gateIds);
+  const gateResults = gateIds.map((gate_id) => {
+    const taskKey = digestCanonical({ gate_id, exactCandidate });
+    const cacheBody = {
+      task_key: taskKey,
+      producing_candidate: exactCandidate,
+      policy_digest: policyDigest,
+      graph_digest: graphDigest,
+      result: 'EXECUTED_PASS',
+    };
+    const cache = { ...cacheBody, result_digest: digestCanonical(cacheBody) };
+    putJson(fixtureValue.root, `${STATE}/freshness/tasks/gate-${gate_id}/${taskKey}.json`, cache);
+    const body = {
+      gate_id,
+      outcome: 'EXECUTED_PASS',
+      task_key: taskKey,
+      output_digest: cache.result_digest,
+    };
+    return { ...body, result_digest: digestCanonical(body) };
+  });
   const pass = (passNumber: 1 | 2) => {
-    const gateResults = gateIds.map((gate_id) => {
-      const body = {
-        gate_id,
-        outcome: passNumber === 1 ? 'EXECUTED_PASS' : 'REUSED_FRESH_PASS',
-        task_key: digestCanonical({ gate_id, exactCandidate }),
-        output_digest: digestCanonical({ gate_id, output: 'PASS' }),
-      };
-      return { ...body, result_digest: digestCanonical(body) };
-    });
     const body = {
       pass_number: passNumber,
       head_before: exactCandidate,
@@ -915,6 +948,96 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       expectCode(result, code);
       expect(existsSync(join(current.root, `${STATE}/review-scope-manifest.json`))).toBe(false);
     });
+
+    it.each([
+      ['schema', 'REVIEW_SCOPE_SCHEMA_INVALID'],
+      ['self-digest', 'REVIEW_SCOPE_SELF_DIGEST_INVALID'],
+      ['recomputation', 'REVIEW_SCOPE_RECOMPUTATION_INVALID'],
+    ])('review-check independently rejects a %s-invalid stored scope', (kind, code) => {
+      const current = fixture(true);
+      const frozen = freeze(current);
+      const scoped = scope(current, frozen);
+      expect(scoped.status, JSON.stringify(scoped.value, null, 2)).toBe(0);
+      const scopePath = `${STATE}/review-scope-manifest.json`;
+      const manifest = readJson(current.root, scopePath);
+      if (kind === 'schema') {
+        delete manifest.topic_count;
+        putJson(current.root, scopePath, selfDigest(manifest, 'manifest_digest_sha256'));
+      } else if (kind === 'self-digest') {
+        manifest.topic_count = Number(manifest.topic_count) + 1;
+        putJson(current.root, scopePath, manifest);
+      } else {
+        const topic = (manifest.topics as Array<Record<string, unknown>>)[0];
+        topic.current_digest = '0'.repeat(64);
+        putJson(current.root, scopePath, selfDigest(manifest, 'manifest_digest_sha256'));
+      }
+      const stored = readJson(current.root, scopePath);
+      const review = passingResult(stored, frozen.candidateManifest);
+      putJson(current.root, 'fixture/scope-check.json', review);
+      expectCode(
+        run(current, 'review-check', [
+          '--candidate',
+          frozen.candidate,
+          '--cycle',
+          '1',
+          '--review-result',
+          'fixture/scope-check.json',
+        ]),
+        code,
+      );
+    });
+
+    it('preserves authenticated review state when scope regeneration fails', () => {
+      const current = fixture(true);
+      const frozen = freeze(current);
+      expect(scope(current, frozen).status).toBe(0);
+      const statePath = `${STATE}/review-state.json`;
+      const scopePath = `${STATE}/review-scope-manifest.json`;
+      const stateBefore = readFileSync(join(current.root, statePath), 'utf8');
+      const candidate = readJson(current.root, `${STATE}/candidate-manifest.json`);
+      candidate.claims_digest = '0'.repeat(64);
+      putJson(
+        current.root,
+        `${STATE}/candidate-manifest.json`,
+        selfDigest(candidate, 'manifest_digest_sha256'),
+      );
+      expect(scope(current, frozen).status).toBe(1);
+      expect(existsSync(join(current.root, scopePath))).toBe(false);
+      expect(readFileSync(join(current.root, statePath), 'utf8')).toBe(stateBefore);
+    });
+
+    it.each(['PASS', 'ESCALATION_REQUIRED', 'REVIEW_TRANSPORT_BLOCKED'])(
+      'does not overwrite terminal %s state during a fresh cycle-1 scope request',
+      (terminal) => {
+        const current = fixture(true);
+        const frozen = freeze(current);
+        const scoped = scope(current, frozen);
+        expect(scoped.status).toBe(0);
+        const statePath = `${STATE}/review-state.json`;
+        const state = readJson(current.root, statePath);
+        const transitionBody = {
+          from: 'CYCLE_1_ACTIVE',
+          to: terminal,
+          candidate_sha: frozen.candidate,
+          candidate_manifest_digest: frozen.candidateManifest.manifest_digest_sha256,
+          review_scope_digest: (scoped.value.manifest as Record<string, unknown>)
+            .manifest_digest_sha256,
+          review_result_digest: 'a'.repeat(64),
+          transport_digest: terminal === 'REVIEW_TRANSPORT_BLOCKED' ? 'b'.repeat(64) : null,
+          repair_evidence_digest: null,
+          previous_state_digest: state.state_digest_sha256,
+        };
+        state.state = terminal;
+        state.transition_history = [
+          ...(state.transition_history as unknown[]),
+          selfDigest(transitionBody, 'transition_digest_sha256'),
+        ];
+        putJson(current.root, statePath, selfDigest(state, 'state_digest_sha256'));
+        const before = readFileSync(join(current.root, statePath), 'utf8');
+        expectCode(scope(current, frozen), 'REVIEW_STATE_TERMINAL');
+        expect(readFileSync(join(current.root, statePath), 'utf8')).toBe(before);
+      },
+    );
   });
 
   describe('C2-F006 canonical findings and independently recomputed reuse', () => {
@@ -1034,6 +1157,122 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
           'fixture/reuse-pass.json',
         ]).status,
       ).toBe(0);
+    });
+
+    it.each([
+      ['fail-disposition', 'REVIEW_TOPIC_NOT_PASSING'],
+      ['blocked-disposition', 'REVIEW_TOPIC_NOT_PASSING'],
+      ['unresolved-p1', 'REVIEW_PASS_INVALID'],
+    ])('forbids PASS with %s', (kind, code) => {
+      const current = fixture(true);
+      const frozen = freeze(current);
+      const scoped = scope(current, frozen);
+      expect(scoped.status).toBe(0);
+      const review = passingResult(
+        scoped.value.manifest as Record<string, unknown>,
+        frozen.candidateManifest,
+      );
+      const dispositions = review.dispositions as Array<Record<string, unknown>>;
+      if (kind === 'fail-disposition') dispositions[0].disposition = 'RECHECKED_FAIL';
+      if (kind === 'blocked-disposition') dispositions[0].disposition = 'BLOCKED';
+      if (kind === 'unresolved-p1') {
+        review.findings = [
+          {
+            finding_id: 'OPEN-1',
+            defect_class_id: 'OPEN_CLASS',
+            severity: 'P1',
+            topic_ids: [dispositions[0].topic_id],
+            evidence: 'unresolved fixture evidence',
+            population_query: 'Enumerate the unresolved fixture population.',
+            affected_instances: ['instance-a'],
+            repair_acceptance: 'Repair instance-a.',
+          },
+        ];
+      }
+      const dispositionCounts = {
+        RECHECKED_PASS: dispositions.filter(({ disposition }) => disposition === 'RECHECKED_PASS')
+          .length,
+        RECHECKED_FAIL: dispositions.filter(({ disposition }) => disposition === 'RECHECKED_FAIL')
+          .length,
+        REUSED_FRESH_PASS: 0,
+        BLOCKED: dispositions.filter(({ disposition }) => disposition === 'BLOCKED').length,
+      };
+      review.terminal = {
+        verdict: 'PASS',
+        topic_count: dispositions.length,
+        disposition_counts: dispositionCounts,
+        finding_count: (review.findings as unknown[]).length,
+        complete: true,
+      };
+      putJson(
+        current.root,
+        'fixture/invalid-pass.json',
+        selfDigest(review, 'result_digest_sha256'),
+      );
+      expectCode(
+        run(current, 'review-check', [
+          '--candidate',
+          frozen.candidate,
+          '--cycle',
+          '1',
+          '--review-result',
+          'fixture/invalid-pass.json',
+        ]),
+        code,
+      );
+    });
+
+    it('consumes a transport attempt for parseable schema-invalid JSON', () => {
+      const current = fixture(true);
+      const frozen = freeze(current);
+      expect(scope(current, frozen).status).toBe(0);
+      putJson(current.root, 'fixture/schema-invalid.json', { schemaVersion: '2.0.0' });
+      const args = [
+        '--candidate',
+        frozen.candidate,
+        '--cycle',
+        '1',
+        '--review-result',
+        'fixture/schema-invalid.json',
+      ];
+      expectCode(run(current, 'review-check', args), 'REVIEW_RESULT_INVALID');
+      expectCode(run(current, 'review-check', args), 'REVIEW_TRANSPORT_BLOCKED');
+    });
+
+    it('rejects an otherwise parseable JSONL stream containing an unknown record type', () => {
+      const current = fixture(true);
+      const frozen = freeze(current);
+      const scoped = scope(current, frozen);
+      expect(scoped.status).toBe(0);
+      const review = passingResult(
+        scoped.value.manifest as Record<string, unknown>,
+        frozen.candidateManifest,
+      );
+      const header = { type: 'header', ...review };
+      delete header.dispositions;
+      delete header.findings;
+      delete header.terminal;
+      const lines = [
+        header,
+        ...(review.dispositions as Array<Record<string, unknown>>).map((entry) => ({
+          type: 'disposition',
+          ...entry,
+        })),
+        { type: 'unknown-record', payload: 'must not be ignored' },
+        { type: 'terminal', ...(review.terminal as Record<string, unknown>) },
+      ];
+      put(current.root, 'fixture/unknown-record.jsonl', lines.map(canonical).join(''));
+      expectCode(
+        run(current, 'review-check', [
+          '--candidate',
+          frozen.candidate,
+          '--cycle',
+          '1',
+          '--review-result',
+          'fixture/unknown-record.jsonl',
+        ]),
+        'REVIEW_JSONL_NON_CANONICAL',
+      );
     });
   });
 
@@ -1171,6 +1410,110 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         ]).status,
       ).toBe(0);
     });
+
+    it.each(['prior-review', 'multi-finding', 'ancestry', 'diff', 'verification'])(
+      'rejects unauthenticated or incomplete repair proof: %s',
+      (kind) => {
+        const current = fixture(true);
+        const first = freeze(current);
+        const firstScope = scope(current, first);
+        expect(firstScope.status).toBe(0);
+        const failure = passingResult(
+          firstScope.value.manifest as Record<string, unknown>,
+          first.candidateManifest,
+        );
+        const dispositions = failure.dispositions as Array<Record<string, unknown>>;
+        dispositions[0].disposition = 'RECHECKED_FAIL';
+        dispositions[0].finding_ids = ['REPAIR-1', 'REPAIR-2'];
+        failure.findings = [
+          {
+            finding_id: 'REPAIR-1',
+            defect_class_id: 'REPAIR_CLASS',
+            severity: 'P1',
+            topic_ids: [dispositions[0].topic_id],
+            evidence: 'first affected instance',
+            population_query: 'Enumerate both repair instances.',
+            affected_instances: ['instance-a'],
+            repair_acceptance: 'Repair both instances.',
+          },
+          {
+            finding_id: 'REPAIR-2',
+            defect_class_id: 'REPAIR_CLASS',
+            severity: 'P1',
+            topic_ids: [dispositions[0].topic_id],
+            evidence: 'second affected instance',
+            population_query: 'Enumerate both repair instances.',
+            affected_instances: ['instance-b'],
+            repair_acceptance: 'Repair both instances.',
+          },
+        ];
+        failure.terminal = {
+          verdict: 'FAIL',
+          topic_count: dispositions.length,
+          disposition_counts: {
+            RECHECKED_PASS: dispositions.length - 1,
+            RECHECKED_FAIL: 1,
+            REUSED_FRESH_PASS: 0,
+            BLOCKED: 0,
+          },
+          finding_count: 2,
+          complete: true,
+        };
+        const failureRecord = selfDigest(failure, 'result_digest_sha256');
+        putJson(current.root, 'fixture/repair-failure.json', failureRecord);
+        expect(
+          run(current, 'review-check', [
+            '--candidate',
+            first.candidate,
+            '--cycle',
+            '1',
+            '--review-result',
+            'fixture/repair-failure.json',
+          ]).status,
+        ).toBe(1);
+        const priorState = readJson(current.root, `${STATE}/review-state.json`);
+        put(current.root, 'packages/a/src/index.ts', 'export const a = 2;\n');
+        const secondCandidate = commit(current.root, 'repair both affected instances');
+        const repairBody = {
+          schemaVersion: '1.0.0',
+          round: ROUND,
+          prior_candidate_sha: first.candidate,
+          prior_candidate_manifest_digest: first.candidateManifest.manifest_digest_sha256,
+          prior_review_scope_digest: (firstScope.value.manifest as Record<string, unknown>)
+            .manifest_digest_sha256,
+          prior_review_result_digest: failureRecord.result_digest_sha256,
+          prior_failure_state_digest: priorState.state_digest_sha256,
+          new_candidate_sha: secondCandidate,
+          repaired_classes: [
+            {
+              defect_class_id: 'REPAIR_CLASS',
+              population_query: 'Enumerate both repair instances.',
+              affected_instances: ['instance-a', 'instance-b'],
+              repaired_instances: ['instance-a', 'instance-b'],
+              changed_paths: ['packages/a/src/index.ts'],
+              verification_refs: ['tests/a.test.ts'],
+            },
+          ],
+        };
+        if (kind === 'prior-review') repairBody.prior_review_result_digest = '0'.repeat(64);
+        if (kind === 'multi-finding') {
+          repairBody.repaired_classes[0].affected_instances = ['instance-a'];
+          repairBody.repaired_classes[0].repaired_instances = ['instance-a'];
+        }
+        if (kind === 'ancestry') repairBody.new_candidate_sha = first.candidate;
+        if (kind === 'diff') repairBody.repaired_classes[0].changed_paths = ['package.json'];
+        if (kind === 'verification') {
+          repairBody.repaired_classes[0].verification_refs = ['tests/missing.test.ts'];
+        }
+        putJson(
+          current.root,
+          `${STATE}/review-repair-evidence.json`,
+          selfDigest(repairBody, 'repair_evidence_digest_sha256'),
+        );
+        const second = freeze(current, secondCandidate);
+        expectCode(scope(current, second, 2), 'REVIEW_REPAIR_EVIDENCE_INCOMPLETE');
+      },
+    );
   });
 
   describe('C2-F008 exact runtime materialized current claims', () => {
@@ -1228,5 +1571,164 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       expect(result.status, JSON.stringify(result.value, null, 2)).toBe(0);
       expect(result.value.materialized_path).toBe(`${STATE}/current-claims.json`);
     });
+
+    it.each([
+      ['missing', 'CLAIM_POPULATION_INVALID'],
+      ['unknown', 'CLAIM_UNKNOWN'],
+      ['duplicate', 'CLAIM_POPULATION_INVALID'],
+      ['placeholder', 'CLAIM_PLACEHOLDER_RESIDUE'],
+    ])('rejects claim census or placeholder bypass: %s', (kind, code) => {
+      const current = fixture(true);
+      const frozen = freeze(current);
+      const path = `${STATE}/current-claims.json`;
+      const ledger = readJson(current.root, path);
+      const claims = ledger.claims as Array<Record<string, unknown>>;
+      if (kind === 'missing') claims.splice(0, 1);
+      if (kind === 'unknown') claims.push({ ...claims[0], claim_id: 'unknown.claim' });
+      if (kind === 'duplicate') claims.push(structuredClone(claims[0]));
+      if (kind === 'placeholder') {
+        const renderedLocation = `work/audit/${ROUND}/as-built.md`;
+        const rendered = 'TBD: replace placeholder before review\nDEVAI_CLAIM:suite.population=1\n';
+        put(current.root, renderedLocation, rendered);
+        const claim = claims[0];
+        const proof = (claim.rendered_proofs as Array<Record<string, unknown>>)[0];
+        const proofBody = {
+          location: renderedLocation,
+          claim_marker: 'DEVAI_CLAIM:suite.population=',
+          content_digest: digestBytes(rendered),
+          extracted_rendered_value_digest: digestCanonical(1),
+        };
+        claim.rendered_proofs = [
+          { ...proof, ...proofBody, verification_digest: digestCanonical(proofBody) },
+        ];
+        claim.rendered_verification_digest = digestCanonical(claim.rendered_proofs);
+      }
+      const { claims_digest_sha256: _old, ...body } = ledger;
+      ledger.claims_digest_sha256 = digestCanonical(body);
+      putJson(current.root, path, ledger);
+      expectCode(run(current, 'claims-check', ['--candidate', frozen.candidate]), code);
+    });
+
+    it('recomputes deferred post-publication declaration digests', () => {
+      const current = fixture(true);
+      const registryPath = `work/rounds/${ROUND}/current-claims.json`;
+      const registry = readJson(current.root, registryPath);
+      const declaration = (registry.claims as Array<Record<string, unknown>>)[0];
+      declaration.availability = 'post-publication';
+      putJson(current.root, registryPath, registry);
+      const candidate = commit(current.root, 'declare deferred post-publication claim');
+      const frozen = freeze(current, candidate);
+      const path = `${STATE}/current-claims.json`;
+      const ledger = readJson(current.root, path);
+      const claim = (ledger.claims as Array<Record<string, unknown>>)[0];
+      claim.proof_status = 'DEFERRED_POST_PUBLICATION';
+      claim.source_digest = null;
+      claim.value_digest = null;
+      claim.deferred_proof = {
+        required_at: 'post-publication',
+        declaration_digest: '0'.repeat(64),
+      };
+      const {
+        resolved_producer: _resolvedProducer,
+        source_manifest: _sourceManifest,
+        producer_output_digest: _producerOutputDigest,
+        extracted_value: _extractedValue,
+        rendered_proofs: _renderedProofs,
+        rendered_verification_digest: _renderedVerificationDigest,
+        ...deferredClaim
+      } = claim;
+      (ledger.claims as Array<Record<string, unknown>>)[0] = deferredClaim;
+      const { claims_digest_sha256: _old, ...body } = ledger;
+      ledger.claims_digest_sha256 = digestCanonical(body);
+      putJson(current.root, path, ledger);
+      expectCode(
+        run(current, 'claims-check', ['--candidate', frozen.candidate]),
+        'CLAIM_DEFERRED_INVALID',
+      );
+    });
+
+    it('reads post-publication mode only from its dedicated path and binds the pre-review digest', () => {
+      const current = fixture(true);
+      const frozen = freeze(current);
+      const preReview = readJson(current.root, `${STATE}/current-claims.json`);
+      const postBody = {
+        ...preReview,
+        mode: 'post-publication',
+        pre_review_claims_digest: preReview.claims_digest_sha256,
+      };
+      delete postBody.claims_digest_sha256;
+      const post = { ...postBody, claims_digest_sha256: digestCanonical(postBody) };
+      putJson(current.root, `${STATE}/current-claims-post-publication.json`, post);
+      const result = run(current, 'claims-check', [
+        '--candidate',
+        frozen.candidate,
+        '--phase',
+        'post-publication',
+      ]);
+      expect(result.status).toBe(0);
+      expect(result.value.materialized_path).toBe(`${STATE}/current-claims-post-publication.json`);
+      expect(result.value.pre_review_claims_digest).toBe(preReview.claims_digest_sha256);
+    });
+
+    it('requires authenticated resolution for site_artifact_path rather than trusting ledger substitution', () => {
+      const current = fixture(true);
+      const registryPath = `work/rounds/${ROUND}/current-claims.json`;
+      const registry = readJson(current.root, registryPath);
+      const declaration = (registry.claims as Array<Record<string, unknown>>)[0];
+      declaration.producer = ['sha256sum', '{site_artifact_path}'];
+      declaration.runtime_parameters = {
+        site_artifact_path: { source: 'authenticated B8 artifact', required_at: 'materialization' },
+      };
+      declaration.source_paths = ['{site_artifact_path}'];
+      putJson(current.root, registryPath, registry);
+      const candidate = commit(current.root, 'declare site artifact parameter');
+      const frozen = freeze(current, candidate);
+      const ledger = readJson(current.root, `${STATE}/current-claims.json`);
+      const claim = (ledger.claims as Array<Record<string, unknown>>)[0];
+      claim.resolved_producer = ['sha256sum', 'fixture/site.zip'];
+      claim.source_manifest = [
+        { path: 'fixture/site.zip', state: 'present', content_digest: digestCanonical('fake') },
+      ];
+      const { claims_digest_sha256: _old, ...body } = ledger;
+      ledger.claims_digest_sha256 = digestCanonical(body);
+      putJson(current.root, `${STATE}/current-claims.json`, ledger);
+      expectCode(
+        run(current, 'claims-check', ['--candidate', frozen.candidate]),
+        'CLAIM_RUNTIME_PARAMETER_UNRESOLVED',
+      );
+    });
+
+    it('requires a nonempty authenticated special Git identity manifest for .git', () => {
+      const current = fixture(true);
+      const frozen = freeze(current);
+      const ledger = readJson(current.root, `${STATE}/current-claims.json`);
+      const claim = (ledger.claims as Array<Record<string, unknown>>)[0];
+      claim.source_paths = ['.git'];
+      claim.source_manifest = [];
+      const { claims_digest_sha256: _old, ...body } = ledger;
+      ledger.claims_digest_sha256 = digestCanonical(body);
+      putJson(current.root, `${STATE}/current-claims.json`, ledger);
+      expectCode(
+        run(current, 'claims-check', ['--candidate', frozen.candidate]),
+        'CLAIM_GIT_IDENTITY_MANIFEST_INVALID',
+      );
+    });
+  });
+
+  it('smart-converge uses the v4 authenticated convergence and candidate artifact writer', () => {
+    const current = fixture(true);
+    put(current.root, 'packages/a/src/index.ts', 'export const a = 2;\n');
+    const candidate = commit(current.root, 'exercise v4 artifact writer');
+    const converged = run(current, 'smart-converge', ['--base', current.base, '--head', candidate]);
+    expect(converged.status).toBe(0);
+    const convergence = readJson(current.root, `${STATE}/convergence-evidence.json`);
+    const candidateManifest = readJson(current.root, `${STATE}/candidate-manifest.json`);
+    expect(validates(current.root, 'law/schemas/round-convergence.schema.json', convergence)).toBe(
+      true,
+    );
+    expect(
+      validates(current.root, 'law/schemas/candidate-manifest.schema.json', candidateManifest),
+    ).toBe(true);
+    expect(candidateManifest.convergence_digest).toBe(convergence.convergence_digest_sha256);
   });
 });
