@@ -593,7 +593,7 @@ describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
     ) as typeof livePolicy;
     const finalRecord = 'work/audit/R-0006/independent-codex-b9-review-final.md';
     const cycleTwoRecord = 'work/audit/R-0006/independent-opus-b9-review-6.md';
-    expect(livePolicy.schemaVersion).toBe('4.0.0');
+    expect(livePolicy.schemaVersion).toBe('5.0.0');
     expect(livePolicy.review_scope.previous_finding_classes_mandatory).toBe(true);
     expect(livePolicy.review_state_machine).toMatchObject({
       substantive_cycle_budget: 2,

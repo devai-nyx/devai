@@ -427,10 +427,15 @@ describe('R-0006 E1 entry-control red contracts', () => {
   it('requires the ordinary full Vitest floor in each convergence pass', () => {
     const canonical = JSON.parse(
       readFileSync(join(ROOT, 'law/policy/round-close-controls.json'), 'utf8'),
-    ) as { convergence: { commands: Array<{ id: string; argv: string[] }> } };
+    ) as {
+      convergence: {
+        commands: Array<{ id: string; argv: string[]; freshness_profile: string }>;
+      };
+    };
     expect(canonical.convergence.commands).toContainEqual({
       id: 'ordinary',
       argv: ['pnpm', 'vitest', 'run'],
+      freshness_profile: 'ordinary',
     });
   });
 
