@@ -20,16 +20,33 @@
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": { "type": "string", "minLength": 1 }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     }
   },
   "properties": {
-    "schemaVersion": { "const": "1.0.0" },
-    "campaign": { "const": "pre-R-0007-convergence-control-remediation-2" },
-    "authority": { "const": "OM-016" },
-    "reviewed_candidate": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
-    "review_evidence": { "type": "string", "minLength": 1 },
-    "review_run_budget": { "const": 2 },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "campaign": {
+      "const": "pre-R-0007-convergence-control-remediation-2"
+    },
+    "authority": {
+      "const": "OM-016"
+    },
+    "reviewed_candidate": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "review_evidence": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_run_budget": {
+      "const": 2
+    },
     "classes": {
       "type": "array",
       "minItems": 8,
@@ -53,27 +70,407 @@
           "closure_state"
         ],
         "properties": {
-          "finding_id": { "pattern": "^R2-F00[1-8]$" },
-          "defect_class_id": { "pattern": "^[A-Z0-9][A-Z0-9_-]*$" },
-          "severity": { "const": "P1" },
-          "population_query": { "type": "string", "minLength": 1 },
-          "expected_complete_population": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
-          "adversarial_mutations": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
-          "required_behavior": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "finding_id": {
+            "pattern": "^R2-F00[1-8]$"
+          },
+          "defect_class_id": {
+            "pattern": "^[A-Z0-9][A-Z0-9_-]*$"
+          },
+          "severity": {
+            "const": "P1"
+          },
+          "population_query": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_complete_population": {
+            "$ref": "#/$defs/nonEmptyUniqueStrings"
+          },
+          "adversarial_mutations": {
+            "$ref": "#/$defs/nonEmptyUniqueStrings"
+          },
+          "required_behavior": {
+            "$ref": "#/$defs/nonEmptyUniqueStrings"
+          },
           "test_ids": {
             "type": "array",
             "minItems": 2,
             "uniqueItems": true,
-            "items": { "type": "string", "pattern": "^R2-[0-9]{3}-[A-Z0-9-]+$" }
+            "items": {
+              "type": "string",
+              "pattern": "^R2-[0-9]{3}-[A-Z0-9-]+$"
+            }
           },
-          "test_paths": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
-          "implementation_surfaces": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
-          "evidence_refs": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "test_paths": {
+            "$ref": "#/$defs/nonEmptyUniqueStrings"
+          },
+          "implementation_surfaces": {
+            "$ref": "#/$defs/nonEmptyUniqueStrings"
+          },
+          "evidence_refs": {
+            "$ref": "#/$defs/nonEmptyUniqueStrings"
+          },
           "closure_state": {
             "enum": ["RED_REQUIRED", "RED_PROVED", "GREEN_PROVED", "REVIEWED_PASS"]
           }
         }
       }
     }
-  }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "campaign": "pre-R-0007-convergence-control-remediation-2",
+      "authority": "OM-016",
+      "reviewed_candidate": "0dbe660db28261287690ea88762407a8d92ba490",
+      "review_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "review_run_budget": 2,
+      "classes": [
+        {
+          "finding_id": "R2-F001",
+          "defect_class_id": "AUTHORITATIVE_GATE_CANDIDATE_RED",
+          "severity": "P1",
+          "population_query": "Execute the exact ordered policy command roster and compare the terminal result of every gate with the exact frozen candidate.",
+          "expected_complete_population": [
+            "formatting",
+            "preparation",
+            "action-registry",
+            "trace",
+            "repository-references",
+            "materializations",
+            "diff-check",
+            "ordinary",
+            "stage1",
+            "stage2",
+            "t4",
+            "t5",
+            "t6",
+            "changesets",
+            "coverage",
+            "governance"
+          ],
+          "adversarial_mutations": [
+            "one repository-wide formatting violation",
+            "one omitted authoritative gate",
+            "one nonzero gate exit hidden by a later PASS"
+          ],
+          "required_behavior": [
+            "all sixteen gates execute or carry an authenticated fresh PASS exactly once",
+            "one red gate makes the candidate ineligible for freeze",
+            "terminal evidence retains every gate ID and exit"
+          ],
+          "test_ids": ["R2-001-ROSTER-EXACT", "R2-001-FORMATTING-RED"],
+          "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+          "implementation_surfaces": [
+            "law/policy/governed-sequencing.json",
+            "scripts/run-round-close-controls.mjs"
+          ],
+          "evidence_refs": [
+            "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+            "law/policy/round-close-controls.json"
+          ],
+          "closure_state": "RED_REQUIRED"
+        },
+        {
+          "finding_id": "R2-F002",
+          "defect_class_id": "AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+          "severity": "P1",
+          "population_query": "Recursively expand every authoritative command and root package script, then prove that its resolved tracked inputs, dependency outputs, executables, complete environment digest, policy inputs, and persistent outputs are covered by the sole freshness profile.",
+          "expected_complete_population": [
+            "all sixteen authoritative gate profiles",
+            "all recursively referenced root package scripts",
+            "all tracked candidate-tree paths",
+            "all seven declared toolchain probes",
+            "the complete process-environment digest",
+            "every declared persistent output population"
+          ],
+          "adversarial_mutations": [
+            "remove each gate profile independently",
+            "remove each effective input class independently",
+            "change CSS and TSX formatting inputs",
+            "change package runtime fixtures and prompts",
+            "change one transitive build output",
+            "change an undeclared environment value",
+            "remove or tamper each persistent output"
+          ],
+          "required_behavior": [
+            "universal tracked-input coverage is proven mechanically, not inferred from nonempty selectors",
+            "recursive script closure and program probes are deterministic",
+            "any effective input, environment, toolchain, dependency-output, or output change prevents reuse"
+          ],
+          "test_ids": [
+            "R2-002-ALL-GATES-CLOSED",
+            "R2-002-SCRIPT-CLOSURE",
+            "R2-002-UNIVERSAL-INPUTS",
+            "R2-002-ENVIRONMENT-COMPLETE",
+            "R2-002-OUTPUTS-COMPLETE"
+          ],
+          "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+          "implementation_surfaces": [
+            "law/schemas/affected-test-graph.schema.json",
+            "work/rounds/R-0007/affected-test-graph.json",
+            "scripts/run-round-close-controls.mjs"
+          ],
+          "evidence_refs": [
+            "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+            "product/owner-mandates/OM-016.md"
+          ],
+          "closure_state": "RED_REQUIRED"
+        },
+        {
+          "finding_id": "R2-F003",
+          "defect_class_id": "AFFECTED_TEST_INPUT_POPULATION_INCOMPLETE",
+          "severity": "P1",
+          "population_query": "Enumerate every tracked candidate-tree path and every computed module-loading syntax, then prove that each changed path selects a declared shard or full-suite and whole-coverage fallback.",
+          "expected_complete_population": [
+            "all tracked candidate-tree paths",
+            "four CLI JSON fixtures",
+            "one effects-check fixture tsconfig",
+            "all skills prompt and test-fixture assets",
+            "dynamic import expressions",
+            "template-literal imports",
+            "require expressions",
+            "require.resolve and import.meta.resolve expressions",
+            "createRequire, module.require, eval, and computed loader wrappers"
+          ],
+          "adversarial_mutations": [
+            "change every runtime/test asset class",
+            "add an unknown tracked extension",
+            "exercise each computed-loader family",
+            "rename an asset between known and unknown populations"
+          ],
+          "required_behavior": [
+            "every tracked change is classified",
+            "known assets select their dependent shard",
+            "unknown assets and unproved loaders select full suite and whole coverage"
+          ],
+          "test_ids": [
+            "R2-003-TRACKED-UNIVERSE",
+            "R2-003-RUNTIME-ASSETS",
+            "R2-003-COMPUTED-LOADERS",
+            "R2-003-UNKNOWN-FALLBACK"
+          ],
+          "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+          "implementation_surfaces": [
+            "law/schemas/affected-test-graph.schema.json",
+            "work/rounds/R-0007/affected-test-graph.json",
+            "scripts/run-round-close-controls.mjs"
+          ],
+          "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
+          "closure_state": "RED_REQUIRED"
+        },
+        {
+          "finding_id": "R2-F004",
+          "defect_class_id": "RECHECKED_TOPIC_EVIDENCE_UNAUTHENTICATED",
+          "severity": "P1",
+          "population_query": "Generate all seven review-topic source classes, resolve every source and evidence reference against typed candidate, Git, convergence, census, claim, change-record, or task artifacts, and reject every unresolved or substituted reference.",
+          "expected_complete_population": [
+            "semantic-obligation topics",
+            "changed-path topics",
+            "active-control topic",
+            "current-claim topics",
+            "previous-finding-class topics",
+            "candidate-identity topic",
+            "convergence-evidence topic"
+          ],
+          "adversarial_mutations": [
+            "unresolved prose evidence",
+            "reference-string-only digest",
+            "candidate blob substitution",
+            "Git range or change-record substitution",
+            "gate result substitution",
+            "claim or census substitution"
+          ],
+          "required_behavior": [
+            "no synthetic evidence fallback exists",
+            "unresolved evidence makes scope or result validation fail",
+            "every disposition binds independently recomputed typed evidence bytes"
+          ],
+          "test_ids": [
+            "R2-004-NO-SYNTHETIC-EVIDENCE",
+            "R2-004-SEVEN-CLASS-RESOLUTION",
+            "R2-004-SUBSTITUTION-REJECTED"
+          ],
+          "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+          "implementation_surfaces": [
+            "law/schemas/review-obligations.schema.json",
+            "work/rounds/R-0007/review-obligations.json",
+            "scripts/run-round-close-controls.mjs"
+          ],
+          "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
+          "closure_state": "RED_REQUIRED"
+        },
+        {
+          "finding_id": "R2-F005",
+          "defect_class_id": "STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+          "severity": "P1",
+          "population_query": "Mutate and re-self-digest every state, transition edge, predecessor identity, transport attempt field, result identity/count field, and repair-v2 link across the complete declared state graph.",
+          "expected_complete_population": [
+            "all twelve allowed transition edges",
+            "cycle 1 and cycle 2 state identities",
+            "every predecessor state and transition digest",
+            "transport attempts zero, one, and two",
+            "all transport identity and state-before fields",
+            "all result identity, topic, finding, terminal, and count fields",
+            "all prior failure and repair-v2 links",
+            "PASS, ESCALATION_REQUIRED, and REVIEW_TRANSPORT_BLOCKED terminals"
+          ],
+          "adversarial_mutations": [
+            "wrong transition cycle",
+            "forged predecessor state",
+            "skipped or reordered transition",
+            "cross-candidate transport",
+            "stale result counts",
+            "forged repair link",
+            "post-terminal successor"
+          ],
+          "required_behavior": [
+            "every consumed artifact is schema- and digest-validated again",
+            "every edge identity is independently reconstructed",
+            "one mismatch fails before any state or transport mutation"
+          ],
+          "test_ids": [
+            "R2-005-ALL-EDGES",
+            "R2-005-PREDECESSOR-STATES",
+            "R2-005-TRANSPORT-IDENTITY",
+            "R2-005-RESULT-REAUTH",
+            "R2-005-REPAIR-V2-REAUTH"
+          ],
+          "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+          "implementation_surfaces": [
+            "law/schemas/review-state.schema.json",
+            "law/schemas/review-transport.schema.json",
+            "law/schemas/review-result.schema.json",
+            "law/schemas/review-repair-evidence.schema.json",
+            "scripts/run-round-close-controls.mjs"
+          ],
+          "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
+          "closure_state": "RED_REQUIRED"
+        },
+        {
+          "finding_id": "R2-F006",
+          "defect_class_id": "ACTIVE_CONTROL_CENSUS_ALLOWLIST_INCOMPLETE",
+          "severity": "P1",
+          "population_query": "Parse structured control provenance from the exact candidate tree, traverse every decision and manifest edge transitively, and compare every resolved identity and raw blob digest with the emitted census.",
+          "expected_complete_population": [
+            "DII-246",
+            "DII-247",
+            "DII-248",
+            "DII-249",
+            "all applicable active Owner mandates",
+            "every policy schema",
+            "policy, profile, graph, obligation, claim, prior-finding, closure-matrix, and provenance registries",
+            "bound declaration when present",
+            "authorization, plan, orchestrator, execution contract, AGENTS authority, and every prior-review evidence manifest"
+          ],
+          "adversarial_mutations": [
+            "hardcoded decision ID",
+            "profile-only allowlist entry",
+            "missing transitive decision",
+            "inactive or malformed mandate",
+            "unresolved, duplicate, missing, or extra control",
+            "substituted raw source blob"
+          ],
+          "required_behavior": [
+            "the exact candidate is the sole source of authority bytes",
+            "structured provenance traversal determines the complete population",
+            "any population or digest mismatch fails atomically"
+          ],
+          "test_ids": [
+            "R2-006-TRANSITIVE-PROVENANCE",
+            "R2-006-NO-ALLOWLIST-AUTHORITY",
+            "R2-006-RAW-BLOBS",
+            "R2-006-EXACT-POPULATION"
+          ],
+          "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+          "implementation_surfaces": [
+            "law/register/DECISIONS.md",
+            "law/schemas/control-provenance.schema.json",
+            "work/rounds/R-0007/control-provenance.json",
+            "scripts/run-round-close-controls.mjs"
+          ],
+          "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
+          "closure_state": "RED_REQUIRED"
+        },
+        {
+          "finding_id": "R2-F007",
+          "defect_class_id": "REVIEWER_BINDING_CENSUS_NOT_CANDIDATE_BOUND",
+          "severity": "P1",
+          "population_query": "Dirty every tracked mandate and profile binding independently while HEAD stays fixed, then invoke every reviewer-binding authority consumer.",
+          "expected_complete_population": [
+            "policy-check",
+            "entry-check",
+            "status",
+            "convergence",
+            "candidate proof",
+            "review-scope",
+            "review-check"
+          ],
+          "adversarial_mutations": [
+            "dirty mandate binding",
+            "dirty profile binding",
+            "missing explicit revision",
+            "unresolved or abbreviated revision"
+          ],
+          "required_behavior": [
+            "every authority consumer supplies one explicit full candidate SHA",
+            "mutable worktree bytes never change binding resolution",
+            "missing or ambiguous candidate identity fails closed"
+          ],
+          "test_ids": [
+            "R2-007-NO-WORKTREE-DEFAULT",
+            "R2-007-ALL-CONSUMERS-EXACT",
+            "R2-007-DIRTY-SUBSTITUTION"
+          ],
+          "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+          "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
+          "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
+          "closure_state": "RED_REQUIRED"
+        },
+        {
+          "finding_id": "R2-F008",
+          "defect_class_id": "SEMANTIC_OBLIGATION_POPULATION_UNCHECKED",
+          "severity": "P1",
+          "population_query": "Change each authoritative normative source and each obligation row independently, then prove that full-source digest coverage and stable obligation identities detect additions, removals, duplicates, and stale mappings.",
+          "expected_complete_population": [
+            "all ten obligation rows",
+            "OM-014",
+            "OM-015",
+            "OM-016",
+            "execution contract",
+            "R-0007 authorization",
+            "R-0007 plan",
+            "R-0007 orchestrator",
+            "AGENTS authority"
+          ],
+          "adversarial_mutations": [
+            "delete each obligation row",
+            "duplicate an obligation ID",
+            "add an unregistered normative source",
+            "change a covered source without refreshing its exact digest",
+            "map a source to an unknown obligation"
+          ],
+          "required_behavior": [
+            "every normative source is exact-candidate digest-bound to known obligation IDs",
+            "every obligation is referenced by at least one source",
+            "any source or registry population drift fails scope generation"
+          ],
+          "test_ids": [
+            "R2-008-ALL-SOURCES-COVERED",
+            "R2-008-OBLIGATION-EXACT-ONCE",
+            "R2-008-SOURCE-DIGEST-DRIFT",
+            "R2-008-UNREGISTERED-SOURCE"
+          ],
+          "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+          "implementation_surfaces": [
+            "law/schemas/review-obligations.schema.json",
+            "work/rounds/R-0007/review-obligations.json",
+            "scripts/run-round-close-controls.mjs"
+          ],
+          "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
+          "closure_state": "RED_REQUIRED"
+        }
+      ]
+    }
+  ]
 }
