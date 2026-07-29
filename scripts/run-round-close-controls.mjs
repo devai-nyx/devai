@@ -5756,6 +5756,14 @@ function deriveControlProvenanceV6(context, candidate, findings) {
       container?.status === mandate.required_status
         ? 'active'
         : 'inactive';
+    if (status !== 'active')
+      findings.push(
+        finding(
+          'ACTIVE_CONTROL_CENSUS_CONFLICT',
+          'Owner mandate container conflicts with structured control provenance',
+          { mandate_id: mandate.mandate_id, path: mandate.path },
+        ),
+      );
     add(mandate.mandate_id, 'owner-mandate', mandate.path, 'authority-reference', status);
   }
 
