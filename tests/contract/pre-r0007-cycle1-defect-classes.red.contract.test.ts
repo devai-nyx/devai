@@ -541,9 +541,16 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
     const cold = run(current, 'smart-converge', ['--base', current.base, '--head', candidate]);
     expect(cold.status).toBe(0);
     const freshness = join(current.root, `.devai/state/round-runs/${ROUND}/close/freshness/tasks`);
-    const unitAPath = join(freshness, 'unit-a', readdirSync(join(freshness, 'unit-a'))[0]!);
+    const [unitARecord] = readdirSync(join(freshness, 'unit-a'));
+    expect(unitARecord).toBeDefined();
+    if (unitARecord === undefined) throw new Error('unit-a freshness record missing');
+    const unitAPath = join(freshness, 'unit-a', unitARecord);
     const value = JSON.parse(readFileSync(unitAPath, 'utf8')) as Record<string, unknown>;
-    const body = { ...value, task_id: 'unit-b', task_key: 'f'.repeat(64) };
+    const body: Record<string, unknown> = {
+      ...value,
+      task_id: 'unit-b',
+      task_key: 'f'.repeat(64),
+    };
     delete body.result_digest;
     putJson(current.root, unitAPath.slice(current.root.length + 1), {
       ...body,
@@ -562,9 +569,12 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
     const cold = run(current, 'smart-converge', ['--base', current.base, '--head', candidate]);
     expect(cold.status).toBe(0);
     const freshness = join(current.root, `.devai/state/round-runs/${ROUND}/close/freshness/tasks`);
-    const unitAPath = join(freshness, 'unit-a', readdirSync(join(freshness, 'unit-a'))[0]!);
+    const [unitARecord] = readdirSync(join(freshness, 'unit-a'));
+    expect(unitARecord).toBeDefined();
+    if (unitARecord === undefined) throw new Error('unit-a freshness record missing');
+    const unitAPath = join(freshness, 'unit-a', unitARecord);
     const value = JSON.parse(readFileSync(unitAPath, 'utf8')) as Record<string, unknown>;
-    const body = { ...value, result: 'EXECUTED_FAIL', exit_code: 1 };
+    const body: Record<string, unknown> = { ...value, result: 'EXECUTED_FAIL', exit_code: 1 };
     delete body.result_digest;
     putJson(current.root, unitAPath.slice(current.root.length + 1), {
       ...body,
@@ -624,7 +634,9 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
     expect(scoped.status).toBe(0);
     const manifest = scoped.value.manifest as Record<string, unknown>;
     const review = passingReview(manifest);
-    const disposition = (review.dispositions as Array<Record<string, unknown>>)[0]!;
+    const [disposition] = review.dispositions as Array<Record<string, unknown>>;
+    expect(disposition).toBeDefined();
+    if (disposition === undefined) throw new Error('review disposition missing');
     disposition.finding_ids = ['F-ORPHAN'];
     const header = { ...review, type: 'header' } as Record<string, unknown>;
     delete header.dispositions;
@@ -713,7 +725,9 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
     >;
     ledger.mode = 'materialized';
     ledger.candidate = candidate;
-    const claim = (ledger.claims as Array<Record<string, unknown>>)[0]!;
+    const [claim] = ledger.claims as Array<Record<string, unknown>>;
+    expect(claim).toBeDefined();
+    if (claim === undefined) throw new Error('claim fixture missing');
     claim.source_digest = 'a'.repeat(64);
     claim.value_digest = 'b'.repeat(64);
     putJson(current.root, ledgerPath, ledger);
