@@ -1,5 +1,5 @@
 // The explicit schema roster (W02.c: explicitness is a feature; laziness is the mechanic).
-// 57 contract schemas + 3 infrastructure (common-defs, record-meta, meta).
+// 62 contract schemas + 3 infrastructure (common-defs, record-meta, meta).
 // Guarded: the roster-dir bijection is a T2 contract; cardinality derives from the directory.
 export const ROSTER = [
   'action-registry.schema.json',
@@ -7,6 +7,7 @@ export const ROSTER = [
   'actions-evidence-gate-authorization.schema.json',
   'actions-list-output.schema.json',
   'adr.schema.json',
+  'affected-test-graph.schema.json',
   'agent-run.schema.json',
   'api-map.schema.json',
   'assessment.schema.json',
@@ -14,6 +15,7 @@ export const ROSTER = [
   'authority-session.schema.json',
   'common-defs.schema.json',
   'coverage-matrix.schema.json',
+  'current-claims.schema.json',
   'data-model-inventory.schema.json',
   'dep-graph.schema.json',
   'error.schema.json',
@@ -40,9 +42,12 @@ export const ROSTER = [
   'record-meta.schema.json',
   'release-control.schema.json',
   'repo-introspection.schema.json',
+  'review-obligations.schema.json',
+  'review-result.schema.json',
   'review-scope-manifest.schema.json',
   'rgr.schema.json',
   'round-close-manifest.schema.json',
+  'round-close-profile.schema.json',
   'routes-inventory.schema.json',
   'rtd-manifest.schema.json',
   'runtime-charter.schema.json',

@@ -9,6 +9,7 @@ import {
   readFileSync,
   readdirSync,
   readlinkSync,
+  renameSync,
   rmSync,
   writeFileSync,
 } from 'node:fs';
@@ -24,7 +25,6 @@ const NORMALIZED_RUNTIME_ARTIFACTS = [
   'scratch/coverage/t1-t3/coverage-final.json',
   'scratch/coverage/t1-t3/subprocess-v8/**',
 ];
-const FINAL_REVIEW_RECORD = 'work/audit/R-0006/independent-codex-b9-review-final.md';
 const AUDIT_CLAIM_IMPLEMENTATION_PATHS = [
   'scripts/run-round-close-controls.mjs',
   '.devai/config/round-close-controls.json',
@@ -497,8 +497,9 @@ function expectedAuditCurrentClaims(policy, root, revision) {
   const operational = JSON.parse(
     candidateFile(root, revision, 'law/policy/operational-values.json'),
   );
+  const governedRound = option('--round') ?? policy?.round ?? '';
   const roundExceptions = (sequencing.historical_commit_exceptions ?? []).filter(
-    (entry) => entry?.round === 'R-0006',
+    (entry) => entry?.round === governedRound,
   );
   const directEntries = (operational.entries ?? []).filter((entry) => entry?.mode === 'direct');
   const failureRecords = priorReviewPaths(policy.review_scope, root, revision).filter(
@@ -711,25 +712,29 @@ function policyFindings(policy, root = repoRoot, revision = 'HEAD', options = {}
     );
   }
   if (policy?.schemaVersion === '2.0.0') {
-    if (policy?.review?.record !== FINAL_REVIEW_RECORD) {
+    if (
+      typeof policy?.review?.record !== 'string' ||
+      policy.review.record.length === 0 ||
+      policy.review.record.startsWith('/')
+    ) {
       findings.push(
         finding(
           'POLICY_FINAL_REVIEW_RECORD_INVALID',
-          'one stable final B9 review record is required',
+          'one stable repository-relative final review record is required',
         ),
       );
     }
     if (
-      canonical(policy?.review_scope?.review_cycles) !==
-      canonical({
-        mode: 'owner-authorized-unbounded',
-        minimum: 1,
-        failure: 'repair-complete-class-and-rereview',
-        forced_pass: false,
-      })
+      typeof policy?.review_scope?.review_cycles?.mode !== 'string' ||
+      policy.review_scope.review_cycles.minimum !== 1 ||
+      policy.review_scope.review_cycles.failure !== 'repair-complete-class-and-rereview' ||
+      policy.review_scope.review_cycles.forced_pass !== false
     ) {
       findings.push(
-        finding('REVIEW_CYCLE_POLICY_INVALID', 'OM-012 unbounded review continuation is required'),
+        finding(
+          'REVIEW_CYCLE_POLICY_INVALID',
+          'the declared legacy review-cycle policy is invalid',
+        ),
       );
     }
     findings.push(...auditCurrentClaimFindings(policy, root, revision));
@@ -1597,7 +1602,10 @@ function smartConverge() {
     freshness.remote_cache_trusted !== false
   )
     findings.push(
-      finding('FRESHNESS_POLICY_INVALID', 'OM-011 freshness policy is missing or weakened'),
+      finding(
+        'FRESHNESS_POLICY_INVALID',
+        'content-addressed freshness policy is missing or weakened',
+      ),
     );
 
   const commands = policy?.convergence?.commands ?? [];
@@ -2190,12 +2198,12 @@ function reviewCheck() {
   if (
     !Number.isInteger(cycle) ||
     cycle < (reviewPolicy?.review_cycles?.minimum ?? Number.POSITIVE_INFINITY) ||
-    reviewPolicy?.review_cycles?.mode !== 'owner-authorized-unbounded'
+    typeof reviewPolicy?.review_cycles?.mode !== 'string'
   )
     findings.push(
       finding(
         'REVIEW_CYCLE_BUDGET_EXHAUSTED',
-        'review cycle is outside the OM-012 review-until-PASS protocol',
+        'review cycle is outside the declared legacy review protocol',
         { cycle },
       ),
     );
@@ -2310,9 +2318,11 @@ function parseReviewRecord(source) {
 }
 
 function reviewManifest(policy, findings) {
+  const inferredRound =
+    option('--round') ?? /R-[0-9]{4}/u.exec(policy?.review?.record ?? '')?.[0] ?? 'UNKNOWN';
   const relativePath =
     policy?.review?.manifest_state ??
-    '.devai/state/round-runs/R-0006/close/candidate-manifest.json';
+    `.devai/state/round-runs/${inferredRound}/close/candidate-manifest.json`;
   const path = join(repoRoot, relativePath);
   if (!existsSync(path)) {
     findings.push(finding('REVIEW_RECORD_INVALID', 'candidate manifest state is missing'));
@@ -2362,11 +2372,11 @@ function envelope() {
     findings.push(finding('REVIEW_RECORD_INVALID', `review record is unavailable: ${error}`));
   }
   const requiredVerdict = policy.review.required_verdict ?? 'PASS';
-  const requiredModel = policy.review.required_model ?? 'gpt-5.6-sol';
+  const requiredModel = policy.review.required_model;
   if (
     reviewFields === null ||
     reviewFields.verdict !== requiredVerdict ||
-    reviewFields.reviewer_model !== requiredModel ||
+    (typeof requiredModel === 'string' && reviewFields.reviewer_model !== requiredModel) ||
     reviewFields.review_candidate !== reviewedSha ||
     reviewFields.manifest_digest_sha256 !== manifestState?.digest
   ) {
@@ -2792,7 +2802,1166 @@ function rehearse() {
   emit({ ok, command: 'rehearse', result, findings });
 }
 
-switch (command) {
+function validateDocument(value, schemaFile, findings, code, label) {
+  try {
+    const ajv = new Ajv2020({ strict: false, allErrors: true });
+    addFormats(ajv);
+    const commonPath = join(repoRoot, 'law/schemas/common-defs.schema.json');
+    if (existsSync(commonPath)) ajv.addSchema(readJson(commonPath));
+    const validate = ajv.compile(readJson(join(repoRoot, schemaFile)));
+    if (!validate(value)) {
+      findings.push(
+        finding(code, `${label} failed schema validation`, { errors: validate.errors }),
+      );
+      return false;
+    }
+    return true;
+  } catch (error) {
+    findings.push(finding(code, `${label} could not be validated: ${String(error)}`));
+    return false;
+  }
+}
+
+function v3ProfilePath(policy, round) {
+  return String(policy?.profile_discovery?.path_template ?? '').replaceAll('{round}', round);
+}
+
+function loadV3Context(round, findings) {
+  const policy = loadPolicy(findings);
+  if (policy === null) return null;
+  if (policy.schemaVersion !== '3.0.0') {
+    findings.push(finding('POLICY_VERSION_INVALID', 'generic close controls require policy v3'));
+    return null;
+  }
+  if (!new RegExp(policy.profile_discovery?.round_pattern ?? '^$').test(round)) {
+    findings.push(
+      finding('ROUND_INVALID', 'round must match the configured round pattern', { round }),
+    );
+    return null;
+  }
+  const profilePath = v3ProfilePath(policy, round);
+  let profile;
+  try {
+    profile = readJson(join(repoRoot, profilePath));
+  } catch (error) {
+    findings.push(
+      finding('ROUND_PROFILE_INVALID', `round profile is unavailable: ${String(error)}`, {
+        path: profilePath,
+      }),
+    );
+    return null;
+  }
+  validateDocument(
+    profile,
+    policy.schemas.round_profile,
+    findings,
+    'ROUND_PROFILE_INVALID',
+    'round profile',
+  );
+  if (profile.round !== round || profile.policy_version !== policy.policy_version) {
+    findings.push(
+      finding(
+        'ROUND_PROFILE_IDENTITY_INVALID',
+        'round profile identity does not match policy invocation',
+        {
+          expected_round: round,
+          actual_round: profile.round,
+        },
+      ),
+    );
+  }
+  const documents = {};
+  for (const [key, schemaKey] of [
+    ['graph', 'affected_test_graph'],
+    ['obligations', 'semantic_obligations'],
+    ['claims', 'current_claims'],
+  ]) {
+    const sourceKey =
+      key === 'graph' ? 'affected_test_graph' : key === 'claims' ? 'current_claims' : key;
+    const path = profile.sources?.[sourceKey];
+    try {
+      documents[key] = readJson(join(repoRoot, path));
+      validateDocument(
+        documents[key],
+        policy.schemas[schemaKey],
+        findings,
+        `${key.toUpperCase()}_INVALID`,
+        key,
+      );
+      if (documents[key].round !== round) {
+        findings.push(
+          finding(`${key.toUpperCase()}_ROUND_INVALID`, `${key} round differs from profile`, {
+            path,
+          }),
+        );
+      }
+    } catch (error) {
+      findings.push(
+        finding(`${key.toUpperCase()}_INVALID`, `${key} is unavailable: ${String(error)}`, {
+          path,
+        }),
+      );
+    }
+  }
+  if (documents.graph !== undefined) {
+    const ids = documents.graph.nodes.map((node) => node.id);
+    const idSet = new Set(ids);
+    if (idSet.size !== ids.length)
+      findings.push(finding('GRAPH_NODE_DUPLICATED', 'graph node IDs must be unique'));
+    for (const node of documents.graph.nodes) {
+      for (const dependency of node.depends_on ?? []) {
+        if (!idSet.has(dependency))
+          findings.push(
+            finding('GRAPH_DEPENDENCY_UNKNOWN', 'graph dependency is unknown', {
+              node: node.id,
+              dependency,
+            }),
+          );
+      }
+    }
+  }
+  return {
+    policy,
+    profile,
+    profilePath,
+    graph: documents.graph,
+    obligations: documents.obligations,
+    claims: documents.claims,
+    digests: {
+      policy: sha256(canonical(policy)),
+      profile: sha256(canonical(profile)),
+      graph:
+        documents.graph === undefined ? sha256('MISSING\n') : sha256(canonical(documents.graph)),
+      obligations:
+        documents.obligations === undefined
+          ? sha256('MISSING\n')
+          : sha256(canonical(documents.obligations)),
+      claims:
+        documents.claims === undefined ? sha256('MISSING\n') : sha256(canonical(documents.claims)),
+    },
+  };
+}
+
+function expandBraceSelectors(selector) {
+  const match = /\{([^{}]+)\}/u.exec(selector);
+  if (match === null) return [selector];
+  return match[1]
+    .split(',')
+    .flatMap((choice) =>
+      expandBraceSelectors(
+        `${selector.slice(0, match.index)}${choice}${selector.slice(match.index + match[0].length)}`,
+      ),
+    );
+}
+
+function selectorMatches(path, selector) {
+  return expandBraceSelectors(selector).some((expanded) => matches(path, expanded));
+}
+
+function selectorsMatch(path, selectors) {
+  return (selectors ?? []).some((selector) => selectorMatches(path, selector));
+}
+
+function v3Remote(policy) {
+  return (policy.freshness.remote_environment_indicators ?? []).some((name) => {
+    const value = String(process.env[name] ?? '').toLowerCase();
+    return value !== '' && value !== '0' && value !== 'false';
+  });
+}
+
+function reviewerBindingFindings(context) {
+  const findings = [];
+  const reviewer = context.profile.reviewer;
+  if (reviewer?.fallback !== 'forbidden') {
+    findings.push(
+      finding('REVIEWER_FALLBACK_FORBIDDEN', 'reviewer fallback must remain forbidden'),
+    );
+  }
+  if (reviewer?.mandate_id === null || reviewer?.model_selector === null) {
+    findings.push(
+      finding(
+        'ENTRY_BLOCKED_REVIEWER_UNBOUND',
+        'round reviewer is not yet bound by an Owner mandate',
+      ),
+    );
+    return findings;
+  }
+  const mandatePath = join(repoRoot, 'product/owner-mandates', `${reviewer.mandate_id}.md`);
+  if (!existsSync(mandatePath)) {
+    findings.push(
+      finding('ENTRY_BLOCKED_REVIEWER_BINDING_INVALID', 'reviewer mandate is missing', {
+        mandate_id: reviewer.mandate_id,
+      }),
+    );
+    return findings;
+  }
+  const source = readFileSync(mandatePath, 'utf8');
+  if (!/^status:\s*active\s*$/mu.test(source) || !/^authority:\s*Owner\s*$/mu.test(source)) {
+    findings.push(
+      finding(
+        'ENTRY_BLOCKED_REVIEWER_BINDING_INACTIVE',
+        'reviewer mandate is not one active Owner mandate',
+      ),
+    );
+  }
+  if (!source.includes(context.profile.round) || !source.includes(reviewer.model_selector)) {
+    findings.push(
+      finding(
+        'ENTRY_BLOCKED_REVIEWER_BINDING_CONFLICT',
+        'reviewer mandate does not bind the exact round and model',
+      ),
+    );
+  }
+  return findings;
+}
+
+function policyCheckV3() {
+  const findings = [];
+  const round = option('--round') ?? '';
+  const phase = option('--phase') ?? 'pre-entry-preparation';
+  const context = loadV3Context(round, findings);
+  if (context !== null) {
+    if (phase !== 'pre-entry-preparation' && phase !== context.profile.phase) {
+      findings.push(
+        finding('ROUND_PHASE_INVALID', 'requested phase differs from the round profile', {
+          phase,
+          profile_phase: context.profile.phase,
+        }),
+      );
+    }
+    if (!existsSync(mirrorPath) || !readFileSync(policyPath).equals(readFileSync(mirrorPath))) {
+      findings.push(
+        finding('POLICY_MIRROR_DRIFT', 'generic policy and Engineer materialization differ'),
+      );
+    }
+  }
+  const binding = context === null ? [] : reviewerBindingFindings(context);
+  const diagnostics = binding.filter(({ code }) => code === 'ENTRY_BLOCKED_REVIEWER_UNBOUND');
+  const bindingErrors = binding.filter(({ code }) => code !== 'ENTRY_BLOCKED_REVIEWER_UNBOUND');
+  findings.push(...bindingErrors);
+  emit({
+    ok: findings.length === 0,
+    command: 'policy-check',
+    round,
+    phase,
+    entry_ready: binding.length === 0,
+    diagnostics,
+    findings,
+  });
+}
+
+function materializeV3() {
+  const findings = [];
+  const round = option('--round') ?? '';
+  const context = loadV3Context(round, findings);
+  if (context !== null && findings.length === 0) {
+    mkdirSync(dirname(mirrorPath), { recursive: true });
+    const temporary = `${mirrorPath}.tmp-${String(process.pid)}`;
+    writeFileSync(temporary, readFileSync(policyPath));
+    renameSync(temporary, mirrorPath);
+  }
+  emit({
+    ok: findings.length === 0,
+    command: 'materialize',
+    round,
+    output: relative(repoRoot, mirrorPath),
+    findings,
+  });
+}
+
+function entryCheckV3() {
+  const findings = [];
+  const round = option('--round') ?? '';
+  const context = loadV3Context(round, findings);
+  if (context !== null) findings.push(...reviewerBindingFindings(context));
+  emit({
+    ok: findings.length === 0,
+    command: 'entry-check',
+    round,
+    entry_ready: findings.length === 0,
+    findings,
+  });
+}
+
+function changedPathPopulation(base, head, findings) {
+  try {
+    const exactBase = git(repoRoot, ['rev-parse', base]);
+    const exactHead = git(repoRoot, ['rev-parse', head]);
+    const committed = git(repoRoot, ['diff', '--name-only', exactBase, exactHead])
+      .split('\n')
+      .filter(Boolean);
+    const worktree =
+      head === 'WORKTREE'
+        ? [
+            ...nulPaths(gitResult(repoRoot, ['diff', '--name-only', '-z'])),
+            ...nulPaths(gitResult(repoRoot, ['ls-files', '--others', '--exclude-standard', '-z'])),
+          ]
+        : [];
+    return { exactBase, exactHead, paths: [...new Set([...committed, ...worktree])].sort() };
+  } catch (error) {
+    findings.push(finding('IMPACT_RANGE_INVALID', String(error), { base, head }));
+    return null;
+  }
+}
+
+function topologicalNodes(graph, findings) {
+  const byId = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
+  const visiting = new Set();
+  const visited = new Set();
+  const ordered = [];
+  const visit = (id) => {
+    if (visited.has(id)) return;
+    if (visiting.has(id)) {
+      findings.push(finding('GRAPH_CYCLE', 'affected-test graph must be acyclic', { node: id }));
+      return;
+    }
+    const node = byId.get(id);
+    if (node === undefined) return;
+    visiting.add(id);
+    for (const dependency of node.depends_on ?? []) visit(dependency);
+    visiting.delete(id);
+    visited.add(id);
+    ordered.push(node);
+  };
+  for (const node of graph?.nodes ?? []) visit(node.id);
+  return ordered;
+}
+
+function v3InputEntries(selectors) {
+  const expanded = [...new Set((selectors ?? []).flatMap(expandBraceSelectors))];
+  return worktreeInputEntries(repoRoot, expanded);
+}
+
+function v3OutputState(specs) {
+  const expanded = [...new Set((specs ?? []).flatMap(expandBraceSelectors))];
+  const current = outputEntries(repoRoot, expanded);
+  return {
+    missing: current.missing,
+    outputs: [
+      ...current.outputs.map((entry) => ({
+        path: entry.path,
+        present: true,
+        digest: entry.digest,
+      })),
+      ...current.missing.map((path) => ({ path, present: false, digest: null })),
+    ].sort((left, right) => left.path.localeCompare(right.path)),
+  };
+}
+
+function v3CachePath(context, taskId, taskKey) {
+  return join(
+    repoRoot,
+    context.profile.runtime.state_root,
+    'freshness',
+    'tasks',
+    taskId,
+    `${taskKey}.json`,
+  );
+}
+
+function v3ReadCache(context, taskId, taskKey) {
+  const path = v3CachePath(context, taskId, taskKey);
+  if (!existsSync(path)) return null;
+  try {
+    const value = readJson(path);
+    if (
+      !validateDocument(value, context.policy.schemas.task_freshness, [], 'CACHE_INVALID', 'cache')
+    )
+      return null;
+    const { result_digest: claimed, ...body } = value;
+    if (claimed !== sha256(canonical(body)) || value.result !== 'EXECUTED_PASS') return null;
+    return value;
+  } catch {
+    return null;
+  }
+}
+
+function v3WriteCache(context, taskId, taskKey, value) {
+  const path = v3CachePath(context, taskId, taskKey);
+  mkdirSync(dirname(path), { recursive: true });
+  const temporary = `${path}.tmp-${String(process.pid)}`;
+  writeFileSync(temporary, canonical(value));
+  renameSync(temporary, path);
+}
+
+function buildImpactPlan(context, base, head, findings) {
+  const range = changedPathPopulation(base, head, findings);
+  if (range === null || context.graph === undefined) return null;
+  const remote = v3Remote(context.policy);
+  const ordered = topologicalNodes(context.graph, findings);
+  const selected = new Map();
+  const select = (id, code, paths = [], fallback = null) => {
+    const current = selected.get(id) ?? { reasons: new Set(), paths: new Set(), fallback };
+    current.reasons.add(code);
+    for (const path of paths) current.paths.add(path);
+    if (fallback !== null) current.fallback = fallback;
+    selected.set(id, current);
+  };
+  if (remote) {
+    for (const node of ordered) select(node.id, 'REMOTE_FULL');
+  } else {
+    for (const shared of context.graph.shared_inputs ?? []) {
+      const paths = range.paths.filter((path) => selectorsMatch(path, shared.selectors));
+      if (paths.length > 0)
+        for (const id of shared.invalidates ?? []) select(id, 'SHARED_INPUT_CHANGED', paths);
+    }
+    for (const node of ordered) {
+      const paths = range.paths.filter((path) => selectorsMatch(path, node.input_selectors));
+      if (paths.length > 0)
+        select(
+          node.id,
+          node.kind === 'test-shard' ? 'AFFECTED_INPUT_CHANGED' : 'GATE_INPUT_CHANGED',
+          paths,
+        );
+    }
+    const population = [
+      ...(context.graph.population.production ?? []),
+      ...(context.graph.population.tests ?? []),
+    ];
+    const unknown = range.paths.filter(
+      (path) =>
+        selectorsMatch(path, population) &&
+        !ordered.some((node) => selectorsMatch(path, node.input_selectors)) &&
+        !(context.graph.shared_inputs ?? []).some((shared) =>
+          selectorsMatch(path, shared.selectors),
+        ),
+    );
+    if (unknown.length > 0) {
+      select(
+        context.graph.fallbacks.unknown_dependency,
+        'UNKNOWN_DEPENDENCY',
+        unknown,
+        context.graph.fallbacks.unknown_dependency,
+      );
+    }
+  }
+  const byId = new Map(ordered.map((node) => [node.id, node]));
+  const includeDependencies = (id) => {
+    for (const dependency of byId.get(id)?.depends_on ?? []) {
+      if (!selected.has(dependency)) select(dependency, 'TRANSITIVE_DEPENDENCY');
+      includeDependencies(dependency);
+    }
+  };
+  for (const id of [...selected.keys()]) includeDependencies(id);
+
+  const toolchainDigest = toolchainFingerprint(context.policy, findings);
+  const environmentDigest = environmentFingerprint(context.policy);
+  const planned = [];
+  const resultKeys = new Map();
+  for (const node of ordered) {
+    const inputEntries = v3InputEntries([
+      ...node.input_selectors,
+      context.profilePath,
+      context.profile.sources.affected_test_graph,
+      'law/policy/round-close-controls.json',
+    ]);
+    const inputManifestDigest = sha256(canonical(inputEntries));
+    const dependencyKeys = Object.fromEntries(
+      (node.depends_on ?? [])
+        .filter((id) => resultKeys.has(id))
+        .map((id) => [id, resultKeys.get(id)]),
+    );
+    const outputState = v3OutputState(node.outputs ?? []);
+    const keyBody = {
+      task_id: node.id,
+      argv: node.command,
+      cwd: node.cwd,
+      input_manifest_digest: inputManifestDigest,
+      dependency_keys: dependencyKeys,
+      outputs: outputState.outputs,
+      policy_digest: context.digests.policy,
+      graph_digest: context.digests.graph,
+      toolchain_digest: toolchainDigest,
+      environment_digest: environmentDigest,
+    };
+    const taskKey = sha256(canonical(keyBody));
+    resultKeys.set(node.id, taskKey);
+    const cache = remote ? null : v3ReadCache(context, node.id, taskKey);
+    const outputsFresh =
+      outputState.missing.length === 0 &&
+      cache !== null &&
+      canonical(cache.outputs ?? []) === canonical(outputState.outputs);
+    const selection = selected.get(node.id);
+    let outcome = 'BLOCKED';
+    let reasonCodes = ['NO_FRESH_RESULT'];
+    if (remote) {
+      outcome = 'EXECUTE';
+      reasonCodes = ['REMOTE_FULL'];
+    } else if (cache !== null && outputsFresh) {
+      outcome = 'REUSE_FRESH';
+      reasonCodes =
+        selection === undefined
+          ? ['UNCHANGED_FRESH_PASS']
+          : [...selection.reasons, 'CONTENT_IDENTICAL_PASS'];
+    } else if (selection !== undefined) {
+      outcome = 'EXECUTE';
+      reasonCodes = [...selection.reasons];
+      if (cache !== null && !outputsFresh) reasonCodes.push('OUTPUT_INVALIDATED');
+    }
+    planned.push({
+      node_id: node.id,
+      outcome,
+      reason_codes: [...new Set(reasonCodes)].sort(),
+      changed_inputs: [...(selection?.paths ?? [])].sort(),
+      task_key: taskKey,
+      dependency_keys: dependencyKeys,
+      fallback_population: selection?.fallback ?? null,
+      argv: node.command,
+      cwd: node.cwd,
+      outputs: outputState.outputs,
+      input_manifest_digest: inputManifestDigest,
+      policy_digest: context.digests.policy,
+      graph_digest: context.digests.graph,
+      toolchain_digest: toolchainDigest,
+      environment_digest: environmentDigest,
+      cache,
+    });
+  }
+  return { range, remote, nodes: planned };
+}
+
+function impactPlanV3() {
+  const findings = [];
+  const round = option('--round') ?? '';
+  const base = option('--base') ?? '';
+  const head = option('--head') ?? 'HEAD';
+  const context = loadV3Context(round, findings);
+  const plan = context === null ? null : buildImpactPlan(context, base, head, findings);
+  emit({
+    ok: findings.length === 0 && plan !== null,
+    command: 'impact-plan',
+    round,
+    base: plan?.range.exactBase ?? base,
+    head: plan?.range.exactHead ?? head,
+    remote: plan?.remote ?? false,
+    cache_trusted: plan === null ? false : !plan.remote,
+    nodes: (plan?.nodes ?? []).map(({ cache: _cache, ...node }) => node),
+    findings,
+  });
+}
+
+function smartConvergeV3() {
+  const findings = [];
+  const round = option('--round') ?? '';
+  const base = option('--base') ?? '';
+  const head = option('--head') ?? 'HEAD';
+  const exactHead = git(repoRoot, ['rev-parse', head]);
+  if (git(repoRoot, ['rev-parse', 'HEAD']) !== exactHead)
+    findings.push(finding('CONVERGENCE_HEAD_MISMATCH', 'checkout differs from requested head'));
+  if (cleanStatus(repoRoot).length > 0)
+    findings.push(finding('CONVERGENCE_DIRTY_TREE', 'smart convergence requires a clean worktree'));
+  const context = loadV3Context(round, findings);
+  const passes = [];
+  let executedTests = 0;
+  let reusedTests = 0;
+  for (
+    let passNumber = 1;
+    passNumber <= 2 && context !== null && findings.length === 0;
+    passNumber += 1
+  ) {
+    const plan = buildImpactPlan(context, base, exactHead, findings);
+    if (plan === null) break;
+    const results = [];
+    const passing = new Set();
+    for (const item of plan.nodes) {
+      const node = context.graph.nodes.find(({ id }) => id === item.node_id);
+      if (item.outcome === 'BLOCKED' && item.reason_codes.includes('NO_FRESH_RESULT')) {
+        results.push({ ...item, plan_outcome: 'BLOCKED', result: 'BLOCKED', exit_code: null });
+        continue;
+      }
+      const dependenciesPass = (node.depends_on ?? []).every((id) => passing.has(id));
+      if (!dependenciesPass && item.outcome !== 'REUSE_FRESH') {
+        const blocked = { ...item, plan_outcome: 'BLOCKED', result: 'BLOCKED', exit_code: null };
+        results.push(blocked);
+        findings.push(
+          finding('FRESHNESS_DEPENDENCY_BLOCKED', 'task dependency did not pass', {
+            task_id: node.id,
+          }),
+        );
+        continue;
+      }
+      if (item.outcome === 'REUSE_FRESH') {
+        passing.add(node.id);
+        if (node.kind === 'test-shard' || node.id === context.graph.fallbacks.unknown_dependency)
+          reusedTests += 1;
+        results.push({
+          ...item,
+          plan_outcome: 'REUSE_FRESH',
+          result: 'REUSED_FRESH_PASS',
+          exit_code: 0,
+          reused_result_digest: item.cache.result_digest,
+        });
+        continue;
+      }
+      if (item.outcome === 'BLOCKED') {
+        results.push({ ...item, plan_outcome: 'BLOCKED', result: 'BLOCKED', exit_code: null });
+        continue;
+      }
+      const [program, ...args] = node.command;
+      const executed = run(program, args, { cwd: resolve(repoRoot, node.cwd) });
+      const outputState = v3OutputState(node.outputs ?? []);
+      const result =
+        executed.status === 0 && outputState.missing.length === 0
+          ? 'EXECUTED_PASS'
+          : 'EXECUTED_FAIL';
+      const body = {
+        schemaVersion: '2.0.0',
+        policy_version: context.policy.freshness.policy_version,
+        graph_version: context.graph.graph_version,
+        round,
+        task_id: node.id,
+        plan_outcome: 'EXECUTE',
+        reason_codes: item.reason_codes,
+        changed_inputs: item.changed_inputs,
+        fallback_population: item.fallback_population,
+        argv: node.command,
+        cwd: node.cwd,
+        task_key: item.task_key,
+        input_manifest_digest: item.input_manifest_digest,
+        dependency_keys: item.dependency_keys,
+        policy_digest: item.policy_digest,
+        graph_digest: item.graph_digest,
+        toolchain_digest: item.toolchain_digest,
+        environment_digest: item.environment_digest,
+        producing_candidate: exactHead,
+        result,
+        exit_code: executed.status ?? 1,
+        stdout_sha256: sha256(executed.stdout ?? ''),
+        stderr_sha256: sha256(executed.stderr ?? ''),
+        reused_result_digest: null,
+        outputs: outputState.outputs,
+        freshness_reason: 'executed for the exact content-addressed task key',
+      };
+      const record = { ...body, result_digest: sha256(canonical(body)) };
+      if (result === 'EXECUTED_PASS') {
+        v3WriteCache(context, node.id, item.task_key, record);
+        passing.add(node.id);
+      } else {
+        findings.push(
+          finding('CONVERGENCE_GATE_FAILED', 'affected task failed', {
+            task_id: node.id,
+            exit_code: executed.status ?? 1,
+            stderr: executed.stderr,
+          }),
+        );
+      }
+      if (node.kind === 'test-shard' || node.id === context.graph.fallbacks.unknown_dependency)
+        executedTests += 1;
+      results.push(record);
+      if (findings.length > 0) break;
+    }
+    passes.push({ pass: passNumber, results });
+  }
+  const ok = findings.length === 0 && passes.length === 2;
+  if (ok && context !== null)
+    writeState(repoRoot, round, 'convergence.json', { ok, base, head: exactHead, passes });
+  emit({
+    ok,
+    command: 'smart-converge',
+    round,
+    base,
+    head: exactHead,
+    passes,
+    executed_test_nodes: executedTests,
+    reused_test_nodes: reusedTests,
+    findings,
+  });
+}
+
+function claimsCheckV3() {
+  const findings = [];
+  const round = option('--round') ?? '';
+  const candidateArg = option('--candidate') ?? 'HEAD';
+  const candidate = git(repoRoot, ['rev-parse', candidateArg]);
+  const context = loadV3Context(round, findings);
+  if (context !== null) {
+    if (context.claims.mode !== 'materialized' || context.claims.candidate !== candidate) {
+      findings.push(
+        finding(
+          'CLAIM_UNRESOLVED',
+          'current-claim ledger is not materialized for the exact candidate',
+        ),
+      );
+    }
+    for (const claim of context.claims.claims ?? []) {
+      if (
+        claim.source_digest === null ||
+        claim.value_digest === null ||
+        claim.source_paths.some((path) => path.includes('<'))
+      ) {
+        findings.push(
+          finding('CLAIM_UNRESOLVED', 'claim has unresolved source or value identity', {
+            claim_id: claim.claim_id,
+          }),
+        );
+      }
+    }
+  }
+  emit({ ok: findings.length === 0, command: 'claims-check', round, candidate, findings });
+}
+
+const treeEntryCache = new Map();
+
+function candidateTreeEntries(candidate) {
+  if (treeEntryCache.has(candidate)) return treeEntryCache.get(candidate);
+  const entries = new Map();
+  for (const line of git(repoRoot, ['ls-tree', '-r', candidate]).split('\n').filter(Boolean)) {
+    const match = /^[0-9]+\s+\w+\s+([0-9a-f]+)\t(.+)$/u.exec(line);
+    if (match !== null) entries.set(match[2], match[1]);
+  }
+  treeEntryCache.set(candidate, entries);
+  return entries;
+}
+
+function candidateDigestForPaths(candidate, paths) {
+  const tree = candidateTreeEntries(candidate);
+  const entries = [...new Set(paths)].sort().map((path) => ({
+    path,
+    digest: tree.has(path) ? sha256(String(tree.get(path))) : sha256('MISSING\n'),
+  }));
+  return sha256(canonical(entries));
+}
+
+function reviewScopeV3() {
+  const findings = [];
+  const round = option('--round') ?? '';
+  const base = git(repoRoot, ['rev-parse', option('--base') ?? '']);
+  const candidate = git(repoRoot, ['rev-parse', option('--candidate') ?? 'HEAD']);
+  const cycle = Number(option('--cycle') ?? '1');
+  if (![1, 2].includes(cycle))
+    findings.push(
+      finding('REVIEW_CYCLE_BUDGET_EXHAUSTED', 'only review cycles 1 and 2 are permitted', {
+        cycle,
+      }),
+    );
+  const context = loadV3Context(round, findings);
+  const topics = [];
+  if (context !== null) {
+    for (const obligation of context.obligations.obligations ?? []) {
+      const currentPaths = pathsForGlobs(
+        repoRoot,
+        candidate,
+        obligation.governing_paths.flatMap(expandBraceSelectors),
+      );
+      const previousPaths = pathsForGlobs(
+        repoRoot,
+        base,
+        obligation.governing_paths.flatMap(expandBraceSelectors),
+      );
+      const currentDigest = candidateDigestForPaths(candidate, currentPaths);
+      const previousDigest = candidateDigestForPaths(base, previousPaths);
+      const unchanged = currentDigest === previousDigest;
+      topics.push({
+        topic_id: `obligation:${obligation.obligation_id.toLowerCase()}`,
+        obligation_id: obligation.obligation_id,
+        risk: obligation.risk,
+        claim: obligation.claim,
+        source_refs: obligation.source_refs,
+        governing_paths: obligation.governing_paths,
+        required_evidence: obligation.required_evidence,
+        current_digest: currentDigest,
+        previous_digest: previousDigest,
+        changed_status: unchanged ? 'unchanged' : 'changed',
+        required_adversaries: obligation.required_adversaries,
+        previous_finding_classes: obligation.finding_classes,
+        freshness_proof: {
+          method: unchanged ? 'content-addressed' : 'recheck-required',
+          inputs_digest: currentDigest,
+          evidence_digest: sha256(canonical(obligation.required_evidence)),
+          task_keys: [],
+          independent_recomputation_required: true,
+        },
+        allowed_dispositions: unchanged
+          ? ['RECHECKED_PASS', 'RECHECKED_FAIL', 'REUSED_FRESH_PASS', 'BLOCKED']
+          : ['RECHECKED_PASS', 'RECHECKED_FAIL', 'BLOCKED'],
+      });
+    }
+    const changed = git(repoRoot, ['diff', '--name-only', base, candidate])
+      .split('\n')
+      .filter(Boolean)
+      .sort();
+    for (const path of changed) {
+      const current = candidateDigestForPaths(candidate, [path]);
+      let previous = null;
+      try {
+        previous = candidateDigestForPaths(base, [path]);
+      } catch {
+        previous = null;
+      }
+      topics.push({
+        topic_id: `changed-path:${sha256(path).slice(0, 24)}`,
+        obligation_id: 'R7-P0-CANDIDATE-IDENTITY',
+        risk: 'P0',
+        claim: `Inspect exact candidate change at ${path}`,
+        source_refs: [path],
+        governing_paths: [path],
+        required_evidence: ['exact diff', 'affected behavior'],
+        current_digest: current,
+        previous_digest: previous,
+        changed_status: previous === null ? 'added' : 'changed',
+        required_adversaries: ['inspect-exact-diff', 'exercise-affected-behavior'],
+        previous_finding_classes: [],
+        freshness_proof: {
+          method: 'recheck-required',
+          inputs_digest: current,
+          evidence_digest: sha256(path),
+          task_keys: [],
+          independent_recomputation_required: true,
+        },
+        allowed_dispositions: ['RECHECKED_PASS', 'RECHECKED_FAIL', 'BLOCKED'],
+      });
+    }
+    topics.sort((left, right) => left.topic_id.localeCompare(right.topic_id));
+    const candidateManifest = readState(repoRoot, round, 'candidate-manifest.json');
+    const candidateManifestDigest =
+      candidateManifest.status === 'valid' &&
+      typeof candidateManifest.value?.manifest_digest_sha256 === 'string'
+        ? candidateManifest.value.manifest_digest_sha256
+        : sha256(
+            canonical({
+              base,
+              candidate,
+              tree: git(repoRoot, ['rev-parse', `${candidate}^{tree}`]),
+            }),
+          );
+    const body = {
+      schemaVersion: '2.0.0',
+      policy_version: context.policy.review_scope.policy_version,
+      round,
+      cycle,
+      exact_base: base,
+      review_candidate: candidate,
+      candidate_tree: git(repoRoot, ['rev-parse', `${candidate}^{tree}`]),
+      policy_digest: context.digests.policy,
+      profile_digest: context.digests.profile,
+      graph_digest: context.digests.graph,
+      obligations_digest: context.digests.obligations,
+      claims_digest: context.digests.claims,
+      current_candidate_manifest_digest: candidateManifestDigest,
+      previous_candidate_manifest_digests: [],
+      topic_count: topics.length,
+      topics,
+    };
+    const manifestValue = { ...body, manifest_digest_sha256: sha256(canonical(body)) };
+    validateDocument(
+      manifestValue,
+      context.policy.schemas.review_scope,
+      findings,
+      'REVIEW_SCOPE_SCHEMA_INVALID',
+      'review scope',
+    );
+    if (findings.length === 0) {
+      mkdirSync(dirname(join(repoRoot, context.profile.runtime.review_scope)), { recursive: true });
+      writeFileSync(join(repoRoot, context.profile.runtime.review_scope), canonical(manifestValue));
+    }
+    emit({
+      ok: findings.length === 0,
+      command: 'review-scope',
+      round,
+      cycle,
+      manifest: manifestValue,
+      findings,
+    });
+    return;
+  }
+  emit({ ok: false, command: 'review-scope', round, cycle, manifest: null, findings });
+}
+
+function parseStructuredReviewResult(path) {
+  const source = readFileSync(path, 'utf8').trim();
+  try {
+    return JSON.parse(source);
+  } catch {
+    const records = source
+      .split('\n')
+      .filter(Boolean)
+      .map((line) => JSON.parse(line));
+    const header = records.find(({ type }) => type === 'header') ?? {};
+    const terminalRecord = records.find(({ type }) => type === 'terminal');
+    return {
+      ...header,
+      dispositions: records
+        .filter(({ type }) => type === 'disposition')
+        .map(({ type: _type, ...value }) => value),
+      findings: records
+        .filter(({ type }) => type === 'finding')
+        .map(({ type: _type, ...value }) => value),
+      terminal:
+        terminalRecord === undefined
+          ? undefined
+          : (({ type: _type, ...value }) => value)(terminalRecord),
+    };
+  }
+}
+
+function recordInvalidTransport(context, round, cycle) {
+  const name = `review-transport-${String(cycle)}.json`;
+  const prior = readState(repoRoot, round, name);
+  const attempts = Number(prior.value?.attempts ?? 0) + 1;
+  writeState(repoRoot, round, name, { attempts });
+  if (attempts > context.profile.review_budget.transport_retries_per_cycle) {
+    writeState(repoRoot, round, 'review-state.json', {
+      state: 'REVIEW_TRANSPORT_BLOCKED',
+      cycle,
+      candidate: null,
+    });
+    return true;
+  }
+  return false;
+}
+
+function reviewCheckV3() {
+  const findings = [];
+  const round = option('--round') ?? '';
+  const cycle = Number(option('--cycle') ?? '1');
+  const candidate = git(repoRoot, ['rev-parse', option('--candidate') ?? 'HEAD']);
+  const context = loadV3Context(round, findings);
+  if (![1, 2].includes(cycle)) {
+    findings.push(
+      finding('REVIEW_CYCLE_BUDGET_EXHAUSTED', 'review cycle 3 is mechanically forbidden', {
+        cycle,
+      }),
+    );
+    emit({ ok: false, command: 'review-check', round, candidate, cycle, findings });
+    return;
+  }
+  if (context === null)
+    return emit({ ok: false, command: 'review-check', round, candidate, cycle, findings });
+  let manifestValue = null;
+  try {
+    manifestValue = readJson(join(repoRoot, context.profile.runtime.review_scope));
+    const { manifest_digest_sha256: claimed, ...body } = manifestValue;
+    if (
+      claimed !== sha256(canonical(body)) ||
+      manifestValue.review_candidate !== candidate ||
+      manifestValue.cycle !== cycle
+    ) {
+      throw new Error('review-scope identity or digest mismatch');
+    }
+  } catch (error) {
+    findings.push(finding('REVIEW_SCOPE_MANIFEST_INVALID', String(error)));
+  }
+  let result = null;
+  try {
+    result = parseStructuredReviewResult(resolve(repoRoot, option('--review-result') ?? ''));
+    if (
+      !validateDocument(
+        result,
+        context.policy.schemas.review_result,
+        findings,
+        'REVIEW_RESULT_INVALID',
+        'review result',
+      )
+    )
+      result = null;
+  } catch (error) {
+    findings.push(
+      finding('REVIEW_RESULT_INVALID', `review result is malformed or truncated: ${String(error)}`),
+    );
+  }
+  if (result === null || manifestValue === null) {
+    const blocked = recordInvalidTransport(context, round, cycle);
+    if (blocked)
+      findings.push(finding('REVIEW_TRANSPORT_BLOCKED', 'transport retry budget is exhausted'));
+    emit({ ok: false, command: 'review-check', round, candidate, cycle, findings });
+    return;
+  }
+  if (
+    result.round !== round ||
+    result.cycle !== cycle ||
+    result.review_candidate !== candidate ||
+    result.manifest_digest !== manifestValue.manifest_digest_sha256 ||
+    result.policy_digest !== manifestValue.policy_digest
+  ) {
+    findings.push(
+      finding(
+        'REVIEW_RESULT_IDENTITY_INVALID',
+        'review result does not bind exact candidate, manifest, policy, and cycle',
+      ),
+    );
+  }
+  const topics = new Map(manifestValue.topics.map((topic) => [topic.topic_id, topic]));
+  const seen = new Set();
+  for (const disposition of result.dispositions) {
+    if (seen.has(disposition.topic_id))
+      findings.push(
+        finding('REVIEW_TOPIC_DUPLICATED', 'review topic is duplicated', {
+          topic_id: disposition.topic_id,
+        }),
+      );
+    seen.add(disposition.topic_id);
+    const topic = topics.get(disposition.topic_id);
+    if (topic === undefined) {
+      findings.push(
+        finding('REVIEW_TOPIC_UNKNOWN', 'review result contains unknown topic', {
+          topic_id: disposition.topic_id,
+        }),
+      );
+      continue;
+    }
+    if (!topic.allowed_dispositions.includes(disposition.disposition))
+      findings.push(
+        finding('REVIEW_TOPIC_DISPOSITION_INVALID', 'disposition is not allowed for topic state', {
+          topic_id: disposition.topic_id,
+        }),
+      );
+    if (disposition.recomputed_digest !== topic.current_digest)
+      findings.push(
+        finding('REVIEW_TOPIC_DIGEST_INVALID', 'topic digest was not independently recomputed', {
+          topic_id: disposition.topic_id,
+        }),
+      );
+    if (
+      disposition.disposition === 'REUSED_FRESH_PASS' &&
+      (topic.changed_status !== 'unchanged' ||
+        disposition.evidence_refs.length === 0 ||
+        disposition.justification.trim().length < 20)
+    )
+      findings.push(
+        finding(
+          'REVIEW_TOPIC_FRESHNESS_UNVERIFIED',
+          'unchanged topic reuse lacks independent evidence and reasoning',
+          { topic_id: disposition.topic_id },
+        ),
+      );
+    if (['RECHECKED_FAIL', 'BLOCKED'].includes(disposition.disposition))
+      findings.push(
+        finding('REVIEW_TOPIC_NOT_PASSING', 'topic is failed or blocked', {
+          topic_id: disposition.topic_id,
+        }),
+      );
+  }
+  for (const id of topics.keys())
+    if (!seen.has(id))
+      findings.push(
+        finding('REVIEW_TOPIC_OMITTED', 'mandatory topic is omitted', { topic_id: id }),
+      );
+  const counts = Object.fromEntries(
+    ['RECHECKED_PASS', 'RECHECKED_FAIL', 'REUSED_FRESH_PASS', 'BLOCKED'].map((name) => [
+      name,
+      result.dispositions.filter(({ disposition }) => disposition === name).length,
+    ]),
+  );
+  if (
+    result.terminal.topic_count !== topics.size ||
+    result.terminal.finding_count !== result.findings.length ||
+    canonical(result.terminal.disposition_counts) !== canonical(counts) ||
+    result.terminal.complete !== true
+  )
+    findings.push(
+      finding('REVIEW_TERMINAL_INVALID', 'terminal counts do not match the complete parsed result'),
+    );
+  if (
+    result.terminal.verdict === 'PASS' &&
+    (findings.length > 0 || result.findings.some(({ severity }) => ['P0', 'P1'].includes(severity)))
+  ) {
+    findings.push(
+      finding(
+        'REVIEW_PASS_INVALID',
+        'PASS contains failed, blocked, incomplete, or unresolved high-risk findings',
+      ),
+    );
+  }
+  const valid = findings.length === 0;
+  const state =
+    valid && result.terminal.verdict === 'PASS'
+      ? 'PASS'
+      : cycle === 1
+        ? 'REPAIR_REQUIRED'
+        : 'ESCALATION_REQUIRED';
+  writeState(repoRoot, round, 'review-state.json', {
+    state,
+    cycle,
+    candidate,
+    manifest_digest: manifestValue.manifest_digest_sha256,
+  });
+  emit({
+    ok: valid && result.terminal.verdict === 'PASS',
+    command: 'review-check',
+    round,
+    candidate,
+    cycle,
+    state,
+    findings,
+  });
+}
+
+function statusV3() {
+  const findings = [];
+  const round = option('--round') ?? '';
+  const context = loadV3Context(round, findings);
+  const stored = readState(repoRoot, round, 'review-state.json');
+  const state = stored.status === 'valid' ? stored.value.state : 'DRAFT';
+  const cycle = Number(stored.value?.cycle ?? 0);
+  const transport =
+    cycle > 0
+      ? readState(repoRoot, round, `review-transport-${String(cycle)}.json`)
+      : { value: null };
+  const binding = context === null ? [] : reviewerBindingFindings(context);
+  emit({
+    ok: findings.length === 0,
+    command: 'status',
+    round,
+    state,
+    substantive_cycles: {
+      used: cycle,
+      maximum: context?.profile.review_budget.substantive_cycles ?? 2,
+    },
+    transport_retries_per_cycle: {
+      used: Number(transport.value?.attempts ?? 0),
+      maximum: context?.profile.review_budget.transport_retries_per_cycle ?? 1,
+    },
+    entry_ready: binding.length === 0,
+    diagnostics: binding,
+    findings,
+  });
+}
+
+let livePolicy = null;
+try {
+  livePolicy = readJson(policyPath);
+} catch {
+  // The normal command handlers report malformed policy evidence.
+}
+const genericV3 = livePolicy?.schemaVersion === '3.0.0';
+
+switch (genericV3 ? `v3:${command}` : command) {
+  case 'v3:policy-check':
+    policyCheckV3();
+    break;
+  case 'v3:materialize':
+    materializeV3();
+    break;
+  case 'v3:entry-check':
+    entryCheckV3();
+    break;
+  case 'v3:impact-plan':
+    impactPlanV3();
+    break;
+  case 'v3:smart-converge':
+    smartConvergeV3();
+    break;
+  case 'v3:claims-check':
+    claimsCheckV3();
+    break;
+  case 'v3:review-scope':
+    reviewScopeV3();
+    break;
+  case 'v3:review-check':
+    reviewCheckV3();
+    break;
+  case 'v3:status':
+    statusV3();
+    break;
+  case 'v3:manifest':
+    manifest();
+    break;
+  case 'v3:envelope':
+    envelope();
+    break;
+  case 'v3:rehearse':
+    rehearse();
+    break;
   case 'policy-check':
     policyCheck();
     break;
