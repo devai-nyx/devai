@@ -22,11 +22,9 @@
       "command": "pnpm vitest run tests/contract/pre-r0007-close-controls.red.contract.test.ts tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts tests/contract/pre-r0007-remediation-1.red.contract.test.ts tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts --reporter=dot",
       "exit_code": 1,
       "tests": [
-        "tests/contract/pre-r0007-close-controls.red.contract.test.ts",
         "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
         "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
-        "tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
-        "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts"
+        "tests/contract/pre-r0007-remediation-1.red.contract.test.ts"
       ],
       "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
       "tests_failed": 104,
