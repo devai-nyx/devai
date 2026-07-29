@@ -693,6 +693,16 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/pre-r0007-close-controls.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
           "target_type": "test"
         },
@@ -734,6 +744,16 @@
         {
           "suite": "contract",
           "path": "tests/contract/governed-sequencing.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-close-controls.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -1288,6 +1308,16 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/pre-r0007-close-controls.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
           "target_type": "test"
         },
@@ -1479,6 +1509,16 @@
         {
           "suite": "unit",
           "path": "packages/skills/tests/unit/authority-host-readonly.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-close-controls.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -2249,8 +2289,8 @@
         "INV-DEVAI-001"
       ],
       "lifecycle": "supported",
-      "assertion_count": 40,
-      "assertion_digest_sha256": "cbe903e3accb7f2bb06b612c99cd68d7258149df8983deb19c5525291cfb6d72"
+      "assertion_count": 46,
+      "assertion_digest_sha256": "5b14daebe4902c305d0ec485982a56fd40d8922df481a0b8f6264950929f8d25"
     },
     {
       "path": "packages/schemas/tests/contract/constitution.contract.test.ts",
@@ -3034,6 +3074,32 @@
       "assertion_digest_sha256": "adac0e1d4eb85a3a7f29c9dc8bb1ec91cd204fa65212f9c80f3d3bc3bf70a97b"
     },
     {
+      "path": "tests/contract/pre-r0007-close-controls.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-003",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 36,
+      "assertion_digest_sha256": "215c2f4f947ea7bc80eb32797718fd12903660039bd172c0b02f21a9df503981"
+    },
+    {
+      "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-003",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 18,
+      "assertion_digest_sha256": "4c5a050d0285cddd5d7b7381ba0858c264d4832d76d7989bd0aa7921ece2eedc"
+    },
+    {
       "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
       "suite": "contract",
       "invariant_ids": [
@@ -3157,8 +3223,8 @@
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported",
-      "assertion_count": 72,
-      "assertion_digest_sha256": "289b0bd5df4e18c336c2df7b161fa4965f9da1e363cbb0797bb39592798d22fe"
+      "assertion_count": 70,
+      "assertion_digest_sha256": "4560edf57bc058969375ce35977aeb56ea0c8f5a1a4c38e7ae5df268bfd46ad6"
     },
     {
       "path": "tests/e2e/bare-domain-help.e2e.test.ts",
