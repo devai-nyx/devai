@@ -196,7 +196,17 @@
     "rendered_marker_must_equal_claim_id": true,
     "rendered_proofs_exactly_match_declared_locations": true,
     "source_manifest_exactly_matches_resolved_sources": true,
-    "complete_ledger_atomic": true
+    "complete_ledger_atomic": true,
+    "ledger_self_digest": "sha256-canonical-body-with-claims-digest-omitted",
+    "materialization_order": [
+      "candidate-primitive-identity",
+      "convergence",
+      "pure-review-topic-count",
+      "materialized-claims",
+      "candidate-manifest",
+      "review-scope"
+    ],
+    "scope-dependent-claim-producer": "forbidden"
   },
   "review_state_machine": {
     "policy_version": "2.0.0",

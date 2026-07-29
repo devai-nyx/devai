@@ -4,6 +4,7 @@
   "round": "R-0007",
   "mode": "registry",
   "candidate": null,
+  "claims_digest_sha256": null,
   "claims": [
     {
       "claim_id": "suite.population",
@@ -45,9 +46,28 @@
     {
       "claim_id": "review.topic-population",
       "volatility": "candidate",
-      "producer": ["pnpm", "run", "round-close:review-scope", "--", "--round", "R-0007"],
+      "producer": [
+        "node",
+        "scripts/run-round-close-controls.mjs",
+        "review-topic-count",
+        "--round",
+        "R-0007",
+        "--candidate",
+        "{candidate_sha}"
+      ],
+      "runtime_parameters": {
+        "candidate_sha": {
+          "source": "candidate_manifest.candidate_sha",
+          "required_at": "materialization"
+        }
+      },
       "extractor": "$.topic_count",
-      "source_paths": [".devai/state/round-runs/R-0007/close/review-scope-manifest.json"],
+      "source_paths": [
+        "work/rounds/R-0007/review-obligations.json",
+        "work/rounds/R-0007/prior-finding-registry.json",
+        "law/policy/round-close-controls.json",
+        "work/rounds/R-0007/close-control-profile.json"
+      ],
       "rendered_locations": ["work/audit/R-0007/independent-review.md"],
       "source_digest": null,
       "value_digest": null

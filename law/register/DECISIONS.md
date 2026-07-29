@@ -4507,7 +4507,11 @@ covering every failed defect class and affected instance. `PASS`,
 Materialized current claims bind and independently recompute resolved producer
 arguments, the complete source manifest, producer output, deterministic extraction,
 canonical extracted-value digest, and each rendered location's current content digest
-and verification digest. Any absent or mismatched proof field fails the complete ledger.
+and verification digest. The complete ledger is self-digested. A pure topic-count
+producer derives its value from candidate primitives and declaration registries without
+reading the review-scope artifact; scope then consumes the completed ledger. This fixed
+order prevents a claims-to-scope-to-claims digest cycle. Any absent or mismatched proof
+field fails the complete ledger.
 
 This decision authorizes implementation and at most two new exhaustive machinery-review
 runs under OM-015. It does not start or close R-0007, bind its governed reviewer, alter

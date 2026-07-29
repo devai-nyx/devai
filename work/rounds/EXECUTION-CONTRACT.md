@@ -149,7 +149,10 @@ controller never fabricates one. Materialized current claims are recomputed from
 resolved producer, complete source manifest, deterministic extraction, canonical value
 digest, and rendered locations. Revalidation also authenticates producer output and
 each rendered location's current content and verification digests; one absent, stale,
-placeholder, or mismatched proof fails the entire ledger.
+placeholder, or mismatched proof fails the entire self-digested ledger. Claim producers
+must not consume review scope. The pure review-topic-count producer depends only on
+candidate primitives and declaration registries; materialized claims complete before
+candidate manifest and review-scope generation, keeping the digest graph acyclic.
 Every changed and unchanged topic receives exactly one structured disposition. Fresh
 reuse still requires independent recomputation of the current topic-input manifest,
 referenced-evidence manifest and digest, and every required task-freshness key. Finding
