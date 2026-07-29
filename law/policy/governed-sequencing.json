@@ -594,9 +594,7 @@
         "command": "pnpm vitest run tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts --reporter=dot",
         "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-late-sequencing-red-evidence.json",
         "evidence_sha256": "ab82b41676d5c2cd3999a9dcf9f4ceeddba50f86d588e56b03fe0dc098fca41f",
-        "tests": [
-          "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts"
-        ],
+        "tests": ["tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts"],
         "exercised_implementation_paths": [
           ".devai/config/round-close-controls.json",
           "packages/schemas/src/roster.ts",
@@ -632,9 +630,7 @@
         "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t 'atomically rejects stale-candidate|accepts one authentic current per-topic reused-topic proof|accepts the full failure, complete repair|rejects independently mutated claim proof: registry-runtime' --reporter=verbose",
         "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-late-sequencing-red-evidence.json",
         "evidence_sha256": "ab82b41676d5c2cd3999a9dcf9f4ceeddba50f86d588e56b03fe0dc098fca41f",
-        "tests": [
-          "tests/contract/pre-r0007-remediation-1.red.contract.test.ts"
-        ],
+        "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
       }
     },
@@ -648,9 +644,7 @@
         "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t 'accepts the full failure, complete repair|rejects a forged v2 repair identity link' --reporter=dot",
         "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-late-sequencing-red-evidence.json",
         "evidence_sha256": "ab82b41676d5c2cd3999a9dcf9f4ceeddba50f86d588e56b03fe0dc098fca41f",
-        "tests": [
-          "tests/contract/pre-r0007-remediation-1.red.contract.test.ts"
-        ],
+        "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
       }
     }

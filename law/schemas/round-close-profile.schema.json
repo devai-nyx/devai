@@ -80,6 +80,8 @@
         "affected_test_graph": { "$ref": "#/$defs/relativePath" },
         "obligations": { "$ref": "#/$defs/relativePath" },
         "current_claims": { "$ref": "#/$defs/relativePath" },
+        "control_provenance": { "$ref": "#/$defs/relativePath" },
+        "remediation_closure_matrix": { "$ref": "#/$defs/relativePath" },
         "additional_controls": { "$ref": "#/$defs/pathList" },
         "prior_findings": {
           "type": "array",

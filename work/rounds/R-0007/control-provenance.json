@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0007",
+  "root_decision": "DII-249",
+  "decision_register": "law/register/DECISIONS.md",
+  "decisions": [
+    {
+      "decision_id": "DII-246",
+      "status": "active",
+      "depends_on": []
+    },
+    {
+      "decision_id": "DII-247",
+      "status": "active",
+      "depends_on": ["DII-246"]
+    },
+    {
+      "decision_id": "DII-248",
+      "status": "active",
+      "depends_on": ["DII-246", "DII-247"]
+    },
+    {
+      "decision_id": "DII-249",
+      "status": "active",
+      "depends_on": ["DII-246", "DII-247", "DII-248"]
+    }
+  ],
+  "owner_mandates": [
+    {
+      "mandate_id": "OM-002",
+      "path": "product/owner-mandates/OM-002.md",
+      "required_status": "active"
+    },
+    {
+      "mandate_id": "OM-003",
+      "path": "product/owner-mandates/OM-003.md",
+      "required_status": "active"
+    },
+    {
+      "mandate_id": "OM-014",
+      "path": "product/owner-mandates/OM-014.md",
+      "required_status": "active"
+    },
+    {
+      "mandate_id": "OM-015",
+      "path": "product/owner-mandates/OM-015.md",
+      "required_status": "active"
+    },
+    {
+      "mandate_id": "OM-016",
+      "path": "product/owner-mandates/OM-016.md",
+      "required_status": "active"
+    }
+  ],
+  "manifest_roots": [
+    "AGENTS.md",
+    "work/rounds/EXECUTION-CONTRACT.md",
+    "work/rounds/R-0007/AUTHORIZATION.md",
+    "work/rounds/R-0007/plan.md",
+    "work/rounds/R-0007/prompts/00-orchestrator.md"
+  ],
+  "derived_sources": [
+    "policy-schema-map",
+    "round-profile-sources",
+    "round-declaration-when-bound",
+    "prior-finding-origin-evidence",
+    "obligation-source-references"
+  ]
+}

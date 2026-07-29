@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "round": "R-0007",
-  "registry_version": "pre-entry-remediation-campaign-1",
+  "registry_version": "pre-entry-remediation-campaign-2",
   "finding_classes": [
     {
       "finding_id": "F001",
@@ -320,6 +320,159 @@
         "round profile and declaration manifests"
       ],
       "repair_condition": "The exact-candidate census contains every uniquely resolved active control and raw-byte digest; unresolved, duplicate, inactive, untracked, or extra controls fail atomically.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F001",
+      "defect_class_id": "AUTHORITATIVE_GATE_CANDIDATE_RED",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": ["candidate-authoritative-gates", "formatting"],
+      "population_query": "Execute every ordered authoritative policy command against the exact detached candidate and retain each terminal result.",
+      "affected_population": [
+        "all sixteen authoritative gates",
+        "law/policy/governed-sequencing.json"
+      ],
+      "repair_condition": "Every authoritative command, including repository-wide formatting, passes at the same clean frozen candidate.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F002",
+      "defect_class_id": "AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": ["authoritative-gate-freshness", "v5-task-runtime-alignment"],
+      "population_query": "Recursively expand all sixteen gate commands and prove complete tracked inputs, dependency outputs, executables, environment, policy, graph, and persistent outputs against each sole profile.",
+      "affected_population": [
+        "all sixteen gate profiles",
+        "root script closure",
+        "complete tracked tree",
+        "complete environment",
+        "toolchains",
+        "persistent outputs"
+      ],
+      "repair_condition": "A mechanically complete superset proof exists for every profile and any effective identity change prevents reuse.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F003",
+      "defect_class_id": "AFFECTED_TEST_INPUT_POPULATION_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": [
+        "affected-test-dag",
+        "impact-planning",
+        "unknown-dynamic-fallback",
+        "whole-coverage"
+      ],
+      "population_query": "Enumerate every tracked runtime/test asset and computed-loader family and prove a dependent shard or conservative full-suite and whole-coverage fallback.",
+      "affected_population": [
+        "109 non-TypeScript/MJS package assets",
+        "all other tracked paths",
+        "computed module-loader families"
+      ],
+      "repair_condition": "Every tracked change is classified and every unproved dependency widens to the full suite and whole coverage.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F004",
+      "defect_class_id": "RECHECKED_TOPIC_EVIDENCE_UNAUTHENTICATED",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": [
+        "all-disposition-proof",
+        "independent-reuse-evidence",
+        "complete-class-enforcement"
+      ],
+      "population_query": "Resolve every source and evidence reference for all seven topic classes to typed candidate, Git, convergence, census, claim, change-record, or task artifacts.",
+      "affected_population": [
+        "82 previously synthetic topic evidence populations",
+        "all seven topic classes",
+        "all four dispositions"
+      ],
+      "repair_condition": "No synthetic prose/reference digest exists; unresolved or substituted evidence fails validation.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F005",
+      "defect_class_id": "STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": ["review-state-complete-chain", "repair-evidence-v2", "transport-chain"],
+      "population_query": "Mutate and re-self-digest every state, edge, predecessor, transport identity, result identity/count, and repair-v2 link across the declared graph and attempts.",
+      "affected_population": [
+        "all twelve edges",
+        "all state and predecessor identities",
+        "attempts zero through two",
+        "result and repair chains",
+        "all terminals"
+      ],
+      "repair_condition": "Every consumed artifact and edge is independently reconstructed and reauthenticated before any mutation.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F006",
+      "defect_class_id": "ACTIVE_CONTROL_CENSUS_ALLOWLIST_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": [
+        "active-control-census",
+        "generic-engine-profile-isolation",
+        "active-census-runtime-alignment"
+      ],
+      "population_query": "Traverse the structured exact-candidate provenance graph from DII-249 and compare every derived identity and raw blob digest with the census.",
+      "affected_population": [
+        "DII-246 through DII-249",
+        "all applicable mandates",
+        "all schemas and profile sources",
+        "declaration and manifest roots",
+        "prior-review and obligation sources"
+      ],
+      "repair_condition": "No runtime hardcoding or profile authority remains; the full structured exact-candidate population and raw blobs match exactly.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F007",
+      "defect_class_id": "REVIEWER_BINDING_CENSUS_NOT_CANDIDATE_BOUND",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": ["reviewer-binding", "binding-census"],
+      "population_query": "Dirty each mandate and profile binding while HEAD stays fixed and invoke every binding authority consumer with and without an explicit candidate.",
+      "affected_population": [
+        "policy-check",
+        "entry-check",
+        "status",
+        "convergence",
+        "candidate proof",
+        "review-scope",
+        "review-check"
+      ],
+      "repair_condition": "Every consumer resolves one explicit full candidate SHA and mutable worktree bytes never affect authority.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F008",
+      "defect_class_id": "SEMANTIC_OBLIGATION_POPULATION_UNCHECKED",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": ["semantic-obligation-completeness"],
+      "population_query": "Change every normative source and obligation row independently and validate exact source-digest-to-obligation coverage.",
+      "affected_population": [
+        "all ten obligations",
+        "OM-014 through OM-016",
+        "execution contract",
+        "R-0007 authorization, plan, and orchestrator",
+        "AGENTS authority"
+      ],
+      "repair_condition": "Every exact-candidate normative source is digest-bound to known obligations and every obligation is covered; any population or byte drift fails.",
       "disposition": "OPEN"
     }
   ]

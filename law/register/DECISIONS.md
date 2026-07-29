@@ -4639,6 +4639,83 @@ This decision authorizes implementation and at most two new exhaustive machinery
 runs under OM-015. It does not start or close R-0007, bind its governed reviewer, alter
 R-0006, deploy, publish packages, promote evidence, or mutate the predecessor.
 
+### DII-249 — Close remediation classes by mechanically complete populations
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-016; remediation review run 2 at 0dbe660db28261287690ea88762407a8d92ba490; DII-246; DII-247; DII-248`
+
+OM-016 creates a separately named second remediation campaign after the first campaign
+exhausted its review budget. The eight Run-2 findings are one complete repair
+population. The versioned closure matrix at
+`work/rounds/R-0007/remediation-2-closure-matrix.json` binds each finding to its
+deterministic population query, complete expected population, adversarial mutations,
+exact Inspector test IDs, implementation surfaces, and evidence. Neither a green point
+fixture nor a nonempty declaration closes a matrix row.
+
+The authoritative gate roster is exact and ordered. Before candidate freeze the
+controller must execute or authenticate one still-fresh PASS for all sixteen commands,
+including repository-wide formatting. Gate freshness is conservative by proof: every
+profile covers the complete tracked candidate-tree universe and recursively resolved
+root-script closure, every declared executable probe, the digest of the complete
+process environment without exposing values, policy and graph inputs, transitive
+dependency results, and every persistent output. A narrower profile is valid only when
+the controller can mechanically prove it is a superset of the expanded command
+semantics. Unknown expansion disables reuse rather than shrinking the key.
+
+The affected-test population begins with every tracked candidate path, not a selected
+extension allowlist. Known prompt, template, fixture, configuration, and other runtime
+assets map to their dependent shards. Any otherwise unclassified tracked change widens
+to the full suite and whole coverage. Computed `import`, template import, `require`,
+`require.resolve`, `import.meta.resolve`, `createRequire`, `module.require`, `eval`, or
+equivalent unresolved loader syntax also widens unless a deterministic resolver proves
+the exact dependency.
+
+Review evidence is typed and byte-backed. Candidate blobs, exact Git range and change
+records, convergence gate results, active-control census entries, materialized claims,
+candidate manifests, and convergence artifacts have explicit resolvers. An unresolved
+reference produces no digest and cannot satisfy any disposition. Hashing prose, a
+reference string, or a declaration that evidence ought to exist is forbidden.
+
+Review state uses independently reconstructable state and edge identities. Every
+transition's declared cycle, from/to state identity, predecessor state and transition,
+candidate, manifest, scope, result, transport, and repair links are recomputed from the
+exact artifact population. Every persisted transport is revalidated against its exact
+pre-attempt state and reviewer/census identity. Every persisted result reruns complete
+topic, finding, terminal, and count authentication. Every consumed repair record reruns
+schema, self-digest, failure-chain, prior-candidate, manifest, scope, and repaired-class
+validation. Terminal states reject successors.
+
+Active controls derive from the exact-candidate structured provenance graph at
+`work/rounds/R-0007/control-provenance.json`. The controller starts at DII-249,
+traverses DII-246 through DII-248 from structured edges, validates each exact decision
+section in `law/register/DECISIONS.md`, validates each Owner mandate container, and then
+derives the policy schema map, profile sources, bound declaration, prior-finding
+evidence, obligation sources, and manifest roots. Runtime code contains no decision ID
+or Owner path population. Profile `additional_controls` is only a linting hint and has
+no authority. Every census entry digests the real exact-candidate source blob.
+
+Every reviewer-binding consumer requires an explicit resolved full candidate SHA.
+There is no `WORKTREE` authority default. Preparation and status may resolve `HEAD` to
+one immutable commit before the census, but dirty tracked bytes never participate.
+Missing, abbreviated, ambiguous, or unresolved candidate identity fails closed.
+
+Semantic-obligation coverage binds every governing normative source by exact candidate
+blob digest to one or more known stable obligation IDs. Every obligation is covered by
+at least one source. Adding, deleting, duplicating, or changing a registry row or a
+normative source without regenerating the exact mapping fails scope generation. This
+whole-source binding is the v5 unregistered-requirement lint; legacy Markdown regexes
+remain non-authoritative.
+
+The complete prior-finding registry retains R2-F001 through R2-F008 alongside every
+earlier class. Inspector red contracts and Auditor red evidence precede Engineer
+implementation. Before either independent review, the exact matrix, all sixteen gates,
+the focused and complete suites, tier gates, whole coverage, sequencing, SHA references,
+governance, diff, and clean-tree checks must be green at one frozen SHA. Any semantic
+change invalidates that evidence.
+
+This decision authorizes implementation and at most two new exhaustive independent
+machinery reviews under OM-016. It does not silently select the governed R-0007 reviewer
+model, weaken entry, manufacture PASS, alter R-0006, deploy, publish, promote evidence,
+or mutate the predecessor.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

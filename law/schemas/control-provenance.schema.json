@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/control-provenance.schema.json",
+  "title": "Exact-candidate active-control provenance graph",
+  "description": "Structured roots and transitive edges used to derive the complete active-control census from raw exact-candidate blobs without implementation hardcoding or profile allowlist authority.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "round",
+    "root_decision",
+    "decision_register",
+    "decisions",
+    "owner_mandates",
+    "manifest_roots",
+    "derived_sources"
+  ],
+  "$defs": {
+    "path": { "type": "string", "minLength": 1 },
+    "decisionId": { "type": "string", "pattern": "^DII-[0-9]+$" },
+    "uniquePaths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/path" }
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "round": { "const": "R-0007" },
+    "root_decision": { "$ref": "#/$defs/decisionId" },
+    "decision_register": { "const": "law/register/DECISIONS.md" },
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["decision_id", "status", "depends_on"],
+        "properties": {
+          "decision_id": { "$ref": "#/$defs/decisionId" },
+          "status": { "const": "active" },
+          "depends_on": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "$ref": "#/$defs/decisionId" }
+          }
+        }
+      }
+    },
+    "owner_mandates": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["mandate_id", "path", "required_status"],
+        "properties": {
+          "mandate_id": { "type": "string", "pattern": "^OM-[0-9]+$" },
+          "path": { "$ref": "#/$defs/path" },
+          "required_status": { "const": "active" }
+        }
+      }
+    },
+    "manifest_roots": { "$ref": "#/$defs/uniquePaths" },
+    "derived_sources": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "policy-schema-map",
+          "round-profile-sources",
+          "round-declaration-when-bound",
+          "prior-finding-origin-evidence",
+          "obligation-source-references"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/remediation-closure-matrix.schema.json",
+  "title": "Complete-class remediation closure matrix",
+  "description": "Machine-readable binding from each independent-review defect class to its complete population query, adversarial mutations, exact red contracts, implementation surfaces, and terminal acceptance evidence.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "campaign",
+    "authority",
+    "reviewed_candidate",
+    "review_evidence",
+    "review_run_budget",
+    "classes"
+  ],
+  "$defs": {
+    "nonEmptyUniqueStrings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "campaign": { "const": "pre-R-0007-convergence-control-remediation-2" },
+    "authority": { "const": "OM-016" },
+    "reviewed_candidate": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "review_evidence": { "type": "string", "minLength": 1 },
+    "review_run_budget": { "const": 2 },
+    "classes": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "finding_id",
+          "defect_class_id",
+          "severity",
+          "population_query",
+          "expected_complete_population",
+          "adversarial_mutations",
+          "required_behavior",
+          "test_ids",
+          "test_paths",
+          "implementation_surfaces",
+          "evidence_refs",
+          "closure_state"
+        ],
+        "properties": {
+          "finding_id": { "pattern": "^R2-F00[1-8]$" },
+          "defect_class_id": { "pattern": "^[A-Z0-9][A-Z0-9_-]*$" },
+          "severity": { "const": "P1" },
+          "population_query": { "type": "string", "minLength": 1 },
+          "expected_complete_population": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "adversarial_mutations": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "required_behavior": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "test_ids": {
+            "type": "array",
+            "minItems": 2,
+            "uniqueItems": true,
+            "items": { "type": "string", "pattern": "^R2-[0-9]{3}-[A-Z0-9-]+$" }
+          },
+          "test_paths": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "implementation_surfaces": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "evidence_refs": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "closure_state": {
+            "enum": ["RED_REQUIRED", "RED_PROVED", "GREEN_PROVED", "REVIEWED_PASS"]
+          }
+        }
+      }
+    }
+  }
+}
