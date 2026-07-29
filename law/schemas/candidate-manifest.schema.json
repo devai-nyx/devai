@@ -64,7 +64,7 @@
       "convergence_digest": "7777777777777777777777777777777777777777777777777777777777777777",
       "claims_digest": "8888888888888888888888888888888888888888888888888888888888888888",
       "reviewer_binding_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "declaration_id": "DII-999",
+      "declaration_id": "DII-248",
       "declaration_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "impact_execution_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "manifest_digest_sha256": "9999999999999999999999999999999999999999999999999999999999999999"

@@ -29,7 +29,7 @@
       "schemaVersion": "1.0.0",
       "devai_round_declaration": true,
       "round": "R-9999",
-      "decision_id": "DII-999",
+      "decision_id": "DII-248",
       "authority": "Architect",
       "exact_base": "1111111111111111111111111111111111111111",
       "base_source": "origin/main-at-b0"
