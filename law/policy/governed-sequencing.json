@@ -647,9 +647,32 @@
         "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": [
+        "c200bca2eda64e5b984d6b7c45fae4b73ff999b2",
+        "62451c21d94e12337286231a73d07dd3316427b5",
+        "26210d5ec43074ace50b3778f63301d95bab0d60"
+      ],
+      "law_commits": ["5d707ca386aaa97c2c92d36f75dcd2de49b414c0"],
+      "red_evidence": {
+        "commit": "c7955c2711ae61a07df89704489847e3074af592",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-2.red.contract.test.ts --reporter=json --outputFile=/tmp/devai-r7-remediation2-red.json",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-2-red-evidence.json",
+        "evidence_sha256": "1a7f55abc98ddbc21a06f627bf3e0c533f3fd825a2a18ff5f6f69b226fe4006a",
+        "tests": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
     }
   ],
   "historical_commit_exceptions": [
+    {
+      "round": "R-0007",
+      "implementation_commits": ["2a6dc6b2207b482f1fdecf5ba16a2790c067291d"],
+      "reason": "The remediation-2 Engineer implementation followed DII-249, Inspector c7955c2, the complete eight-class closure matrix, and Auditor 8e7dd7e red evidence, but the immutable Inspector source did not literally enumerate the .devai/config/round-close-controls.json and packages/schemas/src/roster.ts implementation paths required by prospective exact-source binding. The real 28-test control red and five-test schema-roster red remain preserved; history is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
     {
       "round": "R-0005",
       "implementation_commits": [
