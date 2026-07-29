@@ -22,6 +22,7 @@ import { parse as parseYaml } from 'yaml';
 
 const SCRIPT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SHA40 = /^[0-9a-f]{40}$/u;
+const SHA256 = /^[0-9a-f]{64}$/u;
 const NORMALIZED_RUNTIME_ARTIFACTS = [
   'scratch/coverage/t1-t3/coverage-final.json',
   'scratch/coverage/t1-t3/subprocess-v8/**',
@@ -7604,6 +7605,22 @@ function validateRepairEvidenceV4(context, priorState, newProof, findings) {
     findings,
   );
   if (repair === null) return null;
+  const v2IdentityLinkFields = [
+    'prior_failure_transition_digest',
+    'prior_failure_transport_digest',
+    'new_candidate_manifest_digest',
+    'repair_state_before_digest',
+  ];
+  if (
+    repair.schemaVersion === '2.0.0' &&
+    !v2IdentityLinkFields.every((field) => SHA256.test(repair[field] ?? ''))
+  )
+    findings.push(
+      finding(
+        'REVIEW_REPAIR_EVIDENCE_INCOMPLETE',
+        'repair evidence lacks its complete authenticated V2 identity-link population',
+      ),
+    );
   if (
     !validateDocument(
       repair,
@@ -7662,6 +7679,18 @@ function validateRepairEvidenceV4(context, priorState, newProof, findings) {
   const repairedMap = new Map(
     (repair.repaired_classes ?? []).map((entry) => [entry.defect_class_id, entry]),
   );
+  const expectedV2IdentityLinks = {
+    prior_failure_transition_digest: priorState.latest_transition_digest,
+    prior_failure_transport_digest: priorState.current_transport_digest,
+    new_candidate_manifest_digest: newProof.manifest.manifest_digest_sha256,
+    repair_state_before_digest: priorState.state_digest_sha256,
+  };
+  const v2IdentityLinksValid =
+    repair.schemaVersion !== '2.0.0' ||
+    Object.entries(expectedV2IdentityLinks).every(
+      ([field, expectedDigest]) =>
+        SHA256.test(expectedDigest ?? '') && repair[field] === expectedDigest,
+    );
   valid =
     repair.prior_candidate_sha === priorState.candidate_sha &&
     repair.prior_candidate_manifest_digest === priorState.candidate_manifest_digest &&
@@ -7670,6 +7699,7 @@ function validateRepairEvidenceV4(context, priorState, newProof, findings) {
     repair.prior_failure_state_digest === priorState.state_digest_sha256 &&
     repair.new_candidate_sha === newProof.manifest.candidate_sha &&
     repair.new_candidate_sha !== priorState.candidate_sha &&
+    v2IdentityLinksValid &&
     canonical([...grouped.keys()].sort()) === canonical([...repairedMap.keys()].sort()) &&
     valid;
   if (
