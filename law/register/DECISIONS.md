@@ -4387,6 +4387,47 @@ PASS, publication, merge, exact-main CI, PC-0007, closure, release, package publ
 tag, GitHub Release, Pages deployment, evidence promotion, predecessor mutation, real
 external mutation, or R-0007+ authority.
 
+### DII-246 — Generalize round close into bounded content-addressed convergence
+`type: decision · status: active · authority: Architect · provenance: OM-014; approved pre-R-0007 convergence and review machinery campaign; R-0006 closure lessons`
+
+R-0007 through R-0009 use one generic round-close policy and an explicit per-round
+profile. The generic engine contains no round, historical mandate, audit destination,
+or reviewer-model default. A round profile binds its authorization, plan, prompt,
+affected-test graph, semantic obligations, current-claim registry, runtime paths, and
+review budget. The profile begins with a model-neutral reviewer slot. Preparation may
+validate while returning `ENTRY_BLOCKED_REVIEWER_UNBOUND`; entry fails until exactly
+one later active Owner mandate binds one literal independent read-only model with no
+fallback.
+
+The affected-test planner is a versioned explicit DAG over governed production inputs,
+stable test shards, shared inputs, aggregate gates, outputs, and full-suite and
+whole-coverage fallbacks. Local reuse is limited to a structurally valid PASS whose key
+binds command, working directory, complete transitive content, dependency keys,
+outputs, environment, toolchain, policy, and graph. Unknown or incomplete dependency
+proof widens to the full suite. Remote CI executes the complete authoritative
+population without trusting local cache, and coverage remains indivisible.
+
+Review scope comes from schema-validated semantic obligations, exact changed paths,
+active controls, current claims, prior finding classes, candidate identities, and
+convergence evidence. Markdown scanning is only an unregistered-obligation lint.
+Structured results disposition every changed and unchanged topic exactly once and bind
+the exact candidate, manifest, and policy. Fresh reuse still requires independent
+digest and evidence recomputation. Findings include a complete same-class population
+query and repair condition; incomplete population is `BLOCKED`.
+
+The state machine admits two substantive cycles only. Cycle 1 is exhaustive; one
+role-pure complete-class repair phase invalidates and regenerates every candidate-bound
+artifact; cycle 2 reviews the entire new population. Cycle-2 failure becomes
+`ESCALATION_REQUIRED`, and cycle 3 is mechanically forbidden. One invalid transport
+attempt may retry the unchanged cycle; a second becomes `REVIEW_TRANSPORT_BLOCKED`.
+
+The committed R-0007 profile, graph, obligation registry, and current-claim registry
+are prospective preparation. They do not declare R-0007, resolve its reviewer, start
+B0, authorize deployment, publish a candidate, promote evidence, mutate real-stynx,
+or alter immutable R-0006 evidence. The Engineer must implement and materialize these
+contracts, the Inspector must prove their fail-closed cases, and the Auditor must
+preserve exact current evidence before this machinery can govern entry.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

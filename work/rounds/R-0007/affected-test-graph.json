@@ -1,0 +1,311 @@
+{
+  "schemaVersion": "1.0.0",
+  "graph_version": "1.0.0",
+  "round": "R-0007",
+  "population": {
+    "production": ["packages/*/src/**/*.ts", "packages/*/scripts/**/*.ts", "scripts/**/*.mjs"],
+    "tests": ["packages/**/tests/**/*.ts", "tests/**/*.test.ts"],
+    "classification": "complete-or-full-suite-fallback",
+    "excluded": [
+      {
+        "selector": "packages/**/dist/**",
+        "reason": "Generated outputs are validated as outputs of their producer nodes rather than classified as production inputs."
+      },
+      {
+        "selector": "tests/types/**/*.d.ts",
+        "reason": "Ambient test declarations are shared inputs and invalidate the complete test population."
+      }
+    ]
+  },
+  "shared_inputs": [
+    {
+      "id": "workspace",
+      "selectors": [
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "packages/*/package.json"
+      ],
+      "invalidates": ["full-suite", "full-coverage"]
+    },
+    {
+      "id": "typescript-vitest",
+      "selectors": [
+        "tsconfig*.json",
+        "packages/*/tsconfig*.json",
+        "vitest*.ts",
+        "tests/config/**",
+        "tests/helpers/**",
+        "tests/types/**"
+      ],
+      "invalidates": ["full-suite", "full-coverage"]
+    },
+    {
+      "id": "governed-close-control",
+      "selectors": [
+        "law/policy/**",
+        "law/schemas/**",
+        "law/invariants/**",
+        "product/**",
+        "work/rounds/**",
+        ".github/**"
+      ],
+      "invalidates": ["governance", "full-suite", "full-coverage"]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "authority-tests",
+      "kind": "test-shard",
+      "input_selectors": [
+        "packages/authority/src/**/*.ts",
+        "packages/authority/tests/**/*.ts",
+        "packages/utils/src/**/*.ts"
+      ],
+      "depends_on": [],
+      "command": ["pnpm", "vitest", "run", "packages/authority/tests"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "cli-tests",
+      "kind": "test-shard",
+      "input_selectors": [
+        "packages/cli/src/**/*.ts",
+        "packages/cli/tests/**/*.ts",
+        "packages/{authority,effects-check,evidence,loop,schemas,sensors,skills,spec,utils}/src/**/*.ts"
+      ],
+      "depends_on": [
+        "authority-tests",
+        "effects-tests",
+        "evidence-tests",
+        "loop-tests",
+        "schemas-tests",
+        "sensors-tests",
+        "skills-tests",
+        "spec-tests",
+        "utils-tests"
+      ],
+      "command": ["pnpm", "vitest", "run", "packages/cli/tests"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "effects-tests",
+      "kind": "test-shard",
+      "input_selectors": [
+        "packages/effects-check/src/**/*.ts",
+        "packages/effects-check/tests/**/*.ts"
+      ],
+      "depends_on": [],
+      "command": ["pnpm", "vitest", "run", "packages/effects-check/tests"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "evidence-tests",
+      "kind": "test-shard",
+      "input_selectors": [
+        "packages/evidence/src/**/*.ts",
+        "packages/evidence/tests/**/*.ts",
+        "packages/{authority,schemas,utils}/src/**/*.ts"
+      ],
+      "depends_on": ["authority-tests", "schemas-tests", "utils-tests"],
+      "command": ["pnpm", "vitest", "run", "packages/evidence/tests"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "loop-tests",
+      "kind": "test-shard",
+      "input_selectors": [
+        "packages/loop/src/**/*.ts",
+        "packages/loop/tests/**/*.ts",
+        "packages/{authority,schemas,sensors,spec,utils}/src/**/*.ts"
+      ],
+      "depends_on": [
+        "authority-tests",
+        "schemas-tests",
+        "sensors-tests",
+        "spec-tests",
+        "utils-tests"
+      ],
+      "command": ["pnpm", "vitest", "run", "packages/loop/tests"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "schemas-tests",
+      "kind": "test-shard",
+      "input_selectors": [
+        "packages/schemas/src/**/*.ts",
+        "packages/schemas/scripts/**/*.ts",
+        "packages/schemas/tests/**/*.ts",
+        "law/schemas/**"
+      ],
+      "depends_on": [],
+      "command": ["pnpm", "vitest", "run", "packages/schemas/tests"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "sensors-tests",
+      "kind": "test-shard",
+      "input_selectors": [
+        "packages/sensors/src/**/*.ts",
+        "packages/sensors/scripts/**/*.ts",
+        "packages/sensors/tests/**/*.ts",
+        "packages/{authority,effects-check,schemas,utils}/src/**/*.ts"
+      ],
+      "depends_on": ["authority-tests", "effects-tests", "schemas-tests", "utils-tests"],
+      "command": ["pnpm", "vitest", "run", "packages/sensors/tests"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "skills-tests",
+      "kind": "test-shard",
+      "input_selectors": [
+        "packages/skills/src/**/*.ts",
+        "packages/skills/scripts/**/*.ts",
+        "packages/skills/tests/**/*.ts",
+        "packages/{authority,loop,schemas,sensors,spec,utils}/src/**/*.ts"
+      ],
+      "depends_on": [
+        "authority-tests",
+        "loop-tests",
+        "schemas-tests",
+        "sensors-tests",
+        "spec-tests",
+        "utils-tests"
+      ],
+      "command": ["pnpm", "vitest", "run", "packages/skills/tests"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "spec-tests",
+      "kind": "test-shard",
+      "input_selectors": [
+        "packages/spec/src/**/*.ts",
+        "packages/spec/tests/**/*.ts",
+        "packages/{authority,evidence,schemas,utils}/src/**/*.ts"
+      ],
+      "depends_on": ["authority-tests", "evidence-tests", "schemas-tests", "utils-tests"],
+      "command": ["pnpm", "vitest", "run", "packages/spec/tests"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "utils-tests",
+      "kind": "test-shard",
+      "input_selectors": ["packages/utils/src/**/*.ts", "packages/utils/tests/**/*.ts"],
+      "depends_on": [],
+      "command": ["pnpm", "vitest", "run", "packages/utils/tests"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "root-tests",
+      "kind": "test-shard",
+      "input_selectors": [
+        "tests/**/*.test.ts",
+        "tests/helpers/**",
+        "packages/*/src/**/*.ts",
+        "scripts/**/*.mjs"
+      ],
+      "depends_on": ["cli-tests", "skills-tests"],
+      "command": ["pnpm", "vitest", "run", "tests"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "governance",
+      "kind": "gate",
+      "input_selectors": [
+        "law/**",
+        "product/**",
+        "work/rounds/**",
+        "work/audit/**",
+        "record/**",
+        "tests/**",
+        "packages/**"
+      ],
+      "depends_on": ["full-suite"],
+      "command": ["pnpm", "run", "ci:governance"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "full-suite",
+      "kind": "fallback",
+      "input_selectors": [
+        "packages/**/*.ts",
+        "scripts/**/*.mjs",
+        "tests/**/*.ts",
+        "law/**",
+        "product/**",
+        "work/rounds/**",
+        ".github/**",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "tsconfig*.json",
+        "vitest*.ts"
+      ],
+      "depends_on": [],
+      "command": ["pnpm", "vitest", "run"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "full-coverage",
+      "kind": "fallback",
+      "input_selectors": [
+        "packages/**/*.ts",
+        "scripts/**/*.mjs",
+        "tests/**/*.ts",
+        "law/policy/thresholds.json",
+        "law/policy/round-close-controls.json",
+        "work/rounds/R-0007/affected-test-graph.json",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "tsconfig*.json",
+        "vitest*.ts"
+      ],
+      "depends_on": ["full-suite"],
+      "command": ["pnpm", "run", "test:coverage:t1-t3"],
+      "cwd": ".",
+      "outputs": [
+        "scratch/coverage/t1-t3/coverage-summary.json",
+        "scratch/coverage/t1-t3/coverage-final.json",
+        "scratch/coverage/t1-t3/subprocess-v8/**"
+      ],
+      "coverage_mode": "whole-only"
+    }
+  ],
+  "fallbacks": {
+    "unknown_dependency": "full-suite",
+    "dynamic_import": "full-suite",
+    "incomplete_population": "full-suite"
+  },
+  "coverage": {
+    "node": "full-coverage",
+    "mode": "whole-only",
+    "partial_merge": "forbidden"
+  }
+}

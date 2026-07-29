@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/round-close-profile.schema.json",
+  "title": "Per-round close-control profile",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "round",
+    "policy_version",
+    "decision_id",
+    "phase",
+    "sources",
+    "runtime",
+    "reviewer",
+    "review_budget",
+    "remote_ci"
+  ],
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "pathList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/relativePath" }
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+    "policy_version": { "type": "string", "minLength": 1 },
+    "decision_id": { "type": "string", "pattern": "^DII-[0-9]{3}$" },
+    "phase": { "enum": ["pre-entry-preparation", "entry", "execution", "close"] },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorization",
+        "plan",
+        "orchestrator",
+        "affected_test_graph",
+        "obligations",
+        "current_claims"
+      ],
+      "properties": {
+        "authorization": { "$ref": "#/$defs/relativePath" },
+        "plan": { "$ref": "#/$defs/relativePath" },
+        "orchestrator": { "$ref": "#/$defs/relativePath" },
+        "affected_test_graph": { "$ref": "#/$defs/relativePath" },
+        "obligations": { "$ref": "#/$defs/relativePath" },
+        "current_claims": { "$ref": "#/$defs/relativePath" },
+        "additional_controls": { "$ref": "#/$defs/pathList" },
+        "prior_findings": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/relativePath" }
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state_root", "candidate_manifest", "review_scope", "review_result"],
+      "properties": {
+        "state_root": { "$ref": "#/$defs/relativePath" },
+        "candidate_manifest": { "$ref": "#/$defs/relativePath" },
+        "review_scope": { "$ref": "#/$defs/relativePath" },
+        "review_result": { "$ref": "#/$defs/relativePath" }
+      }
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["binding", "mandate_id", "model_selector", "role", "fallback"],
+      "properties": {
+        "binding": { "const": "owner-mandate-required" },
+        "mandate_id": {
+          "oneOf": [{ "type": "null" }, { "type": "string", "pattern": "^OM-[0-9]{3}$" }]
+        },
+        "model_selector": {
+          "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+        },
+        "role": { "const": "independent-read-only" },
+        "fallback": { "const": "forbidden" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "mandate_id": { "type": "null" } } },
+          "then": { "properties": { "model_selector": { "type": "null" } } }
+        },
+        {
+          "if": { "properties": { "model_selector": { "type": "string" } } },
+          "then": { "properties": { "mandate_id": { "type": "string" } } }
+        }
+      ]
+    },
+    "review_budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "substantive_cycles",
+        "transport_retries_per_cycle",
+        "cycle_three",
+        "cycle_two_failure"
+      ],
+      "properties": {
+        "substantive_cycles": { "const": 2 },
+        "transport_retries_per_cycle": { "const": 1 },
+        "cycle_three": { "const": "forbidden" },
+        "cycle_two_failure": { "const": "ESCALATION_REQUIRED" }
+      }
+    },
+    "remote_ci": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["local_cache_trusted", "gate_population"],
+      "properties": {
+        "local_cache_trusted": { "const": false },
+        "gate_population": { "const": "complete-authoritative" }
+      }
+    },
+    "deployment": { "enum": ["forbidden", "separately-authorized"] }
+  }
+}

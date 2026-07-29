@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    OM-002; OM-003; OM-010; Constitution Articles 6–10 and 27; R-0001 rehearsal lessons; R-0002-PREFLIGHT-AUDIT; R-0006-PREFLIGHT-ALIGNMENT-AUDIT,
+    OM-002; OM-003; OM-010; OM-014; DII-246; Constitution Articles 6–10 and 27; R-0001 rehearsal lessons; R-0002-PREFLIGHT-AUDIT; R-0006-PREFLIGHT-ALIGNMENT-AUDIT,
   ]
 ---
 
@@ -109,6 +109,40 @@ A command that cannot run is a blocker or a newly governed defect, never a green
 Declared DB skips remain skips only under their existing contract and are exercised with
 the configured PostgreSQL service at release-candidate time.
 
+## Prospective affected-test convergence for R-0007 through R-0009
+
+OM-014 and DII-246 replace R-0006's round-specific close wrapper prospectively with a
+generic policy and schema-validated per-round profile. No engine default may supply a
+round, mandate, audit path, or reviewer model. The profile binds the round sources,
+explicit affected-test graph, semantic obligations, current claims, runtime paths,
+review budget, and reviewer authorization.
+
+Local convergence may reuse only a structurally valid content-addressed PASS whose key
+binds the command, working directory, complete transitive input manifest, dependency
+keys, output digests, environment, toolchain, policy, and graph. Changed tests execute
+themselves and changed sources execute every transitively dependent shard. Unknown,
+dynamic, or incomplete proof widens to the full suite. Dirty, untracked, deleted, and
+renamed inputs participate; timestamps alone do not. Remote CI trusts no local cache,
+and coverage is wholly executed or wholly reused without partial merging.
+
+Preparation may accept an unbound reviewer slot only while reporting
+`ENTRY_BLOCKED_REVIEWER_UNBOUND`. Entry requires exactly one active Owner mandate that
+binds the round to one literal independent read-only model. Missing, inactive,
+ambiguous, or conflicting bindings stop entry; silent fallback is forbidden.
+
+Review scope is generated from registered obligations, exact changes, active controls,
+current claims, prior finding classes, candidate identities, and convergence evidence.
+Every changed and unchanged topic receives exactly one structured disposition. Fresh
+reuse still requires independent digest and evidence verification. Malformed,
+truncated, duplicate, omitted, unknown, or identity-mismatched results are invalid.
+
+Cycle 1 exhausts the complete population and continues after blockers. One role-pure
+repair phase closes every reported class and regenerates every invalidated artifact.
+Cycle 2 reviews the complete new population. Cycle-2 failure becomes
+`ESCALATION_REQUIRED`; cycle 3 is refused. One invalid transport attempt may retry the
+unchanged cycle; a second becomes `REVIEW_TRANSPORT_BLOCKED`. Continued work then
+requires a separately named remediation campaign and fresh Owner authority.
+
 ## Candidate identity, convergence, and review freeze
 
 Every source close distinguishes three Git identities:
@@ -177,7 +211,8 @@ Before push:
 - ask the independently selected close reviewer for a read-only exact-candidate review
   and resolve every actionable finding; OM-013 replaces the otherwise-required
   `claude-opus-5` selector with explicit `gpt-5.6-sol` for R-0006 only and does not
-  weaken any review-content, verdict, or evidence requirement;
+  weaken any review-content, verdict, or evidence requirement; R-0007 through R-0009
+  instead require exactly one later active Owner model binding before entry;
 - leave no untracked product or evidence artifacts.
 
 After push, inspect the exact candidate’s GitHub checks. Merge only when every required

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0007",
+  "policy_version": "3.0.0",
+  "decision_id": "DII-246",
+  "phase": "pre-entry-preparation",
+  "sources": {
+    "authorization": "work/rounds/R-0007/AUTHORIZATION.md",
+    "plan": "work/rounds/R-0007/plan.md",
+    "orchestrator": "work/rounds/R-0007/prompts/00-orchestrator.md",
+    "affected_test_graph": "work/rounds/R-0007/affected-test-graph.json",
+    "obligations": "work/rounds/R-0007/review-obligations.json",
+    "current_claims": "work/rounds/R-0007/current-claims.json",
+    "additional_controls": [
+      "product/owner-mandates/OM-002.md",
+      "product/owner-mandates/OM-003.md",
+      "product/owner-mandates/OM-014.md",
+      "work/rounds/EXECUTION-CONTRACT.md",
+      "law/policy/round-close-controls.json"
+    ],
+    "prior_findings": []
+  },
+  "runtime": {
+    "state_root": ".devai/state/round-runs/R-0007/close",
+    "candidate_manifest": ".devai/state/round-runs/R-0007/close/candidate-manifest.json",
+    "review_scope": ".devai/state/round-runs/R-0007/close/review-scope-manifest.json",
+    "review_result": ".devai/state/round-runs/R-0007/close/review-result.json"
+  },
+  "reviewer": {
+    "binding": "owner-mandate-required",
+    "mandate_id": null,
+    "model_selector": null,
+    "role": "independent-read-only",
+    "fallback": "forbidden"
+  },
+  "review_budget": {
+    "substantive_cycles": 2,
+    "transport_retries_per_cycle": 1,
+    "cycle_three": "forbidden",
+    "cycle_two_failure": "ESCALATION_REQUIRED"
+  },
+  "remote_ci": {
+    "local_cache_trusted": false,
+    "gate_population": "complete-authoritative"
+  },
+  "deployment": "forbidden"
+}

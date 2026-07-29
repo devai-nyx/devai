@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0.0",
+  "ledger_version": "1.0.0",
+  "round": "R-0007",
+  "mode": "registry",
+  "candidate": null,
+  "claims": [
+    {
+      "claim_id": "suite.population",
+      "volatility": "tree",
+      "producer": ["pnpm", "vitest", "list", "--json"],
+      "extractor": "$.files",
+      "source_paths": ["packages/**/tests/**/*.ts", "tests/**/*.test.ts", "vitest*.ts"],
+      "rendered_locations": ["work/audit/R-0007/as-built.md"],
+      "source_digest": null,
+      "value_digest": null
+    },
+    {
+      "claim_id": "coverage.summary",
+      "volatility": "coverage",
+      "producer": ["pnpm", "run", "test:coverage:t1-t3"],
+      "extractor": "$.total",
+      "source_paths": ["scratch/coverage/t1-t3/coverage-summary.json"],
+      "rendered_locations": ["work/audit/R-0007/as-built.md"],
+      "source_digest": null,
+      "value_digest": null
+    },
+    {
+      "claim_id": "candidate.range",
+      "volatility": "candidate",
+      "producer": ["git", "rev-list", "--reverse", "<exact-base>..<candidate>"],
+      "extractor": "$",
+      "source_paths": [".git"],
+      "rendered_locations": ["work/rounds/R-0007/source-close.md", "work/audit/R-0007/as-built.md"],
+      "source_digest": null,
+      "value_digest": null
+    },
+    {
+      "claim_id": "review.topic-population",
+      "volatility": "candidate",
+      "producer": ["pnpm", "run", "round-close:review-scope", "--", "--round", "R-0007"],
+      "extractor": "$.topic_count",
+      "source_paths": [".devai/state/round-runs/R-0007/close/review-scope-manifest.json"],
+      "rendered_locations": ["work/audit/R-0007/independent-review.md"],
+      "source_digest": null,
+      "value_digest": null
+    },
+    {
+      "claim_id": "site.artifact",
+      "volatility": "candidate",
+      "producer": ["sha256sum", "<site-artifact>"],
+      "extractor": "$[0]",
+      "source_paths": ["<site-artifact>"],
+      "rendered_locations": ["work/audit/R-0007/as-built.md", "work/rounds/R-0007/source-close.md"],
+      "source_digest": null,
+      "value_digest": null
+    },
+    {
+      "claim_id": "ci.exact-head",
+      "volatility": "ci",
+      "producer": ["gh", "pr", "checks", "<pr-number>"],
+      "extractor": "$.checks",
+      "source_paths": ["<github-exact-head>"],
+      "rendered_locations": ["work/audit/R-0007/as-built.md"],
+      "source_digest": null,
+      "value_digest": null
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/review-obligations.schema.json",
+  "title": "Semantic review obligation registry",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "registry_version", "round", "obligations"],
+  "$defs": {
+    "nonEmptyUniqueStrings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "registry_version": { "type": "string", "minLength": 1 },
+    "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+    "obligations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "obligation_id",
+          "claim",
+          "risk",
+          "source_refs",
+          "governing_paths",
+          "required_evidence",
+          "required_adversaries",
+          "reuse_policy",
+          "finding_classes"
+        ],
+        "properties": {
+          "obligation_id": { "type": "string", "pattern": "^R[0-9]+-[A-Z0-9][A-Z0-9-]*$" },
+          "claim": { "type": "string", "minLength": 1 },
+          "risk": { "enum": ["P0", "P1", "P2"] },
+          "source_refs": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "governing_paths": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "required_evidence": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "required_adversaries": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "reuse_policy": { "enum": ["always-recheck", "digest-and-evidence-recheck"] },
+          "finding_classes": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "pattern": "^[A-Z0-9][A-Z0-9-]*$" }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/current-claims.schema.json",
+  "title": "Structured current-claim ledger",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "ledger_version", "round", "mode", "candidate", "claims"],
+  "$defs": {
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "argv": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "ledger_version": { "type": "string", "minLength": 1 },
+    "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+    "mode": { "enum": ["registry", "materialized"] },
+    "candidate": { "oneOf": [{ "$ref": "#/$defs/sha1" }, { "type": "null" }] },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim_id",
+          "volatility",
+          "producer",
+          "extractor",
+          "source_paths",
+          "rendered_locations",
+          "source_digest",
+          "value_digest"
+        ],
+        "properties": {
+          "claim_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+          "volatility": { "enum": ["candidate", "tree", "gate", "coverage", "ci"] },
+          "producer": { "$ref": "#/$defs/argv" },
+          "extractor": { "type": "string", "minLength": 1 },
+          "source_paths": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "rendered_locations": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "source_digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+          "value_digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "mode": { "const": "registry" } } },
+      "then": { "properties": { "candidate": { "type": "null" } } }
+    },
+    {
+      "if": { "properties": { "mode": { "const": "materialized" } } },
+      "then": {
+        "properties": {
+          "candidate": { "$ref": "#/$defs/sha1" },
+          "claims": {
+            "items": {
+              "properties": {
+                "source_digest": { "$ref": "#/$defs/sha256" },
+                "value_digest": { "$ref": "#/$defs/sha256" }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
