@@ -4551,6 +4551,9 @@ Every declared producer must emit deterministic structured output compatible wit
 extractor. The controller supplies side-effect-free JSON-file extraction and file-digest
 producer verbs where generic tools do not emit the required shape. Acceptance exercises
 the complete live per-round claim registry, not only synthetic one-claim fixtures.
+The exact-head CI producer also proves that the selected PR's head OID equals the claim
+candidate before it accepts the complete required check population; green checks from a
+different PR or SHA have no standing.
 
 This decision authorizes implementation and at most two new exhaustive machinery-review
 runs under OM-015. It does not start or close R-0007, bind its governed reviewer, alter

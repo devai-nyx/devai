@@ -168,6 +168,8 @@ evidence; tracked prose may name their stable claim IDs but never copies a value
 proof would require changing the candidate that it proves.
 Claim producers emit deterministic structured values that their declared extractors can
 actually consume. Acceptance materializes and revalidates the complete live registry.
+Exact-head CI receipts require both a PR head OID equal to the candidate and the complete
+required green check population; an unrelated green PR is rejected.
 Every changed and unchanged topic receives exactly one structured disposition. Fresh
 reuse still requires independent recomputation of the current topic-input manifest,
 referenced-evidence manifest and digest, and every required task-freshness key. Finding

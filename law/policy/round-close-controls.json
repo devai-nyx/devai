@@ -216,6 +216,7 @@
     "live_registry_acceptance": "every-real-declaration-materializes-and-revalidates",
     "pre_review_post_publication_claim": "authenticated-deferred-declaration",
     "post_publication_receipt": "separate-self-digested-ledger-bound-to-pre-review-digest",
+    "exact_head_ci_claim": "pr-head-oid-equals-candidate-and-complete-required-check-population-green",
     "ledger_self_digest": "sha256-canonical-body-with-claims-digest-omitted",
     "materialization_order": [
       "candidate-primitive-identity",

@@ -122,10 +122,24 @@
       "claim_id": "ci.exact-head",
       "volatility": "ci",
       "availability": "post-publication",
-      "producer": ["gh", "pr", "checks", "{source_pr_number}", "--json", "name,state,link"],
+      "producer": [
+        "node",
+        "scripts/run-round-close-controls.mjs",
+        "claim-produce",
+        "--kind",
+        "github-pr-exact-head",
+        "--pr",
+        "{source_pr_number}",
+        "--candidate",
+        "{candidate_sha}"
+      ],
       "runtime_parameters": {
         "source_pr_number": {
           "source": "runtime-inputs.post-publication.source_pr_number",
+          "required_at": "post-publication"
+        },
+        "candidate_sha": {
+          "source": "convergence.candidate_sha",
           "required_at": "post-publication"
         }
       },
