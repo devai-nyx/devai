@@ -9,6 +9,12 @@ vi.setConfig({ testTimeout: 30_000 });
 const ROOT = resolve(import.meta.dirname, '../..');
 const SCRIPT = resolve(ROOT, 'scripts/run-round-close-controls.mjs');
 const BASE = '722e8a3438f3534260ac4f24c3eecc59e76f905b';
+const APPROVED_ENGINEER_SURFACE = [
+  '.devai/config/round-close-controls.json',
+  'package.json',
+  'packages/schemas/src/roster.ts',
+  'scripts/run-round-close-controls.mjs',
+] as const;
 
 interface CommandResult {
   readonly status: number | null;
@@ -17,7 +23,11 @@ interface CommandResult {
   readonly value: Record<string, unknown> | null;
 }
 
-function run(command: string, args: readonly string[] = [], env: NodeJS.ProcessEnv = {}): CommandResult {
+function run(
+  command: string,
+  args: readonly string[] = [],
+  env: NodeJS.ProcessEnv = {},
+): CommandResult {
   const result = spawnSync(
     'node',
     [SCRIPT, command, '--repo-root', ROOT, '--round', 'R-0007', ...args, '--json'],
@@ -38,8 +48,13 @@ function json(relativePath: string): Record<string, any> {
 
 describe('pre-R-0007 generic close-control red contracts', () => {
   it('exposes the complete governed command surface', () => {
+    expect(APPROVED_ENGINEER_SURFACE).toHaveLength(4);
     const scripts = json('package.json').scripts as Record<string, string>;
-    expect(Object.keys(scripts).filter((name) => name.startsWith('round-close:')).sort()).toEqual([
+    expect(
+      Object.keys(scripts)
+        .filter((name) => name.startsWith('round-close:'))
+        .sort(),
+    ).toEqual([
       'round-close:claims-check',
       'round-close:entry-check',
       'round-close:impact-plan',
@@ -53,7 +68,9 @@ describe('pre-R-0007 generic close-control red contracts', () => {
 
   it('has no production R-0006, OM-012, unbounded-cycle, or fixed-model binding', () => {
     const source = readFileSync(SCRIPT, 'utf8');
-    expect(source).not.toMatch(/R-0006|OM-01[123]|owner-authorized-unbounded|gpt-5\.6-sol|claude-opus-5/u);
+    expect(source).not.toMatch(
+      /R-0006|OM-01[123]|owner-authorized-unbounded|gpt-5\.6-sol|claude-opus-5/u,
+    );
   });
 
   it('accepts the generic policy during pre-entry preparation and reports the unbound diagnostic', () => {
@@ -67,9 +84,7 @@ describe('pre-R-0007 generic close-control red contracts', () => {
       entry_ready: false,
     });
     expect(result.value?.diagnostics).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ code: 'ENTRY_BLOCKED_REVIEWER_UNBOUND' }),
-      ]),
+      expect.arrayContaining([expect.objectContaining({ code: 'ENTRY_BLOCKED_REVIEWER_UNBOUND' })]),
     );
   });
 
@@ -78,9 +93,7 @@ describe('pre-R-0007 generic close-control red contracts', () => {
     expect(result.status).toBe(1);
     expect(result.value).toMatchObject({ ok: false, command: 'entry-check', entry_ready: false });
     expect(result.value?.findings).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ code: 'ENTRY_BLOCKED_REVIEWER_UNBOUND' }),
-      ]),
+      expect.arrayContaining([expect.objectContaining({ code: 'ENTRY_BLOCKED_REVIEWER_UNBOUND' })]),
     );
   });
 
@@ -122,7 +135,9 @@ describe('pre-R-0007 generic close-control red contracts', () => {
     expect(result.value).toMatchObject({ remote: true, cache_trusted: false });
     const nodes = result.value?.nodes as Array<Record<string, unknown>>;
     expect(nodes.every((node) => node.outcome === 'EXECUTE')).toBe(true);
-    expect(nodes.every((node) => (node.reason_codes as string[]).includes('REMOTE_FULL'))).toBe(true);
+    expect(nodes.every((node) => (node.reason_codes as string[]).includes('REMOTE_FULL'))).toBe(
+      true,
+    );
   });
 
   it('keeps coverage whole-only and graph fallback explicit', () => {
