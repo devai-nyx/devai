@@ -18,6 +18,7 @@
     "candidate_identity_digest",
     "convergence_digest",
     "claims_digest",
+    "reviewer_binding_digest",
     "manifest_digest_sha256"
   ],
   "$defs": {
@@ -56,6 +57,7 @@
       "candidate_identity_digest": "6666666666666666666666666666666666666666666666666666666666666666",
       "convergence_digest": "7777777777777777777777777777777777777777777777777777777777777777",
       "claims_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+      "reviewer_binding_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "manifest_digest_sha256": "9999999999999999999999999999999999999999999999999999999999999999"
     }
   ]

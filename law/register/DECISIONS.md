@@ -4482,6 +4482,10 @@ Reviewer authority comes only from a complete schema-valid structured marker who
 mandate identifier, active status, exact round, literal model, read-only role, complete
 census, budget, retry limit, and forbidden fallback all validate. Mandate prose and
 partial markers do not enter the binding census.
+The census reads the exact candidate tree, never mutable worktree bytes. Its selected
+binding digest is required in the candidate manifest and must match at scope generation,
+review validation, state transition, and transport validation. A deleted or unreadable
+tracked mandate fails closed rather than crashing or silently shrinking the census.
 
 Convergence is an independently authenticated exact-base/exact-candidate record with
 two complete ordered passes over the authoritative population. Each pass proves clean

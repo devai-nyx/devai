@@ -141,6 +141,9 @@ Only a complete schema-valid structured binding marker enters that census. A mar
 binds its own mandate ID and active status as well as the exact round, model, role,
 census, budget, retry limit, and forbidden fallback. General mandate prose, round-name
 substrings, and partial or malformed marker-shaped objects have no binding authority.
+The census is read from the exact candidate tree. Its digest is mandatory in the
+candidate manifest and must remain equal through scope, review, state, and transport;
+missing or unreadable candidate mandate entries fail closed.
 
 Review scope is generated from registered obligations, exact changes, active controls,
 current claims, prior finding classes, candidate identities, and convergence evidence.

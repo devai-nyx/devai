@@ -312,6 +312,8 @@
     "census_participation": "complete-schema-valid-marker-only",
     "marker_mandate_id_and_status_must_match_container": true,
     "census_glob": "product/owner-mandates/OM-*.md",
+    "census_source": "exact-candidate-tree-never-mutable-worktree",
+    "candidate_manifest_binding": "required-and-equal-selected-candidate-census-digest",
     "preparation_allows_unbound": true,
     "preparation_diagnostic": "ENTRY_BLOCKED_REVIEWER_UNBOUND",
     "entry_requires_exactly_one_active_binding": true,
