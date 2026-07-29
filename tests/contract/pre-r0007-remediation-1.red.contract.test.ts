@@ -1422,7 +1422,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       expect(readFileSync(join(current.root, statePath), 'utf8')).toBe(stateBefore);
     });
 
-    it.each(['PASS', 'ESCALATION_REQUIRED', 'REVIEW_TRANSPORT_BLOCKED'])(
+    it.each(['PASS', 'REVIEW_TRANSPORT_BLOCKED'])(
       'does not overwrite terminal %s state during a fresh cycle-1 scope request',
       (terminal) => {
         const current = fixture(true);
@@ -1454,6 +1454,31 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         expect(readFileSync(join(current.root, statePath), 'utf8')).toBe(before);
       },
     );
+
+    it('rejects cycle-1 escalation without overwriting state or consuming a cycle', () => {
+      const current = fixture(true);
+      const frozen = freeze(current);
+      const scoped = scope(current, frozen);
+      expect(scoped.status).toBe(0);
+      const scopeDigest = (scoped.value.manifest as Record<string, unknown>)
+        .manifest_digest_sha256 as string;
+      const statePath = `${STATE}/review-state.json`;
+      putJson(
+        current.root,
+        statePath,
+        terminalState(current, frozen, scopeDigest, 'ESCALATION_REQUIRED', 'CYCLE_1_ACTIVE', 1),
+      );
+      const before = readFileSync(join(current.root, statePath), 'utf8');
+      const rejected = scope(current, frozen);
+      expectCode(rejected, 'REVIEW_STATE_TRANSITION_INVALID');
+      expect(codes(rejected)).not.toContain('REVIEW_STATE_TERMINAL');
+      expect(readFileSync(join(current.root, statePath), 'utf8')).toBe(before);
+      const status = run(current, 'status');
+      expect(status.value).toMatchObject({
+        state: 'DRAFT',
+        substantive_cycles: { used: 0, maximum: 2 },
+      });
+    });
   });
 
   describe('C2-F006 canonical findings and independently recomputed reuse', () => {
@@ -1555,12 +1580,12 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       );
     });
 
-    it('accepts one authentic current reused-topic proof', () => {
+    it('accepts one authentic current per-topic reused-topic proof', () => {
       const current = fixture(true);
       const frozen = freeze(current);
       const scoped = scope(current, frozen);
       expect(scoped.status).toBe(0);
-      const result = withAuthenticReuse(
+      const { result } = withCompleteTopicReuse(
         current,
         scoped.value.manifest as Record<string, unknown>,
         frozen,
@@ -1677,7 +1702,14 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const frozen = freeze(current, candidate);
       const scoped = scope(current, frozen);
       expect(scoped.status).toBe(0);
-      const topic = reusableTopic(scoped.value.manifest as Record<string, unknown>);
+      const topic = required(
+        (
+          (scoped.value.manifest as Record<string, unknown>).topics as Array<
+            Record<string, unknown>
+          >
+        ).find((entry) => entry.obligation_id === 'R9000-P0-IDENTITY'),
+        'fixture identity obligation topic is absent',
+      );
       expect(topic.allowed_dispositions).not.toContain('REUSED_FRESH_PASS');
       expect((topic.freshness_proof as Record<string, unknown>).method).toBe('recheck-required');
     });
