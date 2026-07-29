@@ -1,0 +1,769 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "PRE-R-0007-MACHINERY",
+  "cycle": 2,
+  "review_candidate": "40e70dce0bcfe697af6cd3450433e5ba4c0cf5a1",
+  "manifest_digest": "4d7680a2b7a1fc528cbc197df78aeb651e5d6c5c4e888da35c280a0453551fe5",
+  "reviewer_model": "gpt-5.6-sol",
+  "dispositions": [
+    {
+      "topic_id": "active-control:complete-census",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "a13bbc7e2e35b3ca5fccd8233abbd0b5c53c9658810a1ab351a14c37f2fd9390",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "candidate-identity:40e70dce0bcfe697",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "5acf65f228060cab53495ee8e663bb70134f20402cb2a81bb4463bce6542d364",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F005"]
+    },
+    {
+      "topic_id": "changed-path:0456a639767b524fc56f89f9",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "5441238c26702654232637814cc0672d7e0c6376780676d0a6cd0afc65639f89",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:135ead1a175d22b514762d00",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "d8995004d021f2ec9198ad80e675ea7f976ec8341ff3e1d1f7d5ec402cc23b38",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F005"]
+    },
+    {
+      "topic_id": "changed-path:14b1248d21857e961032b4df",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "addfcac9d812080d891e3d862fc4ef5c794ab9cf843047f3d44f981333b67208",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:19783e0e74fca846fd08d3d3",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "ff7ac24142fcc9a0e641199b6b018785aad9e0c2b11914116423996d41f8b9ea",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:1a50187afad63cadc34e6c60",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "771bb7a0ac7c47dbb718ace51c16188e38a468aad22b66934a5ab60c841605b3",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:1e1692912003db8d4b74379a",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "bbe1ace5f3cb1c5d89317492e0eac3b43e0840f208b0e43a2a2aa3fb49798d7f",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:1f19a3f728aebb4d1c4c6e5d",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "a2e2d06532b585d6339765cb35107d7d8499f47f09483e9be4fd008e76b8f8a2",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:22a6a4d1e787255256872e94",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "282c3edd8858216dc1507323ff6551bac9e3a7444096b646fc57bf599050cb05",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:2679bbba2b8e5ba1666b209e",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "a998e7f296fa4d70fcc2a7415bdf4990c658aff14084a0637e003ee058d2d72b",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:27923a7917e5eeefa126a65d",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "a58adee43a700329d341182f1091cc610af55fa94c31cca1b194ee4909697d8d",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:2c91e80e6a92940d1faa0a0c",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "be892787af9958b07f551cc679b4c4c92d3f0ec507c0fd93749b3609f5c5ea79",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:2d172301db6409c9acf659c2",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "c44eaa20931aeda9f54871cd2001a5816956407c06a289079018c5e3ec5f41b7",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:30dfa36c83c2dc94c53ce77b",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "c55a723a60f76ed8592950c12563b886182a2fb0e15aa591f15f7f46a041684f",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:3332c65e890a36a7be34fc24",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "7a9e89d288aecb5c850ef6ab10fb13be6b38ec7618b9196a0151cc187712e1b1",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:3b2c30afc2d7a22915a900ef",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "91cd8d321343588ec5cfa2ce393c948d6147013c291a5a0fde03d26371d6b3fa",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:3ea85af70c4e7d817b94a3e3",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "3b37a1f2e27d808dbb36a6282111336857706ecc71f5c5b4cc98914867f99ea3",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:53980d3aa080fb4103270bf4",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "a6459f40e4aa7b091b1ff19ce5b499b0d98007062b6da1e056d17a2d0b0002cd",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:5b97b91498504f7c7517ce3a",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "838ddcf89ae870daf936e27751a613736cfa9add186d58cdd1f43e2e4ae6ca65",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:5bd21cd61a6e03feacc5ef6a",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "1be22faa5effd2890d6045a419dd196216d7949d09749b3d11a5449c1e25ae71",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:5d51d55bf1768033be8ced6d",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "c5ca0c5235be8d23926390cd6fec00f0d1c65df32954778b8d08c2a4cccee8aa",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F001", "C2-F005", "C2-F006", "C2-F007", "C2-F008"]
+    },
+    {
+      "topic_id": "changed-path:61d1ad7fd59da6c0180ba579",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "8d645fde95ba2063c3ad2eab9c21bf1e84ba9d2d3da689403e026a095b696c07",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:63f848d7cf0f065a0f1110d2",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "d7d038479547bf79c9db1bbc5e835b22e501ed713e1ce1e09fb67b9175f721d3",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:6efa91cf4d3b6687d62ea272",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "2964756247c0f90e4335f66a830d33c2d5f16a80249222385b2a42ec335b6756",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:765a6d0d92ca94aaae8ca4a9",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "d86a78f0a733891b292ca8de87511e0c984937fe0363fe8c1f6e64b851fa800d",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:7ae45ad102eab3b6d7e7896a",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "c476e2d116071dae20777841eacb71831a067df58351ab302fa0b7335944910d",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:7e7260b9eeee9aa201f16a01",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "f5dbe64a36adee131bc3a7262eca1485d3bdae8af80821fb65d622be4256e613",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:85622c142ae49fde0ad541b8",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "adfe1957e8651f4aab580ef6e9bc569d92553a2a85f6af4f0c521f14d5db0d7c",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:8c9c6b6a206de4854fc7a4a6",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "ff1bad942ae921a0c2400fb68d9dc0df1bb840f38c3a9b161e3f0e370d1ec7ea",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F008"]
+    },
+    {
+      "topic_id": "changed-path:904d80925869eb663650079d",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "bc454a8e539b58807315376848473aa4e3ad6ac1f2bbd455ec293065cf40a6ac",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F001"]
+    },
+    {
+      "topic_id": "changed-path:93870511a7298a2bc62670c3",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "1743cc5683d798592e9c2be9d86baa1eac34394a69d93081dcc7926e9ada0d73",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:a89f21af09296fb744da5b67",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "0077c075071e41356f49d22bed3d73ce088e50f48dd8184300944d4476d4c51c",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F007"]
+    },
+    {
+      "topic_id": "changed-path:b7443f28c7a7a89d0561a1b3",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "201b2c23a50bcd942b385acfc83f69c1d4fa8088969ed61d7c77e7bb5285c98b",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:b96134b876858f70d82a3e46",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "ea425fbd94b8ac052fc0a28a08cf2d7ccaa05105fc6a6c5b301951d28a03587d",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:ba4e09d8831d03dd0693d693",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "6ac9d034e4cd5d13357f24dce0e51b08ffbd90a59d93cce73658ba1624b04f0a",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:c09b5df0ab0fac8006f013de",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "21f25eb0125b6c30a6999e55183adcce24167750186a8cf9d329d66bbea8e0c5",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:c93bbd61fda64b58af53855b",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "b3e8bf33fc18ce2cfbbb2965d44d47017b4f3007ec2e2ed3279832578960802d",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:cb2d36f71dcbb0fdd52d79c3",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "577dc4f382dbba49edbf48378b204f9a026cc502a15623dd9159f7d3460eba0b",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:d40faee7b457e251367e79c2",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "ad6a04beb7ae235ac576f5bbd7906bbedc537ecb1bd857ddbe5b102814ec04c9",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:d49764dcaac2f115663807b7",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "0ea7b000a7e49b17f37eec765397181e7bd985ce2b8fa9aa8a660f654c325a88",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:e1199b4f2afae4ac539f5931",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "33b264757c3237d69ae469b3f4a3dfc20383d29f2fe916faf2e82fd8f6002e39",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "changed-path:f25f2cc5d6dc8b951e275a47",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "c1939b11e1991428d8e0f290557210294edd3542fba1911373ff3ba9bf9c7e2f",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F008"]
+    },
+    {
+      "topic_id": "changed-path:fd7bf5e420478d1622b91955",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "41850f657773877eee4c3cc72f00b6fc43ab82f8cf48b658db4f6f57af8208e7",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "convergence-evidence:2eab01c43005a4abcd00ec80",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "2eab01c43005a4abcd00ec80f592955411287ef53f81a8897caacce2a579abb0",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F005"]
+    },
+    {
+      "topic_id": "current-claim:candidate.range",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "c0b46af05033786303ef2523fa58369c7b58be3f4d1d8d43690063fdcda76e2a",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F008"]
+    },
+    {
+      "topic_id": "current-claim:ci.exact-head",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "f35cc189eb53b8864d84f9f276e74ad2c6c3317c712775c56b3ef9267e4b945f",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F008"]
+    },
+    {
+      "topic_id": "current-claim:coverage.summary",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "4e64b94bdff822144daa10d23f3a248b21f3caaf97c948b387dbb4b4a13fba2f",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F008"]
+    },
+    {
+      "topic_id": "current-claim:review.topic-population",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "9b7c45e6ab240279395cda8dcf3d03d0e424534f6cc6616972f6ca966b62281d",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F008"]
+    },
+    {
+      "topic_id": "current-claim:site.artifact",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "77c1d681a53bc29bdf9eac4621c2bd9efd13e8c7bd45d74b623871228ea0148d",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F008"]
+    },
+    {
+      "topic_id": "current-claim:suite.population",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "a55982624b17094688df203cf6b0d5ac01a40c3d352af275183770019f09dd93",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F008"]
+    },
+    {
+      "topic_id": "obligation:r7-p0-authority",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "44822784b5a08970b92df74ff4d4db4a202ba768e4c864f99e8eff19e9dbe28f",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "obligation:r7-p0-candidate-identity",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "85245dea7d3e3b84bfc238c22d06495b1b7917a9f93636268117b066564de1c4",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F005"]
+    },
+    {
+      "topic_id": "obligation:r7-p0-deploy-refusal",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "6800b1a21bf9cc26f39ac3dc3b8699202964f806108cae710a861dd203df99b3",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "obligation:r7-p0-history-integrity",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "55b1f2cd3dddb4037c8d4fe6c609f197dcf794ba66910be93653930bfaec6719",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "obligation:r7-p0-reviewer-binding",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "8ce9237355d19c6d5aee9e5868c93e4bc97d2fff36f245b5bcd6f8ce792b4ab1",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F001"]
+    },
+    {
+      "topic_id": "obligation:r7-p1-affected-tests",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "fb3bfa3154752a2cbb1e9ab7d9354f51d091a87b8ab1aca1252ad1e67e348ae7",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "obligation:r7-p1-generated-identity",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "f302f6f26d5914c3017e900f1346d0b49a95add8cd9f94f09b87434b4ad6924e",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "obligation:r7-p1-review-census",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "8fd6b1fd37fec96846ef3561ee45061b429edc5b7dd07c6da3fc13953fe0f172",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F005", "C2-F006"]
+    },
+    {
+      "topic_id": "obligation:r7-p1-two-cycle",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "c5ca0c5235be8d23926390cd6fec00f0d1c65df32954778b8d08c2a4cccee8aa",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F007"]
+    },
+    {
+      "topic_id": "obligation:r7-p2-current-claims",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "e6b77702f32b22b1e678be4e3291b73f6eedf1dd6b4281a4a3dc6188b4e5efd9",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F008"]
+    },
+    {
+      "topic_id": "previous-finding-class:218408d5bc6b90acb23f73a2",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "dd61afe8b620f1593f3ef303133e46114dd5bed3eabcd465a60d7a2feb16403b",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F008"]
+    },
+    {
+      "topic_id": "previous-finding-class:54e1f036b7dc6e2edeb850e2",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "4efb9044c4ee08c9637d9014b3511a4a5602d1b4bbe302d99c9fc488be8d08bd",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F001"]
+    },
+    {
+      "topic_id": "previous-finding-class:8043f2c704419680ad0dbc0b",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "ac1a4d71b4a540e98590fad1585ec203da2c3d60e763ce9f18e89fd30a802af4",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F005"]
+    },
+    {
+      "topic_id": "previous-finding-class:b4e84ca1eb885ccb111a1c97",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "abccc133a6abcd090a34816412b76934afca3744fbda9b19514fc969025455c5",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "previous-finding-class:d12c35920f161b44a3b57f4f",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "298ae0d8d0e7a1cc927b6f43e7d9a5564947cd08be800f339d61beeb67db8cca",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "previous-finding-class:e3dffa65c50682e247047b75",
+      "disposition": "RECHECKED_PASS",
+      "recomputed_digest": "d72d5f7dfdee63a076b8d4e3e0b1bb680d270f7c12762ba845a7e73bebc7103a",
+      "evidence_refs": ["exact candidate diff", "focused adversarial contracts 54/54"],
+      "justification": "Exact candidate topic independently rechecked with no defect found.",
+      "finding_ids": []
+    },
+    {
+      "topic_id": "previous-finding-class:f3cc6ee14b90fce0b09a3797",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "7eac4b2b5f23458a5313e555f3c7bf186b856fe8a705e3cbaa49426da61c8b13",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F007"]
+    },
+    {
+      "topic_id": "previous-finding-class:f6989fb1bef105ba95cb8db8",
+      "disposition": "RECHECKED_FAIL",
+      "recomputed_digest": "12a66893febeaa97aad36c5401da222c4d4b9be7d0fc185c471c510fc8583b19",
+      "evidence_refs": [
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0007/prior-finding-registry.json"
+      ],
+      "justification": "Complete-class cycle-2 recheck found the linked unresolved defect.",
+      "finding_ids": ["C2-F006"]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "C2-F001",
+      "defect_class_id": "BINDING_CENSUS_ABSENT",
+      "severity": "P0",
+      "topic_ids": [
+        "changed-path:5d51d55bf1768033be8ced6d",
+        "changed-path:904d80925869eb663650079d",
+        "obligation:r7-p0-reviewer-binding",
+        "previous-finding-class:54e1f036b7dc6e2edeb850e2"
+      ],
+      "evidence": "reviewerBindingFindings counts every active Owner mandate whose structured round equals R-0007 or whose entire source merely contains R-0007. Active OM-014 repeatedly mentions R-0007 but is intentionally not the later exact model-binding mandate. Adding the required narrow binding therefore makes the census contain OM-014 plus the binding and emits ambiguity.",
+      "population_query": "Enumerate every tracked active Owner mandate; partition exact structured reviewer bindings from prose-only R-0007 references; add each valid single exact binding in turn.",
+      "affected_instances": [
+        "policy-check with a future valid R-0007 binding",
+        "entry-check with a future valid R-0007 binding",
+        "status with a future valid R-0007 binding",
+        "active OM-014 prose-only reference"
+      ],
+      "repair_acceptance": "Only documents containing the complete structured binding field set participate in ambiguity counting. Exactly one later binding matching the profile passes; zero, duplicate, conflicting, inactive, substring-only, or fallback-permitting bindings fail."
+    },
+    {
+      "finding_id": "C2-F005",
+      "defect_class_id": "REVIEW_CENSUS_AND_CANDIDATE_PROOF_INCOMPLETE",
+      "severity": "P0",
+      "topic_ids": [
+        "candidate-identity:40e70dce0bcfe697",
+        "changed-path:135ead1a175d22b514762d00",
+        "changed-path:5d51d55bf1768033be8ced6d",
+        "convergence-evidence:2eab01c43005a4abcd00ec80",
+        "obligation:r7-p0-candidate-identity",
+        "obligation:r7-p1-review-census",
+        "previous-finding-class:8043f2c704419680ad0dbc0b"
+      ],
+      "evidence": "reviewScopeV3 authenticates candidate manifest base/candidate/tree, but candidate-manifest schema does not require convergence_digest. Missing or malformed convergence state is replaced with candidateManifest. Existing convergence is not checked for self-digest, exact range, complete passes, or equality with candidateManifest.convergence_digest.",
+      "population_query": "For every exact candidate manifest exercise convergence missing, malformed, wrong base, wrong head, altered pass population, altered digest, one-pass-only, and candidate convergence-digest mismatch.",
+      "affected_instances": [
+        "missing convergence.json",
+        "malformed convergence.json",
+        "stale convergence for another range",
+        "tampered convergence pass population",
+        "candidate manifest lacking convergence_digest",
+        "candidate convergence digest mismatch"
+      ],
+      "repair_acceptance": "Review scope fails atomically for missing, malformed, stale, partial, or mismatched convergence. Candidate manifest requires and binds exact convergence; no fallback may manufacture convergence evidence."
+    },
+    {
+      "finding_id": "C2-F006",
+      "defect_class_id": "REVIEW_REUSE_AND_STREAM_CANONICALITY",
+      "severity": "P1",
+      "topic_ids": [
+        "changed-path:5d51d55bf1768033be8ced6d",
+        "obligation:r7-p1-review-census",
+        "previous-finding-class:f6989fb1bef105ba95cb8db8"
+      ],
+      "evidence": "resultFindings is a Map without rejecting duplicate finding_id values, so distinct same-ID findings can satisfy schema uniqueItems and collapse during linkage validation. REUSED_FRESH_PASS proof is only a copied topic digest, nonempty evidence refs, and a minimum-length justification; current evidence/task freshness is not recomputed.",
+      "population_query": "Mutate JSON and JSONL with duplicate finding IDs having different bodies, copied topic digests, arbitrary evidence text, stale task keys, and absent independent evidence recomputation.",
+      "affected_instances": [
+        "duplicate finding_id with differing body",
+        "reuse with copied manifest digest",
+        "reuse with arbitrary evidence reference",
+        "reuse without recomputed evidence or task freshness"
+      ],
+      "repair_acceptance": "Finding IDs are unique by identifier. Reuse validation recomputes current input digest, evidence digest, and required task keys; duplicate, stale, or non-recomputed proof fails."
+    },
+    {
+      "finding_id": "C2-F007",
+      "defect_class_id": "REVIEW_STATE_TRANSITION_BYPASS",
+      "severity": "P1",
+      "topic_ids": [
+        "changed-path:5d51d55bf1768033be8ced6d",
+        "changed-path:a89f21af09296fb744da5b67",
+        "obligation:r7-p1-two-cycle",
+        "previous-finding-class:f3cc6ee14b90fce0b09a3797"
+      ],
+      "evidence": "readState treats any parseable JSON as valid. Cycle 2 checks only state REPAIR_REQUIRED and a different candidate; it does not require cycle 1, bind the prior manifest, authenticate prior failure, or require complete-class repair evidence. Cycle 1 has no predecessor-state guard.",
+      "population_query": "Attempt every state enum into cycles 1 and 2 while varying stored cycle, candidate, manifest digest, prior verdict, repair evidence, transport identity, and state integrity.",
+      "affected_instances": [
+        "cycle 2 from stored cycle 99",
+        "cycle 2 with unrelated manifest",
+        "cycle 2 without authenticated cycle-1 failure",
+        "cycle 2 without repair evidence",
+        "cycle 1 after PASS",
+        "cycle 1 after ESCALATION_REQUIRED",
+        "cycle 1 after REVIEW_TRANSPORT_BLOCKED",
+        "parseable forged state JSON"
+      ],
+      "repair_acceptance": "State and transport records validate schemas and identities. A transition table rejects undeclared edges. Cycle 2 requires authenticated cycle-1 repair state, prior manifest, distinct regenerated candidate, and exact complete-class repair evidence; terminal states remain terminal."
+    },
+    {
+      "finding_id": "C2-F008",
+      "defect_class_id": "CLAIM_DIGEST_PLACEHOLDER_ACCEPTED",
+      "severity": "P2",
+      "topic_ids": [
+        "changed-path:5d51d55bf1768033be8ced6d",
+        "changed-path:8c9c6b6a206de4854fc7a4a6",
+        "changed-path:f25f2cc5d6dc8b951e275a47",
+        "current-claim:candidate.range",
+        "current-claim:ci.exact-head",
+        "current-claim:coverage.summary",
+        "current-claim:review.topic-population",
+        "current-claim:site.artifact",
+        "current-claim:suite.population",
+        "obligation:r7-p2-current-claims",
+        "previous-finding-class:218408d5bc6b90acb23f73a2"
+      ],
+      "evidence": "claimsCheckV3 recomputes source_digest and value_digest but never compares source_manifest, producer_output_digest, extracted_value, rendered_locations, or rendered_verification_digest, although materialized schema records require those fields.",
+      "population_query": "For every materialized claim independently alter producer, producer-output digest, source manifest, source digest, extractor, extracted value, value digest, rendered contents, and rendered verification digest.",
+      "affected_instances": [
+        "all six R-0007 claim classes",
+        "source_manifest",
+        "producer_output_digest",
+        "extracted_value",
+        "rendered_locations",
+        "rendered_verification_digest"
+      ],
+      "repair_acceptance": "claims-check recomputes every materialized proof and confirms the extracted value at every rendered location; any mismatch fails."
+    }
+  ],
+  "terminal": {
+    "topic_count": 69,
+    "finding_count": 5,
+    "disposition_counts": {
+      "RECHECKED_PASS": 45,
+      "RECHECKED_FAIL": 24,
+      "REUSED_FRESH_PASS": 0,
+      "BLOCKED": 0
+    },
+    "unresolved_p0": 2,
+    "unresolved_p1": 2,
+    "unresolved_p2": 1,
+    "verdict": "FAIL",
+    "required_state": "ESCALATION_REQUIRED",
+    "complete": true
+  }
+}
