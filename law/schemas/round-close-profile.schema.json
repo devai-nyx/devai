@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/round-close-profile.schema.json",
   "title": "Per-round close-control profile",
+  "description": "Per-round sources, runtime paths, reviewer binding, review budget, remote-CI behavior, and deployment boundary for the generic controller.",
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -125,5 +126,46 @@
       }
     },
     "deployment": { "enum": ["forbidden", "separately-authorized"] }
-  }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "round": "R-9999",
+      "policy_version": "3.0.0",
+      "decision_id": "DII-999",
+      "phase": "pre-entry-preparation",
+      "sources": {
+        "authorization": "work/rounds/R-9999/AUTHORIZATION.md",
+        "plan": "work/rounds/R-9999/plan.md",
+        "orchestrator": "work/rounds/R-9999/prompts/00-orchestrator.md",
+        "affected_test_graph": "work/rounds/R-9999/affected-test-graph.json",
+        "obligations": "work/rounds/R-9999/review-obligations.json",
+        "current_claims": "work/rounds/R-9999/current-claims.json"
+      },
+      "runtime": {
+        "state_root": ".devai/state/round-runs/R-9999/close",
+        "candidate_manifest": ".devai/state/round-runs/R-9999/close/candidate-manifest.json",
+        "review_scope": ".devai/state/round-runs/R-9999/close/review-scope-manifest.json",
+        "review_result": ".devai/state/round-runs/R-9999/close/review-result.json"
+      },
+      "reviewer": {
+        "binding": "owner-mandate-required",
+        "mandate_id": null,
+        "model_selector": null,
+        "role": "independent-read-only",
+        "fallback": "forbidden"
+      },
+      "review_budget": {
+        "substantive_cycles": 2,
+        "transport_retries_per_cycle": 1,
+        "cycle_three": "forbidden",
+        "cycle_two_failure": "ESCALATION_REQUIRED"
+      },
+      "remote_ci": {
+        "local_cache_trusted": false,
+        "gate_population": "complete-authoritative"
+      },
+      "deployment": "forbidden"
+    }
+  ]
 }

@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/review-result.schema.json",
   "title": "Structured exhaustive review result",
+  "description": "Exact-candidate topic dispositions, complete defect-class findings, and terminal counts for one bounded review cycle.",
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -117,5 +118,38 @@
         "complete": { "type": "boolean" }
       }
     }
-  }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "round": "R-9999",
+      "cycle": 1,
+      "review_candidate": "1111111111111111111111111111111111111111",
+      "manifest_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+      "policy_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "dispositions": [
+        {
+          "topic_id": "obligation:r9999-p0-identity",
+          "disposition": "RECHECKED_PASS",
+          "recomputed_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "evidence_refs": ["candidate manifest"],
+          "justification": "The manifest independently resolves the exact candidate.",
+          "finding_ids": []
+        }
+      ],
+      "findings": [],
+      "terminal": {
+        "verdict": "PASS",
+        "topic_count": 1,
+        "disposition_counts": {
+          "RECHECKED_PASS": 1,
+          "RECHECKED_FAIL": 0,
+          "REUSED_FRESH_PASS": 0,
+          "BLOCKED": 0
+        },
+        "finding_count": 0,
+        "complete": true
+      }
+    }
+  ]
 }

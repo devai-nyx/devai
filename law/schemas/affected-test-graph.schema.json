@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/affected-test-graph.schema.json",
   "title": "Explicit affected-test dependency graph",
+  "description": "Versioned source, test, shared-input, gate, fallback, and whole-coverage dependency graph for conservative local impact planning.",
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -122,5 +123,46 @@
         "partial_merge": { "const": "forbidden" }
       }
     }
-  }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "graph_version": "example-v1",
+      "round": "R-9999",
+      "population": {
+        "production": ["packages/*/src/**/*.ts"],
+        "tests": ["tests/**/*.test.ts"],
+        "classification": "complete-or-full-suite-fallback"
+      },
+      "shared_inputs": [
+        {
+          "id": "workspace",
+          "selectors": ["package.json"],
+          "invalidates": ["full-suite"]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "full-suite",
+          "kind": "fallback",
+          "input_selectors": ["packages/**/*.ts", "tests/**/*.ts"],
+          "depends_on": [],
+          "command": ["pnpm", "vitest", "run"],
+          "cwd": ".",
+          "outputs": [],
+          "coverage_mode": "none"
+        }
+      ],
+      "fallbacks": {
+        "unknown_dependency": "full-suite",
+        "dynamic_import": "full-suite",
+        "incomplete_population": "full-suite"
+      },
+      "coverage": {
+        "node": "full-suite",
+        "mode": "whole-only",
+        "partial_merge": "forbidden"
+      }
+    }
+  ]
 }

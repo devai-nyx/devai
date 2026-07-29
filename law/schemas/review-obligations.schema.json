@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/review-obligations.schema.json",
   "title": "Semantic review obligation registry",
+  "description": "Stable semantic obligations that generate the mandatory adversarial-review population for one governed round.",
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -52,5 +53,25 @@
         }
       }
     }
-  }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "registry_version": "example-v1",
+      "round": "R-9999",
+      "obligations": [
+        {
+          "obligation_id": "R9999-P0-IDENTITY",
+          "claim": "Every review result binds the exact candidate.",
+          "risk": "P0",
+          "source_refs": ["work/rounds/R-9999/plan.md#acceptance"],
+          "governing_paths": ["work/rounds/R-9999/**"],
+          "required_evidence": ["candidate manifest"],
+          "required_adversaries": ["wrong-sha"],
+          "reuse_policy": "always-recheck",
+          "finding_classes": []
+        }
+      ]
+    }
+  ]
 }

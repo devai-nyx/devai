@@ -114,5 +114,36 @@
       "if": { "properties": { "plan_outcome": { "const": "BLOCKED" } } },
       "then": { "properties": { "result": { "const": "BLOCKED" } } }
     }
+  ],
+  "examples": [
+    {
+      "schemaVersion": "2.0.0",
+      "policy_version": "2.0.0",
+      "graph_version": "example-v1",
+      "round": "R-9999",
+      "task_id": "full-suite",
+      "plan_outcome": "EXECUTE",
+      "reason_codes": ["SOURCE_CHANGED"],
+      "changed_inputs": ["packages/example/src/index.ts"],
+      "fallback_population": null,
+      "argv": ["pnpm", "vitest", "run"],
+      "cwd": ".",
+      "task_key": "0000000000000000000000000000000000000000000000000000000000000000",
+      "input_manifest_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "dependency_keys": {},
+      "policy_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+      "graph_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "toolchain_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+      "environment_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+      "producing_candidate": "6666666666666666666666666666666666666666",
+      "result": "EXECUTED_PASS",
+      "exit_code": 0,
+      "stdout_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+      "stderr_sha256": "8888888888888888888888888888888888888888888888888888888888888888",
+      "result_digest": "9999999999999999999999999999999999999999999999999999999999999999",
+      "reused_result_digest": null,
+      "outputs": [],
+      "freshness_reason": "executed for the exact content-addressed task key"
+    }
   ]
 }

@@ -152,5 +152,49 @@
       }
     },
     "manifest_digest_sha256": { "$ref": "#/$defs/sha256" }
-  }
+  },
+  "examples": [
+    {
+      "schemaVersion": "2.0.0",
+      "policy_version": "2.0.0",
+      "round": "R-9999",
+      "cycle": 1,
+      "exact_base": "0000000000000000000000000000000000000000",
+      "review_candidate": "1111111111111111111111111111111111111111",
+      "candidate_tree": "2222222222222222222222222222222222222222",
+      "policy_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "profile_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+      "graph_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+      "obligations_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+      "claims_digest": "7777777777777777777777777777777777777777777777777777777777777777",
+      "current_candidate_manifest_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+      "previous_candidate_manifest_digests": [],
+      "topic_count": 1,
+      "topics": [
+        {
+          "topic_id": "obligation:r9999-p0-identity",
+          "obligation_id": "R9999-P0-IDENTITY",
+          "risk": "P0",
+          "claim": "The review binds the exact candidate.",
+          "source_refs": ["work/rounds/R-9999/plan.md#acceptance"],
+          "governing_paths": ["work/rounds/R-9999/plan.md"],
+          "required_evidence": ["candidate manifest"],
+          "current_digest": "9999999999999999999999999999999999999999999999999999999999999999",
+          "previous_digest": null,
+          "changed_status": "added",
+          "required_adversaries": ["wrong-sha"],
+          "previous_finding_classes": [],
+          "freshness_proof": {
+            "method": "recheck-required",
+            "inputs_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "evidence_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "task_keys": [],
+            "independent_recomputation_required": true
+          },
+          "allowed_dispositions": ["RECHECKED_PASS", "RECHECKED_FAIL", "BLOCKED"]
+        }
+      ],
+      "manifest_digest_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  ]
 }

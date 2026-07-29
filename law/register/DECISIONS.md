@@ -4388,7 +4388,7 @@ tag, GitHub Release, Pages deployment, evidence promotion, predecessor mutation,
 external mutation, or R-0007+ authority.
 
 ### DII-246 — Generalize round close into bounded content-addressed convergence
-`type: decision · status: active · authority: Architect · provenance: OM-014; approved pre-R-0007 convergence and review machinery campaign; R-0006 closure lessons`
+`type: decision · status: active · authority: Architect · provenance: session-draft pre-R-0007 convergence machinery; OM-014; approved campaign; R-0006 closure lessons`
 
 R-0007 through R-0009 use one generic round-close policy and an explicit per-round
 profile. The generic engine contains no round, historical mandate, audit destination,

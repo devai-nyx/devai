@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/current-claims.schema.json",
   "title": "Structured current-claim ledger",
+  "description": "Registry or exact-candidate materialization of volatile claims and the source and value digests that make them current.",
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -79,6 +80,27 @@
           }
         }
       }
+    }
+  ],
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "ledger_version": "example-v1",
+      "round": "R-9999",
+      "mode": "registry",
+      "candidate": null,
+      "claims": [
+        {
+          "claim_id": "suite.population",
+          "volatility": "tree",
+          "producer": ["pnpm", "vitest", "list", "--json"],
+          "extractor": "$.files",
+          "source_paths": ["tests/**/*.test.ts"],
+          "rendered_locations": ["work/audit/R-9999/as-built.md"],
+          "source_digest": null,
+          "value_digest": null
+        }
+      ]
     }
   ]
 }
