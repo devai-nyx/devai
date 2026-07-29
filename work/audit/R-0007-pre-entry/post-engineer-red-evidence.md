@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    OM-014; DII-246; Inspector 3d950ed09d6ec0f11b986ec532146b54c01c67a1; Engineer 477237c5a20a7690283433c0cd8e5e0042a34909,
+    OM-014; DII-246; Inspector 3d950ed09d6ec0f11b986ec532146b54c01c67a1; Engineer 477237c8b7c33c2c59e2262ec9147311feaf6e5b,
   ]
 related_invariants: [INV-DEVAI-001; INV-DEVAI-002; INV-DEVAI-003; INV-DEVAI-017; INV-DEVAI-020]
 ---
@@ -17,7 +17,7 @@ related_invariants: [INV-DEVAI-001; INV-DEVAI-002; INV-DEVAI-003; INV-DEVAI-017;
 # Post-Engineer complete-class red evidence
 
 The generic controller implementation at exact Engineer commit
-`477237c5a20a7690283433c0cd8e5e0042a34909` closes the original nine-case red
+`477237c8b7c33c2c59e2262ec9147311feaf6e5b` closes the original nine-case red
 population: `tests/contract/pre-r0007-close-controls.red.contract.test.ts` passes all
 13 cases. `pnpm run devai:prepare` also passes.
 
