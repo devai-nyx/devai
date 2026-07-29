@@ -196,6 +196,11 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
   Object.assign(profile, {
     round: ROUND,
     decision_id: 'DII-900',
+    declaration: {
+      binding: 'b0-decision-required',
+      decision_id: null,
+      exact_base: null,
+    },
     sources: {
       authorization: `work/rounds/${ROUND}/AUTHORIZATION.md`,
       plan: `work/rounds/${ROUND}/plan.md`,
@@ -211,6 +216,7 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
       state_root: `.devai/state/round-runs/${ROUND}/close`,
       candidate_manifest: `.devai/state/round-runs/${ROUND}/close/candidate-manifest.json`,
       convergence_evidence: `.devai/state/round-runs/${ROUND}/close/convergence-evidence.json`,
+      impact_execution: `.devai/state/round-runs/${ROUND}/close/affected-test-execution.json`,
       review_scope: `.devai/state/round-runs/${ROUND}/close/review-scope-manifest.json`,
       review_result: `.devai/state/round-runs/${ROUND}/close/review-result.json`,
       materialized_claims: `.devai/state/round-runs/${ROUND}/close/current-claims.json`,
@@ -371,152 +377,43 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
       `---\nid: OM-900\nstatus: active\nauthority: Owner\n---\n\n\`\`\`json\n${JSON.stringify(reviewerBindingMarker(), null, 2)}\n\`\`\`\n`,
     );
   }
-  return { root, base: commit(root, 'fixture base') };
+  const base = commit(root, 'fixture opening base');
+  profile.declaration = {
+    binding: 'b0-decision-required',
+    decision_id: 'DII-900',
+    exact_base: base,
+  };
+  putJson(root, `work/rounds/${ROUND}/close-control-profile.json`, profile);
+  put(
+    root,
+    'law/register/DECISIONS.md',
+    `# Fixture decisions\n\n### DII-900\n\n\`\`\`json\n${JSON.stringify(
+      {
+        schemaVersion: '1.0.0',
+        devai_round_declaration: true,
+        round: ROUND,
+        decision_id: 'DII-900',
+        authority: 'Architect',
+        exact_base: base,
+        base_source: 'origin/main-at-b0',
+      },
+      null,
+      2,
+    )}\n\`\`\`\n`,
+  );
+  commit(root, 'fixture B0 declaration');
+  return { root, base };
 }
 
 function freezeCandidate(fixtureValue: Fixture, candidate: string): void {
-  const policy = sourceJson('law/policy/round-close-controls.json');
-  policy.policy_id = 'cycle-1-fixture';
-  const convergencePolicy = policy.convergence as Record<string, unknown>;
-  convergencePolicy.commands = (convergencePolicy.commands as Array<{ id: string }>).map(
-    (command) => ({
-      id: command.id,
-      argv: ['node', 'fixture/gate.mjs', command.id],
-    }),
-  );
-  const freshnessPolicy = policy.freshness as Record<string, unknown>;
-  freshnessPolicy.environment_allowlist = [];
-  freshnessPolicy.toolchain = [];
-  const profile = JSON.parse(
-    readFileSync(
-      join(fixtureValue.root, `work/rounds/${ROUND}/close-control-profile.json`),
-      'utf8',
-    ),
-  );
-  const graph = JSON.parse(
-    readFileSync(join(fixtureValue.root, `work/rounds/${ROUND}/affected-test-graph.json`), 'utf8'),
-  );
-  const claimsRegistry = JSON.parse(
-    readFileSync(join(fixtureValue.root, `work/rounds/${ROUND}/current-claims.json`), 'utf8'),
-  );
-  const sourceManifest = [
-    {
-      path: 'tests/a.test.ts',
-      state: 'present',
-      content_digest: digest(readFileSync(join(fixtureValue.root, 'tests/a.test.ts'), 'utf8')),
-    },
-  ];
-  const renderedProofBody = {
-    location: `work/audit/${ROUND}/as-built.md`,
-    claim_marker: 'DEVAI_CLAIM:suite.population=',
-    content_digest: digest('DEVAI_CLAIM:suite.population=1\n'),
-    extracted_rendered_value_digest: digest(canonical(1)),
-  };
-  const renderedProof = {
-    ...renderedProofBody,
-    verification_digest: digest(canonical(renderedProofBody)),
-  };
-  const claimsBody = {
-    ...claimsRegistry,
-    mode: 'materialized',
+  const result = run(fixtureValue, 'smart-converge', [
+    '--base',
+    fixtureValue.base,
+    '--head',
     candidate,
-    pre_review_claims_digest: null,
-    claims: claimsRegistry.claims.map((claim: Record<string, unknown>) => ({
-      ...claim,
-      proof_status: 'PROVEN',
-      resolved_producer: claim.producer,
-      source_manifest: sourceManifest,
-      source_digest: digest(canonical(sourceManifest)),
-      producer_output_digest: digest(JSON.stringify({ count: 1 })),
-      extracted_value: 1,
-      value_digest: digest(canonical(1)),
-      rendered_proofs: [renderedProof],
-      rendered_verification_digest: digest(canonical([renderedProof])),
-    })),
-  };
-  delete claimsBody.claims_digest_sha256;
-  const claims = { ...claimsBody, claims_digest_sha256: digest(canonical(claimsBody)) };
-  put(fixtureValue.root, `work/audit/${ROUND}/as-built.md`, 'DEVAI_CLAIM:suite.population=1\n');
-  putJson(fixtureValue.root, `.devai/state/round-runs/${ROUND}/close/current-claims.json`, claims);
-  const tree = git(fixtureValue.root, ['rev-parse', `${candidate}^{tree}`]);
-  const profileDigest = digest(canonical(profile));
-  const policyDigest = digest(canonical(policy));
-  const graphDigest = digest(canonical(graph));
-  const candidateIdentity = digest(
-    canonical({
-      round: ROUND,
-      base_sha: fixtureValue.base,
-      candidate_sha: candidate,
-      tree_sha: tree,
-      profile_digest: profileDigest,
-      policy_digest: policyDigest,
-      graph_digest: graphDigest,
-    }),
-  );
-  const gateIds = (convergencePolicy.commands as Array<{ id: string }>).map(({ id }) => id);
-  const semanticPopulation = digest(canonical(gateIds));
-  const pass = (passNumber: 1 | 2) => {
-    const passBody = {
-      pass_number: passNumber,
-      head_before: candidate,
-      head_after: candidate,
-      tree_sha: tree,
-      clean_before: true,
-      clean_after: true,
-      writes: [],
-      gate_results: gateIds.map((gate_id) => ({
-        gate_id,
-        outcome: passNumber === 1 ? 'EXECUTED_PASS' : 'REUSED_FRESH_PASS',
-        task_key: digest(canonical({ gate_id, candidate })),
-        output_digest: digest(canonical({ gate_id, output: 'pass' })),
-        result_digest: digest(canonical({ gate_id, result: 'pass' })),
-      })),
-      semantic_population_digest: semanticPopulation,
-    };
-    return { ...passBody, pass_digest_sha256: digest(canonical(passBody)) };
-  };
-  const convergenceBody = {
-    schemaVersion: '1.0.0',
-    round: ROUND,
-    exact_base: fixtureValue.base,
-    candidate_sha: candidate,
-    candidate_tree: tree,
-    candidate_identity_digest: candidateIdentity,
-    policy_digest: policyDigest,
-    profile_digest: profileDigest,
-    authoritative_gate_ids: gateIds,
-    authoritative_population_digest: semanticPopulation,
-    passes: [pass(1), pass(2)],
-  };
-  const convergence = {
-    ...convergenceBody,
-    convergence_digest_sha256: digest(canonical(convergenceBody)),
-  };
-  putJson(
-    fixtureValue.root,
-    `.devai/state/round-runs/${ROUND}/close/convergence-evidence.json`,
-    convergence,
-  );
-  const body = {
-    schemaVersion: '2.0.0',
-    round: ROUND,
-    base_sha: fixtureValue.base,
-    candidate_sha: candidate,
-    tree_sha: tree,
-    profile_digest: profileDigest,
-    policy_digest: policyDigest,
-    graph_digest: graphDigest,
-    candidate_identity_digest: candidateIdentity,
-    convergence_digest: convergence.convergence_digest_sha256,
-    claims_digest: claims.claims_digest_sha256,
-    reviewer_binding_digest: digest(canonical(reviewerBindingMarker())),
-  };
-  putJson(fixtureValue.root, `.devai/state/round-runs/${ROUND}/close/candidate-manifest.json`, {
-    ...body,
-    manifest_digest_sha256: digest(canonical(body)),
-  });
+  ]);
+  expect(result.status, JSON.stringify(result.value, null, 2)).toBe(0);
 }
-
 function scope(fixtureValue: Fixture, cycle: 1 | 2, candidate = 'HEAD'): Result {
   return run(fixtureValue, 'review-scope', [
     '--base',
@@ -693,7 +590,7 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
   });
 
   it('F-004 rejects cache records without exact task and fresh dependency-result identity', () => {
-    const current = fixture();
+    const current = fixture({ bound: true });
     put(current.root, 'packages/a/src/index.ts', 'export const a = 2;\n');
     const candidate = commit(current.root, 'change shared source');
     const cold = run(current, 'smart-converge', ['--base', current.base, '--head', candidate]);
@@ -721,7 +618,7 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
   });
 
   it('F-004 invalidates a dependent PASS when its dependency PASS is no longer fresh', () => {
-    const current = fixture();
+    const current = fixture({ bound: true });
     put(current.root, 'tests/b.test.ts', 'export const testB = "changed";\n');
     const candidate = commit(current.root, 'change dependent test');
     const cold = run(current, 'smart-converge', ['--base', current.base, '--head', candidate]);
@@ -745,12 +642,12 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
   });
 
   it('F-005 requires an exact candidate manifest and emits all seven generic topic classes', () => {
-    const current = fixture();
+    const current = fixture({ bound: true });
     put(current.root, 'packages/a/src/index.ts', 'export const a = 2;\n');
     const candidate = commit(current.root, 'candidate change');
     const missing = scope(current, 1, candidate);
     expect(missing.status).toBe(1);
-    expect(findingCodes(missing)).toContain('CANDIDATE_MANIFEST_REQUIRED');
+    expect(findingCodes(missing)).toContain('CANDIDATE_MANIFEST_MISSING');
 
     freezeCandidate(current, candidate);
     const result = scope(current, 1, candidate);
@@ -772,7 +669,7 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
   });
 
   it('F-006 enforces each semantic obligation reuse policy', () => {
-    const current = fixture({ reusePolicy: 'always-recheck' });
+    const current = fixture({ bound: true, reusePolicy: 'always-recheck' });
     const candidate = git(current.root, ['rev-parse', 'HEAD']);
     freezeCandidate(current, candidate);
     const scoped = scope(current, 1, candidate);
@@ -785,7 +682,7 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
   });
 
   it('F-006 rejects non-canonical JSONL and orphan or mismatched finding links', () => {
-    const current = fixture({ reusePolicy: 'always-recheck' });
+    const current = fixture({ bound: true, reusePolicy: 'always-recheck' });
     const candidate = git(current.root, ['rev-parse', 'HEAD']);
     freezeCandidate(current, candidate);
     const scoped = scope(current, 1, candidate);
@@ -801,14 +698,14 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
     delete header.findings;
     delete header.terminal;
     const terminal = { type: 'terminal', ...(review.terminal as Record<string, unknown>) };
-    const lines = [
+    const nonCanonicalLines = [
       JSON.stringify(header),
       JSON.stringify({ type: 'disposition', ...disposition }),
       JSON.stringify(terminal),
       JSON.stringify(header),
     ];
-    put(current.root, 'review.jsonl', `${lines.join('\n')}\n`);
-    const checked = run(current, 'review-check', [
+    put(current.root, 'review.jsonl', `${nonCanonicalLines.join('\n')}\n`);
+    const nonCanonical = run(current, 'review-check', [
       '--candidate',
       candidate,
       '--cycle',
@@ -816,37 +713,33 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
       '--review-result',
       'review.jsonl',
     ]);
-    expect(checked.status).toBe(1);
-    expect(findingCodes(checked)).toEqual(
-      expect.arrayContaining(['REVIEW_JSONL_NON_CANONICAL', 'REVIEW_FINDING_LINK_INVALID']),
-    );
-  });
+    expect(nonCanonical.status).toBe(1);
+    expect(findingCodes(nonCanonical)).toContain('REVIEW_JSONL_NON_CANONICAL');
 
-  it('F-007 refuses unordered cycle 2 for an unfrozen replacement candidate', () => {
-    const current = fixture();
-    const candidate = git(current.root, ['rev-parse', 'HEAD']);
-    freezeCandidate(current, candidate);
-    const scoped = scope(current, 2, candidate);
-    expect(scoped.status).toBe(0);
-    putJson(
-      current.root,
-      'review.json',
-      passingReview(scoped.value.manifest as Record<string, unknown>),
-    );
-    const unordered = run(current, 'review-check', [
+    putJson(current.root, 'review.json', review);
+    const orphan = run(current, 'review-check', [
       '--candidate',
       candidate,
       '--cycle',
-      '2',
+      '1',
       '--review-result',
       'review.json',
     ]);
-    expect(unordered.status).toBe(1);
-    expect(findingCodes(unordered)).toContain('REVIEW_STATE_TRANSITION_INVALID');
+    expect(orphan.status).toBe(1);
+    expect(findingCodes(orphan)).toContain('REVIEW_FINDING_LINK_INVALID');
+  });
+
+  it('F-007 refuses unordered cycle 2 for an unfrozen replacement candidate', () => {
+    const current = fixture({ bound: true });
+    const candidate = git(current.root, ['rev-parse', 'HEAD']);
+    freezeCandidate(current, candidate);
+    const scoped = scope(current, 2, candidate);
+    expect(scoped.status).toBe(1);
+    expect(findingCodes(scoped)).toContain('REVIEW_STATE_TRANSITION_INVALID');
   });
 
   it('F-007 binds every malformed transport allowance to candidate, manifest, and cycle', () => {
-    const current = fixture();
+    const current = fixture({ bound: true });
     const candidate = git(current.root, ['rev-parse', 'HEAD']);
     freezeCandidate(current, candidate);
     const scoped = scope(current, 1, candidate);
@@ -863,20 +756,21 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
     expect(malformed.status).toBe(1);
     const transport = JSON.parse(
       readFileSync(
-        join(current.root, `.devai/state/round-runs/${ROUND}/close/review-transport-1.json`),
+        join(current.root, `.devai/state/round-runs/${ROUND}/close/review-transport.json`),
         'utf8',
       ),
     ) as Record<string, unknown>;
-    expect(transport).toMatchObject({ candidate, cycle: 1 });
-    expect(transport.manifest_digest).toBe(
+    expect(transport).toMatchObject({ candidate_sha: candidate, cycle: 1 });
+    expect(transport.review_scope_digest).toBe(
       (scoped.value.manifest as Record<string, unknown>).manifest_digest_sha256,
     );
   });
 
   it('F-008 deterministically recomputes claim source and extracted value digests', () => {
-    const current = fixture();
+    const current = fixture({ bound: true });
     const candidate = git(current.root, ['rev-parse', 'HEAD']);
-    const ledgerPath = `work/rounds/${ROUND}/current-claims.json`;
+    freezeCandidate(current, candidate);
+    const ledgerPath = `.devai/state/round-runs/${ROUND}/close/current-claims.json`;
     const ledger = JSON.parse(readFileSync(join(current.root, ledgerPath), 'utf8')) as Record<
       string,
       unknown
@@ -888,6 +782,8 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
     if (claim === undefined) throw new Error('claim fixture missing');
     claim.source_digest = 'a'.repeat(64);
     claim.value_digest = 'b'.repeat(64);
+    const { claims_digest_sha256: _oldDigest, ...ledgerBody } = ledger;
+    ledger.claims_digest_sha256 = digest(canonical(ledgerBody));
     putJson(current.root, ledgerPath, ledger);
     const result = run(current, 'claims-check', ['--candidate', candidate]);
     expect(result.status).toBe(1);

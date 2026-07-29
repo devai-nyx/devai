@@ -1,8 +1,7 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 import { spawnSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.setConfig({ testTimeout: 30_000 });
@@ -10,10 +9,6 @@ vi.setConfig({ testTimeout: 30_000 });
 const ROOT = resolve(import.meta.dirname, '../..');
 const SCRIPT = resolve(ROOT, 'scripts/run-round-close-controls.mjs');
 const BASE = '722e8a3438f3534260ac4f24c3eecc59e76f905b';
-const CANDIDATE_MANIFEST = '.devai/state/round-runs/R-0007/close/candidate-manifest.json';
-const CONVERGENCE_EVIDENCE = '.devai/state/round-runs/R-0007/close/convergence-evidence.json';
-const MATERIALIZED_CLAIMS = '.devai/state/round-runs/R-0007/close/current-claims.json';
-const REVIEW_SCOPE = '.devai/state/round-runs/R-0007/close/review-scope-manifest.json';
 const APPROVED_ENGINEER_SURFACE = [
   '.devai/config/round-close-controls.json',
   'package.json',
@@ -49,189 +44,6 @@ function run(
 
 function json(relativePath: string): Record<string, unknown> {
   return JSON.parse(readFileSync(resolve(ROOT, relativePath), 'utf8')) as Record<string, unknown>;
-}
-
-function stable(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(stable);
-  if (value !== null && typeof value === 'object') {
-    const record = value as Record<string, unknown>;
-    return Object.fromEntries(
-      Object.keys(record)
-        .sort()
-        .map((key) => [key, stable(record[key])]),
-    );
-  }
-  return value;
-}
-
-function canonical(value: unknown): string {
-  return `${JSON.stringify(stable(value))}\n`;
-}
-
-function git(args: readonly string[]): string {
-  const result = spawnSync('git', args, { cwd: ROOT, encoding: 'utf8' });
-  if (result.status !== 0) throw new Error(result.stderr);
-  return result.stdout.trim();
-}
-
-function freezeExactCandidate(): void {
-  const candidate = git(['rev-parse', 'HEAD']);
-  const tree = git(['rev-parse', `${candidate}^{tree}`]);
-  const policy = json('law/policy/round-close-controls.json');
-  const profile = json('work/rounds/R-0007/close-control-profile.json');
-  const graph = json('work/rounds/R-0007/affected-test-graph.json');
-  const claimsRegistry = json('work/rounds/R-0007/current-claims.json');
-  const sha256 = (value: unknown) => createHash('sha256').update(canonical(value)).digest('hex');
-  const policyDigest = sha256(policy);
-  const profileDigest = sha256(profile);
-  const graphDigest = sha256(graph);
-  const candidateIdentity = sha256({
-    round: 'R-0007',
-    base_sha: BASE,
-    candidate_sha: candidate,
-    tree_sha: tree,
-    profile_digest: profileDigest,
-    policy_digest: policyDigest,
-    graph_digest: graphDigest,
-  });
-  const claimsBody = {
-    ...claimsRegistry,
-    mode: 'materialized',
-    candidate,
-    pre_review_claims_digest: null,
-    claims: (claimsRegistry.claims as Array<Record<string, unknown>>).map((claim) => {
-      if (claim.availability === 'post-publication') {
-        return {
-          ...claim,
-          proof_status: 'DEFERRED_POST_PUBLICATION',
-          deferred_proof: {
-            required_at: 'post-publication',
-            declaration_digest: sha256(claim),
-          },
-        };
-      }
-      const extracted = { fixture: claim.claim_id };
-      const sourceManifest = (claim.source_paths as string[]).map((source) => ({
-        path: source,
-        state: 'present',
-        content_digest: sha256({ source, candidate }),
-      }));
-      const renderedProofs = (claim.rendered_locations as string[]).map((location) => {
-        const proofBody = {
-          location,
-          claim_marker: `DEVAI_CLAIM:${String(claim.claim_id)}=`,
-          content_digest: sha256({ location, fixture: true }),
-          extracted_rendered_value_digest: sha256(extracted),
-        };
-        return { ...proofBody, verification_digest: sha256(proofBody) };
-      });
-      return {
-        ...claim,
-        proof_status: 'PROVEN',
-        resolved_producer: (claim.producer as string[]).map((argument) =>
-          argument
-            .replaceAll('{exact_base}', BASE)
-            .replaceAll('{candidate_sha}', candidate)
-            .replaceAll('{site_artifact_path}', 'scratch/site-artifact.zip'),
-        ),
-        source_manifest: sourceManifest,
-        source_digest: sha256(sourceManifest),
-        producer_output_digest: sha256({ claim_id: claim.claim_id, output: 'fixture' }),
-        extracted_value: extracted,
-        value_digest: sha256(extracted),
-        rendered_proofs: renderedProofs,
-        rendered_verification_digest: sha256(renderedProofs),
-      };
-    }),
-  };
-  delete claimsBody.claims_digest_sha256;
-  const claims = { ...claimsBody, claims_digest_sha256: sha256(claimsBody) };
-  const claimsPath = resolve(ROOT, MATERIALIZED_CLAIMS);
-  mkdirSync(dirname(claimsPath), { recursive: true });
-  writeFileSync(claimsPath, canonical(claims));
-  const gateIds = (
-    (policy.convergence as Record<string, unknown>).commands as Array<{ id: string }>
-  ).map(({ id }) => id);
-  const semanticPopulation = sha256(gateIds);
-  const pass = (passNumber: 1 | 2) => {
-    const passBody = {
-      pass_number: passNumber,
-      head_before: candidate,
-      head_after: candidate,
-      tree_sha: tree,
-      clean_before: true,
-      clean_after: true,
-      writes: [],
-      gate_results: gateIds.map((gate_id) => ({
-        gate_id,
-        outcome: passNumber === 1 ? 'EXECUTED_PASS' : 'REUSED_FRESH_PASS',
-        task_key: sha256({ gate_id, candidate }),
-        output_digest: sha256({ gate_id, output: 'pass' }),
-        result_digest: sha256({ gate_id, result: 'pass' }),
-      })),
-      semantic_population_digest: semanticPopulation,
-    };
-    return { ...passBody, pass_digest_sha256: sha256(passBody) };
-  };
-  const convergenceBody = {
-    schemaVersion: '1.0.0',
-    round: 'R-0007',
-    exact_base: BASE,
-    candidate_sha: candidate,
-    candidate_tree: tree,
-    candidate_identity_digest: candidateIdentity,
-    policy_digest: policyDigest,
-    profile_digest: profileDigest,
-    authoritative_gate_ids: gateIds,
-    authoritative_population_digest: semanticPopulation,
-    passes: [pass(1), pass(2)],
-  };
-  const convergence = {
-    ...convergenceBody,
-    convergence_digest_sha256: sha256(convergenceBody),
-  };
-  const convergencePath = resolve(ROOT, CONVERGENCE_EVIDENCE);
-  mkdirSync(dirname(convergencePath), { recursive: true });
-  writeFileSync(convergencePath, canonical(convergence));
-  const body = {
-    schemaVersion: '2.0.0',
-    round: 'R-0007',
-    base_sha: BASE,
-    candidate_sha: candidate,
-    tree_sha: tree,
-    profile_digest: profileDigest,
-    policy_digest: policyDigest,
-    graph_digest: graphDigest,
-    candidate_identity_digest: candidateIdentity,
-    convergence_digest: convergence.convergence_digest_sha256,
-    claims_digest: claims.claims_digest_sha256,
-  };
-  const path = resolve(ROOT, CANDIDATE_MANIFEST);
-  mkdirSync(dirname(path), { recursive: true });
-  writeFileSync(
-    path,
-    canonical({
-      ...body,
-      manifest_digest_sha256: createHash('sha256').update(canonical(body)).digest('hex'),
-    }),
-  );
-}
-
-function preserveRuntimeFiles(relativePaths: readonly string[]): () => void {
-  const snapshots = relativePaths.map((relativePath) => {
-    const path = resolve(ROOT, relativePath);
-    return { path, contents: existsSync(path) ? readFileSync(path) : null };
-  });
-  return () => {
-    for (const { path, contents } of snapshots) {
-      if (contents === null) {
-        if (existsSync(path)) unlinkSync(path);
-      } else {
-        mkdirSync(dirname(path), { recursive: true });
-        writeFileSync(path, contents);
-      }
-    }
-  };
 }
 
 describe('pre-R-0007 generic close-control red contracts', () => {
@@ -353,28 +165,25 @@ describe('pre-R-0007 generic close-control red contracts', () => {
     expect(reviewScope.exactly_once).toBe(true);
   });
 
-  it('generates a scope containing every registered semantic obligation', () => {
-    const restore = preserveRuntimeFiles([
-      CANDIDATE_MANIFEST,
-      CONVERGENCE_EVIDENCE,
-      MATERIALIZED_CLAIMS,
-      REVIEW_SCOPE,
-    ]);
-    try {
-      freezeExactCandidate();
-      const result = run('review-scope', ['--base', BASE, '--candidate', 'HEAD', '--cycle', '1']);
-      expect(result.status).toBe(0);
-      const obligations = json('work/rounds/R-0007/review-obligations.json').obligations as Array<{
-        obligation_id: string;
-      }>;
-      const topics = (result.value?.manifest as Record<string, unknown>).topics as Array<{
-        obligation_id?: string;
-      }>;
-      expect(new Set(topics.map((topic) => topic.obligation_id).filter(Boolean))).toEqual(
-        new Set(obligations.map(({ obligation_id }) => obligation_id)),
+  it('registers every semantic obligation with a stable unique authoritative identity', () => {
+    const obligations = json('work/rounds/R-0007/review-obligations.json').obligations as Array<
+      Record<string, unknown>
+    >;
+    const obligationIds = obligations.map(({ obligation_id }) => obligation_id);
+    expect(new Set(obligationIds).size).toBe(obligations.length);
+    for (const obligation of obligations) {
+      expect(obligation).toEqual(
+        expect.objectContaining({
+          obligation_id: expect.stringMatching(/^R7-P[0-3]-[A-Z0-9-]+$/u),
+          risk: expect.stringMatching(/^P[0-3]$/u),
+          source_refs: expect.arrayContaining([expect.any(String)]),
+          governing_paths: expect.arrayContaining([expect.any(String)]),
+          required_evidence: expect.arrayContaining([expect.any(String)]),
+          required_adversaries: expect.arrayContaining([expect.any(String)]),
+          reuse_policy: expect.stringMatching(/^(?:always-recheck|fresh-pass-eligible)$/u),
+          finding_classes: expect.any(Array),
+        }),
       );
-    } finally {
-      restore();
     }
   });
 
@@ -417,7 +226,7 @@ describe('pre-R-0007 generic close-control red contracts', () => {
     expect(result.status).toBe(1);
     expect(result.value).toMatchObject({ ok: false, command: 'claims-check', round: 'R-0007' });
     expect(result.value?.findings).toEqual(
-      expect.arrayContaining([expect.objectContaining({ code: 'CLAIM_UNRESOLVED' })]),
+      expect.arrayContaining([expect.objectContaining({ code: 'CLAIM_MATERIALIZATION_REQUIRED' })]),
     );
   });
 

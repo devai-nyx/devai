@@ -32,6 +32,22 @@ function sourceJson(relativePath: string): Record<string, unknown> {
   return JSON.parse(readFileSync(join(ROOT, relativePath), 'utf8')) as Record<string, unknown>;
 }
 
+function reviewerBindingMarker(): Record<string, unknown> {
+  return {
+    schemaVersion: '2.0.0',
+    devai_reviewer_binding: true,
+    mandate_id: 'OM-900',
+    mandate_status: 'active',
+    round: 'R-9000',
+    model_selector: 'reviewer-exact-v1',
+    role: 'independent-read-only',
+    semantic_census: 'complete',
+    substantive_cycles: 2,
+    transport_retries: 1,
+    fallback: 'forbidden',
+  };
+}
+
 function git(root: string, args: readonly string[]): string {
   return execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
 }
@@ -94,6 +110,11 @@ function fixture(): Fixture {
   Object.assign(profile, {
     round: 'R-9000',
     decision_id: 'DII-900',
+    declaration: {
+      binding: 'b0-decision-required',
+      decision_id: null,
+      exact_base: null,
+    },
     sources: {
       authorization: 'work/rounds/R-9000/AUTHORIZATION.md',
       plan: 'work/rounds/R-9000/plan.md',
@@ -101,12 +122,14 @@ function fixture(): Fixture {
       affected_test_graph: 'work/rounds/R-9000/affected-test-graph.json',
       obligations: 'work/rounds/R-9000/review-obligations.json',
       current_claims: 'work/rounds/R-9000/current-claims.json',
+      additional_controls: ['product/owner-mandates/OM-900.md'],
       prior_finding_registry: 'work/rounds/R-9000/prior-finding-registry.json',
     },
     runtime: {
       state_root: '.devai/state/round-runs/R-9000/close',
       candidate_manifest: '.devai/state/round-runs/R-9000/close/candidate-manifest.json',
       convergence_evidence: '.devai/state/round-runs/R-9000/close/convergence-evidence.json',
+      impact_execution: '.devai/state/round-runs/R-9000/close/affected-test-execution.json',
       review_scope: '.devai/state/round-runs/R-9000/close/review-scope-manifest.json',
       review_result: '.devai/state/round-runs/R-9000/close/review-result.json',
       materialized_claims: '.devai/state/round-runs/R-9000/close/current-claims.json',
@@ -121,8 +144,8 @@ function fixture(): Fixture {
     },
     reviewer: {
       binding: 'owner-mandate-required',
-      mandate_id: null,
-      model_selector: null,
+      mandate_id: 'OM-900',
+      model_selector: 'reviewer-exact-v1',
       role: 'independent-read-only',
       fallback: 'forbidden',
     },
@@ -228,7 +251,40 @@ function fixture(): Fixture {
   put(root, 'packages/b/src/index.ts', 'export const b = 1;\n');
   put(root, 'tests/a.test.ts', 'export const testA = true;\n');
   put(root, 'tests/b.test.ts', 'export const testB = true;\n');
-  const base = commit(root, 'fixture base');
+  put(
+    root,
+    'product/owner-mandates/OM-900.md',
+    `---\nid: OM-900\nstatus: active\nauthority: Owner\n---\n\n\`\`\`json\n${JSON.stringify(reviewerBindingMarker(), null, 2)}\n\`\`\`\n`,
+  );
+  const base = commit(root, 'fixture opening base');
+  profile.declaration = {
+    binding: 'b0-decision-required',
+    decision_id: 'DII-900',
+    exact_base: base,
+  };
+  put(
+    root,
+    'work/rounds/R-9000/close-control-profile.json',
+    `${JSON.stringify(profile, null, 2)}\n`,
+  );
+  put(
+    root,
+    'law/register/DECISIONS.md',
+    `# Fixture decisions\n\n### DII-900\n\n\`\`\`json\n${JSON.stringify(
+      {
+        schemaVersion: '1.0.0',
+        devai_round_declaration: true,
+        round: 'R-9000',
+        decision_id: 'DII-900',
+        authority: 'Architect',
+        exact_base: base,
+        base_source: 'origin/main-at-b0',
+      },
+      null,
+      2,
+    )}\n\`\`\`\n`,
+  );
+  commit(root, 'fixture B0 declaration');
   return { root, base };
 }
 
@@ -317,13 +373,17 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     );
     const firstExecutions = readFileSync(join(current.root, '.devai/state/gate.log'), 'utf8')
       .trim()
-      .split('\n');
+      .split('\n')
+      .filter((id) => id.startsWith('unit-'));
     expect(firstExecutions).toEqual(['unit-a', 'unit-b']);
 
     const second = run(current, 'smart-converge', ['--base', current.base, '--head', candidate]);
     expect(second).toMatchObject({ ok: true, executed_test_nodes: 0 });
     expect(
-      readFileSync(join(current.root, '.devai/state/gate.log'), 'utf8').trim().split('\n'),
+      readFileSync(join(current.root, '.devai/state/gate.log'), 'utf8')
+        .trim()
+        .split('\n')
+        .filter((id) => id.startsWith('unit-')),
     ).toEqual(firstExecutions);
   });
 });
