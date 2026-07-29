@@ -169,7 +169,7 @@ function fixture(): Fixture {
     depends_on,
     command: ['node', 'fixture/gate.mjs', id],
     cwd: '.',
-    outputs: [],
+    outputs: id === 'unit-a' ? ['.devai/state/output-a.txt'] : [],
     coverage_mode,
   });
   put(
@@ -232,7 +232,7 @@ function fixture(): Fixture {
   put(
     root,
     'fixture/gate.mjs',
-    "import { appendFileSync, mkdirSync } from 'node:fs';\nmkdirSync('.devai/state', { recursive: true });\nappendFileSync('.devai/state/gate.log', `${process.argv[2]}\\n`);\n",
+    "import { appendFileSync, mkdirSync, writeFileSync } from 'node:fs';\nmkdirSync('.devai/state', { recursive: true });\nappendFileSync('.devai/state/gate.log', `${process.argv[2]}\\n`);\nif (process.argv[2] === 'unit-a') writeFileSync('.devai/state/output-a.txt', 'stable-output\\n');\n",
   );
   put(root, 'package.json', '{"name":"fixture","private":true}\n');
   put(root, 'packages/a/src/index.ts', 'export const a = 1;\n');
@@ -323,6 +323,9 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const candidate = commit(current.root, 'change source a');
     const first = run(current, 'smart-converge', ['--base', current.base, '--head', candidate]);
     expect(first).toMatchObject({ ok: true, executed_test_nodes: 2 });
+    expect(readFileSync(join(current.root, '.devai/state/output-a.txt'), 'utf8')).toBe(
+      'stable-output\n',
+    );
     const firstExecutions = readFileSync(join(current.root, '.devai/state/gate.log'), 'utf8')
       .trim()
       .split('\n');
