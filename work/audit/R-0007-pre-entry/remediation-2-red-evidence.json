@@ -5,6 +5,22 @@
   "architect_commit": "5d707ca386aaa97c2c92d36f75dcd2de49b414c0",
   "inspector_commit": "c7955c2711ae61a07df89704489847e3074af592",
   "reviewed_failure_candidate": "0dbe660db28261287690ea88762407a8d92ba490",
+  "observations": [
+    {
+      "commit": "c7955c2711ae61a07df89704489847e3074af592",
+      "command": "pnpm vitest run tests/contract/pre-r0007-remediation-2.red.contract.test.ts --reporter=json --outputFile=/tmp/devai-r7-remediation2-red.json",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+      "exercised_implementation_paths": [
+        ".devai/config/round-close-controls.json",
+        "packages/schemas/src/roster.ts",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "tests_failed": 28,
+      "tests_passed": 3,
+      "output_sha256": "eb2f9858e865c9e7c9f2e784061cf282e583e4e89c915744ad5d5e9060bb56c2"
+    }
+  ],
   "complete_class_red": {
     "command": "pnpm vitest run tests/contract/pre-r0007-remediation-2.red.contract.test.ts --reporter=json --outputFile=/tmp/devai-r7-remediation2-red.json",
     "observed_exit": 1,
