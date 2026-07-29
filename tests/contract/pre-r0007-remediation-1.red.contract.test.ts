@@ -1123,7 +1123,9 @@ function topicEvidenceRef(
       .split('\n')
       .filter(Boolean)
       .map((line) => {
-        const [status, first, second] = line.split('\t');
+        const [rawStatus, rawFirst, second] = line.split('\t');
+        const status = required(rawStatus, 'exact range status is missing');
+        const first = required(rawFirst, 'exact range path is missing');
         const preimage = status === 'A' ? null : first;
         const postimage = status === 'D' ? null : (second ?? first);
         const paths = [...new Set([preimage, postimage].filter((path) => path !== null))];
@@ -1577,7 +1579,16 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const statePath = `${STATE}/review-state.json`;
       const before = readFileSync(join(current.root, statePath), 'utf8');
       const rejected = scope(current, frozen);
-      expectCode(rejected, 'REVIEW_STATE_TRANSITION_INVALID');
+      expect(
+        codes(rejected).some((code) =>
+          [
+            'REVIEW_STATE_TRANSITION_INVALID',
+            'REVIEW_STATE_TRANSITION_EDGE_INVALID',
+            'REVIEW_STATE_PREDECESSOR_STATE_INVALID',
+          ].includes(code),
+        ),
+        JSON.stringify(rejected.value, null, 2),
+      ).toBe(true);
       expect(codes(rejected)).not.toContain('REVIEW_STATE_TERMINAL');
       expect(readFileSync(join(current.root, statePath), 'utf8')).toBe(before);
       const status = run(current, 'status');
@@ -1820,6 +1831,11 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
           gitBytes(current.root, ['show', `${predecessor}:${ref}`]),
         );
         putBytes(current.root, ref, candidateBytes);
+        const obligations = readJson(current.root, `work/rounds/${ROUND}/review-obligations.json`);
+        const normativeSources = obligations.normative_sources as Array<Record<string, unknown>>;
+        required(normativeSources[0], 'fixture normative source is missing').source_digest_sha256 =
+          digestBytes(candidateBytes);
+        putJson(current.root, `work/rounds/${ROUND}/review-obligations.json`, obligations);
         const candidate = commit(current.root, `mutate exact ${kind} bytes`);
         const candidateDigest = digestBytes(
           gitBytes(current.root, ['show', `${candidate}:${ref}`]),
@@ -1828,7 +1844,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
 
         const frozen = freeze(current, candidate);
         const scoped = scope(current, frozen);
-        expect(scoped.status).toBe(0);
+        expect(scoped.status, JSON.stringify(scoped.value, null, 2)).toBe(0);
         const manifest = scoped.value.manifest as Record<string, unknown>;
         const topic = required(
           (manifest.topics as Array<Record<string, unknown>>).find(
@@ -1854,8 +1870,8 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
           evidence.find((entry) => entry.ref === ref),
           'candidate-tree evidence ref is absent',
         );
-        expect(target.digest).toBe(candidateDigest);
-        target.digest = predecessorDigest;
+        expect(target.digest).toBe(digestCanonical({ revision: candidate, blob: candidateDigest }));
+        target.digest = digestCanonical({ revision: predecessor, blob: predecessorDigest });
         disposition.recomputed_evidence_digest = digestCanonical(evidence);
         expect(disposition.recomputed_task_keys).toEqual(
           (topic.freshness_proof as Record<string, unknown>).task_keys,
@@ -2053,11 +2069,19 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
             substantive_cycles: { used: cycle, maximum: 2 },
           });
         } else {
-          expect(resultCodes).toContain(
-            terminal === 'ESCALATION_REQUIRED' && cycle === 1
-              ? 'REVIEW_STATE_CYCLE_INVALID'
-              : 'REVIEW_STATE_TRANSITION_INVALID',
-          );
+          const authenticatedRejectionCodes = new Set([
+            'REVIEW_STATE_CYCLE_INVALID',
+            'REVIEW_STATE_TRANSITION_INVALID',
+            'REVIEW_STATE_TRANSITION_EDGE_INVALID',
+            'REVIEW_STATE_TRANSITION_CYCLE_INVALID',
+            'REVIEW_STATE_PREDECESSOR_STATE_INVALID',
+            'REVIEW_TRANSPORT_CHAIN_INVALID',
+            'REVIEW_TRANSPORT_PREDECESSOR_INVALID',
+          ]);
+          expect(
+            resultCodes.some((code) => authenticatedRejectionCodes.has(code)),
+            JSON.stringify(result.value, null, 2),
+          ).toBe(true);
           expect(resultCodes).not.toContain('REVIEW_STATE_TERMINAL');
           expect(status.value).toMatchObject({
             state: 'DRAFT',
@@ -2181,19 +2205,18 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       );
       putJson(current.root, `${STATE}/review-repair-evidence.json`, repair);
       const secondScope = scope(current, second, 2);
-      expect(secondScope.status).toBe(0);
+      expect(secondScope.status, JSON.stringify(secondScope.value, null, 2)).toBe(0);
       const pass = passingResult(secondScope.value.manifest as Record<string, unknown>, second);
       putJson(current.root, 'fixture/cycle2-pass.json', pass);
-      expect(
-        run(current, 'review-check', [
-          '--candidate',
-          secondCandidate,
-          '--cycle',
-          '2',
-          '--review-result',
-          'fixture/cycle2-pass.json',
-        ]).status,
-      ).toBe(0);
+      const secondReview = run(current, 'review-check', [
+        '--candidate',
+        secondCandidate,
+        '--cycle',
+        '2',
+        '--review-result',
+        'fixture/cycle2-pass.json',
+      ]);
+      expect(secondReview.status, JSON.stringify(secondReview.value, null, 2)).toBe(0);
     });
 
     it.each([

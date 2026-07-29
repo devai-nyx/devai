@@ -63,7 +63,7 @@ function canonical(value: unknown): string {
   return `${JSON.stringify(stable(value))}\n`;
 }
 
-function digest(value: string): string {
+function digest(value: string | Buffer): string {
   return createHash('sha256').update(value).digest('hex');
 }
 
