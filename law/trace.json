@@ -698,6 +698,11 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
           "target_type": "test"
         },
@@ -749,6 +754,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/pre-r0007-close-controls.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -1313,6 +1323,11 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
           "target_type": "test"
         },
@@ -1514,6 +1529,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/pre-r0007-close-controls.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -3084,7 +3104,20 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 37,
-      "assertion_digest_sha256": "a29aa05a58d19871082db3519d90bd64d780e3af358d9e697953c29270f105a9"
+      "assertion_digest_sha256": "6da778549fa99015971fdbf5143ca31b18e937d66018f177ab0193e14d1457fb"
+    },
+    {
+      "path": "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-003",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 39,
+      "assertion_digest_sha256": "9d0800ef0e879682290e67e0cde447fdce3a50461eefd27d69e1728b8be5f424"
     },
     {
       "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
