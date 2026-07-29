@@ -532,7 +532,6 @@ function transportEvidence(
   scopeDigest: string,
   attempt: 1 | 2,
   stateBeforeDigest: string,
-  stateAfterDigest: string,
   previousTransportDigest: string | null,
 ): Record<string, unknown> {
   return selfDigest(
@@ -548,7 +547,6 @@ function transportEvidence(
       payload_digest: digestCanonical('fixture transport payload'),
       validation: 'INVALID_TRANSPORT',
       state_before_digest: stateBeforeDigest,
-      state_after_digest: stateAfterDigest,
       previous_transport_digest: previousTransportDigest,
     },
     'transport_digest_sha256',
@@ -742,7 +740,6 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       frozen,
       scopeDigest,
       1,
-      state.state_digest_sha256 as string,
       state.state_digest_sha256 as string,
       null,
     );

@@ -86,6 +86,22 @@ function sourceJson(relativePath: string): Record<string, unknown> {
   return JSON.parse(readFileSync(join(ROOT, relativePath), 'utf8')) as Record<string, unknown>;
 }
 
+function reviewerBindingMarker(): Record<string, unknown> {
+  return {
+    schemaVersion: '2.0.0',
+    devai_reviewer_binding: true,
+    mandate_id: 'OM-900',
+    mandate_status: 'active',
+    round: ROUND,
+    model_selector: 'reviewer-exact-v1',
+    role: 'independent-read-only',
+    semantic_census: 'complete',
+    substantive_cycles: 2,
+    transport_retries: 1,
+    fallback: 'forbidden',
+  };
+}
+
 function git(root: string, args: readonly string[]): string {
   return execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
 }
@@ -297,12 +313,16 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
     registry_version: 'fixture-prior-v1',
     finding_classes: [
       {
+        finding_id: 'F001',
         defect_class_id: 'DF-PRIOR',
         severity: 'P1',
+        origin_cycle: 1,
+        origin_evidence: 'fixture cycle-1 independent review',
         topic_ids: ['obligation:r9000-p0-identity'],
         population_query: 'Enumerate the fixture population.',
         affected_population: ['fixture-instance'],
         repair_condition: 'The fixture instance is repaired.',
+        disposition: 'REPAIRED_PENDING_REVIEW',
       },
     ],
   });
@@ -341,7 +361,7 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
     put(
       root,
       'product/owner-mandates/OM-900.md',
-      'status: active\nauthority: Owner\nround: R-9000\nmodel_selector: reviewer-exact-v1\nfallback: forbidden\n',
+      `---\nid: OM-900\nstatus: active\nauthority: Owner\n---\n\n\`\`\`json\n${JSON.stringify(reviewerBindingMarker(), null, 2)}\n\`\`\`\n`,
     );
   }
   return { root, base: commit(root, 'fixture base') };
@@ -372,6 +392,23 @@ function freezeCandidate(fixtureValue: Fixture, candidate: string): void {
   const claimsRegistry = JSON.parse(
     readFileSync(join(fixtureValue.root, `work/rounds/${ROUND}/current-claims.json`), 'utf8'),
   );
+  const sourceManifest = [
+    {
+      path: 'tests/a.test.ts',
+      state: 'present',
+      content_digest: digest(readFileSync(join(fixtureValue.root, 'tests/a.test.ts'), 'utf8')),
+    },
+  ];
+  const renderedProofBody = {
+    location: `work/audit/${ROUND}/as-built.md`,
+    claim_marker: 'DEVAI_CLAIM:suite.population=',
+    content_digest: digest('DEVAI_CLAIM:suite.population=1\n'),
+    extracted_rendered_value_digest: digest(canonical(1)),
+  };
+  const renderedProof = {
+    ...renderedProofBody,
+    verification_digest: digest(canonical(renderedProofBody)),
+  };
   const claimsBody = {
     ...claimsRegistry,
     mode: 'materialized',
@@ -379,47 +416,13 @@ function freezeCandidate(fixtureValue: Fixture, candidate: string): void {
     claims: claimsRegistry.claims.map((claim: Record<string, unknown>) => ({
       ...claim,
       resolved_producer: claim.producer,
-      source_manifest: [
-        {
-          path: 'tests/a.test.ts',
-          state: 'present',
-          content_digest: digest(readFileSync(join(fixtureValue.root, 'tests/a.test.ts'), 'utf8')),
-        },
-      ],
-      source_digest: digest(
-        canonical([
-          {
-            path: 'tests/a.test.ts',
-            state: 'present',
-            content_digest: digest(
-              readFileSync(join(fixtureValue.root, 'tests/a.test.ts'), 'utf8'),
-            ),
-          },
-        ]),
-      ),
+      source_manifest: sourceManifest,
+      source_digest: digest(canonical(sourceManifest)),
       producer_output_digest: digest(JSON.stringify({ count: 1 })),
       extracted_value: 1,
       value_digest: digest(canonical(1)),
-      rendered_proofs: [
-        {
-          location: `work/audit/${ROUND}/as-built.md`,
-          claim_marker: 'DEVAI_CLAIM:suite.population=',
-          content_digest: digest('DEVAI_CLAIM:suite.population=1\n'),
-          extracted_rendered_value_digest: digest(canonical(1)),
-          verification_digest: digest(
-            canonical({
-              claim_id: 'suite.population',
-              location: `work/audit/${ROUND}/as-built.md`,
-              value: 1,
-            }),
-          ),
-        },
-      ],
-      rendered_verification_digest: digest(
-        canonical([
-          { claim_id: 'suite.population', location: `work/audit/${ROUND}/as-built.md`, value: 1 },
-        ]),
-      ),
+      rendered_proofs: [renderedProof],
+      rendered_verification_digest: digest(canonical([renderedProof])),
     })),
   };
   delete claimsBody.claims_digest_sha256;
@@ -427,8 +430,19 @@ function freezeCandidate(fixtureValue: Fixture, candidate: string): void {
   put(fixtureValue.root, `work/audit/${ROUND}/as-built.md`, 'DEVAI_CLAIM:suite.population=1\n');
   putJson(fixtureValue.root, `.devai/state/round-runs/${ROUND}/close/current-claims.json`, claims);
   const tree = git(fixtureValue.root, ['rev-parse', `${candidate}^{tree}`]);
+  const profileDigest = digest(canonical(profile));
+  const policyDigest = digest(canonical(policy));
+  const graphDigest = digest(canonical(graph));
   const candidateIdentity = digest(
-    canonical({ round: ROUND, base: fixtureValue.base, candidate, tree }),
+    canonical({
+      round: ROUND,
+      base_sha: fixtureValue.base,
+      candidate_sha: candidate,
+      tree_sha: tree,
+      profile_digest: profileDigest,
+      policy_digest: policyDigest,
+      graph_digest: graphDigest,
+    }),
   );
   const gateIds = (convergencePolicy.commands as Array<{ id: string }>).map(({ id }) => id);
   const semanticPopulation = digest(canonical(gateIds));
@@ -459,8 +473,8 @@ function freezeCandidate(fixtureValue: Fixture, candidate: string): void {
     candidate_sha: candidate,
     candidate_tree: tree,
     candidate_identity_digest: candidateIdentity,
-    policy_digest: digest(canonical(policy)),
-    profile_digest: digest(canonical(profile)),
+    policy_digest: policyDigest,
+    profile_digest: profileDigest,
     authoritative_gate_ids: gateIds,
     authoritative_population_digest: semanticPopulation,
     passes: [pass(1), pass(2)],
@@ -480,12 +494,13 @@ function freezeCandidate(fixtureValue: Fixture, candidate: string): void {
     base_sha: fixtureValue.base,
     candidate_sha: candidate,
     tree_sha: tree,
-    profile_digest: digest(canonical(profile)),
-    policy_digest: digest(canonical(policy)),
-    graph_digest: digest(canonical(graph)),
+    profile_digest: profileDigest,
+    policy_digest: policyDigest,
+    graph_digest: graphDigest,
     candidate_identity_digest: candidateIdentity,
     convergence_digest: convergence.convergence_digest_sha256,
     claims_digest: claims.claims_digest_sha256,
+    reviewer_binding_digest: digest(canonical(reviewerBindingMarker())),
   };
   putJson(fixtureValue.root, `.devai/state/round-runs/${ROUND}/close/candidate-manifest.json`, {
     ...body,
@@ -506,21 +521,38 @@ function scope(fixtureValue: Fixture, cycle: 1 | 2, candidate = 'HEAD'): Result 
 
 function passingReview(manifest: Record<string, unknown>): Record<string, unknown> {
   const topics = manifest.topics as Array<{ topic_id: string; current_digest: string }>;
-  return {
-    schemaVersion: '1.0.0',
+  const dispositions = topics.map((topic) => {
+    const evidenceManifest = [
+      {
+        ref: 'independent fixture evidence',
+        digest: digest(canonical({ topic_id: topic.topic_id, current: topic.current_digest })),
+      },
+    ];
+    return {
+      topic_id: topic.topic_id,
+      disposition: 'RECHECKED_PASS',
+      recomputed_digest: topic.current_digest,
+      recomputed_inputs_manifest: [
+        { source: `topic:${topic.topic_id}`, digest: topic.current_digest },
+      ],
+      recomputed_evidence_manifest: evidenceManifest,
+      recomputed_evidence_digest: digest(canonical(evidenceManifest)),
+      recomputed_task_keys: [],
+      evidence_refs: ['independent fixture evidence'],
+      justification: 'Independently recomputed against the exact candidate.',
+      finding_ids: [],
+    };
+  });
+  const body = {
+    schemaVersion: '2.0.0',
     round: ROUND,
     cycle: manifest.cycle,
     review_candidate: manifest.review_candidate,
     manifest_digest: manifest.manifest_digest_sha256,
     policy_digest: manifest.policy_digest,
-    dispositions: topics.map((topic) => ({
-      topic_id: topic.topic_id,
-      disposition: 'RECHECKED_PASS',
-      recomputed_digest: topic.current_digest,
-      evidence_refs: ['independent fixture evidence'],
-      justification: 'Independently recomputed against the exact candidate.',
-      finding_ids: [],
-    })),
+    candidate_manifest_digest: manifest.current_candidate_manifest_digest,
+    reviewer_binding_digest: digest(canonical(reviewerBindingMarker())),
+    dispositions,
     findings: [],
     terminal: {
       verdict: 'PASS',
@@ -535,6 +567,7 @@ function passingReview(manifest: Record<string, unknown>): Record<string, unknow
       complete: true,
     },
   };
+  return { ...body, result_digest_sha256: digest(canonical(body)) };
 }
 
 afterEach(() => {
@@ -542,7 +575,7 @@ afterEach(() => {
 });
 
 describe('pre-R-0007 independent review cycle-1 defect classes', () => {
-  it('F-001 resolves exactly one active Owner binding using exact fields, not substrings', () => {
+  it('F-001 ignores prose and resolves exactly one complete structured Owner binding', () => {
     expect(REPAIR_IMPLEMENTATION_PATHS).toContain('scripts/run-round-close-controls.mjs');
     const current = fixture({ bound: true });
     put(
@@ -552,12 +585,13 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
     );
     put(
       current.root,
-      'product/owner-mandates/OM-900.md',
+      'product/owner-mandates/OM-902.md',
       'status: active\nauthority: Owner\nnote: R-9000 reviewer-exact-v1 are substrings only\nfallback: alternate-model\n',
     );
+    commit(current.root, 'track prose-only mandate references');
     const result = run(current, 'entry-check');
-    expect(result.status).toBe(1);
-    expect(findingCodes(result)).toEqual(
+    expect(result.status).toBe(0);
+    expect(findingCodes(result)).not.toEqual(
       expect.arrayContaining([
         'ENTRY_BLOCKED_REVIEWER_BINDING_AMBIGUOUS',
         'ENTRY_BLOCKED_REVIEWER_BINDING_CONFLICT',
