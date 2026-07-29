@@ -7159,8 +7159,14 @@ function makeReviewTopicsV4(context, base, candidate, proof, ledger) {
     reusable = false,
     changeRecord = null,
   }) => {
-    const uniqueSourceRefs = [...new Set(sourceRefs)];
-    const uniqueRequiredEvidence = [...new Set(requiredEvidence)];
+    const stableEvidenceRef = (ref) => {
+      if (context.policy.schemaVersion !== '5.0.0') return ref;
+      if (ref === context.profile.runtime.candidate_manifest) return 'candidate manifest';
+      if (ref === context.profile.runtime.convergence_evidence) return 'convergence evidence';
+      return ref;
+    };
+    const uniqueSourceRefs = [...new Set(sourceRefs.map(stableEvidenceRef))];
+    const uniqueRequiredEvidence = [...new Set(requiredEvidence.map(stableEvidenceRef))];
     const evidenceManifest = topicEvidenceManifestV4(
       context,
       proof,
@@ -8468,14 +8474,12 @@ function dispositionInputsV5(topic, proof) {
 
 function dispositionEvidenceV5(context, topic, proof) {
   const refs = [
-    ...new Set([
-      'candidate manifest',
-      'convergence evidence',
-      ...topic.source_refs,
-      ...topic.required_evidence,
-    ]),
+    'candidate manifest',
+    'convergence evidence',
+    ...topic.source_refs,
+    ...topic.required_evidence,
   ];
-  return refs.map((ref) => {
+  const resolved = refs.map((ref) => {
     const resolved = resolveTopicEvidenceV4(context, proof, ref);
     return (
       resolved ?? {
@@ -8490,6 +8494,7 @@ function dispositionEvidenceV5(context, topic, proof) {
       }
     );
   });
+  return [...new Map(resolved.map((entry) => [entry.ref, entry])).values()];
 }
 
 function taskFreshnessManifestV5(context, topic, proof) {
