@@ -132,7 +132,7 @@
       "schemaVersion": "1.0.0",
       "round": "R-9999",
       "policy_version": "3.0.0",
-      "decision_id": "DII-999",
+      "decision_id": "DII-246",
       "phase": "pre-entry-preparation",
       "sources": {
         "authorization": "work/rounds/R-9999/AUTHORIZATION.md",
