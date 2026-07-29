@@ -31,7 +31,14 @@ function run(
   const result = spawnSync(
     'node',
     [SCRIPT, command, '--repo-root', ROOT, '--round', 'R-0007', ...args, '--json'],
-    { cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...env } },
+    {
+      cwd: ROOT,
+      encoding: 'utf8',
+      env: { ...process.env, ...env },
+      // The authenticated v5 impact population is intentionally larger than Node's 1 MiB
+      // spawnSync default; retain the complete JSON rather than accepting a truncated plan.
+      maxBuffer: 4 * 1024 * 1024,
+    },
   );
   let value: Record<string, unknown> | null = null;
   try {

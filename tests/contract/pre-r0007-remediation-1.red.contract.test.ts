@@ -1952,7 +1952,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         } else {
           expect(resultCodes).toContain(
             terminal === 'ESCALATION_REQUIRED' && cycle === 1
-              ? 'REVIEW_STATE_SCHEMA_INVALID'
+              ? 'REVIEW_STATE_CYCLE_INVALID'
               : 'REVIEW_STATE_TRANSITION_INVALID',
           );
           expect(resultCodes).not.toContain('REVIEW_STATE_TERMINAL');
