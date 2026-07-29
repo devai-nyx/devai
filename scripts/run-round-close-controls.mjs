@@ -5307,24 +5307,57 @@ function claimsMaterializeV4() {
   emit({ ok: findings.length === 0 && ledger !== null, command: 'claims-materialize', round, candidate, phase, materialized_path: context === null ? null : phase === 'post-publication' ? context.profile.runtime.post_publication_claims : context.profile.runtime.materialized_claims, claims_digest_sha256: ledger?.claims_digest_sha256 ?? null, findings });
 }
 
-function topicEvidenceManifestV4(context, _proof) {
-  return [context.profile.runtime.candidate_manifest, context.profile.runtime.convergence_evidence].map((ref) => {
-    const value = ref.endsWith('.json') ? readJson(join(repoRoot, ref)) : readFileSync(join(repoRoot, ref));
-    return { ref, digest: ref.endsWith('.json') ? sha256(canonical(value)) : sha256(value) };
-  });
+function resolveTopicEvidenceV4(context, proof, ref) {
+  if (ref === 'candidate manifest') {
+    const path = context.profile.runtime.candidate_manifest;
+    return { ref: path, digest: sha256(canonical(readJson(join(repoRoot, path)))) };
+  }
+  if (ref === 'convergence evidence') {
+    const path = context.profile.runtime.convergence_evidence;
+    return { ref: path, digest: sha256(canonical(readJson(join(repoRoot, path)))) };
+  }
+  if (ref.startsWith('gate:')) {
+    const gateId = ref.slice('gate:'.length);
+    const gate = (proof.convergence.passes?.[1]?.gate_results ?? []).find(({ gate_id: id }) => id === gateId);
+    return gate === undefined ? null : { ref, digest: gate.result_digest };
+  }
+  const path = ref.split('#', 1)[0];
+  if (path === undefined || path === '' || !candidateTreeEntries(proof.manifest.candidate_sha).has(path)) return null;
+  try {
+    return { ref, digest: sha256(git(repoRoot, ['show', `${proof.manifest.candidate_sha}:${path}`])) };
+  } catch {
+    return null;
+  }
+}
+
+function topicEvidenceManifestV4(context, proof, sourceRefs, requiredEvidence) {
+  const refs = ['candidate manifest', 'convergence evidence', ...sourceRefs, ...requiredEvidence];
+  const resolved = refs.map((ref) => resolveTopicEvidenceV4(context, proof, ref));
+  if (resolved.some((entry) => entry === null)) return null;
+  return [...new Map(resolved.map((entry) => [entry.ref, entry])).values()];
+}
+
+function topicTaskKeysV4(proof, requiredEvidence) {
+  const gateIds = new Set(requiredEvidence.filter((ref) => ref.startsWith('gate:')).map((ref) => ref.slice('gate:'.length)));
+  return (proof.convergence.passes?.[1]?.gate_results ?? []).filter(({ gate_id }) => gateIds.has(gate_id)).map(({ task_key }) => task_key);
 }
 
 function makeReviewTopicsV4(context, base, candidate, proof, ledger) {
   const topics = [];
-  const passTwoKeys = (proof.convergence.passes?.[1]?.gate_results ?? []).map(({ task_key }) => task_key);
-  const evidenceManifest = topicEvidenceManifestV4(context, proof);
-  const add = ({ topicId, topicKind, obligationId, risk = 'P1', claim, sourceRefs, governingPaths, requiredEvidence, currentDigest, previousDigest = null, changedStatus = 'changed', adversaries, previousClasses = [], reusable = false }) => topics.push({
-    topic_id: topicId, topic_kind: topicKind, obligation_id: obligationId, risk, claim,
-    source_refs: [...new Set(sourceRefs)], governing_paths: [...new Set(governingPaths)], required_evidence: [...new Set(requiredEvidence)], current_digest: currentDigest, previous_digest: previousDigest,
-    changed_status: changedStatus, required_adversaries: [...new Set(adversaries)], previous_finding_classes: [...new Set(previousClasses)],
-    freshness_proof: { method: reusable && changedStatus === 'unchanged' ? 'content-addressed' : 'recheck-required', inputs_digest: currentDigest, evidence_digest: sha256(canonical(evidenceManifest)), task_keys: reusable && changedStatus === 'unchanged' ? passTwoKeys : [], independent_recomputation_required: true },
-    allowed_dispositions: reusable && changedStatus === 'unchanged' ? ['RECHECKED_PASS', 'RECHECKED_FAIL', 'REUSED_FRESH_PASS', 'BLOCKED'] : ['RECHECKED_PASS', 'RECHECKED_FAIL', 'BLOCKED'],
-  });
+  const add = ({ topicId, topicKind, obligationId, risk = 'P1', claim, sourceRefs, governingPaths, requiredEvidence, currentDigest, previousDigest = null, changedStatus = 'changed', adversaries, previousClasses = [], reusable = false }) => {
+    const uniqueSourceRefs = [...new Set(sourceRefs)];
+    const uniqueRequiredEvidence = [...new Set(requiredEvidence)];
+    const evidenceManifest = topicEvidenceManifestV4(context, proof, uniqueSourceRefs, uniqueRequiredEvidence);
+    const reuseEligible = reusable && changedStatus === 'unchanged' && evidenceManifest !== null;
+    const taskKeys = reuseEligible ? topicTaskKeysV4(proof, uniqueRequiredEvidence) : [];
+    topics.push({
+      topic_id: topicId, topic_kind: topicKind, obligation_id: obligationId, risk, claim,
+      source_refs: uniqueSourceRefs, governing_paths: [...new Set(governingPaths)], required_evidence: uniqueRequiredEvidence, current_digest: currentDigest, previous_digest: previousDigest,
+      changed_status: changedStatus, required_adversaries: [...new Set(adversaries)], previous_finding_classes: [...new Set(previousClasses)],
+      freshness_proof: { method: reuseEligible ? 'content-addressed' : 'recheck-required', inputs_digest: currentDigest, evidence_digest: sha256(canonical(evidenceManifest ?? { unresolved_refs: [...uniqueSourceRefs, ...uniqueRequiredEvidence] })), task_keys: taskKeys, independent_recomputation_required: true },
+      allowed_dispositions: reuseEligible ? ['RECHECKED_PASS', 'RECHECKED_FAIL', 'REUSED_FRESH_PASS', 'BLOCKED'] : ['RECHECKED_PASS', 'RECHECKED_FAIL', 'BLOCKED'],
+    });
+  };
   const identityObligation = (context.obligations?.obligations ?? [])[0];
   for (const obligation of context.obligations?.obligations ?? []) {
     const selectors = obligation.governing_paths.flatMap(expandBraceSelectors);
@@ -5563,6 +5596,10 @@ function readAuthenticatedStateV4(context, findings, expected) {
   if (!anchored) { findings.push(finding('REVIEW_STATE_IDENTITY_INVALID', 'review state is not anchored to current policy, profile, candidate tree, base, and reviewer')); return null; }
   const prefix = state.transition_history.slice(0, 3).map(({ from, to }) => `${from}->${to}`);
   if (canonical(prefix) !== canonical(['DRAFT->PREFLIGHT_GREEN', 'PREFLIGHT_GREEN->CANDIDATE_FROZEN', 'CANDIDATE_FROZEN->CYCLE_1_ACTIVE'])) { findings.push(finding('REVIEW_STATE_TRANSITION_INVALID', 'review history lacks the complete authenticated cycle-1 prefix')); return null; }
+  for (let index = 0; index < state.transition_history.length; index += 1) {
+    const transition = state.transition_history[index];
+    if (!(allowed[transition.from] ?? []).includes(transition.to) || (index > 0 && state.transition_history[index - 1].to !== transition.from)) { findings.push(finding('REVIEW_STATE_TRANSITION_INVALID', 'review transition history contains an undeclared or discontinuous edge')); return null; }
+  }
   if (state.transition_history.at(-1)?.to !== state.state) { findings.push(finding('REVIEW_STATE_TRANSITION_INVALID', 'review state does not equal terminal transition')); return null; }
   const terminalTransition = state.transition_history.at(-1);
   if (terminalTransition.candidate_sha !== state.candidate_sha || terminalTransition.candidate_manifest_digest !== state.candidate_manifest_digest || terminalTransition.review_scope_digest !== state.review_scope_digest) { findings.push(finding('REVIEW_STATE_TRANSITION_INVALID', 'terminal transition does not bind top-level state identity')); return null; }
@@ -5570,13 +5607,9 @@ function readAuthenticatedStateV4(context, findings, expected) {
     if (['PASS', 'REPAIR_REQUIRED', 'ESCALATION_REQUIRED', 'REVIEW_TRANSPORT_BLOCKED'].includes(transition.to) && transition.previous_state_digest === null) { findings.push(finding('REVIEW_STATE_TRANSITION_INVALID', 'state-changing result or transport transition lacks predecessor state digest')); return null; }
   }
   if (expected !== null && (state.round !== expected.round || state.cycle !== expected.cycle || state.candidate_sha !== expected.candidate || state.candidate_manifest_digest !== expected.candidate_manifest_digest || state.review_scope_digest !== expected.review_scope_digest || state.profile_digest !== context.digests.profile || state.policy_digest !== context.digests.policy)) { findings.push(finding('REVIEW_STATE_IDENTITY_INVALID', 'review state belongs to another exact identity')); return null; }
-  // A self-digested, identity-bound terminal marker is fail-closed even if its
-  // incoming edge is corrupt: no command may overwrite it while reporting only
-  // a lesser transition-shape defect.
-  if ((context.policy.review_state_machine.terminal_states ?? []).includes(state.state)) return state;
-  for (let index = 0; index < state.transition_history.length; index += 1) {
-    const transition = state.transition_history[index];
-    if (!(allowed[transition.from] ?? []).includes(transition.to) || (index > 0 && state.transition_history[index - 1].to !== transition.from)) { findings.push(finding('REVIEW_STATE_TRANSITION_INVALID', 'review transition history contains an undeclared edge')); return null; }
+  if ((context.policy.review_state_machine.terminal_states ?? []).includes(state.state)) {
+    const terminalCycle = terminalTransition.from === 'CYCLE_1_ACTIVE' ? 1 : terminalTransition.from === 'CYCLE_2_ACTIVE' ? 2 : null;
+    if (terminalCycle === null || state.cycle !== terminalCycle) { findings.push(finding('REVIEW_STATE_TRANSITION_INVALID', 'terminal state cycle does not match its authenticated active-cycle predecessor')); return null; }
   }
   return state;
 }
@@ -5609,13 +5642,21 @@ function validateReuseV4(context, topic, disposition, proof, findings) {
   }
   if (!Array.isArray(disposition.recomputed_evidence_manifest) || disposition.recomputed_evidence_manifest.length === 0) findings.push(finding('REVIEW_REUSE_EVIDENCE_MANIFEST_MISSING', 'reused topic has no recomputed evidence manifest', { topic_id: topic.topic_id }));
   else {
-    const expectedEvidence = topicEvidenceManifestV4(context, proof);
-    if (canonical(disposition.recomputed_evidence_manifest) !== canonical(expectedEvidence) || disposition.recomputed_evidence_digest !== sha256(canonical(expectedEvidence))) findings.push(finding('REVIEW_REUSE_EVIDENCE_DIGEST_INVALID', 'recomputed evidence is stale or incomplete', { topic_id: topic.topic_id }));
+    const expectedEvidence = topicEvidenceManifestV4(context, proof, topic.source_refs, topic.required_evidence);
+    if (expectedEvidence === null) findings.push(finding('REVIEW_REUSE_EVIDENCE_UNRESOLVED', 'reused topic has evidence that cannot be mechanically resolved', { topic_id: topic.topic_id }));
+    else {
+      const actualEvidence = disposition.recomputed_evidence_manifest;
+      const expectedRefs = expectedEvidence.map(({ ref }) => ref);
+      const actualRefs = actualEvidence.map(({ ref }) => ref);
+      if (canonical(actualRefs) !== canonical(expectedRefs)) findings.push(finding('REVIEW_REUSE_EVIDENCE_MANIFEST_INCOMPLETE', 'recomputed evidence does not contain the exact per-topic reference population', { topic_id: topic.topic_id }));
+      else if (canonical(actualEvidence) !== canonical(expectedEvidence)) findings.push(finding('REVIEW_REUSE_EVIDENCE_MANIFEST_STALE', 'recomputed per-topic evidence contains a stale digest', { topic_id: topic.topic_id }));
+      if (disposition.recomputed_evidence_digest !== sha256(canonical(expectedEvidence))) findings.push(finding('REVIEW_REUSE_EVIDENCE_DIGEST_INVALID', 'recomputed evidence aggregate digest is stale', { topic_id: topic.topic_id }));
+    }
   }
-  if (!Array.isArray(disposition.recomputed_task_keys) || disposition.recomputed_task_keys.length === 0) findings.push(finding('REVIEW_REUSE_TASK_KEY_REQUIRED', 'reused topic requires current PASS task keys', { topic_id: topic.topic_id }));
+  const expectedKeys = topicTaskKeysV4(proof, topic.required_evidence);
+  if (!Array.isArray(disposition.recomputed_task_keys) || (expectedKeys.length > 0 && disposition.recomputed_task_keys.length === 0)) findings.push(finding('REVIEW_REUSE_TASK_KEY_REQUIRED', 'reused topic requires its current relevant PASS task keys', { topic_id: topic.topic_id }));
   else {
-    const expectedKeys = (proof.convergence.passes?.[1]?.gate_results ?? []).map(({ task_key }) => task_key);
-    if (canonical(disposition.recomputed_task_keys) !== canonical(expectedKeys)) findings.push(finding('REVIEW_REUSE_TASK_KEY_STALE', 'reused topic task keys are not the current exact PASS population', { topic_id: topic.topic_id }));
+    if (canonical(disposition.recomputed_task_keys) !== canonical(expectedKeys)) findings.push(finding('REVIEW_REUSE_TASK_KEY_STALE', 'reused topic task keys are not the current exact relevant PASS population', { topic_id: topic.topic_id }));
   }
 }
 
