@@ -165,7 +165,7 @@ function trackedPaths(root, revision = 'HEAD') {
 
 function candidateFile(root, revision, path) {
   if (revision === WORKTREE_REVISION) return readFileSync(join(root, path), 'utf8');
-  return git(root, ['show', `${revision}:${path}`]);
+  return gitBytes(root, ['show', `${revision}:${path}`]).toString('utf8');
 }
 
 function pathsForGlobs(root, revision, globs) {
@@ -5268,7 +5268,7 @@ function loadV4Context(round, findings) {
       } else {
         validateDocument(value, policy.schemas[schemaKey], findings, code, sourceKey);
       }
-      if (value.round !== round)
+      if (Object.hasOwn(value, 'round') && value.round !== round)
         findings.push(finding(`${code}_ROUND`, `${sourceKey} round differs from profile`));
       return value;
     } catch (error) {
