@@ -4,7 +4,7 @@
   "purpose": "output-bearing task-key stability red evidence",
   "observations": [
     {
-      "commit": "8f133dc54d22d2e0521ce056b1527c1138b1a464",
+      "commit": "ba95820f2157ddeab79d9a8d4a73c4dea3ea78de",
       "command": "pnpm vitest run tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts --reporter=verbose",
       "exit_code": 1,
       "tests": ["tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts"],
