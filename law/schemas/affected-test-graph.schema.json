@@ -15,6 +15,7 @@
     "nodes",
     "change_detection",
     "gate_freshness_profiles",
+    "command_closure",
     "fallbacks",
     "coverage"
   ],
@@ -44,8 +45,13 @@
     "population": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["production", "tests", "classification"],
+      "required": ["all_tracked", "production", "tests", "classification"],
       "properties": {
+        "all_tracked": {
+          "type": "array",
+          "prefixItems": [{ "const": "**/*" }],
+          "items": false
+        },
         "production": { "$ref": "#/$defs/selectorList" },
         "tests": { "$ref": "#/$defs/selectorList" },
         "classification": { "const": "complete-or-full-suite-fallback" },
@@ -143,7 +149,9 @@
           "toolchain_probe_ids",
           "environment_input_ids",
           "output_contract",
-          "required_outputs"
+          "required_outputs",
+          "universal_input_proof",
+          "output_observation"
         ],
         "properties": {
           "gate_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
@@ -161,7 +169,9 @@
             "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" }
           },
           "output_contract": { "enum": ["none", "digest-required"] },
-          "required_outputs": { "$ref": "#/$defs/pathList" }
+          "required_outputs": { "$ref": "#/$defs/pathList" },
+          "universal_input_proof": { "const": "tracked-candidate-tree" },
+          "output_observation": { "const": "declared-plus-observed" }
         },
         "allOf": [
           {
@@ -173,6 +183,20 @@
             "then": { "properties": { "required_outputs": { "minItems": 1 } } }
           }
         ]
+      }
+    },
+    "command_closure": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["gate_id", "scripts", "programs"],
+        "properties": {
+          "gate_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+          "scripts": { "$ref": "#/$defs/selectorList" },
+          "programs": { "$ref": "#/$defs/selectorList" }
+        }
       }
     },
     "fallbacks": {

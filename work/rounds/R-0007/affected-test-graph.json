@@ -21,7 +21,8 @@
         "selector": "tests/types/**/*.d.ts",
         "reason": "Ambient test declarations are shared inputs and invalidate the complete test population."
       }
-    ]
+    ],
+    "all_tracked": ["**/*"]
   },
   "shared_inputs": [
     {
@@ -80,7 +81,8 @@
       "input_selectors": [
         "packages/cli/src/**/*.ts",
         "packages/cli/tests/**/*.ts",
-        "packages/{authority,effects-check,evidence,loop,schemas,sensors,skills,spec,utils}/src/**/*.ts"
+        "packages/{authority,effects-check,evidence,loop,schemas,sensors,skills,spec,utils}/src/**/*.ts",
+        "packages/cli/tests/**/*.json"
       ],
       "depends_on": [
         "authority-tests",
@@ -103,7 +105,8 @@
       "kind": "test-shard",
       "input_selectors": [
         "packages/effects-check/src/**/*.ts",
-        "packages/effects-check/tests/**/*.ts"
+        "packages/effects-check/tests/**/*.ts",
+        "packages/effects-check/tests/**/tsconfig.json"
       ],
       "depends_on": [],
       "command": ["pnpm", "vitest", "run", "packages/effects-check/tests"],
@@ -182,7 +185,9 @@
         "packages/skills/src/**/*.ts",
         "packages/skills/scripts/**/*.ts",
         "packages/skills/tests/**/*.ts",
-        "packages/{authority,loop,schemas,sensors,spec,utils}/src/**/*.ts"
+        "packages/{authority,loop,schemas,sensors,spec,utils}/src/**/*.ts",
+        "packages/skills/prompts/**",
+        "packages/skills/test-fixtures/**"
       ],
       "depends_on": [
         "authority-tests",
@@ -314,16 +319,19 @@
   "gate_freshness_profiles": [
     {
       "gate_id": "formatting",
-      "input_selectors": ["**/*.{json,jsonl,md,mjs,ts,yml,yaml}", ".prettierignore"],
-      "dependency_selectors": ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml"],
-      "toolchain_probe_ids": ["node", "pnpm", "prettier"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "input_selectors": ["**/*", "**/*.{json,jsonl,md,mjs,ts,yml,yaml}", ".prettierignore"],
+      "dependency_selectors": ["**/*", "package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "none",
-      "required_outputs": []
+      "required_outputs": [],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "preparation",
       "input_selectors": [
+        "**/*",
         "law/policy/action-registry.json",
         "law/schemas/**",
         "scripts/generate-action-registry.mjs",
@@ -332,14 +340,15 @@
         "packages/{schemas,cli}/tsconfig*.json"
       ],
       "dependency_selectors": [
+        "**/*",
         "package.json",
         "pnpm-lock.yaml",
         "pnpm-workspace.yaml",
         "packages/*/package.json",
         "tsconfig*.json"
       ],
-      "toolchain_probe_ids": ["node", "pnpm", "typescript"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "digest-required",
       "required_outputs": [
         "packages/cli/src/generated/action-registry.ts",
@@ -347,52 +356,63 @@
         "packages/sensors/src/generated/action-kinds.ts",
         "packages/schemas/dist/**",
         "packages/cli/dist/**"
-      ]
+      ],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "action-registry",
       "input_selectors": [
+        "**/*",
         "law/policy/action-registry.json",
         "scripts/generate-action-registry.mjs",
         "packages/{cli,effects-check,sensors}/src/generated/*.ts"
       ],
-      "dependency_selectors": ["package.json", "pnpm-lock.yaml"],
-      "toolchain_probe_ids": ["node", "pnpm"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "dependency_selectors": ["**/*", "package.json", "pnpm-lock.yaml"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "digest-required",
       "required_outputs": [
         "packages/cli/src/generated/action-registry.ts",
         "packages/effects-check/src/generated/action-catalog.ts",
         "packages/sensors/src/generated/action-kinds.ts"
-      ]
+      ],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "trace",
       "input_selectors": [
+        "**/*",
         "law/invariants/**/*.json",
         "tests/**/*.ts",
         "packages/**/tests/**/*.ts",
         "scripts/generate-trace.mjs",
         "law/trace.json"
       ],
-      "dependency_selectors": ["package.json", "pnpm-lock.yaml"],
-      "toolchain_probe_ids": ["node", "pnpm"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "dependency_selectors": ["**/*", "package.json", "pnpm-lock.yaml"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "digest-required",
-      "required_outputs": ["law/trace.json"]
+      "required_outputs": ["law/trace.json"],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "repository-references",
       "input_selectors": ["**/*", "scripts/generate-repository-reference-triage.mjs"],
-      "dependency_selectors": ["package.json", "pnpm-lock.yaml"],
-      "toolchain_probe_ids": ["node", "pnpm", "git"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "dependency_selectors": ["**/*", "package.json", "pnpm-lock.yaml"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "digest-required",
-      "required_outputs": ["work/rounds/R-0002/repository-reference-triage.json"]
+      "required_outputs": ["work/rounds/R-0002/repository-reference-triage.json"],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "materializations",
       "input_selectors": [
+        "**/*",
         "law/policy/round-close-controls.json",
         "law/schemas/round-close-profile.schema.json",
         "law/schemas/active-control-census.schema.json",
@@ -400,24 +420,29 @@
         "scripts/run-round-close-controls.mjs",
         ".devai/config/round-close-controls.json"
       ],
-      "dependency_selectors": ["package.json", "pnpm-lock.yaml"],
-      "toolchain_probe_ids": ["node", "pnpm"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "dependency_selectors": ["**/*", "package.json", "pnpm-lock.yaml"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "digest-required",
-      "required_outputs": [".devai/config/round-close-controls.json"]
+      "required_outputs": [".devai/config/round-close-controls.json"],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "diff-check",
       "input_selectors": ["**/*"],
-      "dependency_selectors": [".gitattributes", ".gitignore"],
-      "toolchain_probe_ids": ["git"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS"],
+      "dependency_selectors": ["**/*", ".gitattributes", ".gitignore"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "none",
-      "required_outputs": []
+      "required_outputs": [],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "ordinary",
       "input_selectors": [
+        "**/*",
         "packages/**/*.ts",
         "scripts/**/*.mjs",
         "tests/**/*.ts",
@@ -429,19 +454,23 @@
         "vitest*.ts"
       ],
       "dependency_selectors": [
+        "**/*",
         "package.json",
         "pnpm-lock.yaml",
         "pnpm-workspace.yaml",
         "packages/*/package.json"
       ],
-      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "none",
-      "required_outputs": []
+      "required_outputs": [],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "stage1",
       "input_selectors": [
+        "**/*",
         ".github/**",
         "law/**",
         "product/**",
@@ -453,13 +482,14 @@
         "tsconfig*.json"
       ],
       "dependency_selectors": [
+        "**/*",
         "package.json",
         "pnpm-lock.yaml",
         "pnpm-workspace.yaml",
         "packages/*/package.json"
       ],
-      "toolchain_probe_ids": ["node", "pnpm", "eslint", "typescript", "git"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "digest-required",
       "required_outputs": [
         "packages/cli/src/generated/action-registry.ts",
@@ -469,11 +499,14 @@
         "packages/cli/dist/**",
         "law/trace.json",
         "work/rounds/R-0002/repository-reference-triage.json"
-      ]
+      ],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "stage2",
       "input_selectors": [
+        "**/*",
         "packages/**/*.ts",
         "scripts/**",
         "tests/**",
@@ -482,67 +515,105 @@
         "vitest*.ts"
       ],
       "dependency_selectors": [
+        "**/*",
         "package.json",
         "pnpm-lock.yaml",
         "pnpm-workspace.yaml",
         "packages/*/package.json"
       ],
-      "toolchain_probe_ids": ["node", "pnpm", "typescript", "vitest"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "digest-required",
-      "required_outputs": ["packages/schemas/dist/**", "packages/cli/dist/**"]
+      "required_outputs": ["packages/schemas/dist/**", "packages/cli/dist/**"],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "t4",
       "input_selectors": [
+        "**/*",
         "packages/**/*.ts",
         "tests/**/*.ts",
         "tests/config/t4.regression.config.ts"
       ],
-      "dependency_selectors": ["package.json", "pnpm-lock.yaml", "vitest*.ts", "tsconfig*.json"],
-      "toolchain_probe_ids": ["node", "pnpm", "vitest"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "dependency_selectors": [
+        "**/*",
+        "package.json",
+        "pnpm-lock.yaml",
+        "vitest*.ts",
+        "tsconfig*.json"
+      ],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "none",
-      "required_outputs": []
+      "required_outputs": [],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "t5",
-      "input_selectors": ["packages/**/*.ts", "tests/**/*.ts", "tests/config/t5.e2e.config.ts"],
-      "dependency_selectors": ["package.json", "pnpm-lock.yaml", "vitest*.ts", "tsconfig*.json"],
-      "toolchain_probe_ids": ["node", "pnpm", "vitest"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "input_selectors": [
+        "**/*",
+        "packages/**/*.ts",
+        "tests/**/*.ts",
+        "tests/config/t5.e2e.config.ts"
+      ],
+      "dependency_selectors": [
+        "**/*",
+        "package.json",
+        "pnpm-lock.yaml",
+        "vitest*.ts",
+        "tsconfig*.json"
+      ],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "none",
-      "required_outputs": []
+      "required_outputs": [],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "t6",
       "input_selectors": [
+        "**/*",
         "packages/**/*.ts",
         "tests/**/*.ts",
         "tests/config/t6.containment.config.ts"
       ],
-      "dependency_selectors": ["package.json", "pnpm-lock.yaml", "vitest*.ts", "tsconfig*.json"],
-      "toolchain_probe_ids": ["node", "pnpm", "vitest"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "dependency_selectors": [
+        "**/*",
+        "package.json",
+        "pnpm-lock.yaml",
+        "vitest*.ts",
+        "tsconfig*.json"
+      ],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "none",
-      "required_outputs": []
+      "required_outputs": [],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "changesets",
       "input_selectors": [
+        "**/*",
         ".changeset/**",
         "scripts/check-changesets.mjs",
         "packages/*/package.json"
       ],
-      "dependency_selectors": ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml"],
-      "toolchain_probe_ids": ["node", "pnpm", "git"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "dependency_selectors": ["**/*", "package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "none",
-      "required_outputs": []
+      "required_outputs": [],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "coverage",
       "input_selectors": [
+        "**/*",
         "packages/**/*.ts",
         "scripts/**/*.mjs",
         "tests/**/*.ts",
@@ -554,23 +625,27 @@
         "vitest*.ts"
       ],
       "dependency_selectors": [
+        "**/*",
         "package.json",
         "pnpm-lock.yaml",
         "pnpm-workspace.yaml",
         "packages/*/package.json"
       ],
-      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "digest-required",
       "required_outputs": [
         "scratch/coverage/t1-t3/coverage-summary.json",
         "scratch/coverage/t1-t3/coverage-final.json",
         "scratch/coverage/t1-t3/subprocess-v8/**"
-      ]
+      ],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     },
     {
       "gate_id": "governance",
       "input_selectors": [
+        "**/*",
         "law/**",
         "product/**",
         "work/rounds/**",
@@ -582,14 +657,15 @@
         ".github/**"
       ],
       "dependency_selectors": [
+        "**/*",
         "package.json",
         "pnpm-lock.yaml",
         "pnpm-workspace.yaml",
         "packages/*/package.json",
         "tsconfig*.json"
       ],
-      "toolchain_probe_ids": ["node", "pnpm", "typescript", "git"],
-      "environment_input_ids": ["CI", "GITHUB_ACTIONS", "NODE_ENV"],
+      "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
+      "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "digest-required",
       "required_outputs": [
         "packages/cli/src/generated/action-registry.ts",
@@ -597,7 +673,9 @@
         "packages/sensors/src/generated/action-kinds.ts",
         "packages/schemas/dist/**",
         "packages/cli/dist/**"
-      ]
+      ],
+      "universal_input_proof": "tracked-candidate-tree",
+      "output_observation": "declared-plus-observed"
     }
   ],
   "fallbacks": {
@@ -722,6 +800,97 @@
       "equivalent_node": "governance",
       "boundary": "exact-head-clean-no-write-equivalent",
       "freshness_profile": "governance"
+    }
+  ],
+  "command_closure": [
+    {
+      "gate_id": "formatting",
+      "scripts": ["direct:prettier-check"],
+      "programs": ["pnpm", "prettier"]
+    },
+    {
+      "gate_id": "preparation",
+      "scripts": ["devai:prepare", "@devai-nyx/schemas:build", "@devai-nyx/cli:build"],
+      "programs": ["node", "pnpm", "tsc"]
+    },
+    {
+      "gate_id": "action-registry",
+      "scripts": ["action-registry:check"],
+      "programs": ["node", "pnpm"]
+    },
+    {
+      "gate_id": "trace",
+      "scripts": ["trace:check"],
+      "programs": ["node", "pnpm"]
+    },
+    {
+      "gate_id": "repository-references",
+      "scripts": ["repository-reference:check"],
+      "programs": ["node", "pnpm"]
+    },
+    {
+      "gate_id": "materializations",
+      "scripts": ["round-close:policy"],
+      "programs": ["node", "pnpm"]
+    },
+    {
+      "gate_id": "diff-check",
+      "scripts": ["direct:git-diff-check"],
+      "programs": ["git"]
+    },
+    {
+      "gate_id": "ordinary",
+      "scripts": ["direct:vitest-run"],
+      "programs": ["pnpm", "vitest"]
+    },
+    {
+      "gate_id": "stage1",
+      "scripts": [
+        "ci:stage1",
+        "ci:workflows",
+        "action-registry:check",
+        "trace:check",
+        "repository-reference:check",
+        "lint",
+        "typecheck",
+        "devai:prepare"
+      ],
+      "programs": ["node", "pnpm", "tsc"]
+    },
+    {
+      "gate_id": "stage2",
+      "scripts": ["ci:stage2", "build", "test:t1", "test:t2", "devai:prepare"],
+      "programs": ["node", "pnpm", "vitest", "tsc"]
+    },
+    {
+      "gate_id": "t4",
+      "scripts": ["test:t4"],
+      "programs": ["pnpm", "vitest"]
+    },
+    {
+      "gate_id": "t5",
+      "scripts": ["test:t5"],
+      "programs": ["pnpm", "vitest"]
+    },
+    {
+      "gate_id": "t6",
+      "scripts": ["test:t6"],
+      "programs": ["pnpm", "vitest"]
+    },
+    {
+      "gate_id": "changesets",
+      "scripts": ["ci:changesets"],
+      "programs": ["node", "pnpm"]
+    },
+    {
+      "gate_id": "coverage",
+      "scripts": ["test:coverage:t1-t3"],
+      "programs": ["pnpm", "vitest"]
+    },
+    {
+      "gate_id": "governance",
+      "scripts": ["ci:governance", "ci:sequencing", "ci:sha-references", "devai:prepare"],
+      "programs": ["node", "pnpm", "tsc"]
     }
   ]
 }

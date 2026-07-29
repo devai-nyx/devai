@@ -2,7 +2,7 @@
   "schemaVersion": "5.0.0",
   "policy_id": "generic-round-close-controls",
   "policy_version": "5.0.0",
-  "decision_id": "DII-248",
+  "decision_id": "DII-249",
   "schemas": {
     "round_profile": "law/schemas/round-close-profile.schema.json",
     "affected_test_graph": "law/schemas/affected-test-graph.schema.json",
@@ -21,7 +21,9 @@
     "review_transport": "law/schemas/review-transport.schema.json",
     "review_repair_evidence": "law/schemas/review-repair-evidence.schema.json",
     "review_scope": "law/schemas/review-scope-manifest.schema.json",
-    "review_result": "law/schemas/review-result.schema.json"
+    "review_result": "law/schemas/review-result.schema.json",
+    "control_provenance": "law/schemas/control-provenance.schema.json",
+    "remediation_closure_matrix": "law/schemas/remediation-closure-matrix.schema.json"
   },
   "profile_discovery": {
     "path_template": "work/rounds/{round}/close-control-profile.json",
@@ -132,20 +134,56 @@
     "missing_ambiguous_or_incomplete_gate_profile": "execute-never-reuse",
     "required_output_validation": "presence-and-raw-byte-digest-before-reuse",
     "environment_allowlist": [
-      { "name": "CI", "mode": "value-sha256" },
-      { "name": "GITHUB_ACTIONS", "mode": "value-sha256" },
-      { "name": "NODE_ENV", "mode": "value-sha256" },
-      { "name": "DATABASE_URL", "mode": "presence" },
-      { "name": "DEVAI_TEST_DATABASE_URL", "mode": "presence" }
+      {
+        "name": "CI",
+        "mode": "value-sha256"
+      },
+      {
+        "name": "GITHUB_ACTIONS",
+        "mode": "value-sha256"
+      },
+      {
+        "name": "NODE_ENV",
+        "mode": "value-sha256"
+      },
+      {
+        "name": "DATABASE_URL",
+        "mode": "presence"
+      },
+      {
+        "name": "DEVAI_TEST_DATABASE_URL",
+        "mode": "presence"
+      }
     ],
     "toolchain": [
-      { "id": "node", "argv": ["node", "--version"] },
-      { "id": "pnpm", "argv": ["pnpm", "--version"] },
-      { "id": "vitest", "argv": ["pnpm", "exec", "vitest", "--version"] },
-      { "id": "typescript", "argv": ["pnpm", "exec", "tsc", "--version"] },
-      { "id": "prettier", "argv": ["pnpm", "exec", "prettier", "--version"] },
-      { "id": "eslint", "argv": ["pnpm", "exec", "eslint", "--version"] },
-      { "id": "git", "argv": ["git", "--version"] }
+      {
+        "id": "node",
+        "argv": ["node", "--version"]
+      },
+      {
+        "id": "pnpm",
+        "argv": ["pnpm", "--version"]
+      },
+      {
+        "id": "vitest",
+        "argv": ["pnpm", "exec", "vitest", "--version"]
+      },
+      {
+        "id": "typescript",
+        "argv": ["pnpm", "exec", "tsc", "--version"]
+      },
+      {
+        "id": "prettier",
+        "argv": ["pnpm", "exec", "prettier", "--version"]
+      },
+      {
+        "id": "eslint",
+        "argv": ["pnpm", "exec", "eslint", "--version"]
+      },
+      {
+        "id": "git",
+        "argv": ["git", "--version"]
+      }
     ],
     "unknown_dependency": "execute-full-suite-fallback",
     "dynamic_import_ambiguity": "execute-full-suite-fallback",
@@ -372,7 +410,7 @@
     "source": "exact-candidate-tree-raw-blobs-only",
     "authority_population": "active-applicable-owner-mandates-reached-from-profile-policy-and-decision-provenance",
     "decision_population": "profile-decision-plus-transitive-active-decision-provenance",
-    "required_decisions": ["DII-246", "DII-248"],
+    "required_decisions": [],
     "derived_populations": [
       "policy-itself",
       "every-policy-schema-map-entry",
@@ -393,10 +431,12 @@
       "raw-byte-digest"
     ],
     "ordering": "kind-control-id-path-bytewise",
-    "duplicates": "control-id-or-path-duplicates-fail",
+    "duplicates": "control-id or canonical source-reference duplicates fail",
     "unresolved_inactive_conflicting_untracked_or_extra": "fail-atomically",
     "profile-additional-controls": "lint-and-root-hints-only-never-authoritative-population",
-    "consumers": ["candidate-manifest", "review-scope", "review-state", "review-result"]
+    "consumers": ["candidate-manifest", "review-scope", "review-state", "review-result"],
+    "provenance_source": "work/rounds/{round}/control-provenance.json",
+    "required_decisions_note": "derived transitively from exact-candidate provenance; never an authority allowlist"
   },
   "reviewer_binding": {
     "source": "per-round-profile-plus-complete-structured-active-owner-mandate-census",
@@ -483,12 +523,36 @@
         "argv": ["git", "diff", "--check"],
         "freshness_profile": "diff-check"
       },
-      { "id": "ordinary", "argv": ["pnpm", "vitest", "run"], "freshness_profile": "ordinary" },
-      { "id": "stage1", "argv": ["pnpm", "run", "ci:stage1"], "freshness_profile": "stage1" },
-      { "id": "stage2", "argv": ["pnpm", "run", "ci:stage2"], "freshness_profile": "stage2" },
-      { "id": "t4", "argv": ["pnpm", "run", "test:t4"], "freshness_profile": "t4" },
-      { "id": "t5", "argv": ["pnpm", "run", "test:t5"], "freshness_profile": "t5" },
-      { "id": "t6", "argv": ["pnpm", "run", "test:t6"], "freshness_profile": "t6" },
+      {
+        "id": "ordinary",
+        "argv": ["pnpm", "vitest", "run"],
+        "freshness_profile": "ordinary"
+      },
+      {
+        "id": "stage1",
+        "argv": ["pnpm", "run", "ci:stage1"],
+        "freshness_profile": "stage1"
+      },
+      {
+        "id": "stage2",
+        "argv": ["pnpm", "run", "ci:stage2"],
+        "freshness_profile": "stage2"
+      },
+      {
+        "id": "t4",
+        "argv": ["pnpm", "run", "test:t4"],
+        "freshness_profile": "t4"
+      },
+      {
+        "id": "t5",
+        "argv": ["pnpm", "run", "test:t5"],
+        "freshness_profile": "t5"
+      },
+      {
+        "id": "t6",
+        "argv": ["pnpm", "run", "test:t6"],
+        "freshness_profile": "t6"
+      },
       {
         "id": "changesets",
         "argv": ["pnpm", "run", "ci:changesets"],

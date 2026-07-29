@@ -20,11 +20,7 @@
         "tests/**",
         "work/audit/**"
       ],
-      "required_evidence": [
-        "role/path commit census",
-        "active mandate resolution",
-        "exact governed range"
-      ],
+      "required_evidence": ["active-control-census", "git:role-path-census", "git:exact-range"],
       "required_adversaries": ["wrong-role-path", "inactive-authority", "undeclared-scope"],
       "reuse_policy": "always-recheck",
       "finding_classes": []
@@ -42,11 +38,7 @@
         "work/rounds/R-0007/close-control-profile.json",
         "scripts/run-round-close-controls.mjs"
       ],
-      "required_evidence": [
-        "preparation policy result",
-        "entry-check result",
-        "binding population"
-      ],
+      "required_evidence": ["reviewer-binding", "gate:materializations"],
       "required_adversaries": [
         "missing-binding",
         "inactive-binding",
@@ -69,11 +61,7 @@
         "docs/**",
         "work/rounds/R-0007/**"
       ],
-      "required_evidence": [
-        "deploy-refusal contract",
-        "workflow trigger census",
-        "candidate identity proof"
-      ],
+      "required_evidence": ["path:work/rounds/R-0007/AUTHORIZATION.md", "candidate-manifest"],
       "required_adversaries": ["missing-grant", "wrong-sha", "dirty-tree", "release-wording"],
       "reuse_policy": "always-recheck",
       "finding_classes": []
@@ -84,7 +72,7 @@
       "risk": "P0",
       "source_refs": ["AGENTS.md", "work/rounds/R-0007/plan.md#acceptance"],
       "governing_paths": ["docs/**", "law/**", "work/rounds/R-0007/**"],
-      "required_evidence": ["frozen hash recomputation", "current-versus-history reference census"],
+      "required_evidence": ["path:AGENTS.md", "git:exact-range"],
       "required_adversaries": [
         "mutable-main-history",
         "copied-predecessor-standing",
@@ -110,12 +98,7 @@
         "work/rounds/**",
         "work/audit/**"
       ],
-      "required_evidence": [
-        "candidate manifest",
-        "claim ledger",
-        "review manifest",
-        "candidate-only clone"
-      ],
+      "required_evidence": ["candidate-manifest", "current-claims", "review-scope"],
       "required_adversaries": [
         "wrong-sha",
         "post-freeze-source-change",
@@ -143,12 +126,9 @@
         ".github/**"
       ],
       "required_evidence": [
-        "cold impact plan",
-        "warm impact plan",
-        "graph population proof",
-        "cache records",
-        "per-authoritative-gate effective input and output profiles",
-        "status-aware committed rename records"
+        "impact-execution",
+        "convergence-evidence",
+        "path:work/rounds/R-0007/affected-test-graph.json"
       ],
       "required_adversaries": [
         "changed-test",
@@ -180,14 +160,7 @@
         "work/rounds/R-0007/current-claims.json",
         "work/audit/R-0007/**"
       ],
-      "required_evidence": [
-        "review-scope manifest",
-        "structured review result",
-        "exact-once validation",
-        "scope core-identity recomputation",
-        "all-disposition proof recomputation",
-        "exact-candidate active-control census"
-      ],
+      "required_evidence": ["review-scope", "active-control-census"],
       "required_adversaries": [
         "omit-unchanged-topic",
         "duplicate-topic",
@@ -215,12 +188,7 @@
         ".devai/state/round-runs/R-0007/**",
         "work/audit/R-0007/**"
       ],
-      "required_evidence": [
-        "state transition log",
-        "complete finding populations",
-        "cycle-3 refusal",
-        "canonical predecessor-linked state and transport digest chain"
-      ],
+      "required_evidence": ["review-state", "review-transport"],
       "required_adversaries": [
         "cycle-one-fail",
         "partial-class-repair",
@@ -240,11 +208,7 @@
       "risk": "P1",
       "source_refs": ["work/rounds/R-0007/plan.md#acceptance"],
       "governing_paths": ["packages/**", "scripts/**", "docs/**", "law/**"],
-      "required_evidence": [
-        "generation check",
-        "output digest comparison",
-        "direct-edit rejection"
-      ],
+      "required_evidence": ["gate:preparation", "git:exact-range"],
       "required_adversaries": ["hand-edited-output", "missing-page", "source-output-drift"],
       "reuse_policy": "always-recheck",
       "finding_classes": []
@@ -258,7 +222,7 @@
         "work/rounds/R-0007/current-claims.json"
       ],
       "governing_paths": ["docs/**", "work/rounds/R-0007/**", "work/audit/R-0007/**"],
-      "required_evidence": ["materialized claim ledger", "rendered-location check"],
+      "required_evidence": ["current-claims", "claim-runtime-inputs"],
       "required_adversaries": [
         "candidate-change",
         "source-change",
@@ -267,6 +231,71 @@
       ],
       "reuse_policy": "always-recheck",
       "finding_classes": []
+    }
+  ],
+  "normative_sources": [
+    {
+      "path": "AGENTS.md",
+      "source_digest_sha256": "01b125350c38bb76e6359b41eebc6a1a9a8147ed6f6406161f599e217c45874b",
+      "obligation_ids": ["R7-P0-AUTHORITY", "R7-P0-HISTORY-INTEGRITY"]
+    },
+    {
+      "path": "product/owner-mandates/OM-014.md",
+      "source_digest_sha256": "4b65116f0f9fd743f395bcdd90fc53895778c0e9f71e68276274ec1429a1f003",
+      "obligation_ids": [
+        "R7-P0-REVIEWER-BINDING",
+        "R7-P0-CANDIDATE-IDENTITY",
+        "R7-P1-AFFECTED-TESTS",
+        "R7-P1-REVIEW-CENSUS",
+        "R7-P1-TWO-CYCLE",
+        "R7-P2-CURRENT-CLAIMS"
+      ]
+    },
+    {
+      "path": "product/owner-mandates/OM-015.md",
+      "source_digest_sha256": "be3f8e47ac87d77bebafa527eeff1e5d83e806cec1689f1898ca0d70e49f4a5a",
+      "obligation_ids": ["R7-P0-CANDIDATE-IDENTITY", "R7-P1-REVIEW-CENSUS", "R7-P1-TWO-CYCLE"]
+    },
+    {
+      "path": "product/owner-mandates/OM-016.md",
+      "source_digest_sha256": "dd54b30fa3d7bee0a2ada70f9d2bfec6396142c515e5422e997f00113d188105",
+      "obligation_ids": [
+        "R7-P0-AUTHORITY",
+        "R7-P0-CANDIDATE-IDENTITY",
+        "R7-P1-AFFECTED-TESTS",
+        "R7-P1-REVIEW-CENSUS",
+        "R7-P1-TWO-CYCLE"
+      ]
+    },
+    {
+      "path": "work/rounds/EXECUTION-CONTRACT.md",
+      "source_digest_sha256": "c4388f4e17ce8e5abf844697d30fbaadc2612261dd9ad41907f54ce6a0b44e89",
+      "obligation_ids": [
+        "R7-P0-AUTHORITY",
+        "R7-P0-CANDIDATE-IDENTITY",
+        "R7-P1-REVIEW-CENSUS",
+        "R7-P1-TWO-CYCLE"
+      ]
+    },
+    {
+      "path": "work/rounds/R-0007/AUTHORIZATION.md",
+      "source_digest_sha256": "e9d2cee5117647cfd5c62a20e3be9ce7bb5c6c05445fcf7ccbeed90fa23be444",
+      "obligation_ids": ["R7-P0-DEPLOY-REFUSAL"]
+    },
+    {
+      "path": "work/rounds/R-0007/plan.md",
+      "source_digest_sha256": "7489fe0f77716f9c57e3073ea27d344a2c405cce12dcb25e517a770b7c9d64d3",
+      "obligation_ids": [
+        "R7-P0-DEPLOY-REFUSAL",
+        "R7-P0-HISTORY-INTEGRITY",
+        "R7-P1-GENERATED-IDENTITY",
+        "R7-P2-CURRENT-CLAIMS"
+      ]
+    },
+    {
+      "path": "work/rounds/R-0007/prompts/00-orchestrator.md",
+      "source_digest_sha256": "58e6b9e82c698fee1450de80d4c5d979606df3775e7107f059c667d1e2ec54bb",
+      "obligation_ids": ["R7-P0-AUTHORITY", "R7-P0-DEPLOY-REFUSAL", "R7-P0-CANDIDATE-IDENTITY"]
     }
   ]
 }

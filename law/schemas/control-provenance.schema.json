@@ -14,6 +14,7 @@
     "decisions",
     "owner_mandates",
     "manifest_roots",
+    "normative_source_roots",
     "derived_sources"
   ],
   "$defs": {
@@ -66,6 +67,7 @@
       }
     },
     "manifest_roots": { "$ref": "#/$defs/uniquePaths" },
+    "normative_source_roots": { "$ref": "#/$defs/uniquePaths" },
     "derived_sources": {
       "type": "array",
       "minItems": 1,

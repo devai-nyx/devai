@@ -65,5 +65,15 @@
     "round-declaration-when-bound",
     "prior-finding-origin-evidence",
     "obligation-source-references"
+  ],
+  "normative_source_roots": [
+    "AGENTS.md",
+    "product/owner-mandates/OM-014.md",
+    "product/owner-mandates/OM-015.md",
+    "product/owner-mandates/OM-016.md",
+    "work/rounds/EXECUTION-CONTRACT.md",
+    "work/rounds/R-0007/AUTHORIZATION.md",
+    "work/rounds/R-0007/plan.md",
+    "work/rounds/R-0007/prompts/00-orchestrator.md"
   ]
 }
