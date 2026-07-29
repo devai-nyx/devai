@@ -51,13 +51,13 @@ function run(
   command: string,
   args: readonly string[],
   env: NodeJS.ProcessEnv = {},
-): Record<string, any> {
+): Record<string, unknown> {
   const result = spawnSync(
     'node',
     [SCRIPT, command, '--repo-root', fixture.root, '--round', 'R-9000', ...args, '--json'],
     { cwd: fixture.root, encoding: 'utf8', env: { ...process.env, ...env } },
   );
-  const value = JSON.parse(result.stdout) as Record<string, any>;
+  const value = JSON.parse(result.stdout) as Record<string, unknown>;
   expect(result.status, `${result.stderr}\n${result.stdout}`).toBe(value.ok ? 0 : 1);
   return value;
 }
@@ -243,11 +243,17 @@ function fixture(): Fixture {
   return { root, base };
 }
 
-function executed(value: Record<string, any>): string[] {
-  return value.nodes
+function executed(value: Record<string, unknown>): string[] {
+  return nodes(value)
     .filter(({ outcome }: { outcome: string }) => outcome === 'EXECUTE')
     .map(({ node_id }: { node_id: string }) => node_id)
     .sort();
+}
+
+function nodes(
+  value: Record<string, unknown>,
+): Array<{ node_id: string; outcome: string; reason_codes: string[] }> {
+  return value.nodes as Array<{ node_id: string; outcome: string; reason_codes: string[] }>;
 }
 
 afterEach(() => {
@@ -280,9 +286,7 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const value = run(current, 'impact-plan', ['--base', current.base, '--head', candidate]);
     expect(value.ok).toBe(true);
     expect(executed(value)).toEqual(['full-suite']);
-    expect(
-      value.nodes.find(({ node_id }: { node_id: string }) => node_id === 'full-suite'),
-    ).toEqual(
+    expect(nodes(value).find(({ node_id }) => node_id === 'full-suite')).toEqual(
       expect.objectContaining({
         reason_codes: expect.arrayContaining(['UNKNOWN_DEPENDENCY']),
         fallback_population: 'full-suite',
@@ -308,11 +312,9 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     expect(value.ok).toBe(true);
     expect(value).toMatchObject({ remote: true, cache_trusted: false });
     expect(executed(value)).toEqual(['full-coverage', 'full-suite', 'unit-a', 'unit-b']);
-    expect(
-      value.nodes.every(({ reason_codes }: { reason_codes: string[] }) =>
-        reason_codes.includes('REMOTE_FULL'),
-      ),
-    ).toBe(true);
+    expect(nodes(value).every(({ reason_codes }) => reason_codes.includes('REMOTE_FULL'))).toBe(
+      true,
+    );
   });
 
   it('executes affected nodes once, then reuses byte-identical PASS results', () => {

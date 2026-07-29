@@ -42,8 +42,8 @@ function run(
   return { status: result.status, stdout: result.stdout, stderr: result.stderr, value };
 }
 
-function json(relativePath: string): Record<string, any> {
-  return JSON.parse(readFileSync(resolve(ROOT, relativePath), 'utf8')) as Record<string, any>;
+function json(relativePath: string): Record<string, unknown> {
+  return JSON.parse(readFileSync(resolve(ROOT, relativePath), 'utf8')) as Record<string, unknown>;
 }
 
 describe('pre-R-0007 generic close-control red contracts', () => {
@@ -143,7 +143,8 @@ describe('pre-R-0007 generic close-control red contracts', () => {
   it('keeps coverage whole-only and graph fallback explicit', () => {
     const policy = json('law/policy/round-close-controls.json');
     const graph = json('work/rounds/R-0007/affected-test-graph.json');
-    expect(policy.freshness.partial_coverage_merge).toBe('forbidden');
+    const freshness = policy.freshness as Record<string, unknown>;
+    expect(freshness.partial_coverage_merge).toBe('forbidden');
     expect(graph.coverage).toEqual({
       node: 'full-coverage',
       mode: 'whole-only',
@@ -158,9 +159,10 @@ describe('pre-R-0007 generic close-control red contracts', () => {
 
   it('uses semantic obligations rather than markdown requirements as authoritative topics', () => {
     const policy = json('law/policy/round-close-controls.json');
-    expect(policy.review_scope.topic_sources).toContain('semantic-obligation');
-    expect(policy.review_scope.markdown_requirement_scan).toBe('unregistered-obligation-lint-only');
-    expect(policy.review_scope.exactly_once).toBe(true);
+    const reviewScope = policy.review_scope as Record<string, unknown>;
+    expect(reviewScope.topic_sources).toContain('semantic-obligation');
+    expect(reviewScope.markdown_requirement_scan).toBe('unregistered-obligation-lint-only');
+    expect(reviewScope.exactly_once).toBe(true);
   });
 
   it('generates a scope containing every registered semantic obligation', () => {
@@ -169,7 +171,7 @@ describe('pre-R-0007 generic close-control red contracts', () => {
     const obligations = json('work/rounds/R-0007/review-obligations.json').obligations as Array<{
       obligation_id: string;
     }>;
-    const topics = (result.value?.manifest as Record<string, any>).topics as Array<{
+    const topics = (result.value?.manifest as Record<string, unknown>).topics as Array<{
       obligation_id?: string;
     }>;
     expect(new Set(topics.map((topic) => topic.obligation_id).filter(Boolean))).toEqual(
