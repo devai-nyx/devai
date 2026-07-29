@@ -3206,6 +3206,11 @@ function buildImpactPlan(context, base, head, findings) {
         for (const id of shared.invalidates ?? []) select(id, 'SHARED_INPUT_CHANGED', paths);
     }
     for (const node of ordered) {
+      // Fallback nodes describe the complete population that must execute when
+      // precision is impossible. Their broad input selectors participate in
+      // freshness keys, but are not ordinary impact edges: treating them as
+      // such would widen every narrow source or test change to the full suite.
+      if (node.kind === 'fallback') continue;
       const paths = range.paths.filter((path) => selectorsMatch(path, node.input_selectors));
       if (paths.length > 0)
         select(
@@ -3221,7 +3226,9 @@ function buildImpactPlan(context, base, head, findings) {
     const unknown = range.paths.filter(
       (path) =>
         selectorsMatch(path, population) &&
-        !ordered.some((node) => selectorsMatch(path, node.input_selectors)) &&
+        !ordered.some(
+          (node) => node.kind !== 'fallback' && selectorsMatch(path, node.input_selectors),
+        ) &&
         !(context.graph.shared_inputs ?? []).some((shared) =>
           selectorsMatch(path, shared.selectors),
         ),
