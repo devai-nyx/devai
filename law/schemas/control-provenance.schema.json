@@ -40,7 +40,8 @@
       "const": "1.0.0"
     },
     "round": {
-      "const": "R-0007"
+      "type": "string",
+      "pattern": "^R-[0-9]{4}$"
     },
     "root_decision": {
       "$ref": "#/$defs/decisionId"
@@ -75,7 +76,6 @@
     },
     "owner_mandates": {
       "type": "array",
-      "minItems": 1,
       "uniqueItems": true,
       "items": {
         "type": "object",

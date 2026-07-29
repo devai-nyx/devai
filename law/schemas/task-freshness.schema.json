@@ -148,8 +148,15 @@
         "additionalProperties": false,
         "required": ["name", "mode", "digest"],
         "properties": {
-          "name": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
-          "mode": { "enum": ["presence", "value-sha256"] },
+          "name": {
+            "oneOf": [
+              { "const": "__ALL_ENVIRONMENT__" },
+              { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" }
+            ]
+          },
+          "mode": {
+            "enum": ["presence", "value-sha256", "complete-environment-sha256"]
+          },
           "digest": { "$ref": "#/$defs/sha256" }
         }
       }
