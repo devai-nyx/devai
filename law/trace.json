@@ -3132,7 +3132,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 22,
-      "assertion_digest_sha256": "b6f0524f6fb50fbc8767faf0d173659652da48ca26bac1c11c07b87908f3b816"
+      "assertion_digest_sha256": "8c4e3bae7d3cd591155a2fbd342de8b7093ec1216771e79ce6d794775502cf91"
     },
     {
       "path": "tests/contract/r0006-output-totality-mocked-producers.contract.test.ts",

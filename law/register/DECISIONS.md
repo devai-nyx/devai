@@ -4356,6 +4356,37 @@ publication, merge, exact-main CI, PC-0007, closure, release, package publicatio
 GitHub Release, Pages deployment, evidence promotion, predecessor mutation, real
 external mutation, or R-0007+ authority.
 
+### DII-245 — Reaccept the output gate after pre-review portability repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 pre-review gate correction; OM-012; OM-013; DII-239; DII-244; failed smart convergence at 3581f1e9a6e09174c38df137a89d229d50ad84fc; Inspector 2f9018ff8661806b31ccc68c11871c28c63ae419, 3b91504718268a5376ad5e51dabcfbc9ef5b84e0, and 3e1dab4745ac899f96bf3adf1e370781bcf931a6; Auditor f3469497bbcf9873b4e4ae374f7c643aa6bc3b9b`
+
+Remote-mode smart convergence at exact head
+`3581f1e9a6e09174c38df137a89d229d50ad84fc` distrusted all pre-existing freshness
+records and continued through all 16 tasks. Fourteen passed. Formatting rejected the
+Auditor as-built and population JSON, and coverage completed 158 files with one failed
+sensor-envelope case after a child process exceeded its 30-second bound under the full
+V8 provider load. No coverage summary was admitted. Auditor `f346949…` preserves the
+complete two-gate defect population and does not relabel that convergence PASS.
+
+The repair changes no production path, action identity, sensor behavior, threshold,
+coverage denominator, exclusion, provider, or review controller. Inspector `2f9018f…`
+and `3e1dab4…` make the executable population writer resolve and apply the repository's
+canonical Prettier configuration. Inspector `3b91504…` raises only the affected
+synchronous coverage-harness bounds to 120 seconds per child and 360 seconds for the
+three-invocation case. A subprocess-V8 focused run passes all six cases. The regenerated
+Auditor population remains a zero-failure behavioral PASS and has canonical SHA-256
+`32fcbd1c054ee737c7d803a53903e98f1fe1a2ed6f363dca842a719f6b3fb0dd`.
+
+DII-245 replaces DII-244 as the Architect closing decision for production PC-0007;
+DII-207 remains the declaration. It reaccepts only the repaired pre-review harness and
+artifact. Full coverage, two-pass smart convergence, isolated rehearsal, candidate and
+review-scope manifests, and an independent confirmation of the existing 264 topics
+must still pass before formal Codex review cycle 6 may begin.
+
+This decision claims no fresh convergence PASS, candidate freeze, manifest, review
+PASS, publication, merge, exact-main CI, PC-0007, closure, release, package publication,
+tag, GitHub Release, Pages deployment, evidence promotion, predecessor mutation, real
+external mutation, or R-0007+ authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

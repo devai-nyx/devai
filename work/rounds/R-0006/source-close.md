@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-207; DII-211–244; OM-011; R-0006-AS-BUILT; Auditor 72fac684750a157a26b6b867beaa56d045569960; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; R-0006-INDEPENDENT-CODEX-B9-REVIEW-5-FAILURE; Auditor 2e02d31c9504d4ee63dbe05f40084466292aff99,
+    DII-207; DII-211–245; OM-011; R-0006-AS-BUILT; Auditor 72fac684750a157a26b6b867beaa56d045569960; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; R-0006-INDEPENDENT-CODEX-B9-REVIEW-5-FAILURE; Auditor 2e02d31c9504d4ee63dbe05f40084466292aff99,
     7c0fc17e4c9543c31db9f3f563e5b9e65d220c67,
     and 0f22cfa5bb56e418086c14ef834a2e56590f6793; Inspector 5846718c3947ddce6b3bb67b296796bcc275dcb9 and 547351f7d87086b601d4c11a811855ce9d2f57af; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE; R-0006-OM-011-CYCLE-1-RETENTION-CANDIDATE-FAILURE,
   ]
@@ -153,7 +153,7 @@ The source merge must then pass exact-main CI before the production phase-close 
 append PC-0007 on a closure-only branch derived from that merge.
 
 PC-0007 is the only permitted file in the closure-only PR. It uses DII-207 as the
-declaration and DII-244 as the closing decision, binds the exact source merge rather
+declaration and DII-245 as the closing decision, binds the exact source merge rather
 than the later closure commit, and records `none-needed` release disposition. DII-235
 was invalidated by the cycle-3 review FAIL; DII-236 governs its complete-class repair;
 DII-237 reaccepted the repaired machinery before the cycle-3 finding-heading
@@ -164,7 +164,8 @@ its materialized, tested, and audited implementation before the fresh governance
 DII-242 discloses and contains that gate's exact historical sequencing defect; DII-243
 governs the initial complete-class correction required by the independent Codex cycle-5
 FAIL; DII-244 contains the complete-population sequencing defect and reaccepts only the
-verified repair for pre-review gates.
+verified behavior; DII-245 preserves the failed pre-review gate population and
+reaccepts its test-harness and evidence-format repair.
 The closure-only head, closure merge, and final main must each pass their required exact-SHA checks. A
 rehearsal PC has no standing and must never be published.
 
