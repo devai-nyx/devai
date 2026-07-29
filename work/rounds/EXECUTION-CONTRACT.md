@@ -171,7 +171,9 @@ actually consume. Acceptance materializes and revalidates the complete live regi
 Every changed and unchanged topic receives exactly one structured disposition. Fresh
 reuse still requires independent recomputation of the current topic-input manifest,
 referenced-evidence manifest and digest, and every required task-freshness key. Finding
-IDs are globally unique across the canonical JSON or JSONL stream. Malformed,
+IDs are globally unique across the canonical JSON or JSONL stream. Obligations with
+unstructured evidence requirements are always rechecked. Prior findings produce one
+topic per defect class with their complete origin population. Malformed,
 truncated, duplicate, omitted, unknown, or identity-mismatched results are invalid.
 
 Scope generation requires the independently authenticated convergence record named by

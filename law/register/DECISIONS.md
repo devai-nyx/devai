@@ -4499,6 +4499,11 @@ Review result finding identifiers are globally unique across the canonical JSON 
 JSONL stream. A reused topic is accepted only after recomputing its current input
 manifest, referenced-evidence manifest and digest, and every required task-freshness key
 from current artifacts; copied topic digests or prose have no standing.
+An obligation whose required evidence is not yet expressed as mechanically resolvable
+references and task nodes is always rechecked and cannot use `REUSED_FRESH_PASS`.
+Historical findings are grouped into one mandatory topic per defect class while
+retaining every finding ID, origin cycle, origin evidence reference, and disposition;
+repeated appearances of one class never create duplicate topic IDs or lose history.
 
 Review state, transport attempts, results, candidate manifests, scope manifests, and
 complete-class repair evidence are schema-validated, self-digested, and linked by exact

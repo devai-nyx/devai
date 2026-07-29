@@ -90,7 +90,7 @@
         "copied-predecessor-standing",
         "predecessor-write"
       ],
-      "reuse_policy": "digest-and-evidence-recheck",
+      "reuse_policy": "always-recheck",
       "finding_classes": []
     },
     {
@@ -229,7 +229,7 @@
         "direct-edit rejection"
       ],
       "required_adversaries": ["hand-edited-output", "missing-page", "source-output-drift"],
-      "reuse_policy": "digest-and-evidence-recheck",
+      "reuse_policy": "always-recheck",
       "finding_classes": []
     },
     {
@@ -248,7 +248,7 @@
         "stale-rendered-value",
         "handwritten-current-count"
       ],
-      "reuse_policy": "digest-and-evidence-recheck",
+      "reuse_policy": "always-recheck",
       "finding_classes": []
     }
   ]

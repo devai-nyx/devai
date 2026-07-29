@@ -167,7 +167,9 @@
       "every-required-current-task-key"
     ],
     "changed_topic_reuse_forbidden": true,
+    "unstructured_required_evidence": "always-recheck-no-reuse",
     "previous_finding_classes_mandatory": true,
+    "prior_findings_topic_key": "one-topic-per-defect-class-with-complete-origin-population",
     "structured_result_required": true,
     "finding_ids_globally_unique_across_json_or_jsonl": true,
     "terminal_record_required": true,
