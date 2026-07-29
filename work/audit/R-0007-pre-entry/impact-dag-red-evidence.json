@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0007",
+  "purpose": "fallback-edge precision defect red evidence",
+  "observations": [
+    {
+      "commit": "988b01a01d048345197c4c432edfa2212bedb04e",
+      "command": "pnpm vitest run tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts --reporter=verbose",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "failed_tests": 4,
+      "passed_tests": 2,
+      "defect_class": "fallback input selectors incorrectly behave as ordinary impact edges",
+      "repair_condition": "narrow source and test changes exclude fallback nodes while shared, unknown, and remote cases retain explicit fallback selection"
+    }
+  ],
+  "round_started": false,
+  "deployment_authorized": false
+}
