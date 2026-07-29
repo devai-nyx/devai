@@ -4486,6 +4486,12 @@ The census reads the exact candidate tree, never mutable worktree bytes. Its sel
 binding digest is required in the candidate manifest and must match at scope generation,
 review validation, state transition, and transport validation. A deleted or unreadable
 tracked mandate fails closed rather than crashing or silently shrinking the census.
+The repository can authenticate the authorized model and exact review bytes, but no
+provider-signed Codex invocation-verification API is available to this controller.
+Reviewer execution provenance is therefore an explicit external-orchestration trust
+boundary: a role-pure Auditor captures task/invocation ID, selected model, input
+identities, and output digest without claiming cryptographic attestation. A self-asserted
+receipt must never be described as stronger proof.
 
 Convergence is an independently authenticated exact-base/exact-candidate record with
 two complete ordered passes over the authoritative population. Each pass proves clean
@@ -4562,7 +4568,8 @@ the complete live per-round claim registry, not only synthetic one-claim fixture
 Checkout-dependent producer paths are normalized to sorted repository-relative paths.
 The exact-head CI producer also proves that the selected PR's head OID equals the claim
 candidate before it accepts the complete required check population; green checks from a
-different PR or SHA have no standing.
+different PR or SHA have no standing. The required-check population is nonempty,
+complete, deterministically ordered, and entirely terminal-success.
 
 The affected-test plan and every node result from both convergence passes are retained
 in a schema-valid self-digested runtime artifact. Candidate and convergence manifests

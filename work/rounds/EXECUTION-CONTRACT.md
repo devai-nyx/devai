@@ -144,6 +144,11 @@ substrings, and partial or malformed marker-shaped objects have no binding autho
 The census is read from the exact candidate tree. Its digest is mandatory in the
 candidate manifest and must remain equal through scope, review, state, and transport;
 missing or unreadable candidate mandate entries fail closed.
+Repository machinery authenticates the selected reviewer binding and exact result bytes,
+not provider execution. Because no provider-signed receipt verifier is available, a
+role-pure Auditor must record the external task/invocation ID, model, exact inputs, and
+output digest as an explicit orchestration trust boundary, without claiming
+cryptographic provenance.
 
 Review scope is generated from registered obligations, exact changes, active controls,
 current claims, prior finding classes, candidate identities, and convergence evidence.
@@ -170,6 +175,8 @@ Claim producers emit deterministic structured values that their declared extract
 actually consume. Acceptance materializes and revalidates the complete live registry.
 Exact-head CI receipts require both a PR head OID equal to the candidate and the complete
 required green check population; an unrelated green PR is rejected.
+The required-check census must be nonempty, complete, deterministically sorted, and all
+terminal-success.
 Checkout-dependent producer paths are normalized to deterministically sorted
 repository-relative paths. Both affected-task passes retain every node's plan outcome,
 reasons, task key, dependency keys, output proof, and result in a self-digested artifact

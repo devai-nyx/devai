@@ -220,6 +220,7 @@
     "pre_review_post_publication_claim": "authenticated-deferred-declaration",
     "post_publication_receipt": "separate-self-digested-ledger-bound-to-pre-review-digest",
     "exact_head_ci_claim": "pr-head-oid-equals-candidate-and-complete-required-check-population-green",
+    "exact_head_required_checks": "nonempty-complete-required-population-all-terminal-success",
     "post_publication_materialization": "explicit-phase-command-atomic-no-hand-authored-receipt",
     "ledger_self_digest": "sha256-canonical-body-with-claims-digest-omitted",
     "materialization_order": [
@@ -321,6 +322,9 @@
     "census_glob": "product/owner-mandates/OM-*.md",
     "census_source": "exact-candidate-tree-never-mutable-worktree",
     "candidate_manifest_binding": "required-and-equal-selected-candidate-census-digest",
+    "provenance_boundary": "external-orchestration-not-cryptographically-verifiable-repo-locally",
+    "auditor_capture": "role-pure-task-id-model-input-output-digests-required",
+    "self_asserted_receipt": "never-upgrades-to-cryptographic-provenance",
     "preparation_allows_unbound": true,
     "preparation_diagnostic": "ENTRY_BLOCKED_REVIEWER_UNBOUND",
     "entry_requires_exactly_one_active_binding": true,
