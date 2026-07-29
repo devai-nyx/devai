@@ -88,6 +88,19 @@ function git(root, args, options = {}) {
   return result.stdout.trim();
 }
 
+function gitBytes(root, args) {
+  const result = spawnSync('git', args, {
+    cwd: root,
+    encoding: null,
+    env: process.env,
+    maxBuffer: 64 * 1024 * 1024,
+  });
+  if (result.status !== 0) {
+    throw new Error(`git ${args.join(' ')} failed: ${String(result.stderr ?? result.stdout)}`);
+  }
+  return result.stdout;
+}
+
 function finding(code, message, extra = {}) {
   return { code, message, ...extra };
 }
@@ -5322,9 +5335,10 @@ function resolveTopicEvidenceV4(context, proof, ref) {
     return gate === undefined ? null : { ref, digest: gate.result_digest };
   }
   const path = ref.split('#', 1)[0];
-  if (path === undefined || path === '' || !candidateTreeEntries(proof.manifest.candidate_sha).has(path)) return null;
+  const objectId = path === undefined || path === '' ? undefined : candidateTreeEntries(proof.manifest.candidate_sha).get(path);
+  if (objectId === undefined) return null;
   try {
-    return { ref, digest: sha256(git(repoRoot, ['show', `${proof.manifest.candidate_sha}:${path}`])) };
+    return { ref, digest: sha256(gitBytes(repoRoot, ['cat-file', 'blob', objectId])) };
   } catch {
     return null;
   }
