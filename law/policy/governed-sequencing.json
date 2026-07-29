@@ -523,6 +523,27 @@
         "tests": ["tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": [
+        "acda29ec3e8d3fa7f34da1f2a6198087f9f36755",
+        "a4ac90bdd999af12dcf8ffbc8eb44148ab68d1f6"
+      ],
+      "law_commits": ["0332ce727d006d03429d1f46fef8ecbc563aa8af"],
+      "red_evidence": {
+        "commit": "28d07305fd33681aab56cad0bdce00158c9afe0e",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts --reporter=dot",
+        "evidence_path": "work/audit/R-0007-pre-entry/cycle1-complete-class-red-evidence.json",
+        "evidence_sha256": "5a33cf75410619951b89c9a8276a77b0e1dfdf301795caefc0a1ac70469376eb",
+        "tests": ["tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "packages/schemas/src/roster.ts",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [
