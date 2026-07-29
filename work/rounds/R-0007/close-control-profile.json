@@ -1,7 +1,7 @@
 {
   "schemaVersion": "2.0.0",
   "round": "R-0007",
-  "policy_version": "4.0.0",
+  "policy_version": "5.0.0",
   "decision_id": "DII-248",
   "phase": "pre-entry-preparation",
   "declaration": {
@@ -43,7 +43,9 @@
     "post_publication_claim_inputs": ".devai/state/round-runs/R-0007/close/claim-inputs-post-publication.json",
     "review_state": ".devai/state/round-runs/R-0007/close/review-state.json",
     "review_transport": ".devai/state/round-runs/R-0007/close/review-transport.json",
-    "review_repair_evidence": ".devai/state/round-runs/R-0007/close/review-repair-evidence.json"
+    "review_transport_root": ".devai/state/round-runs/R-0007/close/review-transports",
+    "review_repair_evidence": ".devai/state/round-runs/R-0007/close/review-repair-evidence.json",
+    "active_control_census": ".devai/state/round-runs/R-0007/close/active-control-census.json"
   },
   "reviewer": {
     "binding": "owner-mandate-required",

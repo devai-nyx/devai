@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "4.0.0",
+  "schemaVersion": "5.0.0",
   "policy_id": "generic-round-close-controls",
-  "policy_version": "4.0.0",
+  "policy_version": "5.0.0",
   "decision_id": "DII-248",
   "schemas": {
     "round_profile": "law/schemas/round-close-profile.schema.json",
@@ -15,6 +15,7 @@
     "candidate_manifest": "law/schemas/candidate-manifest.schema.json",
     "round_convergence": "law/schemas/round-convergence.schema.json",
     "reviewer_binding": "law/schemas/reviewer-binding.schema.json",
+    "active_control_census": "law/schemas/active-control-census.schema.json",
     "prior_finding_registry": "law/schemas/prior-finding-registry.schema.json",
     "review_state": "law/schemas/review-state.schema.json",
     "review_transport": "law/schemas/review-transport.schema.json",
@@ -97,7 +98,7 @@
     }
   ],
   "freshness": {
-    "policy_version": "2.0.0",
+    "policy_version": "3.0.0",
     "graph_from_round_profile": true,
     "state_root_template": ".devai/state/round-runs/{round}/close/freshness",
     "cache_write": "atomic-rename",
@@ -119,6 +120,17 @@
       "policy-digest",
       "graph-digest"
     ],
+    "authoritative_gate_profiles": "required-exactly-one-per-convergence-command",
+    "gate_profile_components": [
+      "complete-effective-input-selectors",
+      "dependency-selectors-and-current-digests",
+      "gate-specific-toolchain-probe-ids-and-outputs",
+      "environment-input-ids",
+      "required-persistent-output-selectors-or-explicit-none"
+    ],
+    "gate_profile_resolution": "exact-candidate-tree-raw-bytes",
+    "missing_ambiguous_or_incomplete_gate_profile": "execute-never-reuse",
+    "required_output_validation": "presence-and-raw-byte-digest-before-reuse",
     "environment_allowlist": [
       { "name": "CI", "mode": "value-sha256" },
       { "name": "GITHUB_ACTIONS", "mode": "value-sha256" },
@@ -131,18 +143,23 @@
       { "id": "pnpm", "argv": ["pnpm", "--version"] },
       { "id": "vitest", "argv": ["pnpm", "exec", "vitest", "--version"] },
       { "id": "typescript", "argv": ["pnpm", "exec", "tsc", "--version"] },
+      { "id": "prettier", "argv": ["pnpm", "exec", "prettier", "--version"] },
+      { "id": "eslint", "argv": ["pnpm", "exec", "eslint", "--version"] },
       { "id": "git", "argv": ["git", "--version"] }
     ],
     "unknown_dependency": "execute-full-suite-fallback",
     "dynamic_import_ambiguity": "execute-full-suite-fallback",
     "incomplete_population": "execute-full-suite-fallback",
     "dirty_untracked_deleted_renamed_inputs": "include-content-state-in-plan",
+    "committed_change_discovery": "git-diff-name-status-z-find-renames-exact-base-candidate",
+    "rename_invalidation": "union-of-preimage-and-postimage-with-shared-record-id",
+    "name_only_committed_discovery": "forbidden",
     "timestamp_only_change": "does-not-invalidate-identical-bytes",
     "coverage_reuse": "whole-identical-inputs-dependencies-environment-toolchain-and-outputs-only",
     "partial_coverage_merge": "forbidden"
   },
   "review_scope": {
-    "policy_version": "3.0.0",
+    "policy_version": "4.0.0",
     "obligations_from_round_profile": true,
     "claims_from_round_profile": true,
     "claims_digest_source": "profile-runtime-materialized-claims",
@@ -168,6 +185,24 @@
       "referenced-evidence-digest",
       "every-required-current-task-key"
     ],
+    "all_disposition_recomputation": [
+      "exact-current-input-manifest",
+      "exact-current-evidence-manifest-and-digest",
+      "exact-current-evidence-reference-set-and-digest",
+      "complete-required-task-freshness-records",
+      "disposition-proof-digest"
+    ],
+    "committed_rename_topics": "distinct-preimage-and-postimage-topics-linked-by-one-change-record",
+    "scope_identity_fields": [
+      "round",
+      "cycle",
+      "review-candidate",
+      "candidate-tree",
+      "policy-version",
+      "previous-candidate-manifest-digests"
+    ],
+    "scope_identity_recomputation": "invocation-plus-exact-git-policy-state-and-repair-chain",
+    "scope_identity_mismatch": "fail-before-transport-with-zero-state-or-attempt-mutation",
     "changed_topic_reuse_forbidden": true,
     "unstructured_required_evidence": "always-recheck-no-reuse",
     "previous_finding_classes_mandatory": true,
@@ -235,7 +270,7 @@
     "scope-dependent-claim-producer": "forbidden"
   },
   "review_state_machine": {
-    "policy_version": "2.0.0",
+    "policy_version": "3.0.0",
     "states": [
       "DRAFT",
       "PREFLIGHT_GREEN",
@@ -279,13 +314,27 @@
     ],
     "authenticated_chain": [
       "state-self-digest",
-      "prior-state-digest",
+      "canonical-history-digest",
+      "previous-state-digest",
+      "previous-transition-digest",
       "candidate-manifest-digest",
       "review-scope-digest",
       "review-result-digest",
       "transport-digest",
       "repair-evidence-digest"
     ],
+    "state_cycle_binding": {
+      "cycle-1": ["DRAFT", "PREFLIGHT_GREEN", "CANDIDATE_FROZEN", "CYCLE_1_ACTIVE"],
+      "cycle-2": ["REPAIR_REQUIRED", "PREFLIGHT_GREEN", "NEW_CANDIDATE_FROZEN", "CYCLE_2_ACTIVE"],
+      "terminal": "cycle-equals-consumed-active-cycle-and-terminal-evidence-matches"
+    },
+    "canonical_history": {
+      "ordinals": "contiguous-starting-at-one",
+      "first_predecessor": "null-only-for-DRAFT-origin",
+      "subsequent_predecessor": "exact-previous-state-and-transition-digests",
+      "tip": "exact-current-state-cycle-candidate-and-linked-artifact-digests",
+      "skips_duplicates_and_reordering": "forbidden"
+    },
     "cycle_two_requires": [
       "authenticated-cycle-one-failure",
       "exact-prior-candidate-and-manifests",
@@ -306,13 +355,48 @@
       "attempt_two_previous_digest": "authenticated-attempt-one",
       "identity_change_between_attempts": "forbidden",
       "transport_binds": "state-before-only",
-      "subsequent_state_transition_consumes_transport_digest": true
+      "subsequent_state_transition_consumes_transport_digest": true,
+      "nonzero_attempts": "authenticate-complete-persisted-predecessor-linked-population",
+      "valid-result": "payload-digest-equals-result-digest-input-and-transition-consumes-transport",
+      "transport-terminal": "exact-two-invalid-attempts-with-matching-terminal-transition"
     },
     "repair_evidence_guards": {
       "failed_classes": "exactly-equal-prior-result-failed-class-population",
       "repaired_instances": "exactly-equal-each-class-affected-instances",
-      "new_candidate": "distinct-and-descends-from-prior-candidate"
+      "new_candidate": "distinct-and-descends-from-prior-candidate",
+      "prior_chain": "exact-failure-result-state-transition-transport-candidate-manifest-and-scope"
     }
+  },
+  "active_control_census": {
+    "policy_version": "1.0.0",
+    "source": "exact-candidate-tree-raw-blobs-only",
+    "authority_population": "active-applicable-owner-mandates-reached-from-profile-policy-and-decision-provenance",
+    "decision_population": "profile-decision-plus-transitive-active-decision-provenance",
+    "required_decisions": ["DII-246", "DII-248"],
+    "derived_populations": [
+      "policy-itself",
+      "every-policy-schema-map-entry",
+      "round-profile",
+      "affected-test-graph",
+      "obligation-registry",
+      "current-claim-registry",
+      "prior-finding-registry",
+      "bound-round-declaration",
+      "tracked-manifests-referenced-by-these-controls"
+    ],
+    "entry_identity": [
+      "control-id",
+      "kind",
+      "path",
+      "active-status",
+      "derivation",
+      "raw-byte-digest"
+    ],
+    "ordering": "kind-control-id-path-bytewise",
+    "duplicates": "control-id-or-path-duplicates-fail",
+    "unresolved_inactive_conflicting_untracked_or_extra": "fail-atomically",
+    "profile-additional-controls": "lint-and-root-hints-only-never-authoritative-population",
+    "consumers": ["candidate-manifest", "review-scope", "review-state", "review-result"]
   },
   "reviewer_binding": {
     "source": "per-round-profile-plus-complete-structured-active-owner-mandate-census",
@@ -364,25 +448,62 @@
       "equal-semantic-population-digests"
     ],
     "commands": [
-      { "id": "formatting", "argv": ["pnpm", "exec", "prettier", "--check", "."] },
-      { "id": "preparation", "argv": ["pnpm", "run", "devai:prepare"] },
-      { "id": "action-registry", "argv": ["pnpm", "run", "action-registry:check"] },
-      { "id": "trace", "argv": ["pnpm", "run", "trace:check"] },
-      { "id": "repository-references", "argv": ["pnpm", "run", "repository-reference:check"] },
+      {
+        "id": "formatting",
+        "argv": ["pnpm", "exec", "prettier", "--check", "."],
+        "freshness_profile": "formatting"
+      },
+      {
+        "id": "preparation",
+        "argv": ["pnpm", "run", "devai:prepare"],
+        "freshness_profile": "preparation"
+      },
+      {
+        "id": "action-registry",
+        "argv": ["pnpm", "run", "action-registry:check"],
+        "freshness_profile": "action-registry"
+      },
+      {
+        "id": "trace",
+        "argv": ["pnpm", "run", "trace:check"],
+        "freshness_profile": "trace"
+      },
+      {
+        "id": "repository-references",
+        "argv": ["pnpm", "run", "repository-reference:check"],
+        "freshness_profile": "repository-references"
+      },
       {
         "id": "materializations",
-        "argv": ["node", "scripts/run-round-close-controls.mjs", "policy-check"]
+        "argv": ["node", "scripts/run-round-close-controls.mjs", "policy-check"],
+        "freshness_profile": "materializations"
       },
-      { "id": "diff-check", "argv": ["git", "diff", "--check"] },
-      { "id": "ordinary", "argv": ["pnpm", "vitest", "run"] },
-      { "id": "stage1", "argv": ["pnpm", "run", "ci:stage1"] },
-      { "id": "stage2", "argv": ["pnpm", "run", "ci:stage2"] },
-      { "id": "t4", "argv": ["pnpm", "run", "test:t4"] },
-      { "id": "t5", "argv": ["pnpm", "run", "test:t5"] },
-      { "id": "t6", "argv": ["pnpm", "run", "test:t6"] },
-      { "id": "changesets", "argv": ["pnpm", "run", "ci:changesets"] },
-      { "id": "coverage", "argv": ["pnpm", "run", "test:coverage:t1-t3"] },
-      { "id": "governance", "argv": ["pnpm", "run", "ci:governance"] }
+      {
+        "id": "diff-check",
+        "argv": ["git", "diff", "--check"],
+        "freshness_profile": "diff-check"
+      },
+      { "id": "ordinary", "argv": ["pnpm", "vitest", "run"], "freshness_profile": "ordinary" },
+      { "id": "stage1", "argv": ["pnpm", "run", "ci:stage1"], "freshness_profile": "stage1" },
+      { "id": "stage2", "argv": ["pnpm", "run", "ci:stage2"], "freshness_profile": "stage2" },
+      { "id": "t4", "argv": ["pnpm", "run", "test:t4"], "freshness_profile": "t4" },
+      { "id": "t5", "argv": ["pnpm", "run", "test:t5"], "freshness_profile": "t5" },
+      { "id": "t6", "argv": ["pnpm", "run", "test:t6"], "freshness_profile": "t6" },
+      {
+        "id": "changesets",
+        "argv": ["pnpm", "run", "ci:changesets"],
+        "freshness_profile": "changesets"
+      },
+      {
+        "id": "coverage",
+        "argv": ["pnpm", "run", "test:coverage:t1-t3"],
+        "freshness_profile": "coverage"
+      },
+      {
+        "id": "governance",
+        "argv": ["pnpm", "run", "ci:governance"],
+        "freshness_profile": "governance"
+      }
     ]
   },
   "rehearsal": {

@@ -146,7 +146,9 @@
         "cold impact plan",
         "warm impact plan",
         "graph population proof",
-        "cache records"
+        "cache records",
+        "per-authoritative-gate effective input and output profiles",
+        "status-aware committed rename records"
       ],
       "required_adversaries": [
         "changed-test",
@@ -155,7 +157,11 @@
         "unknown-source",
         "tampered-cache",
         "missing-output",
-        "remote-mode"
+        "remote-mode",
+        "gate-specific-toolchain-change",
+        "gate-specific-dependency-change",
+        "committed-rename-preimage",
+        "committed-rename-postimage"
       ],
       "reuse_policy": "always-recheck",
       "finding_classes": []
@@ -177,14 +183,21 @@
       "required_evidence": [
         "review-scope manifest",
         "structured review result",
-        "exact-once validation"
+        "exact-once validation",
+        "scope core-identity recomputation",
+        "all-disposition proof recomputation",
+        "exact-candidate active-control census"
       ],
       "required_adversaries": [
         "omit-unchanged-topic",
         "duplicate-topic",
         "unknown-topic",
         "false-fresh-reuse",
-        "truncated-result"
+        "truncated-result",
+        "rechecked-evidence-substitution",
+        "scope-identity-substitution",
+        "missing-policy-schema-control",
+        "inactive-or-duplicate-control"
       ],
       "reuse_policy": "always-recheck",
       "finding_classes": []
@@ -205,14 +218,18 @@
       "required_evidence": [
         "state transition log",
         "complete finding populations",
-        "cycle-3 refusal"
+        "cycle-3 refusal",
+        "canonical predecessor-linked state and transport digest chain"
       ],
       "required_adversaries": [
         "cycle-one-fail",
         "partial-class-repair",
         "cycle-two-fail",
         "cycle-three",
-        "second-transport-failure"
+        "second-transport-failure",
+        "state-cycle-inversion",
+        "missing-or-tampered-transport",
+        "forged-result-or-repair-predecessor"
       ],
       "reuse_policy": "always-recheck",
       "finding_classes": []

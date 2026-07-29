@@ -3,7 +3,7 @@
   "$id": "https://devai.nyxk.com.br/schemas/affected-test-execution.schema.json",
   "title": "Auditable two-pass affected-task execution",
   "description": "Exact plan and result population for every affected-test DAG node in each convergence pass.",
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -13,12 +13,53 @@
     "candidate_sha",
     "policy_digest",
     "graph_digest",
+    "change_records",
     "passes",
     "execution_digest_sha256"
   ],
   "$defs": {
     "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
     "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "nullablePath": {
+      "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }]
+    },
+    "changeRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "status",
+        "preimage",
+        "postimage",
+        "affected_paths",
+        "record_digest"
+      ],
+      "properties": {
+        "record_id": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["A", "M", "D", "R", "C", "T", "U"] },
+        "preimage": { "$ref": "#/$defs/nullablePath" },
+        "postimage": { "$ref": "#/$defs/nullablePath" },
+        "affected_paths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "record_digest": { "$ref": "#/$defs/sha256" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "enum": ["R", "C"] } } },
+          "then": {
+            "properties": {
+              "preimage": { "type": "string" },
+              "postimage": { "type": "string" },
+              "affected_paths": { "minItems": 2 }
+            }
+          }
+        }
+      ]
+    },
     "nodeResult": {
       "type": "object",
       "additionalProperties": false,
@@ -29,8 +70,14 @@
         "reason_codes",
         "changed_inputs",
         "task_key",
+        "gate_freshness_profile_digest",
+        "input_manifest_digest",
+        "dependency_input_manifest_digest",
         "dependency_keys",
+        "toolchain_digest",
+        "environment_digest",
         "fallback_population",
+        "output_contract",
         "outputs_digest",
         "result_digest"
       ],
@@ -50,13 +97,19 @@
           "items": { "type": "string", "minLength": 1 }
         },
         "task_key": { "$ref": "#/$defs/sha256" },
+        "gate_freshness_profile_digest": { "$ref": "#/$defs/sha256" },
+        "input_manifest_digest": { "$ref": "#/$defs/sha256" },
+        "dependency_input_manifest_digest": { "$ref": "#/$defs/sha256" },
         "dependency_keys": {
           "type": "object",
           "additionalProperties": { "$ref": "#/$defs/sha256" }
         },
+        "toolchain_digest": { "$ref": "#/$defs/sha256" },
+        "environment_digest": { "$ref": "#/$defs/sha256" },
         "fallback_population": {
           "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }]
         },
+        "output_contract": { "enum": ["none", "digest-required"] },
         "outputs_digest": { "$ref": "#/$defs/sha256" },
         "result_digest": { "$ref": "#/$defs/sha256" }
       }
@@ -85,12 +138,16 @@
     }
   },
   "properties": {
-    "schemaVersion": { "const": "1.0.0" },
+    "schemaVersion": { "const": "2.0.0" },
     "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
     "exact_base": { "$ref": "#/$defs/sha1" },
     "candidate_sha": { "$ref": "#/$defs/sha1" },
     "policy_digest": { "$ref": "#/$defs/sha256" },
     "graph_digest": { "$ref": "#/$defs/sha256" },
+    "change_records": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/changeRecord" }
+    },
     "passes": {
       "type": "array",
       "minItems": 2,
@@ -101,12 +158,22 @@
   },
   "examples": [
     {
-      "schemaVersion": "1.0.0",
+      "schemaVersion": "2.0.0",
       "round": "R-9999",
       "exact_base": "1111111111111111111111111111111111111111",
       "candidate_sha": "2222222222222222222222222222222222222222",
       "policy_digest": "3333333333333333333333333333333333333333333333333333333333333333",
       "graph_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+      "change_records": [
+        {
+          "record_id": "change-1",
+          "status": "M",
+          "preimage": "packages/example/src/index.ts",
+          "postimage": "packages/example/src/index.ts",
+          "affected_paths": ["packages/example/src/index.ts"],
+          "record_digest": "0606060606060606060606060606060606060606060606060606060606060606"
+        }
+      ],
       "passes": [
         {
           "pass_number": 1,
@@ -120,8 +187,14 @@
               "reason_codes": ["SOURCE_CHANGED"],
               "changed_inputs": ["packages/example/src/index.ts"],
               "task_key": "7777777777777777777777777777777777777777777777777777777777777777",
+              "gate_freshness_profile_digest": "0101010101010101010101010101010101010101010101010101010101010101",
+              "input_manifest_digest": "0202020202020202020202020202020202020202020202020202020202020202",
+              "dependency_input_manifest_digest": "0303030303030303030303030303030303030303030303030303030303030303",
               "dependency_keys": {},
+              "toolchain_digest": "0404040404040404040404040404040404040404040404040404040404040404",
+              "environment_digest": "0505050505050505050505050505050505050505050505050505050505050505",
               "fallback_population": null,
+              "output_contract": "none",
               "outputs_digest": "8888888888888888888888888888888888888888888888888888888888888888",
               "result_digest": "9999999999999999999999999999999999999999999999999999999999999999"
             }
@@ -140,8 +213,14 @@
               "reason_codes": ["UNCHANGED_FRESH_PASS"],
               "changed_inputs": [],
               "task_key": "7777777777777777777777777777777777777777777777777777777777777777",
+              "gate_freshness_profile_digest": "0101010101010101010101010101010101010101010101010101010101010101",
+              "input_manifest_digest": "0202020202020202020202020202020202020202020202020202020202020202",
+              "dependency_input_manifest_digest": "0303030303030303030303030303030303030303030303030303030303030303",
               "dependency_keys": {},
+              "toolchain_digest": "0404040404040404040404040404040404040404040404040404040404040404",
+              "environment_digest": "0505050505050505050505050505050505050505050505050505050505050505",
               "fallback_population": null,
+              "output_contract": "none",
               "outputs_digest": "8888888888888888888888888888888888888888888888888888888888888888",
               "result_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
             }

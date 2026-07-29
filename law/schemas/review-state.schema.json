@@ -3,7 +3,7 @@
   "$id": "https://devai.nyxk.com.br/schemas/review-state.schema.json",
   "title": "Authenticated bounded review state chain",
   "description": "Self-digested exact-candidate state and complete predecessor-linked transition history for bounded substantive review.",
-  "schema_version": "2.0.0",
+  "schema_version": "3.0.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -19,8 +19,20 @@
     "candidate_manifest_digest",
     "review_scope_digest",
     "reviewer_binding_digest",
+    "active_control_census_digest",
+    "previous_candidate_sha",
+    "prior_failure_result_digest",
+    "prior_failure_state_digest",
+    "prior_failure_transport_digest",
+    "repair_evidence_digest",
     "transition_history",
+    "history_digest",
+    "latest_transition_digest",
+    "previous_state_digest",
     "transport_attempts",
+    "transport_history_digests",
+    "current_transport_digest",
+    "current_review_result_digest",
     "state_digest_sha256"
   ],
   "$defs": {
@@ -48,6 +60,8 @@
       "required": [
         "from",
         "to",
+        "ordinal",
+        "cycle",
         "candidate_sha",
         "candidate_manifest_digest",
         "review_scope_digest",
@@ -55,11 +69,14 @@
         "transport_digest",
         "repair_evidence_digest",
         "previous_state_digest",
+        "previous_transition_digest",
         "transition_digest_sha256"
       ],
       "properties": {
         "from": { "$ref": "#/$defs/stateName" },
         "to": { "$ref": "#/$defs/stateName" },
+        "ordinal": { "type": "integer", "minimum": 1 },
+        "cycle": { "enum": [1, 2] },
         "candidate_sha": { "$ref": "#/$defs/sha1" },
         "candidate_manifest_digest": { "$ref": "#/$defs/nullableSha256" },
         "review_scope_digest": { "$ref": "#/$defs/nullableSha256" },
@@ -67,12 +84,13 @@
         "transport_digest": { "$ref": "#/$defs/nullableSha256" },
         "repair_evidence_digest": { "$ref": "#/$defs/nullableSha256" },
         "previous_state_digest": { "$ref": "#/$defs/nullableSha256" },
+        "previous_transition_digest": { "$ref": "#/$defs/nullableSha256" },
         "transition_digest_sha256": { "$ref": "#/$defs/sha256" }
       }
     }
   },
   "properties": {
-    "schemaVersion": { "const": "2.0.0" },
+    "schemaVersion": { "const": "3.0.0" },
     "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
     "state": { "$ref": "#/$defs/stateName" },
     "cycle": { "enum": [1, 2] },
@@ -84,20 +102,72 @@
     "candidate_manifest_digest": { "$ref": "#/$defs/sha256" },
     "review_scope_digest": { "$ref": "#/$defs/sha256" },
     "reviewer_binding_digest": { "$ref": "#/$defs/sha256" },
+    "active_control_census_digest": { "$ref": "#/$defs/sha256" },
     "previous_candidate_sha": { "$ref": "#/$defs/nullableSha1" },
     "prior_failure_result_digest": { "$ref": "#/$defs/nullableSha256" },
+    "prior_failure_state_digest": { "$ref": "#/$defs/nullableSha256" },
+    "prior_failure_transport_digest": { "$ref": "#/$defs/nullableSha256" },
     "repair_evidence_digest": { "$ref": "#/$defs/nullableSha256" },
     "transition_history": {
       "type": "array",
       "minItems": 1,
       "items": { "$ref": "#/$defs/transition" }
     },
+    "history_digest": { "$ref": "#/$defs/sha256" },
+    "latest_transition_digest": { "$ref": "#/$defs/nullableSha256" },
+    "previous_state_digest": { "$ref": "#/$defs/nullableSha256" },
     "transport_attempts": { "type": "integer", "minimum": 0, "maximum": 2 },
+    "transport_history_digests": {
+      "type": "array",
+      "maxItems": 2,
+      "items": { "$ref": "#/$defs/sha256" }
+    },
+    "current_transport_digest": { "$ref": "#/$defs/nullableSha256" },
+    "current_review_result_digest": { "$ref": "#/$defs/nullableSha256" },
     "state_digest_sha256": { "$ref": "#/$defs/sha256" }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": { "enum": ["DRAFT", "CANDIDATE_FROZEN", "CYCLE_1_ACTIVE"] }
+        }
+      },
+      "then": { "properties": { "cycle": { "const": 1 } } }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": { "enum": ["NEW_CANDIDATE_FROZEN", "CYCLE_2_ACTIVE"] }
+        }
+      },
+      "then": { "properties": { "cycle": { "const": 2 } } }
+    },
+    {
+      "if": {
+        "properties": { "state": { "enum": ["PASS", "ESCALATION_REQUIRED"] } }
+      },
+      "then": {
+        "properties": {
+          "current_transport_digest": { "$ref": "#/$defs/sha256" },
+          "current_review_result_digest": { "$ref": "#/$defs/sha256" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "const": "REVIEW_TRANSPORT_BLOCKED" } } },
+      "then": {
+        "properties": {
+          "transport_attempts": { "const": 2 },
+          "transport_history_digests": { "minItems": 2, "maxItems": 2 },
+          "current_transport_digest": { "$ref": "#/$defs/sha256" }
+        }
+      }
+    }
+  ],
   "examples": [
     {
-      "schemaVersion": "2.0.0",
+      "schemaVersion": "3.0.0",
       "round": "R-9999",
       "state": "CYCLE_1_ACTIVE",
       "cycle": 1,
@@ -109,10 +179,18 @@
       "candidate_manifest_digest": "5555555555555555555555555555555555555555555555555555555555555555",
       "review_scope_digest": "6666666666666666666666666666666666666666666666666666666666666666",
       "reviewer_binding_digest": "7777777777777777777777777777777777777777777777777777777777777777",
+      "active_control_census_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "previous_candidate_sha": null,
+      "prior_failure_result_digest": null,
+      "prior_failure_state_digest": null,
+      "prior_failure_transport_digest": null,
+      "repair_evidence_digest": null,
       "transition_history": [
         {
           "from": "CANDIDATE_FROZEN",
           "to": "CYCLE_1_ACTIVE",
+          "ordinal": 1,
+          "cycle": 1,
           "candidate_sha": "1111111111111111111111111111111111111111",
           "candidate_manifest_digest": "5555555555555555555555555555555555555555555555555555555555555555",
           "review_scope_digest": "6666666666666666666666666666666666666666666666666666666666666666",
@@ -120,10 +198,17 @@
           "transport_digest": null,
           "repair_evidence_digest": null,
           "previous_state_digest": null,
+          "previous_transition_digest": null,
           "transition_digest_sha256": "8888888888888888888888888888888888888888888888888888888888888888"
         }
       ],
+      "history_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "latest_transition_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+      "previous_state_digest": null,
       "transport_attempts": 0,
+      "transport_history_digests": [],
+      "current_transport_digest": null,
+      "current_review_result_digest": null,
       "state_digest_sha256": "9999999999999999999999999999999999999999999999999999999999999999"
     }
   ]

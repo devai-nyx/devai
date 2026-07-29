@@ -105,7 +105,9 @@
         "post_publication_claim_inputs",
         "review_state",
         "review_transport",
-        "review_repair_evidence"
+        "review_transport_root",
+        "review_repair_evidence",
+        "active_control_census"
       ],
       "properties": {
         "state_root": { "$ref": "#/$defs/relativePath" },
@@ -120,7 +122,9 @@
         "post_publication_claim_inputs": { "$ref": "#/$defs/relativePath" },
         "review_state": { "$ref": "#/$defs/relativePath" },
         "review_transport": { "$ref": "#/$defs/relativePath" },
-        "review_repair_evidence": { "$ref": "#/$defs/relativePath" }
+        "review_transport_root": { "$ref": "#/$defs/relativePath" },
+        "review_repair_evidence": { "$ref": "#/$defs/relativePath" },
+        "active_control_census": { "$ref": "#/$defs/relativePath" }
       }
     },
     "reviewer": {
@@ -209,7 +213,9 @@
         "post_publication_claim_inputs": ".devai/state/round-runs/R-9999/close/claim-inputs-post-publication.json",
         "review_state": ".devai/state/round-runs/R-9999/close/review-state.json",
         "review_transport": ".devai/state/round-runs/R-9999/close/review-transport.json",
-        "review_repair_evidence": ".devai/state/round-runs/R-9999/close/review-repair-evidence.json"
+        "review_transport_root": ".devai/state/round-runs/R-9999/close/review-transports",
+        "review_repair_evidence": ".devai/state/round-runs/R-9999/close/review-repair-evidence.json",
+        "active_control_census": ".devai/state/round-runs/R-9999/close/active-control-census.json"
       },
       "reviewer": {
         "binding": "owner-mandate-required",

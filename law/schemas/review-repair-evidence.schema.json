@@ -3,7 +3,7 @@
   "$id": "https://devai.nyxk.com.br/schemas/review-repair-evidence.schema.json",
   "title": "Complete-class review repair evidence",
   "description": "Self-digested proof that every failed defect class and affected instance from one exact review result was repaired in a distinct candidate.",
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -14,7 +14,11 @@
     "prior_review_scope_digest",
     "prior_review_result_digest",
     "prior_failure_state_digest",
+    "prior_failure_transition_digest",
+    "prior_failure_transport_digest",
     "new_candidate_sha",
+    "new_candidate_manifest_digest",
+    "repair_state_before_digest",
     "repaired_classes",
     "repair_evidence_digest_sha256"
   ],
@@ -29,14 +33,18 @@
     }
   },
   "properties": {
-    "schemaVersion": { "const": "1.0.0" },
+    "schemaVersion": { "const": "2.0.0" },
     "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
     "prior_candidate_sha": { "$ref": "#/$defs/sha1" },
     "prior_candidate_manifest_digest": { "$ref": "#/$defs/sha256" },
     "prior_review_scope_digest": { "$ref": "#/$defs/sha256" },
     "prior_review_result_digest": { "$ref": "#/$defs/sha256" },
     "prior_failure_state_digest": { "$ref": "#/$defs/sha256" },
+    "prior_failure_transition_digest": { "$ref": "#/$defs/sha256" },
+    "prior_failure_transport_digest": { "$ref": "#/$defs/sha256" },
     "new_candidate_sha": { "$ref": "#/$defs/sha1" },
+    "new_candidate_manifest_digest": { "$ref": "#/$defs/sha256" },
+    "repair_state_before_digest": { "$ref": "#/$defs/sha256" },
     "repaired_classes": {
       "type": "array",
       "minItems": 1,
@@ -65,14 +73,18 @@
   },
   "examples": [
     {
-      "schemaVersion": "1.0.0",
+      "schemaVersion": "2.0.0",
       "round": "R-9999",
       "prior_candidate_sha": "1111111111111111111111111111111111111111",
       "prior_candidate_manifest_digest": "2222222222222222222222222222222222222222222222222222222222222222",
       "prior_review_scope_digest": "3333333333333333333333333333333333333333333333333333333333333333",
       "prior_review_result_digest": "4444444444444444444444444444444444444444444444444444444444444444",
       "prior_failure_state_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+      "prior_failure_transition_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+      "prior_failure_transport_digest": "9999999999999999999999999999999999999999999999999999999999999999",
       "new_candidate_sha": "6666666666666666666666666666666666666666",
+      "new_candidate_manifest_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "repair_state_before_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "repaired_classes": [
         {
           "defect_class_id": "EXAMPLE_CLASS",

@@ -4577,6 +4577,64 @@ bind its digest, and review scope uses that exact digest rather than a changed-p
 summary. Post-publication claims have an explicit deterministic materialization phase;
 hand-authored receipts have no standing.
 
+Remediation review run 1 at candidate `42ecafda98086ec5d89c738685a342e6a2323299`
+failed with six additional complete defect classes, recorded as `R1-F001` through
+`R1-F006`. The single OM-015 repair phase binds all six together. They remain mandatory
+prior-finding topics in the regenerated scope; repairing a point example or omitting an
+affected instance cannot satisfy the repair record.
+
+Every authoritative convergence gate has one versioned gate-specific freshness
+profile. That profile declares its complete effective candidate-tree input selectors,
+package or gate dependency selectors, executable-version probes, environment inputs,
+and required persistent outputs. Expansion of a package script is part of the
+declaration, not an implementation shortcut. A cache key is independently recomputed
+from the resolved raw-byte input population, dependency results, tool versions,
+environment, policy, graph, and current required-output population. Missing, changed,
+unresolved, or multiply matched declarations force execution; a gate with no persistent
+output records an explicit `none` output contract rather than inheriting an empty
+generic output list.
+
+Committed change discovery uses status-aware NUL records from the exact declared range.
+Each rename is one authenticated record retaining both preimage and postimage, and the
+union of those paths participates in node, shared-input, coverage, fallback, and review
+topic matching. The two paths receive distinct exactly-once changed-path topics linked
+by the same rename record. Name-only discovery has no standing for impact or review.
+
+Every review disposition, including rechecked PASS, rechecked FAIL, reuse, and BLOCKED,
+is evidence-bearing. Validation independently recomputes the exact current input
+manifest, evidence manifest and digest, evidence-reference set and digest, every
+required task-freshness record, and the disposition proof digest. Reviewer-supplied
+digests, paths, or explanatory prose are claims to verify, never authentication.
+
+Before parsing or persisting reviewer transport, `review-check` independently derives
+the scope's round, cycle, candidate commit, candidate tree, policy version, and complete
+ordered predecessor-candidate-manifest population from the invocation, exact Git
+objects, current policy, authenticated state, and repair chain. All six must equal both
+the scope fields and its identity proof. A mismatch is a pre-transport identity failure:
+it writes no transport artifact, increments no attempt counter, and performs no state
+transition.
+
+The review state is accepted only as the tip of one canonical digest chain. State and
+cycle must match the declared state graph; every transition has a monotonic ordinal,
+cycle, exact predecessor state and transition digests, candidate and manifest identity,
+and the result, transport, and repair digests required by that edge. Every nonzero
+transport count resolves the complete persisted predecessor-linked attempt population.
+A valid result transition consumes the exact successful transport payload digest.
+Repair and cycle-2 edges consume the exact prior failure result, failure state,
+transport, candidate, scope, and complete-class repair record. Terminal states require
+their matching terminal evidence and reject all successors.
+
+Active controls are no longer a profile path allowlist. The controller derives a
+self-digested census from raw blobs in the exact candidate tree: active applicable Owner
+mandates, the profile decision and its transitive active decision provenance (including
+DII-246 and DII-248), the policy itself, every path in the policy schema map, the round
+profile, affected-test graph, obligation/current-claim/prior-finding registries, bound
+round declaration, and every other tracked manifest referenced by those sources. Each
+entry binds a stable control identity, kind, path, active status, derivation edge, and
+raw-byte digest. Missing, unresolved, inactive, duplicate-ID, duplicate-path,
+conflicting, untracked, or extra entries fail the census atomically. Candidate manifest,
+review scope, state, and result all consume the exact census digest.
+
 This decision authorizes implementation and at most two new exhaustive machinery-review
 runs under OM-015. It does not start or close R-0007, bind its governed reviewer, alter
 R-0006, deploy, publish packages, promote evidence, or mutate the predecessor.

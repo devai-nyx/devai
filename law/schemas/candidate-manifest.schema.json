@@ -3,7 +3,7 @@
   "$id": "https://devai.nyxk.com.br/schemas/candidate-manifest.schema.json",
   "title": "Generic round-close candidate manifest",
   "description": "Exact base, candidate, tree, and evidence identities frozen before semantic review.",
-  "schema_version": "2.0.0",
+  "schema_version": "3.0.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -19,6 +19,7 @@
     "convergence_digest",
     "claims_digest",
     "reviewer_binding_digest",
+    "active_control_census_digest",
     "declaration_id",
     "declaration_digest",
     "impact_execution_digest",
@@ -29,7 +30,7 @@
     "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
   },
   "properties": {
-    "schemaVersion": { "const": "2.0.0" },
+    "schemaVersion": { "const": "3.0.0" },
     "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
     "base_sha": { "$ref": "#/$defs/sha1" },
     "candidate_sha": { "$ref": "#/$defs/sha1" },
@@ -42,6 +43,7 @@
     "claims_digest": { "$ref": "#/$defs/sha256" },
     "rehearsal_digest": { "$ref": "#/$defs/sha256" },
     "reviewer_binding_digest": { "$ref": "#/$defs/sha256" },
+    "active_control_census_digest": { "$ref": "#/$defs/sha256" },
     "declaration_id": { "type": "string", "pattern": "^DII-[0-9]{3}$" },
     "declaration_digest": { "$ref": "#/$defs/sha256" },
     "impact_execution_digest": { "$ref": "#/$defs/sha256" },
@@ -52,7 +54,7 @@
   },
   "examples": [
     {
-      "schemaVersion": "2.0.0",
+      "schemaVersion": "3.0.0",
       "round": "R-9999",
       "base_sha": "0000000000000000000000000000000000000000",
       "candidate_sha": "1111111111111111111111111111111111111111",
@@ -64,6 +66,7 @@
       "convergence_digest": "7777777777777777777777777777777777777777777777777777777777777777",
       "claims_digest": "8888888888888888888888888888888888888888888888888888888888888888",
       "reviewer_binding_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "active_control_census_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
       "declaration_id": "DII-248",
       "declaration_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "impact_execution_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",

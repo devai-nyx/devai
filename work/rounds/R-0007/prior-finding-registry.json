@@ -196,6 +196,131 @@
       ],
       "repair_condition": "claims-check reads runtime materialization and independently recomputes every field and exact marker at every location; any omission, placeholder, substring-only match, or mismatch fails the ledger.",
       "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R1-F001",
+      "defect_class_id": "AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
+      "topic_ids": ["authoritative-gate-freshness"],
+      "population_query": "Expand every convergence command and compare its complete effective inputs, dependency selectors, toolchain probes, and required outputs with its gate freshness declaration and computed task key.",
+      "affected_population": [
+        "formatting",
+        "preparation",
+        "action-registry",
+        "trace",
+        "repository-references",
+        "materializations",
+        "diff-check",
+        "ordinary",
+        "stage1",
+        "stage2",
+        "t4",
+        "t5",
+        "t6",
+        "changesets",
+        "coverage",
+        "governance"
+      ],
+      "repair_condition": "Every authoritative gate resolves one complete versioned gate-specific freshness profile; changing or removing any declared input, dependency, executable version, or required output forces execution.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R1-F002",
+      "defect_class_id": "COMMITTED_RENAME_PREIMAGE_OMITTED",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
+      "topic_ids": ["committed-rename-planning"],
+      "population_query": "Parse the exact committed range with name-status NUL records and match both paths of every rename against node, shared-input, coverage, fallback, and review-topic selectors.",
+      "affected_population": [
+        "governed-to-ungoverned renames",
+        "cross-package renames",
+        "cross-shard renames",
+        "shared-to-nonshared renames",
+        "coverage-to-noncoverage renames",
+        "preimage and postimage changed-path topics"
+      ],
+      "repair_condition": "Every committed rename retains its preimage and postimage as one authenticated change record and uses their union for invalidation and exactly-once changed-path topics.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R1-F003",
+      "defect_class_id": "RECHECKED_TOPIC_EVIDENCE_UNAUTHENTICATED",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
+      "topic_ids": ["all-disposition-proof"],
+      "population_query": "Substitute each input, evidence, evidence-reference, task-freshness, and proof-digest field independently for every disposition and revalidate the self-digested result.",
+      "affected_population": [
+        "RECHECKED_PASS",
+        "RECHECKED_FAIL",
+        "REUSED_FRESH_PASS",
+        "BLOCKED",
+        "all seven review topic source classes"
+      ],
+      "repair_condition": "Every disposition independently recomputes the exact current input manifest, evidence manifest and digest, evidence-reference set and digest, required task-freshness records, and final proof digest.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R1-F004",
+      "defect_class_id": "REVIEW_SCOPE_CORE_IDENTITY_NOT_RECOMPUTED",
+      "severity": "P0",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
+      "topic_ids": ["review-scope-core-identity"],
+      "population_query": "Mutate and re-self-digest each scope identity field independently while invoking review-check against the original exact candidate and cycle.",
+      "affected_population": [
+        "round",
+        "cycle",
+        "review_candidate",
+        "candidate_tree",
+        "policy_version",
+        "previous_candidate_manifest_digests"
+      ],
+      "repair_condition": "Review validation independently derives and matches all six fields before transport persistence; any mismatch consumes no transport attempt and performs no state transition.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R1-F005",
+      "defect_class_id": "STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
+      "topic_ids": ["review-state-complete-chain"],
+      "population_query": "Cross every state with cycles, canonical and noncanonical histories, predecessor identities, transport attempts, prior results, and repair records, including missing, malformed, tampered, and cross-identity artifacts.",
+      "affected_population": [
+        "cycle-1 and cycle-2 active states",
+        "REPAIR_REQUIRED and regenerated-candidate states",
+        "transport attempt zero, one, and two",
+        "PASS, ESCALATION_REQUIRED, and REVIEW_TRANSPORT_BLOCKED terminals",
+        "prior result and complete-class repair chains"
+      ],
+      "repair_condition": "State, cycle, canonical transition history, predecessor state, result, repair, and every persisted transport attempt form one independently authenticated digest chain with exact terminal evidence.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R1-F006",
+      "defect_class_id": "ACTIVE_CONTROL_CENSUS_ALLOWLIST_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
+      "topic_ids": ["active-control-census"],
+      "population_query": "Derive authority and decision references transitively from the exact candidate tree, enumerate every policy schema, and resolve the profile, graph, registries, declaration, and tracked manifests to raw candidate blobs.",
+      "affected_population": [
+        "DII-246",
+        "DII-248",
+        "active applicable Owner mandates",
+        "every round-close policy schema",
+        "affected-test graph",
+        "obligation registry",
+        "current-claim registry",
+        "prior-finding registry",
+        "round profile and declaration manifests"
+      ],
+      "repair_condition": "The exact-candidate census contains every uniquely resolved active control and raw-byte digest; unresolved, duplicate, inactive, untracked, or extra controls fail atomically.",
+      "disposition": "OPEN"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "$id": "https://devai.nyxk.com.br/schemas/review-scope-manifest.schema.json",
   "title": "Generic exhaustive review-scope manifest",
   "description": "Machine-generated exact-candidate semantic review census. Every changed and unchanged topic is mandatory.",
-  "schema_version": "3.0.0",
+  "schema_version": "4.0.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -19,13 +19,14 @@
     "graph_digest",
     "obligations_digest",
     "claims_digest",
-    "active_controls_digest",
+    "active_control_census_digest",
     "prior_findings_digest",
     "impact_plan_digest",
     "convergence_evidence_digest",
     "candidate_identity_digest",
     "current_candidate_manifest_digest",
     "previous_candidate_manifest_digests",
+    "identity_proof",
     "topic_count",
     "topics",
     "manifest_digest_sha256"
@@ -64,10 +65,31 @@
         },
         "independent_recomputation_required": { "const": true }
       }
+    },
+    "changeRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "record_id", "role", "preimage", "postimage", "record_digest"],
+      "properties": {
+        "status": { "enum": ["NOT_APPLICABLE", "A", "M", "D", "R", "C", "T", "U"] },
+        "record_id": {
+          "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }]
+        },
+        "role": { "enum": ["not-applicable", "single", "preimage", "postimage"] },
+        "preimage": {
+          "oneOf": [{ "$ref": "#/$defs/relativePath" }, { "type": "null" }]
+        },
+        "postimage": {
+          "oneOf": [{ "$ref": "#/$defs/relativePath" }, { "type": "null" }]
+        },
+        "record_digest": {
+          "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+        }
+      }
     }
   },
   "properties": {
-    "schemaVersion": { "const": "3.0.0" },
+    "schemaVersion": { "const": "4.0.0" },
     "policy_version": { "type": "string", "minLength": 1 },
     "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
     "cycle": { "enum": [1, 2] },
@@ -79,7 +101,7 @@
     "graph_digest": { "$ref": "#/$defs/sha256" },
     "obligations_digest": { "$ref": "#/$defs/sha256" },
     "claims_digest": { "$ref": "#/$defs/sha256" },
-    "active_controls_digest": { "$ref": "#/$defs/sha256" },
+    "active_control_census_digest": { "$ref": "#/$defs/sha256" },
     "prior_findings_digest": { "$ref": "#/$defs/sha256" },
     "impact_plan_digest": { "$ref": "#/$defs/sha256" },
     "convergence_evidence_digest": { "$ref": "#/$defs/sha256" },
@@ -89,6 +111,32 @@
       "type": "array",
       "uniqueItems": true,
       "items": { "$ref": "#/$defs/sha256" }
+    },
+    "identity_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "invocation_round",
+        "invocation_cycle",
+        "invocation_candidate",
+        "candidate_tree_from_git",
+        "policy_version_from_policy",
+        "previous_candidate_manifest_digests_from_state",
+        "identity_digest_sha256"
+      ],
+      "properties": {
+        "invocation_round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+        "invocation_cycle": { "enum": [1, 2] },
+        "invocation_candidate": { "$ref": "#/$defs/sha1" },
+        "candidate_tree_from_git": { "$ref": "#/$defs/sha1" },
+        "policy_version_from_policy": { "type": "string", "minLength": 1 },
+        "previous_candidate_manifest_digests_from_state": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/sha256" }
+        },
+        "identity_digest_sha256": { "$ref": "#/$defs/sha256" }
+      }
     },
     "topic_count": { "type": "integer", "minimum": 1 },
     "topics": {
@@ -109,6 +157,7 @@
           "current_digest",
           "previous_digest",
           "changed_status",
+          "change_record",
           "required_adversaries",
           "previous_finding_classes",
           "freshness_proof",
@@ -141,6 +190,7 @@
           "current_digest": { "$ref": "#/$defs/sha256" },
           "previous_digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
           "changed_status": { "enum": ["added", "changed", "unchanged", "removed"] },
+          "change_record": { "$ref": "#/$defs/changeRecord" },
           "required_adversaries": { "$ref": "#/$defs/nonEmptyStrings" },
           "previous_finding_classes": {
             "type": "array",
@@ -184,6 +234,34 @@
                 }
               }
             }
+          },
+          {
+            "if": { "properties": { "topic_kind": { "const": "changed-path" } } },
+            "then": {
+              "properties": {
+                "change_record": {
+                  "properties": {
+                    "status": { "not": { "const": "NOT_APPLICABLE" } },
+                    "record_id": { "type": "string" },
+                    "record_digest": { "$ref": "#/$defs/sha256" }
+                  }
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "change_record": {
+                  "properties": {
+                    "status": { "const": "NOT_APPLICABLE" },
+                    "role": { "const": "not-applicable" },
+                    "record_id": { "type": "null" },
+                    "preimage": { "type": "null" },
+                    "postimage": { "type": "null" },
+                    "record_digest": { "type": "null" }
+                  }
+                }
+              }
+            }
           }
         ]
       }
@@ -192,7 +270,7 @@
   },
   "examples": [
     {
-      "schemaVersion": "3.0.0",
+      "schemaVersion": "4.0.0",
       "policy_version": "2.0.0",
       "round": "R-9999",
       "cycle": 1,
@@ -204,13 +282,22 @@
       "graph_digest": "5555555555555555555555555555555555555555555555555555555555555555",
       "obligations_digest": "6666666666666666666666666666666666666666666666666666666666666666",
       "claims_digest": "7777777777777777777777777777777777777777777777777777777777777777",
-      "active_controls_digest": "1212121212121212121212121212121212121212121212121212121212121212",
+      "active_control_census_digest": "1212121212121212121212121212121212121212121212121212121212121212",
       "prior_findings_digest": "1313131313131313131313131313131313131313131313131313131313131313",
       "impact_plan_digest": "1414141414141414141414141414141414141414141414141414141414141414",
       "convergence_evidence_digest": "1515151515151515151515151515151515151515151515151515151515151515",
       "candidate_identity_digest": "1616161616161616161616161616161616161616161616161616161616161616",
       "current_candidate_manifest_digest": "8888888888888888888888888888888888888888888888888888888888888888",
       "previous_candidate_manifest_digests": [],
+      "identity_proof": {
+        "invocation_round": "R-9999",
+        "invocation_cycle": 1,
+        "invocation_candidate": "1111111111111111111111111111111111111111",
+        "candidate_tree_from_git": "2222222222222222222222222222222222222222",
+        "policy_version_from_policy": "2.0.0",
+        "previous_candidate_manifest_digests_from_state": [],
+        "identity_digest_sha256": "1717171717171717171717171717171717171717171717171717171717171717"
+      },
       "topic_count": 1,
       "topics": [
         {
@@ -225,6 +312,14 @@
           "current_digest": "9999999999999999999999999999999999999999999999999999999999999999",
           "previous_digest": null,
           "changed_status": "added",
+          "change_record": {
+            "status": "NOT_APPLICABLE",
+            "record_id": null,
+            "role": "not-applicable",
+            "preimage": null,
+            "postimage": null,
+            "record_digest": null
+          },
           "required_adversaries": ["wrong-sha"],
           "previous_finding_classes": [],
           "freshness_proof": {

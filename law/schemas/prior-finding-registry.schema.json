@@ -31,7 +31,10 @@
           "disposition"
         ],
         "properties": {
-          "finding_id": { "type": "string", "pattern": "^(?:F|C[12]-F)[0-9]{3}$" },
+          "finding_id": {
+            "type": "string",
+            "pattern": "^(?:F|C[12]-F|R[0-9]+-F)[0-9]{3}$"
+          },
           "defect_class_id": { "type": "string", "pattern": "^[A-Z0-9][A-Z0-9_-]*$" },
           "severity": { "enum": ["P0", "P1", "P2"] },
           "origin_cycle": { "enum": [1, 2] },
