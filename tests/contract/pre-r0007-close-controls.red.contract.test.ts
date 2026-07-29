@@ -1,7 +1,8 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 import { spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.setConfig({ testTimeout: 30_000 });
@@ -9,6 +10,8 @@ vi.setConfig({ testTimeout: 30_000 });
 const ROOT = resolve(import.meta.dirname, '../..');
 const SCRIPT = resolve(ROOT, 'scripts/run-round-close-controls.mjs');
 const BASE = '722e8a3438f3534260ac4f24c3eecc59e76f905b';
+const CANDIDATE_MANIFEST = '.devai/state/round-runs/R-0007/close/candidate-manifest.json';
+const REVIEW_SCOPE = '.devai/state/round-runs/R-0007/close/review-scope-manifest.json';
 const APPROVED_ENGINEER_SURFACE = [
   '.devai/config/round-close-controls.json',
   'package.json',
@@ -44,6 +47,65 @@ function run(
 
 function json(relativePath: string): Record<string, unknown> {
   return JSON.parse(readFileSync(resolve(ROOT, relativePath), 'utf8')) as Record<string, unknown>;
+}
+
+function stable(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(stable);
+  if (value !== null && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([key, child]) => [key, stable(child)]),
+    );
+  }
+  return value;
+}
+
+function canonical(value: unknown): string {
+  return `${JSON.stringify(stable(value))}\n`;
+}
+
+function git(args: readonly string[]): string {
+  const result = spawnSync('git', args, { cwd: ROOT, encoding: 'utf8' });
+  if (result.status !== 0) throw new Error(result.stderr);
+  return result.stdout.trim();
+}
+
+function freezeExactCandidate(): void {
+  const candidate = git(['rev-parse', 'HEAD']);
+  const body = {
+    schemaVersion: '1.0.0',
+    round: 'R-0007',
+    base_sha: BASE,
+    candidate_sha: candidate,
+    tree_sha: git(['rev-parse', `${candidate}^{tree}`]),
+  };
+  const path = resolve(ROOT, CANDIDATE_MANIFEST);
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(
+    path,
+    canonical({
+      ...body,
+      manifest_digest_sha256: createHash('sha256').update(canonical(body)).digest('hex'),
+    }),
+  );
+}
+
+function preserveRuntimeFiles(relativePaths: readonly string[]): () => void {
+  const snapshots = relativePaths.map((relativePath) => {
+    const path = resolve(ROOT, relativePath);
+    return { path, contents: existsSync(path) ? readFileSync(path) : null };
+  });
+  return () => {
+    for (const { path, contents } of snapshots) {
+      if (contents === null) {
+        if (existsSync(path)) unlinkSync(path);
+      } else {
+        mkdirSync(dirname(path), { recursive: true });
+        writeFileSync(path, contents);
+      }
+    }
+  };
 }
 
 describe('pre-R-0007 generic close-control red contracts', () => {
@@ -166,17 +228,23 @@ describe('pre-R-0007 generic close-control red contracts', () => {
   });
 
   it('generates a scope containing every registered semantic obligation', () => {
-    const result = run('review-scope', ['--base', BASE, '--candidate', 'HEAD', '--cycle', '1']);
-    expect(result.status).toBe(0);
-    const obligations = json('work/rounds/R-0007/review-obligations.json').obligations as Array<{
-      obligation_id: string;
-    }>;
-    const topics = (result.value?.manifest as Record<string, unknown>).topics as Array<{
-      obligation_id?: string;
-    }>;
-    expect(new Set(topics.map((topic) => topic.obligation_id).filter(Boolean))).toEqual(
-      new Set(obligations.map(({ obligation_id }) => obligation_id)),
-    );
+    const restore = preserveRuntimeFiles([CANDIDATE_MANIFEST, REVIEW_SCOPE]);
+    try {
+      freezeExactCandidate();
+      const result = run('review-scope', ['--base', BASE, '--candidate', 'HEAD', '--cycle', '1']);
+      expect(result.status).toBe(0);
+      const obligations = json('work/rounds/R-0007/review-obligations.json').obligations as Array<{
+        obligation_id: string;
+      }>;
+      const topics = (result.value?.manifest as Record<string, unknown>).topics as Array<{
+        obligation_id?: string;
+      }>;
+      expect(new Set(topics.map((topic) => topic.obligation_id).filter(Boolean))).toEqual(
+        new Set(obligations.map(({ obligation_id }) => obligation_id)),
+      );
+    } finally {
+      restore();
+    }
   });
 
   it('requires structured exact-once results, terminal counts, and complete finding classes', () => {
