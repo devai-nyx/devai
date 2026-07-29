@@ -83,6 +83,12 @@ function put(root: string, relativePath: string, contents: string): void {
   writeFileSync(path, contents);
 }
 
+function putBytes(root: string, relativePath: string, contents: Buffer): void {
+  const path = join(root, relativePath);
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, contents);
+}
+
 function putJson(root: string, relativePath: string, value: unknown): void {
   put(root, relativePath, `${JSON.stringify(value, null, 2)}\n`);
 }
@@ -103,6 +109,10 @@ function copy(root: string, relativePath: string): void {
 
 function git(root: string, args: readonly string[]): string {
   return execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
+}
+
+function gitBytes(root: string, args: readonly string[]): Buffer {
+  return execFileSync('git', args, { cwd: root });
 }
 
 function commit(root: string, subject: string): string {
@@ -240,8 +250,8 @@ function fixture(bound = true): Fixture {
     },
   });
   putJson(root, `work/rounds/${ROUND}/close-control-profile.json`, profile);
-  put(root, `work/rounds/${ROUND}/AUTHORIZATION.md`, '# authorization\n');
-  put(root, `work/rounds/${ROUND}/plan.md`, '# plan\n');
+  put(root, `work/rounds/${ROUND}/AUTHORIZATION.md`, '# authorization');
+  put(root, `work/rounds/${ROUND}/plan.md`, '# plan');
   put(root, `work/rounds/${ROUND}/prompts/00-orchestrator.md`, '# orchestrator\n');
 
   const node = (id: string, selectors: string[], depends_on: string[] = []) => ({
@@ -1014,7 +1024,7 @@ function topicEvidenceRef(
   try {
     return {
       ref,
-      digest: digestBytes(git(fixtureValue.root, ['show', `${frozen.candidate}:${path}`])),
+      digest: digestBytes(gitBytes(fixtureValue.root, ['show', `${frozen.candidate}:${path}`])),
     };
   } catch {
     return null;
@@ -1685,6 +1695,88 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       );
     });
 
+    it.each([
+      ['lf', Buffer.from('# plan'), Buffer.from('# plan\n'), false],
+      ['crlf', Buffer.from('# plan'), Buffer.from('# plan\r\n'), false],
+      ['trailing-space', Buffer.from('# plan'), Buffer.from('# plan '), false],
+      ['tab', Buffer.from('# plan'), Buffer.from('# plan\t'), false],
+      ['repeated-blank-line', Buffer.from('# plan'), Buffer.from('# plan\n\n'), false],
+      ['empty', Buffer.from('\n'), Buffer.alloc(0), false],
+      ['whitespace-only', Buffer.alloc(0), Buffer.from(' \t\r\n'), false],
+      ['binary-non-utf8', Buffer.from([0xef, 0xbf, 0xbd]), Buffer.from([0xff]), true],
+    ])(
+      'rejects stale predecessor evidence after exact-byte %s mutation',
+      (kind, predecessorBytes, candidateBytes, binary) => {
+        const current = fixture(true);
+        const ref = `work/rounds/${ROUND}/plan.md`;
+        putBytes(current.root, ref, predecessorBytes);
+        let predecessor = git(current.root, ['rev-parse', 'HEAD']);
+        if (git(current.root, ['status', '--porcelain', '--untracked-files=all']) !== '') {
+          predecessor = commit(current.root, `set ${kind} predecessor bytes`);
+        }
+        const predecessorDigest = digestBytes(
+          gitBytes(current.root, ['show', `${predecessor}:${ref}`]),
+        );
+        putBytes(current.root, ref, candidateBytes);
+        const candidate = commit(current.root, `mutate exact ${kind} bytes`);
+        const candidateDigest = digestBytes(
+          gitBytes(current.root, ['show', `${candidate}:${ref}`]),
+        );
+        expect(candidateDigest).not.toBe(predecessorDigest);
+
+        const frozen = freeze(current, candidate);
+        const scoped = scope(current, frozen);
+        expect(scoped.status).toBe(0);
+        const manifest = scoped.value.manifest as Record<string, unknown>;
+        const topic = required(
+          (manifest.topics as Array<Record<string, unknown>>).find(
+            (entry) => entry.topic_id === 'obligation:r9000-p0-identity',
+          ),
+          'fixture identity obligation topic is absent',
+        );
+        const dispositions = topic.allowed_dispositions as string[];
+        if (binary && !dispositions.includes('REUSED_FRESH_PASS')) {
+          expect((topic.freshness_proof as Record<string, unknown>).method).toBe(
+            'recheck-required',
+          );
+          return;
+        }
+        expect(dispositions).toContain('REUSED_FRESH_PASS');
+
+        const { result, disposition } = withCompleteTopicReuse(current, manifest, frozen);
+        const evidence = disposition.recomputed_evidence_manifest as Array<{
+          ref: string;
+          digest: string;
+        }>;
+        const target = required(
+          evidence.find((entry) => entry.ref === ref),
+          'candidate-tree evidence ref is absent',
+        );
+        expect(target.digest).toBe(candidateDigest);
+        target.digest = predecessorDigest;
+        disposition.recomputed_evidence_digest = digestCanonical(evidence);
+        expect(disposition.recomputed_task_keys).toEqual(
+          (topic.freshness_proof as Record<string, unknown>).task_keys,
+        );
+        putJson(
+          current.root,
+          'fixture/stale-byte-proof.json',
+          selfDigest(result, 'result_digest_sha256'),
+        );
+        expectCode(
+          run(current, 'review-check', [
+            '--candidate',
+            frozen.candidate,
+            '--cycle',
+            '1',
+            '--review-result',
+            'fixture/stale-byte-proof.json',
+          ]),
+          'REVIEW_REUSE_EVIDENCE_MANIFEST_STALE',
+        );
+      },
+    );
+
     it('forbids reuse when any declared topic evidence cannot be mechanically resolved', () => {
       const current = fixture(true);
       const registryPath = `work/rounds/${ROUND}/review-obligations.json`;
@@ -1707,7 +1799,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
           (scoped.value.manifest as Record<string, unknown>).topics as Array<
             Record<string, unknown>
           >
-        ).find((entry) => entry.obligation_id === 'R9000-P0-IDENTITY'),
+        ).find((entry) => entry.topic_id === 'obligation:r9000-p0-identity'),
         'fixture identity obligation topic is absent',
       );
       expect(topic.allowed_dispositions).not.toContain('REUSED_FRESH_PASS');
