@@ -153,6 +153,10 @@ placeholder, or mismatched proof fails the entire self-digested ledger. Claim pr
 must not consume review scope. The pure review-topic-count producer depends only on
 candidate primitives and declaration registries; materialized claims complete before
 candidate manifest and review-scope generation, keeping the digest graph acyclic.
+Candidate and base parameters resolve from authenticated convergence, not from the
+later manifest. Post-publication-only claims remain explicit deferred declarations in
+the candidate-bound ledger. A separate post-publication ledger later proves them and
+binds the immutable pre-review claims digest without changing the reviewed candidate.
 Every changed and unchanged topic receives exactly one structured disposition. Fresh
 reuse still requires independent recomputation of the current topic-input manifest,
 referenced-evidence manifest and digest, and every required task-freshness key. Finding

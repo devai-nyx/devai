@@ -5,10 +5,12 @@
   "mode": "registry",
   "candidate": null,
   "claims_digest_sha256": null,
+  "pre_review_claims_digest": null,
   "claims": [
     {
       "claim_id": "suite.population",
       "volatility": "tree",
+      "availability": "pre-review",
       "producer": ["pnpm", "vitest", "list", "--json"],
       "extractor": "$.files",
       "source_paths": ["packages/**/tests/**/*.ts", "tests/**/*.test.ts", "vitest*.ts"],
@@ -19,6 +21,7 @@
     {
       "claim_id": "coverage.summary",
       "volatility": "coverage",
+      "availability": "pre-review",
       "producer": ["pnpm", "run", "test:coverage:t1-t3"],
       "extractor": "$.total",
       "source_paths": ["scratch/coverage/t1-t3/coverage-summary.json"],
@@ -29,11 +32,12 @@
     {
       "claim_id": "candidate.range",
       "volatility": "candidate",
+      "availability": "pre-review",
       "producer": ["git", "rev-list", "--reverse", "{exact_base}..{candidate_sha}"],
       "runtime_parameters": {
-        "exact_base": { "source": "candidate_manifest.base_sha", "required_at": "materialization" },
+        "exact_base": { "source": "convergence.exact_base", "required_at": "materialization" },
         "candidate_sha": {
-          "source": "candidate_manifest.candidate_sha",
+          "source": "convergence.candidate_sha",
           "required_at": "materialization"
         }
       },
@@ -46,18 +50,25 @@
     {
       "claim_id": "review.topic-population",
       "volatility": "candidate",
+      "availability": "pre-review",
       "producer": [
         "node",
         "scripts/run-round-close-controls.mjs",
         "review-topic-count",
         "--round",
         "R-0007",
+        "--base",
+        "{exact_base}",
         "--candidate",
         "{candidate_sha}"
       ],
       "runtime_parameters": {
+        "exact_base": {
+          "source": "convergence.exact_base",
+          "required_at": "materialization"
+        },
         "candidate_sha": {
-          "source": "candidate_manifest.candidate_sha",
+          "source": "convergence.candidate_sha",
           "required_at": "materialization"
         }
       },
@@ -75,6 +86,7 @@
     {
       "claim_id": "site.artifact",
       "volatility": "candidate",
+      "availability": "pre-review",
       "producer": ["sha256sum", "{site_artifact_path}"],
       "runtime_parameters": {
         "site_artifact_path": {
@@ -91,6 +103,7 @@
     {
       "claim_id": "ci.exact-head",
       "volatility": "ci",
+      "availability": "post-publication",
       "producer": ["gh", "pr", "checks", "{source_pr_number}", "--json", "name,state,link"],
       "runtime_parameters": {
         "source_pr_number": {

@@ -74,6 +74,7 @@
         "review_scope",
         "review_result",
         "materialized_claims",
+        "post_publication_claims",
         "review_state",
         "review_transport",
         "review_repair_evidence"
@@ -85,6 +86,7 @@
         "review_scope": { "$ref": "#/$defs/relativePath" },
         "review_result": { "$ref": "#/$defs/relativePath" },
         "materialized_claims": { "$ref": "#/$defs/relativePath" },
+        "post_publication_claims": { "$ref": "#/$defs/relativePath" },
         "review_state": { "$ref": "#/$defs/relativePath" },
         "review_transport": { "$ref": "#/$defs/relativePath" },
         "review_repair_evidence": { "$ref": "#/$defs/relativePath" }
@@ -165,6 +167,7 @@
         "review_scope": ".devai/state/round-runs/R-9999/close/review-scope-manifest.json",
         "review_result": ".devai/state/round-runs/R-9999/close/review-result.json",
         "materialized_claims": ".devai/state/round-runs/R-9999/close/current-claims.json",
+        "post_publication_claims": ".devai/state/round-runs/R-9999/close/current-claims-post-publication.json",
         "review_state": ".devai/state/round-runs/R-9999/close/review-state.json",
         "review_transport": ".devai/state/round-runs/R-9999/close/review-transport.json",
         "review_repair_evidence": ".devai/state/round-runs/R-9999/close/review-repair-evidence.json"

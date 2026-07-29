@@ -4518,6 +4518,13 @@ reading the review-scope artifact; scope then consumes the completed ledger. Thi
 order prevents a claims-to-scope-to-claims digest cycle. Any absent or mismatched proof
 field fails the complete ledger.
 
+Claim producers resolve candidate and base identities from the authenticated
+convergence primitive, never from the later candidate manifest. A claim unavailable
+before publication is retained in the candidate-bound ledger only as a schema-valid
+`DEFERRED_POST_PUBLICATION` declaration. After exact-head CI exists, a separate
+self-digested post-publication ledger must prove every claim and bind the immutable
+pre-review claims digest; it does not rewrite the reviewed candidate manifest.
+
 This decision authorizes implementation and at most two new exhaustive machinery-review
 runs under OM-015. It does not start or close R-0007, bind its governed reviewer, alter
 R-0006, deploy, publish packages, promote evidence, or mutate the predecessor.

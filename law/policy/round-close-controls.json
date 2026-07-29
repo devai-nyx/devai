@@ -197,6 +197,8 @@
     "rendered_proofs_exactly_match_declared_locations": true,
     "source_manifest_exactly_matches_resolved_sources": true,
     "complete_ledger_atomic": true,
+    "pre_review_post_publication_claim": "authenticated-deferred-declaration",
+    "post_publication_receipt": "separate-self-digested-ledger-bound-to-pre-review-digest",
     "ledger_self_digest": "sha256-canonical-body-with-claims-digest-omitted",
     "materialization_order": [
       "candidate-primitive-identity",
@@ -204,7 +206,8 @@
       "pure-review-topic-count",
       "materialized-claims",
       "candidate-manifest",
-      "review-scope"
+      "review-scope",
+      "post-publication-claims-receipt"
     ],
     "scope-dependent-claim-producer": "forbidden"
   },
