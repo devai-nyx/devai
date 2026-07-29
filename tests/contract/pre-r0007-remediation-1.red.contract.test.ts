@@ -339,6 +339,7 @@ function buildFixture(bound = true, register = true): Fixture {
           'candidate manifest',
           'convergence evidence',
           `work/rounds/${ROUND}/AUTHORIZATION.md`,
+          'gate:stage1',
           'gate:governance',
         ],
         required_adversaries: ['cross identity', 'copied digest'],
@@ -404,6 +405,7 @@ function buildFixture(bound = true, register = true): Fixture {
   put(root, 'fixture/claim.mjs', 'process.stdout.write(JSON.stringify({count: 1}));\n');
   put(root, 'package.json', '{"name":"fixture","private":true}\n');
   put(root, 'packages/a/src/index.ts', 'export const a = 1;\n');
+  put(root, 'packages/a/src/secondary.ts', 'export const secondary = 1;\n');
   put(root, 'tests/a.test.ts', 'export const testA = true;\n');
   put(root, `work/audit/${ROUND}/as-built.md`, 'DEVAI_CLAIM:suite.population=1\n');
   if (bound) put(root, 'product/owner-mandates/OM-900.md', mandate(bindingMarker()));
@@ -611,8 +613,12 @@ function repairEvidence(
   firstScopeDigest: string,
   failureResultDigest: string,
   failureStateDigest: string,
-  secondCandidate: string,
+  second: Frozen | string,
 ): Record<string, unknown> {
+  const authenticatedState = existsSync(join(first.root, `${STATE}/review-state.json`))
+    ? readJson(first.root, `${STATE}/review-state.json`)
+    : null;
+  const secondCandidate = typeof second === 'string' ? second : second.candidate;
   return selfDigest(
     {
       schemaVersion: '2.0.0',
@@ -622,11 +628,16 @@ function repairEvidence(
       prior_review_scope_digest: firstScopeDigest,
       prior_review_result_digest: failureResultDigest,
       prior_failure_state_digest: failureStateDigest,
-      prior_failure_transition_digest: '2'.repeat(64),
-      prior_failure_transport_digest: '3'.repeat(64),
+      prior_failure_transition_digest:
+        authenticatedState?.latest_transition_digest ?? '2'.repeat(64),
+      prior_failure_transport_digest:
+        authenticatedState?.current_transport_digest ?? '3'.repeat(64),
       new_candidate_sha: secondCandidate,
-      new_candidate_manifest_digest: '4'.repeat(64),
-      repair_state_before_digest: failureStateDigest,
+      new_candidate_manifest_digest:
+        typeof second === 'string'
+          ? '4'.repeat(64)
+          : second.candidateManifest.manifest_digest_sha256,
+      repair_state_before_digest: authenticatedState?.state_digest_sha256 ?? failureStateDigest,
       repaired_classes: [
         {
           defect_class_id: 'FIXTURE_CLASS',
@@ -793,6 +804,194 @@ function refreshDispositionProof(disposition: Record<string, unknown>): void {
   });
 }
 
+function failingResult(
+  manifest: Record<string, unknown>,
+  frozen: Frozen,
+  defectClassId = 'FIXTURE_CLASS',
+): Record<string, unknown> {
+  const result = passingResult(manifest, frozen);
+  const dispositions = result.dispositions as Array<Record<string, unknown>>;
+  const disposition = required(dispositions[0], 'fixture review result has no dispositions');
+  disposition.disposition = 'RECHECKED_FAIL';
+  disposition.finding_ids = ['FIXTURE-FAILURE'];
+  refreshDispositionProof(disposition);
+  result.findings = [
+    {
+      finding_id: 'FIXTURE-FAILURE',
+      defect_class_id: defectClassId,
+      severity: 'P1',
+      topic_ids: [disposition.topic_id],
+      evidence: 'authenticated fixture failure',
+      population_query: 'Enumerate fixture instances.',
+      affected_instances: ['instance-a'],
+      repair_acceptance: 'Repair instance-a.',
+    },
+  ];
+  result.terminal = {
+    verdict: 'FAIL',
+    topic_count: dispositions.length,
+    disposition_counts: {
+      RECHECKED_PASS: dispositions.length - 1,
+      RECHECKED_FAIL: 1,
+      REUSED_FRESH_PASS: 0,
+      BLOCKED: 0,
+    },
+    finding_count: 1,
+    complete: true,
+  };
+  return selfDigest(result, 'result_digest_sha256');
+}
+
+function prepareRepairCandidate(current: Fixture): {
+  first: Frozen;
+  firstScope: Record<string, unknown>;
+  priorState: Record<string, unknown>;
+  second: Frozen;
+  repair: Record<string, unknown>;
+} {
+  const first = freeze(current);
+  const firstScoped = scope(current, first);
+  expect(firstScoped.status, JSON.stringify(firstScoped.value, null, 2)).toBe(0);
+  const firstScope = firstScoped.value.manifest as Record<string, unknown>;
+  const failure = failingResult(firstScope, first);
+  putJson(current.root, 'fixture/cycle1-failure.json', failure);
+  const failed = run(current, 'review-check', [
+    '--candidate',
+    first.candidate,
+    '--cycle',
+    '1',
+    '--review-result',
+    'fixture/cycle1-failure.json',
+  ]);
+  expect(failed.value.state, JSON.stringify(failed.value, null, 2)).toBe('REPAIR_REQUIRED');
+  const priorState = readJson(current.root, `${STATE}/review-state.json`);
+  put(current.root, 'packages/a/src/index.ts', 'export const a = 2;\n');
+  const secondCandidate = commit(current.root, 'complete authenticated fixture repair');
+  const second = freeze(current, secondCandidate);
+  const repair = repairEvidence(
+    first,
+    firstScope.manifest_digest_sha256 as string,
+    failure.result_digest_sha256 as string,
+    priorState.state_digest_sha256 as string,
+    second,
+  );
+  return { first, firstScope, priorState, second, repair };
+}
+
+function enterCycleTwo(current: Fixture): {
+  first: Frozen;
+  firstScope: Record<string, unknown>;
+  priorState: Record<string, unknown>;
+  second: Frozen;
+  secondScope: Record<string, unknown>;
+} {
+  const prepared = prepareRepairCandidate(current);
+  putJson(current.root, `${STATE}/review-repair-evidence.json`, prepared.repair);
+  const secondScoped = scope(current, prepared.second, 2);
+  expect(secondScoped.status, JSON.stringify(secondScoped.value, null, 2)).toBe(0);
+  return {
+    first: prepared.first,
+    firstScope: prepared.firstScope,
+    priorState: prepared.priorState,
+    second: prepared.second,
+    secondScope: secondScoped.value.manifest as Record<string, unknown>,
+  };
+}
+
+function redigestState(state: Record<string, unknown>): Record<string, unknown> {
+  let previousTransitionDigest: string | null = null;
+  const transitionHistory = (state.transition_history as Array<Record<string, unknown>>).map(
+    (transition, index) => {
+      const { transition_digest_sha256: _oldDigest, ...body } = transition;
+      const authenticated = selfDigest(
+        {
+          ...body,
+          ordinal: index + 1,
+          previous_transition_digest: previousTransitionDigest,
+        },
+        'transition_digest_sha256',
+      );
+      previousTransitionDigest = authenticated.transition_digest_sha256 as string;
+      return authenticated;
+    },
+  );
+  return selfDigest(
+    {
+      ...state,
+      transition_history: transitionHistory,
+      history_digest: digestCanonical(transitionHistory),
+      latest_transition_digest: previousTransitionDigest,
+    },
+    'state_digest_sha256',
+  );
+}
+
+function materializeTerminal(
+  terminal: 'PASS' | 'ESCALATION_REQUIRED' | 'REVIEW_TRANSPORT_BLOCKED',
+  predecessor: 'CYCLE_1_ACTIVE' | 'CYCLE_2_ACTIVE',
+  requestedCycle: 1 | 2,
+): { current: Fixture; frozen: Frozen } {
+  const current = fixture(true);
+  let frozen: Frozen;
+  let manifest: Record<string, unknown>;
+  if (predecessor === 'CYCLE_1_ACTIVE') {
+    frozen = freeze(current);
+    const scoped = scope(current, frozen);
+    expect(scoped.status, JSON.stringify(scoped.value, null, 2)).toBe(0);
+    manifest = scoped.value.manifest as Record<string, unknown>;
+  } else {
+    const cycleTwo = enterCycleTwo(current);
+    frozen = cycleTwo.second;
+    manifest = cycleTwo.secondScope;
+  }
+  if (terminal === 'REVIEW_TRANSPORT_BLOCKED') {
+    put(current.root, 'fixture/terminal-malformed.jsonl', '{');
+    const args = [
+      '--candidate',
+      frozen.candidate,
+      '--cycle',
+      predecessor === 'CYCLE_1_ACTIVE' ? '1' : '2',
+      '--review-result',
+      'fixture/terminal-malformed.jsonl',
+    ];
+    expect(run(current, 'review-check', args).status).toBe(1);
+    expectCode(run(current, 'review-check', args), 'REVIEW_TRANSPORT_BLOCKED');
+  } else {
+    const result =
+      terminal === 'PASS' ? passingResult(manifest, frozen) : failingResult(manifest, frozen);
+    putJson(current.root, 'fixture/terminal-result.json', result);
+    const checked = run(current, 'review-check', [
+      '--candidate',
+      frozen.candidate,
+      '--cycle',
+      predecessor === 'CYCLE_1_ACTIVE' ? '1' : '2',
+      '--review-result',
+      'fixture/terminal-result.json',
+    ]);
+    expect(checked.value.state, JSON.stringify(checked.value, null, 2)).toBe(
+      terminal === 'PASS'
+        ? 'PASS'
+        : predecessor === 'CYCLE_1_ACTIVE'
+          ? 'REPAIR_REQUIRED'
+          : 'ESCALATION_REQUIRED',
+    );
+  }
+  const statePath = `${STATE}/review-state.json`;
+  const state = readJson(current.root, statePath);
+  if (terminal === 'ESCALATION_REQUIRED' && predecessor === 'CYCLE_1_ACTIVE') {
+    state.state = terminal;
+    const finalTransition = required(
+      (state.transition_history as Array<Record<string, unknown>>).at(-1),
+      'fixture terminal transition is missing',
+    );
+    finalTransition.to = terminal;
+    finalTransition.cycle = 2;
+  }
+  state.cycle = requestedCycle;
+  putJson(current.root, statePath, redigestState(state));
+  return { current, frozen };
+}
+
 function withAuthenticReuse(
   _fixtureValue: Fixture,
   manifest: Record<string, unknown>,
@@ -954,55 +1153,6 @@ function withCompleteTopicReuse(
   disposition.evidence_refs = evidence.map(({ ref }) => ref);
   refreshDispositionProof(disposition);
   return { result: selfDigest(result, 'result_digest_sha256'), topic, disposition };
-}
-
-function terminalState(
-  fixtureValue: Fixture,
-  frozen: Frozen,
-  scopeDigest: string,
-  terminal: 'PASS' | 'ESCALATION_REQUIRED' | 'REVIEW_TRANSPORT_BLOCKED',
-  predecessor: 'CYCLE_1_ACTIVE' | 'CYCLE_2_ACTIVE',
-  cycle: 1 | 2,
-): Record<string, unknown> {
-  const active = readJson(fixtureValue.root, `${STATE}/review-state.json`);
-  const history = [...(active.transition_history as Array<Record<string, unknown>>)].slice(0, 3);
-  const priorDigest = 'a'.repeat(64);
-  if (predecessor === 'CYCLE_2_ACTIVE') {
-    history.push(
-      transition('CYCLE_1_ACTIVE', 'REPAIR_REQUIRED', frozen, {
-        review_scope_digest: scopeDigest,
-        review_result_digest: 'b'.repeat(64),
-        previous_state_digest: priorDigest,
-      }),
-      transition('REPAIR_REQUIRED', 'PREFLIGHT_GREEN', frozen, {
-        review_scope_digest: scopeDigest,
-        previous_state_digest: priorDigest,
-      }),
-      transition('PREFLIGHT_GREEN', 'NEW_CANDIDATE_FROZEN', frozen, {
-        review_scope_digest: scopeDigest,
-        repair_evidence_digest: 'c'.repeat(64),
-        previous_state_digest: priorDigest,
-      }),
-      transition('NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE', frozen, {
-        review_scope_digest: scopeDigest,
-        repair_evidence_digest: 'c'.repeat(64),
-        previous_state_digest: priorDigest,
-      }),
-    );
-  }
-  history.push(
-    transition(predecessor, terminal, frozen, {
-      review_scope_digest: scopeDigest,
-      review_result_digest: terminal === 'REVIEW_TRANSPORT_BLOCKED' ? null : 'd'.repeat(64),
-      transport_digest: terminal === 'REVIEW_TRANSPORT_BLOCKED' ? 'e'.repeat(64) : null,
-      previous_state_digest: priorDigest,
-    }),
-  );
-  return stateChain(fixtureValue, frozen, terminal, cycle, scopeDigest, history, {
-    previous_candidate_sha: predecessor === 'CYCLE_2_ACTIVE' ? frozen.candidate : null,
-    prior_failure_result_digest: predecessor === 'CYCLE_2_ACTIVE' ? 'b'.repeat(64) : null,
-    repair_evidence_digest: predecessor === 'CYCLE_2_ACTIVE' ? 'c'.repeat(64) : null,
-  });
 }
 
 function expectCode(result: Result, code: string): void {
@@ -1308,33 +1458,11 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       expect(readFileSync(join(current.root, statePath), 'utf8')).toBe(stateBefore);
     });
 
-    it.each(['PASS', 'REVIEW_TRANSPORT_BLOCKED'])(
+    it.each(['PASS', 'REVIEW_TRANSPORT_BLOCKED'] as const)(
       'does not overwrite terminal %s state during a fresh cycle-1 scope request',
       (terminal) => {
-        const current = fixture(true);
-        const frozen = freeze(current);
-        const scoped = scope(current, frozen);
-        expect(scoped.status).toBe(0);
+        const { current, frozen } = materializeTerminal(terminal, 'CYCLE_1_ACTIVE', 1);
         const statePath = `${STATE}/review-state.json`;
-        const state = readJson(current.root, statePath);
-        const transitionBody = {
-          from: 'CYCLE_1_ACTIVE',
-          to: terminal,
-          candidate_sha: frozen.candidate,
-          candidate_manifest_digest: frozen.candidateManifest.manifest_digest_sha256,
-          review_scope_digest: (scoped.value.manifest as Record<string, unknown>)
-            .manifest_digest_sha256,
-          review_result_digest: 'a'.repeat(64),
-          transport_digest: terminal === 'REVIEW_TRANSPORT_BLOCKED' ? 'b'.repeat(64) : null,
-          repair_evidence_digest: null,
-          previous_state_digest: state.state_digest_sha256,
-        };
-        state.state = terminal;
-        state.transition_history = [
-          ...(state.transition_history as unknown[]),
-          selfDigest(transitionBody, 'transition_digest_sha256'),
-        ];
-        putJson(current.root, statePath, selfDigest(state, 'state_digest_sha256'));
         const before = readFileSync(join(current.root, statePath), 'utf8');
         expectCode(scope(current, frozen), 'REVIEW_STATE_TERMINAL');
         expect(readFileSync(join(current.root, statePath), 'utf8')).toBe(before);
@@ -1342,18 +1470,8 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
     );
 
     it('rejects cycle-1 escalation without overwriting state or consuming a cycle', () => {
-      const current = fixture(true);
-      const frozen = freeze(current);
-      const scoped = scope(current, frozen);
-      expect(scoped.status).toBe(0);
-      const scopeDigest = (scoped.value.manifest as Record<string, unknown>)
-        .manifest_digest_sha256 as string;
+      const { current, frozen } = materializeTerminal('ESCALATION_REQUIRED', 'CYCLE_1_ACTIVE', 2);
       const statePath = `${STATE}/review-state.json`;
-      putJson(
-        current.root,
-        statePath,
-        terminalState(current, frozen, scopeDigest, 'ESCALATION_REQUIRED', 'CYCLE_1_ACTIVE', 1),
-      );
       const before = readFileSync(join(current.root, statePath), 'utf8');
       const rejected = scope(current, frozen);
       expectCode(rejected, 'REVIEW_STATE_TRANSITION_INVALID');
@@ -1420,13 +1538,15 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       );
     });
 
+    // Policy v5 authenticates every disposition, so the former reuse-only diagnostics map to
+    // the same-or-stricter proof-population guards regardless of the selected PASS disposition.
     it.each([
-      ['missing-input', 'REVIEW_REUSE_INPUT_MANIFEST_MISSING'],
-      ['stale-input', 'REVIEW_REUSE_INPUT_MANIFEST_STALE'],
-      ['missing-evidence', 'REVIEW_REUSE_EVIDENCE_MANIFEST_MISSING'],
-      ['stale-evidence', 'REVIEW_REUSE_EVIDENCE_DIGEST_INVALID'],
-      ['empty-task-key', 'REVIEW_REUSE_TASK_KEY_REQUIRED'],
-      ['stale-task-key', 'REVIEW_REUSE_TASK_KEY_STALE'],
+      ['missing-input', 'REVIEW_DISPOSITION_INPUTS_INVALID'],
+      ['stale-input', 'REVIEW_DISPOSITION_INPUTS_INVALID'],
+      ['missing-evidence', 'REVIEW_DISPOSITION_EVIDENCE_INVALID'],
+      ['stale-evidence', 'REVIEW_DISPOSITION_EVIDENCE_INVALID'],
+      ['empty-task-key', 'REVIEW_DISPOSITION_TASK_FRESHNESS_INVALID'],
+      ['stale-task-key', 'REVIEW_DISPOSITION_TASK_FRESHNESS_INVALID'],
     ])('rejects reused-topic proof: %s', (kind, code) => {
       const current = fixture(true);
       const frozen = freeze(current);
@@ -1441,12 +1561,19 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         (entry) => entry.disposition === 'REUSED_FRESH_PASS',
       );
       if (disposition === undefined) throw new Error('authentic reuse disposition is missing');
-      if (kind === 'missing-input') disposition.recomputed_inputs_manifest = [];
+      if (kind === 'missing-input')
+        disposition.recomputed_inputs_manifest = (
+          disposition.recomputed_inputs_manifest as unknown[]
+        ).slice(1);
       if (kind === 'stale-input')
         disposition.recomputed_inputs_manifest = [{ source: 'wrong', digest: '0'.repeat(64) }];
-      if (kind === 'missing-evidence') disposition.recomputed_evidence_manifest = [];
+      if (kind === 'missing-evidence')
+        disposition.recomputed_evidence_manifest = (
+          disposition.recomputed_evidence_manifest as unknown[]
+        ).slice(1);
       if (kind === 'stale-evidence') disposition.recomputed_evidence_digest = '0'.repeat(64);
-      if (kind === 'empty-task-key') disposition.recomputed_task_keys = [];
+      if (kind === 'empty-task-key')
+        disposition.recomputed_task_keys = (disposition.recomputed_task_keys as unknown[]).slice(1);
       if (kind === 'stale-task-key') disposition.recomputed_task_keys = ['0'.repeat(64)];
       const path = 'fixture/reuse.json';
       putJson(current.root, path, selfDigest(result, 'result_digest_sha256'));
@@ -1513,21 +1640,21 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       [
         'remove-source-ref',
         `work/rounds/${ROUND}/plan.md`,
-        'REVIEW_REUSE_EVIDENCE_MANIFEST_INCOMPLETE',
+        'REVIEW_DISPOSITION_EVIDENCE_REFS_INVALID',
       ],
-      ['mutate-source-ref', `work/rounds/${ROUND}/plan.md`, 'REVIEW_REUSE_EVIDENCE_MANIFEST_STALE'],
+      ['mutate-source-ref', `work/rounds/${ROUND}/plan.md`, 'REVIEW_DISPOSITION_EVIDENCE_INVALID'],
       [
         'remove-required-evidence',
         `work/rounds/${ROUND}/AUTHORIZATION.md`,
-        'REVIEW_REUSE_EVIDENCE_MANIFEST_INCOMPLETE',
+        'REVIEW_DISPOSITION_EVIDENCE_REFS_INVALID',
       ],
       [
         'mutate-required-evidence',
         `work/rounds/${ROUND}/AUTHORIZATION.md`,
-        'REVIEW_REUSE_EVIDENCE_MANIFEST_STALE',
+        'REVIEW_DISPOSITION_EVIDENCE_INVALID',
       ],
-      ['remove-task-evidence', 'gate:governance', 'REVIEW_REUSE_EVIDENCE_MANIFEST_INCOMPLETE'],
-      ['mutate-task-evidence', 'gate:governance', 'REVIEW_REUSE_EVIDENCE_MANIFEST_STALE'],
+      ['remove-task-evidence', 'gate:governance', 'REVIEW_DISPOSITION_EVIDENCE_REFS_INVALID'],
+      ['mutate-task-evidence', 'gate:governance', 'REVIEW_DISPOSITION_EVIDENCE_INVALID'],
     ])('rejects a reused topic when its per-topic evidence population is %s', (kind, ref, code) => {
       const current = fixture(true);
       const frozen = freeze(current);
@@ -1644,7 +1771,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
             '--review-result',
             'fixture/stale-byte-proof.json',
           ]),
-          'REVIEW_REUSE_EVIDENCE_MANIFEST_STALE',
+          'REVIEW_DISPOSITION_EVIDENCE_INVALID',
         );
       },
     );
@@ -1807,18 +1934,8 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
     ] as const)(
       'authenticates terminal %s only from %s in cycle %i (authorized=%s)',
       (terminal, predecessor, cycle, authorized) => {
-        const current = fixture(true);
-        const frozen = freeze(current);
-        const scoped = scope(current, frozen);
-        expect(scoped.status).toBe(0);
-        const scopeDigest = (scoped.value.manifest as Record<string, unknown>)
-          .manifest_digest_sha256 as string;
+        const { current, frozen } = materializeTerminal(terminal, predecessor, cycle);
         const statePath = `${STATE}/review-state.json`;
-        putJson(
-          current.root,
-          statePath,
-          terminalState(current, frozen, scopeDigest, terminal, predecessor, cycle),
-        );
         const before = readFileSync(join(current.root, statePath), 'utf8');
         const result = scope(current, frozen, 1);
         expect(result.status).toBe(1);
@@ -1833,7 +1950,11 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
             substantive_cycles: { used: cycle, maximum: 2 },
           });
         } else {
-          expect(resultCodes).toContain('REVIEW_STATE_TRANSITION_INVALID');
+          expect(resultCodes).toContain(
+            terminal === 'ESCALATION_REQUIRED' && cycle === 1
+              ? 'REVIEW_STATE_SCHEMA_INVALID'
+              : 'REVIEW_STATE_TRANSITION_INVALID',
+          );
           expect(resultCodes).not.toContain('REVIEW_STATE_TERMINAL');
           expect(status.value).toMatchObject({
             state: 'DRAFT',
@@ -1853,6 +1974,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const scoped = scope(current, frozen);
       expect(scoped.status).toBe(0);
       const statePath = `${STATE}/review-state.json`;
+      const result = passingResult(scoped.value.manifest as Record<string, unknown>, frozen);
       if (kind === 'malformed-state') put(current.root, statePath, '{');
       else {
         const state = readJson(current.root, statePath);
@@ -1863,7 +1985,6 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
           kind === 'forged-state' ? state : selfDigest(state, 'state_digest_sha256'),
         );
       }
-      const result = passingResult(scoped.value.manifest as Record<string, unknown>, frozen);
       putJson(current.root, 'fixture/pass.json', result);
       expectCode(
         run(current, 'review-check', [
@@ -1947,15 +2068,15 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       put(current.root, 'packages/a/src/index.ts', 'export const a = 2;\n');
       const secondCandidate = commit(current.root, 'complete fixture repair');
       const priorState = readJson(current.root, `${STATE}/review-state.json`);
+      const second = freeze(current, secondCandidate);
       const repair = repairEvidence(
         first,
         (firstScope.value.manifest as Record<string, unknown>).manifest_digest_sha256 as string,
         readJson(current.root, 'fixture/fail.json').result_digest_sha256 as string,
         priorState.state_digest_sha256 as string,
-        secondCandidate,
+        second,
       );
       putJson(current.root, `${STATE}/review-repair-evidence.json`, repair);
-      const second = freeze(current, secondCandidate);
       const secondScope = scope(current, second, 2);
       expect(secondScope.status).toBe(0);
       const pass = passingResult(secondScope.value.manifest as Record<string, unknown>, second);
@@ -1970,6 +2091,23 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
           'fixture/cycle2-pass.json',
         ]).status,
       ).toBe(0);
+    });
+
+    it.each([
+      'prior_failure_transition_digest',
+      'prior_failure_transport_digest',
+      'new_candidate_manifest_digest',
+      'repair_state_before_digest',
+    ])('rejects a forged v2 repair identity link: %s', (field) => {
+      const current = fixture(true);
+      const prepared = prepareRepairCandidate(current);
+      prepared.repair[field] = '0'.repeat(64);
+      putJson(
+        current.root,
+        `${STATE}/review-repair-evidence.json`,
+        selfDigest(prepared.repair, 'repair_evidence_digest_sha256'),
+      );
+      expectCode(scope(current, prepared.second, 2), 'REVIEW_REPAIR_EVIDENCE_INCOMPLETE');
     });
 
     it.each(['prior-review', 'multi-finding', 'ancestry', 'diff', 'verification'])(
@@ -2034,8 +2172,9 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         const priorState = readJson(current.root, `${STATE}/review-state.json`);
         put(current.root, 'packages/a/src/index.ts', 'export const a = 2;\n');
         const secondCandidate = commit(current.root, 'repair both affected instances');
+        const second = freeze(current, secondCandidate);
         const repairBody = {
-          schemaVersion: '1.0.0',
+          schemaVersion: '2.0.0',
           round: ROUND,
           prior_candidate_sha: first.candidate,
           prior_candidate_manifest_digest: first.candidateManifest.manifest_digest_sha256,
@@ -2043,7 +2182,11 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
             .manifest_digest_sha256,
           prior_review_result_digest: failureRecord.result_digest_sha256,
           prior_failure_state_digest: priorState.state_digest_sha256,
+          prior_failure_transition_digest: priorState.latest_transition_digest,
+          prior_failure_transport_digest: priorState.current_transport_digest,
           new_candidate_sha: secondCandidate,
+          new_candidate_manifest_digest: second.candidateManifest.manifest_digest_sha256,
+          repair_state_before_digest: priorState.state_digest_sha256,
           repaired_classes: [
             {
               defect_class_id: 'REPAIR_CLASS',
@@ -2074,7 +2217,6 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
           `${STATE}/review-repair-evidence.json`,
           selfDigest(repairBody, 'repair_evidence_digest_sha256'),
         );
-        const second = freeze(current, secondCandidate);
         expectCode(scope(current, second, 2), 'REVIEW_REPAIR_EVIDENCE_INCOMPLETE');
       },
     );
@@ -2298,21 +2440,8 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       declaration.source_paths = ['{site_artifact_path}'];
       putJson(current.root, registryPath, registry);
       const candidate = commit(current.root, 'declare site artifact parameter');
-      const frozen = freeze(current, candidate);
-      const ledger = readJson(current.root, `${STATE}/current-claims.json`);
-      const claim = required(
-        (ledger.claims as Array<Record<string, unknown>>)[0],
-        'fixture claim ledger has no claims',
-      );
-      claim.resolved_producer = ['sha256sum', 'fixture/site.zip'];
-      claim.source_manifest = [
-        { path: 'fixture/site.zip', state: 'present', content_digest: digestCanonical('fake') },
-      ];
-      const { claims_digest_sha256: _old, ...body } = ledger;
-      ledger.claims_digest_sha256 = digestCanonical(body);
-      putJson(current.root, `${STATE}/current-claims.json`, ledger);
       expectCode(
-        run(current, 'claims-check', ['--candidate', frozen.candidate]),
+        run(current, 'smart-converge', ['--base', current.base, '--head', candidate]),
         'CLAIM_RUNTIME_PARAMETER_UNRESOLVED',
       );
     });
