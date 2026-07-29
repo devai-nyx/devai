@@ -1,18 +1,24 @@
 {
-  "schemaVersion": "3.0.0",
+  "schemaVersion": "4.0.0",
   "policy_id": "generic-round-close-controls",
-  "policy_version": "3.0.0",
-  "decision_id": "DII-246",
+  "policy_version": "4.0.0",
+  "decision_id": "DII-248",
   "schemas": {
     "round_profile": "law/schemas/round-close-profile.schema.json",
     "affected_test_graph": "law/schemas/affected-test-graph.schema.json",
     "task_freshness": "law/schemas/task-freshness.schema.json",
     "semantic_obligations": "law/schemas/review-obligations.schema.json",
     "current_claims": "law/schemas/current-claims.schema.json",
+    "claim_runtime_inputs": "law/schemas/claim-runtime-inputs.schema.json",
+    "affected_test_execution": "law/schemas/affected-test-execution.schema.json",
+    "round_declaration": "law/schemas/round-declaration.schema.json",
     "candidate_manifest": "law/schemas/candidate-manifest.schema.json",
+    "round_convergence": "law/schemas/round-convergence.schema.json",
     "reviewer_binding": "law/schemas/reviewer-binding.schema.json",
     "prior_finding_registry": "law/schemas/prior-finding-registry.schema.json",
     "review_state": "law/schemas/review-state.schema.json",
+    "review_transport": "law/schemas/review-transport.schema.json",
+    "review_repair_evidence": "law/schemas/review-repair-evidence.schema.json",
     "review_scope": "law/schemas/review-scope-manifest.schema.json",
     "review_result": "law/schemas/review-result.schema.json"
   },
@@ -136,9 +142,10 @@
     "partial_coverage_merge": "forbidden"
   },
   "review_scope": {
-    "policy_version": "2.0.0",
+    "policy_version": "3.0.0",
     "obligations_from_round_profile": true,
     "claims_from_round_profile": true,
+    "claims_digest_source": "profile-runtime-materialized-claims",
     "exact_range": "declared-base-to-candidate",
     "topic_sources": [
       "semantic-obligation",
@@ -154,28 +161,81 @@
     "exactly_once": true,
     "unchanged_topic_omission": "invalid",
     "unchanged_reuse_requires_independent_digest_and_evidence_recheck": true,
+    "reused_topic_requires_current_task_keys": true,
+    "reused_topic_recomputation": [
+      "current-input-manifest",
+      "referenced-evidence-manifest",
+      "referenced-evidence-digest",
+      "every-required-current-task-key"
+    ],
     "changed_topic_reuse_forbidden": true,
+    "unstructured_required_evidence": "always-recheck-no-reuse",
     "previous_finding_classes_mandatory": true,
+    "prior_findings_topic_key": "one-topic-per-defect-class-with-complete-origin-population",
     "structured_result_required": true,
+    "finding_ids_globally_unique_across_json_or_jsonl": true,
     "terminal_record_required": true,
     "truncated_or_malformed_result": "invalid-never-pass"
   },
   "claims": {
-    "policy_version": "1.0.0",
+    "policy_version": "2.0.0",
     "registry_from_round_profile": true,
+    "registry_is_declaration_only": true,
+    "validation_source": "profile-runtime-materialized-claims",
     "volatile_numeric_prose": "generated-or-checked-only",
     "candidate_or_source_change": "invalidate",
     "required_bindings": [
       "producer-command",
       "deterministic-extractor",
       "candidate-sha",
+      "complete-source-manifest",
       "source-digest",
+      "producer-output-digest",
+      "extracted-value",
       "value-digest",
-      "rendered-locations"
-    ]
+      "rendered-location-content-digests",
+      "per-claim-structured-rendered-markers",
+      "per-location-verification-digests"
+    ],
+    "substring_match_forbidden": true,
+    "rendered_marker_must_equal_claim_id": true,
+    "rendered_proofs_exactly_match_declared_locations": true,
+    "source_manifest_exactly_matches_resolved_sources": true,
+    "runtime_parameter_sources": [
+      "convergence.exact_base",
+      "convergence.candidate_sha",
+      "runtime-inputs.pre-review.<input-id>",
+      "runtime-inputs.post-publication.<input-id>"
+    ],
+    "runtime_inputs": "phase-specific-self-digested-candidate-bound-exact-population",
+    "virtual_source_manifests": {
+      ".git": "git:commit/<candidate> with commit-and-tree identity digest",
+      "producer-output:<claim-id>": "canonical producer-output digest"
+    },
+    "tracked_candidate_rendering": "stable-claim-id-reference-only-no-candidate-or-post-publication-value",
+    "complete_ledger_atomic": true,
+    "producer_output": "deterministic-structured-output-compatible-with-declared-extractor",
+    "checkout_path_normalization": "repo-relative-deterministically-sorted",
+    "live_registry_acceptance": "every-real-declaration-materializes-and-revalidates",
+    "pre_review_post_publication_claim": "authenticated-deferred-declaration",
+    "post_publication_receipt": "separate-self-digested-ledger-bound-to-pre-review-digest",
+    "exact_head_ci_claim": "pr-head-oid-equals-candidate-and-complete-required-check-population-green",
+    "exact_head_required_checks": "nonempty-complete-required-population-all-terminal-success",
+    "post_publication_materialization": "explicit-phase-command-atomic-no-hand-authored-receipt",
+    "ledger_self_digest": "sha256-canonical-body-with-claims-digest-omitted",
+    "materialization_order": [
+      "candidate-primitive-identity",
+      "convergence",
+      "pure-review-topic-count",
+      "materialized-claims",
+      "candidate-manifest",
+      "review-scope",
+      "post-publication-claims-receipt"
+    ],
+    "scope-dependent-claim-producer": "forbidden"
   },
   "review_state_machine": {
-    "policy_version": "1.0.0",
+    "policy_version": "2.0.0",
     "states": [
       "DRAFT",
       "PREFLIGHT_GREEN",
@@ -217,12 +277,54 @@
       "review-scope-digest",
       "reviewer-binding-digest"
     ],
-    "transport_identity": ["round", "cycle", "candidate", "manifest-digest", "reviewer"]
+    "authenticated_chain": [
+      "state-self-digest",
+      "prior-state-digest",
+      "candidate-manifest-digest",
+      "review-scope-digest",
+      "review-result-digest",
+      "transport-digest",
+      "repair-evidence-digest"
+    ],
+    "cycle_two_requires": [
+      "authenticated-cycle-one-failure",
+      "exact-prior-candidate-and-manifests",
+      "distinct-regenerated-candidate",
+      "complete-class-repair-evidence"
+    ],
+    "transition_guards": {
+      "NEW_CANDIDATE_FROZEN": "requires-authenticated-REPAIR_REQUIRED-in-history",
+      "CYCLE_2_ACTIVE": "requires-authenticated-complete-class-repair-and-distinct-candidate"
+    },
+    "terminal_states": ["PASS", "ESCALATION_REQUIRED", "REVIEW_TRANSPORT_BLOCKED"],
+    "terminal_scope_reentry": "forbidden",
+    "scope_failure_invalidation": "delete-stale-derived-scope-only-preserve-authenticated-state-and-history",
+    "history_rewrite": "forbidden",
+    "transport_identity": ["round", "cycle", "candidate", "manifest-digest", "reviewer"],
+    "transport_guards": {
+      "attempt_one_previous_digest": "null",
+      "attempt_two_previous_digest": "authenticated-attempt-one",
+      "identity_change_between_attempts": "forbidden",
+      "transport_binds": "state-before-only",
+      "subsequent_state_transition_consumes_transport_digest": true
+    },
+    "repair_evidence_guards": {
+      "failed_classes": "exactly-equal-prior-result-failed-class-population",
+      "repaired_instances": "exactly-equal-each-class-affected-instances",
+      "new_candidate": "distinct-and-descends-from-prior-candidate"
+    }
   },
   "reviewer_binding": {
     "source": "per-round-profile-plus-complete-structured-active-owner-mandate-census",
     "schema_marker": "devai_reviewer_binding",
+    "census_participation": "complete-schema-valid-marker-only",
+    "marker_mandate_id_and_status_must_match_container": true,
     "census_glob": "product/owner-mandates/OM-*.md",
+    "census_source": "exact-candidate-tree-never-mutable-worktree",
+    "candidate_manifest_binding": "required-and-equal-selected-candidate-census-digest",
+    "provenance_boundary": "external-orchestration-not-cryptographically-verifiable-repo-locally",
+    "auditor_capture": "role-pure-task-id-model-input-output-digests-required",
+    "self_asserted_receipt": "never-upgrades-to-cryptographic-provenance",
     "preparation_allows_unbound": true,
     "preparation_diagnostic": "ENTRY_BLOCKED_REVIEWER_UNBOUND",
     "entry_requires_exactly_one_active_binding": true,
@@ -231,10 +333,16 @@
     "substitution_invalidates_prior_pass": true
   },
   "convergence": {
+    "schema": "law/schemas/round-convergence.schema.json",
     "passes": 2,
     "second_pass": "no-write-clean",
     "authoritative_population": "all-policy-command-ids-exactly-once",
     "affected_graph_role": "supplemental-local-impact-population",
+    "affected_execution_evidence": "schema-valid-self-digested-complete-node-population-both-passes",
+    "declared_base": "structured-b0-decision-from-exact-candidate-tree",
+    "caller_selected_base": "forbidden",
+    "pre_b0_preparation": "declaration-slot-may-be-unbound",
+    "smart_converge_requires": "profile-decision-and-base-equal-candidate-tree-declaration-and-ancestor",
     "pass_boundaries": {
       "head": "exact-and-stable",
       "tree": "clean-before-and-after",
@@ -242,6 +350,19 @@
       "semantic_equivalence": "required"
     },
     "remote_mode": "execute-complete-authoritative-population",
+    "candidate_cross_binding": {
+      "candidate_requires_convergence_digest": true,
+      "shared_candidate_identity_digest": true,
+      "fallback_evidence": "forbidden"
+    },
+    "evidence_validation": [
+      "self-digest",
+      "exact-base-candidate-tree-policy-profile",
+      "authoritative-gate-ids-exactly-once-per-pass",
+      "stable-head-and-clean-boundaries",
+      "pass-two-zero-writes",
+      "equal-semantic-population-digests"
+    ],
     "commands": [
       { "id": "formatting", "argv": ["pnpm", "exec", "prettier", "--check", "."] },
       { "id": "preparation", "argv": ["pnpm", "run", "devai:prepare"] },
@@ -273,6 +394,7 @@
     "range_check": ["node", "scripts/check-governed-sequencing.mjs"]
   },
   "semantic_assertions": {
+    "authentication": "sha256-of-canonical-json-with-own-self-digest-field-omitted",
     "population_sources": [
       "law/**/*.json",
       "product/**/*.json",
