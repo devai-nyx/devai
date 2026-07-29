@@ -170,6 +170,11 @@ Claim producers emit deterministic structured values that their declared extract
 actually consume. Acceptance materializes and revalidates the complete live registry.
 Exact-head CI receipts require both a PR head OID equal to the candidate and the complete
 required green check population; an unrelated green PR is rejected.
+Checkout-dependent producer paths are normalized to deterministically sorted
+repository-relative paths. Both affected-task passes retain every node's plan outcome,
+reasons, task key, dependency keys, output proof, and result in a self-digested artifact
+bound by convergence, candidate manifest, and review scope. Post-publication receipts
+are produced only by the explicit atomic materialization phase, never by hand.
 Every changed and unchanged topic receives exactly one structured disposition. Fresh
 reuse still requires independent recomputation of the current topic-input manifest,
 referenced-evidence manifest and digest, and every required task-freshness key. Finding
@@ -185,6 +190,13 @@ complete ordered passes over every authoritative gate; each pass has clean bound
 exactly-once result, output and task-key digests, and one semantic-population digest,
 while pass 2 has no writes. Missing, partial, stale, malformed, substituted, or
 cross-digest-mismatched convergence has no fallback and invalidates scope atomically.
+The exact base comes from a structured B0 declaration marker in the exact candidate
+tree, not from caller preference. Before B0 the profile declaration slot remains
+explicitly unbound. B0 binds its decision ID and then-main SHA; later convergence,
+scope, claims, and review require that profile value, marker value, caller argument,
+candidate ancestry, and candidate-manifest declaration digest to agree.
+The B0 marker validates against `law/schemas/round-declaration.schema.json`; prose alone
+cannot declare or move the base.
 
 Cycle 1 exhausts the complete population and continues after blockers. One role-pure
 repair phase closes every reported class and regenerates every invalidated artifact.

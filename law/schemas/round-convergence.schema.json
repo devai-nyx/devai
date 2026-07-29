@@ -17,6 +17,7 @@
     "profile_digest",
     "authoritative_gate_ids",
     "authoritative_population_digest",
+    "impact_execution_digest",
     "passes",
     "convergence_digest_sha256"
   ],
@@ -94,6 +95,7 @@
       "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" }
     },
     "authoritative_population_digest": { "$ref": "#/$defs/sha256" },
+    "impact_execution_digest": { "$ref": "#/$defs/sha256" },
     "passes": {
       "type": "array",
       "items": { "$ref": "#/$defs/pass" },
@@ -114,6 +116,7 @@
       "profile_digest": "5555555555555555555555555555555555555555555555555555555555555555",
       "authoritative_gate_ids": ["ordinary"],
       "authoritative_population_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+      "impact_execution_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "passes": [
         {
           "pass_number": 1,

@@ -14,6 +14,11 @@ one later active Owner mandate binding one literal independent read-only model. 
 missing, inactive, ambiguous, conflicting, or unavailable binding stops the round.
 Silent fallback is forbidden.
 
+At B0, record a schema-valid structured round-declaration marker in the Architect
+decision and update the profile declaration slot with that decision ID and the exact
+then-main SHA. Every later base argument must equal that candidate-tree marker and be an
+ancestor of the candidate; never select a shorter convenient range.
+
 Execute B0 through B9 by risk slice. Install the deploy-refusal guard before changing
 site configuration. The Owner batch follows only approved line-level dispositions.
 The Architect classifies every historical or active reference. The Engineer generates

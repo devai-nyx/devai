@@ -4,6 +4,11 @@
   "policy_version": "4.0.0",
   "decision_id": "DII-248",
   "phase": "pre-entry-preparation",
+  "declaration": {
+    "binding": "b0-decision-required",
+    "decision_id": null,
+    "exact_base": null
+  },
   "sources": {
     "authorization": "work/rounds/R-0007/AUTHORIZATION.md",
     "plan": "work/rounds/R-0007/plan.md",
@@ -29,6 +34,7 @@
     "state_root": ".devai/state/round-runs/R-0007/close",
     "candidate_manifest": ".devai/state/round-runs/R-0007/close/candidate-manifest.json",
     "convergence_evidence": ".devai/state/round-runs/R-0007/close/convergence-evidence.json",
+    "impact_execution": ".devai/state/round-runs/R-0007/close/affected-test-execution.json",
     "review_scope": ".devai/state/round-runs/R-0007/close/review-scope-manifest.json",
     "review_result": ".devai/state/round-runs/R-0007/close/review-result.json",
     "materialized_claims": ".devai/state/round-runs/R-0007/close/current-claims.json",

@@ -4494,6 +4494,14 @@ digests, and semantic equivalence; pass 2 proves no writes. The candidate manife
 carry the convergence record digest, while both artifacts carry the same independently
 recomputed candidate-identity digest. Missing, malformed, partial, stale, substituted,
 or cross-digest-mismatched evidence invalidates scope generation atomically.
+The exact base is not caller-selected. Before B0 the round profile keeps an explicitly
+unbound declaration slot. B0 must add a structured round-declaration marker to its
+candidate-tree decision and bind the profile to that decision ID and exact then-main
+base. Smart convergence, scope, claims, and review require the caller base, profile
+base, candidate-tree marker base, and merge ancestry to agree; the candidate manifest
+binds the declaration entry digest. A shortened later-ancestor range fails closed.
+The marker validates against `law/schemas/round-declaration.schema.json`; prose does not
+declare or move a base.
 
 Review result finding identifiers are globally unique across the canonical JSON or
 JSONL stream. A reused topic is accepted only after recomputing its current input
@@ -4551,9 +4559,16 @@ Every declared producer must emit deterministic structured output compatible wit
 extractor. The controller supplies side-effect-free JSON-file extraction and file-digest
 producer verbs where generic tools do not emit the required shape. Acceptance exercises
 the complete live per-round claim registry, not only synthetic one-claim fixtures.
+Checkout-dependent producer paths are normalized to sorted repository-relative paths.
 The exact-head CI producer also proves that the selected PR's head OID equals the claim
 candidate before it accepts the complete required check population; green checks from a
 different PR or SHA have no standing.
+
+The affected-test plan and every node result from both convergence passes are retained
+in a schema-valid self-digested runtime artifact. Candidate and convergence manifests
+bind its digest, and review scope uses that exact digest rather than a changed-path
+summary. Post-publication claims have an explicit deterministic materialization phase;
+hand-authored receipts have no standing.
 
 This decision authorizes implementation and at most two new exhaustive machinery-review
 runs under OM-015. It does not start or close R-0007, bind its governed reviewer, alter

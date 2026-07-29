@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/round-declaration.schema.json",
+  "title": "Structured B0 round declaration marker",
+  "description": "Architect marker that binds one round to its exact opening main commit.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "devai_round_declaration",
+    "round",
+    "decision_id",
+    "authority",
+    "exact_base",
+    "base_source"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "devai_round_declaration": { "const": true },
+    "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+    "decision_id": { "type": "string", "pattern": "^DII-[0-9]{3}$" },
+    "authority": { "const": "Architect" },
+    "exact_base": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "base_source": { "const": "origin/main-at-b0" }
+  }
+}

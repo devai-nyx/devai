@@ -12,6 +12,7 @@
     "policy_version",
     "decision_id",
     "phase",
+    "declaration",
     "sources",
     "runtime",
     "reviewer",
@@ -19,6 +20,7 @@
     "remote_ci"
   ],
   "$defs": {
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
     "relativePath": {
       "type": "string",
       "minLength": 1,
@@ -37,6 +39,29 @@
     "policy_version": { "type": "string", "minLength": 1 },
     "decision_id": { "type": "string", "pattern": "^DII-[0-9]{3}$" },
     "phase": { "enum": ["pre-entry-preparation", "entry", "execution", "close"] },
+    "declaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["binding", "decision_id", "exact_base"],
+      "properties": {
+        "binding": { "const": "b0-decision-required" },
+        "decision_id": {
+          "oneOf": [{ "type": "null" }, { "type": "string", "pattern": "^DII-[0-9]{3}$" }]
+        },
+        "exact_base": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/sha1" }] }
+      },
+      "oneOf": [
+        {
+          "properties": { "decision_id": { "type": "null" }, "exact_base": { "type": "null" } }
+        },
+        {
+          "properties": {
+            "decision_id": { "type": "string", "pattern": "^DII-[0-9]{3}$" },
+            "exact_base": { "$ref": "#/$defs/sha1" }
+          }
+        }
+      ]
+    },
     "sources": {
       "type": "object",
       "additionalProperties": false,
@@ -71,6 +96,7 @@
         "state_root",
         "candidate_manifest",
         "convergence_evidence",
+        "impact_execution",
         "review_scope",
         "review_result",
         "materialized_claims",
@@ -85,6 +111,7 @@
         "state_root": { "$ref": "#/$defs/relativePath" },
         "candidate_manifest": { "$ref": "#/$defs/relativePath" },
         "convergence_evidence": { "$ref": "#/$defs/relativePath" },
+        "impact_execution": { "$ref": "#/$defs/relativePath" },
         "review_scope": { "$ref": "#/$defs/relativePath" },
         "review_result": { "$ref": "#/$defs/relativePath" },
         "materialized_claims": { "$ref": "#/$defs/relativePath" },
@@ -156,6 +183,11 @@
       "policy_version": "4.0.0",
       "decision_id": "DII-248",
       "phase": "pre-entry-preparation",
+      "declaration": {
+        "binding": "b0-decision-required",
+        "decision_id": null,
+        "exact_base": null
+      },
       "sources": {
         "authorization": "work/rounds/R-9999/AUTHORIZATION.md",
         "plan": "work/rounds/R-9999/plan.md",
@@ -168,6 +200,7 @@
         "state_root": ".devai/state/round-runs/R-9999/close",
         "candidate_manifest": ".devai/state/round-runs/R-9999/close/candidate-manifest.json",
         "convergence_evidence": ".devai/state/round-runs/R-9999/close/convergence-evidence.json",
+        "impact_execution": ".devai/state/round-runs/R-9999/close/affected-test-execution.json",
         "review_scope": ".devai/state/round-runs/R-9999/close/review-scope-manifest.json",
         "review_result": ".devai/state/round-runs/R-9999/close/review-result.json",
         "materialized_claims": ".devai/state/round-runs/R-9999/close/current-claims.json",

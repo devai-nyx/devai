@@ -19,6 +19,9 @@
     "convergence_digest",
     "claims_digest",
     "reviewer_binding_digest",
+    "declaration_id",
+    "declaration_digest",
+    "impact_execution_digest",
     "manifest_digest_sha256"
   ],
   "$defs": {
@@ -39,6 +42,9 @@
     "claims_digest": { "$ref": "#/$defs/sha256" },
     "rehearsal_digest": { "$ref": "#/$defs/sha256" },
     "reviewer_binding_digest": { "$ref": "#/$defs/sha256" },
+    "declaration_id": { "type": "string", "pattern": "^DII-[0-9]{3}$" },
+    "declaration_digest": { "$ref": "#/$defs/sha256" },
+    "impact_execution_digest": { "$ref": "#/$defs/sha256" },
     "previous_candidate_sha": {
       "oneOf": [{ "$ref": "#/$defs/sha1" }, { "type": "null" }]
     },
@@ -58,6 +64,9 @@
       "convergence_digest": "7777777777777777777777777777777777777777777777777777777777777777",
       "claims_digest": "8888888888888888888888888888888888888888888888888888888888888888",
       "reviewer_binding_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "declaration_id": "DII-999",
+      "declaration_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "impact_execution_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "manifest_digest_sha256": "9999999999999999999999999999999999999999999999999999999999999999"
     }
   ]

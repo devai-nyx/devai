@@ -11,7 +11,13 @@
       "claim_id": "suite.population",
       "volatility": "tree",
       "availability": "pre-review",
-      "producer": ["pnpm", "vitest", "list", "--json"],
+      "producer": [
+        "node",
+        "scripts/run-round-close-controls.mjs",
+        "claim-produce",
+        "--kind",
+        "vitest-list"
+      ],
       "extractor": "$",
       "source_paths": ["packages/**/tests/**/*.ts", "tests/**/*.test.ts", "vitest*.ts"],
       "rendered_locations": [],
