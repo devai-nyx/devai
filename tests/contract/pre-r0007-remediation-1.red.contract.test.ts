@@ -195,6 +195,11 @@ function fixture(bound = true): Fixture {
   Object.assign(profile, {
     round: ROUND,
     decision_id: 'DII-900',
+    declaration: {
+      binding: 'b0-decision-required',
+      decision_id: null,
+      exact_base: null,
+    },
     sources: {
       authorization: `work/rounds/${ROUND}/AUTHORIZATION.md`,
       plan: `work/rounds/${ROUND}/plan.md`,
@@ -210,6 +215,7 @@ function fixture(bound = true): Fixture {
       state_root: STATE,
       candidate_manifest: `${STATE}/candidate-manifest.json`,
       convergence_evidence: `${STATE}/convergence-evidence.json`,
+      impact_execution: `${STATE}/affected-test-execution.json`,
       review_scope: `${STATE}/review-scope-manifest.json`,
       review_result: `${STATE}/review-result.json`,
       materialized_claims: `${STATE}/current-claims.json`,
@@ -353,7 +359,32 @@ function fixture(bound = true): Fixture {
   put(root, 'tests/a.test.ts', 'export const testA = true;\n');
   put(root, `work/audit/${ROUND}/as-built.md`, 'DEVAI_CLAIM:suite.population=1\n');
   if (bound) put(root, 'product/owner-mandates/OM-900.md', mandate(bindingMarker()));
-  return { root, base: commit(root, 'fixture base') };
+  const base = commit(root, 'fixture opening base');
+  profile.declaration = {
+    binding: 'b0-decision-required',
+    decision_id: 'DII-900',
+    exact_base: base,
+  };
+  putJson(root, `work/rounds/${ROUND}/close-control-profile.json`, profile);
+  put(
+    root,
+    'law/register/DECISIONS.md',
+    `# Fixture decisions\n\n### DII-900\n\n\`\`\`json\n${JSON.stringify(
+      {
+        schemaVersion: '1.0.0',
+        devai_round_declaration: true,
+        round: ROUND,
+        decision_id: 'DII-900',
+        authority: 'Architect',
+        exact_base: base,
+        base_source: 'origin/main-at-b0',
+      },
+      null,
+      2,
+    )}\n\`\`\`\n`,
+  );
+  commit(root, 'fixture B0 declaration');
+  return { root, base };
 }
 
 function materializeClaims(fixtureValue: Fixture, candidate: string): Record<string, unknown> {
@@ -434,21 +465,81 @@ function freeze(fixtureValue: Fixture, candidate = 'HEAD'): Frozen {
     policy_digest: policyDigest,
     graph_digest: graphDigest,
   });
-  const gateIds = (
-    (policy.convergence as Record<string, unknown>).commands as Array<{ id: string }>
-  ).map(({ id }) => id);
+  const gateCommands = (policy.convergence as Record<string, unknown>).commands as Array<{
+    id: string;
+    argv: string[];
+  }>;
+  const gateIds = gateCommands.map(({ id }) => id);
   const semanticPopulation = digestCanonical(gateIds);
-  const gateResults = gateIds.map((gate_id) => {
-    const taskKey = digestCanonical({ gate_id, exactCandidate });
+  const populationPaths = git(fixtureValue.root, ['ls-tree', '-r', '--name-only', exactCandidate])
+    .split('\n')
+    .filter(Boolean)
+    .filter(
+      (path) =>
+        (/^(?:law|product)\//u.test(path) && path.endsWith('.json')) ||
+        (/^(?:packages|tests)\//u.test(path) && path.endsWith('.ts')) ||
+        (path.startsWith('scripts/') && path.endsWith('.mjs')),
+    );
+  const candidateEntries = populationPaths.map((path) => ({
+    path,
+    blob: git(fixtureValue.root, ['rev-parse', `${exactCandidate}:${path}`]),
+  }));
+  const toolchainDigest = digestCanonical([]);
+  const environmentDigest = digestCanonical([]);
+  const gateResults = gateCommands.map(({ id: gate_id, argv }) => {
+    const inputManifestDigest = digestCanonical({
+      argv,
+      inputs: candidateEntries,
+      policy: policyDigest,
+      profile: profileDigest,
+      graph: graphDigest,
+    });
+    const taskId = `gate-${gate_id}`;
+    const taskKey = digestCanonical({
+      task_id: taskId,
+      argv,
+      cwd: '.',
+      input_manifest_digest: inputManifestDigest,
+      dependency_keys: {},
+      policy_digest: policyDigest,
+      graph_digest: graphDigest,
+      toolchain_digest: toolchainDigest,
+      environment_digest: environmentDigest,
+    });
     const cacheBody = {
+      schemaVersion: '2.0.0',
+      policy_version: (policy.freshness as Record<string, unknown>).policy_version,
+      graph_version: graph.graph_version,
+      round: ROUND,
+      task_id: taskId,
+      plan_outcome: 'EXECUTE',
+      reason_codes: ['AUTHORITATIVE_POLICY_GATE'],
+      changed_inputs: [],
+      fallback_population: null,
+      argv,
+      cwd: '.',
       task_key: taskKey,
+      input_manifest_digest: inputManifestDigest,
+      dependency_keys: {},
+      dependency_results: {},
       producing_candidate: exactCandidate,
       policy_digest: policyDigest,
       graph_digest: graphDigest,
+      toolchain_digest: toolchainDigest,
+      environment_digest: environmentDigest,
       result: 'EXECUTED_PASS',
+      exit_code: 0,
+      stdout_sha256: digestBytes('PASS\n'),
+      stderr_sha256: digestBytes(''),
+      reused_result_digest: null,
+      outputs: [],
+      freshness_reason: 'executed authoritative policy gate for exact candidate',
     };
     const cache = { ...cacheBody, result_digest: digestCanonical(cacheBody) };
-    putJson(fixtureValue.root, `${STATE}/freshness/tasks/gate-${gate_id}/${taskKey}.json`, cache);
+    expect(validates(fixtureValue.root, 'law/schemas/task-freshness.schema.json', cache)).toBe(
+      true,
+    );
+    putJson(fixtureValue.root, `${STATE}/freshness/tasks/${taskId}/${taskKey}.json`, cache);
     const body = {
       gate_id,
       outcome: 'EXECUTED_PASS',
@@ -457,6 +548,115 @@ function freeze(fixtureValue: Fixture, candidate = 'HEAD'): Frozen {
     };
     return { ...body, result_digest: digestCanonical(body) };
   });
+  const graphNodes = graph.nodes as Array<Record<string, unknown>>;
+  for (const graphNode of graphNodes) {
+    const planned = run(fixtureValue, 'impact-plan', [
+      '--base',
+      fixtureValue.base,
+      '--head',
+      exactCandidate,
+    ]);
+    expect(planned.status, JSON.stringify(planned.value, null, 2)).toBe(0);
+    const node = (planned.value.nodes as Array<Record<string, unknown>>).find(
+      ({ node_id }) => node_id === graphNode.id,
+    );
+    if (node === undefined)
+      throw new Error(`missing production impact node ${String(graphNode.id)}`);
+    const cacheBody = {
+      schemaVersion: '2.0.0',
+      policy_version: (policy.freshness as Record<string, unknown>).policy_version,
+      graph_version: graph.graph_version,
+      round: ROUND,
+      task_id: node.node_id,
+      plan_outcome: 'EXECUTE',
+      reason_codes: ['FIXTURE_AUTHENTIC_EXECUTION'],
+      changed_inputs: node.changed_inputs,
+      fallback_population: node.fallback_population,
+      argv: node.argv,
+      cwd: node.cwd,
+      task_key: node.task_key,
+      input_manifest_digest: node.input_manifest_digest,
+      dependency_keys: node.dependency_keys,
+      dependency_results: node.dependency_results,
+      policy_digest: node.policy_digest,
+      graph_digest: node.graph_digest,
+      toolchain_digest: node.toolchain_digest,
+      environment_digest: node.environment_digest,
+      producing_candidate: exactCandidate,
+      result: 'EXECUTED_PASS',
+      exit_code: 0,
+      stdout_sha256: digestBytes('PASS\n'),
+      stderr_sha256: digestBytes(''),
+      reused_result_digest: null,
+      outputs: node.outputs,
+      freshness_reason: 'executed exact production-planned fixture task',
+    };
+    const cache = { ...cacheBody, result_digest: digestCanonical(cacheBody) };
+    expect(validates(fixtureValue.root, 'law/schemas/task-freshness.schema.json', cache)).toBe(
+      true,
+    );
+    putJson(
+      fixtureValue.root,
+      `${STATE}/freshness/tasks/${String(node.node_id)}/${String(node.task_key)}.json`,
+      cache,
+    );
+  }
+  const freshPlan = run(fixtureValue, 'impact-plan', [
+    '--base',
+    fixtureValue.base,
+    '--head',
+    exactCandidate,
+  ]);
+  expect(freshPlan.status, JSON.stringify(freshPlan.value, null, 2)).toBe(0);
+  const impactNodes = (freshPlan.value.nodes as Array<Record<string, unknown>>).map((node) => {
+    expect(node.outcome).toBe('REUSE_FRESH');
+    const resultBody = {
+      node_id: node.node_id,
+      outcome: node.outcome,
+      result: 'REUSED_FRESH_PASS',
+      reason_codes: node.reason_codes,
+      changed_inputs: node.changed_inputs,
+      task_key: node.task_key,
+      dependency_keys: node.dependency_keys,
+      fallback_population: node.fallback_population,
+      outputs_digest: digestCanonical(node.outputs),
+    };
+    return { ...resultBody, result_digest: digestCanonical(resultBody) };
+  });
+  const impactPass = (passNumber: 1 | 2) => {
+    const plan = impactNodes.map(
+      ({ result: _result, result_digest: _resultDigest, outputs_digest: _outputs, ...node }) =>
+        node,
+    );
+    const passBody = {
+      pass_number: passNumber,
+      plan_digest: digestCanonical(plan),
+      result_population_digest: digestCanonical(impactNodes),
+      nodes: impactNodes,
+    };
+    return { ...passBody, pass_digest_sha256: digestCanonical(passBody) };
+  };
+  const impactBody = {
+    schemaVersion: '1.0.0',
+    round: ROUND,
+    exact_base: fixtureValue.base,
+    candidate_sha: exactCandidate,
+    policy_digest: policyDigest,
+    graph_digest: graphDigest,
+    passes: [impactPass(1), impactPass(2)],
+  };
+  const impactExecution = {
+    ...impactBody,
+    execution_digest_sha256: digestCanonical(impactBody),
+  };
+  expect(
+    validates(
+      fixtureValue.root,
+      'law/schemas/affected-test-execution.schema.json',
+      impactExecution,
+    ),
+  ).toBe(true);
+  putJson(fixtureValue.root, `${STATE}/affected-test-execution.json`, impactExecution);
   const pass = (passNumber: 1 | 2) => {
     const body = {
       pass_number: passNumber,
@@ -482,6 +682,7 @@ function freeze(fixtureValue: Fixture, candidate = 'HEAD'): Frozen {
     profile_digest: profileDigest,
     authoritative_gate_ids: gateIds,
     authoritative_population_digest: semanticPopulation,
+    impact_execution_digest: impactExecution.execution_digest_sha256,
     passes: [pass(1), pass(2)],
   };
   const convergence = selfDigest(convergenceBody, 'convergence_digest_sha256');
@@ -499,6 +700,17 @@ function freeze(fixtureValue: Fixture, candidate = 'HEAD'): Frozen {
     convergence_digest: convergence.convergence_digest_sha256,
     claims_digest: claims.claims_digest_sha256,
     reviewer_binding_digest: digestCanonical(bindingMarker()),
+    declaration_id: (profile.declaration as Record<string, unknown>).decision_id,
+    declaration_digest: digestCanonical({
+      schemaVersion: '1.0.0',
+      devai_round_declaration: true,
+      round: ROUND,
+      decision_id: 'DII-900',
+      authority: 'Architect',
+      exact_base: fixtureValue.base,
+      base_source: 'origin/main-at-b0',
+    }),
+    impact_execution_digest: impactExecution.execution_digest_sha256,
   };
   const candidateManifest = selfDigest(candidateBody, 'manifest_digest_sha256');
   putJson(fixtureValue.root, `${STATE}/candidate-manifest.json`, candidateManifest);
@@ -757,11 +969,43 @@ afterEach(() => {
 });
 
 describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
+  it('keeps production close controls free of fixture-specific branches', () => {
+    const production = readFileSync(SCRIPT, 'utf8');
+    expect(production).not.toMatch(/\bfixtureOnly\b|R-9000|remediation-1-fixture|fixture\/gate/u);
+  });
+
+  it('uses normalized suite and exact-head CI claim producers in the live R-0007 registry', () => {
+    const registry = sourceJson('work/rounds/R-0007/current-claims.json');
+    const claims = new Map(
+      (registry.claims as Array<Record<string, unknown>>).map((claim) => [claim.claim_id, claim]),
+    );
+    expect(claims.get('suite.population')?.producer).toEqual([
+      'node',
+      'scripts/run-round-close-controls.mjs',
+      'claim-produce',
+      '--kind',
+      'vitest-list',
+    ]);
+    expect(claims.get('ci.exact-head')?.producer).toEqual([
+      'node',
+      'scripts/run-round-close-controls.mjs',
+      'claim-produce',
+      '--kind',
+      'github-pr-exact-head',
+      '--pr',
+      '{source_pr_number}',
+      '--candidate',
+      '{candidate_sha}',
+    ]);
+    expect(claims.get('ci.exact-head')?.source_paths).toEqual(['producer-output:ci.exact-head']);
+  });
+
   it('provides one schema-valid, independently self-digested fixture foundation', () => {
     const current = fixture(true);
     const frozen = freeze(current);
     const profile = readJson(current.root, `work/rounds/${ROUND}/close-control-profile.json`);
     const claims = readJson(current.root, `${STATE}/current-claims.json`);
+    const impactExecution = readJson(current.root, `${STATE}/affected-test-execution.json`);
     const scopeDigest = 'a'.repeat(64);
     const history = [
       transition('CANDIDATE_FROZEN', 'CYCLE_1_ACTIVE', frozen, {
@@ -797,6 +1041,9 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       ),
     ).toBe(true);
     expect(validates(current.root, 'law/schemas/current-claims.schema.json', claims)).toBe(true);
+    expect(
+      validates(current.root, 'law/schemas/affected-test-execution.schema.json', impactExecution),
+    ).toBe(true);
     expect(
       validates(current.root, 'law/schemas/reviewer-binding.schema.json', bindingMarker()),
     ).toBe(true);
@@ -1668,6 +1915,32 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       expect(result.status).toBe(0);
       expect(result.value.materialized_path).toBe(`${STATE}/current-claims-post-publication.json`);
       expect(result.value.pre_review_claims_digest).toBe(preReview.claims_digest_sha256);
+    });
+
+    it('rejects a post-publication receipt that alters a copied pre-review claim', () => {
+      const current = fixture(true);
+      const frozen = freeze(current);
+      const preReview = readJson(current.root, `${STATE}/current-claims.json`);
+      const postBody = {
+        ...structuredClone(preReview),
+        mode: 'post-publication',
+        pre_review_claims_digest: preReview.claims_digest_sha256,
+      };
+      delete postBody.claims_digest_sha256;
+      const copiedClaim = (postBody.claims as Array<Record<string, unknown>>)[0];
+      copiedClaim.extracted_value = 2;
+      copiedClaim.value_digest = digestCanonical(2);
+      const post = { ...postBody, claims_digest_sha256: digestCanonical(postBody) };
+      putJson(current.root, `${STATE}/current-claims-post-publication.json`, post);
+      expectCode(
+        run(current, 'claims-check', [
+          '--candidate',
+          frozen.candidate,
+          '--phase',
+          'post-publication',
+        ]),
+        'CLAIM_PRE_REVIEW_CLAIM_INVALID',
+      );
     });
 
     it('requires authenticated resolution for site_artifact_path rather than trusting ledger substitution', () => {
