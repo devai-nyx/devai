@@ -166,7 +166,12 @@
           "environment_input_ids": {
             "type": "array",
             "uniqueItems": true,
-            "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" }
+            "items": {
+              "oneOf": [
+                { "const": "__ALL_ENVIRONMENT__" },
+                { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" }
+              ]
+            }
           },
           "output_contract": { "enum": ["none", "digest-required"] },
           "required_outputs": { "$ref": "#/$defs/pathList" },
