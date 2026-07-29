@@ -67,6 +67,11 @@ function digestBytes(value: string | Buffer): string {
   return createHash('sha256').update(value).digest('hex');
 }
 
+function required<T>(value: T | undefined, message: string): T {
+  if (value === undefined) throw new Error(message);
+  return value;
+}
+
 function selfDigest(value: Record<string, unknown>, field: string): Record<string, unknown> {
   const { [field]: _omitted, ...body } = value;
   return { ...body, [field]: digestCanonical(body) };
@@ -928,7 +933,10 @@ function withAuthenticReuse(
       digest: digestCanonical(frozen.convergence),
     },
   ];
-  const passTwo = (frozen.convergence.passes as Array<Record<string, unknown>>)[1];
+  const passTwo = required(
+    (frozen.convergence.passes as Array<Record<string, unknown>>)[1],
+    'fixture convergence has no pass 2',
+  );
   const taskKeys = (passTwo.gate_results as Array<Record<string, unknown>>).map(
     (gate) => gate.task_key as string,
   );
@@ -1177,7 +1185,8 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       if (kind === 'partial-convergence') {
         const value = readJson(current.root, convergencePath);
         const passes = value.passes as Array<Record<string, unknown>>;
-        passes[1].gate_results = (passes[1].gate_results as unknown[]).slice(1);
+        const passTwo = required(passes[1], 'fixture convergence has no pass 2');
+        passTwo.gate_results = (passTwo.gate_results as unknown[]).slice(1);
         value.passes = passes.map((pass) => selfDigest(pass, 'pass_digest_sha256'));
         putJson(current.root, convergencePath, selfDigest(value, 'convergence_digest_sha256'));
       }
@@ -1214,7 +1223,10 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         manifest.topic_count = Number(manifest.topic_count) + 1;
         putJson(current.root, scopePath, manifest);
       } else {
-        const topic = (manifest.topics as Array<Record<string, unknown>>)[0];
+        const topic = required(
+          (manifest.topics as Array<Record<string, unknown>>)[0],
+          'fixture review scope has no topics',
+        );
         topic.current_digest = '0'.repeat(64);
         putJson(current.root, scopePath, selfDigest(manifest, 'manifest_digest_sha256'));
       }
@@ -1297,7 +1309,10 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         scoped.value.manifest as Record<string, unknown>,
         frozen.candidateManifest,
       );
-      const topicId = (result.dispositions as Array<Record<string, unknown>>)[0].topic_id as string;
+      const topicId = required(
+        (result.dispositions as Array<Record<string, unknown>>)[0],
+        'fixture review result has no dispositions',
+      ).topic_id as string;
       const duplicate = {
         finding_id: 'DUP-1',
         defect_class_id: 'DUPLICATE_ID',
@@ -1314,7 +1329,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         putJson(current.root, path, selfDigest(result, 'result_digest_sha256'));
       else {
         const body = selfDigest(result, 'result_digest_sha256');
-        const header = { type: 'header', ...body };
+        const header: Record<string, unknown> = { type: 'header', ...body };
         delete header.dispositions;
         delete header.findings;
         delete header.terminal;
@@ -1420,15 +1435,16 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         frozen.candidateManifest,
       );
       const dispositions = review.dispositions as Array<Record<string, unknown>>;
-      if (kind === 'fail-disposition') dispositions[0].disposition = 'RECHECKED_FAIL';
-      if (kind === 'blocked-disposition') dispositions[0].disposition = 'BLOCKED';
+      const disposition = required(dispositions[0], 'fixture review result has no dispositions');
+      if (kind === 'fail-disposition') disposition.disposition = 'RECHECKED_FAIL';
+      if (kind === 'blocked-disposition') disposition.disposition = 'BLOCKED';
       if (kind === 'unresolved-p1') {
         review.findings = [
           {
             finding_id: 'OPEN-1',
             defect_class_id: 'OPEN_CLASS',
             severity: 'P1',
-            topic_ids: [dispositions[0].topic_id],
+            topic_ids: [disposition.topic_id],
             evidence: 'unresolved fixture evidence',
             population_query: 'Enumerate the unresolved fixture population.',
             affected_instances: ['instance-a'],
@@ -1495,7 +1511,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         scoped.value.manifest as Record<string, unknown>,
         frozen.candidateManifest,
       );
-      const header = { type: 'header', ...review };
+      const header: Record<string, unknown> = { type: 'header', ...review };
       delete header.dispositions;
       delete header.findings;
       delete header.terminal;
@@ -1589,7 +1605,10 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         firstScope.value.manifest as Record<string, unknown>,
         first.candidateManifest,
       );
-      const disposition = (fail.dispositions as Array<Record<string, unknown>>)[0];
+      const disposition = required(
+        (fail.dispositions as Array<Record<string, unknown>>)[0],
+        'fixture review result has no dispositions',
+      );
       disposition.disposition = 'RECHECKED_FAIL';
       disposition.finding_ids = ['FIX-1'];
       fail.findings = [
@@ -1670,14 +1689,15 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
           first.candidateManifest,
         );
         const dispositions = failure.dispositions as Array<Record<string, unknown>>;
-        dispositions[0].disposition = 'RECHECKED_FAIL';
-        dispositions[0].finding_ids = ['REPAIR-1', 'REPAIR-2'];
+        const disposition = required(dispositions[0], 'fixture review result has no dispositions');
+        disposition.disposition = 'RECHECKED_FAIL';
+        disposition.finding_ids = ['REPAIR-1', 'REPAIR-2'];
         failure.findings = [
           {
             finding_id: 'REPAIR-1',
             defect_class_id: 'REPAIR_CLASS',
             severity: 'P1',
-            topic_ids: [dispositions[0].topic_id],
+            topic_ids: [disposition.topic_id],
             evidence: 'first affected instance',
             population_query: 'Enumerate both repair instances.',
             affected_instances: ['instance-a'],
@@ -1687,7 +1707,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
             finding_id: 'REPAIR-2',
             defect_class_id: 'REPAIR_CLASS',
             severity: 'P1',
-            topic_ids: [dispositions[0].topic_id],
+            topic_ids: [disposition.topic_id],
             evidence: 'second affected instance',
             population_query: 'Enumerate both repair instances.',
             affected_instances: ['instance-b'],
@@ -1743,14 +1763,18 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
           ],
         };
         if (kind === 'prior-review') repairBody.prior_review_result_digest = '0'.repeat(64);
+        const repairedClass = required(
+          repairBody.repaired_classes[0],
+          'fixture repair evidence has no repaired classes',
+        );
         if (kind === 'multi-finding') {
-          repairBody.repaired_classes[0].affected_instances = ['instance-a'];
-          repairBody.repaired_classes[0].repaired_instances = ['instance-a'];
+          repairedClass.affected_instances = ['instance-a'];
+          repairedClass.repaired_instances = ['instance-a'];
         }
         if (kind === 'ancestry') repairBody.new_candidate_sha = first.candidate;
-        if (kind === 'diff') repairBody.repaired_classes[0].changed_paths = ['package.json'];
+        if (kind === 'diff') repairedClass.changed_paths = ['package.json'];
         if (kind === 'verification') {
-          repairBody.repaired_classes[0].verification_refs = ['tests/missing.test.ts'];
+          repairedClass.verification_refs = ['tests/missing.test.ts'];
         }
         putJson(
           current.root,
@@ -1784,7 +1808,10 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const frozen = freeze(current);
       const path = `${STATE}/current-claims.json`;
       const ledger = readJson(current.root, path);
-      const claim = (ledger.claims as Array<Record<string, unknown>>)[0];
+      const claim = required(
+        (ledger.claims as Array<Record<string, unknown>>)[0],
+        'fixture claim ledger has no claims',
+      );
       if (kind === 'registry-runtime') ledger.mode = 'registry';
       if (kind === 'candidate') ledger.candidate = '0'.repeat(40);
       if (kind === 'producer') claim.resolved_producer = ['node', 'fixture/other.mjs'];
@@ -1796,7 +1823,10 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       if (kind === 'source-digest') claim.source_digest = '0'.repeat(64);
       if (kind === 'extracted-value') claim.extracted_value = 2;
       if (kind === 'value-digest') claim.value_digest = '0'.repeat(64);
-      const proof = (claim.rendered_proofs as Array<Record<string, unknown>>)[0];
+      const proof = required(
+        (claim.rendered_proofs as Array<Record<string, unknown>>)[0],
+        'fixture claim has no rendered proof',
+      );
       if (kind === 'rendered-marker') proof.claim_marker = 'DEVAI_CLAIM:other=';
       if (kind === 'rendered-content') proof.content_digest = '0'.repeat(64);
       if (kind === 'rendered-value') proof.extracted_rendered_value_digest = '0'.repeat(64);
@@ -1831,14 +1861,22 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const ledger = readJson(current.root, path);
       const claims = ledger.claims as Array<Record<string, unknown>>;
       if (kind === 'missing') claims.splice(0, 1);
-      if (kind === 'unknown') claims.push({ ...claims[0], claim_id: 'unknown.claim' });
-      if (kind === 'duplicate') claims.push(structuredClone(claims[0]));
+      if (kind === 'unknown')
+        claims.push({
+          ...required(claims[0], 'fixture claim ledger has no claims'),
+          claim_id: 'unknown.claim',
+        });
+      if (kind === 'duplicate')
+        claims.push(structuredClone(required(claims[0], 'fixture claim ledger has no claims')));
       if (kind === 'placeholder') {
         const renderedLocation = `work/audit/${ROUND}/as-built.md`;
         const rendered = 'TBD: replace placeholder before review\nDEVAI_CLAIM:suite.population=1\n';
         put(current.root, renderedLocation, rendered);
-        const claim = claims[0];
-        const proof = (claim.rendered_proofs as Array<Record<string, unknown>>)[0];
+        const claim = required(claims[0], 'fixture claim ledger has no claims');
+        const proof = required(
+          (claim.rendered_proofs as Array<Record<string, unknown>>)[0],
+          'fixture claim has no rendered proof',
+        );
         const proofBody = {
           location: renderedLocation,
           claim_marker: 'DEVAI_CLAIM:suite.population=',
@@ -1860,14 +1898,20 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const current = fixture(true);
       const registryPath = `work/rounds/${ROUND}/current-claims.json`;
       const registry = readJson(current.root, registryPath);
-      const declaration = (registry.claims as Array<Record<string, unknown>>)[0];
+      const declaration = required(
+        (registry.claims as Array<Record<string, unknown>>)[0],
+        'fixture claim registry has no declarations',
+      );
       declaration.availability = 'post-publication';
       putJson(current.root, registryPath, registry);
       const candidate = commit(current.root, 'declare deferred post-publication claim');
       const frozen = freeze(current, candidate);
       const path = `${STATE}/current-claims.json`;
       const ledger = readJson(current.root, path);
-      const claim = (ledger.claims as Array<Record<string, unknown>>)[0];
+      const claim = required(
+        (ledger.claims as Array<Record<string, unknown>>)[0],
+        'fixture claim ledger has no claims',
+      );
       claim.proof_status = 'DEFERRED_POST_PUBLICATION';
       claim.source_digest = null;
       claim.value_digest = null;
@@ -1898,7 +1942,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const current = fixture(true);
       const frozen = freeze(current);
       const preReview = readJson(current.root, `${STATE}/current-claims.json`);
-      const postBody = {
+      const postBody: Record<string, unknown> = {
         ...preReview,
         mode: 'post-publication',
         pre_review_claims_digest: preReview.claims_digest_sha256,
@@ -1921,13 +1965,16 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const current = fixture(true);
       const frozen = freeze(current);
       const preReview = readJson(current.root, `${STATE}/current-claims.json`);
-      const postBody = {
+      const postBody: Record<string, unknown> = {
         ...structuredClone(preReview),
         mode: 'post-publication',
         pre_review_claims_digest: preReview.claims_digest_sha256,
       };
       delete postBody.claims_digest_sha256;
-      const copiedClaim = (postBody.claims as Array<Record<string, unknown>>)[0];
+      const copiedClaim = required(
+        (postBody.claims as Array<Record<string, unknown>>)[0],
+        'post-publication fixture has no copied claim',
+      );
       copiedClaim.extracted_value = 2;
       copiedClaim.value_digest = digestCanonical(2);
       const post = { ...postBody, claims_digest_sha256: digestCanonical(postBody) };
@@ -1947,7 +1994,10 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const current = fixture(true);
       const registryPath = `work/rounds/${ROUND}/current-claims.json`;
       const registry = readJson(current.root, registryPath);
-      const declaration = (registry.claims as Array<Record<string, unknown>>)[0];
+      const declaration = required(
+        (registry.claims as Array<Record<string, unknown>>)[0],
+        'fixture claim registry has no declarations',
+      );
       declaration.producer = ['sha256sum', '{site_artifact_path}'];
       declaration.runtime_parameters = {
         site_artifact_path: { source: 'authenticated B8 artifact', required_at: 'materialization' },
@@ -1957,7 +2007,10 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const candidate = commit(current.root, 'declare site artifact parameter');
       const frozen = freeze(current, candidate);
       const ledger = readJson(current.root, `${STATE}/current-claims.json`);
-      const claim = (ledger.claims as Array<Record<string, unknown>>)[0];
+      const claim = required(
+        (ledger.claims as Array<Record<string, unknown>>)[0],
+        'fixture claim ledger has no claims',
+      );
       claim.resolved_producer = ['sha256sum', 'fixture/site.zip'];
       claim.source_manifest = [
         { path: 'fixture/site.zip', state: 'present', content_digest: digestCanonical('fake') },
@@ -1975,7 +2028,10 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const current = fixture(true);
       const frozen = freeze(current);
       const ledger = readJson(current.root, `${STATE}/current-claims.json`);
-      const claim = (ledger.claims as Array<Record<string, unknown>>)[0];
+      const claim = required(
+        (ledger.claims as Array<Record<string, unknown>>)[0],
+        'fixture claim ledger has no claims',
+      );
       claim.source_paths = ['.git'];
       claim.source_manifest = [];
       const { claims_digest_sha256: _old, ...body } = ledger;
