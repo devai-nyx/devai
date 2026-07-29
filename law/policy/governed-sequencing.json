@@ -544,6 +544,45 @@
           "scripts/run-round-close-controls.mjs"
         ]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": [
+        "2736248dc88dfe374dac685dc8313cfde49ea828",
+        "f24e14b85ba750df9dd52081687883b92fbaabfd",
+        "7f0b7a4f6613c451918cd9f49263a21a8f045637"
+      ],
+      "law_commits": [
+        "9d36281b9715f98747788afa8d21c0d4f8cf7bda",
+        "36c9ac2afcaa3a51d9f67b93682663753bc9cf77",
+        "7fc56358e09c1c98d5f031192ec6f396462607df",
+        "cd5aad133ab5346f9abec28cb7ac7239b6f08bc3",
+        "a1e219b09d80b001731fabd1570ff27966765760",
+        "03d28e7ac8821f3184a44c19c808c7195c2b9ffd",
+        "fb4e20a773d614a3be8b11ee447a6bdb9b600e5a",
+        "97ecbc3ba5d3a02cbaefa8257ac4dc6ee482751e",
+        "b5efa1641182419774fde6c26f96e92873553e58",
+        "7956a4d2bf51e2d8cd78b3a8c1bc2ffd5151d910",
+        "4067b07f37dfa63388d132c52cae646daa632ee4"
+      ],
+      "red_evidence": {
+        "commit": "9401c63746d70abdfba82547a4b432def56e64fe",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-close-controls.red.contract.test.ts tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts tests/contract/pre-r0007-remediation-1.red.contract.test.ts --reporter=dot",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-sequencing-red-evidence.json",
+        "evidence_sha256": "c741507796d4d60036544c3769f2096b5d944c4aff6cb3e5a7cc9d3faf49cf0b",
+        "tests": [
+          "tests/contract/pre-r0007-close-controls.red.contract.test.ts",
+          "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
+          "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
+          "tests/contract/pre-r0007-remediation-1.red.contract.test.ts"
+        ],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "packages/schemas/src/roster.ts",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [
