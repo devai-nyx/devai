@@ -476,6 +476,39 @@
           "packages/cli/src/command-router.ts"
         ]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["477237c8b7c33c2c59e2262ec9147311feaf6e5b"],
+      "law_commits": ["55b0a78ca9585c1166d1eba109a97596e2f8649e"],
+      "red_evidence": {
+        "commit": "3d950ed09d6ec0f11b986ec532146b54c01c67a1",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-close-controls.red.contract.test.ts --reporter=dot",
+        "evidence_path": "work/audit/R-0007-pre-entry/control-red-evidence.json",
+        "evidence_sha256": "700821ace5f24febf7a1457b7aefa5e5d391ac92cd4dd7e4334551d5ef1040ac",
+        "tests": ["tests/contract/pre-r0007-close-controls.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "package.json",
+          "packages/schemas/src/roster.ts",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["c0b26d6a7a2949dd5b64933844f9d0add26fc2cf"],
+      "law_commits": ["55b0a78ca9585c1166d1eba109a97596e2f8649e"],
+      "red_evidence": {
+        "commit": "988b01a01d048345197c4c432edfa2212bedb04e",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts --reporter=verbose",
+        "evidence_path": "work/audit/R-0007-pre-entry/impact-dag-red-evidence.json",
+        "evidence_sha256": "f40971600d156a8c24ab66fccaa3eff77fa0ec1a1140463326cf83211c56a32a",
+        "tests": ["tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
     }
   ],
   "historical_commit_exceptions": [

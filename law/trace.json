@@ -3083,8 +3083,8 @@
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported",
-      "assertion_count": 36,
-      "assertion_digest_sha256": "215c2f4f947ea7bc80eb32797718fd12903660039bd172c0b02f21a9df503981"
+      "assertion_count": 37,
+      "assertion_digest_sha256": "a29aa05a58d19871082db3519d90bd64d780e3af358d9e697953c29270f105a9"
     },
     {
       "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
