@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0007",
+  "purpose": "output-bearing task-key stability red evidence",
+  "observations": [
+    {
+      "commit": "8f133dc54d22d2e0521ce056b1527c1138b1a464",
+      "command": "pnpm vitest run tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts --reporter=verbose",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "failed_tests": 1,
+      "passed_tests": 5,
+      "defect_class": "pre-execution output digest mutates task identity",
+      "repair_condition": "outputs validate the cached PASS without participating in the task key, so an output-producing task executes once and reuses on the second pass"
+    }
+  ],
+  "round_started": false,
+  "deployment_authorized": false
+}
