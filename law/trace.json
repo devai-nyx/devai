@@ -713,6 +713,11 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/pre-r0007-remediation-2.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts",
           "target_type": "test"
         },
@@ -779,6 +784,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-remediation-2.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -1358,6 +1368,11 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/pre-r0007-remediation-2.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts",
           "target_type": "test"
         },
@@ -1574,6 +1589,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-remediation-2.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -3157,7 +3177,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 45,
-      "assertion_digest_sha256": "49064cffd9ce76651af190b476502f8d891bc485184484fc90c12970ef474601"
+      "assertion_digest_sha256": "7dff9ff2dc0d68320f2fdf5f5367ecb497351c6eaa04e3137ccf2c4848510ada"
     },
     {
       "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
@@ -3170,7 +3190,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 19,
-      "assertion_digest_sha256": "f9d2ed68b54c6b408ee8c38c3d6e4594d57918de1040295afb7d41c15ec0d2b1"
+      "assertion_digest_sha256": "ef8ac2c718ebe97d4b2c4d1b0b6fbb1de5b40696a0316c416908491c6ca8b634"
     },
     {
       "path": "tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
@@ -3182,8 +3202,21 @@
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported",
-      "assertion_count": 86,
-      "assertion_digest_sha256": "c43a3e4bee525349c7a72b7aa3dd137b91442c19de12f6f5413c34e0d94c5a0d"
+      "assertion_count": 87,
+      "assertion_digest_sha256": "45c11366e0faedf650d85d0b61f44afe0a8078707c1efd07801fe07b0206d60c"
+    },
+    {
+      "path": "tests/contract/pre-r0007-remediation-2.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-003",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 74,
+      "assertion_digest_sha256": "d8a36257a0122da6ddbb47c1b3f2fd5d59149a940541eaa0b37dddf746dadf29"
     },
     {
       "path": "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts",
@@ -3195,8 +3228,8 @@
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported",
-      "assertion_count": 44,
-      "assertion_digest_sha256": "b072118f6df23fc06527ebf5ed6d9a42e4b859e702e8d35bfd8e276fea0e6884"
+      "assertion_count": 45,
+      "assertion_digest_sha256": "0d06e5e67e78339cbaeef4fca7ef612f91c6e3c7e4fc62238edab9e63f9341cf"
     },
     {
       "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
