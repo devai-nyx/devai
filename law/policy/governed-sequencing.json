@@ -509,6 +509,20 @@
         "tests": ["tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["5b5bae5c9b3bedbaf1facd6dcab2363993ffcca1"],
+      "law_commits": ["55b0a78ca9585c1166d1eba109a97596e2f8649e"],
+      "red_evidence": {
+        "commit": "ba95820f2157ddeab79d9a8d4a73c4dea3ea78de",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts --reporter=verbose",
+        "evidence_path": "work/audit/R-0007-pre-entry/output-freshness-red-evidence.json",
+        "evidence_sha256": "5608b3949a8e1f370ca0946e2d4f447492c95710b09bacc1f147a1a52e215231",
+        "tests": ["tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
     }
   ],
   "historical_commit_exceptions": [

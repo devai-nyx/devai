@@ -3096,8 +3096,8 @@
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported",
-      "assertion_count": 18,
-      "assertion_digest_sha256": "4c5a050d0285cddd5d7b7381ba0858c264d4832d76d7989bd0aa7921ece2eedc"
+      "assertion_count": 19,
+      "assertion_digest_sha256": "4b0b1ad6c8dfe73a6b99bb26bc37b8e5d850f8205403ab55727a5154967172aa"
     },
     {
       "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
