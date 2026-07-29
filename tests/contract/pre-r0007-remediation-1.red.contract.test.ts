@@ -67,8 +67,8 @@ function digestBytes(value: string | Buffer): string {
   return createHash('sha256').update(value).digest('hex');
 }
 
-function required<T>(value: T | undefined, message: string): T {
-  if (value === undefined) throw new Error(message);
+function required<T>(value: T | null | undefined, message: string): T {
+  if (value === undefined || value === null) throw new Error(message);
   return value;
 }
 
@@ -297,7 +297,12 @@ function fixture(bound = true): Fixture {
         risk: 'P0',
         source_refs: [`work/rounds/${ROUND}/plan.md`],
         governing_paths: ['packages/**'],
-        required_evidence: ['candidate manifest', 'convergence evidence'],
+        required_evidence: [
+          'candidate manifest',
+          'convergence evidence',
+          `work/rounds/${ROUND}/AUTHORIZATION.md`,
+          'gate:governance',
+        ],
         required_adversaries: ['cross identity', 'copied digest'],
         reuse_policy: 'digest-and-evidence-recheck',
         finding_classes: ['C2-F005', 'C2-F006'],
@@ -966,6 +971,158 @@ function withAuthenticReuse(
   return selfDigest(result, 'result_digest_sha256');
 }
 
+function reusableTopic(manifest: Record<string, unknown>): Record<string, unknown> {
+  return required(
+    (manifest.topics as Array<Record<string, unknown>>).find((topic) =>
+      (topic.allowed_dispositions as string[]).includes('REUSED_FRESH_PASS'),
+    ),
+    'fixture has no reuse-eligible topic',
+  );
+}
+
+function topicEvidenceRef(
+  fixtureValue: Fixture,
+  frozen: Frozen,
+  ref: string,
+): { ref: string; digest: string } | null {
+  if (ref === 'candidate manifest') {
+    return {
+      ref: `${STATE}/candidate-manifest.json`,
+      digest: digestCanonical(frozen.candidateManifest),
+    };
+  }
+  if (ref === 'convergence evidence') {
+    return {
+      ref: `${STATE}/convergence-evidence.json`,
+      digest: digestCanonical(frozen.convergence),
+    };
+  }
+  if (ref.startsWith('gate:')) {
+    const gateId = ref.slice('gate:'.length);
+    const passTwo = required(
+      (frozen.convergence.passes as Array<Record<string, unknown>>)[1],
+      'fixture convergence has no pass 2',
+    );
+    const gate = (passTwo.gate_results as Array<Record<string, unknown>>).find(
+      (entry) => entry.gate_id === gateId,
+    );
+    if (gate === undefined) return null;
+    return { ref, digest: gate.result_digest as string };
+  }
+  const path = ref.split('#', 1)[0];
+  if (path === undefined || path === '') return null;
+  try {
+    return {
+      ref,
+      digest: digestBytes(git(fixtureValue.root, ['show', `${frozen.candidate}:${path}`])),
+    };
+  } catch {
+    return null;
+  }
+}
+
+function completeTopicEvidence(
+  fixtureValue: Fixture,
+  frozen: Frozen,
+  topic: Record<string, unknown>,
+): Array<{ ref: string; digest: string }> {
+  const refs = [
+    'candidate manifest',
+    'convergence evidence',
+    ...(topic.source_refs as string[]),
+    ...(topic.required_evidence as string[]),
+  ];
+  const evidence = refs.map((ref) => topicEvidenceRef(fixtureValue, frozen, ref));
+  if (evidence.some((entry) => entry === null)) {
+    throw new Error('fixture topic contains unresolved evidence');
+  }
+  const resolved = evidence.map((entry) => required(entry, 'resolved evidence missing'));
+  return [...new Map(resolved.map((entry) => [entry.ref, entry])).values()];
+}
+
+function withCompleteTopicReuse(
+  fixtureValue: Fixture,
+  manifest: Record<string, unknown>,
+  frozen: Frozen,
+): {
+  result: Record<string, unknown>;
+  topic: Record<string, unknown>;
+  disposition: Record<string, unknown>;
+} {
+  const result = withAuthenticReuse(fixtureValue, manifest, frozen);
+  const topic = reusableTopic(manifest);
+  const disposition = required(
+    (result.dispositions as Array<Record<string, unknown>>).find(
+      (entry) => entry.topic_id === topic.topic_id,
+    ),
+    'fixture reuse disposition is missing',
+  );
+  const evidence = completeTopicEvidence(fixtureValue, frozen, topic);
+  disposition.recomputed_evidence_manifest = evidence;
+  disposition.recomputed_evidence_digest = digestCanonical(evidence);
+  const requiredGateIds = (topic.required_evidence as string[])
+    .filter((ref) => ref.startsWith('gate:'))
+    .map((ref) => ref.slice('gate:'.length));
+  const passTwo = required(
+    (frozen.convergence.passes as Array<Record<string, unknown>>)[1],
+    'fixture convergence has no pass 2',
+  );
+  disposition.recomputed_task_keys = (passTwo.gate_results as Array<Record<string, unknown>>)
+    .filter((gate) => requiredGateIds.includes(gate.gate_id as string))
+    .map((gate) => gate.task_key as string);
+  disposition.evidence_refs = evidence.map(({ ref }) => ref);
+  return { result: selfDigest(result, 'result_digest_sha256'), topic, disposition };
+}
+
+function terminalState(
+  fixtureValue: Fixture,
+  frozen: Frozen,
+  scopeDigest: string,
+  terminal: 'PASS' | 'ESCALATION_REQUIRED' | 'REVIEW_TRANSPORT_BLOCKED',
+  predecessor: 'CYCLE_1_ACTIVE' | 'CYCLE_2_ACTIVE',
+  cycle: 1 | 2,
+): Record<string, unknown> {
+  const active = readJson(fixtureValue.root, `${STATE}/review-state.json`);
+  const history = [...(active.transition_history as Array<Record<string, unknown>>)].slice(0, 3);
+  const priorDigest = 'a'.repeat(64);
+  if (predecessor === 'CYCLE_2_ACTIVE') {
+    history.push(
+      transition('CYCLE_1_ACTIVE', 'REPAIR_REQUIRED', frozen, {
+        review_scope_digest: scopeDigest,
+        review_result_digest: 'b'.repeat(64),
+        previous_state_digest: priorDigest,
+      }),
+      transition('REPAIR_REQUIRED', 'PREFLIGHT_GREEN', frozen, {
+        review_scope_digest: scopeDigest,
+        previous_state_digest: priorDigest,
+      }),
+      transition('PREFLIGHT_GREEN', 'NEW_CANDIDATE_FROZEN', frozen, {
+        review_scope_digest: scopeDigest,
+        repair_evidence_digest: 'c'.repeat(64),
+        previous_state_digest: priorDigest,
+      }),
+      transition('NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE', frozen, {
+        review_scope_digest: scopeDigest,
+        repair_evidence_digest: 'c'.repeat(64),
+        previous_state_digest: priorDigest,
+      }),
+    );
+  }
+  history.push(
+    transition(predecessor, terminal, frozen, {
+      review_scope_digest: scopeDigest,
+      review_result_digest: terminal === 'REVIEW_TRANSPORT_BLOCKED' ? null : 'd'.repeat(64),
+      transport_digest: terminal === 'REVIEW_TRANSPORT_BLOCKED' ? 'e'.repeat(64) : null,
+      previous_state_digest: priorDigest,
+    }),
+  );
+  return stateChain(fixtureValue, frozen, terminal, cycle, scopeDigest, history, {
+    previous_candidate_sha: predecessor === 'CYCLE_2_ACTIVE' ? frozen.candidate : null,
+    prior_failure_result_digest: predecessor === 'CYCLE_2_ACTIVE' ? 'b'.repeat(64) : null,
+    repair_evidence_digest: predecessor === 'CYCLE_2_ACTIVE' ? 'c'.repeat(64) : null,
+  });
+}
+
 function expectCode(result: Result, code: string): void {
   expect(codes(result), `${result.stderr}\n${JSON.stringify(result.value, null, 2)}`).toContain(
     code,
@@ -1421,6 +1578,110 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       ).toBe(0);
     });
 
+    it('accepts an exact per-topic evidence population for every reuse-eligible topic', () => {
+      const current = fixture(true);
+      const frozen = freeze(current);
+      const scoped = scope(current, frozen);
+      expect(scoped.status).toBe(0);
+      const manifest = scoped.value.manifest as Record<string, unknown>;
+      const eligible = (manifest.topics as Array<Record<string, unknown>>).filter((topic) =>
+        (topic.allowed_dispositions as string[]).includes('REUSED_FRESH_PASS'),
+      );
+      expect(eligible).toHaveLength(1);
+      const { result } = withCompleteTopicReuse(current, manifest, frozen);
+      putJson(current.root, 'fixture/complete-topic-reuse.json', result);
+      expect(
+        run(current, 'review-check', [
+          '--candidate',
+          frozen.candidate,
+          '--cycle',
+          '1',
+          '--review-result',
+          'fixture/complete-topic-reuse.json',
+        ]).status,
+      ).toBe(0);
+    });
+
+    it.each([
+      [
+        'remove-source-ref',
+        `work/rounds/${ROUND}/plan.md`,
+        'REVIEW_REUSE_EVIDENCE_MANIFEST_INCOMPLETE',
+      ],
+      ['mutate-source-ref', `work/rounds/${ROUND}/plan.md`, 'REVIEW_REUSE_EVIDENCE_MANIFEST_STALE'],
+      [
+        'remove-required-evidence',
+        `work/rounds/${ROUND}/AUTHORIZATION.md`,
+        'REVIEW_REUSE_EVIDENCE_MANIFEST_INCOMPLETE',
+      ],
+      [
+        'mutate-required-evidence',
+        `work/rounds/${ROUND}/AUTHORIZATION.md`,
+        'REVIEW_REUSE_EVIDENCE_MANIFEST_STALE',
+      ],
+      ['remove-task-evidence', 'gate:governance', 'REVIEW_REUSE_EVIDENCE_MANIFEST_INCOMPLETE'],
+      ['mutate-task-evidence', 'gate:governance', 'REVIEW_REUSE_EVIDENCE_MANIFEST_STALE'],
+    ])('rejects a reused topic when its per-topic evidence population is %s', (kind, ref, code) => {
+      const current = fixture(true);
+      const frozen = freeze(current);
+      const scoped = scope(current, frozen);
+      expect(scoped.status).toBe(0);
+      const { result, disposition } = withCompleteTopicReuse(
+        current,
+        scoped.value.manifest as Record<string, unknown>,
+        frozen,
+      );
+      const evidence = disposition.recomputed_evidence_manifest as Array<{
+        ref: string;
+        digest: string;
+      }>;
+      const index = evidence.findIndex((entry) => entry.ref === ref);
+      expect(index).toBeGreaterThanOrEqual(0);
+      if (kind.startsWith('remove-')) evidence.splice(index, 1);
+      else required(evidence[index], 'target evidence ref is absent').digest = '0'.repeat(64);
+      disposition.recomputed_evidence_manifest = evidence;
+      disposition.recomputed_evidence_digest = digestCanonical(evidence);
+      disposition.evidence_refs = evidence.map((entry) => entry.ref);
+      putJson(
+        current.root,
+        'fixture/incomplete-topic-reuse.json',
+        selfDigest(result, 'result_digest_sha256'),
+      );
+      expectCode(
+        run(current, 'review-check', [
+          '--candidate',
+          frozen.candidate,
+          '--cycle',
+          '1',
+          '--review-result',
+          'fixture/incomplete-topic-reuse.json',
+        ]),
+        code,
+      );
+    });
+
+    it('forbids reuse when any declared topic evidence cannot be mechanically resolved', () => {
+      const current = fixture(true);
+      const registryPath = `work/rounds/${ROUND}/review-obligations.json`;
+      const registry = readJson(current.root, registryPath);
+      const obligation = required(
+        (registry.obligations as Array<Record<string, unknown>>)[0],
+        'fixture obligation registry is empty',
+      );
+      obligation.required_evidence = [
+        ...(obligation.required_evidence as string[]),
+        'unresolved external attestation',
+      ];
+      putJson(current.root, registryPath, registry);
+      const candidate = commit(current.root, 'declare unresolved review evidence');
+      const frozen = freeze(current, candidate);
+      const scoped = scope(current, frozen);
+      expect(scoped.status).toBe(0);
+      const topic = reusableTopic(scoped.value.manifest as Record<string, unknown>);
+      expect(topic.allowed_dispositions).not.toContain('REUSED_FRESH_PASS');
+      expect((topic.freshness_proof as Record<string, unknown>).method).toBe('recheck-required');
+    });
+
     it.each([
       ['fail-disposition', 'REVIEW_TOPIC_NOT_PASSING'],
       ['blocked-disposition', 'REVIEW_TOPIC_NOT_PASSING'],
@@ -1540,6 +1801,58 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
   });
 
   describe('C2-F007 authenticated bounded review transitions', () => {
+    it.each([
+      ['PASS', 'CYCLE_1_ACTIVE', 1, true],
+      ['PASS', 'CYCLE_1_ACTIVE', 2, false],
+      ['PASS', 'CYCLE_2_ACTIVE', 1, false],
+      ['PASS', 'CYCLE_2_ACTIVE', 2, true],
+      ['ESCALATION_REQUIRED', 'CYCLE_1_ACTIVE', 1, false],
+      ['ESCALATION_REQUIRED', 'CYCLE_1_ACTIVE', 2, false],
+      ['ESCALATION_REQUIRED', 'CYCLE_2_ACTIVE', 1, false],
+      ['ESCALATION_REQUIRED', 'CYCLE_2_ACTIVE', 2, true],
+      ['REVIEW_TRANSPORT_BLOCKED', 'CYCLE_1_ACTIVE', 1, true],
+      ['REVIEW_TRANSPORT_BLOCKED', 'CYCLE_1_ACTIVE', 2, false],
+      ['REVIEW_TRANSPORT_BLOCKED', 'CYCLE_2_ACTIVE', 1, false],
+      ['REVIEW_TRANSPORT_BLOCKED', 'CYCLE_2_ACTIVE', 2, true],
+    ] as const)(
+      'authenticates terminal %s only from %s in cycle %i (authorized=%s)',
+      (terminal, predecessor, cycle, authorized) => {
+        const current = fixture(true);
+        const frozen = freeze(current);
+        const scoped = scope(current, frozen);
+        expect(scoped.status).toBe(0);
+        const scopeDigest = (scoped.value.manifest as Record<string, unknown>)
+          .manifest_digest_sha256 as string;
+        const statePath = `${STATE}/review-state.json`;
+        putJson(
+          current.root,
+          statePath,
+          terminalState(current, frozen, scopeDigest, terminal, predecessor, cycle),
+        );
+        const before = readFileSync(join(current.root, statePath), 'utf8');
+        const result = scope(current, frozen, 1);
+        expect(result.status).toBe(1);
+        expect(readFileSync(join(current.root, statePath), 'utf8')).toBe(before);
+        const resultCodes = codes(result);
+        const status = run(current, 'status');
+        if (authorized) {
+          expect(resultCodes).toContain('REVIEW_STATE_TERMINAL');
+          expect(resultCodes).not.toContain('REVIEW_STATE_TRANSITION_INVALID');
+          expect(status.value).toMatchObject({
+            state: terminal,
+            substantive_cycles: { used: cycle, maximum: 2 },
+          });
+        } else {
+          expect(resultCodes).toContain('REVIEW_STATE_TRANSITION_INVALID');
+          expect(resultCodes).not.toContain('REVIEW_STATE_TERMINAL');
+          expect(status.value).toMatchObject({
+            state: 'DRAFT',
+            substantive_cycles: { used: 0, maximum: 2 },
+          });
+        }
+      },
+    );
+
     it.each([
       ['malformed-state', 'REVIEW_STATE_MALFORMED'],
       ['forged-state', 'REVIEW_STATE_SELF_DIGEST_INVALID'],
