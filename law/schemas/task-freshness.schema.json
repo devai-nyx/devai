@@ -20,6 +20,7 @@
     "task_key",
     "input_manifest_digest",
     "dependency_keys",
+    "dependency_results",
     "policy_digest",
     "graph_digest",
     "toolchain_digest",
@@ -70,6 +71,19 @@
     "dependency_keys": {
       "type": "object",
       "additionalProperties": { "$ref": "#/$defs/sha256" }
+    },
+    "dependency_results": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["task_key", "result_digest", "fresh_pass"],
+        "properties": {
+          "task_key": { "$ref": "#/$defs/sha256" },
+          "result_digest": { "$ref": "#/$defs/sha256" },
+          "fresh_pass": { "const": true }
+        }
+      }
     },
     "policy_digest": { "$ref": "#/$defs/sha256" },
     "graph_digest": { "$ref": "#/$defs/sha256" },
@@ -131,6 +145,7 @@
       "task_key": "0000000000000000000000000000000000000000000000000000000000000000",
       "input_manifest_digest": "1111111111111111111111111111111111111111111111111111111111111111",
       "dependency_keys": {},
+      "dependency_results": {},
       "policy_digest": "2222222222222222222222222222222222222222222222222222222222222222",
       "graph_digest": "3333333333333333333333333333333333333333333333333333333333333333",
       "toolchain_digest": "4444444444444444444444444444444444444444444444444444444444444444",

@@ -42,6 +42,18 @@
           "claim_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
           "volatility": { "enum": ["candidate", "tree", "gate", "coverage", "ci"] },
           "producer": { "$ref": "#/$defs/argv" },
+          "runtime_parameters": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["source"],
+              "properties": {
+                "source": { "type": "string", "minLength": 1 },
+                "required_at": { "enum": ["materialization", "post-publication"] }
+              }
+            }
+          },
           "extractor": { "type": "string", "minLength": 1 },
           "source_paths": {
             "type": "array",
@@ -55,7 +67,12 @@
             "items": { "type": "string", "minLength": 1 }
           },
           "source_digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
-          "value_digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+          "value_digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+          "resolved_producer": { "$ref": "#/$defs/argv" },
+          "source_manifest": { "type": "array", "items": { "type": "object" } },
+          "producer_output_digest": { "$ref": "#/$defs/sha256" },
+          "extracted_value": {},
+          "rendered_verification_digest": { "$ref": "#/$defs/sha256" }
         }
       }
     }
@@ -75,7 +92,14 @@
               "properties": {
                 "source_digest": { "$ref": "#/$defs/sha256" },
                 "value_digest": { "$ref": "#/$defs/sha256" }
-              }
+              },
+              "required": [
+                "resolved_producer",
+                "source_manifest",
+                "producer_output_digest",
+                "extracted_value",
+                "rendered_verification_digest"
+              ]
             }
           }
         }

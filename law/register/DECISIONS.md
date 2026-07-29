@@ -4428,6 +4428,48 @@ or alter immutable R-0006 evidence. The Engineer must implement and materialize 
 contracts, the Inspector must prove their fail-closed cases, and the Auditor must
 preserve exact current evidence before this machinery can govern entry.
 
+### DII-247 — Repair the complete cycle-1 convergence-control defect population
+`type: decision · status: active · authority: Architect · provenance: session-draft pre-R-0007 machinery review cycle 1; OM-014; DII-246; Auditor 730c969; Inspector 28d0730; Auditor a916695`
+
+The first independent machinery review found eight control classes, F001 through F008,
+across reviewer-binding census, authoritative convergence gates, conservative impact
+widening, cache identity, review census, canonical result streams, review transitions,
+and current-claim recomputation. The authoritative class population is
+`work/rounds/R-0007/prior-finding-registry.json`; point repairs do not satisfy it.
+
+The convergence policy command roster is the mandatory ordered gate population. The
+affected-test DAG is a supplemental local precision population and may never replace,
+omit, or manufacture an authoritative gate result. Both convergence passes bind the
+same exact head, start and finish clean, execute or freshly reuse every authoritative
+gate, prohibit second-pass writes, and prove semantic equivalence. Remote execution
+disables all local reuse.
+
+Owner reviewer authority is discovered only by a complete structural census of every
+tracked active Owner mandate carrying the `devai_reviewer_binding` marker. Prose
+substrings have no authority. Zero, duplicate, inactive, conflicting, ambiguous, or
+fallback-capable bindings block entry. This decision does not create such a binding;
+the R-0007 slot remains intentionally unbound.
+
+Review scope requires an independently generated exact-candidate manifest and covers
+exactly seven source classes: semantic obligations, changed paths, active controls,
+current claims, previous finding classes, candidate identity, and convergence
+evidence. Result streams and state transitions are exact-candidate, exact-manifest,
+exact-reviewer, and exact-cycle bound. Cycle 2 requires a distinct regenerated
+candidate after the one complete-class repair phase; cycle 3 remains mechanically
+impossible.
+
+Freshness reuse requires equality of every current record identity and still-fresh
+PASS proof for every dependency. Materialized claims are recomputed from resolved
+producer arguments, complete source manifests, deterministic extraction, canonical
+value digests, and rendered locations. Unknown, dynamic, incomplete, dirty, staged,
+untracked, deleted, or renamed inputs widen conservatively, and coverage remains whole
+only.
+
+DII-247 is prospective and does not rewrite R-0006 history, start R-0007, resolve its
+reviewer, authorize deployment, publish a candidate, promote evidence, or mutate the
+predecessor. One complete second review of the regenerated machinery candidate is the
+last substantive review authorized by OM-014; a second failure requires escalation.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

@@ -18,13 +18,17 @@
       "work/rounds/EXECUTION-CONTRACT.md",
       "law/policy/round-close-controls.json"
     ],
-    "prior_findings": []
+    "prior_findings": ["work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md"],
+    "prior_finding_registry": "work/rounds/R-0007/prior-finding-registry.json"
   },
   "runtime": {
     "state_root": ".devai/state/round-runs/R-0007/close",
     "candidate_manifest": ".devai/state/round-runs/R-0007/close/candidate-manifest.json",
     "review_scope": ".devai/state/round-runs/R-0007/close/review-scope-manifest.json",
-    "review_result": ".devai/state/round-runs/R-0007/close/review-result.json"
+    "review_result": ".devai/state/round-runs/R-0007/close/review-result.json",
+    "materialized_claims": ".devai/state/round-runs/R-0007/close/current-claims.json",
+    "review_state": ".devai/state/round-runs/R-0007/close/review-state.json",
+    "review_transport": ".devai/state/round-runs/R-0007/close/review-transport.json"
   },
   "reviewer": {
     "binding": "owner-mandate-required",

@@ -28,7 +28,14 @@
     {
       "claim_id": "candidate.range",
       "volatility": "candidate",
-      "producer": ["git", "rev-list", "--reverse", "<exact-base>..<candidate>"],
+      "producer": ["git", "rev-list", "--reverse", "{exact_base}..{candidate_sha}"],
+      "runtime_parameters": {
+        "exact_base": { "source": "candidate_manifest.base_sha", "required_at": "materialization" },
+        "candidate_sha": {
+          "source": "candidate_manifest.candidate_sha",
+          "required_at": "materialization"
+        }
+      },
       "extractor": "$",
       "source_paths": [".git"],
       "rendered_locations": ["work/rounds/R-0007/source-close.md", "work/audit/R-0007/as-built.md"],
@@ -48,9 +55,15 @@
     {
       "claim_id": "site.artifact",
       "volatility": "candidate",
-      "producer": ["sha256sum", "<site-artifact>"],
+      "producer": ["sha256sum", "{site_artifact_path}"],
+      "runtime_parameters": {
+        "site_artifact_path": {
+          "source": "R-0007 B8 exact built-site artifact path",
+          "required_at": "materialization"
+        }
+      },
       "extractor": "$[0]",
-      "source_paths": ["<site-artifact>"],
+      "source_paths": ["{site_artifact_path}"],
       "rendered_locations": ["work/audit/R-0007/as-built.md", "work/rounds/R-0007/source-close.md"],
       "source_digest": null,
       "value_digest": null
@@ -58,9 +71,15 @@
     {
       "claim_id": "ci.exact-head",
       "volatility": "ci",
-      "producer": ["gh", "pr", "checks", "<pr-number>"],
+      "producer": ["gh", "pr", "checks", "{source_pr_number}", "--json", "name,state,link"],
+      "runtime_parameters": {
+        "source_pr_number": {
+          "source": "published source PR identity",
+          "required_at": "post-publication"
+        }
+      },
       "extractor": "$.checks",
-      "source_paths": ["<github-exact-head>"],
+      "source_paths": ["{github_exact_head_check_population}"],
       "rendered_locations": ["work/audit/R-0007/as-built.md"],
       "source_digest": null,
       "value_digest": null

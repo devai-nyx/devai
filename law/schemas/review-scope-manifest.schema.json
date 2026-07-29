@@ -19,6 +19,10 @@
     "graph_digest",
     "obligations_digest",
     "claims_digest",
+    "active_controls_digest",
+    "prior_findings_digest",
+    "impact_plan_digest",
+    "convergence_evidence_digest",
     "current_candidate_manifest_digest",
     "previous_candidate_manifest_digests",
     "topic_count",
@@ -74,6 +78,10 @@
     "graph_digest": { "$ref": "#/$defs/sha256" },
     "obligations_digest": { "$ref": "#/$defs/sha256" },
     "claims_digest": { "$ref": "#/$defs/sha256" },
+    "active_controls_digest": { "$ref": "#/$defs/sha256" },
+    "prior_findings_digest": { "$ref": "#/$defs/sha256" },
+    "impact_plan_digest": { "$ref": "#/$defs/sha256" },
+    "convergence_evidence_digest": { "$ref": "#/$defs/sha256" },
     "current_candidate_manifest_digest": { "$ref": "#/$defs/sha256" },
     "previous_candidate_manifest_digests": {
       "type": "array",
@@ -89,6 +97,7 @@
         "additionalProperties": false,
         "required": [
           "topic_id",
+          "topic_kind",
           "obligation_id",
           "risk",
           "claim",
@@ -105,6 +114,17 @@
         ],
         "properties": {
           "topic_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]*$" },
+          "topic_kind": {
+            "enum": [
+              "semantic-obligation",
+              "changed-path",
+              "active-control",
+              "current-claim",
+              "previous-finding-class",
+              "candidate-identity",
+              "convergence-evidence"
+            ]
+          },
           "obligation_id": { "type": "string", "pattern": "^R[0-9]+-[A-Z0-9][A-Z0-9-]*$" },
           "risk": { "enum": ["P0", "P1", "P2"] },
           "claim": { "type": "string", "minLength": 1 },
@@ -167,12 +187,17 @@
       "graph_digest": "5555555555555555555555555555555555555555555555555555555555555555",
       "obligations_digest": "6666666666666666666666666666666666666666666666666666666666666666",
       "claims_digest": "7777777777777777777777777777777777777777777777777777777777777777",
+      "active_controls_digest": "1212121212121212121212121212121212121212121212121212121212121212",
+      "prior_findings_digest": "1313131313131313131313131313131313131313131313131313131313131313",
+      "impact_plan_digest": "1414141414141414141414141414141414141414141414141414141414141414",
+      "convergence_evidence_digest": "1515151515151515151515151515151515151515151515151515151515151515",
       "current_candidate_manifest_digest": "8888888888888888888888888888888888888888888888888888888888888888",
       "previous_candidate_manifest_digests": [],
       "topic_count": 1,
       "topics": [
         {
           "topic_id": "obligation:r9999-p0-identity",
+          "topic_kind": "semantic-obligation",
           "obligation_id": "R9999-P0-IDENTITY",
           "risk": "P0",
           "claim": "The review binds the exact candidate.",

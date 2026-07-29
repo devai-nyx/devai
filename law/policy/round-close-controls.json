@@ -9,7 +9,10 @@
     "task_freshness": "law/schemas/task-freshness.schema.json",
     "semantic_obligations": "law/schemas/review-obligations.schema.json",
     "current_claims": "law/schemas/current-claims.schema.json",
-    "candidate_manifest": "law/schemas/round-close-manifest.schema.json",
+    "candidate_manifest": "law/schemas/candidate-manifest.schema.json",
+    "reviewer_binding": "law/schemas/reviewer-binding.schema.json",
+    "prior_finding_registry": "law/schemas/prior-finding-registry.schema.json",
+    "review_state": "law/schemas/review-state.schema.json",
     "review_scope": "law/schemas/review-scope-manifest.schema.json",
     "review_result": "law/schemas/review-result.schema.json"
   },
@@ -193,10 +196,33 @@
     "cycle_two_failure": "ESCALATION_REQUIRED",
     "transport_retry_budget_per_cycle": 1,
     "second_invalid_transport": "REVIEW_TRANSPORT_BLOCKED",
-    "forced_pass": false
+    "forced_pass": false,
+    "allowed_transitions": {
+      "DRAFT": ["PREFLIGHT_GREEN"],
+      "PREFLIGHT_GREEN": ["CANDIDATE_FROZEN", "NEW_CANDIDATE_FROZEN"],
+      "CANDIDATE_FROZEN": ["CYCLE_1_ACTIVE"],
+      "CYCLE_1_ACTIVE": ["PASS", "REPAIR_REQUIRED", "REVIEW_TRANSPORT_BLOCKED"],
+      "REPAIR_REQUIRED": ["PREFLIGHT_GREEN"],
+      "NEW_CANDIDATE_FROZEN": ["CYCLE_2_ACTIVE"],
+      "CYCLE_2_ACTIVE": ["PASS", "ESCALATION_REQUIRED", "REVIEW_TRANSPORT_BLOCKED"]
+    },
+    "state_identity": [
+      "round",
+      "base",
+      "candidate",
+      "tree",
+      "profile-digest",
+      "policy-digest",
+      "candidate-manifest-digest",
+      "review-scope-digest",
+      "reviewer-binding-digest"
+    ],
+    "transport_identity": ["round", "cycle", "candidate", "manifest-digest", "reviewer"]
   },
   "reviewer_binding": {
-    "source": "per-round-profile-plus-active-owner-mandate",
+    "source": "per-round-profile-plus-complete-structured-active-owner-mandate-census",
+    "schema_marker": "devai_reviewer_binding",
+    "census_glob": "product/owner-mandates/OM-*.md",
     "preparation_allows_unbound": true,
     "preparation_diagnostic": "ENTRY_BLOCKED_REVIEWER_UNBOUND",
     "entry_requires_exactly_one_active_binding": true,
@@ -207,6 +233,14 @@
   "convergence": {
     "passes": 2,
     "second_pass": "no-write-clean",
+    "authoritative_population": "all-policy-command-ids-exactly-once",
+    "affected_graph_role": "supplemental-local-impact-population",
+    "pass_boundaries": {
+      "head": "exact-and-stable",
+      "tree": "clean-before-and-after",
+      "second_pass_writes": "forbidden",
+      "semantic_equivalence": "required"
+    },
     "remote_mode": "execute-complete-authoritative-population",
     "commands": [
       { "id": "formatting", "argv": ["pnpm", "exec", "prettier", "--check", "."] },

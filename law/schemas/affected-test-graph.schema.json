@@ -122,6 +122,24 @@
         "mode": { "const": "whole-only" },
         "partial_merge": { "const": "forbidden" }
       }
+    },
+    "authoritative_gates": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["gate_id", "execution", "equivalent_node", "boundary"],
+        "properties": {
+          "gate_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+          "execution": { "const": "policy-command-exactly-once-per-cold-pass" },
+          "equivalent_node": {
+            "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+          },
+          "boundary": { "const": "exact-head-clean-no-write-equivalent" }
+        }
+      }
     }
   },
   "examples": [

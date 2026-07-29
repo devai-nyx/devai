@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/review-state.schema.json",
+  "title": "Identity-bound bounded review state",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "round",
+    "state",
+    "cycle",
+    "base_sha",
+    "candidate_sha",
+    "tree_sha",
+    "profile_digest",
+    "policy_digest",
+    "candidate_manifest_digest",
+    "review_scope_digest",
+    "reviewer_binding_digest",
+    "transport_attempts"
+  ],
+  "$defs": {
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  },
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+    "state": {
+      "enum": [
+        "DRAFT",
+        "PREFLIGHT_GREEN",
+        "CANDIDATE_FROZEN",
+        "CYCLE_1_ACTIVE",
+        "REPAIR_REQUIRED",
+        "NEW_CANDIDATE_FROZEN",
+        "CYCLE_2_ACTIVE",
+        "PASS",
+        "ESCALATION_REQUIRED",
+        "REVIEW_TRANSPORT_BLOCKED"
+      ]
+    },
+    "cycle": { "enum": [1, 2] },
+    "base_sha": { "$ref": "#/$defs/sha1" },
+    "candidate_sha": { "$ref": "#/$defs/sha1" },
+    "tree_sha": { "$ref": "#/$defs/sha1" },
+    "profile_digest": { "$ref": "#/$defs/sha256" },
+    "policy_digest": { "$ref": "#/$defs/sha256" },
+    "candidate_manifest_digest": { "$ref": "#/$defs/sha256" },
+    "review_scope_digest": { "$ref": "#/$defs/sha256" },
+    "reviewer_binding_digest": { "$ref": "#/$defs/sha256" },
+    "previous_candidate_sha": {
+      "oneOf": [{ "$ref": "#/$defs/sha1" }, { "type": "null" }]
+    },
+    "complete_class_repair_digest": {
+      "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+    },
+    "transport_attempts": { "type": "integer", "minimum": 0, "maximum": 2 }
+  }
+}

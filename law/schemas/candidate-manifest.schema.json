@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/candidate-manifest.schema.json",
+  "title": "Generic round-close candidate manifest",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schemaVersion",
+    "round",
+    "base_sha",
+    "candidate_sha",
+    "tree_sha",
+    "manifest_digest_sha256"
+  ],
+  "$defs": {
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  },
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+    "base_sha": { "$ref": "#/$defs/sha1" },
+    "candidate_sha": { "$ref": "#/$defs/sha1" },
+    "tree_sha": { "$ref": "#/$defs/sha1" },
+    "profile_digest": { "$ref": "#/$defs/sha256" },
+    "policy_digest": { "$ref": "#/$defs/sha256" },
+    "graph_digest": { "$ref": "#/$defs/sha256" },
+    "convergence_digest": { "$ref": "#/$defs/sha256" },
+    "claims_digest": { "$ref": "#/$defs/sha256" },
+    "rehearsal_digest": { "$ref": "#/$defs/sha256" },
+    "reviewer_binding_digest": { "$ref": "#/$defs/sha256" },
+    "previous_candidate_sha": {
+      "oneOf": [{ "$ref": "#/$defs/sha1" }, { "type": "null" }]
+    },
+    "manifest_digest_sha256": { "$ref": "#/$defs/sha256" }
+  }
+}

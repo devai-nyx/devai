@@ -3,8 +3,14 @@
   "graph_version": "1.0.0",
   "round": "R-0007",
   "population": {
-    "production": ["packages/*/src/**/*.ts", "packages/*/scripts/**/*.ts", "scripts/**/*.mjs"],
-    "tests": ["packages/**/tests/**/*.ts", "tests/**/*.test.ts"],
+    "production": [
+      "packages/*/src/**/*.ts",
+      "packages/*/scripts/**/*.{ts,mjs}",
+      "scripts/**/*.{ts,mjs}",
+      "*.config.{ts,mjs,js}",
+      "eslint.config.*"
+    ],
+    "tests": ["packages/**/tests/**/*.{ts,mjs}", "tests/**/*.{test,spec}.{ts,mjs}"],
     "classification": "complete-or-full-suite-fallback",
     "excluded": [
       {
@@ -307,5 +313,103 @@
     "node": "full-coverage",
     "mode": "whole-only",
     "partial_merge": "forbidden"
-  }
+  },
+  "authoritative_gates": [
+    {
+      "gate_id": "formatting",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "preparation",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "action-registry",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "trace",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "repository-references",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "materializations",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "diff-check",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "ordinary",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": "full-suite",
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "stage1",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "stage2",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "t4",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "t5",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "t6",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "changesets",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": null,
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "coverage",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": "full-coverage",
+      "boundary": "exact-head-clean-no-write-equivalent"
+    },
+    {
+      "gate_id": "governance",
+      "execution": "policy-command-exactly-once-per-cold-pass",
+      "equivalent_node": "governance",
+      "boundary": "exact-head-clean-no-write-equivalent"
+    }
+  ]
 }

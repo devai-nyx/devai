@@ -1,0 +1,119 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0007",
+  "registry_version": "pre-entry-machinery-review-cycle-1",
+  "finding_classes": [
+    {
+      "finding_id": "F001",
+      "defect_class_id": "BINDING_CENSUS_ABSENT",
+      "severity": "P0",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["reviewer-binding"],
+      "population_query": "Enumerate every tracked active Owner mandate and structurally parse reviewer-binding markers for R-0007.",
+      "affected_population": ["policy-check", "entry-check", "status"],
+      "repair_condition": "Exactly one active structured binding matches the profile; zero, duplicate, conflicting, inactive, substring-only, and fallback bindings fail closed.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F002",
+      "defect_class_id": "AUTHORITATIVE_GATE_POPULATION_OMITTED",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["smart-convergence"],
+      "population_query": "Compare every policy convergence command ID with each cold convergence pass result.",
+      "affected_population": ["all sixteen policy convergence commands"],
+      "repair_condition": "Both cold passes execute every authoritative policy command at stable exact-head clean boundaries; pass 2 writes nothing and is semantically equivalent.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F003",
+      "defect_class_id": "CONSERVATIVE_WIDENING_DEAD",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["impact-planning"],
+      "population_query": "Exercise staged, unstaged, untracked, deleted, renamed, dynamic-load, incomplete-population, and coverage-relevant changes.",
+      "affected_population": [
+        "WORKTREE and committed change discovery",
+        "full-suite fallback",
+        "whole coverage fallback"
+      ],
+      "repair_condition": "Every ambiguous or incomplete change executes full-suite and whole-coverage with explicit reason codes.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F004",
+      "defect_class_id": "CACHE_RECORD_IDENTITY_UNBOUND",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["freshness"],
+      "population_query": "Tamper each freshness identity field and each transitive dependency result while preserving a valid self-digest.",
+      "affected_population": ["every affected-test and policy-gate cache record"],
+      "repair_condition": "Reuse requires exact current identity equality and still-fresh dependency PASS proofs; any mismatch executes the complete dependent population.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F005",
+      "defect_class_id": "REVIEW_CENSUS_AND_CANDIDATE_PROOF_INCOMPLETE",
+      "severity": "P0",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["review-scope"],
+      "population_query": "Census all seven authoritative topic source classes and verify the pre-existing exact-candidate manifest.",
+      "affected_population": [
+        "semantic obligations",
+        "changed paths",
+        "active controls",
+        "current claims",
+        "previous finding classes",
+        "candidate identity",
+        "convergence evidence"
+      ],
+      "repair_condition": "Scope generation fails without an authentic exact-candidate manifest and emits every source class atomically without round-specific fabricated topics.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F006",
+      "defect_class_id": "REVIEW_REUSE_AND_STREAM_CANONICALITY",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["review-result"],
+      "population_query": "Mutate JSONL record order, duplicate headers or terminals, append trailing records, orphan findings, and attempt prohibited reuse.",
+      "affected_population": [
+        "all review JSONL records",
+        "all topic dispositions",
+        "all finding links"
+      ],
+      "repair_condition": "Only one header-first and one terminal-last stream with exact topic and finding linkage passes; obligation reuse policy is enforced.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F007",
+      "defect_class_id": "REVIEW_STATE_TRANSITION_BYPASS",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["review-state"],
+      "population_query": "Attempt every undeclared state transition, same-candidate cycle 2, stale PASS reuse, cycle 3, and cross-identity transport retry.",
+      "affected_population": ["review-check", "review state", "transport state"],
+      "repair_condition": "Only declared identity-bound transitions pass; cycle 2 requires a distinct regenerated candidate and cycle-1 complete-class repair evidence.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F008",
+      "defect_class_id": "CLAIM_DIGEST_PLACEHOLDER_ACCEPTED",
+      "severity": "P2",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["current-claims"],
+      "population_query": "Recompute every materialized claim producer, extractor, source manifest, value, digest, and rendered location.",
+      "affected_population": ["every materialized current claim"],
+      "repair_condition": "Any producer, source, extracted-value, value-digest, or rendered-location mismatch fails claims-check.",
+      "disposition": "OPEN"
+    }
+  ]
+}

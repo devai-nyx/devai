@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/reviewer-binding.schema.json",
+  "title": "Owner reviewer binding marker",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "devai_reviewer_binding",
+    "round",
+    "model_selector",
+    "role",
+    "semantic_census",
+    "substantive_cycles",
+    "transport_retries",
+    "fallback"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "devai_reviewer_binding": { "const": true },
+    "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+    "model_selector": { "type": "string", "minLength": 1 },
+    "role": { "const": "independent-read-only" },
+    "semantic_census": { "const": "complete" },
+    "substantive_cycles": { "const": 2 },
+    "transport_retries": { "const": 1 },
+    "fallback": { "const": "forbidden" }
+  }
+}

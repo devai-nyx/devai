@@ -60,7 +60,8 @@
           "type": "array",
           "uniqueItems": true,
           "items": { "$ref": "#/$defs/relativePath" }
-        }
+        },
+        "prior_finding_registry": { "$ref": "#/$defs/relativePath" }
       }
     },
     "runtime": {
@@ -71,7 +72,10 @@
         "state_root": { "$ref": "#/$defs/relativePath" },
         "candidate_manifest": { "$ref": "#/$defs/relativePath" },
         "review_scope": { "$ref": "#/$defs/relativePath" },
-        "review_result": { "$ref": "#/$defs/relativePath" }
+        "review_result": { "$ref": "#/$defs/relativePath" },
+        "materialized_claims": { "$ref": "#/$defs/relativePath" },
+        "review_state": { "$ref": "#/$defs/relativePath" },
+        "review_transport": { "$ref": "#/$defs/relativePath" }
       }
     },
     "reviewer": {

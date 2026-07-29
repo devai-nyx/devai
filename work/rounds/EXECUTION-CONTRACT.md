@@ -111,7 +111,7 @@ the configured PostgreSQL service at release-candidate time.
 
 ## Prospective affected-test convergence for R-0007 through R-0009
 
-OM-014 and DII-246 replace R-0006's round-specific close wrapper prospectively with a
+OM-014, DII-246, and DII-247 replace R-0006's round-specific close wrapper prospectively with a
 generic policy and schema-validated per-round profile. No engine default may supply a
 round, mandate, audit path, or reviewer model. The profile binds the round sources,
 explicit affected-test graph, semantic obligations, current claims, runtime paths,
@@ -119,7 +119,12 @@ review budget, and reviewer authorization.
 
 Local convergence may reuse only a structurally valid content-addressed PASS whose key
 binds the command, working directory, complete transitive input manifest, dependency
-keys, output digests, environment, toolchain, policy, and graph. Changed tests execute
+keys and still-fresh dependency PASS results, output digests, environment, toolchain,
+policy, and graph. The ordered policy command roster remains the mandatory
+authoritative convergence population; the affected-test graph is a supplemental local
+precision population and cannot omit or substitute a policy gate. Both passes bind one
+stable exact head, start and finish clean, prohibit second-pass writes, and produce
+semantically equivalent result populations. Changed tests execute
 themselves and changed sources execute every transitively dependent shard. Unknown,
 dynamic, or incomplete proof widens to the full suite. Dirty, untracked, deleted, and
 renamed inputs participate; timestamps alone do not. Remote CI trusts no local cache,
@@ -127,11 +132,17 @@ and coverage is wholly executed or wholly reused without partial merging.
 
 Preparation may accept an unbound reviewer slot only while reporting
 `ENTRY_BLOCKED_REVIEWER_UNBOUND`. Entry requires exactly one active Owner mandate that
-binds the round to one literal independent read-only model. Missing, inactive,
+contains the structured `devai_reviewer_binding` marker and binds the round to one
+literal independent read-only model. The engine performs a complete census of all
+tracked active Owner mandates; prose substrings have no authority. Missing, inactive,
 ambiguous, or conflicting bindings stop entry; silent fallback is forbidden.
 
 Review scope is generated from registered obligations, exact changes, active controls,
 current claims, prior finding classes, candidate identities, and convergence evidence.
+An authentic exact-candidate manifest is required before scope generation; the
+controller never fabricates one. Materialized current claims are recomputed from their
+resolved producer, complete source manifest, deterministic extraction, canonical value
+digest, and rendered locations.
 Every changed and unchanged topic receives exactly one structured disposition. Fresh
 reuse still requires independent digest and evidence verification. Malformed,
 truncated, duplicate, omitted, unknown, or identity-mismatched results are invalid.
