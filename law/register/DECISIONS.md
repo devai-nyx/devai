@@ -4504,6 +4504,10 @@ manifest, scope and result, a distinct regenerated candidate, and one repair rec
 covering every failed defect class and affected instance. `PASS`,
 `ESCALATION_REQUIRED`, and `REVIEW_TRANSPORT_BLOCKED` are terminal.
 
+Scope-generation failure invalidates and removes only the stale derivative scope; it
+never deletes or rewrites authenticated review state or transition history. A terminal
+state refuses every new scope, transport, or review transition for the same campaign.
+
 A transport attempt binds the authenticated state that existed before parsing the
 payload. Its self-digest never contains a future state digest. The subsequent state
 transition may consume the completed transport digest. This one-way order prevents a
@@ -4524,6 +4528,20 @@ before publication is retained in the candidate-bound ledger only as a schema-va
 `DEFERRED_POST_PUBLICATION` declaration. After exact-head CI exists, a separate
 self-digested post-publication ledger must prove every claim and bind the immutable
 pre-review claims digest; it does not rewrite the reviewed candidate manifest.
+
+Dynamic runtime parameters come only from the authenticated convergence primitive or
+from a phase-specific, self-digested, candidate-bound runtime-input manifest. The
+complete runtime-input population and every input's evidence manifest are independently
+recomputed. Git identity and external producer output use explicit virtual source
+entries rather than an empty filesystem expansion. Tracked candidate prose contains
+stable claim-ID references only: candidate ranges, topic populations, artifact hashes,
+and CI receipts remain in ignored structured evidence so proving them never changes the
+SHA being proved.
+
+Every declared producer must emit deterministic structured output compatible with its
+extractor. The controller supplies side-effect-free JSON-file extraction and file-digest
+producer verbs where generic tools do not emit the required shape. Acceptance exercises
+the complete live per-round claim registry, not only synthetic one-claim fixtures.
 
 This decision authorizes implementation and at most two new exhaustive machinery-review
 runs under OM-015. It does not start or close R-0007, bind its governed reviewer, alter

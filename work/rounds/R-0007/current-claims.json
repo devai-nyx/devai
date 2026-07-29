@@ -12,9 +12,9 @@
       "volatility": "tree",
       "availability": "pre-review",
       "producer": ["pnpm", "vitest", "list", "--json"],
-      "extractor": "$.files",
+      "extractor": "$",
       "source_paths": ["packages/**/tests/**/*.ts", "tests/**/*.test.ts", "vitest*.ts"],
-      "rendered_locations": ["work/audit/R-0007/as-built.md"],
+      "rendered_locations": [],
       "source_digest": null,
       "value_digest": null
     },
@@ -22,10 +22,20 @@
       "claim_id": "coverage.summary",
       "volatility": "coverage",
       "availability": "pre-review",
-      "producer": ["pnpm", "run", "test:coverage:t1-t3"],
-      "extractor": "$.total",
+      "producer": [
+        "node",
+        "scripts/run-round-close-controls.mjs",
+        "claim-produce",
+        "--kind",
+        "json-file",
+        "--path",
+        "scratch/coverage/t1-t3/coverage-summary.json",
+        "--extractor",
+        "$.total"
+      ],
+      "extractor": "$",
       "source_paths": ["scratch/coverage/t1-t3/coverage-summary.json"],
-      "rendered_locations": ["work/audit/R-0007/as-built.md"],
+      "rendered_locations": [],
       "source_digest": null,
       "value_digest": null
     },
@@ -43,7 +53,7 @@
       },
       "extractor": "$",
       "source_paths": [".git"],
-      "rendered_locations": ["work/rounds/R-0007/source-close.md", "work/audit/R-0007/as-built.md"],
+      "rendered_locations": [],
       "source_digest": null,
       "value_digest": null
     },
@@ -79,7 +89,7 @@
         "law/policy/round-close-controls.json",
         "work/rounds/R-0007/close-control-profile.json"
       ],
-      "rendered_locations": ["work/audit/R-0007/independent-review.md"],
+      "rendered_locations": [],
       "source_digest": null,
       "value_digest": null
     },
@@ -87,16 +97,24 @@
       "claim_id": "site.artifact",
       "volatility": "candidate",
       "availability": "pre-review",
-      "producer": ["sha256sum", "{site_artifact_path}"],
+      "producer": [
+        "node",
+        "scripts/run-round-close-controls.mjs",
+        "claim-produce",
+        "--kind",
+        "file-sha256",
+        "--path",
+        "{site_artifact_path}"
+      ],
       "runtime_parameters": {
         "site_artifact_path": {
-          "source": "R-0007 B8 exact built-site artifact path",
+          "source": "runtime-inputs.pre-review.site_artifact_path",
           "required_at": "materialization"
         }
       },
-      "extractor": "$[0]",
+      "extractor": "$.sha256",
       "source_paths": ["{site_artifact_path}"],
-      "rendered_locations": ["work/audit/R-0007/as-built.md", "work/rounds/R-0007/source-close.md"],
+      "rendered_locations": [],
       "source_digest": null,
       "value_digest": null
     },
@@ -107,13 +125,13 @@
       "producer": ["gh", "pr", "checks", "{source_pr_number}", "--json", "name,state,link"],
       "runtime_parameters": {
         "source_pr_number": {
-          "source": "published source PR identity",
+          "source": "runtime-inputs.post-publication.source_pr_number",
           "required_at": "post-publication"
         }
       },
-      "extractor": "$.checks",
-      "source_paths": ["{github_exact_head_check_population}"],
-      "rendered_locations": ["work/audit/R-0007/as-built.md"],
+      "extractor": "$",
+      "source_paths": ["producer-output:ci.exact-head"],
+      "rendered_locations": [],
       "source_digest": null,
       "value_digest": null
     }

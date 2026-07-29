@@ -9,6 +9,7 @@
     "task_freshness": "law/schemas/task-freshness.schema.json",
     "semantic_obligations": "law/schemas/review-obligations.schema.json",
     "current_claims": "law/schemas/current-claims.schema.json",
+    "claim_runtime_inputs": "law/schemas/claim-runtime-inputs.schema.json",
     "candidate_manifest": "law/schemas/candidate-manifest.schema.json",
     "round_convergence": "law/schemas/round-convergence.schema.json",
     "reviewer_binding": "law/schemas/reviewer-binding.schema.json",
@@ -196,7 +197,21 @@
     "rendered_marker_must_equal_claim_id": true,
     "rendered_proofs_exactly_match_declared_locations": true,
     "source_manifest_exactly_matches_resolved_sources": true,
+    "runtime_parameter_sources": [
+      "convergence.exact_base",
+      "convergence.candidate_sha",
+      "runtime-inputs.pre-review.<input-id>",
+      "runtime-inputs.post-publication.<input-id>"
+    ],
+    "runtime_inputs": "phase-specific-self-digested-candidate-bound-exact-population",
+    "virtual_source_manifests": {
+      ".git": "git:commit/<candidate> with commit-and-tree identity digest",
+      "producer-output:<claim-id>": "canonical producer-output digest"
+    },
+    "tracked_candidate_rendering": "stable-claim-id-reference-only-no-candidate-or-post-publication-value",
     "complete_ledger_atomic": true,
+    "producer_output": "deterministic-structured-output-compatible-with-declared-extractor",
+    "live_registry_acceptance": "every-real-declaration-materializes-and-revalidates",
     "pre_review_post_publication_claim": "authenticated-deferred-declaration",
     "post_publication_receipt": "separate-self-digested-ledger-bound-to-pre-review-digest",
     "ledger_self_digest": "sha256-canonical-body-with-claims-digest-omitted",
@@ -274,6 +289,9 @@
       "CYCLE_2_ACTIVE": "requires-authenticated-complete-class-repair-and-distinct-candidate"
     },
     "terminal_states": ["PASS", "ESCALATION_REQUIRED", "REVIEW_TRANSPORT_BLOCKED"],
+    "terminal_scope_reentry": "forbidden",
+    "scope_failure_invalidation": "delete-stale-derived-scope-only-preserve-authenticated-state-and-history",
+    "history_rewrite": "forbidden",
     "transport_identity": ["round", "cycle", "candidate", "manifest-digest", "reviewer"],
     "transport_guards": {
       "attempt_one_previous_digest": "null",

@@ -33,6 +33,8 @@
     "review_result": ".devai/state/round-runs/R-0007/close/review-result.json",
     "materialized_claims": ".devai/state/round-runs/R-0007/close/current-claims.json",
     "post_publication_claims": ".devai/state/round-runs/R-0007/close/current-claims-post-publication.json",
+    "pre_review_claim_inputs": ".devai/state/round-runs/R-0007/close/claim-inputs-pre-review.json",
+    "post_publication_claim_inputs": ".devai/state/round-runs/R-0007/close/claim-inputs-post-publication.json",
     "review_state": ".devai/state/round-runs/R-0007/close/review-state.json",
     "review_transport": ".devai/state/round-runs/R-0007/close/review-transport.json",
     "review_repair_evidence": ".devai/state/round-runs/R-0007/close/review-repair-evidence.json"

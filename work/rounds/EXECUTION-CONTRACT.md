@@ -157,6 +157,14 @@ Candidate and base parameters resolve from authenticated convergence, not from t
 later manifest. Post-publication-only claims remain explicit deferred declarations in
 the candidate-bound ledger. A separate post-publication ledger later proves them and
 binds the immutable pre-review claims digest without changing the reviewed candidate.
+Runtime parameters resolve only from convergence or phase-specific self-digested,
+candidate-bound runtime-input manifests with complete evidence. Git identity and
+external producer output receive explicit virtual source-manifest entries. Volatile
+candidate, range, topic-count, artifact, and CI values stay in ignored structured
+evidence; tracked prose may name their stable claim IDs but never copies a value whose
+proof would require changing the candidate that it proves.
+Claim producers emit deterministic structured values that their declared extractors can
+actually consume. Acceptance materializes and revalidates the complete live registry.
 Every changed and unchanged topic receives exactly one structured disposition. Fresh
 reuse still requires independent recomputation of the current topic-input manifest,
 referenced-evidence manifest and digest, and every required task-freshness key. Finding
@@ -173,6 +181,8 @@ cross-digest-mismatched convergence has no fallback and invalidates scope atomic
 
 Cycle 1 exhausts the complete population and continues after blockers. One role-pure
 repair phase closes every reported class and regenerates every invalidated artifact.
+Scope failure removes only stale derivative scope while preserving authenticated state
+and transition history. PASS, escalation, and transport-blocked states refuse re-entry.
 Cycle 2 reviews the complete new population. Cycle-2 failure becomes
 `ESCALATION_REQUIRED`; cycle 3 is refused. One invalid transport attempt may retry the
 unchanged cycle; a second becomes `REVIEW_TRANSPORT_BLOCKED`. Continued work then
