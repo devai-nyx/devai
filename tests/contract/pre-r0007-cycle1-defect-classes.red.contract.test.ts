@@ -87,6 +87,27 @@ function sourceJson(relativePath: string): Record<string, unknown> {
   return JSON.parse(readFileSync(join(ROOT, relativePath), 'utf8')) as Record<string, unknown>;
 }
 
+function v5GraphControls(gateIds: readonly string[]): Record<string, unknown> {
+  return {
+    change_detection: {
+      committed_command: 'git diff --name-status -z -M --find-renames <exact-base> <candidate>',
+      record_format: 'status-aware-nul',
+      rename_paths: 'retain-preimage-and-postimage',
+      selector_population: 'union-of-preimage-and-postimage',
+      review_topics: 'exactly-once-per-path-linked-by-change-record',
+    },
+    gate_freshness_profiles: gateIds.map((gate_id) => ({
+      gate_id,
+      input_selectors: ['**/*'],
+      dependency_selectors: ['package.json'],
+      toolchain_probe_ids: ['node'],
+      environment_input_ids: ['CI'],
+      output_contract: 'none',
+      required_outputs: [],
+    })),
+  };
+}
+
 function reviewerBindingMarker(): Record<string, unknown> {
   return {
     schemaVersion: '2.0.0',
@@ -176,14 +197,14 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
     'changesets',
     'coverage',
     'governance',
-  ].map((id) => ({ id, argv: ['node', 'fixture/gate.mjs', id] }));
+  ].map((id) => ({ id, argv: ['node', 'fixture/gate.mjs', id], freshness_profile: id }));
   const policy = sourceJson('law/policy/round-close-controls.json');
   policy.policy_id = 'cycle-1-fixture';
   const convergencePolicy = policy.convergence as Record<string, unknown>;
   convergencePolicy.commands = convergenceCommands;
   const freshnessPolicy = policy.freshness as Record<string, unknown>;
-  freshnessPolicy.environment_allowlist = [];
-  freshnessPolicy.toolchain = [];
+  freshnessPolicy.environment_allowlist = [{ name: 'CI', mode: 'value-sha256' }];
+  freshnessPolicy.toolchain = [{ id: 'node', argv: ['node', '--version'] }];
   for (const relativePath of new Set<string>([
     'law/schemas/common-defs.schema.json',
     ...Object.values(policy.schemas as Record<string, string>),
@@ -225,7 +246,9 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
       post_publication_claim_inputs: `.devai/state/round-runs/${ROUND}/close/claim-inputs-post-publication.json`,
       review_state: `.devai/state/round-runs/${ROUND}/close/review-state.json`,
       review_transport: `.devai/state/round-runs/${ROUND}/close/review-transport.json`,
+      review_transport_root: `.devai/state/round-runs/${ROUND}/close/review-transports`,
       review_repair_evidence: `.devai/state/round-runs/${ROUND}/close/review-repair-evidence.json`,
+      active_control_census: `.devai/state/round-runs/${ROUND}/close/active-control-census.json`,
     },
     reviewer: {
       binding: 'owner-mandate-required',
@@ -265,7 +288,7 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
     coverage_mode,
   });
   putJson(root, `work/rounds/${ROUND}/affected-test-graph.json`, {
-    schemaVersion: '1.0.0',
+    schemaVersion: '2.0.0',
     graph_version: 'fixture-graph-v1',
     round: ROUND,
     population: {
@@ -292,6 +315,7 @@ function fixture(options: { bound?: boolean; reusePolicy?: string } = {}): Fixtu
         'whole-only',
       ),
     ],
+    ...v5GraphControls(convergenceCommands.map(({ id }) => id)),
     fallbacks: {
       unknown_dependency: 'full-suite',
       dynamic_import: 'full-suite',
