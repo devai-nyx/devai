@@ -10,7 +10,7 @@ const ROOT = join(import.meta.dirname, '..', '..', '..', '..');
 
 const ACTIVE_CAMPAIGN_INSTRUCTIONS = [
   'work/rounds/CAMPAIGN.md',
-  ...[2, 3, 4, 7, 8, 9, 10].map(
+  ...[2, 3, 4, 8, 9, 10].map(
     (round) => `work/rounds/R-${String(round).padStart(4, '0')}/prompts/00-orchestrator.md`,
   ),
 ];
@@ -20,6 +20,7 @@ const R0006_CODEX_INSTRUCTIONS = [
   'work/rounds/EXECUTION-CONTRACT.md',
   'work/rounds/R-0006/prompts/00-orchestrator.md',
 ];
+const R0007_MODEL_NEUTRAL_INSTRUCTION = 'work/rounds/R-0007/prompts/00-orchestrator.md';
 
 const BL017_RETIREMENT_INSTRUCTIONS = [
   'AGENTS.md',
@@ -109,6 +110,34 @@ describe('Owner-selected Claude review model', () => {
     const roundSixPrompt = readFileSync(join(ROOT, R0006_CODEX_INSTRUCTIONS[1] ?? ''), 'utf8');
     expect(roundSixPrompt).toMatch(/independent\s+Codex/u);
     expect(roundSixPrompt).not.toContain('claude-opus-5');
+  });
+
+  it('keeps R-0007 model-neutral and fail-closed until a later Owner binding', () => {
+    const mandate = readFileSync(join(ROOT, 'product/owner-mandates/OM-014.md'), 'utf8');
+    const instruction = readFileSync(join(ROOT, R0007_MODEL_NEUTRAL_INSTRUCTION), 'utf8');
+    const profile = JSON.parse(
+      readFileSync(join(ROOT, 'work/rounds/R-0007/close-control-profile.json'), 'utf8'),
+    ) as {
+      reviewer: {
+        binding: string;
+        mandate_id: string | null;
+        model_selector: string | null;
+        fallback: string;
+      };
+    };
+
+    expect(mandate).toContain('Model-neutral reviewer binding');
+    expect(instruction).toContain('unbound reviewer');
+    expect(instruction).toContain('Do not select, infer, or substitute a model');
+    expect(instruction).toMatch(/Silent fallback is forbidden/iu);
+    expect(instruction).not.toMatch(/claude-opus-5|gpt-5\.6-sol/iu);
+    expect(profile.reviewer).toEqual({
+      binding: 'owner-mandate-required',
+      mandate_id: null,
+      model_selector: null,
+      role: 'independent-read-only',
+      fallback: 'forbidden',
+    });
   });
 
   it.each(BL017_RETIREMENT_INSTRUCTIONS)(

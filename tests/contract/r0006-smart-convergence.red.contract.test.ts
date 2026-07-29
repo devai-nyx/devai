@@ -575,47 +575,39 @@ describe('R-0006 OM-011 content-addressed freshness red contracts', () => {
 });
 
 describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
-  it('binds OM-012 continuation, review-6 retention, and one stable final PASS destination', () => {
+  it('retains the R-0006 continuation as history while prospective controls are bounded', () => {
     const livePolicy = JSON.parse(
       readFileSync(join(ROOT, 'law/policy/round-close-controls.json'), 'utf8'),
     ) as {
-      review: { record: string };
+      schemaVersion: string;
       review_scope: {
-        requirement_sources: string[];
-        prior_review_globs: string[];
-        review_cycles: Record<string, unknown>;
-        previous_findings_mandatory: boolean;
+        previous_finding_classes_mandatory: boolean;
+      };
+      review_state_machine: {
+        substantive_cycle_budget: number;
+        cycle_three: string;
       };
     };
     const materializedPolicy = JSON.parse(
       readFileSync(join(ROOT, '.devai/config/round-close-controls.json'), 'utf8'),
     ) as typeof livePolicy;
     const finalRecord = 'work/audit/R-0006/independent-codex-b9-review-final.md';
-    const reviewGlob = 'work/audit/R-0006/independent-opus-b9-review*.md';
     const cycleTwoRecord = 'work/audit/R-0006/independent-opus-b9-review-6.md';
-    expect(livePolicy.review_scope.previous_findings_mandatory).toBe(true);
-    expect(livePolicy.review.record).toBe(finalRecord);
-    expect(livePolicy.review_scope.requirement_sources).toContain(
-      'product/owner-mandates/OM-012.md',
-    );
-    expect(livePolicy.review_scope.requirement_sources).toContain(
-      'product/owner-mandates/OM-013.md',
-    );
-    expect(livePolicy.review_scope.prior_review_globs).toContain(reviewGlob);
-    expect(livePolicy.review_scope.review_cycles).toEqual({
-      mode: 'owner-authorized-unbounded',
-      minimum: 1,
-      failure: 'repair-complete-class-and-rereview',
-      forced_pass: false,
+    expect(livePolicy.schemaVersion).toBe('3.0.0');
+    expect(livePolicy.review_scope.previous_finding_classes_mandatory).toBe(true);
+    expect(livePolicy.review_state_machine).toMatchObject({
+      substantive_cycle_budget: 2,
+      cycle_three: 'mechanically-forbidden',
     });
     expect(materializedPolicy).toEqual(livePolicy);
+    expect(readFileSync(join(ROOT, 'product/owner-mandates/OM-012.md'), 'utf8')).toContain(
+      'There is no numeric review-cycle cap under this mandate',
+    );
     expect(readFileSync(join(ROOT, cycleTwoRecord), 'utf8')).toContain(
       '### P1 — the active as-built again presents superseded readings as current',
     );
-    expect(readFileSync(join(ROOT, 'scripts/run-round-close-controls.mjs'), 'utf8')).toContain(
-      finalRecord,
-    );
-    expect(readFileSync(join(ROOT, '.devai/config/round-close-controls.json'), 'utf8')).toContain(
+    expect(readFileSync(join(ROOT, finalRecord), 'utf8')).toContain('verdict: PASS');
+    expect(readFileSync(join(ROOT, 'scripts/run-round-close-controls.mjs'), 'utf8')).not.toContain(
       finalRecord,
     );
   });
@@ -648,60 +640,34 @@ describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
     );
   });
 
-  it('governs the active Architect source-close handoff against the complete volatile-claim population', () => {
+  it('preserves historical source-close claims while prospective claims use a registry', () => {
     const livePolicy = JSON.parse(
       readFileSync(join(ROOT, 'law/policy/round-close-controls.json'), 'utf8'),
     ) as {
-      audit_current_claims: {
-        documents: { path: string; claims: string[] }[];
-      };
+      claims: { registry_from_round_profile: boolean; candidate_or_source_change: string };
     };
-    const sourceClosePolicy = livePolicy.audit_current_claims.documents.find(
-      ({ path }) => path === 'work/rounds/R-0006/source-close.md',
+    const historicalSourceClose = readFileSync(
+      join(ROOT, 'work/rounds/R-0006/source-close.md'),
+      'utf8',
     );
-    expect(sourceClosePolicy).toEqual({
-      path: 'work/rounds/R-0006/source-close.md',
-      claims: [
-        'trace_invariants',
-        'trace_test_sources',
-        'trace_assertion_sites',
-        'prior_b9_failure_records',
-      ],
-    });
-    if (sourceClosePolicy === undefined) {
-      throw new Error('active source-close handoff is absent from current-claim policy');
-    }
-    expect(readFileSync(join(ROOT, sourceClosePolicy.path), 'utf8')).toContain(
-      '<!-- governed-current-claims:start -->',
-    );
+    const prospectiveClaims = JSON.parse(
+      readFileSync(join(ROOT, 'work/rounds/R-0007/current-claims.json'), 'utf8'),
+    ) as { mode: string; candidate: null; claims: { claim_id: string }[] };
 
-    const current = fixture();
-    const fixturePolicy = JSON.parse(
-      readFileSync(join(current.root, 'law/policy/round-close-controls.json'), 'utf8'),
-    ) as typeof livePolicy;
-    fixturePolicy.audit_current_claims = livePolicy.audit_current_claims;
-    put(
-      current.root,
-      'law/policy/round-close-controls.json',
-      `${JSON.stringify(fixturePolicy, null, 2)}\n`,
+    expect(historicalSourceClose).toContain('<!-- governed-current-claims:start -->');
+    expect(livePolicy.claims).toEqual(
+      expect.objectContaining({
+        registry_from_round_profile: true,
+        candidate_or_source_change: 'invalidate',
+      }),
     );
-    put(
-      current.root,
-      sourceClosePolicy.path,
-      '# Source close\n<!-- governed-current-claims:start -->\n{"trace_invariants":1,"trace_test_sources":1,"trace_assertion_sites":999,"prior_b9_failure_records":4}\n<!-- governed-current-claims:end -->\n',
-    );
-    commit(current.root, 'DEVAI Architect', 'test: stale source-close claims', [
-      'law/policy/round-close-controls.json',
-      sourceClosePolicy.path,
-    ]);
-    const stale = run(current.root, ['policy-check']);
-    expect(stale.status).not.toBe(0);
-    expect(output(stale).findings).toEqual(
+    expect(prospectiveClaims).toMatchObject({ mode: 'registry', candidate: null });
+    expect(prospectiveClaims.claims.map(({ claim_id }) => claim_id)).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          code: 'AUDIT_CURRENT_CLAIM_DRIFT',
-          details: expect.objectContaining({ path: sourceClosePolicy.path }),
-        }),
+        'suite.population',
+        'coverage.summary',
+        'candidate.range',
+        'review.topic-population',
       ]),
     );
   });
