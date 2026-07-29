@@ -9,7 +9,10 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    DII-211–230; DII-243; DII-244; OM-011; R-0006-ENTRY-INVENTORY; BL-026; BL-034; BL-035; BL-081; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; R-0006-BRANCH-COVERAGE-INTEGRITY-RED-EVIDENCE; R-0006-HONEST-BRANCH-COVERAGE-DEPTH-RED-EVIDENCE; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; R-0006-OUTPUT-TOTALITY-POPULATION; implementation subjects a8bec1c66379449c1b3d82879c765fc062cb49a0, f8886676d81e560fc85be3914e7f2e129ebb61c3, 3be16cb1dca53a2614ced355f9de35bb1b65f752, and 2f1a24b4e0f42dd2eacbce1da83ea741b66a2486; population artifact 6461aadb0185450b30bfb3101230a78760e929a75b8a91c40ece250dfb7a3afe,
+    DII-211–230; DII-243; DII-244; OM-011; R-0006-ENTRY-INVENTORY; BL-026; BL-034; BL-035; BL-081; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; R-0006-BRANCH-COVERAGE-INTEGRITY-RED-EVIDENCE; R-0006-HONEST-BRANCH-COVERAGE-DEPTH-RED-EVIDENCE; R-0006-EXACT-LOCATION-COLLISION-RED-EVIDENCE; R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE; R-0006-OUTPUT-TOTALITY-POPULATION; implementation subjects a8bec1c66379449c1b3d82879c765fc062cb49a0,
+    f8886676d81e560fc85be3914e7f2e129ebb61c3,
+    3be16cb1dca53a2614ced355f9de35bb1b65f752,
+    and 2f1a24b4e0f42dd2eacbce1da83ea741b66a2486; population artifact 32fcbd1c054ee737c7d803a53903e98f1fe1a2ed6f363dca842a719f6b3fb0dd,
   ]
 ---
 
@@ -384,7 +387,7 @@ The cycle-5 repair closes that later evidence gap. Inspector executables `86934e
 `fd2ea61` generated `output-totality-population.json` under `CI=true` and
 `GITHUB_ACTIONS=true` in isolated Git fixtures with no ambient Git identity, trusted
 local cache, alternates, or real external mutation. The artifact SHA-256 is
-`6461aadb0185450b30bfb3101230a78760e929a75b8a91c40ece250dfb7a3afe` and its verdict is
+`32fcbd1c054ee737c7d803a53903e98f1fe1a2ed6f363dca842a719f6b3fb0dd` and its verdict is
 PASS with an empty failure set. Expected and unique observed populations match exactly:
 
 - 147 retained actions, each executed in human mode and both machine spellings, with
@@ -405,6 +408,19 @@ behavioral coverage are both observed for the retained population.
 This finding is only the pre-review semantic gate: formal cycle 6, clean-runner parity,
 fresh convergence, rehearsal, manifests, candidate freeze, publication, merge, and
 round closure remain unclaimed here.
+
+The first remote-mode smart-convergence attempt at exact head
+`3581f1e9a6e09174c38df137a89d229d50ad84fc` continued through its complete 16-task
+population and failed two gates while the other 14 passed. Formatting rejected this
+Auditor document and the population JSON. Coverage then ran all 158 test files but one
+sensor-envelope subprocess exceeded its 30-second child timeout under the full V8
+provider load; the suite reported 1,488 passing tests, eight skips, one failure, and no
+final coverage summaries. Inspector `2f9018f` and `3e1dab4` make the evidence producer
+emit the repository's canonical Prettier form, while Inspector `3b91504` raises only
+that subprocess bound to 120 seconds and the enclosing synchronous case bound to 360
+seconds. A subprocess-coverage probe passes all six focused cases in 21.16 seconds.
+These repairs do not convert the failed convergence into PASS; full coverage and fresh
+two-pass convergence still must run green.
 
 ## Law extraction and evidence semantics
 
