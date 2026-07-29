@@ -180,6 +180,8 @@ controller verifies the full transition chain, not only the current state label.
 second review after repair requires the authenticated first failure and its exact
 candidate, manifest, scope, result and state, a distinct regenerated candidate, and a
 complete-class repair record covering every failed class and affected instance.
+Transport records bind only the authenticated pre-parse state; a later state transition
+consumes the completed transport digest, so neither artifact hashes a future artifact.
 `PASS`, `ESCALATION_REQUIRED`, and `REVIEW_TRANSPORT_BLOCKED` have no outgoing edge.
 
 ## Candidate identity, convergence, and review freeze

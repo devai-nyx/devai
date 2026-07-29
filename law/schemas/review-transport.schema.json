@@ -18,7 +18,6 @@
     "payload_digest",
     "validation",
     "state_before_digest",
-    "state_after_digest",
     "previous_transport_digest",
     "transport_digest_sha256"
   ],
@@ -39,7 +38,6 @@
     "payload_digest": { "$ref": "#/$defs/sha256" },
     "validation": { "enum": ["VALID", "INVALID_TRANSPORT"] },
     "state_before_digest": { "$ref": "#/$defs/sha256" },
-    "state_after_digest": { "$ref": "#/$defs/sha256" },
     "previous_transport_digest": { "$ref": "#/$defs/nullableSha256" },
     "transport_digest_sha256": { "$ref": "#/$defs/sha256" }
   },
@@ -56,9 +54,8 @@
       "payload_digest": "5555555555555555555555555555555555555555555555555555555555555555",
       "validation": "INVALID_TRANSPORT",
       "state_before_digest": "6666666666666666666666666666666666666666666666666666666666666666",
-      "state_after_digest": "7777777777777777777777777777777777777777777777777777777777777777",
       "previous_transport_digest": null,
-      "transport_digest_sha256": "8888888888888888888888888888888888888888888888888888888888888888"
+      "transport_digest_sha256": "7777777777777777777777777777777777777777777777777777777777777777"
     }
   ]
 }

@@ -275,7 +275,9 @@
     "transport_guards": {
       "attempt_one_previous_digest": "null",
       "attempt_two_previous_digest": "authenticated-attempt-one",
-      "identity_change_between_attempts": "forbidden"
+      "identity_change_between_attempts": "forbidden",
+      "transport_binds": "state-before-only",
+      "subsequent_state_transition_consumes_transport_digest": true
     },
     "repair_evidence_guards": {
       "failed_classes": "exactly-equal-prior-result-failed-class-population",

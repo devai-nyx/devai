@@ -4504,6 +4504,11 @@ manifest, scope and result, a distinct regenerated candidate, and one repair rec
 covering every failed defect class and affected instance. `PASS`,
 `ESCALATION_REQUIRED`, and `REVIEW_TRANSPORT_BLOCKED` are terminal.
 
+A transport attempt binds the authenticated state that existed before parsing the
+payload. Its self-digest never contains a future state digest. The subsequent state
+transition may consume the completed transport digest. This one-way order prevents a
+transport-to-state-to-transport hash cycle.
+
 Materialized current claims bind and independently recompute resolved producer
 arguments, the complete source manifest, producer output, deterministic extraction,
 canonical extracted-value digest, and each rendered location's current content digest
