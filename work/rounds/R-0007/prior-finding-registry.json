@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "round": "R-0007",
-  "registry_version": "pre-entry-machinery-review-cycle-1",
+  "registry_version": "pre-entry-remediation-campaign-1",
   "finding_classes": [
     {
       "finding_id": "F001",
@@ -113,6 +113,88 @@
       "population_query": "Recompute every materialized claim producer, extractor, source manifest, value, digest, and rendered location.",
       "affected_population": ["every materialized current claim"],
       "repair_condition": "Any producer, source, extracted-value, value-digest, or rendered-location mismatch fails claims-check.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "C2-F001",
+      "defect_class_id": "BINDING_CENSUS_ABSENT",
+      "severity": "P0",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
+      "topic_ids": ["reviewer-binding"],
+      "population_query": "Parse every tracked Owner mandate and census only complete reviewer-binding markers whose mandate ID and active status agree with the containing mandate.",
+      "affected_population": [
+        "general mandates mentioning R-0007",
+        "partial and malformed marker-shaped blocks",
+        "zero, one, duplicate, conflicting, inactive, ambiguous, and fallback-capable complete bindings"
+      ],
+      "repair_condition": "General mandate prose never becomes a binding; exactly one complete schema-valid active binding matching the profile passes and every other population fails closed.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "C2-F005",
+      "defect_class_id": "REVIEW_CENSUS_AND_CANDIDATE_PROOF_INCOMPLETE",
+      "severity": "P0",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
+      "topic_ids": ["review-scope"],
+      "population_query": "Delete, truncate, stale, partially populate, tamper, substitute, and cross-digest-mismatch candidate and convergence evidence across every identity, gate, pass, and digest field.",
+      "affected_population": [
+        "candidate manifest required convergence and candidate-identity digests",
+        "two independently authenticated complete equivalent convergence passes",
+        "atomic review-scope generation without fallback evidence"
+      ],
+      "repair_condition": "Only exact cross-bound candidate and convergence records with two complete equivalent passes pass; every malformed, missing, stale, partial, tampered, substituted, or mismatched record fails atomically.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "C2-F006",
+      "defect_class_id": "REVIEW_REUSE_AND_STREAM_CANONICALITY",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
+      "topic_ids": ["review-result"],
+      "population_query": "Duplicate each finding ID in JSON and JSONL, then mutate every reusable topic input, evidence reference, evidence byte, evidence digest, and required freshness task key independently.",
+      "affected_population": [
+        "global finding-ID namespace",
+        "current topic-input manifests",
+        "referenced-evidence manifests and digests",
+        "nonempty required current task-freshness keys"
+      ],
+      "repair_condition": "Duplicate finding IDs always fail and REUSED_FRESH_PASS requires independent exact recomputation of every current input, evidence, and required nonempty task key.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "C2-F007",
+      "defect_class_id": "REVIEW_STATE_TRANSITION_BYPASS",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
+      "topic_ids": ["review-state"],
+      "population_query": "Attempt every undeclared, skipped, stale, cross-identity, forged-predecessor, unauthenticated-repair, same-candidate second-run, post-terminal, cycle-3, and exhausted-transport transition.",
+      "affected_population": [
+        "schema and self-digest validation for every linked record",
+        "complete predecessor-linked transition history",
+        "authenticated first failure and complete-class repair evidence",
+        "terminal PASS, ESCALATION_REQUIRED, and REVIEW_TRANSPORT_BLOCKED"
+      ],
+      "repair_condition": "Only the complete authenticated declared chain passes; review 2 binds the exact prior failure and distinct regenerated candidate, and terminal states reject every successor.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "C2-F008",
+      "defect_class_id": "CLAIM_DIGEST_PLACEHOLDER_ACCEPTED",
+      "severity": "P2",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
+      "topic_ids": ["current-claims"],
+      "population_query": "Mutate or omit every producer, source-manifest, output, extracted-value, canonical digest, structured rendered marker, rendered content, and per-location verification field independently.",
+      "affected_population": [
+        "runtime materialized claim ledger distinct from declaration registry",
+        "every proof field for every claim",
+        "every structured per-claim rendered location"
+      ],
+      "repair_condition": "claims-check reads runtime materialization and independently recomputes every field and exact marker at every location; any omission, placeholder, substring-only match, or mismatch fails the ledger.",
       "disposition": "OPEN"
     }
   ]

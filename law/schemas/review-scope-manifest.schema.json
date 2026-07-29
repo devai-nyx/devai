@@ -3,7 +3,7 @@
   "$id": "https://devai.nyxk.com.br/schemas/review-scope-manifest.schema.json",
   "title": "Generic exhaustive review-scope manifest",
   "description": "Machine-generated exact-candidate semantic review census. Every changed and unchanged topic is mandatory.",
-  "schema_version": "2.0.0",
+  "schema_version": "3.0.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -23,6 +23,7 @@
     "prior_findings_digest",
     "impact_plan_digest",
     "convergence_evidence_digest",
+    "candidate_identity_digest",
     "current_candidate_manifest_digest",
     "previous_candidate_manifest_digests",
     "topic_count",
@@ -66,7 +67,7 @@
     }
   },
   "properties": {
-    "schemaVersion": { "const": "2.0.0" },
+    "schemaVersion": { "const": "3.0.0" },
     "policy_version": { "type": "string", "minLength": 1 },
     "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
     "cycle": { "enum": [1, 2] },
@@ -82,6 +83,7 @@
     "prior_findings_digest": { "$ref": "#/$defs/sha256" },
     "impact_plan_digest": { "$ref": "#/$defs/sha256" },
     "convergence_evidence_digest": { "$ref": "#/$defs/sha256" },
+    "candidate_identity_digest": { "$ref": "#/$defs/sha256" },
     "current_candidate_manifest_digest": { "$ref": "#/$defs/sha256" },
     "previous_candidate_manifest_digests": {
       "type": "array",
@@ -167,6 +169,21 @@
                 }
               }
             }
+          },
+          {
+            "if": {
+              "properties": {
+                "allowed_dispositions": { "contains": { "const": "REUSED_FRESH_PASS" } }
+              }
+            },
+            "then": {
+              "properties": {
+                "freshness_proof": {
+                  "properties": { "task_keys": { "minItems": 1 } },
+                  "required": ["task_keys"]
+                }
+              }
+            }
           }
         ]
       }
@@ -175,7 +192,7 @@
   },
   "examples": [
     {
-      "schemaVersion": "2.0.0",
+      "schemaVersion": "3.0.0",
       "policy_version": "2.0.0",
       "round": "R-9999",
       "cycle": 1,
@@ -191,6 +208,7 @@
       "prior_findings_digest": "1313131313131313131313131313131313131313131313131313131313131313",
       "impact_plan_digest": "1414141414141414141414141414141414141414141414141414141414141414",
       "convergence_evidence_digest": "1515151515151515151515151515151515151515151515151515151515151515",
+      "candidate_identity_digest": "1616161616161616161616161616161616161616161616161616161616161616",
       "current_candidate_manifest_digest": "8888888888888888888888888888888888888888888888888888888888888888",
       "previous_candidate_manifest_digests": [],
       "topic_count": 1,

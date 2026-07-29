@@ -3,12 +3,14 @@
   "$id": "https://devai.nyxk.com.br/schemas/reviewer-binding.schema.json",
   "title": "Owner reviewer binding marker",
   "description": "Structured Owner-only marker that binds one round to one independent reviewer model with no fallback.",
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schemaVersion",
     "devai_reviewer_binding",
+    "mandate_id",
+    "mandate_status",
     "round",
     "model_selector",
     "role",
@@ -18,8 +20,10 @@
     "fallback"
   ],
   "properties": {
-    "schemaVersion": { "const": "1.0.0" },
+    "schemaVersion": { "const": "2.0.0" },
     "devai_reviewer_binding": { "const": true },
+    "mandate_id": { "type": "string", "pattern": "^OM-[0-9]{3}$" },
+    "mandate_status": { "const": "active" },
     "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
     "model_selector": { "type": "string", "minLength": 1 },
     "role": { "const": "independent-read-only" },
@@ -30,8 +34,10 @@
   },
   "examples": [
     {
-      "schemaVersion": "1.0.0",
+      "schemaVersion": "2.0.0",
       "devai_reviewer_binding": true,
+      "mandate_id": "OM-999",
+      "mandate_status": "active",
       "round": "R-9999",
       "model_selector": "reviewer-model-exact",
       "role": "independent-read-only",

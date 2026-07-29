@@ -111,7 +111,7 @@ the configured PostgreSQL service at release-candidate time.
 
 ## Prospective affected-test convergence for R-0007 through R-0009
 
-OM-014, DII-246, and DII-247 replace R-0006's round-specific close wrapper prospectively with a
+OM-014, OM-015, and DII-246 through DII-248 replace R-0006's round-specific close wrapper prospectively with a
 generic policy and schema-validated per-round profile. No engine default may supply a
 round, mandate, audit path, or reviewer model. The profile binds the round sources,
 explicit affected-test graph, semantic obligations, current claims, runtime paths,
@@ -137,15 +137,32 @@ literal independent read-only model. The engine performs a complete census of al
 tracked active Owner mandates; prose substrings have no authority. Missing, inactive,
 ambiguous, or conflicting bindings stop entry; silent fallback is forbidden.
 
+Only a complete schema-valid structured binding marker enters that census. A marker
+binds its own mandate ID and active status as well as the exact round, model, role,
+census, budget, retry limit, and forbidden fallback. General mandate prose, round-name
+substrings, and partial or malformed marker-shaped objects have no binding authority.
+
 Review scope is generated from registered obligations, exact changes, active controls,
 current claims, prior finding classes, candidate identities, and convergence evidence.
 An authentic exact-candidate manifest is required before scope generation; the
 controller never fabricates one. Materialized current claims are recomputed from their
 resolved producer, complete source manifest, deterministic extraction, canonical value
-digest, and rendered locations.
+digest, and rendered locations. Revalidation also authenticates producer output and
+each rendered location's current content and verification digests; one absent, stale,
+placeholder, or mismatched proof fails the entire ledger.
 Every changed and unchanged topic receives exactly one structured disposition. Fresh
-reuse still requires independent digest and evidence verification. Malformed,
+reuse still requires independent recomputation of the current topic-input manifest,
+referenced-evidence manifest and digest, and every required task-freshness key. Finding
+IDs are globally unique across the canonical JSON or JSONL stream. Malformed,
 truncated, duplicate, omitted, unknown, or identity-mismatched results are invalid.
+
+Scope generation requires the independently authenticated convergence record named by
+the candidate manifest. Both artifacts share an independently recomputed candidate-
+identity digest. The convergence record binds exact base, candidate and tree plus two
+complete ordered passes over every authoritative gate; each pass has clean boundaries,
+exactly-once result, output and task-key digests, and one semantic-population digest,
+while pass 2 has no writes. Missing, partial, stale, malformed, substituted, or
+cross-digest-mismatched convergence has no fallback and invalidates scope atomically.
 
 Cycle 1 exhausts the complete population and continues after blockers. One role-pure
 repair phase closes every reported class and regenerates every invalidated artifact.
@@ -153,6 +170,14 @@ Cycle 2 reviews the complete new population. Cycle-2 failure becomes
 `ESCALATION_REQUIRED`; cycle 3 is refused. One invalid transport attempt may retry the
 unchanged cycle; a second becomes `REVIEW_TRANSPORT_BLOCKED`. Continued work then
 requires a separately named remediation campaign and fresh Owner authority.
+
+Every state, transport, result, candidate, scope, and repair-evidence record is schema-
+validated, self-digested, exact-identity bound, and linked to its predecessor. The
+controller verifies the full transition chain, not only the current state label. A
+second review after repair requires the authenticated first failure and its exact
+candidate, manifest, scope, result and state, a distinct regenerated candidate, and a
+complete-class repair record covering every failed class and affected instance.
+`PASS`, `ESCALATION_REQUIRED`, and `REVIEW_TRANSPORT_BLOCKED` have no outgoing edge.
 
 ## Candidate identity, convergence, and review freeze
 

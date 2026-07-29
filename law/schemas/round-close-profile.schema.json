@@ -3,7 +3,7 @@
   "$id": "https://devai.nyxk.com.br/schemas/round-close-profile.schema.json",
   "title": "Per-round close-control profile",
   "description": "Per-round sources, runtime paths, reviewer binding, review budget, remote-CI behavior, and deployment boundary for the generic controller.",
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -32,7 +32,7 @@
     }
   },
   "properties": {
-    "schemaVersion": { "const": "1.0.0" },
+    "schemaVersion": { "const": "2.0.0" },
     "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
     "policy_version": { "type": "string", "minLength": 1 },
     "decision_id": { "type": "string", "pattern": "^DII-[0-9]{3}$" },
@@ -67,15 +67,27 @@
     "runtime": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["state_root", "candidate_manifest", "review_scope", "review_result"],
+      "required": [
+        "state_root",
+        "candidate_manifest",
+        "convergence_evidence",
+        "review_scope",
+        "review_result",
+        "materialized_claims",
+        "review_state",
+        "review_transport",
+        "review_repair_evidence"
+      ],
       "properties": {
         "state_root": { "$ref": "#/$defs/relativePath" },
         "candidate_manifest": { "$ref": "#/$defs/relativePath" },
+        "convergence_evidence": { "$ref": "#/$defs/relativePath" },
         "review_scope": { "$ref": "#/$defs/relativePath" },
         "review_result": { "$ref": "#/$defs/relativePath" },
         "materialized_claims": { "$ref": "#/$defs/relativePath" },
         "review_state": { "$ref": "#/$defs/relativePath" },
-        "review_transport": { "$ref": "#/$defs/relativePath" }
+        "review_transport": { "$ref": "#/$defs/relativePath" },
+        "review_repair_evidence": { "$ref": "#/$defs/relativePath" }
       }
     },
     "reviewer": {
@@ -133,10 +145,10 @@
   },
   "examples": [
     {
-      "schemaVersion": "1.0.0",
+      "schemaVersion": "2.0.0",
       "round": "R-9999",
-      "policy_version": "3.0.0",
-      "decision_id": "DII-246",
+      "policy_version": "4.0.0",
+      "decision_id": "DII-248",
       "phase": "pre-entry-preparation",
       "sources": {
         "authorization": "work/rounds/R-9999/AUTHORIZATION.md",
@@ -149,8 +161,13 @@
       "runtime": {
         "state_root": ".devai/state/round-runs/R-9999/close",
         "candidate_manifest": ".devai/state/round-runs/R-9999/close/candidate-manifest.json",
+        "convergence_evidence": ".devai/state/round-runs/R-9999/close/convergence-evidence.json",
         "review_scope": ".devai/state/round-runs/R-9999/close/review-scope-manifest.json",
-        "review_result": ".devai/state/round-runs/R-9999/close/review-result.json"
+        "review_result": ".devai/state/round-runs/R-9999/close/review-result.json",
+        "materialized_claims": ".devai/state/round-runs/R-9999/close/current-claims.json",
+        "review_state": ".devai/state/round-runs/R-9999/close/review-state.json",
+        "review_transport": ".devai/state/round-runs/R-9999/close/review-transport.json",
+        "review_repair_evidence": ".devai/state/round-runs/R-9999/close/review-repair-evidence.json"
       },
       "reviewer": {
         "binding": "owner-mandate-required",

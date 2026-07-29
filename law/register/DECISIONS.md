@@ -4470,6 +4470,49 @@ reviewer, authorize deployment, publish a candidate, promote evidence, or mutate
 predecessor. One complete second review of the regenerated machinery candidate is the
 last substantive review authorized by OM-014; a second failure requires escalation.
 
+### DII-248 — Bind remediation review to independently recomputable proof chains
+`type: decision · status: active · authority: Architect · provenance: session-draft pre-R-0007 convergence-control remediation campaign 1; OM-015; DII-246; DII-247; cycle-2 result at 5068e5f5b56dd15cd733c9c5d2663b09b2f43c13`
+
+OM-015 authorizes a separately named remediation campaign for the five cycle-2 defect
+classes recorded as `C2-F001`, `C2-F005`, `C2-F006`, `C2-F007`, and `C2-F008`. The
+authoritative class population is retained beside every earlier class in
+`work/rounds/R-0007/prior-finding-registry.json`; no point example can close a class.
+
+Reviewer authority comes only from a complete schema-valid structured marker whose
+mandate identifier, active status, exact round, literal model, read-only role, complete
+census, budget, retry limit, and forbidden fallback all validate. Mandate prose and
+partial markers do not enter the binding census.
+
+Convergence is an independently authenticated exact-base/exact-candidate record with
+two complete ordered passes over the authoritative population. Each pass proves clean
+boundaries, exact stable head and tree, exactly-once gate results, output and task-key
+digests, and semantic equivalence; pass 2 proves no writes. The candidate manifest must
+carry the convergence record digest, while both artifacts carry the same independently
+recomputed candidate-identity digest. Missing, malformed, partial, stale, substituted,
+or cross-digest-mismatched evidence invalidates scope generation atomically.
+
+Review result finding identifiers are globally unique across the canonical JSON or
+JSONL stream. A reused topic is accepted only after recomputing its current input
+manifest, referenced-evidence manifest and digest, and every required task-freshness key
+from current artifacts; copied topic digests or prose have no standing.
+
+Review state, transport attempts, results, candidate manifests, scope manifests, and
+complete-class repair evidence are schema-validated, self-digested, and linked by exact
+identity digests. The complete declared transition chain is verified. A second
+remediation review requires the authenticated first-run failure, its exact candidate,
+manifest, scope and result, a distinct regenerated candidate, and one repair record
+covering every failed defect class and affected instance. `PASS`,
+`ESCALATION_REQUIRED`, and `REVIEW_TRANSPORT_BLOCKED` are terminal.
+
+Materialized current claims bind and independently recompute resolved producer
+arguments, the complete source manifest, producer output, deterministic extraction,
+canonical extracted-value digest, and each rendered location's current content digest
+and verification digest. Any absent or mismatched proof field fails the complete ledger.
+
+This decision authorizes implementation and at most two new exhaustive machinery-review
+runs under OM-015. It does not start or close R-0007, bind its governed reviewer, alter
+R-0006, deploy, publish packages, promote evidence, or mutate the predecessor.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

@@ -3,7 +3,7 @@
   "$id": "https://devai.nyxk.com.br/schemas/current-claims.schema.json",
   "title": "Structured current-claim ledger",
   "description": "Registry or exact-candidate materialization of volatile claims and the source and value digests that make them current.",
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "ledger_version", "round", "mode", "candidate", "claims"],
@@ -17,7 +17,7 @@
     }
   },
   "properties": {
-    "schemaVersion": { "const": "1.0.0" },
+    "schemaVersion": { "const": "2.0.0" },
     "ledger_version": { "type": "string", "minLength": 1 },
     "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
     "mode": { "enum": ["registry", "materialized"] },
@@ -69,9 +69,49 @@
           "source_digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
           "value_digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
           "resolved_producer": { "$ref": "#/$defs/argv" },
-          "source_manifest": { "type": "array", "items": { "type": "object" } },
+          "source_manifest": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["path", "state", "content_digest"],
+              "properties": {
+                "path": { "type": "string", "minLength": 1 },
+                "state": { "enum": ["present", "absent"] },
+                "content_digest": {
+                  "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+                }
+              }
+            }
+          },
           "producer_output_digest": { "$ref": "#/$defs/sha256" },
           "extracted_value": {},
+          "rendered_proofs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "location",
+                "claim_marker",
+                "content_digest",
+                "extracted_rendered_value_digest",
+                "verification_digest"
+              ],
+              "properties": {
+                "location": { "type": "string", "minLength": 1 },
+                "claim_marker": {
+                  "type": "string",
+                  "pattern": "^DEVAI_CLAIM:[a-z0-9][a-z0-9._-]*="
+                },
+                "content_digest": { "$ref": "#/$defs/sha256" },
+                "extracted_rendered_value_digest": { "$ref": "#/$defs/sha256" },
+                "verification_digest": { "$ref": "#/$defs/sha256" }
+              }
+            }
+          },
           "rendered_verification_digest": { "$ref": "#/$defs/sha256" }
         }
       }
@@ -98,6 +138,7 @@
                 "source_manifest",
                 "producer_output_digest",
                 "extracted_value",
+                "rendered_proofs",
                 "rendered_verification_digest"
               ]
             }
@@ -108,7 +149,7 @@
   ],
   "examples": [
     {
-      "schemaVersion": "1.0.0",
+      "schemaVersion": "2.0.0",
       "ledger_version": "example-v1",
       "round": "R-9999",
       "mode": "registry",

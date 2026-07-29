@@ -3,15 +3,21 @@
   "$id": "https://devai.nyxk.com.br/schemas/candidate-manifest.schema.json",
   "title": "Generic round-close candidate manifest",
   "description": "Exact base, candidate, tree, and evidence identities frozen before semantic review.",
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "type": "object",
-  "additionalProperties": true,
+  "additionalProperties": false,
   "required": [
     "schemaVersion",
     "round",
     "base_sha",
     "candidate_sha",
     "tree_sha",
+    "profile_digest",
+    "policy_digest",
+    "graph_digest",
+    "candidate_identity_digest",
+    "convergence_digest",
+    "claims_digest",
     "manifest_digest_sha256"
   ],
   "$defs": {
@@ -19,7 +25,7 @@
     "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
   },
   "properties": {
-    "schemaVersion": { "const": "1.0.0" },
+    "schemaVersion": { "const": "2.0.0" },
     "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
     "base_sha": { "$ref": "#/$defs/sha1" },
     "candidate_sha": { "$ref": "#/$defs/sha1" },
@@ -27,6 +33,7 @@
     "profile_digest": { "$ref": "#/$defs/sha256" },
     "policy_digest": { "$ref": "#/$defs/sha256" },
     "graph_digest": { "$ref": "#/$defs/sha256" },
+    "candidate_identity_digest": { "$ref": "#/$defs/sha256" },
     "convergence_digest": { "$ref": "#/$defs/sha256" },
     "claims_digest": { "$ref": "#/$defs/sha256" },
     "rehearsal_digest": { "$ref": "#/$defs/sha256" },
@@ -38,12 +45,18 @@
   },
   "examples": [
     {
-      "schemaVersion": "1.0.0",
+      "schemaVersion": "2.0.0",
       "round": "R-9999",
       "base_sha": "0000000000000000000000000000000000000000",
       "candidate_sha": "1111111111111111111111111111111111111111",
       "tree_sha": "2222222222222222222222222222222222222222",
-      "manifest_digest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+      "profile_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "policy_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+      "graph_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+      "candidate_identity_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+      "convergence_digest": "7777777777777777777777777777777777777777777777777777777777777777",
+      "claims_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+      "manifest_digest_sha256": "9999999999999999999999999999999999999999999999999999999999999999"
     }
   ]
 }

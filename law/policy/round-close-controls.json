@@ -1,8 +1,8 @@
 {
-  "schemaVersion": "3.0.0",
+  "schemaVersion": "4.0.0",
   "policy_id": "generic-round-close-controls",
-  "policy_version": "3.0.0",
-  "decision_id": "DII-246",
+  "policy_version": "4.0.0",
+  "decision_id": "DII-248",
   "schemas": {
     "round_profile": "law/schemas/round-close-profile.schema.json",
     "affected_test_graph": "law/schemas/affected-test-graph.schema.json",
@@ -10,9 +10,12 @@
     "semantic_obligations": "law/schemas/review-obligations.schema.json",
     "current_claims": "law/schemas/current-claims.schema.json",
     "candidate_manifest": "law/schemas/candidate-manifest.schema.json",
+    "round_convergence": "law/schemas/round-convergence.schema.json",
     "reviewer_binding": "law/schemas/reviewer-binding.schema.json",
     "prior_finding_registry": "law/schemas/prior-finding-registry.schema.json",
     "review_state": "law/schemas/review-state.schema.json",
+    "review_transport": "law/schemas/review-transport.schema.json",
+    "review_repair_evidence": "law/schemas/review-repair-evidence.schema.json",
     "review_scope": "law/schemas/review-scope-manifest.schema.json",
     "review_result": "law/schemas/review-result.schema.json"
   },
@@ -136,9 +139,10 @@
     "partial_coverage_merge": "forbidden"
   },
   "review_scope": {
-    "policy_version": "2.0.0",
+    "policy_version": "3.0.0",
     "obligations_from_round_profile": true,
     "claims_from_round_profile": true,
+    "claims_digest_source": "profile-runtime-materialized-claims",
     "exact_range": "declared-base-to-candidate",
     "topic_sources": [
       "semantic-obligation",
@@ -154,28 +158,48 @@
     "exactly_once": true,
     "unchanged_topic_omission": "invalid",
     "unchanged_reuse_requires_independent_digest_and_evidence_recheck": true,
+    "reused_topic_requires_current_task_keys": true,
+    "reused_topic_recomputation": [
+      "current-input-manifest",
+      "referenced-evidence-manifest",
+      "referenced-evidence-digest",
+      "every-required-current-task-key"
+    ],
     "changed_topic_reuse_forbidden": true,
     "previous_finding_classes_mandatory": true,
     "structured_result_required": true,
+    "finding_ids_globally_unique_across_json_or_jsonl": true,
     "terminal_record_required": true,
     "truncated_or_malformed_result": "invalid-never-pass"
   },
   "claims": {
-    "policy_version": "1.0.0",
+    "policy_version": "2.0.0",
     "registry_from_round_profile": true,
+    "registry_is_declaration_only": true,
+    "validation_source": "profile-runtime-materialized-claims",
     "volatile_numeric_prose": "generated-or-checked-only",
     "candidate_or_source_change": "invalidate",
     "required_bindings": [
       "producer-command",
       "deterministic-extractor",
       "candidate-sha",
+      "complete-source-manifest",
       "source-digest",
+      "producer-output-digest",
+      "extracted-value",
       "value-digest",
-      "rendered-locations"
-    ]
+      "rendered-location-content-digests",
+      "per-claim-structured-rendered-markers",
+      "per-location-verification-digests"
+    ],
+    "substring_match_forbidden": true,
+    "rendered_marker_must_equal_claim_id": true,
+    "rendered_proofs_exactly_match_declared_locations": true,
+    "source_manifest_exactly_matches_resolved_sources": true,
+    "complete_ledger_atomic": true
   },
   "review_state_machine": {
-    "policy_version": "1.0.0",
+    "policy_version": "2.0.0",
     "states": [
       "DRAFT",
       "PREFLIGHT_GREEN",
@@ -217,11 +241,43 @@
       "review-scope-digest",
       "reviewer-binding-digest"
     ],
-    "transport_identity": ["round", "cycle", "candidate", "manifest-digest", "reviewer"]
+    "authenticated_chain": [
+      "state-self-digest",
+      "prior-state-digest",
+      "candidate-manifest-digest",
+      "review-scope-digest",
+      "review-result-digest",
+      "transport-digest",
+      "repair-evidence-digest"
+    ],
+    "cycle_two_requires": [
+      "authenticated-cycle-one-failure",
+      "exact-prior-candidate-and-manifests",
+      "distinct-regenerated-candidate",
+      "complete-class-repair-evidence"
+    ],
+    "transition_guards": {
+      "NEW_CANDIDATE_FROZEN": "requires-authenticated-REPAIR_REQUIRED-in-history",
+      "CYCLE_2_ACTIVE": "requires-authenticated-complete-class-repair-and-distinct-candidate"
+    },
+    "terminal_states": ["PASS", "ESCALATION_REQUIRED", "REVIEW_TRANSPORT_BLOCKED"],
+    "transport_identity": ["round", "cycle", "candidate", "manifest-digest", "reviewer"],
+    "transport_guards": {
+      "attempt_one_previous_digest": "null",
+      "attempt_two_previous_digest": "authenticated-attempt-one",
+      "identity_change_between_attempts": "forbidden"
+    },
+    "repair_evidence_guards": {
+      "failed_classes": "exactly-equal-prior-result-failed-class-population",
+      "repaired_instances": "exactly-equal-each-class-affected-instances",
+      "new_candidate": "distinct-and-descends-from-prior-candidate"
+    }
   },
   "reviewer_binding": {
     "source": "per-round-profile-plus-complete-structured-active-owner-mandate-census",
     "schema_marker": "devai_reviewer_binding",
+    "census_participation": "complete-schema-valid-marker-only",
+    "marker_mandate_id_and_status_must_match_container": true,
     "census_glob": "product/owner-mandates/OM-*.md",
     "preparation_allows_unbound": true,
     "preparation_diagnostic": "ENTRY_BLOCKED_REVIEWER_UNBOUND",
@@ -231,6 +287,7 @@
     "substitution_invalidates_prior_pass": true
   },
   "convergence": {
+    "schema": "law/schemas/round-convergence.schema.json",
     "passes": 2,
     "second_pass": "no-write-clean",
     "authoritative_population": "all-policy-command-ids-exactly-once",
@@ -242,6 +299,19 @@
       "semantic_equivalence": "required"
     },
     "remote_mode": "execute-complete-authoritative-population",
+    "candidate_cross_binding": {
+      "candidate_requires_convergence_digest": true,
+      "shared_candidate_identity_digest": true,
+      "fallback_evidence": "forbidden"
+    },
+    "evidence_validation": [
+      "self-digest",
+      "exact-base-candidate-tree-policy-profile",
+      "authoritative-gate-ids-exactly-once-per-pass",
+      "stable-head-and-clean-boundaries",
+      "pass-two-zero-writes",
+      "equal-semantic-population-digests"
+    ],
     "commands": [
       { "id": "formatting", "argv": ["pnpm", "exec", "prettier", "--check", "."] },
       { "id": "preparation", "argv": ["pnpm", "run", "devai:prepare"] },
@@ -273,6 +343,7 @@
     "range_check": ["node", "scripts/check-governed-sequencing.mjs"]
   },
   "semantic_assertions": {
+    "authentication": "sha256-of-canonical-json-with-own-self-digest-field-omitted",
     "population_sources": [
       "law/**/*.json",
       "product/**/*.json",
