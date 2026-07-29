@@ -1,6 +1,7 @@
 # R-0006 ORCHESTRATOR — contracts and coverage depth
 
-Read OM-002, OM-003, OM-010, the shared execution contract, authorization/plan, R-0005
+Read OM-002, OM-003, OM-010, OM-011, OM-012, OM-013, the shared execution contract,
+authorization/plan, R-0005
 close, the R-0006 preflight alignment audit, Constitution operational-value findings,
 thresholds policy, coverage config, current coverage JSON, all action
 manifests/emitters, error and output schemas, and BL-035 review sources.
@@ -29,10 +30,40 @@ rehearse source ancestry plus a closure-only PC branch in isolation. Freeze the 
 caused deterministic Architect projection regeneration. Mechanically verify that
 envelope, reconverge `published_head`, and invalidate PASS on any other mutation.
 
+OM-011 interrupts B9 before review iteration 5. Preserve the already role-pure
+Inspector coverage-provider correction. Before creating any new review candidate or
+invoking an independent reviewer, commit and validate OM-011's Architect policy/schema,
+Inspector-red, Engineer, Inspector-green, and Auditor batches.
+
+Use content-addressed task freshness, never timestamps. A task key binds exact task
+identity and invocation, the complete known input graph, dependency keys, required
+output digests, package/lock/configuration state, toolchain versions, allowlisted
+environment fingerprint, and policy version. Reuse only an identical prior PASS whose
+dependencies and outputs remain fresh. Dirty, untracked, deleted, renamed, stale,
+failed, malformed, tampered, unknown, or dynamically ambiguous state executes the
+affected broader population. Classify every task as `EXECUTED_PASS`, `SKIPPED_FRESH`,
+`EXECUTED_FAIL`, or `BLOCKED` and explain every skip. Remote CI trusts no local cache.
+
+Treat coverage as an indivisible whole: any production, test, provider,
+coverage-configuration, threshold, or denominator change reruns complete coverage; do
+not partially merge coverage. Generate the review-scope manifest mechanically from the
+exact base-to-candidate population, controlling law and policy, every R-0006
+requirement, every finding class from B9 reviews 1–4, and current/previous candidate
+manifests. Require every topic exactly once with one of `RECHECKED_PASS`,
+`RECHECKED_FAIL`, `REUSED_FRESH_PASS`, or `BLOCKED`; unchanged topics still require
+independent digest recomputation, freshness inspection, and a current invariant reason.
+
+Every review cycle is exhaustive discovery and continues after blockers. On FAIL,
+preserve the literal record, repair every complete same-class population role-purely,
+regenerate all invalidated candidate evidence, and perform another complete review.
+OM-012 suspends the numeric review quota for R-0006 only; it never manufactures PASS or
+permits reuse across changed inputs.
+
 Exercise DB-gated integration tests with PostgreSQL. Inspect per-package/file coverage
-for suspicious zeroes and suspiciously excluded code. Ask Claude Opus 5 through literal
-`claude-opus-5` to challenge test quality, denominator integrity, output totality, and
-policy semantics; no fallback to another model is permitted.
+for suspicious zeroes and suspiciously excluded code. Under OM-013, ask an independent
+Codex agent through explicit `gpt-5.6-sol` to challenge test quality, denominator
+integrity, output totality, and policy semantics. The substitution is R-0006-only and
+does not weaken exhaustive topic accounting or the PASS threshold.
 
 Do not close until all four exact floors pass on the normal command and remote stage 3
 passes on the exact SHA.
@@ -41,4 +72,4 @@ Final report:
 
 `BASELINE DENOMINATOR / LAW EXTRACTIONS / MUTATION-STRENGTH DECISION / AGGREGATION
 DECISION / OUTPUT CONTRACT CENSUS / TEST DEPTH / COVERAGE 4-METRIC RESULT / EXCLUSIONS /
-BATCH COMMITS / T1–T6 / REMOTE STAGE 3 / CLOSURE / CLAUDE REVIEW / NONCLAIMS`.
+BATCH COMMITS / T1–T6 / REMOTE STAGE 3 / CLOSURE / CODEX REVIEW / NONCLAIMS`.

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0006-SUBPROCESS-LOCATION-AGGREGATION-RED-EVIDENCE",
+  "round": "R-0006",
+  "authority": "Auditor",
+  "date": "2026-07-27",
+  "supersedes_semantics": "DII-226 subprocess-map duplicate rejection only",
+  "implementation": {
+    "commit": "912092f0d3d042fd932b077aa3bd06089de11bb2",
+    "sha256": "b844ec5f08cc0f5726622717b34ccfbb273d2c7a69d035b375b40a77baa5f18d"
+  },
+  "observations": [
+    {
+      "command": "pnpm run test:coverage:t1-t3",
+      "exit_code": 1,
+      "error": "duplicate exact branch location 404:9:406:3 in subprocess coverage map",
+      "finding": "The canonical current map had zero collisions in the fourth review, but source mapping of legitimate subprocess observations can yield more than one observation at the same canonical location. Rejecting that subprocess population makes the unchanged authoritative coverage command impossible."
+    },
+    {
+      "commit": "9fe038682f35674f8cfe26eda6c3e271eb2ee21c",
+      "command": "pnpm vitest run tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+      "exit_code": 1,
+      "files_collected": 1,
+      "tests_passed": 7,
+      "tests_failed": 1,
+      "test_sha256": "6d18f463b0039728be4d992819c9b826621c44a284d1e9a6981b0179ec94996a",
+      "failure_summary": "The parent-map uniqueness, incomplete-location, exact-counter, repeat-merge, degenerate-branch, retention, and reporter cases are green. The subprocess duplicate-location case fails because the implementation throws rather than summing 1 + 2 into the one matching canonical parent location."
+    },
+    {
+      "commit": "9fe038682f35674f8cfe26eda6c3e271eb2ee21c",
+      "command": "pnpm vitest run",
+      "exit_code": 1,
+      "files_passed": 154,
+      "files_failed": 1,
+      "tests_passed": 1457,
+      "tests_failed": 1,
+      "tests_skipped": 8,
+      "failure_scope": "Only the newly declared duplicate subprocess observation aggregation adversary fails."
+    }
+  ],
+  "repair_boundary": "Preserve fail-closed uniqueness for complete canonical parent identities. Within each subprocess coverage kind, sum all complete-location observations before applying that aggregate exactly once to the matching canonical parent counter. Continue skipping incomplete locations and make no threshold, exclusion, denominator, source, generated-label, skip, or assertion-mechanism change."
+}

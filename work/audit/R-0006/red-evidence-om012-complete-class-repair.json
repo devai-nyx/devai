@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0006-OM-012-COMPLETE-CLASS-REPAIR-RED-EVIDENCE",
+  "round": "R-0006",
+  "date": "2026-07-28",
+  "authority": "Auditor",
+  "mandate": "OM-012",
+  "inspector_red_commit": "ab471b48066853085f4978536aade0a7605142c1",
+  "focused_red": {
+    "command": "pnpm vitest run tests/contract/r0006-coverage-integrity.red.contract.test.ts tests/contract/r0006-smart-convergence.red.contract.test.ts",
+    "exit_code": 1,
+    "output_sha256": "84e01f1395787f922c6bec830d7d906a596d0f13b458b84226bfc1efd8859e25",
+    "test_files_failed": 2,
+    "tests_failed": 4,
+    "tests_passed": 28
+  },
+  "full_floor_red": {
+    "command": "pnpm vitest run",
+    "exit_code": 1,
+    "output_sha256": "e909eb09b036e49d0bdb89184c7a2a67ff55cd58eb6e42cc5cbebc9ef6d0cfca",
+    "test_files_failed": 2,
+    "test_files_passed": 154,
+    "tests_failed": 4,
+    "tests_passed": 1478,
+    "tests_skipped": 8,
+    "failure_scope": "Only the four newly declared OM-012 complete-class adversaries fail."
+  },
+  "tests": [
+    {
+      "path": "tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+      "sha256": "a729b6e5d8e829f6c903f5c831f507c4c8425d3e5dca74fbff610f674ed46911"
+    },
+    {
+      "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
+      "sha256": "9affdb4c8ca214a06d39a38973ad0a2455f28b1a4a96835771d0ab31a1415e14"
+    }
+  ],
+  "observations": [
+    {
+      "commit": "ab471b48066853085f4978536aade0a7605142c1",
+      "command": "pnpm vitest run tests/contract/r0006-coverage-integrity.red.contract.test.ts tests/contract/r0006-smart-convergence.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+        "tests/contract/r0006-smart-convergence.red.contract.test.ts"
+      ],
+      "exercised_implementation_paths": [
+        ".devai/config/round-close-controls.json",
+        "scripts/run-round-close-controls.mjs"
+      ]
+    }
+  ],
+  "observed_failures": [
+    {
+      "class": "whole-parent canonical location uniqueness",
+      "finding": "A duplicate complete parent statement location in a file absent from subprocess coverage is not inspected."
+    },
+    {
+      "class": "stable final review destination and OM-012 continuation",
+      "finding": "Canonical policy still points at independent-review.md and retains the superseded two-cycle behavior."
+    },
+    {
+      "class": "durable current-claim enforcement",
+      "finding": "policy-check accepts a changed trace while the governed Auditor claim block remains stale."
+    },
+    {
+      "class": "review-until-pass execution",
+      "finding": "review-check rejects cycle 3 with REVIEW_CYCLE_BUDGET_EXHAUSTED despite OM-012."
+    }
+  ],
+  "prospective_implementation_paths": [
+    ".devai/config/round-close-controls.json",
+    "scripts/run-round-close-controls.mjs",
+    "tests/config/subprocess-v8-coverage-provider.ts"
+  ],
+  "architect_sources": [
+    "law/policy/round-close-controls.json",
+    "law/register/DECISIONS.md",
+    "work/rounds/R-0006/plan.md",
+    "work/rounds/R-0006/prompts/00-orchestrator.md",
+    "work/rounds/R-0006/source-close.md"
+  ],
+  "auditor_sources": [
+    "work/audit/R-0006/as-built.md",
+    "work/audit/R-0006/om011-convergence-control-audit.md"
+  ],
+  "repair_boundary": "Repair the complete reported population without changing coverage thresholds, exclusions, denominator, review-topic completeness, exact-candidate identity, review freeze, remote-cache distrust, role purity, release boundaries, or predecessor immutability.",
+  "standing": "historical red evidence only; no candidate, review, publication, or closure standing"
+}

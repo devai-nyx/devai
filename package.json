@@ -11,6 +11,9 @@
     "node": ">=24"
   },
   "scripts": {
+    "round-close:smart-converge": "node scripts/run-round-close-controls.mjs smart-converge",
+    "round-close:review-scope": "node scripts/run-round-close-controls.mjs review-scope",
+    "round-close:review-check": "node scripts/run-round-close-controls.mjs review-check",
     "devai:prepare": "node scripts/generate-action-registry.mjs && pnpm --filter @devai-nyx/schemas build && pnpm --filter @devai-nyx/cli build",
     "action-registry:check": "node scripts/generate-action-registry.mjs --check",
     "build": "pnpm devai:prepare && node packages/cli/dist/bin.js sense build --repo-root . --no-emit-reading",
@@ -38,6 +41,7 @@
     "ci:workflows": "node scripts/check-workflows.mjs"
   },
   "devDependencies": {
+    "@bcoe/v8-coverage": "1.0.2",
     "@eslint/js": "^9.0.0",
     "@types/node": "^26.1.1",
     "@vitest/coverage-v8": "4.1.10",

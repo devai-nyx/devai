@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0006",
+  "authority": "Auditor",
+  "status": "expected-red",
+  "owner_mandate": "OM-012",
+  "review_failure": "work/audit/R-0006/independent-opus-b9-review-7-failure.md",
+  "inspector_commit": "c4c1758ccf40a7269721b7cacde1a2fafa6cdbec",
+  "command": ["pnpm", "vitest", "run"],
+  "result": {
+    "exit_code": 1,
+    "test_files_passed": 155,
+    "test_files_failed": 1,
+    "tests_passed": 1482,
+    "tests_failed": 1,
+    "tests_skipped": 8,
+    "failed_test": "R-0006 OM-011 exhaustive review-scope red contracts > governs the active Architect source-close handoff against the complete volatile-claim population",
+    "failure": "The current-claim policy contains no work/rounds/R-0006/source-close.md document entry."
+  },
+  "unexpected_failure_reproduction": {
+    "observed": "sense type check initially failed because the new Inspector test did not explicitly narrow an optional policy lookup",
+    "correction": "The Inspector test added an explicit undefined guard without weakening the missing-policy assertion.",
+    "verification": [
+      "pnpm exec tsc --noEmit",
+      "pnpm vitest run packages/cli/tests/unit/public-read-actions.test.ts -t sense,type,check executes sense type check with exit 0 in-process"
+    ],
+    "status": "both passed before the authoritative full red rerun"
+  },
+  "observations": [
+    {
+      "commit": "c4c1758ccf40a7269721b7cacde1a2fafa6cdbec",
+      "command": "pnpm vitest run",
+      "exit_code": 1,
+      "tests": ["tests/contract/r0006-smart-convergence.red.contract.test.ts"],
+      "exercised_implementation_paths": [".devai/config/round-close-controls.json"]
+    }
+  ],
+  "prospective_implementation_paths": [
+    "law/policy/round-close-controls.json",
+    ".devai/config/round-close-controls.json",
+    "work/rounds/R-0006/source-close.md"
+  ],
+  "acceptance": [
+    "The canonical and materialized policies enumerate the active source-close handoff with trace and prior-review claims.",
+    "The source-close handoff carries an exact machine-derived current-claims block and no unbound volatile suite, trace, or review-census numerics.",
+    "A stale source-close block fails policy-check with AUDIT_CURRENT_CLAIM_DRIFT.",
+    "The focused contract and complete ordinary floor pass after the role-pure repair."
+  ],
+  "nonclaims": [
+    "No implementation is present in this evidence commit.",
+    "No review PASS, publication, merge, closure, release, evidence promotion, predecessor mutation, or R-0007 work is claimed."
+  ]
+}

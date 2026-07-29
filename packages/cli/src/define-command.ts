@@ -8,6 +8,8 @@ import {
   type ActionTier,
   type ActionVisibility,
   type AdoptionProfile,
+  type ActionOutputContract,
+  type ActionErrorContract,
 } from './command-manifest.js';
 
 /**
@@ -80,6 +82,8 @@ export interface RegistryEntry extends CommandSpec {
   readonly disposition: 'keep' | 'fold' | 'tombstone';
   readonly migration: string | null;
   readonly authority_contract: AuthorityActionContract;
+  readonly output_contract: ActionOutputContract;
+  readonly error_contract: ActionErrorContract;
   runtime_args?: string;
   runtime_options?: readonly { readonly flags: string; readonly description: string }[];
   runtime_supports_human?: boolean;
@@ -139,6 +143,8 @@ export function getActionsList(opts: { authority?: ActionAuthority } = {}): read
       runtime_options: _options,
       runtime_supports_human: _human,
       authority_contract: _authorityContract,
+      output_contract: _outputContract,
+      error_contract: _errorContract,
       disposition: _disposition,
       migration: _migration,
       ...spec
@@ -157,12 +163,8 @@ export function getFullRegistry(): readonly RegistryEntry[] {
 
 /** Mechanical W05.e surface guard over the post-collapse public catalog. */
 export function validateActionSurface(entries: readonly RegistryEntry[]): void {
-  const ACTION_FLOOR = 147;
-  const ACTION_CEILING = 147;
-  if (entries.length < ACTION_FLOOR || entries.length > ACTION_CEILING) {
-    throw new Error(
-      `ACTION_COUNT_GUARD: expected ${String(ACTION_FLOOR)}..${String(ACTION_CEILING)}, received ${String(entries.length)}`,
-    );
+  if (entries.length === 0) {
+    throw new Error('ACTION_COUNT_GUARD: expected a nonempty canonical population');
   }
   const paths = entries.map((entry) => entry.path.join(' '));
   if (new Set(paths).size !== paths.length) {

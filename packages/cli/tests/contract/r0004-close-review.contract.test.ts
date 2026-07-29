@@ -43,14 +43,25 @@ describe('R-0004 first Opus close-review contracts', () => {
       [],
     );
     const trace = json<{
-      test_corpus: { path: string; suite: string }[];
+      test_corpus: Array<{
+        path: string;
+        suite: string;
+        invariant_ids: string[];
+        lifecycle: string;
+        assertion_count: number;
+        assertion_digest_sha256: string;
+      }>;
     }>('law/trace.json');
-    expect(trace.test_corpus).toContainEqual({
-      path: 'tests/contract/r0004-governed-surface.red.contract.test.ts',
-      suite: 'contract',
-      invariant_ids: ['INV-DEVAI-017', 'INV-DEVAI-020'],
-      lifecycle: 'supported',
-    });
+    expect(trace.test_corpus).toContainEqual(
+      expect.objectContaining({
+        path: 'tests/contract/r0004-governed-surface.red.contract.test.ts',
+        suite: 'contract',
+        invariant_ids: expect.arrayContaining(['INV-DEVAI-017', 'INV-DEVAI-020']),
+        lifecycle: 'supported',
+        assertion_count: expect.any(Number),
+        assertion_digest_sha256: expect.stringMatching(/^[a-f0-9]{64}$/u),
+      }),
+    );
   });
 
   it('registers policy check schemas through the canonical action path', () => {

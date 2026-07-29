@@ -95,6 +95,8 @@
           "authority",
           "description",
           "promotion_criteria",
+          "output_contract",
+          "error_contract",
           "authority_contract_version",
           "authority_contract"
         ],
@@ -174,6 +176,12 @@
               "minLength": 1
             }
           },
+          "output_contract": {
+            "$ref": "#/$defs/outputContract"
+          },
+          "error_contract": {
+            "$ref": "#/$defs/errorContract"
+          },
           "authority_contract_version": {
             "const": "1.0.0"
           },
@@ -198,6 +206,20 @@
                 },
                 "lifecycle": {
                   "enum": ["supported", "experimental"]
+                },
+                "output_contract": {
+                  "properties": {
+                    "mode": {
+                      "const": "action-envelope"
+                    }
+                  }
+                },
+                "error_contract": {
+                  "properties": {
+                    "mode": {
+                      "const": "structured-error-envelope"
+                    }
+                  }
                 }
               }
             },
@@ -209,6 +231,20 @@
                 },
                 "lifecycle": {
                   "const": "retired"
+                },
+                "output_contract": {
+                  "properties": {
+                    "mode": {
+                      "const": "router-only"
+                    }
+                  }
+                },
+                "error_contract": {
+                  "properties": {
+                    "mode": {
+                      "const": "router-only"
+                    }
+                  }
                 }
               }
             }
@@ -218,6 +254,127 @@
     }
   },
   "$defs": {
+    "outputContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "mode", "envelope_schema", "success_channel", "payload_schema"],
+      "properties": {
+        "schemaVersion": {
+          "const": "1.0.0"
+        },
+        "mode": {
+          "enum": ["action-envelope", "router-only"]
+        },
+        "envelope_schema": {
+          "type": ["string", "null"],
+          "enum": ["law/schemas/action-result.schema.json", null]
+        },
+        "success_channel": {
+          "enum": ["stdout", "none"]
+        },
+        "payload_schema": {
+          "type": ["string", "null"],
+          "pattern": "^law/schemas/[a-z0-9-]+\\.schema\\.json$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "action-envelope"
+              }
+            },
+            "required": ["mode"]
+          },
+          "then": {
+            "properties": {
+              "envelope_schema": {
+                "const": "law/schemas/action-result.schema.json"
+              },
+              "success_channel": {
+                "const": "stdout"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "envelope_schema": {
+                "type": "null"
+              },
+              "success_channel": {
+                "const": "none"
+              },
+              "payload_schema": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "errorContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "mode", "envelope_schema", "error_schema", "error_channel"],
+      "properties": {
+        "schemaVersion": {
+          "const": "1.0.0"
+        },
+        "mode": {
+          "enum": ["structured-error-envelope", "router-only"]
+        },
+        "envelope_schema": {
+          "type": ["string", "null"],
+          "enum": ["law/schemas/action-result.schema.json", null]
+        },
+        "error_schema": {
+          "type": ["string", "null"],
+          "enum": ["law/schemas/error.schema.json", null]
+        },
+        "error_channel": {
+          "enum": ["stderr", "none"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "structured-error-envelope"
+              }
+            },
+            "required": ["mode"]
+          },
+          "then": {
+            "properties": {
+              "envelope_schema": {
+                "const": "law/schemas/action-result.schema.json"
+              },
+              "error_schema": {
+                "const": "law/schemas/error.schema.json"
+              },
+              "error_channel": {
+                "const": "stderr"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "envelope_schema": {
+                "type": "null"
+              },
+              "error_schema": {
+                "type": "null"
+              },
+              "error_channel": {
+                "const": "none"
+              }
+            }
+          }
+        }
+      ]
+    },
     "authorityContract": {
       "type": "object",
       "additionalProperties": false,

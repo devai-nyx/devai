@@ -64,6 +64,12 @@ function ensureCommon(): void {
   }
 }
 
+function ensureSchemaReferences(name: SchemaName): void {
+  if (name === 'action-result.schema.json' && ajv.getSchema('error.schema.json') === undefined) {
+    ajv.addSchema(loadSchema('error.schema.json'), 'error.schema.json');
+  }
+}
+
 const compiled = new Map<SchemaName, ReturnType<typeof ajv.compile>>();
 export function getValidator(name: SchemaName) {
   let v = compiled.get(name);
@@ -71,6 +77,7 @@ export function getValidator(name: SchemaName) {
     if (!(ROSTER as readonly string[]).includes(name))
       throw new Error(`unregistered schema: ${name}`);
     ensureCommon();
+    ensureSchemaReferences(name);
     v =
       name === 'common-defs.schema.json' || name === 'record-meta.schema.json'
         ? (ajv.getSchema(name) ?? ajv.compile(loadSchema(name)))

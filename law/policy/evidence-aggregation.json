@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "evidence-aggregation",
+  "status": "active",
+  "authority": "Architect",
+  "decision": "DII-214",
+  "population": {
+    "derived_from_policy": true,
+    "must_be_nonempty_for_readiness": true,
+    "identity": ["subject", "kind", "scope", "binding"],
+    "caller_selected_subset_forbidden": true
+  },
+  "precedence": [
+    {
+      "condition": "any-current-readiness-bearing-fail",
+      "aggregate": "FAIL"
+    },
+    {
+      "condition": "no-current-fail-and-any-required-unknown",
+      "aggregate": "UNKNOWN"
+    },
+    {
+      "condition": "every-required-member-current-independent-pass",
+      "aggregate": "PASS"
+    }
+  ],
+  "unknown_inputs": [
+    "absent",
+    "stale",
+    "unknown",
+    "unavailable",
+    "error",
+    "conflicting-current-observations",
+    "judge-only",
+    "independently-uncheckable"
+  ],
+  "supersession": {
+    "same_exact_identity_required": true,
+    "newer_valid_observation_required": true,
+    "omission_never_supersedes": true,
+    "filtering_never_supersedes": true
+  },
+  "not_applicable": {
+    "policy_declared_reason_required": true,
+    "remains_visible": true,
+    "excluded_from_denominator": true,
+    "may_not_empty_readiness_population": true
+  },
+  "non_readiness_evidence": ["advisory", "experimental", "judge-only", "independently-uncheckable"],
+  "error_semantics": {
+    "maps_to": "UNKNOWN",
+    "never_maps_to": ["PASS", "FAIL"]
+  },
+  "standing": {
+    "evidence_reuse_enabled": false,
+    "promotion_enabled": false,
+    "predecessor_standing_imported": false
+  }
+}

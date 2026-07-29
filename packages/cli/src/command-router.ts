@@ -1,7 +1,6 @@
 import type { RegistryEntry } from './define-command.js';
 import {
   ARCHIVED_SENSOR_KINDS,
-  SENSOR_ACTION_KINDS,
   SENSOR_READING_KINDS,
   isArchivedSensorKind,
   isSensorKind,
@@ -233,22 +232,27 @@ export type RouteResult =
   | { readonly kind: 'dispatch'; readonly argv: string[] }
   | { readonly kind: 'output'; readonly text: string; readonly exitCode: number };
 
-function singleSensorRunIsReadOnly(args: readonly string[]): boolean {
-  if (args.includes('--write') || args.includes('--allow-publish')) return false;
+function singleSensorKind(args: readonly string[]): string | undefined {
+  if (args.includes('--write') || args.includes('--allow-publish')) return undefined;
   const senseIndex = args.findIndex(
     (value, index) => value === 'sense' && args[index + 1] === 'run',
   );
-  if (senseIndex < 0) return false;
+  if (senseIndex < 0) return undefined;
   const kind = args[senseIndex + 2];
-  if (kind === undefined || kind.startsWith('-') || !isSensorKind(kind)) return false;
-  const internal = SENSOR_INTERNAL_COMMAND[kind];
-  if (internal === undefined) return false;
-  const child = SENSOR_ACTION_KINDS.find(
-    (entry) =>
-      entry.migration === `sense run ${kind}` &&
-      entry.internal_binding.replaceAll(' ', '-') === internal[0],
-  );
-  return child?.effect === 'read';
+  return kind === undefined || kind.startsWith('-') || !isSensorKind(kind) ? undefined : kind;
+}
+
+function singleSensorRunIsReadOnly(args: readonly string[]): boolean {
+  return singleSensorKind(args) !== undefined;
+}
+
+export function invocationUsesSensorInternal(
+  internalName: string,
+  args: readonly string[],
+): boolean {
+  const kind = singleSensorKind(args);
+  const internal = kind === undefined ? undefined : SENSOR_INTERNAL_COMMAND[kind];
+  return internal !== undefined && internal[0] === internalName;
 }
 
 export function invocationIsNonMutating(internalName: string, args: readonly string[]): boolean {
@@ -300,7 +304,13 @@ export function routeArgv(
         });
         return { kind: 'output', text: renderCliError(error, wantsJson(args)), exitCode: 7 };
       }
-      const remaining = args.slice(3).filter((arg) => arg !== '--json');
+      let remaining = args.slice(3).filter((arg) => arg !== '--json');
+      const formatIndex = remaining.lastIndexOf('--format');
+      if (formatIndex >= 0 && remaining[formatIndex + 1] === 'json') {
+        remaining = remaining.filter(
+          (_, index) => index !== formatIndex && index !== formatIndex + 1,
+        );
+      }
       return {
         kind: 'dispatch',
         argv: [...argv.slice(0, 2), ...internal, ...remaining],
@@ -367,6 +377,7 @@ export function routeArgv(
     .sort((a, b) => b.path.length - a.path.length)[0];
   if (exact !== undefined) {
     let remaining = args.slice(exact.path.length);
+    remaining = remaining.filter((arg) => arg !== '--json');
     const formatIndex = remaining.lastIndexOf('--format');
     if (formatIndex >= 0) {
       const format = remaining[formatIndex + 1];

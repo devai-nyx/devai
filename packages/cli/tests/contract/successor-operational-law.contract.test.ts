@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { authorityBindings, canonicalSha256 } from '../../src/authority/policy.js';
+import { subprocessCoverageEnvironment } from '../../../../tests/helpers/subprocess-coverage.js';
 
 const PKG_ROOT = join(import.meta.dirname, '..', '..');
 const ROOT = join(PKG_ROOT, '..', '..');
@@ -18,7 +19,10 @@ const AUTHORITY_POLICY_PATHS = [
 ] as const;
 
 function run(args: readonly string[]): { status: number | null; stdout: string; stderr: string } {
-  const result = spawnSync(process.execPath, [DRIVER, ...args], { encoding: 'utf8' });
+  const result = spawnSync(process.execPath, [DRIVER, ...args], {
+    encoding: 'utf8',
+    env: subprocessCoverageEnvironment(),
+  });
   return { status: result.status, stdout: result.stdout, stderr: result.stderr };
 }
 

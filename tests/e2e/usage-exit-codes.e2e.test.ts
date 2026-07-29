@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const BIN = join(
@@ -20,7 +21,10 @@ const skipIfNotBuilt = existsSync(BIN) ? it : it.skip;
 const CLI_TIMEOUT_MS = 30_000;
 
 function run(args: readonly string[]): { status: number | null; stdout: string; stderr: string } {
-  const result = spawnSync('node', [BIN, ...args], { encoding: 'utf8' });
+  const result = spawnSync('node', [BIN, ...args], {
+    encoding: 'utf8',
+    env: subprocessCoverageEnvironment(),
+  });
   return { status: result.status, stdout: result.stdout, stderr: result.stderr };
 }
 

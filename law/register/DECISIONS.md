@@ -2962,6 +2962,1431 @@ tags, GitHub Releases, Pages deployment, external release or deployment, real-st
 mutation, R-0008 external action, R-0009 activation, or R-0010 observation. The
 predecessor remains read-only.
 
+### DII-207 — Open the R-0006 entry-control prelude
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 E0 declaration; R-0006-AUTHORIZATION; ROUND-EXECUTION-CONTRACT@sha256:1fd6384fe303d24a329a06b9fe0144f1d8dac1de2dc8e57b52d223f9b4176a64; R-0006-PLAN@sha256:c87ff86156f3d56ede6ee79775255b0c82d0d1112303929bf51c9bc9d2d3d73f; R-0006-ORCHESTRATOR@sha256:c7b652c7874d53ea9b42687e81a43a36bd3feebd0f63e41b01b47578547853ab; OM-010; PC-0006; successor 7cf325625307a630344efe971bceccb011560301; exact-main CI 30239216258`
+
+R-0006 is declared from exact successor base
+`7cf325625307a630344efe971bceccb011560301` after PC-0006 closed R-0005 and the
+pre-R-0006 governance-alignment merge passed exact-main CI run `30239216258`. The
+exact shared execution contract, amended R-0006 plan, and amended orchestrator prompt
+are bound by the SHA-256 digests above. Their mandatory E0 through E5 sequence is the
+complete authorized scope of this entry-control prelude.
+
+The known-red posture is explicit: candidate-only publishability, full Git identity,
+exact candidate range, two-pass convergence, post-review mutation freeze, the exact
+review envelope, isolated closure rehearsal, and non-vacuous semantic assertions do
+not yet have the complete behavioral enforcement required by OM-010. E1 must preserve
+failing Inspector contracts for those admitted defects before E2 semantics or E3
+workspace-tooling implementation. No existing threshold, source set, assertion,
+forbidden-action rule, sequencing rule, role authority, public action behavior, or
+release boundary may be weakened.
+
+The claims ceiling is entry-control machinery implemented and tested only if E5 records
+an exact Auditor observation and an independent read-only PASS for a clean, publishable
+prelude candidate. This decision does not inventory, decide, implement, or test R-0006
+action/output contracts, operational-value extraction, mutation strength, evidence
+aggregation, or coverage depth. B0 through B9 remain blocked. Execution must stop after
+E5 and before substantive B0, and no release, publication, deployment, evidence reuse
+or promotion, real-stynx mutation, predecessor mutation, or R-0007+ work is authorized.
+
+### DII-208 — Govern exact source-close candidate controls
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 E2 semantics; DII-207; OM-010; R-0006 E1 Inspector 0afa4449a134584f0fb704581eb3377032297876; R-0006-ENTRY-CONTROL-KNOWN-RED; ROUND-CLOSE-CONTROLS; ROUND-CLOSE-CANDIDATE-MANIFEST`
+
+The R-0006 E1 command exited nonzero with eight intentionally failing behavioral
+contracts after all 1,230 prior tests remained green. DII-208 binds the semantics needed
+to close those reds. `implementation_subject` is the last semantic law, product, plant,
+or test commit; `review_candidate` is the complete current source candidate submitted
+to review and must descend from it; `published_head` is that reviewed candidate plus at
+most the exact post-PASS envelope. Each is a full Git commit identity. The governed
+range is the exact DII-207 base through `published_head`; fixed trailing windows and
+pre-round history are forbidden.
+
+A publishable identity must resolve in a bundle-backed, single-candidate-branch clone
+with no alternates and no borrowed refs or objects. An identity absent there is admitted
+only when the existing historical-exception registry names its exact full SHA, truthful
+object kind and reason, and every and only path where it occurs. Abbreviated identities,
+invented expansions, objects of a non-commit kind, unresolved identities, and unclassified
+local-only objects fail closed.
+
+The deterministic candidate manifest is governed by
+`law/schemas/round-close-manifest.schema.json`. It derives the exact base, three
+candidate identities, candidate tree, complete commit range, role/path attribution,
+projection and materialization digests, test and coverage readings, candidate-only Git
+resolution, ordered gate results, two-pass convergence, and isolated closure rehearsal.
+Its digest is SHA-256 over canonical JSON with the digest member omitted; timestamps,
+ambient refs, caller-selected history windows, and unrecorded gate results are excluded.
+
+The review freeze begins at the exact `review_candidate`. Any later law, product,
+package, test, current-documentation, E5 as-built, source-close, or closing-decision
+change invalidates PASS. The sole permitted envelope is one exact
+`DEVAI Auditor`-authored `work/audit/R-0006/independent-review.md` record plus only the
+policy-enumerated deterministic projection outputs caused by that record and reproduced
+byte-for-byte from unchanged sources. A second audit record, generator or policy edit,
+uncaused output, malformed manifest, omitted path, or glob variant invalidates PASS.
+
+Convergence runs the policy's complete ordered commands twice from clean boundaries.
+Every projection uses no-write/check mode; the immediate second pass may change no
+tracked or untracked path. Formatting, preparation, trace, repository references,
+generated views, materializations, lint, typecheck, gates, coverage, diff, or cleanliness
+drift restarts convergence. Semantic checks derive complete populations from broad
+source globs; fixed corpus counts, self-comparisons, narrow named-file scans, and policy
+or materialization mirror drift are vacuous and fail closed.
+
+Closure rehearsal uses an isolated candidate-only clone. It constructs non-standing
+source-merge and closure-only descendants and proves both the closure schema and
+validated production verb exist in ancestry strictly before the Machine-shaped closure
+commit. Either missing prerequisite fails. Rehearsal refs and generated bytes are
+discarded and grant no standing.
+
+These semantics authorize only E3 workspace tooling and the one generated policy
+materialization required by the E1 tests. They add no public action, change no existing
+public action behavior, and do not authorize B0, action/output contract work, coverage
+depth work, threshold or exclusion changes, evidence reuse or promotion, release,
+publication, deployment, predecessor mutation, real-stynx mutation, or R-0007+ work.
+
+### DII-209 — Correct the closure-rehearsal production-verb binding
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 E4 repair; DII-208; R-0006 Inspector f9ff51ed2181a9ed2ae09981e2e61e8af5695bbe; R-0006-CLOSURE-PREREQUISITE-RED-EVIDENCE`
+
+The R-0006 isolated real-candidate rehearsal proved that DII-208's canonical policy
+named an absent closure-verb path. The already validated and action-registered
+production implementation is `packages/cli/src/commands/phase/index.ts`; the rehearsal
+must bind that tracked path together with `law/schemas/phase-closure.schema.json` before
+constructing its non-standing source merge and closure-only descendant. The generated
+policy mirror must reproduce this correction byte-for-byte.
+
+This is a path-binding correction only. It changes no public action behavior, authorizes
+no closure record, and does not authorize B0, threshold or exclusion changes, evidence
+promotion, publication, merge, release, deployment, predecessor mutation,
+real-stynx mutation, or R-0007+ work.
+
+### DII-210 — Repair entry controls after independent diagnostic review
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 E4 repair; DII-207; DII-208; DII-209; R-0006 Inspector ea00313bd8552389c4bd8608c6f8e7e6b4952af7; R-0006-INDEPENDENT-REVIEW-REPAIR-RED-EVIDENCE@sha256:bea949a59118cce5b4b721777793d6d872ef1140fda207eb05365fd0d10d5a01; R-0006-INDEPENDENT-CODEX-REVIEW-FAILURE`
+
+The first read-only diagnostic review of the E0-E5 candidate returned six P1 findings.
+Its positives remain evidence, but its FAIL grants no review standing. Before the
+execution contract's mandatory literal `claude-opus-5` review, the complete close
+control must repair all six classes under the existing red-first and role-pure sequence.
+
+Convergence is valid only when the working checkout remains the caller-named exact head
+before, during, and after both ordered passes. Each pass includes the ordinary
+`pnpm vitest run` floor. The immediate second pass must reproduce the same ordered
+command identities, arguments, exit outcomes, and coverage bytes without changing any
+relevant tracked, untracked, ignored, or generated workspace content. A manifest may
+report convergence only after revalidating that complete ignored-state record against
+the canonical policy, exact candidate, current coverage artifact, and clean boundary.
+
+Closure rehearsal must run the policy-bound production phase-close command in an
+isolated candidate-only clone against a schema-valid non-standing draft. It must consume
+the command's actual Machine record bytes, create exactly one closure-only Machine
+descendant, and run the production sequencing check across that exact one-commit range.
+Existence checks and hand-written placeholder records are not rehearsal evidence.
+
+The review envelope derives its frozen candidate only from the deterministic candidate
+manifest and an exact Auditor-authored review record. That record must declare verdict
+`PASS`, literal reviewer model `claude-opus-5`, the same full review-candidate SHA, and
+the manifest's internally recomputed SHA-256 digest. Caller-selected reviewed identity,
+FAIL or malformed records, and mismatched candidate or digest fail closed.
+
+Semantic non-vacuity evaluates every governed population glob against the exact tracked
+candidate and requires every population to be nonempty. Every declared source/mirror
+pair must exist and be byte-identical; checking only one hard-coded pair is forbidden.
+These requirements are additive to the existing fixed-count, self-comparison, and
+named-file-only prohibitions.
+
+This repair changes only pre-R-0006 entry-control machinery. It changes no public
+action behavior or threshold and authorizes no B0 work, publication, push, merge,
+closure, release, deployment, evidence reuse or promotion, predecessor mutation,
+real-stynx mutation, or R-0007+ work.
+
+### DII-211 — Continue R-0006 after the entry-control PASS
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B0 continuation; direct Owner continuation instruction in the active R-0006 task; DII-207; DII-208; DII-209; DII-210; R-0006-ENTRY-CONTROL-AS-BUILT; R-0006-INDEPENDENT-REVIEW; published entry-control head c6c9d4c11c99f63b54e21dd8f34e31a611a1856f`
+
+The exact E0-E5 entry-control candidate passed the mandatory literal
+`claude-opus-5` review at review candidate
+`790126e0a048927562173ee1c295a44003e027e4`, and its bounded Auditor review record
+produced published entry-control head
+`c6c9d4c11c99f63b54e21dd8f34e31a611a1856f`. The post-review envelope verifier,
+candidate-only identity checks, production closure rehearsal, and both final
+published-head convergence passes were green and clean. That PASS satisfies the
+amended plan's mandatory entry condition for B0.
+
+R-0006 therefore continues serially through B0-B9 under the already-granted
+R-0006 authorization and the Owner's continuation instruction. B0 freezes the exact
+action/output/error and coverage populations before B1 makes any policy decision.
+The starting coverage denominator is evidence, not a protected arithmetic shortcut:
+B6 must either prove the current loaded-module denominator correct or repair the
+measurement without excluding valid source. No threshold, assertion, test source,
+or exclusion may be weakened.
+
+The claims ceiling remains contracts and coverage depth implemented and tested, then
+published and closed only through the two-PR ceremony. This decision authorizes no
+package publication, tag, GitHub Release, Pages deployment, external deployment,
+evidence reuse or promotion, real-stynx mutation, predecessor mutation, or R-0007+
+work.
+
+### DII-212 — Extract constitutional operational values into policy
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B1 operational-value extraction; DII-211; R-0001-LAW-ALTITUDE-SWEEP; BL-034; Constitution Articles 1, 11, 13-19, 21-28, 30-32, 34, 37, 39-40`
+
+The R-0001 altitude sweep identified mechanism values embedded in constitutional
+prose. R-0006 adopts `law/policy/operational-values.json` as their sole operational
+home. The Constitution remains the durable doctrine and anchor source; where it
+contains a concrete token, count, path, command composition, field list, or lifecycle
+choreography enumerated by this policy, that spelling is an explanatory founding
+snapshot rather than an independently editable second setpoint. A change to the
+policy cannot weaken or contradict the constitutional doctrine, and any doctrinal
+change still requires the full Article-40 amendment process.
+
+This extraction changes no doctrine and therefore does not rewrite or version-bump
+the ratified Constitution. It makes the already-ratified distinction between axiom and
+mechanism explicit and mechanically locatable. Existing schemas remain canonical for
+their record shapes; the policy points to them rather than restating their full
+definitions. Thresholds remain canonical in `law/policy/thresholds.json`.
+
+No operational value may be authoritative in two policy homes. The extraction
+registry names one canonical home for every altitude-sweep row and records whether the
+value is carried directly or by reference. Later implementation consumes those homes;
+it may not copy a value back into constitutional text or introduce an uncatalogued
+override.
+
+### DII-213 — Decide mutation-strength obligations
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B1 mutation-strength decision; DII-211; DII-212; ADR-004; BL-035; Constitution Articles 39 and 42; law/policy/thresholds.json`
+
+Mutation strength is a separately selected deterministic validation obligation, not a
+universal substitute for ordinary tests and not an aggregation rule. The canonical
+semantics are `law/policy/mutation-strength.json`. A mutation obligation exists only
+when an invariant, validation strategy, or governed risk selection marks a scope
+mutation-relevant. The selection must be nonempty, exact-candidate-bound, and enumerate
+its scenarios; an empty or caller-trimmed selection is UNKNOWN, never PASS.
+
+A mutation observation is PASS only when every required scenario executed, every
+required critical mutant was killed, no runtime or infrastructure error occurred, the
+canonical mutation score meets `thresholds.mutation.score_min`, and the survivor count
+does not exceed `thresholds.mutation.survived_max`. A surviving required critical
+mutant, score breach, or survivor breach is FAIL after a valid observation exists.
+Invalid reports, exact-subject mismatches, missing evidence, unavailable runners,
+timeouts, crashes, incomplete selections, and independently uncheckable results are
+UNKNOWN and block any required readiness conclusion without being relabelled FAIL.
+
+Mutation PASS is supporting evidence only. It cannot establish readiness by itself,
+and judge-only assessment cannot replace an executable mutation observation. This
+decision neither changes the existing 60/50 setpoints nor decides how heterogeneous
+evidence is aggregated.
+
+### DII-214 — Decide evidence-aggregation semantics
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B1 evidence-aggregation decision; DII-211; DII-212; ADR-004; BL-035; Constitution Articles 11, 39 and 42`
+
+Evidence aggregation is independent of mutation-strength selection. Its canonical
+semantics are `law/policy/evidence-aggregation.json`. Aggregation first derives a
+nonempty required population from policy, then groups observations by exact subject,
+kind, scope, and binding. A current readiness-bearing FAIL dominates the aggregate. If
+no current FAIL exists but any required observation is absent, stale, UNKNOWN,
+unavailable, conflicting, judge-only, or otherwise independently uncheckable, the
+aggregate is UNKNOWN and blocks PASS. PASS exists only when every required member has
+one current, independently checkable PASS.
+
+A recorded FAIL leaves the current same-kind population only when a newer valid
+observation of the same exact subject, kind, scope, and binding supersedes it. Filtering
+or omission cannot erase it. An error is an observation failure and maps to UNKNOWN,
+not to PASS or FAIL. N/A requires a policy-declared applicability record, remains
+visible with its reason, and cannot reduce a readiness-bearing population to empty.
+Advisory and experimental evidence may be reported but cannot satisfy a required
+readiness member.
+
+This decision supplies no readiness standing, does not activate evidence reuse or
+promotion, and does not convert predecessor or local rehearsal evidence into current
+standing.
+
+### DII-215 — Close every public action output and error boundary
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B3 contract decision; DII-211; BL-026; INV-DEVAI-001; INV-DEVAI-015; INV-DEVAI-017; law/policy/action-registry.json`
+
+Every runnable public action has one action-bound machine result contract and one
+structured error contract declared on its canonical registry row. In machine mode,
+success is exactly one `action-result.schema.json` object on stdout with `ok: true`,
+the canonical never-reminted `action_id`, and a closed transport result frame. Failure
+is exactly one object of the same envelope on stderr with `ok: false`, the same action
+identity, and an `error.schema.json` value. The opposite channel is empty. Human-mode
+presentation is not evidence for this contract.
+
+The common result frame closes the transport shape and preserves a typed media kind.
+Where a domain payload schema already exists, the registry row binds it explicitly;
+an absent payload schema means the action's JSON value is opaque to this transport
+layer, not that the outer envelope is open or optional. A consumer must validate the
+common envelope and every non-null per-action payload schema. It may not infer action
+identity from argv, prose, or a handler implementation after validation.
+
+Folded and tombstoned identities are router-only. Their registry contracts therefore
+declare no runnable success or error channel and no envelope or payload schema. Their
+migration string remains the only supported route. This prevents a retired identity
+from silently acquiring an independently executable output contract or being reminted.
+
+### DII-216 — Bind trace depth to executable assertion sites
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B3 trace-depth decision; DII-211; BL-081; INV-DEVAI-020; law/trace.json; law/schemas/trace.schema.json`
+
+Every canonical `test_corpus` row must bind the exact traced source to a positive
+deterministic assertion count and a SHA-256 digest of its ordered assertion-site
+projection. The generator derives both values from tracked source bytes; callers may
+not supply, trim, or reuse them. A missing source, zero assertion sites, an unsupported
+or ambiguous assertion form, or a digest mismatch fails closed and cannot contribute
+trace coverage.
+
+This evidence proves that the named executable contains assertion-bearing control
+points at the exact materialized source revision. It does not, by count alone, prove
+that each assertion is strong or that every listed invariant is semantically established.
+Invariant markers, ordinary tests, contract tests, coverage, independent review, and
+the applicable validation strategy remain separate required evidence. Documentary
+mentions, snapshots without an executable matcher, and configuration-only presence do
+not satisfy the assertion-bearing corpus rule.
+
+### DII-217 — Measure the complete eligible source denominator
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B6 coverage-correctness decision; DII-211; R-0006-B0-BASELINE; BL-017; law/policy/thresholds.json`
+
+The B0 V8 report measured 223 of 377 then-eligible non-generated package source files
+because its source include was implicit and therefore limited to modules loaded by the
+selected tests. The 154 omitted files, including 150 CLI files, are valid shipped source.
+That loaded-module denominator is incorrect for repository-wide coverage and cannot be
+used for an all-source threshold claim.
+
+The canonical coverage configuration must explicitly include
+`packages/*/src/**/*.{ts,tsx,js,mjs,cjs}` and retain the pre-existing exclusions only
+for distribution output, tests, configuration files, and generated source. Every
+tracked file matching that include and not an exclusion belongs to the denominator,
+whether or not a test loads it. New valid source joins automatically. B6 may repair
+that instrumentation and provider integration; B7 must add real assertion-bearing
+tests until the unchanged 70/60/70/70 lines/branches/functions/statements floors pass.
+
+No threshold may fall, no valid source may be excluded, and no uncovered file may be
+removed or relabelled generated to manufacture a pass. The corrected first reading is
+expected to be red and is evidence for missing tests, not permission to restore the
+loaded-module shortcut.
+
+### DII-218 — Disclose immutable R-0006 sequencing gaps
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 exit-ladder correction; DII-202; DII-211; DII-215; DII-217; Inspector a3e95afe069f4aafad880832bd0eec29d078e437; Inspector 0cf442d310f1be130e90a85a7622f7950e06f83f; first B9 convergence FAIL at c5b2c770107fc7684d689d4158ecb092aab2969d`
+
+The first B9 convergence failed closed before review. Formatting and root typecheck
+exposed correctable Inspector quality defects, while governed sequencing disclosed
+that three already-committed Engineer changes had no exact prospective binding. The
+failed convergence has no standing and must not be reused.
+
+The action-envelope commits
+`a0292658a7322066ba70b91c80f0c3d751ab69dc` and
+`58b175d3b751c52fe55a97aa17b78f2c55e14d2c` followed the B2 failing contract and
+DII-215, but the immutable failing Inspector source did not literally enumerate every
+implementation path later changed. The subprocess-coverage commit
+`8e7a44b70a3e13b85293de48af8284889daea7e3` followed DII-217 and the observed
+corrected whole-source red reading, but no prior committed Inspector source plus durable
+Auditor JSON bound every exact changed path. These are real sequencing defects; neither
+conceptual test relevance nor a later green run can be relabelled as compliant prior
+red evidence.
+
+The exact three commits are therefore recorded as historical commit exceptions in
+`law/policy/governed-sequencing.json`. The exceptions describe immutable history only,
+grant no prospective bypass, and do not weaken the law-before-implementation,
+red-before-repair, semantic-scope, threshold, exclusion, or review rules. Inspector
+`0cf442d310f1be130e90a85a7622f7950e06f83f` repairs the formatting, typechecking, and
+deterministic runtime-test defects without changing plant behavior. The Architect must
+refresh the caused trace projection, the Auditor must amend the as-built with the failed
+gate and exact disclosures, and B9 must restart from a new implementation subject and
+review candidate with two fresh convergence passes.
+
+This decision authorizes no source publication before fresh convergence and literal
+`claude-opus-5` PASS, no closure record before source merge and exact-main CI, and no
+package publication, tag, GitHub Release, Pages deployment, external deployment,
+evidence reuse or promotion, real-stynx mutation, predecessor mutation, or R-0007+
+work.
+
+### DII-219 — Classify exact immutable R-0006 role-path defects
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 manifest correction; DII-207; DII-211; DII-217; DII-218; Inspector fb37d09255cd1a7fbf383a8b4af8404ce744b34b; Auditor R-0006-ROLE-PATH-EXCEPTION-RED-EVIDENCE; failed manifest at 970651a5f49fa6e2bb7f979d53371a147ef0e109`
+
+The candidate manifest failed closed after convergence and rehearsal because two
+immutable B6 commits were authored as Engineer while changing Inspector-owned
+`tests/config/**` paths. Commit `d41c648b184ae63c2ed473ae1a44725eb3cb26dc`
+changed only `tests/config/t1-t3.coverage.config.ts`. Commit
+`8e7a44b70a3e13b85293de48af8284889daea7e3` changed Engineer-owned package and
+workspace files plus `tests/config/t1-t3.coverage.config.ts` and
+`tests/config/subprocess-v8-coverage-provider.ts`. This is an ownership defect in
+immutable history; coverage purpose does not make the test paths Engineer-owned.
+
+`law/policy/round-close-controls.json` therefore classifies only those two full commit
+identities and only their exact mismatched paths. A classification is valid only when
+the governed commit exists, its actual author role equals the declared role, its exact
+otherwise-unauthorized path set equals the declared path set, `decision_id` resolves
+to this decision, and the reason is nonempty. A missing commit, wrong role, omitted
+path, unused extra path, glob, prefix, or already-authorized path fails closed. The
+manifest may mark the commit path-authorized only after all those conditions hold.
+
+This classification does not rewrite history or call the original commits role-pure.
+It preserves `tests/**` and `**/tests/**` as Inspector authority, grants no prospective
+waiver, and cannot be inherited by another commit or path. The failed manifest and its
+preceding green convergence remain audit evidence without review or publication
+standing. B9 must restart convergence, rehearsal, manifest generation, and literal
+`claude-opus-5` review at a fresh candidate after implementation and adversarial tests
+pass.
+
+This decision authorizes no threshold or exclusion change, source publication before
+fresh review PASS, closure record before source merge and exact-main CI, package
+publication, tag, GitHub Release, Pages deployment, external deployment, evidence
+reuse or promotion, real-stynx mutation, predecessor mutation, or R-0007+ work.
+
+### DII-220 — Close the final R-0006 independent-review gaps
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 Opus correction; DII-208; DII-211; DII-215; DII-216; DII-219; Inspector a1bedaa01813c626ac497fe9e6e85102c72d21db; Auditor R-0006-OPUS-B9-CORRECTION-RED-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-FAILURE`
+
+The first independent B9 review of the post-manifest-correction candidate returned
+FAIL with five P1 findings. Its verified positives have no standing across repair. The
+semantic anti-vacuity control must inspect every tracked file in each configured
+population and emit path-specific findings for governed fixed-count declarations,
+literal self-comparison assertions, and direct named-file-only content assertions. A
+nonempty glob alone is not evidence that its contents were checked. The four concrete
+anti-patterns identified by review must be derived or removed without weakening the
+population.
+
+The 39 folded or tombstoned action identities must declare exact `router-only` success
+and error modes. Registry-derived runtime tests must exercise at least one folded route
+and the tombstone and prove exit 2, empty stdout, and one structured stderr refusal.
+This establishes retirement routing behavior but does not claim end-to-end invocation
+coverage for every kept action; the as-built must state that residual honestly.
+
+A DII-219-classified role-path row may be accepted only under the existing exact-set
+checks and must disclose the classification in the manifest. Every role-path row now
+carries `role_path_exception`: `null` for an ordinarily authorized commit, or a closed
+object containing the resolving `decision_id` and exact otherwise-unauthorized paths.
+`path_authorized: true` alone must never hide the distinction. The schema and generator
+must agree, and the exact fixture classification must prove the disclosure.
+
+Inspector must record the final green dispositions for both B2 and the B9 role-path
+red. Auditor must correct assertion-site totals directly from `law/trace.json` and
+narrow output-totality prose to the evidence actually executed. Every affected
+projection and sequencing binding must be refreshed role-purely. B9 then restarts
+convergence, rehearsal, manifest generation, and literal `claude-opus-5` review at a
+fresh candidate.
+
+This decision authorizes no threshold or exclusion change, broad historical exception,
+source publication before fresh review PASS, closure record before source merge and
+exact-main CI, package publication, tag, GitHub Release, Pages deployment, external
+deployment, evidence reuse or promotion, real-stynx mutation, predecessor mutation,
+or R-0007+ work.
+
+### DII-221 — Disclose the final immutable R-0006 sequencing defect
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 sequencing correction; DII-202; DII-220; Inspector a1bedaa01813c626ac497fe9e6e85102c72d21db; Auditor R-0006-OPUS-B9-CORRECTION-RED-EVIDENCE; Engineer 63b2238ddf22e542ba3e755108477ddd903ea137; governed sequencing FAIL`
+
+Governed sequencing failed after the final Opus repair because Engineer
+`63b2238ddf22e542ba3e755108477ddd903ea137` changed both
+`scripts/run-round-close-controls.mjs` and `packages/cli/src/define-command.ts`, while
+the immutable failing Inspector source literally named only the controller path. The
+Auditor evidence was corrected before implementation to bind both exact paths, DII-220
+authorized both repairs, the population adversary semantically exposed the fixed-count
+class, and all focused and ordinary tests passed after implementation. Those facts do
+not make the missing literal Inspector path retrospectively present.
+
+The exact Engineer commit is therefore a historical commit exception in
+`law/policy/governed-sequencing.json`. This is a disclosed sequencing defect, not a
+claim of prospective compliance. It grants no exception to any later commit, test,
+path, law-before-implementation rule, threshold, exclusion, review gate, or role
+boundary. The failed governance observation has no convergence or review standing.
+B9 must use a fresh candidate and rerun its complete exit ladder.
+
+This decision authorizes no source publication before fresh review PASS, closure
+record before source merge and exact-main CI, package publication, tag, GitHub Release,
+Pages deployment, external deployment, evidence reuse or promotion, real-stynx
+mutation, predecessor mutation, or R-0007+ work.
+
+### DII-222 — Require auditable exact-hit coverage measurement
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 second B9 Opus correction; DII-217; DII-219; DII-221; Inspector 49a89b433799823cc4e9d8f0baa8d6068959ae24; Auditor R-0006-COVERAGE-INTEGRITY-RED-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-2-FAILURE`
+
+The second independent B9 review returned FAIL because the subprocess coverage
+provider treated a positive containing range as evidence that a nested exact zero-hit
+statement or function executed. A coverage numerator may contain only measured hits.
+The canonical merge must therefore match complete source locations exactly, carry
+explicit zero-hit locations as zero, and add no count when the source maps do not
+identify the same canonical location. Containment, nearest-range, parent-range, line,
+or other inferred projection is forbidden for statements, functions, and branches.
+
+The merged coverage run must leave independently inspectable evidence. It emits the
+Istanbul statement-level `coverage-final.json` beside the summary and preserves the
+raw child-process V8 JSON inputs under `scratch/coverage/t1-t3/subprocess-v8` after the
+merge completes. A later run may clean the previous ephemeral artifact before
+measurement, but the provider must not unconditionally destroy the current inputs at
+the end of conversion. The evidence paths are runtime scratch material and are not
+committed.
+
+The 378-file denominator, source include, four existing exclusions, and
+70/60/70/70 lines/branches/functions/statements floors remain unchanged. The first
+honest reading after repair is evidence, whether green or red. If a floor is red, B7
+adds behavior-bearing Inspector tests against real risk paths until it passes; no
+threshold reduction, exclusion growth, valid-source removal, generated relabeling, or
+replacement inference is permitted.
+
+Both bounded repair paths are under `tests/config/**` and remain Inspector-owned.
+DII-219 explicitly grants no prospective Engineer waiver, so the correction must be
+committed as Inspector despite the historical B6 role label. No new role-path
+exception is authorized. The final Auditor record must re-read the corrected coverage
+digest, numerator, denominator, percentages, governed-range counts, and all exception
+claims from current machine sources before a fresh convergence, rehearsal, manifest,
+and literal `claude-opus-5` review.
+
+This decision authorizes no source publication before fresh review PASS, closure
+record before source merge and exact-main CI, package publication, tag, GitHub Release,
+Pages deployment, external deployment, evidence reuse or promotion, real-stynx
+mutation, predecessor mutation, or R-0007+ work.
+
+### DII-223 — Accept R-0006 for the governed source-close ceremony
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 source close; DII-207–228; OM-002; R-0006-AUTHORIZATION; R-0006-PLAN; R-0006-AS-BUILT at Auditor 72fac684750a157a26b6b867beaa56d045569960; R-0006-COVERAGE-DEPTH-EVIDENCE; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE`
+
+R-0006's semantic implementation subject is exact Inspector commit
+`e284a6cb9b2d23eaf5713c34ecf29e324397b355`. Architect
+`cef0540a70a62de2222078c63455cd763fa92703` is its deterministic trace projection,
+and Auditor `72fac684750a157a26b6b867beaa56d045569960` binds the final pre-review
+as-built.
+The action surface remains 147 runnable identities, 38 folded identities, and one
+tombstone. The operational-value extraction remains 24 rows. Mutation-strength and
+evidence-aggregation decisions remain independent.
+
+The collision-free exact-hit complete-denominator coverage reading is statements 71.86%
+(16,093/22,393), branches 60.14% (11,658/19,382), functions 80.67%
+(2,479/3,073), and lines 73.27% (14,936/20,383), above the unchanged
+70/60/70/70 floors. All 378 eligible source files remain measured under the unchanged
+four exclusions. The ordinary suite passes 155 files, 1,458 tests, and eight declared
+skips. The trace projection binds 34 invariants, 155 test sources, and 2,784 lexical
+assertion sites. All four B9 Opus FAILs and every honest interim correction red remain
+immutable evidence; none is relabelled PASS.
+
+The governed-sequencing policy contains three R-0006 historical exception entries
+covering exactly four immutable implementation commits. The separate role-path policy
+classifies exactly two immutable commits and their exact mismatched test paths. Neither
+control grants a prospective bypass. Every post-DII-222 repair is role-pure, and no
+threshold, exclusion, source denominator, assertion, or skip declaration was weakened.
+
+This decision accepts the audited implementation only for the remaining serial B9
+controls. The complete source candidate must converge twice, rehearse the source and
+closure ancestry in isolation, generate a fresh candidate-only manifest, and receive a
+fresh read-only PASS through the literal `claude-opus-5` selector. Any finding returns
+to its owning role and invalidates all candidate state. After PASS, only the exact
+Auditor review record may form the review envelope; current policy admits no
+deterministic projection consequence. The resulting published head must converge twice
+again before push.
+
+The source PR may merge only after every required exact-head check passes. Its exact
+merge must then pass exact-main CI. Only from that merged source may the production
+phase-close verb append PC-0007 on a closure-only branch. PC-0007 uses DII-207 as the
+declaring decision and DII-223 as the closing decision, binds the exact source merge,
+and records release disposition `none-needed`. The closure-only PR, its merge, and final
+exact-main CI remain separate required gates.
+
+This decision does not itself claim independent-review PASS, source publishability,
+push, pull request, merge, exact-head or exact-main CI, PC-0007, final closure, package
+publication, tag, GitHub Release, Pages or other deployment, evidence reuse or
+promotion, real-stynx mutation, predecessor mutation, or R-0007+ work.
+
+### DII-224 — Normalize only retained coverage runtime artifacts at convergence
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 fixpoint correction; DII-208; DII-222; DII-223; Inspector ebf10882d2ea55d83a773cd88c3c9b667fd42c91; Auditor R-0006-RETAINED-COVERAGE-FIXPOINT-RED-EVIDENCE; failed convergence at 95abe603ee86e82e99ba0498b56d49cac292ab45`
+
+The first post-DII-223 convergence attempt ran every one of the 16 ordered gates green
+in both passes, began and ended both passes Git-clean, retained identical coverage
+summary bytes, and produced equivalent ordered outcomes. It still failed closed because
+the relevant-workspace digest changed. DII-222 requires the current run's raw
+subprocess inputs to remain under `scratch/coverage/t1-t3/subprocess-v8`, whose runtime
+names contain process and time values, and requires the statement-level
+`scratch/coverage/t1-t3/coverage-final.json` artifact. Treating those exact per-run
+artifacts as immutable workspace source makes the retained-evidence and two-pass
+contracts impossible to satisfy together.
+
+The convergence policy therefore classifies only those two exact paths as normalized
+runtime artifacts. They remain present and independently inspectable after the final
+coverage execution, but their per-run filenames and bytes do not enter the generic
+relevant-workspace snapshot. The separate coverage digest continues to bind
+`scratch/coverage/t1-t3/coverage-summary.json` byte-for-byte across both passes. Every
+other tracked, untracked, ignored, generated, scratch, materialization, projection, and
+coverage path remains part of the workspace snapshot. A prefix or broad `scratch/**`
+exception is forbidden.
+
+Engineer may update only `scripts/run-round-close-controls.mjs` and the committed policy
+materialization needed to enforce this exact classification. The implementation must be
+policy-derived, reject malformed or broad runtime-artifact declarations, and keep the
+existing coverage-byte, command-result, dirty-tree, and workspace-drift adversaries
+green. Inspector must make the new focused red green and rerun the same-class entry
+control suite. Auditor must preserve the failed convergence and refresh the as-built.
+All convergence, rehearsal, manifest, review, and source-publication state for the
+failed candidate is invalid.
+
+This decision authorizes no raw-evidence deletion, threshold or exclusion change,
+denominator change, broad ignored-path waiver, retained PASS, source publication before
+fresh convergence and literal `claude-opus-5` PASS, closure before source merge and
+exact-main CI, package publication, tag, GitHub Release, Pages or other deployment,
+evidence reuse or promotion, real-stynx mutation, predecessor mutation, or R-0007+ work.
+
+### DII-225 — Correct branch exact-hit measurement and reaccept R-0006
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 third B9 Opus correction; DII-222–224; R-0006-INDEPENDENT-OPUS-B9-REVIEW-3-FAILURE at candidate 3c6c2d3bdde6bc6d505a6a29fb92d120a36c0050; Inspector f93d8f6508706b3bbb9c9bd423581512626bf88f; Auditor 2ee11660d0dd17ce01ddf540dd38888ca2267160; Inspector 2087572909813282086a48a823017e3ed74f39cf; Auditor 05d883ea30f5624cd94dbabcdc492ccebf3b8bad; Inspector a7814b4384c20dbbe33c830649a52f94ae5e36c5; Architect 694bc725f869947c443def37e7eebad22ab83442; Auditor 0b0be11c0cdd833add8bc5b7756f730bcda85a75`
+
+The third literal `claude-opus-5` B9 review returned FAIL with one P0, three P1,
+nine P2, and four P3 findings. That verdict remains exact historical evidence and
+invalidates candidate `3c6c2d3bdde6bc6d505a6a29fb92d120a36c0050`, its convergence,
+rehearsal, manifest, and every publication claim. The earlier E0–E5 PASS remains in a
+separate immutable Auditor record rather than occupying the final policy review-record
+slot.
+
+An incomplete Istanbul branch location is not a merge identity. Empty or partially
+specified branch positions must never collapse into a shared key, inherit a foreign
+hit, or otherwise contribute inferred coverage. Complete integer locations remain the
+only exact-hit identity for statements, functions, and branches. The live Istanbul
+coverage object may be updated exactly once; it must not be additively re-added to the
+map after in-place mutation. Raw subprocess inputs and the statement-level artifact
+remain retained run evidence, but their runtime-variable bytes are not a stable
+cross-run identity. Retention, exact counters, repeat merging, degenerate branches,
+every return-path filter, and malformed-input failure are behaviorally exercised.
+
+Inspector `f93d8f6508706b3bbb9c9bd423581512626bf88f` preserves four exact reds.
+Auditor `2ee11660d0dd17ce01ddf540dd38888ca2267160` binds that observation, and Inspector
+`2087572909813282086a48a823017e3ed74f39cf` makes it green within the existing
+Inspector-owned provider path. The first honest corrected complete-denominator run
+then failed only branches at 59.62% (11,557/19,382), 73 hits below the unchanged floor;
+Auditor `05d883ea30f5624cd94dbabcdc492ccebf3b8bad` preserves that red. Inspector
+`a7814b4384c20dbbe33c830649a52f94ae5e36c5` adds ten behavior-bearing workflow-parser
+and runtime-probe-data tests. The resulting reading is statements 71.86%
+(16,093/22,393), branches 60.14% (11,658/19,382), functions 80.67%
+(2,479/3,073), and lines 73.27% (14,936/20,383) across the unchanged 378-file
+denominator, four exclusions, and 70/60/70/70 floors. The ordinary suite passes 155
+files and 1,455 tests with eight declared skips; Architect
+`694bc725f869947c443def37e7eebad22ab83442` binds 34 invariants, 155 test sources,
+and 2,778 lexical assertion sites; Auditor
+`0b0be11c0cdd833add8bc5b7756f730bcda85a75` binds that then-current as-built and stable
+coverage-summary digest.
+
+The remaining P2 and P3 observations stay visible as bounded nonblocking observations;
+they are not restated as implemented controls or readiness claims. Candidate-file
+boundary whitespace is preserved, the final review envelope admits only the exact
+Auditor review record and no deterministic projection, and malformed subprocess
+evidence fails closed. DII-223's acceptance is refreshed only for a new complete B9
+ceremony: fresh two-pass convergence, isolated source/closure rehearsal,
+candidate-only manifest, and literal `claude-opus-5` review. Any fresh finding returns
+to its owning role and invalidates all candidate state.
+
+The fourth review did return findings and therefore invalidated this decision's
+then-current acceptance identity and all associated candidate state. DII-226 through
+DII-228 preserve and correct that later sequence; the historical counts above are not
+the current source-close identity.
+
+This decision authorizes no threshold, exclusion, denominator, source-set, generated
+classification, skip, or assertion-mechanism weakening; no reuse of the failed
+candidate; no source publication before fresh review PASS; no closure before source
+merge and exact-main CI; no package publication, tag, GitHub Release, Pages or other
+deployment, evidence reuse or promotion, real-stynx mutation, predecessor mutation,
+or R-0007+ work.
+
+### DII-226 — Fail closed on duplicate exact coverage locations
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 fourth B9 Opus correction; DII-222; DII-225; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE at candidate c7ab49f5fbeffae3d8f58be0137f4c8f11d356fa; Inspector 9b8b288bf83dea1342d1b7084a2253a4fd16e78a; Auditor dbb1ea5840cb5c3cde8c0e503c199008f7ff5441`
+
+The fourth literal `claude-opus-5` B9 review returned FAIL with zero P0, one P1, one
+actionable P2, and two actionable P3 findings. That verdict remains exact historical
+evidence and invalidates candidate `c7ab49f5fbeffae3d8f58be0137f4c8f11d356fa`, its
+convergence, rehearsal, manifest, and every publication claim. The reviewer independently
+measured zero complete-location collisions across the current 378-file statement,
+function, and branch population, so the current numerator is not retroactively relabelled
+inflated.
+
+Exact-location merging nevertheless must not rely on last-wins map insertion. Within
+each coverage kind, every complete location is a unique identity in both the parent map
+and the subprocess map. Two statement entries, two function entries, or two branch arms
+with the same complete start and end location in one map are malformed evidence and must
+fail before any counter is mutated. Cross-kind location reuse remains valid because a
+statement, function, and branch may legitimately begin and end at the same positions.
+Empty or incomplete locations remain conservatively excluded from merge identity and do
+not collide.
+
+Repeat invocation is cumulative, not idempotent: each supplied subprocess observation
+is added exactly once to the then-current parent counter. For a parent count of two and
+a subprocess count of three, two invocations produce eight. It must produce neither the
+self-doubled legacy result nor five through accidental deduplication. Inspector
+`9b8b288bf83dea1342d1b7084a2253a4fd16e78a` executes that repeat behavior and preserves
+the duplicate-location failure; Auditor `dbb1ea5840cb5c3cde8c0e503c199008f7ff5441`
+binds the red.
+
+The Auditor must separately sweep every current coverage value in the as-built, remove
+unbounded runtime-variable artifact digests, and bind invalidated intermediate readings
+to their exact historical evidence rather than the current table. The repair does not
+change the unchanged 378-file denominator, four exclusions, 70/60/70/70 floors, source
+set, generated classification, skips, or assertion mechanism. B9 must restart at a fresh
+candidate with new convergence, rehearsal, manifest, and literal-model review evidence.
+
+This decision authorizes no inferred numerator, broad collision waiver, evidence-value
+rewrite outside the exact Auditor sweep, source publication before fresh review PASS,
+closure before source merge and exact-main CI, package publication, tag, GitHub Release,
+Pages or other deployment, evidence reuse or promotion, real-stynx mutation,
+predecessor mutation, or R-0007+ work.
+
+### DII-227 — Aggregate convergent subprocess observations into unique canonical locations
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 DII-226 live-population correction; DII-222; DII-225; DII-226; Inspector 912092f0d3d042fd932b077aa3bd06089de11bb2; authoritative coverage FAIL at branch location 404:9:406:3; Inspector 9fe038682f35674f8cfe26eda6c3e271eb2ee21c; Auditor 968099c2582e8812bb1bcd6e6de9cbdb3985336d`
+
+DII-226 correctly requires unique complete locations in the canonical parent map and
+exact cumulative repeat behavior. Its prospective requirement to reject duplicate
+subprocess locations is too broad and is superseded only for that subprocess-map case.
+The first implementation made all seven then-current focused contracts green, but the
+unchanged authoritative coverage command failed on two legitimate source-mapped branch
+observations converging at exact location `404:9:406:3`. That failed run has no coverage
+or review standing and is preserved as red evidence.
+
+The canonical Istanbul parent map remains the denominator and therefore must contain at
+most one complete location per coverage kind. Duplicate complete statement entries,
+function entries, or branch arms in that parent map remain malformed and fail before
+any mutation. The fourth review measured zero such parent collisions across the real
+378-file population.
+
+The subprocess map is observation input rather than the canonical denominator. Multiple
+same-kind subprocess observations may source-map to one complete canonical location.
+They must be summed within their kind before the aggregate is applied exactly once to
+the matching parent counter. A subprocess statement, function, or branch pair carrying
+counts one and two at the same complete location therefore contributes three, not the
+last observed count, not a duplicate-evidence failure, and not a cross-kind sum.
+Incomplete locations remain excluded and contribute nothing.
+
+Inspector `9fe038682f35674f8cfe26eda6c3e271eb2ee21c` preserves the refined red while
+keeping canonical-parent rejection, repeat accumulation, degenerate-location exclusion,
+exact counters, retention, and reporter behavior green. Auditor
+`968099c2582e8812bb1bcd6e6de9cbdb3985336d` binds both the real coverage-command
+failure and the focused red. Inspector may correct only the existing provider and must
+rerun the focused, ordinary, and unchanged complete-denominator coverage commands.
+
+This correction authorizes no parent collision, cross-kind aggregation, inferred hit,
+threshold or exclusion change, denominator or source change, generated relabeling,
+skip or assertion-mechanism change, reuse of the failed coverage run, source publication
+before fresh review PASS, closure before source merge and exact-main CI, package
+publication, tag, GitHub Release, Pages or other deployment, evidence reuse or
+promotion, real-stynx mutation, predecessor mutation, or R-0007+ work.
+
+### DII-228 — Reaccept the collision-guarded R-0006 source candidate
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 fourth B9 correction close; DII-223; DII-225–227; R-0006-INDEPENDENT-OPUS-B9-REVIEW-4-FAILURE; Inspector e284a6cb9b2d23eaf5713c34ecf29e324397b355; Architect cef0540a70a62de2222078c63455cd763fa92703; Auditor 72fac684750a157a26b6b867beaa56d045569960`
+
+R-0006's exact semantic implementation subject is Inspector
+`e284a6cb9b2d23eaf5713c34ecf29e324397b355`. It preserves incomplete-location
+exclusion, exact cumulative repeat merging, and non-additive live-map mutation; rejects
+duplicate complete canonical parent identities before mutation; and aggregates
+same-kind subprocess observations that converge on one complete canonical location.
+Architect `cef0540a70a62de2222078c63455cd763fa92703` is the caused trace projection,
+and Auditor `72fac684750a157a26b6b867beaa56d045569960` binds the final pre-review
+as-built and coverage evidence.
+
+The unchanged 378-file denominator and four exclusions pass the unchanged 70/60/70/70
+floors at statements 71.86% (16,093/22,393), branches 60.14% (11,658/19,382),
+functions 80.67% (2,479/3,073), and lines 73.27% (14,936/20,383). The stable summary
+digest is `c4d75618fbc39602b4b01e9059e74249cf1e78a862f7176f770511ea177aa17b`;
+the retained statement artifact is runtime-variable and has no durable cross-run
+digest. The ordinary and coverage suites pass 155 files and 1,458 tests with eight
+declared skips. Trace binds 34 invariants, 155 test sources, and 2,784 lexical assertion
+sites. The action surface remains 147 runnable, 38 folded, and one tombstoned identity;
+the operational-value extraction remains 24 rows; mutation strength and evidence
+aggregation remain separate.
+
+All four B9 Opus FAILs, the overbroad DII-226 implementation red, the refined
+subprocess-aggregation red, and every earlier honest coverage red remain immutable
+evidence without review standing. The fourth review's P1 and P2 evidence-value defects
+are removed by a same-class Auditor sweep. Its repeat-merge and collision findings are
+exercised behaviorally across statements, functions, and branches. DII-225's remaining
+bounded nonblocking observations stay visible and are not restated as implemented
+controls or readiness claims.
+
+DII-223 is refreshed as the closing decision used by the production phase-close verb;
+this decision supplies its final correction provenance. The complete source candidate
+must still converge twice, rehearse source and closure ancestry in isolation, generate
+a fresh candidate-only manifest, and receive a fresh read-only PASS through the literal
+`claude-opus-5` selector. Any finding or failed required gate stops execution and
+invalidates all candidate state. After PASS, only the exact Auditor review record may
+form the review envelope, and the published head must converge twice again before push.
+
+This decision does not itself claim review PASS, source publishability, push, pull
+request, merge, exact-head or exact-main CI, PC-0007, final closure, package publication,
+tag, GitHub Release, Pages or other deployment, evidence reuse or promotion,
+real-stynx mutation, predecessor mutation, or R-0007+ work.
+
+### DII-229 — Require content-addressed convergence and an exhaustive review census
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 B9 OM-011 convergence-control correction; Owner interruption before independent-review iteration 5; DII-207; DII-208; DII-222–228`
+
+R-0006 B9 replaces all-or-nothing local re-execution with a conservative
+content-addressed task DAG. This decision narrowly supersedes DII-227 only where its
+nonclaim against evidence reuse would prohibit reuse of a byte-identical local PASS;
+DII-227's exact-location aggregation, collision, denominator, exclusion, and coverage
+semantics remain unchanged. OM-010 remains active except for the same OM-011-bounded
+local execution-result reuse.
+
+Each task key binds the freshness-policy version, task ID, exact argv and repository-
+relative cwd, its complete configured input population from the live worktree including
+dirty, untracked, deleted, and renamed states, dependency task keys, required output
+paths and digests, package manifests and lockfile, TypeScript and Vitest configuration,
+setup/helpers/generators, controlling law/policy/schema inputs, toolchain versions, and
+an allowlisted environment fingerprint. Values of secret-bearing environment entries
+are never emitted; the policy admits presence or a one-way digest only. Runtime cache
+lives exclusively below ignored `.devai/state/` and timestamps have no standing.
+
+A task may be `SKIPPED_FRESH` only from a schema-valid prior `EXECUTED_PASS` or
+transitively valid `SKIPPED_FRESH` result with the identical task key, fresh dependency
+keys, and still-present byte-identical required outputs. Every skip records its task key,
+input digest, producing candidate, and reused result digest. All other tasks report
+`EXECUTED_PASS`, `EXECUTED_FAIL`, or `BLOCKED`. FAIL, stale, malformed, tampered,
+unknown, dynamically ambiguous, or incomplete graph state cannot skip and widens to the
+configured broader task population. Remote CI detects its untrusted context and executes
+the complete authoritative gate set without accepting local cache.
+
+The task graph is conservative: a changed test executes itself; a changed source
+executes every known transitive dependent test; shared helpers, configuration, lockfile,
+or toolchain inputs invalidate their complete dependent population; and any unresolved
+relationship selects the broader suite. The ordinary and tier tasks therefore admit
+broad input populations when exact static dependency knowledge is incomplete. This is a
+correctness boundary, not an optimization failure.
+
+Coverage is an indivisible whole-only task. Its key binds every production, test,
+provider, coverage-configuration, threshold, denominator, package, toolchain,
+environment, and policy input. Reuse additionally requires every configured retained
+artifact to exist at its recorded digest. Any such input or output change reruns complete
+coverage. Partial coverage merging is forbidden and no threshold, source set, or
+exclusion changes.
+
+Before review, workspace tooling generates a deterministic review-scope manifest from
+the exact declared-base-to-candidate changed-path population, the configured R-0006
+requirement sources, controlling law/policy, all four prior B9 review failures, and the
+current plus retained previous candidate manifests. Every topic has exactly one stable
+topic ID and the required claim, governing paths, current and previous digests, changed
+status, required adversaries, previous findings, freshness proof, and required
+disposition. Previous finding classes remain topics after repair.
+
+The review record is invalid unless the manifest topic population and record
+dispositions are a bijection. Each topic receives exactly one `RECHECKED_PASS`,
+`RECHECKED_FAIL`, `REUSED_FRESH_PASS`, or `BLOCKED`; omission and duplication fail.
+Unchanged does not permit omission. `REUSED_FRESH_PASS` requires the reviewer to
+independently recompute the topic digest, inspect the freshness proof, and explain why
+the invariant still holds in the current candidate.
+
+The first review cycle is exhaustive discovery and continues after finding a blocker so
+all findings and same-class populations are returned together. Repairs cover the whole
+defect classes in role-pure batches. The second cycle is one complete re-review. A
+cycle-2 failure stops and escalates with a process/root-cause report; no third automatic
+cycle begins. The two-cycle budget never forces PASS.
+
+This decision does not itself claim that the task DAG, cache, review census, schemas,
+tests, audit, smart convergence, review candidate, review PASS, publication, remote CI,
+merge, PC-0007, closure, or release exists or passes. Review iteration 5 remains blocked
+until the complete OM-011 correction is committed and green.
+
+### DII-230 — Disclose the immutable OM-011 exact-scope sequencing defect
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 OM-011 smart-convergence failure at candidate a81969865cf237e5a13c351de828dec066f5b065; DII-229; Inspector 0215430f21649fb81650df312cbddef9e1e92b4c; Engineer ec68086260b0f9d5e13656c05504681ab253d1a7; Auditor 8748242782fb265359ea28cec4e640741f700a90`
+
+The first authoritative OM-011 smart-convergence pass executed fifteen tasks green,
+including whole coverage, then failed closed at `ci:governance`. The exact sequencing
+finding was that substantive Engineer commit
+`ec68086260b0f9d5e13656c05504681ab253d1a7` had zero admitted bindings.
+
+That commit followed DII-229 and the prior 16-case Inspector red
+`0215430f21649fb81650df312cbddef9e1e92b4c`. The red behaviorally exercises the task
+cache, package commands, schema integration, and controller, and it later passes with the
+complete suite. Its immutable source nevertheless names only `package.json` and
+`scripts/run-round-close-controls.mjs` from the Engineer commit's exact four-path
+population. It does not literally name `.devai/config/round-close-controls.json` or
+`packages/schemas/src/roster.ts`, as required by the prospective semantic-scope rule.
+
+No truthful binding can be created after implementation because the missing literal
+scope was not present in the prior Inspector source. The governed-sequencing policy
+therefore classifies only exact commit `ec68086260b0f9d5e13656c05504681ab253d1a7`
+as a historical commit exception. Auditor
+`8748242782fb265359ea28cec4e640741f700a90` preserves the exact failed gate, complete
+implementation paths, coverage reading, and missing-literal population. History is not
+rewritten, the real defect remains visible, and this classification grants no
+prospective exception to any later Engineer commit.
+
+The failed smart-convergence state remains invalid and must be rerun at a fresh head.
+All content-addressed key, output-digest, remote-cache, whole-coverage, review-census,
+two-cycle, exact-candidate, candidate-only clone, review-freeze, publication, and remote
+CI gates remain unchanged.
+
+This decision does not claim a green smart convergence, rehearsal, candidate or review-
+scope manifest, ready-to-review SHA, independent review, PASS, publication, merge,
+PC-0007, closure, or release. Review iteration 5 remains blocked.
+
+### DII-231 — Reaccept R-0006 after the exhaustive cycle-1 evidence sweep
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 exhaustive cycle-1 correction; OM-011; DII-207; DII-223; DII-228–230; R-0006-INDEPENDENT-OPUS-B9-REVIEW-5-FAILURE at Auditor 2e02d31c9504d4ee63dbe05f40084466292aff99; Auditor 7c0fc17e4c9543c31db9f3f563e5b9e65d220c67; Inspector 5846718c3947ddce6b3bb67b296796bcc275dcb9`
+
+The first OM-011 exhaustive review cycle bound exact candidate
+`93894da782af3943e2447f43e81e5e69cbdc73fa` and independently regenerated all 207
+mandatory topics. It returned FAIL on four topics in one complete defect class: active
+Auditor as-built and Architect source-close prose still presented superseded coverage,
+suite, trace, governed-range, and sequencing-exception readings as current. The review
+continued after the first blocker, preserved 203 passing dispositions, and disclosed
+the complete stale-current-evidence population rather than issuing a partial verdict.
+
+Auditor `2e02d31c9504d4ee63dbe05f40084466292aff99` preserves the exact FAIL and all
+207 topic dispositions. Auditor `7c0fc17e4c9543c31db9f3f563e5b9e65d220c67` refreshes
+every Auditor-owned current claim and binds older figures only to their exact historical
+subjects. Inspector `5846718c3947ddce6b3bb67b296796bcc275dcb9` performs the same
+historical binding for the KNOWN-RED coverage narrative. This decision and the amended
+source-close handoff complete the Architect-owned sweep. No production, threshold,
+exclusion, denominator, skip, assertion mechanism, task result, or prior immutable
+evidence is changed.
+
+At this decision's committed candidate, the exact declared-base range contains 135
+commits: 41 Architect, 41 Auditor, 13 Engineer, 39 Inspector, and one Owner. The current
+378-file coverage summary remains statements 16,094/22,393 (71.87%), branches
+11,659/19,382 (60.15%), functions 2,479/3,073 (80.67%), and lines 14,936/20,383
+(73.27%), above unchanged 70/60/70/70 floors, with stable summary digest
+`ac29412270641af7c8f3ca8276fcf3ae4cc48a81c425fe904c185f4c7c79e08c`. The ordinary
+suite has 156 files, 1,479 passing tests, and eight governed skips. Trace has 34
+invariants, 156 test sources, and 2,839 lexical assertion sites. The sequencing policy
+has four R-0006 exception entries covering five exact immutable implementation commits;
+the separate role-path policy still has two exact classifications.
+
+These values have no candidate standing until the committed head passes fresh
+content-addressed smart convergence, isolated rehearsal, candidate-manifest generation,
+and complete review-scope generation. Cycle 2 is the one permitted complete re-review
+through literal `claude-opus-5`. A failed or blocked cycle-2 topic stops and escalates
+to the Owner; no cycle 3 is authorized. After PASS, only the exact Auditor review record
+may form the review envelope, and the published head must reconverge before push.
+
+DII-231 is the closing decision for production PC-0007; DII-207 remains the declaration.
+PC-0007 may be emitted only from an all-green exact-main source merge, on a closure-only
+branch, and must bind that source merge with release disposition `none-needed`.
+
+This decision does not itself claim cycle-2 PASS, source publishability, push, pull
+request, remote exact-head CI, merge, exact-main CI, PC-0007, closure, package
+publication, tag, GitHub Release, Pages or other deployment, evidence promotion,
+real-stynx mutation, predecessor mutation, or R-0007+ work.
+
+### DII-232 — Bind cycle-1 failure classes into the cycle-2 review census
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 cycle-1 finding-retention correction; OM-011; DII-229–231; Inspector 1771b0b; Auditor 2591fe9`
+
+OM-011 requires the one permitted cycle-2 review to recheck every mandatory topic and
+every defect class found by cycle 1. The canonical review-scope policy nevertheless
+listed only independent-review failure records 1 through 4. Consequently, the fresh
+208-topic scope generated at Architect `66020a3414212104354d4dcb805161981e3cd96c`
+omitted the two P1/P2 classes preserved by cycle-1 failure record 5 even though the
+policy declared prior findings mandatory.
+
+Inspector `1771b0b` preserves the exact red contract: the canonical policy must include
+failure record 5, and that record must expose both findings through the governed
+machine-readable heading form. Auditor `2591fe9` changes only those two heading levels;
+the preserved FAIL verdict, topic dispositions, evidence, and review-cycle accounting
+remain unchanged. This decision adds failure record 5 to the canonical prior-review
+population. The executing Engineer must regenerate the committed machine mirror from
+this source before any fresh candidate machinery may pass.
+
+Cycle 2 has not begun. It may begin only after a fresh committed head passes the full
+floor, smart convergence, isolated rehearsal, candidate-manifest generation, and a
+complete review-scope census that includes both cycle-1 finding classes. A cycle-2 FAIL
+or BLOCKED result stops and escalates to the Owner; no cycle 3 is authorized.
+
+This decision does not claim green materialization, convergence, rehearsal, candidate
+identity, review-scope generation, cycle-2 PASS, publication, merge, PC-0007, closure,
+release, deployment, evidence promotion, real-stynx mutation, predecessor mutation, or
+R-0007+ work. DII-231 remains the closing decision unless a later Architect decision
+reaccepts the final corrected candidate.
+
+### DII-233 — Reaccept R-0006 after the retention-close failure
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 retention-close correction; OM-011; DII-229–232; Engineer 6a581a9a9c1586d73a604108b845e5af5ef573c8; Auditor 0f22cfa5bb56e418086c14ef834a2e56590f6793; Inspector 547351f7d87086b601d4c11a811855ce9d2f57af; R-0006-OM-011-CYCLE-1-RETENTION-CANDIDATE-FAILURE`
+
+The first candidate after DII-232, exact head
+`6a581a9a9c1586d73a604108b845e5af5ef573c8`, kept a clean worktree and passed 13
+of 16 smart-convergence tasks. It failed `trace` and dependent `stage1` because the
+new Inspector retention contract had not yet been projected into `law/trace.json`. It
+also failed `governance` because the committed policy materialization was substantive
+Engineer work with zero governed-sequencing bindings. No second convergence pass,
+rehearsal, manifest, review, publication, or closure step began.
+
+Auditor `0f22cfa5bb56e418086c14ef834a2e56590f6793` preserves the complete failed
+candidate evidence. Engineer `6a581a9a9c1586d73a604108b845e5af5ef573c8` followed
+this register's DII-232 law and the real Inspector red at `1771b0b`, but the immutable
+failing Inspector source did not literally name the exact implementation path
+`.devai/config/round-close-controls.json`. A prospective binding cannot be invented
+after implementation. The governed-sequencing policy therefore classifies only that
+exact Engineer commit as a historical exception. Inspector
+`547351f7d87086b601d4c11a811855ce9d2f57af` now binds both canonical and materialized
+paths for every prospective retention change; the classification grants no future
+bypass. This commit also regenerates the deterministic trace from the complete current
+Inspector source population.
+
+At this decision's committed candidate, the exact declared-base range contains 142
+commits: 43 Architect, 43 Auditor, 14 Engineer, 41 Inspector, and one Owner. The
+ordinary suite passes 156 files and 1,480 tests with eight governed skips. Trace binds
+34 invariants, 156 test sources, and 2,845 lexical assertion sites. The unchanged
+coverage summary remains statements 16,094/22,393 (71.87%), branches 11,659/19,382
+(60.15%), functions 2,479/3,073 (80.67%), and lines 14,936/20,383 (73.27%), with
+summary digest `ac29412270641af7c8f3ca8276fcf3ae4cc48a81c425fe904c185f4c7c79e08c`.
+The sequencing policy now has five R-0006 exception entries covering six exact
+immutable implementation commits; the separate role-path policy retains two exact
+classifications.
+
+DII-233 is the closing decision for production PC-0007; DII-207 remains the
+declaration. This candidate has no standing until fresh smart convergence, isolated
+rehearsal, candidate-manifest generation, and the complete review-scope census pass.
+Cycle 2 remains the one permitted complete re-review through literal
+`claude-opus-5`; FAIL or BLOCKED stops and escalates to the Owner, and no cycle 3 is
+authorized.
+
+This decision does not itself claim convergence, rehearsal, candidate identity,
+cycle-2 PASS, publication, remote CI, merge, PC-0007, closure, package publication,
+tag, GitHub Release, Pages or other deployment, evidence promotion, real-stynx
+mutation, predecessor mutation, or R-0007+ work.
+
+### DII-234 — Govern OM-012 complete-class repair and review-until-PASS continuation
+`type: decision · status: active · authority: Architect · provenance: session-draft OM-012 complete-class correction; R-0006-INDEPENDENT-OPUS-B9-REVIEW-6 at Auditor 33d1fa3; Inspector ab471b4; R-0006-OM-012-COMPLETE-CLASS-REPAIR-RED-EVIDENCE at Auditor 1856372`
+
+The literal cycle-2 review of candidate
+`ab4721b09ef3dde327c5d660fdf78b542cc85a66` dispositioned all 211 mandatory topics
+and returned FAIL on five. The failure invalidates that candidate, convergence,
+rehearsal, manifests, and publication standing. OM-012 supersedes only OM-011's numeric
+two-cycle cap and terminal stop, authorizing R-0006 to continue through complete-class
+repairs and as many fresh exhaustive reviews as are required for a real PASS.
+
+Every review remains read-only through literal `claude-opus-5` with no fallback,
+continues after blockers, and dispositions every machine-censused topic exactly once.
+Any FAIL or BLOCKED disposition invalidates its exact candidate and returns to
+role-pure complete-class repair, full gates, two-pass content-addressed convergence,
+candidate-only identity proof, isolated closure rehearsal, fresh manifests, and a new
+complete review. No failed result, omitted topic, stale input, transport failure, or
+cycle count may manufacture PASS.
+
+The review-scope population is no longer maintained as an enumerated list that can omit
+the newest failure. It is derived from the exact governed B9 review-record glob at the
+candidate revision, so every preserved prior P0-P3 class remains mandatory. The final
+PASS always lands at
+`work/audit/R-0006/independent-opus-b9-review-final.md`, independent of its cycle
+number; canonical policy, committed materialization, review-check, and review-envelope
+behavior must agree on that one destination.
+
+Active Auditor documents that state volatile trace, sequencing, review-census,
+coverage, suite, range, or operational-value readings must not rely on manually copied
+current prose. The policy names their structured claim blocks. The close controller
+must derive each governed value from `law/trace.json`,
+`law/policy/governed-sequencing.json`,
+`law/policy/operational-values.json`, and the candidate's complete prior-review
+population, reject missing, extra, malformed, or unequal claims, and reject unbound
+current numeric prose outside the block. Historical values remain permitted only when
+bound to an exact 40-hex subject in their paragraph.
+
+DII-226 parent-location uniqueness applies to the whole complete parent coverage map,
+not only files also observed by a subprocess. The Inspector provider must validate all
+parent files before applying any subprocess aggregate; subprocess same-kind duplicate
+observations still sum once at one canonical parent location. This changes no hit,
+denominator, threshold, include, exclusion, or whole-coverage rule for the current
+artifact, whose independently reviewed parent population had zero collisions.
+
+Inspector `ab471b48066853085f4978536aade0a7605142c1` establishes four exact red
+adversaries and literally binds `scripts/run-round-close-controls.mjs`,
+`.devai/config/round-close-controls.json`, and
+`tests/config/subprocess-v8-coverage-provider.ts`. Auditor evidence at `1856372`
+preserves the focused and full-floor failures. Implementation may now proceed only in
+those exact role-owned paths, followed by Auditor claim reconciliation and a fresh
+Architect reacceptance decision before another candidate is reviewed.
+
+This decision does not claim green implementation, corrected Auditor prose,
+convergence, rehearsal, candidate identity, review PASS, publication, remote CI, merge,
+PC-0007, closure, release, evidence promotion, real-stynx mutation, predecessor
+mutation, or R-0007+ authority.
+
+### DII-235 — Reaccept R-0006 after the OM-012 complete-class correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 OM-012 reacceptance; DII-234; Inspector ab471b4 and f749995; Auditor 1856372, 3c0879a, 1075c20, and c7b525f; Engineer 4f1af9e and 69dc9b8; Architect 5b76908`
+
+The complete-class repair ordered by the literal cycle-2 FAIL is implemented. Inspector
+`ab471b48066853085f4978536aade0a7605142c1` preserved four failing adversaries across
+the whole-parent coverage population, stable final-review destination, machine-derived
+Auditor claims, and Owner-authorized cycle continuation. Inspector
+`f749995` validates every complete parent file before any subprocess aggregate, while
+preserving DII-227 same-kind subprocess summation and every denominator, threshold,
+include, and exclusion rule.
+
+Engineer `4f1af9e` and `69dc9b8` implement the version-2 close policy: the prior-review
+population is derived at the exact candidate revision, every positive review-cycle
+number is admitted under OM-012, the final PASS record has one stable path, and
+`policy-check` derives the governed Auditor claim block from canonical trace,
+sequencing, operational-value, and prior-review sources. The committed
+`.devai/config/round-close-controls.json` mirror is byte-identical to its Architect
+source. The behavior is scoped to the successor version-2 policy and does not rewrite
+the frozen version-1 entry-control fixtures.
+
+Auditor `3c0879a` removes the complete stale-current prose population, corrects the
+17-direct-row versus 16-distinct-direct-home arithmetic, and makes structured
+machine-derived blocks the only current numeric authority for the governed values.
+Auditor `1075c20` exposes the exact sequencing observation required by the prospective
+binding. Architect `5b76908` binds both Engineer commits to the prior two-test red,
+regenerates the trace, and preserves all historical exceptions. Auditor `c7b525f`
+demonstrates the control by reconciling the resulting 2,853-site trace reading only
+after `policy-check` rejected the prior 2,845 value.
+
+At exact Architect subject `5b76908865da9319859b9931598647a51eb41625`, the minimum
+floor passes 156 test files with 1,482 tests passing and eight governed skips. Trace
+verifies 34 invariants, 156 test sources, and 2,853 lexical assertion sites. The focused
+OM-012 population passes 32/32, entry-control plus smart-convergence passes 57/57,
+canonical policy-check passes, and governed sequencing passes its exact 152-commit
+population. These readings authorize fresh candidate machinery only; they
+do not reuse the invalidated candidate `ab4721b09ef3dde327c5d660fdf78b542cc85a66`
+or any of its manifests, convergence, rehearsal, or review standing.
+
+DII-235 is the current closing decision for production PC-0007; DII-207 remains the
+declaration. R-0006 must still pass complete smart convergence, whole coverage,
+candidate-only manifest generation, isolated source/closure rehearsal, exhaustive
+review-scope generation, literal `claude-opus-5` read-only PASS, exact review envelope,
+published-head reconvergence, source PR and exact-SHA CI, source merge and exact-main
+CI, then the closure-only PC-0007 PR, merge, and final exact-main CI.
+
+This decision authorizes no package publication, tag, GitHub Release, Pages or other
+deployment, evidence promotion or reuse, real-stynx mutation, predecessor mutation, or
+R-0007+ work.
+
+### DII-236 — Govern the complete active-document current-claim population
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 cycle-3 complete-class correction; R-0006-INDEPENDENT-OPUS-B9-REVIEW-7-FAILURE at Auditor aa57003; Inspector c4c1758; Auditor ee09665 and 888d530`
+
+The literal cycle-3 review of exact candidate
+`ee98663d639f7728ef07a3d097310659777b92ab` regenerated all 238 mandatory topics and
+returned FAIL on three. The exact defect class was the same stale-current class reported
+in cycles 1 and 2: the active Architect source-close handoff retained a 2,845-site trace
+reading and five-record review census after machine truth had moved to 2,853 sites and
+six preserved failure records. The controller correctly governed two Auditor documents
+but its enumerated document population omitted the active Architect handoff.
+
+Auditor `aa57003` preserves the complete 235/3/0 disposition census. Inspector
+`c4c1758ccf40a7269721b7cacde1a2fafa6cdbec` proves that the active source-close path is
+absent from the policy and binds the canonical policy, committed materialization, and
+source-close repair paths. Auditor `ee09665` preserves the exact full-floor red with 155
+files and 1,482 tests passing, one expected failure, and eight skips; Auditor `888d530`
+reconciles the now-seven-record failure population before implementation.
+
+The governed current-claim population covers every active document that asserts the
+selected volatile trace or prior-review values, regardless of role ownership. The
+Architect source-close handoff therefore carries the same structured machine-derived
+block as the Auditor material and removes unbound volatile suite, trace, and
+review-census numerics from current prose. Exact-subject historical readings remain
+permitted and are explicitly non-current. A stale, missing, malformed, or extra
+source-close block must fail `policy-check` with the same closed behavior as an Auditor
+document.
+
+The canonical policy now names `work/rounds/R-0006/source-close.md` with trace invariant,
+test-source, assertion-site, and prior-failure claims. The executing Engineer must
+materialize that canonical policy byte-for-byte into `.devai/config/` before acceptance.
+After materialization, the focused contract and full floor must turn green, an Auditor
+must confirm the complete-class population, and a fresh later Architect decision must
+reaccept the round before candidate machinery restarts. DII-235 is invalidated as the
+closing decision by the cycle-3 FAIL; DII-207 remains the declaration.
+
+This decision claims no green materialization, fresh candidate, convergence, rehearsal,
+manifest, review PASS, publication, remote CI, merge, PC-0007, closure, release,
+evidence promotion, predecessor mutation, or R-0007+ authority.
+
+### DII-237 — Reaccept R-0006 after the cycle-3 complete-class correction
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 cycle-3 reacceptance; DII-236; Inspector c4c1758; Auditor aa57003, ee09665, 888d530, 25d622c, 81c514b, 1246d1a, and b4e8e7a; Architect 17eb61f and 1f6f95f; Engineer 508ce0e`
+
+The cycle-3 complete-class correction is implemented and audited. Inspector
+`c4c1758ccf40a7269721b7cacde1a2fafa6cdbec` exposes the omitted active Architect
+source-close population and proves stale structured values fail closed. Architect
+`17eb61fce741336f97da10d9b0734a0479cee40d` adds that exact path and claim set to the
+canonical policy, converts its volatile handoff values to a machine-derived block,
+exact-binds historical quantitative prose, and regenerates trace. Engineer
+`508ce0ec00915133a349c51ee7c1ce2b753c1b33` materializes the canonical policy
+byte-for-byte. Architect `1f6f95fc7c97b4f9081aad1d9e183d01f85b6ed1` binds the
+Engineer commit to its exact prior Inspector red and durable Auditor artifact without
+an exception.
+
+Auditor `25d622ca1d33f760047688c4dd01887d54f8ce78` reconciles the regenerated trace claim,
+Auditor `81c514bb0872bc5ed812bc361bfbd03bb61471c5` normalizes the immutable red observation
+for machine sequencing, and Auditor `1246d1a5e99325083f414b82e9b6b4a3d03699cb` audits the
+whole repair population. At exact Engineer subject
+`508ce0ec00915133a349c51ee7c1ce2b753c1b33`, the focused contract passed 24 cases and
+the complete ordinary floor passed 156 files with 1,483 tests passing and eight governed
+skips. At exact Architect subject `1f6f95fc7c97b4f9081aad1d9e183d01f85b6ed1`, trace
+verified 34 invariants, 156 test sources, and 2,857 lexical assertion sites while
+governed sequencing passed its 163-commit population. Auditor
+`b4e8e7a67256318adefcb9a26513af0f67cd9f76` corrected the one invented SHA expansion
+found by the full floor; the governed SHA gate then passed. Fresh candidate machinery,
+not this prose, must derive every later population and result.
+
+DII-237 replaces invalidated DII-235 as the Architect closing decision for production
+PC-0007; DII-207 remains the declaration. This decision authorizes fresh smart
+convergence, candidate-only identity verification, isolated rehearsal, candidate and
+review-scope manifest generation, and a fresh literal `claude-opus-5` exhaustive review.
+It does not reuse candidate `ee98663d639f7728ef07a3d097310659777b92ab` or any of its
+state. Only a mechanically valid PASS may enter the governed review envelope and serial
+source/closure ceremony.
+
+This decision claims no fresh candidate yet, review PASS, publication, remote CI, merge,
+PC-0007, closure, release, package publication, tag, GitHub Release, Pages deployment,
+evidence promotion, predecessor mutation, or R-0007+ authority.
+
+### DII-238 — Reaccept the cycle-3 finding-class census
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 exhaustive-census reacceptance; DII-237; Auditor b7f41ef`
+
+Auditor `b7f41eff8b58d2e4bc6a1ce0d7b5a494a20811be` normalizes the preserved cycle-3
+complete-class heading to the governed `### P1` form. The review-scope generator derives
+prior defect classes from that structural form; without this correction the exact
+cycle-3 source-close population remained disclosed in prose and dispositions but did
+not become a mandatory `previous-finding` topic in the next census. No review was
+invoked against that incomplete census.
+
+The correction changes no finding, disposition, digest for the rejected candidate,
+source repair, policy, materialization, test, trace, sequencing binding, coverage
+reading, threshold, exclusion, or denominator. It makes the already-preserved defect
+class mechanically mandatory for every later candidate. DII-238 replaces DII-237 as the
+Architect closing decision for production PC-0007; DII-207 remains the declaration.
+
+Fresh smart convergence, isolated rehearsal, candidate-manifest generation, and
+review-scope generation must run from the exact DII-238 head. The resulting census must
+contain the cycle-3 P1 class before literal `claude-opus-5` is invoked. No state from
+candidate `764bc54ab23abb6c09b303bd82e94fb59b9a8ea5` survives this audit and closing-decision
+change.
+
+This decision claims no fresh candidate yet, review PASS, publication, remote CI, merge,
+PC-0007, closure, release, package publication, tag, GitHub Release, Pages deployment,
+evidence promotion, predecessor mutation, or R-0007+ authority.
+
+### DII-239 — Reaccept R-0006 after clean-runner portability repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 remote-CI repair; OM-012; source PR #12 run 30391126864; Auditor 4228116; Inspector 3887da0`
+
+Source PR #12 failed Stage 2 at exact source head
+`3bd2faec178ef1d37d9ae37973dc0b2971658f5d`. Auditor
+`42281167e3932edf5e1926e36e906e552cb3cc90` preserves the exact failed run: two
+fixture-only `git commit-tree` calls relied on ambient Git identity, while a freshness
+fixture inherited remote-CI indicators in a test intended to exercise locally trusted
+cache behavior. Stage 1, changeset classification, governed repository enforcement,
+and fail-closed evidence mode passed; Stage 3 and round gates correctly did not run.
+
+Inspector `3887da00ff3ebc42e026f3a4284ce580e546413d` repairs the complete test-fixture
+population. Every raw `commit-tree` call now supplies fixture-local identity, and the
+smart-convergence subprocess helper removes inherited `CI` and `GITHUB_ACTIONS`
+indicators unless a test explicitly supplies them. With global Git identity disabled
+and both remote indicators present in the parent environment, the two affected files
+pass all 58 tests. The ordinary full floor remains 156 files with 1,483 tests passing
+and eight governed skips. This decision regenerates `law/trace.json` from the repaired
+Inspector sources; the population remains 34 invariants, 156 test sources, and 2,857
+lexical assertion sites.
+
+The remote failure invalidates cycle-4 candidate
+`ccf1907c42267108192bc69122708cf48cf6d378`, its PASS record, review envelope,
+published head, and all publication or closure standing. DII-239 replaces DII-238 as
+the Architect closing decision for production PC-0007; DII-207 remains the
+declaration. A fresh exact candidate must pass the complete local controls and a fresh
+literal `claude-opus-5` exhaustive review under OM-012 before source publication may
+resume.
+
+This decision claims no fresh candidate, review PASS, publication, merge, exact-main
+CI, PC-0007, closure, release, package publication, tag, GitHub Release, Pages
+deployment, evidence promotion, predecessor mutation, or R-0007+ authority.
+
+### DII-240 — Apply the R-0006 independent Codex-review substitution
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 Codex-review substitution; OM-013; DII-207; DII-239; external claude-opus-5 session quota blocker`
+
+OM-013 replaces the otherwise-required Claude Opus 5 selector for R-0006 only. The
+fresh exhaustive close review must be performed by an independent Codex agent using
+explicit `gpt-5.6-sol` in read-only mode. The review record must state that exact model
+truthfully and bind the exact candidate, candidate-manifest digest, review-scope digest,
+governed range, findings, and every mandatory topic disposition. It must not claim or
+reuse Claude, Opus, cross-provider, cycle-4, or prior-candidate review standing.
+
+All OM-011 and OM-012 controls remain binding. The independent reviewer must recompute
+the complete machine-generated census, continue after blockers, recheck every prior
+finding class including all cycle-4 advisories, disposition every topic exactly once,
+and issue PASS only with zero failed or blocked topics and zero P0 or P1 findings. Any
+FAIL or BLOCKED result invalidates the candidate and returns to complete-class
+role-pure repair with no forced PASS and no numeric cycle cap.
+
+The canonical close-control policy admits `gpt-5.6-sol`, the truthful stable Auditor
+record at `work/audit/R-0006/independent-codex-b9-review-final.md`, and both the
+historical Opus and new Codex review populations. The executing Engineer must
+materialize that policy byte-for-byte and align the workspace controller before the
+Inspector accepts the substitution. Fresh convergence, rehearsal, candidate manifest,
+and review-scope generation must run from the final reaccepted head; no earlier
+candidate state survives these semantic changes.
+
+DII-240 replaces DII-239 as the Architect closing decision for production PC-0007;
+DII-207 remains the declaration. Only a mechanically valid exhaustive Codex PASS may
+enter the exact review envelope and the existing source and closure-only PR ceremony.
+
+This decision claims no fresh candidate, review PASS, publication, merge, exact-main
+CI, PC-0007, closure, release, package publication, tag, GitHub Release, Pages
+deployment, evidence promotion, predecessor mutation, or R-0007+ authority.
+
+### DII-241 — Reaccept R-0006 under the independent Codex review control
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 Codex-review reacceptance; OM-013; DII-240; Owner 15fa84c63a2aee72f26881172be93b1914113c41; Architect 9e7718a7628153d482b3203e65154f007d10a7e3; Auditor aae5d538d98cead86863d7f8f4a97c68a4342b77 and 4dfcfcefe44c6091e4dc53af0f512c8a2fb3561b; Engineer 5c290bedf335d4cd65813370e26218588eb8ac2f; Inspector 7edc33b3a4c18e14d02c87ce51c7df0d9f35edf1`
+
+The R-0006-only Codex substitution is implemented and audited. Owner
+`15fa84c63a2aee72f26881172be93b1914113c41` records OM-013. Architect
+`9e7718a7628153d482b3203e65154f007d10a7e3` binds explicit `gpt-5.6-sol`, the truthful
+stable Codex review path, both historical Opus and prospective Codex review
+populations, and the unchanged exhaustive PASS threshold. Auditor
+`aae5d538d98cead86863d7f8f4a97c68a4342b77` preserves the two stale selector-contract
+failures before repair.
+
+Engineer `5c290bedf335d4cd65813370e26218588eb8ac2f` materializes the canonical policy
+byte-for-byte and aligns the controller's stable record and model check. Inspector
+`7edc33b3a4c18e14d02c87ce51c7df0d9f35edf1` makes the complete active-campaign
+selector contract model both narrow Owner exceptions, updates every review-record
+fixture to the exact model, and retains literal Opus-only enforcement for unaffected
+rounds. Auditor `4dfcfcefe44c6091e4dc53af0f512c8a2fb3561b` reconciles the resulting current claim.
+
+The minimum floor passes 156 test files with 1,482 tests passing and eight governed
+skips. The focused selector plus entry-control and smart-convergence population passes
+81 tests. Policy-check passes with byte-identical canonical and materialized policy.
+The regenerated trace covers 34 invariants, 156 test sources, and 2,869 lexical
+assertion sites. Fresh candidate machinery must independently derive every later
+identity, digest, gate, census, convergence, and rehearsal result from the final clean
+head.
+
+DII-241 replaces DII-240 as the Architect closing decision for production PC-0007;
+DII-207 remains the declaration. It authorizes a fresh exact candidate, two-pass smart
+convergence, isolated source/closure rehearsal, candidate and review-scope manifests,
+and the independent read-only `gpt-5.6-sol` exhaustive review required by OM-013. Only
+a mechanically valid PASS may enter the review envelope and serial source/closure
+ceremony.
+
+This decision claims no fresh candidate yet, review PASS, publication, merge,
+exact-main CI, PC-0007, closure, release, package publication, tag, GitHub Release,
+Pages deployment, evidence promotion, predecessor mutation, or R-0007+ authority.
+
+### DII-242 — Contain the Codex substitution sequencing defect
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 Codex-substitution governance correction; OM-013; DII-240; DII-241; Auditor 48a97795b6225e2c67f90b32add5abb6431efb95; Engineer 5c290bedf335d4cd65813370e26218588eb8ac2f; Inspector 7edc33b3a4c18e14d02c87ce51c7df0d9f35edf1`
+
+Fresh smart convergence at exact candidate
+`b3d323605834d1f8fea679920c2933701a96ee16` executed the governance task and stopped
+on one complete-class finding: substantive Engineer commit
+`5c290bedf335d4cd65813370e26218588eb8ac2f` had zero governed sequencing bindings.
+Auditor `48a97795b6225e2c67f90b32add5abb6431efb95` preserves the exact task key, input
+digest, exit, reproduction, and invalidated candidate standing.
+
+The implementation followed DII-240 and a real two-test selector failure preserved by
+Auditor `aae5d538d98cead86863d7f8f4a97c68a4342b77`, but the repairing Inspector commit
+`7edc33b3a4c18e14d02c87ce51c7df0d9f35edf1` followed the Engineer commit. It is not
+relabelled as a qualifying prior semantic red. Rewriting the role-pure published branch
+history would erase the failure chronology, so the governed sequencing policy records
+one exact historical commit exception for `5c290bed…`, with no round-wide or
+prospective bypass. The complete affected population is that single Engineer commit.
+
+The machine-derived current claim now reports six R-0006 exception entries covering
+seven exact commits. Policy-check and governed sequencing must pass from the new clean
+head before any candidate, manifest, rehearsal, or review is regenerated. Candidate
+`b3d3236…` and its partial convergence have no standing.
+
+DII-242 replaces DII-241 as the Architect closing decision for production PC-0007;
+DII-207 remains the declaration. After the exact correction passes, it authorizes only
+a fresh candidate, two-pass convergence, isolated rehearsal, new manifests, and the
+OM-013 independent `gpt-5.6-sol` exhaustive review. Any new substantive implementation
+still requires an ordinary exact prior semantic-red binding; this exception cannot be
+copied forward.
+
+This decision claims no fresh candidate yet, review PASS, publication, merge,
+exact-main CI, PC-0007, closure, release, package publication, tag, GitHub Release,
+Pages deployment, evidence promotion, predecessor mutation, or R-0007+ authority.
+
+### DII-243 — Close the cycle-5 public output-totality gaps
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 Codex cycle-5 complete-class correction; OM-012; OM-013; DII-215; DII-242; R-0006-INDEPENDENT-CODEX-B9-REVIEW-5-FAILURE; Inspector c1cbf28639464de6889ccdd3d37a75867e2d5f9c; Auditor aeb72277213c4cb4d2b38378388731e131ab07d8`
+
+The independent Codex cycle-5 review rejects candidate
+`57a736a7db4a54e62a489fdeb647c462e855c17c` on three complete P1 classes. The public
+machine-output boundary does not consume bare `--json` on the retained surface,
+parameterized `sense run` bypasses its public action identity and authority projection,
+and noncanonical handler exits or pre-dispatch exceptions can make the process status
+contradict the action-result envelope or escape it entirely. Inspector
+`c1cbf28639464de6889ccdd3d37a75867e2d5f9c` exposes all three populations; Auditor
+`aeb72277213c4cb4d2b38378388731e131ab07d8` preserves the literal five-failure result
+and its exact four-path semantic scope.
+
+DII-215's one-envelope rule applies to the whole public invocation, including
+initialization, authority, routing, and handler dispatch. Both `--json` and `--format
+json` select the same machine mode and are consumed before the retained handler sees
+them. A machine invocation emits exactly one action-result envelope bound to the
+canonical public action identity; no internal folded identity, raw SensorReading,
+router prose, CAC diagnostic, exception message, or stack may bypass that boundary.
+Every error envelope's `error.exit` is the operating-system process status. A legacy
+domain or strict exit outside the closed 2–7 transport range maps to contract exit 7,
+but its human-mode domain result remains represented truthfully in the structured
+error rather than being replaced by fabricated transport prose.
+
+Every one of the 59 registered `sense run <kind>` forms is a read-only projection of
+the single public `sense run` action when no write or publication consent is present.
+The public parent authority scope may execute the exact registered internal sensor
+emitter without reminting the child as a public action. Both machine spellings and
+`sense run --list` use the same parent action-result envelope. The registry census,
+sensor result semantics, and fail-closed authority boundary remain unchanged.
+
+The Engineer repair is limited to `packages/cli/src/action-output.ts`,
+`packages/cli/src/authority/index.ts`, `packages/cli/src/bin.ts`, and
+`packages/cli/src/command-router.ts`. It must make the exact Inspector red green,
+retain human presentation, and pass the full ordinary floor. A later Architect commit
+must bind the Engineer commit to this decision, the prior Inspector red, and the
+durable Auditor artifact before R-0006 may be reaccepted.
+
+DII-243 replaces DII-242 as the Architect closing decision for production PC-0007;
+DII-207 remains the declaration. Candidate `57a736a…`, its convergence, rehearsal,
+manifests, and review have no standing. Only complete role-pure repair, audit,
+sequencing binding, and a fresh exhaustive OM-013 Codex PASS can restore publication
+eligibility.
+
+This decision claims no green repair, fresh candidate, review PASS, publication,
+merge, exact-main CI, PC-0007, closure, release, package publication, tag, GitHub
+Release, Pages deployment, evidence promotion, predecessor mutation, or R-0007+
+authority.
+
+### DII-244 — Contain and reaccept the complete-population output repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 complete-population correction; OM-012; OM-013; DII-215; DII-243; Engineer a8bec1c66379449c1b3d82879c765fc062cb49a0, f8886676d81e560fc85be3914e7f2e129ebb61c3, 3be16cb1dca53a2614ced355f9de35bb1b65f752, and 2f1a24b4e0f42dd2eacbce1da83ea741b66a2486; Inspector 86934e7, fd2ea61, and aa3e180; Auditor 145cf2989480fd3eac9a51bafa415645acc1b371`
+
+The Owner's pre-review stop condition required observable execution of every retained
+public output identity rather than route-only or synthetic evidence. The resulting
+machine-readable population executes all 147 retained actions, all 59 `sense run`
+kinds plus list under both machine spellings, the actual failure paths of all 13
+noncanonical-exit producers, and separate initialization, registry-validation,
+authorization, routing, and handler-dispatch throws. It reports no missing, duplicate,
+structurally-only, unexecuted, envelope-invalid, exit-mismatched, or semantically
+divergent row. Auditor `145cf2989480fd3eac9a51bafa415645acc1b371`
+preserves the exact artifact with SHA-256
+`6461aadb0185450b30bfb3101230a78760e929a75b8a91c40ece250dfb7a3afe`.
+
+The complete execution also disclosed an immutable sequencing defect in Engineer
+`2f1a24b4e0f42dd2eacbce1da83ea741b66a2486`. A post-envelope doctor warning and two
+handler catches that swallowed the canonical action-output exit sentinel required
+corrections in `packages/cli/src/commands/doctor.ts`,
+`packages/cli/src/commands/mutation/run.ts`, and
+`packages/cli/src/commands/record/run.ts`, in addition to
+`packages/cli/src/action-output.ts`. Those paths exceeded DII-243's exact four-path
+limit, and the complete executable Inspector population at `86934e7` followed the
+Engineer commit. It is not relabelled as prior red. The sequencing policy therefore
+records one exact historical-commit exception for `2f1a24b…`; it grants no round-wide
+or prospective bypass.
+
+The three earlier Engineer commits `a8bec1c…`, `f888667…`, and `3be16cb…` remain
+ordinarily bound to prior Architect `34784bd…`, Inspector `c1cbf28…`, and Auditor
+`aeb7227…`. Their union changes exactly the four implementation paths enumerated by
+that prior red. The exception population is exactly one later Engineer commit.
+
+DII-244 replaces DII-243 as the Architect closing decision for production PC-0007;
+DII-207 remains the declaration. It reaccepts the verified behavior only for the
+remaining pre-review gates: governed checks, focused and ordinary suites, isolated
+clean-runner parity, smart convergence, rehearsal, and fresh manifests. The formal
+cycle-6 Codex review remains stopped until every such gate is green.
+
+This decision claims no completed pre-review gate set, fresh candidate, review PASS,
+publication, merge, exact-main CI, PC-0007, closure, release, package publication, tag,
+GitHub Release, Pages deployment, evidence promotion, predecessor mutation, real
+external mutation, or R-0007+ authority.
+
+### DII-245 — Reaccept the output gate after pre-review portability repair
+`type: decision · status: active · authority: Architect · provenance: session-draft R-0006 pre-review gate correction; OM-012; OM-013; DII-239; DII-244; failed smart convergence at 3581f1e9a6e09174c38df137a89d229d50ad84fc; Inspector 2f9018ff8661806b31ccc68c11871c28c63ae419, 3b91504718268a5376ad5e51dabcfbc9ef5b84e0, and 3e1dab4745ac899f96bf3adf1e370781bcf931a6; Auditor f3469497bbcf9873b4e4ae374f7c643aa6bc3b9b`
+
+Remote-mode smart convergence at exact head
+`3581f1e9a6e09174c38df137a89d229d50ad84fc` distrusted all pre-existing freshness
+records and continued through all 16 tasks. Fourteen passed. Formatting rejected the
+Auditor as-built and population JSON, and coverage completed 158 files with one failed
+sensor-envelope case after a child process exceeded its 30-second bound under the full
+V8 provider load. No coverage summary was admitted. Auditor `f346949…` preserves the
+complete two-gate defect population and does not relabel that convergence PASS.
+
+The repair changes no production path, action identity, sensor behavior, threshold,
+coverage denominator, exclusion, provider, or review controller. Inspector `2f9018f…`
+and `3e1dab4…` make the executable population writer resolve and apply the repository's
+canonical Prettier configuration. Inspector `3b91504…` raises only the affected
+synchronous coverage-harness bounds to 120 seconds per child and 360 seconds for the
+three-invocation case. A subprocess-V8 focused run passes all six cases. The regenerated
+Auditor population remains a zero-failure behavioral PASS and has canonical SHA-256
+`32fcbd1c054ee737c7d803a53903e98f1fe1a2ed6f363dca842a719f6b3fb0dd`.
+
+DII-245 replaces DII-244 as the Architect closing decision for production PC-0007;
+DII-207 remains the declaration. It reaccepts only the repaired pre-review harness and
+artifact. Full coverage, two-pass smart convergence, isolated rehearsal, candidate and
+review-scope manifests, and an independent confirmation of the existing 264 topics
+must still pass before formal Codex review cycle 6 may begin.
+
+This decision claims no fresh convergence PASS, candidate freeze, manifest, review
+PASS, publication, merge, exact-main CI, PC-0007, closure, release, package publication,
+tag, GitHub Release, Pages deployment, evidence promotion, predecessor mutation, real
+external mutation, or R-0007+ authority.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

@@ -1,0 +1,460 @@
+{
+  "schemaVersion": "2.0.0",
+  "manifest_schema": "law/schemas/round-close-manifest.schema.json",
+  "freshness_schema": "law/schemas/task-freshness.schema.json",
+  "review_scope_schema": "law/schemas/review-scope-manifest.schema.json",
+  "declaration": {
+    "decision_id": "DII-207",
+    "base_pattern": "exact successor base\\s+`([0-9a-f]{40})`"
+  },
+  "identities": {
+    "fields": ["implementation_subject", "review_candidate", "published_head"],
+    "required_kind": "commit",
+    "publishability": "candidate-only-no-alternates",
+    "historical_classification": "exact-sha-kind-reason-paths"
+  },
+  "governed_range": {
+    "mode": "exact-declared-base-to-published-head",
+    "fixed_windows_forbidden": true
+  },
+  "governed_identity_sources": ["law/register/DECISIONS.md", "work/audit/**/*.md"],
+  "role_paths": {
+    "Architect": ["law/**", "work/rounds/**", "docs/**"],
+    "Owner": ["product/**"],
+    "Engineer": [
+      ".devai/config/**",
+      ".devai/pin/**",
+      ".github/**",
+      "packages/**",
+      "scripts/**",
+      "*.json",
+      "*.yml",
+      "*.yaml",
+      "eslint.config.*",
+      "tsconfig.*"
+    ],
+    "Inspector": ["tests/**", "**/tests/**", "**/*.test.ts", "**/*.spec.ts"],
+    "Auditor": ["work/audit/**"],
+    "Machine": ["record/**"]
+  },
+  "role_path_exceptions": [
+    {
+      "commit": "d41c648b184ae63c2ed473ae1a44725eb3cb26dc",
+      "role": "Engineer",
+      "paths": ["tests/config/t1-t3.coverage.config.ts"],
+      "decision_id": "DII-219",
+      "reason": "Immutable B6 ownership defect; the exact coverage configuration path remains Inspector-owned."
+    },
+    {
+      "commit": "8e7a44b70a3e13b85293de48af8284889daea7e3",
+      "role": "Engineer",
+      "paths": [
+        "tests/config/subprocess-v8-coverage-provider.ts",
+        "tests/config/t1-t3.coverage.config.ts"
+      ],
+      "decision_id": "DII-219",
+      "reason": "Immutable B6 ownership defect; both exact coverage-provider paths remain Inspector-owned."
+    }
+  ],
+  "projections": [
+    {
+      "id": "action-registry",
+      "command": ["pnpm", "run", "action-registry:check"],
+      "sources": ["law/policy/action-registry.json"],
+      "outputs": [
+        "packages/cli/src/generated/action-registry.ts",
+        "packages/effects-check/src/generated/action-catalog.ts",
+        "packages/sensors/src/generated/action-kinds.ts"
+      ]
+    },
+    {
+      "id": "trace",
+      "command": ["pnpm", "run", "trace:check"],
+      "sources": ["law/invariants/**/*.json", "tests/**/*.ts", "packages/**/tests/**/*.ts"],
+      "outputs": ["law/trace.json"]
+    },
+    {
+      "id": "repository-references",
+      "command": ["pnpm", "run", "repository-reference:check"],
+      "sources": ["**/*"],
+      "outputs": ["work/rounds/R-0002/repository-reference-triage.json"]
+    },
+    {
+      "id": "round-close-policy-materialization",
+      "command": ["node", "scripts/run-round-close-controls.mjs", "policy-check"],
+      "sources": ["law/policy/round-close-controls.json"],
+      "outputs": [".devai/config/round-close-controls.json"]
+    }
+  ],
+  "freshness": {
+    "policy_version": "1.0.0",
+    "state_root": ".devai/state/round-runs/{round}/close/freshness",
+    "local_cache_trusted": true,
+    "remote_cache_trusted": false,
+    "remote_environment_indicators": ["CI", "GITHUB_ACTIONS"],
+    "outcomes": ["EXECUTED_PASS", "SKIPPED_FRESH", "EXECUTED_FAIL", "BLOCKED"],
+    "environment_allowlist": [
+      { "name": "CI", "mode": "value-sha256" },
+      { "name": "GITHUB_ACTIONS", "mode": "value-sha256" },
+      { "name": "NODE_ENV", "mode": "value-sha256" },
+      { "name": "DATABASE_URL", "mode": "presence" },
+      { "name": "DEVAI_TEST_DATABASE_URL", "mode": "presence" }
+    ],
+    "toolchain": [
+      { "id": "node", "argv": ["node", "--version"] },
+      { "id": "pnpm", "argv": ["pnpm", "--version"] },
+      { "id": "vitest", "argv": ["pnpm", "exec", "vitest", "--version"] },
+      { "id": "typescript", "argv": ["pnpm", "exec", "tsc", "--version"] },
+      { "id": "git", "argv": ["git", "--version"] }
+    ],
+    "input_sets": {
+      "package_graph": [
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "packages/**/package.json"
+      ],
+      "typescript": ["tsconfig*.json", "packages/**/tsconfig*.json"],
+      "vitest": ["vitest*.ts", "tests/config/**", "tests/helpers/**", "packages/**/vitest*.ts"],
+      "production": ["packages/**/*.ts", "scripts/**/*.mjs"],
+      "tests": [
+        "tests/**/*.ts",
+        "packages/**/tests/**/*.ts",
+        "packages/**/*.test.ts",
+        "packages/**/*.spec.ts"
+      ],
+      "law": ["law/policy/**", "law/schemas/**", "law/invariants/**", "law/register/DECISIONS.md"],
+      "governance": ["product/**", "work/rounds/**", "work/audit/**", "record/**", ".github/**"],
+      "formatting": ["**/*"],
+      "coverage": [
+        "packages/**/*.ts",
+        "scripts/**/*.mjs",
+        "tests/**/*.ts",
+        "packages/**/tests/**/*.ts",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "vitest*.ts",
+        "tsconfig*.json",
+        "packages/**/package.json",
+        "packages/**/tsconfig*.json",
+        "law/policy/thresholds.json",
+        "law/policy/round-close-controls.json"
+      ]
+    },
+    "tasks": [
+      {
+        "id": "formatting",
+        "input_sets": ["formatting"],
+        "dependencies": [],
+        "outputs": [],
+        "graph": "complete"
+      },
+      {
+        "id": "preparation",
+        "input_sets": ["package_graph", "typescript", "production", "law"],
+        "dependencies": [],
+        "outputs": [
+          "packages/cli/dist/**",
+          "packages/schemas/dist/**",
+          "packages/*/src/generated/**"
+        ],
+        "graph": "conservative"
+      },
+      {
+        "id": "action-registry",
+        "input_sets": ["package_graph", "production", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [
+          "packages/cli/src/generated/action-registry.ts",
+          "packages/effects-check/src/generated/action-catalog.ts",
+          "packages/sensors/src/generated/action-kinds.ts"
+        ],
+        "graph": "complete"
+      },
+      {
+        "id": "trace",
+        "input_sets": ["production", "tests", "law"],
+        "dependencies": ["preparation"],
+        "outputs": ["law/trace.json"],
+        "graph": "complete"
+      },
+      {
+        "id": "repository-references",
+        "input_sets": ["formatting"],
+        "dependencies": [],
+        "outputs": ["work/rounds/R-0002/repository-reference-triage.json"],
+        "graph": "conservative"
+      },
+      {
+        "id": "materializations",
+        "input_sets": ["production", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [".devai/config/round-close-controls.json"],
+        "graph": "complete"
+      },
+      {
+        "id": "diff-check",
+        "input_sets": ["formatting"],
+        "dependencies": [],
+        "outputs": [],
+        "graph": "complete"
+      },
+      {
+        "id": "ordinary",
+        "input_sets": ["package_graph", "typescript", "vitest", "production", "tests", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "stage1",
+        "input_sets": [
+          "package_graph",
+          "typescript",
+          "vitest",
+          "production",
+          "tests",
+          "law",
+          "governance"
+        ],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "stage2",
+        "input_sets": ["package_graph", "typescript", "vitest", "production", "tests", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "t4",
+        "input_sets": ["package_graph", "typescript", "vitest", "production", "tests", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "t5",
+        "input_sets": ["package_graph", "typescript", "vitest", "production", "tests", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "t6",
+        "input_sets": ["package_graph", "typescript", "vitest", "production", "tests", "law"],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "changesets",
+        "input_sets": ["package_graph", "production", "governance"],
+        "dependencies": [],
+        "outputs": [],
+        "graph": "conservative"
+      },
+      {
+        "id": "coverage",
+        "input_sets": ["coverage"],
+        "dependencies": ["preparation"],
+        "outputs": [
+          "scratch/coverage/t1-t3/coverage-summary.json",
+          "scratch/coverage/t1-t3/coverage-final.json",
+          "scratch/coverage/t1-t3/subprocess-v8/**"
+        ],
+        "graph": "complete",
+        "coverage_mode": "whole-only"
+      },
+      {
+        "id": "governance",
+        "input_sets": ["package_graph", "typescript", "production", "tests", "law", "governance"],
+        "dependencies": ["preparation"],
+        "outputs": [],
+        "graph": "conservative"
+      }
+    ],
+    "unknown_dependency": "execute-broader-suite",
+    "dynamic_import_ambiguity": "execute-broader-suite",
+    "failed_or_malformed_cache": "execute",
+    "dirty_untracked_deleted_renamed_inputs": "included-in-key",
+    "coverage_reuse": "whole-identical-inputs-and-outputs-only",
+    "partial_coverage_merge": "forbidden"
+  },
+  "review_scope": {
+    "policy_version": "1.0.0",
+    "manifest_state": ".devai/state/round-runs/{round}/close/review-scope-manifest.json",
+    "candidate_manifest_state": ".devai/state/round-runs/{round}/close/candidate-manifest.json",
+    "candidate_manifest_history": ".devai/state/round-runs/{round}/close/candidate-manifests/*.json",
+    "exact_range": "declared-base-to-candidate",
+    "requirement_sources": [
+      "work/rounds/R-0006/AUTHORIZATION.md",
+      "work/rounds/R-0006/plan.md",
+      "work/rounds/R-0006/prompts/00-orchestrator.md",
+      "product/owner-mandates/OM-011.md",
+      "product/owner-mandates/OM-012.md",
+      "product/owner-mandates/OM-013.md"
+    ],
+    "controlling_sources": [
+      "work/rounds/EXECUTION-CONTRACT.md",
+      "law/policy/round-close-controls.json",
+      "law/schemas/task-freshness.schema.json",
+      "law/schemas/review-scope-manifest.schema.json",
+      "law/register/DECISIONS.md"
+    ],
+    "prior_review_globs": [
+      "work/audit/R-0006/independent-opus-b9-review*.md",
+      "work/audit/R-0006/independent-codex-b9-review*.md"
+    ],
+    "topic_sources": [
+      "changed-path",
+      "requirement",
+      "control",
+      "previous-finding",
+      "candidate-manifest"
+    ],
+    "topic_fields": [
+      "topic_id",
+      "claim",
+      "governing_paths",
+      "current_digest",
+      "previous_digest",
+      "changed_status",
+      "required_adversaries",
+      "previous_findings",
+      "freshness_proof",
+      "required_disposition"
+    ],
+    "dispositions": ["RECHECKED_PASS", "RECHECKED_FAIL", "REUSED_FRESH_PASS", "BLOCKED"],
+    "unchanged_requires_recomputation": true,
+    "exactly_once": true,
+    "previous_findings_mandatory": true,
+    "review_record_markers": {
+      "start": "<!-- review-topic-dispositions:start -->",
+      "end": "<!-- review-topic-dispositions:end -->"
+    },
+    "review_cycles": {
+      "mode": "owner-authorized-unbounded",
+      "minimum": 1,
+      "failure": "repair-complete-class-and-rereview",
+      "forced_pass": false
+    }
+  },
+  "convergence": {
+    "passes": 2,
+    "second_pass": "no-write-clean",
+    "normalized_runtime_artifacts": [
+      "scratch/coverage/t1-t3/coverage-final.json",
+      "scratch/coverage/t1-t3/subprocess-v8/**"
+    ],
+    "commands": [
+      { "id": "formatting", "argv": ["pnpm", "exec", "prettier", "--check", "."] },
+      { "id": "preparation", "argv": ["pnpm", "run", "devai:prepare"] },
+      { "id": "action-registry", "argv": ["pnpm", "run", "action-registry:check"] },
+      { "id": "trace", "argv": ["pnpm", "run", "trace:check"] },
+      {
+        "id": "repository-references",
+        "argv": ["pnpm", "run", "repository-reference:check"]
+      },
+      {
+        "id": "materializations",
+        "argv": ["node", "scripts/run-round-close-controls.mjs", "policy-check"]
+      },
+      { "id": "diff-check", "argv": ["git", "diff", "--check"] },
+      { "id": "ordinary", "argv": ["pnpm", "vitest", "run"] },
+      { "id": "stage1", "argv": ["pnpm", "run", "ci:stage1"] },
+      { "id": "stage2", "argv": ["pnpm", "run", "ci:stage2"] },
+      { "id": "t4", "argv": ["pnpm", "run", "test:t4"] },
+      { "id": "t5", "argv": ["pnpm", "run", "test:t5"] },
+      { "id": "t6", "argv": ["pnpm", "run", "test:t6"] },
+      { "id": "changesets", "argv": ["pnpm", "run", "ci:changesets"] },
+      { "id": "coverage", "argv": ["pnpm", "run", "test:coverage:t1-t3"] },
+      { "id": "governance", "argv": ["pnpm", "run", "ci:governance"] }
+    ]
+  },
+  "review": {
+    "frozen_paths": [
+      "law/**",
+      "product/**",
+      "packages/**",
+      "tests/**",
+      "docs/**",
+      "work/rounds/**",
+      "work/audit/R-0006/entry-control-as-built.md"
+    ],
+    "record": "work/audit/R-0006/independent-codex-b9-review-final.md",
+    "record_author": "DEVAI Auditor",
+    "required_verdict": "PASS",
+    "required_model": "gpt-5.6-sol",
+    "manifest_state": ".devai/state/round-runs/R-0006/close/candidate-manifest.json",
+    "projection_only": true,
+    "allowed_projection_ids": []
+  },
+  "rehearsal": {
+    "schema_path": "law/schemas/phase-closure.schema.json",
+    "verb_path": "packages/cli/src/commands/phase/index.ts",
+    "closure_path_glob": "record/proofs/compliance/closures/PC-*.json",
+    "prepare": [
+      ["pnpm", "install", "--offline", "--frozen-lockfile"],
+      ["pnpm", "run", "devai:prepare"]
+    ],
+    "command": ["node", "packages/cli/dist/bin.js", "govern", "phase", "close"],
+    "range_check": ["node", "scripts/check-governed-sequencing.mjs"]
+  },
+  "audit_current_claims": {
+    "markers": {
+      "start": "<!-- governed-current-claims:start -->",
+      "end": "<!-- governed-current-claims:end -->"
+    },
+    "volatile_current_numeric_prose_forbidden": true,
+    "documents": [
+      {
+        "path": "work/audit/R-0006/as-built.md",
+        "claims": [
+          "trace_invariants",
+          "trace_test_sources",
+          "trace_assertion_sites",
+          "r0006_sequencing_exception_entries",
+          "r0006_sequencing_exception_commits",
+          "operational_direct_rows",
+          "operational_distinct_direct_value_homes",
+          "operational_total_value_homes"
+        ]
+      },
+      {
+        "path": "work/audit/R-0006/om011-convergence-control-audit.md",
+        "claims": ["prior_b9_failure_records"]
+      },
+      {
+        "path": "work/rounds/R-0006/source-close.md",
+        "claims": [
+          "trace_invariants",
+          "trace_test_sources",
+          "trace_assertion_sites",
+          "prior_b9_failure_records"
+        ]
+      }
+    ]
+  },
+  "semantic_assertions": {
+    "population_sources": [
+      "law/**/*.json",
+      "product/**/*.json",
+      "packages/**/*.ts",
+      "scripts/**/*.mjs",
+      "tests/**/*.ts"
+    ],
+    "fixed_counts_forbidden": true,
+    "self_comparisons_forbidden": true,
+    "named_file_only_forbidden": true,
+    "mirror_pairs": [
+      {
+        "source": "law/policy/round-close-controls.json",
+        "mirror": ".devai/config/round-close-controls.json"
+      }
+    ]
+  }
+}

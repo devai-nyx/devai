@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/review-scope-manifest.schema.json",
+  "title": "R-0006 exhaustive review-scope manifest",
+  "description": "Machine-generated exact-candidate review census. Every topic is mandatory and must be dispositioned exactly once.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "policy_version",
+    "round",
+    "exact_base",
+    "review_candidate",
+    "candidate_tree",
+    "current_candidate_manifest_digest",
+    "previous_candidate_manifest_digests",
+    "topic_count",
+    "topics",
+    "manifest_digest_sha256"
+  ],
+  "$defs": {
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "freshnessProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "inputs_digest", "independent_recomputation_required"],
+      "properties": {
+        "method": { "enum": ["content-addressed", "recheck-required"] },
+        "inputs_digest": { "$ref": "#/$defs/sha256" },
+        "task_keys": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/sha256" }
+        },
+        "independent_recomputation_required": { "const": true }
+      }
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "policy_version": { "type": "string", "minLength": 1 },
+    "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+    "exact_base": { "$ref": "#/$defs/sha1" },
+    "review_candidate": { "$ref": "#/$defs/sha1" },
+    "candidate_tree": { "$ref": "#/$defs/sha1" },
+    "current_candidate_manifest_digest": { "$ref": "#/$defs/sha256" },
+    "previous_candidate_manifest_digests": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/sha256" }
+    },
+    "topic_count": { "type": "integer", "minimum": 1 },
+    "topics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "topic_id",
+          "claim",
+          "governing_paths",
+          "current_digest",
+          "previous_digest",
+          "changed_status",
+          "required_adversaries",
+          "previous_findings",
+          "freshness_proof",
+          "required_disposition"
+        ],
+        "properties": {
+          "topic_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]*$" },
+          "claim": { "type": "string", "minLength": 1 },
+          "governing_paths": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "$ref": "#/$defs/relativePath" }
+          },
+          "current_digest": { "$ref": "#/$defs/sha256" },
+          "previous_digest": {
+            "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+          },
+          "changed_status": { "enum": ["added", "changed", "unchanged", "removed"] },
+          "required_adversaries": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "previous_findings": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "freshness_proof": { "$ref": "#/$defs/freshnessProof" },
+          "required_disposition": {
+            "enum": ["RECHECKED_PASS", "RECHECKED_FAIL", "REUSED_FRESH_PASS", "BLOCKED"]
+          }
+        }
+      }
+    },
+    "manifest_digest_sha256": { "$ref": "#/$defs/sha256" }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "policy_version": "1.0.0",
+      "round": "R-0006",
+      "exact_base": "0000000000000000000000000000000000000000",
+      "review_candidate": "1111111111111111111111111111111111111111",
+      "candidate_tree": "2222222222222222222222222222222222222222",
+      "current_candidate_manifest_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "previous_candidate_manifest_digests": [],
+      "topic_count": 1,
+      "topics": [
+        {
+          "topic_id": "requirement:example",
+          "claim": "Every mandatory review topic is dispositioned exactly once.",
+          "governing_paths": ["work/rounds/R-0006/plan.md"],
+          "current_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+          "previous_digest": null,
+          "changed_status": "added",
+          "required_adversaries": ["omit-topic", "duplicate-topic"],
+          "previous_findings": [],
+          "freshness_proof": {
+            "method": "recheck-required",
+            "inputs_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+            "task_keys": [],
+            "independent_recomputation_required": true
+          },
+          "required_disposition": "RECHECKED_PASS"
+        }
+      ],
+      "manifest_digest_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    }
+  ]
+}

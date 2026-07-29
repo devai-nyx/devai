@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0006-HONEST-BRANCH-COVERAGE-DEPTH-RED-EVIDENCE",
+  "round": "R-0006",
+  "authority": "Auditor",
+  "date": "2026-07-27",
+  "implementation_subject": "2087572909813282086a48a823017e3ed74f39cf",
+  "command": "pnpm run test:coverage:t1-t3",
+  "exit_code": 1,
+  "test_result": {
+    "files_passed": 153,
+    "tests_passed": 1445,
+    "tests_skipped": 8,
+    "tests_failed": 0
+  },
+  "coverage": {
+    "eligible_source_files": 378,
+    "thresholds": {
+      "lines": 70,
+      "branches": 60,
+      "functions": 70,
+      "statements": 70
+    },
+    "lines": {
+      "covered": 14834,
+      "total": 20383,
+      "pct": 72.77
+    },
+    "branches": {
+      "covered": 11557,
+      "total": 19382,
+      "pct": 59.62,
+      "required_covered": 11630,
+      "deficit": 73
+    },
+    "functions": {
+      "covered": 2469,
+      "total": 3073,
+      "pct": 80.34
+    },
+    "statements": {
+      "covered": 15974,
+      "total": 22393,
+      "pct": 71.33
+    },
+    "summary_sha256": "d6de0c743d69efabc9af69ea9a86d1e9947bf049d117be5f0abe20bbcec27f6b",
+    "runtime_coverage_final_sha256": "8f11d5caf803f430e8a24a8aa1a3ca2cec3044dd428e86c1cf4eb45cc106d732",
+    "runtime_coverage_final_stability": "byte-unstable-retained-run-artifact",
+    "raw_subprocess_json_files": 191
+  },
+  "disposition": "The collision-free exact-hit provider and non-additive live-map merge expose the honest branch deficit predicted by the third mandatory Opus review. The complete 378-file denominator, four exclusions, and 70/60/70/70 thresholds are unchanged. Only behavior-bearing Inspector depth may close the 73-branch deficit. The runtime statement artifact digest identifies this historical red run only and is not a stable cross-run identity."
+}

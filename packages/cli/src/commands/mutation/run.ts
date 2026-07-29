@@ -14,6 +14,7 @@ import type { AnySchema, ValidateFunction } from 'ajv';
 import type { CAC } from 'cac';
 import { EXIT_CONFIG, EXIT_FAIL, EXIT_PASS, EXIT_USAGE } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
+import { isActionOutputExit } from '../../action-output.js';
 
 /**
  * D-A-44 — `devai sense mutation run`.
@@ -792,6 +793,7 @@ export const mutationRun = defineCommand({
           process.exitCode =
             options.failOnSurvivors === true && current.survived > 0 ? EXIT_FAIL : EXIT_PASS;
         } catch (err) {
+          if (isActionOutputExit(err)) throw err;
           const msg = err instanceof Error ? err.message : String(err);
           process.stderr.write(`devai sense mutation run: ${msg}\n`);
           process.exit(EXIT_FAIL);

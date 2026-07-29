@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "R-0006-COVERAGE-INTEGRITY-RED-EVIDENCE",
+  "round": "R-0006",
+  "authority": "Auditor",
+  "date": "2026-07-27",
+  "observations": [
+    {
+      "commit": "49a89b433799823cc4e9d8f0baa8d6068959ae24",
+      "command": "pnpm vitest run tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": ["tests/contract/r0006-coverage-integrity.red.contract.test.ts"],
+      "test_sha256": "345d55b84c6fd7eb932f94c4c83716c55edb27208c149f3943dbe8d74b9717ef",
+      "exercised_implementation_paths": [
+        "tests/config/subprocess-v8-coverage-provider.ts",
+        "tests/config/t1-t3.coverage.config.ts"
+      ],
+      "failure_summary": "The focused pre-repair run collected one file and failed exactly three of three contracts: the canonical merge was not independently callable and could not prove that an enclosing positive hit leaves a nested exact zero-hit statement and function at zero; the coverage reporter omitted statement-level JSON; and the provider retained no raw subprocess-evidence directory or copy/rename. The complete ordinary run preserved only those three failures while 1,290 prior tests passed and eight declared skips remained."
+    }
+  ]
+}

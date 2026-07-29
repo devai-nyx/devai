@@ -305,6 +305,177 @@
         "tests": ["tests/contract/governed-sequencing.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/check-governed-sequencing.mjs"]
       }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["77ac7cd2aaf238db96b29ee2430498febc210b14"],
+      "law_commits": ["b53bde0535aa9d61e22ccf08f3ca44f6650e444c"],
+      "red_evidence": {
+        "commit": "2e73c5d9c440ff2a2cf9e8b8c025df1a44ae9948",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0006/red-evidence.json",
+        "evidence_sha256": "7ea3039433a1491977dbb3a15cf622591d75151daaa68f85e15d129a71a8a712",
+        "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "packages/schemas/src/roster.ts",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["ae68840a11f2caebaacdc774931627ddf712c446"],
+      "law_commits": ["3655fd63921baf1607581d205df3076ff7d8bc40"],
+      "red_evidence": {
+        "commit": "2e73c5d9c440ff2a2cf9e8b8c025df1a44ae9948",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0006/red-evidence-materialization.json",
+        "evidence_sha256": "8c441b0fd38bcfb05438fc02271e6de30e1ab1ba27fd7d5c93ef935e574759cd",
+        "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+        "exercised_implementation_paths": [".devai/config/round-close-controls.json"]
+      }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["848524a509bed3d25867eab347c877803f7ca8ed"],
+      "law_commits": ["3f5120886319f6ece4645014d54c2ad02e23cafc"],
+      "red_evidence": {
+        "commit": "f9ff51ed2181a9ed2ae09981e2e61e8af5695bbe",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0006/red-evidence-closure-prerequisite.json",
+        "evidence_sha256": "353b848f0785f8a6a647480c87889b7cf0c025035e0ff6af58936206352b176b",
+        "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+        "exercised_implementation_paths": [".devai/config/round-close-controls.json"]
+      }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["42060dc4e4095cc4f672dba9257dfda5b1ac28b7"],
+      "law_commits": ["b53bde0535aa9d61e22ccf08f3ca44f6650e444c"],
+      "red_evidence": {
+        "commit": "1ca2bd61ca2c5b3d8ac14a3bfc68e3bcd11efa31",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0006/red-evidence-freshness.json",
+        "evidence_sha256": "896d699525aff948d3d8632b8c589c32d14ad3031591acb551182f1aee9bf337",
+        "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["0e7f2240b9a10c2e864e5f08749be786c5f7e505"],
+      "law_commits": ["d9351279131f9c459a3e363a0db2460ae0ac5ab3"],
+      "red_evidence": {
+        "commit": "ea00313bd8552389c4bd8608c6f8e7e6b4952af7",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0006/red-evidence-independent-review.json",
+        "evidence_sha256": "bea949a59118cce5b4b721777793d6d872ef1140fda207eb05365fd0d10d5a01",
+        "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["b51de82cf519ad47e29e15ad0960ffdfd7e99c2d"],
+      "law_commits": ["ac97a17942ff04202cfbf192b1c4979c6eb82834"],
+      "red_evidence": {
+        "commit": "fb37d09255cd1a7fbf383a8b4af8404ce744b34b",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts -t \"historical role-path exception\"",
+        "evidence_path": "work/audit/R-0006/red-evidence-role-path-exceptions.json",
+        "evidence_sha256": "d470aa7c55d6ceb1cbb43e1dd7bb54c3cf61a6f86694769cdd2d92270ca070bd",
+        "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["bad810ca82b4b958399860534e12a98e42a2c5c0"],
+      "law_commits": ["5260972110a8685362c3f7b32aebe2c7aae85173"],
+      "red_evidence": {
+        "commit": "b3186cbd3579ade5321ce8f42686e10d4dabf967",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-entry-control.red.contract.test.ts -t \"normalizes only retained coverage runtime evidence\"",
+        "evidence_path": "work/audit/R-0006/red-evidence-retained-coverage-fixpoint.json",
+        "evidence_sha256": "01b020fee80777df7dd7322359b3dbdac3b95f43d2e7ee365ab85ff189cf6944",
+        "tests": ["tests/contract/r0006-entry-control.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": [
+        "4f1af9e1b5f897c3c756e9b139ea96d697bd0e24",
+        "69dc9b8972f15dda5ad73384a666527c5e7bbee7"
+      ],
+      "law_commits": ["424a1615c2446fb30aa7e749bb2f4982637568ce"],
+      "red_evidence": {
+        "commit": "ab471b48066853085f4978536aade0a7605142c1",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-coverage-integrity.red.contract.test.ts tests/contract/r0006-smart-convergence.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0006/red-evidence-om012-complete-class-repair.json",
+        "evidence_sha256": "2547496f973d0467b4d11ca579d73958528f5e5c9601945da2b7c1fdf827baf3",
+        "tests": [
+          "tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+          "tests/contract/r0006-smart-convergence.red.contract.test.ts"
+        ],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["508ce0ec00915133a349c51ee7c1ce2b753c1b33"],
+      "law_commits": ["17eb61fce741336f97da10d9b0734a0479cee40d"],
+      "red_evidence": {
+        "commit": "c4c1758ccf40a7269721b7cacde1a2fafa6cdbec",
+        "observed_exit": 1,
+        "command": "pnpm vitest run",
+        "evidence_path": "work/audit/R-0006/red-evidence-om012-source-close-current-claims.json",
+        "evidence_sha256": "ba26987bd47578724e9e4f5136d97326ba90eec829a8d21518bc12860fd38914",
+        "tests": ["tests/contract/r0006-smart-convergence.red.contract.test.ts"],
+        "exercised_implementation_paths": [".devai/config/round-close-controls.json"]
+      }
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": [
+        "a8bec1c66379449c1b3d82879c765fc062cb49a0",
+        "f8886676d81e560fc85be3914e7f2e129ebb61c3",
+        "3be16cb1dca53a2614ced355f9de35bb1b65f752"
+      ],
+      "law_commits": ["34784bdc46557ace60bd86c86c16616fa93aaf72"],
+      "red_evidence": {
+        "commit": "c1cbf28639464de6889ccdd3d37a75867e2d5f9c",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0006/red-evidence-codex-cycle5-output-totality.json",
+        "evidence_sha256": "67469df20e0a33e341e32f760bcb969ad11c42fa235a49af8d384d4c41f4828d",
+        "tests": ["tests/contract/r0006-output-totality-cycle5.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          "packages/cli/src/action-output.ts",
+          "packages/cli/src/authority/index.ts",
+          "packages/cli/src/bin.ts",
+          "packages/cli/src/command-router.ts"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [
@@ -325,6 +496,44 @@
       "round": "R-0005",
       "implementation_commits": ["50308359503d5d86c0ef9c7bb6ab243347fee0bc"],
       "reason": "The eighth-review red at 5880033 semantically exercised the exact runtime authority materialization, but its immutable Inspector source constructed .devai/config/authority-policy.json from path segments before the strict literal-scope contract was understood. Inspector 60e8f21 hardens future tests with exact literals; this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": [
+        "a0292658a7322066ba70b91c80f0c3d751ab69dc",
+        "58b175d3b751c52fe55a97aa17b78f2c55e14d2c"
+      ],
+      "reason": "The first B9 convergence disclosed that the B4 action-envelope implementation followed the B2 failing contract and DII-215, but its immutable Inspector source did not literally enumerate every changed implementation path required by the prospective exact-scope binding rule. The behavior-first red, law-before-implementation order, and full green repair are preserved; history is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["8e7a44b70a3e13b85293de48af8284889daea7e3"],
+      "reason": "The first B9 convergence disclosed that the B6 subprocess-coverage integration followed DII-217 and the preserved corrected whole-source red reading, but no prior committed Inspector source and durable Auditor JSON bound every exact implementation path. The red denominator evidence remains visible and thresholds and exclusions remain unchanged; history is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["63b2238ddf22e542ba3e755108477ddd903ea137"],
+      "reason": "The final B9 Opus correction followed the four-failure Inspector red, durable Auditor evidence and DII-220, but the immutable failing Inspector source literally named scripts/run-round-close-controls.mjs and not the separately corrected packages/cli/src/define-command.ts fixed-count guard. The Auditor JSON names both exact paths and the repair is tested green; this is a real sequencing defect, history is not rewritten, and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["ec68086260b0f9d5e13656c05504681ab253d1a7"],
+      "reason": "The first OM-011 smart-convergence run disclosed that the content-addressed controller implementation followed Architect DII-229 and the 16-case Inspector red 0215430, but that immutable Inspector source literally named only package.json and scripts/run-round-close-controls.mjs from the four-path Engineer commit; it omitted .devai/config/round-close-controls.json and packages/schemas/src/roster.ts under the prospective exact-scope rule. Auditor 8748242 preserves the failed governance gate and exact population. The behavior-first red and full green correction remain real; history is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["6a581a9a9c1586d73a604108b845e5af5ef573c8"],
+      "reason": "The cycle-1 finding-retention materialization followed Architect DII-232 and the behavior-first Inspector red 1771b0b, but that immutable failing Inspector source named law/policy/round-close-controls.json and the fifth-review record rather than the exact Engineer path .devai/config/round-close-controls.json required by the prospective semantic-scope rule. Auditor 0f22cfa preserves the failed smart-convergence governance gate and exact path. Inspector 547351f now binds both canonical and materialized paths prospectively; history is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["5c290bedf335d4cd65813370e26218588eb8ac2f"],
+      "reason": "The OM-013 Codex-review controller and materialization followed Architect DII-240 and an observed two-test selector failure preserved by Auditor aae5d53, but the repairing Inspector commit 7edc33b followed the Engineer commit and therefore cannot be relabelled as a qualifying prior semantic red. Fresh smart convergence at b3d3236 stopped on the missing binding, and Auditor 48a9779 preserves the exact governance failure. History is not rewritten; this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0006",
+      "implementation_commits": ["2f1a24b4e0f42dd2eacbce1da83ea741b66a2486"],
+      "reason": "The mandatory complete behavioral output-totality population exposed four boundary leaks only after the initial DII-243 repair: doctor emitted a post-envelope shell warning, and mutation and evidence handlers swallowed the canonical action-output exit sentinel. Engineer 2f1a24b corrected action-output plus those three handler paths, exceeding DII-243's four-path limit, before Inspector 86934e7 committed the complete executable population; that later Inspector commit cannot be relabelled as prior semantic red. Auditor 145cf29 preserves the 147-action, 59-sensor-plus-list, 13-producer, and five-throw-stage zero-failure artifact. DII-244 contains the exact defect; history is not rewritten and this exact-commit disclosure grants no prospective exception."
     }
   ],
   "historical_round_disclosures": [

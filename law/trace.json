@@ -188,7 +188,62 @@
         },
         {
           "suite": "unit",
+          "path": "packages/cli/tests/unit/authority-broker-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/authority-cli-harness.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/check-dependencies-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/doctor-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/cli/tests/unit/forbidden-actions-help.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/governed-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/mutation-verify-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-read-actions.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-surface-bootstrap.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/release-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/rgr-record-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/translation-command-depth.test.ts",
           "target_type": "test"
         },
         {
@@ -234,6 +289,11 @@
         {
           "suite": "unit",
           "path": "packages/loop/tests/unit/freshness-policy-fail-closed.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/loop/tests/unit/sensor-inputs-depth.test.ts",
           "target_type": "test"
         },
         {
@@ -308,7 +368,37 @@
         },
         {
           "suite": "unit",
+          "path": "packages/sensors/tests/unit/harness-alignment-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/migrate-type-judge-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/runtime-probe-data-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/security-perf-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/site-drift-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/sensors/tests/unit/trace-resolve.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/workflow-parser-depth.test.ts",
           "target_type": "test"
         },
         {
@@ -492,6 +582,31 @@
           "target_type": "test"
         },
         {
+          "suite": "contract",
+          "path": "tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-contracts.adversarial.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-contracts.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-mocked-producers.contract.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "e2e",
           "path": "tests/e2e/bare-domain-help.e2e.test.ts",
           "target_type": "test"
@@ -577,6 +692,16 @@
           "target_type": "test"
         },
         {
+          "suite": "contract",
+          "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "e2e",
           "path": "tests/e2e/inventory-sensors.smoke.test.ts",
           "target_type": "test"
@@ -609,6 +734,16 @@
         {
           "suite": "contract",
           "path": "tests/contract/governed-sequencing.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
           "target_type": "test"
         }
       ]
@@ -773,7 +908,27 @@
       "tests": [
         {
           "suite": "unit",
+          "path": "packages/loop/tests/unit/sensor-inputs-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/loop/tests/unit/sensor-integrity.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/harness-alignment-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/migrate-type-judge-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/runtime-probe-data-depth.test.ts",
           "target_type": "test"
         },
         {
@@ -783,7 +938,17 @@
         },
         {
           "suite": "unit",
+          "path": "packages/sensors/tests/unit/security-perf-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/sensors/tests/unit/sensor-reading.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/site-drift-depth.test.ts",
           "target_type": "test"
         },
         {
@@ -794,6 +959,11 @@
         {
           "suite": "unit",
           "path": "packages/sensors/tests/unit/test-weakening-config.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/workflow-parser-depth.test.ts",
           "target_type": "test"
         },
         {
@@ -865,12 +1035,67 @@
           "suite": "unit",
           "path": "packages/utils/tests/unit/glob-guards.test.ts",
           "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+          "target_type": "test"
         }
       ]
     },
     {
       "id": "INV-DEVAI-015",
       "tests": [
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/authority-broker-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/authority-cli-harness.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/doctor-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/governed-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/mutation-verify-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-read-actions.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-surface-bootstrap.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/release-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/rgr-record-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/translation-command-depth.test.ts",
+          "target_type": "test"
+        },
         {
           "suite": "contract",
           "path": "packages/skills/tests/contract/feedback-iteration-bounded-replacements.red.test.ts",
@@ -889,6 +1114,26 @@
         {
           "suite": "sec",
           "path": "tests/containment/apply-edits.containment.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-contracts.adversarial.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-contracts.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-mocked-producers.contract.test.ts",
           "target_type": "test"
         }
       ]
@@ -927,6 +1172,61 @@
           "target_type": "test"
         },
         {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/authority-broker-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/authority-cli-harness.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/check-dependencies-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/doctor-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/governed-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/mutation-verify-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-read-actions.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-surface-bootstrap.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/release-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/rgr-record-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/translation-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
           "suite": "contract",
           "path": "packages/evidence/tests/contract/actions-run-evidence.red.test.ts",
           "target_type": "test"
@@ -938,7 +1238,37 @@
         },
         {
           "suite": "unit",
+          "path": "packages/loop/tests/unit/sensor-inputs-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/loop/tests/unit/worktrees-containment.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/migrate-type-judge-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/runtime-probe-data-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/security-perf-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/site-drift-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/sensors/tests/unit/workflow-parser-depth.test.ts",
           "target_type": "test"
         },
         {
@@ -970,6 +1300,41 @@
           "suite": "contract",
           "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
           "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-contracts.adversarial.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-contracts.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-mocked-producers.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
+          "target_type": "test"
         }
       ]
     },
@@ -978,7 +1343,17 @@
       "tests": [
         {
           "suite": "unit",
+          "path": "packages/cli/tests/unit/check-dependencies-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/cli/tests/unit/dependency-security.sec.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/governed-command-depth.test.ts",
           "target_type": "test"
         },
         {
@@ -1038,6 +1413,11 @@
         },
         {
           "suite": "unit",
+          "path": "packages/sensors/tests/unit/harness-alignment-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
           "path": "packages/sensors/tests/unit/r21-w09-alignment-adversarial.test.ts",
           "target_type": "test"
         }
@@ -1049,6 +1429,36 @@
         {
           "suite": "contract",
           "path": "packages/cli/tests/contract/r0004-close-review.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/authority-broker-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/authority-cli-harness.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/governed-command-depth.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-read-actions.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/public-surface-bootstrap.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "unit",
+          "path": "packages/cli/tests/unit/translation-command-depth.test.ts",
           "target_type": "test"
         },
         {
@@ -1084,6 +1494,36 @@
         {
           "suite": "contract",
           "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-contracts.adversarial.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-contracts.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-output-totality-mocked-producers.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -1191,7 +1631,9 @@
       "invariant_ids": [
         "INV-AUTH-003"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 10,
+      "assertion_digest_sha256": "be52e0f0bbbb98603fcb4ad5b020fb4ba6b71082687c6bc93a83dc0239c4ea1b"
     },
     {
       "path": "packages/authority/tests/unit/authority-declaration-context.red.test.ts",
@@ -1200,7 +1642,9 @@
         "INV-AUTH-001",
         "INV-AUTH-004"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 7,
+      "assertion_digest_sha256": "fe31d3ae18d91bc9ed06c6ddd465a42bf656580d33fdc7ddba38920b070aea28"
     },
     {
       "path": "packages/authority/tests/unit/authority-evidence-validator.red.test.ts",
@@ -1209,7 +1653,9 @@
         "INV-AUTH-003",
         "INV-AUTH-004"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 8,
+      "assertion_digest_sha256": "ab2069b81d10d0f38b0ac422ddb9f553a55d5acd649135d715ddc8aa378fc846"
     },
     {
       "path": "packages/authority/tests/unit/authority-final-boundary.red.test.ts",
@@ -1219,7 +1665,9 @@
         "INV-AUTH-003",
         "INV-AUTH-004"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 24,
+      "assertion_digest_sha256": "b9918449a91002b1453d5fb184b7e12b2470887e9341598c8ad4d8bc43ed4192"
     },
     {
       "path": "packages/authority/tests/unit/authority-policy-runtime.red.test.ts",
@@ -1229,7 +1677,9 @@
         "INV-AUTH-002",
         "INV-AUTH-003"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 14,
+      "assertion_digest_sha256": "6a5c192b433f585b1457494dec64a7d56b17edca06abc248c52933393cebc74a"
     },
     {
       "path": "packages/authority/tests/unit/authority-required-cases.red.test.ts",
@@ -1240,7 +1690,9 @@
         "INV-AUTH-003",
         "INV-AUTH-004"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 32,
+      "assertion_digest_sha256": "1fa7dbc691bf2d2c8ba6608825ae01f470af0701b89c8cedcb1a6b0b270ed844"
     },
     {
       "path": "packages/authority/tests/unit/authority-resource-boundaries.red.test.ts",
@@ -1249,7 +1701,9 @@
         "INV-AUTH-002",
         "INV-AUTH-003"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 5,
+      "assertion_digest_sha256": "2ede339598d54ba458c8f161852d8824a46934da68f3b5c85e1614119915798e"
     },
     {
       "path": "packages/authority/tests/unit/authority-seam.test.ts",
@@ -1257,7 +1711,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 62,
+      "assertion_digest_sha256": "67a33e697774fcb32b654243ae9e2c26355b801dc88cbeea00f5c234ff9b7d88"
     },
     {
       "path": "packages/authority/tests/unit/proof-path-domain.red.test.ts",
@@ -1266,7 +1722,9 @@
         "INV-AUTH-002",
         "INV-AUTH-003"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 3,
+      "assertion_digest_sha256": "26ff184263a80b2e1f94b7d36282d10a2edd92db06bad00173956b4e6c045ecb"
     },
     {
       "path": "packages/cli/tests/contract/action-coverage.contract.test.ts",
@@ -1274,7 +1732,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 27,
+      "assertion_digest_sha256": "e96ef8b578bdd016fdce5ad0e2712ffea645c5c342bb903533f8e5e14025d478"
     },
     {
       "path": "packages/cli/tests/contract/no-exit-after-emit.contract.test.ts",
@@ -1282,7 +1742,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 2,
+      "assertion_digest_sha256": "e43416b60abddb8193aa54ae70f62f1ea95642eccc25aba443ca79a93aa25a37"
     },
     {
       "path": "packages/cli/tests/contract/r0004-close-review.contract.test.ts",
@@ -1292,7 +1754,9 @@
         "INV-DEVAI-017",
         "INV-DEVAI-020"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 19,
+      "assertion_digest_sha256": "02202de2029356e24d28f98d4bbee77764586063449672fdbc1948280e34ff3e"
     },
     {
       "path": "packages/cli/tests/contract/successor-operational-law.contract.test.ts",
@@ -1301,7 +1765,47 @@
         "INV-DEVAI-001",
         "INV-DEVAI-014"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 33,
+      "assertion_digest_sha256": "e9d0184dd04ca086d0288c416da0dd1fe74ae7a2b5d7ebd08ff95459132afbc3"
+    },
+    {
+      "path": "packages/cli/tests/unit/authority-broker-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 25,
+      "assertion_digest_sha256": "fb4aa8b6d2b46c654f689c4ce8d2d861f5020ecb0cdc4072aba0273026c67833"
+    },
+    {
+      "path": "packages/cli/tests/unit/authority-cli-harness.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 11,
+      "assertion_digest_sha256": "cd1c1763bffc99109261ad96d61c126136c01493af0fede3c43608ade70529a4"
+    },
+    {
+      "path": "packages/cli/tests/unit/check-dependencies-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-017",
+        "INV-DEVAI-018"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 12,
+      "assertion_digest_sha256": "81f8142dfa3103676a6f93d8e2cf853a54066865b8c57b1fbf663009b9364c99"
     },
     {
       "path": "packages/cli/tests/unit/dependency-security.sec.test.ts",
@@ -1309,7 +1813,21 @@
       "invariant_ids": [
         "INV-DEVAI-018"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 10,
+      "assertion_digest_sha256": "dd6e60b4ec93fda01f807f35d02518b6e01d23941d414a32a5da4ebac3b1080c"
+    },
+    {
+      "path": "packages/cli/tests/unit/doctor-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 14,
+      "assertion_digest_sha256": "33f17ba28fef85f5add371c18b69ad019911847528094206e3de59b2343b7fd3"
     },
     {
       "path": "packages/cli/tests/unit/forbidden-actions-help.test.ts",
@@ -1317,7 +1835,23 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 2,
+      "assertion_digest_sha256": "d1c990b11d1da7206017bc66511836b0d5f55cc05b26484c1930a723d284df5f"
+    },
+    {
+      "path": "packages/cli/tests/unit/governed-command-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-018",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 19,
+      "assertion_digest_sha256": "3c6313dbd5a6d4afc0cd43cd318b48ff0c01dade678f28e7e37d5ce0faad3f6e"
     },
     {
       "path": "packages/cli/tests/unit/hooks-install.test.ts",
@@ -1326,7 +1860,59 @@
         "INV-DEVAI-013",
         "INV-DEVAI-018"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 26,
+      "assertion_digest_sha256": "c3523492a2cde2209e0f06e8817e6b421352b9a993483c1f42f57b2c69b9c319"
+    },
+    {
+      "path": "packages/cli/tests/unit/mutation-verify-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 12,
+      "assertion_digest_sha256": "abc1ec8713a4d2767d7975c515185bbdf12218a8676d10412bb7a19f57197ad5"
+    },
+    {
+      "path": "packages/cli/tests/unit/public-read-actions.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 7,
+      "assertion_digest_sha256": "28103b91d99b9a9057e3e24896a244fbb1aeb6859ab9731384c5c56df032a349"
+    },
+    {
+      "path": "packages/cli/tests/unit/public-surface-bootstrap.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 6,
+      "assertion_digest_sha256": "b45cbb18271628eaa2c23be2d972613093688773af66f467bcd4b37ee278229f"
+    },
+    {
+      "path": "packages/cli/tests/unit/release-command-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 21,
+      "assertion_digest_sha256": "ebef883ddb139e6bcbf034384fd865c0931938d53ff9f23be991df79159a5568"
     },
     {
       "path": "packages/cli/tests/unit/render-mermaid.test.ts",
@@ -1334,7 +1920,21 @@
       "invariant_ids": [
         "INV-DEVAI-013"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 12,
+      "assertion_digest_sha256": "adaf0a51146cdd877d36fb5dd5dc675463437ae4d29fd1a8a8a8124e247402d9"
+    },
+    {
+      "path": "packages/cli/tests/unit/rgr-record-command-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 16,
+      "assertion_digest_sha256": "abb82750c6c98349cae3598e4e715ef226cf011348e03b0e6a74c3e35bd8d26e"
     },
     {
       "path": "packages/cli/tests/unit/sense-run-readiness.test.ts",
@@ -1342,7 +1942,22 @@
       "invariant_ids": [
         "INV-DEVAI-019"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 24,
+      "assertion_digest_sha256": "27414a1815a89879e094ddf0b36caaa192f485abb345d69ab7b3cd18064f0764"
+    },
+    {
+      "path": "packages/cli/tests/unit/translation-command-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 7,
+      "assertion_digest_sha256": "6dc8cefc111a3a954ad28492afa71267d5ddd2244df00312da67350f0cc6721a"
     },
     {
       "path": "packages/cli/tests/unit/version.test.ts",
@@ -1350,7 +1965,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 6,
+      "assertion_digest_sha256": "34a54164703e822d6ca1fe9ba2ab5500208af3a0bb53f1cf0eb61379eabe3bc1"
     },
     {
       "path": "packages/effects-check/tests/contract/r24-effects.red.contract.test.ts",
@@ -1358,7 +1975,9 @@
       "invariant_ids": [
         "INV-DEVAI-020"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 7,
+      "assertion_digest_sha256": "d457611002a01848ccd2d860d712e925665bc4dac08eb3d3fbb3948027319938"
     },
     {
       "path": "packages/effects-check/tests/contract/r25-binding.red.contract.test.ts",
@@ -1366,7 +1985,9 @@
       "invariant_ids": [
         "INV-DEVAI-020"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 3,
+      "assertion_digest_sha256": "819bb3a7838ee896c05ca01304769428c068e95e77d2e700c87572d38330365b"
     },
     {
       "path": "packages/effects-check/tests/unit/binding.test.ts",
@@ -1374,7 +1995,9 @@
       "invariant_ids": [
         "INV-DEVAI-020"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 3,
+      "assertion_digest_sha256": "87d2c7fcac883b99f195f16c039152b477737bc53b5161434f5af658b21a8ccb"
     },
     {
       "path": "packages/evidence/tests/contract/actions-run-evidence.red.test.ts",
@@ -1382,7 +2005,9 @@
       "invariant_ids": [
         "INV-DEVAI-017"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 26,
+      "assertion_digest_sha256": "765911158c8cc8a1ae28314c58d215e34fe74a1b7b415353fa213ddf025fecac"
     },
     {
       "path": "packages/evidence/tests/contract/phase-closure.contract.test.ts",
@@ -1390,7 +2015,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 20,
+      "assertion_digest_sha256": "4a035b5c9634513bf6acdbb9dde63355559ff3fdb133aa7d83a2cb282de1212f"
     },
     {
       "path": "packages/evidence/tests/unit/actions-run.test.ts",
@@ -1399,7 +2026,9 @@
         "INV-DEVAI-017",
         "INV-DEVAI-018"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 19,
+      "assertion_digest_sha256": "7bf7e40067228260bf7c1a75b676c12eb62d620786b8abd7675ec9f6e5d84173"
     },
     {
       "path": "packages/evidence/tests/unit/agent-run.test.ts",
@@ -1407,7 +2036,9 @@
       "invariant_ids": [
         "INV-DEVAI-018"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 15,
+      "assertion_digest_sha256": "5d1c4c35f2e9d889e30de10f81b6720e00632c78197409ebd862de9fa8df35b2"
     },
     {
       "path": "packages/evidence/tests/unit/chain.test.ts",
@@ -1415,7 +2046,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 28,
+      "assertion_digest_sha256": "0cd8963605da1c4cf4c67adc33413227fbea5099e73d88125cabdf0deb43f0ea"
     },
     {
       "path": "packages/evidence/tests/unit/git-context.test.ts",
@@ -1423,7 +2056,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 6,
+      "assertion_digest_sha256": "10371eaf82119ec9072334016766ab3105960a317118274025af5102313a8f3b"
     },
     {
       "path": "packages/evidence/tests/unit/id-generator.test.ts",
@@ -1431,7 +2066,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 7,
+      "assertion_digest_sha256": "e6b35c882dda586ef04ff0b837d512497217bc7caab9413ff10c893ead31816b"
     },
     {
       "path": "packages/evidence/tests/unit/local-evidence.test.ts",
@@ -1440,7 +2077,9 @@
         "INV-DEVAI-016",
         "INV-DEVAI-018"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 43,
+      "assertion_digest_sha256": "b37b93b57d2108e736902db3155d33f2b8503c4b25810a9a25a21afc83f47427"
     },
     {
       "path": "packages/evidence/tests/unit/phase-closure-successor.test.ts",
@@ -1448,7 +2087,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 15,
+      "assertion_digest_sha256": "b348d4c16a76ad203e6057ff276f659de4b6d04c205409616e6ff80fe3d9a463"
     },
     {
       "path": "packages/evidence/tests/unit/proof-epoch.test.ts",
@@ -1457,7 +2098,9 @@
         "INV-DEVAI-016",
         "INV-DEVAI-018"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 10,
+      "assertion_digest_sha256": "49f441f3a19e958dfe0b7e71fb24cb67ba4f6996329e78ede679439d3480b75c"
     },
     {
       "path": "packages/evidence/tests/unit/redact.test.ts",
@@ -1465,7 +2108,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 19,
+      "assertion_digest_sha256": "c80a922e6e83c2286dba8285c1446438aa4123c63fd065b1a0f51b3ba63ef3e2"
     },
     {
       "path": "packages/loop/tests/unit/adherence-reverse.test.ts",
@@ -1473,7 +2118,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 21,
+      "assertion_digest_sha256": "90af0965b0ada69da7998252268f625d13e9e48b2c96127c88d752a4b79ed792"
     },
     {
       "path": "packages/loop/tests/unit/backlog-tasks.test.ts",
@@ -1483,7 +2130,9 @@
         "INV-DEVAI-004",
         "INV-DEVAI-005"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 39,
+      "assertion_digest_sha256": "3f02b2a4a5179ac70580de72eec7327ecd7ade2c4b553bc6723b4ab231af62a6"
     },
     {
       "path": "packages/loop/tests/unit/freshness-policy-fail-closed.test.ts",
@@ -1491,7 +2140,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 2,
+      "assertion_digest_sha256": "40e4a0b08fb689d5bc3bc2d6f6c7677ee8187e25ed5a4e0c19b49593eeb6521e"
     },
     {
       "path": "packages/loop/tests/unit/release-control.test.ts",
@@ -1500,7 +2151,9 @@
         "INV-DEVAI-016",
         "INV-DEVAI-018"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 26,
+      "assertion_digest_sha256": "23b8ff646e24a530c4914b599f694d0dcacf2d8c950ea5c9936d8398ed9064c0"
     },
     {
       "path": "packages/loop/tests/unit/scorecard-assess-narrative.test.ts",
@@ -1509,7 +2162,9 @@
         "INV-DEVAI-006",
         "INV-DEVAI-011"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 24,
+      "assertion_digest_sha256": "9fd78771c6f0ff91e6837d151f1e7c281711b4b9e7ee23d73f0ae4c1b1f7cba1"
     },
     {
       "path": "packages/loop/tests/unit/scorecard-inventory-mapping.test.ts",
@@ -1517,7 +2172,9 @@
       "invariant_ids": [
         "INV-INVENTORY-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 23,
+      "assertion_digest_sha256": "b3fc8bb8ba4a4cbc2d508d4f8fd714abe3b1ac20935e2270b959948641bf2458"
     },
     {
       "path": "packages/loop/tests/unit/scorecard-na-override.test.ts",
@@ -1525,7 +2182,21 @@
       "invariant_ids": [
         "INV-DEVAI-006"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 25,
+      "assertion_digest_sha256": "9403b2f94f9a6420d7b1d9cf50e0047ac89a6e042a3bbc3b6682532e79ce8aea"
+    },
+    {
+      "path": "packages/loop/tests/unit/sensor-inputs-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-012",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 10,
+      "assertion_digest_sha256": "8faf7b7c17ae3c7c54a3c1f146ed6b5649ab5cd4ebad02dde0715e6acc6ca77c"
     },
     {
       "path": "packages/loop/tests/unit/sensor-integrity.test.ts",
@@ -1535,7 +2206,9 @@
         "INV-DEVAI-007",
         "INV-DEVAI-012"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 9,
+      "assertion_digest_sha256": "2790420151d79c4711461d0f0fd63c56ff05e97d09d833fc66f3926b63d31ded"
     },
     {
       "path": "packages/loop/tests/unit/worktrees-containment.test.ts",
@@ -1545,7 +2218,9 @@
         "INV-DEVAI-005",
         "INV-DEVAI-017"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 8,
+      "assertion_digest_sha256": "37bc758c9636fae1bb25ab8d4cd199ff011a68e83cfbdd5a7f9e24fc7cdf4592"
     },
     {
       "path": "packages/schemas/tests/contract/adr.contract.test.ts",
@@ -1553,7 +2228,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 23,
+      "assertion_digest_sha256": "0b195cf9b36b78035f673ed672b8b91551a282a7238c1433100a316c0ee3edc9"
     },
     {
       "path": "packages/schemas/tests/contract/backlog-current-disposition.contract.test.ts",
@@ -1561,7 +2238,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 9,
+      "assertion_digest_sha256": "9951024e3a9f40e84227b1da8b2a047aeffdb389076cdd683fc05e0f47d1de36"
     },
     {
       "path": "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
@@ -1569,7 +2248,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 40,
+      "assertion_digest_sha256": "cbe903e3accb7f2bb06b612c99cd68d7258149df8983deb19c5525291cfb6d72"
     },
     {
       "path": "packages/schemas/tests/contract/constitution.contract.test.ts",
@@ -1577,7 +2258,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 10,
+      "assertion_digest_sha256": "0a673800af82d49fa54da6446c2fcca32dcb823269a3d7b02037e58d34880a7c"
     },
     {
       "path": "packages/schemas/tests/contract/founding-ratification.contract.test.ts",
@@ -1585,7 +2268,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 21,
+      "assertion_digest_sha256": "9047035e5ec11d828b95bbab4dd301a4cfdb95b47d6ce16c29d360eeab20fe47"
     },
     {
       "path": "packages/schemas/tests/contract/genesis-attestation-binding.contract.test.ts",
@@ -1593,7 +2278,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 4,
+      "assertion_digest_sha256": "1f8877a99b0bd64d3af45875adb02f7d5b9acca61aa57338027e30111e8e815e"
     },
     {
       "path": "packages/schemas/tests/contract/governed-populations.contract.test.ts",
@@ -1602,7 +2289,9 @@
         "INV-DEVAI-001",
         "INV-DEVAI-014"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 41,
+      "assertion_digest_sha256": "dbfe85be656f38958806ae31d5cba3402aff9e2ae65b83e69a427f3648fed855"
     },
     {
       "path": "packages/schemas/tests/contract/product.contract.test.ts",
@@ -1610,7 +2299,9 @@
       "invariant_ids": [
         "INV-BLUEPRINT-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 29,
+      "assertion_digest_sha256": "7c75cca2b9ac9671af414962bb732b967a03f8a5fe7de777d5de803a3d862329"
     },
     {
       "path": "packages/schemas/tests/contract/r0003-opus-repairs.contract.test.ts",
@@ -1618,7 +2309,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 59,
+      "assertion_digest_sha256": "0129b8d4ece493123771e9de10cff5c3bb57d30cb2fa29a04728b01b02910a51"
     },
     {
       "path": "packages/schemas/tests/contract/r0003-opus-review-3.contract.test.ts",
@@ -1626,7 +2319,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 30,
+      "assertion_digest_sha256": "3a30864181bc7d4093dbdf5f8eebf0de7dc3bd721d549bb7b6dc6bcac40ca4bc"
     },
     {
       "path": "packages/schemas/tests/contract/register.contract.test.ts",
@@ -1634,7 +2329,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 8,
+      "assertion_digest_sha256": "f5fa62864c0d2c18cdeff6d6283513a7e4ae2d78a5acade8db179125a9361d52"
     },
     {
       "path": "packages/schemas/tests/contract/repository-reference-triage.contract.test.ts",
@@ -1642,7 +2339,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 6,
+      "assertion_digest_sha256": "ec35024c7540b624f931fc249b48d73beef303ebad8a17ddcfc7be11b71c279f"
     },
     {
       "path": "packages/schemas/tests/contract/roster.contract.test.ts",
@@ -1650,7 +2349,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 15,
+      "assertion_digest_sha256": "0455e46b0f070886e299f97111d23fb9a0b19d696eb828f6dcce57543803133c"
     },
     {
       "path": "packages/schemas/tests/contract/trace-materialization.contract.test.ts",
@@ -1658,7 +2359,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 14,
+      "assertion_digest_sha256": "b2d72215b697865a274f044eff57820e436dbd8d5feafc2e21b736fcd72e36c3"
     },
     {
       "path": "packages/sensors/tests/unit/docs-drift-fail-closed.test.ts",
@@ -1666,7 +2369,33 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 4,
+      "assertion_digest_sha256": "931b5840cf36e170b9659da6098945e6b2d9a831593bf760e3163c7cea229b9a"
+    },
+    {
+      "path": "packages/sensors/tests/unit/harness-alignment-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-012",
+        "INV-DEVAI-019"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 12,
+      "assertion_digest_sha256": "7e1b8a89dc09ead8c6dd008f7876a40c46feed60bba7cc221294810504f62780"
+    },
+    {
+      "path": "packages/sensors/tests/unit/migrate-type-judge-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-012",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 24,
+      "assertion_digest_sha256": "a90060568c851c638f8496567f82fcdc2b0ebe79e47f2432c43fb6bc7d4f5645"
     },
     {
       "path": "packages/sensors/tests/unit/r21-w09-alignment-adversarial.test.ts",
@@ -1674,7 +2403,21 @@
       "invariant_ids": [
         "INV-DEVAI-019"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 2,
+      "assertion_digest_sha256": "1bdcebdb25423ce15bb54f5e464c6c936aaa96c65343cea1eb18348b9078c6f3"
+    },
+    {
+      "path": "packages/sensors/tests/unit/runtime-probe-data-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-012",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 16,
+      "assertion_digest_sha256": "8d82cc9ad0089b343a43310bbf0caad2fd2f61b64a62324f2496c2bd19f6b741"
     },
     {
       "path": "packages/sensors/tests/unit/runtime-probe.test.ts",
@@ -1683,7 +2426,21 @@
         "INV-DEVAI-002",
         "INV-DEVAI-012"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 21,
+      "assertion_digest_sha256": "07cac54ae8b84f5d50a49df2366fb8ed0dcd7bf9279ff124384b07599838b429"
+    },
+    {
+      "path": "packages/sensors/tests/unit/security-perf-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-012",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 20,
+      "assertion_digest_sha256": "864111544556d72d66a5f688da4b7355fd4a39bfac4d913f0e9f5f6d45da61e5"
     },
     {
       "path": "packages/sensors/tests/unit/sensor-reading.test.ts",
@@ -1695,7 +2452,21 @@
         "INV-INVENTORY-003",
         "INV-INVENTORY-004"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 8,
+      "assertion_digest_sha256": "96515999280ddcd1bebd4fd2137329c5bc400f3367cfc8cd4338064bf7885052"
+    },
+    {
+      "path": "packages/sensors/tests/unit/site-drift-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-012",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 8,
+      "assertion_digest_sha256": "6100c4c72ea026e9ab1271ee4ee0d5d17438cd7bc6a9bbb9b2cdb16ff52abefb"
     },
     {
       "path": "packages/sensors/tests/unit/test-coherence.test.ts",
@@ -1704,7 +2475,9 @@
         "INV-DEVAI-002",
         "INV-DEVAI-012"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 10,
+      "assertion_digest_sha256": "53c21400e34ac718c6e3f3fa3237806b03c6ab8d0c4bc1fc01d4ee795848f1b5"
     },
     {
       "path": "packages/sensors/tests/unit/test-weakening-config.test.ts",
@@ -1713,7 +2486,9 @@
         "INV-DEVAI-002",
         "INV-DEVAI-012"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 16,
+      "assertion_digest_sha256": "1711f46805f51bb8e02271248ab40805fff3f7833395c13703233da597ebdb5e"
     },
     {
       "path": "packages/sensors/tests/unit/trace-resolve.test.ts",
@@ -1721,7 +2496,21 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 11,
+      "assertion_digest_sha256": "9af67de24bf68fe795b75b44ffc97f4373342939029b9d94990457204c9b26b2"
+    },
+    {
+      "path": "packages/sensors/tests/unit/workflow-parser-depth.test.ts",
+      "suite": "unit",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-012",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 15,
+      "assertion_digest_sha256": "b24b1c655f1f73c435ba647117690b7c3edf9098b5cd81997801c0f51ddabf51"
     },
     {
       "path": "packages/skills/tests/contract/feedback-iteration-bounded-replacements.red.test.ts",
@@ -1729,7 +2518,9 @@
       "invariant_ids": [
         "INV-DEVAI-015"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 13,
+      "assertion_digest_sha256": "ff061d0479e2327df02e1343e8a87e6048880bb2e89195922f71b30f29a5b94e"
     },
     {
       "path": "packages/skills/tests/contract/mutating-llm-artifact-emission.red.test.ts",
@@ -1737,7 +2528,9 @@
       "invariant_ids": [
         "INV-DEVAI-021"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 18,
+      "assertion_digest_sha256": "efaaaea24e8be952cb6610b5ab65f9e65c1a9cf6f0eb32c0c641bc400e808c7b"
     },
     {
       "path": "packages/skills/tests/contract/package-manager-prewarm.contract.test.ts",
@@ -1746,7 +2539,9 @@
         "INV-DEVAI-001",
         "INV-DEVAI-008"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 8,
+      "assertion_digest_sha256": "4c5004d68ed46d08e28e4ad0ae6ec19cc8109ad2650d208f1494c2a09a46b66b"
     },
     {
       "path": "packages/skills/tests/contract/required-workflow-gates.contract.test.ts",
@@ -1755,7 +2550,9 @@
         "INV-DEVAI-001",
         "INV-DEVAI-008"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 2,
+      "assertion_digest_sha256": "7ec71f6011e72c887d961bbea51cf190ce20210f9c8049f667bdd4cc9bda79ae"
     },
     {
       "path": "packages/skills/tests/contract/skills-api-surface.test.ts",
@@ -1763,7 +2560,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 23,
+      "assertion_digest_sha256": "7630b1e30c99a792397036a354d437c455bacc73ce338343ac3d0c65cdb6520b"
     },
     {
       "path": "packages/skills/tests/contract/skills-bounded-writer-corpus.test.ts",
@@ -1771,7 +2570,9 @@
       "invariant_ids": [
         "INV-DEVAI-015"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 3,
+      "assertion_digest_sha256": "6480ffa270d7be0bb4bbe4f619b772f0f82dbad6538f82f145952fbd2cb7b94d"
     },
     {
       "path": "packages/skills/tests/contract/skills-cycle-gate.test.ts",
@@ -1779,7 +2580,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 3,
+      "assertion_digest_sha256": "3118d8f8b5dc34b5046aa9fef16b8a756ea9296b1ae8d3d9f46f8284e045a0b7"
     },
     {
       "path": "packages/skills/tests/contract/skills-facade-gate.test.ts",
@@ -1787,7 +2590,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 1,
+      "assertion_digest_sha256": "8d20c4a11ef60e36b091d0bb3e746947495d5a6c78381ec28f9527f98033c15c"
     },
     {
       "path": "packages/skills/tests/contract/skills-fingerprint-behavior.test.ts",
@@ -1797,7 +2602,9 @@
         "INV-DEVAI-008",
         "INV-DEVAI-010"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 15,
+      "assertion_digest_sha256": "0121f617fa401b29a17eae4d80e556a19c825456cd37800623b2d53eb7754ada"
     },
     {
       "path": "packages/skills/tests/contract/skills-ledger-corpus.test.ts",
@@ -1806,7 +2613,9 @@
         "INV-DEVAI-001",
         "INV-DEVAI-010"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 2,
+      "assertion_digest_sha256": "9a4049017c0cecef3db40b0c5a951138afe8b2c2caca2d0456c7ab735966d51e"
     },
     {
       "path": "packages/skills/tests/contract/skills-manifest-corpus.test.ts",
@@ -1815,7 +2624,9 @@
         "INV-DEVAI-001",
         "INV-DEVAI-010"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 2,
+      "assertion_digest_sha256": "bc367c5fdcdec266e53496ca28d010d768a863edeeed3583480ef103a23accf5"
     },
     {
       "path": "packages/skills/tests/contract/skills-prompt-inventory.test.ts",
@@ -1824,7 +2635,9 @@
         "INV-DEVAI-001",
         "INV-DEVAI-008"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 13,
+      "assertion_digest_sha256": "f84475a89fbdf1282136407d6dfbae2d002b5297f9bdd8bf371544e4bf48b683"
     },
     {
       "path": "packages/skills/tests/contract/skills-rendered-prompts.test.ts",
@@ -1833,7 +2646,9 @@
         "INV-DEVAI-001",
         "INV-DEVAI-008"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 4,
+      "assertion_digest_sha256": "89cc75698351ead689c30dfdd58a35ca6d84e8fbc3b45782c11bd1448d4fbef0"
     },
     {
       "path": "packages/skills/tests/contract/skills-round-corpus.test.ts",
@@ -1842,7 +2657,9 @@
         "INV-DEVAI-001",
         "INV-DEVAI-010"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 5,
+      "assertion_digest_sha256": "8c90956ab0dacc13dac2fc347d2cb33c7b9daad9fd260016bc87e73dd620e4cc"
     },
     {
       "path": "packages/skills/tests/unit/authority-host-readonly.test.ts",
@@ -1852,7 +2669,9 @@
         "INV-DEVAI-017",
         "INV-DEVAI-020"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 3,
+      "assertion_digest_sha256": "440769a058354485f3f041b48f828e7a4780f388abf296dd44746ba7cdbd0b84"
     },
     {
       "path": "packages/skills/tests/unit/bootstrap.test.ts",
@@ -1860,7 +2679,9 @@
       "invariant_ids": [
         "INV-DEVAI-009"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 24,
+      "assertion_digest_sha256": "860fc3db9cfe4036e51d1a67d1da0b6001853a9d7ed7f844081a575325d07cd1"
     },
     {
       "path": "packages/skills/tests/unit/bounded-writer.test.ts",
@@ -1868,7 +2689,9 @@
       "invariant_ids": [
         "INV-DEVAI-015"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 13,
+      "assertion_digest_sha256": "3115b2c5820a96773211e6df743edbdb54c32d1e41dc07156120d27a5153b55c"
     },
     {
       "path": "packages/skills/tests/unit/cli-client.test.ts",
@@ -1876,7 +2699,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 51,
+      "assertion_digest_sha256": "ff183d2f0cc07ea1fca53ecf4a61b7adc3847abf29a00213856fec7563a2383e"
     },
     {
       "path": "packages/skills/tests/unit/constitution.test.ts",
@@ -1884,7 +2709,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 31,
+      "assertion_digest_sha256": "87675c9567c81968045801707e8bd59b56e25a6fb940e494f0c117f81f8c49de"
     },
     {
       "path": "packages/skills/tests/unit/firewall-overlaps.test.ts",
@@ -1892,7 +2719,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 22,
+      "assertion_digest_sha256": "359667af37036acc6a2983f7969dbb2c4012ab576a2b0fb9c5567f8a28c05346"
     },
     {
       "path": "packages/skills/tests/unit/fix-skills.test.ts",
@@ -1900,7 +2729,9 @@
       "invariant_ids": [
         "INV-DEVAI-013"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 13,
+      "assertion_digest_sha256": "849b335c6a112e00a65632ca444ab54294e1a19f911fdeb1d009432090412899"
     },
     {
       "path": "packages/skills/tests/unit/forbidden-actions.test.ts",
@@ -1908,7 +2739,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 41,
+      "assertion_digest_sha256": "55bef5a9995eebdc61fe8ac053bac368a62a7aff03179665ecf833e0c71fc770"
     },
     {
       "path": "packages/skills/tests/unit/governance-skills.test.ts",
@@ -1916,7 +2749,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 9,
+      "assertion_digest_sha256": "3d2899428a59d5d76aa7ef8566ffbe1b6ccf21dcbd1f49be73d11a68c92ed5cd"
     },
     {
       "path": "packages/skills/tests/unit/introspect.test.ts",
@@ -1924,7 +2759,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 19,
+      "assertion_digest_sha256": "427c29dd02ca154751ad0a50d5951971ee3d18de3698343d0e309b0b8146e549"
     },
     {
       "path": "packages/skills/tests/unit/inv-override.test.ts",
@@ -1932,7 +2769,9 @@
       "invariant_ids": [
         "INV-INVENTORY-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 18,
+      "assertion_digest_sha256": "0059b88f8b48d2ab2689162181f973a1a08e38b2767dab00010b3dbf3e5adbf3"
     },
     {
       "path": "packages/skills/tests/unit/llm-timeout-resolver.test.ts",
@@ -1940,7 +2779,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 60,
+      "assertion_digest_sha256": "bbd301e1cf2abf7cf619b11a605f45e4bb50a9348f2d1b0887ab8b038ac40e47"
     },
     {
       "path": "packages/skills/tests/unit/llm-timeout-wrapper.test.ts",
@@ -1948,7 +2789,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 2,
+      "assertion_digest_sha256": "e3d1f04d4acfe4839b47fa78bcd459d34838a52952af28464b708f69114f2263"
     },
     {
       "path": "packages/skills/tests/unit/llm.test.ts",
@@ -1956,7 +2799,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 42,
+      "assertion_digest_sha256": "65dbd5ed2d0c88d0ea7378f9f5272cde7f9949e3b6e838b216cc62ead073833c"
     },
     {
       "path": "packages/skills/tests/unit/pack-resolver-sensor-params.test.ts",
@@ -1965,7 +2810,9 @@
         "INV-DEVAI-002",
         "INV-DEVAI-012"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 9,
+      "assertion_digest_sha256": "a406c706d6c585494ed5b44410909c902cd292eb4be352e2368f68471e87fe25"
     },
     {
       "path": "packages/skills/tests/unit/post-merge-auditor.test.ts",
@@ -1974,7 +2821,9 @@
         "INV-DEVAI-016",
         "INV-DEVAI-018"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 39,
+      "assertion_digest_sha256": "35c8806701fbcd7a72b04aa2e218d30ce6e32b69d7a0bc26b152cc1a87e64ab1"
     },
     {
       "path": "packages/skills/tests/unit/prompt-firewall.test.ts",
@@ -1982,7 +2831,9 @@
       "invariant_ids": [
         "INV-DEVAI-008"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 25,
+      "assertion_digest_sha256": "ad31c35ea8bd101ea67d0e2a3a984c74e7f8b59c4db92b987512871c30235629"
     },
     {
       "path": "packages/skills/tests/unit/round-state-routing.test.ts",
@@ -1990,7 +2841,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 4,
+      "assertion_digest_sha256": "dd324454a1af0212c6cb3dfecc7b741ecc61397ce82d719820a9700f58c1f12d"
     },
     {
       "path": "packages/skills/tests/unit/round-utilities.test.ts",
@@ -1999,7 +2852,9 @@
         "INV-DEVAI-005",
         "INV-DEVAI-017"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 57,
+      "assertion_digest_sha256": "7e0b973ca859ed00522d4b4db7dcb83e821dd6afe81e611fe10945b9310e0aea"
     },
     {
       "path": "packages/skills/tests/unit/round-verdict.test.ts",
@@ -2007,7 +2862,9 @@
       "invariant_ids": [
         "INV-DEVAI-005"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 1,
+      "assertion_digest_sha256": "c3834993b58ff2bb03159c086d3979eab5e14991e6dd8e6db91bb8e260b9ea46"
     },
     {
       "path": "packages/spec/tests/contract/r29-currentness-behavior.red.test.ts",
@@ -2017,7 +2874,9 @@
         "INV-DEVAI-002",
         "INV-DEVAI-008"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 2,
+      "assertion_digest_sha256": "c4efeafa29211d7eb5704f0a63a317c977236e45596f6d795b6216c369cdd98d"
     },
     {
       "path": "packages/spec/tests/unit/adr.test.ts",
@@ -2025,7 +2884,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 22,
+      "assertion_digest_sha256": "b9bdefa28c5aa4151060c5c5214378acb10a6c832bb57a29db078f777fb528b6"
     },
     {
       "path": "packages/spec/tests/unit/domains-loader.test.ts",
@@ -2035,7 +2896,9 @@
         "INV-BLUEPRINT-003",
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 11,
+      "assertion_digest_sha256": "e96aae6fc7e4ea76f7c3d6ab2967ac82c0b9fea56ba5caaaf28cc483ededd703"
     },
     {
       "path": "packages/spec/tests/unit/pr-compliance.test.ts",
@@ -2044,7 +2907,9 @@
         "INV-DEVAI-001",
         "INV-RBAC-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 13,
+      "assertion_digest_sha256": "38fa4ecf575c81b524b44ed90280b35b71a61a336db342cca0557adad0bfeea9"
     },
     {
       "path": "packages/spec/tests/unit/test-trace-validator.test.ts",
@@ -2052,7 +2917,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 8,
+      "assertion_digest_sha256": "669d9b86f1947bc3fd91f7bb30931fa937acc89ca93887f73473984e8f2309af"
     },
     {
       "path": "packages/spec/tests/unit/trace-validator.test.ts",
@@ -2060,7 +2927,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 2,
+      "assertion_digest_sha256": "2ce14b93a30b87c9f31ee5afd217a69fbc35f5a0536dedd70b149ab9df2f8a24"
     },
     {
       "path": "packages/spec/tests/unit/xref-resolver.test.ts",
@@ -2068,7 +2937,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 11,
+      "assertion_digest_sha256": "7a6c48dc130e54b1aa200727099d407fd87a6cd22e8516c22493d60c22173651"
     },
     {
       "path": "packages/utils/tests/unit/canonical-json.test.ts",
@@ -2076,7 +2947,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 19,
+      "assertion_digest_sha256": "2eba9bc0e7930c566291a337228b7fbe6de427ee903569f45ef19028eefaedf7"
     },
     {
       "path": "packages/utils/tests/unit/exit.test.ts",
@@ -2084,7 +2957,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 5,
+      "assertion_digest_sha256": "d8afd0cb9fbf5e2e257a553b2e5ab61f24af31b3a6b56933d19cc426f57ec9fa"
     },
     {
       "path": "packages/utils/tests/unit/glob-guards.test.ts",
@@ -2092,7 +2967,9 @@
       "invariant_ids": [
         "INV-DEVAI-014"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 21,
+      "assertion_digest_sha256": "92a47a7abdb685ee24cc41b02fcba2536cf74b540537906220d5cd5a8bdf8394"
     },
     {
       "path": "packages/utils/tests/unit/logger.test.ts",
@@ -2100,7 +2977,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 11,
+      "assertion_digest_sha256": "57555ebfecd764c35daacc314d83cedcb0a57620b6697a287b84b50167f3eed4"
     },
     {
       "path": "packages/utils/tests/unit/redact.test.ts",
@@ -2108,7 +2987,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 11,
+      "assertion_digest_sha256": "5bf7048fa75f7ad1d226329f8f16d5fd47bff2334addc2bb40d2ae745dee694d"
     },
     {
       "path": "packages/utils/tests/unit/state-profile.test.ts",
@@ -2116,7 +2997,9 @@
       "invariant_ids": [
         "INV-DEVAI-017"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 23,
+      "assertion_digest_sha256": "70b64b80bde3dea6c9d6bb8fa805e4525e9b9ce86d39eaab2f397110f17f53dc"
     },
     {
       "path": "packages/utils/tests/unit/templates.test.ts",
@@ -2125,7 +3008,9 @@
         "INV-DEVAI-001",
         "INV-SCAFFOLD-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 36,
+      "assertion_digest_sha256": "78e9ff13a8725a70d2fa0da84e00e38aca74e8f389fb0c140c4e04635a9b7ffa"
     },
     {
       "path": "tests/containment/apply-edits.containment.test.ts",
@@ -2133,7 +3018,9 @@
       "invariant_ids": [
         "INV-DEVAI-015"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 9,
+      "assertion_digest_sha256": "0582b4f74c694cbc30822c2664a8e996c97b53eb90e11918a760860ed084ce4f"
     },
     {
       "path": "tests/contract/governed-sequencing.contract.test.ts",
@@ -2142,7 +3029,9 @@
         "INV-DEVAI-002",
         "INV-DEVAI-003"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 21,
+      "assertion_digest_sha256": "adac0e1d4eb85a3a7f29c9dc8bb1ec91cd204fa65212f9c80f3d3bc3bf70a97b"
     },
     {
       "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
@@ -2151,7 +3040,9 @@
         "INV-DEVAI-017",
         "INV-DEVAI-020"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 103,
+      "assertion_digest_sha256": "d9bea81dd8927d11a0c5733c21452a1aa6197b6b5fdd8061250364f3d2e349fa"
     },
     {
       "path": "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
@@ -2161,7 +3052,9 @@
         "INV-DEVAI-017",
         "INV-DEVAI-020"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 48,
+      "assertion_digest_sha256": "03c820117e0a707efde87f3d7e0b9e9a0c278055a0e0bc69518d8d21bd3ee1a8"
     },
     {
       "path": "tests/contract/r0005-independent-review.red.contract.test.ts",
@@ -2173,7 +3066,99 @@
         "INV-DEVAI-018",
         "INV-DEVAI-020"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 26,
+      "assertion_digest_sha256": "68e97ac5d73146bd3cf85e641834b3a35149437f081417db213d3ba31fb5b305"
+    },
+    {
+      "path": "tests/contract/r0006-coverage-integrity.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-014",
+        "INV-DEVAI-017"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 19,
+      "assertion_digest_sha256": "6f96b72fb5e97f063572327029577a1926d82b2d381ed55f0c4e51f225c4536f"
+    },
+    {
+      "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-003",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 72,
+      "assertion_digest_sha256": "d9be940be402971dcf9d4ecc9f60c023877fe6050413c88667bcc22c1411d4ed"
+    },
+    {
+      "path": "tests/contract/r0006-output-contracts.adversarial.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 22,
+      "assertion_digest_sha256": "cef4f65f5d3dcb3e407ffdc7b86f069810e12bd755d05aa98227c0860e7934fc"
+    },
+    {
+      "path": "tests/contract/r0006-output-contracts.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 22,
+      "assertion_digest_sha256": "82c54a5796f82ab0b49f05196500823ed5c9b9eb7b254953b88390c7331fce47"
+    },
+    {
+      "path": "tests/contract/r0006-output-totality-cycle5.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 22,
+      "assertion_digest_sha256": "8c4e3bae7d3cd591155a2fbd342de8b7093ec1216771e79ce6d794775502cf91"
+    },
+    {
+      "path": "tests/contract/r0006-output-totality-mocked-producers.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-001",
+        "INV-DEVAI-015",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 8,
+      "assertion_digest_sha256": "7b96e02b70de6db107645e629feb55bbf8537bd40ebd9339afa4715dd9f0c87a"
+    },
+    {
+      "path": "tests/contract/r0006-smart-convergence.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-003",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 72,
+      "assertion_digest_sha256": "289b0bd5df4e18c336c2df7b161fa4965f9da1e363cbb0797bb39592798d22fe"
     },
     {
       "path": "tests/e2e/bare-domain-help.e2e.test.ts",
@@ -2181,7 +3166,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 11,
+      "assertion_digest_sha256": "35767bfdb6db848a3c0b94354b58b77700151868e827e830f379abc4c1e0b0b6"
     },
     {
       "path": "tests/e2e/built-cli-guard.e2e.test.ts",
@@ -2189,7 +3176,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 1,
+      "assertion_digest_sha256": "0595db2a6663fb88556ffde69d8cf66cbc422cc8816f6825de793d046ab1be71"
     },
     {
       "path": "tests/e2e/cli-help.smoke.test.ts",
@@ -2197,7 +3186,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 20,
+      "assertion_digest_sha256": "1b3529c194a21d6f22e14a70fdb03ac71c21e0e50eb5e4272c3d80cf7d2e3ffd"
     },
     {
       "path": "tests/e2e/inventory-sensors.smoke.test.ts",
@@ -2206,7 +3197,9 @@
         "INV-DEVAI-002",
         "INV-DEVAI-012"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 2,
+      "assertion_digest_sha256": "2dd47851a59d1a8f62b4083bbad539115b57128d7b15e7b083e580506a70732f"
     },
     {
       "path": "tests/e2e/post-merge-auditor.e2e.test.ts",
@@ -2214,7 +3207,9 @@
       "invariant_ids": [
         "INV-DEVAI-018"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 63,
+      "assertion_digest_sha256": "0fa68516a356c25d632638bc49254f378aaad12a04a0774096e340a1fc3c14da"
     },
     {
       "path": "tests/e2e/usage-exit-codes.e2e.test.ts",
@@ -2222,7 +3217,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 10,
+      "assertion_digest_sha256": "a4107d97b708cabaac6248575181c39e203b3b299da220dcddef98160376609d"
     },
     {
       "path": "tests/integration/action-effects-binding.integration.test.ts",
@@ -2230,7 +3227,9 @@
       "invariant_ids": [
         "INV-DEVAI-020"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 5,
+      "assertion_digest_sha256": "3dec36d041c078c3dd235be3356843df238d82be42eefae1afba94ffcab68cca"
     },
     {
       "path": "tests/integration/ci-scaffold.integration.test.ts",
@@ -2239,7 +3238,9 @@
         "INV-DEVAI-013",
         "INV-SCAFFOLD-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 14,
+      "assertion_digest_sha256": "81eb33ced1b08a45d4db22b604b96df0370c4b0d8c16a94d592e4cd4717882fc"
     },
     {
       "path": "tests/integration/hooks-install.integration.test.ts",
@@ -2247,7 +3248,9 @@
       "invariant_ids": [
         "INV-DEVAI-013"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 30,
+      "assertion_digest_sha256": "5fc779466a8794299dd5a26aef6614cbf6e29599dbdfa8e0097e2be722832562"
     },
     {
       "path": "tests/integration/mutation-candidate-provenance.red.integration.test.ts",
@@ -2255,7 +3258,9 @@
       "invariant_ids": [
         "INV-DEVAI-021"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 36,
+      "assertion_digest_sha256": "cc06ae4913c4c3e38ec71f11db96c0900bde6d4727f2157f5021e50c7cbfc9cd"
     },
     {
       "path": "tests/integration/rtd-manifest.integration.test.ts",
@@ -2263,7 +3268,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 16,
+      "assertion_digest_sha256": "a3481c6fdcd2fb755115f2d9ea85c33e6b89c8211d66401972adc419e8d1ae63"
     },
     {
       "path": "tests/integration/runtime-probe-data.integration.test.ts",
@@ -2272,7 +3279,9 @@
         "INV-DEVAI-002",
         "INV-DEVAI-012"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 18,
+      "assertion_digest_sha256": "226df1dc21d058161de1eb5d9e5949d49a72fc56a70b7ee4064f5b7add6c74ca"
     },
     {
       "path": "tests/integration/sensor-descriptor-cli-parity.integration.test.ts",
@@ -2281,7 +3290,9 @@
         "INV-DEVAI-001",
         "INV-DEVAI-002"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 5,
+      "assertion_digest_sha256": "22574290481d55582f8b026548d9bf03ce09f02bcffe079e6d72841e0e3b288e"
     },
     {
       "path": "tests/integration/sensor-standing.integration.test.ts",
@@ -2290,7 +3301,9 @@
         "INV-DEVAI-002",
         "INV-DEVAI-012"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 8,
+      "assertion_digest_sha256": "85b726f086e374114a048244ee9ed2dddcf1ce3f3a969890f54f4d43a0db97b7"
     },
     {
       "path": "tests/integration/translation-validation.red.integration.test.ts",
@@ -2298,7 +3311,9 @@
       "invariant_ids": [
         "INV-DEVAI-021"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 55,
+      "assertion_digest_sha256": "aae95dfd1e6017ec8a4a8ff7d706944a306dc82999688aadc51098b8ee0738db"
     },
     {
       "path": "tests/regression/evidence-chain-100-event.regression.test.ts",
@@ -2306,7 +3321,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 7,
+      "assertion_digest_sha256": "18cc8241eab2b9ed05a64be87b8b0d9bb89aa26bc16bae1fa516fa46173b7a7e"
     },
     {
       "path": "tests/regression/xref-resolver-performance.regression.test.ts",
@@ -2314,7 +3331,9 @@
       "invariant_ids": [
         "INV-DEVAI-001"
       ],
-      "lifecycle": "supported"
+      "lifecycle": "supported",
+      "assertion_count": 4,
+      "assertion_digest_sha256": "e60746ba537da38169817a1600e9c31ffc1432028618b01d2155bbf42416f349"
     }
   ],
   "suites": {

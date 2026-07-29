@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { subprocessCoverageEnvironment } from '../../../../tests/helpers/subprocess-coverage.js';
 
 /**
  * Contract tests (Phase 16.H). Schema-vs-implementation drift
@@ -26,7 +27,10 @@ const RELEASE_WORKFLOW = join(REPO_ROOT, '.github/workflows/release.yml');
 const itReleaseWorkflow = existsSync(RELEASE_WORKFLOW) ? it : it.skip;
 
 function run(args: readonly string[]): { status: number | null; stdout: string; stderr: string } {
-  const r = spawnSync('node', [DRIVER, ...args], { encoding: 'utf8' });
+  const r = spawnSync('node', [DRIVER, ...args], {
+    encoding: 'utf8',
+    env: subprocessCoverageEnvironment(),
+  });
   return { status: r.status, stdout: r.stdout, stderr: r.stderr };
 }
 

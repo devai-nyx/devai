@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 
@@ -59,7 +60,23 @@ for (const file of testFiles) {
     unmarked.push(file);
     continue;
   }
-  testRows.push({ file, ids });
+  const assertionSites = [...content.matchAll(/\b(?:expect|assert)\s*\(|\bassert\s*\./gu)].map(
+    (match) => `${String(match.index)}:${match[0]}`,
+  );
+  if (assertionSites.length === 0) {
+    process.stderr.write(`trace generation refused: ${file} has no executable assertion sites\n`);
+    process.exit(1);
+  }
+  testRows.push({
+    file,
+    ids,
+    assertion_count: assertionSites.length,
+    assertion_digest_sha256: createHash('sha256')
+      .update(
+        `source_sha256:${createHash('sha256').update(content).digest('hex')}\n${assertionSites.join('\n')}\n`,
+      )
+      .digest('hex'),
+  });
 }
 if (unmarked.length > 0) {
   process.stderr.write(
@@ -105,6 +122,8 @@ const trace = {
     suite: corpusSuite(row.file),
     invariant_ids: row.ids,
     lifecycle: 'supported',
+    assertion_count: row.assertion_count,
+    assertion_digest_sha256: row.assertion_digest_sha256,
   })),
   suites: {
     unit: { command: 'pnpm test:t1' },

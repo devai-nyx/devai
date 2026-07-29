@@ -14,6 +14,12 @@ import {
   validateLiveAuthorityActionRegistry,
 } from './authority/index.js';
 import { resolveCliVersion } from './version.js';
+import {
+  attachActionOutputBoundaries,
+  emitPreDispatchActionResult,
+  publicActionForArgv,
+  runCliStage,
+} from './action-output.js';
 import { actionsList } from './commands/actions-list.js';
 import { blueprintDiff, blueprintPlan, blueprintValidate } from './commands/blueprint/index.js';
 import { rgrEmit, rgrList, rgrResolve, rgrShow } from './commands/rgr/index.js';
@@ -405,39 +411,65 @@ mutationRun.register(cli);
 mutationVerify.register(cli);
 verifyTranslation.register(cli);
 
-attachRuntimeContracts(cli.commands);
 const registry = getFullRegistry();
-validateActionSurface(registry);
-validateLiveAuthorityActionRegistry(registry);
-attachAuthorityCommandBoundaries(cli.commands, registry);
-const authorityResult = authorizeCliArgv(
-  process.argv,
-  registry,
-  (skillId) => getSkill(skillId)?.manifest.authority_role,
-);
-if (authorityResult !== undefined) {
-  const stream = authorityResult.stdout.length > 0 ? process.stdout : process.stderr;
-  stream.write(authorityResult.stdout.length > 0 ? authorityResult.stdout : authorityResult.stderr);
-  process.exitCode = authorityResult.exit_code;
-} else {
-  const route = routeArgv(stripAuthorityArgv(process.argv), registry, pkgVersion);
-  if (route.kind === 'output') {
-    const stream = route.exitCode === 0 ? process.stdout : process.stderr;
-    stream.write(route.text);
-    process.exitCode = route.exitCode;
+const machineAction = publicActionForArgv(process.argv, registry);
+const initialized = runCliStage(machineAction, 'initialization', () => {
+  attachRuntimeContracts(cli.commands);
+  attachAuthorityCommandBoundaries(cli.commands, registry);
+  attachActionOutputBoundaries(cli.commands, registry);
+});
+if (initialized.ok) {
+  const validated = runCliStage(machineAction, 'registry-validation', () => {
+    validateActionSurface(registry);
+    validateLiveAuthorityActionRegistry(registry);
+  });
+  const routed = validated.ok
+    ? runCliStage(machineAction, 'routing', () =>
+        routeArgv(stripAuthorityArgv(process.argv), registry, pkgVersion),
+      )
+    : undefined;
+  const route = routed?.ok === true ? routed.value : undefined;
+  if (route === undefined) {
+    // The stage boundary already emitted the sole structured failure.
+  } else if (route.kind === 'output') {
+    if (
+      !emitPreDispatchActionResult(machineAction, {
+        exit: route.exitCode,
+        stdout: route.exitCode === 0 ? route.text : '',
+        stderr: route.exitCode === 0 ? '' : route.text,
+      })
+    ) {
+      const stream = route.exitCode === 0 ? process.stdout : process.stderr;
+      stream.write(route.text);
+      process.exitCode = route.exitCode;
+    }
   } else {
-    try {
-      cli.parse(route.argv);
-    } catch (err) {
-      // R18.C.4 (D-133/M3): cac throws CACError on missing/excess required
-      // args, which previously escaped as a raw stack trace with exit 1.
-      // Usage failures exit 2 with a one-line message, at every layer.
-      if (err instanceof Error && err.name === 'CACError') {
-        process.stderr.write(`devai: ${err.message}\n`);
-        process.exitCode = 2;
-      } else {
-        throw err;
+    const authorized = runCliStage(machineAction, 'authorization', () =>
+      authorizeCliArgv(
+        process.argv,
+        registry,
+        (skillId) => getSkill(skillId)?.manifest.authority_role,
+      ),
+    );
+    const authorityResult = authorized.ok ? authorized.value : undefined;
+    if (!authorized.ok) {
+      // The stage boundary already emitted the sole structured failure.
+    } else if (authorityResult !== undefined) {
+      if (
+        !emitPreDispatchActionResult(machineAction, {
+          exit: authorityResult.exit_code,
+          stdout: authorityResult.stdout,
+          stderr: authorityResult.stderr,
+        })
+      ) {
+        const stream = authorityResult.stdout.length > 0 ? process.stdout : process.stderr;
+        stream.write(
+          authorityResult.stdout.length > 0 ? authorityResult.stdout : authorityResult.stderr,
+        );
+        process.exitCode = authorityResult.exit_code;
       }
+    } else {
+      runCliStage(machineAction, 'handler-dispatch', () => cli.parse(route.argv));
     }
   }
 }
