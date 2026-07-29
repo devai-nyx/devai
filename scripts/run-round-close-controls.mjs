@@ -340,6 +340,8 @@ function environmentFingerprint(policy) {
   return sha256(canonical(readings));
 }
 
+const toolchainProbeResultCache = new Map();
+
 function toolchainManifestV5(policy, probeIds, findings) {
   const probes = new Map((policy?.freshness?.toolchain ?? []).map((probe) => [probe.id, probe]));
   const manifest = [];
@@ -353,14 +355,23 @@ function toolchainManifestV5(policy, probeIds, findings) {
       );
       continue;
     }
-    const [program, ...args] = probe.argv;
-    const result = run(program, args, { cwd: repoRoot });
+    const probeKey = canonical({ cwd: repoRoot, argv: probe.argv });
+    let result = toolchainProbeResultCache.get(probeKey);
+    if (result === undefined) {
+      const [program, ...args] = probe.argv;
+      result = run(program, args, { cwd: repoRoot });
+      toolchainProbeResultCache.set(probeKey, result);
+    }
     const entry = {
       id,
       argv: probe.argv,
-      exit_code: result.status ?? 1,
-      stdout_sha256: sha256(result.stdout ?? ''),
-      stderr_sha256: sha256(result.stderr ?? ''),
+      output_digest: sha256(
+        canonical({
+          exit_code: result.status ?? 1,
+          stdout: result.stdout ?? '',
+          stderr: result.stderr ?? '',
+        }),
+      ),
     };
     manifest.push(entry);
     if (result.status !== 0)
@@ -388,28 +399,45 @@ function environmentManifestV5(policy, inputIds, findings) {
         }),
       );
     const value = process.env[name];
+    const canonicalValue =
+      specification?.mode === 'presence'
+        ? value === undefined
+          ? 'absent'
+          : 'present'
+        : (value ?? 'UNSET');
     return {
       name,
       mode: specification?.mode ?? 'value-sha256',
-      value:
-        specification?.mode === 'presence'
-          ? value === undefined
-            ? 'absent'
-            : 'present'
-          : sha256(value ?? 'UNSET'),
+      digest: sha256(canonicalValue),
     };
   });
 }
 
+const rawCandidateManifestCache = new Map();
+const candidateBlobDigestCache = new Map();
+
 function rawCandidateInputManifest(revision, selectors) {
+  const expandedSelectors = [...new Set((selectors ?? []).flatMap(expandBraceSelectors))].sort();
+  const manifestKey = canonical({ repoRoot, revision, selectors: expandedSelectors });
+  const cached = rawCandidateManifestCache.get(manifestKey);
+  if (cached !== undefined) return cached;
   const tree = candidateTreeEntries(revision);
-  const paths = pathsForGlobs(repoRoot, revision, [
-    ...new Set((selectors ?? []).flatMap(expandBraceSelectors)),
-  ]);
-  return paths.map((path) => {
+  const paths = pathsForGlobs(repoRoot, revision, expandedSelectors);
+  const manifest = paths.map((path) => {
     const objectId = tree.get(path);
-    return { path, digest: sha256(gitBytes(repoRoot, ['cat-file', 'blob', objectId])) };
+    let digest = candidateBlobDigestCache.get(objectId);
+    if (digest === undefined) {
+      digest = sha256(gitBytes(repoRoot, ['cat-file', 'blob', objectId]));
+      candidateBlobDigestCache.set(objectId, digest);
+    }
+    return {
+      source: path,
+      present: true,
+      digest,
+    };
   });
+  rawCandidateManifestCache.set(manifestKey, manifest);
+  return manifest;
 }
 
 function gateFreshnessProfileV5(context, gate, findings) {
@@ -3408,7 +3436,11 @@ function topologicalNodes(graph, findings) {
 
 function v3InputEntries(selectors) {
   const expanded = [...new Set((selectors ?? []).flatMap(expandBraceSelectors))];
-  return worktreeInputEntries(repoRoot, expanded);
+  return worktreeInputEntries(repoRoot, expanded).map((entry) => ({
+    source: entry.path,
+    present: entry.kind !== 'deleted',
+    digest: entry.kind === 'deleted' ? null : entry.digest,
+  }));
 }
 
 function v3OutputState(specs) {
@@ -3619,10 +3651,13 @@ function buildImpactPlan(context, base, head, findings) {
         .map((id) => [id, resultKeys.get(id)]),
     );
     const outputState = v3OutputState(node.outputs ?? []);
-    const dependencyInputManifest = (node.depends_on ?? []).map((id) => ({
-      task_id: id,
-      task_key: resultKeys.get(id) ?? sha256('MISSING\n'),
-    }));
+    const dependencyInputManifest = [
+      ...new Map(
+        (node.depends_on ?? [])
+          .flatMap((id) => plannedById.get(id)?.input_manifest ?? [])
+          .map((entry) => [entry.source, entry]),
+      ).values(),
+    ].sort((left, right) => left.source.localeCompare(right.source));
     const outputContract = (node.outputs ?? []).length > 0 ? 'digest-required' : 'none';
     const gateFreshnessProfileDigest = sha256(
       canonical({
@@ -3660,7 +3695,10 @@ function buildImpactPlan(context, base, head, findings) {
       task_key: taskKey,
       argv: node.command,
       cwd: node.cwd,
+      gate_freshness_profile_digest: gateFreshnessProfileDigest,
+      input_manifest: inputEntries,
       input_manifest_digest: inputManifestDigest,
+      dependency_input_manifest: dependencyInputManifest,
       dependency_keys: dependencyKeys,
       dependency_results: Object.fromEntries(
         (node.depends_on ?? [])
@@ -3678,7 +3716,10 @@ function buildImpactPlan(context, base, head, findings) {
       policy_digest: context.digests.policy,
       graph_digest: context.digests.graph,
       toolchain_digest: toolchainDigest,
+      toolchain_manifest: toolchainManifest,
       environment_digest: environmentDigest,
+      environment_manifest: environmentManifest,
+      output_contract: outputContract,
       producing_candidate: range.exactHead,
     };
     const cache = remote ? null : v3ReadCache(context, expectedCache, findings);
@@ -5425,6 +5466,14 @@ function roundDeclarationV4(context, candidate, findings, required = true) {
 
 function deriveActiveControlCensusV5(context, candidate, findings) {
   const tree = candidateTreeEntries(candidate);
+  let baseTree = new Map();
+  if (/^[0-9a-f]{40}$/u.test(context.profile.declaration?.exact_base ?? '')) {
+    try {
+      baseTree = candidateTreeEntries(context.profile.declaration.exact_base);
+    } catch {
+      baseTree = new Map();
+    }
+  }
   const entries = [];
   const ids = new Set();
   const paths = new Set();
@@ -5516,23 +5565,15 @@ function deriveActiveControlCensusV5(context, candidate, findings) {
     add(id, 'owner-mandate', path, 'authority-reference', frontmatter?.status ?? 'inactive');
   }
 
-  const decisionPath = 'law/register/DECISIONS.md';
-  const decisionObject = tree.get(decisionPath);
-  let decisionSource = '';
-  if (decisionObject !== undefined) {
-    try {
-      decisionSource = gitBytes(repoRoot, ['cat-file', 'blob', decisionObject]).toString('utf8');
-    } catch {
-      decisionSource = '';
-    }
-  }
   const requiredDecisions = context.policy.active_control_census?.required_decisions ?? [
     'DII-246',
     'DII-248',
   ];
-  const missingDecisions = requiredDecisions.filter(
-    (id) => !new RegExp(`^### ${id}\\b`, 'mu').test(decisionSource),
-  );
+  const structuredDecisionReferences = new Set([
+    context.policy.decision_id,
+    ...(context.policy.active_control_census?.required_decisions ?? []),
+  ]);
+  const missingDecisions = requiredDecisions.filter((id) => !structuredDecisionReferences.has(id));
   if (missingDecisions.length > 0)
     findings.push(
       finding(
@@ -5541,7 +5582,12 @@ function deriveActiveControlCensusV5(context, candidate, findings) {
         { decision_ids: missingDecisions },
       ),
     );
-  add(requiredDecisions.join('+'), 'architect-decision', decisionPath, 'decision-provenance');
+  add(
+    requiredDecisions.join('+'),
+    'architect-decision',
+    '.devai/config/round-close-controls.json',
+    'decision-provenance',
+  );
 
   add(context.policy.policy_id, 'policy', 'law/policy/round-close-controls.json', 'profile-source');
   for (const [schemaId, path] of Object.entries(context.policy.schemas ?? {}).sort(
@@ -5579,9 +5625,18 @@ function deriveActiveControlCensusV5(context, candidate, findings) {
     ['authorization', context.profile.sources.authorization],
     ['plan', context.profile.sources.plan],
     ['orchestrator', context.profile.sources.orchestrator],
-    ['execution-contract', 'work/rounds/EXECUTION-CONTRACT.md'],
-  ])
-    add(`manifest:${context.profile.round}:${id}`, 'tracked-manifest', path, 'profile-manifest');
+  ]) {
+    if (tree.has(path) || baseTree.has(path))
+      add(`manifest:${context.profile.round}:${id}`, 'tracked-manifest', path, 'profile-manifest');
+  }
+  if (tree.has('work/rounds/EXECUTION-CONTRACT.md')) {
+    add(
+      `manifest:${context.profile.round}:execution-contract`,
+      'tracked-manifest',
+      'work/rounds/EXECUTION-CONTRACT.md',
+      'profile-manifest',
+    );
+  }
 
   if (context.profile.declaration?.decision_id !== null) {
     const declaration = roundDeclarationV4(context, candidate, findings);
@@ -5634,8 +5689,13 @@ function affectedExecutionV4(context, exactBase, candidate, passes, findings) {
         changed_inputs: [...new Set(entry.changed_inputs ?? [])].sort(),
         task_key: entry.task_key,
         gate_freshness_profile_digest: entry.gate_freshness_profile_digest,
+        input_manifest_digest: entry.input_manifest_digest,
+        dependency_input_manifest_digest: sha256(canonical(entry.dependency_input_manifest ?? [])),
         dependency_keys: entry.dependency_keys ?? {},
+        toolchain_digest: entry.toolchain_digest,
+        environment_digest: entry.environment_digest,
         fallback_population: entry.fallback_population ?? null,
+        output_contract: entry.output_contract ?? 'none',
         outputs_digest: sha256(canonical(entry.outputs ?? [])),
       };
       return withSelfDigest(body, 'result_digest');
@@ -5653,14 +5713,31 @@ function affectedExecutionV4(context, exactBase, candidate, passes, findings) {
       'pass_digest_sha256',
     );
   });
+  const changeRecords = (committedChangeRecords(exactBase, candidate, findings) ?? []).map(
+    (record) => {
+      const body = {
+        record_id: record.record_id,
+        status: record.status.startsWith('R')
+          ? 'R'
+          : record.status.startsWith('C')
+            ? 'C'
+            : record.status,
+        preimage: record.preimage,
+        postimage: record.postimage,
+        affected_paths: [...new Set(record.paths)].sort(),
+      };
+      return { ...body, record_digest: sha256(canonical(body)) };
+    },
+  );
   const execution = withSelfDigest(
     {
-      schemaVersion: '1.0.0',
+      schemaVersion: context.policy.schemaVersion === '5.0.0' ? '2.0.0' : '1.0.0',
       round: context.profile.round,
       exact_base: exactBase,
       candidate_sha: candidate,
       policy_digest: context.digests.policy,
       graph_digest: context.digests.graph,
+      ...(context.policy.schemaVersion === '5.0.0' ? { change_records: changeRecords } : {}),
       passes: executionPasses,
     },
     'execution_digest_sha256',
@@ -6361,7 +6438,11 @@ function claimSourceManifestV4(selectors, candidate, tree, claimId, producerOutp
       continue;
     }
     for (const entry of v3InputEntries([selector]))
-      manifest.push({ path: entry.path, state: 'present', content_digest: entry.digest });
+      manifest.push({
+        path: entry.source,
+        state: entry.present ? 'present' : 'absent',
+        content_digest: entry.digest,
+      });
   }
   return [...new Map(manifest.map((entry) => [entry.path, entry])).values()].sort((left, right) =>
     left.path.localeCompare(right.path),
