@@ -66,7 +66,7 @@ function fixture(): Fixture {
   const root = mkdtempSync(join(tmpdir(), 'devai-r7-impact-'));
   roots.push(root);
   git(root, ['init', '-q']);
-  put(root, '.gitignore', '.devai/state/\n');
+  put(root, '.gitignore', '.devai/state/\nfixture/output-a.txt\n');
   for (const name of [
     'affected-test-graph.schema.json',
     'common-defs.schema.json',
@@ -169,7 +169,7 @@ function fixture(): Fixture {
     depends_on,
     command: ['node', 'fixture/gate.mjs', id],
     cwd: '.',
-    outputs: id === 'unit-a' ? ['.devai/state/output-a.txt'] : [],
+    outputs: id === 'unit-a' ? ['fixture/output-a.txt'] : [],
     coverage_mode,
   });
   put(
@@ -232,7 +232,7 @@ function fixture(): Fixture {
   put(
     root,
     'fixture/gate.mjs',
-    "import { appendFileSync, mkdirSync, writeFileSync } from 'node:fs';\nmkdirSync('.devai/state', { recursive: true });\nappendFileSync('.devai/state/gate.log', `${process.argv[2]}\\n`);\nif (process.argv[2] === 'unit-a') writeFileSync('.devai/state/output-a.txt', 'stable-output\\n');\n",
+    "import { appendFileSync, mkdirSync, writeFileSync } from 'node:fs';\nmkdirSync('.devai/state', { recursive: true });\nappendFileSync('.devai/state/gate.log', `${process.argv[2]}\\n`);\nif (process.argv[2] === 'unit-a') writeFileSync('fixture/output-a.txt', 'stable-output\\n');\n",
   );
   put(root, 'package.json', '{"name":"fixture","private":true}\n');
   put(root, 'packages/a/src/index.ts', 'export const a = 1;\n');
@@ -323,7 +323,7 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const candidate = commit(current.root, 'change source a');
     const first = run(current, 'smart-converge', ['--base', current.base, '--head', candidate]);
     expect(first).toMatchObject({ ok: true, executed_test_nodes: 2 });
-    expect(readFileSync(join(current.root, '.devai/state/output-a.txt'), 'utf8')).toBe(
+    expect(readFileSync(join(current.root, 'fixture/output-a.txt'), 'utf8')).toBe(
       'stable-output\n',
     );
     const firstExecutions = readFileSync(join(current.root, '.devai/state/gate.log'), 'utf8')
