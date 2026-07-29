@@ -583,6 +583,76 @@
           "scripts/run-round-close-controls.mjs"
         ]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["cfd5631ac6a23dd8476cdb8d66b7dde4298fae3d"],
+      "law_commits": ["2e02614f6fdc1d4dd5981a702b236a340173e1b5"],
+      "red_evidence": {
+        "commit": "bab28b72f438ed80bf445dc1286dfdf08d0d212c",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts --reporter=dot",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-late-sequencing-red-evidence.json",
+        "evidence_sha256": "ab82b41676d5c2cd3999a9dcf9f4ceeddba50f86d588e56b03fe0dc098fca41f",
+        "tests": [
+          "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts"
+        ],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "packages/schemas/src/roster.ts",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["320d1653b70abab71dc2166a5ff1e4246f479462"],
+      "law_commits": ["2e02614f6fdc1d4dd5981a702b236a340173e1b5"],
+      "red_evidence": {
+        "commit": "92ef37219af43476416373bc683ac80650ba7db8",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-close-controls.red.contract.test.ts tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts tests/contract/pre-r0007-remediation-1.red.contract.test.ts tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts --reporter=dot",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-late-sequencing-red-evidence.json",
+        "evidence_sha256": "ab82b41676d5c2cd3999a9dcf9f4ceeddba50f86d588e56b03fe0dc098fca41f",
+        "tests": [
+          "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
+          "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
+          "tests/contract/pre-r0007-remediation-1.red.contract.test.ts"
+        ],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["a7820ff7daa9781fcca04ec67b4a7ffb39fab1e4"],
+      "law_commits": ["2e02614f6fdc1d4dd5981a702b236a340173e1b5"],
+      "red_evidence": {
+        "commit": "7142bc07f58e4e5236585da67e9b82f43156bf09",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t 'atomically rejects stale-candidate|accepts one authentic current per-topic reused-topic proof|accepts the full failure, complete repair|rejects independently mutated claim proof: registry-runtime' --reporter=verbose",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-late-sequencing-red-evidence.json",
+        "evidence_sha256": "ab82b41676d5c2cd3999a9dcf9f4ceeddba50f86d588e56b03fe0dc098fca41f",
+        "tests": [
+          "tests/contract/pre-r0007-remediation-1.red.contract.test.ts"
+        ],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["bf76df9029f578b1b4597c53f3f42828969be813"],
+      "law_commits": ["2e02614f6fdc1d4dd5981a702b236a340173e1b5"],
+      "red_evidence": {
+        "commit": "cb9ba36cffe4c166081900071489f9410d2919bb",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t 'accepts the full failure, complete repair|rejects a forged v2 repair identity link' --reporter=dot",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-late-sequencing-red-evidence.json",
+        "evidence_sha256": "ab82b41676d5c2cd3999a9dcf9f4ceeddba50f86d588e56b03fe0dc098fca41f",
+        "tests": [
+          "tests/contract/pre-r0007-remediation-1.red.contract.test.ts"
+        ],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
     }
   ],
   "historical_commit_exceptions": [
