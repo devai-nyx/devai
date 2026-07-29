@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/prior-finding-registry.schema.json",
   "title": "Prior review finding-class registry",
+  "description": "Stable complete-class findings retained as mandatory topics for subsequent review cycles.",
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -43,5 +44,26 @@
         }
       }
     }
-  }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "round": "R-9999",
+      "registry_version": "example-v1",
+      "finding_classes": [
+        {
+          "finding_id": "F001",
+          "defect_class_id": "EXAMPLE_CLASS",
+          "severity": "P1",
+          "origin_cycle": 1,
+          "origin_evidence": "work/audit/R-9999/review-1.md",
+          "topic_ids": ["example-topic"],
+          "population_query": "Enumerate the complete example population.",
+          "affected_population": ["example-instance"],
+          "repair_condition": "Every enumerated instance satisfies the example invariant.",
+          "disposition": "OPEN"
+        }
+      ]
+    }
+  ]
 }

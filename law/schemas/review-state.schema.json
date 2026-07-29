@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/review-state.schema.json",
   "title": "Identity-bound bounded review state",
+  "description": "Exact-candidate substantive-cycle and transport state for mechanically bounded review.",
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -57,5 +58,22 @@
       "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
     },
     "transport_attempts": { "type": "integer", "minimum": 0, "maximum": 2 }
-  }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "round": "R-9999",
+      "state": "CYCLE_1_ACTIVE",
+      "cycle": 1,
+      "base_sha": "0000000000000000000000000000000000000000",
+      "candidate_sha": "1111111111111111111111111111111111111111",
+      "tree_sha": "2222222222222222222222222222222222222222",
+      "profile_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "policy_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+      "candidate_manifest_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+      "review_scope_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+      "reviewer_binding_digest": "7777777777777777777777777777777777777777777777777777777777777777",
+      "transport_attempts": 0
+    }
+  ]
 }

@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/candidate-manifest.schema.json",
   "title": "Generic round-close candidate manifest",
+  "description": "Exact base, candidate, tree, and evidence identities frozen before semantic review.",
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": true,
@@ -34,5 +35,15 @@
       "oneOf": [{ "$ref": "#/$defs/sha1" }, { "type": "null" }]
     },
     "manifest_digest_sha256": { "$ref": "#/$defs/sha256" }
-  }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "round": "R-9999",
+      "base_sha": "0000000000000000000000000000000000000000",
+      "candidate_sha": "1111111111111111111111111111111111111111",
+      "tree_sha": "2222222222222222222222222222222222222222",
+      "manifest_digest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+    }
+  ]
 }
