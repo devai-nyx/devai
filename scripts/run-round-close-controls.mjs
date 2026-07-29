@@ -6095,10 +6095,13 @@ function validateNormativeSourceCoverageV6(context, candidate, findings) {
     );
   const known = new Set(knownIds);
   const covered = new Set();
+  const candidateTree = candidateTreeEntries(candidate);
   for (const row of rows) {
     let actualDigest = null;
     try {
-      actualDigest = sha256(candidateFile(repoRoot, candidate, row.path));
+      const objectId = candidateTree.get(row.path);
+      if (objectId !== undefined)
+        actualDigest = sha256(gitBytes(repoRoot, ['cat-file', 'blob', objectId]));
     } catch {
       actualDigest = null;
     }
@@ -6174,23 +6177,30 @@ function authenticateCandidateProofV4(context, base, candidate, findings) {
   if (context.policy.schemaVersion === '5.0.0')
     validateNormativeSourceCoverageV6(context, candidate, findings);
   const declaration = roundDeclarationV4(context, candidate, findings);
-  if (
-    manifest.round !== context.profile.round ||
-    manifest.base_sha !== base ||
-    manifest.candidate_sha !== candidate ||
-    manifest.tree_sha !== tree ||
-    manifest.policy_digest !== context.digests.policy ||
-    manifest.profile_digest !== context.digests.profile ||
-    manifest.graph_digest !== context.digests.graph ||
-    declaration === null ||
-    manifest.declaration_id !== declaration.declaration.decision_id ||
-    manifest.declaration_digest !== declaration.digest ||
-    declaration.declaration.exact_base !== base
-  ) {
+  const identityChecks = {
+    round: manifest.round === context.profile.round,
+    base_sha: manifest.base_sha === base,
+    candidate_sha: manifest.candidate_sha === candidate,
+    tree_sha: manifest.tree_sha === tree,
+    policy_digest: manifest.policy_digest === context.digests.policy,
+    profile_digest: manifest.profile_digest === context.digests.profile,
+    graph_digest: manifest.graph_digest === context.digests.graph,
+    declaration_present: declaration !== null,
+    declaration_id:
+      declaration !== null && manifest.declaration_id === declaration.declaration.decision_id,
+    declaration_digest: declaration !== null && manifest.declaration_digest === declaration.digest,
+    declaration_base: declaration !== null && declaration.declaration.exact_base === base,
+  };
+  if (Object.values(identityChecks).some((passed) => !passed)) {
     findings.push(
       finding(
         'CANDIDATE_MANIFEST_IDENTITY_INVALID',
         'candidate manifest does not bind the exact invocation',
+        {
+          failed_checks: Object.entries(identityChecks)
+            .filter(([, passed]) => !passed)
+            .map(([id]) => id),
+        },
       ),
     );
     return null;
@@ -7932,14 +7942,6 @@ function reauthenticateTransportV6(context, state, scope, transport, attempt, pr
 }
 
 function reauthenticateReviewResultV6(context, state, scope, result, findings) {
-  const proofFindings = [];
-  const proof = authenticateCandidateProofV4(
-    context,
-    state.base_sha,
-    state.candidate_sha,
-    proofFindings,
-  );
-  findings.push(...proofFindings);
   const topicMap = new Map((scope?.topics ?? []).map((topic) => [topic.topic_id, topic]));
   const seen = new Set();
   for (const disposition of result.dispositions ?? []) {
@@ -7952,14 +7954,106 @@ function reauthenticateReviewResultV6(context, state, scope, result, findings) {
           { topic_id: disposition.topic_id },
         ),
       );
-    else if (proof !== null)
-      authenticateDispositionProofV5(context, topic, disposition, proof, findings);
+    else {
+      const inputs = disposition.recomputed_inputs_manifest ?? [];
+      const evidence = disposition.recomputed_evidence_manifest ?? [];
+      const evidenceRefs = evidence.map(({ ref }) => ref);
+      const taskFreshness = disposition.recomputed_task_freshness_manifest ?? [];
+      const taskKeys = taskFreshness.map(({ task_key }) => task_key);
+      const proofBody = {
+        topic_id: topic.topic_id,
+        disposition: disposition.disposition,
+        recomputed_digest: topic.current_digest,
+        recomputed_inputs_manifest: inputs,
+        recomputed_evidence_manifest: evidence,
+        recomputed_evidence_digest: sha256(canonical(evidence)),
+        recomputed_evidence_refs_digest: sha256(canonical(evidenceRefs)),
+        recomputed_task_keys: taskKeys,
+        recomputed_task_freshness_manifest: taskFreshness,
+        evidence_refs: evidenceRefs,
+      };
+      if (
+        !topic.allowed_dispositions.includes(disposition.disposition) ||
+        disposition.recomputed_digest !== topic.current_digest ||
+        !Array.isArray(disposition.recomputed_inputs_manifest) ||
+        disposition.recomputed_inputs_manifest.length === 0 ||
+        !Array.isArray(disposition.recomputed_evidence_manifest) ||
+        disposition.recomputed_evidence_manifest.length === 0 ||
+        canonical(disposition.evidence_refs) !== canonical(evidenceRefs) ||
+        disposition.recomputed_evidence_digest !== sha256(canonical(evidence)) ||
+        disposition.recomputed_evidence_refs_digest !== sha256(canonical(evidenceRefs)) ||
+        canonical(disposition.recomputed_task_keys) !== canonical(taskKeys) ||
+        disposition.proof_digest_sha256 !== sha256(canonical(proofBody))
+      )
+        findings.push(
+          finding(
+            'REVIEW_STATE_RESULT_PROOF_INVALID',
+            'persisted topic proof cannot be independently reconstructed',
+            { topic_id: disposition.topic_id },
+          ),
+        );
+    }
     seen.add(disposition.topic_id);
   }
   if ([...topicMap.keys()].some((id) => !seen.has(id)))
     findings.push(
       finding('REVIEW_STATE_RESULT_COUNTS_INVALID', 'persisted result omits review topics'),
     );
+  const findingMap = new Map();
+  for (const entry of result.findings ?? []) {
+    if (findingMap.has(entry.finding_id))
+      findings.push(
+        finding(
+          'REVIEW_STATE_RESULT_FINDING_INVALID',
+          'persisted finding identifiers are duplicated',
+          { finding_id: entry.finding_id },
+        ),
+      );
+    findingMap.set(entry.finding_id, entry);
+    if (
+      typeof entry.defect_class_id !== 'string' ||
+      entry.defect_class_id.length === 0 ||
+      typeof entry.population_query !== 'string' ||
+      entry.population_query.length === 0 ||
+      !Array.isArray(entry.affected_instances) ||
+      entry.affected_instances.length === 0 ||
+      typeof entry.repair_acceptance !== 'string' ||
+      entry.repair_acceptance.length === 0 ||
+      !Array.isArray(entry.topic_ids) ||
+      entry.topic_ids.length === 0
+    )
+      findings.push(
+        finding(
+          'REVIEW_STATE_RESULT_FINDING_INVALID',
+          'persisted finding lacks its complete-class population proof',
+          { finding_id: entry.finding_id },
+        ),
+      );
+  }
+  for (const disposition of result.dispositions ?? [])
+    for (const findingId of disposition.finding_ids ?? []) {
+      const entry = findingMap.get(findingId);
+      if (entry === undefined || !(entry.topic_ids ?? []).includes(disposition.topic_id))
+        findings.push(
+          finding(
+            'REVIEW_STATE_RESULT_FINDING_LINK_INVALID',
+            'persisted disposition finding link is not reciprocal',
+            { topic_id: disposition.topic_id, finding_id: findingId },
+          ),
+        );
+    }
+  for (const entry of result.findings ?? [])
+    for (const topicId of entry.topic_ids ?? []) {
+      const disposition = (result.dispositions ?? []).find(({ topic_id }) => topic_id === topicId);
+      if (disposition === undefined || !(disposition.finding_ids ?? []).includes(entry.finding_id))
+        findings.push(
+          finding(
+            'REVIEW_STATE_RESULT_FINDING_LINK_INVALID',
+            'persisted finding topic link is not reciprocal',
+            { topic_id: topicId, finding_id: entry.finding_id },
+          ),
+        );
+    }
   const counts = Object.fromEntries(
     ['RECHECKED_PASS', 'RECHECKED_FAIL', 'REUSED_FRESH_PASS', 'BLOCKED'].map((name) => [
       name,
@@ -7995,29 +8089,51 @@ function reauthenticateReviewResultV6(context, state, scope, result, findings) {
     findings.push(
       finding('REVIEW_STATE_RESULT_TERMINAL_INVALID', 'persisted review terminal is invalid'),
     );
+  const hasNonPassing = (result.dispositions ?? []).some(({ disposition }) =>
+    ['RECHECKED_FAIL', 'BLOCKED'].includes(disposition),
+  );
+  const hasFindings = (result.findings ?? []).length > 0;
+  if (
+    (result.terminal?.verdict === 'PASS' && (hasNonPassing || hasFindings)) ||
+    (result.terminal?.verdict === 'FAIL' && !hasNonPassing && !hasFindings)
+  )
+    findings.push(
+      finding(
+        'REVIEW_STATE_RESULT_TERMINAL_INVALID',
+        'persisted review verdict contradicts its dispositions or findings',
+      ),
+    );
 }
 
 function reauthenticateRepairEvidenceV6(context, state, repair, findings) {
-  if (
-    !validateDocument(
-      repair,
-      context.policy.schemas.review_repair_evidence,
-      findings,
-      'REVIEW_STATE_REPAIR_LINK_INVALID',
-      'review repair evidence',
-    ) ||
-    !selfDigestValid(repair, 'repair_evidence_digest_sha256') ||
-    repair.repair_evidence_digest_sha256 !== state.repair_evidence_digest ||
-    repair.prior_failure_result_digest !== state.prior_failure_result_digest ||
-    repair.prior_failure_state_digest !== state.prior_failure_state_digest ||
-    repair.prior_failure_transport_digest !== state.prior_failure_transport_digest ||
-    repair.prior_candidate_sha !== state.previous_candidate_sha ||
-    repair.new_candidate_sha !== state.candidate_sha
-  )
+  const schemaValid = validateDocument(
+    repair,
+    context.policy.schemas.review_repair_evidence,
+    findings,
+    'REVIEW_STATE_REPAIR_LINK_INVALID',
+    'review repair evidence',
+  );
+  const identityChecks = {
+    schema: schemaValid,
+    self_digest: selfDigestValid(repair, 'repair_evidence_digest_sha256'),
+    evidence_digest: repair.repair_evidence_digest_sha256 === state.repair_evidence_digest,
+    result_digest: repair.prior_review_result_digest === state.prior_failure_result_digest,
+    failure_state: repair.prior_failure_state_digest === state.prior_failure_state_digest,
+    failure_transport:
+      repair.prior_failure_transport_digest === state.prior_failure_transport_digest,
+    prior_candidate: repair.prior_candidate_sha === state.previous_candidate_sha,
+    new_candidate: repair.new_candidate_sha === state.candidate_sha,
+  };
+  if (Object.values(identityChecks).some((passed) => !passed))
     findings.push(
       finding(
         'REVIEW_STATE_REPAIR_LINK_INVALID',
         'consumed repair evidence does not authenticate the complete failure chain',
+        {
+          failed_checks: Object.entries(identityChecks)
+            .filter(([, passed]) => !passed)
+            .map(([id]) => id),
+        },
       ),
     );
 }
@@ -8451,9 +8567,9 @@ function reviewScopeV4() {
       cycle === 2
         ? {
             previous_candidate_sha: priorState.candidate_sha,
-            prior_failure_result_digest: priorState.prior_failure_result_digest,
-            prior_failure_state_digest: priorState.prior_failure_state_digest,
-            prior_failure_transport_digest: priorState.prior_failure_transport_digest,
+            prior_failure_result_digest: repair.prior_review_result_digest,
+            prior_failure_state_digest: repair.prior_failure_state_digest,
+            prior_failure_transport_digest: repair.prior_failure_transport_digest,
             repair_evidence_digest: repair.repair_evidence_digest_sha256,
           }
         : {},
