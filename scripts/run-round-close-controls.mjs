@@ -3275,7 +3275,6 @@ function buildImpactPlan(context, base, head, findings) {
       cwd: node.cwd,
       input_manifest_digest: inputManifestDigest,
       dependency_keys: dependencyKeys,
-      outputs: outputState.outputs,
       policy_digest: context.digests.policy,
       graph_digest: context.digests.graph,
       toolchain_digest: toolchainDigest,
