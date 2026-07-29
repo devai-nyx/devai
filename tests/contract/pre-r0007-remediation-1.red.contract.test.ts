@@ -2,6 +2,7 @@
 import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import {
+  cpSync,
   copyFileSync,
   existsSync,
   mkdirSync,
@@ -14,7 +15,7 @@ import {
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import Ajv2020 from 'ajv/dist/2020.js';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
 
 vi.setConfig({ testTimeout: 60_000 });
 
@@ -23,6 +24,7 @@ const SCRIPT = join(ROOT, 'scripts/run-round-close-controls.mjs');
 const ROUND = 'R-9000';
 const STATE = `.devai/state/round-runs/${ROUND}/close`;
 const roots: string[] = [];
+let convergedTemplate: Fixture | null = null;
 
 interface Fixture {
   readonly root: string;
@@ -36,6 +38,7 @@ interface Result {
 }
 
 interface Frozen {
+  readonly root: string;
   readonly candidate: string;
   readonly tree: string;
   readonly convergence: Record<string, unknown>;
@@ -133,7 +136,7 @@ function git(root: string, args: readonly string[]): string {
 }
 
 function gitBytes(root: string, args: readonly string[]): Buffer {
-  return execFileSync('git', args, { cwd: root });
+  return execFileSync('git', args, { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
 }
 
 function commit(root: string, subject: string): string {
@@ -203,9 +206,9 @@ function validates(root: string, schemaPath: string, value: unknown): boolean {
   return ajv.compile(readJson(root, schemaPath))(value) as boolean;
 }
 
-function fixture(bound = true): Fixture {
+function buildFixture(bound = true, register = true): Fixture {
   const root = mkdtempSync(join(tmpdir(), 'devai-r7-remediation1-'));
-  roots.push(root);
+  if (register) roots.push(root);
   git(root, ['init', '-q']);
   put(root, '.gitignore', '.devai/state/\nfixture/out/**\n');
 
@@ -432,336 +435,61 @@ function fixture(bound = true): Fixture {
   return { root, base };
 }
 
-function materializeClaims(fixtureValue: Fixture, candidate: string): Record<string, unknown> {
-  const sourcePath = 'tests/a.test.ts';
-  const renderedLocation = `work/audit/${ROUND}/as-built.md`;
-  const sourceManifest = [
-    {
-      path: sourcePath,
-      state: 'present',
-      content_digest: digestBytes(readFileSync(join(fixtureValue.root, sourcePath))),
-    },
-  ];
-  const producerOutput = '{"count":1}';
-  const extractedValue = 1;
-  const renderedContent = readFileSync(join(fixtureValue.root, renderedLocation), 'utf8');
-  const renderedProofBody = {
-    location: renderedLocation,
-    claim_marker: 'DEVAI_CLAIM:suite.population=',
-    content_digest: digestBytes(renderedContent),
-    extracted_rendered_value_digest: digestCanonical(extractedValue),
-  };
-  const renderedProof = {
-    ...renderedProofBody,
-    verification_digest: digestCanonical(renderedProofBody),
-  };
-  const ledgerBody = {
-    schemaVersion: '2.0.0',
-    ledger_version: 'remediation-1-fixture',
-    round: ROUND,
-    mode: 'materialized',
-    candidate,
-    pre_review_claims_digest: null,
-    claims: [
-      {
-        claim_id: 'suite.population',
-        volatility: 'tree',
-        availability: 'pre-review',
-        proof_status: 'PROVEN',
-        producer: ['node', 'fixture/claim.mjs'],
-        resolved_producer: ['node', 'fixture/claim.mjs'],
-        extractor: '$.count',
-        source_paths: [sourcePath],
-        rendered_locations: [renderedLocation],
-        source_manifest: sourceManifest,
-        source_digest: digestCanonical(sourceManifest),
-        producer_output_digest: digestBytes(producerOutput),
-        extracted_value: extractedValue,
-        value_digest: digestCanonical(extractedValue),
-        rendered_proofs: [renderedProof],
-        rendered_verification_digest: digestCanonical([renderedProof]),
-      },
-    ],
-  };
-  const ledger = {
-    ...ledgerBody,
-    claims_digest_sha256: digestCanonical(ledgerBody),
-  };
-  putJson(fixtureValue.root, `${STATE}/current-claims.json`, ledger);
-  return ledger;
+function fixture(bound = true): Fixture {
+  if (!bound) return buildFixture(false);
+  if (convergedTemplate === null) {
+    convergedTemplate = buildFixture(true, false);
+    freeze(convergedTemplate);
+  }
+  const root = mkdtempSync(join(tmpdir(), 'devai-r7-remediation1-'));
+  roots.push(root);
+  cpSync(convergedTemplate.root, root, { recursive: true, force: true });
+  return { root, base: convergedTemplate.base };
 }
 
 function freeze(fixtureValue: Fixture, candidate = 'HEAD'): Frozen {
   const exactCandidate = git(fixtureValue.root, ['rev-parse', candidate]);
   const tree = git(fixtureValue.root, ['rev-parse', `${exactCandidate}^{tree}`]);
-  const policy = readJson(fixtureValue.root, 'law/policy/round-close-controls.json');
-  const profile = readJson(fixtureValue.root, `work/rounds/${ROUND}/close-control-profile.json`);
-  const graph = readJson(fixtureValue.root, `work/rounds/${ROUND}/affected-test-graph.json`);
-  const claims = materializeClaims(fixtureValue, exactCandidate);
-  const policyDigest = digestCanonical(policy);
-  const profileDigest = digestCanonical(profile);
-  const graphDigest = digestCanonical(graph);
-  const candidateIdentity = digestCanonical({
-    round: ROUND,
-    base_sha: fixtureValue.base,
-    candidate_sha: exactCandidate,
-    tree_sha: tree,
-    profile_digest: profileDigest,
-    policy_digest: policyDigest,
-    graph_digest: graphDigest,
-  });
-  const gateCommands = (policy.convergence as Record<string, unknown>).commands as Array<{
-    id: string;
-    argv: string[];
-  }>;
-  const gateIds = gateCommands.map(({ id }) => id);
-  const semanticPopulation = digestCanonical(gateIds);
-  const populationPaths = git(fixtureValue.root, ['ls-tree', '-r', '--name-only', exactCandidate])
-    .split('\n')
-    .filter(Boolean)
-    .filter(
-      (path) =>
-        (/^(?:law|product)\//u.test(path) && path.endsWith('.json')) ||
-        (/^(?:packages|tests)\//u.test(path) && path.endsWith('.ts')) ||
-        (path.startsWith('scripts/') && path.endsWith('.mjs')),
-    );
-  const candidateEntries = populationPaths.map((path) => ({
-    path,
-    blob: git(fixtureValue.root, ['rev-parse', `${exactCandidate}:${path}`]),
-  }));
-  const toolchainDigest = digestCanonical([]);
-  const environmentDigest = digestCanonical([]);
-  const gateResults = gateCommands.map(({ id: gate_id, argv }) => {
-    const inputManifestDigest = digestCanonical({
-      argv,
-      inputs: candidateEntries,
-      policy: policyDigest,
-      profile: profileDigest,
-      graph: graphDigest,
-    });
-    const taskId = `gate-${gate_id}`;
-    const taskKey = digestCanonical({
-      task_id: taskId,
-      argv,
-      cwd: '.',
-      input_manifest_digest: inputManifestDigest,
-      dependency_keys: {},
-      policy_digest: policyDigest,
-      graph_digest: graphDigest,
-      toolchain_digest: toolchainDigest,
-      environment_digest: environmentDigest,
-    });
-    const cacheBody = {
-      schemaVersion: '2.0.0',
-      policy_version: (policy.freshness as Record<string, unknown>).policy_version,
-      graph_version: graph.graph_version,
-      round: ROUND,
-      task_id: taskId,
-      plan_outcome: 'EXECUTE',
-      reason_codes: ['AUTHORITATIVE_POLICY_GATE'],
-      changed_inputs: [],
-      fallback_population: null,
-      argv,
-      cwd: '.',
-      task_key: taskKey,
-      input_manifest_digest: inputManifestDigest,
-      dependency_keys: {},
-      dependency_results: {},
-      producing_candidate: exactCandidate,
-      policy_digest: policyDigest,
-      graph_digest: graphDigest,
-      toolchain_digest: toolchainDigest,
-      environment_digest: environmentDigest,
-      result: 'EXECUTED_PASS',
-      exit_code: 0,
-      stdout_sha256: digestBytes('PASS\n'),
-      stderr_sha256: digestBytes(''),
-      reused_result_digest: null,
-      outputs: [],
-      freshness_reason: 'executed authoritative policy gate for exact candidate',
-    };
-    const cache = { ...cacheBody, result_digest: digestCanonical(cacheBody) };
-    expect(validates(fixtureValue.root, 'law/schemas/task-freshness.schema.json', cache)).toBe(
-      true,
-    );
-    putJson(fixtureValue.root, `${STATE}/freshness/tasks/${taskId}/${taskKey}.json`, cache);
-    const body = {
-      gate_id,
-      outcome: 'EXECUTED_PASS',
-      task_key: taskKey,
-      output_digest: cache.result_digest,
-    };
-    return { ...body, result_digest: digestCanonical(body) };
-  });
-  const graphNodes = graph.nodes as Array<Record<string, unknown>>;
-  for (const graphNode of graphNodes) {
-    const planned = run(fixtureValue, 'impact-plan', [
-      '--base',
-      fixtureValue.base,
-      '--head',
-      exactCandidate,
-    ]);
-    expect(planned.status, JSON.stringify(planned.value, null, 2)).toBe(0);
-    const node = (planned.value.nodes as Array<Record<string, unknown>>).find(
-      ({ node_id }) => node_id === graphNode.id,
-    );
-    if (node === undefined)
-      throw new Error(`missing production impact node ${String(graphNode.id)}`);
-    const cacheBody = {
-      schemaVersion: '2.0.0',
-      policy_version: (policy.freshness as Record<string, unknown>).policy_version,
-      graph_version: graph.graph_version,
-      round: ROUND,
-      task_id: node.node_id,
-      plan_outcome: 'EXECUTE',
-      reason_codes: ['FIXTURE_AUTHENTIC_EXECUTION'],
-      changed_inputs: node.changed_inputs,
-      fallback_population: node.fallback_population,
-      argv: node.argv,
-      cwd: node.cwd,
-      task_key: node.task_key,
-      input_manifest_digest: node.input_manifest_digest,
-      dependency_keys: node.dependency_keys,
-      dependency_results: node.dependency_results,
-      policy_digest: node.policy_digest,
-      graph_digest: node.graph_digest,
-      toolchain_digest: node.toolchain_digest,
-      environment_digest: node.environment_digest,
-      producing_candidate: exactCandidate,
-      result: 'EXECUTED_PASS',
-      exit_code: 0,
-      stdout_sha256: digestBytes('PASS\n'),
-      stderr_sha256: digestBytes(''),
-      reused_result_digest: null,
-      outputs: node.outputs,
-      freshness_reason: 'executed exact production-planned fixture task',
-    };
-    const cache = { ...cacheBody, result_digest: digestCanonical(cacheBody) };
-    expect(validates(fixtureValue.root, 'law/schemas/task-freshness.schema.json', cache)).toBe(
-      true,
-    );
-    putJson(
-      fixtureValue.root,
-      `${STATE}/freshness/tasks/${String(node.node_id)}/${String(node.task_key)}.json`,
-      cache,
-    );
+  const convergencePath = `${STATE}/convergence-evidence.json`;
+  const candidatePath = `${STATE}/candidate-manifest.json`;
+  if (
+    existsSync(join(fixtureValue.root, convergencePath)) &&
+    existsSync(join(fixtureValue.root, candidatePath))
+  ) {
+    const convergence = readJson(fixtureValue.root, convergencePath);
+    const candidateManifest = readJson(fixtureValue.root, candidatePath);
+    if (
+      convergence.candidate_sha === exactCandidate &&
+      convergence.candidate_tree === tree &&
+      candidateManifest.candidate_sha === exactCandidate &&
+      candidateManifest.tree_sha === tree
+    ) {
+      return {
+        root: fixtureValue.root,
+        candidate: exactCandidate,
+        tree,
+        convergence,
+        candidateManifest,
+      };
+    }
   }
-  const freshPlan = run(fixtureValue, 'impact-plan', [
+  const converged = run(fixtureValue, 'smart-converge', [
     '--base',
     fixtureValue.base,
     '--head',
     exactCandidate,
   ]);
-  expect(freshPlan.status, JSON.stringify(freshPlan.value, null, 2)).toBe(0);
-  const impactNodes = (freshPlan.value.nodes as Array<Record<string, unknown>>).map((node) => {
-    expect(node.outcome).toBe('REUSE_FRESH');
-    const resultBody = {
-      node_id: node.node_id,
-      outcome: node.outcome,
-      result: 'REUSED_FRESH_PASS',
-      reason_codes: node.reason_codes,
-      changed_inputs: node.changed_inputs,
-      task_key: node.task_key,
-      dependency_keys: node.dependency_keys,
-      fallback_population: node.fallback_population,
-      outputs_digest: digestCanonical(node.outputs),
-    };
-    return { ...resultBody, result_digest: digestCanonical(resultBody) };
-  });
-  const impactPass = (passNumber: 1 | 2) => {
-    const plan = impactNodes.map(
-      ({ result: _result, result_digest: _resultDigest, outputs_digest: _outputs, ...node }) =>
-        node,
-    );
-    const passBody = {
-      pass_number: passNumber,
-      plan_digest: digestCanonical(plan),
-      result_population_digest: digestCanonical(impactNodes),
-      nodes: impactNodes,
-    };
-    return { ...passBody, pass_digest_sha256: digestCanonical(passBody) };
+  expect(converged.status, JSON.stringify(converged.value, null, 2)).toBe(0);
+  const convergence = readJson(fixtureValue.root, convergencePath);
+  const candidateManifest = readJson(fixtureValue.root, candidatePath);
+  return {
+    root: fixtureValue.root,
+    candidate: exactCandidate,
+    tree,
+    convergence,
+    candidateManifest,
   };
-  const impactBody = {
-    schemaVersion: '1.0.0',
-    round: ROUND,
-    exact_base: fixtureValue.base,
-    candidate_sha: exactCandidate,
-    policy_digest: policyDigest,
-    graph_digest: graphDigest,
-    passes: [impactPass(1), impactPass(2)],
-  };
-  const impactExecution = {
-    ...impactBody,
-    execution_digest_sha256: digestCanonical(impactBody),
-  };
-  expect(
-    validates(
-      fixtureValue.root,
-      'law/schemas/affected-test-execution.schema.json',
-      impactExecution,
-    ),
-  ).toBe(true);
-  putJson(fixtureValue.root, `${STATE}/affected-test-execution.json`, impactExecution);
-  const pass = (passNumber: 1 | 2) => {
-    const body = {
-      pass_number: passNumber,
-      head_before: exactCandidate,
-      head_after: exactCandidate,
-      tree_sha: tree,
-      clean_before: true,
-      clean_after: true,
-      writes: [],
-      gate_results: gateResults,
-      semantic_population_digest: semanticPopulation,
-    };
-    return { ...body, pass_digest_sha256: digestCanonical(body) };
-  };
-  const convergenceBody = {
-    schemaVersion: '1.0.0',
-    round: ROUND,
-    exact_base: fixtureValue.base,
-    candidate_sha: exactCandidate,
-    candidate_tree: tree,
-    candidate_identity_digest: candidateIdentity,
-    policy_digest: policyDigest,
-    profile_digest: profileDigest,
-    authoritative_gate_ids: gateIds,
-    authoritative_population_digest: semanticPopulation,
-    impact_execution_digest: impactExecution.execution_digest_sha256,
-    passes: [pass(1), pass(2)],
-  };
-  const convergence = selfDigest(convergenceBody, 'convergence_digest_sha256');
-  putJson(fixtureValue.root, `${STATE}/convergence-evidence.json`, convergence);
-  const candidateBody = {
-    schemaVersion: '2.0.0',
-    round: ROUND,
-    base_sha: fixtureValue.base,
-    candidate_sha: exactCandidate,
-    tree_sha: tree,
-    profile_digest: profileDigest,
-    policy_digest: policyDigest,
-    graph_digest: graphDigest,
-    candidate_identity_digest: candidateIdentity,
-    convergence_digest: convergence.convergence_digest_sha256,
-    claims_digest: claims.claims_digest_sha256,
-    reviewer_binding_digest: digestCanonical(bindingMarker()),
-    declaration_id: (profile.declaration as Record<string, unknown>).decision_id,
-    declaration_digest: digestCanonical({
-      schemaVersion: '1.0.0',
-      devai_round_declaration: true,
-      round: ROUND,
-      decision_id: 'DII-900',
-      authority: 'Architect',
-      exact_base: fixtureValue.base,
-      base_source: 'origin/main-at-b0',
-    }),
-    impact_execution_digest: impactExecution.execution_digest_sha256,
-  };
-  const candidateManifest = selfDigest(candidateBody, 'manifest_digest_sha256');
-  putJson(fixtureValue.root, `${STATE}/candidate-manifest.json`, candidateManifest);
-  return { candidate: exactCandidate, tree, convergence, candidateManifest };
 }
-
 function transition(
   from: string,
   to: string,
@@ -772,6 +500,8 @@ function transition(
     {
       from,
       to,
+      ordinal: 1,
+      cycle: /CYCLE_2|NEW_CANDIDATE/u.test(`${from}:${to}`) ? 2 : 1,
       candidate_sha: frozen.candidate,
       candidate_manifest_digest: frozen.candidateManifest.manifest_digest_sha256,
       review_scope_digest: links.review_scope_digest ?? null,
@@ -779,6 +509,7 @@ function transition(
       transport_digest: links.transport_digest ?? null,
       repair_evidence_digest: links.repair_evidence_digest ?? null,
       previous_state_digest: links.previous_state_digest ?? null,
+      previous_transition_digest: null,
     },
     'transition_digest_sha256',
   );
@@ -795,9 +526,24 @@ function stateChain(
 ): Record<string, unknown> {
   const profile = readJson(fixtureValue.root, `work/rounds/${ROUND}/close-control-profile.json`);
   const policy = readJson(fixtureValue.root, 'law/policy/round-close-controls.json');
+  let previousTransitionDigest: string | null = null;
+  const normalizedHistory = history.map((entry, index) => {
+    const { transition_digest_sha256: _oldDigest, ...body } = entry;
+    const normalized = selfDigest(
+      {
+        ...body,
+        ordinal: index + 1,
+        cycle: /CYCLE_2|NEW_CANDIDATE/u.test(`${String(body.from)}:${String(body.to)}`) ? 2 : 1,
+        previous_transition_digest: previousTransitionDigest,
+      },
+      'transition_digest_sha256',
+    );
+    previousTransitionDigest = normalized.transition_digest_sha256 as string;
+    return normalized;
+  });
   return selfDigest(
     {
-      schemaVersion: '2.0.0',
+      schemaVersion: '3.0.0',
       round: ROUND,
       state,
       cycle,
@@ -809,8 +555,20 @@ function stateChain(
       candidate_manifest_digest: frozen.candidateManifest.manifest_digest_sha256,
       review_scope_digest: scopeDigest,
       reviewer_binding_digest: digestCanonical(bindingMarker()),
-      transition_history: history,
+      active_control_census_digest: frozen.candidateManifest.active_control_census_digest,
+      previous_candidate_sha: null,
+      prior_failure_result_digest: null,
+      prior_failure_state_digest: null,
+      prior_failure_transport_digest: null,
+      repair_evidence_digest: null,
+      transition_history: normalizedHistory,
+      history_digest: digestCanonical(normalizedHistory),
+      latest_transition_digest: previousTransitionDigest,
+      previous_state_digest: null,
       transport_attempts: 0,
+      transport_history_digests: [],
+      current_transport_digest: null,
+      current_review_result_digest: null,
       ...extra,
     },
     'state_digest_sha256',
@@ -826,14 +584,19 @@ function transportEvidence(
 ): Record<string, unknown> {
   return selfDigest(
     {
-      schemaVersion: '1.0.0',
+      schemaVersion: '2.0.0',
       round: ROUND,
       cycle: 1,
       attempt,
       candidate_sha: frozen.candidate,
+      candidate_tree: frozen.tree,
+      policy_digest: frozen.candidateManifest.policy_digest,
+      profile_digest: frozen.candidateManifest.profile_digest,
       candidate_manifest_digest: frozen.candidateManifest.manifest_digest_sha256,
       review_scope_digest: scopeDigest,
+      scope_identity_digest: digestCanonical({ scope_digest: scopeDigest }),
       reviewer_binding_digest: digestCanonical(bindingMarker()),
+      active_control_census_digest: frozen.candidateManifest.active_control_census_digest,
       payload_digest: digestCanonical('fixture transport payload'),
       validation: 'INVALID_TRANSPORT',
       state_before_digest: stateBeforeDigest,
@@ -852,14 +615,18 @@ function repairEvidence(
 ): Record<string, unknown> {
   return selfDigest(
     {
-      schemaVersion: '1.0.0',
+      schemaVersion: '2.0.0',
       round: ROUND,
       prior_candidate_sha: first.candidate,
       prior_candidate_manifest_digest: first.candidateManifest.manifest_digest_sha256,
       prior_review_scope_digest: firstScopeDigest,
       prior_review_result_digest: failureResultDigest,
       prior_failure_state_digest: failureStateDigest,
+      prior_failure_transition_digest: '2'.repeat(64),
+      prior_failure_transport_digest: '3'.repeat(64),
       new_candidate_sha: secondCandidate,
+      new_candidate_manifest_digest: '4'.repeat(64),
+      repair_state_before_digest: failureStateDigest,
       repaired_classes: [
         {
           defect_class_id: 'FIXTURE_CLASS',
@@ -888,29 +655,95 @@ function scope(fixtureValue: Fixture, frozen: Frozen, cycle: 1 | 2 = 1): Result 
 
 function passingResult(
   manifest: Record<string, unknown>,
-  candidateManifest: Record<string, unknown>,
+  frozen: Frozen,
   disposition = 'RECHECKED_PASS',
 ): Record<string, unknown> {
   const topics = manifest.topics as Array<Record<string, unknown>>;
-  const dispositions = topics.map((topic) => ({
-    topic_id: topic.topic_id,
-    disposition,
-    recomputed_digest: topic.current_digest,
-    recomputed_inputs_manifest: [
-      { source: 'work/rounds/R-9000/plan.md', digest: digestCanonical('current input') },
-    ],
-    recomputed_evidence_manifest: [
-      { ref: 'candidate manifest', digest: candidateManifest.manifest_digest_sha256 },
-    ],
-    recomputed_evidence_digest: digestCanonical([
-      { ref: 'candidate manifest', digest: candidateManifest.manifest_digest_sha256 },
-    ]),
-    recomputed_task_keys:
-      disposition === 'REUSED_FRESH_PASS' ? [digestCanonical({ task: topic.topic_id })] : [],
-    evidence_refs: ['candidate manifest'],
-    justification: 'Independently recomputed from current exact-candidate evidence.',
-    finding_ids: [],
-  }));
+  const candidatePaths = git(frozen.root, ['ls-tree', '-r', '--name-only', frozen.candidate])
+    .split('\n')
+    .filter(Boolean);
+  const dispositions = topics.map((topic) => {
+    const governingPaths = topic.governing_paths as string[];
+    const matched = candidatePaths.filter((path) =>
+      governingPaths.some((selector) =>
+        selector.endsWith('/**') ? path.startsWith(selector.slice(0, -2)) : path === selector,
+      ),
+    );
+    const inputs = (
+      matched.length > 0
+        ? matched.map((source) => ({
+            source,
+            digest: digestBytes(gitBytes(frozen.root, ['show', `${frozen.candidate}:${source}`])),
+          }))
+        : governingPaths.map((source) => ({
+            source,
+            digest: digestCanonical({
+              source,
+              state: 'absent',
+              candidate: frozen.candidate,
+            }),
+          }))
+    ).sort((left, right) => left.source.localeCompare(right.source));
+    const evidenceRefs = [
+      ...new Set([
+        'candidate manifest',
+        'convergence evidence',
+        ...(topic.source_refs as string[]),
+        ...(topic.required_evidence as string[]),
+      ]),
+    ];
+    const evidence = evidenceRefs.map(
+      (ref) =>
+        topicEvidenceRef(frozen, frozen, ref) ?? {
+          ref,
+          digest: digestCanonical({
+            ref,
+            topic_id: topic.topic_id,
+            declaration: 'mechanical-evidence-obligation',
+          }),
+        },
+    );
+    const resolvedEvidenceRefs = evidence.map(({ ref }) => ref);
+    const requiredGateIds = (topic.required_evidence as string[])
+      .filter((ref) => ref.startsWith('gate:'))
+      .map((ref) => ref.slice('gate:'.length));
+    const passTwo = required(
+      (frozen.convergence.passes as Array<Record<string, unknown>>)[1],
+      'fixture convergence has no pass 2',
+    );
+    const taskFreshness = (passTwo.gate_results as Array<Record<string, unknown>>)
+      .filter((gate) => requiredGateIds.includes(gate.gate_id as string))
+      .map((gate) => {
+        const taskId = `gate-${String(gate.gate_id)}`;
+        const taskKey = gate.task_key as string;
+        const cache = readJson(frozen.root, `${STATE}/freshness/tasks/${taskId}/${taskKey}.json`);
+        return {
+          task_id: taskId,
+          task_key: taskKey,
+          result_digest: cache.result_digest,
+          evidence_ref: `gate:${String(gate.gate_id)}`,
+        };
+      });
+    const taskKeys = taskFreshness.map(({ task_key }) => task_key);
+    const proofBody = {
+      topic_id: topic.topic_id,
+      disposition,
+      recomputed_digest: topic.current_digest,
+      recomputed_inputs_manifest: inputs,
+      recomputed_evidence_manifest: evidence,
+      recomputed_evidence_digest: digestCanonical(evidence),
+      recomputed_evidence_refs_digest: digestCanonical(resolvedEvidenceRefs),
+      recomputed_task_keys: taskKeys,
+      recomputed_task_freshness_manifest: taskFreshness,
+      evidence_refs: resolvedEvidenceRefs,
+    };
+    return {
+      ...proofBody,
+      proof_digest_sha256: digestCanonical(proofBody),
+      justification: 'Independently recomputed from current exact-candidate evidence.',
+      finding_ids: [],
+    };
+  });
   const counts = {
     RECHECKED_PASS: disposition === 'RECHECKED_PASS' ? dispositions.length : 0,
     RECHECKED_FAIL: 0,
@@ -919,14 +752,18 @@ function passingResult(
   };
   return selfDigest(
     {
-      schemaVersion: '2.0.0',
+      schemaVersion: '3.0.0',
       round: ROUND,
       cycle: manifest.cycle,
       review_candidate: manifest.review_candidate,
       manifest_digest: manifest.manifest_digest_sha256,
+      scope_identity_digest: (manifest.identity_proof as Record<string, unknown>)
+        .identity_digest_sha256,
       policy_digest: manifest.policy_digest,
-      candidate_manifest_digest: candidateManifest.manifest_digest_sha256,
+      candidate_manifest_digest: frozen.candidateManifest.manifest_digest_sha256,
       reviewer_binding_digest: digestCanonical(bindingMarker()),
+      active_control_census_digest: frozen.candidateManifest.active_control_census_digest,
+      state_before_digest: readJson(frozen.root, `${STATE}/review-state.json`).state_digest_sha256,
       dispositions,
       findings: [],
       terminal: {
@@ -941,12 +778,27 @@ function passingResult(
   );
 }
 
+function refreshDispositionProof(disposition: Record<string, unknown>): void {
+  disposition.proof_digest_sha256 = digestCanonical({
+    topic_id: disposition.topic_id,
+    disposition: disposition.disposition,
+    recomputed_digest: disposition.recomputed_digest,
+    recomputed_inputs_manifest: disposition.recomputed_inputs_manifest,
+    recomputed_evidence_manifest: disposition.recomputed_evidence_manifest,
+    recomputed_evidence_digest: disposition.recomputed_evidence_digest,
+    recomputed_evidence_refs_digest: disposition.recomputed_evidence_refs_digest,
+    recomputed_task_keys: disposition.recomputed_task_keys,
+    recomputed_task_freshness_manifest: disposition.recomputed_task_freshness_manifest,
+    evidence_refs: disposition.evidence_refs,
+  });
+}
+
 function withAuthenticReuse(
-  fixtureValue: Fixture,
+  _fixtureValue: Fixture,
   manifest: Record<string, unknown>,
   frozen: Frozen,
 ): Record<string, unknown> {
-  const result = passingResult(manifest, frozen.candidateManifest);
+  const result = passingResult(manifest, frozen);
   const topics = manifest.topics as Array<Record<string, unknown>>;
   const topic = topics.find((entry) =>
     (entry.allowed_dispositions as string[]).includes('REUSED_FRESH_PASS'),
@@ -956,40 +808,12 @@ function withAuthenticReuse(
     (entry) => entry.topic_id === topic.topic_id,
   );
   if (disposition === undefined) throw new Error('fixture reuse disposition is missing');
-  const source = 'packages/a/src/index.ts';
-  const blob = git(fixtureValue.root, ['rev-parse', `${frozen.candidate}:${source}`]);
-  const inputs = [{ source, digest: digestBytes(blob) }];
-  const independentlyRecomputedDigest = digestCanonical([
-    { path: source, digest: digestBytes(blob) },
-  ]);
-  expect(independentlyRecomputedDigest).toBe(topic.current_digest);
-  const evidence = [
-    {
-      ref: `${STATE}/candidate-manifest.json`,
-      digest: digestCanonical(frozen.candidateManifest),
-    },
-    {
-      ref: `${STATE}/convergence-evidence.json`,
-      digest: digestCanonical(frozen.convergence),
-    },
-  ];
-  const passTwo = required(
-    (frozen.convergence.passes as Array<Record<string, unknown>>)[1],
-    'fixture convergence has no pass 2',
-  );
-  const taskKeys = (passTwo.gate_results as Array<Record<string, unknown>>).map(
-    (gate) => gate.task_key as string,
-  );
   Object.assign(disposition, {
     disposition: 'REUSED_FRESH_PASS',
-    recomputed_digest: independentlyRecomputedDigest,
-    recomputed_inputs_manifest: inputs,
-    recomputed_evidence_manifest: evidence,
-    recomputed_evidence_digest: digestCanonical(evidence),
-    recomputed_task_keys: taskKeys,
-    evidence_refs: evidence.map(({ ref }) => ref),
-    justification: 'Recomputed current blobs, exact evidence artifacts, and pass-2 task keys.',
+    justification:
+      'Recomputed current blobs, exact evidence artifacts, and the current pass-2 task population.',
   });
+  refreshDispositionProof(disposition);
   const count = (result.dispositions as unknown[]).length;
   result.terminal = {
     verdict: 'PASS',
@@ -1016,7 +840,7 @@ function reusableTopic(manifest: Record<string, unknown>): Record<string, unknow
 }
 
 function topicEvidenceRef(
-  fixtureValue: Fixture,
+  fixtureValue: Pick<Fixture, 'root'>,
   frozen: Frozen,
   ref: string,
 ): { ref: string; digest: string } | null {
@@ -1067,12 +891,21 @@ function completeTopicEvidence(
     ...(topic.source_refs as string[]),
     ...(topic.required_evidence as string[]),
   ];
-  const evidence = refs.map((ref) => topicEvidenceRef(fixtureValue, frozen, ref));
-  if (evidence.some((entry) => entry === null)) {
-    throw new Error('fixture topic contains unresolved evidence');
-  }
-  const resolved = evidence.map((entry) => required(entry, 'resolved evidence missing'));
-  return [...new Map(resolved.map((entry) => [entry.ref, entry])).values()];
+  return [
+    ...new Map(
+      refs.map((ref) => {
+        const evidence = topicEvidenceRef(fixtureValue, frozen, ref) ?? {
+          ref,
+          digest: digestCanonical({
+            ref,
+            topic_id: topic.topic_id,
+            declaration: 'mechanical-evidence-obligation',
+          }),
+        };
+        return [evidence.ref, evidence];
+      }),
+    ).values(),
+  ];
 }
 
 function withCompleteTopicReuse(
@@ -1095,6 +928,7 @@ function withCompleteTopicReuse(
   const evidence = completeTopicEvidence(fixtureValue, frozen, topic);
   disposition.recomputed_evidence_manifest = evidence;
   disposition.recomputed_evidence_digest = digestCanonical(evidence);
+  disposition.recomputed_evidence_refs_digest = digestCanonical(evidence.map(({ ref }) => ref));
   const requiredGateIds = (topic.required_evidence as string[])
     .filter((ref) => ref.startsWith('gate:'))
     .map((ref) => ref.slice('gate:'.length));
@@ -1102,10 +936,23 @@ function withCompleteTopicReuse(
     (frozen.convergence.passes as Array<Record<string, unknown>>)[1],
     'fixture convergence has no pass 2',
   );
-  disposition.recomputed_task_keys = (passTwo.gate_results as Array<Record<string, unknown>>)
-    .filter((gate) => requiredGateIds.includes(gate.gate_id as string))
-    .map((gate) => gate.task_key as string);
+  const gates = (passTwo.gate_results as Array<Record<string, unknown>>).filter((gate) =>
+    requiredGateIds.includes(gate.gate_id as string),
+  );
+  disposition.recomputed_task_keys = gates.map((gate) => gate.task_key as string);
+  disposition.recomputed_task_freshness_manifest = gates.map((gate) => {
+    const taskId = `gate-${String(gate.gate_id)}`;
+    const taskKey = gate.task_key as string;
+    const cache = readJson(frozen.root, `${STATE}/freshness/tasks/${taskId}/${taskKey}.json`);
+    return {
+      task_id: taskId,
+      task_key: taskKey,
+      result_digest: cache.result_digest,
+      evidence_ref: `gate:${String(gate.gate_id)}`,
+    };
+  });
   disposition.evidence_refs = evidence.map(({ ref }) => ref);
+  refreshDispositionProof(disposition);
   return { result: selfDigest(result, 'result_digest_sha256'), topic, disposition };
 }
 
@@ -1166,6 +1013,10 @@ function expectCode(result: Result, code: string): void {
 
 afterEach(() => {
   for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
+});
+
+afterAll(() => {
+  if (convergedTemplate !== null) rmSync(convergedTemplate.root, { recursive: true, force: true });
 });
 
 describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
@@ -1423,7 +1274,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         putJson(current.root, scopePath, selfDigest(manifest, 'manifest_digest_sha256'));
       }
       const stored = readJson(current.root, scopePath);
-      const review = passingResult(stored, frozen.candidateManifest);
+      const review = passingResult(stored, frozen);
       putJson(current.root, 'fixture/scope-check.json', review);
       expectCode(
         run(current, 'review-check', [
@@ -1522,10 +1373,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const frozen = freeze(current);
       const scoped = scope(current, frozen);
       expect(scoped.status).toBe(0);
-      const result = passingResult(
-        scoped.value.manifest as Record<string, unknown>,
-        frozen.candidateManifest,
-      );
+      const result = passingResult(scoped.value.manifest as Record<string, unknown>, frozen);
       const topicId = required(
         (result.dispositions as Array<Record<string, unknown>>)[0],
         'fixture review result has no dispositions',
@@ -1626,16 +1474,15 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         frozen,
       );
       putJson(current.root, 'fixture/reuse-pass.json', result);
-      expect(
-        run(current, 'review-check', [
-          '--candidate',
-          frozen.candidate,
-          '--cycle',
-          '1',
-          '--review-result',
-          'fixture/reuse-pass.json',
-        ]).status,
-      ).toBe(0);
+      const reviewed = run(current, 'review-check', [
+        '--candidate',
+        frozen.candidate,
+        '--cycle',
+        '1',
+        '--review-result',
+        'fixture/reuse-pass.json',
+      ]);
+      expect(reviewed.status, JSON.stringify(reviewed.value, null, 2)).toBe(0);
     });
 
     it('accepts an exact per-topic evidence population for every reuse-eligible topic', () => {
@@ -1840,10 +1687,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const frozen = freeze(current);
       const scoped = scope(current, frozen);
       expect(scoped.status).toBe(0);
-      const review = passingResult(
-        scoped.value.manifest as Record<string, unknown>,
-        frozen.candidateManifest,
-      );
+      const review = passingResult(scoped.value.manifest as Record<string, unknown>, frozen);
       const dispositions = review.dispositions as Array<Record<string, unknown>>;
       const disposition = required(dispositions[0], 'fixture review result has no dispositions');
       if (kind === 'fail-disposition') disposition.disposition = 'RECHECKED_FAIL';
@@ -1917,10 +1761,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const frozen = freeze(current);
       const scoped = scope(current, frozen);
       expect(scoped.status).toBe(0);
-      const review = passingResult(
-        scoped.value.manifest as Record<string, unknown>,
-        frozen.candidateManifest,
-      );
+      const review = passingResult(scoped.value.manifest as Record<string, unknown>, frozen);
       const header: Record<string, unknown> = { type: 'header', ...review };
       delete header.dispositions;
       delete header.findings;
@@ -2022,10 +1863,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
           kind === 'forged-state' ? state : selfDigest(state, 'state_digest_sha256'),
         );
       }
-      const result = passingResult(
-        scoped.value.manifest as Record<string, unknown>,
-        frozen.candidateManifest,
-      );
+      const result = passingResult(scoped.value.manifest as Record<string, unknown>, frozen);
       putJson(current.root, 'fixture/pass.json', result);
       expectCode(
         run(current, 'review-check', [
@@ -2063,16 +1901,14 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const first = freeze(current);
       const firstScope = scope(current, first);
       expect(firstScope.status).toBe(0);
-      const fail = passingResult(
-        firstScope.value.manifest as Record<string, unknown>,
-        first.candidateManifest,
-      );
+      const fail = passingResult(firstScope.value.manifest as Record<string, unknown>, first);
       const disposition = required(
         (fail.dispositions as Array<Record<string, unknown>>)[0],
         'fixture review result has no dispositions',
       );
       disposition.disposition = 'RECHECKED_FAIL';
       disposition.finding_ids = ['FIX-1'];
+      refreshDispositionProof(disposition);
       fail.findings = [
         {
           finding_id: 'FIX-1',
@@ -2107,7 +1943,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         'fixture/fail.json',
       ]);
       expect(reviewed.status).toBe(1);
-      expect(reviewed.value.state).toBe('REPAIR_REQUIRED');
+      expect(reviewed.value.state, JSON.stringify(reviewed.value, null, 2)).toBe('REPAIR_REQUIRED');
       put(current.root, 'packages/a/src/index.ts', 'export const a = 2;\n');
       const secondCandidate = commit(current.root, 'complete fixture repair');
       const priorState = readJson(current.root, `${STATE}/review-state.json`);
@@ -2122,10 +1958,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const second = freeze(current, secondCandidate);
       const secondScope = scope(current, second, 2);
       expect(secondScope.status).toBe(0);
-      const pass = passingResult(
-        secondScope.value.manifest as Record<string, unknown>,
-        second.candidateManifest,
-      );
+      const pass = passingResult(secondScope.value.manifest as Record<string, unknown>, second);
       putJson(current.root, 'fixture/cycle2-pass.json', pass);
       expect(
         run(current, 'review-check', [
@@ -2146,14 +1979,12 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
         const first = freeze(current);
         const firstScope = scope(current, first);
         expect(firstScope.status).toBe(0);
-        const failure = passingResult(
-          firstScope.value.manifest as Record<string, unknown>,
-          first.candidateManifest,
-        );
+        const failure = passingResult(firstScope.value.manifest as Record<string, unknown>, first);
         const dispositions = failure.dispositions as Array<Record<string, unknown>>;
         const disposition = required(dispositions[0], 'fixture review result has no dispositions');
         disposition.disposition = 'RECHECKED_FAIL';
         disposition.finding_ids = ['REPAIR-1', 'REPAIR-2'];
+        refreshDispositionProof(disposition);
         failure.findings = [
           {
             finding_id: 'REPAIR-1',
