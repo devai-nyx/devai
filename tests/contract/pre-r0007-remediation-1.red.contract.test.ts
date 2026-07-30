@@ -2680,6 +2680,20 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       );
     });
 
+    it('R2-F002 rejects coordinated removal of every command-closure derivation marker', () => {
+      const current = buildFixture(true);
+      const graphPath = `work/rounds/${ROUND}/affected-test-graph.json`;
+      const graph = readJson(current.root, graphPath);
+      for (const closure of graph.command_closure as Array<Record<string, unknown>>)
+        delete closure.derivation;
+      putJson(current.root, graphPath, graph);
+      commit(current.root, 'remove every command closure derivation marker');
+      expectCode(
+        run(current, 'policy-check', ['--phase', 'pre-entry-preparation']),
+        'GATE_COMMAND_CLOSURE_DERIVATION_INVALID',
+      );
+    });
+
     it('R2-F002 binds history-sensitive freshness to an identical-tree successor commit', () => {
       const current = fixture(true);
       git(current.root, [
@@ -2925,6 +2939,19 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       );
       putJson(current.root, provenancePath, provenance);
       commit(current.root, 'coordinate deletion across self-declared populations');
+      expectCode(
+        run(current, 'policy-check', ['--phase', 'pre-entry-preparation']),
+        'SEMANTIC_OBLIGATION_BASELINE_MISMATCH',
+      );
+    });
+
+    it('R2-F008 rejects removal of the independent baseline pointer from a baseline-governed profile', () => {
+      const current = buildFixture(true);
+      const profilePath = `work/rounds/${ROUND}/close-control-profile.json`;
+      const profile = readJson(current.root, profilePath);
+      delete (profile.sources as Record<string, unknown>).obligation_baseline;
+      putJson(current.root, profilePath, profile);
+      commit(current.root, 'remove independent obligation baseline pointer');
       expectCode(
         run(current, 'policy-check', ['--phase', 'pre-entry-preparation']),
         'SEMANTIC_OBLIGATION_BASELINE_MISMATCH',
