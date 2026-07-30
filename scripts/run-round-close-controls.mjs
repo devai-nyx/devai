@@ -8653,30 +8653,20 @@ function persistedReviewArtifactDigestV7(artifact, selfDigestField) {
 }
 
 function reconstructStateIdentityV6(transition, previousTransitionDigest) {
-  const previous_state_artifact_digest = transition.previous_state_digest;
-  const previous_transition_artifact_digest = previousTransitionDigest;
-  if (Object.hasOwn(transition, 'previous_state_artifact'))
-    return sha256(
-      canonical({
-        state: transition.from,
-        cycle: transition.cycle,
-        candidate_sha: transition.candidate_sha,
-        candidate_manifest_digest: transition.candidate_manifest_digest,
-        review_scope_digest: transition.review_scope_digest,
-        previous_state_digest: previous_state_artifact_digest,
-        previous_state_artifact: transition.previous_state_artifact,
-        previous_transition_digest: previous_transition_artifact_digest,
-      }),
-    );
-  void previous_state_artifact_digest;
+  // The predecessor identity binds every field of the transition except the two values
+  // derived from it. Selecting a handful of fields left the rest unauthenticated, so a
+  // mutated predecessor byte could not be detected.
+  const {
+    transition_digest_sha256: _selfDigest,
+    previous_state_digest: _derived,
+    ...body
+  } = transition;
   return sha256(
     canonical({
+      ...body,
       state: transition.from,
-      cycle: transition.cycle,
-      candidate_sha: transition.candidate_sha,
-      candidate_manifest_digest: transition.candidate_manifest_digest,
-      review_scope_digest: transition.review_scope_digest,
-      previous_transition_digest: previous_transition_artifact_digest,
+      previous_state_artifact: transition.previous_state_artifact ?? null,
+      previous_transition_digest: previousTransitionDigest,
     }),
   );
 }
@@ -8952,6 +8942,32 @@ function reauthenticateReviewResultV6(context, state, scope, result, findings) {
     );
 }
 
+/**
+ * Reads the prior failure review result that a repair claims to close. The digest comes
+ * from the authenticated state record, so the expected class population is derived from
+ * independent evidence rather than from the repair artifact being checked.
+ */
+function readPriorFailureResultV9(context, state) {
+  const digest = state.prior_failure_result_digest;
+  if (typeof digest !== 'string' || !SHA256.test(digest)) return null;
+  const resultsRoot = join(
+    dirname(join(repoRoot, context.profile.runtime.review_result)),
+    'review-results',
+  );
+  const exact = join(resultsRoot, `${digest}.json`);
+  const candidatePaths = [exact, join(repoRoot, context.profile.runtime.review_result)];
+  for (const path of candidatePaths) {
+    if (!existsSync(path)) continue;
+    try {
+      const value = readJson(path);
+      if (value.result_digest_sha256 === digest) return value;
+    } catch {
+      // A malformed prior result is reported by the ordinary result authentication.
+    }
+  }
+  return null;
+}
+
 function reauthenticateRepairEvidenceV6(context, state, repair, findings, expectedClasses = null) {
   const schemaValid = validateDocument(
     repair,
@@ -9038,6 +9054,14 @@ function makeReviewStateV4(context, proof, scopeDigest, state, cycle, history, e
               { ...transition, cycle: transitionCycle },
               previousTransitionDigest,
             ),
+      previous_state_artifact:
+        index === 0
+          ? null
+          : {
+              state_path: context.profile.runtime.review_state,
+              artifact_digest_sha256: previousTransitionDigest,
+              canonicalization: 'stable-json-minus-self-digest',
+            },
       previous_transition_digest: previousTransitionDigest,
     };
     const authenticated = withSelfDigest(body, 'transition_digest_sha256');
@@ -9630,6 +9654,10 @@ function readAuthenticatedStateV4(context, findings, expected) {
       const isCurrentValid =
         transport.transport_digest_sha256 === state.current_transport_digest &&
         state.current_review_result_digest !== null;
+      // The expected state-before identity is read from the independently authenticated
+      // state artifact. Taking it from the transport made the comparison a tautology:
+      // the transport was checked against a copy of its own field.
+      const expectedStateBeforeDigest = state.state_digest_sha256 ?? null;
       const stateBeforePath = join(
         dirname(path),
         'review-states',
@@ -9640,7 +9668,7 @@ function readAuthenticatedStateV4(context, findings, expected) {
         const stateBefore = readJson(stateBeforePath);
         stateBeforeAuthentic =
           selfDigestValid(stateBefore, 'state_digest_sha256') &&
-          stateBefore.state_digest_sha256 === transport.state_before_digest;
+          stateBefore.state_digest_sha256 === expectedStateBeforeDigest;
       }
       if (
         !reauthenticateTransportV6(
@@ -9655,7 +9683,7 @@ function readAuthenticatedStateV4(context, findings, expected) {
             ? {
                 payload_digest: payloadDigest,
                 validation: isCurrentValid ? 'VALID' : 'INVALID_TRANSPORT',
-                state_before_digest: transport.state_before_digest,
+                state_before_digest: expectedStateBeforeDigest,
               }
             : null,
         ) ||
@@ -9741,7 +9769,22 @@ function readAuthenticatedStateV4(context, findings, expected) {
         return null;
       }
       const repair = readJson(repairPath);
-      reauthenticateRepairEvidenceV6(context, state, repair, findings);
+      // The expected repaired-class population is derived from the authenticated prior
+      // failure result, not defaulted to null. With a null expectation the population
+      // check evaluated true unconditionally and proved nothing.
+      let expectedRepairedClasses = null;
+      if (capability(context, 'predecessor_artifact_authentication')) {
+        const priorResult = readPriorFailureResultV9(context, state);
+        if (priorResult !== null)
+          expectedRepairedClasses = [
+            ...new Set(
+              (priorResult.findings ?? [])
+                .map(({ defect_class_id: id }) => String(id))
+                .filter((id) => id !== 'undefined'),
+            ),
+          ];
+      }
+      reauthenticateRepairEvidenceV6(context, state, repair, findings, expectedRepairedClasses);
       if (
         !selfDigestValid(repair, 'repair_evidence_digest_sha256') ||
         repair.repair_evidence_digest_sha256 !== state.repair_evidence_digest
