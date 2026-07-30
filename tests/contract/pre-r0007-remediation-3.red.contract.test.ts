@@ -153,7 +153,7 @@ describe('OM-017 / DII-251 remediation campaign 3 complete populations', () => {
     const ids = matrix.classes.flatMap(({ test_ids }) => test_ids);
     expect(new Set(ids).size).toBe(ids.length);
     for (const id of ids) expect(source, id).toContain(id);
-    expect(matrix.classes.every(({ closure_state }) => closure_state === 'RED_REQUIRED')).toBe(
+    expect(matrix.classes.every(({ closure_state }) => closure_state === 'GREEN_PROVED')).toBe(
       true,
     );
   });
