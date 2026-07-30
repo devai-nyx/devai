@@ -562,7 +562,7 @@
       "finding_id": "R7-F001",
       "defect_class_id": "CONSERVATIVE_WIDENING_DEAD",
       "severity": "P1",
-      "origin_cycle": 3,
+      "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
       "topic_ids": [
         "remediation-class:R3-F004",
@@ -584,7 +584,7 @@
       "finding_id": "R7-F002",
       "defect_class_id": "REVIEW_STATE_TRANSITION_BYPASS",
       "severity": "P1",
-      "origin_cycle": 3,
+      "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
       "topic_ids": [
         "remediation-class:R3-F004",
@@ -618,7 +618,7 @@
       "finding_id": "R7-F003",
       "defect_class_id": "REVIEWER_BINDING_CENSUS_NOT_CANDIDATE_BOUND",
       "severity": "P1",
-      "origin_cycle": 3,
+      "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
       "topic_ids": [
         "remediation-class:R3-F005",
@@ -653,7 +653,7 @@
       "finding_id": "R7-F004",
       "defect_class_id": "AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
       "severity": "P1",
-      "origin_cycle": 3,
+      "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
       "topic_ids": [
         "remediation-class:R3-F002",
@@ -679,7 +679,7 @@
       "finding_id": "R7-F005",
       "defect_class_id": "AUTHORITATIVE_GATE_CANDIDATE_RED",
       "severity": "P1",
-      "origin_cycle": 3,
+      "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
       "topic_ids": [
         "remediation-class:R3-F001",
@@ -718,7 +718,7 @@
       "finding_id": "R7-F006",
       "defect_class_id": "AFFECTED_TEST_INPUT_POPULATION_INCOMPLETE",
       "severity": "P1",
-      "origin_cycle": 3,
+      "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
       "topic_ids": [
         "remediation-class:R3-F003",
@@ -741,7 +741,7 @@
       "finding_id": "R7-F007",
       "defect_class_id": "ENTRY_READINESS_CONTRADICTS_ENTRY_BLOCK",
       "severity": "P1",
-      "origin_cycle": 3,
+      "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
       "topic_ids": [
         "obligation:R7-P0-DEPLOY-REFUSAL",
@@ -762,7 +762,7 @@
       "finding_id": "R7-F008",
       "defect_class_id": "RECHECKED_TOPIC_EVIDENCE_UNAUTHENTICATED",
       "severity": "P2",
-      "origin_cycle": 3,
+      "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
       "topic_ids": [
         "obligation:R7-P0-HISTORY-INTEGRITY",
@@ -785,7 +785,7 @@
       "finding_id": "R7-F009",
       "defect_class_id": "SPECIMEN_SCOPED_DECISION_ID_GATE",
       "severity": "P1",
-      "origin_cycle": 3,
+      "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
       "topic_ids": [
         "control:product/owner-mandates/OM-017.md",
@@ -812,7 +812,7 @@
       "finding_id": "R7-F010",
       "defect_class_id": "REMEDIATION_MATRIX_POPULATION_FLOOR_REMOVED",
       "severity": "P2",
-      "origin_cycle": 3,
+      "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
       "topic_ids": [
         "control:product/owner-mandates/OM-016.md",
