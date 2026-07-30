@@ -84,7 +84,10 @@
         "properties": {
           "source": { "type": "string", "minLength": 1 },
           "present": { "type": "boolean" },
-          "digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+          "digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+          "mode": { "type": "string", "pattern": "^[0-9]{6}$" },
+          "object_type": { "enum": ["blob", "tree", "commit"] },
+          "object_id": { "type": "string", "pattern": "^[a-f0-9]{40,64}$" }
         }
       }
     },
@@ -98,7 +101,10 @@
         "properties": {
           "source": { "type": "string", "minLength": 1 },
           "present": { "type": "boolean" },
-          "digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+          "digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+          "mode": { "type": "string", "pattern": "^[0-9]{6}$" },
+          "object_type": { "enum": ["blob", "tree", "commit"] },
+          "object_id": { "type": "string", "pattern": "^[a-f0-9]{40,64}$" }
         }
       }
     },
