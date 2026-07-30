@@ -272,9 +272,9 @@ describe('OM-016 / DII-249 remediation campaign 2 complete populations', () => {
   });
 
   describe('R2-F006 structured exact-candidate active-control provenance', () => {
-    it('R2-006-TRANSITIVE-PROVENANCE binds policy and profile to the DII-249 graph', () => {
+    it('R2-006-TRANSITIVE-PROVENANCE retains DII-249 policy authority under the current profile root', () => {
       expect(policy.decision_id).toBe('DII-249');
-      expect(profile.decision_id).toBe('DII-249');
+      expect(profile.decision_id).toBe('DII-251');
       expect(policy.schemas.control_provenance).toBe('law/schemas/control-provenance.schema.json');
       expect(profile.sources.control_provenance).toBe('work/rounds/R-0007/control-provenance.json');
     });
@@ -340,6 +340,7 @@ describe('OM-016 / DII-249 remediation campaign 2 complete populations', () => {
           'product/owner-mandates/OM-014.md',
           'product/owner-mandates/OM-015.md',
           'product/owner-mandates/OM-016.md',
+          'product/owner-mandates/OM-017.md',
           'work/rounds/EXECUTION-CONTRACT.md',
           'work/rounds/R-0007/AUTHORIZATION.md',
           'work/rounds/R-0007/plan.md',

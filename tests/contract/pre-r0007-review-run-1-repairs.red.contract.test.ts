@@ -432,6 +432,7 @@ describe('OM-015 review run 1 complete-class repair populations', () => {
         'DII-248',
         'DII-249',
         'DII-250',
+        'DII-251',
       ]);
       expect(controller.includes("'DII-246'")).toBe(false);
       expect(controller.includes("'DII-248'")).toBe(false);

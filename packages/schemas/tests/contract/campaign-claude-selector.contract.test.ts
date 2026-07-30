@@ -112,8 +112,9 @@ describe('Owner-selected Claude review model', () => {
     expect(roundSixPrompt).not.toContain('claude-opus-5');
   });
 
-  it('keeps R-0007 model-neutral and fail-closed until a later Owner binding', () => {
+  it('preserves the model-neutral preparation prompt while resolving the later OM-017 binding', () => {
     const mandate = readFileSync(join(ROOT, 'product/owner-mandates/OM-014.md'), 'utf8');
+    const bindingMandate = readFileSync(join(ROOT, 'product/owner-mandates/OM-017.md'), 'utf8');
     const instruction = readFileSync(join(ROOT, R0007_MODEL_NEUTRAL_INSTRUCTION), 'utf8');
     const profile = JSON.parse(
       readFileSync(join(ROOT, 'work/rounds/R-0007/close-control-profile.json'), 'utf8'),
@@ -131,10 +132,12 @@ describe('Owner-selected Claude review model', () => {
     expect(instruction).toContain('Do not select, infer, or substitute a model');
     expect(instruction).toMatch(/Silent fallback is forbidden/iu);
     expect(instruction).not.toMatch(/claude-opus-5|gpt-5\.6-sol/iu);
+    expect(bindingMandate).toContain('"devai_reviewer_binding": true');
+    expect(bindingMandate).toContain('"model_selector": "claude-opus-5"');
     expect(profile.reviewer).toEqual({
       binding: 'owner-mandate-required',
-      mandate_id: null,
-      model_selector: null,
+      mandate_id: 'OM-017',
+      model_selector: 'claude-opus-5',
       role: 'independent-read-only',
       fallback: 'forbidden',
     });

@@ -9,6 +9,7 @@ vi.setConfig({ testTimeout: 30_000 });
 const ROOT = resolve(import.meta.dirname, '../..');
 const SCRIPT = resolve(ROOT, 'scripts/run-round-close-controls.mjs');
 const BASE = '722e8a3438f3534260ac4f24c3eecc59e76f905b';
+const HEAD = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).stdout.trim();
 const APPROVED_ENGINEER_SURFACE = [
   '.devai/config/round-close-controls.json',
   'package.json',
@@ -80,8 +81,8 @@ describe('pre-R-0007 generic close-control red contracts', () => {
     );
   });
 
-  it('accepts the generic policy during pre-entry preparation and reports the unbound diagnostic', () => {
-    const result = run('policy-check', ['--phase', 'pre-entry-preparation']);
+  it('accepts the Owner-bound reviewer during preparation and reports only the declaration diagnostic', () => {
+    const result = run('policy-check', ['--phase', 'pre-entry-preparation', '--candidate', HEAD]);
     expect(result.status, JSON.stringify(result.value, null, 2)).toBe(0);
     expect(result.value).toMatchObject({
       ok: true,
@@ -91,21 +92,23 @@ describe('pre-R-0007 generic close-control red contracts', () => {
       entry_ready: false,
     });
     expect(result.value?.diagnostics).toEqual(
-      expect.arrayContaining([expect.objectContaining({ code: 'ENTRY_BLOCKED_REVIEWER_UNBOUND' })]),
+      expect.arrayContaining([
+        expect.objectContaining({ code: 'ENTRY_BLOCKED_DECLARATION_UNBOUND' }),
+      ]),
     );
   });
 
-  it('fails entry closed while the reviewer slot is unbound', () => {
-    const result = run('entry-check');
+  it('fails entry closed while the B0 declaration is unbound', () => {
+    const result = run('entry-check', ['--candidate', HEAD]);
     expect(result.status).toBe(1);
     expect(result.value).toMatchObject({ ok: false, command: 'entry-check', entry_ready: false });
-    expect(result.value?.findings).toEqual(
-      expect.arrayContaining([expect.objectContaining({ code: 'ENTRY_BLOCKED_REVIEWER_UNBOUND' })]),
+    expect(result.value?.diagnostics).toEqual(
+      expect.arrayContaining([expect.objectContaining({ code: 'DECLARATION_PENDING_B0' })]),
     );
   });
 
   it('emits an auditable impact plan with conservative fallback for this control range', () => {
-    const result = run('impact-plan', ['--base', BASE, '--head', 'HEAD']);
+    const result = run('impact-plan', ['--base', BASE, '--head', HEAD, '--candidate', HEAD]);
     expect(result.status).toBe(0);
     expect(result.value).toMatchObject({ ok: true, command: 'impact-plan', round: 'R-0007' });
     const nodes = result.value?.nodes as Array<Record<string, unknown>>;
@@ -134,7 +137,7 @@ describe('pre-R-0007 generic close-control red contracts', () => {
   });
 
   it('forces the complete authoritative population in remote mode', () => {
-    const result = run('impact-plan', ['--base', 'HEAD', '--head', 'HEAD'], {
+    const result = run('impact-plan', ['--base', HEAD, '--head', HEAD, '--candidate', HEAD], {
       CI: 'true',
       GITHUB_ACTIONS: 'true',
     });
@@ -238,7 +241,7 @@ describe('pre-R-0007 generic close-control red contracts', () => {
   });
 
   it('reports the bounded state and transport budget without mutating the candidate', () => {
-    const result = run('status');
+    const result = run('status', ['--candidate', HEAD]);
     expect(result.status).toBe(0);
     expect(result.value).toMatchObject({
       ok: true,
@@ -247,7 +250,7 @@ describe('pre-R-0007 generic close-control red contracts', () => {
       state: 'DRAFT',
       substantive_cycles: { used: 0, maximum: 2 },
       transport_retries_per_cycle: { used: 0, maximum: 1 },
-      entry_ready: false,
+      entry_ready: true,
     });
   });
 });
