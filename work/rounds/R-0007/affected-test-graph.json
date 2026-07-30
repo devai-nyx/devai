@@ -832,7 +832,7 @@
       "gate_id": "trace",
       "derivation": "recursive-policy-command-v1",
       "scripts": ["trace:check"],
-      "programs": ["git", "node", "pnpm"]
+      "programs": ["find", "git", "node", "pnpm"]
     },
     {
       "gate_id": "repository-references",
@@ -844,7 +844,7 @@
       "gate_id": "materializations",
       "derivation": "recursive-policy-command-v1",
       "scripts": ["direct:materializations"],
-      "programs": ["node"]
+      "programs": ["git", "node"]
     },
     {
       "gate_id": "diff-check",
@@ -873,7 +873,7 @@
         "@devai-nyx/schemas:build",
         "@devai-nyx/cli:build"
       ],
-      "programs": ["git", "node", "pnpm", "tsc"]
+      "programs": ["find", "git", "node", "pnpm", "tsc"]
     },
     {
       "gate_id": "stage2",
