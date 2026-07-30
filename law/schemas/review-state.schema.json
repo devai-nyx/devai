@@ -69,7 +69,6 @@
         "transport_digest",
         "repair_evidence_digest",
         "previous_state_digest",
-        "previous_state_artifact",
         "previous_transition_digest",
         "transition_digest_sha256"
       ],
