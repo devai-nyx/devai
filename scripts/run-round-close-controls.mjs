@@ -442,9 +442,33 @@ function environmentManifestV5(policy, inputIds, findings) {
   });
 }
 
+/**
+ * Programs are parsed generically from the command string. A name allowlist is not
+ * derivation: any token in leading position of a command segment, or following a
+ * package-runner verb, is a program regardless of whether this file has heard of it.
+ */
 function executableProgramsV7(command, programs) {
-  for (const match of command.matchAll(/\b(?:node|vitest|tsc|git|prettier|pnpm)\b/gu))
-    programs.add(match[0]);
+  for (const segment of command.split(/&&|\|\||\||;/gu)) {
+    const parts = segment
+      .trim()
+      .split(/\s+/u)
+      .filter((part) => part.length > 0);
+    let index = 0;
+    // Skip environment assignments such as CI=1 before the program token.
+    while (index < parts.length && /^[A-Za-z_][A-Za-z0-9_]*=/u.test(parts[index])) index += 1;
+    const head = parts[index];
+    if (head === undefined) continue;
+    const named = head.replace(/^.*\//u, '');
+    if (/^[A-Za-z@][\w.@/-]*$/u.test(named)) programs.add(named);
+    // A package runner delegates to a further program: pnpm exec <program>, npx <program>.
+    if (/^(?:pnpm|npm|npx|yarn)$/u.test(named)) {
+      let next = index + 1;
+      while (next < parts.length && /^(?:exec|run|--silent|-s|--)$/u.test(parts[next])) next += 1;
+      const delegated = parts[next]?.replace(/^.*\//u, '');
+      if (delegated !== undefined && /^[A-Za-z@][\w.@/-]*$/u.test(delegated))
+        programs.add(delegated);
+    }
+  }
 }
 
 function deriveGateCommandClosureV7(context, gate) {
@@ -468,18 +492,109 @@ function deriveGateCommandClosureV7(context, gate) {
       });
   }
   const visited = new Set();
-  const scanProgramSource = (relativePath) => {
+  const scannedExecutables = new Set();
+  /**
+   * Executable closure to a fixpoint. An executable that cannot be read from the
+   * candidate object is recorded as a blocking member rather than dropped, and module
+   * edges are followed so second-order executables are visible.
+   */
+  /**
+   * `required` distinguishes a genuine executable reference, such as `node <path>` or a
+   * spawn literal, from a module edge discovered inside a scanned source. Only the
+   * former blocks when unreadable: an import edge may be type-only, or may be a literal
+   * inside generated-code text, and treating those as missing executables would
+   * manufacture false blocking findings.
+   */
+  const scanProgramSource = (relativePath, required = true) => {
+    const normalized = relativePath.replaceAll('\\', '/').replace(/^\.\//u, '');
+    if (scannedExecutables.has(normalized)) return;
+    scannedExecutables.add(normalized);
     let source;
     try {
-      source = candidateFile(repoRoot, revision, relativePath);
+      source = candidateFile(repoRoot, revision, normalized);
     } catch {
+      // Silently dropping an unreadable executable is what hid generated binaries from
+      // every gate closure. Record it so the digest changes and the gate can block.
+      if (required) executables.add(`missing:${normalized}`);
       return;
     }
-    executables.add(relativePath);
+    executables.add(normalized);
     for (const match of source.matchAll(
       /(?:spawnSync|execFileSync|spawn|execFile)\s*\(\s*['"]([^'"]+)['"]/gu,
     ))
       programs.add(match[1]);
+    // Follow import, require and dynamic-import edges to their repository sources.
+    const base = dirname(normalized);
+    for (const match of source.matchAll(
+      /(?:\bfrom\s*|\brequire\s*\(\s*|\bimport\s*\(\s*)['"](\.[^'"]+)['"]/gu,
+    )) {
+      const target = join(base, match[1]).replaceAll('\\', '/');
+      const variants = [
+        target,
+        `${target}.js`,
+        `${target}.mjs`,
+        `${target}.cjs`,
+        `${target}.ts`,
+        `${target}/index.js`,
+        `${target}/index.ts`,
+      ];
+      const resolved = variants.find((entry) => {
+        try {
+          candidateFile(repoRoot, revision, entry);
+          return true;
+        } catch {
+          return false;
+        }
+      });
+      if (resolved !== undefined) scanProgramSource(resolved, false);
+    }
+  };
+  /**
+   * TypeScript project closure to a fixpoint: every reachable project is visited once,
+   * following `references` transitively and `extends` chains, and binding each
+   * project's declared outputs and roots. A depth-one scan left base configs and
+   * second-order references outside every gate closure.
+   */
+  const visitProject = (projectPath) => {
+    const normalized = projectPath.replaceAll('\\', '/').replace(/^\.\//u, '');
+    if (visited.has(`project:${normalized}`)) return;
+    visited.add(`project:${normalized}`);
+    let project;
+    try {
+      project = readCandidateJson(normalized);
+    } catch {
+      projectReferences.add(`missing:${normalized}`);
+      return;
+    }
+    projectReferences.add(normalized);
+    const projectRoot = dirname(normalized);
+    const extended = project.extends;
+    for (const entry of Array.isArray(extended) ? extended : extended ? [extended] : []) {
+      const target = join(projectRoot, String(entry)).replaceAll('\\', '/');
+      const withSuffix = /\.json$/u.test(target) ? target : `${target}.json`;
+      projectReferences.add(`${normalized}-extends->${withSuffix}`);
+      visitProject(withSuffix);
+    }
+    const options = project.compilerOptions ?? {};
+    for (const [key, value] of Object.entries(options))
+      if (/^(?:outDir|rootDir|outFile|tsBuildInfoFile|declarationDir)$/u.test(key))
+        projectReferences.add(
+          `${normalized}-${key}->${join(projectRoot, String(value)).replaceAll('\\', '/')}`,
+        );
+    for (const key of ['include', 'files', 'exclude'])
+      for (const entry of project[key] ?? [])
+        projectReferences.add(
+          `${normalized}-${key}->${join(projectRoot, String(entry)).replaceAll('\\', '/')}`,
+        );
+    const references = (project.references ?? []).map(({ path }) => String(path));
+    if (new Set(references).size !== references.length)
+      projectReferences.add(`duplicate:${normalized}`);
+    for (const reference of references) {
+      const target = join(projectRoot, reference).replaceAll('\\', '/');
+      const withConfig = /\.json$/u.test(target) ? target : `${target}/tsconfig.json`;
+      projectReferences.add(`${normalized}->${target}`);
+      visitProject(withConfig);
+    }
   };
   const scanProject = (packageRoot, command) => {
     if (!/\btsc\b/u.test(command)) return;
@@ -487,20 +602,7 @@ function deriveGateCommandClosureV7(context, gate) {
     const projectPath = configured
       ? join(packageRoot, configured).replaceAll('\\', '/')
       : `${packageRoot === '.' ? '' : `${packageRoot}/`}tsconfig.json`;
-    let project;
-    try {
-      project = readCandidateJson(projectPath);
-    } catch {
-      projectReferences.add(`missing:${projectPath}`);
-      return;
-    }
-    const references = (project.references ?? []).map(({ path }) => String(path));
-    if (new Set(references).size !== references.length)
-      projectReferences.add(`duplicate:${projectPath}`);
-    for (const reference of references)
-      projectReferences.add(
-        `${projectPath}->${join(packageRoot, reference).replaceAll('\\', '/')}`,
-      );
+    visitProject(projectPath);
   };
   const visitScript = (packageName, packageRoot, packageScripts, name) => {
     const key = `${packageName}:${name}`;
@@ -557,6 +659,8 @@ function deriveGateCommandClosureV7(context, gate) {
     derivation: 'recursive-policy-command-v1',
     scripts: semantics.scripts,
     programs: semantics.programs,
+    executables: semantics.executables,
+    project_references: semantics.project_references,
     closure_digest: sha256(canonical(semantics)),
   };
 }
@@ -4325,7 +4429,25 @@ function smartConvergeV3() {
               output_contract: 'none',
               required_outputs: [],
             };
-      if (gateProfile === null) continue;
+      if (gateProfile === null) {
+        findings.push(
+          finding(
+            'GATE_FRESHNESS_PROFILE_INCOMPLETE',
+            'authoritative gate has no resolvable freshness profile',
+            { gate_id: gate.id },
+          ),
+        );
+        results.push({
+          node_id: gate.id,
+          gate_id: gate.id,
+          outcome: 'BLOCKED',
+          result: 'BLOCKED',
+          exit_code: 1,
+          task_key: null,
+          output_digest: null,
+        });
+        continue;
+      }
       const inputManifest = rawCandidateInputManifest(exactHead, gateProfile.input_selectors);
       const dependencyInputManifest = rawCandidateInputManifest(
         exactHead,
@@ -4396,8 +4518,10 @@ function smartConvergeV3() {
       if (outputsFresh) {
         results.push({
           node_id: gate.id,
+          gate_id: gate.id,
           outcome: 'REUSE_FRESH',
           result: 'REUSED_FRESH_PASS',
+          exit_code: 0,
           task_key: taskKey,
           output_digest: cache.result_digest,
         });
@@ -4480,8 +4604,10 @@ function smartConvergeV3() {
         );
       results.push({
         node_id: gate.id,
+        gate_id: gate.id,
         outcome: 'EXECUTE',
         result,
+        exit_code: executed.status ?? 1,
         task_key: taskKey,
         output_digest: record.result_digest,
       });
@@ -4494,7 +4620,20 @@ function smartConvergeV3() {
     const plan = buildImpactPlan(context, base, exactHead, findings);
     if (plan === null) break;
     const affectedResults = executeAffected(plan);
-    const results = isBlocking() ? [] : executePolicyGates();
+    // A blocking impact plan must not erase the population. Every declared gate keeps
+    // an ordered terminal record carrying its identity and an exit code, so terminal
+    // evidence still accounts for all sixteen commands.
+    const results = isBlocking()
+      ? (context.policy.convergence?.commands ?? []).map((gate) => ({
+          node_id: gate.id,
+          gate_id: gate.id,
+          outcome: 'BLOCKED',
+          result: 'BLOCKED',
+          exit_code: 1,
+          task_key: null,
+          output_digest: null,
+        }))
+      : executePolicyGates();
     const headAfter = git(repoRoot, ['rev-parse', 'HEAD']);
     const statusAfter = cleanStatus(repoRoot);
     if (headBefore !== exactHead || headAfter !== exactHead)
