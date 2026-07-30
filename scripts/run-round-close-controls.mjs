@@ -427,6 +427,66 @@ function environmentManifestV5(policy, inputIds, findings) {
   });
 }
 
+function executableProgramsV7(command, programs) {
+  for (const match of command.matchAll(/\b(?:node|vitest|tsc|git|prettier|pnpm)\b/gu))
+    programs.add(match[0]);
+}
+
+function deriveGateCommandClosureV7(context, gate) {
+  const scripts = new Set();
+  const programs = new Set();
+  const rootPackage = readJson(join(repoRoot, 'package.json'));
+  const rootScripts = rootPackage.scripts ?? {};
+  const visited = new Set();
+  const scanProgramSource = (relativePath) => {
+    const absolute = join(repoRoot, relativePath);
+    if (!existsSync(absolute)) return;
+    const source = readFileSync(absolute, 'utf8');
+    for (const match of source.matchAll(
+      /(?:spawnSync|execFileSync|spawn|execFile)\s*\(\s*['"]([^'"]+)['"]/gu,
+    ))
+      programs.add(match[1]);
+  };
+  const visitScript = (name) => {
+    if (visited.has(name) || typeof rootScripts[name] !== 'string') return;
+    visited.add(name);
+    scripts.add(name);
+    const command = rootScripts[name];
+    executableProgramsV7(command, programs);
+    for (const match of command.matchAll(/\bpnpm(?:\s+run)?\s+([a-zA-Z0-9:._-]+)/gu))
+      if (Object.hasOwn(rootScripts, match[1])) visitScript(match[1]);
+    for (const match of command.matchAll(
+      /\bpnpm\s+--filter\s+([^\s]+)\s+(?:run\s+)?([a-zA-Z0-9:._-]+)/gu,
+    )) {
+      scripts.add(`${match[1]}:${match[2]}`);
+      programs.add('pnpm');
+      if (match[2] === 'build') programs.add('tsc');
+    }
+    for (const match of command.matchAll(/\bnode\s+([^\s;&|]+)/gu)) scanProgramSource(match[1]);
+  };
+  const [program, ...args] = gate.argv ?? [];
+  if (program !== undefined) programs.add(program);
+  const rootScript =
+    program === 'pnpm' && args[0] === 'run'
+      ? args[1]
+      : program === 'pnpm' && Object.hasOwn(rootScripts, args[0])
+        ? args[0]
+        : null;
+  if (rootScript !== null && rootScript !== undefined) visitScript(rootScript);
+  else {
+    scripts.add(`direct:${gate.id}`);
+    if (program === 'pnpm' && args[0] === 'exec' && args[1] !== undefined) programs.add(args[1]);
+    if (program === 'pnpm' && args[0] === 'vitest') programs.add('vitest');
+    if (program === 'node' && args[0] !== undefined) scanProgramSource(args[0]);
+  }
+  return {
+    gate_id: gate.id,
+    derivation: 'recursive-policy-command-v1',
+    scripts: [...scripts].sort(),
+    programs: [...programs].sort(),
+  };
+}
+
 function validateGateCommandClosureV6(context, findings) {
   const commands = context.policy?.convergence?.commands ?? [];
   const closures = context.graph?.command_closure ?? [];
@@ -448,6 +508,23 @@ function validateGateCommandClosureV6(context, findings) {
         'every authoritative gate requires one ordered nonempty script and program closure',
       ),
     );
+  const derivedClosureRequired = closures.some((entry) => Object.hasOwn(entry, 'derivation'));
+  for (const gate of derivedClosureRequired ? commands : []) {
+    const declared = closures.find(({ gate_id }) => gate_id === gate.id);
+    const derived = deriveGateCommandClosureV7(context, gate);
+    if (
+      declared?.derivation !== derived.derivation ||
+      canonical([...(declared?.scripts ?? [])].sort()) !== canonical(derived.scripts) ||
+      canonical([...(declared?.programs ?? [])].sort()) !== canonical(derived.programs)
+    )
+      findings.push(
+        finding(
+          'GATE_COMMAND_CLOSURE_DERIVATION_INVALID',
+          'declared gate closure differs from recursively derived command semantics',
+          { gate_id: gate.id, declared, derived },
+        ),
+      );
+  }
   const profileIds = (context.graph?.gate_freshness_profiles ?? []).map(({ gate_id }) => gate_id);
   if (canonical(profileIds) !== canonical(expected))
     findings.push(
@@ -493,10 +570,11 @@ function rawCandidateInputManifest(revision, selectors) {
   const manifestKey = canonical({ repoRoot, revision, selectors: expandedSelectors });
   const cached = rawCandidateManifestCache.get(manifestKey);
   if (cached !== undefined) return cached;
-  const tree = candidateTreeEntries(revision);
+  const tree = candidateTreeIdentityEntriesV7(revision);
   const paths = pathsForGlobs(repoRoot, revision, expandedSelectors);
   const manifest = paths.map((path) => {
-    const objectId = tree.get(path);
+    const identity = tree.get(path);
+    const objectId = identity?.object_id;
     let digest = candidateBlobDigestCache.get(objectId);
     if (digest === undefined) {
       digest = sha256(gitBytes(repoRoot, ['cat-file', 'blob', objectId]));
@@ -506,6 +584,9 @@ function rawCandidateInputManifest(revision, selectors) {
       source: path,
       present: true,
       digest,
+      mode: identity?.mode,
+      object_type: identity?.object_type,
+      object_id: identity?.object_id,
     };
   });
   rawCandidateManifestCache.set(manifestKey, manifest);
@@ -1303,6 +1384,31 @@ function rolePathMap(root, base, head, policy, findings) {
       role_path_exception: exceptionAuthorized
         ? { decision_id: exception.decision_id, paths: [...exception.paths].sort() }
         : null,
+    };
+  });
+}
+
+function rolePathEvidenceV7(base, candidate, policy) {
+  const localFindings = [];
+  const population = rolePathMap(repoRoot, base, candidate, policy, localFindings);
+  return population.map((entry) => {
+    const [authorName, authorEmail] = git(repoRoot, [
+      'show',
+      '-s',
+      '--format=%an%x00%ae',
+      entry.commit,
+    ]).split('\0');
+    return {
+      commit_sha: entry.commit,
+      author_name: authorName,
+      author_email: authorEmail,
+      paths: entry.paths,
+      classification: entry.role,
+      verdict: entry.path_authorized ? 'ROLE_PURE' : 'ROLE_PATH_VIOLATION',
+      finding_codes: localFindings
+        .filter(({ sha }) => sha === entry.commit)
+        .map(({ code }) => code)
+        .sort(),
     };
   });
 }
@@ -3514,6 +3620,15 @@ function topologicalNodes(graph, findings) {
 }
 
 function hasAmbiguousLoaderV6(source) {
+  if (
+    /\b(?:const|let|var)\s+[A-Za-z_$][\w$]*\s*=\s*(?:globalThis\.)?require\b/u.test(source) ||
+    /\bglobalThis\.require\s*\(/u.test(source) ||
+    /\brequire\s*\?\.\s*\(/u.test(source) ||
+    /\bReflect\.apply\s*\(\s*(?:module\.)?require\b/u.test(source) ||
+    /\bmodule\.require\.bind\s*\(/u.test(source) ||
+    /\b(?:module|globalThis)\s*\[\s*['"]require['"]\s*\]\s*\(/u.test(source)
+  )
+    return true;
   const families = [
     { label: 'import(', expression: /\bimport\s*\(([^)]*)\)/gu },
     { label: 'require(', expression: /\brequire\s*\(([^)]*)\)/gu },
@@ -3603,6 +3718,7 @@ function v3ReadCache(context, expected, findings) {
       'environment_digest',
       'environment_manifest',
       'output_contract',
+      'producing_candidate',
     ]) {
       if (canonical(value[key]) !== canonical(expected[key]))
         throw new Error(`cache field ${key} does not match the planned task`);
@@ -3687,6 +3803,12 @@ function buildImpactPlan(context, base, head, findings) {
         unknown,
         context.graph.fallbacks.unknown_dependency,
       );
+      select(
+        context.graph.coverage.node,
+        'UNKNOWN_DEPENDENCY',
+        unknown,
+        context.graph.coverage.node,
+      );
     }
     const dynamic = range.paths.filter((path) => {
       const absolute = join(repoRoot, path);
@@ -3698,6 +3820,12 @@ function buildImpactPlan(context, base, head, findings) {
         'DYNAMIC_DEPENDENCY_AMBIGUOUS',
         dynamic,
         context.graph.fallbacks.dynamic_import,
+      );
+      select(
+        context.graph.coverage.node,
+        'DYNAMIC_DEPENDENCY_AMBIGUOUS',
+        dynamic,
+        context.graph.coverage.node,
       );
     }
     const coverageRelevant = range.paths.filter((path) =>
@@ -3783,6 +3911,7 @@ function buildImpactPlan(context, base, head, findings) {
       environment_digest: environmentDigest,
       environment_manifest: environmentManifest,
       output_contract: outputContract,
+      producing_candidate: range.exactHead,
     };
     const taskKey = sha256(canonical(keyBody));
     resultKeys.set(node.id, taskKey);
@@ -4125,6 +4254,7 @@ function smartConvergeV3() {
         environment_manifest: environmentManifest,
         output_contract: gateProfile.output_contract,
         outputs: outputState.outputs,
+        producing_candidate: exactHead,
       };
       const taskKey = sha256(canonical(keyBody));
       const expected = {
@@ -4245,7 +4375,6 @@ function smartConvergeV3() {
         task_key: taskKey,
         output_digest: record.result_digest,
       });
-      if (result !== 'EXECUTED_PASS') break;
     }
     return results;
   };
@@ -4559,14 +4688,32 @@ function claimsCheckV3() {
 }
 
 const treeEntryCache = new Map();
+const treeIdentityEntryCache = new Map();
+
+function candidateTreeIdentityEntriesV7(candidate) {
+  if (treeIdentityEntryCache.has(candidate)) return treeIdentityEntryCache.get(candidate);
+  const entries = new Map();
+  for (const line of git(repoRoot, ['ls-tree', '-r', candidate]).split('\n').filter(Boolean)) {
+    const match = /^([0-9]+)\s+(\w+)\s+([0-9a-f]+)\t(.+)$/u.exec(line);
+    if (match !== null)
+      entries.set(match[4], {
+        mode: match[1],
+        object_type: match[2],
+        object_id: match[3],
+      });
+  }
+  treeIdentityEntryCache.set(candidate, entries);
+  return entries;
+}
 
 function candidateTreeEntries(candidate) {
   if (treeEntryCache.has(candidate)) return treeEntryCache.get(candidate);
-  const entries = new Map();
-  for (const line of git(repoRoot, ['ls-tree', '-r', candidate]).split('\n').filter(Boolean)) {
-    const match = /^[0-9]+\s+\w+\s+([0-9a-f]+)\t(.+)$/u.exec(line);
-    if (match !== null) entries.set(match[2], match[1]);
-  }
+  const entries = new Map(
+    [...candidateTreeIdentityEntriesV7(candidate)].map(([path, identity]) => [
+      path,
+      identity.object_id,
+    ]),
+  );
   treeEntryCache.set(candidate, entries);
   return entries;
 }
@@ -5202,7 +5349,7 @@ function statusV3() {
 // Policy v4 is intentionally implemented beside the immutable v2/v3 compatibility
 // engines. Runtime evidence is authenticated at every read boundary; parseable JSON
 // alone never has standing.
-function loadV4Context(round, findings) {
+function loadV4Context(round, findings, candidate = null) {
   const policy = loadPolicy(findings);
   if (policy === null) return null;
   if (!['4.0.0', '5.0.0'].includes(policy.schemaVersion)) {
@@ -5225,7 +5372,10 @@ function loadV4Context(round, findings) {
   const profilePath = v3ProfilePath(policy, round);
   let profile;
   try {
-    profile = readJson(join(repoRoot, profilePath));
+    profile =
+      candidate === null
+        ? readJson(join(repoRoot, profilePath))
+        : JSON.parse(candidateFile(repoRoot, candidate, profilePath));
   } catch (error) {
     findings.push(
       finding('ROUND_PROFILE_INVALID', `round profile is unavailable: ${String(error)}`),
@@ -5247,7 +5397,10 @@ function loadV4Context(round, findings) {
   const loadRoundDocument = (sourceKey, schemaKey, code) => {
     const path = profile.sources?.[sourceKey];
     try {
-      const value = readJson(join(repoRoot, path));
+      const value =
+        candidate === null
+          ? readJson(join(repoRoot, path))
+          : JSON.parse(candidateFile(repoRoot, candidate, path));
       if (sourceKey === 'current_claims' && value.mode === 'registry') {
         const registryFindings = [];
         validateDocument(value, policy.schemas[schemaKey], registryFindings, code, sourceKey);
@@ -5282,6 +5435,31 @@ function loadV4Context(round, findings) {
     'semantic_obligations',
     'OBLIGATIONS_INVALID',
   );
+  let obligationBaseline = null;
+  if (profile.sources?.obligation_baseline) {
+    try {
+      obligationBaseline =
+        candidate === null
+          ? readJson(join(repoRoot, profile.sources.obligation_baseline))
+          : JSON.parse(candidateFile(repoRoot, candidate, profile.sources.obligation_baseline));
+      if (
+        obligationBaseline.round !== round ||
+        obligationBaseline.derivation !== 'independent-policy-baseline'
+      )
+        findings.push(
+          finding(
+            'OBLIGATION_BASELINE_INVALID',
+            'independent obligation baseline identity is invalid',
+          ),
+        );
+    } catch (error) {
+      findings.push(
+        finding('OBLIGATION_BASELINE_INVALID', 'independent obligation baseline is unavailable', {
+          detail: String(error),
+        }),
+      );
+    }
+  }
   const claimsRegistry = loadRoundDocument('current_claims', 'current_claims', 'CLAIMS_INVALID');
   const priorFindingRegistry = profile.sources?.prior_finding_registry
     ? loadRoundDocument(
@@ -5310,6 +5488,7 @@ function loadV4Context(round, findings) {
     profilePath,
     graph,
     obligations,
+    obligationBaseline,
     claimsRegistry,
     priorFindingRegistry,
     controlProvenance,
@@ -5319,6 +5498,8 @@ function loadV4Context(round, findings) {
       profile: sha256(canonical(profile)),
       graph: graph === null ? sha256('MISSING\n') : sha256(canonical(graph)),
       obligations: obligations === null ? sha256('MISSING\n') : sha256(canonical(obligations)),
+      obligationBaseline:
+        obligationBaseline === null ? sha256('MISSING\n') : sha256(canonical(obligationBaseline)),
       claimsRegistry:
         claimsRegistry === null ? sha256('MISSING\n') : sha256(canonical(claimsRegistry)),
       priorFindings:
@@ -5388,6 +5569,16 @@ function fencedBindingObjects(source, markerField = 'devai_reviewer_binding') {
 }
 
 function resolveExactCandidateV6(revision, findings) {
+  if (!SHA40.test(revision)) {
+    findings.push(
+      finding(
+        'REVIEWER_BINDING_CANDIDATE_REQUIRED',
+        'authoritative reviewer boundary requires a literal 40-hex candidate commit',
+        { revision },
+      ),
+    );
+    return null;
+  }
   try {
     const candidate = git(repoRoot, ['rev-parse', `${revision}^{commit}`]);
     if (!SHA40.test(candidate)) throw new Error('resolved revision is not one exact commit SHA');
@@ -5399,6 +5590,21 @@ function resolveExactCandidateV6(revision, findings) {
         'reviewer authority requires one exact candidate commit',
         { revision, detail: String(error) },
       ),
+    );
+    return null;
+  }
+}
+
+function resolvePreparationCandidateV7(revision, findings) {
+  try {
+    const resolved = git(repoRoot, ['rev-parse', `${revision}^{commit}`]);
+    return resolveExactCandidateV6(resolved, findings);
+  } catch (error) {
+    findings.push(
+      finding('REVIEWER_BINDING_CANDIDATE_REQUIRED', 'candidate commit cannot be resolved', {
+        revision,
+        detail: String(error),
+      }),
     );
     return null;
   }
@@ -5616,7 +5822,8 @@ function deriveControlProvenanceV6(context, candidate, findings) {
   }
   if (
     provenance.round !== context.profile.round ||
-    provenance.root_decision !== context.policy.decision_id
+    (provenance.root_decision !== context.policy.decision_id &&
+      provenance.discovery_mode?.decisions !== 'exact-register-transitive-from-root')
   ) {
     findings.push(
       finding('ACTIVE_CONTROL_CENSUS_INCOMPLETE', 'control provenance root identity is stale'),
@@ -5694,12 +5901,47 @@ function deriveControlProvenanceV6(context, candidate, findings) {
     add(`source:${sha256(sourceRef).slice(0, 24)}`, 'tracked-manifest', sourceRef, derivation);
   };
 
-  const decisions = new Map(
-    (provenance.decisions ?? []).map((entry) => [entry.decision_id, entry]),
-  );
+  const decisionRows = provenance.decisions ?? [];
+  const decisionIds = decisionRows.map(({ decision_id }) => decision_id);
+  if (new Set(decisionIds).size !== decisionIds.length)
+    findings.push(
+      finding(
+        'ACTIVE_CONTROL_CENSUS_DUPLICATE_ID',
+        'decision identifiers must be unique before provenance map construction',
+      ),
+    );
+  const decisions = new Map(decisionRows.map((entry) => [entry.decision_id, entry]));
   const visiting = new Set();
   const visited = new Set();
   const registerSource = candidateFile(repoRoot, candidate, provenance.decision_register);
+  const registerSections = new Map(
+    registerSource
+      .split(/(?=^### DII-[0-9]+\b)/gmu)
+      .map((section) => [/^### (DII-[0-9]+)\b/mu.exec(section)?.[1], section])
+      .filter(([decisionId]) => decisionId !== undefined),
+  );
+  const derivedDependencies = (decisionId) => {
+    const section = registerSections.get(decisionId) ?? '';
+    const metadata = section.split('\n')[1] ?? '';
+    return [
+      ...new Set(
+        [...metadata.matchAll(/\bDII-[0-9]+\b/gu)]
+          .map(([id]) => id)
+          .filter((id) => id !== decisionId && registerSections.has(id)),
+      ),
+    ].sort();
+  };
+  for (const row of decisionRows) {
+    const derived = derivedDependencies(row.decision_id);
+    if (canonical([...(row.depends_on ?? [])].sort()) !== canonical(derived))
+      findings.push(
+        finding(
+          'ACTIVE_CONTROL_CENSUS_DECLARATION_MISMATCH',
+          'declared decision edges differ from exact-register dependencies',
+          { decision_id: row.decision_id, declared: row.depends_on ?? [], derived },
+        ),
+      );
+  }
   const visitDecision = (decisionId) => {
     if (visited.has(decisionId)) return;
     if (visiting.has(decisionId)) {
@@ -5723,9 +5965,7 @@ function deriveControlProvenanceV6(context, candidate, findings) {
     for (const dependency of declaration.depends_on ?? []) visitDecision(dependency);
     visiting.delete(decisionId);
     visited.add(decisionId);
-    const section = registerSource
-      .split(/(?=^### DII-[0-9]+\b)/gmu)
-      .find((value) => value.startsWith(`### ${decisionId} `));
+    const section = registerSections.get(decisionId);
     const active =
       section !== undefined &&
       /`type: decision · status: active · authority: Architect\b/u.test(section);
@@ -5930,7 +6170,8 @@ function policyCheckV4() {
   const findings = [];
   const round = option('--round') ?? '';
   const phase = option('--phase') ?? 'pre-entry-preparation';
-  const context = loadV4Context(round, findings);
+  const exactCandidate = resolvePreparationCandidateV7('HEAD', findings);
+  const context = loadV4Context(round, findings, exactCandidate);
   let resolution = null;
   let declarationDiagnostic = null;
   if (context !== null) {
@@ -5938,7 +6179,6 @@ function policyCheckV4() {
       findings.push(
         finding('POLICY_MIRROR_DRIFT', 'generic policy and Engineer materialization differ'),
       );
-    const exactCandidate = resolveExactCandidateV6('HEAD', findings);
     resolution = reviewerBindingV4(context, exactCandidate ?? 'INVALID');
     findings.push(...resolution.findings);
     if (exactCandidate !== null && context.policy.schemaVersion === '5.0.0') {
@@ -5977,7 +6217,8 @@ function policyCheckV4() {
 function entryCheckV4() {
   const findings = [];
   const round = option('--round') ?? '';
-  const context = loadV4Context(round, findings);
+  const head = resolvePreparationCandidateV7('HEAD', findings);
+  const context = loadV4Context(round, findings, head);
   if (cleanStatus(repoRoot) !== '')
     findings.push(
       finding('ENTRY_BLOCKED_DIRTY_WORKTREE', 'entry requires a clean exact-HEAD worktree'),
@@ -5992,8 +6233,7 @@ function entryCheckV4() {
         'DECLARATION_PENDING_B0',
         'structured round declaration remains intentionally unbound until B0',
       );
-    const head = git(repoRoot, ['rev-parse', 'HEAD']);
-    const resolution = reviewerBindingV4(context, head);
+    const resolution = reviewerBindingV4(context, head ?? 'INVALID');
     findings.push(...resolution.findings);
     if (resolution.diagnostic !== null) findings.push(resolution.diagnostic);
   }
@@ -6060,11 +6300,18 @@ function readJsonPrecisely(path, missingCode, malformedCode, findings) {
 function validateNormativeSourceCoverageV6(context, candidate, findings) {
   let registry;
   let provenance;
+  let baseline;
   try {
     registry = JSON.parse(candidateFile(repoRoot, candidate, context.profile.sources.obligations));
     provenance = JSON.parse(
       candidateFile(repoRoot, candidate, context.profile.sources.control_provenance),
     );
+    baseline = context.profile.sources.obligation_baseline
+      ? JSON.parse(candidateFile(repoRoot, candidate, context.profile.sources.obligation_baseline))
+      : {
+          normative_source_paths: provenance.normative_source_roots ?? [],
+          obligation_ids: (registry.obligations ?? []).map(({ obligation_id }) => obligation_id),
+        };
   } catch (error) {
     findings.push(
       finding(
@@ -6075,7 +6322,20 @@ function validateNormativeSourceCoverageV6(context, candidate, findings) {
     );
     return false;
   }
-  const expectedPaths = [...new Set(provenance.normative_source_roots ?? [])].sort();
+  const baselinePaths = baseline.normative_source_paths ?? [];
+  const baselineIds = baseline.obligation_ids ?? [];
+  const expectedPaths = [...new Set(baselinePaths)].sort();
+  if (
+    new Set(baselinePaths).size !== baselinePaths.length ||
+    new Set(baselineIds).size !== baselineIds.length ||
+    canonical([...(provenance.normative_source_roots ?? [])].sort()) !== canonical(expectedPaths)
+  )
+    findings.push(
+      finding(
+        'SEMANTIC_OBLIGATION_BASELINE_MISMATCH',
+        'declared normative populations differ from the independent baseline',
+      ),
+    );
   const rows = registry.normative_sources ?? [];
   const actualPaths = rows.map(({ path }) => path).sort();
   if (
@@ -6089,6 +6349,13 @@ function validateNormativeSourceCoverageV6(context, candidate, findings) {
       ),
     );
   const knownIds = (registry.obligations ?? []).map(({ obligation_id }) => obligation_id);
+  if (canonical([...knownIds].sort()) !== canonical([...baselineIds].sort()))
+    findings.push(
+      finding(
+        'SEMANTIC_OBLIGATION_BASELINE_MISMATCH',
+        'registered obligation IDs differ from the independent baseline',
+      ),
+    );
   if (new Set(knownIds).size !== knownIds.length)
     findings.push(
       finding('SEMANTIC_OBLIGATION_ID_DUPLICATE', 'obligation identifiers are duplicated'),
@@ -6456,6 +6723,7 @@ function authenticateCandidateProofV4(context, base, candidate, findings) {
           environment_manifest: localEnvironmentManifest,
           output_contract: profile.output_contract,
           outputs,
+          producing_candidate: candidate,
         };
         return [gate.id, { ...keyBody, task_key: sha256(canonical(keyBody)) }];
       }
@@ -6534,6 +6802,7 @@ function authenticateCandidateProofV4(context, base, candidate, findings) {
                 'environment_manifest',
                 'output_contract',
                 'outputs',
+                'producing_candidate',
               ]
             : [
                 'task_id',
@@ -7367,6 +7636,7 @@ function claimsMaterializeV4() {
 }
 
 function resolveTopicEvidenceV6(context, proof, ref) {
+  if (['review-scope', 'review-state', 'review-transport'].includes(ref)) return null;
   const runtimeAliases = new Map([
     ['candidate manifest', context.profile.runtime.candidate_manifest],
     ['candidate-manifest', context.profile.runtime.candidate_manifest],
@@ -7408,12 +7678,14 @@ function resolveTopicEvidenceV6(context, proof, ref) {
     return records === null ? null : { ref, digest: sha256(canonical(records)) };
   }
   if (ref === 'git:role-path-census') {
-    const commits = git(repoRoot, [
-      'log',
-      '--format=%H%x00%an%x00%ae',
-      `${proof.manifest.base_sha}..${proof.manifest.candidate_sha}`,
-    ]);
-    return { ref, digest: sha256(commits) };
+    return {
+      ref,
+      digest: sha256(
+        canonical(
+          rolePathEvidenceV7(proof.manifest.base_sha, proof.manifest.candidate_sha, context.policy),
+        ),
+      ),
+    };
   }
   if (ref.startsWith('gate:')) {
     const gateId = ref.slice('gate:'.length);
@@ -7469,7 +7741,7 @@ function topicTaskKeysV4(proof, requiredEvidence) {
     .map(({ task_key }) => task_key);
 }
 
-function makeReviewTopicsV4(context, base, candidate, proof, ledger) {
+function makeReviewTopicsV4(context, base, candidate, proof, ledger, findings = []) {
   const topics = [];
   const add = ({
     topicId,
@@ -7502,6 +7774,13 @@ function makeReviewTopicsV4(context, base, candidate, proof, ledger) {
       uniqueSourceRefs,
       uniqueRequiredEvidence,
     );
+    if (evidenceManifest === null)
+      findings.push(
+        finding('UNRESOLVED_TOPIC_EVIDENCE', 'review topic contains unresolved evidence', {
+          topic_id: topicId,
+          evidence_refs: [...uniqueSourceRefs, ...uniqueRequiredEvidence],
+        }),
+      );
     const reuseEligible = reusable && changedStatus === 'unchanged' && evidenceManifest !== null;
     const taskKeys = reuseEligible ? topicTaskKeysV4(proof, uniqueRequiredEvidence) : [];
     topics.push({
@@ -7845,7 +8124,15 @@ function transitionV4(from, to, proof, links = {}) {
   );
 }
 
+function persistedReviewArtifactDigestV7(artifact, selfDigestField) {
+  if (!selfDigestValid(artifact, selfDigestField)) return null;
+  return artifact[selfDigestField];
+}
+
 function reconstructStateIdentityV6(transition, previousTransitionDigest) {
+  const previous_state_artifact_digest = transition.previous_state_digest;
+  const previous_transition_artifact_digest = previousTransitionDigest;
+  void previous_state_artifact_digest;
   return sha256(
     canonical({
       state: transition.from,
@@ -7853,7 +8140,7 @@ function reconstructStateIdentityV6(transition, previousTransitionDigest) {
       candidate_sha: transition.candidate_sha,
       candidate_manifest_digest: transition.candidate_manifest_digest,
       review_scope_digest: transition.review_scope_digest,
-      previous_transition_digest: previousTransitionDigest,
+      previous_transition_digest: previous_transition_artifact_digest,
     }),
   );
 }
@@ -7868,8 +8155,21 @@ function validateTransitionEdgeV6(context, transition, index, prior, findings) {
         { ordinal: index + 1 },
       ),
     );
+  if (
+    prior !== null &&
+    (persistedReviewArtifactDigestV7(prior, 'transition_digest_sha256') === null ||
+      transition.previous_transition_digest !== prior.transition_digest_sha256)
+  )
+    findings.push(
+      finding(
+        'REVIEW_STATE_PREDECESSOR_STATE_INVALID',
+        'transition does not bind the exact persisted predecessor transition artifact',
+        { ordinal: index + 1 },
+      ),
+    );
   const expectedCycle =
     transition.from === 'REPAIR_REQUIRED' ||
+    transition.from === 'CYCLE_2_ACTIVE' ||
     ['NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE', 'ESCALATION_REQUIRED'].includes(transition.to) ||
     (transition.from === 'CYCLE_2_ACTIVE' && transition.to === 'PASS')
       ? 2
@@ -8386,9 +8686,20 @@ function reviewScopeV4() {
   const findings = [];
   const round = option('--round') ?? '';
   const base = git(repoRoot, ['rev-parse', option('--base') ?? '']);
-  const candidate = git(repoRoot, ['rev-parse', option('--candidate') ?? 'HEAD']);
+  const candidateExpression = option('--candidate') ?? 'HEAD';
+  const candidate = resolveExactCandidateV6(candidateExpression, findings);
   const cycle = Number(option('--cycle') ?? '1');
-  const context = loadV4Context(round, findings);
+  if (candidate === null)
+    return emit({
+      ok: false,
+      command: 'review-scope',
+      round,
+      base,
+      candidate: candidateExpression,
+      cycle,
+      findings,
+    });
+  const context = loadV4Context(round, findings, candidate);
   if (![1, 2].includes(cycle))
     findings.push(finding('REVIEW_CYCLE_BUDGET_EXHAUSTED', 'only cycles 1 and 2 are permitted'));
   let existingState = null;
@@ -8458,7 +8769,7 @@ function reviewScopeV4() {
     emit({ ok: false, command: 'review-scope', round, cycle, manifest: null, findings });
     return;
   }
-  const topics = makeReviewTopicsV4(context, base, candidate, proof, ledger);
+  const topics = makeReviewTopicsV4(context, base, candidate, proof, ledger, findings);
   if (new Set(topics.map(({ topic_id }) => topic_id)).size !== topics.length)
     findings.push(
       finding('REVIEW_TOPIC_DUPLICATED', 'generated review topic identifiers must be unique'),
@@ -9540,17 +9851,27 @@ function reviewCheckV4() {
   const findings = [];
   const round = option('--round') ?? '';
   const cycle = Number(option('--cycle') ?? '1');
-  const candidate = git(repoRoot, ['rev-parse', option('--candidate') ?? 'HEAD']);
+  const candidateExpression = option('--candidate') ?? 'HEAD';
   if (![1, 2].includes(cycle))
     return emit({
       ok: false,
       command: 'review-check',
       round,
-      candidate,
+      candidate: candidateExpression,
       cycle,
       findings: [finding('REVIEW_CYCLE_BUDGET_EXHAUSTED', 'cycle 3 is forbidden')],
     });
-  const context = loadV4Context(round, findings);
+  const candidate = resolveExactCandidateV6(candidateExpression, findings);
+  if (candidate === null)
+    return emit({
+      ok: false,
+      command: 'review-check',
+      round,
+      candidate: candidateExpression,
+      cycle,
+      findings,
+    });
+  const context = loadV4Context(round, findings, candidate);
   if (context === null)
     return emit({ ok: false, command: 'review-check', round, candidate, cycle, findings });
   const scopePath = join(repoRoot, context.profile.runtime.review_scope);
@@ -9582,7 +9903,14 @@ function reviewCheckV4() {
   findings.push(...binding.findings);
   if (binding.diagnostic !== null) findings.push(binding.diagnostic);
   if (proof !== null && ledger !== null && scope !== null) {
-    const expectedTopics = makeReviewTopicsV4(context, scope.exact_base, candidate, proof, ledger);
+    const expectedTopics = makeReviewTopicsV4(
+      context,
+      scope.exact_base,
+      candidate,
+      proof,
+      ledger,
+      findings,
+    );
     const activeControls = [
       context.profilePath,
       'law/policy/round-close-controls.json',
@@ -9885,8 +10213,8 @@ function reviewCheckV4() {
 function statusV4() {
   const findings = [];
   const round = option('--round') ?? '';
-  const context = loadV4Context(round, findings);
-  const exactCandidate = context === null ? null : resolveExactCandidateV6('HEAD', findings);
+  const exactCandidate = resolvePreparationCandidateV7('HEAD', findings);
+  const context = loadV4Context(round, findings, exactCandidate);
   const binding = context === null ? null : reviewerBindingV4(context, exactCandidate ?? 'INVALID');
   if (binding !== null) {
     findings.push(...binding.findings);
