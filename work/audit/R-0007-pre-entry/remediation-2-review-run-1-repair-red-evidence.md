@@ -24,17 +24,17 @@ The 108 passing tests include the complete historical fixture foundation and the
 already-correct cycle-2 `REVIEW_TRANSPORT_BLOCKED` terminal check. The 32 failures are
 the newly executable absent-behavior population:
 
-| Finding class | Intended red population | Failed |
-| --- | --- | ---: |
-| R2-F001 | Continue after an injected failure and retain all 16 ordered gate dispositions; the last-gate injection is already complete by construction | 15 |
-| R2-F002 | Reject false nonempty command closure; invalidate identical-tree history-sensitive reuse | 2 |
-| R2-F003 | Unknown asset widens to suite plus coverage; six alias/wrapper/computed loader families widen likewise | 7 |
-| R2-F004 | Refuse scope/transport self-evidence; bind role-path evidence to commit, author, paths, classification, and verdict | 2 |
-| R2-F005 | Authenticate predecessor state and transition from persisted artifact bytes; cycle-2 transport terminal already passes | 1 |
-| R2-F006 | Compare declared decisions with register-derived dependencies; reject duplicate IDs before map construction | 2 |
-| R2-F007 | Ignore dirty tracked profile substitution during preparation; reject symbolic candidate identity at review boundary | 2 |
-| R2-F008 | Detect coordinated registry/provenance deletion against an independent obligation baseline | 1 |
-| **Total** |  | **32** |
+| Finding class | Intended red population                                                                                                                     | Failed |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -----: |
+| R2-F001       | Continue after an injected failure and retain all 16 ordered gate dispositions; the last-gate injection is already complete by construction |     15 |
+| R2-F002       | Reject false nonempty command closure; invalidate identical-tree history-sensitive reuse                                                    |      2 |
+| R2-F003       | Unknown asset widens to suite plus coverage; six alias/wrapper/computed loader families widen likewise                                      |      7 |
+| R2-F004       | Refuse scope/transport self-evidence; bind role-path evidence to commit, author, paths, classification, and verdict                         |      2 |
+| R2-F005       | Authenticate predecessor state and transition from persisted artifact bytes; cycle-2 transport terminal already passes                      |      1 |
+| R2-F006       | Compare declared decisions with register-derived dependencies; reject duplicate IDs before map construction                                 |      2 |
+| R2-F007       | Ignore dirty tracked profile substitution during preparation; reject symbolic candidate identity at review boundary                         |      2 |
+| R2-F008       | Detect coordinated registry/provenance deletion against an independent obligation baseline                                                  |      1 |
+| **Total**     |                                                                                                                                             | **32** |
 
 ## Acceptance boundary
 
