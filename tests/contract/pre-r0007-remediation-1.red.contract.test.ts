@@ -2869,6 +2869,33 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       );
     });
 
+    it('R2-006-MANDATE-REMOVAL rejects coordinated removal of a transitively referenced Owner mandate', () => {
+      const current = buildFixture(true);
+      const planPath = `work/rounds/${ROUND}/plan.md`;
+      put(current.root, planPath, '# plan\n\nAuthority: OM-900.\n');
+      const obligationsPath = `work/rounds/${ROUND}/review-obligations.json`;
+      const obligations = readJson(current.root, obligationsPath);
+      const sourceRow = required(
+        (obligations.normative_sources as Array<Record<string, unknown>>).find(
+          ({ path }) => path === planPath,
+        ),
+        'fixture plan source is missing',
+      );
+      sourceRow.source_digest_sha256 = digestBytes(readFileSync(join(current.root, planPath)));
+      putJson(current.root, obligationsPath, obligations);
+      commit(current.root, 'establish transitive Owner authority reference');
+
+      const provenancePath = `work/rounds/${ROUND}/control-provenance.json`;
+      const provenance = readJson(current.root, provenancePath);
+      provenance.owner_mandates = [];
+      putJson(current.root, provenancePath, provenance);
+      commit(current.root, 'remove transitively referenced Owner mandate declaration');
+      expectCode(
+        run(current, 'policy-check', ['--phase', 'pre-entry-preparation']),
+        'ACTIVE_CONTROL_CENSUS_DECLARATION_MISMATCH',
+      );
+    });
+
     it('R2-F007 ignores dirty tracked profile substitution during preparation authority resolution', () => {
       const current = fixture(true);
       const profilePath = `work/rounds/${ROUND}/close-control-profile.json`;
