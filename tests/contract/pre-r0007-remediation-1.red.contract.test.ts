@@ -2680,7 +2680,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       );
     });
 
-    it('R2-F002 rejects coordinated removal of every command-closure derivation marker', () => {
+    it('R2-002-DERIVATION-REMOVAL rejects coordinated removal of every command-closure derivation marker', () => {
       const current = buildFixture(true);
       const graphPath = `work/rounds/${ROUND}/affected-test-graph.json`;
       const graph = readJson(current.root, graphPath);
@@ -2945,7 +2945,7 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       );
     });
 
-    it('R2-F008 rejects removal of the independent baseline pointer from a baseline-governed profile', () => {
+    it('R2-008-BASELINE-POINTER-REMOVAL rejects removal of the independent baseline pointer from a baseline-governed profile', () => {
       const current = buildFixture(true);
       const profilePath = `work/rounds/${ROUND}/close-control-profile.json`;
       const profile = readJson(current.root, profilePath);
