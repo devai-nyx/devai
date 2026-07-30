@@ -28,10 +28,7 @@
     {
       "finding_id": "R3-F001",
       "defect_class": "AUTHORITATIVE_GATE_CANDIDATE_RED",
-      "test_ids": [
-        "R3-001-LITERAL-ROSTER",
-        "R3-001-ALL-FAILURE-ORDINALS"
-      ]
+      "test_ids": ["R3-001-LITERAL-ROSTER", "R3-001-ALL-FAILURE-ORDINALS"]
     },
     {
       "finding_id": "R3-F002",
