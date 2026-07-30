@@ -49,7 +49,7 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
         "law/policy/round-close-controls.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F002",
@@ -95,7 +95,7 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
         "product/owner-mandates/OM-016.md"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F003",
@@ -137,7 +137,7 @@
         "scripts/run-round-close-controls.mjs"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F004",
@@ -178,7 +178,7 @@
         "scripts/run-round-close-controls.mjs"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F005",
@@ -225,7 +225,7 @@
         "scripts/run-round-close-controls.mjs"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F006",
@@ -270,7 +270,7 @@
         "scripts/run-round-close-controls.mjs"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F007",
@@ -305,7 +305,7 @@
       "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
       "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F008",
@@ -348,7 +348,7 @@
         "scripts/run-round-close-controls.mjs"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     }
   ]
 }
