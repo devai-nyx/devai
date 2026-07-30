@@ -436,7 +436,7 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const candidate = commit(current.root, 'add unknown source');
     const value = run(current, 'impact-plan', ['--base', current.impactBase, '--head', candidate]);
     expect(value.ok).toBe(true);
-    expect(executed(value)).toEqual(['full-suite']);
+    expect(executed(value)).toEqual(['full-coverage', 'full-suite']);
     expect(nodes(value).find(({ node_id }) => node_id === 'full-suite')).toEqual(
       expect.objectContaining({
         reason_codes: expect.arrayContaining(['UNKNOWN_DEPENDENCY']),

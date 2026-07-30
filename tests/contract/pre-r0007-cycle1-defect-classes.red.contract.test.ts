@@ -608,7 +608,7 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
     ]);
     expect(
       readFileSync(join(current.root, '.devai/state/gates.log'), 'utf8').trim().split('\n'),
-    ).toEqual(['full-suite', ...expected]);
+    ).toEqual(['full-suite', 'full-coverage', ...expected]);
     expect(git(current.root, ['status', '--porcelain', '--untracked-files=all'])).toBe('');
     expect(result.value).toMatchObject({
       exact_head_before: candidate,
