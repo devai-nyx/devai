@@ -47,9 +47,10 @@
       ],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
-        "law/policy/round-close-controls.json"
+        "law/policy/round-close-controls.json",
+        "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F002",
@@ -81,11 +82,15 @@
       "test_ids": [
         "R2-002-ALL-GATES-CLOSED",
         "R2-002-SCRIPT-CLOSURE",
+        "R2-002-DERIVATION-REMOVAL",
         "R2-002-UNIVERSAL-INPUTS",
         "R2-002-ENVIRONMENT-COMPLETE",
         "R2-002-OUTPUTS-COMPLETE"
       ],
-      "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+      "test_paths": [
+        "tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
+        "tests/contract/pre-r0007-remediation-2.red.contract.test.ts"
+      ],
       "implementation_surfaces": [
         "law/schemas/affected-test-graph.schema.json",
         "work/rounds/R-0007/affected-test-graph.json",
@@ -93,9 +98,10 @@
       ],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
-        "product/owner-mandates/OM-016.md"
+        "product/owner-mandates/OM-016.md",
+        "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F003",
@@ -136,8 +142,11 @@
         "work/rounds/R-0007/affected-test-graph.json",
         "scripts/run-round-close-controls.mjs"
       ],
-      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
-      "closure_state": "RED_REQUIRED"
+      "evidence_refs": [
+        "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+        "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md"
+      ],
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F004",
@@ -177,8 +186,11 @@
         "work/rounds/R-0007/review-obligations.json",
         "scripts/run-round-close-controls.mjs"
       ],
-      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
-      "closure_state": "RED_REQUIRED"
+      "evidence_refs": [
+        "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+        "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md"
+      ],
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F005",
@@ -224,8 +236,11 @@
         "law/schemas/review-repair-evidence.schema.json",
         "scripts/run-round-close-controls.mjs"
       ],
-      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
-      "closure_state": "RED_REQUIRED"
+      "evidence_refs": [
+        "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+        "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md"
+      ],
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F006",
@@ -260,17 +275,24 @@
         "R2-006-TRANSITIVE-PROVENANCE",
         "R2-006-NO-ALLOWLIST-AUTHORITY",
         "R2-006-RAW-BLOBS",
-        "R2-006-EXACT-POPULATION"
+        "R2-006-EXACT-POPULATION",
+        "R2-006-MANDATE-REMOVAL"
       ],
-      "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+      "test_paths": [
+        "tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
+        "tests/contract/pre-r0007-remediation-2.red.contract.test.ts"
+      ],
       "implementation_surfaces": [
         "law/register/DECISIONS.md",
         "law/schemas/control-provenance.schema.json",
         "work/rounds/R-0007/control-provenance.json",
         "scripts/run-round-close-controls.mjs"
       ],
-      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
-      "closure_state": "RED_REQUIRED"
+      "evidence_refs": [
+        "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+        "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md"
+      ],
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F007",
@@ -304,8 +326,11 @@
       ],
       "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
       "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
-      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
-      "closure_state": "RED_REQUIRED"
+      "evidence_refs": [
+        "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+        "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md"
+      ],
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F008",
@@ -339,16 +364,23 @@
         "R2-008-ALL-SOURCES-COVERED",
         "R2-008-OBLIGATION-EXACT-ONCE",
         "R2-008-SOURCE-DIGEST-DRIFT",
-        "R2-008-UNREGISTERED-SOURCE"
+        "R2-008-UNREGISTERED-SOURCE",
+        "R2-008-BASELINE-POINTER-REMOVAL"
       ],
-      "test_paths": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+      "test_paths": [
+        "tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
+        "tests/contract/pre-r0007-remediation-2.red.contract.test.ts"
+      ],
       "implementation_surfaces": [
         "law/schemas/review-obligations.schema.json",
         "work/rounds/R-0007/review-obligations.json",
         "scripts/run-round-close-controls.mjs"
       ],
-      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"],
-      "closure_state": "RED_REQUIRED"
+      "evidence_refs": [
+        "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+        "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md"
+      ],
+      "closure_state": "GREEN_PROVED"
     }
   ]
 }
