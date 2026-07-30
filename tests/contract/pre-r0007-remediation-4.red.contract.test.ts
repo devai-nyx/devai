@@ -513,21 +513,44 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
     });
 
     it('R7-008-EVIDENCE-IMMUTABLE-AFTER-IMPL is never modified at or after implementation', () => {
-      const evidence = json<{ implementation_commit?: string }>(ROOT, EVIDENCE);
-      const implementation = evidence.implementation_commit;
-      expect(typeof implementation, 'evidence must name the implementation commit').toBe('string');
-      const touching = git(ROOT, [
-        'log',
-        '--format=%H',
-        `${String(implementation)}~1..HEAD`,
-        '--',
-        EVIDENCE,
-      ])
-        .split('\n')
-        .filter(Boolean);
+      // The implementation commit is read from the Architect-bound sequencing record,
+      // never from the evidence itself: the evidence is written before any
+      // implementation exists and must stay immutable afterwards.
+      const sequencing = json<{
+        bindings: Array<{
+          round: string;
+          implementation_commits?: string[];
+          red_evidence?: { evidence_path?: string };
+        }>;
+      }>(ROOT, 'law/policy/governed-sequencing.json');
+      const binding = sequencing.bindings.find(
+        (entry) => entry.round === 'R-0007' && entry.red_evidence?.evidence_path === EVIDENCE,
+      );
       expect(
-        touching,
-        `red evidence was rewritten at or after implementation: ${touching.join(', ')}`,
+        binding,
+        'governed sequencing must bind this red evidence to its implementation commits',
+      ).toBeTruthy();
+      const implementations = binding?.implementation_commits ?? [];
+      expect(
+        implementations.length,
+        'the binding must name at least one implementation',
+      ).toBeGreaterThan(0);
+      const offenders: string[] = [];
+      for (const implementation of implementations) {
+        const touching = git(ROOT, [
+          'log',
+          '--format=%H',
+          `${implementation}~1..HEAD`,
+          '--',
+          EVIDENCE,
+        ])
+          .split('\n')
+          .filter(Boolean);
+        offenders.push(...touching);
+      }
+      expect(
+        [...new Set(offenders)],
+        `red evidence was rewritten at or after implementation: ${offenders.join(', ')}`,
       ).toEqual([]);
     });
   });
