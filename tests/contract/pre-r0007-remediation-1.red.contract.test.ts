@@ -2684,6 +2684,12 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const current = buildFixture(true);
       const graphPath = `work/rounds/${ROUND}/affected-test-graph.json`;
       const graph = readJson(current.root, graphPath);
+      graph.freshness_identity = {
+        candidate: 'literal-commit-and-tree',
+        tree_entries: 'path-mode-type-object-and-raw-blob',
+        history_sensitive_gates: 'bind-commit-history-and-range',
+        outputs: 'declared-complete-including-ignored',
+      };
       for (const closure of graph.command_closure as Array<Record<string, unknown>>)
         delete closure.derivation;
       putJson(current.root, graphPath, graph);
@@ -2887,6 +2893,12 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
 
       const provenancePath = `work/rounds/${ROUND}/control-provenance.json`;
       const provenance = readJson(current.root, provenancePath);
+      provenance.discovery_mode = {
+        decisions: 'exact-register-transitive-from-root',
+        owner_mandates: 'exact-candidate-transitive-references',
+        manifest_roots: 'profile-and-round-authority-derived',
+        normative_sources: 'independent-obligation-baseline',
+      };
       provenance.owner_mandates = [];
       putJson(current.root, provenancePath, provenance);
       commit(current.root, 'remove transitively referenced Owner mandate declaration');
@@ -2978,6 +2990,15 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const profile = readJson(current.root, profilePath);
       delete (profile.sources as Record<string, unknown>).obligation_baseline;
       putJson(current.root, profilePath, profile);
+      const provenancePath = `work/rounds/${ROUND}/control-provenance.json`;
+      const provenance = readJson(current.root, provenancePath);
+      provenance.discovery_mode = {
+        decisions: 'exact-register-transitive-from-root',
+        owner_mandates: 'exact-candidate-transitive-references',
+        manifest_roots: 'profile-and-round-authority-derived',
+        normative_sources: 'independent-obligation-baseline',
+      };
+      putJson(current.root, provenancePath, provenance);
       commit(current.root, 'remove independent obligation baseline pointer');
       expectCode(
         run(current, 'policy-check', ['--phase', 'pre-entry-preparation']),
