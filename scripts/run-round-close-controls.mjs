@@ -508,7 +508,9 @@ function validateGateCommandClosureV6(context, findings) {
         'every authoritative gate requires one ordered nonempty script and program closure',
       ),
     );
-  const derivedClosureRequired = closures.some((entry) => Object.hasOwn(entry, 'derivation'));
+  const derivedClosureRequired =
+    context.policy?.schemaVersion === '5.0.0' ||
+    closures.some((entry) => Object.hasOwn(entry, 'derivation'));
   for (const gate of derivedClosureRequired ? commands : []) {
     const declared = closures.find(({ gate_id }) => gate_id === gate.id);
     const derived = deriveGateCommandClosureV7(context, gate);
@@ -6306,6 +6308,18 @@ function validateNormativeSourceCoverageV6(context, candidate, findings) {
     provenance = JSON.parse(
       candidateFile(repoRoot, candidate, context.profile.sources.control_provenance),
     );
+    if (
+      context.policy.schemaVersion === '5.0.0' &&
+      typeof context.profile.sources.obligation_baseline !== 'string'
+    ) {
+      findings.push(
+        finding(
+          'SEMANTIC_OBLIGATION_BASELINE_MISMATCH',
+          'schema-v5 review profiles require an independent obligation baseline',
+        ),
+      );
+      return false;
+    }
     baseline = context.profile.sources.obligation_baseline
       ? JSON.parse(candidateFile(repoRoot, candidate, context.profile.sources.obligation_baseline))
       : {
