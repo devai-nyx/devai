@@ -4828,6 +4828,83 @@ reviewer resolution required for later R-0007 entry. It does not bypass any R-00
 entry or batch gate, alter closed R-0006 artifacts, deploy, publish, promote evidence,
 or mutate the predecessor.
 
+### DII-252 — Derive close-control behaviour from generic capabilities, not decision specimens
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-017; remediation campaign 3 Review Run 1 failure at 25d0c17d84eff057817ab5849912f77b86a4f311, recorded at work/audit/R-0007-pre-entry/remediation-3-review-run-1.json; DII-246; DII-247; DII-248; DII-249; DII-250; DII-251`
+
+DII-251 stated the correct contracts but was implemented as a specimen. Nine control
+behaviours were selected by comparing a profile `decision_id` against the literal
+`DII-251`, so every other profile silently reverted to pre-campaign behaviour. Control
+behaviour is not a property of a decision identifier. Every close-control behaviour is
+selected by a named generic capability declared in `law/policy/round-close-controls.json`
+under `control_capabilities`, keyed to the policy schema version. No production control
+source may contain a string literal matching `DII-[0-9]+`, and the Inspector contract
+scans the complete controller for that pattern rather than a list of retired ids.
+
+Reviewer binding is resolved before dispatch for every authoritative consumer, not for a
+selected subset. The bootstrap resolves exactly one literal 40-hex candidate commit
+before any policy byte is read, and refuses omitted, symbolic, abbreviated, ambiguous,
+and non-commit revisions with `REVIEWER_BINDING_CANDIDATE_REQUIRED`. Policy, profile,
+schemas, mandates, graph, obligations, claims, and linked authority load from that Git
+object alone. Mutable tracked worktree bytes cannot select a handler, a schema, or a
+verdict. `smart-converge` resolves its head by the same rule and does not accept `HEAD`.
+
+An authoritative gate may not be removed from the roster by degrading it. The literal
+roster retains a gate that performs reviewer-binding census, normative-source coverage,
+and control-provenance derivation. Because a static policy argv cannot carry a candidate
+SHA, that gate is self-binding: it accepts no candidate argument, refuses to run on a
+dirty tree, resolves the checked-out commit to one literal 40-hex identity, proves the
+working tree matches that commit's tree, and then loads all authority from that Git
+object. Any mutable byte fails it closed, so worktree substitution cannot influence it.
+Convergence emits exactly one ordered terminal record per declared command, each
+carrying `gate_id`, `outcome`, and `exit_code`, and retains the complete population after
+any failure ordinal and under blocking impact plans. A gate whose freshness profile does
+not resolve becomes an explicit blocking record naming it, never a silent skip.
+
+Command closure is a fixpoint, not a depth-limited scan. Derivation traverses root and
+selected workspace scripts, TypeScript `references` transitively and `extends` chains,
+declared and derived build outputs, and the import, require, and spawn edges of every
+scanned executable until no new member appears. Programs are parsed generically from
+literal command strings; a program-name allowlist is not derivation. An executable that
+cannot be read from the candidate object is a blocking finding, never a silent drop. The
+closure digest is compared for every profile.
+
+Loader classification is binding-flow analysis, not specimen matching. Any identifier
+bound directly or transitively from an expression whose property name is `require`,
+`resolve`, or `createRequire`, and any call through a computed member access, marks the
+file ambiguous. Every unproved form selects both the full suite and whole coverage with
+`DYNAMIC_DEPENDENCY_AMBIGUOUS`, in candidate bytes and in base or preimage bytes alike.
+
+Review state identity binds the complete canonical persisted predecessor artifact. The
+review-state schema admits the authenticated predecessor artifact that transition
+identity actually binds, a production writer persists it, repair reauthentication derives
+its expected class population from authenticated prior failure evidence, and no field of
+an expected identity is read from the transport it authenticates.
+
+Entry readiness is one computation. `policy-check`, `entry-check`, and `status` consume a
+single shared readiness function, and `entry_ready` is false whenever any
+`ENTRY_BLOCKED_*` condition holds. While the R-0007 B0 declaration is unbound, all three
+consumers report `entry_ready` false. No contract may assert a readiness value that
+contradicts a blocking entry check.
+
+Closure-matrix population has a floor derived from evidence, not from a literal count.
+The profile binds one current closure matrix whose `finding_id` set is a superset of every
+`OPEN` disposition in the prior-finding registry, validated against the independently
+loaded registry at runtime. A coordinated deletion from both the matrix and its tests
+still fails. Carried classes are recorded honestly at their real closure state; a class is
+`GREEN_PROVED` only when its complete executable population is green.
+
+Red evidence is prospective and immutable. The Inspector red commit and the Auditor
+red-evidence commit precede every implementation-surface commit, evidence counts are
+internally consistent and accurately named as suites or files, and no commit at or after
+the first implementation commit modifies the evidence. Historically retrospective
+evidence is superseded prospectively and labelled as non-temporal replay rather than
+rewritten.
+
+This decision authorizes the campaign-3 complete-class repair. It does not bypass any
+R-0007 entry or batch gate, does not bind the B0 declaration, does not alter closed
+R-0006 artifacts, and does not deploy, publish, tag, promote evidence, or mutate the
+predecessor.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

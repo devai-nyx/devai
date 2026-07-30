@@ -69,6 +69,7 @@
         "transport_digest",
         "repair_evidence_digest",
         "previous_state_digest",
+        "previous_state_artifact",
         "previous_transition_digest",
         "transition_digest_sha256"
       ],
@@ -84,6 +85,21 @@
         "transport_digest": { "$ref": "#/$defs/nullableSha256" },
         "repair_evidence_digest": { "$ref": "#/$defs/nullableSha256" },
         "previous_state_digest": { "$ref": "#/$defs/nullableSha256" },
+        "previous_state_artifact": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["state_path", "artifact_digest_sha256", "canonicalization"],
+              "properties": {
+                "state_path": { "type": "string", "minLength": 1 },
+                "artifact_digest_sha256": { "$ref": "#/$defs/sha256" },
+                "canonicalization": { "const": "stable-json-minus-self-digest" }
+              }
+            }
+          ]
+        },
         "previous_transition_digest": { "$ref": "#/$defs/nullableSha256" },
         "transition_digest_sha256": { "$ref": "#/$defs/sha256" }
       }
