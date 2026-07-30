@@ -665,6 +665,65 @@
         "tests": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["5763ad738c3f57ac5327ddcdbc55567d3ce75735"],
+      "law_commits": ["19e185a26e34aa06513873ddabf8f6033a66dd76"],
+      "red_evidence": {
+        "commit": "787a651aa23bcf54711b0b2900b0643df3c0dc94",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-sequencing-red-evidence.json",
+        "evidence_sha256": "ee4bb8a7cd35033dbb51810de011cda0ae696828787a3ce3084e65c5b6b57562",
+        "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": [
+        "f387c0e484f6dadd860470c334cd42002ba90877",
+        "389a911a42e5eb68af71326a0ef41de019ef120f"
+      ],
+      "law_commits": ["19e185a26e34aa06513873ddabf8f6033a66dd76"],
+      "red_evidence": {
+        "commit": "6f189580015dec33747a2992b41ddb4f59b779d6",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t \"coordinated removal of every command-closure|removal of the independent baseline pointer\"",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-sequencing-red-evidence.json",
+        "evidence_sha256": "ee4bb8a7cd35033dbb51810de011cda0ae696828787a3ce3084e65c5b6b57562",
+        "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["29dcadfc2095be8f10cfb762546d0eca12460b71"],
+      "law_commits": ["19e185a26e34aa06513873ddabf8f6033a66dd76"],
+      "red_evidence": {
+        "commit": "8b57513ad7d8d2cdd73483bd304163c50b33b94a",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t R2-006-MANDATE-REMOVAL",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-sequencing-red-evidence.json",
+        "evidence_sha256": "ee4bb8a7cd35033dbb51810de011cda0ae696828787a3ce3084e65c5b6b57562",
+        "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["83de5ef4c2d3d618ba0bc9f4e808e87f65146fd6"],
+      "law_commits": ["19e185a26e34aa06513873ddabf8f6033a66dd76"],
+      "red_evidence": {
+        "commit": "cf5f394d925a64071a14a2e21bf7f428bbd0306e",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t \"provides one schema-valid, independently self-digested fixture foundation\"",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-sequencing-red-evidence.json",
+        "evidence_sha256": "ee4bb8a7cd35033dbb51810de011cda0ae696828787a3ce3084e65c5b6b57562",
+        "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
     }
   ],
   "historical_commit_exceptions": [
