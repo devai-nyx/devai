@@ -50,7 +50,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
         "product/owner-mandates/OM-017.md"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R3-F002",
@@ -92,7 +92,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
         "product/owner-mandates/OM-017.md"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R3-F003",
@@ -131,7 +131,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
         "product/owner-mandates/OM-017.md"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R3-F004",
@@ -176,7 +176,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
         "product/owner-mandates/OM-017.md"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R3-F005",
@@ -215,7 +215,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
         "product/owner-mandates/OM-017.md"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     }
   ]
 }
