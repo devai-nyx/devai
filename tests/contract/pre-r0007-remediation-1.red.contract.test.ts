@@ -217,7 +217,11 @@ function buildFixture(bound = true, register = true): Fixture {
   const root = mkdtempSync(join(tmpdir(), 'devai-r7-remediation1-'));
   if (register) roots.push(root);
   git(root, ['init', '-q']);
-  put(root, '.gitignore', '.devai/state/\nfixture/out/**\n');
+  put(
+    root,
+    '.gitignore',
+    '.devai/state/\nfixture/out/**\nfixture/gate-log.txt\nfixture/fail-gate.txt\n',
+  );
 
   const policy = structuredClone(sourceJson('law/policy/round-close-controls.json'));
   policy.policy_id = 'remediation-1-fixture';
@@ -254,6 +258,7 @@ function buildFixture(bound = true, register = true): Fixture {
       orchestrator: `work/rounds/${ROUND}/prompts/00-orchestrator.md`,
       affected_test_graph: `work/rounds/${ROUND}/affected-test-graph.json`,
       obligations: `work/rounds/${ROUND}/review-obligations.json`,
+      obligation_baseline: `work/rounds/${ROUND}/review-obligation-baseline.json`,
       current_claims: `work/rounds/${ROUND}/current-claims.json`,
       control_provenance: `work/rounds/${ROUND}/control-provenance.json`,
       additional_controls: ['product/owner-mandates/OM-900.md'],
@@ -365,6 +370,23 @@ function buildFixture(bound = true, register = true): Fixture {
       },
     ],
   });
+  putJson(root, `work/rounds/${ROUND}/review-obligation-baseline.json`, {
+    schemaVersion: '1.0.0',
+    round: ROUND,
+    authority_decision: 'DII-900',
+    derivation: 'independent-policy-baseline',
+    obligation_ids: ['R9000-P0-IDENTITY'],
+    normative_source_paths: [`work/rounds/${ROUND}/plan.md`],
+    required_checks: [
+      'exact-source-population',
+      'exact-obligation-population',
+      'unique-source-paths',
+      'unique-obligation-identities',
+      'source-byte-digests',
+      'every-source-mapped',
+      'every-obligation-mapped',
+    ],
+  });
   putJson(root, `work/rounds/${ROUND}/prior-finding-registry.json`, {
     schemaVersion: '1.0.0',
     round: ROUND,
@@ -418,7 +440,19 @@ function buildFixture(bound = true, register = true): Fixture {
       },
     ],
   });
-  put(root, 'fixture/gate.mjs', 'process.stdout.write("PASS\\n");\n');
+  put(
+    root,
+    'fixture/gate.mjs',
+    `import { appendFileSync, existsSync, readFileSync } from 'node:fs';
+const gate = process.argv[2] ?? '';
+appendFileSync('fixture/gate-log.txt', \`${'${gate}'}\\n\`);
+const fail = existsSync('fixture/fail-gate.txt')
+  ? readFileSync('fixture/fail-gate.txt', 'utf8').trim()
+  : '';
+if (gate === fail) process.exitCode = 19;
+else process.stdout.write('PASS\\n');
+`,
+  );
   put(root, 'fixture/claim.mjs', 'process.stdout.write(JSON.stringify({count: 1}));\n');
   put(root, 'package.json', '{"name":"fixture","private":true}\n');
   put(root, 'packages/a/src/index.ts', 'export const a = 1;\n');
@@ -2607,5 +2641,300 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       validates(current.root, 'law/schemas/candidate-manifest.schema.json', candidateManifest),
     ).toBe(true);
     expect(candidateManifest.convergence_digest).toBe(convergence.convergence_digest_sha256);
+  });
+
+  describe('OM-016 Review Run 1 complete-class executable adversaries', () => {
+    const authoritativeGateIds = (
+      (sourceJson('law/policy/round-close-controls.json').convergence as Record<string, unknown>)
+        .commands as Array<{ id: string }>
+    ).map(({ id }) => id);
+
+    it.each(authoritativeGateIds)(
+      'R2-F001 retains all sixteen dispositions when %s fails',
+      (failedGate) => {
+        const current = buildFixture(true);
+        put(current.root, 'fixture/fail-gate.txt', `${failedGate}\n`);
+        const result = run(current, 'smart-converge', [
+          '--base',
+          current.base,
+          '--head',
+          git(current.root, ['rev-parse', 'HEAD']),
+        ]);
+        expect(result.status).toBe(1);
+        const observed = readFileSync(join(current.root, 'fixture/gate-log.txt'), 'utf8')
+          .trim()
+          .split('\n')
+          .filter((id) => authoritativeGateIds.includes(id));
+        expect(observed).toEqual(authoritativeGateIds);
+        expectCode(result, 'CONVERGENCE_GATE_FAILED');
+      },
+    );
+
+    it('R2-F002 rejects a coordinated nonempty but false command closure', () => {
+      const current = buildFixture(true);
+      const graphPath = `work/rounds/${ROUND}/affected-test-graph.json`;
+      const graph = readJson(current.root, graphPath);
+      const closures = graph.command_closure as Array<Record<string, unknown>>;
+      const target = required(closures[0], 'fixture closure population is empty');
+      target.scripts = ['fixture:plausible-but-false'];
+      target.programs = ['node'];
+      putJson(current.root, graphPath, graph);
+      commit(current.root, 'forge declared command closure');
+      expectCode(
+        run(current, 'policy-check', ['--phase', 'pre-entry-preparation']),
+        'GATE_COMMAND_CLOSURE_DERIVATION_INVALID',
+      );
+    });
+
+    it('R2-F002 binds history-sensitive freshness to an identical-tree successor commit', () => {
+      const current = fixture(true);
+      git(current.root, [
+        '-c',
+        'user.name=DEVAI Fixture',
+        '-c',
+        'user.email=fixture@example.test',
+        'commit',
+        '--allow-empty',
+        '-qm',
+        'history-only successor',
+      ]);
+      const candidate = git(current.root, ['rev-parse', 'HEAD']);
+      const converged = run(current, 'smart-converge', [
+        '--base',
+        current.base,
+        '--head',
+        candidate,
+      ]);
+      expect(converged.status, JSON.stringify(converged.value, null, 2)).toBe(0);
+      const proof = readJson(current.root, `${STATE}/convergence-evidence.json`);
+      const firstPass = required(
+        (proof.passes as Array<Record<string, unknown>>)[0],
+        'convergence pass 1 is absent',
+      );
+      const trace = required(
+        (firstPass.gate_results as Array<Record<string, unknown>>).find(
+          ({ gate_id }) => gate_id === 'trace',
+        ),
+        'trace result is absent',
+      );
+      expect(trace.outcome).toBe('EXECUTED_PASS');
+    });
+
+    it('R2-F003 widens an unknown tracked asset to both full suite and whole coverage', () => {
+      const current = buildFixture(true);
+      put(current.root, 'assets/opaque.runtime', 'opaque runtime asset\n');
+      const candidate = commit(current.root, 'add unknown runtime asset');
+      const planned = run(current, 'impact-plan', ['--base', current.base, '--head', candidate]);
+      expect(planned.status, JSON.stringify(planned.value, null, 2)).toBe(0);
+      const selected = new Map(
+        (planned.value.nodes as Array<Record<string, unknown>>)
+          .filter(({ outcome }) => outcome !== 'BLOCKED')
+          .map((node) => [node.node_id, node]),
+      );
+      expect([...selected.keys()]).toEqual(expect.arrayContaining(['full-suite', 'full-coverage']));
+      expect(selected.get('full-suite')?.reason_codes).toContain('UNKNOWN_DEPENDENCY');
+      expect(selected.get('full-coverage')?.reason_codes).toContain('UNKNOWN_DEPENDENCY');
+    });
+
+    it.each([
+      ['alias-call', 'const load = require; load(name);\n'],
+      ['global-wrapper', 'globalThis.require(name);\n'],
+      ['optional-call', 'require?.(name);\n'],
+      ['reflect-apply', 'Reflect.apply(require, null, [name]);\n'],
+      ['bound-module', 'const load = module.require.bind(module); load(name);\n'],
+      ['computed-wrapper', "module['require'](name);\n"],
+    ])('R2-F003 detects unresolved loader family %s', (_kind, body) => {
+      const current = buildFixture(true);
+      put(current.root, 'packages/a/src/loader.ts', body);
+      const candidate = commit(current.root, 'add unresolved loader adversary');
+      const planned = run(current, 'impact-plan', ['--base', current.base, '--head', candidate]);
+      const fullSuite = (planned.value.nodes as Array<Record<string, unknown>>).find(
+        ({ node_id }) => node_id === 'full-suite',
+      );
+      const coverage = (planned.value.nodes as Array<Record<string, unknown>>).find(
+        ({ node_id }) => node_id === 'full-coverage',
+      );
+      expect(fullSuite?.reason_codes).toContain('DYNAMIC_DEPENDENCY_AMBIGUOUS');
+      expect(coverage?.reason_codes).toContain('DYNAMIC_DEPENDENCY_AMBIGUOUS');
+    });
+
+    it('R2-F004 refuses scope and transport self-references before emitting scope', () => {
+      const current = buildFixture(true);
+      const registryPath = `work/rounds/${ROUND}/review-obligations.json`;
+      const registry = readJson(current.root, registryPath);
+      const obligation = required(
+        (registry.obligations as Array<Record<string, unknown>>)[0],
+        'fixture obligation registry is empty',
+      );
+      obligation.required_evidence = [
+        ...(obligation.required_evidence as string[]),
+        'review-scope',
+        'review-transport',
+      ];
+      putJson(current.root, registryPath, registry);
+      const candidate = commit(current.root, 'add causally impossible review evidence');
+      const frozen = freeze(current, candidate);
+      const result = scope(current, frozen);
+      expectCode(result, 'UNRESOLVED_TOPIC_EVIDENCE');
+      expect(existsSync(join(current.root, `${STATE}/review-scope-manifest.json`))).toBe(false);
+    });
+
+    it('R2-F004 computes role-path evidence from commit, author, paths, classification, and verdict', () => {
+      const production = readFileSync(SCRIPT, 'utf8');
+      expect(production).toContain('rolePathEvidenceV7');
+      for (const field of [
+        'commit_sha',
+        'author_name',
+        'author_email',
+        'paths',
+        'classification',
+        'verdict',
+      ])
+        expect(production, field).toContain(field);
+    });
+
+    it('R2-F005 records a cycle-2 transport terminal with cycle 2 and an exact predecessor chain', () => {
+      const current = fixture(true);
+      const cycleTwo = enterCycleTwo(current);
+      put(current.root, 'fixture/cycle2-malformed.jsonl', '{');
+      const args = [
+        '--candidate',
+        cycleTwo.second.candidate,
+        '--cycle',
+        '2',
+        '--review-result',
+        'fixture/cycle2-malformed.jsonl',
+      ];
+      expect(run(current, 'review-check', args).status).toBe(1);
+      expectCode(run(current, 'review-check', args), 'REVIEW_TRANSPORT_BLOCKED');
+      const state = readJson(current.root, `${STATE}/review-state.json`);
+      const terminal = required(
+        (state.transition_history as Array<Record<string, unknown>>).at(-1),
+        'terminal transition is absent',
+      );
+      expect(state).toMatchObject({ state: 'REVIEW_TRANSPORT_BLOCKED', cycle: 2 });
+      expect(terminal).toMatchObject({
+        from: 'CYCLE_2_ACTIVE',
+        to: 'REVIEW_TRANSPORT_BLOCKED',
+        cycle: 2,
+      });
+      expect(run(current, 'status').value).toMatchObject({
+        state: 'REVIEW_TRANSPORT_BLOCKED',
+        substantive_cycles: { used: 2, maximum: 2 },
+      });
+    });
+
+    it('R2-F005 authenticates persisted predecessors from exact artifact bytes', () => {
+      const production = readFileSync(SCRIPT, 'utf8');
+      expect(production).toContain('persistedReviewArtifactDigestV7');
+      expect(production).toContain('previous_state_artifact_digest');
+      expect(production).toContain('previous_transition_artifact_digest');
+    });
+
+    it('R2-F006 rejects a decision dependency discoverable from the register but omitted from provenance', () => {
+      const current = buildFixture(true);
+      put(
+        current.root,
+        'law/register/DECISIONS.md',
+        `# Fixture decisions\n\n### DII-899 — Independent dependency\n\`type: decision · status: active · authority: Architect · provenance: session-draft fixture\`\n\n### DII-900 — Fixture root\n\`type: decision · status: active · authority: Architect · provenance: session-draft fixture; DII-899\`\n`,
+      );
+      commit(current.root, 'declare independent transitive decision');
+      expectCode(
+        run(current, 'policy-check', ['--phase', 'pre-entry-preparation']),
+        'ACTIVE_CONTROL_CENSUS_DECLARATION_MISMATCH',
+      );
+    });
+
+    it('R2-F006 rejects duplicate decision IDs before map construction', () => {
+      const current = buildFixture(true);
+      const path = `work/rounds/${ROUND}/control-provenance.json`;
+      const provenance = readJson(current.root, path);
+      provenance.decisions = [
+        { decision_id: 'DII-900', status: 'active', depends_on: [] },
+        { decision_id: 'DII-900', status: 'active', depends_on: ['DII-899'] },
+      ];
+      putJson(current.root, path, provenance);
+      commit(current.root, 'duplicate decision ID before map');
+      expectCode(
+        run(current, 'policy-check', ['--phase', 'pre-entry-preparation']),
+        'ACTIVE_CONTROL_CENSUS_DUPLICATE_ID',
+      );
+    });
+
+    it('R2-F007 ignores dirty tracked profile substitution during preparation authority resolution', () => {
+      const current = fixture(true);
+      const profilePath = `work/rounds/${ROUND}/close-control-profile.json`;
+      const profile = readJson(current.root, profilePath);
+      const reviewer = profile.reviewer as Record<string, unknown>;
+      reviewer.model_selector = 'dirty-uncommitted-substitution';
+      putJson(current.root, profilePath, profile);
+      const checked = run(current, 'policy-check', ['--phase', 'pre-entry-preparation']);
+      expect(checked.status, JSON.stringify(checked.value, null, 2)).toBe(0);
+      expect(checked.value.entry_ready).toBe(true);
+    });
+
+    it('R2-F007 rejects symbolic candidate identity at the authoritative review boundary', () => {
+      const current = fixture(true);
+      const checked = run(current, 'review-scope', [
+        '--base',
+        current.base,
+        '--candidate',
+        'HEAD',
+        '--cycle',
+        '1',
+      ]);
+      expectCode(checked, 'REVIEWER_BINDING_CANDIDATE_REQUIRED');
+    });
+
+    it('R2-F008 rejects coordinated registry and provenance deletion against the independent baseline', () => {
+      const current = buildFixture(true);
+      const registryPath = `work/rounds/${ROUND}/review-obligations.json`;
+      const baselinePath = `work/rounds/${ROUND}/review-obligation-baseline.json`;
+      const provenancePath = `work/rounds/${ROUND}/control-provenance.json`;
+      const authorizationPath = `work/rounds/${ROUND}/AUTHORIZATION.md`;
+      const registry = readJson(current.root, registryPath);
+      (registry.obligations as Array<Record<string, unknown>>).push({
+        obligation_id: 'R9000-P1-AUTHORIZATION',
+        claim: 'Authorization remains independently accounted.',
+        risk: 'P1',
+        source_refs: [authorizationPath],
+        governing_paths: [authorizationPath],
+        required_evidence: [authorizationPath],
+        required_adversaries: ['coordinated deletion'],
+        reuse_policy: 'digest-and-evidence-recheck',
+        finding_classes: ['R2-F008'],
+      });
+      (registry.normative_sources as Array<Record<string, unknown>>).push({
+        path: authorizationPath,
+        source_digest_sha256: digestBytes(readFileSync(join(current.root, authorizationPath))),
+        obligation_ids: ['R9000-P1-AUTHORIZATION'],
+      });
+      putJson(current.root, registryPath, registry);
+      const baseline = readJson(current.root, baselinePath);
+      (baseline.obligation_ids as string[]).push('R9000-P1-AUTHORIZATION');
+      (baseline.normative_source_paths as string[]).push(authorizationPath);
+      putJson(current.root, baselinePath, baseline);
+      const provenance = readJson(current.root, provenancePath);
+      (provenance.normative_source_roots as string[]).push(authorizationPath);
+      putJson(current.root, provenancePath, provenance);
+      commit(current.root, 'establish independent obligation population');
+
+      registry.obligations = (registry.obligations as Array<Record<string, unknown>>).filter(
+        ({ obligation_id }) => obligation_id !== 'R9000-P1-AUTHORIZATION',
+      );
+      registry.normative_sources = (
+        registry.normative_sources as Array<Record<string, unknown>>
+      ).filter(({ path }) => path !== authorizationPath);
+      putJson(current.root, registryPath, registry);
+      provenance.normative_source_roots = (provenance.normative_source_roots as string[]).filter(
+        (path) => path !== authorizationPath,
+      );
+      putJson(current.root, provenancePath, provenance);
+      commit(current.root, 'coordinate deletion across self-declared populations');
+      expectCode(
+        run(current, 'policy-check', ['--phase', 'pre-entry-preparation']),
+        'SEMANTIC_OBLIGATION_BASELINE_MISMATCH',
+      );
+    });
   });
 });
