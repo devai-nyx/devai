@@ -1946,17 +1946,8 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       const candidate = commit(current.root, 'declare unresolved review evidence');
       const frozen = freeze(current, candidate);
       const scoped = scope(current, frozen);
-      expect(scoped.status).toBe(0);
-      const topic = required(
-        (
-          (scoped.value.manifest as Record<string, unknown>).topics as Array<
-            Record<string, unknown>
-          >
-        ).find((entry) => entry.topic_id === 'obligation:r9000-p0-identity'),
-        'fixture identity obligation topic is absent',
-      );
-      expect(topic.allowed_dispositions).not.toContain('REUSED_FRESH_PASS');
-      expect((topic.freshness_proof as Record<string, unknown>).method).toBe('recheck-required');
+      expectCode(scoped, 'UNRESOLVED_TOPIC_EVIDENCE');
+      expect(existsSync(join(current.root, `${STATE}/review-scope-manifest.json`))).toBe(false);
     });
 
     it.each([
