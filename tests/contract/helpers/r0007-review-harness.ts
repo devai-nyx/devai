@@ -16,7 +16,9 @@ import { dirname, join, resolve } from 'node:path';
 import Ajv2020 from 'ajv/dist/2020.js';
 import { expect } from 'vitest';
 
-export const ROOT = resolve(import.meta.dirname, '../..');
+// This module lives at tests/contract/helpers, one level deeper than the contract files
+// it was extracted from, so the repository root is three levels up rather than two.
+export const ROOT = resolve(import.meta.dirname, '../../..');
 export const SCRIPT = join(ROOT, 'scripts/run-round-close-controls.mjs');
 export const ROUND = 'R-9000';
 export const STATE = `.devai/state/round-runs/${ROUND}/close`;
