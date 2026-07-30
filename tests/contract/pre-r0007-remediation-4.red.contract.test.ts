@@ -492,7 +492,11 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         profile.sources.remediation_closure_matrix,
       );
       const surfaces = [...new Set(matrix.classes.flatMap((c) => c.implementation_surfaces))];
-      const base = 'ff5c80574ee7fc670046bfec990fadedf3d89ce4';
+      // Scope is this repair only. The campaign base ff5c805 precedes the failed
+      // remediation whose implementation commits are ancestors of this red evidence;
+      // the rule binds the NEW implementation commits, which start after the candidate
+      // that Review Run 1 rejected.
+      const base = '25d0c17d84eff057817ab5849912f77b86a4f311';
       const offenders: string[] = [];
       for (const surface of surfaces) {
         const touching = git(ROOT, ['log', '--format=%H', `${base}..HEAD`, '--', surface])
