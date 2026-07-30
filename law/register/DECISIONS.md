@@ -4716,6 +4716,62 @@ machinery reviews under OM-016. It does not silently select the governed R-0007 
 model, weaken entry, manufacture PASS, alter R-0006, deploy, publish, promote evidence,
 or mutate the predecessor.
 
+### DII-250 — Rebuild close-control proof from independently derived populations
+`type: decision · status: active · authority: Architect · provenance: session-draft remediation campaign 2 Review Run 1 failure at 45e38de5a6dc615cd4d986e3144029a5d3407715; OM-016; DII-246; DII-247; DII-248; DII-249`
+
+Review Run 1 proved that internally consistent declarations are not proof of complete
+populations. The one OM-016 repair phase therefore reopens R2-F001 through R2-F008 and
+binds them to independently derived runtime checks.
+
+Authoritative convergence records all sixteen ordered gate dispositions even after a
+failure. A red gate prevents freeze but never truncates the later accounting
+population. Executable Inspector adversaries inject failure at every ordinal.
+
+Gate command closure is computed recursively from the policy argv, root and workspace
+package scripts, executable invocations, TypeScript project references, and generated
+outputs. Hand-authored nonempty script/program arrays have no evidentiary standing.
+Freshness identity binds the literal candidate commit, tree, every tree entry's path,
+mode, type and raw blob, history identity for history-sensitive gates, dependency
+results, complete environment and toolchain manifests, and every declared output,
+including ignored `dist` and build-info files. Cache reuse compares the producing
+candidate and every identity field.
+
+Impact classification starts from every candidate and preimage path. The complete
+runtime/test asset population includes the actual skills fixture tree. Every unknown
+path or unresolved computed-loader family selects both the full suite and whole
+coverage. Loader discovery covers aliases, calls/applications, computed properties,
+global/module wrappers, and deleted or renamed preimages conservatively.
+
+Review topics consume only causally prior immutable evidence. Scope and transport do
+not prove their own creation. Unresolved evidence fails scope generation. Role/path
+evidence binds the exact commit, author, paths, classification and verdict population.
+
+State validation reauthenticates the exact persisted predecessor artifact and every
+transition, transport, result and repair field. Cycle semantics come from the declared
+edge. Emission and validation use the same exact predecessor digest. Every one of the
+twelve edges, attempts zero through two, and all three terminals receive executable
+mutation coverage.
+
+The active-control census derives its decision graph from the exact register beginning
+at DII-250 and derives applicable Owner mandates transitively from exact source
+references. Duplicate IDs are rejected before map construction. Profile sources,
+round authority, policy schemas, prior evidence and normative sources are independently
+enumerated and compared with, rather than defined by, the provenance declaration.
+
+Reviewer binding loads policy, profile and linked authority from the literal 40-hex
+candidate object. Symbolic or abbreviated revisions are rejected at authoritative
+boundaries. Preparation policy and status may resolve `HEAD` once before entering that
+boundary; mutable tracked worktree bytes never participate.
+
+The obligation registry is compared with the separate per-round obligation baseline.
+That baseline fixes the complete normative-source and obligation-ID populations outside
+the registry being checked. Any deletion, addition, duplicate, coordinated registry
+edit, unresolved source, or byte drift fails before topic generation.
+
+This decision authorizes only the complete repair and final Review Run 2 allowed by
+OM-016. It does not start R-0007, bind its governed reviewer, alter R-0006, deploy,
+publish, promote evidence, or mutate the predecessor.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

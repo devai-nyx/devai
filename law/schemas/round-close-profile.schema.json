@@ -79,6 +79,7 @@
         "orchestrator": { "$ref": "#/$defs/relativePath" },
         "affected_test_graph": { "$ref": "#/$defs/relativePath" },
         "obligations": { "$ref": "#/$defs/relativePath" },
+        "obligation_baseline": { "$ref": "#/$defs/relativePath" },
         "current_claims": { "$ref": "#/$defs/relativePath" },
         "control_provenance": { "$ref": "#/$defs/relativePath" },
         "remediation_closure_matrix": { "$ref": "#/$defs/relativePath" },
@@ -200,6 +201,7 @@
         "orchestrator": "work/rounds/R-9999/prompts/00-orchestrator.md",
         "affected_test_graph": "work/rounds/R-9999/affected-test-graph.json",
         "obligations": "work/rounds/R-9999/review-obligations.json",
+        "obligation_baseline": "work/rounds/R-9999/review-obligation-baseline.json",
         "current_claims": "work/rounds/R-9999/current-claims.json"
       },
       "runtime": {

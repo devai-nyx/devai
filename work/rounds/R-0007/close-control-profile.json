@@ -15,6 +15,7 @@
     "orchestrator": "work/rounds/R-0007/prompts/00-orchestrator.md",
     "affected_test_graph": "work/rounds/R-0007/affected-test-graph.json",
     "obligations": "work/rounds/R-0007/review-obligations.json",
+    "obligation_baseline": "work/rounds/R-0007/review-obligation-baseline.json",
     "current_claims": "work/rounds/R-0007/current-claims.json",
     "control_provenance": "work/rounds/R-0007/control-provenance.json",
     "remediation_closure_matrix": "work/rounds/R-0007/remediation-2-closure-matrix.json",

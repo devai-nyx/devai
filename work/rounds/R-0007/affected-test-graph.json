@@ -185,9 +185,10 @@
         "packages/skills/src/**/*.ts",
         "packages/skills/scripts/**/*.ts",
         "packages/skills/tests/**/*.ts",
+        "packages/skills/test-fixtures/**",
         "packages/{authority,loop,schemas,sensors,spec,utils}/src/**/*.ts",
         "packages/skills/prompts/**",
-        "packages/skills/test-fixtures/**"
+        "packages/skills/tests/contract/fixtures/**"
       ],
       "depends_on": [
         "authority-tests",
@@ -316,6 +317,12 @@
     "selector_population": "union-of-preimage-and-postimage",
     "review_topics": "exactly-once-per-path-linked-by-change-record"
   },
+  "freshness_identity": {
+    "candidate": "literal-commit-and-tree",
+    "tree_entries": "path-mode-type-object-and-raw-blob",
+    "history_sensitive_gates": "bind-commit-history-and-range",
+    "outputs": "declared-complete-including-ignored"
+  },
   "gate_freshness_profiles": [
     {
       "gate_id": "formatting",
@@ -354,8 +361,8 @@
         "packages/cli/src/generated/action-registry.ts",
         "packages/effects-check/src/generated/action-catalog.ts",
         "packages/sensors/src/generated/action-kinds.ts",
-        "packages/schemas/dist/**",
-        "packages/cli/dist/**"
+        "packages/*/dist/**",
+        "packages/*/tsconfig.tsbuildinfo"
       ],
       "universal_input_proof": "tracked-candidate-tree",
       "output_observation": "declared-plus-observed"
@@ -495,8 +502,8 @@
         "packages/cli/src/generated/action-registry.ts",
         "packages/effects-check/src/generated/action-catalog.ts",
         "packages/sensors/src/generated/action-kinds.ts",
-        "packages/schemas/dist/**",
-        "packages/cli/dist/**",
+        "packages/*/dist/**",
+        "packages/*/tsconfig.tsbuildinfo",
         "law/trace.json",
         "work/rounds/R-0002/repository-reference-triage.json"
       ],
@@ -524,7 +531,7 @@
       "toolchain_probe_ids": ["node", "pnpm", "vitest", "typescript", "prettier", "eslint", "git"],
       "environment_input_ids": ["__ALL_ENVIRONMENT__"],
       "output_contract": "digest-required",
-      "required_outputs": ["packages/schemas/dist/**", "packages/cli/dist/**"],
+      "required_outputs": ["packages/*/dist/**", "packages/*/tsconfig.tsbuildinfo"],
       "universal_input_proof": "tracked-candidate-tree",
       "output_observation": "declared-plus-observed"
     },
@@ -671,8 +678,8 @@
         "packages/cli/src/generated/action-registry.ts",
         "packages/effects-check/src/generated/action-catalog.ts",
         "packages/sensors/src/generated/action-kinds.ts",
-        "packages/schemas/dist/**",
-        "packages/cli/dist/**"
+        "packages/*/dist/**",
+        "packages/*/tsconfig.tsbuildinfo"
       ],
       "universal_input_proof": "tracked-candidate-tree",
       "output_observation": "declared-plus-observed"
@@ -805,46 +812,55 @@
   "command_closure": [
     {
       "gate_id": "formatting",
+      "derivation": "recursive-policy-command-v1",
       "scripts": ["direct:prettier-check"],
       "programs": ["pnpm", "prettier"]
     },
     {
       "gate_id": "preparation",
+      "derivation": "recursive-policy-command-v1",
       "scripts": ["devai:prepare", "@devai-nyx/schemas:build", "@devai-nyx/cli:build"],
       "programs": ["node", "pnpm", "tsc"]
     },
     {
       "gate_id": "action-registry",
+      "derivation": "recursive-policy-command-v1",
       "scripts": ["action-registry:check"],
       "programs": ["node", "pnpm"]
     },
     {
       "gate_id": "trace",
+      "derivation": "recursive-policy-command-v1",
       "scripts": ["trace:check"],
-      "programs": ["node", "pnpm"]
+      "programs": ["git", "node", "pnpm"]
     },
     {
       "gate_id": "repository-references",
+      "derivation": "recursive-policy-command-v1",
       "scripts": ["repository-reference:check"],
-      "programs": ["node", "pnpm"]
+      "programs": ["git", "node", "pnpm"]
     },
     {
       "gate_id": "materializations",
-      "scripts": ["round-close:policy"],
-      "programs": ["node", "pnpm"]
+      "derivation": "recursive-policy-command-v1",
+      "scripts": ["direct:round-close-policy"],
+      "programs": ["node"]
     },
     {
       "gate_id": "diff-check",
+      "derivation": "recursive-policy-command-v1",
       "scripts": ["direct:git-diff-check"],
       "programs": ["git"]
     },
     {
       "gate_id": "ordinary",
+      "derivation": "recursive-policy-command-v1",
       "scripts": ["direct:vitest-run"],
       "programs": ["pnpm", "vitest"]
     },
     {
       "gate_id": "stage1",
+      "derivation": "recursive-policy-command-v1",
       "scripts": [
         "ci:stage1",
         "ci:workflows",
@@ -853,44 +869,68 @@
         "repository-reference:check",
         "lint",
         "typecheck",
-        "devai:prepare"
+        "devai:prepare",
+        "@devai-nyx/schemas:build",
+        "@devai-nyx/cli:build"
       ],
-      "programs": ["node", "pnpm", "tsc"]
+      "programs": ["git", "node", "pnpm", "tsc"]
     },
     {
       "gate_id": "stage2",
-      "scripts": ["ci:stage2", "build", "test:t1", "test:t2", "devai:prepare"],
-      "programs": ["node", "pnpm", "vitest", "tsc"]
+      "derivation": "recursive-policy-command-v1",
+      "scripts": [
+        "ci:stage2",
+        "build",
+        "test:t1",
+        "test:t2",
+        "devai:prepare",
+        "@devai-nyx/schemas:build",
+        "@devai-nyx/cli:build"
+      ],
+      "programs": ["node", "pnpm", "tsc", "vitest"]
     },
     {
       "gate_id": "t4",
+      "derivation": "recursive-policy-command-v1",
       "scripts": ["test:t4"],
       "programs": ["pnpm", "vitest"]
     },
     {
       "gate_id": "t5",
+      "derivation": "recursive-policy-command-v1",
       "scripts": ["test:t5"],
       "programs": ["pnpm", "vitest"]
     },
     {
       "gate_id": "t6",
+      "derivation": "recursive-policy-command-v1",
       "scripts": ["test:t6"],
       "programs": ["pnpm", "vitest"]
     },
     {
       "gate_id": "changesets",
+      "derivation": "recursive-policy-command-v1",
       "scripts": ["ci:changesets"],
       "programs": ["node", "pnpm"]
     },
     {
       "gate_id": "coverage",
+      "derivation": "recursive-policy-command-v1",
       "scripts": ["test:coverage:t1-t3"],
       "programs": ["pnpm", "vitest"]
     },
     {
       "gate_id": "governance",
-      "scripts": ["ci:governance", "ci:sequencing", "ci:sha-references", "devai:prepare"],
-      "programs": ["node", "pnpm", "tsc"]
+      "derivation": "recursive-policy-command-v1",
+      "scripts": [
+        "ci:governance",
+        "ci:sequencing",
+        "ci:sha-references",
+        "devai:prepare",
+        "@devai-nyx/schemas:build",
+        "@devai-nyx/cli:build"
+      ],
+      "programs": ["git", "node", "pnpm", "tsc"]
     }
   ]
 }
