@@ -22,7 +22,6 @@ const SCRIPT = join(ROOT, 'scripts/run-round-close-controls.mjs');
 const TEST_PATH = 'tests/contract/pre-r0007-remediation-3.red.contract.test.ts';
 const MATRIX_PATH = 'work/rounds/R-0007/remediation-3-closure-matrix.json';
 const POLICY_PATH = 'law/policy/round-close-controls.json';
-const GRAPH_PATH = 'work/rounds/R-0007/affected-test-graph.json';
 const roots: string[] = [];
 
 interface CommandResult {
