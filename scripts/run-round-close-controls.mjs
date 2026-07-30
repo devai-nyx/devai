@@ -5985,7 +5985,46 @@ function deriveControlProvenanceV6(context, candidate, findings) {
       finding('ACTIVE_CONTROL_CENSUS_EXTRA', 'provenance declares unreachable decision rows'),
     );
 
-  for (const mandate of provenance.owner_mandates ?? []) {
+  const referencedMandateIds = new Set();
+  const collectMandateReferences = (value) => {
+    for (const match of value.matchAll(/\bOM-[0-9]+\b/gu)) referencedMandateIds.add(match[0]);
+  };
+  for (const decisionId of visited) {
+    const section = registerSections.get(decisionId);
+    if (section !== undefined) collectMandateReferences(section.split('\n')[1] ?? '');
+  }
+  for (const path of [
+    context.profile.sources.authorization,
+    context.profile.sources.plan,
+    context.profile.sources.orchestrator,
+  ])
+    if (typeof path === 'string') collectMandateReferences(candidateFile(repoRoot, candidate, path));
+  const mandateRows = provenance.owner_mandates ?? [];
+  const declaredMandateIds = mandateRows.map(({ mandate_id: mandateId }) => mandateId);
+  if (
+    new Set(declaredMandateIds).size !== declaredMandateIds.length ||
+    canonical([...declaredMandateIds].sort()) !== canonical([...referencedMandateIds].sort())
+  )
+    findings.push(
+      finding(
+        'ACTIVE_CONTROL_CENSUS_DECLARATION_MISMATCH',
+        'declared Owner mandates differ from exact-candidate transitive authority references',
+        {
+          declared: [...declaredMandateIds].sort(),
+          derived: [...referencedMandateIds].sort(),
+        },
+      ),
+    );
+
+  for (const mandate of mandateRows) {
+    if (mandate.path !== `product/owner-mandates/${mandate.mandate_id}.md`)
+      findings.push(
+        finding(
+          'ACTIVE_CONTROL_CENSUS_DECLARATION_MISMATCH',
+          'Owner mandate path differs from its exact conventional identity',
+          { mandate_id: mandate.mandate_id, path: mandate.path },
+        ),
+      );
     let container = null;
     try {
       container = parseMandateContainer(candidateFile(repoRoot, candidate, mandate.path));
