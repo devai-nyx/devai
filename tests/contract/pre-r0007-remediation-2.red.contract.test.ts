@@ -74,7 +74,12 @@ const obligations = json<{
 }>(OBLIGATIONS_PATH);
 const matrix = json<{ classes: ClosureClass[] }>(MATRIX_PATH);
 const controller = source();
-const thisSource = source('tests/contract/pre-r0007-remediation-2.red.contract.test.ts');
+const inspectorSources = [
+  'tests/contract/pre-r0007-remediation-1.red.contract.test.ts',
+  'tests/contract/pre-r0007-remediation-2.red.contract.test.ts',
+]
+  .map((path) => source(path))
+  .join('\n');
 
 describe('OM-016 / DII-249 remediation campaign 2 complete populations', () => {
   it('binds all eight findings to present exact Inspector IDs', () => {
@@ -90,7 +95,7 @@ describe('OM-016 / DII-249 remediation campaign 2 complete populations', () => {
     ]);
     const ids = matrix.classes.flatMap(({ test_ids }) => test_ids);
     expect(new Set(ids).size).toBe(ids.length);
-    for (const id of ids) expect(thisSource, id).toContain(id);
+    for (const id of ids) expect(inspectorSources, id).toContain(id);
   });
 
   describe('R2-F001 complete authoritative candidate gate', () => {
