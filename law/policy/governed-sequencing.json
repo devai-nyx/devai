@@ -724,6 +724,28 @@
         "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
         "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["850c8a8f2ccd0b46e1ed693bd58878c0bd9adcce"],
+      "law_commits": [
+        "12030b4193876556874ba3c230a451a3cddc1e77",
+        "49ab9117eb38fa44033bb87b07decc381e3cd3df",
+        "3ae14eb5abcdc7a861e98e51e6f205fd19e40c9e",
+        "c82d6d350cea854ff685a16b8855a1e0f1e7aa72"
+      ],
+      "red_evidence": {
+        "commit": "2dfe86b54c79dfe04780e607af4dac16ef000808",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-3.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json",
+        "evidence_sha256": "e38c287d2b66dab8f83b6fd8267507daa9e0f313a6b132cb5541f65c56871567",
+        "tests": ["tests/contract/pre-r0007-remediation-3.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [
