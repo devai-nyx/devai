@@ -123,11 +123,22 @@ export function v5GraphControls(gateIds: readonly string[]): Record<string, unkn
       universal_input_proof: 'tracked-candidate-tree',
       output_observation: 'declared-plus-observed',
     })),
+    // Fixture gates are `node fixture/gate.mjs <id>`, so the derivation yields one
+    // direct script, the node program, and fixture/gate.mjs as the scanned executable.
+    // The closure digest is declared explicitly: the controller now compares it under a
+    // generic capability rather than only for one profile decision id, so a fixture that
+    // omits it is genuinely incomplete.
     command_closure: gateIds.map((gate_id) => ({
       gate_id,
       derivation: 'recursive-policy-command-v1',
       scripts: [`direct:${gate_id}`],
       programs: ['node'],
+      closure_digest: digestCanonical({
+        scripts: [`direct:${gate_id}`],
+        programs: ['node'],
+        executables: ['fixture/gate.mjs'],
+        project_references: [],
+      }),
     })),
   };
 }
