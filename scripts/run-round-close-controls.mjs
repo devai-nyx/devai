@@ -3812,38 +3812,89 @@ function topologicalNodes(graph, findings) {
   return ordered;
 }
 
+/**
+ * Loader classification by binding flow rather than specimen matching.
+ *
+ * A file is ambiguous when it can reach a module loader through a value this analysis
+ * cannot prove constant. Identifiers are tainted from any initializer that names a
+ * loader, taint propagates transitively through further bindings, and a call of a
+ * tainted identifier, a call through a computed member, or a loader call with a
+ * non-literal argument all widen. Anything not proved safe widens; the cost of a false
+ * widen is a longer run, the cost of a false narrow is an untested change.
+ */
 function hasAmbiguousLoaderV6(source) {
-  if (
-    /\b(?:const|let|var)\s+[A-Za-z_$][\w$]*\s*=\s*(?:globalThis\.)?require\b/u.test(source) ||
-    /\b(?:const|let|var)\s*\{\s*require\s*:\s*[A-Za-z_$][\w$]*\s*\}\s*=\s*module\b/u.test(source) ||
-    /\(\s*0\s*,\s*(?:module\.)?require\s*\)\s*\(/u.test(source) ||
-    /\bglobalThis\.require\s*\(/u.test(source) ||
-    /\brequire\s*\?\.\s*\(/u.test(source) ||
-    /\bReflect\.apply\s*\(\s*(?:module\.)?require\b/u.test(source) ||
-    /\b(?:module\.)?require\.(?:apply|call|bind)\s*\(/u.test(source) ||
-    /\bmodule\s*\[\s*(?!['"]require['"])[^\]]+\]\s*\(/u.test(source) ||
-    /\b(?:module|globalThis)\s*\[\s*['"]require['"]\s*\]\s*\(/u.test(source)
-  )
-    return true;
-  const families = [
-    { label: 'import(', expression: /\bimport\s*\(([^)]*)\)/gu },
-    { label: 'require(', expression: /\brequire\s*\(([^)]*)\)/gu },
-    { label: 'require.resolve(', expression: /\brequire\.resolve\s*\(([^)]*)\)/gu },
-    { label: 'import.meta.resolve(', expression: /\bimport\.meta\.resolve\s*\(([^)]*)\)/gu },
-    { label: 'createRequire(', expression: /\bcreateRequire\s*\(([^)]*)\)/gu },
-    { label: 'module.require(', expression: /\bmodule\.require\s*\(([^)]*)\)/gu },
-  ];
-  if (/\beval\s*\(/u.test(source)) return true; // eval( is always ambiguous.
-  for (const { expression } of families) {
-    for (const match of source.matchAll(expression)) {
-      const argument = String(match[1] ?? '').trim();
-      const literal =
-        /^'(?:[^'\\]|\\.)*'$/u.test(argument) ||
-        /^"(?:[^"\\]|\\.)*"$/u.test(argument) ||
-        (/^`(?:[^`\\]|\\.)*`$/u.test(argument) && !argument.includes('${'));
-      if (!literal) return true;
+  if (/\beval\s*\(/u.test(source)) return true;
+
+  const literalArgument = (argument) => {
+    const value = String(argument ?? '').trim();
+    return (
+      /^'(?:[^'\\]|\\.)*'$/u.test(value) ||
+      /^"(?:[^"\\]|\\.)*"$/u.test(value) ||
+      (/^`(?:[^`\\]|\\.)*`$/u.test(value) && !value.includes('${'))
+    );
+  };
+
+  // A call through a computed member on any object cannot be proved constant here.
+  if (/[\w$)\]]\s*\[[^\]\n]+\]\s*\(/u.test(source)) return true;
+
+  // Seeds: an initializer that names a loader, however it is reached.
+  const loaderSeed =
+    /\brequire\b|\bcreateRequire\b|\bimport\s*\.\s*meta\s*\.\s*resolve\b|\bprocess\s*\.\s*mainModule\b|\[\s*['"](?:require|resolve|createRequire)['"]\s*\]/u;
+
+  const tainted = new Set();
+  const bindings = [];
+  for (const match of source.matchAll(/\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*([^;\n]+)/gu))
+    bindings.push({ name: match[1], initializer: match[2] });
+  // Destructured loader bindings, from any source object.
+  for (const match of source.matchAll(
+    /\b(?:const|let|var)\s*\{\s*(?:require|createRequire)\s*(?::\s*([A-Za-z_$][\w$]*)\s*)?\}\s*=\s*([^;\n]+)/gu,
+  ))
+    tainted.add(match[1] ?? 'require');
+
+  for (const { name, initializer } of bindings) if (loaderSeed.test(initializer)) tainted.add(name);
+
+  // Propagate transitively: a binding initialised from a tainted identifier is tainted.
+  for (let pass = 0; pass < bindings.length + 1; pass += 1) {
+    let changed = false;
+    for (const { name, initializer } of bindings) {
+      if (tainted.has(name)) continue;
+      for (const candidate of tainted)
+        if (new RegExp(`\\b${candidate}\\b`, 'u').test(initializer)) {
+          tainted.add(name);
+          changed = true;
+          break;
+        }
     }
+    if (!changed) break;
   }
+
+  // A call of any tainted identifier widens unless every argument is a literal.
+  for (const name of tainted) {
+    const call = new RegExp(`\\b${name}\\s*(?:\\?\\.)?\\s*\\(([^)]*)\\)`, 'gu');
+    for (const match of source.matchAll(call)) if (!literalArgument(match[1])) return true;
+    // Applied, bound or reflected invocation cannot be proved constant.
+    if (new RegExp(`\\b${name}\\s*\\.\\s*(?:apply|call|bind)\\s*\\(`, 'u').test(source))
+      return true;
+    if (new RegExp(`\\bReflect\\s*\\.\\s*apply\\s*\\(\\s*${name}\\b`, 'u').test(source))
+      return true;
+  }
+
+  // Direct loader forms, including the sequence-expression and optional-call spellings.
+  if (/\(\s*0\s*,\s*(?:[\w$]+\s*\.\s*)*require\s*\)\s*\(/u.test(source)) return true;
+  if (/\brequire\s*\?\.\s*\(/u.test(source)) return true;
+  if (/\bReflect\s*\.\s*apply\s*\(\s*(?:[\w$]+\s*\.\s*)*require\b/u.test(source)) return true;
+  if (/\b(?:[\w$]+\s*\.\s*)*require\s*\.\s*(?:apply|call|bind)\s*\(/u.test(source)) return true;
+
+  const families = [
+    /\bimport\s*\(([^)]*)\)/gu,
+    /(?:^|[^.\w$])require\s*\(([^)]*)\)/gu,
+    /\brequire\s*\.\s*resolve\s*\(([^)]*)\)/gu,
+    /\bimport\s*\.\s*meta\s*\.\s*resolve\s*\(([^)]*)\)/gu,
+    /\bcreateRequire\s*\(([^)]*)\)/gu,
+    /\b[\w$]+\s*\.\s*require\s*\(([^)]*)\)/gu,
+  ];
+  for (const expression of families)
+    for (const match of source.matchAll(expression)) if (!literalArgument(match[1])) return true;
   return false;
 }
 
