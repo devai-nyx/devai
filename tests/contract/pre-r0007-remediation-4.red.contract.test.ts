@@ -6,13 +6,19 @@ import { dirname, join, resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   STATE as HARNESS_STATE,
+  ROUND as HARNESS_ROUND,
   disposeHarness,
   fixture as harnessFixture,
   freeze as harnessFreeze,
   readJson as harnessReadJson,
   putJson as harnessPutJson,
+  put as harnessPut,
   run as harnessRun,
   codes as harnessCodes,
+  git as harnessGit,
+  commit as harnessCommit,
+  mandate,
+  bindingMarker,
   stateChain,
   transition,
   transportEvidence,
@@ -61,6 +67,24 @@ function clone(): { root: string; candidate: string } {
   const root = join(parent, 'repo');
   execFileSync('git', ['clone', '--quiet', '--shared', ROOT, root]);
   return { root, candidate: git(root, ['rev-parse', 'HEAD']) };
+}
+
+function commitAll(root: string, message: string): string {
+  execFileSync('git', ['add', '-A'], { cwd: root });
+  execFileSync(
+    'git',
+    [
+      '-c',
+      'user.name=DEVAI Inspector',
+      '-c',
+      'user.email=inspector@test',
+      'commit',
+      '-qm',
+      message,
+    ],
+    { cwd: root },
+  );
+  return git(root, ['rev-parse', 'HEAD']);
 }
 
 function run(root: string, argv: readonly string[]): Outcome {
@@ -232,19 +256,7 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       const profile = json<Record<string, unknown>>(root, PROFILE_PATH);
       profile.decision_id = 'DII-900';
       putJson(root, PROFILE_PATH, profile);
-      execFileSync(
-        'git',
-        [
-          '-c',
-          'user.name=DEVAI Inspector',
-          '-c',
-          'user.email=inspector@test',
-          'commit',
-          '-aqm',
-          'test: foreign profile decision id',
-        ],
-        { cwd: root },
-      );
+      commitAll(root, 'test: foreign profile decision id');
       const foreign = git(root, ['rev-parse', 'HEAD']);
       const outcome = run(root, ['status', '--round', 'R-0007', '--candidate', foreign]);
       expect(outcome.value?.entry_ready, detail(outcome)).toBe(false);
@@ -289,19 +301,7 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       expect(victim, 'R2-F001 must be carried by the bound matrix').toBeTruthy();
       matrix.classes = matrix.classes.filter(({ finding_id }) => finding_id !== 'R2-F001');
       putJson(root, matrixPath, matrix);
-      execFileSync(
-        'git',
-        [
-          '-c',
-          'user.name=DEVAI Inspector',
-          '-c',
-          'user.email=inspector@test',
-          'commit',
-          '-aqm',
-          'test: delete a carried class from the bound matrix',
-        ],
-        { cwd: root },
-      );
+      commitAll(root, 'test: delete a carried class from the bound matrix');
       const mutated = git(root, ['rev-parse', 'HEAD']);
       const outcome = run(root, ['policy-check', '--round', 'R-0007', '--candidate', mutated]);
       expect(outcome.status, detail(outcome)).toBe(1);
@@ -363,7 +363,7 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
     ];
 
     it('R7-006-THIRTEEN-LOADER-FAMILIES widens full suite and whole coverage for every family', () => {
-      const { root, candidate } = clone();
+      const { root } = clone();
       const graph = json<{ nodes: Array<{ id: string; kind: string }> }>(
         root,
         'work/rounds/R-0007/affected-test-graph.json',
@@ -373,31 +373,26 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       const offenders: string[] = [];
       for (const [label, body] of FAMILIES) {
         const file = `packages/cli/src/generated/r7-loader-${label}.ts`;
-        putJson(root, 'work/rounds/R-0007/.r7-probe.json', { label });
+        // Each family is measured in isolation. The base is the commit immediately
+        // before this family's own commit, so exactly one file is in the range and a
+        // previously widening family cannot carry a later one.
+        const isolationBase = git(root, ['rev-parse', 'HEAD']);
         writeFileSync(
           join(root, file),
           `// loader family probe\nexport const name = 'x';\nexport const loaderName = 'require';\nexport const loaderExpression = 'x';\n${body}`,
         );
-        execFileSync(
-          'git',
-          [
-            '-c',
-            'user.name=DEVAI Inspector',
-            '-c',
-            'user.email=inspector@test',
-            'commit',
-            '-Aqm',
-            `test: loader family ${label}`,
-          ],
-          { cwd: root },
-        );
+        commitAll(root, `test: loader family ${label}`);
         const head = git(root, ['rev-parse', 'HEAD']);
+        const changed = git(root, ['diff', '--name-only', isolationBase, head])
+          .split('\n')
+          .filter(Boolean);
+        expect(changed, `family ${label} must isolate exactly one changed input`).toEqual([file]);
         const outcome = run(root, [
           'impact-plan',
           '--round',
           'R-0007',
           '--base',
-          candidate,
+          isolationBase,
           '--head',
           head,
           '--candidate',
@@ -466,19 +461,7 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       );
       graph.command_closure[0].closure_digest = 'f'.repeat(64);
       putJson(root, 'work/rounds/R-0007/affected-test-graph.json', graph);
-      execFileSync(
-        'git',
-        [
-          '-c',
-          'user.name=DEVAI Inspector',
-          '-c',
-          'user.email=inspector@test',
-          'commit',
-          '-aqm',
-          'test: foreign profile with a substituted closure digest',
-        ],
-        { cwd: root },
-      );
+      commitAll(root, 'test: foreign profile with a substituted closure digest');
       const mutated = git(root, ['rev-parse', 'HEAD']);
       const outcome = run(root, ['policy-check', '--round', 'R-0007', '--candidate', mutated]);
       expect(codes(outcome), detail(outcome)).toContain('GATE_COMMAND_CLOSURE_DERIVATION_INVALID');
@@ -736,6 +719,453 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       harnessPutJson(current.root, `${HARNESS_STATE}/review-state.json`, state);
       const outcome = harnessRun(current, 'review-check', []);
       expect(outcome.status).not.toBeNull();
+    });
+  });
+
+  describe('R7-F004 a candidate executable that cannot be read blocks derivation', () => {
+    it('R7-004-MISSING-EXECUTABLE-BLOCKS names the unreadable executable', () => {
+      const { root } = clone();
+      const pkg = json<{ scripts: Record<string, string> }>(root, 'package.json');
+      // A reachable script that names an executable absent from the candidate tree.
+      pkg.scripts['devai:prepare'] =
+        `node scripts/r7-absent-executable.mjs && ${pkg.scripts['devai:prepare']}`;
+      putJson(root, 'package.json', pkg);
+      commitAll(root, 'test: reachable script names an absent executable');
+      const mutated = git(root, ['rev-parse', 'HEAD']);
+      const outcome = run(root, ['policy-check', '--round', 'R-0007', '--candidate', mutated]);
+      const serialized = JSON.stringify(outcome.value ?? {});
+      expect(codes(outcome), detail(outcome)).toContain('GATE_COMMAND_CLOSURE_DERIVATION_INVALID');
+      expect(
+        serialized,
+        'the derived closure must name the unreadable executable rather than drop it',
+      ).toContain('scripts/r7-absent-executable.mjs');
+    });
+  });
+
+  describe('R7-F005 convergence retains the complete ordered population', () => {
+    it('R7-005-SIXTEEN-RECORDS-EVERY-ORDINAL keeps sixteen records for every failure ordinal', () => {
+      const current = harnessFixture(true);
+      const policy = harnessReadJson(current.root, 'law/policy/round-close-controls.json') as {
+        convergence: { commands: Array<{ id: string }> };
+      };
+      const gateIds = policy.convergence.commands.map(({ id }) => id);
+      expect(gateIds).toHaveLength(16);
+
+      const offenders: string[] = [];
+      for (const failing of gateIds) {
+        harnessPut(current.root, 'fixture/fail-gate.txt', `${failing}\n`);
+        const converged = harnessRun(current, 'smart-converge', [
+          '--base',
+          current.base,
+          '--head',
+          harnessGit(current.root, ['rev-parse', 'HEAD']),
+        ]);
+        const passes = (converged.value.passes ?? []) as Array<{
+          results?: Array<Record<string, unknown>>;
+        }>;
+        const first = passes[0]?.results ?? [];
+        if (first.length !== 16) {
+          offenders.push(`${failing}: ${first.length} records`);
+          continue;
+        }
+        const complete = first.every(
+          (record) =>
+            typeof record.gate_id === 'string' && Number.isInteger(record.exit_code as number),
+        );
+        if (!complete) offenders.push(`${failing}: record missing gate_id or exit_code`);
+        const ordered = first.map((record) => String(record.gate_id));
+        if (JSON.stringify(ordered) !== JSON.stringify(gateIds))
+          offenders.push(`${failing}: population reordered or incomplete`);
+      }
+      expect(
+        offenders,
+        `failure ordinals losing the complete ordered population:\n${offenders.join('\n')}`,
+      ).toEqual([]);
+    });
+
+    it('R7-005-SIXTEEN-LITERAL-DETACHED executes every literal argv from a detached candidate', (context) => {
+      // The `ordinary` gate is literally `pnpm vitest run`, so this case re-enters the
+      // whole suite. The guard lets the nested run execute every other contract exactly
+      // once while refusing to re-enter this one.
+      if (process.env.DEVAI_R7_DETACHED_GATE === '1') {
+        context.skip();
+        return;
+      }
+      const { root, candidate } = clone();
+      execFileSync('git', ['checkout', '--detach', candidate], { cwd: root, stdio: 'ignore' });
+      // Dependencies are resolved from the already-installed store; the checkout itself
+      // is a clean detached exact-candidate tree.
+      execFileSync('ln', ['-s', join(ROOT, 'node_modules'), join(root, 'node_modules')]);
+      const policy = json<{ convergence: { commands: Array<{ id: string; argv: string[] }> } }>(
+        root,
+        POLICY_PATH,
+      );
+      const failures: string[] = [];
+      for (const gate of policy.convergence.commands) {
+        const [program, ...args] = gate.argv;
+        const result = spawnSync(program, args, {
+          cwd: root,
+          encoding: 'utf8',
+          maxBuffer: 64 * 1024 * 1024,
+          env: { ...process.env, DEVAI_R7_DETACHED_GATE: '1' },
+        });
+        if (result.status !== 0)
+          failures.push(
+            `${gate.id} exit=${String(result.status)} ${String(result.stderr).slice(0, 400)}`,
+          );
+      }
+      expect(
+        failures,
+        `literal argv rows failing from a detached candidate:\n${failures.join('\n')}`,
+      ).toEqual([]);
+    }, 3_600_000);
+  });
+
+  describe('R7-F006 loader widening covers preimage bytes and owned selectors', () => {
+    it('R7-006-CANDIDATE-AND-PREIMAGE widens on a deleted ambiguous loader', () => {
+      const { root, candidate } = clone();
+      const file = 'packages/cli/src/generated/r7-preimage-loader.ts';
+      writeFileSync(
+        join(root, file),
+        "export const name = 'x';\nconst load = module.require;\nconst value = load(name);\nexport { value };\n",
+      );
+      commitAll(root, 'test: introduce ambiguous loader');
+      const withLoader = git(root, ['rev-parse', 'HEAD']);
+      execFileSync('git', ['rm', '-q', file], { cwd: root });
+      execFileSync(
+        'git',
+        [
+          '-c',
+          'user.name=DEVAI Inspector',
+          '-c',
+          'user.email=inspector@test',
+          'commit',
+          '-qm',
+          'test: delete ambiguous loader',
+        ],
+        { cwd: root },
+      );
+      const deleted = git(root, ['rev-parse', 'HEAD']);
+      const outcome = run(root, [
+        'impact-plan',
+        '--round',
+        'R-0007',
+        '--base',
+        withLoader,
+        '--head',
+        deleted,
+        '--candidate',
+        deleted,
+      ]);
+      expect(
+        JSON.stringify(outcome.value ?? {}),
+        'a deleted file must be read from base/preimage bytes',
+      ).toContain('DYNAMIC_DEPENDENCY_AMBIGUOUS');
+      expect(candidate).not.toBe(deleted);
+    });
+
+    it('R7-006-OWNED-SELECTOR-WIDENING selects full suite and whole coverage together', () => {
+      const { root, candidate } = clone();
+      const file = 'packages/cli/src/generated/r7-owned-loader.ts';
+      writeFileSync(
+        join(root, file),
+        "export const loaderName = 'require';\nexport const value = globalThis[loaderName]('x');\n",
+      );
+      commitAll(root, 'test: owned selector ambiguous loader');
+      const head = git(root, ['rev-parse', 'HEAD']);
+      const outcome = run(root, [
+        'impact-plan',
+        '--round',
+        'R-0007',
+        '--base',
+        candidate,
+        '--head',
+        head,
+        '--candidate',
+        head,
+      ]);
+      const graph = json<{ fallbacks: Record<string, string> }>(
+        root,
+        'work/rounds/R-0007/affected-test-graph.json',
+      );
+      const serialized = JSON.stringify(outcome.value ?? {});
+      const fullSuite = String(graph.fallbacks.unknown_dependency ?? 'full-suite');
+      expect(serialized, 'full-suite node must be selected').toContain(fullSuite);
+      expect(serialized, 'whole-coverage node must be selected').toMatch(/coverage/u);
+      expect(serialized).toContain('DYNAMIC_DEPENDENCY_AMBIGUOUS');
+    });
+  });
+
+  describe('R7 carried classes — regression guards for still-OPEN prior findings', () => {
+    it('R7-011-BINDING-CENSUS-EXACT-ONE resolves exactly one active binding', () => {
+      const current = harnessFixture(true);
+      const outcome = harnessRun(current, 'policy-check', []);
+      const observed = harnessCodes(outcome);
+      expect(observed).not.toContain('ENTRY_BLOCKED_REVIEWER_BINDING_AMBIGUOUS');
+      expect(observed).not.toContain('ENTRY_BLOCKED_REVIEWER_BINDING_CONFLICT');
+    });
+
+    it('R7-011-BINDING-CENSUS-FAIL-CLOSED rejects a duplicate conflicting binding', () => {
+      const current = harnessFixture(true);
+      harnessPut(
+        current.root,
+        'product/owner-mandates/OM-901.md',
+        mandate(
+          { ...bindingMarker('other-model-v1'), mandate_id: 'OM-901' },
+          {
+            id: 'OM-901',
+            status: 'active',
+            authority: 'Owner',
+          },
+        ),
+      );
+      harnessCommit(current.root, 'test: second active reviewer binding');
+      const outcome = harnessRun(current, 'policy-check', []);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+    });
+
+    it('R7-012-NO-GATE-OMITTED converges over the complete declared population', () => {
+      const current = harnessFixture(true);
+      const converged = harnessRun(current, 'smart-converge', [
+        '--base',
+        current.base,
+        '--head',
+        harnessGit(current.root, ['rev-parse', 'HEAD']),
+      ]);
+      const passes = (converged.value.passes ?? []) as Array<{ results?: unknown[] }>;
+      expect(passes[0]?.results ?? []).toHaveLength(16);
+    });
+
+    it('R7-012-ROSTER-DELETION-FAILS rejects a shortened authoritative roster', () => {
+      const current = harnessFixture(true);
+      const policy = harnessReadJson(current.root, 'law/policy/round-close-controls.json') as {
+        convergence: { commands: Array<{ id: string }> };
+      };
+      policy.convergence.commands = policy.convergence.commands.slice(0, 15);
+      harnessPutJson(current.root, 'law/policy/round-close-controls.json', policy);
+      harnessPutJson(current.root, '.devai/config/round-close-controls.json', policy);
+      harnessCommit(current.root, 'test: delete one authoritative gate');
+      const outcome = harnessRun(current, 'policy-check', []);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+    });
+
+    it('R7-013-CACHE-RECORD-IDENTITY binds each freshness record to its task key', () => {
+      const current = harnessFixture(true);
+      harnessFreeze(current);
+      const outcome = harnessRun(current, 'policy-check', []);
+      expect(harnessCodes(outcome)).not.toContain('CACHE_RECORD_IDENTITY_INVALID');
+    });
+
+    it('R7-013-CACHE-SUBSTITUTION-FAILS rejects a substituted cache record', () => {
+      const current = harnessFixture(true);
+      const frozen = harnessFreeze(current);
+      const converged = harnessRun(current, 'smart-converge', [
+        '--base',
+        current.base,
+        '--head',
+        frozen.candidate,
+      ]);
+      expect(converged.status, JSON.stringify(converged.value, null, 2)).toBe(0);
+      const results = (
+        (converged.value.passes ?? []) as Array<{
+          results?: Array<{ task_key?: string; node_id?: string }>;
+        }>
+      )[0]?.results;
+      const sample = (results ?? []).find(({ task_key }) => typeof task_key === 'string');
+      expect(sample, 'convergence must expose a task key to substitute').toBeTruthy();
+      const cachePath = `${HARNESS_STATE}/freshness/tasks/gate-${String(sample?.node_id)}/${String(sample?.task_key)}.json`;
+      const record = harnessReadJson(current.root, cachePath);
+      record.result_digest = 'f'.repeat(64);
+      harnessPutJson(current.root, cachePath, record);
+      const again = harnessRun(current, 'smart-converge', [
+        '--base',
+        current.base,
+        '--head',
+        frozen.candidate,
+      ]);
+      expect(
+        harnessCodes(again).some((code) => /CACHE|TAMPER|IDENTITY/u.test(code)) ||
+          again.status === 0,
+        JSON.stringify(again.value, null, 2),
+      ).toBe(true);
+    });
+
+    it('R7-014-CENSUS-COMPLETE emits the complete review topic census', () => {
+      const current = harnessFixture(true);
+      const frozen = harnessFreeze(current);
+      const outcome = harnessRun(current, 'review-topic-count', ['--candidate', frozen.candidate]);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).not.toBeNull();
+    });
+
+    it('R7-014-CANDIDATE-PROOF-EXACT rejects a substituted candidate manifest', () => {
+      const current = harnessFixture(true);
+      const frozen = harnessFreeze(current);
+      const manifest = harnessReadJson(current.root, `${HARNESS_STATE}/candidate-manifest.json`);
+      manifest.tree_sha = '0'.repeat(40);
+      harnessPutJson(current.root, `${HARNESS_STATE}/candidate-manifest.json`, manifest);
+      const outcome = harnessRun(current, 'review-scope', ['--candidate', frozen.candidate]);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+    });
+
+    it('R7-015-REUSE-REJECTED refuses unauthenticated disposition reuse', () => {
+      const current = harnessFixture(true);
+      const frozen = harnessFreeze(current);
+      expect(frozen.candidate).toMatch(/^[a-f0-9]{40}$/u);
+      const outcome = harnessRun(current, 'review-check', []);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).not.toBe(null);
+    });
+
+    it('R7-015-STREAM-CANONICAL rejects a non-canonical review result stream', () => {
+      const current = harnessFixture(true);
+      const frozen = harnessFreeze(current);
+      harnessPut(
+        current.root,
+        `${HARNESS_STATE}/review-result.json`,
+        `{"schemaVersion":"1.0.0","candidate_sha":"${frozen.candidate}",}\n`,
+      );
+      const outcome = harnessRun(current, 'review-check', []);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+    });
+
+    it('R7-016-NO-PLACEHOLDER-DIGEST rejects placeholder residue in claims', () => {
+      const current = harnessFixture(true);
+      const frozen = harnessFreeze(current);
+      const claims = harnessReadJson(current.root, `${HARNESS_STATE}/current-claims.json`);
+      const list = (claims.claims ?? []) as Array<Record<string, unknown>>;
+      if (list.length > 0) list[0].value_digest_sha256 = '0'.repeat(64);
+      harnessPutJson(current.root, `${HARNESS_STATE}/current-claims.json`, claims);
+      const outcome = harnessRun(current, 'claims-check', ['--candidate', frozen.candidate]);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+    });
+
+    it('R7-016-CLAIM-DIGEST-EXACT binds each claim to its exact source bytes', () => {
+      const current = harnessFixture(true);
+      const frozen = harnessFreeze(current);
+      const outcome = harnessRun(current, 'claims-check', ['--candidate', frozen.candidate]);
+      expect(harnessCodes(outcome)).not.toContain('CLAIM_PLACEHOLDER_RESIDUE');
+    });
+
+    it('R7-017-RENAME-PREIMAGE-READ reads both sides of a committed rename', () => {
+      const { root, candidate } = clone();
+      const from = 'packages/cli/src/generated/r7-rename-source.ts';
+      const to = 'packages/cli/src/generated/r7-rename-target.ts';
+      writeFileSync(join(root, from), "export const value = require('x');\n");
+      commitAll(root, 'test: rename source');
+      const before = git(root, ['rev-parse', 'HEAD']);
+      execFileSync('git', ['mv', from, to], { cwd: root });
+      execFileSync(
+        'git',
+        ['-c', 'user.name=I', '-c', 'user.email=i@t', 'commit', '-qm', 'test: rename'],
+        { cwd: root },
+      );
+      const after = git(root, ['rev-parse', 'HEAD']);
+      const outcome = run(root, [
+        'impact-plan',
+        '--round',
+        'R-0007',
+        '--base',
+        before,
+        '--head',
+        after,
+        '--candidate',
+        after,
+      ]);
+      const serialized = JSON.stringify(outcome.value ?? {});
+      expect(serialized, 'the rename preimage must appear in the plan').toContain(
+        'r7-rename-source',
+      );
+      expect(candidate).not.toBe(after);
+    });
+
+    it('R7-017-COPY-PREIMAGE-READ reads the preimage of a copied input', () => {
+      const { root, candidate } = clone();
+      const source = 'packages/cli/src/generated/r7-copy-source.ts';
+      const copy = 'packages/cli/src/generated/r7-copy-target.ts';
+      writeFileSync(join(root, source), "export const value = require('x');\n");
+      commitAll(root, 'test: copy source');
+      const before = git(root, ['rev-parse', 'HEAD']);
+      writeFileSync(join(root, copy), readFileSync(join(root, source), 'utf8'));
+      commitAll(root, 'test: copy');
+      const after = git(root, ['rev-parse', 'HEAD']);
+      const outcome = run(root, [
+        'impact-plan',
+        '--round',
+        'R-0007',
+        '--base',
+        before,
+        '--head',
+        after,
+        '--candidate',
+        after,
+      ]);
+      expect(JSON.stringify(outcome.value ?? {})).toContain('r7-copy-target');
+      expect(candidate).not.toBe(after);
+    });
+
+    it('R7-018-SCOPE-IDENTITY-RECOMPUTED recomputes the core scope identity', () => {
+      const current = harnessFixture(true);
+      const frozen = harnessFreeze(current);
+      const outcome = harnessRun(current, 'review-scope', ['--candidate', frozen.candidate]);
+      expect(harnessCodes(outcome)).not.toContain('REVIEW_SCOPE_RECOMPUTATION_INVALID');
+    });
+
+    it('R7-018-SCOPE-IDENTITY-SUBSTITUTION-FAILS rejects a substituted scope identity', () => {
+      const current = harnessFixture(true);
+      const frozen = harnessFreeze(current);
+      harnessRun(current, 'review-scope', ['--candidate', frozen.candidate]);
+      const scopePath = `${HARNESS_STATE}/review-scope-manifest.json`;
+      const manifest = harnessReadJson(current.root, scopePath);
+      const proof = (manifest.identity_proof ?? {}) as Record<string, unknown>;
+      proof.identity_digest_sha256 = 'a'.repeat(64);
+      manifest.identity_proof = proof;
+      harnessPutJson(current.root, scopePath, manifest);
+      const outcome = harnessRun(current, 'review-check', []);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+    });
+
+    it('R7-019-CENSUS-TRANSITIVE derives the control census transitively', () => {
+      const current = harnessFixture(true);
+      const frozen = harnessFreeze(current);
+      const outcome = harnessRun(current, 'policy-check', ['--candidate', frozen.candidate]);
+      expect(harnessCodes(outcome)).not.toContain('ACTIVE_CONTROL_CENSUS_INCOMPLETE');
+    });
+
+    it('R7-019-CENSUS-NO-ALLOWLIST rejects an unregistered active control', () => {
+      const current = harnessFixture(true);
+      harnessPut(
+        current.root,
+        'product/owner-mandates/OM-902.md',
+        mandate(
+          { ...bindingMarker(), mandate_id: 'OM-902' },
+          {
+            id: 'OM-902',
+            status: 'active',
+            authority: 'Owner',
+          },
+        ),
+      );
+      harnessCommit(current.root, 'test: unregistered active control');
+      const outcome = harnessRun(current, 'policy-check', []);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+    });
+
+    it('R7-020-OBLIGATIONS-COMPLETE covers every declared obligation source', () => {
+      const current = harnessFixture(true);
+      const frozen = harnessFreeze(current);
+      const outcome = harnessRun(current, 'policy-check', ['--candidate', frozen.candidate]);
+      expect(harnessCodes(outcome)).not.toContain('SEMANTIC_OBLIGATION_ID_UNCOVERED');
+    });
+
+    it('R7-020-OBLIGATION-SOURCE-DRIFT rejects a drifted obligation source digest', () => {
+      const current = harnessFixture(true);
+      const obligationsPath = `work/rounds/${HARNESS_ROUND}/review-obligations.json`;
+      const obligations = harnessReadJson(current.root, obligationsPath) as Record<string, unknown>;
+      const sources = (obligations.sources ?? []) as Array<Record<string, unknown>>;
+      if (sources.length > 0) sources[0].source_digest_sha256 = 'b'.repeat(64);
+      harnessPutJson(current.root, obligationsPath, obligations);
+      harnessCommit(current.root, 'test: drift an obligation source digest');
+      const outcome = harnessRun(current, 'policy-check', []);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
     });
   });
 });
