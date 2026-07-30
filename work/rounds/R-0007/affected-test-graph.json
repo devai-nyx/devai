@@ -813,7 +813,7 @@
     {
       "gate_id": "formatting",
       "derivation": "recursive-policy-command-v1",
-      "scripts": ["direct:prettier-check"],
+      "scripts": ["direct:formatting"],
       "programs": ["pnpm", "prettier"]
     },
     {
@@ -843,19 +843,19 @@
     {
       "gate_id": "materializations",
       "derivation": "recursive-policy-command-v1",
-      "scripts": ["direct:round-close-policy"],
+      "scripts": ["direct:materializations"],
       "programs": ["node"]
     },
     {
       "gate_id": "diff-check",
       "derivation": "recursive-policy-command-v1",
-      "scripts": ["direct:git-diff-check"],
+      "scripts": ["direct:diff-check"],
       "programs": ["git"]
     },
     {
       "gate_id": "ordinary",
       "derivation": "recursive-policy-command-v1",
-      "scripts": ["direct:vitest-run"],
+      "scripts": ["direct:ordinary"],
       "programs": ["pnpm", "vitest"]
     },
     {
