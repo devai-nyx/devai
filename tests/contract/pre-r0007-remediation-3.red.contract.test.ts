@@ -1,7 +1,15 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import {
+  copyFileSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import ts from 'typescript';
@@ -60,6 +68,11 @@ function fixture(): string {
   const root = join(parent, 'repo');
   roots.push(parent);
   execFileSync('git', ['clone', '--quiet', '--shared', ROOT, root]);
+  const mirror = '.devai/config/round-close-controls.json';
+  if (readFileSync(join(root, mirror), 'utf8') !== readFileSync(join(ROOT, mirror), 'utf8')) {
+    copyFileSync(join(ROOT, mirror), join(root, mirror));
+    commit(root, 'test: materialize current policy mirror');
+  }
   return root;
 }
 
