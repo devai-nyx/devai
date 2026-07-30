@@ -31,10 +31,12 @@
       "const": "1.0.0"
     },
     "campaign": {
-      "const": "pre-R-0007-convergence-control-remediation-2"
+      "type": "string",
+      "pattern": "^pre-R-[0-9]{4}-convergence-control-remediation-[0-9]+$"
     },
     "authority": {
-      "const": "OM-016"
+      "type": "string",
+      "pattern": "^OM-[0-9]{3}$"
     },
     "reviewed_candidate": {
       "type": "string",
@@ -49,8 +51,8 @@
     },
     "classes": {
       "type": "array",
-      "minItems": 8,
-      "maxItems": 8,
+      "minItems": 1,
+      "maxItems": 64,
       "uniqueItems": true,
       "items": {
         "type": "object",
@@ -71,7 +73,8 @@
         ],
         "properties": {
           "finding_id": {
-            "pattern": "^R2-F00[1-8]$"
+            "type": "string",
+            "pattern": "^R[0-9]+-F[0-9]{3}$"
           },
           "defect_class_id": {
             "pattern": "^[A-Z0-9][A-Z0-9_-]*$"
@@ -98,7 +101,7 @@
             "uniqueItems": true,
             "items": {
               "type": "string",
-              "pattern": "^R2-[0-9]{3}-[A-Z0-9-]+$"
+              "pattern": "^R[0-9]+-[0-9]{3}-[A-Z0-9-]+$"
             }
           },
           "test_paths": {
