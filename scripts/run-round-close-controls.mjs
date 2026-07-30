@@ -135,6 +135,18 @@ function loadPolicy(findings) {
   }
 }
 
+/**
+ * Control behaviour is selected by a named generic capability declared in policy,
+ * never by comparing a profile decision id against a literal. A capability that is
+ * not declared is off, so an older policy keeps its older behaviour without any
+ * control source naming a decision.
+ */
+function capability(context, name) {
+  const declared = context?.policy?.control_capabilities ?? context?.control_capabilities ?? null;
+  if (declared === null || typeof declared !== 'object') return false;
+  return declared[name] === true;
+}
+
 function globExpression(glob) {
   let expression = '';
   for (let index = 0; index < glob.length; index += 1) {
@@ -580,7 +592,7 @@ function validateGateCommandClosureV6(context, findings) {
       declared?.derivation !== derived.derivation ||
       canonical([...(declared?.scripts ?? [])].sort()) !== canonical(derived.scripts) ||
       canonical([...(declared?.programs ?? [])].sort()) !== canonical(derived.programs) ||
-      (context.profile?.decision_id === 'DII-251' &&
+      (capability(context, 'gate_closure_digest_enforced') &&
         declared?.closure_digest !== derived.closure_digest)
     )
       findings.push(
@@ -3004,8 +3016,11 @@ function performRehearsal(policy, round, base, candidate, findings) {
     const draft = {
       round_id: `${round}-rehearsal`,
       title: 'Non-standing entry-control closure rehearsal',
-      declaring_decision: 'DII-207',
-      closing_decision: 'DII-210',
+      // Synthetic non-standing draft. The decision identities are read from the
+      // governing policy rather than pinned to literals, so no control source names
+      // a decision id.
+      declaring_decision: policy.rehearsal?.declaring_decision ?? policy.decision_id,
+      closing_decision: policy.rehearsal?.closing_decision ?? policy.decision_id,
       batches: [
         {
           id: 'entry-control-rehearsal',
@@ -3553,7 +3568,7 @@ function entryCheckV3() {
     ok: findings.length === 0,
     command: 'entry-check',
     round,
-    entry_ready: findings.length === 0,
+    entry_ready: entryReadinessV9(context, null, findings).entry_ready,
     findings,
   });
 }
@@ -5573,6 +5588,30 @@ function loadV4Context(round, findings, candidate = null) {
         'REMEDIATION_CLOSURE_MATRIX_INVALID',
       )
     : null;
+  // The bound closure matrix must enumerate every class still OPEN in the
+  // independently loaded prior-finding registry. The floor is derived from evidence,
+  // so a coordinated deletion from the matrix and its tests still fails here.
+  if (
+    capability({ policy }, 'closure_matrix_registry_floor') &&
+    remediationClosureMatrix !== null &&
+    priorFindingRegistry !== null
+  ) {
+    const bound = new Set(
+      (remediationClosureMatrix.classes ?? []).map(({ finding_id: id }) => String(id)),
+    );
+    const missing = (priorFindingRegistry.finding_classes ?? [])
+      .filter(({ disposition }) => disposition === 'OPEN')
+      .map(({ finding_id: id }) => String(id))
+      .filter((id) => !bound.has(id));
+    if (missing.length > 0)
+      findings.push(
+        finding(
+          'REMEDIATION_MATRIX_POPULATION_INCOMPLETE',
+          'bound closure matrix omits prior findings that remain OPEN in the registry',
+          { missing, matrix: profile.sources.remediation_closure_matrix },
+        ),
+      );
+  }
   if (graph !== null) {
     topologicalNodes(graph, findings);
     validateGateCommandClosureV6({ policy, graph, candidate, profile }, findings);
@@ -5698,32 +5737,14 @@ function resolveExactCandidateV6(revision, findings) {
   }
 }
 
-function resolvePreparationCandidateV7(revision, findings) {
-  try {
-    const resolved = git(repoRoot, ['rev-parse', `${revision}^{commit}`]);
-    return resolveExactCandidateV6(resolved, findings);
-  } catch (error) {
-    findings.push(
-      finding('REVIEWER_BINDING_CANDIDATE_REQUIRED', 'candidate commit cannot be resolved', {
-        revision,
-        detail: String(error),
-      }),
-    );
-    return null;
-  }
-}
-
-function resolveConsumerCandidateV8(round, findings) {
-  const supplied = option('--candidate');
-  if (supplied !== undefined) return resolveExactCandidateV6(supplied, findings);
-  try {
-    const policy = readJson(policyPath);
-    const profile = readJson(join(repoRoot, v3ProfilePath(policy, round)));
-    if (profile.decision_id === 'DII-251') return resolveExactCandidateV6('', findings);
-  } catch {
-    // The ordinary context loader reports malformed compatibility fixtures.
-  }
-  return resolvePreparationCandidateV7('HEAD', findings);
+/**
+ * An authoritative consumer binds exactly one literal candidate. The revision is never
+ * inferred from the worktree, and no worktree byte is read to decide whether the rule
+ * applies: reading mutable policy or profile here would let a dirty tree choose its own
+ * strictness, which is the defect this resolution closes.
+ */
+function resolveConsumerCandidateV8(_round, findings) {
+  return resolveExactCandidateV6(option('--candidate') ?? '', findings);
 }
 
 function reviewerBindingV4(context, revision) {
@@ -6325,6 +6346,32 @@ function affectedExecutionV4(context, exactBase, candidate, passes, findings) {
   return validationFindings.length === 0 ? execution : null;
 }
 
+/**
+ * One readiness computation for policy-check, entry-check and status. Readiness is
+ * false whenever any ENTRY_BLOCKED_* condition holds, whether it arrives as a finding
+ * or as the unbound round declaration, so the three consumers cannot disagree.
+ */
+function entryReadinessV9(context, resolution, findings) {
+  const blocked = findings
+    .map(({ code }) => String(code))
+    .filter((code) => code.startsWith('ENTRY_BLOCKED_'));
+  const declarationUnbound =
+    context === null ||
+    context.profile?.declaration?.decision_id === null ||
+    context.profile?.declaration?.decision_id === undefined ||
+    context.profile?.declaration?.exact_base === null ||
+    context.profile?.declaration?.exact_base === undefined;
+  if (declarationUnbound) blocked.push('ENTRY_BLOCKED_DECLARATION_UNBOUND');
+  if (resolution !== null && resolution?.selected === null)
+    blocked.push('ENTRY_BLOCKED_REVIEWER_BINDING_UNRESOLVED');
+  const codes = [...new Set(blocked)];
+  return {
+    entry_ready: codes.length === 0 && findings.length === 0,
+    blocked: codes,
+    declaration_unbound: declarationUnbound,
+  };
+}
+
 function policyCheckV4() {
   const findings = [];
   const round = option('--round') ?? '';
@@ -6385,8 +6432,7 @@ function policyCheckV4() {
     command: 'policy-check',
     round,
     phase,
-    entry_ready:
-      resolution?.selected !== null && declarationDiagnostic === null && findings.length === 0,
+    entry_ready: entryReadinessV9(context, resolution, findings).entry_ready,
     diagnostics,
     findings,
   });
@@ -6426,7 +6472,7 @@ function entryCheckV4() {
     ok: findings.length === 0,
     command: 'entry-check',
     round,
-    entry_ready: findings.length === 0,
+    entry_ready: entryReadinessV9(context, null, findings).entry_ready,
     diagnostics: declarationDiagnostic === null ? [] : [declarationDiagnostic],
     findings,
   });
@@ -6470,6 +6516,75 @@ function materializationsCheckV8() {
     findings.push(finding('POLICY_MIRROR_DRIFT', String(error)));
   }
   emit({ ok: findings.length === 0, command: 'materializations-check', findings });
+}
+
+/**
+ * Self-binding authoritative attestation. A static policy argv cannot carry a 40-hex
+ * candidate, so this gate derives one: it refuses a dirty tree, resolves the checked-out
+ * commit to one literal identity, proves the working tree matches that commit's tree,
+ * and then reads every byte of authority from that Git object. Any mutable byte fails it
+ * closed, so worktree substitution cannot influence the verdict. It restores the
+ * reviewer-binding census, normative-source coverage and control-provenance derivation
+ * that the degraded materializations gate had dropped from the literal roster.
+ */
+function controlAttestationV9() {
+  const findings = [];
+  const round = option('--round') ?? '';
+  const candidate = candidateBoundRevision;
+  if (candidate === null) {
+    emit({
+      ok: false,
+      command: 'control-attestation',
+      findings: [
+        finding(
+          'REVIEWER_BINDING_CANDIDATE_REQUIRED',
+          'attestation requires a clean tree at one literal commit',
+        ),
+      ],
+    });
+    return;
+  }
+  const workingTree = git(repoRoot, ['rev-parse', 'HEAD^{tree}']);
+  const committedTree = git(repoRoot, ['rev-parse', `${candidate}^{tree}`]);
+  if (workingTree !== committedTree)
+    findings.push(
+      finding('CONTROL_ATTESTATION_TREE_MISMATCH', 'working tree differs from the bound commit', {
+        working_tree: workingTree,
+        committed_tree: committedTree,
+      }),
+    );
+  try {
+    const policyBytes = candidateFile(repoRoot, candidate, 'law/policy/round-close-controls.json');
+    const mirrorBytes = candidateFile(
+      repoRoot,
+      candidate,
+      '.devai/config/round-close-controls.json',
+    );
+    if (policyBytes !== mirrorBytes)
+      findings.push(
+        finding('POLICY_MIRROR_DRIFT', 'generic policy and Engineer materialization differ'),
+      );
+  } catch (error) {
+    findings.push(finding('POLICY_MIRROR_DRIFT', String(error)));
+  }
+  const context = loadV4Context(round, findings, candidate);
+  if (context !== null) {
+    const resolution = reviewerBindingV4(context, candidate);
+    findings.push(...resolution.findings);
+    if (resolution.diagnostic !== null && resolution.profileBound)
+      findings.push(resolution.diagnostic);
+    if (context.policy.schemaVersion === '5.0.0') {
+      validateNormativeSourceCoverageV6(context, candidate, findings);
+      deriveControlProvenanceV6(context, candidate, findings);
+    }
+  }
+  emit({
+    ok: findings.length === 0,
+    command: 'control-attestation',
+    round,
+    candidate,
+    findings,
+  });
 }
 
 function candidateIdentityDigestV4(context, base, candidate, tree) {
@@ -8814,14 +8929,13 @@ function validateRepairEvidenceV4(context, priorState, newProof, findings) {
     return null;
   }
   const priorResultFindings = [];
-  const priorResultPath =
-    context.profile.decision_id === 'DII-251'
-      ? join(
-          dirname(join(repoRoot, context.profile.runtime.review_result)),
-          'review-results',
-          `${priorState.prior_failure_result_digest}.json`,
-        )
-      : join(repoRoot, context.profile.runtime.review_result);
+  const priorResultPath = capability(context, 'exact_prior_result_path')
+    ? join(
+        dirname(join(repoRoot, context.profile.runtime.review_result)),
+        'review-results',
+        `${priorState.prior_failure_result_digest}.json`,
+      )
+    : join(repoRoot, context.profile.runtime.review_result);
   const priorResult = readJsonPrecisely(
     priorResultPath,
     'REVIEW_PRIOR_FAILURE_RESULT_MISSING',
@@ -9140,7 +9254,10 @@ function reviewScopeV4() {
           }
         : {},
     );
-    if (context.policy.schemaVersion === '5.0.0' && context.profile.decision_id === 'DII-251')
+    if (
+      context.policy.schemaVersion === '5.0.0' &&
+      capability(context, 'review_scope_state_persistence')
+    )
       persistStateV5(context, state);
     else writeJsonAtomic(join(repoRoot, context.profile.runtime.review_state), state);
   }
@@ -9176,7 +9293,7 @@ function readAuthenticatedStateV4(context, findings, expected) {
   }
   if (
     context.policy.schemaVersion === '5.0.0' &&
-    context.profile.decision_id === 'DII-251' &&
+    capability(context, 'predecessor_artifact_authentication') &&
     state.previous_state_digest !== null
   ) {
     const predecessorPath = join(
@@ -9215,7 +9332,7 @@ function readAuthenticatedStateV4(context, findings, expected) {
       return null;
     }
   if (context.policy.schemaVersion === '5.0.0') {
-    const exactArtifactChain = context.profile.decision_id === 'DII-251';
+    const exactArtifactChain = capability(context, 'exact_artifact_chain');
     const history = state.transition_history ?? [];
     const scopePath = join(repoRoot, context.profile.runtime.review_scope);
     const scope = existsSync(scopePath) ? readJson(scopePath) : null;
@@ -10109,7 +10226,8 @@ function invalidTransportV5(context, state, scope, payloadDigest, findings, payl
     current_transport_digest: transport.transport_digest_sha256,
   };
   const updatedState = withSelfDigest(updatedBody, 'state_digest_sha256');
-  if (context.profile.decision_id === 'DII-251') persistStateV5(context, updatedState);
+  if (capability(context, 'invalid_transport_state_persistence'))
+    persistStateV5(context, updatedState);
   else writeJsonAtomic(join(repoRoot, context.profile.runtime.review_state), updatedState);
   if (attempts >= 2)
     findings.push(finding('REVIEW_TRANSPORT_BLOCKED', 'transport retry budget is exhausted'));
@@ -10530,7 +10648,7 @@ function reviewCheckV4() {
           readFileSync(resultPath),
         )
       : null;
-  if (context.policy.schemaVersion === '5.0.0' && context.profile.decision_id === 'DII-251')
+  if (context.policy.schemaVersion === '5.0.0' && capability(context, 'review_result_persistence'))
     persistReviewResultV8(context, result);
   else writeJsonAtomic(join(repoRoot, context.profile.runtime.review_result), result);
   const verdict = result.terminal.verdict;
@@ -10572,7 +10690,7 @@ function reviewCheckV4() {
         : {}),
     },
   );
-  if (context.policy.schemaVersion === '5.0.0' && context.profile.decision_id === 'DII-251')
+  if (context.policy.schemaVersion === '5.0.0' && capability(context, 'next_state_persistence'))
     persistStateV5(context, nextState);
   else writeJsonAtomic(join(repoRoot, context.profile.runtime.review_state), nextState);
   emit({
@@ -10622,30 +10740,103 @@ function statusV4() {
       used: attempts,
       maximum: context?.profile.review_budget.transport_retries_per_cycle ?? 1,
     },
-    entry_ready: binding?.selected !== null && findings.length === 0,
+    entry_ready: entryReadinessV9(context, binding ?? null, findings).entry_ready,
     diagnostics:
       binding?.diagnostic !== null && binding?.profileBound === false ? [binding.diagnostic] : [],
     findings,
   });
 }
 
+/**
+ * Every authoritative v4/v5 consumer reachable from the dispatch switch. Each loads
+ * policy, profile, schemas, mandates, graph, obligations, claims or linked authority,
+ * so each must bind one literal candidate before any worktree byte is read.
+ */
+const AUTHORITATIVE_CONSUMERS = new Set([
+  'policy-check',
+  'entry-check',
+  'status',
+  'impact-plan',
+  'smart-converge',
+  'review-scope',
+  'review-check',
+  'claims-check',
+  'claims-materialize',
+  'claim-produce',
+  'review-topic-count',
+  'materialize',
+  'materializations-check',
+  'manifest',
+  'envelope',
+  'rehearse',
+]);
+
+/**
+ * The self-binding attestation gate takes no candidate. It derives one from the
+ * checked-out commit and proves the working tree matches that commit's tree, so a
+ * mutable byte fails it closed rather than selecting its own authority.
+ */
+const SELF_BINDING_COMMANDS = new Set(['control-attestation']);
+
 let livePolicy = null;
+let bootstrapFindings = [];
 try {
-  const strictCandidateCommands = new Set(['policy-check', 'entry-check', 'status']);
-  const suppliedCandidate = option('--candidate') ?? '';
-  if (
-    strictCandidateCommands.has(command) &&
-    SHA40.test(suppliedCandidate) &&
-    gitResult(repoRoot, ['cat-file', '-e', `${suppliedCandidate}^{commit}`]).status === 0
-  ) {
-    candidateBoundRevision = suppliedCandidate;
-    candidateBoundPolicy = JSON.parse(
-      candidateFile(repoRoot, suppliedCandidate, 'law/policy/round-close-controls.json'),
-    );
-    livePolicy = candidateBoundPolicy;
+  // smart-converge names its candidate with --head; every other consumer uses
+  // --candidate. Neither accepts an omitted, symbolic, abbreviated or ambiguous form.
+  const suppliedCandidate =
+    command === 'smart-converge'
+      ? (option('--head') ?? option('--candidate') ?? '')
+      : (option('--candidate') ?? '');
+  if (AUTHORITATIVE_CONSUMERS.has(command)) {
+    const resolved =
+      SHA40.test(suppliedCandidate) &&
+      gitResult(repoRoot, ['cat-file', '-e', `${suppliedCandidate}^{commit}`]).status === 0
+        ? suppliedCandidate
+        : null;
+    if (resolved === null)
+      bootstrapFindings.push(
+        finding(
+          'REVIEWER_BINDING_CANDIDATE_REQUIRED',
+          'authoritative consumers require one literal 40-hex candidate commit before dispatch',
+          { command, revision: suppliedCandidate },
+        ),
+      );
+    else {
+      candidateBoundRevision = resolved;
+      candidateBoundPolicy = JSON.parse(
+        candidateFile(repoRoot, resolved, 'law/policy/round-close-controls.json'),
+      );
+      livePolicy = candidateBoundPolicy;
+    }
+  } else if (SELF_BINDING_COMMANDS.has(command)) {
+    const head = git(repoRoot, ['rev-parse', 'HEAD']);
+    if (!SHA40.test(head) || cleanStatus(repoRoot) !== '')
+      bootstrapFindings.push(
+        finding(
+          'REVIEWER_BINDING_CANDIDATE_REQUIRED',
+          'self-binding attestation requires a clean tree at one literal commit',
+          { command, revision: head },
+        ),
+      );
+    else {
+      candidateBoundRevision = head;
+      candidateBoundPolicy = JSON.parse(
+        candidateFile(repoRoot, head, 'law/policy/round-close-controls.json'),
+      );
+      livePolicy = candidateBoundPolicy;
+    }
   } else livePolicy = readJson(policyPath);
-} catch {
-  // The normal command handlers report malformed policy evidence.
+} catch (error) {
+  bootstrapFindings.push(
+    finding('REVIEWER_BINDING_CANDIDATE_REQUIRED', 'candidate authority could not be loaded', {
+      command,
+      detail: String(error),
+    }),
+  );
+}
+if (bootstrapFindings.length > 0) {
+  emit({ ok: false, command: command || 'missing', findings: bootstrapFindings });
+  process.exit(process.exitCode ?? 1);
 }
 const genericV3 = livePolicy?.schemaVersion === '3.0.0';
 const genericV4 = livePolicy?.schemaVersion === '4.0.0';
@@ -10662,6 +10853,9 @@ switch (
     break;
   case 'v4:materializations-check':
     materializationsCheckV8();
+    break;
+  case 'v4:control-attestation':
+    controlAttestationV9();
     break;
   case 'v4:entry-check':
     entryCheckV4();
@@ -10711,6 +10905,9 @@ switch (
   case 'v3:materializations-check':
     materializationsCheckV8();
     break;
+  case 'v3:control-attestation':
+    controlAttestationV9();
+    break;
   case 'v3:entry-check':
     entryCheckV3();
     break;
@@ -10749,6 +10946,9 @@ switch (
     break;
   case 'materializations-check':
     materializationsCheckV8();
+    break;
+  case 'control-attestation':
+    controlAttestationV9();
     break;
   case 'manifest':
     manifest();

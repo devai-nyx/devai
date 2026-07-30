@@ -3,6 +3,22 @@
   "policy_id": "generic-round-close-controls",
   "policy_version": "5.0.0",
   "decision_id": "DII-249",
+  "control_capabilities": {
+    "capability_version": "1.0.0",
+    "gate_closure_digest_enforced": true,
+    "gate_closure_fixpoint_derivation": true,
+    "consumer_literal_candidate_required": true,
+    "exact_prior_result_path": true,
+    "review_scope_state_persistence": true,
+    "predecessor_artifact_authentication": true,
+    "exact_artifact_chain": true,
+    "invalid_transport_state_persistence": true,
+    "review_result_persistence": true,
+    "next_state_persistence": true,
+    "shared_entry_readiness": true,
+    "binding_flow_loader_classification": true,
+    "closure_matrix_registry_floor": true
+  },
   "schemas": {
     "round_profile": "law/schemas/round-close-profile.schema.json",
     "affected_test_graph": "law/schemas/affected-test-graph.schema.json",
@@ -515,7 +531,13 @@
       },
       {
         "id": "materializations",
-        "argv": ["node", "scripts/run-round-close-controls.mjs", "materializations-check"],
+        "argv": [
+          "node",
+          "scripts/run-round-close-controls.mjs",
+          "control-attestation",
+          "--round",
+          "R-0007"
+        ],
         "freshness_profile": "materializations"
       },
       {
