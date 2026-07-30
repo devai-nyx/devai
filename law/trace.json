@@ -3203,7 +3203,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 108,
-      "assertion_digest_sha256": "a0ffc2139571edc1ddf194fe7ad485f02eb6995b8fa3cd8f5cca43c8fb625225"
+      "assertion_digest_sha256": "e1682671bf373bbfda60a6050dd1292c2c4865831687f152f9b504bbe0560071"
     },
     {
       "path": "tests/contract/pre-r0007-remediation-2.red.contract.test.ts",
@@ -3216,7 +3216,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 74,
-      "assertion_digest_sha256": "d8a36257a0122da6ddbb47c1b3f2fd5d59149a940541eaa0b37dddf746dadf29"
+      "assertion_digest_sha256": "dad71d5b9479c770512256fa133abd83ad29f6c232ef8d3c8d20a349ea08dfa3"
     },
     {
       "path": "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts",
