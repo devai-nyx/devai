@@ -515,7 +515,7 @@
       },
       {
         "id": "materializations",
-        "argv": ["node", "scripts/run-round-close-controls.mjs", "policy-check"],
+        "argv": ["node", "scripts/run-round-close-controls.mjs", "materializations-check"],
         "freshness_profile": "materializations"
       },
       {

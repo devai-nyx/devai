@@ -207,10 +207,11 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["gate_id", "scripts", "programs"],
+        "required": ["gate_id", "closure_digest", "scripts", "programs"],
         "properties": {
           "gate_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
           "derivation": { "const": "recursive-policy-command-v1" },
+          "closure_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
           "scripts": { "$ref": "#/$defs/selectorList" },
           "programs": { "$ref": "#/$defs/selectorList" }
         }

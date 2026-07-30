@@ -813,54 +813,63 @@
     {
       "gate_id": "formatting",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "cabf6d2927dd22bcdf0f833897b1be2c7aa8e004dfac9926198f8aed3d8a322e",
       "scripts": ["direct:formatting"],
       "programs": ["pnpm", "prettier"]
     },
     {
       "gate_id": "preparation",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "94d5986b765b9fd80c1c8a5a66e64835ac0c4f2a9142d5fdf871fab0da9391bd",
       "scripts": ["devai:prepare", "@devai-nyx/schemas:build", "@devai-nyx/cli:build"],
       "programs": ["node", "pnpm", "tsc"]
     },
     {
       "gate_id": "action-registry",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "30ab87e51fd7ef6a87bf71a049f5e7353319e5db9fac02a50080ce335146c226",
       "scripts": ["action-registry:check"],
       "programs": ["node", "pnpm"]
     },
     {
       "gate_id": "trace",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "7d255ec7f32159e84db1d7a0614a252243d830cd0aad41d9373dd3a53ef6ef92",
       "scripts": ["trace:check"],
       "programs": ["find", "git", "node", "pnpm"]
     },
     {
       "gate_id": "repository-references",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "504ebfc343035ad6542381bd2df31ea1bf3a663c8be692337f1c28d4e39f5ea5",
       "scripts": ["repository-reference:check"],
       "programs": ["git", "node", "pnpm"]
     },
     {
       "gate_id": "materializations",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "5195a03a178c4c3fb2ebe0a0d0eff7e51ea2a56d25d2f9ee61d08728d676a76a",
       "scripts": ["direct:materializations"],
       "programs": ["git", "node"]
     },
     {
       "gate_id": "diff-check",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "afc9f42cf76d18dceb63b0ad2cba71599523eab6446b65301d17e16d4f1ee6fc",
       "scripts": ["direct:diff-check"],
       "programs": ["git"]
     },
     {
       "gate_id": "ordinary",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "0e00b8644a02e3912c440eec2c0b23505f8ae0a7a0a6da198f97f227c6c380cc",
       "scripts": ["direct:ordinary"],
       "programs": ["pnpm", "vitest"]
     },
     {
       "gate_id": "stage1",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "3968f6a54cf350fde2ad56acc871ddcaa49f30e22b44a0e50ac0f24bbe9c2faa",
       "scripts": [
         "ci:stage1",
         "ci:workflows",
@@ -878,6 +887,7 @@
     {
       "gate_id": "stage2",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "ea8e44bff284e53405a09f8c7d01155306bf574a6b7bd0e03a0f3270d13c01f6",
       "scripts": [
         "ci:stage2",
         "build",
@@ -892,36 +902,42 @@
     {
       "gate_id": "t4",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "8c7fa4c2d5f93801e9eb0426c0068bf426dc7773c565fb454770321dbac4cedb",
       "scripts": ["test:t4"],
       "programs": ["pnpm", "vitest"]
     },
     {
       "gate_id": "t5",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "491bcc64b23df90d4523d74ce4e06013a7d7960ab4e05c62a255b49535d2c91e",
       "scripts": ["test:t5"],
       "programs": ["pnpm", "vitest"]
     },
     {
       "gate_id": "t6",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "70f8cd9ca66c0b36cf384d638d0908501550fcd5f823f6997b5e753ff69db856",
       "scripts": ["test:t6"],
       "programs": ["pnpm", "vitest"]
     },
     {
       "gate_id": "changesets",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "b42a23c3dfa7b3235a0f98139639535ea6dc2c8faeab87c0daef6c012f5cd3d7",
       "scripts": ["ci:changesets"],
       "programs": ["node", "pnpm"]
     },
     {
       "gate_id": "coverage",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "8aabf2787a3297413f34d372f722e259dfce1283e50b575881d6cb395fc96f91",
       "scripts": ["test:coverage:t1-t3"],
       "programs": ["pnpm", "vitest"]
     },
     {
       "gate_id": "governance",
       "derivation": "recursive-policy-command-v1",
+      "closure_digest": "c5c9a98f7bd3c7d9ea24e44e915250a2834e72a8ea3bd36f7b683b515b7cfbfc",
       "scripts": [
         "ci:governance",
         "ci:sequencing",
