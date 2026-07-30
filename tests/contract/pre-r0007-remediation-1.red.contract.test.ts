@@ -126,7 +126,8 @@ function v5GraphControls(gateIds: readonly string[]): Record<string, unknown> {
     })),
     command_closure: gateIds.map((gate_id) => ({
       gate_id,
-      scripts: [`fixture:${gate_id}`],
+      derivation: 'recursive-policy-command-v1',
+      scripts: [`direct:${gate_id}`],
       programs: ['node'],
     })),
   };
