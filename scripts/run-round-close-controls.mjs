@@ -5998,7 +5998,8 @@ function deriveControlProvenanceV6(context, candidate, findings) {
     context.profile.sources.plan,
     context.profile.sources.orchestrator,
   ])
-    if (typeof path === 'string') collectMandateReferences(candidateFile(repoRoot, candidate, path));
+    if (typeof path === 'string')
+      collectMandateReferences(candidateFile(repoRoot, candidate, path));
   const mandateRows = provenance.owner_mandates ?? [];
   const declaredMandateIds = mandateRows.map(({ mandate_id: mandateId }) => mandateId);
   if (
