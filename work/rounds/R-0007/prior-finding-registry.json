@@ -474,6 +474,89 @@
       ],
       "repair_condition": "Every exact-candidate normative source is digest-bound to known obligations and every obligation is covered; any population or byte drift fails.",
       "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R3-F001",
+      "defect_class_id": "AUTHORITATIVE_GATE_CANDIDATE_RED",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
+      "topic_ids": ["literal-authoritative-roster", "candidate-convergence"],
+      "population_query": "Execute all sixteen exact policy argv arrays from the detached exact candidate and retain every terminal result after any red ordinal.",
+      "affected_population": ["all sixteen authoritative gates", "literal materializations argv"],
+      "repair_condition": "Every literal argv passes without hidden argument rewriting and all sixteen ordered results remain present after any failure.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R3-F002",
+      "defect_class_id": "AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
+      "topic_ids": ["recursive-workspace-command-closure"],
+      "population_query": "Recursively derive every root and workspace script, TypeScript project reference and output, and imported or spawned executable reachable from all sixteen argv arrays.",
+      "affected_population": [
+        "all sixteen gate rows",
+        "all root scripts",
+        "all thirteen workspace packages",
+        "all reachable TypeScript projects and executables"
+      ],
+      "repair_condition": "Any reachable invocation or project edge mutation changes closure and freshness identity or fails validation without relying on script-name assumptions.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R3-F003",
+      "defect_class_id": "AFFECTED_TEST_INPUT_POPULATION_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
+      "topic_ids": ["candidate-and-preimage-loader-analysis"],
+      "population_query": "Load candidate and base/preimage Git blobs for every status record and conservatively classify every JavaScript and TypeScript loader form.",
+      "affected_population": [
+        "all tracked candidate paths",
+        "deleted and renamed preimages",
+        "109 runtime assets",
+        "all direct and indirect loader families"
+      ],
+      "repair_condition": "Every unresolved loader in either candidate or preimage bytes selects full suite and whole coverage.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R3-F004",
+      "defect_class_id": "STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
+      "topic_ids": ["exact-predecessor-and-transport-chain"],
+      "population_query": "Mutate and re-self-digest every predecessor, transition, transport, validation, result, count, terminal, and repair-population byte over all edges and attempts.",
+      "affected_population": [
+        "all twelve edges",
+        "attempts zero through two",
+        "complete predecessor artifacts",
+        "transport and result bytes",
+        "repair-v2 populations",
+        "all terminals"
+      ],
+      "repair_condition": "Every consumed artifact is reauthenticated from complete exact bytes before any mutation.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R3-F005",
+      "defect_class_id": "REVIEWER_BINDING_CENSUS_NOT_CANDIDATE_BOUND",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
+      "topic_ids": ["candidate-bound-bootstrap-and-policy-dispatch"],
+      "population_query": "Dirty policy, profile, schemas, and mandates independently and invoke every authoritative consumer with literal and nonliteral candidate inputs.",
+      "affected_population": [
+        "all seven authoritative consumers",
+        "policy",
+        "profile",
+        "schemas",
+        "mandates"
+      ],
+      "repair_condition": "A literal candidate is resolved before dispatch and every authority byte loads from that Git object; dirty substitutions and nonliteral revisions fail closed.",
+      "disposition": "OPEN"
     }
   ]
 }

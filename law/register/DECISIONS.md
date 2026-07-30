@@ -4772,6 +4772,62 @@ This decision authorizes only the complete repair and final Review Run 2 allowed
 OM-016. It does not start R-0007, bind its governed reviewer, alter R-0006, deploy,
 publish, promote evidence, or mutate the predecessor.
 
+### DII-251 — Bind exact-candidate closure and Claude Opus 5 review
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-017; remediation campaign 2 Review Run 2 failure at 7a39cc31c47a5858e15f2ba3cf7244dd6d744f22; DII-246; DII-247; DII-248; DII-249; DII-250`
+
+Remediation campaign 3 repairs the five still-open P1 populations as one unit before
+candidate freeze. The literal policy command roster is the executable authority:
+commands receive every required argument in their declared argv, and convergence may
+not inject, repair, or reinterpret arguments. All sixteen commands are executed or
+authenticated exactly once and remain visible after a red ordinal.
+
+Command closure is a recursively resolved graph. Resolution begins at every policy
+argv, follows root package scripts, `pnpm --filter` workspace selection and workspace
+package scripts, TypeScript project references and declared outputs, imported or
+spawned repository executables, generated outputs, environment, toolchain, policy,
+and history-sensitive Git inputs. Validation compares declarations with this derived
+population. A label, nonempty array, or script-name heuristic is not completeness
+proof.
+
+Impact planning uses status-aware candidate and base Git objects. Added and modified
+paths use candidate blobs; deleted paths use base blobs; renames and copies inspect
+both preimage and postimage. JavaScript and TypeScript loader analysis covers direct,
+aliased, destructured, wrapped, applied, bound, optional, computed, eval-based,
+`createRequire`, `require.resolve`, `import.meta.resolve`, and dynamic-import forms.
+Any unproved form selects both the full suite and whole coverage.
+
+Review state identity is the digest of the complete canonical persisted predecessor
+artifact, excluding only its self-digest field under one declared canonicalization.
+Every transition stores and reauthenticates that exact identity. Transport validation
+recomputes payload, validation, state-before, prior-attempt, result, topic-count,
+finding-count, terminal, and repair-population identities from exact bytes before any
+mutation. All twelve edges, attempts zero through two, and all terminals are runtime
+mutation populations.
+
+An immutable bootstrap parses only the literal candidate argument required by the
+selected command, resolves it to one 40-hex commit, and loads the round-close policy
+from that Git object before version dispatch. All policy, profile, schema, mandate,
+scope, and authority bytes thereafter come from that candidate. Authoritative
+commands reject missing, symbolic, abbreviated, and ambiguous revisions. Dirty
+worktree substitutions cannot alter dispatch or verdict.
+
+The R-0007 profile resolves the Owner-authorized reviewer binding to OM-017 and the
+literal selector `claude-opus-5`; fallback and aliases are forbidden. Both remediation
+campaign reviews and governed R-0007 review must retain provider-reported model usage
+showing exactly `claude-opus-5`. Model unavailability is transport blocking, not
+permission to substitute another model.
+
+The Inspector provides executable red mutations across the full five-class matrix
+before Engineer repair, and the Auditor retains red and green evidence. Reviews retain
+the prior 69-topic census, add every campaign-3 path, and recheck every earlier class
+exactly once. Review Run 1 PASS ends review; otherwise one complete-class repair and
+one Review Run 2 are allowed. Review Run 3 is refused.
+
+This decision authorizes campaign-3 control implementation and the Owner-bound
+reviewer resolution required for later R-0007 entry. It does not bypass any R-0007
+entry or batch gate, alter closed R-0006 artifacts, deploy, publish, promote evidence,
+or mutate the predecessor.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

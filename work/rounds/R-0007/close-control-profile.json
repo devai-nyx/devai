@@ -2,7 +2,7 @@
   "schemaVersion": "2.0.0",
   "round": "R-0007",
   "policy_version": "5.0.0",
-  "decision_id": "DII-249",
+  "decision_id": "DII-251",
   "phase": "pre-entry-preparation",
   "declaration": {
     "binding": "b0-decision-required",
@@ -18,13 +18,14 @@
     "obligation_baseline": "work/rounds/R-0007/review-obligation-baseline.json",
     "current_claims": "work/rounds/R-0007/current-claims.json",
     "control_provenance": "work/rounds/R-0007/control-provenance.json",
-    "remediation_closure_matrix": "work/rounds/R-0007/remediation-2-closure-matrix.json",
+    "remediation_closure_matrix": "work/rounds/R-0007/remediation-3-closure-matrix.json",
     "additional_controls": [
       "product/owner-mandates/OM-002.md",
       "product/owner-mandates/OM-003.md",
       "product/owner-mandates/OM-014.md",
       "product/owner-mandates/OM-015.md",
       "product/owner-mandates/OM-016.md",
+      "product/owner-mandates/OM-017.md",
       "work/rounds/EXECUTION-CONTRACT.md",
       "law/policy/round-close-controls.json"
     ],
@@ -32,7 +33,9 @@
       "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
       "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
       "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
-      "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md"
+      "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "work/audit/R-0007-pre-entry/remediation-2-review-run-1-failure.md",
+      "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md"
     ],
     "prior_finding_registry": "work/rounds/R-0007/prior-finding-registry.json"
   },
@@ -55,8 +58,8 @@
   },
   "reviewer": {
     "binding": "owner-mandate-required",
-    "mandate_id": null,
-    "model_selector": null,
+    "mandate_id": "OM-017",
+    "model_selector": "claude-opus-5",
     "role": "independent-read-only",
     "fallback": "forbidden"
   },
