@@ -20,6 +20,18 @@
     "tests_passed": 2,
     "exit_code": 1
   },
+  "observations": [
+    {
+      "commit": "7715c5184e4ac7c8e73f97c125f9680504f4f2b5",
+      "command": "pnpm vitest run tests/contract/pre-r0007-remediation-3.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-remediation-3.red.contract.test.ts"],
+      "exercised_implementation_paths": [
+        ".devai/config/round-close-controls.json",
+        "scripts/run-round-close-controls.mjs"
+      ]
+    }
+  ],
   "passing_contracts": [
     "complete closure-matrix and executable-ID census",
     "complete declared state-machine edge and terminal census"
