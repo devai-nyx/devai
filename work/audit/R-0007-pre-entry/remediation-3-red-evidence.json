@@ -6,7 +6,7 @@
     "owner_mandate": "OM-017",
     "architect_decision": "DII-251"
   },
-  "inspector_candidate_sha": "7715c5184e4ac7c8e73f97c125f9680504f4f2b5",
+  "inspector_candidate_sha": "2dfe86b54c79dfe04780e607af4dac16ef000808",
   "command": [
     "pnpm",
     "vitest",
@@ -22,9 +22,13 @@
   },
   "observations": [
     {
-      "commit": "7715c5184e4ac7c8e73f97c125f9680504f4f2b5",
+      "commit": "2dfe86b54c79dfe04780e607af4dac16ef000808",
       "command": "pnpm vitest run tests/contract/pre-r0007-remediation-3.red.contract.test.ts",
       "exit_code": 1,
+      "observation_mode": "exact-detached-candidate-replay",
+      "observed_test_files_failed": 7,
+      "observed_tests_failed": 14,
+      "observed_tests_passed": 2,
       "tests": ["tests/contract/pre-r0007-remediation-3.red.contract.test.ts"],
       "exercised_implementation_paths": [
         ".devai/config/round-close-controls.json",
