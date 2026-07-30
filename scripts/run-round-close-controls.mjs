@@ -509,7 +509,7 @@ function validateGateCommandClosureV6(context, findings) {
       ),
     );
   const derivedClosureRequired =
-    context.policy?.schemaVersion === '5.0.0' ||
+    context.graph?.freshness_identity?.candidate === 'literal-commit-and-tree' ||
     closures.some((entry) => Object.hasOwn(entry, 'derivation'));
   for (const gate of derivedClosureRequired ? commands : []) {
     const declared = closures.find(({ gate_id }) => gate_id === gate.id);
@@ -5985,6 +5985,8 @@ function deriveControlProvenanceV6(context, candidate, findings) {
       finding('ACTIVE_CONTROL_CENSUS_EXTRA', 'provenance declares unreachable decision rows'),
     );
 
+  const mandateDerivationRequired =
+    provenance.discovery_mode?.owner_mandates === 'exact-candidate-transitive-references';
   const referencedMandateIds = new Set();
   const collectMandateReferences = (value) => {
     for (const match of value.matchAll(/\bOM-[0-9]+\b/gu)) referencedMandateIds.add(match[0]);
@@ -6003,8 +6005,9 @@ function deriveControlProvenanceV6(context, candidate, findings) {
   const mandateRows = provenance.owner_mandates ?? [];
   const declaredMandateIds = mandateRows.map(({ mandate_id: mandateId }) => mandateId);
   if (
-    new Set(declaredMandateIds).size !== declaredMandateIds.length ||
-    canonical([...declaredMandateIds].sort()) !== canonical([...referencedMandateIds].sort())
+    mandateDerivationRequired &&
+    (new Set(declaredMandateIds).size !== declaredMandateIds.length ||
+      canonical([...declaredMandateIds].sort()) !== canonical([...referencedMandateIds].sort()))
   )
     findings.push(
       finding(
@@ -6349,7 +6352,7 @@ function validateNormativeSourceCoverageV6(context, candidate, findings) {
       candidateFile(repoRoot, candidate, context.profile.sources.control_provenance),
     );
     if (
-      context.policy.schemaVersion === '5.0.0' &&
+      provenance.discovery_mode?.normative_sources === 'independent-obligation-baseline' &&
       typeof context.profile.sources.obligation_baseline !== 'string'
     ) {
       findings.push(
