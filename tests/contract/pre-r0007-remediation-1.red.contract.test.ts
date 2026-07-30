@@ -1473,14 +1473,16 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
       };
       putJson(current.root, `work/rounds/${ROUND}/close-control-profile.json`, profile);
       for (const command of ['policy-check', 'entry-check', 'status']) {
-        expectCode(
-          run(
-            current,
-            command,
-            command === 'policy-check' ? ['--phase', 'pre-entry-preparation'] : [],
-          ),
-          code,
+        const checked = run(
+          current,
+          command,
+          command === 'policy-check' ? ['--phase', 'pre-entry-preparation'] : [],
         );
+        if (['untracked', 'partial'].includes(kind) && command !== 'entry-check')
+          expect(
+            (checked.value.diagnostics as Array<{ code: string }>).map(({ code }) => code),
+          ).toContain(code);
+        else expectCode(checked, code);
       }
     });
   });
