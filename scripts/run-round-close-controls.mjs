@@ -9268,7 +9268,22 @@ function validateRepairEvidenceV4(context, priorState, newProof, findings) {
 function reviewScopeV4() {
   const findings = [];
   const round = option('--round') ?? '';
-  const base = git(repoRoot, ['rev-parse', option('--base') ?? '']);
+  // A missing or unresolvable base is a blocking finding, never an uncaught throw.
+  const baseExpression = option('--base') ?? '';
+  const baseResolution = gitResult(repoRoot, ['rev-parse', baseExpression]);
+  if (baseExpression === '' || baseResolution.status !== 0)
+    return emit({
+      ok: false,
+      command: 'review-scope',
+      round,
+      base: baseExpression,
+      findings: [
+        finding('REVIEW_SCOPE_BASE_REQUIRED', 'review scope requires one resolvable exact base', {
+          revision: baseExpression,
+        }),
+      ],
+    });
+  const base = baseResolution.stdout.trim();
   const candidateExpression = option('--candidate') ?? 'HEAD';
   const candidate = resolveExactCandidateV6(candidateExpression, findings);
   const cycle = Number(option('--cycle') ?? '1');
@@ -11075,144 +11090,169 @@ const genericV3 = livePolicy?.schemaVersion === '3.0.0';
 const genericV4 = livePolicy?.schemaVersion === '4.0.0';
 const genericV5 = livePolicy?.schemaVersion === '5.0.0';
 
-switch (
-  genericV5 ? `v4:${command}` : genericV4 ? `v4:${command}` : genericV3 ? `v3:${command}` : command
-) {
-  case 'v4:policy-check':
-    policyCheckV4();
-    break;
-  case 'v4:materialize':
-    materializeV4();
-    break;
-  case 'v4:materializations-check':
-    materializationsCheckV8();
-    break;
-  case 'v4:control-attestation':
-    controlAttestationV9();
-    break;
-  case 'v4:entry-check':
-    entryCheckV4();
-    break;
-  case 'v4:impact-plan':
-    impactPlanV3();
-    break;
-  case 'v4:smart-converge':
-    smartConvergeV3();
-    break;
-  case 'v4:review-topic-count':
-    reviewTopicCountV4();
-    break;
-  case 'v4:claim-produce':
-    claimProduceV4();
-    break;
-  case 'v4:claims-check':
-    claimsCheckV4();
-    break;
-  case 'v4:claims-materialize':
-    claimsMaterializeV4();
-    break;
-  case 'v4:review-scope':
-    reviewScopeV4();
-    break;
-  case 'v4:review-check':
-    reviewCheckV4();
-    break;
-  case 'v4:status':
-    statusV4();
-    break;
-  case 'v4:manifest':
-    manifest();
-    break;
-  case 'v4:envelope':
-    envelope();
-    break;
-  case 'v4:rehearse':
-    rehearse();
-    break;
-  case 'v3:policy-check':
-    policyCheckV3();
-    break;
-  case 'v3:materialize':
-    materializeV3();
-    break;
-  case 'v3:materializations-check':
-    materializationsCheckV8();
-    break;
-  case 'v3:control-attestation':
-    controlAttestationV9();
-    break;
-  case 'v3:entry-check':
-    entryCheckV3();
-    break;
-  case 'v3:impact-plan':
-    impactPlanV3();
-    break;
-  case 'v3:smart-converge':
-    smartConvergeV3();
-    break;
-  case 'v3:claims-check':
-    claimsCheckV3();
-    break;
-  case 'v3:review-scope':
-    reviewScopeV3();
-    break;
-  case 'v3:review-check':
-    reviewCheckV3();
-    break;
-  case 'v3:status':
-    statusV3();
-    break;
-  case 'v3:manifest':
-    manifest();
-    break;
-  case 'v3:envelope':
-    envelope();
-    break;
-  case 'v3:rehearse':
-    rehearse();
-    break;
-  case 'policy-check':
-    policyCheck();
-    break;
-  case 'materialize':
-    materialize();
-    break;
-  case 'materializations-check':
-    materializationsCheckV8();
-    break;
-  case 'control-attestation':
-    controlAttestationV9();
-    break;
-  case 'manifest':
-    manifest();
-    break;
-  case 'converge':
-    converge();
-    break;
-  case 'smart-converge':
-    smartConverge();
-    break;
-  case 'review-scope':
-    reviewScopeManifest();
-    break;
-  case 'review-check':
-    reviewCheck();
-    break;
-  case 'envelope':
-    envelope();
-    break;
-  case 'rehearse':
-    rehearse();
-    break;
-  default:
-    emit({
-      ok: false,
-      command: command || 'missing',
-      findings: [
-        finding(
-          'COMMAND_INVALID',
-          'expected policy-check, materialize, manifest, converge, smart-converge, review-scope, review-check, envelope, or rehearse',
-        ),
-      ],
-    });
+/**
+ * No authoritative consumer may terminate without emitting a structured result. An
+ * uncaught throw gives a caller silence, which is indistinguishable from finding
+ * nothing wrong; a blocking finding is a refusal a caller can act on.
+ */
+try {
+  switch (
+    genericV5
+      ? `v4:${command}`
+      : genericV4
+        ? `v4:${command}`
+        : genericV3
+          ? `v3:${command}`
+          : command
+  ) {
+    case 'v4:policy-check':
+      policyCheckV4();
+      break;
+    case 'v4:materialize':
+      materializeV4();
+      break;
+    case 'v4:materializations-check':
+      materializationsCheckV8();
+      break;
+    case 'v4:control-attestation':
+      controlAttestationV9();
+      break;
+    case 'v4:entry-check':
+      entryCheckV4();
+      break;
+    case 'v4:impact-plan':
+      impactPlanV3();
+      break;
+    case 'v4:smart-converge':
+      smartConvergeV3();
+      break;
+    case 'v4:review-topic-count':
+      reviewTopicCountV4();
+      break;
+    case 'v4:claim-produce':
+      claimProduceV4();
+      break;
+    case 'v4:claims-check':
+      claimsCheckV4();
+      break;
+    case 'v4:claims-materialize':
+      claimsMaterializeV4();
+      break;
+    case 'v4:review-scope':
+      reviewScopeV4();
+      break;
+    case 'v4:review-check':
+      reviewCheckV4();
+      break;
+    case 'v4:status':
+      statusV4();
+      break;
+    case 'v4:manifest':
+      manifest();
+      break;
+    case 'v4:envelope':
+      envelope();
+      break;
+    case 'v4:rehearse':
+      rehearse();
+      break;
+    case 'v3:policy-check':
+      policyCheckV3();
+      break;
+    case 'v3:materialize':
+      materializeV3();
+      break;
+    case 'v3:materializations-check':
+      materializationsCheckV8();
+      break;
+    case 'v3:control-attestation':
+      controlAttestationV9();
+      break;
+    case 'v3:entry-check':
+      entryCheckV3();
+      break;
+    case 'v3:impact-plan':
+      impactPlanV3();
+      break;
+    case 'v3:smart-converge':
+      smartConvergeV3();
+      break;
+    case 'v3:claims-check':
+      claimsCheckV3();
+      break;
+    case 'v3:review-scope':
+      reviewScopeV3();
+      break;
+    case 'v3:review-check':
+      reviewCheckV3();
+      break;
+    case 'v3:status':
+      statusV3();
+      break;
+    case 'v3:manifest':
+      manifest();
+      break;
+    case 'v3:envelope':
+      envelope();
+      break;
+    case 'v3:rehearse':
+      rehearse();
+      break;
+    case 'policy-check':
+      policyCheck();
+      break;
+    case 'materialize':
+      materialize();
+      break;
+    case 'materializations-check':
+      materializationsCheckV8();
+      break;
+    case 'control-attestation':
+      controlAttestationV9();
+      break;
+    case 'manifest':
+      manifest();
+      break;
+    case 'converge':
+      converge();
+      break;
+    case 'smart-converge':
+      smartConverge();
+      break;
+    case 'review-scope':
+      reviewScopeManifest();
+      break;
+    case 'review-check':
+      reviewCheck();
+      break;
+    case 'envelope':
+      envelope();
+      break;
+    case 'rehearse':
+      rehearse();
+      break;
+    default:
+      emit({
+        ok: false,
+        command: command || 'missing',
+        findings: [
+          finding(
+            'COMMAND_INVALID',
+            'expected policy-check, materialize, manifest, converge, smart-converge, review-scope, review-check, envelope, or rehearse',
+          ),
+        ],
+      });
+  }
+} catch (error) {
+  emit({
+    ok: false,
+    command: command || 'missing',
+    findings: [
+      finding(
+        'CONSUMER_TERMINATED_WITHOUT_RESULT',
+        'command terminated before emitting a structured result',
+        { command, detail: String(error) },
+      ),
+    ],
+  });
 }
