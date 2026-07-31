@@ -31,7 +31,7 @@ record required by the role-pure sequence; that record does not yet exist.
 | Substantive runs used | 1 of 2                                                              |
 | Substantive runs left | **1 — Review Run 2, the sole remaining run**                        |
 | Review Run 3          | Forbidden by OM-017; failure of Run 2 goes to Owner escalation      |
-| Current head          | `2abff2a0fafbe724f419f4997bdbb590829a501d`                          |
+| Current head          | `493928c`                                                           |
 | R-0007 standing       | **NOT STARTED** — `ENTRY_BLOCKED_DECLARATION_UNBOUND`               |
 
 The branch has not been pushed and no pull request exists.
@@ -120,6 +120,38 @@ Nothing is `GREEN_PROVED` in the matrix. No class is recorded closed.
 - Closure derivation reaches `tsconfig.base.json`, the nine depth-2 references, all
   thirteen projects’ output and root sets, programs outside the former allowlist, and
   surfaces `packages/cli/dist/bin.js` as a missing executable rather than dropping it.
+
+## Blocking defect: the state identity rewrite disagrees with every fixture
+
+`reconstructStateIdentityV6` was rewritten at `bb9f79c` to bind every field of a
+transition rather than a selected six. That closes the unselected-byte hole in R7-F001,
+but it invalidates every fixture that computes `previous_state_digest` by replicating the
+former selection. `tests/contract/pre-r0007-remediation-1.red.contract.test.ts` now
+reports **52 failed, 91 passed of 143**, of which **60 are
+`REVIEW_STATE_PREDECESSOR_STATE_INVALID`** from exactly this cause.
+
+Until it is resolved that suite cannot be read, and it masks any signal from the
+state-before repair at `493928c`. Two options, neither yet chosen:
+
+1. the fixtures compute the new identity, which means replicating the controller
+   algorithm in test code and keeping the two in step; or
+2. the identity binds a documented subset a fixture can reproduce, provided no byte the
+   transition authenticates is left unselected.
+
+**This is the first thing to resolve. Nothing downstream is readable until it is.**
+
+## Two unfounded claims, and the pattern behind them
+
+- `4964459` states the bootstrap blast radius was contained, the same four failures as
+  before. That was measured on **one** contract file. remediation-1 went from 143 passing
+  to 139 failing and was not re-run after any Engineer tranche. The claim was wrong.
+- `bb9f79c` attributes the five remaining R7-001 and R7-002 failures to test shape. At
+  least part of the cause was the state-before defect repaired at `493928c`, and the
+  identity rewrite above. The attribution was premature.
+
+The pattern in both, and in the loader contract that passed on a neighbouring family
+evidence: **a single measurement generalised to a whole population.** The correction is
+not more careful wording but re-running the affected population before making the claim.
 
 ## What is not proved, and must not be read as proved
 
