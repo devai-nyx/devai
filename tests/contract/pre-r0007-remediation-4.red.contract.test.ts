@@ -19,6 +19,7 @@ import {
   commit as harnessCommit,
   mandate,
   bindingMarker,
+  selfDigest,
   stateChain,
   transition,
   transportEvidence,
@@ -617,7 +618,12 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         const history = [transition(from, terminal, frozen, { review_scope_digest: scopeDigest })];
         const state = stateChain(current, frozen, terminal, cycle, scopeDigest, history);
         harnessPutJson(current.root, STATE_PATH, state);
-        const outcome = harnessRun(current, 'review-scope', ['--candidate', frozen.candidate]);
+        const outcome = harnessRun(current, 'review-scope', [
+          '--base',
+          current.base,
+          '--candidate',
+          frozen.candidate,
+        ]);
         const observed = harnessCodes(outcome);
         if (!observed.includes('REVIEW_STATE_TERMINAL') && outcome.status === 0)
           unproved.push(terminal);
@@ -672,23 +678,81 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
           review_scope_digest: scopeDigest,
         }),
       ];
-      const state = stateChain(current, frozen, 'PREFLIGHT_GREEN', 1, scopeDigest, history);
-      harnessPutJson(current.root, `${HARNESS_STATE}/review-state.json`, state);
+      // The expected repaired-class population is derived from the authenticated prior
+      // failure result, so that result must exist and be retrievable by its digest.
+      const priorResult = selfDigest(
+        {
+          schemaVersion: '1.0.0',
+          round: HARNESS_ROUND,
+          candidate_sha: frozen.candidate,
+          findings: [
+            {
+              finding_id: 'FIXTURE-FAILURE',
+              defect_class_id: 'FIXTURE_CLASS',
+              severity: 'P1',
+            },
+            {
+              finding_id: 'FIXTURE-FAILURE-B',
+              defect_class_id: 'FIXTURE_CLASS_B',
+              severity: 'P1',
+            },
+          ],
+        },
+        'result_digest_sha256',
+      );
+      const priorResultDigest = priorResult.result_digest_sha256 as string;
+      harnessPutJson(
+        current.root,
+        `${HARNESS_STATE}/review-results/${priorResultDigest}.json`,
+        priorResult,
+      );
+
       const repair = repairEvidence(
         frozen,
         scopeDigest,
+        priorResultDigest,
         'b'.repeat(64),
-        state.state_digest_sha256 as string,
-        '1'.repeat(40),
+        frozen.candidate,
       ) as Record<string, unknown>;
-      const repaired = (repair.repaired_classes ?? []) as unknown[];
-      expect(repaired.length, 'repair evidence must carry a class population').toBeGreaterThan(0);
+
+      // Delete one repaired class and re-digest, so the artifact is internally
+      // consistent. The state then binds the MUTATED digest: if it bound the original,
+      // the controller would reject on the evidence-digest check and the case would pass
+      // without ever exercising the derived class population it names.
+      const seeded = (repair.repaired_classes ?? []) as Array<Record<string, unknown>>;
+      expect(seeded.length, 'repair evidence must carry a class population').toBeGreaterThan(0);
+      repair.repaired_classes = [...seeded, { ...seeded[0], defect_class_id: 'FIXTURE_CLASS_B' }];
+      const repaired = repair.repaired_classes as unknown[];
+      // Delete one of two, so the artifact stays schema-valid and only the derived
+      // population disagrees. Emptying the array would fail schema minItems instead.
       repair.repaired_classes = repaired.slice(1);
-      harnessPutJson(current.root, `${HARNESS_STATE}/review-repair-evidence.json`, repair);
-      const outcome = harnessRun(current, 'review-scope', ['--candidate', frozen.candidate]);
-      expect(harnessCodes(outcome), JSON.stringify(outcome.value, null, 2)).toContain(
-        'REVIEW_STATE_REPAIR_LINK_INVALID',
-      );
+      const mutatedRepair = selfDigest(repair, 'repair_evidence_digest_sha256');
+      harnessPutJson(current.root, `${HARNESS_STATE}/review-repair-evidence.json`, mutatedRepair);
+
+      const state = stateChain(current, frozen, 'PREFLIGHT_GREEN', 1, scopeDigest, history, {
+        repair_evidence_digest: mutatedRepair.repair_evidence_digest_sha256,
+        prior_failure_result_digest: mutatedRepair.prior_review_result_digest,
+        prior_failure_state_digest: mutatedRepair.prior_failure_state_digest,
+        prior_failure_transport_digest: mutatedRepair.prior_failure_transport_digest,
+        previous_candidate_sha: mutatedRepair.prior_candidate_sha,
+      });
+      harnessPutJson(current.root, `${HARNESS_STATE}/review-state.json`, state);
+      const outcome = harnessRun(current, 'review-scope', [
+        '--base',
+        current.base,
+        '--candidate',
+        frozen.candidate,
+      ]);
+      const linkFinding = (
+        (outcome.value.findings ?? []) as Array<{ code?: string; failed_checks?: string[] }>
+      ).find(({ code }) => code === 'REVIEW_STATE_REPAIR_LINK_INVALID');
+      expect(linkFinding, JSON.stringify(outcome.value, null, 2)).toBeTruthy();
+      // The finding must name the population check. Any other failed check would mean the
+      // case passed on artifact bookkeeping rather than on the derived class population.
+      expect(
+        linkFinding?.failed_checks,
+        `expected the repaired-class population check to fail, got ${JSON.stringify(linkFinding?.failed_checks)}`,
+      ).toEqual(['repaired_class_population']);
     });
 
     it('R7-001-NO-SELF-COMPARED-EXPECTATION detects a substituted state-before artifact', () => {
@@ -1030,7 +1094,12 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       const manifest = harnessReadJson(current.root, `${HARNESS_STATE}/candidate-manifest.json`);
       manifest.tree_sha = '0'.repeat(40);
       harnessPutJson(current.root, `${HARNESS_STATE}/candidate-manifest.json`, manifest);
-      const outcome = harnessRun(current, 'review-scope', ['--candidate', frozen.candidate]);
+      const outcome = harnessRun(current, 'review-scope', [
+        '--base',
+        current.base,
+        '--candidate',
+        frozen.candidate,
+      ]);
       expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
     });
 
@@ -1132,14 +1201,24 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
     it('R7-018-SCOPE-IDENTITY-RECOMPUTED recomputes the core scope identity', () => {
       const current = harnessFixture(true);
       const frozen = harnessFreeze(current);
-      const outcome = harnessRun(current, 'review-scope', ['--candidate', frozen.candidate]);
+      const outcome = harnessRun(current, 'review-scope', [
+        '--base',
+        current.base,
+        '--candidate',
+        frozen.candidate,
+      ]);
       expect(harnessCodes(outcome)).not.toContain('REVIEW_SCOPE_RECOMPUTATION_INVALID');
     });
 
     it('R7-018-SCOPE-IDENTITY-SUBSTITUTION-FAILS rejects a substituted scope identity', () => {
       const current = harnessFixture(true);
       const frozen = harnessFreeze(current);
-      harnessRun(current, 'review-scope', ['--candidate', frozen.candidate]);
+      harnessRun(current, 'review-scope', [
+        '--base',
+        current.base,
+        '--candidate',
+        frozen.candidate,
+      ]);
       const scopePath = `${HARNESS_STATE}/review-scope-manifest.json`;
       const manifest = harnessReadJson(current.root, scopePath);
       const proof = (manifest.identity_proof ?? {}) as Record<string, unknown>;
