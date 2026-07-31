@@ -828,6 +828,20 @@
       ],
       "repair_condition": "Either the profile must bind every campaign closure matrix whose classes remain OPEN in the prior-finding registry, or the schema must require that the bound matrix enumerate the union of all OPEN prior finding ids. A machine check must assert that the set of finding_ids in the bound matrix is a superset of the OPEN dispositions in work/rounds/R-0007/prior-finding-registry.json.",
       "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F011",
+      "defect_class_id": "AUTHORITATIVE_CONSUMER_UNCAUGHT_THROW",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-repair-handoff.md",
+      "topic_ids": ["review-scope"],
+      "population_query": "For every authoritative consumer, invoke it with each required revision argument omitted and report any invocation that terminates without emitting a structured result.",
+      "affected_population": [
+        "review-scope invoked without --base terminates on an uncaught git rev-parse of an empty revision"
+      ],
+      "repair_condition": "No authoritative consumer may terminate without emitting a structured result. A missing or unresolvable required revision is a blocking finding, never an uncaught throw.",
+      "disposition": "OPEN"
     }
   ]
 }

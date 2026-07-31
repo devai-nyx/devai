@@ -1714,6 +1714,29 @@
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
       "closure_state": "RED_REQUIRED"
+    },
+    {
+      "finding_id": "R7-F011",
+      "defect_class_id": "AUTHORITATIVE_CONSUMER_UNCAUGHT_THROW",
+      "severity": "P1",
+      "population_query": "For every authoritative consumer, invoke it with each required revision argument omitted and report any invocation that terminates without emitting a structured result.",
+      "expected_complete_population": [
+        "review-scope --base omitted",
+        "every authoritative consumer with a required revision omitted"
+      ],
+      "adversarial_mutations": [
+        "omit --base from review-scope",
+        "omit each required revision argument from every authoritative consumer"
+      ],
+      "required_behavior": [
+        "No authoritative consumer terminates without emitting a structured result.",
+        "A missing or unresolvable required revision produces a blocking finding rather than an uncaught throw."
+      ],
+      "test_ids": ["R7-021-REVIEW-SCOPE-BASE-BLOCKS", "R7-021-NO-SILENT-TERMINATION"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-repair-handoff.md"],
+      "closure_state": "RED_REQUIRED"
     }
   ]
 }
