@@ -746,6 +746,40 @@
           "scripts/run-round-close-controls.mjs"
         ]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": [
+        "cabdb3ed9816c043f50291e547e1bd7b2c4e0090",
+        "f8061667ff0a659900bbcaa7fae5a6d7b140808a",
+        "cae574a48c19ed497c9e70ab29f19860c1644096",
+        "faa4d3b964b8cd8dd29f3c460c8f5fe0c98fe093",
+        "d4a3e37db0d5e66a5ed390c2d0740221e2a9c4d1",
+        "e717a3d946d257feb3ad3bdec1724d7aab0285ae",
+        "493928c2e50c014b30ec67ecb7b12c30139cec93",
+        "2abff2a0fafbe724f419f4997bdbb590829a501d",
+        "bb9f79cd5332e8396f847f187b7c72a86986eb09",
+        "3145baee1dfcb0eddc1db4ef714e48a9da7e5843",
+        "e0e8c4ab03e3e436af16174743b5234c15f8e005",
+        "49644596d32851ef56ffa4b982e51175881fb1cf"
+      ],
+      "law_commits": [
+        "63eea2863cbe56b36831d07fb880f4420d0791f8",
+        "690052814b87364e75424db639c6c8a333729f8d",
+        "1fa4405b5567bc6209ae2b921bce1bc15a42dae5",
+        "14487d208dd1400ee7266b8a37ccec880099d9bc",
+        "4ded20588cc364434e052cb3ee2820a15dc15b24",
+        "5b6ff667b2d5236615fc4d9114514ef9509c15dc",
+        "875d6c42faeba0e6355d2f9e48e27e86b576dd91"
+      ],
+      "red_evidence": {
+        "commit": "beb37bb6139bb2639e97e1de3f875ea6daf02c94",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-4.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-4-red-evidence.json",
+        "evidence_sha256": "63d142a3fc7e62ab8846971f2e20ead7f198de3c2349c1e7929c5fa05f3b3c0b",
+        "tests": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"]
+      }
     }
   ],
   "historical_commit_exceptions": [
