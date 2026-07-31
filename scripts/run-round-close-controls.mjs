@@ -8698,6 +8698,15 @@ function validateTransitionEdgeV6(context, transition, index, prior, findings) {
         ),
       );
   } else {
+    const coalescedWithoutPersistedBoundary =
+      transition.previous_state_digest === null &&
+      new Set([
+        'PREFLIGHT_GREEN->CANDIDATE_FROZEN',
+        'CANDIDATE_FROZEN->CYCLE_1_ACTIVE',
+        'PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN',
+        'NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE',
+      ]).has(`${transition.from}->${transition.to}`);
+    if (coalescedWithoutPersistedBoundary) return;
     // Per DII-252, the predecessor identity is the predecessor artifact self-digest,
     // corroborated rather than recomputed from a private field selection. A derivation
     // only the producing implementation can reproduce is not independently checkable.
@@ -9037,32 +9046,39 @@ function makeReviewStateV4(context, proof, scopeDigest, state, cycle, history, e
       ['NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE', 'ESCALATION_REQUIRED'].includes(transition.to)
         ? 2
         : 1;
-    // The predecessor identity binds a retained artifact, per DII-252. The writer
-    // persists that artifact rather than asserting a digest, so the validator has
-    // something independent to corroborate against.
+    // This constructor coalesces preflight/freeze/activation edges into one persisted
+    // state, so no complete predecessor artifact exists at those intermediate boundaries.
+    // Inventing a partial state would make an unauthenticated claim look corroborated.
+    // Only a predecessor already snapshotted by persistStateV5 is therefore bound here.
+    const claimedPredecessorDigest = transition.previous_state_digest ?? null;
     let retainedPredecessor = null;
-    if (index > 0) {
-      const predecessorBody = {
-        schemaVersion: '3.0.0',
-        round: context.profile.round,
-        state: transition.from,
-        cycle: transitionCycle,
-        candidate_sha: transition.candidate_sha,
-        tree_sha: proof?.manifest?.tree_sha ?? null,
-      };
-      const predecessor = withSelfDigest(predecessorBody, 'state_digest_sha256');
-      const statePath = context.profile.runtime.review_state;
+    if (
+      index > 0 &&
+      typeof claimedPredecessorDigest === 'string' &&
+      SHA256.test(claimedPredecessorDigest)
+    ) {
+      const currentStatePath = join(repoRoot, context.profile.runtime.review_state);
       const retainedPath = join(
-        dirname(join(repoRoot, statePath)),
+        dirname(currentStatePath),
         'review-states',
-        `${predecessor.state_digest_sha256}.json`,
+        `${claimedPredecessorDigest}.json`,
       );
-      mkdirSync(dirname(retainedPath), { recursive: true });
-      writeJsonAtomic(retainedPath, predecessor);
-      retainedPredecessor = {
-        state_path: statePath,
-        state_digest_sha256: predecessor.state_digest_sha256,
-      };
+      if (existsSync(retainedPath)) {
+        try {
+          const predecessor = readJson(retainedPath);
+          if (
+            selfDigestValid(predecessor, 'state_digest_sha256') &&
+            predecessor.state_digest_sha256 === claimedPredecessorDigest
+          )
+            retainedPredecessor = {
+              state_path: relative(repoRoot, retainedPath),
+              state_digest_sha256: claimedPredecessorDigest,
+            };
+        } catch {
+          // Authentication rejects unreadable retained bytes; construction must not
+          // replace them with a newly invented artifact.
+        }
+      }
     }
     const body = {
       from: transition.from,
@@ -9075,7 +9091,7 @@ function makeReviewStateV4(context, proof, scopeDigest, state, cycle, history, e
       review_result_digest: transition.review_result_digest ?? null,
       transport_digest: transition.transport_digest ?? null,
       repair_evidence_digest: transition.repair_evidence_digest ?? null,
-      previous_state_digest: retainedPredecessor?.state_digest_sha256 ?? null,
+      previous_state_digest: claimedPredecessorDigest,
       previous_state_artifact:
         retainedPredecessor === null
           ? null
