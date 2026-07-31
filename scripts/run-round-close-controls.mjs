@@ -8727,7 +8727,10 @@ function validateTransitionEdgeV6(context, transition, index, prior, findings) {
       SHA256.test(claimed) &&
       retained !== null &&
       selfDigestValid(retained, 'state_digest_sha256') &&
-      retained.state_digest_sha256 === claimed;
+      retained.state_digest_sha256 === claimed &&
+      transition.previous_state_artifact?.state_path === relative(repoRoot, retainedPath) &&
+      transition.previous_state_artifact?.artifact_digest_sha256 === claimed &&
+      transition.previous_state_artifact?.canonicalization === 'stable-json-minus-self-digest';
     if (!corroborated)
       findings.push(
         finding(
