@@ -31,7 +31,7 @@ record required by the role-pure sequence; that record does not yet exist.
 | Substantive runs used | 1 of 2                                                              |
 | Substantive runs left | **1 — Review Run 2, the sole remaining run**                        |
 | Review Run 3          | Forbidden by OM-017; failure of Run 2 goes to Owner escalation      |
-| Current head          | `bb9f79cd5332e8396f847f187b7c72a86986eb09`                          |
+| Current head          | `2abff2a0fafbe724f419f4997bdbb590829a501d`                          |
 | R-0007 standing       | **NOT STARTED** — `ENTRY_BLOCKED_DECLARATION_UNBOUND`               |
 
 The branch has not been pushed and no pull request exists.
@@ -73,10 +73,16 @@ not bear on the verdict.
 | `fff4e8c` | Auditor   | Superseding observation for six invalidated red cases           |
 | `b06a7f7` | Inspector | Correction: fixture gate closure digest                         |
 | `bb9f79c` | Engineer  | F001/F002 predecessor artifact authentication                   |
+| `37727d6` | Auditor   | This record, second issue                                       |
+| `54f7526` | Inspector | R7-001 repaired-class case made to discriminate                 |
+| `14487d2` | Architect | R7-F011 declared: uncaught throw in an authoritative consumer   |
+| `4c13d63` | Inspector | R7-F011 red, two contracts                                      |
+| `2abff2a` | Engineer  | R7-F011 repaired; every consumer emits a structured result      |
 
-Seventeen commits, all role-pure. Seven are corrections to earlier work in this same
-repair. They are recorded rather than squashed, because the sequence they document is
-itself the evidence.
+Twenty-three commits, all role-pure. Seven are corrections to earlier work in this same
+repair, and four belong to R7-F011, a class discovered during the repair and added to it
+on Owner direction. They are recorded rather than squashed, because the sequence they
+document is itself the evidence.
 
 ## Class standing
 
@@ -91,6 +97,7 @@ itself the evidence.
 | F007  | shared entry readiness                              | **green, 2 of 2**                                     |
 | F009  | capability model, no decision-id literal            | **green, 2 of 2**                                     |
 | F010  | registry-derived matrix floor                       | implemented                                           |
+| F011  | no consumer terminates without a structured result  | **green, 2 of 2**                                     |
 | F008  | prospective, consistent, immutable evidence         | procedural; ancestry enforceable since 3e863e5        |
 
 Nothing is `GREEN_PROVED` in the matrix. No class is recorded closed.
@@ -105,17 +112,22 @@ Nothing is `GREEN_PROVED` in the matrix. No class is recorded closed.
 - Every authoritative consumer rejects an omitted, symbolic or abbreviated candidate.
 - All thirteen OM-017 loader families widen; six real repository scripts do not, and
   neither `path.resolve` nor a Promise `resolve` parameter widens.
+- No authoritative consumer terminates without emitting a structured result. The general
+  contract found the defect in four consumers — `smart-converge`, `review-scope`,
+  `review-topic-count` and `envelope` — not only in the one where it was observed.
+- The repaired-class population check is exercised for the reason it names: the case
+  asserts `failed_checks` equals exactly `[repaired_class_population]`.
 - Closure derivation reaches `tsconfig.base.json`, the nine depth-2 references, all
   thirteen projects’ output and root sets, programs outside the former allowlist, and
   surfaces `packages/cli/dist/bin.js` as a missing executable rather than dropping it.
 
 ## What is not proved, and must not be read as proved
 
-- **The six R7-001 and R7-002 cases do not discriminate.** `stateChain` builds a state
-  whose `repair_evidence_digest` and transport linkage are unset, so the controller
-  never enters the repair or transport branches those assertions target. They fail, but
-  not for the reason they claim. Inspector work must bind those artifacts into the state
-  before the cases mean anything.
+- **Five of the six R7-001 and R7-002 cases do not discriminate.**
+  `R7-001-REPAIR-POPULATION-DERIVED` was repaired at `54f7526` and is now pinned to the
+  population check. The remaining five still need the same treatment: the fixture state
+  must bind the repair and transport artifacts, and each assertion must name the specific
+  check it depends on rather than a finding code.
 - **The R7-004 contracts are red by construction.** The derived closure is now
   authoritative and deliberately disagrees with the stale declared digests in
   `work/rounds/R-0007/affected-test-graph.json`, which is Architect-owned. Four gates
@@ -126,6 +138,26 @@ Nothing is `GREEN_PROVED` in the matrix. No class is recorded closed.
   separated genuine defects from fixture-shape failures. They are not evidence.
 - **Six of the 45 failures in `beb37bb` were infrastructure, not defects.** Superseded
   prospectively at `fff4e8c`; the original document is not edited.
+
+## The dominant failure mode: passing for the wrong reason
+
+Bringing one case to genuine green took four successive repairs, each revealed by fixing
+the previous:
+
+1. the fixture state never bound the repair artifact, so the branch was never entered;
+2. `review-scope` was invoked without `--base` and terminated on an uncaught throw,
+   emitting nothing, so the assertion saw an empty code list;
+3. the state bound the pre-mutation digest, so the finding fired on `evidence_digest`;
+4. deleting the only repaired class emptied the array, so the finding fired on schema
+   `minItems`.
+
+Each layer produced a plausible result. Three of the four would have been recorded as a
+pass proving the derived class population, while proving nothing of the kind.
+
+The generalisable rule: **`REVIEW_STATE_REPAIR_LINK_INVALID` covers eight sub-checks, so
+asserting the finding code accepts a pass from any of them.** An assertion must name the
+specific check it depends on. Several of the eighteen untriaged carried guards assert on
+codes this way and should be expected to contain similar wrong-reason passes.
 
 ## Errors made in this repair, and what they cost
 
@@ -216,10 +248,38 @@ The derived `command_closure` digests in `work/rounds/R-0007/affected-test-graph
 are deliberately stale. They can only be regenerated after the fixpoint derivation
 exists, in the Architect sequencing step.
 
+## R7-F011, a class added during the repair
+
+`review-scope` resolved `--base` through a throwing `git()` before any findings-based
+emit, so an omitted base terminated the process with no output and no findings. A caller
+received silence, indistinguishable from finding nothing wrong.
+
+It was **not reported by Review Run 1**. It is present at the reviewed candidate
+`25d0c17` and at `3e863e5`, before any Engineer commit of this repair, so it is
+pre-existing rather than introduced. It was found only because five adversaries could not
+discriminate and the cause was traced instead of assumed. The Owner directed repair under
+DII-252 rather than deferral to Review Run 2.
+
+The repair has two layers: a wrapper making `CONSUMER_TERMINATED_WITHOUT_RESULT` the
+floor for every command, and a specific `REVIEW_SCOPE_BASE_REQUIRED` naming the
+unresolvable revision. A catch-all alone would have traded a silence defect for a
+vagueness defect.
+
+**Open objection a reviewer may raise:** the wrapper could mask an unrelated future
+defect by converting a crash into a finding. The narrower repair is per-site revision
+validation at all six `option(--base) ?? ` call sites, retaining the wrapper only as
+a backstop. This is recorded now rather than left to be discovered.
+
+No schema was widened to accommodate the new class. A `provenance_note` field was
+drafted, rejected by the registry schema, and dropped rather than loosening
+`additionalProperties` — relaxing a floor to fit the document in hand is the defect
+R7-F010 describes.
+
 ## Remaining sequence
 
-1. Inspector — bind repair evidence and transport linkage into the fixture state so the
-   six R7-001 and R7-002 cases discriminate; then re-observe them.
+1. Inspector — bind the repair and transport artifacts into the fixture state for the
+   five remaining R7-001 and R7-002 cases, and pin each assertion to the specific check
+   it depends on rather than a finding code; then re-observe them.
 2. Inspector — triage the 18 failing carried-class guards, separating genuine defects
    from fixture-shape failures. Record which is which.
 3. Architect — regenerate `work/rounds/R-0007/affected-test-graph.json` closure digests
