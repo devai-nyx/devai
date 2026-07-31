@@ -3685,6 +3685,8 @@ function committedChangeRecords(base, head, findings) {
       '-z',
       '-M',
       '--find-renames',
+      '-C',
+      '--find-copies-harder',
       base,
       head,
     ]);
