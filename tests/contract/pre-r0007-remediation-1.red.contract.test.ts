@@ -2910,10 +2910,27 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
     });
 
     it('R2-F005 authenticates persisted predecessors from exact artifact bytes', () => {
-      const production = readFileSync(SCRIPT, 'utf8');
-      expect(production).toContain('persistedReviewArtifactDigestV7');
-      expect(production).toContain('previous_state_artifact_digest');
-      expect(production).toContain('previous_transition_artifact_digest');
+      const current = fixture(true);
+      const { priorState } = prepareRepairCandidate(current);
+      const predecessorDigest = required(
+        priorState.previous_state_digest as string | null,
+        'persisted predecessor digest is absent',
+      );
+      const predecessorPath = join(
+        current.root,
+        `${STATE}/review-states/${predecessorDigest}.json`,
+      );
+      const predecessorBytes = Buffer.from(readFileSync(predecessorPath));
+      const roundMarker = Buffer.from(`"round":"${ROUND}"`);
+      const markerOffset = predecessorBytes.indexOf(roundMarker);
+      expect(markerOffset).toBeGreaterThanOrEqual(0);
+      const mutatedByteOffset = markerOffset + roundMarker.length - 2;
+      predecessorBytes[mutatedByteOffset] = '1'.charCodeAt(0);
+      writeFileSync(predecessorPath, predecessorBytes);
+
+      const blocked = run(current, 'status');
+      expect(blocked.status).toBe(1);
+      expectCode(blocked, 'REVIEW_STATE_PREDECESSOR_INVALID');
     });
 
     it('R2-F006 rejects a decision dependency discoverable from the register but omitted from provenance', () => {
