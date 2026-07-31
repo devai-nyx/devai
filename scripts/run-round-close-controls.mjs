@@ -9669,21 +9669,41 @@ function readAuthenticatedStateV4(context, findings, expected) {
       const isCurrentValid =
         transport.transport_digest_sha256 === state.current_transport_digest &&
         state.current_review_result_digest !== null;
-      // The expected state-before identity is read from the independently authenticated
-      // state artifact. Taking it from the transport made the comparison a tautology:
-      // the transport was checked against a copy of its own field.
-      const expectedStateBeforeDigest = state.state_digest_sha256 ?? null;
+      // The state-before identity is corroborated against the authenticated state chain,
+      // which the transport cannot influence.
+      //
+      // Two wrong answers were tried before this one and both are rejected here. Taking
+      // the expectation from the transport is a tautology: the transport is compared
+      // with a copy of its own field. Taking it from the current state digest is also
+      // wrong: the writer records state_before_digest from the state as it stood when
+      // the transport was written, and the state is then re-digested with an incremented
+      // attempt count, so the current digest is legitimately different and the check
+      // would raise a false chain failure on every retry.
+      //
+      // The authenticated chain is the current state identity plus every predecessor
+      // identity recorded in its own transition history.
+      const authenticatedStateIdentities = new Set(
+        [
+          state.state_digest_sha256,
+          ...(state.transition_history ?? []).map(
+            ({ previous_state_digest: previous }) => previous,
+          ),
+        ].filter((value) => typeof value === 'string' && SHA256.test(value)),
+      );
       const stateBeforePath = join(
         dirname(path),
         'review-states',
         `${transport.state_before_digest}.json`,
       );
       let stateBeforeAuthentic = !exactArtifactChain;
-      if (exactArtifactChain && existsSync(stateBeforePath)) {
-        const stateBefore = readJson(stateBeforePath);
+      if (exactArtifactChain) {
+        const claimed = transport.state_before_digest;
+        const retained = existsSync(stateBeforePath) ? readJson(stateBeforePath) : null;
         stateBeforeAuthentic =
-          selfDigestValid(stateBefore, 'state_digest_sha256') &&
-          stateBefore.state_digest_sha256 === expectedStateBeforeDigest;
+          retained !== null &&
+          selfDigestValid(retained, 'state_digest_sha256') &&
+          retained.state_digest_sha256 === claimed &&
+          authenticatedStateIdentities.has(claimed);
       }
       if (
         !reauthenticateTransportV6(
@@ -9698,7 +9718,9 @@ function readAuthenticatedStateV4(context, findings, expected) {
             ? {
                 payload_digest: payloadDigest,
                 validation: isCurrentValid ? 'VALID' : 'INVALID_TRANSPORT',
-                state_before_digest: expectedStateBeforeDigest,
+                // state_before_digest is deliberately absent: it is corroborated against
+                // the authenticated state chain above, not by equality with a value this
+                // function could only take from the transport or the current state.
               }
             : null,
         ) ||
