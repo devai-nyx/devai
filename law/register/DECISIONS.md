@@ -4900,6 +4900,33 @@ the first implementation commit modifies the evidence. Historically retrospectiv
 evidence is superseded prospectively and labelled as non-temporal replay rather than
 rewritten.
 
+**Amendment — what a transition identity binds.** Binding every field of a transition into
+the predecessor identity was the wrong resolution and is withdrawn. A transition's own
+bytes are already authenticated by `transition_digest_sha256`, so re-binding them into
+`previous_state_digest` adds no authentication while making the identity irreproducible
+by any independent party: a fixture, an auditor, or a reviewer recomputing the chain must
+replicate the controller's field selection exactly and stay in step with it forever. An
+identity only the producing implementation can compute is not an independently checkable
+identity.
+
+The obligation R7-F001 states is that no byte of the **predecessor state artifact** is
+left unselected. The predecessor's own self-digest satisfies that exactly: it is computed
+over the complete canonical predecessor body minus its self-digest field, so mutating any
+byte changes it. `previous_state_digest` therefore binds the predecessor state artifact's
+`state_digest_sha256`, and `previous_state_artifact` retains the path, that digest and the
+declared canonicalization so the artifact remains independently retrievable.
+
+Authentication of that claim does not come from recomputing a private derivation. It comes
+from corroboration against the authenticated state chain, the same rule the transport
+state-before identity follows: the retained artifact must exist, its self-digest must
+recompute from its own bytes, it must equal the claimed value, and the claimed value must
+be a member of the chain the state itself records. A substituted digest fails because no
+matching artifact exists and it is absent from the chain; a mutated predecessor fails
+because its self-digest changes.
+
+This makes the identity reproducible by anyone holding the artifacts, which is the
+property a reviewer needs, without weakening what is bound.
+
 This decision authorizes the campaign-3 complete-class repair. It does not bypass any
 R-0007 entry or batch gate, does not bind the B0 declaration, does not alter closed
 R-0006 artifacts, and does not deploy, publish, tag, promote evidence, or mutate the
