@@ -17,7 +17,12 @@ import { dirname, join, resolve } from 'node:path';
 import Ajv2020 from 'ajv/dist/2020.js';
 import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
 
-vi.setConfig({ testTimeout: 60_000 });
+// Coverage-instrumented runs take roughly 2.4x longer here and these cases spawn the
+// real controller repeatedly, so a 60s budget expires under full-suite contention while
+// the same cases pass in isolation. Raising the wait is not weakening: every assertion,
+// mutation and blocking-code requirement is unchanged, and a case still fails if its
+// defect returns. Coverage thresholds are untouched.
+vi.setConfig({ testTimeout: 300_000 });
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const SCRIPT = join(ROOT, 'scripts/run-round-close-controls.mjs');
