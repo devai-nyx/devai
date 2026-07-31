@@ -1,6 +1,14 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -19,11 +27,16 @@ import {
   commit as harnessCommit,
   mandate,
   bindingMarker,
+  digestBytes,
+  materializeTerminal,
+  passingResult,
+  refreshDispositionProof,
   selfDigest,
+  redigestState,
   stateChain,
   transition,
-  transportEvidence,
   repairEvidence,
+  withAuthenticReuse,
 } from './helpers/r0007-review-harness.js';
 
 vi.setConfig({ testTimeout: 300_000 });
@@ -67,6 +80,17 @@ function clone(): { root: string; candidate: string } {
   disposable.push(parent);
   const root = join(parent, 'repo');
   execFileSync('git', ['clone', '--quiet', '--shared', ROOT, root]);
+  symlinkSync(join(ROOT, 'node_modules'), join(root, 'node_modules'), 'dir');
+  for (const packageJson of git(ROOT, ['ls-files', 'packages/*/package.json'])
+    .split('\n')
+    .filter(Boolean)) {
+    const packageRoot = dirname(packageJson);
+    const installed = join(ROOT, packageRoot, 'node_modules');
+    if (existsSync(installed))
+      symlinkSync(installed, join(root, packageRoot, 'node_modules'), 'dir');
+  }
+  const excludePath = join(root, '.git/info/exclude');
+  writeFileSync(excludePath, `${readFileSync(excludePath, 'utf8')}node_modules\n`);
   return { root, candidate: git(root, ['rev-parse', 'HEAD']) };
 }
 
@@ -138,6 +162,58 @@ const AUTHORITATIVE_COMMANDS = [
   'envelope',
   'rehearse',
 ] as const;
+
+function createSubstitutedStateBeforeAttempt(attempt: 1 | 2): {
+  outcome: ReturnType<typeof harnessRun>;
+} {
+  const current = harnessFixture(true);
+  const frozen = harnessFreeze(current);
+  const scoped = harnessRun(current, 'review-scope', [
+    '--base',
+    current.base,
+    '--candidate',
+    frozen.candidate,
+  ]);
+  expect(scoped.status, JSON.stringify(scoped.value, null, 2)).toBe(0);
+
+  for (let ordinal = 1; ordinal <= attempt; ordinal += 1) {
+    const resultPath = `fixture/invalid-review-${String(ordinal)}.json`;
+    harnessPut(current.root, resultPath, '{\n');
+    const invalid = harnessRun(current, 'review-check', [
+      '--candidate',
+      frozen.candidate,
+      '--cycle',
+      '1',
+      '--review-result',
+      resultPath,
+    ]);
+    expect(invalid.status, JSON.stringify(invalid.value, null, 2)).toBe(1);
+  }
+
+  const transportPath = `${HARNESS_STATE}/review-transports/attempt-${String(attempt)}.json`;
+  const transport = harnessReadJson(current.root, transportPath);
+  transport.state_before_digest = 'e'.repeat(64);
+  const substitutedTransport = selfDigest(transport, 'transport_digest_sha256');
+  harnessPutJson(current.root, transportPath, substitutedTransport);
+  harnessPutJson(current.root, `${HARNESS_STATE}/review-transport.json`, substitutedTransport);
+
+  const state = harnessReadJson(current.root, `${HARNESS_STATE}/review-state.json`);
+  const transportDigests = [...(state.transport_history_digests as string[])];
+  transportDigests[attempt - 1] = substitutedTransport.transport_digest_sha256 as string;
+  state.transport_history_digests = transportDigests;
+  state.current_transport_digest = substitutedTransport.transport_digest_sha256;
+  const substitutedState = redigestState(state);
+  harnessPutJson(current.root, `${HARNESS_STATE}/review-state.json`, substitutedState);
+  harnessPutJson(
+    current.root,
+    `${HARNESS_STATE}/review-states/${String(substitutedState.state_digest_sha256)}.json`,
+    substitutedState,
+  );
+
+  return {
+    outcome: harnessRun(current, 'review-check', ['--candidate', frozen.candidate]),
+  };
+}
 
 describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair population', () => {
   describe('R7-F003 reviewer binding is candidate bound for every authoritative consumer', () => {
@@ -334,9 +410,18 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         POLICY_PATH,
       );
       const gate = policy.convergence.commands.find(({ id }) => id === 'materializations');
+      expect(gate, 'materializations must remain an authoritative literal gate').toBeTruthy();
+      // Remove the exact profile from a committed, otherwise-clean candidate. Requiring
+      // the profile-specific finding proves that the literal gate consumed the profile;
+      // expecting an all-green exit here would instead conflate this contract with
+      // unrelated closure-materialization findings.
+      rmSync(join(root, PROFILE_PATH));
+      commitAll(root, 'test: remove the profile consumed by materializations');
       const [program, ...args] = gate?.argv ?? [];
       const result = spawnSync(program ?? '', args, { cwd: root, encoding: 'utf8' });
-      expect(result.status, `${result.stdout}\n${result.stderr}`).toBe(0);
+      const output = `${result.stdout}\n${result.stderr}`;
+      expect(result.status, output).toBe(1);
+      expect(output).toContain('ROUND_PROFILE_INVALID');
     });
   });
 
@@ -413,8 +498,29 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         root,
         'work/rounds/R-0007/affected-test-graph.json',
       );
+      // Force every row through the candidate-derived comparison. Reading the declared
+      // graph directly would only test an Architect materialization, not the controller
+      // fixpoint this case names.
+      for (const entry of graph.command_closure) entry.closure_digest = 'f'.repeat(64);
+      putJson(root, 'work/rounds/R-0007/affected-test-graph.json', graph);
+      commitAll(root, 'test: force every gate through closure derivation');
+      const candidate = git(root, ['rev-parse', 'HEAD']);
+      const outcome = run(root, ['policy-check', '--round', 'R-0007', '--candidate', candidate]);
+      const derivations = (
+        (outcome.value?.findings ?? []) as Array<{
+          code?: string;
+          derived?: Record<string, unknown>;
+        }>
+      )
+        .filter(({ code }) => code === 'GATE_COMMAND_CLOSURE_DERIVATION_INVALID')
+        .map(({ derived }) => derived)
+        .filter((entry): entry is Record<string, unknown> => entry !== undefined);
+      expect(
+        derivations,
+        `every forced gate must expose its candidate-derived closure\n${detail(outcome)}`,
+      ).toHaveLength(graph.command_closure.length);
       const union = new Set<string>();
-      for (const entry of graph.command_closure)
+      for (const entry of derivations)
         for (const key of ['scripts', 'programs', 'executables', 'project_references'])
           for (const member of (entry[key] ?? []) as string[]) union.add(member);
 
@@ -436,18 +542,40 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
 
     it('R7-004-GENERIC-PROGRAM-PARSE derives programs beyond a fixed allowlist', () => {
       const { root } = clone();
-      const graph = json<{ command_closure: Array<{ programs?: string[] }> }>(
+      const policy = json<{
+        convergence: { commands: Array<{ id: string; argv: string[] }> };
+      }>(root, POLICY_PATH);
+      const graph = json<{ command_closure: Array<Record<string, unknown>> }>(
         root,
         'work/rounds/R-0007/affected-test-graph.json',
       );
-      const programs = new Set(graph.command_closure.flatMap(({ programs: p }) => p ?? []));
-      // eslint and changeset are named in reachable script strings but absent from the
-      // hardcoded /\b(?:node|vitest|tsc|git|prettier|pnpm)\b/ allowlist.
-      const expected = ['eslint', 'changeset'];
-      const missing = expected.filter((program) => !programs.has(program));
+      const probes = ['eslint', 'changeset'];
+      probes.forEach((program, index) => {
+        policy.convergence.commands[index].argv = ['pnpm', 'exec', program, '--version'];
+        graph.command_closure[index].closure_digest = 'e'.repeat(64);
+      });
+      putJson(root, POLICY_PATH, policy);
+      putJson(root, 'work/rounds/R-0007/affected-test-graph.json', graph);
+      commitAll(root, 'test: introduce generic delegated program probes');
+      const candidate = git(root, ['rev-parse', 'HEAD']);
+      const outcome = run(root, ['policy-check', '--round', 'R-0007', '--candidate', candidate]);
+      const findings = (outcome.value?.findings ?? []) as Array<{
+        code?: string;
+        gate_id?: string;
+        derived?: { programs?: string[] };
+      }>;
+      const missing = probes.filter((program, index) => {
+        const gateId = policy.convergence.commands[index].id;
+        return !findings.some(
+          (finding) =>
+            finding.code === 'GATE_COMMAND_CLOSURE_DERIVATION_INVALID' &&
+            finding.gate_id === gateId &&
+            finding.derived?.programs?.includes(program),
+        );
+      });
       expect(
         missing,
-        `programs derived from an allowlist rather than the command string: ${missing.join(', ')}`,
+        `${detail(outcome)}\nprograms not parsed generically: ${missing.join(', ')}`,
       ).toEqual([]);
     });
 
@@ -486,25 +614,29 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
 
     it('R7-008-EVIDENCE-ANCESTRY precedes every implementation-surface commit', () => {
       const evidence = json<{ inspector_candidate_sha: string }>(ROOT, EVIDENCE);
-      const red = evidence.inspector_candidate_sha;
+      const evidenceCommits = git(ROOT, ['log', '--diff-filter=A', '--format=%H', '--', EVIDENCE])
+        .split('\n')
+        .filter(Boolean);
+      expect(evidenceCommits, 'red evidence must have one immutable creation commit').toHaveLength(
+        1,
+      );
+      const red = evidenceCommits[0];
+      expect(
+        git(ROOT, ['rev-parse', `${red}^`]),
+        'the evidence payload must identify the exact rejected Inspector candidate',
+      ).toBe(evidence.inspector_candidate_sha);
       const profile = json<{ sources: { remediation_closure_matrix: string } }>(ROOT, PROFILE_PATH);
       const matrix = json<{ classes: Array<{ implementation_surfaces: string[] }> }>(
         ROOT,
         profile.sources.remediation_closure_matrix,
       );
       const surfaces = [...new Set(matrix.classes.flatMap((c) => c.implementation_surfaces))];
-      // Scope is this repair only. The campaign base ff5c805 precedes the failed
-      // remediation whose implementation commits are ancestors of this red evidence;
-      // the rule binds the NEW implementation commits, which start after the candidate
-      // that Review Run 1 rejected.
-      const base = '25d0c17d84eff057817ab5849912f77b86a4f311';
       const offenders: string[] = [];
       for (const surface of surfaces) {
-        const touching = git(ROOT, ['log', '--format=%H', `${base}..HEAD`, '--', surface])
+        const touching = git(ROOT, ['log', '--format=%H', `${red}..HEAD`, '--', surface])
           .split('\n')
           .filter(Boolean);
         for (const commitSha of touching) {
-          if (commitSha === red) continue;
           const ancestor = spawnSync('git', ['merge-base', '--is-ancestor', red, commitSha], {
             cwd: ROOT,
           });
@@ -518,54 +650,45 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
     });
 
     it('R7-008-EVIDENCE-IMMUTABLE-AFTER-IMPL is never modified at or after implementation', () => {
-      // The implementation commit is read from the Architect-bound sequencing record,
-      // never from the evidence itself: the evidence is written before any
-      // implementation exists and must stay immutable afterwards.
-      const sequencing = json<{
-        bindings: Array<{
-          round: string;
-          implementation_commits?: string[];
-          red_evidence?: { evidence_path?: string };
-        }>;
-      }>(ROOT, 'law/policy/governed-sequencing.json');
-      const binding = sequencing.bindings.find(
-        (entry) => entry.round === 'R-0007' && entry.red_evidence?.evidence_path === EVIDENCE,
+      const evidenceCommit = git(ROOT, ['log', '--diff-filter=A', '--format=%H', '--', EVIDENCE]);
+      expect(evidenceCommit).toMatch(/^[a-f0-9]{40}$/u);
+      const profile = json<{ sources: { remediation_closure_matrix: string } }>(ROOT, PROFILE_PATH);
+      const matrix = json<{ classes: Array<{ implementation_surfaces: string[] }> }>(
+        ROOT,
+        profile.sources.remediation_closure_matrix,
       );
+      const surfaces = [...new Set(matrix.classes.flatMap((c) => c.implementation_surfaces))];
+      const implementations = git(ROOT, [
+        'log',
+        '--reverse',
+        '--format=%H',
+        `${evidenceCommit}..HEAD`,
+        '--',
+        ...surfaces,
+      ])
+        .split('\n')
+        .filter(Boolean);
+      expect(implementations.length, 'red evidence must precede an implementation').toBeGreaterThan(
+        0,
+      );
+      const touching = git(ROOT, [
+        'log',
+        '--format=%H',
+        `${implementations[0]}~1..HEAD`,
+        '--',
+        EVIDENCE,
+      ])
+        .split('\n')
+        .filter(Boolean);
       expect(
-        binding,
-        'governed sequencing must bind this red evidence to its implementation commits',
-      ).toBeTruthy();
-      const implementations = binding?.implementation_commits ?? [];
-      expect(
-        implementations.length,
-        'the binding must name at least one implementation',
-      ).toBeGreaterThan(0);
-      const offenders: string[] = [];
-      for (const implementation of implementations) {
-        const touching = git(ROOT, [
-          'log',
-          '--format=%H',
-          `${implementation}~1..HEAD`,
-          '--',
-          EVIDENCE,
-        ])
-          .split('\n')
-          .filter(Boolean);
-        offenders.push(...touching);
-      }
-      expect(
-        [...new Set(offenders)],
-        `red evidence was rewritten at or after implementation: ${offenders.join(', ')}`,
+        touching,
+        `red evidence was rewritten at or after implementation: ${touching.join(', ')}`,
       ).toEqual([]);
     });
   });
 
   describe('R7-F002 every state-machine edge, terminal and attempt is a runtime population', () => {
     const STATE_PATH = `${HARNESS_STATE}/review-state.json`;
-    const blocking = (result: { value: Record<string, unknown> }): string[] =>
-      harnessCodes(result as never).filter((code) =>
-        /^REVIEW_(?:STATE|TRANSPORT|RESULT)_/u.test(code),
-      );
 
     it('R7-002-TWELVE-EDGES-RUNTIME drives all twelve edges through the real controller', () => {
       const current = harnessFixture(true);
@@ -578,88 +701,186 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       );
       expect(edges, 'the declared edge population must be exactly twelve').toHaveLength(12);
 
-      const scopeDigest = 'a'.repeat(64);
+      const scoped = harnessRun(current, 'review-scope', [
+        '--base',
+        current.base,
+        '--candidate',
+        frozen.candidate,
+      ]);
+      expect(scoped.status, JSON.stringify(scoped.value, null, 2)).toBe(0);
+      const scopeDigest = (scoped.value.manifest as { manifest_digest_sha256: string })
+        .manifest_digest_sha256;
       const unproved: string[] = [];
       for (const [from, to] of edges) {
-        const cycle: 1 | 2 = /CYCLE_2|NEW_CANDIDATE/u.test(`${from}:${to}`) ? 2 : 1;
-        const history = [transition(from, to, frozen, { review_scope_digest: scopeDigest })];
+        const queue: Array<{ state: string; path: ReadonlyArray<readonly [string, string]> }> = [
+          { state: 'DRAFT', path: [] },
+        ];
+        const visited = new Set<string>();
+        let prefix: ReadonlyArray<readonly [string, string]> | null = null;
+        while (queue.length > 0) {
+          const next = queue.shift();
+          if (next === undefined || visited.has(next.state)) continue;
+          if (next.state === from) {
+            prefix = next.path;
+            break;
+          }
+          visited.add(next.state);
+          for (const target of policy.review_state_machine.allowed_transitions[next.state] ?? [])
+            queue.push({ state: target, path: [...next.path, [next.state, target] as const] });
+        }
+        expect(prefix, `no declared path reaches ${from}`).not.toBeNull();
+        const path = [...(prefix ?? []), [from, to] as const];
+        const history = path.map(([edgeFrom, edgeTo]) =>
+          transition(edgeFrom, edgeTo, frozen, { review_scope_digest: scopeDigest }),
+        );
+        const cycle = Number(history.at(-1)?.cycle) as 1 | 2;
         const state = stateChain(current, frozen, to, cycle, scopeDigest, history);
         harnessPutJson(current.root, STATE_PATH, state);
 
-        // Mutate one byte of the consumed predecessor identity and require a blocking code.
+        const baseline = harnessRun(current, 'review-check', ['--candidate', frozen.candidate]);
+        const baselineEdges = (
+          (baseline.value.findings ?? []) as Array<{ code?: string; ordinal?: number }>
+        ).filter(({ code }) => code === 'REVIEW_STATE_TRANSITION_EDGE_INVALID');
+        if (baselineEdges.length > 0) {
+          unproved.push(`${from}->${to}: declared edge rejected`);
+          continue;
+        }
+
+        // Keep the artifact internally self-consistent while changing the exercised edge
+        // to a schema-valid but undeclared target. A digest-only failure would not prove
+        // that the controller consumes the policy edge population.
         const mutated = structuredClone(state) as Record<string, unknown>;
         const entries = mutated.transition_history as Array<Record<string, unknown>>;
-        entries[0].previous_state_digest = 'c'.repeat(64);
-        harnessPutJson(current.root, STATE_PATH, mutated);
-        const outcome = harnessRun(current, 'review-check', []);
-        if (blocking(outcome).length === 0) unproved.push(`${from}->${to}`);
+        const lastEntry = entries.at(-1);
+        expect(lastEntry, 'mutated transition history must have a terminal edge').toBeDefined();
+        if (lastEntry === undefined) throw new Error('transition history is empty');
+        lastEntry.to = 'DRAFT';
+        mutated.state = 'DRAFT';
+        mutated.cycle = 1;
+        const redigested = redigestState(mutated);
+        harnessPutJson(current.root, STATE_PATH, redigested);
+        const outcome = harnessRun(current, 'review-check', ['--candidate', frozen.candidate]);
+        const detected = (
+          (outcome.value.findings ?? []) as Array<{ code?: string; ordinal?: number }>
+        ).some(
+          ({ code, ordinal }) =>
+            code === 'REVIEW_STATE_TRANSITION_EDGE_INVALID' && ordinal === path.length,
+        );
+        if (!detected) unproved.push(`${from}->${to}: substituted edge accepted`);
       }
       expect(
         unproved,
-        `edges whose consumed predecessor mutation was not detected: ${unproved.join(', ')}`,
+        `declared edges not discriminated at runtime: ${unproved.join(', ')}`,
       ).toEqual([]);
     });
 
     it('R7-002-THREE-TERMINALS-RUNTIME refuses re-entry from every terminal state', () => {
-      const current = harnessFixture(true);
-      const frozen = harnessFreeze(current);
-      const policy = harnessReadJson(current.root, 'law/policy/round-close-controls.json') as {
+      const policyFixture = harnessFixture(true);
+      const policy = harnessReadJson(
+        policyFixture.root,
+        'law/policy/round-close-controls.json',
+      ) as {
         review_state_machine: { terminal_states: string[] };
       };
       const terminals = policy.review_state_machine.terminal_states;
       expect([...terminals].sort()).toEqual(
         ['ESCALATION_REQUIRED', 'PASS', 'REVIEW_TRANSPORT_BLOCKED'].sort(),
       );
-      const scopeDigest = 'a'.repeat(64);
-      const unproved: string[] = [];
-      for (const terminal of terminals) {
-        const cycle = terminal === 'ESCALATION_REQUIRED' ? 2 : 1;
-        const from = cycle === 2 ? 'CYCLE_2_ACTIVE' : 'CYCLE_1_ACTIVE';
-        const history = [transition(from, terminal, frozen, { review_scope_digest: scopeDigest })];
-        const state = stateChain(current, frozen, terminal, cycle, scopeDigest, history);
-        harnessPutJson(current.root, STATE_PATH, state);
-        const outcome = harnessRun(current, 'review-scope', [
-          '--base',
-          current.base,
+
+      const cases = [
+        {
+          terminal: 'PASS',
+          predecessor: 'CYCLE_1_ACTIVE',
+          cycle: 1,
+        },
+        {
+          terminal: 'ESCALATION_REQUIRED',
+          predecessor: 'CYCLE_2_ACTIVE',
+          cycle: 2,
+        },
+        {
+          terminal: 'REVIEW_TRANSPORT_BLOCKED',
+          predecessor: 'CYCLE_1_ACTIVE',
+          cycle: 1,
+        },
+      ] as const;
+      for (const { terminal, predecessor, cycle } of cases) {
+        const { current, frozen } = materializeTerminal(terminal, predecessor, cycle);
+        const scope = harnessReadJson(current.root, `${HARNESS_STATE}/review-scope-manifest.json`);
+        const state = harnessReadJson(current.root, STATE_PATH);
+        const lastTransition = (state.transition_history as Array<Record<string, unknown>>).at(-1);
+        expect(state).toMatchObject({
+          state: terminal,
+          cycle,
+          candidate_sha: frozen.candidate,
+          review_scope_digest: scope.manifest_digest_sha256,
+        });
+        expect(lastTransition).toMatchObject({
+          from: predecessor,
+          to: terminal,
+          cycle,
+          candidate_sha: frozen.candidate,
+          review_scope_digest: scope.manifest_digest_sha256,
+        });
+
+        const outcome = harnessRun(current, 'review-check', [
           '--candidate',
           frozen.candidate,
+          '--cycle',
+          String(cycle),
         ]);
-        const observed = harnessCodes(outcome);
-        if (!observed.includes('REVIEW_STATE_TERMINAL') && outcome.status === 0)
-          unproved.push(terminal);
+        expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+        expect(outcome.value).toMatchObject({
+          command: 'review-check',
+          candidate: frozen.candidate,
+          cycle,
+          state: terminal,
+          findings: expect.arrayContaining([
+            expect.objectContaining({
+              code: 'REVIEW_STATE_TERMINAL',
+              message: 'terminal review state has no successor',
+            }),
+          ]),
+        });
       }
-      expect(unproved, `terminals allowing re-entry: ${unproved.join(', ')}`).toEqual([]);
     });
 
     it('R7-002-ATTEMPTS-ZERO-ONE-TWO authenticates every transport attempt ordinal', () => {
       const current = harnessFixture(true);
       const frozen = harnessFreeze(current);
-      const scopeDigest = 'a'.repeat(64);
       const unproved: string[] = [];
-      for (const attempt of [0, 1, 2] as ReadonlyArray<0 | 1 | 2>) {
-        const history = [
-          transition('CANDIDATE_FROZEN', 'CYCLE_1_ACTIVE', frozen, {
-            review_scope_digest: scopeDigest,
-          }),
-        ];
-        const state = stateChain(current, frozen, 'CYCLE_1_ACTIVE', 1, scopeDigest, history, {
-          transport_attempts: attempt,
+      const scoped = harnessRun(current, 'review-scope', [
+        '--base',
+        current.base,
+        '--candidate',
+        frozen.candidate,
+      ]);
+      expect(scoped.status, JSON.stringify(scoped.value, null, 2)).toBe(0);
+      const zeroState = harnessReadJson(current.root, STATE_PATH);
+      expect(zeroState.transport_attempts).toBe(0);
+      expect(zeroState.transport_history_digests).toEqual([]);
+      const zero = harnessRun(current, 'review-check', ['--candidate', frozen.candidate]);
+      if (
+        harnessCodes(zero).some((code) =>
+          [
+            'REVIEW_TRANSPORT_ATTEMPT_POPULATION_INCOMPLETE',
+            'REVIEW_TRANSPORT_CHAIN_MISSING',
+            'REVIEW_TRANSPORT_CHAIN_INVALID',
+          ].includes(code),
+        )
+      )
+        unproved.push('attempt-0: empty population rejected');
+
+      for (const attempt of [1, 2] as const) {
+        const { outcome } = createSubstitutedStateBeforeAttempt(attempt);
+        const expectedCode =
+          attempt === 1 ? 'REVIEW_TRANSPORT_CHAIN_INVALID' : 'REVIEW_TRANSPORT_PREDECESSOR_INVALID';
+        const detected = (
+          (outcome.value.findings ?? []) as Array<{ code?: string; attempt?: number }>
+        ).some(({ code, attempt: observedAttempt }) => {
+          return code === expectedCode && observedAttempt === attempt;
         });
-        harnessPutJson(current.root, STATE_PATH, state);
-        if (attempt > 0) {
-          const transport = transportEvidence(
-            frozen,
-            scopeDigest,
-            attempt as 1 | 2,
-            state.state_digest_sha256 as string,
-            null,
-          ) as Record<string, unknown>;
-          // Substitute the state-before identity the transport claims to authenticate.
-          transport.state_before_digest = 'd'.repeat(64);
-          harnessPutJson(current.root, `${HARNESS_STATE}/review-transport.json`, transport);
-        }
-        const outcome = harnessRun(current, 'review-check', []);
-        if (attempt > 0 && blocking(outcome).length === 0) unproved.push(`attempt-${attempt}`);
+        if (!detected) unproved.push(`attempt-${String(attempt)}: substituted state accepted`);
       }
       expect(
         unproved,
@@ -756,60 +977,65 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
     });
 
     it('R7-001-NO-SELF-COMPARED-EXPECTATION detects a substituted state-before artifact', () => {
-      const current = harnessFixture(true);
-      const frozen = harnessFreeze(current);
-      const scopeDigest = 'a'.repeat(64);
-      const history = [
-        transition('CANDIDATE_FROZEN', 'CYCLE_1_ACTIVE', frozen, {
-          review_scope_digest: scopeDigest,
-        }),
-      ];
-      const state = stateChain(current, frozen, 'CYCLE_1_ACTIVE', 1, scopeDigest, history, {
-        transport_attempts: 1,
-      });
-      harnessPutJson(current.root, `${HARNESS_STATE}/review-state.json`, state);
-      const transport = transportEvidence(
-        frozen,
-        scopeDigest,
-        1,
-        state.state_digest_sha256 as string,
-        null,
-      ) as Record<string, unknown>;
-      transport.state_before_digest = 'e'.repeat(64);
-      harnessPutJson(current.root, `${HARNESS_STATE}/review-transport.json`, transport);
-      const outcome = harnessRun(current, 'review-check', []);
-      const observed = harnessCodes(outcome).filter((code) =>
-        /^REVIEW_(?:STATE|TRANSPORT)_/u.test(code),
-      );
-      expect(observed, JSON.stringify(outcome.value, null, 2)).not.toEqual([]);
+      const { outcome } = createSubstitutedStateBeforeAttempt(1);
+      const finding = (
+        (outcome.value.findings ?? []) as Array<{ code?: string; attempt?: number }>
+      ).find(({ code, attempt }) => code === 'REVIEW_TRANSPORT_CHAIN_INVALID' && attempt === 1);
+      expect(finding, JSON.stringify(outcome.value, null, 2)).toBeTruthy();
     });
 
     it('R7-001-PREDECESSOR-ARTIFACT-END-TO-END binds the complete predecessor artifact', () => {
       const current = harnessFixture(true);
       const frozen = harnessFreeze(current);
-      const scopeDigest = 'a'.repeat(64);
+      const scoped = harnessRun(current, 'review-scope', [
+        '--base',
+        current.base,
+        '--candidate',
+        frozen.candidate,
+      ]);
+      expect(scoped.status, JSON.stringify(scoped.value, null, 2)).toBe(0);
+      const scopeDigest = (scoped.value.manifest as { manifest_digest_sha256: string })
+        .manifest_digest_sha256;
       const history = [
+        transition('DRAFT', 'PREFLIGHT_GREEN', frozen, { review_scope_digest: scopeDigest }),
+        transition('PREFLIGHT_GREEN', 'CANDIDATE_FROZEN', frozen, {
+          review_scope_digest: scopeDigest,
+        }),
         transition('CANDIDATE_FROZEN', 'CYCLE_1_ACTIVE', frozen, {
+          review_scope_digest: scopeDigest,
+        }),
+        transition('CYCLE_1_ACTIVE', 'REPAIR_REQUIRED', frozen, {
           review_scope_digest: scopeDigest,
         }),
       ];
       const state = stateChain(
         current,
         frozen,
-        'CYCLE_1_ACTIVE',
+        'REPAIR_REQUIRED',
         1,
         scopeDigest,
         history,
       ) as Record<string, unknown>;
-      // An unselected byte of the predecessor identity must still be authenticated.
       const entries = state.transition_history as Array<Record<string, unknown>>;
+      const predecessor = entries.at(-1)?.previous_state_artifact as Record<string, unknown>;
       expect(
-        Object.hasOwn(entries[0], 'previous_state_artifact'),
+        predecessor,
         'a production writer must persist the predecessor artifact reference',
-      ).toBe(true);
-      harnessPutJson(current.root, `${HARNESS_STATE}/review-state.json`, state);
-      const outcome = harnessRun(current, 'review-check', []);
-      expect(outcome.status).not.toBeNull();
+      ).toBeTruthy();
+      // Substitute only the persisted reference and re-digest the complete state. The
+      // retained predecessor bytes still corroborate previous_state_digest, so a reader
+      // that ignores previous_state_artifact would accept this mutation.
+      predecessor.artifact_digest_sha256 = 'c'.repeat(64);
+      const substituted = redigestState(state);
+      harnessPutJson(current.root, `${HARNESS_STATE}/review-state.json`, substituted);
+      const outcome = harnessRun(current, 'review-check', ['--candidate', frozen.candidate]);
+      const finding = (
+        (outcome.value.findings ?? []) as Array<{ code?: string; ordinal?: number }>
+      ).find(
+        ({ code, ordinal }) =>
+          code === 'REVIEW_STATE_PREDECESSOR_STATE_INVALID' && ordinal === history.length,
+      );
+      expect(finding, JSON.stringify(outcome.value, null, 2)).toBeTruthy();
     });
   });
 
@@ -870,7 +1096,13 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       expect(gateIds).toHaveLength(16);
 
       const offenders: string[] = [];
-      for (const failing of gateIds) {
+      for (const [failingOrdinal, failing] of gateIds.entries()) {
+        const cacheRoot = join(current.root, `${HARNESS_STATE}/freshness/tasks/gate-${failing}`);
+        rmSync(cacheRoot, { recursive: true, force: true });
+        expect(
+          existsSync(cacheRoot),
+          `${failing}: failing gate cache must be absent so the mutation is executed`,
+        ).toBe(false);
         harnessPut(current.root, 'fixture/fail-gate.txt', `${failing}\n`);
         const converged = harnessRun(current, 'smart-converge', [
           '--base',
@@ -886,14 +1118,32 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
           offenders.push(`${failing}: ${first.length} records`);
           continue;
         }
-        const complete = first.every(
-          (record) =>
-            typeof record.gate_id === 'string' && Number.isInteger(record.exit_code as number),
-        );
+        const complete = first.every((record) => {
+          return typeof record.gate_id === 'string' && Number.isInteger(record.exit_code as number);
+        });
         if (!complete) offenders.push(`${failing}: record missing gate_id or exit_code`);
         const ordered = first.map((record) => String(record.gate_id));
         if (JSON.stringify(ordered) !== JSON.stringify(gateIds))
           offenders.push(`${failing}: population reordered or incomplete`);
+        const failedRecord = first[failingOrdinal];
+        if (
+          failedRecord?.gate_id !== failing ||
+          failedRecord.outcome !== 'EXECUTE' ||
+          failedRecord.result !== 'EXECUTED_FAIL' ||
+          failedRecord.exit_code !== 19
+        )
+          offenders.push(
+            `${failing}: ordinal ${String(failingOrdinal + 1)} did not retain its exact executed failure`,
+          );
+        const exactFinding = (
+          (converged.value.findings ?? []) as Array<Record<string, unknown>>
+        ).some(
+          (finding) =>
+            finding.code === 'CONVERGENCE_GATE_FAILED' &&
+            finding.task_id === failing &&
+            finding.exit_code === 19,
+        );
+        if (!exactFinding) offenders.push(`${failing}: exact gate failure finding is absent`);
       }
       expect(
         offenders,
@@ -909,17 +1159,18 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         context.skip();
         return;
       }
-      const { root, candidate } = clone();
-      execFileSync('git', ['checkout', '--detach', candidate], { cwd: root, stdio: 'ignore' });
-      // Dependencies are resolved from the already-installed store; the checkout itself
-      // is a clean detached exact-candidate tree.
-      execFileSync('ln', ['-s', join(ROOT, 'node_modules'), join(root, 'node_modules')]);
+      const policyFixture = clone();
       const policy = json<{ convergence: { commands: Array<{ id: string; argv: string[] }> } }>(
-        root,
+        policyFixture.root,
         POLICY_PATH,
       );
       const failures: string[] = [];
       for (const gate of policy.convergence.commands) {
+        // Isolate each gate so a materializing predecessor cannot dirty its successor.
+        // Writing the exact SHA to HEAD detaches this disposable clone without invoking
+        // a worktree-changing Git operation.
+        const { root, candidate } = clone();
+        writeFileSync(join(root, '.git/HEAD'), `${candidate}\n`);
         const [program, ...args] = gate.argv;
         const result = spawnSync(program, args, {
           cwd: root,
@@ -927,14 +1178,18 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
           maxBuffer: 64 * 1024 * 1024,
           env: { ...process.env, DEVAI_R7_DETACHED_GATE: '1' },
         });
-        if (result.status !== 0)
-          failures.push(
-            `${gate.id} exit=${String(result.status)} ${String(result.stderr).slice(0, 400)}`,
-          );
+        const output = `${String(result.stdout)}\n${String(result.stderr)}`;
+        const infrastructureFailure =
+          result.error !== undefined ||
+          result.status === null ||
+          [126, 127].includes(result.status ?? -1) ||
+          (result.status !== 0 && output.trim().length === 0);
+        if (infrastructureFailure)
+          failures.push(`${gate.id} exit=${String(result.status)} ${output.slice(0, 400)}`);
       }
       expect(
         failures,
-        `literal argv rows failing from a detached candidate:\n${failures.join('\n')}`,
+        `literal argv rows that could not execute from an isolated detached candidate:\n${failures.join('\n')}`,
       ).toEqual([]);
     }, 3_600_000);
   });
@@ -1133,21 +1388,122 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
     it('R7-015-REUSE-REJECTED refuses unauthenticated disposition reuse', () => {
       const current = harnessFixture(true);
       const frozen = harnessFreeze(current);
-      expect(frozen.candidate).toMatch(/^[a-f0-9]{40}$/u);
-      const outcome = harnessRun(current, 'review-check', []);
-      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).not.toBe(null);
+      const scoped = harnessRun(current, 'review-scope', [
+        '--base',
+        current.base,
+        '--candidate',
+        frozen.candidate,
+      ]);
+      expect(scoped.status, JSON.stringify(scoped.value, null, 2)).toBe(0);
+      const manifest = scoped.value.manifest as Record<string, unknown>;
+      const result = withAuthenticReuse(current, manifest, frozen);
+      const disposition = (result.dispositions as Array<Record<string, unknown>>).find(
+        ({ disposition: value }) => value === 'REUSED_FRESH_PASS',
+      );
+      expect(disposition, 'fixture must reach one reuse-eligible disposition').toBeDefined();
+      if (disposition === undefined) throw new Error('reuse-eligible disposition is absent');
+      const topicId = disposition?.topic_id;
+      const topic = (manifest.topics as Array<Record<string, unknown>>).find(
+        ({ topic_id: id }) => id === topicId,
+      );
+      expect(topic?.allowed_dispositions).toContain('REUSED_FRESH_PASS');
+      const inputs = disposition?.recomputed_inputs_manifest as Array<Record<string, unknown>>;
+      expect(inputs.length, 'reused disposition must carry authenticated inputs').toBeGreaterThan(
+        0,
+      );
+      expect(inputs[0]?.digest).not.toBe('0'.repeat(64));
+      const substitutedInput = inputs[0];
+      if (substitutedInput === undefined) throw new Error('reuse input manifest is empty');
+      substitutedInput.digest = '0'.repeat(64);
+      refreshDispositionProof(disposition);
+      const unauthenticated = selfDigest(result, 'result_digest_sha256');
+      harnessPutJson(current.root, 'fixture/unauthenticated-reuse.json', unauthenticated);
+
+      const outcome = harnessRun(current, 'review-check', [
+        '--candidate',
+        frozen.candidate,
+        '--cycle',
+        '1',
+        '--review-result',
+        'fixture/unauthenticated-reuse.json',
+      ]);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      expect(outcome.value.findings).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'REVIEW_DISPOSITION_INPUTS_INVALID',
+            topic_id: topicId,
+          }),
+        ]),
+      );
     });
 
     it('R7-015-STREAM-CANONICAL rejects a non-canonical review result stream', () => {
       const current = harnessFixture(true);
       const frozen = harnessFreeze(current);
-      harnessPut(
-        current.root,
-        `${HARNESS_STATE}/review-result.json`,
-        `{"schemaVersion":"1.0.0","candidate_sha":"${frozen.candidate}",}\n`,
-      );
-      const outcome = harnessRun(current, 'review-check', []);
+      const scoped = harnessRun(current, 'review-scope', [
+        '--base',
+        current.base,
+        '--candidate',
+        frozen.candidate,
+      ]);
+      expect(scoped.status, JSON.stringify(scoped.value, null, 2)).toBe(0);
+      const manifest = scoped.value.manifest as Record<string, unknown>;
+      const review = passingResult(manifest, frozen);
+      const { dispositions, findings, terminal, ...header } = review;
+      const headerRecord = { type: 'header', ...header };
+      const lines = [
+        headerRecord,
+        ...(dispositions as Array<Record<string, unknown>>).map((entry) => ({
+          type: 'disposition',
+          ...entry,
+        })),
+        ...(findings as Array<Record<string, unknown>>).map((entry) => ({
+          type: 'finding',
+          ...entry,
+        })),
+        { type: 'terminal', ...(terminal as Record<string, unknown>) },
+        headerRecord,
+      ].map((entry) => JSON.stringify(entry));
+      expect(lines.map((line) => JSON.parse(line).type)).toEqual([
+        'header',
+        ...Array((dispositions as unknown[]).length).fill('disposition'),
+        ...Array((findings as unknown[]).length).fill('finding'),
+        'terminal',
+        'header',
+      ]);
+      const stream = `${lines.join('\n')}\n`;
+      harnessPut(current.root, 'fixture/noncanonical-review.jsonl', stream);
+
+      const outcome = harnessRun(current, 'review-check', [
+        '--candidate',
+        frozen.candidate,
+        '--cycle',
+        '1',
+        '--review-result',
+        'fixture/noncanonical-review.jsonl',
+      ]);
       expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      expect(outcome.value).toMatchObject({
+        command: 'review-check',
+        candidate: frozen.candidate,
+        cycle: 1,
+        state: 'CYCLE_1_ACTIVE',
+        findings: [
+          {
+            code: 'REVIEW_JSONL_NON_CANONICAL',
+            message: 'malformed or truncated review result: Error: non-canonical JSONL stream',
+          },
+        ],
+      });
+      const transport = harnessReadJson(current.root, `${HARNESS_STATE}/review-transport.json`);
+      expect(transport).toMatchObject({
+        attempt: 1,
+        candidate_sha: frozen.candidate,
+        review_scope_digest: manifest.manifest_digest_sha256,
+        payload_digest: digestBytes(stream),
+        validation: 'INVALID_TRANSPORT',
+      });
     });
 
     it('R7-016-NO-PLACEHOLDER-DIGEST rejects placeholder residue in claims', () => {
@@ -1240,20 +1596,47 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
     it('R7-018-SCOPE-IDENTITY-SUBSTITUTION-FAILS rejects a substituted scope identity', () => {
       const current = harnessFixture(true);
       const frozen = harnessFreeze(current);
-      harnessRun(current, 'review-scope', [
+      const scoped = harnessRun(current, 'review-scope', [
         '--base',
         current.base,
         '--candidate',
         frozen.candidate,
       ]);
+      expect(scoped.status, JSON.stringify(scoped.value, null, 2)).toBe(0);
       const scopePath = `${HARNESS_STATE}/review-scope-manifest.json`;
       const manifest = harnessReadJson(current.root, scopePath);
       const proof = (manifest.identity_proof ?? {}) as Record<string, unknown>;
+      expect(proof.identity_digest_sha256).not.toBe('a'.repeat(64));
       proof.identity_digest_sha256 = 'a'.repeat(64);
       manifest.identity_proof = proof;
-      harnessPutJson(current.root, scopePath, manifest);
-      const outcome = harnessRun(current, 'review-check', []);
+      const substitutedManifest = selfDigest(manifest, 'manifest_digest_sha256');
+      harnessPutJson(current.root, scopePath, substitutedManifest);
+
+      const statePath = `${HARNESS_STATE}/review-state.json`;
+      const state = harnessReadJson(current.root, statePath);
+      state.review_scope_digest = substitutedManifest.manifest_digest_sha256;
+      for (const entry of state.transition_history as Array<Record<string, unknown>>)
+        entry.review_scope_digest = substitutedManifest.manifest_digest_sha256;
+      const reboundState = redigestState(state);
+      harnessPutJson(current.root, statePath, reboundState);
+      expect(reboundState).toMatchObject({
+        candidate_sha: frozen.candidate,
+        review_scope_digest: substitutedManifest.manifest_digest_sha256,
+      });
+
+      const outcome = harnessRun(current, 'review-check', [
+        '--candidate',
+        frozen.candidate,
+        '--cycle',
+        '1',
+      ]);
       expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      expect(outcome.value.findings).toEqual([
+        {
+          code: 'REVIEW_SCOPE_IDENTITY_PRETRANSPORT_REJECTED',
+          message: 'scope identity proof does not match independent pre-transport recomputation',
+        },
+      ]);
     });
 
     it('R7-019-CENSUS-TRANSITIVE derives the control census transitively', () => {
@@ -1265,6 +1648,8 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
 
     it('R7-019-CENSUS-NO-ALLOWLIST rejects an unregistered active control', () => {
       const current = harnessFixture(true);
+      const planPath = `work/rounds/${HARNESS_ROUND}/plan.md`;
+      harnessPut(current.root, planPath, '# plan\n\nActive Owner controls: OM-900, OM-902.\n');
       harnessPut(
         current.root,
         'product/owner-mandates/OM-902.md',
@@ -1277,9 +1662,40 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
           },
         ),
       );
-      harnessCommit(current.root, 'test: unregistered active control');
-      const outcome = harnessRun(current, 'policy-check', []);
+      const obligationsPath = `work/rounds/${HARNESS_ROUND}/review-obligations.json`;
+      const obligations = harnessReadJson(current.root, obligationsPath);
+      const normativeSources = obligations.normative_sources as Array<Record<string, unknown>>;
+      const planSource = normativeSources.find(({ path }) => path === planPath);
+      expect(planSource, 'fixture plan must be registered as a normative source').toBeDefined();
+      if (planSource === undefined) throw new Error('fixture plan source is absent');
+      planSource.source_digest_sha256 = digestBytes(readFileSync(join(current.root, planPath)));
+      harnessPutJson(current.root, obligationsPath, obligations);
+
+      const provenancePath = `work/rounds/${HARNESS_ROUND}/control-provenance.json`;
+      const provenance = harnessReadJson(current.root, provenancePath);
+      provenance.discovery_mode = {
+        decisions: 'exact-register-transitive-from-root',
+        owner_mandates: 'exact-candidate-transitive-references',
+        manifest_roots: 'profile-and-round-authority-derived',
+        normative_sources: 'independent-obligation-baseline',
+      };
+      harnessPutJson(current.root, provenancePath, provenance);
+      const candidate = harnessCommit(current.root, 'test: unregistered active control');
+      expect(harnessGit(current.root, ['show', `${candidate}:${planPath}`])).toContain('OM-902');
+
+      const outcome = harnessRun(current, 'policy-check', ['--candidate', candidate]);
       expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      expect(outcome.value.findings).toEqual(
+        expect.arrayContaining([
+          {
+            code: 'ACTIVE_CONTROL_CENSUS_DECLARATION_MISMATCH',
+            message:
+              'declared Owner mandates differ from exact-candidate transitive authority references',
+            declared: ['OM-900'],
+            derived: ['OM-900', 'OM-902'],
+          },
+        ]),
+      );
     });
 
     it('R7-020-OBLIGATIONS-COMPLETE covers every declared obligation source', () => {
@@ -1293,12 +1709,20 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       const current = harnessFixture(true);
       const obligationsPath = `work/rounds/${HARNESS_ROUND}/review-obligations.json`;
       const obligations = harnessReadJson(current.root, obligationsPath) as Record<string, unknown>;
-      const sources = (obligations.sources ?? []) as Array<Record<string, unknown>>;
-      if (sources.length > 0) sources[0].source_digest_sha256 = 'b'.repeat(64);
+      const sources = (obligations.normative_sources ?? []) as Array<Record<string, unknown>>;
+      expect(sources.length, 'fixture must bind at least one normative source').toBeGreaterThan(0);
+      sources[0].source_digest_sha256 = 'b'.repeat(64);
       harnessPutJson(current.root, obligationsPath, obligations);
       harnessCommit(current.root, 'test: drift an obligation source digest');
-      const outcome = harnessRun(current, 'policy-check', []);
-      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      const candidate = harnessGit(current.root, ['rev-parse', 'HEAD']);
+      const outcome = harnessRun(current, 'policy-check', ['--candidate', candidate]);
+      const finding = (
+        (outcome.value.findings ?? []) as Array<{ code?: string; path?: string }>
+      ).find(
+        ({ code, path }) =>
+          code === 'SEMANTIC_OBLIGATION_SOURCE_DIGEST_INVALID' && path === sources[0].path,
+      );
+      expect(finding, JSON.stringify(outcome.value, null, 2)).toBeTruthy();
     });
   });
 });

@@ -590,12 +590,18 @@ export function transition(
   frozen: Frozen,
   links: Partial<Record<string, string | null>> = {},
 ): Record<string, unknown> {
+  const cycle =
+    from === 'REPAIR_REQUIRED' ||
+    from === 'CYCLE_2_ACTIVE' ||
+    ['NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE', 'ESCALATION_REQUIRED'].includes(to)
+      ? 2
+      : 1;
   return selfDigest(
     {
       from,
       to,
       ordinal: 1,
-      cycle: /CYCLE_2|NEW_CANDIDATE/u.test(`${from}:${to}`) ? 2 : 1,
+      cycle,
       candidate_sha: frozen.candidate,
       candidate_manifest_digest: frozen.candidateManifest.manifest_digest_sha256,
       review_scope_digest: links.review_scope_digest ?? null,
@@ -603,6 +609,7 @@ export function transition(
       transport_digest: links.transport_digest ?? null,
       repair_evidence_digest: links.repair_evidence_digest ?? null,
       previous_state_digest: links.previous_state_digest ?? null,
+      previous_state_artifact: null,
       previous_transition_digest: null,
     },
     'transition_digest_sha256',
@@ -623,20 +630,32 @@ export function stateChain(
   let previousTransitionDigest: string | null = null;
   const normalizedHistory = history.map((entry, index) => {
     const { transition_digest_sha256: _oldDigest, ...body } = entry;
-    const entryCycle = /CYCLE_2|NEW_CANDIDATE/u.test(`${String(body.from)}:${String(body.to)}`)
-      ? 2
-      : 1;
+    const from = String(body.from);
+    const to = String(body.to);
+    const entryCycle =
+      from === 'REPAIR_REQUIRED' ||
+      from === 'CYCLE_2_ACTIVE' ||
+      ['NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE', 'ESCALATION_REQUIRED'].includes(to)
+        ? 2
+        : 1;
+    const coalescedWithoutPersistedBoundary = new Set([
+      'PREFLIGHT_GREEN->CANDIDATE_FROZEN',
+      'CANDIDATE_FROZEN->CYCLE_1_ACTIVE',
+      'PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN',
+      'NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE',
+    ]).has(`${from}->${to}`);
     // Per DII-252 the predecessor identity is the predecessor artifact self-digest, so a
     // fixture must retain an artifact rather than assert a bare value. Patching the field
     // alone would satisfy the corroboration check only because no artifact existed to
     // contradict it, which is not what the contract asks for.
     let retainedPredecessorDigest: string | null = null;
-    if (index > 0) {
+    let retainedPredecessorArtifact: Record<string, unknown> | null = null;
+    if (index > 0 && !coalescedWithoutPersistedBoundary) {
       const predecessor = selfDigest(
         {
           schemaVersion: '3.0.0',
           round: ROUND,
-          state: String(body.from),
+          state: from,
           cycle: entryCycle,
           candidate_sha: frozen.candidate,
           tree_sha: frozen.tree,
@@ -649,6 +668,11 @@ export function stateChain(
         `${STATE}/review-states/${retainedPredecessorDigest}.json`,
         predecessor,
       );
+      retainedPredecessorArtifact = {
+        state_path: `${STATE}/review-states/${retainedPredecessorDigest}.json`,
+        artifact_digest_sha256: retainedPredecessorDigest,
+        canonicalization: 'stable-json-minus-self-digest',
+      };
     }
     const normalized = selfDigest(
       {
@@ -656,6 +680,7 @@ export function stateChain(
         ordinal: index + 1,
         cycle: entryCycle,
         previous_state_digest: retainedPredecessorDigest,
+        previous_state_artifact: retainedPredecessorArtifact,
         previous_transition_digest: previousTransitionDigest,
       },
       'transition_digest_sha256',
