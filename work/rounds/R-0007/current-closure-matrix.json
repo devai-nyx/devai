@@ -40,7 +40,7 @@
         "law/schemas/review-state.schema.json"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R7-F002",
@@ -86,7 +86,7 @@
       "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R7-F003",
@@ -131,7 +131,7 @@
       "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R7-F004",
@@ -171,7 +171,7 @@
         "work/rounds/R-0007/affected-test-graph.json"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R7-F005",
@@ -225,7 +225,7 @@
         ".devai/config/round-close-controls.json"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R7-F006",
@@ -257,7 +257,7 @@
       "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R7-F007",
@@ -281,7 +281,7 @@
       "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R7-F008",
@@ -313,7 +313,7 @@
       "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": ["law/policy/governed-sequencing.json"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R7-F009",
@@ -351,7 +351,7 @@
         "law/policy/round-close-controls.json"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R7-F010",
@@ -380,7 +380,7 @@
         "law/schemas/remediation-closure-matrix.schema.json"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "F001",
@@ -403,7 +403,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "F002",
@@ -425,7 +425,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "F003",
@@ -459,7 +459,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "F004",
@@ -480,7 +480,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "F005",
@@ -515,7 +515,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "F006",
@@ -542,7 +542,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "F007",
@@ -569,7 +569,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "F008",
@@ -588,7 +588,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "C2-F001",
@@ -615,7 +615,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "C2-F005",
@@ -642,7 +642,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "C2-F006",
@@ -671,7 +671,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "C2-F007",
@@ -704,7 +704,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "C2-F008",
@@ -731,7 +731,7 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R1-F001",
@@ -792,7 +792,7 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R1-F002",
@@ -825,7 +825,7 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R1-F003",
@@ -860,7 +860,7 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R1-F004",
@@ -893,7 +893,7 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R1-F005",
@@ -931,7 +931,7 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R1-F006",
@@ -970,7 +970,7 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F001",
@@ -1032,7 +1032,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F002",
@@ -1096,7 +1096,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F003",
@@ -1152,7 +1152,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F004",
@@ -1208,7 +1208,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F005",
@@ -1271,7 +1271,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F006",
@@ -1333,7 +1333,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F007",
@@ -1379,7 +1379,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R2-F008",
@@ -1437,7 +1437,7 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R3-F001",
@@ -1497,7 +1497,7 @@
         "product/owner-mandates/OM-017.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R3-F002",
@@ -1552,7 +1552,7 @@
         "product/owner-mandates/OM-017.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R3-F003",
@@ -1602,7 +1602,7 @@
         "product/owner-mandates/OM-017.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R3-F004",
@@ -1661,7 +1661,7 @@
         "product/owner-mandates/OM-017.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R3-F005",
@@ -1713,7 +1713,7 @@
         "product/owner-mandates/OM-017.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     },
     {
       "finding_id": "R7-F011",
@@ -1736,7 +1736,20 @@
       "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-repair-handoff.md"],
-      "closure_state": "RED_REQUIRED"
+      "closure_state": "GREEN_PROVED"
     }
-  ]
+  ],
+  "declared_limitations": [
+    "Preflight, freeze and activation transitions are atomically coalesced, so four edges have no complete predecessor state artifact and remain intentionally unbound rather than receiving fabricated artifacts. A fabricated artifact would satisfy every check while reinstating the six-selected-fields pattern R7-F001 exists to eliminate.",
+    "R7-004-CLOSURE-FIXPOINT asserts the controller candidate-derived closure rather than the Architect-owned graph declaration. The graph rebind itself is covered by policy-check reporting no GATE_COMMAND_CLOSURE_DERIVATION_INVALID on the exact candidate."
+  ],
+  "verified_by": {
+    "battery": "pnpm run devai:prepare && pnpm vitest run && git diff --check",
+    "test_files_passed": 166,
+    "test_files_total": 166,
+    "tests_passed": 1777,
+    "tests_skipped": 8,
+    "tests_total": 1785,
+    "single_run": true
+  }
 }

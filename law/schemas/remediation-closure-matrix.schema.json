@@ -50,7 +50,10 @@
     "supersedes": {
       "type": "array",
       "uniqueItems": true,
-      "items": { "type": "string", "minLength": 1 }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     },
     "review_run_budget": {
       "const": 2
@@ -129,6 +132,20 @@
           }
         }
       }
+    },
+    "declared_limitations": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Limitations the matrix declares rather than conceals. A class may be GREEN_PROVED while a named boundary of its population remains unbound, provided the boundary is stated here."
+    },
+    "verified_by": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "The single verified run whose result the closure states record. A composite assembled from partial runs is not admissible evidence."
     }
   },
   "examples": [
