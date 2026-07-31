@@ -657,11 +657,38 @@ function stateChain(
   let previousTransitionDigest: string | null = null;
   const normalizedHistory = history.map((entry, index) => {
     const { transition_digest_sha256: _oldDigest, ...body } = entry;
+    const entryCycle = /CYCLE_2|NEW_CANDIDATE/u.test(`${String(body.from)}:${String(body.to)}`)
+      ? 2
+      : 1;
+    // Mirrors tests/contract/helpers/r0007-review-harness.ts. Per the DII-252 amendment
+    // previous_state_digest binds the predecessor artifact self-digest, so the fixture
+    // retains an artifact rather than asserting a bare value that nothing can contradict.
+    let retainedPredecessorDigest: string | null = null;
+    if (index > 0) {
+      const predecessor = selfDigest(
+        {
+          schemaVersion: '3.0.0',
+          round: ROUND,
+          state: String(body.from),
+          cycle: entryCycle,
+          candidate_sha: frozen.candidate,
+          tree_sha: frozen.tree,
+        },
+        'state_digest_sha256',
+      );
+      retainedPredecessorDigest = predecessor.state_digest_sha256 as string;
+      putJson(
+        fixtureValue.root,
+        `${STATE}/review-states/${retainedPredecessorDigest}.json`,
+        predecessor,
+      );
+    }
     const normalized = selfDigest(
       {
         ...body,
         ordinal: index + 1,
-        cycle: /CYCLE_2|NEW_CANDIDATE/u.test(`${String(body.from)}:${String(body.to)}`) ? 2 : 1,
+        cycle: entryCycle,
+        previous_state_digest: retainedPredecessorDigest,
         previous_transition_digest: previousTransitionDigest,
       },
       'transition_digest_sha256',
