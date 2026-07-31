@@ -3243,7 +3243,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 107,
-      "assertion_digest_sha256": "d9a1feec395ad0aa27d9d0bdfff1a750e431dd20669f885fcb9c90e3d9d52480"
+      "assertion_digest_sha256": "610ea4179dfc7d5bdeb7146d0a08c3ecc839c78c552000be326e10980e64a543"
     },
     {
       "path": "tests/contract/pre-r0007-remediation-2.red.contract.test.ts",
