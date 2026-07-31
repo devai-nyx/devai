@@ -129,6 +129,14 @@ function v5GraphControls(gateIds: readonly string[]): Record<string, unknown> {
       derivation: 'recursive-policy-command-v1',
       scripts: [`direct:${gate_id}`],
       programs: ['node'],
+      // The closure digest is compared for every profile now that behaviour is selected
+      // by capability rather than by a decision id, so the fixture must declare it.
+      closure_digest: digestCanonical({
+        scripts: [`direct:${gate_id}`],
+        programs: ['node'],
+        executables: ['fixture/gate.mjs'],
+        project_references: [],
+      }),
     })),
   };
 }
@@ -161,10 +169,46 @@ function commit(root: string, subject: string): string {
   return git(root, ['rev-parse', 'HEAD']);
 }
 
+/**
+ * Every authoritative consumer now binds one literal candidate before dispatch. These
+ * fixtures predate that rule and mostly omit it, so the runner supplies the fixture head
+ * when a case did not name a candidate itself. A case that names one, including a
+ * deliberately invalid one, is passed through untouched so binding contracts still bind.
+ */
+const CANDIDATE_BOUND_COMMANDS = new Set([
+  'policy-check',
+  'entry-check',
+  'status',
+  'impact-plan',
+  'smart-converge',
+  'review-scope',
+  'review-check',
+  'claims-check',
+  'claims-materialize',
+  'claim-produce',
+  'review-topic-count',
+  'materialize',
+  'materializations-check',
+  'manifest',
+  'envelope',
+  'rehearse',
+]);
+
 function run(fixtureValue: Fixture, command: string, args: readonly string[] = []): Result {
+  const needsCandidate =
+    CANDIDATE_BOUND_COMMANDS.has(command) &&
+    !args.includes('--candidate') &&
+    !(command === 'smart-converge' && args.includes('--head'));
+  const bound = needsCandidate
+    ? [
+        ...args,
+        command === 'smart-converge' ? '--head' : '--candidate',
+        git(fixtureValue.root, ['rev-parse', 'HEAD']),
+      ]
+    : args;
   const result = spawnSync(
     'node',
-    [SCRIPT, command, '--repo-root', fixtureValue.root, '--round', ROUND, ...args, '--json'],
+    [SCRIPT, command, '--repo-root', fixtureValue.root, '--round', ROUND, ...bound, '--json'],
     { cwd: fixtureValue.root, encoding: 'utf8', env: { ...process.env } },
   );
   let value: Record<string, unknown> = {};
