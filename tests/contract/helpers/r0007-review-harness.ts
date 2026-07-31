@@ -623,11 +623,39 @@ export function stateChain(
   let previousTransitionDigest: string | null = null;
   const normalizedHistory = history.map((entry, index) => {
     const { transition_digest_sha256: _oldDigest, ...body } = entry;
+    const entryCycle = /CYCLE_2|NEW_CANDIDATE/u.test(`${String(body.from)}:${String(body.to)}`)
+      ? 2
+      : 1;
+    // Per DII-252 the predecessor identity is the predecessor artifact self-digest, so a
+    // fixture must retain an artifact rather than assert a bare value. Patching the field
+    // alone would satisfy the corroboration check only because no artifact existed to
+    // contradict it, which is not what the contract asks for.
+    let retainedPredecessorDigest: string | null = null;
+    if (index > 0) {
+      const predecessor = selfDigest(
+        {
+          schemaVersion: '3.0.0',
+          round: ROUND,
+          state: String(body.from),
+          cycle: entryCycle,
+          candidate_sha: frozen.candidate,
+          tree_sha: frozen.tree,
+        },
+        'state_digest_sha256',
+      );
+      retainedPredecessorDigest = predecessor.state_digest_sha256 as string;
+      putJson(
+        fixtureValue.root,
+        `${STATE}/review-states/${retainedPredecessorDigest}.json`,
+        predecessor,
+      );
+    }
     const normalized = selfDigest(
       {
         ...body,
         ordinal: index + 1,
-        cycle: /CYCLE_2|NEW_CANDIDATE/u.test(`${String(body.from)}:${String(body.to)}`) ? 2 : 1,
+        cycle: entryCycle,
+        previous_state_digest: retainedPredecessorDigest,
         previous_transition_digest: previousTransitionDigest,
       },
       'transition_digest_sha256',
