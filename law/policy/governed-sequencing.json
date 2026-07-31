@@ -764,21 +764,21 @@
         "49644596d32851ef56ffa4b982e51175881fb1cf"
       ],
       "law_commits": [
-        "63eea2863cbe56b36831d07fb880f4420d0791f8",
-        "690052814b87364e75424db639c6c8a333729f8d",
-        "1fa4405b5567bc6209ae2b921bce1bc15a42dae5",
-        "14487d208dd1400ee7266b8a37ccec880099d9bc",
-        "4ded20588cc364434e052cb3ee2820a15dc15b24",
+        "875d6c42faeba0e6355d2f9e48e27e86b576dd91",
         "5b6ff667b2d5236615fc4d9114514ef9509c15dc",
-        "875d6c42faeba0e6355d2f9e48e27e86b576dd91"
+        "4ded20588cc364434e052cb3ee2820a15dc15b24"
       ],
       "red_evidence": {
-        "commit": "beb37bb6139bb2639e97e1de3f875ea6daf02c94",
+        "commit": "3e863e5e355434ffbd28aadbf386985ade1927ba",
         "observed_exit": 1,
         "command": "pnpm vitest run tests/contract/pre-r0007-remediation-4.red.contract.test.ts",
-        "evidence_path": "work/audit/R-0007-pre-entry/remediation-4-red-evidence.json",
-        "evidence_sha256": "63d142a3fc7e62ab8846971f2e20ead7f198de3c2349c1e7929c5fa05f3b3c0b",
-        "tests": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"]
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-4-red-evidence-conforming.json",
+        "evidence_sha256": "9a1e5861cb79a3e527e1a31863ecacc56a6519a8aa421eaeda9333fe4cfc7c31",
+        "tests": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "scripts/run-round-close-controls.mjs"
+        ]
       }
     }
   ],
