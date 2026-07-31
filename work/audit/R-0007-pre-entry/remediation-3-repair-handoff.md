@@ -127,7 +127,7 @@ An earlier issue of this record framed the remediation-1 failures as a regressio
 by the state identity rewrite. **That framing was wrong and is withdrawn.**
 
 Predecessor authentication was previously gated on `context.profile.decision_id ===
-'DII-252'`-style specimen comparison, and every fixture profile is `DII-900`. The block
+'DII-252'`-style specimen comparison, and every fixture profile is a synthetic fixture decision identifier. The block
 was therefore **skipped entirely**. It has never run against these fixtures. The R7-F009
 capability repair turned it on, correctly, and the fixtures have simply never satisfied
 it.
