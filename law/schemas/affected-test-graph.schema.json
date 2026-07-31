@@ -20,28 +20,46 @@
     "coverage"
   ],
   "$defs": {
-    "selector": { "type": "string", "minLength": 1 },
+    "selector": {
+      "type": "string",
+      "minLength": 1
+    },
     "selectorList": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": { "$ref": "#/$defs/selector" }
+      "items": {
+        "$ref": "#/$defs/selector"
+      }
     },
     "argv": {
       "type": "array",
       "minItems": 1,
-      "items": { "type": "string", "minLength": 1 }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     },
     "pathList": {
       "type": "array",
       "uniqueItems": true,
-      "items": { "$ref": "#/$defs/selector" }
+      "items": {
+        "$ref": "#/$defs/selector"
+      }
     }
   },
   "properties": {
-    "schemaVersion": { "const": "2.0.0" },
-    "graph_version": { "type": "string", "minLength": 1 },
-    "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+    "schemaVersion": {
+      "const": "2.0.0"
+    },
+    "graph_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "round": {
+      "type": "string",
+      "pattern": "^R-[0-9]{4}$"
+    },
     "population": {
       "type": "object",
       "additionalProperties": false,
@@ -49,12 +67,22 @@
       "properties": {
         "all_tracked": {
           "type": "array",
-          "prefixItems": [{ "const": "**/*" }],
+          "prefixItems": [
+            {
+              "const": "**/*"
+            }
+          ],
           "items": false
         },
-        "production": { "$ref": "#/$defs/selectorList" },
-        "tests": { "$ref": "#/$defs/selectorList" },
-        "classification": { "const": "complete-or-full-suite-fallback" },
+        "production": {
+          "$ref": "#/$defs/selectorList"
+        },
+        "tests": {
+          "$ref": "#/$defs/selectorList"
+        },
+        "classification": {
+          "const": "complete-or-full-suite-fallback"
+        },
         "excluded": {
           "type": "array",
           "uniqueItems": true,
@@ -63,8 +91,13 @@
             "additionalProperties": false,
             "required": ["selector", "reason"],
             "properties": {
-              "selector": { "$ref": "#/$defs/selector" },
-              "reason": { "type": "string", "minLength": 1 }
+              "selector": {
+                "$ref": "#/$defs/selector"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
             }
           }
         }
@@ -78,13 +111,21 @@
         "additionalProperties": false,
         "required": ["id", "selectors", "invalidates"],
         "properties": {
-          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
-          "selectors": { "$ref": "#/$defs/selectorList" },
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          },
+          "selectors": {
+            "$ref": "#/$defs/selectorList"
+          },
           "invalidates": {
             "type": "array",
             "minItems": 1,
             "uniqueItems": true,
-            "items": { "type": "string", "minLength": 1 }
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         }
       }
@@ -97,22 +138,41 @@
         "additionalProperties": false,
         "required": ["id", "kind", "input_selectors", "depends_on", "command", "cwd", "outputs"],
         "properties": {
-          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
-          "kind": { "enum": ["test-shard", "gate", "fallback"] },
-          "input_selectors": { "$ref": "#/$defs/selectorList" },
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          },
+          "kind": {
+            "enum": ["test-shard", "gate", "fallback"]
+          },
+          "input_selectors": {
+            "$ref": "#/$defs/selectorList"
+          },
           "depends_on": {
             "type": "array",
             "uniqueItems": true,
-            "items": { "type": "string", "minLength": 1 }
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
           },
-          "command": { "$ref": "#/$defs/argv" },
-          "cwd": { "type": "string", "minLength": 1 },
+          "command": {
+            "$ref": "#/$defs/argv"
+          },
+          "cwd": {
+            "type": "string",
+            "minLength": 1
+          },
           "outputs": {
             "type": "array",
             "uniqueItems": true,
-            "items": { "$ref": "#/$defs/selector" }
+            "items": {
+              "$ref": "#/$defs/selector"
+            }
           },
-          "coverage_mode": { "enum": ["none", "whole-only"] }
+          "coverage_mode": {
+            "enum": ["none", "whole-only"]
+          }
         }
       }
     },
@@ -130,10 +190,18 @@
         "committed_command": {
           "const": "git diff --name-status -z -M --find-renames <exact-base> <candidate>"
         },
-        "record_format": { "const": "status-aware-nul" },
-        "rename_paths": { "const": "retain-preimage-and-postimage" },
-        "selector_population": { "const": "union-of-preimage-and-postimage" },
-        "review_topics": { "const": "exactly-once-per-path-linked-by-change-record" }
+        "record_format": {
+          "const": "status-aware-nul"
+        },
+        "rename_paths": {
+          "const": "retain-preimage-and-postimage"
+        },
+        "selector_population": {
+          "const": "union-of-preimage-and-postimage"
+        },
+        "review_topics": {
+          "const": "exactly-once-per-path-linked-by-change-record"
+        }
       }
     },
     "freshness_identity": {
@@ -141,10 +209,18 @@
       "additionalProperties": false,
       "required": ["candidate", "tree_entries", "history_sensitive_gates", "outputs"],
       "properties": {
-        "candidate": { "const": "literal-commit-and-tree" },
-        "tree_entries": { "const": "path-mode-type-object-and-raw-blob" },
-        "history_sensitive_gates": { "const": "bind-commit-history-and-range" },
-        "outputs": { "const": "declared-complete-including-ignored" }
+        "candidate": {
+          "const": "literal-commit-and-tree"
+        },
+        "tree_entries": {
+          "const": "path-mode-type-object-and-raw-blob"
+        },
+        "history_sensitive_gates": {
+          "const": "bind-commit-history-and-range"
+        },
+        "outputs": {
+          "const": "declared-complete-including-ignored"
+        }
       }
     },
     "gate_freshness_profiles": {
@@ -165,38 +241,85 @@
           "output_observation"
         ],
         "properties": {
-          "gate_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
-          "input_selectors": { "$ref": "#/$defs/selectorList" },
-          "dependency_selectors": { "$ref": "#/$defs/pathList" },
+          "gate_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          },
+          "input_selectors": {
+            "$ref": "#/$defs/selectorList"
+          },
+          "dependency_selectors": {
+            "$ref": "#/$defs/pathList"
+          },
           "toolchain_probe_ids": {
             "type": "array",
             "minItems": 1,
             "uniqueItems": true,
-            "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" }
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._-]*$"
+            }
           },
           "environment_input_ids": {
             "type": "array",
             "uniqueItems": true,
             "items": {
               "oneOf": [
-                { "const": "__ALL_ENVIRONMENT__" },
-                { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" }
+                {
+                  "const": "__ALL_ENVIRONMENT__"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9_]*$"
+                }
               ]
             }
           },
-          "output_contract": { "enum": ["none", "digest-required"] },
-          "required_outputs": { "$ref": "#/$defs/pathList" },
-          "universal_input_proof": { "const": "tracked-candidate-tree" },
-          "output_observation": { "const": "declared-plus-observed" }
+          "output_contract": {
+            "enum": ["none", "digest-required"]
+          },
+          "required_outputs": {
+            "$ref": "#/$defs/pathList"
+          },
+          "universal_input_proof": {
+            "const": "tracked-candidate-tree"
+          },
+          "output_observation": {
+            "const": "declared-plus-observed"
+          }
         },
         "allOf": [
           {
-            "if": { "properties": { "output_contract": { "const": "none" } } },
-            "then": { "properties": { "required_outputs": { "maxItems": 0 } } }
+            "if": {
+              "properties": {
+                "output_contract": {
+                  "const": "none"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "required_outputs": {
+                  "maxItems": 0
+                }
+              }
+            }
           },
           {
-            "if": { "properties": { "output_contract": { "const": "digest-required" } } },
-            "then": { "properties": { "required_outputs": { "minItems": 1 } } }
+            "if": {
+              "properties": {
+                "output_contract": {
+                  "const": "digest-required"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "required_outputs": {
+                  "minItems": 1
+                }
+              }
+            }
           }
         ]
       }
@@ -209,11 +332,41 @@
         "additionalProperties": false,
         "required": ["gate_id", "scripts", "programs"],
         "properties": {
-          "gate_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
-          "derivation": { "const": "recursive-policy-command-v1" },
-          "closure_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-          "scripts": { "$ref": "#/$defs/selectorList" },
-          "programs": { "$ref": "#/$defs/selectorList" }
+          "gate_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          },
+          "derivation": {
+            "const": "recursive-policy-command-v1"
+          },
+          "closure_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "scripts": {
+            "$ref": "#/$defs/selectorList"
+          },
+          "programs": {
+            "$ref": "#/$defs/selectorList"
+          },
+          "executables": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Executables reached by the derivation, including missing:<path> for a candidate executable that cannot be read."
+          },
+          "project_references": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "TypeScript projects, extends chains, declared outputs and roots reached transitively."
+          }
         }
       }
     },
@@ -222,9 +375,18 @@
       "additionalProperties": false,
       "required": ["unknown_dependency", "dynamic_import", "incomplete_population"],
       "properties": {
-        "unknown_dependency": { "type": "string", "minLength": 1 },
-        "dynamic_import": { "type": "string", "minLength": 1 },
-        "incomplete_population": { "type": "string", "minLength": 1 }
+        "unknown_dependency": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dynamic_import": {
+          "type": "string",
+          "minLength": 1
+        },
+        "incomplete_population": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "coverage": {
@@ -232,9 +394,16 @@
       "additionalProperties": false,
       "required": ["node", "mode", "partial_merge"],
       "properties": {
-        "node": { "type": "string", "minLength": 1 },
-        "mode": { "const": "whole-only" },
-        "partial_merge": { "const": "forbidden" }
+        "node": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "const": "whole-only"
+        },
+        "partial_merge": {
+          "const": "forbidden"
+        }
       }
     },
     "authoritative_gates": {
@@ -246,12 +415,27 @@
         "additionalProperties": false,
         "required": ["gate_id", "execution", "equivalent_node", "boundary", "freshness_profile"],
         "properties": {
-          "gate_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
-          "execution": { "const": "policy-command-exactly-once-per-cold-pass" },
-          "equivalent_node": {
-            "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+          "gate_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
           },
-          "boundary": { "const": "exact-head-clean-no-write-equivalent" },
+          "execution": {
+            "const": "policy-command-exactly-once-per-cold-pass"
+          },
+          "equivalent_node": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "minLength": 1
+              }
+            ]
+          },
+          "boundary": {
+            "const": "exact-head-clean-no-write-equivalent"
+          },
           "freshness_profile": {
             "type": "string",
             "pattern": "^[a-z0-9][a-z0-9._-]*$"
