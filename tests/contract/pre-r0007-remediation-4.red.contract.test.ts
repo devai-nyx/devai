@@ -813,6 +813,33 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
     });
   });
 
+  describe('R7-F011 no authoritative consumer terminates without a structured result', () => {
+    it('R7-021-REVIEW-SCOPE-BASE-BLOCKS refuses an omitted base with a finding', () => {
+      const { root, candidate } = clone();
+      const outcome = run(root, ['review-scope', '--round', 'R-0007', '--candidate', candidate]);
+      // The controller must emit a structured result. Terminating on an uncaught throw
+      // gives a caller silence, which is indistinguishable from finding nothing wrong.
+      expect(outcome.value, detail(outcome)).not.toBeNull();
+      expect(outcome.status, detail(outcome)).toBe(1);
+      expect(codes(outcome), detail(outcome)).not.toEqual([]);
+    });
+
+    it('R7-021-NO-SILENT-TERMINATION holds for every authoritative consumer', () => {
+      const { root, candidate } = clone();
+      const offenders: string[] = [];
+      for (const command of AUTHORITATIVE_COMMANDS) {
+        // Supply the candidate but omit every other revision argument.
+        const outcome = run(root, [command, '--round', 'R-0007', '--candidate', candidate]);
+        if (outcome.value === null)
+          offenders.push(`${command}: no structured result (status ${String(outcome.status)})`);
+      }
+      expect(
+        offenders,
+        `consumers terminating without a structured result:\n${offenders.join('\n')}`,
+      ).toEqual([]);
+    });
+  });
+
   describe('R7-F004 a candidate executable that cannot be read blocks derivation', () => {
     it('R7-004-MISSING-EXECUTABLE-BLOCKS names the unreadable executable', () => {
       const { root } = clone();
