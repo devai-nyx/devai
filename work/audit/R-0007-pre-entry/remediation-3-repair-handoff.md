@@ -31,7 +31,7 @@ record required by the role-pure sequence; that record does not yet exist.
 | Substantive runs used | 1 of 2                                                              |
 | Substantive runs left | **1 — Review Run 2, the sole remaining run**                        |
 | Review Run 3          | Forbidden by OM-017; failure of Run 2 goes to Owner escalation      |
-| Current head          | `493928c`                                                           |
+| Current head          | `e717a3d`                                                           |
 | R-0007 standing       | **NOT STARTED** — `ENTRY_BLOCKED_DECLARATION_UNBOUND`               |
 
 The branch has not been pushed and no pull request exists.
@@ -121,31 +121,58 @@ Nothing is `GREEN_PROVED` in the matrix. No class is recorded closed.
   thirteen projects’ output and root sets, programs outside the former allowlist, and
   surfaces `packages/cli/dist/bin.js` as a missing executable rather than dropping it.
 
-## Blocking defect: the state identity rewrite disagrees with every fixture
+## The 52 failures are dormant checks, not a regression
 
-`reconstructStateIdentityV6` was rewritten at `bb9f79c` to bind every field of a
-transition rather than a selected six. That closes the unselected-byte hole in R7-F001,
-but it invalidates every fixture that computes `previous_state_digest` by replicating the
-former selection. `tests/contract/pre-r0007-remediation-1.red.contract.test.ts` now
-reports **52 failed, 91 passed of 143**, of which **60 are
-`REVIEW_STATE_PREDECESSOR_STATE_INVALID`** from exactly this cause.
+An earlier issue of this record framed the remediation-1 failures as a regression caused
+by the state identity rewrite. **That framing was wrong and is withdrawn.**
 
-Until it is resolved that suite cannot be read, and it masks any signal from the
-state-before repair at `493928c`. Two options, neither yet chosen:
+Predecessor authentication was previously gated on `context.profile.decision_id ===
+'DII-252'`-style specimen comparison, and every fixture profile is `DII-900`. The block
+was therefore **skipped entirely**. It has never run against these fixtures. The R7-F009
+capability repair turned it on, correctly, and the fixtures have simply never satisfied
+it.
 
-1. the fixtures compute the new identity, which means replicating the controller
-   algorithm in test code and keeping the two in step; or
-2. the identity binds a documented subset a fixture can reproduce, provided no byte the
-   transition authenticates is left unselected.
+This resolves a contradiction the earlier framing could not account for: how the suite
+passed 143 of 143 at `5b6ff66` under a validator that would have rejected the same states.
+It did not reject them. It never executed.
 
-**This is the first thing to resolve. Nothing downstream is readable until it is.**
+So the 52 failures are **previously-dormant checks now executing against fixtures built
+while they were dormant**, not behaviour that used to work and stopped. The distinction
+matters for what to do next: nothing needs reverting, and the fixtures need to satisfy a
+contract they were never asked to satisfy before.
+
+This is the third time a specimen gate turned out to be concealing fixture incompleteness
+rather than merely disabling a check:
+
+1. the closure digest the fixture never declared, exposed when the digest comparison
+   became universal;
+2. predecessor authentication the fixture never satisfied, exposed here;
+3. the same mechanism gated six further behaviours, none of which had been exercised
+   under any fixture profile.
+
+Taken together this is independent evidence that the R7-F009 capability repair does real
+work rather than renaming a condition. It is also a caution: **a green suite under the
+specimen gates was not evidence those behaviours worked.** Any class whose only evidence
+predates the capability repair should be treated as unproven until re-run.
+
+### What the fixtures actually need
+
+`previous_state_digest` binds the predecessor state artifact self-digest, per the DII-252
+amendment. These fixtures construct states without ever retaining a predecessor artifact,
+so there is no honest value to supply by patching a field. `stateChain` must retain a
+predecessor state artifact under `review-states/<digest>.json` and reference it, in both
+the shared harness and the inline copy in remediation-1. That is a change to fixture
+semantics, not a field edit.
 
 ## Two unfounded claims, and the pattern behind them
 
 - `4964459` states the bootstrap blast radius was contained, the same four failures as
   before. That was measured on **one** contract file. remediation-1 went from 143 passing
   to 139 failing and was not re-run after any Engineer tranche. The claim was wrong.
-- `bb9f79c` attributes the five remaining R7-001 and R7-002 failures to test shape. At
+- `bb9f79c` attributes the five remaining R7-001 and R7-002 failures to test shape.
+- The fourth issue of this record framed the 52 remediation-1 failures as a regression
+  from the identity rewrite. They are dormant checks newly enabled by the capability
+  repair. Withdrawn above. At
   least part of the cause was the state-before defect repaired at `493928c`, and the
   identity rewrite above. The attribution was premature.
 
