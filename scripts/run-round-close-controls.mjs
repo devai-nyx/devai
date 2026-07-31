@@ -8711,12 +8711,14 @@ function validateTransitionEdgeV6(context, transition, index, prior, findings) {
       typeof claimed === 'string' && SHA256.test(claimed) && existsSync(retainedPath)
         ? readJson(retainedPath)
         : null;
+    // A missing artifact is not corroboration. Accepting null here would let any
+    // well-formed digest pass unchallenged, which is the appearance of authentication.
     const corroborated =
       typeof claimed === 'string' &&
       SHA256.test(claimed) &&
-      (retained === null ||
-        (selfDigestValid(retained, 'state_digest_sha256') &&
-          retained.state_digest_sha256 === claimed));
+      retained !== null &&
+      selfDigestValid(retained, 'state_digest_sha256') &&
+      retained.state_digest_sha256 === claimed;
     if (!corroborated)
       findings.push(
         finding(
@@ -9035,6 +9037,33 @@ function makeReviewStateV4(context, proof, scopeDigest, state, cycle, history, e
       ['NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE', 'ESCALATION_REQUIRED'].includes(transition.to)
         ? 2
         : 1;
+    // The predecessor identity binds a retained artifact, per DII-252. The writer
+    // persists that artifact rather than asserting a digest, so the validator has
+    // something independent to corroborate against.
+    let retainedPredecessor = null;
+    if (index > 0) {
+      const predecessorBody = {
+        schemaVersion: '3.0.0',
+        round: context.profile.round,
+        state: transition.from,
+        cycle: transitionCycle,
+        candidate_sha: transition.candidate_sha,
+        tree_sha: proof?.manifest?.tree_sha ?? null,
+      };
+      const predecessor = withSelfDigest(predecessorBody, 'state_digest_sha256');
+      const statePath = context.profile.runtime.review_state;
+      const retainedPath = join(
+        dirname(join(repoRoot, statePath)),
+        'review-states',
+        `${predecessor.state_digest_sha256}.json`,
+      );
+      mkdirSync(dirname(retainedPath), { recursive: true });
+      writeJsonAtomic(retainedPath, predecessor);
+      retainedPredecessor = {
+        state_path: statePath,
+        state_digest_sha256: predecessor.state_digest_sha256,
+      };
+    }
     const body = {
       from: transition.from,
       to: transition.to,
@@ -9046,13 +9075,13 @@ function makeReviewStateV4(context, proof, scopeDigest, state, cycle, history, e
       review_result_digest: transition.review_result_digest ?? null,
       transport_digest: transition.transport_digest ?? null,
       repair_evidence_digest: transition.repair_evidence_digest ?? null,
-      previous_state_digest: index === 0 ? null : (transition.previous_state_digest ?? null),
+      previous_state_digest: retainedPredecessor?.state_digest_sha256 ?? null,
       previous_state_artifact:
-        index === 0
+        retainedPredecessor === null
           ? null
           : {
-              state_path: context.profile.runtime.review_state,
-              artifact_digest_sha256: previousTransitionDigest,
+              state_path: retainedPredecessor.state_path,
+              artifact_digest_sha256: retainedPredecessor.state_digest_sha256,
               canonicalization: 'stable-json-minus-self-digest',
             },
       previous_transition_digest: previousTransitionDigest,
