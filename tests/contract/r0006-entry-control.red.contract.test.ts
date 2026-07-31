@@ -249,6 +249,8 @@ function manifestArgs(candidate: string): string[] {
     'manifest',
     '--round',
     'R-0006',
+    '--candidate',
+    candidate,
     '--implementation-subject',
     candidate,
     '--review-candidate',
@@ -369,6 +371,8 @@ describe('R-0006 E1 entry-control red contracts', () => {
         'R-0006',
         '--base',
         base,
+        '--candidate',
+        candidate,
         '--implementation-subject',
         testCase.value,
         '--review-candidate',
@@ -517,6 +521,8 @@ describe('R-0006 E1 entry-control red contracts', () => {
     }
     const result = run(root, [
       'envelope',
+      '--candidate',
+      git(root, ['rev-parse', 'HEAD']),
       '--reviewed-sha',
       candidate,
       '--head',
@@ -551,6 +557,8 @@ describe('R-0006 E1 entry-control red contracts', () => {
     ]);
     const result = run(root, [
       'envelope',
+      '--candidate',
+      git(root, ['rev-parse', 'HEAD']),
       '--reviewed-sha',
       candidate,
       '--head',
@@ -648,14 +656,24 @@ describe('R-0006 E1 entry-control red contracts', () => {
     ];
     for (const invalid of invalidPolicies) {
       put(root, 'law/policy/round-close-controls.json', policy(invalid));
-      const result = run(root, ['policy-check']);
+      const candidate = commit(
+        root,
+        'DEVAI Architect',
+        'law(r0006): inject invalid assertion policy',
+        ['law/policy/round-close-controls.json'],
+      );
+      const result = run(root, ['policy-check', '--candidate', candidate]);
       expect(findings(result)).toEqual(
         expect.arrayContaining([expect.objectContaining({ code: 'SEMANTIC_ASSERTION_VACUOUS' })]),
       );
     }
     put(root, 'law/policy/round-close-controls.json', policy());
     put(root, '.devai/config/round-close-controls.json', `${policy()} `);
-    const mirror = run(root, ['policy-check']);
+    const candidate = commit(root, 'DEVAI Architect', 'law(r0006): inject policy mirror drift', [
+      'law/policy/round-close-controls.json',
+      '.devai/config/round-close-controls.json',
+    ]);
+    const mirror = run(root, ['policy-check', '--candidate', candidate]);
     expect(findings(mirror)).toEqual(
       expect.arrayContaining([expect.objectContaining({ code: 'POLICY_MIRROR_DRIFT' })]),
     );
@@ -685,8 +703,8 @@ describe('R-0006 E1 entry-control red contracts', () => {
     (path, source, role, code) => {
       const { root } = fixture();
       put(root, path, source);
-      commit(root, role, 'test(r0006): inject semantic anti-pattern', [path]);
-      const result = run(root, ['policy-check']);
+      const candidate = commit(root, role, 'test(r0006): inject semantic anti-pattern', [path]);
+      const result = run(root, ['policy-check', '--candidate', candidate]);
       expect(result.status).not.toBe(0);
       expect(findings(result)).toEqual(
         expect.arrayContaining([expect.objectContaining({ code, path })]),
@@ -1064,6 +1082,8 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     ]);
     const result = run(current.root, [
       'envelope',
+      '--candidate',
+      git(current.root, ['rev-parse', 'HEAD']),
       '--head',
       git(current.root, ['rev-parse', 'HEAD']),
       '--review-record',
@@ -1085,6 +1105,8 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     ]);
     const result = run(current.root, [
       'envelope',
+      '--candidate',
+      git(current.root, ['rev-parse', 'HEAD']),
       '--head',
       git(current.root, ['rev-parse', 'HEAD']),
       '--review-record',
@@ -1107,6 +1129,8 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
       ]);
       const result = run(current.root, [
         'envelope',
+        '--candidate',
+        git(current.root, ['rev-parse', 'HEAD']),
         '--reviewed-sha',
         current.candidate,
         '--head',
@@ -1138,7 +1162,13 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     const emptyPolicy = policy({ semantic_assertions: validAssertions });
     put(current.root, 'law/policy/round-close-controls.json', emptyPolicy);
     put(current.root, '.devai/config/round-close-controls.json', emptyPolicy);
-    const empty = run(current.root, ['policy-check']);
+    const emptyCandidate = commit(
+      current.root,
+      'DEVAI Architect',
+      'law(r0006): empty semantic population',
+      ['law/policy/round-close-controls.json', '.devai/config/round-close-controls.json'],
+    );
+    const empty = run(current.root, ['policy-check', '--candidate', emptyCandidate]);
     expect(findings(empty)).toEqual(
       expect.arrayContaining([expect.objectContaining({ code: 'SEMANTIC_POPULATION_EMPTY' })]),
     );
@@ -1158,7 +1188,18 @@ describe('R-0006 E4 entry-control acceptance and adversaries', () => {
     put(current.root, '.devai/config/round-close-controls.json', pairPolicy);
     put(current.root, 'law/policy/second.json', '{"value":1}\n');
     put(current.root, '.devai/config/second.json', '{"value":2}\n');
-    const drift = run(current.root, ['policy-check']);
+    const driftCandidate = commit(
+      current.root,
+      'DEVAI Architect',
+      'law(r0006): drift second mirror pair',
+      [
+        'law/policy/round-close-controls.json',
+        '.devai/config/round-close-controls.json',
+        'law/policy/second.json',
+        '.devai/config/second.json',
+      ],
+    );
+    const drift = run(current.root, ['policy-check', '--candidate', driftCandidate]);
     expect(findings(drift)).toEqual(
       expect.arrayContaining([expect.objectContaining({ code: 'POLICY_MIRROR_DRIFT' })]),
     );
@@ -1249,7 +1290,13 @@ if (process.argv[2] === 'ordinary') {
       const source = `${JSON.stringify(document, null, 2)}\n`;
       put(current.root, 'law/policy/round-close-controls.json', source);
       put(current.root, '.devai/config/round-close-controls.json', source);
-      expect(findings(run(current.root, ['policy-check']))).toEqual(
+      const candidate = commit(
+        current.root,
+        'DEVAI Architect',
+        'law(r0006): invalidate normalization policy',
+        ['law/policy/round-close-controls.json', '.devai/config/round-close-controls.json'],
+      );
+      expect(findings(run(current.root, ['policy-check', '--candidate', candidate]))).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ code: 'POLICY_CONVERGENCE_RUNTIME_ARTIFACTS_INVALID' }),
         ]),
@@ -1270,6 +1317,8 @@ if (process.argv[2] === 'ordinary') {
     ]);
     const result = run(current.root, [
       'envelope',
+      '--candidate',
+      git(current.root, ['rev-parse', 'HEAD']),
       '--reviewed-sha',
       current.candidate,
       '--head',

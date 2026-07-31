@@ -219,7 +219,7 @@ describe('pre-R-0007 generic close-control red contracts', () => {
   it('refuses a nonexistent cycle 3 before reading a review result', () => {
     const result = run('review-check', [
       '--candidate',
-      'HEAD',
+      HEAD,
       '--cycle',
       '3',
       '--review-result',
@@ -232,7 +232,7 @@ describe('pre-R-0007 generic close-control red contracts', () => {
   });
 
   it('rejects unresolved and stale claim ledgers for an exact candidate', () => {
-    const result = run('claims-check', ['--candidate', 'HEAD']);
+    const result = run('claims-check', ['--candidate', HEAD]);
     expect(result.status).toBe(1);
     expect(result.value).toMatchObject({ ok: false, command: 'claims-check', round: 'R-0007' });
     expect(result.value?.findings).toEqual(
@@ -250,7 +250,9 @@ describe('pre-R-0007 generic close-control red contracts', () => {
       state: 'DRAFT',
       substantive_cycles: { used: 0, maximum: 2 },
       transport_retries_per_cycle: { used: 0, maximum: 1 },
-      entry_ready: true,
+      entry_ready: false,
+      diagnostics: [],
+      findings: [],
     });
   });
 });

@@ -7,11 +7,12 @@ import {
   mkdtempSync,
   readFileSync,
   rmSync,
+  symlinkSync,
   unlinkSync,
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import ts from 'typescript';
 import { afterAll, describe, expect, it, vi } from 'vitest';
 
@@ -67,6 +68,8 @@ function fixture(): string {
   const root = join(parent, 'repo');
   roots.push(parent);
   execFileSync('git', ['clone', '--quiet', '--shared', ROOT, root]);
+  writeFileSync(join(root, '.git/info/exclude'), 'node_modules\n');
+  symlinkSync(join(ROOT, 'node_modules'), join(root, 'node_modules'), 'dir');
   const mirror = '.devai/config/round-close-controls.json';
   if (readFileSync(join(root, mirror), 'utf8') !== readFileSync(join(ROOT, mirror), 'utf8')) {
     copyFileSync(join(ROOT, mirror), join(root, mirror));
@@ -160,8 +163,9 @@ describe('OM-017 / DII-251 remediation campaign 3 complete populations', () => {
 
   describe('R3-F001 literal authoritative roster', () => {
     it('R3-001-LITERAL-ROSTER executes every declared argv without hidden repair', () => {
+      const root = fixture();
       const policy = json<{ convergence: { commands: Array<{ id: string; argv: string[] }> } }>(
-        ROOT,
+        root,
         POLICY_PATH,
       );
       expect(policy.convergence.commands).toHaveLength(16);
@@ -170,7 +174,7 @@ describe('OM-017 / DII-251 remediation campaign 3 complete populations', () => {
       );
       expect(materializations).toBeDefined();
       const [program, ...args] = materializations?.argv ?? [];
-      const result = spawnSync(program ?? '', args, { cwd: ROOT, encoding: 'utf8' });
+      const result = spawnSync(program ?? '', args, { cwd: root, encoding: 'utf8' });
       expect(result.status, `${result.stdout}\n${result.stderr}`).toBe(0);
     });
 
@@ -351,24 +355,74 @@ describe('OM-017 / DII-251 remediation campaign 3 complete populations', () => {
 
   describe('R3-F004 exact state, transport, and repair authentication', () => {
     it('R3-004-EXACT-PREDECESSOR-ARTIFACT binds every predecessor artifact byte', () => {
-      const reconstruct = controllerFunction<
-        (transition: Record<string, unknown>, prior: string) => string
-      >('reconstructStateIdentityV6', { sha256, canonical });
+      let retainedBody: Record<string, unknown> = {
+        schemaVersion: '3.0.0',
+        state: 'CYCLE_1_ACTIVE',
+        unselected: 'alpha',
+      };
+      let retained = {
+        ...retainedBody,
+        state_digest_sha256: sha256(canonical(retainedBody)),
+      };
+      const claimed = retained.state_digest_sha256;
+      const validate = controllerFunction<
+        (
+          context: Record<string, unknown>,
+          transition: Record<string, unknown>,
+          index: number,
+          prior: Record<string, unknown>,
+          findings: Array<Record<string, unknown>>,
+        ) => void
+      >('validateTransitionEdgeV6', {
+        persistedReviewArtifactDigestV7: (artifact: Record<string, unknown>, field: string) =>
+          artifact[field],
+        finding: (code: string, message: string, extra = {}) => ({ code, message, ...extra }),
+        repoRoot: '/fixture',
+        join,
+        dirname,
+        relative,
+        SHA256: /^[a-f0-9]{64}$/u,
+        existsSync: () => true,
+        readJson: () => retained,
+        selfDigestValid: (artifact: Record<string, unknown>, field: string) => {
+          const { [field]: digest, ...body } = artifact;
+          return digest === sha256(canonical(body));
+        },
+      });
+      const prior = { to: 'CYCLE_1_ACTIVE', transition_digest_sha256: 'a'.repeat(64) };
       const transition = {
         from: 'CYCLE_1_ACTIVE',
+        to: 'REPAIR_REQUIRED',
         cycle: 1,
-        candidate_sha: '1'.repeat(40),
-        candidate_manifest_digest: '2'.repeat(64),
-        review_scope_digest: '3'.repeat(64),
-        previous_state_digest: '4'.repeat(64),
-        previous_state_artifact: { state: 'CYCLE_1_ACTIVE', unselected: 'alpha' },
+        previous_transition_digest: prior.transition_digest_sha256,
+        previous_state_digest: claimed,
+        previous_state_artifact: {
+          state_path: `state/review-states/${claimed}.json`,
+          artifact_digest_sha256: claimed,
+          canonicalization: 'stable-json-minus-self-digest',
+        },
       };
-      const changed = {
-        ...transition,
-        previous_state_artifact: { state: 'CYCLE_1_ACTIVE', unselected: 'beta' },
+      const context = {
+        policy: {
+          review_state_machine: { allowed_transitions: { CYCLE_1_ACTIVE: ['REPAIR_REQUIRED'] } },
+        },
+        profile: { runtime: { review_state: 'state/review-state.json' } },
       };
-      expect(reconstruct(transition, '5'.repeat(64))).not.toBe(
-        reconstruct(changed, '5'.repeat(64)),
+      const validFindings: Array<Record<string, unknown>> = [];
+      validate(context, transition, 1, prior, validFindings);
+      expect(validFindings).toEqual([]);
+
+      retainedBody = { ...retainedBody, unselected: 'beta' };
+      retained = {
+        ...retainedBody,
+        state_digest_sha256: sha256(canonical(retainedBody)),
+      };
+      const tamperedFindings: Array<Record<string, unknown>> = [];
+      validate(context, transition, 1, prior, tamperedFindings);
+      expect(tamperedFindings).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ code: 'REVIEW_STATE_PREDECESSOR_STATE_INVALID' }),
+        ]),
       );
     });
 

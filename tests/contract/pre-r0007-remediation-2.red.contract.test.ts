@@ -1,7 +1,9 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
+import ts from 'typescript';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.setConfig({ testTimeout: 180_000 });
@@ -44,6 +46,40 @@ function required<T>(value: T | null | undefined, label: string): T {
   return value;
 }
 
+function controllerFunction<T>(name: string, dependencies: Record<string, unknown>): T {
+  const text = source();
+  const file = ts.createSourceFile('controller.mjs', text, ts.ScriptTarget.Latest, true);
+  const declaration = file.statements.find(
+    (statement): statement is ts.FunctionDeclaration =>
+      ts.isFunctionDeclaration(statement) && statement.name?.text === name,
+  );
+  if (declaration === undefined) throw new Error(`controller function ${name} is missing`);
+  const names = Object.keys(dependencies);
+  const factory = new Function(...names, `${declaration.getText(file)}; return ${name};`);
+  return factory(...names.map((key) => dependencies[key])) as T;
+}
+
+function stable(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(stable);
+  if (value !== null && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
+    return Object.fromEntries(
+      Object.keys(record)
+        .sort()
+        .map((key) => [key, stable(record[key])]),
+    );
+  }
+  return value;
+}
+
+function canonical(value: unknown): string {
+  return `${JSON.stringify(stable(value))}\n`;
+}
+
+function sha256(value: string): string {
+  return createHash('sha256').update(value).digest('hex');
+}
+
 const policy = json<{
   decision_id: string;
   schemas: Record<string, string>;
@@ -53,6 +89,7 @@ const policy = json<{
   };
   convergence: { commands: Array<{ id: string; freshness_profile: string }> };
   active_control_census: Record<string, unknown>;
+  control_capabilities: Record<string, boolean | string>;
 }>(POLICY_PATH);
 const graph = json<{
   population: Record<string, string[]>;
@@ -181,17 +218,20 @@ describe('OM-016 / DII-249 remediation campaign 2 complete populations', () => {
     });
 
     it('R2-003-COMPUTED-LOADERS uses one conservative loader classifier', () => {
-      expect(controller).toContain('hasAmbiguousLoaderV6');
-      for (const family of [
-        'import(',
-        'require(',
-        'require.resolve(',
-        'import.meta.resolve(',
-        'createRequire(',
-        'module.require(',
-        'eval(',
+      const classify = controllerFunction<(text: string) => boolean>('hasAmbiguousLoaderV6', {});
+      for (const specimen of [
+        'import(runtimeName)',
+        'require(runtimeName)',
+        'require.resolve(runtimeName)',
+        'import.meta.resolve(runtimeName)',
+        'createRequire(runtimeName)',
+        'module.require(runtimeName)',
+        'eval(runtimeName)',
+        'module[loaderName](runtimeName)',
+        'const { require: load } = module; load(runtimeName)',
       ])
-        expect(controller, family).toContain(family);
+        expect(classify(specimen), specimen).toBe(true);
+      expect(classify("const known = require('./known.js')")).toBe(false);
     });
 
     it('R2-003-UNKNOWN-FALLBACK never filters unknown paths through a partial population', () => {
@@ -237,8 +277,75 @@ describe('OM-016 / DII-249 remediation campaign 2 complete populations', () => {
     });
 
     it('R2-005-PREDECESSOR-STATES reconstructs every predecessor state identity', () => {
-      expect(controller).toContain('reconstructStateIdentityV6');
-      expect(controller).toContain('REVIEW_STATE_PREDECESSOR_STATE_INVALID');
+      let retainedBody: Record<string, unknown> = {
+        schemaVersion: '3.0.0',
+        state: 'CYCLE_1_ACTIVE',
+        unselected: 'alpha',
+      };
+      let retained = {
+        ...retainedBody,
+        state_digest_sha256: sha256(canonical(retainedBody)),
+      };
+      const claimed = retained.state_digest_sha256;
+      const validate = controllerFunction<
+        (
+          context: Record<string, unknown>,
+          transition: Record<string, unknown>,
+          index: number,
+          prior: Record<string, unknown>,
+          findings: Array<Record<string, unknown>>,
+        ) => void
+      >('validateTransitionEdgeV6', {
+        persistedReviewArtifactDigestV7: (artifact: Record<string, unknown>, field: string) =>
+          artifact[field],
+        finding: (code: string, message: string, extra = {}) => ({ code, message, ...extra }),
+        repoRoot: '/fixture',
+        join,
+        dirname,
+        relative,
+        SHA256: /^[a-f0-9]{64}$/u,
+        existsSync: () => true,
+        readJson: () => retained,
+        selfDigestValid: (artifact: Record<string, unknown>, field: string) => {
+          const { [field]: digest, ...body } = artifact;
+          return digest === sha256(canonical(body));
+        },
+      });
+      const prior = { to: 'CYCLE_1_ACTIVE', transition_digest_sha256: 'a'.repeat(64) };
+      const transition = {
+        from: 'CYCLE_1_ACTIVE',
+        to: 'REPAIR_REQUIRED',
+        cycle: 1,
+        previous_transition_digest: prior.transition_digest_sha256,
+        previous_state_digest: claimed,
+        previous_state_artifact: {
+          state_path: `state/review-states/${claimed}.json`,
+          artifact_digest_sha256: claimed,
+          canonicalization: 'stable-json-minus-self-digest',
+        },
+      };
+      const context = {
+        policy: {
+          review_state_machine: { allowed_transitions: { CYCLE_1_ACTIVE: ['REPAIR_REQUIRED'] } },
+        },
+        profile: { runtime: { review_state: 'state/review-state.json' } },
+      };
+      const validFindings: Array<Record<string, unknown>> = [];
+      validate(context, transition, 1, prior, validFindings);
+      expect(validFindings).toEqual([]);
+
+      retainedBody = { ...retainedBody, unselected: 'beta' };
+      retained = {
+        ...retainedBody,
+        state_digest_sha256: sha256(canonical(retainedBody)),
+      };
+      const tamperedFindings: Array<Record<string, unknown>> = [];
+      validate(context, transition, 1, prior, tamperedFindings);
+      expect(tamperedFindings).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ code: 'REVIEW_STATE_PREDECESSOR_STATE_INVALID' }),
+        ]),
+      );
     });
 
     it('R2-005-TRANSPORT-IDENTITY compares the complete persisted attempt identity', () => {
@@ -274,7 +381,12 @@ describe('OM-016 / DII-249 remediation campaign 2 complete populations', () => {
   describe('R2-F006 structured exact-candidate active-control provenance', () => {
     it('R2-006-TRANSITIVE-PROVENANCE retains DII-249 policy authority under the current profile root', () => {
       expect(policy.decision_id).toBe('DII-249');
-      expect(profile.decision_id).toBe('DII-251');
+      expect(profile.decision_id).toBe('DII-252');
+      expect(policy.control_capabilities).toMatchObject({
+        gate_closure_fixpoint_derivation: true,
+        predecessor_artifact_authentication: true,
+        consumer_literal_candidate_required: true,
+      });
       expect(policy.schemas.control_provenance).toBe('law/schemas/control-provenance.schema.json');
       expect(profile.sources.control_provenance).toBe('work/rounds/R-0007/control-provenance.json');
     });

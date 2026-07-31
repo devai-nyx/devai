@@ -416,7 +416,14 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const current = fixture();
     put(current.root, 'tests/a.test.ts', 'export const testA = "changed";\n');
     const candidate = commit(current.root, 'change test a');
-    const value = run(current, 'impact-plan', ['--base', current.impactBase, '--head', candidate]);
+    const value = run(current, 'impact-plan', [
+      '--base',
+      current.impactBase,
+      '--head',
+      candidate,
+      '--candidate',
+      candidate,
+    ]);
     expect(value.ok).toBe(true);
     expect(executed(value)).toEqual(['unit-a']);
   });
@@ -425,7 +432,14 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const current = fixture();
     put(current.root, 'packages/a/src/index.ts', 'export const a = 2;\n');
     const candidate = commit(current.root, 'change source a');
-    const value = run(current, 'impact-plan', ['--base', current.impactBase, '--head', candidate]);
+    const value = run(current, 'impact-plan', [
+      '--base',
+      current.impactBase,
+      '--head',
+      candidate,
+      '--candidate',
+      candidate,
+    ]);
     expect(value.ok).toBe(true);
     expect(executed(value)).toEqual(['unit-a', 'unit-b']);
   });
@@ -434,7 +448,14 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const current = fixture();
     put(current.root, 'packages/c/src/index.ts', 'export const c = 1;\n');
     const candidate = commit(current.root, 'add unknown source');
-    const value = run(current, 'impact-plan', ['--base', current.impactBase, '--head', candidate]);
+    const value = run(current, 'impact-plan', [
+      '--base',
+      current.impactBase,
+      '--head',
+      candidate,
+      '--candidate',
+      candidate,
+    ]);
     expect(value.ok).toBe(true);
     expect(executed(value)).toEqual(['full-coverage', 'full-suite']);
     expect(nodes(value).find(({ node_id }) => node_id === 'full-suite')).toEqual(
@@ -449,7 +470,14 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const current = fixture();
     put(current.root, 'package.json', '{"name":"fixture","private":true,"version":"1.0.0"}\n');
     const candidate = commit(current.root, 'change workspace manifest');
-    const value = run(current, 'impact-plan', ['--base', current.impactBase, '--head', candidate]);
+    const value = run(current, 'impact-plan', [
+      '--base',
+      current.impactBase,
+      '--head',
+      candidate,
+      '--candidate',
+      candidate,
+    ]);
     expect(value.ok).toBe(true);
     expect(executed(value)).toEqual(['full-coverage', 'full-suite']);
   });
@@ -459,7 +487,14 @@ describe('pre-R-0007 affected-test DAG adversaries', () => {
     const value = run(
       current,
       'impact-plan',
-      ['--base', current.impactBase, '--head', current.impactBase],
+      [
+        '--base',
+        current.impactBase,
+        '--head',
+        current.impactBase,
+        '--candidate',
+        current.impactBase,
+      ],
       {
         CI: 'true',
         GITHUB_ACTIONS: 'true',

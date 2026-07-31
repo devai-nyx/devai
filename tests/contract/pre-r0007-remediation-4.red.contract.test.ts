@@ -552,8 +552,12 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       );
       const probes = ['eslint', 'changeset'];
       probes.forEach((program, index) => {
-        policy.convergence.commands[index].argv = ['pnpm', 'exec', program, '--version'];
-        graph.command_closure[index].closure_digest = 'e'.repeat(64);
+        const command = policy.convergence.commands[index];
+        const closure = graph.command_closure[index];
+        if (command === undefined || closure === undefined)
+          throw new Error(`fixture closure entry ${String(index)} is absent`);
+        command.argv = ['pnpm', 'exec', program, '--version'];
+        closure.closure_digest = 'e'.repeat(64);
       });
       putJson(root, POLICY_PATH, policy);
       putJson(root, 'work/rounds/R-0007/affected-test-graph.json', graph);
@@ -566,7 +570,9 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         derived?: { programs?: string[] };
       }>;
       const missing = probes.filter((program, index) => {
-        const gateId = policy.convergence.commands[index].id;
+        const command = policy.convergence.commands[index];
+        if (command === undefined) throw new Error(`fixture command ${String(index)} is absent`);
+        const gateId = command.id;
         return !findings.some(
           (finding) =>
             finding.code === 'GATE_COMMAND_CLOSURE_DERIVATION_INVALID' &&
@@ -589,7 +595,9 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         root,
         'work/rounds/R-0007/affected-test-graph.json',
       );
-      graph.command_closure[0].closure_digest = 'f'.repeat(64);
+      const firstClosure = graph.command_closure[0];
+      if (firstClosure === undefined) throw new Error('fixture command closure is empty');
+      firstClosure.closure_digest = 'f'.repeat(64);
       putJson(root, 'work/rounds/R-0007/affected-test-graph.json', graph);
       commitAll(root, 'test: foreign profile with a substituted closure digest');
       const mutated = git(root, ['rev-parse', 'HEAD']);
@@ -622,6 +630,7 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         1,
       );
       const red = evidenceCommits[0];
+      if (red === undefined) throw new Error('red evidence creation commit is absent');
       expect(
         git(ROOT, ['rev-parse', `${red}^`]),
         'the evidence payload must identify the exact rejected Inspector candidate',
@@ -1173,6 +1182,7 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         const { root, candidate } = clone();
         writeFileSync(join(root, '.git/HEAD'), `${candidate}\n`);
         const [program, ...args] = gate.argv;
+        if (program === undefined) throw new Error(`gate ${gate.id} has no executable`);
         const result = spawnSync(program, args, {
           cwd: root,
           encoding: 'utf8',
@@ -1704,6 +1714,7 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       expect(location, 'materialized claim must declare one rendered location').toBe(
         `work/audit/${HARNESS_ROUND}/as-built.md`,
       );
+      if (location === undefined) throw new Error('materialized claim location is absent');
       harnessPut(
         current.root,
         location,
@@ -2031,7 +2042,9 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       const obligations = harnessReadJson(current.root, obligationsPath) as Record<string, unknown>;
       const sources = (obligations.normative_sources ?? []) as Array<Record<string, unknown>>;
       expect(sources.length, 'fixture must bind at least one normative source').toBeGreaterThan(0);
-      sources[0].source_digest_sha256 = 'b'.repeat(64);
+      const source = sources[0];
+      if (source === undefined) throw new Error('normative source fixture is absent');
+      source.source_digest_sha256 = 'b'.repeat(64);
       harnessPutJson(current.root, obligationsPath, obligations);
       harnessCommit(current.root, 'test: drift an obligation source digest');
       const candidate = harnessGit(current.root, ['rev-parse', 'HEAD']);
@@ -2041,7 +2054,7 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         {
           code: 'SEMANTIC_OBLIGATION_SOURCE_DIGEST_INVALID',
           message: 'normative source digest differs from exact candidate bytes',
-          path: sources[0].path,
+          path: source.path,
         },
       ]);
     });

@@ -614,7 +614,7 @@ describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
 
   it('fails the policy gate when a governed current claim drifts from machine sources', () => {
     const current = fixture();
-    const valid = run(current.root, ['policy-check']);
+    const valid = run(current.root, ['policy-check', '--candidate', current.candidate]);
     expect(valid.status, valid.stderr).toBe(0);
 
     put(
@@ -622,7 +622,10 @@ describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
       'law/trace.json',
       '{"invariants":[{},{}],"test_corpus":[{"assertion_count":3}]}\n',
     );
-    const stale = run(current.root, ['policy-check']);
+    const staleCandidate = commit(current.root, 'DEVAI Architect', 'law: drift trace source', [
+      'law/trace.json',
+    ]);
+    const stale = run(current.root, ['policy-check', '--candidate', staleCandidate]);
     expect(stale.status).not.toBe(0);
     expect(output(stale).findings).toEqual(
       expect.arrayContaining([

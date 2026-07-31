@@ -566,7 +566,8 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
       'status: active\nauthority: Owner\nnote: R-9000 reviewer-exact-v1 are substrings only\nfallback: alternate-model\n',
     );
     commit(current.root, 'track prose-only mandate references');
-    const result = run(current, 'entry-check');
+    const candidate = git(current.root, ['rev-parse', 'HEAD']);
+    const result = run(current, 'entry-check', ['--candidate', candidate]);
     expect(result.status, JSON.stringify(result.value, null, 2)).toBe(0);
     expect(findingCodes(result)).not.toEqual(
       expect.arrayContaining([
@@ -652,7 +653,15 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
     for (const [name, change] of cases) {
       const current = fixture();
       change(current.root);
-      const result = run(current, 'impact-plan', ['--base', current.base, '--head', 'WORKTREE']);
+      const candidate = git(current.root, ['rev-parse', 'HEAD']);
+      const result = run(current, 'impact-plan', [
+        '--base',
+        current.base,
+        '--head',
+        'WORKTREE',
+        '--candidate',
+        candidate,
+      ]);
       expect(result.status, `${name}: ${result.stderr}`).toBe(0);
       const outcomes = nodeOutcomes(result);
       expect(outcomes.get('full-suite'), name).toBe('EXECUTE');
@@ -682,7 +691,14 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
       ...body,
       result_digest: digest(canonical(body)),
     });
-    const warm = run(current, 'impact-plan', ['--base', current.base, '--head', candidate]);
+    const warm = run(current, 'impact-plan', [
+      '--base',
+      current.base,
+      '--head',
+      candidate,
+      '--candidate',
+      candidate,
+    ]);
     expect(warm.status).toBe(0);
     expect(nodeOutcomes(warm).get('unit-a')).toBe('EXECUTE');
     expect(findingCodes(warm)).toContain('CACHE_RECORD_IDENTITY_INVALID');
@@ -706,7 +722,14 @@ describe('pre-R-0007 independent review cycle-1 defect classes', () => {
       ...body,
       result_digest: digest(canonical(body)),
     });
-    const warm = run(current, 'impact-plan', ['--base', current.base, '--head', candidate]);
+    const warm = run(current, 'impact-plan', [
+      '--base',
+      current.base,
+      '--head',
+      candidate,
+      '--candidate',
+      candidate,
+    ]);
     expect(warm.status).toBe(0);
     expect(nodeOutcomes(warm).get('unit-a')).toBe('EXECUTE');
     expect(nodeOutcomes(warm).get('unit-b')).toBe('EXECUTE');
