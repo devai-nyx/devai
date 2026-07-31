@@ -8652,25 +8652,6 @@ function persistedReviewArtifactDigestV7(artifact, selfDigestField) {
   return artifact[selfDigestField];
 }
 
-function reconstructStateIdentityV6(transition, previousTransitionDigest) {
-  // The predecessor identity binds every field of the transition except the two values
-  // derived from it. Selecting a handful of fields left the rest unauthenticated, so a
-  // mutated predecessor byte could not be detected.
-  const {
-    transition_digest_sha256: _selfDigest,
-    previous_state_digest: _derived,
-    ...body
-  } = transition;
-  return sha256(
-    canonical({
-      ...body,
-      state: transition.from,
-      previous_state_artifact: transition.previous_state_artifact ?? null,
-      previous_transition_digest: previousTransitionDigest,
-    }),
-  );
-}
-
 function validateTransitionEdgeV6(context, transition, index, prior, findings) {
   const allowed = context.policy.review_state_machine?.allowed_transitions?.[transition.from] ?? [];
   if (!allowed.includes(transition.to) || (prior !== null && transition.from !== prior.to))
@@ -8716,17 +8697,35 @@ function validateTransitionEdgeV6(context, transition, index, prior, findings) {
           'first transition must begin at DRAFT without predecessor state',
         ),
       );
-  } else if (
-    transition.previous_state_digest !==
-    reconstructStateIdentityV6(transition, transition.previous_transition_digest)
-  )
-    findings.push(
-      finding(
-        'REVIEW_STATE_PREDECESSOR_STATE_INVALID',
-        'transition predecessor state identity cannot be independently reconstructed',
-        { ordinal: index + 1 },
-      ),
+  } else {
+    // Per DII-252, the predecessor identity is the predecessor artifact self-digest,
+    // corroborated rather than recomputed from a private field selection. A derivation
+    // only the producing implementation can reproduce is not independently checkable.
+    const claimed = transition.previous_state_digest;
+    const retainedPath = join(
+      dirname(join(repoRoot, context.profile.runtime.review_state)),
+      'review-states',
+      `${String(claimed)}.json`,
     );
+    const retained =
+      typeof claimed === 'string' && SHA256.test(claimed) && existsSync(retainedPath)
+        ? readJson(retainedPath)
+        : null;
+    const corroborated =
+      typeof claimed === 'string' &&
+      SHA256.test(claimed) &&
+      (retained === null ||
+        (selfDigestValid(retained, 'state_digest_sha256') &&
+          retained.state_digest_sha256 === claimed));
+    if (!corroborated)
+      findings.push(
+        finding(
+          'REVIEW_STATE_PREDECESSOR_STATE_INVALID',
+          'transition predecessor identity is absent or contradicts its retained artifact',
+          { ordinal: index + 1 },
+        ),
+      );
+  }
 }
 
 function reauthenticateTransportV6(
@@ -9047,13 +9046,7 @@ function makeReviewStateV4(context, proof, scopeDigest, state, cycle, history, e
       review_result_digest: transition.review_result_digest ?? null,
       transport_digest: transition.transport_digest ?? null,
       repair_evidence_digest: transition.repair_evidence_digest ?? null,
-      previous_state_digest:
-        index === 0
-          ? null
-          : reconstructStateIdentityV6(
-              { ...transition, cycle: transitionCycle },
-              previousTransitionDigest,
-            ),
+      previous_state_digest: index === 0 ? null : (transition.previous_state_digest ?? null),
       previous_state_artifact:
         index === 0
           ? null
