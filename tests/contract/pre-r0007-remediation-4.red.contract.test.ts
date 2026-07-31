@@ -27,6 +27,7 @@ import {
   commit as harnessCommit,
   mandate,
   bindingMarker,
+  digestCanonical,
   digestBytes,
   materializeTerminal,
   passingResult,
@@ -1272,10 +1273,34 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
   describe('R7 carried classes — regression guards for still-OPEN prior findings', () => {
     it('R7-011-BINDING-CENSUS-EXACT-ONE resolves exactly one active binding', () => {
       const current = harnessFixture(true);
-      const outcome = harnessRun(current, 'policy-check', []);
-      const observed = harnessCodes(outcome);
-      expect(observed).not.toContain('ENTRY_BLOCKED_REVIEWER_BINDING_AMBIGUOUS');
-      expect(observed).not.toContain('ENTRY_BLOCKED_REVIEWER_BINDING_CONFLICT');
+      const candidate = harnessGit(current.root, ['rev-parse', 'HEAD']);
+      const outcome = harnessRun(current, 'policy-check', ['--candidate', candidate]);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(0);
+      expect(outcome.value).toMatchObject({
+        command: 'policy-check',
+        round: HARNESS_ROUND,
+        entry_ready: true,
+        diagnostics: [],
+        findings: [],
+      });
+
+      // A clean result alone does not prove that a census occurred. Remove the only
+      // structured marker while retaining the active mandate container and provenance,
+      // so the exact zero-binding branch must be reached.
+      harnessPut(
+        current.root,
+        'product/owner-mandates/OM-900.md',
+        '---\nid: OM-900\nstatus: active\nauthority: Owner\n---\n\n# No structured binding\n',
+      );
+      const unboundCandidate = harnessCommit(current.root, 'test: remove exact reviewer binding');
+      const unbound = harnessRun(current, 'policy-check', ['--candidate', unboundCandidate]);
+      expect(unbound.status, JSON.stringify(unbound.value, null, 2)).toBe(1);
+      expect(unbound.value.findings).toEqual([
+        {
+          code: 'ENTRY_BLOCKED_REVIEWER_UNBOUND',
+          message: 'round reviewer has no tracked complete active binding',
+        },
+      ]);
     });
 
     it('R7-011-BINDING-CENSUS-FAIL-CLOSED rejects a duplicate conflicting binding', () => {
@@ -1292,21 +1317,45 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
           },
         ),
       );
-      harnessCommit(current.root, 'test: second active reviewer binding');
-      const outcome = harnessRun(current, 'policy-check', []);
+      const candidate = harnessCommit(current.root, 'test: second active reviewer binding');
+      const outcome = harnessRun(current, 'policy-check', ['--candidate', candidate]);
       expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      expect(outcome.value.findings).toEqual([
+        {
+          code: 'ENTRY_BLOCKED_REVIEWER_BINDING_AMBIGUOUS',
+          message: 'more than one complete active binding selects the round',
+          mandate_ids: ['OM-900', 'OM-901'],
+        },
+      ]);
     });
 
     it('R7-012-NO-GATE-OMITTED converges over the complete declared population', () => {
       const current = harnessFixture(true);
+      const policy = harnessReadJson(current.root, 'law/policy/round-close-controls.json') as {
+        convergence: { commands: Array<{ id: string }> };
+      };
+      const expectedIds = policy.convergence.commands.map(({ id }) => id);
       const converged = harnessRun(current, 'smart-converge', [
         '--base',
         current.base,
         '--head',
         harnessGit(current.root, ['rev-parse', 'HEAD']),
       ]);
-      const passes = (converged.value.passes ?? []) as Array<{ results?: unknown[] }>;
-      expect(passes[0]?.results ?? []).toHaveLength(16);
+      expect(converged.status, JSON.stringify(converged.value, null, 2)).toBe(0);
+      const passes = (converged.value.passes ?? []) as Array<{
+        pass?: number;
+        results?: Array<{ gate_id?: string }>;
+      }>;
+      expect(
+        passes.map(({ pass, results }) => ({
+          pass,
+          gate_ids: (results ?? []).map(({ gate_id }) => gate_id),
+        })),
+      ).toEqual([
+        { pass: 1, gate_ids: expectedIds },
+        { pass: 2, gate_ids: expectedIds },
+      ]);
+      expect(expectedIds).toHaveLength(16);
     });
 
     it('R7-012-ROSTER-DELETION-FAILS rejects a shortened authoritative roster', () => {
@@ -1317,16 +1366,90 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       policy.convergence.commands = policy.convergence.commands.slice(0, 15);
       harnessPutJson(current.root, 'law/policy/round-close-controls.json', policy);
       harnessPutJson(current.root, '.devai/config/round-close-controls.json', policy);
-      harnessCommit(current.root, 'test: delete one authoritative gate');
-      const outcome = harnessRun(current, 'policy-check', []);
+      const candidate = harnessCommit(current.root, 'test: delete one authoritative gate');
+      const outcome = harnessRun(current, 'policy-check', ['--candidate', candidate]);
       expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      expect(outcome.value.findings).toEqual([
+        {
+          code: 'GATE_COMMAND_CLOSURE_INCOMPLETE',
+          message:
+            'every authoritative gate requires one ordered nonempty script and program closure',
+        },
+        {
+          code: 'GATE_FRESHNESS_PROFILE_INCOMPLETE',
+          message: 'freshness profile population differs from authoritative commands',
+        },
+      ]);
     });
 
     it('R7-013-CACHE-RECORD-IDENTITY binds each freshness record to its task key', () => {
       const current = harnessFixture(true);
-      harnessFreeze(current);
-      const outcome = harnessRun(current, 'policy-check', []);
-      expect(harnessCodes(outcome)).not.toContain('CACHE_RECORD_IDENTITY_INVALID');
+      const frozen = harnessFreeze(current);
+      const converged = harnessRun(current, 'smart-converge', [
+        '--base',
+        current.base,
+        '--head',
+        frozen.candidate,
+      ]);
+      expect(converged.status, JSON.stringify(converged.value, null, 2)).toBe(0);
+      const firstPass = (
+        (converged.value.passes ?? []) as Array<{
+          results?: Array<{ task_key?: string; node_id?: string }>;
+        }>
+      )[0]?.results;
+      expect(firstPass, 'convergence must expose the complete gate population').toHaveLength(16);
+      const expectedTaskIds: string[] = [];
+      for (const result of firstPass ?? []) {
+        const taskId = `gate-${String(result.node_id)}`;
+        const taskKey = String(result.task_key);
+        expectedTaskIds.push(taskId);
+        const cachePath = `${HARNESS_STATE}/freshness/tasks/${taskId}/${taskKey}.json`;
+        const record = harnessReadJson(current.root, cachePath);
+        const { result_digest: claimedDigest, ...recordBody } = record;
+        expect(record).toMatchObject({
+          task_id: taskId,
+          task_key: taskKey,
+          producing_candidate: frozen.candidate,
+          result: 'EXECUTED_PASS',
+        });
+        expect(claimedDigest).toBe(digestCanonical(recordBody));
+        record.task_key = '0'.repeat(64);
+        harnessPutJson(current.root, cachePath, selfDigest(record, 'result_digest'));
+      }
+
+      const replay = harnessRun(current, 'smart-converge', [
+        '--base',
+        current.base,
+        '--head',
+        frozen.candidate,
+      ]);
+      expect(replay.status, JSON.stringify(replay.value, null, 2)).toBe(0);
+      expect(replay.value.findings).toEqual(
+        expectedTaskIds.map((task_id) => ({
+          code: 'CACHE_RECORD_IDENTITY_INVALID',
+          message: 'cached PASS does not bind exact task identity',
+          task_id,
+          detail: 'Error: cache field task_key does not match the planned task',
+        })),
+      );
+      const replayFirstPass = (
+        (replay.value.passes ?? []) as Array<{
+          results?: Array<{ gate_id?: string; outcome?: string; result?: string }>;
+        }>
+      )[0]?.results;
+      expect(
+        (replayFirstPass ?? []).map(({ gate_id, outcome, result }) => ({
+          gate_id,
+          outcome,
+          result,
+        })),
+      ).toEqual(
+        expectedTaskIds.map((taskId) => ({
+          gate_id: taskId.slice('gate-'.length),
+          outcome: 'EXECUTE',
+          result: 'EXECUTED_PASS',
+        })),
+      );
     });
 
     it('R7-013-CACHE-SUBSTITUTION-FAILS rejects a substituted cache record', () => {
@@ -1348,26 +1471,73 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       expect(sample, 'convergence must expose a task key to substitute').toBeTruthy();
       const cachePath = `${HARNESS_STATE}/freshness/tasks/gate-${String(sample?.node_id)}/${String(sample?.task_key)}.json`;
       const record = harnessReadJson(current.root, cachePath);
-      record.result_digest = 'f'.repeat(64);
-      harnessPutJson(current.root, cachePath, record);
+      record.producing_candidate = 'f'.repeat(40);
+      harnessPutJson(current.root, cachePath, selfDigest(record, 'result_digest'));
       const again = harnessRun(current, 'smart-converge', [
         '--base',
         current.base,
         '--head',
         frozen.candidate,
       ]);
-      expect(
-        harnessCodes(again).some((code) => /CACHE|TAMPER|IDENTITY/u.test(code)) ||
-          again.status === 0,
-        JSON.stringify(again.value, null, 2),
-      ).toBe(true);
+      expect(again.status, JSON.stringify(again.value, null, 2)).toBe(0);
+      expect(again.value.findings).toEqual([
+        {
+          code: 'CACHE_RECORD_IDENTITY_INVALID',
+          message: 'cached PASS does not bind exact task identity',
+          task_id: `gate-${String(sample?.node_id)}`,
+          detail: 'Error: cache field producing_candidate does not match the planned task',
+        },
+      ]);
+      const replaySample = (
+        (again.value.passes ?? []) as Array<{
+          results?: Array<{ node_id?: string; outcome?: string; result?: string }>;
+        }>
+      )[0]?.results?.find(({ node_id }) => node_id === sample?.node_id);
+      expect(replaySample).toMatchObject({
+        node_id: sample?.node_id,
+        outcome: 'EXECUTE',
+        result: 'EXECUTED_PASS',
+      });
     });
 
     it('R7-014-CENSUS-COMPLETE emits the complete review topic census', () => {
       const current = harnessFixture(true);
       const frozen = harnessFreeze(current);
-      const outcome = harnessRun(current, 'review-topic-count', ['--candidate', frozen.candidate]);
-      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).not.toBeNull();
+      const outcome = harnessRun(current, 'review-topic-count', [
+        '--base',
+        current.base,
+        '--candidate',
+        frozen.candidate,
+      ]);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(0);
+      expect(outcome.value).toMatchObject({
+        command: 'review-topic-count',
+        base: current.base,
+        candidate: frozen.candidate,
+        topic_count: 9,
+        findings: [],
+      });
+
+      const scoped = harnessRun(current, 'review-scope', [
+        '--base',
+        current.base,
+        '--candidate',
+        frozen.candidate,
+      ]);
+      expect(scoped.status, JSON.stringify(scoped.value, null, 2)).toBe(0);
+      const topics = (scoped.value.manifest as { topics: Array<{ topic_kind: string }> }).topics;
+      expect(topics.map(({ topic_kind }) => topic_kind).sort()).toEqual([
+        'active-control',
+        'candidate-identity',
+        'changed-path',
+        'changed-path',
+        'convergence-evidence',
+        'current-claim',
+        'previous-finding-class',
+        'previous-finding-class',
+        'semantic-obligation',
+      ]);
+      expect(scoped.value.manifest).toMatchObject({ topic_count: outcome.value.topic_count });
     });
 
     it('R7-014-CANDIDATE-PROOF-EXACT rejects a substituted candidate manifest', () => {
@@ -1375,7 +1545,11 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       const frozen = harnessFreeze(current);
       const manifest = harnessReadJson(current.root, `${HARNESS_STATE}/candidate-manifest.json`);
       manifest.tree_sha = '0'.repeat(40);
-      harnessPutJson(current.root, `${HARNESS_STATE}/candidate-manifest.json`, manifest);
+      harnessPutJson(
+        current.root,
+        `${HARNESS_STATE}/candidate-manifest.json`,
+        selfDigest(manifest, 'manifest_digest_sha256'),
+      );
       const outcome = harnessRun(current, 'review-scope', [
         '--base',
         current.base,
@@ -1383,6 +1557,18 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         frozen.candidate,
       ]);
       expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      expect(outcome.value).toMatchObject({
+        command: 'review-scope',
+        cycle: 1,
+        manifest: null,
+        findings: [
+          {
+            code: 'CANDIDATE_MANIFEST_IDENTITY_INVALID',
+            message: 'candidate manifest does not bind the exact invocation',
+            failed_checks: ['tree_sha'],
+          },
+        ],
+      });
     });
 
     it('R7-015-REUSE-REJECTED refuses unauthenticated disposition reuse', () => {
@@ -1511,17 +1697,52 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       const frozen = harnessFreeze(current);
       const claims = harnessReadJson(current.root, `${HARNESS_STATE}/current-claims.json`);
       const list = (claims.claims ?? []) as Array<Record<string, unknown>>;
-      if (list.length > 0) list[0].value_digest_sha256 = '0'.repeat(64);
-      harnessPutJson(current.root, `${HARNESS_STATE}/current-claims.json`, claims);
+      expect(list, 'fixture must materialize one runtime claim').toHaveLength(1);
+      const claim = list[0];
+      if (claim === undefined) throw new Error('materialized claim is absent');
+      const location = (claim.rendered_locations as string[])[0];
+      expect(location, 'materialized claim must declare one rendered location').toBe(
+        `work/audit/${HARNESS_ROUND}/as-built.md`,
+      );
+      harnessPut(
+        current.root,
+        location,
+        `${readFileSync(join(current.root, location), 'utf8')}TODO\n`,
+      );
       const outcome = harnessRun(current, 'claims-check', ['--candidate', frozen.candidate]);
       expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      expect(outcome.value.findings).toEqual(
+        expect.arrayContaining([
+          {
+            code: 'CLAIM_PLACEHOLDER_RESIDUE',
+            message: 'rendered claim location contains unresolved placeholder residue',
+            claim_id: claim.claim_id,
+            location,
+          },
+        ]),
+      );
     });
 
     it('R7-016-CLAIM-DIGEST-EXACT binds each claim to its exact source bytes', () => {
       const current = harnessFixture(true);
       const frozen = harnessFreeze(current);
+      const claimsPath = `${HARNESS_STATE}/current-claims.json`;
+      const claims = harnessReadJson(current.root, claimsPath);
+      const list = claims.claims as Array<Record<string, unknown>>;
+      expect(list, 'fixture must materialize one runtime claim').toHaveLength(1);
+      const claim = list[0];
+      if (claim === undefined) throw new Error('materialized claim is absent');
+      claim.value_digest = '0'.repeat(64);
+      harnessPutJson(current.root, claimsPath, selfDigest(claims, 'claims_digest_sha256'));
       const outcome = harnessRun(current, 'claims-check', ['--candidate', frozen.candidate]);
-      expect(harnessCodes(outcome)).not.toContain('CLAIM_PLACEHOLDER_RESIDUE');
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      expect(outcome.value.findings).toEqual([
+        {
+          code: 'CLAIM_VALUE_DIGEST_INVALID',
+          message: 'extracted value digest is invalid',
+          claim_id: claim.claim_id,
+        },
+      ]);
     });
 
     it('R7-017-RENAME-PREIMAGE-READ reads both sides of a committed rename', () => {
@@ -1549,10 +1770,20 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         '--candidate',
         after,
       ]);
-      const serialized = JSON.stringify(outcome.value ?? {});
-      expect(serialized, 'the rename preimage must appear in the plan').toContain(
-        'r7-rename-source',
-      );
+      const cli = (
+        (outcome.value?.nodes ?? []) as Array<{
+          node_id?: string;
+          outcome?: string;
+          reason_codes?: string[];
+          changed_inputs?: string[];
+        }>
+      ).find(({ node_id }) => node_id === 'cli-tests');
+      expect(cli, JSON.stringify(outcome.value, null, 2)).toMatchObject({
+        node_id: 'cli-tests',
+        outcome: 'EXECUTE',
+        reason_codes: expect.arrayContaining(['AFFECTED_INPUT_CHANGED']),
+        changed_inputs: [from, to],
+      });
       expect(candidate).not.toBe(after);
     });
 
@@ -1577,7 +1808,20 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         '--candidate',
         after,
       ]);
-      expect(JSON.stringify(outcome.value ?? {})).toContain('r7-copy-target');
+      const cli = (
+        (outcome.value?.nodes ?? []) as Array<{
+          node_id?: string;
+          outcome?: string;
+          reason_codes?: string[];
+          changed_inputs?: string[];
+        }>
+      ).find(({ node_id }) => node_id === 'cli-tests');
+      expect(cli, JSON.stringify(outcome.value, null, 2)).toMatchObject({
+        node_id: 'cli-tests',
+        outcome: 'EXECUTE',
+        reason_codes: expect.arrayContaining(['AFFECTED_INPUT_CHANGED']),
+        changed_inputs: [source, copy],
+      });
       expect(candidate).not.toBe(after);
     });
 
@@ -1590,7 +1834,41 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         '--candidate',
         frozen.candidate,
       ]);
-      expect(harnessCodes(outcome)).not.toContain('REVIEW_SCOPE_RECOMPUTATION_INVALID');
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(0);
+      const scopePath = `${HARNESS_STATE}/review-scope-manifest.json`;
+      const manifest = harnessReadJson(current.root, scopePath);
+      manifest.candidate_tree = '0'.repeat(40);
+      const substitutedManifest = selfDigest(manifest, 'manifest_digest_sha256');
+      harnessPutJson(current.root, scopePath, substitutedManifest);
+
+      const statePath = `${HARNESS_STATE}/review-state.json`;
+      const state = harnessReadJson(current.root, statePath);
+      state.review_scope_digest = substitutedManifest.manifest_digest_sha256;
+      for (const entry of state.transition_history as Array<Record<string, unknown>>)
+        entry.review_scope_digest = substitutedManifest.manifest_digest_sha256;
+      harnessPutJson(current.root, statePath, redigestState(state));
+      expect(existsSync(join(current.root, `${HARNESS_STATE}/review-transport.json`))).toBe(false);
+
+      const checked = harnessRun(current, 'review-check', [
+        '--candidate',
+        frozen.candidate,
+        '--cycle',
+        '1',
+      ]);
+      expect(checked.status, JSON.stringify(checked.value, null, 2)).toBe(1);
+      expect(checked.value.findings).toEqual(
+        expect.arrayContaining([
+          {
+            code: 'REVIEW_SCOPE_IDENTITY_CANDIDATE_TREE_INVALID',
+            message:
+              'review scope core identity differs from independently derived invocation state',
+            field: 'candidate_tree',
+            expected: frozen.tree,
+            actual: '0'.repeat(40),
+          },
+        ]),
+      );
+      expect(existsSync(join(current.root, `${HARNESS_STATE}/review-transport.json`))).toBe(false);
     });
 
     it('R7-018-SCOPE-IDENTITY-SUBSTITUTION-FAILS rejects a substituted scope identity', () => {
@@ -1641,9 +1919,28 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
 
     it('R7-019-CENSUS-TRANSITIVE derives the control census transitively', () => {
       const current = harnessFixture(true);
-      const frozen = harnessFreeze(current);
-      const outcome = harnessRun(current, 'policy-check', ['--candidate', frozen.candidate]);
-      expect(harnessCodes(outcome)).not.toContain('ACTIVE_CONTROL_CENSUS_INCOMPLETE');
+      const registerPath = 'law/register/DECISIONS.md';
+      const register = readFileSync(join(current.root, registerPath), 'utf8');
+      harnessPut(
+        current.root,
+        registerPath,
+        `${register.replace(
+          'provenance: fixture`',
+          'provenance: fixture · depends-on: DII-899`',
+        )}\n### DII-899 — Transitive fixture dependency\n\`type: decision · status: active · authority: Architect · provenance: fixture\`\n`,
+      );
+      const candidate = harnessCommit(current.root, 'test: add undeclared transitive decision');
+      const outcome = harnessRun(current, 'policy-check', ['--candidate', candidate]);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      expect(outcome.value.findings).toEqual([
+        {
+          code: 'ACTIVE_CONTROL_CENSUS_DECLARATION_MISMATCH',
+          message: 'declared decision edges differ from exact-register dependencies',
+          decision_id: 'DII-900',
+          declared: [],
+          derived: ['DII-899'],
+        },
+      ]);
     });
 
     it('R7-019-CENSUS-NO-ALLOWLIST rejects an unregistered active control', () => {
@@ -1700,9 +1997,32 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
 
     it('R7-020-OBLIGATIONS-COMPLETE covers every declared obligation source', () => {
       const current = harnessFixture(true);
-      const frozen = harnessFreeze(current);
-      const outcome = harnessRun(current, 'policy-check', ['--candidate', frozen.candidate]);
-      expect(harnessCodes(outcome)).not.toContain('SEMANTIC_OBLIGATION_ID_UNCOVERED');
+      const obligationsPath = `work/rounds/${HARNESS_ROUND}/review-obligations.json`;
+      const baselinePath = `work/rounds/${HARNESS_ROUND}/review-obligation-baseline.json`;
+      const obligations = harnessReadJson(current.root, obligationsPath);
+      const baseline = harnessReadJson(current.root, baselinePath);
+      const rows = obligations.obligations as Array<Record<string, unknown>>;
+      const source = rows[0];
+      if (source === undefined) throw new Error('fixture obligation is absent');
+      const obligationId = 'R9000-P1-UNMAPPED';
+      rows.push({
+        ...source,
+        obligation_id: obligationId,
+        claim: 'This intentionally lacks a normative source mapping.',
+      });
+      (baseline.obligation_ids as string[]).push(obligationId);
+      harnessPutJson(current.root, obligationsPath, obligations);
+      harnessPutJson(current.root, baselinePath, baseline);
+      const candidate = harnessCommit(current.root, 'test: add uncovered semantic obligation');
+      const outcome = harnessRun(current, 'policy-check', ['--candidate', candidate]);
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      expect(outcome.value.findings).toEqual([
+        {
+          code: 'SEMANTIC_OBLIGATION_ID_UNCOVERED',
+          message: 'registered obligations lack a normative source mapping',
+          obligation_ids: [obligationId],
+        },
+      ]);
     });
 
     it('R7-020-OBLIGATION-SOURCE-DRIFT rejects a drifted obligation source digest', () => {
@@ -1716,13 +2036,14 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       harnessCommit(current.root, 'test: drift an obligation source digest');
       const candidate = harnessGit(current.root, ['rev-parse', 'HEAD']);
       const outcome = harnessRun(current, 'policy-check', ['--candidate', candidate]);
-      const finding = (
-        (outcome.value.findings ?? []) as Array<{ code?: string; path?: string }>
-      ).find(
-        ({ code, path }) =>
-          code === 'SEMANTIC_OBLIGATION_SOURCE_DIGEST_INVALID' && path === sources[0].path,
-      );
-      expect(finding, JSON.stringify(outcome.value, null, 2)).toBeTruthy();
+      expect(outcome.status, JSON.stringify(outcome.value, null, 2)).toBe(1);
+      expect(outcome.value.findings).toEqual([
+        {
+          code: 'SEMANTIC_OBLIGATION_SOURCE_DIGEST_INVALID',
+          message: 'normative source digest differs from exact candidate bytes',
+          path: sources[0].path,
+        },
+      ]);
     });
   });
 });
