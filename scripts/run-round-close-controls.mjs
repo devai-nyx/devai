@@ -9704,14 +9704,30 @@ function readAuthenticatedStateV4(context, findings, expected) {
       //
       // The authenticated chain is the current state identity plus every predecessor
       // identity recorded in its own transition history.
-      const authenticatedStateIdentities = new Set(
-        [
-          state.state_digest_sha256,
-          ...(state.transition_history ?? []).map(
-            ({ previous_state_digest: previous }) => previous,
-          ),
-        ].filter((value) => typeof value === 'string' && SHA256.test(value)),
-      );
+      // Membership is the authenticated state lineage, walked through the retained
+      // artifacts themselves. Transport attempts mutate state without necessarily adding
+      // a transition, so a set built only from the current digest and transition
+      // predecessors omits states whose artifacts genuinely exist. Membership is never
+      // derived from transports: a claim must not authenticate itself.
+      const statesRoot = join(dirname(path), 'review-states');
+      const authenticatedStateIdentities = new Set();
+      let lineageCursor = state.state_digest_sha256;
+      while (
+        typeof lineageCursor === 'string' &&
+        SHA256.test(lineageCursor) &&
+        !authenticatedStateIdentities.has(lineageCursor)
+      ) {
+        authenticatedStateIdentities.add(lineageCursor);
+        const lineagePath = join(statesRoot, `${lineageCursor}.json`);
+        if (!existsSync(lineagePath)) break;
+        const lineageArtifact = readJson(lineagePath);
+        if (
+          !selfDigestValid(lineageArtifact, 'state_digest_sha256') ||
+          lineageArtifact.state_digest_sha256 !== lineageCursor
+        )
+          break;
+        lineageCursor = lineageArtifact.previous_state_digest ?? null;
+      }
       const stateBeforePath = join(
         dirname(path),
         'review-states',
