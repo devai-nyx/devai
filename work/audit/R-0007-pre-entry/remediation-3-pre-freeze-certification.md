@@ -81,7 +81,10 @@ threshold relaxed to obtain a pass.
 - Review budget: **1 substantive run remaining, unspent.** Review Run 2 is the last.
 - R-0007: **NOT STARTED.** `entry-check` reports `ENTRY_BLOCKED_DECLARATION_UNBOUND`.
   The B0 declaration is unbound and no declaration was invented.
-- `../devai` at `05dd242bf72334bfd683096aed380e8240b6b9aa`, zero modifications.
+- `../devai` remains at its immutable absorption pin as recorded in AGENTS.md, with zero
+  modifications. The pin is not restated here: `check-governed-sha-references` permits that
+  exception only in designated paths, and widening the allowlist to accommodate this
+  document would be the same move as relaxing a threshold to obtain a pass.
 - Nothing deployed, published, tagged, released, or promoted. No real-stynx mutation.
 
 ## Certification
