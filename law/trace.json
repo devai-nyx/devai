@@ -3282,7 +3282,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 153,
-      "assertion_digest_sha256": "a61c7f2e643e5528530ac2d04b6461645938d0162864c1480aa397a4baf7cbab"
+      "assertion_digest_sha256": "1b0dd3e5af23ee085127b3deb2a7615ca4c1a72c89bf3fcc5570413eb15356b1"
     },
     {
       "path": "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts",
