@@ -13,9 +13,6 @@ provenance: [OM-017, DII-252, work/audit/R-0007-pre-entry/remediation-3-review-r
 # Continuity record — remediation campaign 3 complete-class repair
 
 This record exists so the repair can resume from committed state rather than from reconstructed intent. It is reissued at each session boundary. It records what is proved, what is explicitly not proved, and what must not be repeated. It is **not** the causal red-evidence record; that is `remediation-4-red-evidence.json` at `beb37bb`, partially superseded at `fff4e8c`.
-reconstructed intent. It records what is proved, what is declared but not yet
-delivered, and what must not be repeated. It is **not** the causal red-evidence
-record required by the role-pure sequence; that record does not yet exist.
 
 ## Standing facts
 
@@ -31,7 +28,7 @@ record required by the role-pure sequence; that record does not yet exist.
 | Substantive runs used | 1 of 2                                                              |
 | Substantive runs left | **1 — Review Run 2, the sole remaining run**                        |
 | Review Run 3          | Forbidden by OM-017; failure of Run 2 goes to Owner escalation      |
-| Current head          | `e717a3d`                                                           |
+| Current head          | `7b47eb39b23629c1d3d4a1c2a2e41351804bcc6f`                          |
 | R-0007 standing       | **NOT STARTED** — `ENTRY_BLOCKED_DECLARATION_UNBOUND`               |
 
 The branch has not been pushed and no pull request exists.
@@ -79,10 +76,26 @@ not bear on the verdict.
 | `4c13d63` | Inspector | R7-F011 red, two contracts                                      |
 | `2abff2a` | Engineer  | R7-F011 repaired; every consumer emits a structured result      |
 
-Twenty-three commits, all role-pure. Seven are corrections to earlier work in this same
-repair, and four belong to R7-F011, a class discovered during the repair and added to it
-on Owner direction. They are recorded rather than squashed, because the sequence they
-document is itself the evidence.
+Since the third issue the repair continued through the Architect close, the Auditor
+pre-freeze attempt, and a detached-candidate verification phase that exposed further
+defects. Commits after `2abff2a`, in order: `e13c51a` record third issue, `17bdb87`
+remediation-1 adapted, `493928c` state-before corroboration, `47a52ad` record fourth
+issue, `1fa4405` identity contract resolved, `e717a3d` identity implemented, `778b36a`
+record fifth issue, `95eef75` and `747bc2a` predecessor artifacts retained, `d4a3e37`
+writer and corroboration repair, `faa4d3b` lineage authentication, `cae574a` authentic
+snapshots only, `2dc53cd` R2-F005 behavioural, `f806166` and `fb1a1ca` remediation-4
+triage, `9e88cf9` guard audit and copy detection, `9038a7d` matrix closed, `41ce7a4`
+sequencing bound, `9682bb8` sequencing conformed, `5fd6cd6` coverage budget, `e59d138`
+certification, `2ade919` trace refresh, `488fe06` self-preparing gate, `8070440` derived
+artifacts refreshed, `7b47eb3` ordering defect disclosed.
+
+All role-pure. Many are corrections to earlier work in this same repair. They are
+recorded rather than squashed, because the sequence they document is itself the evidence.
+
+**This record was itself found corrupted after a power outage**: an orphaned paragraph
+fragment survived an earlier incomplete text replacement and was committed, and the
+standing facts cited a head twelve commits stale. A resuming session reading it would
+have been misled about both the head and what remained. Repaired here.
 
 ## Class standing
 
