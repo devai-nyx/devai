@@ -785,6 +785,11 @@
   "historical_commit_exceptions": [
     {
       "round": "R-0007",
+      "implementation_commits": ["bef98f91b9f8cc7f50e554e907c0e54af38056e7"],
+      "reason": "The literal-gate self-preparation repair added package.json and vitest.config.ts after the bound Inspector red at 3e863e5, whose immutable source did not name vitest.config.ts. The strict detached-candidate Inspector commit e75ba57 followed the Engineer repair and therefore cannot be relabelled as prior semantic red; a post-repair observation cannot repair that ordering defect. History is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0007",
       "implementation_commits": ["2a6dc6b2207b482f1fdecf5ba16a2790c067291d"],
       "reason": "The remediation-2 Engineer implementation followed DII-249, Inspector c7955c2, the complete eight-class closure matrix, and Auditor 8e7dd7e red evidence, but the immutable Inspector source did not literally enumerate the .devai/config/round-close-controls.json and packages/schemas/src/roster.ts implementation paths required by prospective exact-source binding. The real 28-test control red and five-test schema-roster red remain preserved; history is not rewritten and this exact-commit disclosure grants no prospective exception."
     },
