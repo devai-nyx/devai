@@ -1,17 +1,19 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 import { execFileSync, spawnSync } from 'node:child_process';
 import {
+  constants,
+  cpSync,
   existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
   rmSync,
-  symlinkSync,
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { basename, dirname, join, resolve } from 'node:path';
+import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
+import { parse as parseYaml } from 'yaml';
 import {
   STATE as HARNESS_STATE,
   ROUND as HARNESS_ROUND,
@@ -48,11 +50,17 @@ const POLICY_PATH = 'law/policy/round-close-controls.json';
 const PROFILE_PATH = 'work/rounds/R-0007/close-control-profile.json';
 const REGISTRY_PATH = 'work/rounds/R-0007/prior-finding-registry.json';
 const disposable: string[] = [];
+let offlineStoreParent: string | null = null;
+let offlineStore: string | null = null;
 
 afterEach(() => {
   for (const root of disposable.splice(0)) rmSync(root, { recursive: true, force: true });
   disposeHarness();
-});
+}, 120_000);
+
+afterAll(() => {
+  if (offlineStoreParent !== null) rmSync(offlineStoreParent, { recursive: true, force: true });
+}, 120_000);
 
 interface Outcome {
   readonly status: number | null;
@@ -75,23 +83,49 @@ function putJson(root: string, path: string, value: unknown): void {
   writeFileSync(absolute, `${JSON.stringify(value, null, 2)}\n`);
 }
 
-/** A disposable clone of the real repository at its exact current commit. */
+/**
+ * Copy the active install's content-addressed cache once, then require every disposable
+ * candidate to prove that a real frozen install succeeds without network access.
+ */
+function hermeticOfflineStore(): string {
+  if (offlineStore !== null) return offlineStore;
+  const modulesManifest = parseYaml(
+    readFileSync(join(ROOT, 'node_modules/.modules.yaml'), 'utf8'),
+  ) as { storeDir?: unknown };
+  const source = modulesManifest.storeDir;
+  if (typeof source !== 'string' || source.length === 0)
+    throw new Error('active pnpm install does not declare storeDir');
+  if (!existsSync(source)) throw new Error(`active pnpm store does not exist: ${source}`);
+
+  offlineStoreParent = mkdtempSync(join(tmpdir(), 'devai-r7-offline-store-'));
+  const fixtureClone = join(offlineStoreParent, 'repo');
+  execFileSync('git', ['clone', '--quiet', '--shared', ROOT, fixtureClone]);
+  offlineStore = join(fixtureClone, '.pnpm-store');
+  mkdirSync(offlineStore, { recursive: true });
+  cpSync(source, join(offlineStore, basename(source)), {
+    recursive: true,
+    mode: constants.COPYFILE_FICLONE,
+  });
+  return offlineStore;
+}
+
+/** A disposable, independently installed clone of the repository's exact current commit. */
 function clone(): { root: string; candidate: string } {
   const parent = mkdtempSync(join(tmpdir(), 'devai-r7-remediation4-'));
   disposable.push(parent);
   const root = join(parent, 'repo');
   execFileSync('git', ['clone', '--quiet', '--shared', ROOT, root]);
-  symlinkSync(join(ROOT, 'node_modules'), join(root, 'node_modules'), 'dir');
-  for (const packageJson of git(ROOT, ['ls-files', 'packages/*/package.json'])
-    .split('\n')
-    .filter(Boolean)) {
-    const packageRoot = dirname(packageJson);
-    const installed = join(ROOT, packageRoot, 'node_modules');
-    if (existsSync(installed))
-      symlinkSync(installed, join(root, packageRoot, 'node_modules'), 'dir');
-  }
-  const excludePath = join(root, '.git/info/exclude');
-  writeFileSync(excludePath, `${readFileSync(excludePath, 'utf8')}node_modules\n`);
+  execFileSync(
+    'pnpm',
+    ['install', '--offline', '--frozen-lockfile', '--store-dir', hermeticOfflineStore()],
+    {
+      cwd: root,
+      env: { ...process.env, CI: '1' },
+      encoding: 'utf8',
+      maxBuffer: 64 * 1024 * 1024,
+      timeout: 300_000,
+    },
+  );
   return { root, candidate: git(root, ['rev-parse', 'HEAD']) };
 }
 
@@ -1190,19 +1224,21 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
           env: { ...process.env, DEVAI_R7_DETACHED_GATE: '1' },
         });
         const output = `${String(result.stdout)}\n${String(result.stderr)}`;
-        const infrastructureFailure =
-          result.error !== undefined ||
-          result.status === null ||
-          [126, 127].includes(result.status ?? -1) ||
-          (result.status !== 0 && output.trim().length === 0);
-        if (infrastructureFailure)
-          failures.push(`${gate.id} exit=${String(result.status)} ${output.slice(0, 400)}`);
+        if (result.error !== undefined || result.status !== 0) {
+          const diagnostic =
+            output.length <= 4_000
+              ? output
+              : `${output.slice(0, 500)}\n... output truncated ...\n${output.slice(-3_500)}`;
+          failures.push(
+            `${gate.id} exit=${String(result.status)} error=${String(result.error ?? '')} ${diagnostic}`,
+          );
+        }
       }
       expect(
         failures,
         `literal argv rows that could not execute from an isolated detached candidate:\n${failures.join('\n')}`,
       ).toEqual([]);
-    }, 3_600_000);
+    }, 7_200_000);
   });
 
   describe('R7-F006 loader widening covers preimage bytes and owned selectors', () => {
