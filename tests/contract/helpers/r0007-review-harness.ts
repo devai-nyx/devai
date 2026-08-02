@@ -584,18 +584,26 @@ export function freeze(fixtureValue: Fixture, candidate = 'HEAD'): Frozen {
     candidateManifest,
   };
 }
+/**
+ * Per DII-253 the edge-to-cycle rule is read from the candidate policy. This helper used to
+ * carry its own copy of the rule, so a controller that drifted from the declaration would
+ * have drifted in step with its own oracle.
+ */
+export function edgeCycle(root: string, from: string, to: string): 1 | 2 {
+  const policy = readJson(root, 'law/policy/round-close-controls.json') as {
+    review_state_machine?: { cycle_two_states?: string[] };
+  };
+  const declared = new Set(policy.review_state_machine?.cycle_two_states ?? []);
+  return declared.has(from) || declared.has(to) ? 2 : 1;
+}
+
 export function transition(
   from: string,
   to: string,
   frozen: Frozen,
   links: Partial<Record<string, string | null>> = {},
 ): Record<string, unknown> {
-  const cycle =
-    from === 'REPAIR_REQUIRED' ||
-    from === 'CYCLE_2_ACTIVE' ||
-    ['NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE', 'ESCALATION_REQUIRED'].includes(to)
-      ? 2
-      : 1;
+  const cycle = edgeCycle(frozen.root, from, to);
   return selfDigest(
     {
       from,
@@ -632,25 +640,19 @@ export function stateChain(
     const { transition_digest_sha256: _oldDigest, ...body } = entry;
     const from = String(body.from);
     const to = String(body.to);
-    const entryCycle =
-      from === 'REPAIR_REQUIRED' ||
-      from === 'CYCLE_2_ACTIVE' ||
-      ['NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE', 'ESCALATION_REQUIRED'].includes(to)
-        ? 2
-        : 1;
-    const coalescedWithoutPersistedBoundary = new Set([
-      'PREFLIGHT_GREEN->CANDIDATE_FROZEN',
-      'CANDIDATE_FROZEN->CYCLE_1_ACTIVE',
-      'PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN',
-      'NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE',
-    ]).has(`${from}->${to}`);
+    const entryCycle = edgeCycle(fixtureValue.root, from, to);
     // Per DII-252 the predecessor identity is the predecessor artifact self-digest, so a
     // fixture must retain an artifact rather than assert a bare value. Patching the field
     // alone would satisfy the corroboration check only because no artifact existed to
     // contradict it, which is not what the contract asks for.
+    //
+    // Per DII-253 no edge is exempt. This helper used to mirror the controller's four-edge
+    // coalescing exemption, so the oracle reproduced the defect it was meant to detect and
+    // could never have caught controller drift. review-scope now persists every boundary,
+    // and the fixture chain follows.
     let retainedPredecessorDigest: string | null = null;
     let retainedPredecessorArtifact: Record<string, unknown> | null = null;
-    if (index > 0 && !coalescedWithoutPersistedBoundary) {
+    if (index > 0) {
       const predecessor = selfDigest(
         {
           schemaVersion: '3.0.0',

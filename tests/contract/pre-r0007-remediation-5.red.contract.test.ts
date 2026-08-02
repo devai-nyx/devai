@@ -20,6 +20,7 @@ import {
   run as harnessRun,
   codes as harnessCodes,
   commit as harnessCommit,
+  git as harnessGit,
 } from './helpers/r0007-review-harness.js';
 
 vi.setConfig({ testTimeout: 300_000 });
@@ -115,8 +116,17 @@ describe('R7-F012 undeclared state-machine control selector', () => {
       mutated.round = `${String(mutated.round)}-mutated`;
       harnessPutJson(current.root, `${HARNESS_STATE}/review-states/${digest}.json`, mutated);
       const outcome = harnessRun(current, 'review-check', ['--candidate', frozen.candidate]);
-      if (!harnessCodes(outcome).includes('REVIEW_STATE_PREDECESSOR_STATE_INVALID'))
-        undetected.push(digest);
+      const observed = harnessCodes(outcome);
+      // Two codes express the same failure at different depths, and which one fires depends
+      // only on how far back the mutated artifact sits. REVIEW_STATE_PREDECESSOR_INVALID is
+      // the top-level chain check on the state's own previous_state_digest;
+      // REVIEW_STATE_PREDECESSOR_STATE_INVALID is the per-transition corroboration. Either
+      // is a blocking predecessor-authentication failure, and the run must not survive.
+      const blocked =
+        outcome.status !== 0 &&
+        (observed.includes('REVIEW_STATE_PREDECESSOR_STATE_INVALID') ||
+          observed.includes('REVIEW_STATE_PREDECESSOR_INVALID'));
+      if (!blocked) undetected.push(`${digest} -> [${observed.join(', ')}]`);
       harnessPutJson(
         current.root,
         `${HARNESS_STATE}/review-states/${digest}.json`,
@@ -130,22 +140,34 @@ describe('R7-F012 undeclared state-machine control selector', () => {
     // A controller that keeps its literals and intersects them with policy passes a
     // removal-only test. Both directions are required: the emitted population must shrink
     // when the declaration shrinks and return when the declaration returns.
-    const current = harnessFixture(true);
-    const policy = harnessReadJson(current.root, POLICY_PATH) as {
-      review_state_machine: {
-        emitted_transition_sequences: Record<string, Array<[string, string]>>;
-      };
-    };
-    const declared = policy.review_state_machine.emitted_transition_sequences['cycle-1'];
+    const declared = (
+      harnessReadJson(harnessFixture(true).root, POLICY_PATH) as {
+        review_state_machine: {
+          emitted_transition_sequences: Record<string, Array<[string, string]>>;
+        };
+      }
+    ).review_state_machine.emitted_transition_sequences['cycle-1'];
     expect(declared, 'policy must declare the cycle-1 emitted sequence').toBeDefined();
     expect(declared.length).toBe(3);
 
+    // Each direction observes a fresh fixture. Reusing one would leave a review state
+    // anchored to the previous policy digest, so the second observation would fail on
+    // REVIEW_STATE_IDENTITY_INVALID rather than on the sequence it is meant to measure.
     const observe = (sequence: Array<[string, string]>, label: string): Array<[string, string]> => {
-      const next = harnessReadJson(current.root, POLICY_PATH) as typeof policy;
+      const current = harnessFixture(true);
+      const next = harnessReadJson(current.root, POLICY_PATH) as {
+        review_state_machine: {
+          emitted_transition_sequences: Record<string, Array<[string, string]>>;
+        };
+      };
       next.review_state_machine.emitted_transition_sequences['cycle-1'] = sequence;
       harnessPutJson(current.root, POLICY_PATH, next);
       harnessPutJson(current.root, MIRROR_PATH, next);
-      harnessCommit(current.root, `declare cycle-1 as ${label}`);
+      // The restored direction reproduces the fixture's own declaration byte for byte, so
+      // there is nothing to commit. Committing unconditionally would fail on an empty diff
+      // and hide the observation behind a fixture error.
+      if (harnessGit(current.root, ['status', '--porcelain']) !== '')
+        harnessCommit(current.root, `declare cycle-1 as ${label}`);
       const { scoped } = scopeOnce(current);
       expect(scoped.status, JSON.stringify(scoped.value, null, 2)).toBe(0);
       const state = harnessReadJson(current.root, STATE_PATH);
@@ -153,12 +175,14 @@ describe('R7-F012 undeclared state-machine control selector', () => {
     };
 
     const shortened = declared.slice(0, 2);
-    expect(observe(shortened, 'two edges'), 'the emitted sequence must follow a shrunk declaration').toEqual(
-      shortened,
-    );
-    expect(observe(declared, 'three edges'), 'the emitted sequence must follow a restored declaration').toEqual(
-      declared,
-    );
+    expect(
+      observe(shortened, 'two edges'),
+      'the emitted sequence must follow a shrunk declaration',
+    ).toEqual(shortened);
+    expect(
+      observe(declared, 'three edges'),
+      'the emitted sequence must follow a restored declaration',
+    ).toEqual(declared);
   });
 
   it('R7-022-POLICY-SCHEMA-FAIL-CLOSED rejects a policy document that violates its own schema', () => {
@@ -173,8 +197,11 @@ describe('R7-F012 undeclared state-machine control selector', () => {
     // contract pass on a neighbouring check rather than the one it names.
     harnessPutJson(current.root, MIRROR_PATH, policy);
     harnessCommit(current.root, 'remove a required policy declaration');
-    const frozen = harnessFreeze(current);
-    const outcome = harnessRun(current, 'policy-check', ['--candidate', frozen.candidate]);
+    // Resolve the candidate directly rather than through freeze: convergence itself now
+    // refuses the invalid policy, and a helper failing first would hide the finding this
+    // contract exists to observe.
+    const candidate = harnessGit(current.root, ['rev-parse', 'HEAD']);
+    const outcome = harnessRun(current, 'policy-check', ['--candidate', candidate]);
     expect(outcome.status, JSON.stringify(outcome.value, null, 2)).not.toBe(0);
     expect(harnessCodes(outcome)).toContain('POLICY_DOCUMENT_INVALID');
   });

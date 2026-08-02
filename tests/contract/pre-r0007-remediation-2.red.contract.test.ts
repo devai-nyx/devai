@@ -296,6 +296,16 @@ describe('OM-016 / DII-249 remediation campaign 2 complete populations', () => {
           findings: Array<Record<string, unknown>>,
         ) => void
       >('validateTransitionEdgeV6', {
+        // Per DII-253 the edge-to-cycle rule moved out of this function and into law.
+        // The extracted body now depends on the shared derivation, so the seam must supply it.
+        edgeCycleV7: (
+          policy: { review_state_machine?: { cycle_two_states?: string[] } },
+          from: string,
+          to: string,
+        ) => {
+          const declared = new Set(policy?.review_state_machine?.cycle_two_states ?? []);
+          return declared.has(from) || declared.has(to) ? 2 : 1;
+        },
         persistedReviewArtifactDigestV7: (artifact: Record<string, unknown>, field: string) =>
           artifact[field],
         finding: (code: string, message: string, extra = {}) => ({ code, message, ...extra }),
