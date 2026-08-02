@@ -14,7 +14,9 @@
     "review_evidence",
     "review_run_budget",
     "prior_finding_registry",
-    "classes"
+    "classes",
+    "pre_entry_ready",
+    "full_round_closure"
   ],
   "$defs": {
     "nonEmptyUniqueStrings": {
@@ -129,8 +131,69 @@
           },
           "closure_state": {
             "enum": ["RED_REQUIRED", "RED_PROVED", "GREEN_PROVED", "REVIEWED_PASS"]
+          },
+          "unbound_population_boundaries": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Members of expected_complete_population this class does not prove. Naming a boundary here is disclosure, never permission: a non-empty list forbids GREEN_PROVED and REVIEWED_PASS."
+          },
+          "verdict_scope": {
+            "enum": ["pre-entry", "b0-dependent"],
+            "description": "Which verdict this class is adjudicable under. A class with both pre-entry and B0-dependent members is split into two separately adjudicable classes rather than carrying a single global state."
+          },
+          "b0_blocked_members": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Members excluded by exact Owner authority pending the B0 declaration. Distinct from unbound_population_boundaries: those are unproved, these are out of scope. The two are never merged, because one is failure and the other is authority."
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "required": ["unbound_population_boundaries"],
+              "properties": {
+                "unbound_population_boundaries": {
+                  "type": "array",
+                  "minItems": 1
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "closure_state": {
+                  "enum": ["RED_REQUIRED", "RED_PROVED"]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "required": ["b0_blocked_members"],
+              "properties": {
+                "b0_blocked_members": {
+                  "type": "array",
+                  "minItems": 1
+                }
+              }
+            },
+            "then": {
+              "required": ["verdict_scope"],
+              "properties": {
+                "verdict_scope": {
+                  "const": "b0-dependent"
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "declared_limitations": {
@@ -140,12 +203,54 @@
         "type": "string",
         "minLength": 1
       },
-      "description": "Limitations the matrix declares rather than conceals. A class may be GREEN_PROVED while a named boundary of its population remains unbound, provided the boundary is stated here."
+      "description": "Campaign-wide limitations the matrix declares rather than conceals. Disclosure is not permission. A limitation that leaves any member of a class population unproved must also appear in that class's unbound_population_boundaries, which forbids GREEN_PROVED. This list may not be used to hold a closure state a class has not earned."
     },
     "verified_by": {
       "type": "object",
       "additionalProperties": true,
-      "description": "The single verified run whose result the closure states record. A composite assembled from partial runs is not admissible evidence."
+      "description": "The single verified run whose result the closure states record. A composite assembled from partial runs is not admissible evidence. A run that was signalled, interrupted, or that hit a diagnostic ceiling is INCONCLUSIVE and yields no rows at all, not the rows it had already produced."
+    },
+    "pre_entry_ready": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "authority", "member_classes"],
+      "properties": {
+        "verdict": {
+          "enum": ["READY", "BLOCKED"]
+        },
+        "authority": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The exact Owner authority that fixes the pre-B0 obligation set. Membership is authorized, never inferred."
+        },
+        "member_classes": {
+          "$ref": "#/$defs/nonEmptyUniqueStrings"
+        }
+      },
+      "description": "Verdict over the Owner-authorized pre-B0 obligation set only. Every member must carry complete executable evidence; this verdict may not be read as, or reported as, full round closure."
+    },
+    "full_round_closure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "blocked_class_ids", "blocked_reason"],
+      "properties": {
+        "verdict": {
+          "enum": ["BLOCKED", "CLOSED"]
+        },
+        "blocked_class_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "blocked_reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "description": "Verdict over every OPEN registry class and its complete population. Remains BLOCKED while any B0-dependent evidence is unavailable, and enumerates each blocked id so a pre-entry pass can never be presented as closure."
     }
   },
   "examples": [

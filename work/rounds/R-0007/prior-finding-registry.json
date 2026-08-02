@@ -9,9 +9,15 @@
       "severity": "P0",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
-      "topic_ids": ["reviewer-binding"],
+      "topic_ids": [
+        "reviewer-binding"
+      ],
       "population_query": "Enumerate every tracked active Owner mandate and structurally parse reviewer-binding markers for R-0007.",
-      "affected_population": ["policy-check", "entry-check", "status"],
+      "affected_population": [
+        "policy-check",
+        "entry-check",
+        "status"
+      ],
       "repair_condition": "Exactly one active structured binding matches the profile; zero, duplicate, conflicting, inactive, substring-only, and fallback bindings fail closed.",
       "disposition": "OPEN"
     },
@@ -21,9 +27,13 @@
       "severity": "P1",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
-      "topic_ids": ["smart-convergence"],
+      "topic_ids": [
+        "smart-convergence"
+      ],
       "population_query": "Compare every policy convergence command ID with each cold convergence pass result.",
-      "affected_population": ["all sixteen policy convergence commands"],
+      "affected_population": [
+        "all sixteen policy convergence commands"
+      ],
       "repair_condition": "Both cold passes execute every authoritative policy command at stable exact-head clean boundaries; pass 2 writes nothing and is semantically equivalent.",
       "disposition": "OPEN"
     },
@@ -33,7 +43,9 @@
       "severity": "P1",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
-      "topic_ids": ["impact-planning"],
+      "topic_ids": [
+        "impact-planning"
+      ],
       "population_query": "Exercise staged, unstaged, untracked, deleted, renamed, dynamic-load, incomplete-population, and coverage-relevant changes.",
       "affected_population": [
         "WORKTREE and committed change discovery",
@@ -49,9 +61,13 @@
       "severity": "P1",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
-      "topic_ids": ["freshness"],
+      "topic_ids": [
+        "freshness"
+      ],
       "population_query": "Tamper each freshness identity field and each transitive dependency result while preserving a valid self-digest.",
-      "affected_population": ["every affected-test and policy-gate cache record"],
+      "affected_population": [
+        "every affected-test and policy-gate cache record"
+      ],
       "repair_condition": "Reuse requires exact current identity equality and still-fresh dependency PASS proofs; any mismatch executes the complete dependent population.",
       "disposition": "OPEN"
     },
@@ -61,7 +77,9 @@
       "severity": "P0",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
-      "topic_ids": ["review-scope"],
+      "topic_ids": [
+        "review-scope"
+      ],
       "population_query": "Census all seven authoritative topic source classes and verify the pre-existing exact-candidate manifest.",
       "affected_population": [
         "semantic obligations",
@@ -81,7 +99,9 @@
       "severity": "P1",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
-      "topic_ids": ["review-result"],
+      "topic_ids": [
+        "review-result"
+      ],
       "population_query": "Mutate JSONL record order, duplicate headers or terminals, append trailing records, orphan findings, and attempt prohibited reuse.",
       "affected_population": [
         "all review JSONL records",
@@ -97,9 +117,15 @@
       "severity": "P1",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
-      "topic_ids": ["review-state"],
+      "topic_ids": [
+        "review-state"
+      ],
       "population_query": "Attempt every undeclared state transition, same-candidate cycle 2, stale PASS reuse, cycle 3, and cross-identity transport retry.",
-      "affected_population": ["review-check", "review state", "transport state"],
+      "affected_population": [
+        "review-check",
+        "review state",
+        "transport state"
+      ],
       "repair_condition": "Only declared identity-bound transitions pass; cycle 2 requires a distinct regenerated candidate and cycle-1 complete-class repair evidence.",
       "disposition": "OPEN"
     },
@@ -109,9 +135,13 @@
       "severity": "P2",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
-      "topic_ids": ["current-claims"],
+      "topic_ids": [
+        "current-claims"
+      ],
       "population_query": "Recompute every materialized claim producer, extractor, source manifest, value, digest, and rendered location.",
-      "affected_population": ["every materialized current claim"],
+      "affected_population": [
+        "every materialized current claim"
+      ],
       "repair_condition": "Any producer, source, extracted-value, value-digest, or rendered-location mismatch fails claims-check.",
       "disposition": "OPEN"
     },
@@ -121,7 +151,9 @@
       "severity": "P0",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
-      "topic_ids": ["reviewer-binding"],
+      "topic_ids": [
+        "reviewer-binding"
+      ],
       "population_query": "Parse every tracked Owner mandate and census only complete reviewer-binding markers whose mandate ID and active status agree with the containing mandate.",
       "affected_population": [
         "general mandates mentioning R-0007",
@@ -137,7 +169,9 @@
       "severity": "P0",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
-      "topic_ids": ["review-scope"],
+      "topic_ids": [
+        "review-scope"
+      ],
       "population_query": "Delete, truncate, stale, partially populate, tamper, substitute, and cross-digest-mismatch candidate and convergence evidence across every identity, gate, pass, and digest field.",
       "affected_population": [
         "candidate manifest required convergence and candidate-identity digests",
@@ -153,7 +187,9 @@
       "severity": "P1",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
-      "topic_ids": ["review-result"],
+      "topic_ids": [
+        "review-result"
+      ],
       "population_query": "Duplicate each finding ID in JSON and JSONL, then mutate every reusable topic input, evidence reference, evidence byte, evidence digest, and required freshness task key independently.",
       "affected_population": [
         "global finding-ID namespace",
@@ -170,7 +206,9 @@
       "severity": "P1",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
-      "topic_ids": ["review-state"],
+      "topic_ids": [
+        "review-state"
+      ],
       "population_query": "Attempt every undeclared, skipped, stale, cross-identity, forged-predecessor, unauthenticated-repair, same-candidate second-run, post-terminal, cycle-3, and exhausted-transport transition.",
       "affected_population": [
         "schema and self-digest validation for every linked record",
@@ -187,7 +225,9 @@
       "severity": "P2",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
-      "topic_ids": ["current-claims"],
+      "topic_ids": [
+        "current-claims"
+      ],
       "population_query": "Mutate or omit every producer, source-manifest, output, extracted-value, canonical digest, structured rendered marker, rendered content, and per-location verification field independently.",
       "affected_population": [
         "runtime materialized claim ledger distinct from declaration registry",
@@ -203,7 +243,9 @@
       "severity": "P1",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
-      "topic_ids": ["authoritative-gate-freshness"],
+      "topic_ids": [
+        "authoritative-gate-freshness"
+      ],
       "population_query": "Expand every convergence command and compare its complete effective inputs, dependency selectors, toolchain probes, and required outputs with its gate freshness declaration and computed task key.",
       "affected_population": [
         "formatting",
@@ -232,7 +274,9 @@
       "severity": "P1",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
-      "topic_ids": ["committed-rename-planning"],
+      "topic_ids": [
+        "committed-rename-planning"
+      ],
       "population_query": "Parse the exact committed range with name-status NUL records and match both paths of every rename against node, shared-input, coverage, fallback, and review-topic selectors.",
       "affected_population": [
         "governed-to-ungoverned renames",
@@ -251,7 +295,9 @@
       "severity": "P1",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
-      "topic_ids": ["all-disposition-proof"],
+      "topic_ids": [
+        "all-disposition-proof"
+      ],
       "population_query": "Substitute each input, evidence, evidence-reference, task-freshness, and proof-digest field independently for every disposition and revalidate the self-digested result.",
       "affected_population": [
         "RECHECKED_PASS",
@@ -269,7 +315,9 @@
       "severity": "P0",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
-      "topic_ids": ["review-scope-core-identity"],
+      "topic_ids": [
+        "review-scope-core-identity"
+      ],
       "population_query": "Mutate and re-self-digest each scope identity field independently while invoking review-check against the original exact candidate and cycle.",
       "affected_population": [
         "round",
@@ -288,7 +336,9 @@
       "severity": "P1",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
-      "topic_ids": ["review-state-complete-chain"],
+      "topic_ids": [
+        "review-state-complete-chain"
+      ],
       "population_query": "Cross every state with cycles, canonical and noncanonical histories, predecessor identities, transport attempts, prior results, and repair records, including missing, malformed, tampered, and cross-identity artifacts.",
       "affected_population": [
         "cycle-1 and cycle-2 active states",
@@ -306,7 +356,9 @@
       "severity": "P1",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
-      "topic_ids": ["active-control-census"],
+      "topic_ids": [
+        "active-control-census"
+      ],
       "population_query": "Derive authority and decision references transitively from the exact candidate tree, enumerate every policy schema, and resolve the profile, graph, registries, declaration, and tracked manifests to raw candidate blobs.",
       "affected_population": [
         "DII-246",
@@ -328,7 +380,10 @@
       "severity": "P1",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
-      "topic_ids": ["candidate-authoritative-gates", "formatting"],
+      "topic_ids": [
+        "candidate-authoritative-gates",
+        "formatting"
+      ],
       "population_query": "Execute every ordered authoritative policy command against the exact detached candidate and retain each terminal result.",
       "affected_population": [
         "all sixteen authoritative gates",
@@ -343,7 +398,10 @@
       "severity": "P1",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
-      "topic_ids": ["authoritative-gate-freshness", "v5-task-runtime-alignment"],
+      "topic_ids": [
+        "authoritative-gate-freshness",
+        "v5-task-runtime-alignment"
+      ],
       "population_query": "Recursively expand all sixteen gate commands and prove complete tracked inputs, dependency outputs, executables, environment, policy, graph, and persistent outputs against each sole profile.",
       "affected_population": [
         "all sixteen gate profiles",
@@ -403,7 +461,11 @@
       "severity": "P1",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
-      "topic_ids": ["review-state-complete-chain", "repair-evidence-v2", "transport-chain"],
+      "topic_ids": [
+        "review-state-complete-chain",
+        "repair-evidence-v2",
+        "transport-chain"
+      ],
       "population_query": "Mutate and re-self-digest every state, edge, predecessor, transport identity, result identity/count, and repair-v2 link across the declared graph and attempts.",
       "affected_population": [
         "all twelve edges",
@@ -443,7 +505,10 @@
       "severity": "P1",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
-      "topic_ids": ["reviewer-binding", "binding-census"],
+      "topic_ids": [
+        "reviewer-binding",
+        "binding-census"
+      ],
       "population_query": "Dirty each mandate and profile binding while HEAD stays fixed and invoke every binding authority consumer with and without an explicit candidate.",
       "affected_population": [
         "policy-check",
@@ -463,7 +528,9 @@
       "severity": "P1",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
-      "topic_ids": ["semantic-obligation-completeness"],
+      "topic_ids": [
+        "semantic-obligation-completeness"
+      ],
       "population_query": "Change every normative source and obligation row independently and validate exact source-digest-to-obligation coverage.",
       "affected_population": [
         "all ten obligations",
@@ -481,9 +548,15 @@
       "severity": "P1",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
-      "topic_ids": ["literal-authoritative-roster", "candidate-convergence"],
+      "topic_ids": [
+        "literal-authoritative-roster",
+        "candidate-convergence"
+      ],
       "population_query": "Execute all sixteen exact policy argv arrays from the detached exact candidate and retain every terminal result after any red ordinal.",
-      "affected_population": ["all sixteen authoritative gates", "literal materializations argv"],
+      "affected_population": [
+        "all sixteen authoritative gates",
+        "literal materializations argv"
+      ],
       "repair_condition": "Every literal argv passes without hidden argument rewriting and all sixteen ordered results remain present after any failure.",
       "disposition": "OPEN"
     },
@@ -493,7 +566,9 @@
       "severity": "P1",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
-      "topic_ids": ["recursive-workspace-command-closure"],
+      "topic_ids": [
+        "recursive-workspace-command-closure"
+      ],
       "population_query": "Recursively derive every root and workspace script, TypeScript project reference and output, and imported or spawned executable reachable from all sixteen argv arrays.",
       "affected_population": [
         "all sixteen gate rows",
@@ -510,7 +585,9 @@
       "severity": "P1",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
-      "topic_ids": ["candidate-and-preimage-loader-analysis"],
+      "topic_ids": [
+        "candidate-and-preimage-loader-analysis"
+      ],
       "population_query": "Load candidate and base/preimage Git blobs for every status record and conservatively classify every JavaScript and TypeScript loader form.",
       "affected_population": [
         "all tracked candidate paths",
@@ -527,7 +604,9 @@
       "severity": "P1",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
-      "topic_ids": ["exact-predecessor-and-transport-chain"],
+      "topic_ids": [
+        "exact-predecessor-and-transport-chain"
+      ],
       "population_query": "Mutate and re-self-digest every predecessor, transition, transport, validation, result, count, terminal, and repair-population byte over all edges and attempts.",
       "affected_population": [
         "all twelve edges",
@@ -546,7 +625,9 @@
       "severity": "P1",
       "origin_cycle": 2,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
-      "topic_ids": ["candidate-bound-bootstrap-and-policy-dispatch"],
+      "topic_ids": [
+        "candidate-bound-bootstrap-and-policy-dispatch"
+      ],
       "population_query": "Dirty policy, profile, schemas, and mandates independently and invoke every authoritative consumer with literal and nonliteral candidate inputs.",
       "affected_population": [
         "all seven authoritative consumers",
@@ -835,12 +916,41 @@
       "severity": "P1",
       "origin_cycle": 1,
       "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-repair-handoff.md",
-      "topic_ids": ["review-scope"],
+      "topic_ids": [
+        "review-scope"
+      ],
       "population_query": "For every authoritative consumer, invoke it with each required revision argument omitted and report any invocation that terminates without emitting a structured result.",
       "affected_population": [
         "review-scope invoked without --base terminates on an uncaught git rev-parse of an empty revision"
       ],
       "repair_condition": "No authoritative consumer may terminate without emitting a structured result. A missing or unresolvable required revision is a blocking finding, never an uncaught throw.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F012",
+      "defect_class_id": "UNDECLARED_STATE_MACHINE_CONTROL_SELECTOR",
+      "severity": "P0",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-4-readiness-pre-check.md",
+      "topic_ids": [
+        "control:product/owner-mandates/OM-017.md",
+        "changed-path:scripts/run-round-close-controls.mjs",
+        "changed-path:law/policy/round-close-controls.json",
+        "changed-path:law/schemas/remediation-closure-matrix.schema.json"
+      ],
+      "population_query": "Enumerate every site in scripts/run-round-close-controls.mjs that selects review-state-machine control behaviour from a literal in its own source rather than from law/policy/round-close-controls.json read off the exact candidate; and every declared edge whose transition is accepted without corroborating a persisted predecessor state artifact.",
+      "affected_population": [
+        "scripts/run-round-close-controls.mjs:8703 four-edge predecessor-authentication exemption keyed on hard-coded edge literals",
+        "scripts/run-round-close-controls.mjs:8679 and :9048 edge-to-cycle derivation from hard-coded state sets, mutually divergent in form",
+        "scripts/run-round-close-controls.mjs:9484 cycle-1 and cycle-2 emitted transition sequences hard-coded, and persisted by a single persistStateV5 call so intermediate states never exist",
+        "scripts/run-round-close-controls.mjs:9654 and :9937 hard-coded state/cycle sets and canonical cycle-1 prefix duplicating law/policy/round-close-controls.json state_cycle_binding",
+        "scripts/run-round-close-controls.mjs:9376, :9894 and :9989 hard-coded repair, predecessor and terminal guards",
+        "scripts/run-round-close-controls.mjs:9344, :9810, :10520 and :10667 hard-coded cycle and retry budgets and blocked-state mapping",
+        "scripts/run-round-close-controls.mjs:10983 and :11049 hard-coded verdict-to-next-state mapping and initial state",
+        "tests/contract/helpers/r0007-review-harness.ts:593 and :635 mirror the same literals, so the oracle cannot detect controller drift",
+        "law/policy/round-close-controls.json is loaded without schema validation; loadV4Context validates only the round profile"
+      ],
+      "repair_condition": "Every emitted transition persists its target state before the next edge, so each non-initial transition corroborates a predecessor artifact that exists; the four-edge exemption is deleted rather than declared. All state-machine control vocabulary is read from the candidate-bound policy document, which is itself schema-validated on load. A contract must prove the controller follows the declaration in both directions: removing a declaration changes behaviour and adding one changes behaviour, so an implementation retaining literals intersected with policy cannot pass.",
       "disposition": "OPEN"
     }
   ]

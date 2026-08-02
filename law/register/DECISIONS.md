@@ -4932,6 +4932,56 @@ R-0007 entry or batch gate, does not bind the B0 declaration, does not alter clo
 R-0006 artifacts, and does not deploy, publish, tag, promote evidence, or mutate the
 predecessor.
 
+### DII-253 — Persist every state boundary; disclosure is not permission
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-017; independent readiness pre-check of candidate 46fdc7709437ea6289d0f97ffda27c7fdb273254; Owner decisions of 2026-08-02 selecting redesign over mandate rider and full re-derivation of the closure matrix; DII-249; DII-250; DII-251; DII-252`
+
+OM-017 requires that each transition authenticates the complete exact persisted
+predecessor artifact, and that all twelve edges are executable mutation populations. The
+campaign-3 implementation did not meet that requirement. `review-scope` constructed the
+preflight, freeze and activation transitions as one atomic burst and called
+`persistStateV5` once, so the intermediate states were never materialized. Four edges —
+`PREFLIGHT_GREEN->CANDIDATE_FROZEN`, `CANDIDATE_FROZEN->CYCLE_1_ACTIVE`,
+`PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN` and `NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE` — were
+then exempted from predecessor-artifact corroboration by a hard-coded set of edge literals
+in the controller. A state artifact presenting a null predecessor on any of those edges
+passed authentication.
+
+The exemption was disclosed as a declared limitation rather than repaired. That was the
+wrong remedy twice over: an Architect record cannot narrow an Owner mandate, and the
+limitation described the controller's behaviour as a property of the machine when it was a
+property of the implementation.
+
+**Every non-initial transition binds a persisted predecessor.** `review-scope` folds over
+the transitions it emits, materializing and persisting the state at each boundary, so the
+predecessor artifact each transition names actually exists. The exemption is deleted, not
+declared. The sole null predecessor is the initial `DRAFT->PREFLIGHT_GREEN` edge, which is
+the base case of the chain rather than an exception: `DRAFT` is the machine's initial
+state, so no predecessor artifact exists to authenticate.
+
+**Control behaviour is selected by Architect-owned declaration, never by literals in the
+controller.** DII-252 established this for decision-id specimens. The same rule governs the
+state-machine vocabulary: edge-to-cycle derivation, cycle paths and active states, terminal
+and repair guards, cycle and retry budgets, blocked-state mapping, verdict-to-next-state
+mapping and the initial state are declared in `law/policy/round-close-controls.json` and
+read from the exact candidate. A literal that duplicates its own declaration is a defect
+whether or not the two currently agree, because nothing prevents them from diverging. The
+policy document is itself schema-validated on load, alongside the round profile.
+
+**Disclosure is not permission.** The closure-matrix schema previously stated that a class
+may be `GREEN_PROVED` while a named boundary of its population remains unbound, provided
+the boundary is declared. That clause was authored inside this campaign at `9038a7d` and
+the matrix closure then rested on it. It inverted the floor it was meant to record: naming
+an unproved boundary became a way to keep a closure state the class had not earned. A class
+that does not prove its complete population now records that boundary in
+`unbound_population_boundaries`, and a non-empty list mechanically forbids `GREEN_PROVED`
+and `REVIEWED_PASS`. Every class of the matrix is re-derived against its own
+`required_behavior` under that floor rather than carried forward.
+
+This decision authorizes the campaign-3 R7-F012 repair. It does not amend OM-017, which is
+satisfied as written and not relaxed. It does not bypass any R-0007 entry or batch gate,
+does not bind the B0 declaration, does not alter closed R-0006 artifacts, and does not
+deploy, publish, tag, promote evidence, or mutate the predecessor.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
