@@ -147,7 +147,9 @@ describe('R7-F012 undeclared state-machine control selector', () => {
         };
       }
     ).review_state_machine.emitted_transition_sequences['cycle-1'];
-    expect(declared, 'policy must declare the cycle-1 emitted sequence').toBeDefined();
+    // A matcher does not narrow the type, and an absent declaration would otherwise surface
+    // three compiler errors instead of one legible contract failure.
+    if (declared === undefined) throw new Error('policy must declare the cycle-1 emitted sequence');
     expect(declared.length).toBe(3);
 
     // Each direction observes a fresh fixture. Reusing one would leave a review state
