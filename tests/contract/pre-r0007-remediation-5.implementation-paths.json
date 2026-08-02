@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0.0",
+  "finding_id": "R7-F012",
+  "decision_id": "DII-253",
+  "red_contract": "tests/contract/pre-r0007-remediation-5.red.contract.test.ts",
+  "description": "Exact implementation surfaces the R7-F012 repair may touch. Recorded prospectively by the Inspector so the Auditor can machine-check that the Engineer diff is a subset of this manifest. An unnamed implementation path stops the repair before implementation; widening the manifest is itself an Inspector act requiring a fresh red observation.",
+  "allowed_paths": [
+    "scripts/run-round-close-controls.mjs",
+    "tests/contract/helpers/r0007-review-harness.ts",
+    ".devai/config/round-close-controls.json"
+  ],
+  "rationale": {
+    "scripts/run-round-close-controls.mjs": "review-scope folds over the declared emitted transition sequence and persists each boundary; the four-edge exemption is deleted; every state-machine selector is read from the candidate-bound policy; the policy document is schema-validated on load.",
+    "tests/contract/helpers/r0007-review-harness.ts": "the harness mirrors the same literals it is meant to police, so its expected populations are derived from the candidate policy instead.",
+    ".devai/config/round-close-controls.json": "Engineer-owned machine materialization of the Architect-owned policy source, refreshed in the same commit that consumes the new declarations."
+  },
+  "forbidden": [
+    "law/**",
+    "product/**",
+    "work/**",
+    "any relaxation of an existing schema floor",
+    "any widening of an existing allowlist",
+    "any edit to an immutable evidence artifact"
+  ]
+}
