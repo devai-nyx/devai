@@ -23,6 +23,12 @@
     "required_after_commit": "3925a2f89f8f5ce041e247a29c00fd624b711765",
     "description": "Every later substantive Engineer implementation must bind its exact changed implementation paths to both the prior failing Inspector sources and the durable Auditor observation."
   },
+  "implementation_path_manifests": {
+    "required_after_commit": "ca0667d7874ab64a89b45c52e14ec24cbe56de0c",
+    "manifest_suffix": ".implementation-paths.json",
+    "rule": "every substantive Engineer commit after the boundary must have every substantive implementation path named in an implementation-path manifest committed by a prior Inspector commit",
+    "reason": "DII-253. The manifest existed as an Auditor procedure and was checked after the Engineer commit for R7-F012, so it reported an unnamed path instead of preventing it. A control that runs after the act it governs is a report, not a gate."
+  },
   "implementation_surfaces": {
     "prefixes": [
       "packages/",
