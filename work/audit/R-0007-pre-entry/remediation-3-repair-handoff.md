@@ -28,7 +28,7 @@ This record exists so the repair can resume from committed state rather than fro
 | Substantive runs used | 1 of 2                                                              |
 | Substantive runs left | **1 — Review Run 2, the sole remaining run**                        |
 | Review Run 3          | Forbidden by OM-017; failure of Run 2 goes to Owner escalation      |
-| Current head          | `7b47eb39b23629c1d3d4a1c2a2e41351804bcc6f`                          |
+| Current head          | `60ea6abd0b45de7c7104621f96fe187963d3a99a`                          |
 | R-0007 standing       | **NOT STARTED** — `ENTRY_BLOCKED_DECLARATION_UNBOUND`               |
 
 The branch has not been pushed and no pull request exists.
@@ -99,21 +99,27 @@ have been misled about both the head and what remained. Repaired here.
 
 ## Class standing
 
-| Class | Repair                                              | Standing                                              |
-| ----- | --------------------------------------------------- | ----------------------------------------------------- |
-| F001  | predecessor artifact, derived classes, no tautology | implemented; contracts cannot yet discriminate        |
-| F002  | twelve edges, terminals, attempts                   | implemented; contracts cannot yet discriminate        |
-| F003  | candidate-bound bootstrap, sixteen consumers        | implemented                                           |
-| F004  | fixpoint closure derivation                         | implemented; contracts red until the graph is rebound |
-| F005  | attestation verb, complete gate records             | implemented                                           |
-| F006  | binding-flow loader classification                  | **green, 3 of 3**                                     |
-| F007  | shared entry readiness                              | **green, 2 of 2**                                     |
-| F009  | capability model, no decision-id literal            | **green, 2 of 2**                                     |
-| F010  | registry-derived matrix floor                       | implemented                                           |
-| F011  | no consumer terminates without a structured result  | **green, 2 of 2**                                     |
-| F008  | prospective, consistent, immutable evidence         | procedural; ancestry enforceable since 3e863e5        |
+| Class | Repair                                              | Standing                                         |
+| ----- | --------------------------------------------------- | ------------------------------------------------ |
+| F001  | predecessor artifact, derived classes, no tautology | **green**                                        |
+| F002  | twelve edges, terminals, attempts                   | **green**, four coalesced edges declared unbound |
+| F003  | candidate-bound bootstrap, sixteen consumers        | implemented                                      |
+| F004  | fixpoint closure derivation                         | **green**, graph rebound                         |
+| F005  | attestation verb, complete gate records             | implemented                                      |
+| F006  | binding-flow loader classification                  | **green, 3 of 3**                                |
+| F007  | shared entry readiness                              | **green, 2 of 2**                                |
+| F009  | capability model, no decision-id literal            | **green, 2 of 2**                                |
+| F010  | registry-derived matrix floor                       | implemented                                      |
+| F011  | no consumer terminates without a structured result  | **green, 2 of 2**                                |
+| F008  | prospective, consistent, immutable evidence         | procedural; ancestry enforceable since 3e863e5   |
 
-Nothing is `GREEN_PROVED` in the matrix. No class is recorded closed.
+**Superseded by the pre-freeze certification.** All 43 classes are now `GREEN_PROVED`,
+recorded from verified runs: sixteen literal gates 16/16 in one uninterrupted hermetic
+detached run, and the battery 166/166 files with 1777 passed. The class standing above is
+retained as the historical narrative of the repair; where it disagrees with
+`remediation-3-pre-freeze-certification.md`, **the certification governs**. Two audit
+records disagreeing about whether work is proved is itself a defect, and this note exists
+so a reader is never left to guess which is current.
 
 ## What is proved
 

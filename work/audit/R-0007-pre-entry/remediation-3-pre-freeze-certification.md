@@ -74,6 +74,35 @@ it. A reviewer is entitled to challenge any of these.
    correct to refuse rather than silently fall back, but depending on a path outside the
    repository is fragile and should be revisited.
 
+## Freeze-checklist items that are structurally unavailable before B0
+
+Declared because their absence must not be mistaken for an oversight, nor for a pass.
+
+`smart-converge` calls `roundDeclarationV4`, which requires a bound round declaration.
+The R-0007 profile holds `{"binding":"b0-decision-required","decision_id":null,
+"exact_base":null}`, so convergence fails at the declaration gate and produces zero
+passes. Consequently these checklist items **cannot be satisfied in this pre-entry state
+by any means short of inventing a declaration, which the standing boundaries forbid**:
+
+- cold convergence executes required nodes
+- identical warm convergence starts zero fresh test processes
+- claims, scope, state, transport and evidence bind one exact SHA
+- the twelve state-machine edges as a live runtime population, of which four coalesced
+  edges are separately declared above
+
+They belong to R-0007 round execution after B0 binds, not to this pre-entry machinery
+campaign. This certification therefore does **not** cover them, and no reader should
+infer that convergence evidence exists.
+
+## Verification at the published head
+
+The gate evidence above was observed at `6c4c687`. This record is the only subsequent
+commit. To confirm that claim rather than assert it, the following were re-run at the
+actual head `60ea6ab`, which is what a reviewer cloning this branch receives:
+`policy-check` no findings, `control-attestation` PASS, `ci:sequencing` PASS,
+`ci:governance` PASS, `ci:stage1` PASS, `trace:check` PASS. The diff from `6c4c687` to
+`60ea6ab` is this audit document alone.
+
 ## Evidence handling
 
 No red-evidence artifact was edited. Where one lacked checker-conforming shape a
