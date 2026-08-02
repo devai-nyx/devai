@@ -36,18 +36,18 @@ not have.
 
 ## What the independent pre-check claimed, and what survived
 
-| Claim under test                                            | Pre-check verdict | Adjudication after verification                                                                                                                                                          |
-| ----------------------------------------------------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Sixteen literal commands pass in one uninterrupted run       | UNVERIFIABLE      | **Upheld as unestablished.** The observation was made at `6c4c687`; the head was two commits later. The pre-check's own run was interrupted and yields nothing either way.                  |
-| The battery passes at the candidate                          | UNVERIFIABLE      | **Upheld as unestablished**, for the same reason.                                                                                                                                          |
-| Commits are role-pure                                        | CONFIRMED         | Holds. `ci:sequencing` PASS over 218 commits.                                                                                                                                              |
-| Red evidence precedes every implementation commit            | REFUTED           | **The claim was overstated; the defect is not repairable.** See "The `bef98f9` exception" below.                                                                                            |
-| The matrix is a superset of the OPEN registry                | CONFIRMED         | Holds.                                                                                                                                                                                     |
-| No decision-id literal in the controller                     | CONFIRMED         | Holds.                                                                                                                                                                                     |
-| The audit records do not contradict each other               | REFUTED           | **Upheld.** Two defects: a stale self-referential head claim, and a precedence rule substituted for reconciliation. Both are repaired in the superseding records of this campaign.          |
-| Four coalesced edges unbound — disqualifying                 | DISQUALIFYING     | **Reasoning wrong, conclusion right for a different reason.** It conflated edge discrimination with predecessor lineage. Verification found the live defect recorded below as R7-F012.      |
-| Pre-B0 convergence unavailability — disqualifying            | DISQUALIFYING     | **Rejected, and retracted by the pre-check on review.** Scope, not defect: those obligations require a bound B0 declaration that OM-017 places in R-0007 execution. Owner confirmed.        |
-| `R7-004` asserts derivation not declaration                  | ACCEPTABLE        | Accepted. Retained as a declared limitation.                                                                                                                                               |
+| Claim under test                                       | Pre-check verdict | Adjudication after verification                                                                                                                                                        |
+| ------------------------------------------------------ | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Sixteen literal commands pass in one uninterrupted run | UNVERIFIABLE      | **Upheld as unestablished.** The observation was made at `6c4c687`; the head was two commits later. The pre-check's own run was interrupted and yields nothing either way.             |
+| The battery passes at the candidate                    | UNVERIFIABLE      | **Upheld as unestablished**, for the same reason.                                                                                                                                      |
+| Commits are role-pure                                  | CONFIRMED         | Holds. `ci:sequencing` PASS over 218 commits.                                                                                                                                          |
+| Red evidence precedes every implementation commit      | REFUTED           | **The claim was overstated; the defect is not repairable.** See "The `bef98f9` exception" below.                                                                                       |
+| The matrix is a superset of the OPEN registry          | CONFIRMED         | Holds.                                                                                                                                                                                 |
+| No decision-id literal in the controller               | CONFIRMED         | Holds.                                                                                                                                                                                 |
+| The audit records do not contradict each other         | REFUTED           | **Upheld.** Two defects: a stale self-referential head claim, and a precedence rule substituted for reconciliation. Both are repaired in the superseding records of this campaign.     |
+| Four coalesced edges unbound — disqualifying           | DISQUALIFYING     | **Reasoning wrong, conclusion right for a different reason.** It conflated edge discrimination with predecessor lineage. Verification found the live defect recorded below as R7-F012. |
+| Pre-B0 convergence unavailability — disqualifying      | DISQUALIFYING     | **Rejected, and retracted by the pre-check on review.** Scope, not defect: those obligations require a bound B0 declaration that OM-017 places in R-0007 execution. Owner confirmed.   |
+| `R7-004` asserts derivation not declaration            | ACCEPTABLE        | Accepted. Retained as a declared limitation.                                                                                                                                           |
 
 ## R7-F012 — undeclared state-machine control selector
 
@@ -68,7 +68,7 @@ those four edges recomputes its transition, history and state self-digests, sati
 remaining identity constraints, and passes. The exemption is not neutralized by an earlier
 check.
 
-The claim that those transitions receive *no* corroboration would be too strong, and is not
+The claim that those transitions receive _no_ corroboration would be too strong, and is not
 made here. Edge membership, history continuity, the previous-transition digest, the
 transition self-digest, the cycle derivation and the canonical history digest are all still
 enforced. What is absent is corroboration of a complete predecessor **state artifact**, which
