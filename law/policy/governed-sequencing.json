@@ -786,6 +786,26 @@
           "scripts/run-round-close-controls.mjs"
         ]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["87aa821d376af83a12a19bea0f4fe05a415250c9"],
+      "law_commits": ["284307a12b07f9635156f1c306fdb6b98a93fc5f"],
+      "red_evidence": {
+        "commit": "31fe8bcf8bfa2462d1d659b25118a1837b3c866c",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-5-manifest-gate-red-evidence.json",
+        "evidence_sha256": "f0ad958b3930a59b6bc4e9ecb31ed45d9b35d063a9ea79b5de0df093db5c5386",
+        "tests": [
+          "tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
+          "tests/contract/pre-r0007-manifest-gate.implementation-paths.json"
+        ],
+        "exercised_implementation_paths": [
+          "package.json",
+          "scripts/check-implementation-path-manifest.mjs"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [

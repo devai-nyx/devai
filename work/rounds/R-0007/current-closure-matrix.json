@@ -1852,6 +1852,39 @@
         "no edge is driven through production persistence; the harness writes the state artifact directly"
       ],
       "verdict_scope": "pre-entry"
+    },
+    {
+      "finding_id": "R7-F013",
+      "defect_class_id": "IMPLEMENTATION_PATH_MANIFEST_UNENFORCED",
+      "severity": "P1",
+      "population_query": "For every substantive Engineer commit after the declared boundary, report each substantive implementation path in its diff that no implementation-path manifest carried by a prior Inspector commit names.",
+      "expected_complete_population": [
+        "the implementation-path manifest existed only as an Auditor procedure with no executable control",
+        "775f47d touched packages/schemas/src/roster.ts, which the manifest at the bound red 3e2a3e0 did not name, and the check ran after the commit rather than before it"
+      ],
+      "adversarial_mutations": [
+        "give a governed history an Engineer diff touching a path no prior manifest names and assert the gate exits nonzero naming that path",
+        "name every path and assert the gate exits zero",
+        "introduce the manifest in the same commit it would authorize and assert it grants nothing",
+        "author the manifest as a role other than Inspector and assert it grants nothing",
+        "remove the gate from ci:governance and assert the contract fails"
+      ],
+      "required_behavior": [
+        "An executable gate reads manifests at the parent of each substantive Engineer commit, counts only those authored by an Inspector, rejects any unnamed substantive implementation path, leaves documentation-only diffs alone, and runs inside ci:governance without altering the sixteen literal convergence commands."
+      ],
+      "test_ids": [
+        "R7-023-MANIFEST-GATE-EXISTS",
+        "R7-023-MANIFEST-GATE-REJECTS-UNNAMED-PATH",
+        "R7-023-MANIFEST-GATE-ACCEPTS-NAMED-PATH",
+        "R7-023-MANIFEST-GATE-IGNORES-NON-IMPLEMENTATION"
+      ],
+      "test_paths": ["tests/contract/pre-r0007-manifest-gate.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/check-implementation-path-manifest.mjs", "package.json"],
+      "evidence_refs": [
+        "work/audit/R-0007-pre-entry/remediation-5-manifest-gate-red-evidence.json"
+      ],
+      "closure_state": "RED_REQUIRED",
+      "verdict_scope": "pre-entry"
     }
   ],
   "declared_limitations": [
@@ -1915,7 +1948,8 @@
       "R7-F009",
       "R7-F010",
       "R7-F011",
-      "R7-F012"
+      "R7-F012",
+      "R7-F013"
     ]
   },
   "full_round_closure": {
@@ -1929,7 +1963,8 @@
       "R3-F004",
       "R7-F001",
       "R7-F002",
-      "R7-F012"
+      "R7-F012",
+      "R7-F013"
     ],
     "blocked_reason": "R7-F012 is open: the controller selected state-machine control behaviour from its own literals and exempted four declared edges from predecessor-artifact corroboration, contrary to OM-017 and to the existing declaration canonical_history.first_predecessor null-only-for-DRAFT-origin. Separately, the convergence obligations of the freeze checklist require a bound B0 declaration and are not adjudicable in this pre-entry campaign."
   }

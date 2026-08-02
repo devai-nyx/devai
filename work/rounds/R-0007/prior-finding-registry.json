@@ -869,6 +869,25 @@
       ],
       "repair_condition": "Every emitted transition persists its target state before the next edge, so each non-initial transition corroborates a predecessor artifact that exists; the four-edge exemption is deleted rather than declared. All state-machine control vocabulary is read from the candidate-bound policy document, which is itself schema-validated on load. A contract must prove the controller follows the declaration in both directions: removing a declaration changes behaviour and adding one changes behaviour, so an implementation retaining literals intersected with policy cannot pass.",
       "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F013",
+      "defect_class_id": "IMPLEMENTATION_PATH_MANIFEST_UNENFORCED",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-5-manifest-gate-red-evidence.json",
+      "topic_ids": [
+        "control:product/owner-mandates/OM-017.md",
+        "changed-path:scripts/check-implementation-path-manifest.mjs",
+        "changed-path:package.json"
+      ],
+      "population_query": "For every substantive Engineer commit after the declared boundary, report each substantive implementation path in its diff that no implementation-path manifest carried by a prior Inspector commit names.",
+      "affected_population": [
+        "the implementation-path manifest existed only as an Auditor procedure with no executable control",
+        "775f47d touched packages/schemas/src/roster.ts, which the manifest at the bound red 3e2a3e0 did not name, and the check ran after the commit rather than before it"
+      ],
+      "repair_condition": "An executable gate rejects any substantive Engineer commit whose implementation paths are not all named by a manifest present at its parent and authored by an Inspector, and the gate runs inside an authoritative governance command rather than as a procedure.",
+      "disposition": "OPEN"
     }
   ]
 }
