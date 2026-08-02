@@ -785,6 +785,11 @@
   "historical_commit_exceptions": [
     {
       "round": "R-0007",
+      "implementation_commits": ["775f47dbb592ddcf8dc53f0b65a6bb75cff23757"],
+      "reason": "The R7-F012 repair under DII-253 was bound to the prospective Inspector red at 3e2a3e0, whose sources name scripts/run-round-close-controls.mjs and .devai/config/round-close-controls.json but not packages/schemas/src/roster.ts. The roster entry became necessary only because the repair added law/schemas/round-close-controls.schema.json, and the roster is an explicit bijection with that directory. The Auditor subset check against the Inspector implementation-path manifest detected the unnamed path, but ran after the commit rather than before it, so it reported the violation instead of preventing it. No forward repair conforms: a bound red must precede its implementation, and after the repair landed there is no honest failing observation left to record for a revert. History is not rewritten and this exact-commit disclosure grants no prospective exception. The subset check is being made an enforced control so this class cannot recur."
+    },
+    {
+      "round": "R-0007",
       "implementation_commits": ["bef98f91b9f8cc7f50e554e907c0e54af38056e7"],
       "reason": "The literal-gate self-preparation repair added package.json and vitest.config.ts after the bound Inspector red at 3e863e5, whose immutable source did not name vitest.config.ts. The strict detached-candidate Inspector commit e75ba57 followed the Engineer repair and therefore cannot be relabelled as prior semantic red; a post-repair observation cannot repair that ordering defect. History is not rewritten and this exact-commit disclosure grants no prospective exception."
     },
