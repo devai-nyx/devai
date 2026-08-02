@@ -150,4 +150,34 @@ describe('R7-F013 implementation-path manifest is unenforced', () => {
     const outcome = runGateAllowingFailure(root);
     expect(outcome.status, outcome.output).toBe(0);
   });
+
+  it('R7-023-MANIFEST-GATE-UNREACHABLE-BOUNDARY-IS-NOT-APPLICABLE leaves a foreign history alone', () => {
+    // Every contract fixture is a fresh history that copies the real governed-sequencing
+    // policy, so it carries a boundary commit it cannot contain. A declaration bound to a
+    // commit outside a history does not govern that history: it is not applicable, and
+    // treating it as a violation made the gate fail closed inside every fixture that runs
+    // the literal ci:governance command.
+    const root = mkdtempSync(join(tmpdir(), 'devai-manifest-gate-foreign-'));
+    roots.push(root);
+    git(root, ['init', '-q']);
+    write(
+      root,
+      'law/policy/governed-sequencing.json',
+      `${JSON.stringify(
+        {
+          implementation_surfaces: { prefixes: ['scripts/'], root_globs: [] },
+          implementation_path_manifests: {
+            required_after_commit: '0'.repeat(40),
+            manifest_suffix: '.implementation-paths.json',
+          },
+        },
+        null,
+        2,
+      )}\n`,
+    );
+    commitAs(root, 'DEVAI Architect', 'seed a history the boundary cannot reach');
+    const outcome = runGateAllowingFailure(root);
+    expect(outcome.status, outcome.output).toBe(0);
+    expect(outcome.output).toContain('not applicable');
+  });
 });
