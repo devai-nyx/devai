@@ -806,6 +806,20 @@
           "scripts/check-implementation-path-manifest.mjs"
         ]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["f020c41cd088a76a8205597f1d03bbbbb451cf84"],
+      "red_evidence": {
+        "commit": "f39673c0e0b1d375263f56cc10b4717ca7a4fce0",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-5-manifest-gate-foreign-history-red.json",
+        "evidence_sha256": "2ff921012b8545d051801066e6e14dbb6014f015b25c22fb9475c6d8b298e705",
+        "tests": ["tests/contract/pre-r0007-manifest-gate.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/check-implementation-path-manifest.mjs"]
+      },
+      "law_commits": ["284307a12b07f9635156f1c306fdb6b98a93fc5f"]
     }
   ],
   "historical_commit_exceptions": [
