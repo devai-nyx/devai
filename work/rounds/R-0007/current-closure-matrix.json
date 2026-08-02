@@ -34,16 +34,12 @@
         "R7-001-REPAIR-POPULATION-DERIVED",
         "R7-001-NO-SELF-COMPARED-EXPECTATION"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": [
         "scripts/run-round-close-controls.mjs",
         "law/schemas/review-state.schema.json"
       ],
-      "evidence_refs": [
-        "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
-      ],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
       "closure_state": "RED_REQUIRED",
       "unbound_population_boundaries": [
         "PREFLIGHT_GREEN->CANDIDATE_FROZEN carries no persisted predecessor state artifact",
@@ -95,15 +91,9 @@
         "R7-002-THREE-TERMINALS-RUNTIME",
         "R7-002-ATTEMPTS-ZERO-ONE-TWO"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
-      "evidence_refs": [
-        "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
       "closure_state": "RED_REQUIRED",
       "unbound_population_boundaries": [
         "PREFLIGHT_GREEN->CANDIDATE_FROZEN carries no persisted predecessor state artifact",
@@ -154,15 +144,9 @@
         "R7-003-DIRTY-BY-FORM-CROSS-PRODUCT",
         "R7-003-SMART-CONVERGE-REJECTS-HEAD"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
-      "evidence_refs": [
-        "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
       "closure_state": "GREEN_PROVED"
     },
     {
@@ -197,16 +181,12 @@
         "R7-004-GENERIC-PROGRAM-PARSE",
         "R7-004-DIGEST-EVERY-PROFILE"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": [
         "scripts/run-round-close-controls.mjs",
         "work/rounds/R-0007/affected-test-graph.json"
       ],
-      "evidence_refs": [
-        "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
-      ],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
       "closure_state": "GREEN_PROVED"
     },
     {
@@ -254,17 +234,13 @@
         "R7-005-GATE-ID-AND-EXIT-CODE",
         "R7-005-NO-SILENT-PROFILE-SKIP"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": [
         "scripts/run-round-close-controls.mjs",
         "law/policy/round-close-controls.json",
         ".devai/config/round-close-controls.json"
       ],
-      "evidence_refs": [
-        "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
-      ],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
       "closure_state": "GREEN_PROVED"
     },
     {
@@ -294,15 +270,9 @@
         "R7-006-CANDIDATE-AND-PREIMAGE",
         "R7-006-OWNED-SELECTOR-WIDENING"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
-      "evidence_refs": [
-        "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
       "closure_state": "GREEN_PROVED"
     },
     {
@@ -323,19 +293,10 @@
       "required_behavior": [
         "entry_ready must be computed by one shared function for policy-check, entry-check and status, and must be false whenever any ENTRY_BLOCKED_* condition holds. A machine check must assert that for the exact candidate the three consumers emit identical entry_ready values and that status.entry_ready is false while ENTRY_BLOCKED_DECLARATION_UNBOUND is present."
       ],
-      "test_ids": [
-        "R7-007-THREE-CONSUMERS-AGREE",
-        "R7-007-STATUS-FALSE-WHILE-BLOCKED"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
-      "evidence_refs": [
-        "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
-      ],
+      "test_ids": ["R7-007-THREE-CONSUMERS-AGREE", "R7-007-STATUS-FALSE-WHILE-BLOCKED"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
       "closure_state": "GREEN_PROVED"
     },
     {
@@ -365,15 +326,9 @@
         "R7-008-COUNT-CONSISTENCY",
         "R7-008-EVIDENCE-IMMUTABLE-AFTER-IMPL"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "law/policy/governed-sequencing.json"
-      ],
-      "evidence_refs": [
-        "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["law/policy/governed-sequencing.json"],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
       "closure_state": "GREEN_PROVED"
     },
     {
@@ -405,20 +360,13 @@
       "required_behavior": [
         "Every one of the nine behaviours must be selected by a capability declared in law/policy/round-close-controls.json (for example a policy_version or a named feature flag) rather than by a profile decision-id literal, and the controller guard must be strengthened from the two named ids to a assertion that scripts/run-round-close-controls.mjs contains no string literal matching /DII-[0-9]+/."
       ],
-      "test_ids": [
-        "R7-009-NO-DECISION-ID-LITERAL",
-        "R7-009-CAPABILITY-SELECTED-BEHAVIOUR"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
+      "test_ids": ["R7-009-NO-DECISION-ID-LITERAL", "R7-009-CAPABILITY-SELECTED-BEHAVIOUR"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": [
         "scripts/run-round-close-controls.mjs",
         "law/policy/round-close-controls.json"
       ],
-      "evidence_refs": [
-        "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
-      ],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
       "closure_state": "GREEN_PROVED"
     },
     {
@@ -441,20 +389,13 @@
       "required_behavior": [
         "Either the profile must bind every campaign closure matrix whose classes remain OPEN in the prior-finding registry, or the schema must require that the bound matrix enumerate the union of all OPEN prior finding ids. A machine check must assert that the set of finding_ids in the bound matrix is a superset of the OPEN dispositions in work/rounds/R-0007/prior-finding-registry.json."
       ],
-      "test_ids": [
-        "R7-010-MATRIX-SUPERSET-OF-OPEN",
-        "R7-010-COORDINATED-DELETION-FAILS"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
+      "test_ids": ["R7-010-MATRIX-SUPERSET-OF-OPEN", "R7-010-COORDINATED-DELETION-FAILS"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": [
         "scripts/run-round-close-controls.mjs",
         "law/schemas/remediation-closure-matrix.schema.json"
       ],
-      "evidence_refs": [
-        "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
-      ],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
       "closure_state": "GREEN_PROVED"
     },
     {
@@ -462,11 +403,7 @@
       "defect_class_id": "BINDING_CENSUS_ABSENT",
       "severity": "P0",
       "population_query": "Enumerate every tracked active Owner mandate and structurally parse reviewer-binding markers for R-0007.",
-      "expected_complete_population": [
-        "policy-check",
-        "entry-check",
-        "status"
-      ],
+      "expected_complete_population": ["policy-check", "entry-check", "status"],
       "adversarial_mutations": [
         "mutate or delete: policy-check",
         "mutate or delete: entry-check",
@@ -475,16 +412,9 @@
       "required_behavior": [
         "Exactly one active structured binding matches the profile; zero, duplicate, conflicting, inactive, substring-only, and fallback bindings fail closed."
       ],
-      "test_ids": [
-        "R7-011-BINDING-CENSUS-EXACT-ONE",
-        "R7-011-BINDING-CENSUS-FAIL-CLOSED"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_ids": ["R7-011-BINDING-CENSUS-EXACT-ONE", "R7-011-BINDING-CENSUS-FAIL-CLOSED"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -496,22 +426,13 @@
       "defect_class_id": "AUTHORITATIVE_GATE_POPULATION_OMITTED",
       "severity": "P1",
       "population_query": "Compare every policy convergence command ID with each cold convergence pass result.",
-      "expected_complete_population": [
-        "all sixteen policy convergence commands"
-      ],
-      "adversarial_mutations": [
-        "mutate or delete: all sixteen policy convergence commands"
-      ],
+      "expected_complete_population": ["all sixteen policy convergence commands"],
+      "adversarial_mutations": ["mutate or delete: all sixteen policy convergence commands"],
       "required_behavior": [
         "Both cold passes execute every authoritative policy command at stable exact-head clean boundaries; pass 2 writes nothing and is semantically equivalent."
       ],
-      "test_ids": [
-        "R7-012-NO-GATE-OMITTED",
-        "R7-012-ROSTER-DELETION-FAILS"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
+      "test_ids": ["R7-012-NO-GATE-OMITTED", "R7-012-ROSTER-DELETION-FAILS"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": [
         "scripts/run-round-close-controls.mjs",
         "law/policy/round-close-controls.json"
@@ -545,9 +466,7 @@
         "R7-001-REPAIR-POPULATION-DERIVED",
         "R7-001-NO-SELF-COMPARED-EXPECTATION"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": [
         "scripts/run-round-close-controls.mjs",
         "law/schemas/review-state.schema.json"
@@ -571,25 +490,16 @@
       "defect_class_id": "CACHE_RECORD_IDENTITY_UNBOUND",
       "severity": "P1",
       "population_query": "Tamper each freshness identity field and each transitive dependency result while preserving a valid self-digest.",
-      "expected_complete_population": [
-        "every affected-test and policy-gate cache record"
-      ],
+      "expected_complete_population": ["every affected-test and policy-gate cache record"],
       "adversarial_mutations": [
         "mutate or delete: every affected-test and policy-gate cache record"
       ],
       "required_behavior": [
         "Reuse requires exact current identity equality and still-fresh dependency PASS proofs; any mismatch executes the complete dependent population."
       ],
-      "test_ids": [
-        "R7-013-CACHE-RECORD-IDENTITY",
-        "R7-013-CACHE-SUBSTITUTION-FAILS"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_ids": ["R7-013-CACHE-RECORD-IDENTITY", "R7-013-CACHE-SUBSTITUTION-FAILS"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -622,16 +532,9 @@
       "required_behavior": [
         "Scope generation fails without an authentic exact-candidate manifest and emits every source class atomically without round-specific fabricated topics."
       ],
-      "test_ids": [
-        "R7-014-CENSUS-COMPLETE",
-        "R7-014-CANDIDATE-PROOF-EXACT"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_ids": ["R7-014-CENSUS-COMPLETE", "R7-014-CANDIDATE-PROOF-EXACT"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -656,16 +559,9 @@
       "required_behavior": [
         "Only one header-first and one terminal-last stream with exact topic and finding linkage passes; obligation reuse policy is enforced."
       ],
-      "test_ids": [
-        "R7-015-REUSE-REJECTED",
-        "R7-015-STREAM-CANONICAL"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_ids": ["R7-015-REUSE-REJECTED", "R7-015-STREAM-CANONICAL"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -677,11 +573,7 @@
       "defect_class_id": "REVIEW_STATE_TRANSITION_BYPASS",
       "severity": "P1",
       "population_query": "Attempt every undeclared state transition, same-candidate cycle 2, stale PASS reuse, cycle 3, and cross-identity transport retry.",
-      "expected_complete_population": [
-        "review-check",
-        "review state",
-        "transport state"
-      ],
+      "expected_complete_population": ["review-check", "review state", "transport state"],
       "adversarial_mutations": [
         "mutate or delete: review-check",
         "mutate or delete: review state",
@@ -695,12 +587,8 @@
         "R7-002-THREE-TERMINALS-RUNTIME",
         "R7-002-ATTEMPTS-ZERO-ONE-TWO"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -720,25 +608,14 @@
       "defect_class_id": "CLAIM_DIGEST_PLACEHOLDER_ACCEPTED",
       "severity": "P2",
       "population_query": "Recompute every materialized claim producer, extractor, source manifest, value, digest, and rendered location.",
-      "expected_complete_population": [
-        "every materialized current claim"
-      ],
-      "adversarial_mutations": [
-        "mutate or delete: every materialized current claim"
-      ],
+      "expected_complete_population": ["every materialized current claim"],
+      "adversarial_mutations": ["mutate or delete: every materialized current claim"],
       "required_behavior": [
         "Any producer, source, extracted-value, value-digest, or rendered-location mismatch fails claims-check."
       ],
-      "test_ids": [
-        "R7-016-NO-PLACEHOLDER-DIGEST",
-        "R7-016-CLAIM-DIGEST-EXACT"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_ids": ["R7-016-NO-PLACEHOLDER-DIGEST", "R7-016-CLAIM-DIGEST-EXACT"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -763,16 +640,9 @@
       "required_behavior": [
         "General mandate prose never becomes a binding; exactly one complete schema-valid active binding matching the profile passes and every other population fails closed."
       ],
-      "test_ids": [
-        "R7-011-BINDING-CENSUS-EXACT-ONE",
-        "R7-011-BINDING-CENSUS-FAIL-CLOSED"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_ids": ["R7-011-BINDING-CENSUS-EXACT-ONE", "R7-011-BINDING-CENSUS-FAIL-CLOSED"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -797,16 +667,9 @@
       "required_behavior": [
         "Only exact cross-bound candidate and convergence records with two complete equivalent passes pass; every malformed, missing, stale, partial, tampered, substituted, or mismatched record fails atomically."
       ],
-      "test_ids": [
-        "R7-014-CENSUS-COMPLETE",
-        "R7-014-CANDIDATE-PROOF-EXACT"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_ids": ["R7-014-CENSUS-COMPLETE", "R7-014-CANDIDATE-PROOF-EXACT"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -833,16 +696,9 @@
       "required_behavior": [
         "Duplicate finding IDs always fail and REUSED_FRESH_PASS requires independent exact recomputation of every current input, evidence, and required nonempty task key."
       ],
-      "test_ids": [
-        "R7-015-REUSE-REJECTED",
-        "R7-015-STREAM-CANONICAL"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_ids": ["R7-015-REUSE-REJECTED", "R7-015-STREAM-CANONICAL"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -874,12 +730,8 @@
         "R7-002-THREE-TERMINALS-RUNTIME",
         "R7-002-ATTEMPTS-ZERO-ONE-TWO"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -912,16 +764,9 @@
       "required_behavior": [
         "claims-check reads runtime materialization and independently recomputes every field and exact marker at every location; any omission, placeholder, substring-only match, or mismatch fails the ledger."
       ],
-      "test_ids": [
-        "R7-016-NO-PLACEHOLDER-DIGEST",
-        "R7-016-CLAIM-DIGEST-EXACT"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_ids": ["R7-016-NO-PLACEHOLDER-DIGEST", "R7-016-CLAIM-DIGEST-EXACT"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -978,9 +823,7 @@
         "R7-004-GENERIC-PROGRAM-PARSE",
         "R7-004-DIGEST-EVERY-PROFILE"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": [
         "scripts/run-round-close-controls.mjs",
         "work/rounds/R-0007/affected-test-graph.json"
@@ -1015,16 +858,9 @@
       "required_behavior": [
         "Every committed rename retains its preimage and postimage as one authenticated change record and uses their union for invalidation and exactly-once changed-path topics."
       ],
-      "test_ids": [
-        "R7-017-RENAME-PREIMAGE-READ",
-        "R7-017-COPY-PREIMAGE-READ"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_ids": ["R7-017-RENAME-PREIMAGE-READ", "R7-017-COPY-PREIMAGE-READ"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -1058,12 +894,8 @@
         "R7-008-COUNT-CONSISTENCY",
         "R7-008-EVIDENCE-IMMUTABLE-AFTER-IMPL"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "law/policy/governed-sequencing.json"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["law/policy/governed-sequencing.json"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -1094,16 +926,9 @@
       "required_behavior": [
         "Review validation independently derives and matches all six fields before transport persistence; any mismatch consumes no transport attempt and performs no state transition."
       ],
-      "test_ids": [
-        "R7-018-SCOPE-IDENTITY-RECOMPUTED",
-        "R7-018-SCOPE-IDENTITY-SUBSTITUTION-FAILS"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_ids": ["R7-018-SCOPE-IDENTITY-RECOMPUTED", "R7-018-SCOPE-IDENTITY-SUBSTITUTION-FAILS"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -1137,9 +962,7 @@
         "R7-002-TWELVE-EDGES-RUNTIME",
         "R7-002-ATTEMPTS-ZERO-ONE-TWO"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": [
         "scripts/run-round-close-controls.mjs",
         "law/schemas/review-state.schema.json"
@@ -1188,16 +1011,9 @@
       "required_behavior": [
         "The exact-candidate census contains every uniquely resolved active control and raw-byte digest; unresolved, duplicate, inactive, untracked, or extra controls fail atomically."
       ],
-      "test_ids": [
-        "R7-019-CENSUS-TRANSITIVE",
-        "R7-019-CENSUS-NO-ALLOWLIST"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "test_ids": ["R7-019-CENSUS-TRANSITIVE", "R7-019-CENSUS-NO-ALLOWLIST"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
@@ -1613,9 +1429,7 @@
         "tests/contract/pre-r0007-remediation-2.red.contract.test.ts",
         "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
       ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
@@ -1957,9 +1771,7 @@
         "tests/contract/pre-r0007-remediation-3.red.contract.test.ts",
         "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
       ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
         "product/owner-mandates/OM-017.md",
@@ -1984,19 +1796,10 @@
         "No authoritative consumer terminates without emitting a structured result.",
         "A missing or unresolvable required revision produces a blocking finding rather than an uncaught throw."
       ],
-      "test_ids": [
-        "R7-021-REVIEW-SCOPE-BASE-BLOCKS",
-        "R7-021-NO-SILENT-TERMINATION"
-      ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-4.red.contract.test.ts"
-      ],
-      "implementation_surfaces": [
-        "scripts/run-round-close-controls.mjs"
-      ],
-      "evidence_refs": [
-        "work/audit/R-0007-pre-entry/remediation-3-repair-handoff.md"
-      ],
+      "test_ids": ["R7-021-REVIEW-SCOPE-BASE-BLOCKS", "R7-021-NO-SILENT-TERMINATION"],
+      "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+      "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-repair-handoff.md"],
       "closure_state": "GREEN_PROVED"
     },
     {
@@ -2032,18 +1835,14 @@
         "R7-022-NO-STATE-MACHINE-LITERAL",
         "R7-022-POLICY-SCHEMA-FAIL-CLOSED"
       ],
-      "test_paths": [
-        "tests/contract/pre-r0007-remediation-5.red.contract.test.ts"
-      ],
+      "test_paths": ["tests/contract/pre-r0007-remediation-5.red.contract.test.ts"],
       "implementation_surfaces": [
         "scripts/run-round-close-controls.mjs",
         "law/policy/round-close-controls.json",
         "law/schemas/round-close-controls.schema.json",
         "tests/contract/helpers/r0007-review-harness.ts"
       ],
-      "evidence_refs": [
-        "work/audit/R-0007-pre-entry/remediation-4-readiness-pre-check.md"
-      ],
+      "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-4-readiness-pre-check.md"],
       "closure_state": "RED_REQUIRED",
       "unbound_population_boundaries": [
         "PREFLIGHT_GREEN->CANDIDATE_FROZEN carries no persisted predecessor state artifact",

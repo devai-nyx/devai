@@ -1,8 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "law/schemas/round-close-controls.schema.json",
+  "$id": "https://devai.nyxk.com.br/schemas/round-close-controls.schema.json",
   "title": "Round close controls policy",
   "description": "The Architect-owned policy document that selects close-control behaviour. Per DII-253 the controller reads control vocabulary from this document rather than from literals in its own source, so the document is itself an authenticated input and must be validated on load alongside the round profile.",
+  "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": true,
   "required": [
@@ -133,13 +134,32 @@
         },
         "canonical_history": {
           "type": "object",
-          "required": ["first_predecessor", "subsequent_predecessor"],
+          "additionalProperties": false,
+          "required": [
+            "ordinals",
+            "first_predecessor",
+            "subsequent_predecessor",
+            "tip",
+            "skips_duplicates_and_reordering"
+          ],
           "properties": {
+            "ordinals": {
+              "type": "string",
+              "minLength": 1
+            },
             "first_predecessor": {
-              "const": "null-only-for-DRAFT-origin"
+              "const": "null-only-for-DRAFT-origin",
+              "description": "Per DII-253 the DRAFT origin is the only transition without a predecessor artifact, because it is the base case of the chain rather than an exemption from it."
             },
             "subsequent_predecessor": {
               "const": "exact-previous-state-and-transition-digests"
+            },
+            "tip": {
+              "type": "string",
+              "minLength": 1
+            },
+            "skips_duplicates_and_reordering": {
+              "const": "forbidden"
             }
           }
         },
@@ -164,6 +184,42 @@
       }
     }
   },
+  "examples": [
+    {
+      "schemaVersion": "5.0.0",
+      "policy_id": "round-close-controls",
+      "policy_version": "1.0.0",
+      "control_capabilities": {
+        "capability_version": "1.0.0",
+        "predecessor_artifact_authentication": true
+      },
+      "schemas": {
+        "round_close_controls": "law/schemas/round-close-controls.schema.json"
+      },
+      "role_paths": { "law": "Architect" },
+      "review_state_machine": {
+        "states": ["DRAFT", "PREFLIGHT_GREEN"],
+        "initial_state": "DRAFT",
+        "terminal_states": ["PASS"],
+        "cycle_two_states": ["CYCLE_2_ACTIVE"],
+        "edge_cycle_derivation": "cycle-two-when-either-endpoint-is-a-cycle-two-state-otherwise-cycle-one",
+        "allowed_transitions": { "DRAFT": ["PREFLIGHT_GREEN"] },
+        "emitted_transition_sequences": { "cycle-1": [["DRAFT", "PREFLIGHT_GREEN"]] },
+        "predecessor_persistence": "every-emitted-transition-persists-its-target-state-before-the-next-edge",
+        "verdict_next_state": { "PASS": "PASS" },
+        "canonical_history": {
+          "ordinals": "contiguous-starting-at-one",
+          "first_predecessor": "null-only-for-DRAFT-origin",
+          "subsequent_predecessor": "exact-previous-state-and-transition-digests",
+          "tip": "exact-current-state-cycle-candidate-and-linked-artifact-digests",
+          "skips_duplicates_and_reordering": "forbidden"
+        },
+        "state_cycle_binding": { "cycle-1": ["DRAFT", "PREFLIGHT_GREEN"] },
+        "substantive_cycle_budget": 2,
+        "transport_retry_budget_per_cycle": 1
+      }
+    }
+  ],
   "$defs": {
     "state": {
       "type": "string",
