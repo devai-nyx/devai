@@ -57,6 +57,7 @@ export const ROSTER = [
   'review-transport.schema.json',
   'reviewer-binding.schema.json',
   'rgr.schema.json',
+  'round-close-controls.schema.json',
   'round-close-manifest.schema.json',
   'round-close-profile.schema.json',
   'round-convergence.schema.json',

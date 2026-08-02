@@ -141,6 +141,28 @@ function loadPolicy(findings) {
  * not declared is off, so an older policy keeps its older behaviour without any
  * control source naming a decision.
  */
+/**
+ * Per DII-253 the edge-to-cycle rule is declared in law, never duplicated in control
+ * source. Two sites previously encoded it with different literal sets that happened to
+ * agree; nothing kept them agreeing, and a literal that duplicates its own declaration is
+ * a defect whether or not the two currently match.
+ */
+function edgeCycleV7(policy, from, to) {
+  const declared = policy?.review_state_machine?.cycle_two_states;
+  if (!Array.isArray(declared)) return 1;
+  const cycleTwo = new Set(declared);
+  return cycleTwo.has(from) || cycleTwo.has(to) ? 2 : 1;
+}
+
+/**
+ * The exact edge sequence a cycle emits, read from law. review-scope used to hold this
+ * list inline, so the declaration could say one thing while the controller did another.
+ */
+function emittedSequenceV7(policy, cycle) {
+  const declared = policy?.review_state_machine?.emitted_transition_sequences?.[`cycle-${cycle}`];
+  return Array.isArray(declared) ? declared : null;
+}
+
 function capability(context, name) {
   const declared = context?.policy?.control_capabilities ?? context?.control_capabilities ?? null;
   if (declared === null || typeof declared !== 'object') return false;
@@ -5660,6 +5682,22 @@ function loadV4Context(round, findings, candidate = null) {
     );
     return null;
   }
+  // Per DII-253 this document selects control behaviour, so it is an authenticated input in
+  // its own right. Validating only the round profile left the document that chooses the
+  // machine's vocabulary unchecked, and a policy missing a required declaration was
+  // consumed silently. Older policies that declare no schema for themselves keep their
+  // previous behaviour rather than failing closed on a key they cannot carry.
+  if (
+    typeof policy.schemas?.round_close_controls === 'string' &&
+    !validateDocument(
+      policy,
+      policy.schemas.round_close_controls,
+      findings,
+      'POLICY_DOCUMENT_INVALID',
+      'round close controls policy',
+    )
+  )
+    return null;
   let roundExpression;
   try {
     roundExpression = new RegExp(policy.profile_discovery?.round_pattern ?? '^$', 'u');
@@ -8676,13 +8714,7 @@ function validateTransitionEdgeV6(context, transition, index, prior, findings) {
         { ordinal: index + 1 },
       ),
     );
-  const expectedCycle =
-    transition.from === 'REPAIR_REQUIRED' ||
-    transition.from === 'CYCLE_2_ACTIVE' ||
-    ['NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE', 'ESCALATION_REQUIRED'].includes(transition.to) ||
-    (transition.from === 'CYCLE_2_ACTIVE' && transition.to === 'PASS')
-      ? 2
-      : 1;
+  const expectedCycle = edgeCycleV7(context.policy, transition.from, transition.to);
   if (transition.cycle !== expectedCycle)
     findings.push(
       finding(
@@ -8700,15 +8732,15 @@ function validateTransitionEdgeV6(context, transition, index, prior, findings) {
         ),
       );
   } else {
-    const coalescedWithoutPersistedBoundary =
-      transition.previous_state_digest === null &&
-      new Set([
-        'PREFLIGHT_GREEN->CANDIDATE_FROZEN',
-        'CANDIDATE_FROZEN->CYCLE_1_ACTIVE',
-        'PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN',
-        'NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE',
-      ]).has(`${transition.from}->${transition.to}`);
-    if (coalescedWithoutPersistedBoundary) return;
+    // Per DII-253 no edge is exempt. The preflight, freeze and activation transitions used
+    // to be emitted as one burst persisted once, and the four boundaries that produced were
+    // allowed through with a null predecessor by a hard-coded set of edge literals. That
+    // contradicted OM-017, the declaration canonical_history.first_predecessor
+    // null-only-for-DRAFT-origin, and the declared capability
+    // predecessor_artifact_authentication. review-scope now persists the state at each
+    // boundary, so every non-initial edge has a predecessor artifact to corroborate and the
+    // exemption has nothing left to excuse.
+    //
     // Per DII-252, the predecessor identity is the predecessor artifact self-digest,
     // corroborated rather than recomputed from a private field selection. A derivation
     // only the producing implementation can reproduce is not independently checkable.
@@ -9046,15 +9078,12 @@ function makeReviewStateV4(context, proof, scopeDigest, state, cycle, history, e
     );
   let previousTransitionDigest = null;
   const canonicalHistory = history.map((transition, index) => {
-    const transitionCycle =
-      ['REPAIR_REQUIRED', 'NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE'].includes(transition.from) ||
-      ['NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE', 'ESCALATION_REQUIRED'].includes(transition.to)
-        ? 2
-        : 1;
-    // This constructor coalesces preflight/freeze/activation edges into one persisted
-    // state, so no complete predecessor artifact exists at those intermediate boundaries.
-    // Inventing a partial state would make an unauthenticated claim look corroborated.
-    // Only a predecessor already snapshotted by persistStateV5 is therefore bound here.
+    const transitionCycle = edgeCycleV7(context.policy, transition.from, transition.to);
+    // Per DII-253 the caller persists the state at each boundary before emitting the next
+    // edge, so a predecessor snapshotted by persistStateV5 exists for every non-initial
+    // transition. Binding only a predecessor that has actually been retained is still the
+    // rule: an artifact is never invented to make an unauthenticated claim look
+    // corroborated. The difference is that the artifact now exists.
     const claimedPredecessorDigest = transition.previous_state_digest ?? null;
     let retainedPredecessor = null;
     if (
@@ -9480,58 +9509,64 @@ function reviewScopeV4() {
   );
   if (findings.length === 0) {
     writeJsonAtomic(join(repoRoot, context.profile.runtime.review_scope), manifest);
-    const history =
-      priorState === null
-        ? [
-            transitionV4('DRAFT', 'PREFLIGHT_GREEN', proof, {
-              review_scope_digest: manifest.manifest_digest_sha256,
-            }),
-            transitionV4('PREFLIGHT_GREEN', 'CANDIDATE_FROZEN', proof, {
-              review_scope_digest: manifest.manifest_digest_sha256,
-            }),
-            transitionV4('CANDIDATE_FROZEN', 'CYCLE_1_ACTIVE', proof, {
-              review_scope_digest: manifest.manifest_digest_sha256,
-            }),
-          ]
-        : [
-            ...priorState.transition_history,
-            transitionV4('REPAIR_REQUIRED', 'PREFLIGHT_GREEN', proof, {
-              review_scope_digest: manifest.manifest_digest_sha256,
-              previous_state_digest: priorState.state_digest_sha256,
+    // Per DII-253 the emitted edge sequence is read from law, and the state at each boundary
+    // is persisted before the next edge is emitted. The previous implementation built the
+    // whole burst and persisted once, so the four intermediate boundaries had no artifact
+    // and were waved through by a hard-coded exemption. Folding over the declaration gives
+    // every non-initial transition a predecessor that actually exists, which is what OM-017
+    // requires and what the declaration canonical_history.first_predecessor already said.
+    const sequence = emittedSequenceV7(context.policy, cycle);
+    if (sequence === null)
+      findings.push(
+        finding(
+          'REVIEW_STATE_SEQUENCE_UNDECLARED',
+          'policy declares no emitted transition sequence for this cycle',
+          { cycle },
+        ),
+      );
+    else {
+      const cycleTwoIdentity =
+        cycle === 2
+          ? {
+              previous_candidate_sha: priorState.candidate_sha,
+              prior_failure_result_digest: repair.prior_review_result_digest,
+              prior_failure_state_digest: repair.prior_failure_state_digest,
+              prior_failure_transport_digest: repair.prior_failure_transport_digest,
               repair_evidence_digest: repair.repair_evidence_digest_sha256,
-            }),
-            transitionV4('PREFLIGHT_GREEN', 'NEW_CANDIDATE_FROZEN', proof, {
-              review_scope_digest: manifest.manifest_digest_sha256,
-              repair_evidence_digest: repair.repair_evidence_digest_sha256,
-            }),
-            transitionV4('NEW_CANDIDATE_FROZEN', 'CYCLE_2_ACTIVE', proof, {
-              review_scope_digest: manifest.manifest_digest_sha256,
-              repair_evidence_digest: repair.repair_evidence_digest_sha256,
-            }),
-          ];
-    const state = makeReviewStateV4(
-      context,
-      proof,
-      manifest.manifest_digest_sha256,
-      cycle === 1 ? 'CYCLE_1_ACTIVE' : 'CYCLE_2_ACTIVE',
-      cycle,
-      history,
-      cycle === 2
-        ? {
-            previous_candidate_sha: priorState.candidate_sha,
-            prior_failure_result_digest: repair.prior_review_result_digest,
-            prior_failure_state_digest: repair.prior_failure_state_digest,
-            prior_failure_transport_digest: repair.prior_failure_transport_digest,
-            repair_evidence_digest: repair.repair_evidence_digest_sha256,
-          }
-        : {},
-    );
-    if (
-      context.policy.schemaVersion === '5.0.0' &&
-      capability(context, 'review_scope_state_persistence')
-    )
-      persistStateV5(context, state);
-    else writeJsonAtomic(join(repoRoot, context.profile.runtime.review_state), state);
+            }
+          : {};
+      const persist =
+        context.policy.schemaVersion === '5.0.0' &&
+        capability(context, 'review_scope_state_persistence');
+      let history = cycle === 2 ? [...priorState.transition_history] : [];
+      // The predecessor of the first emitted edge is the state the machine already occupied.
+      // In cycle one that is the DRAFT origin, which has no artifact by construction.
+      let predecessorDigest = cycle === 2 ? priorState.state_digest_sha256 : null;
+      for (const [from, to] of sequence) {
+        history = [
+          ...history,
+          transitionV4(from, to, proof, {
+            review_scope_digest: manifest.manifest_digest_sha256,
+            previous_state_digest: predecessorDigest,
+            ...(cycle === 2
+              ? { repair_evidence_digest: repair.repair_evidence_digest_sha256 }
+              : {}),
+          }),
+        ];
+        const state = makeReviewStateV4(
+          context,
+          proof,
+          manifest.manifest_digest_sha256,
+          to,
+          cycle,
+          history,
+          { ...cycleTwoIdentity, previous_state_digest: predecessorDigest },
+        );
+        if (persist) persistStateV5(context, state);
+        else writeJsonAtomic(join(repoRoot, context.profile.runtime.review_state), state);
+        predecessorDigest = state.state_digest_sha256;
+      }
+    }
   }
   emit({
     ok: findings.length === 0,
@@ -9934,15 +9969,22 @@ function readAuthenticatedStateV4(context, findings, expected) {
     );
     return null;
   }
-  const prefix = state.transition_history.slice(0, 3).map(({ from, to }) => `${from}->${to}`);
-  if (
-    canonical(prefix) !==
-    canonical([
-      'DRAFT->PREFLIGHT_GREEN',
-      'PREFLIGHT_GREEN->CANDIDATE_FROZEN',
-      'CANDIDATE_FROZEN->CYCLE_1_ACTIVE',
-    ])
-  ) {
+  // Per DII-253 the cycle-one prefix is the declared emitted sequence, not a literal that
+  // duplicates it. The two agreed when both were written; nothing kept them agreeing.
+  const declaredPrefix = emittedSequenceV7(context.policy, 1);
+  if (declaredPrefix === null) {
+    findings.push(
+      finding(
+        'REVIEW_STATE_SEQUENCE_UNDECLARED',
+        'policy declares no emitted transition sequence for cycle 1',
+      ),
+    );
+    return null;
+  }
+  const prefix = state.transition_history
+    .slice(0, declaredPrefix.length)
+    .map(({ from, to }) => `${from}->${to}`);
+  if (canonical(prefix) !== canonical(declaredPrefix.map(([from, to]) => `${from}->${to}`))) {
     findings.push(
       finding(
         'REVIEW_STATE_TRANSITION_INVALID',
@@ -10982,7 +11024,21 @@ function reviewCheckV4() {
   else writeJsonAtomic(join(repoRoot, context.profile.runtime.review_result), result);
   const verdict = result.terminal.verdict;
   const next =
-    verdict === 'PASS' ? 'PASS' : cycle === 1 ? 'REPAIR_REQUIRED' : 'ESCALATION_REQUIRED';
+    // Per DII-253 the verdict-to-next-state mapping is declared, not encoded here.
+    context.policy.review_state_machine?.verdict_next_state?.[
+      verdict === 'PASS' ? 'PASS' : `non-pass-cycle-${cycle}`
+    ] ?? null;
+  if (next === null) {
+    findings.push(
+      finding(
+        'REVIEW_STATE_SEQUENCE_UNDECLARED',
+        'policy declares no next state for this verdict and cycle',
+        { verdict, cycle },
+      ),
+    );
+    emit({ ok: false, command: 'review-check', candidate, cycle, findings });
+    return;
+  }
   const transition = transitionV4(state.state, next, proof, {
     review_scope_digest: scope.manifest_digest_sha256,
     review_result_digest: result.result_digest_sha256,
@@ -11046,7 +11102,8 @@ function statusV4() {
     findings.push(...binding.findings);
     if (binding.diagnostic !== null && binding.profileBound) findings.push(binding.diagnostic);
   }
-  let state = 'DRAFT';
+  // Per DII-253 the initial state is declared in law rather than assumed here.
+  let state = context?.policy?.review_state_machine?.initial_state ?? 'DRAFT';
   let used = 0;
   let attempts = 0;
   if (context !== null && existsSync(join(repoRoot, context.profile.runtime.review_state))) {

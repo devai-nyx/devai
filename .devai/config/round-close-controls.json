@@ -20,6 +20,7 @@
     "closure_matrix_registry_floor": true
   },
   "schemas": {
+    "round_close_controls": "law/schemas/round-close-controls.schema.json",
     "round_profile": "law/schemas/round-close-profile.schema.json",
     "affected_test_graph": "law/schemas/affected-test-graph.schema.json",
     "task_freshness": "law/schemas/task-freshness.schema.json",
@@ -354,6 +355,32 @@
       "REPAIR_REQUIRED": ["PREFLIGHT_GREEN"],
       "NEW_CANDIDATE_FROZEN": ["CYCLE_2_ACTIVE"],
       "CYCLE_2_ACTIVE": ["PASS", "ESCALATION_REQUIRED", "REVIEW_TRANSPORT_BLOCKED"]
+    },
+    "initial_state": "DRAFT",
+    "cycle_two_states": [
+      "REPAIR_REQUIRED",
+      "NEW_CANDIDATE_FROZEN",
+      "CYCLE_2_ACTIVE",
+      "ESCALATION_REQUIRED"
+    ],
+    "edge_cycle_derivation": "cycle-two-when-either-endpoint-is-a-cycle-two-state-otherwise-cycle-one",
+    "emitted_transition_sequences": {
+      "cycle-1": [
+        ["DRAFT", "PREFLIGHT_GREEN"],
+        ["PREFLIGHT_GREEN", "CANDIDATE_FROZEN"],
+        ["CANDIDATE_FROZEN", "CYCLE_1_ACTIVE"]
+      ],
+      "cycle-2": [
+        ["REPAIR_REQUIRED", "PREFLIGHT_GREEN"],
+        ["PREFLIGHT_GREEN", "NEW_CANDIDATE_FROZEN"],
+        ["NEW_CANDIDATE_FROZEN", "CYCLE_2_ACTIVE"]
+      ]
+    },
+    "predecessor_persistence": "every-emitted-transition-persists-its-target-state-before-the-next-edge",
+    "verdict_next_state": {
+      "PASS": "PASS",
+      "non-pass-cycle-1": "REPAIR_REQUIRED",
+      "non-pass-cycle-2": "ESCALATION_REQUIRED"
     },
     "state_identity": [
       "round",
