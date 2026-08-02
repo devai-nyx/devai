@@ -7,12 +7,22 @@
   "allowed_paths": [
     "scripts/run-round-close-controls.mjs",
     "tests/contract/helpers/r0007-review-harness.ts",
-    ".devai/config/round-close-controls.json"
+    ".devai/config/round-close-controls.json",
+    "packages/schemas/src/roster.ts"
+  ],
+  "amendments": [
+    {
+      "path": "packages/schemas/src/roster.ts",
+      "added_after_commit": "775f47d",
+      "reason": "The Auditor subset check rejected the Engineer diff because this path was unnamed. The roster is an explicit bijection with the law/schemas directory, so adding law/schemas/round-close-controls.schema.json under DII-253 requires the corresponding entry; it is a mechanical consequence of an already-named law change and introduces no control behaviour. The amendment is recorded rather than backdated: the manifest was insufficient when written, and the check found it.",
+      "process_finding": "The subset check ran after the Engineer commit rather than before it, so it detected the violation instead of preventing it. Ordering the check ahead of the commit is what makes the manifest a gate rather than a report."
+    }
   ],
   "rationale": {
     "scripts/run-round-close-controls.mjs": "review-scope folds over the declared emitted transition sequence and persists each boundary; the four-edge exemption is deleted; every state-machine selector is read from the candidate-bound policy; the policy document is schema-validated on load.",
     "tests/contract/helpers/r0007-review-harness.ts": "the harness mirrors the same literals it is meant to police, so its expected populations are derived from the candidate policy instead.",
-    ".devai/config/round-close-controls.json": "Engineer-owned machine materialization of the Architect-owned policy source, refreshed in the same commit that consumes the new declarations."
+    ".devai/config/round-close-controls.json": "Engineer-owned machine materialization of the Architect-owned policy source, refreshed in the same commit that consumes the new declarations.",
+    "packages/schemas/src/roster.ts": "The explicit roster bijects with the law/schemas directory; the new policy schema requires its entry. Added by amendment, not in the original manifest."
   },
   "forbidden": [
     "law/**",
