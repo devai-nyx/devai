@@ -41,29 +41,30 @@ every one exiting zero. `ordinary` 168 files / 1787 passed / 8 skipped / 0 faile
 72.46 / 60.78 / 81.14 / 73.9 against floors 70 / 60 / 70 / 70. Working tree clean before and
 after; HEAD and tree identical across the run.
 
-## The delta after S, stated rather than implied
+## The delta after S, stated as an invariant
 
-Four files change between S and the commit this record creates. The count includes this
-record itself, because a reviewer running the command below sees it:
+An earlier draft of this section stated a file count. That was wrong twice over: the count
+changed each time the section was corrected, because the correcting commit joins the delta it
+describes. A self-referencing count cannot be made true by revising it. The claim is therefore
+stated as a property that stays true as audit records accumulate.
 
-| Path                                                 | Class         |
-| ---------------------------------------------------- | ------------- |
-| `work/audit/.../om-018-admission-gate-evidence.json` | documentation |
-| `work/audit/.../om-018-readiness-certification.md`   | documentation |
-| `work/rounds/R-0007/current-closure-matrix.json`     | **semantic**  |
-| `work/rounds/R-0007/om-018-deferrals.json`           | **semantic**  |
+**Invariant.** Every path in the delta from S is under `work/audit/` or
+`work/rounds/R-0007/`. No path under `law/`, `product/`, `scripts/`, `packages/`, `tests/`,
+`.devai/`, or the repository root appears. Exactly two of the delta paths are semantic —
+`work/rounds/R-0007/current-closure-matrix.json` and
+`work/rounds/R-0007/om-018-deferrals.json`. Every other path is an audit record.
 
-Two of the four are semantic. OM-018 holds that any semantic or current-tree change
-invalidates gate evidence. **The evidence at S therefore does not carry to this commit, and
-this certification does not claim that it does.** A terminal run at the commit this record
-creates is required before Review Run 2 is submitted, and until that run is green this
-certification is incomplete.
-
-A reviewer can check the delta claim directly:
+A reviewer checks it directly, and the command returns nothing if the invariant holds:
 
 ```
-git diff --name-only 0cdc2967fffa63398b0655fafbe4ae6b6324f0f3..<head>
+git diff --name-only 0cdc2967fffa63398b0655fafbe4ae6b6324f0f3..HEAD \
+  -- . ':(exclude)work/audit/**' ':(exclude)work/rounds/R-0007/**'
 ```
+
+Because two of the delta paths are semantic, OM-018's rule applies: gate evidence observed at
+S does **not** carry to any later commit. This certification does not claim that it does. A
+terminal run at the exact final commit is required before Review Run 2 is submitted, and its
+result is retained outside the repository so that recording it cannot invalidate it.
 
 ## What is proved
 
