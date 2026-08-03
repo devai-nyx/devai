@@ -2,16 +2,23 @@
 id: R-0007-PRE-ENTRY-CONTROL-CERTIFICATION
 title: Pre-R-0007 close-control machinery certification
 type: assessment
-status: active
+status: superseded
 date: 2026-07-29
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: om-018-readiness-certification
 provenance: [OM-014; DII-246; candidate 185dcd840259586384c5a0823da879dd7ba63579]
 related_invariants: [INV-DEVAI-001; INV-DEVAI-002; INV-DEVAI-003; INV-DEVAI-017; INV-DEVAI-020]
 ---
 
 # Pre-R-0007 close-control machinery certification
+
+> **Superseded by `om-018-readiness-certification` on 2026-08-03.**
+> This certified the close-control machinery at candidate `185dcd8` on 2026-07-29. That
+> candidate is superseded, and the machinery it certified has since been found defective by
+> four independent reviews, most consequentially R7-F012, a production-reachable
+> predecessor-authentication gap. Retained unaltered as the historical record; none of its
+> conclusions is a current claim about the machinery.
 
 ## Exact subject
 
