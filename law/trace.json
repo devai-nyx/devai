@@ -2051,7 +2051,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 19,
-      "assertion_digest_sha256": "3c6313dbd5a6d4afc0cd43cd318b48ff0c01dade678f28e7e37d5ce0faad3f6e"
+      "assertion_digest_sha256": "5fe453b7807de759193caecc460ea9c058a19a05e56c71a97aa5b07bb0abcde8"
     },
     {
       "path": "packages/cli/tests/unit/hooks-install.test.ts",
@@ -2583,7 +2583,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 12,
-      "assertion_digest_sha256": "7e1b8a89dc09ead8c6dd008f7876a40c46feed60bba7cc221294810504f62780"
+      "assertion_digest_sha256": "04b2880dfc26bafe4d9f3ebc15d43c982460178f81fffab27b535aaae78a7773"
     },
     {
       "path": "packages/sensors/tests/unit/migrate-type-judge-depth.test.ts",
