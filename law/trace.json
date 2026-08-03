@@ -708,6 +708,11 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
           "target_type": "test"
         },
@@ -794,6 +799,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -1393,6 +1403,11 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
           "target_type": "test"
         },
@@ -1629,6 +1644,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -3251,6 +3271,19 @@
       "lifecycle": "supported",
       "assertion_count": 19,
       "assertion_digest_sha256": "8c996b669b441dea0d1f2fa3a20b6cd46514c16121fda4f550888d42b9bf50b9"
+    },
+    {
+      "path": "tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-003",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 8,
+      "assertion_digest_sha256": "7f7cc51ed9ce980f1099587942dc6e0ee8782d8cd9cd7dd1086f6bc0d2d5b4ae"
     },
     {
       "path": "tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
