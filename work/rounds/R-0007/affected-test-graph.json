@@ -1570,7 +1570,6 @@
     {
       "gate_id": "governance",
       "derivation": "recursive-policy-command-v1",
-      "closure_digest": "90b7b27d7b727caad77b935fb7780f2ff7b1c03e7fc9683315830de9291c5fcc",
       "scripts": [
         "@devai-nyx/cli:build",
         "@devai-nyx/schemas:build",
@@ -1585,6 +1584,7 @@
         "packages/schemas/scripts/copy-law.mjs",
         "scripts/check-governed-sequencing.mjs",
         "scripts/check-governed-sha-references.mjs",
+        "scripts/check-implementation-path-manifest.mjs",
         "scripts/generate-action-registry.mjs"
       ],
       "project_references": [
@@ -1671,7 +1671,8 @@
         "packages/utils/tsconfig.json-outDir->packages/utils/dist",
         "packages/utils/tsconfig.json-rootDir->packages/utils/src",
         "tsconfig.base.json"
-      ]
+      ],
+      "closure_digest": "ab1936428412115c496d20f03328bd64e11d2efa5bc37fd76d3095cb13c80990"
     }
   ]
 }
