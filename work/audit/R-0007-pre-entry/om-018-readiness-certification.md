@@ -43,15 +43,17 @@ after; HEAD and tree identical across the run.
 
 ## The delta after S, stated rather than implied
 
-Three files changed between S and this record:
+Four files change between S and the commit this record creates. The count includes this
+record itself, because a reviewer running the command below sees it:
 
 | Path                                                 | Class         |
 | ---------------------------------------------------- | ------------- |
 | `work/audit/.../om-018-admission-gate-evidence.json` | documentation |
+| `work/audit/.../om-018-readiness-certification.md`   | documentation |
 | `work/rounds/R-0007/current-closure-matrix.json`     | **semantic**  |
 | `work/rounds/R-0007/om-018-deferrals.json`           | **semantic**  |
 
-Two of the three are semantic. OM-018 holds that any semantic or current-tree change
+Two of the four are semantic. OM-018 holds that any semantic or current-tree change
 invalidates gate evidence. **The evidence at S therefore does not carry to this commit, and
 this certification does not claim that it does.** A terminal run at the commit this record
 creates is required before Review Run 2 is submitted, and until that run is green this

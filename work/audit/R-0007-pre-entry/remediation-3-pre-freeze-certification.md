@@ -2,15 +2,24 @@
 id: remediation-3-pre-freeze-certification
 title: Pre-freeze certification for the remediation campaign 3 complete-class repair
 type: audit-record
-status: active
+status: superseded
 date: 2026-08-02
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: om-018-readiness-certification
 provenance: [OM-017, DII-252, work/audit/R-0007-pre-entry/remediation-3-review-run-1.json]
 ---
 
 # Pre-freeze certification — remediation campaign 3
+
+> **Superseded by `om-018-readiness-certification` on 2026-08-03.**
+> This record certified the candidate fit to freeze at `60ea6ab`. That certification was
+> wrong on the merits, not merely stale. It rested on a closure-matrix clause permitting
+> `GREEN_PROVED` while part of a population remained unbound — a clause authored inside this
+> campaign at `9038a7d` and since removed — and it did not detect R7-F012, a
+> production-reachable predecessor-authentication gap that contradicted OM-017. The body
+> below is retained unaltered as the historical record of what was claimed. None of its
+> conclusions are current.
 
 ## Candidate
 
