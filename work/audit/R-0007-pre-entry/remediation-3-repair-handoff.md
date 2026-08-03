@@ -2,15 +2,23 @@
 id: remediation-3-repair-handoff
 title: Continuity record for the remediation campaign 3 complete-class repair
 type: audit-record
-status: active
+status: superseded
 date: 2026-07-30
 authority: Auditor
 supersedes: null
-superseded_by: null
+superseded_by: om-018-readiness-certification
 provenance: [OM-017, DII-252, work/audit/R-0007-pre-entry/remediation-3-review-run-1.json]
 ---
 
 # Continuity record — remediation campaign 3 complete-class repair
+
+> **Superseded by `om-018-readiness-certification` on 2026-08-03.**
+> This handoff recorded the campaign-3 repair narrative and directed readers to
+> `remediation-3-pre-freeze-certification` wherever the two disagreed. That certification is
+> itself superseded, so the direction now points at a withdrawn record. Its claim that all 43
+> classes were `GREEN_PROVED` is withdrawn: the matrix is re-derived under OM-018 as 37
+> pre-entry green and 8 deferred, and `full_round_closure` remains BLOCKED. The body below is
+> retained unaltered as the historical record of the repair.
 
 This record exists so the repair can resume from committed state rather than from reconstructed intent. It is reissued at each session boundary. It records what is proved, what is explicitly not proved, and what must not be repeated. It is **not** the causal red-evidence record; that is `remediation-4-red-evidence.json` at `beb37bb`, partially superseded at `fff4e8c`.
 
