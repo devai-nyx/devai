@@ -41,14 +41,10 @@
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
       "closure_state": "RED_REQUIRED",
-      "unbound_population_boundaries": [
-        "PREFLIGHT_GREEN->CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "CANDIDATE_FROZEN->CYCLE_1_ACTIVE carries no persisted predecessor state artifact",
-        "PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE carries no persisted predecessor state artifact",
-        "no edge is driven through production persistence; the harness writes the state artifact directly"
-      ],
-      "verdict_scope": "pre-entry"
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-018 defers this population into R-0007 as governed batch work. Its members concern the review transport and state machine, freshness optimization, affected-test selection, or the closure matrix as an admission gate, none of which is a pre-entry obligation. Deferred by mandate, not proved."
+      ]
     },
     {
       "finding_id": "R7-F002",
@@ -95,14 +91,10 @@
       "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
       "closure_state": "RED_REQUIRED",
-      "unbound_population_boundaries": [
-        "PREFLIGHT_GREEN->CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "CANDIDATE_FROZEN->CYCLE_1_ACTIVE carries no persisted predecessor state artifact",
-        "PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE carries no persisted predecessor state artifact",
-        "no edge is driven through production persistence; the harness writes the state artifact directly"
-      ],
-      "verdict_scope": "pre-entry"
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-018 defers this population into R-0007 as governed batch work. Its members concern the review transport and state machine, freshness optimization, affected-test selection, or the closure matrix as an admission gate, none of which is a pre-entry obligation. Deferred by mandate, not proved."
+      ]
     },
     {
       "finding_id": "R7-F003",
@@ -147,7 +139,8 @@
       "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R7-F004",
@@ -187,7 +180,8 @@
         "work/rounds/R-0007/affected-test-graph.json"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R7-F005",
@@ -241,7 +235,8 @@
         ".devai/config/round-close-controls.json"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R7-F006",
@@ -273,7 +268,8 @@
       "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R7-F007",
@@ -297,7 +293,8 @@
       "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R7-F008",
@@ -329,7 +326,8 @@
       "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": ["law/policy/governed-sequencing.json"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R7-F009",
@@ -367,7 +365,8 @@
         "law/policy/round-close-controls.json"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R7-F010",
@@ -396,7 +395,8 @@
         "law/schemas/remediation-closure-matrix.schema.json"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "F001",
@@ -419,7 +419,8 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "F002",
@@ -441,7 +442,8 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "F003",
@@ -476,14 +478,10 @@
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
       "closure_state": "RED_REQUIRED",
-      "unbound_population_boundaries": [
-        "PREFLIGHT_GREEN->CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "CANDIDATE_FROZEN->CYCLE_1_ACTIVE carries no persisted predecessor state artifact",
-        "PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE carries no persisted predecessor state artifact",
-        "no edge is driven through production persistence; the harness writes the state artifact directly"
-      ],
-      "verdict_scope": "pre-entry"
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-018 defers this population into R-0007 as governed batch work. Its members concern the review transport and state machine, freshness optimization, affected-test selection, or the closure matrix as an admission gate, none of which is a pre-entry obligation. Deferred by mandate, not proved."
+      ]
     },
     {
       "finding_id": "F004",
@@ -504,7 +502,8 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "F005",
@@ -539,7 +538,8 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "F006",
@@ -566,7 +566,8 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "F007",
@@ -594,14 +595,10 @@
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
       "closure_state": "RED_REQUIRED",
-      "unbound_population_boundaries": [
-        "PREFLIGHT_GREEN->CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "CANDIDATE_FROZEN->CYCLE_1_ACTIVE carries no persisted predecessor state artifact",
-        "PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE carries no persisted predecessor state artifact",
-        "no edge is driven through production persistence; the harness writes the state artifact directly"
-      ],
-      "verdict_scope": "pre-entry"
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-018 defers this population into R-0007 as governed batch work. Its members concern the review transport and state machine, freshness optimization, affected-test selection, or the closure matrix as an admission gate, none of which is a pre-entry obligation. Deferred by mandate, not proved."
+      ]
     },
     {
       "finding_id": "F008",
@@ -620,7 +617,8 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "C2-F001",
@@ -647,7 +645,8 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "C2-F005",
@@ -674,7 +673,8 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "C2-F006",
@@ -703,7 +703,8 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "C2-F007",
@@ -737,14 +738,10 @@
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
       "closure_state": "RED_REQUIRED",
-      "unbound_population_boundaries": [
-        "PREFLIGHT_GREEN->CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "CANDIDATE_FROZEN->CYCLE_1_ACTIVE carries no persisted predecessor state artifact",
-        "PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE carries no persisted predecessor state artifact",
-        "no edge is driven through production persistence; the harness writes the state artifact directly"
-      ],
-      "verdict_scope": "pre-entry"
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-018 defers this population into R-0007 as governed batch work. Its members concern the review transport and state machine, freshness optimization, affected-test selection, or the closure matrix as an admission gate, none of which is a pre-entry obligation. Deferred by mandate, not proved."
+      ]
     },
     {
       "finding_id": "C2-F008",
@@ -771,7 +768,8 @@
         "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R1-F001",
@@ -832,7 +830,8 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R1-F002",
@@ -865,7 +864,8 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R1-F003",
@@ -900,7 +900,8 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R1-F004",
@@ -933,7 +934,8 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R1-F005",
@@ -972,14 +974,10 @@
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
       "closure_state": "RED_REQUIRED",
-      "unbound_population_boundaries": [
-        "PREFLIGHT_GREEN->CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "CANDIDATE_FROZEN->CYCLE_1_ACTIVE carries no persisted predecessor state artifact",
-        "PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE carries no persisted predecessor state artifact",
-        "no edge is driven through production persistence; the harness writes the state artifact directly"
-      ],
-      "verdict_scope": "pre-entry"
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-018 defers this population into R-0007 as governed batch work. Its members concern the review transport and state machine, freshness optimization, affected-test selection, or the closure matrix as an admission gate, none of which is a pre-entry obligation. Deferred by mandate, not proved."
+      ]
     },
     {
       "finding_id": "R1-F006",
@@ -1018,7 +1016,8 @@
         "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R2-F001",
@@ -1080,7 +1079,8 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R2-F002",
@@ -1144,7 +1144,8 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R2-F003",
@@ -1200,7 +1201,8 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R2-F004",
@@ -1256,7 +1258,8 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R2-F005",
@@ -1320,14 +1323,10 @@
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
       "closure_state": "RED_REQUIRED",
-      "unbound_population_boundaries": [
-        "PREFLIGHT_GREEN->CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "CANDIDATE_FROZEN->CYCLE_1_ACTIVE carries no persisted predecessor state artifact",
-        "PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE carries no persisted predecessor state artifact",
-        "no edge is driven through production persistence; the harness writes the state artifact directly"
-      ],
-      "verdict_scope": "pre-entry"
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-018 defers this population into R-0007 as governed batch work. Its members concern the review transport and state machine, freshness optimization, affected-test selection, or the closure matrix as an admission gate, none of which is a pre-entry obligation. Deferred by mandate, not proved."
+      ]
     },
     {
       "finding_id": "R2-F006",
@@ -1389,7 +1388,8 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R2-F007",
@@ -1435,7 +1435,8 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R2-F008",
@@ -1493,7 +1494,8 @@
         "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-certification.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R3-F001",
@@ -1553,7 +1555,8 @@
         "product/owner-mandates/OM-017.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R3-F002",
@@ -1608,7 +1611,8 @@
         "product/owner-mandates/OM-017.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R3-F003",
@@ -1658,7 +1662,8 @@
         "product/owner-mandates/OM-017.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R3-F004",
@@ -1718,14 +1723,10 @@
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
       "closure_state": "RED_REQUIRED",
-      "unbound_population_boundaries": [
-        "PREFLIGHT_GREEN->CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "CANDIDATE_FROZEN->CYCLE_1_ACTIVE carries no persisted predecessor state artifact",
-        "PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE carries no persisted predecessor state artifact",
-        "no edge is driven through production persistence; the harness writes the state artifact directly"
-      ],
-      "verdict_scope": "pre-entry"
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-018 defers this population into R-0007 as governed batch work. Its members concern the review transport and state machine, freshness optimization, affected-test selection, or the closure matrix as an admission gate, none of which is a pre-entry obligation. Deferred by mandate, not proved."
+      ]
     },
     {
       "finding_id": "R3-F005",
@@ -1777,7 +1778,8 @@
         "product/owner-mandates/OM-017.md",
         "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"
       ],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R7-F011",
@@ -1800,7 +1802,8 @@
       "test_paths": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
       "implementation_surfaces": ["scripts/run-round-close-controls.mjs"],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-repair-handoff.md"],
-      "closure_state": "GREEN_PROVED"
+      "closure_state": "GREEN_PROVED",
+      "verdict_scope": "pre-entry"
     },
     {
       "finding_id": "R7-F012",
@@ -1843,14 +1846,7 @@
         "tests/contract/helpers/r0007-review-harness.ts"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-4-readiness-pre-check.md"],
-      "closure_state": "RED_REQUIRED",
-      "unbound_population_boundaries": [
-        "PREFLIGHT_GREEN->CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "CANDIDATE_FROZEN->CYCLE_1_ACTIVE carries no persisted predecessor state artifact",
-        "PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN carries no persisted predecessor state artifact",
-        "NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE carries no persisted predecessor state artifact",
-        "no edge is driven through production persistence; the harness writes the state artifact directly"
-      ],
+      "closure_state": "GREEN_PROVED",
       "verdict_scope": "pre-entry"
     },
     {
@@ -1883,62 +1879,52 @@
       "evidence_refs": [
         "work/audit/R-0007-pre-entry/remediation-5-manifest-gate-red-evidence.json"
       ],
-      "closure_state": "RED_REQUIRED",
+      "closure_state": "GREEN_PROVED",
       "verdict_scope": "pre-entry"
     }
   ],
   "declared_limitations": [
-    "R7-004-CLOSURE-FIXPOINT asserts the controller candidate-derived closure rather than the Architect-owned graph declaration. The graph rebind itself is covered by policy-check reporting no GATE_COMMAND_CLOSURE_DERIVATION_INVALID on the exact candidate.",
-    "One implementation surface, root vitest.config.ts, shipped without prospective red evidence naming it. It is recorded as an exact-commit historical exception for bef98f9 in law/policy/governed-sequencing.json. No forward repair removes it, because the sequencing check keys exceptions on exact commits present in history and history is not rewritten.",
-    "The hermetic-install contract depends on a pnpm store path outside the repository. The contract is correct to refuse rather than fall back silently, but the dependency is fragile."
+    "R7-004-CLOSURE-FIXPOINT asserts the controller candidate-derived closure rather than the Architect-owned graph declaration. The graph rebind is covered by policy-check reporting no GATE_COMMAND_CLOSURE_DERIVATION_INVALID on the exact candidate.",
+    "Two implementation commits carry disclosed exact-commit historical exceptions: bef98f9 shipped root vitest.config.ts and 775f47d touched packages/schemas/src/roster.ts, neither named by its bound prospective red. Neither is repairable forward without rewriting history. The implementation-path manifest gate now prevents recurrence.",
+    "The admission gate depends on a pnpm store path outside the repository. The contract is correct to refuse rather than fall back silently, but the dependency is fragile.",
+    "Coverage branches stands at 60.78 percent against a floor of 60. The margin is 0.78 points."
   ],
   "verified_by": {
-    "battery": "pnpm run devai:prepare && pnpm vitest run && git diff --check",
-    "test_files_passed": 166,
-    "test_files_total": 166,
-    "tests_passed": 1777,
-    "tests_skipped": 8,
-    "tests_total": 1785,
-    "single_run": true
+    "run": "OM-018 admission gate",
+    "semantic_candidate": "0cdc2967fffa63398b0655fafbe4ae6b6324f0f3",
+    "evidence": "work/audit/R-0007-pre-entry/om-018-admission-gate-evidence.json",
+    "rows_exit_zero": 16
   },
   "pre_entry_ready": {
-    "verdict": "BLOCKED",
-    "authority": "OM-017 with Owner decisions of 2026-08-02 confirming the pre-B0 scope reading and selecting redesign over a mandate rider",
+    "verdict": "READY",
+    "authority": "OM-018, admission gate green at 0cdc2967fffa63398b0655fafbe4ae6b6324f0f3 recorded in work/audit/R-0007-pre-entry/om-018-admission-gate-evidence.json",
     "member_classes": [
       "C2-F001",
       "C2-F005",
       "C2-F006",
-      "C2-F007",
       "C2-F008",
       "F001",
       "F002",
-      "F003",
       "F004",
       "F005",
       "F006",
-      "F007",
       "F008",
       "R1-F001",
       "R1-F002",
       "R1-F003",
       "R1-F004",
-      "R1-F005",
       "R1-F006",
       "R2-F001",
       "R2-F002",
       "R2-F003",
       "R2-F004",
-      "R2-F005",
       "R2-F006",
       "R2-F007",
       "R2-F008",
       "R3-F001",
       "R3-F002",
       "R3-F003",
-      "R3-F004",
       "R3-F005",
-      "R7-F001",
-      "R7-F002",
       "R7-F003",
       "R7-F004",
       "R7-F005",
@@ -1962,10 +1948,8 @@
       "R2-F005",
       "R3-F004",
       "R7-F001",
-      "R7-F002",
-      "R7-F012",
-      "R7-F013"
+      "R7-F002"
     ],
-    "blocked_reason": "R7-F012 is open: the controller selected state-machine control behaviour from its own literals and exempted four declared edges from predecessor-artifact corroboration, contrary to OM-017 and to the existing declaration canonical_history.first_predecessor null-only-for-DRAFT-origin. Separately, the convergence obligations of the freeze checklist require a bound B0 declaration and are not adjudicable in this pre-entry campaign."
+    "blocked_reason": "OM-018 defers these populations into R-0007 as governed batch work. They are not proved and are not represented as proved; full round closure remains blocked until R-0007 discharges them."
   }
 }

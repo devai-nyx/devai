@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "om-018-deferrals",
+  "round": "R-0007",
+  "authority": "OM-018",
+  "date": "2026-08-03",
+  "note": "Governed deferral records. OM-018 requires deferred scope to be recorded, never left as an informal later list.",
+  "deferred_classes": [
+    "C2-F007",
+    "F003",
+    "F007",
+    "R1-F005",
+    "R2-F005",
+    "R3-F004",
+    "R7-F001",
+    "R7-F002"
+  ],
+  "deferred_machinery": [
+    {
+      "item": "authenticated freshness optimization and affected-test selection",
+      "destination": "R-0007 batch work",
+      "reason": "Not a pre-entry obligation. Where selection is uncertain it is turned off and the full population executes."
+    },
+    {
+      "item": "review transport and review state machine, including its twelve declared edges, retry budgets and terminal states",
+      "destination": "R-0007 B8/B9",
+      "reason": "No row of the sixteen-command admission gate executes review-scope or review-check, so the state machine is not exercised by entry."
+    },
+    {
+      "item": "the remediation closure matrix as an admission gate",
+      "destination": "retained as a disclosure and backlog register only",
+      "reason": "The controller reads neither closure_state nor GREEN_PROVED; matrix closure was procedural, never mechanical."
+    },
+    {
+      "item": "the prior-finding topic census as a precondition for starting B0",
+      "destination": "R-0007",
+      "reason": "Registry preserved; a historical topic replay is not the price of starting B0."
+    },
+    {
+      "item": "two-pass smart convergence before B0",
+      "destination": "B8, after the round has done its work",
+      "reason": "One cold pre-entry execution suffices for admission."
+    },
+    {
+      "item": "decomposition of scripts/run-round-close-controls.mjs",
+      "destination": "R-0007",
+      "reason": "Refactoring now would maximize the Review Run 2 diff."
+    }
+  ],
+  "control_surface_freeze": "No new generic control machinery lands before R-0007 entry. A defect found in proof machinery is resolved by deleting or deferring that machinery, not by wrapping it in a further schema, matrix, census or gate."
+}
