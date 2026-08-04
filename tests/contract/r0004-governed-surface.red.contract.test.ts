@@ -24,7 +24,6 @@ const DRIVER = join(ROOT, 'packages/cli/tests/fixtures/authorized-cli-test-drive
 const CONDITIONAL_SKIP_SOURCE_ALLOWLIST = [
   'packages/cli/tests/contract/action-coverage.contract.test.ts',
   'packages/cli/tests/contract/successor-operational-law.contract.test.ts',
-  'tests/contract/pre-r0007-remediation-4.red.contract.test.ts',
   'tests/e2e/bare-domain-help.e2e.test.ts',
   'tests/e2e/cli-help.smoke.test.ts',
   'tests/e2e/post-merge-auditor.e2e.test.ts',
