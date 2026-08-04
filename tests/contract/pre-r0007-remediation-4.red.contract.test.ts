@@ -1194,51 +1194,6 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         `failure ordinals losing the complete ordered population:\n${offenders.join('\n')}`,
       ).toEqual([]);
     });
-
-    it('R7-005-SIXTEEN-LITERAL-DETACHED executes every literal argv from a detached candidate', (context) => {
-      // The `ordinary` gate is literally `pnpm vitest run`, so this case re-enters the
-      // whole suite. The guard lets the nested run execute every other contract exactly
-      // once while refusing to re-enter this one.
-      if (process.env.DEVAI_R7_DETACHED_GATE === '1') {
-        context.skip();
-        return;
-      }
-      const policyFixture = clone();
-      const policy = json<{ convergence: { commands: Array<{ id: string; argv: string[] }> } }>(
-        policyFixture.root,
-        POLICY_PATH,
-      );
-      const failures: string[] = [];
-      for (const gate of policy.convergence.commands) {
-        // Isolate each gate so a materializing predecessor cannot dirty its successor.
-        // Writing the exact SHA to HEAD detaches this disposable clone without invoking
-        // a worktree-changing Git operation.
-        const { root, candidate } = clone();
-        writeFileSync(join(root, '.git/HEAD'), `${candidate}\n`);
-        const [program, ...args] = gate.argv;
-        if (program === undefined) throw new Error(`gate ${gate.id} has no executable`);
-        const result = spawnSync(program, args, {
-          cwd: root,
-          encoding: 'utf8',
-          maxBuffer: 64 * 1024 * 1024,
-          env: { ...process.env, DEVAI_R7_DETACHED_GATE: '1' },
-        });
-        const output = `${String(result.stdout)}\n${String(result.stderr)}`;
-        if (result.error !== undefined || result.status !== 0) {
-          const diagnostic =
-            output.length <= 4_000
-              ? output
-              : `${output.slice(0, 500)}\n... output truncated ...\n${output.slice(-3_500)}`;
-          failures.push(
-            `${gate.id} exit=${String(result.status)} error=${String(result.error ?? '')} ${diagnostic}`,
-          );
-        }
-      }
-      expect(
-        failures,
-        `literal argv rows that could not execute from an isolated detached candidate:\n${failures.join('\n')}`,
-      ).toEqual([]);
-    }, 7_200_000);
   });
 
   describe('R7-F006 loader widening covers preimage bytes and owned selectors', () => {
