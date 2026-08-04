@@ -296,7 +296,7 @@
     },
     {
       "path": "work/rounds/R-0007/plan.md",
-      "source_digest_sha256": "7489fe0f77716f9c57e3073ea27d344a2c405cce12dcb25e517a770b7c9d64d3",
+      "source_digest_sha256": "8027c05fe0d0c794619154da3aee0ecf38ecd8e6c00f16dd73082aa0f3928bf7",
       "obligation_ids": [
         "R7-P0-DEPLOY-REFUSAL",
         "R7-P0-HISTORY-INTEGRITY",
@@ -306,7 +306,7 @@
     },
     {
       "path": "work/rounds/R-0007/prompts/00-orchestrator.md",
-      "source_digest_sha256": "58e6b9e82c698fee1450de80d4c5d979606df3775e7107f059c667d1e2ec54bb",
+      "source_digest_sha256": "3a1f9c50c95938c091fbfe898cb3acc5dd53f5436e38a9bb9b2132d7f6bb3557",
       "obligation_ids": ["R7-P0-AUTHORITY", "R7-P0-DEPLOY-REFUSAL", "R7-P0-CANDIDATE-IDENTITY"]
     }
   ]
