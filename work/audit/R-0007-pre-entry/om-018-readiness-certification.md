@@ -22,9 +22,12 @@ provenance:
 
 Two earlier certifications in this campaign named the commit that introduced them as "the
 actual head", which is impossible: an audit record cannot verify the commit that creates it.
-This record therefore binds an exact prior commit, states its own delta, and defers the
-terminal claim to a run performed **after** this record exists, whose result is retained
-outside the repository.
+This record therefore binds **no SHA and no delta** for its terminal claim. The observations
+below name the historical commit at which they were made, as observations must; the admission
+identity itself lives only in the external attestation of a run performed **after** the final
+record exists. An earlier draft of this paragraph promised a stated delta and contradicted the
+construction that replaced it; the contradiction was found by an independent pre-check, not by
+the author.
 
 ## What was observed, and where
 
@@ -78,24 +81,35 @@ sixteen rows is genuinely one execution of each.
 - Role purity and governed sequencing across 242 commits.
 - The implementation-path manifest gate, which prevents recurrence of the ordering class that
   produced both historical exceptions.
-- 37 of 45 closure classes pre-entry and green, verified inside the gate's `ordinary` row.
+- The pre-entry green set of the closure matrix, verified inside the gate's `ordinary` row.
+  This record states no count: prose counts in this campaign have gone stale twice within the
+  batch that wrote them. `work/rounds/R-0007/current-closure-matrix.json` governs
+  (`pre_entry_ready.member_classes`), and any disagreement between that file and a number
+  written here is a defect in this record.
 
 ## What is not proved, and is not represented as proved
 
 - The machinery OM-018 defers: freshness optimization, affected-test selection, the review
   transport and state machine, the closure matrix as an admission gate, the prior-finding
-  topic census, and two-pass smart convergence. Eight classes are deferred as governed records
-  in `work/rounds/R-0007/om-018-deferrals.json`. `full_round_closure` remains **BLOCKED** and
+  topic census, and two-pass smart convergence. The deferred classes are governed records
+  enumerated in `work/rounds/R-0007/om-018-deferrals.json` (`deferred_classes`), including
+  R7-F005's loss of independent per-command cold executability, which that file names
+  verbatim. `full_round_closure` remains **BLOCKED** and
   enumerates every deferred id, so a pre-entry pass cannot be read as round closure.
 - Any commit other than S, pending the terminal run described above.
 
 ## Declared limitations a reviewer may challenge
 
-1. **Two disclosed ordering exceptions.** `bef98f9` shipped root `vitest.config.ts` and
-   `775f47d` touched `packages/schemas/src/roster.ts`; neither was named by its bound
-   prospective red. Neither is repairable forward without rewriting history. Two instances in
-   one campaign may fairly be read as a pattern rather than an accident. The manifest gate now
-   makes a third mechanically impossible on this branch.
+1. **Disclosed ordering exceptions.** `law/policy/governed-sequencing.json` carries three
+   exact-commit exceptions attributed to round R-0007: `2a6dc6b` (disclosed during remediation
+   campaign 2) and `bef98f9` and `775f47d` (both arising in this campaign — root
+   `vitest.config.ts` and `packages/schemas/src/roster.ts`, neither named by its bound
+   prospective red). None is repairable forward without rewriting history. Recording `775f47d`
+   grew the exception list from twelve entries to thirteen; that is a disclosed, exact-commit,
+   non-prospective widening, so a bare claim that no allowlist widened would be false and is
+   not made. Two instances in one campaign may fairly be read as a pattern rather than an
+   accident. The manifest gate now makes a further instance mechanically impossible on this
+   branch.
 2. **Branch coverage has 0.78 points of margin** above its floor, at 60.78 percent.
 3. **The gate depends on a pnpm store path outside the repository.** Correct to refuse rather
    than fall back silently, but fragile.
