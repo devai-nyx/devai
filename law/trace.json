@@ -3372,7 +3372,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 103,
-      "assertion_digest_sha256": "30ae229f872d26bc7883bfb522eb9d8c1d3ac006a61ce7e340b0b800868da8cc"
+      "assertion_digest_sha256": "d9bea81dd8927d11a0c5733c21452a1aa6197b6b5fdd8061250364f3d2e349fa"
     },
     {
       "path": "tests/contract/r0005-evidence-lifecycle.red.contract.test.ts",
