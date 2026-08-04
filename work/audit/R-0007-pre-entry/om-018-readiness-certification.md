@@ -41,30 +41,36 @@ every one exiting zero. `ordinary` 168 files / 1787 passed / 8 skipped / 0 faile
 72.46 / 60.78 / 81.14 / 73.9 against floors 70 / 60 / 70 / 70. Working tree clean before and
 after; HEAD and tree identical across the run.
 
-## The delta after S, stated as an invariant
+## Where the terminal claim lives, third construction
 
-An earlier draft of this section stated a file count. That was wrong twice over: the count
-changed each time the section was corrected, because the correcting commit joins the delta it
-describes. A self-referencing count cannot be made true by revising it. The claim is therefore
-stated as a property that stays true as audit records accumulate.
+Two earlier constructions of this section failed. A file count changed each time it was
+corrected, because the correcting commit joined the delta it counted. The invariant that
+replaced it — every delta path under `work/audit/` or `work/rounds/R-0007/` — was then broken
+by legitimate Inspector repairs to expiring test fixtures, and the breakage went unnoticed:
+an in-repo record that names a baseline ages exactly like the fixtures it was correcting for.
 
-**Invariant.** Every path in the delta from S is under `work/audit/` or
-`work/rounds/R-0007/`. No path under `law/`, `product/`, `scripts/`, `packages/`, `tests/`,
-`.devai/`, or the repository root appears. Exactly two of the delta paths are semantic —
-`work/rounds/R-0007/current-closure-matrix.json` and
-`work/rounds/R-0007/om-018-deferrals.json`. Every other path is an audit record.
+This record therefore binds **no SHA and no delta**. It states the procedure, and the exact
+identity lives in the terminal attestation, which is retained outside the repository so that
+recording it cannot invalidate it:
 
-A reviewer checks it directly, and the command returns nothing if the invariant holds:
+1. All role commits for a candidate are batched; the tree goes clean.
+2. The sixteen-row gate runs once, cold, at that exact detached HEAD: non-shared clone,
+   frozen offline install, argv verbatim from policy, every exit retained, HEAD and tree
+   unchanged across the run.
+3. The external attestation names the SHA, the tree, the sixteen exits, and the figures.
+   A green attestation at a SHA is the admission evidence for that SHA and no other.
 
-```
-git diff --name-only 0cdc2967fffa63398b0655fafbe4ae6b6324f0f3..HEAD \
-  -- . ':(exclude)work/audit/**' ':(exclude)work/rounds/R-0007/**'
-```
+## Corrections to the superseded evidence record
 
-Because two of the delta paths are semantic, OM-018's rule applies: gate evidence observed at
-S does **not** carry to any later commit. This certification does not claim that it does. A
-terminal run at the exact final commit is required before Review Run 2 is submitted, and its
-result is retained outside the repository so that recording it cannot invalidate it.
+`om-018-admission-gate-evidence.json` (candidate `0cdc296`) claimed
+`each_row_executed_once: true`. Transitively that was false. Three roster rows execute the
+test suite, which then contained `R7-005-SIXTEEN-LITERAL-DETACHED`, which spawned all sixteen
+rows again: one nominal run performed four roster traversals — 64 row invocations, of which
+48 were unrecorded, ran under `DEVAI_R7_DETACHED_GATE=1`, and used `--shared` clones — a
+different isolation model than the record describes. The claim was true only of the runner's
+immediate children. That contract is now deleted and its property deferred with the loss
+named in `work/rounds/R-0007/om-018-deferrals.json`; after the deletion, one run of the
+sixteen rows is genuinely one execution of each.
 
 ## What is proved
 
