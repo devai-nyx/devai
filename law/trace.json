@@ -2450,7 +2450,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 48,
-      "assertion_digest_sha256": "13602202e1d4c48bd11281e4523fc163d84dc31f474a922763ea04a6c42f3743"
+      "assertion_digest_sha256": "211f7a0f3528a16f0edd27aac535eea78108bbc7b902dac1621cca88c77d012a"
     },
     {
       "path": "packages/schemas/tests/contract/constitution.contract.test.ts",
@@ -3309,7 +3309,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 75,
-      "assertion_digest_sha256": "dd99007869ef5f3a8753b8a64807386c5ecf784c28bbc1aa18d7b5ff6ffcc89c"
+      "assertion_digest_sha256": "41c3231e9f31fb89f46f965614b8df8b48a66637da3ce7bc019a5c537b380eb7"
     },
     {
       "path": "tests/contract/pre-r0007-remediation-3.red.contract.test.ts",

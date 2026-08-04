@@ -11,10 +11,11 @@ validation, prove graph and obligation population completeness, and confirm the 
 admission gate PASS and Review Run 2 PASS. Per OM-018 the pre-B0 handoff is
 declaration-tolerant: do **not** run `round-close:entry-check` before B0 — it is
 declaration-bearing and correctly blocks on the unbound declaration. Run it after B0
-and before B1. The reviewer is already bound by Owner mandate: OM-017 binds the literal
-`claude-opus-5` selector with no fallback, retained by OM-018. Do not select, infer, or
-substitute a model; an inactive, ambiguous, conflicting, or unavailable binding stops
-the round. Silent fallback is forbidden.
+and before B1. The reviewer is already bound by Owner mandate: OM-017 binds one literal
+independent read-only model selector with no fallback, retained by OM-018; the exact
+selector lives in the mandate and profile, never in this prompt.
+Do not select, infer, or substitute a model; an inactive, ambiguous, conflicting, or
+unavailable binding stops the round. Silent fallback is forbidden.
 
 At B0, record a schema-valid structured round-declaration marker in the Architect
 decision and update the profile declaration slot with that decision ID and the exact
