@@ -7,12 +7,14 @@ closure, combined audit, docs migration manifest, product contracts, action regi
 docs generators, History, Docusaurus configuration, and deploy workflow.
 
 Before B0, fetch and prove clean `main == origin/main`, run preparation policy
-validation, prove graph and obligation population completeness, and run
-`round-close:entry-check -- --round R-0007`. The profile intentionally begins with an
-unbound reviewer. Do not select, infer, or substitute a model: entry requires exactly
-one later active Owner mandate binding one literal independent read-only model. Any
-missing, inactive, ambiguous, conflicting, or unavailable binding stops the round.
-Silent fallback is forbidden.
+validation, prove graph and obligation population completeness, and confirm the OM-018
+admission gate PASS and Review Run 2 PASS. Per OM-018 the pre-B0 handoff is
+declaration-tolerant: do **not** run `round-close:entry-check` before B0 — it is
+declaration-bearing and correctly blocks on the unbound declaration. Run it after B0
+and before B1. The reviewer is already bound by Owner mandate: OM-017 binds the literal
+`claude-opus-5` selector with no fallback, retained by OM-018. Do not select, infer, or
+substitute a model; an inactive, ambiguous, conflicting, or unavailable binding stops
+the round. Silent fallback is forbidden.
 
 At B0, record a schema-valid structured round-declaration marker in the Architect
 decision and update the profile declaration slot with that decision ID and the exact

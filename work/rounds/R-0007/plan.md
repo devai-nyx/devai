@@ -21,10 +21,14 @@ produce an exact deployable successor site artifact without deploying it.
 ## Entry gates
 
 R-0006 is merged and closed; 70/60/70/70 and all production gates are green; action and
-schema populations are stable; the pre-R-0007 close-control machinery is merged with
-green exact-main CI; `round-close:entry-check -- --round R-0007` resolves exactly one
-active Owner reviewer binding; the external Pages gate remains ungranted. An unbound,
-inactive, ambiguous, or conflicting reviewer binding means R-0007 remains dormant.
+schema populations are stable; the OM-018 admission gate has passed — one cold
+uninterrupted sixteen-command run from a clean detached frozen candidate, attested
+externally — and Review Run 2 has passed against it. Per OM-018, readiness is separated
+from entry: the pre-B0 handoff is declaration-tolerant, B0 binds the declaration, and
+the declaration-bearing `round-close:entry-check -- --round R-0007` runs **after** B0
+and before B1. The reviewer binding is `claude-opus-5` under OM-017 as retained by
+OM-018; an inactive, ambiguous, or conflicting binding means R-0007 remains dormant.
+The external Pages gate remains ungranted.
 
 ## Risk slices
 
