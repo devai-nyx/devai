@@ -3334,8 +3334,8 @@
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported",
-      "assertion_count": 153,
-      "assertion_digest_sha256": "1b0dd3e5af23ee085127b3deb2a7615ca4c1a72c89bf3fcc5570413eb15356b1"
+      "assertion_count": 152,
+      "assertion_digest_sha256": "591a746e2b0232860294944c22fe8c791620b31fdd3ba4ace926afd40dfab421"
     },
     {
       "path": "tests/contract/pre-r0007-remediation-5.red.contract.test.ts",

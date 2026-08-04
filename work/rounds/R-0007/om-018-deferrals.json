@@ -13,7 +13,8 @@
     "R2-F005",
     "R3-F004",
     "R7-F001",
-    "R7-F002"
+    "R7-F002",
+    "R7-F005"
   ],
   "deferred_machinery": [
     {
@@ -45,6 +46,11 @@
       "item": "decomposition of scripts/run-round-close-controls.mjs",
       "destination": "R-0007",
       "reason": "Refactoring now would maximize the Review Run 2 diff."
+    },
+    {
+      "item": "the self-reentrant detached-literal roster contract (R7-005-SIXTEEN-LITERAL-DETACHED)",
+      "destination": "R-0007, as a non-reentrant per-command proof that does not live inside a suite the roster executes",
+      "reason": "Independent per-command cold executability: every authoritative command exits zero when started independently in its own freshly installed detached clone, without relying on artifacts produced by earlier roster rows. This was OM-017 language, was proved only by the deleted R7-005-SIXTEEN-LITERAL-DETACHED contract, and is NOT proved elsewhere. The OM-018 admission run proves a weaker property: all sixteen pass sequentially in one clean detached clone, so an order dependency between rows would not be detected pre-entry. Deferred with that loss stated, not hidden."
     }
   ],
   "control_surface_freeze": "No new generic control machinery lands before R-0007 entry. A defect found in proof machinery is resolved by deleting or deferring that machinery, not by wrapping it in a further schema, matrix, census or gate."

@@ -223,7 +223,6 @@
         "An executable contract must spawn all sixteen literal argv arrays from a clean detached candidate checkout and assert exit 0 for each without controller argument injection; smart-converge must emit exactly sixteen ordered records containing gate_id and exit_code for every one of the sixteen injected failure ordinals and when impact planning is blocking; no gate may be skipped without a blocking finding naming it; and the roster must retain a gate that executes the reviewer-binding, normative-source-coverage and control-provenance checks."
       ],
       "test_ids": [
-        "R7-005-SIXTEEN-LITERAL-DETACHED",
         "R7-005-SIXTEEN-RECORDS-EVERY-ORDINAL",
         "R7-005-GATE-ID-AND-EXIT-CODE",
         "R7-005-NO-SILENT-PROFILE-SKIP"
@@ -235,8 +234,11 @@
         ".devai/config/round-close-controls.json"
       ],
       "evidence_refs": ["work/audit/R-0007-pre-entry/remediation-3-review-run-1.json"],
-      "closure_state": "GREEN_PROVED",
-      "verdict_scope": "pre-entry"
+      "closure_state": "RED_REQUIRED",
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "Independent per-command cold executability: every authoritative command exits zero when started independently in its own freshly installed detached clone, without relying on artifacts produced by earlier roster rows. This was OM-017 language, was proved only by the deleted R7-005-SIXTEEN-LITERAL-DETACHED contract, and is NOT proved elsewhere. The OM-018 admission run proves a weaker property: all sixteen pass sequentially in one clean detached clone, so an order dependency between rows would not be detected pre-entry. Deferred with that loss stated, not hidden."
+      ]
     },
     {
       "finding_id": "R7-F006",
@@ -1927,7 +1929,6 @@
       "R3-F005",
       "R7-F003",
       "R7-F004",
-      "R7-F005",
       "R7-F006",
       "R7-F007",
       "R7-F008",
@@ -1948,7 +1949,8 @@
       "R2-F005",
       "R3-F004",
       "R7-F001",
-      "R7-F002"
+      "R7-F002",
+      "R7-F005"
     ],
     "blocked_reason": "OM-018 defers these populations into R-0007 as governed batch work. They are not proved and are not represented as proved; full round closure remains blocked until R-0007 discharges them."
   }
