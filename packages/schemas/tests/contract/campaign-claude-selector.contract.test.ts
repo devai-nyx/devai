@@ -128,7 +128,11 @@ describe('Owner-selected Claude review model', () => {
     };
 
     expect(mandate).toContain('Model-neutral reviewer binding');
-    expect(instruction).toContain('unbound reviewer');
+    // The prompt used to claim the profile begins with an unbound reviewer. That has been
+    // false since campaign 3 bound claude-opus-5 under OM-017, and an independent pre-check
+    // flagged the sentence; this contract had pinned the falsehood. The truthful invariants
+    // are that the binding comes from an Owner mandate and that no fallback exists.
+    expect(instruction).toContain('already bound by Owner mandate');
     expect(instruction).toContain('Do not select, infer, or substitute a model');
     expect(instruction).toMatch(/Silent fallback is forbidden/iu);
     expect(instruction).not.toMatch(/claude-opus-5|gpt-5\.6-sol/iu);
