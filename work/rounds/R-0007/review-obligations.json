@@ -280,6 +280,11 @@
       ]
     },
     {
+      "path": "product/owner-mandates/OM-018.md",
+      "source_digest_sha256": "796601caa98eaf1df2f0042b536dc4f845120c318dd5664772cc773a95212145",
+      "obligation_ids": ["R7-P0-REVIEWER-BINDING", "R7-P0-CANDIDATE-IDENTITY", "R7-P1-TWO-CYCLE"]
+    },
+    {
       "path": "work/rounds/EXECUTION-CONTRACT.md",
       "source_digest_sha256": "c4388f4e17ce8e5abf844697d30fbaadc2612261dd9ad41907f54ce6a0b44e89",
       "obligation_ids": [
