@@ -158,7 +158,14 @@ function run(
   const result = spawnSync(
     'node',
     [SCRIPT, command, '--repo-root', fixture.root, '--round', ROUND, ...args, '--json'],
-    { cwd: fixture.root, encoding: 'utf8', env: { ...process.env, ...env } },
+    {
+      cwd: fixture.root,
+      encoding: 'utf8',
+      // The planner treats CI/GITHUB_ACTIONS as remote-environment indicators and rightly
+      // refuses selective reuse under them. Fixture behaviour must be pinned, not inherited
+      // from whatever runner executes the suite; remote-mode contracts set their own value.
+      env: { ...process.env, CI: '', GITHUB_ACTIONS: '', ...env },
+    },
   );
   let value: Record<string, unknown> = {};
   try {

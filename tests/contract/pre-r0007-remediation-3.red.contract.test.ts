@@ -82,7 +82,12 @@ function run(root: string, command: string, args: readonly string[]): CommandRes
   const result = spawnSync(
     'node',
     [SCRIPT, command, '--repo-root', root, '--round', 'R-0007', ...args, '--json'],
-    { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 },
+    {
+      cwd: root,
+      encoding: 'utf8',
+      maxBuffer: 16 * 1024 * 1024,
+      env: { ...process.env, CI: '', GITHUB_ACTIONS: '' },
+    },
   );
   let value: Record<string, unknown> | null = null;
   try {

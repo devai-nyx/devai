@@ -150,6 +150,7 @@ function commitAll(root: string, message: string): string {
 function run(root: string, argv: readonly string[]): Outcome {
   const result = spawnSync('node', [SCRIPT, ...argv, '--repo-root', root, '--json'], {
     cwd: root,
+    env: { ...process.env, CI: '', GITHUB_ACTIONS: '' },
     encoding: 'utf8',
     maxBuffer: 32 * 1024 * 1024,
   });
