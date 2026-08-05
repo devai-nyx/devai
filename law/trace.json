@@ -3244,7 +3244,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 37,
-      "assertion_digest_sha256": "f65eaf2824068d0a26b1bda6c84e58ad92676b6b8d170f07bd1f08cb3d3ff52e"
+      "assertion_digest_sha256": "ca3ccac734e159ab67c7fc345c9bd910d2476690cc706355df34e526fd917a21"
     },
     {
       "path": "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
@@ -3257,7 +3257,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 45,
-      "assertion_digest_sha256": "69636670aa24c62bb773e24d417c3aba3b165a685f0c47c0311099e162d14882"
+      "assertion_digest_sha256": "b63b0b73ef39e97691d3cc7a4dd722c3e3ac30c704a3e7be3ab6ba641922e30c"
     },
     {
       "path": "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
@@ -3270,7 +3270,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 19,
-      "assertion_digest_sha256": "8c996b669b441dea0d1f2fa3a20b6cd46514c16121fda4f550888d42b9bf50b9"
+      "assertion_digest_sha256": "5cd7b249f54d6372cb8c842aaf05a6c74b7d3b7d0a545e34dd38c6ccf32cee97"
     },
     {
       "path": "tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
@@ -3296,7 +3296,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 107,
-      "assertion_digest_sha256": "610ea4179dfc7d5bdeb7146d0a08c3ecc839c78c552000be326e10980e64a543"
+      "assertion_digest_sha256": "ff21d0f1aa21f7fc7381eb2c7a2b274acf57fac4da0bde1a65bef517fea4e285"
     },
     {
       "path": "tests/contract/pre-r0007-remediation-2.red.contract.test.ts",
@@ -3322,7 +3322,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 30,
-      "assertion_digest_sha256": "36b78f80538ab11833a12b430387cae76c35ea43339b8747bdf3c80b198d9f72"
+      "assertion_digest_sha256": "035d57639596a4d37fe3edbf0c243a7744aa81343530eee5e7c7f5f50854f597"
     },
     {
       "path": "tests/contract/pre-r0007-remediation-4.red.contract.test.ts",
@@ -3335,7 +3335,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 152,
-      "assertion_digest_sha256": "591a746e2b0232860294944c22fe8c791620b31fdd3ba4ace926afd40dfab421"
+      "assertion_digest_sha256": "972c7910376f9b87b8437304d3e1966bbe0af0e5e5b2280685a0d08f9f6053c4"
     },
     {
       "path": "tests/contract/pre-r0007-remediation-5.red.contract.test.ts",
@@ -3423,7 +3423,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 72,
-      "assertion_digest_sha256": "46e76b45a435bb9d604640bd05044d7c277c488d0f3e9b3842be769693ef7d00"
+      "assertion_digest_sha256": "e136f9a1939b4882715032b933bb929dd8487c057bde3d438c7161a65beb5866"
     },
     {
       "path": "tests/contract/r0006-output-contracts.adversarial.contract.test.ts",
