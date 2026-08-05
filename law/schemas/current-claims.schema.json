@@ -1,0 +1,258 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/current-claims.schema.json",
+  "title": "Structured current-claim ledger",
+  "description": "Registry or exact-candidate materialization of volatile claims and the source and value digests that make them current.",
+  "schema_version": "2.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "ledger_version",
+    "round",
+    "mode",
+    "candidate",
+    "claims",
+    "claims_digest_sha256",
+    "pre_review_claims_digest"
+  ],
+  "$defs": {
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "argv": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": "2.0.0" },
+    "ledger_version": { "type": "string", "minLength": 1 },
+    "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+    "mode": { "enum": ["registry", "materialized", "post-publication"] },
+    "candidate": { "oneOf": [{ "$ref": "#/$defs/sha1" }, { "type": "null" }] },
+    "claims_digest_sha256": {
+      "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+    },
+    "pre_review_claims_digest": {
+      "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim_id",
+          "volatility",
+          "availability",
+          "producer",
+          "extractor",
+          "source_paths",
+          "rendered_locations",
+          "source_digest",
+          "value_digest"
+        ],
+        "properties": {
+          "claim_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+          "volatility": { "enum": ["candidate", "tree", "gate", "coverage", "ci"] },
+          "availability": { "enum": ["pre-review", "post-publication"] },
+          "producer": { "$ref": "#/$defs/argv" },
+          "runtime_parameters": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["source"],
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "pattern": "^(convergence\\.(exact_base|candidate_sha)|runtime-inputs\\.(pre-review|post-publication)\\.[a-z][a-z0-9._-]*)$"
+                },
+                "required_at": { "enum": ["materialization", "post-publication"] }
+              }
+            }
+          },
+          "extractor": { "type": "string", "minLength": 1 },
+          "source_paths": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "rendered_locations": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "source_digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+          "value_digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+          "proof_status": { "enum": ["PROVEN", "DEFERRED_POST_PUBLICATION"] },
+          "deferred_proof": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["required_at", "declaration_digest"],
+            "properties": {
+              "required_at": { "const": "post-publication" },
+              "declaration_digest": { "$ref": "#/$defs/sha256" }
+            }
+          },
+          "resolved_producer": { "$ref": "#/$defs/argv" },
+          "source_manifest": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["path", "state", "content_digest"],
+              "properties": {
+                "path": { "type": "string", "minLength": 1 },
+                "state": { "enum": ["present", "absent"] },
+                "content_digest": {
+                  "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+                }
+              }
+            }
+          },
+          "producer_output_digest": { "$ref": "#/$defs/sha256" },
+          "extracted_value": {},
+          "rendered_proofs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "location",
+                "claim_marker",
+                "content_digest",
+                "extracted_rendered_value_digest",
+                "verification_digest"
+              ],
+              "properties": {
+                "location": { "type": "string", "minLength": 1 },
+                "claim_marker": {
+                  "type": "string",
+                  "pattern": "^DEVAI_CLAIM:[a-z0-9][a-z0-9._-]*="
+                },
+                "content_digest": { "$ref": "#/$defs/sha256" },
+                "extracted_rendered_value_digest": { "$ref": "#/$defs/sha256" },
+                "verification_digest": { "$ref": "#/$defs/sha256" }
+              }
+            }
+          },
+          "rendered_verification_digest": { "$ref": "#/$defs/sha256" }
+        },
+        "allOf": [
+          {
+            "if": {
+              "required": ["proof_status"],
+              "properties": { "proof_status": { "const": "PROVEN" } }
+            },
+            "then": {
+              "properties": {
+                "source_digest": { "$ref": "#/$defs/sha256" },
+                "value_digest": { "$ref": "#/$defs/sha256" }
+              },
+              "required": [
+                "resolved_producer",
+                "source_manifest",
+                "producer_output_digest",
+                "extracted_value",
+                "rendered_proofs",
+                "rendered_verification_digest"
+              ]
+            }
+          },
+          {
+            "if": {
+              "required": ["proof_status"],
+              "properties": { "proof_status": { "const": "DEFERRED_POST_PUBLICATION" } }
+            },
+            "then": {
+              "properties": {
+                "availability": { "const": "post-publication" },
+                "source_digest": { "type": "null" },
+                "value_digest": { "type": "null" }
+              },
+              "required": ["deferred_proof"]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "mode": { "const": "registry" } } },
+      "then": {
+        "properties": {
+          "candidate": { "type": "null" },
+          "claims_digest_sha256": { "type": "null" },
+          "pre_review_claims_digest": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "mode": { "const": "materialized" } } },
+      "then": {
+        "properties": {
+          "candidate": { "$ref": "#/$defs/sha1" },
+          "claims_digest_sha256": { "$ref": "#/$defs/sha256" },
+          "pre_review_claims_digest": { "type": "null" },
+          "claims": {
+            "items": {
+              "required": ["proof_status"],
+              "allOf": [
+                {
+                  "if": { "properties": { "availability": { "const": "pre-review" } } },
+                  "then": { "properties": { "proof_status": { "const": "PROVEN" } } }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "mode": { "const": "post-publication" } } },
+      "then": {
+        "properties": {
+          "candidate": { "$ref": "#/$defs/sha1" },
+          "claims_digest_sha256": { "$ref": "#/$defs/sha256" },
+          "pre_review_claims_digest": { "$ref": "#/$defs/sha256" },
+          "claims": {
+            "items": {
+              "properties": { "proof_status": { "const": "PROVEN" } },
+              "required": ["proof_status"]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "examples": [
+    {
+      "schemaVersion": "2.0.0",
+      "ledger_version": "example-v1",
+      "round": "R-9999",
+      "mode": "registry",
+      "candidate": null,
+      "claims_digest_sha256": null,
+      "pre_review_claims_digest": null,
+      "claims": [
+        {
+          "claim_id": "suite.population",
+          "volatility": "tree",
+          "availability": "pre-review",
+          "producer": ["pnpm", "vitest", "list", "--json"],
+          "extractor": "$.files",
+          "source_paths": ["tests/**/*.test.ts"],
+          "rendered_locations": ["work/audit/R-9999/as-built.md"],
+          "source_digest": null,
+          "value_digest": null
+        }
+      ]
+    }
+  ]
+}

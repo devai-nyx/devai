@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/round-convergence.schema.json",
+  "title": "Authenticated two-pass round convergence",
+  "description": "Exact-candidate, complete-population convergence evidence consumed atomically by candidate freeze and review scope.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "round",
+    "exact_base",
+    "candidate_sha",
+    "candidate_tree",
+    "candidate_identity_digest",
+    "policy_digest",
+    "profile_digest",
+    "authoritative_gate_ids",
+    "authoritative_population_digest",
+    "impact_execution_digest",
+    "passes",
+    "convergence_digest_sha256"
+  ],
+  "$defs": {
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "gateResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gate_id", "outcome", "task_key", "output_digest", "result_digest"],
+      "properties": {
+        "gate_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+        "outcome": { "enum": ["EXECUTED_PASS", "REUSED_FRESH_PASS"] },
+        "task_key": { "$ref": "#/$defs/sha256" },
+        "output_digest": { "$ref": "#/$defs/sha256" },
+        "result_digest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "pass": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pass_number",
+        "head_before",
+        "head_after",
+        "tree_sha",
+        "clean_before",
+        "clean_after",
+        "writes",
+        "gate_results",
+        "semantic_population_digest",
+        "pass_digest_sha256"
+      ],
+      "properties": {
+        "pass_number": { "enum": [1, 2] },
+        "head_before": { "$ref": "#/$defs/sha1" },
+        "head_after": { "$ref": "#/$defs/sha1" },
+        "tree_sha": { "$ref": "#/$defs/sha1" },
+        "clean_before": { "const": true },
+        "clean_after": { "const": true },
+        "writes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "gate_results": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/gateResult" }
+        },
+        "semantic_population_digest": { "$ref": "#/$defs/sha256" },
+        "pass_digest_sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "pass_number": { "const": 2 } } },
+          "then": { "properties": { "writes": { "maxItems": 0 } } }
+        }
+      ]
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "round": { "type": "string", "pattern": "^R-[0-9]{4}$" },
+    "exact_base": { "$ref": "#/$defs/sha1" },
+    "candidate_sha": { "$ref": "#/$defs/sha1" },
+    "candidate_tree": { "$ref": "#/$defs/sha1" },
+    "candidate_identity_digest": { "$ref": "#/$defs/sha256" },
+    "policy_digest": { "$ref": "#/$defs/sha256" },
+    "profile_digest": { "$ref": "#/$defs/sha256" },
+    "authoritative_gate_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" }
+    },
+    "authoritative_population_digest": { "$ref": "#/$defs/sha256" },
+    "impact_execution_digest": { "$ref": "#/$defs/sha256" },
+    "passes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/pass" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "convergence_digest_sha256": { "$ref": "#/$defs/sha256" }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "round": "R-9999",
+      "exact_base": "0000000000000000000000000000000000000000",
+      "candidate_sha": "1111111111111111111111111111111111111111",
+      "candidate_tree": "2222222222222222222222222222222222222222",
+      "candidate_identity_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "policy_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+      "profile_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+      "authoritative_gate_ids": ["ordinary"],
+      "authoritative_population_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+      "impact_execution_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "passes": [
+        {
+          "pass_number": 1,
+          "head_before": "1111111111111111111111111111111111111111",
+          "head_after": "1111111111111111111111111111111111111111",
+          "tree_sha": "2222222222222222222222222222222222222222",
+          "clean_before": true,
+          "clean_after": true,
+          "writes": [],
+          "gate_results": [
+            {
+              "gate_id": "ordinary",
+              "outcome": "EXECUTED_PASS",
+              "task_key": "7777777777777777777777777777777777777777777777777777777777777777",
+              "output_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+              "result_digest": "9999999999999999999999999999999999999999999999999999999999999999"
+            }
+          ],
+          "semantic_population_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "pass_digest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        {
+          "pass_number": 2,
+          "head_before": "1111111111111111111111111111111111111111",
+          "head_after": "1111111111111111111111111111111111111111",
+          "tree_sha": "2222222222222222222222222222222222222222",
+          "clean_before": true,
+          "clean_after": true,
+          "writes": [],
+          "gate_results": [
+            {
+              "gate_id": "ordinary",
+              "outcome": "REUSED_FRESH_PASS",
+              "task_key": "7777777777777777777777777777777777777777777777777777777777777777",
+              "output_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+              "result_digest": "9999999999999999999999999999999999999999999999999999999999999999"
+            }
+          ],
+          "semantic_population_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "pass_digest_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        }
+      ],
+      "convergence_digest_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    }
+  ]
+}

@@ -1,0 +1,916 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0007",
+  "campaign": "remediation-3",
+  "review_run": 1,
+  "review_type": "independent-adversarial-control-review",
+  "authority": {
+    "owner_mandate": "OM-017",
+    "architect_decision": "DII-251"
+  },
+  "base_sha": "ff5c80574ee7fc670046bfec990fadedf3d89ce4",
+  "candidate_sha": "25d0c17d84eff057817ab5849912f77b86a4f311",
+  "reviewer": {
+    "required_selector": "claude-opus-5",
+    "fallback": "forbidden",
+    "primary_model": "claude-opus-5",
+    "model_usage": {
+      "claude-haiku-4-5-20251001": {
+        "inputTokens": 2590,
+        "outputTokens": 22,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.0026999999999999997,
+        "contextWindow": 200000,
+        "maxOutputTokens": 32000
+      },
+      "claude-opus-5": {
+        "inputTokens": 86,
+        "outputTokens": 111667,
+        "cacheReadInputTokens": 3664159,
+        "cacheCreationInputTokens": 161205,
+        "webSearchRequests": 0,
+        "costUSD": 6.236234500000002,
+        "contextWindow": 200000,
+        "maxOutputTokens": 32000
+      }
+    }
+  },
+  "transport": {
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 64,
+    "duration_ms": 1372763,
+    "duration_api_ms": 1377752,
+    "total_cost_usd": 6.238934500000001,
+    "permission_denials": [
+      {
+        "tool_name": "Bash",
+        "tool_use_id": "toolu_01Bqkr95ipgZwPbZcwsik8Eo",
+        "tool_input": {
+          "command": "python3 -c \"\nimport json\np=json.load(open('law/policy/round-close-controls.json'))\ncmds=p['convergence']['commands']\nprint(len(cmds))\nfor i,c in enumerate(cmds):\n    print(i+1, c['id'], json.dumps(c['argv']), c.get('freshness_profile'))\n\"",
+          "description": "Enumerate the sixteen authoritative argv rows"
+        }
+      }
+    ],
+    "preflight_retry": {
+      "count": 1,
+      "reason": "CLI rejected unsupported draft-2020 schema declaration before model invocation"
+    }
+  },
+  "validation": {
+    "raw_session_sha256": "a7775f493ee1e4dad2f1cf8ebd69c0a7a1d3388f4c615d18bf1b58632ef723aa",
+    "topic_census_expected": 61,
+    "topic_census_observed": 61,
+    "topic_ids_unique": true,
+    "exact_topic_set": true,
+    "schema_valid": true
+  },
+  "result": {
+    "verdict": "FAIL",
+    "base_sha": "ff5c80574ee7fc670046bfec990fadedf3d89ce4",
+    "candidate_sha": "25d0c17d84eff057817ab5849912f77b86a4f311",
+    "reviewer_model_assertion": "claude-opus-5",
+    "summary": "Independent review of 25d0c17 (detached, clean, 22 changed paths matching the census; 18 commits over ff5c805..25d0c17 with red tests at 7715c51 preceding implementation at 850c8a8). The intentional B0 entry block is preserved and authenticated: policy-check emits ENTRY_BLOCKED_DECLARATION_UNBOUND as a diagnostic and entry-check now fails closed on it. OM-017 is the sole devai_reviewer_binding marker in the candidate tree, bound to claude-opus-5, digest 8ed49721986f7ada60505c0802ab6d71ef27cf4e179c8e0520fcd3ff88c88bd1 matching review-obligations.json; law/policy and .devai mirror bytes are identical (1f0a3666...). All five R3 classes are nevertheless declared GREEN_PROVED on populations that do not hold. Ten findings, eight P1. R3-F004 relies on three dead widenings: the previous_state_artifact branch is unreachable because law/schemas/review-state.schema.json:57 fixes additionalProperties:false without that key and no writer exists, the expectedClasses repair-population check is never supplied at its sole call site 9437, and the transport expected.state_before_digest compares a field to itself; the twelve edges and three terminals are asserted only as JSON counts. R3-F005 still lets dirty worktree bytes pick the dispatch version and the strict-candidate rule whenever --candidate is omitted, and loadPolicy/validateDocument remain worktree-bound for smart-converge, review-scope, review-check and nine other commands. R3-F002 drops untracked generated executables (packages/cli/dist/bin.js), never recurses into referenced or extended tsconfigs, derives no tsconfig outputs, and extracts programs from a six-name allowlist. R3-F003 misses aliased, non-module destructured and globalThis-computed loader forms inside the owned selector packages/cli/src/**/*.ts. R3-F001 replaced the policy-check gate with a two-file byte comparison, executes 1 of 16 literal argv rows, and proves failure-ordinal retention through a no-op wrapper. status reports entry_ready true while entry-check fails, locked in by a test edit. Nine hardcoded 'DII-251' literals scope every repair to one profile, evading the existing guard that only forbids 'DII-246' and 'DII-248'. Red evidence is internally inconsistent and was re-anchored after implementation.",
+    "topics": [
+      {
+        "topic_id": "obligation:R7-P0-AUTHORITY",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "product/owner-mandates/OM-017.md",
+          "law/register/DECISIONS.md",
+          "work/rounds/R-0007/control-provenance.json"
+        ],
+        "notes": "OM-017 is present, type mandate-rider, status active, authority Owner, dated 2026-07-30, and DII-251 is recorded in the register with depends_on DII-246..DII-250. control-provenance root_decision and owner_mandates both advance to DII-251/OM-017."
+      },
+      {
+        "topic_id": "obligation:R7-P0-CANDIDATE-IDENTITY",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:10632",
+          "scripts/run-round-close-controls.mjs:5713",
+          "scripts/run-round-close-controls.mjs:125"
+        ],
+        "notes": "Candidate identity is not authoritative before dispatch. The bootstrap reads worktree policy whenever --candidate is absent or non-literal, and resolveConsumerCandidateV8 reads worktree policy and profile decision_id to decide whether a literal candidate is required. See R7-F003."
+      },
+      {
+        "topic_id": "obligation:R7-P0-DEPLOY-REFUSAL",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:10624",
+          "tests/contract/pre-r0007-close-controls.red.contract.test.ts:253",
+          "preflight: entry-check FAIL only ENTRY_BLOCKED_DECLARATION_UNBOUND"
+        ],
+        "notes": "No deployment, tag, publication or predecessor mutation appears in ff5c805..25d0c17. However statusV4 now reports entry_ready true for the same candidate on which entry-check fails closed, and the contract was edited from false to true to accept it. See R7-F007."
+      },
+      {
+        "topic_id": "obligation:R7-P0-HISTORY-INTEGRITY",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "commit 22863db",
+          "commit b325e69",
+          "commit 3ae14eb",
+          "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json:86"
+        ],
+        "notes": "Commit order is red-before-green (7715c51 tests, 850c8a8 implementation), but the preserved red evidence was re-anchored from 7715c518 to 2dfe86b at 22863db and b325e69, both after implementation 850c8a8, and its no-implementation-preceded claim is contradicted by 3ae14eb. See R7-F008."
+      },
+      {
+        "topic_id": "obligation:R7-P0-REVIEWER-BINDING",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "product/owner-mandates/OM-017.md:128",
+          "work/rounds/R-0007/close-control-profile.json",
+          "scripts/run-round-close-controls.mjs:5737"
+        ],
+        "notes": "Exactly one devai_reviewer_binding marker exists across product/owner-mandates (OM-017), selector claude-opus-5, fallback forbidden, substantive_cycles 2. reviewerBindingV4 enumerates mandates from the exact candidate tree via git show <candidate>:<path>; profile reviewer block matches the marker."
+      },
+      {
+        "topic_id": "obligation:R7-P1-AFFECTED-TESTS",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:3696",
+          "work/rounds/R-0007/affected-test-graph.json:82"
+        ],
+        "notes": "Status-aware preimage/postimage inspection is correct, but hasAmbiguousLoaderV6 misses aliased and computed loader forms that fall inside the owned selector packages/cli/src/**/*.ts, so they select neither full suite nor whole coverage. See R7-F006."
+      },
+      {
+        "topic_id": "obligation:R7-P1-GENERATED-IDENTITY",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:458",
+          "package.json:24",
+          "work/rounds/R-0007/affected-test-graph.json"
+        ],
+        "notes": "scanProgramSource returns before executables.add when a path is absent from the candidate tree, so the generated packages/cli/dist/bin.js reached by root build, lint, typecheck, test and ci:governance never enters the closure or its digest. See R7-F004."
+      },
+      {
+        "topic_id": "obligation:R7-P1-REVIEW-CENSUS",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "work/rounds/R-0007/review-obligations.json",
+          "work/rounds/R-0007/review-obligation-baseline.json",
+          "work/rounds/R-0007/prior-finding-registry.json"
+        ],
+        "notes": "The ten obligation ids are unchanged; OM-017 is added to both the obligation source list (digest verified) and the baseline authority set, and R3-F001..R3-F005 are registered with population queries and repair conditions at disposition OPEN."
+      },
+      {
+        "topic_id": "obligation:R7-P1-TWO-CYCLE",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "law/policy/round-close-controls.json:310",
+          "product/owner-mandates/OM-017.md:36",
+          "work/rounds/R-0007/remediation-3-closure-matrix.json:7"
+        ],
+        "notes": "substantive_cycle_budget 2, cycle_three mechanically-forbidden, cycle_two_failure ESCALATION_REQUIRED; OM-017 forbids Review Run 3 without new Owner authority and the matrix records review_run_budget 2. No ceiling was raised."
+      },
+      {
+        "topic_id": "obligation:R7-P2-CURRENT-CLAIMS",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "work/rounds/R-0007/close-control-profile.json",
+          "preflight: changesets: PASS"
+        ],
+        "notes": "profile sources.current_claims is unchanged, no claim ledger or claims schema was touched in ff5c805..25d0c17, and the changesets gate passes on the exact candidate."
+      },
+      {
+        "topic_id": "prior-class:ACTIVE_CONTROL_CENSUS_ALLOWLIST_INCOMPLETE",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "work/rounds/R-0007/control-provenance.json",
+          "tests/contract/pre-r0007-remediation-2.red.contract.test.ts:343"
+        ],
+        "notes": "OM-017 is added to control-provenance owner_mandates and manifest allowlist, to profile additional_controls, and to the remediation-2 contract's expected control list, so the census widened rather than shrank with the new control."
+      },
+      {
+        "topic_id": "prior-class:AFFECTED_TEST_INPUT_POPULATION_INCOMPLETE",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:3698",
+          "scripts/run-round-close-controls.mjs:3699",
+          "scripts/run-round-close-controls.mjs:3705"
+        ],
+        "notes": "Four OM-017-enumerated loader forms remain undetected: alias from a member expression, destructuring from a non-module object, computed access on globalThis, and process.mainModule.require. See R7-F006."
+      },
+      {
+        "topic_id": "prior-class:AUTHORITATIVE_GATE_CANDIDATE_RED",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "law/policy/round-close-controls.json:518",
+          "tests/contract/pre-r0007-remediation-3.red.contract.test.ts:162",
+          "scripts/run-round-close-controls.mjs:4135"
+        ],
+        "notes": "Argument injection is genuinely removed, but the repair replaced the policy-check gate with a two-file comparison, the contract executes 1 of 16 argv rows, and the ordinal-retention proof runs a wrapper whose production runner executes nothing. See R7-F005."
+      },
+      {
+        "topic_id": "prior-class:AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:471",
+          "scripts/run-round-close-controls.mjs:433",
+          "scripts/run-round-close-controls.mjs:583"
+        ],
+        "notes": "Workspace-script recursion is real, but the tsconfig graph is depth-1 with no extends and no outputs, generated executables are dropped, programs come from a six-name allowlist, and the digest comparison only applies under decision_id DII-251. See R7-F004."
+      },
+      {
+        "topic_id": "prior-class:AUTHORITATIVE_GATE_POPULATION_OMITTED",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "law/policy/round-close-controls.json:517",
+          "scripts/run-round-close-controls.mjs:6454",
+          "scripts/run-round-close-controls.mjs:4313"
+        ],
+        "notes": "policy-check is no longer reachable from any of the sixteen argv rows or their script closure, so reviewer-binding census, normative-source coverage and control-provenance derivation left the freeze roster; gates whose freshness profile fails to resolve are also silently skipped. See R7-F005."
+      },
+      {
+        "topic_id": "prior-class:BINDING_CENSUS_ABSENT",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:5737",
+          "product/owner-mandates/OM-017.md:128"
+        ],
+        "notes": "The census enumerates every tracked product/owner-mandates/OM-*.md from the candidate commit, parses fenced binding objects, and cross-checks id, status and Owner authority against the front-matter container; exactly one marker resolves."
+      },
+      {
+        "topic_id": "prior-class:CACHE_RECORD_IDENTITY_UNBOUND",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:4335",
+          "scripts/run-round-close-controls.mjs:716"
+        ],
+        "notes": "Gate freshness keys still bind argv, profile digest, whole-tree input and dependency manifests, policy and graph digests, toolchain and environment manifests, output contract and producing candidate; no cache identity field was removed in this range."
+      },
+      {
+        "topic_id": "prior-class:CLAIM_DIGEST_PLACEHOLDER_ACCEPTED",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": ["law/policy/round-close-controls.json:253", "ff5c805..25d0c17"],
+        "notes": "The claims section retains substring_match_forbidden, per-location verification digests and complete-ledger atomicity; no claims schema, producer or extractor changed in the range, so no placeholder path was reintroduced."
+      },
+      {
+        "topic_id": "prior-class:COMMITTED_RENAME_PREIMAGE_OMITTED",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:3584",
+          "scripts/run-round-close-controls.mjs:3610",
+          "scripts/run-round-close-controls.mjs:3888"
+        ],
+        "notes": "committedChangeRecords carries preimage and postimage for R and C, null preimage only for A and null postimage only for D, and buildImpactPlan reads the base object for every preimage and the head object for every postimage."
+      },
+      {
+        "topic_id": "prior-class:CONSERVATIVE_WIDENING_DEAD",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:8353",
+          "scripts/run-round-close-controls.mjs:8650",
+          "scripts/run-round-close-controls.mjs:9348"
+        ],
+        "notes": "Three widenings added for R3-F004 cannot fire in production: an unreachable schema-forbidden branch, an argument never supplied at the only call site, and a self-comparison. See R7-F001."
+      },
+      {
+        "topic_id": "prior-class:RECHECKED_TOPIC_EVIDENCE_UNAUTHENTICATED",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json:17",
+          "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json:29",
+          "commit b325e69"
+        ],
+        "notes": "The same document reports test_files_failed 1 and observed_test_files_failed 7 for a single-file vitest command, and was rewritten after implementation. See R7-F008."
+      },
+      {
+        "topic_id": "prior-class:REVIEW_CENSUS_AND_CANDIDATE_PROOF_INCOMPLETE",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:10624",
+          "scripts/run-round-close-controls.mjs:6388",
+          "tests/contract/pre-r0007-close-controls.red.contract.test.ts:253"
+        ],
+        "notes": "policyCheckV4 folds the declaration diagnostic into entry_ready but statusV4 does not, so two authoritative consumers disagree about entry readiness for one candidate. See R7-F007."
+      },
+      {
+        "topic_id": "prior-class:REVIEW_REUSE_AND_STREAM_CANONICALITY",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "law/policy/round-close-controls.json:199",
+          "scripts/run-round-close-controls.mjs:9646"
+        ],
+        "notes": "Reuse rules are unchanged: changed_topic_reuse_forbidden, unchanged reuse requires independent digest and evidence recheck, truncated_or_malformed_result invalid-never-pass, and validateReuseV4 recomputation inputs were not relaxed in this range."
+      },
+      {
+        "topic_id": "prior-class:REVIEW_SCOPE_CORE_IDENTITY_NOT_RECOMPUTED",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:125",
+          "scripts/run-round-close-controls.mjs:3212",
+          "scripts/run-round-close-controls.mjs:8957"
+        ],
+        "notes": "review-scope and review-check require a literal candidate for documents, but their policy and every JSON Schema still load from worktree bytes because candidateBoundPolicy and candidateBoundRevision are set only for policy-check, entry-check and status. See R7-F003."
+      },
+      {
+        "topic_id": "prior-class:REVIEW_STATE_TRANSITION_BYPASS",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "tests/contract/pre-r0007-remediation-3.red.contract.test.ts:466",
+          "law/policy/round-close-controls.json:333",
+          "scripts/run-round-close-controls.mjs:8378"
+        ],
+        "notes": "R3-004-ALL-EDGES-AND-TERMINALS asserts only that the policy JSON declares 12 edges and 3 terminals; no edge, terminal or transport attempt is executed, and validateTransitionEdgeV6 still reconstructs predecessors from six selected fields. See R7-F002."
+      },
+      {
+        "topic_id": "prior-class:REVIEWER_BINDING_CENSUS_NOT_CANDIDATE_BOUND",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:10632",
+          "scripts/run-round-close-controls.mjs:3493",
+          "scripts/run-round-close-controls.mjs:4144"
+        ],
+        "notes": "With --candidate omitted a dirty worktree schemaVersion routes policy-check, entry-check and status to v3 handlers that never demand a literal candidate, and smart-converge still accepts symbolic or abbreviated --head. See R7-F003."
+      },
+      {
+        "topic_id": "prior-class:SEMANTIC_OBLIGATION_POPULATION_UNCHECKED",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "work/rounds/R-0007/review-obligations.json",
+          "product/owner-mandates/OM-017.md",
+          "preflight: policy-check pre-entry-preparation: PASS"
+        ],
+        "notes": "The new normative source OM-017 is registered with six obligation ids and source_digest 8ed49721986f7ada60505c0802ab6d71ef27cf4e179c8e0520fcd3ff88c88bd1, which I recomputed and matched; validateNormativeSourceCoverageV6 passes on the exact candidate."
+      },
+      {
+        "topic_id": "prior-class:STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:8351",
+          "scripts/run-round-close-controls.mjs:9437",
+          "scripts/run-round-close-controls.mjs:9339"
+        ],
+        "notes": "Predecessor state artifacts are now persisted and self-digest-checked one level deep, but per-transition identity remains a selected-field reconstruction and the repair-population and state-before reauthentications are inert. See R7-F001 and R7-F002."
+      },
+      {
+        "topic_id": "changed-path:.devai/config/round-close-controls.json",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          ".devai/config/round-close-controls.json:518",
+          "law/policy/round-close-controls.json:518"
+        ],
+        "notes": "Mirror bytes are byte-identical to the generic policy (both sha256 1f0a3666f521955c8aee367678bde92d761c3b49a78fed8edda15905d2ee2f5d), but it materializes the weakened materializations argv. See R7-F005."
+      },
+      {
+        "topic_id": "changed-path:law/policy/governed-sequencing.json",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "law/policy/governed-sequencing.json",
+          "commit 3ae14eb",
+          "commit c82d6d3"
+        ],
+        "notes": "The new R-0007 entry records evidence_sha256 e38c287d2b66dab8f83b6fd8267507daa9e0f313a6b132cb5541f65c56871567, which I recomputed and matched, but classifies 3ae14eb and c82d6d3 as law_commits although 3ae14eb carries the R3-F001 argv repair and R3-F002 closure digests and precedes the recorded red evidence commit. See R7-F008."
+      },
+      {
+        "topic_id": "changed-path:law/policy/round-close-controls.json",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "law/policy/round-close-controls.json:517",
+          "scripts/run-round-close-controls.mjs:6454"
+        ],
+        "notes": "The only policy change swaps the materializations gate from policy-check to materializations-check, removing the strongest command from the sixteen-row freeze roster. See R7-F005."
+      },
+      {
+        "topic_id": "changed-path:law/register/DECISIONS.md",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "law/register/DECISIONS.md",
+          "scripts/run-round-close-controls.mjs:10632",
+          "scripts/run-round-close-controls.mjs:125"
+        ],
+        "notes": "DII-251 is well-formed and provenance-linked, but its normative text that the bootstrap loads policy from the candidate object before version dispatch and that all policy, profile, schema, mandate and scope bytes thereafter come from that candidate is false for every command except policy-check, entry-check and status. See R7-F003."
+      },
+      {
+        "topic_id": "changed-path:law/schemas/affected-test-graph.schema.json",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "law/schemas/affected-test-graph.schema.json:214",
+          "scripts/run-round-close-controls.mjs:583"
+        ],
+        "notes": "closure_digest is added as a 64-hex constrained property; an omitted digest compares unequal to the derived value and fails closed, so the schema addition itself does not weaken validation."
+      },
+      {
+        "topic_id": "changed-path:law/schemas/remediation-closure-matrix.schema.json",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "law/schemas/remediation-closure-matrix.schema.json:54",
+          "work/rounds/R-0007/close-control-profile.json"
+        ],
+        "notes": "Generalizing campaign and authority is reasonable, but classes minItems drops from 8 to 1 and finding_id loosens from ^R2-F00[1-8]$ to a pattern, while the profile stops binding the remediation-2 matrix. See R7-F010."
+      },
+      {
+        "topic_id": "changed-path:law/trace.json",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": ["law/trace.json", "preflight: ci:stage1: PASS"],
+        "notes": "The new contract file is registered in four suite lists with invariants INV-DEVAI-002/003/017/020, assertion_count 29 and a regenerated digest; the trace:check gate inside ci:stage1 passes on the exact candidate."
+      },
+      {
+        "topic_id": "changed-path:packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts:112",
+          "product/owner-mandates/OM-017.md:128"
+        ],
+        "notes": "The edit strengthens rather than weakens: it keeps the R-0006 and preparation-prompt neutrality assertions, adds positive assertions on the OM-017 binding marker, and updates the profile reviewer expectation to the now-bound OM-017/claude-opus-5 pair."
+      },
+      {
+        "topic_id": "changed-path:product/owner-mandates/OM-017.md",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "product/owner-mandates/OM-017.md",
+          "work/rounds/R-0007/review-obligations.json"
+        ],
+        "notes": "Front matter is complete and active, the five required repair classes are stated, the two-run ceiling and Review Run 3 refusal are explicit, deployment and promotion are refused, and the file digest matches the obligation registry."
+      },
+      {
+        "topic_id": "changed-path:scripts/run-round-close-controls.mjs",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "scripts/run-round-close-controls.mjs:8353",
+          "scripts/run-round-close-controls.mjs:10632",
+          "scripts/run-round-close-controls.mjs:458",
+          "scripts/run-round-close-controls.mjs:10624"
+        ],
+        "notes": "The single implementation commit 850c8a8 carries all five class repairs and is the locus of R7-F001 through R7-F005, R7-F007 and R7-F009: dead widenings, worktree-bound dispatch and authority, incomplete closure derivation, roster weakening and nine hardcoded DII-251 gates."
+      },
+      {
+        "topic_id": "changed-path:tests/contract/pre-r0007-close-controls.red.contract.test.ts",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "tests/contract/pre-r0007-close-controls.red.contract.test.ts:253",
+          "tests/contract/pre-r0007-close-controls.red.contract.test.ts:84"
+        ],
+        "notes": "Adding --candidate HEAD to the consumer invocations is correct, but the status expectation was changed from entry_ready false to entry_ready true, encoding the contradiction with entry-check instead of repairing it. See R7-F007."
+      },
+      {
+        "topic_id": "changed-path:tests/contract/pre-r0007-remediation-2.red.contract.test.ts",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "tests/contract/pre-r0007-remediation-2.red.contract.test.ts:272",
+          "tests/contract/pre-r0007-remediation-2.red.contract.test.ts:343"
+        ],
+        "notes": "The change retains the DII-249 policy authority assertion, updates only the profile root to DII-251, and widens the expected control list with OM-017; no R2 assertion was deleted or relaxed."
+      },
+      {
+        "topic_id": "changed-path:tests/contract/pre-r0007-remediation-3.red.contract.test.ts",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "tests/contract/pre-r0007-remediation-3.red.contract.test.ts:123",
+          "tests/contract/pre-r0007-remediation-3.red.contract.test.ts:162",
+          "tests/contract/pre-r0007-remediation-3.red.contract.test.ts:466"
+        ],
+        "notes": "Four of sixteen cases run controllerFunction, which extracts a declaration by name and evaluates it with stubbed dependencies, so they assert on source text rather than runtime paths; the roster case runs 1 of 16 argv rows and the edge case asserts JSON counts. See R7-F001, R7-F002, R7-F005."
+      },
+      {
+        "topic_id": "changed-path:tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts:437",
+          "scripts/run-round-close-controls.mjs:583"
+        ],
+        "notes": "The file adds DII-251 to the expected provenance list but leaves the anti-hardcoding guard naming only 'DII-246' and 'DII-248', so nine new 'DII-251' literals in the controller pass unchallenged. See R7-F009."
+      },
+      {
+        "topic_id": "changed-path:work/audit/R-0007-pre-entry/remediation-3-red-evidence.json",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json:17",
+          "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json:29",
+          "commit dfe84b8"
+        ],
+        "notes": "Counts 16 total / 14 failed / 2 passed match the supplied replay at 2dfe86b, but the document contradicts itself on failed test files and was re-anchored from 7715c518 after implementation. See R7-F008."
+      },
+      {
+        "topic_id": "changed-path:work/rounds/R-0007/affected-test-graph.json",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "work/rounds/R-0007/affected-test-graph.json:815",
+          "scripts/run-round-close-controls.mjs:438"
+        ],
+        "notes": "Sixteen hand-authored closure_digest values bind a derivation that omits generated executables, transitive and extended tsconfigs, tsconfig outputs and import edges, so the declared digests certify an incomplete population. See R7-F004."
+      },
+      {
+        "topic_id": "changed-path:work/rounds/R-0007/close-control-profile.json",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "work/rounds/R-0007/close-control-profile.json",
+          "law/schemas/remediation-closure-matrix.schema.json:54"
+        ],
+        "notes": "The reviewer block, OM-017 addition and review-evidence additions are correct, but sources.remediation_closure_matrix moves from the eight-class remediation-2 matrix to the five-class remediation-3 matrix, leaving the R2 classes outside runtime validation. See R7-F010."
+      },
+      {
+        "topic_id": "changed-path:work/rounds/R-0007/control-provenance.json",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": ["work/rounds/R-0007/control-provenance.json"],
+        "notes": "root_decision advances to DII-251 with an explicit depends_on chain over DII-246..DII-250, and OM-017 is added to both owner_mandates with required_status active and the manifest allowlist; discovery_mode remains exact-register-transitive-from-root."
+      },
+      {
+        "topic_id": "changed-path:work/rounds/R-0007/prior-finding-registry.json",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": ["work/rounds/R-0007/prior-finding-registry.json"],
+        "notes": "All five R3 classes are appended with severity P1, origin_cycle 2, origin evidence, deterministic population queries, affected populations and repair conditions, at disposition OPEN; no earlier entry was deleted or closed."
+      },
+      {
+        "topic_id": "changed-path:work/rounds/R-0007/remediation-3-closure-matrix.json",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "work/rounds/R-0007/remediation-3-closure-matrix.json:53",
+          "work/rounds/R-0007/remediation-3-closure-matrix.json:134",
+          "work/rounds/R-0007/remediation-3-closure-matrix.json:218"
+        ],
+        "notes": "All five classes are labelled GREEN_PROVED at 73ddea7 while counterexamples exist for each declared required_behavior; the label does not override the demonstrated failures. See R7-F001 through R7-F006."
+      },
+      {
+        "topic_id": "changed-path:work/rounds/R-0007/review-obligation-baseline.json",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": ["work/rounds/R-0007/review-obligation-baseline.json"],
+        "notes": "authority_decision advances to DII-251, the ten obligation ids are unchanged, derivation stays independent-policy-baseline, and OM-017 is added to the normative source list."
+      },
+      {
+        "topic_id": "changed-path:work/rounds/R-0007/review-obligations.json",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "work/rounds/R-0007/review-obligations.json",
+          "product/owner-mandates/OM-017.md"
+        ],
+        "notes": "The single added record binds OM-017 to six obligation ids with a source digest I independently recomputed as 8ed49721986f7ada60505c0802ab6d71ef27cf4e179c8e0520fcd3ff88c88bd1; no existing record changed."
+      },
+      {
+        "topic_id": "control:product/owner-mandates/OM-002.md",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "product/owner-mandates/OM-002.md",
+          "work/rounds/R-0007/control-provenance.json"
+        ],
+        "notes": "Unmodified in ff5c805..25d0c17 and still listed in control-provenance owner_mandates, the manifest allowlist and profile additional_controls; no obligation it carries was relaxed."
+      },
+      {
+        "topic_id": "control:product/owner-mandates/OM-003.md",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "product/owner-mandates/OM-003.md",
+          "work/rounds/R-0007/control-provenance.json"
+        ],
+        "notes": "Unmodified in the range and retained in the provenance and allowlist populations; no competing reviewer or gate provision was introduced against it."
+      },
+      {
+        "topic_id": "control:product/owner-mandates/OM-014.md",
+        "disposition": "RECHECKED_PASS",
+        "evidence_refs": [
+          "product/owner-mandates/OM-014.md",
+          "packages/schemas/tests/contract/campaign-claude-selector.contract.test.ts:112"
+        ],
+        "notes": "Unmodified; the R-0006 selector and the model-neutral R-0007 preparation prompt remain asserted, and OM-017 binds the previously neutral reviewer slot without editing OM-014."
+      },
+      {
+        "topic_id": "control:product/owner-mandates/OM-015.md",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "product/owner-mandates/OM-015.md",
+          "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts:437",
+          "scripts/run-round-close-controls.mjs:5722"
+        ],
+        "notes": "The mandate text is unmodified, but the R1-F006 guarantee that the controller derives decisions rather than hardcoding them is defeated by nine new 'DII-251' literals that its contract does not cover. See R7-F009."
+      },
+      {
+        "topic_id": "control:product/owner-mandates/OM-016.md",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "product/owner-mandates/OM-016.md",
+          "law/schemas/remediation-closure-matrix.schema.json:54",
+          "work/rounds/R-0007/close-control-profile.json"
+        ],
+        "notes": "OM-016 remains immutable historical authority, but the mechanical floor it established (exactly eight R2 classes, validated through the profile) was removed by the schema relaxation and the matrix re-pointing. See R7-F010."
+      },
+      {
+        "topic_id": "control:product/owner-mandates/OM-017.md",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "product/owner-mandates/OM-017.md:92",
+          "scripts/run-round-close-controls.mjs:433",
+          "tests/contract/pre-r0007-remediation-3.red.contract.test.ts:123"
+        ],
+        "notes": "Its own anti-repetition clause forbidding source-string assertions substituted for runtime behavior, hardcoded completeness lists substituted for derivation, worktree bytes substituted for candidate bytes and specimen-only fixes is violated by R7-F001, R7-F003, R7-F004, R7-F005 and R7-F009."
+      },
+      {
+        "topic_id": "remediation-class:R3-F001",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "work/rounds/R-0007/remediation-3-closure-matrix.json:13",
+          "law/policy/round-close-controls.json:517",
+          "tests/contract/pre-r0007-remediation-3.red.contract.test.ts:162",
+          "scripts/run-round-close-controls.mjs:4482"
+        ],
+        "notes": "Its population query demands executing every exact argv and retaining every terminal result; the contract executes one, the ordinal proof runs a no-op wrapper, exits are retained for no passing gate, and the roster lost policy-check. See R7-F005."
+      },
+      {
+        "topic_id": "remediation-class:R3-F002",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "work/rounds/R-0007/remediation-3-closure-matrix.json:59",
+          "scripts/run-round-close-controls.mjs:471",
+          "scripts/run-round-close-controls.mjs:458",
+          "scripts/run-round-close-controls.mjs:433"
+        ],
+        "notes": "Its expected population names every reachable TypeScript project reference and output and every imported or spawned executable; the derivation supplies depth-1 references only, no outputs, no extends, no imports, and drops untracked executables. See R7-F004."
+      },
+      {
+        "topic_id": "remediation-class:R3-F003",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "work/rounds/R-0007/remediation-3-closure-matrix.json:101",
+          "scripts/run-round-close-controls.mjs:3698",
+          "tests/contract/pre-r0007-remediation-3.red.contract.test.ts:313"
+        ],
+        "notes": "Candidate and preimage byte loading is correct and complete, but the declared thirteen loader families are covered by five test forms and the detector misses at least four indirect forms that reach owned graph nodes. See R7-F006."
+      },
+      {
+        "topic_id": "remediation-class:R3-F004",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "work/rounds/R-0007/remediation-3-closure-matrix.json:140",
+          "scripts/run-round-close-controls.mjs:8353",
+          "scripts/run-round-close-controls.mjs:9437",
+          "tests/contract/pre-r0007-remediation-3.red.contract.test.ts:466"
+        ],
+        "notes": "Three of the four declared behaviors rest on code paths production cannot reach, and the twelve edges, three terminals and attempts zero through two are asserted as JSON counts rather than executed. See R7-F001 and R7-F002."
+      },
+      {
+        "topic_id": "remediation-class:R3-F005",
+        "disposition": "RECHECKED_FAIL",
+        "evidence_refs": [
+          "work/rounds/R-0007/remediation-3-closure-matrix.json:185",
+          "scripts/run-round-close-controls.mjs:10632",
+          "scripts/run-round-close-controls.mjs:125",
+          "tests/contract/pre-r0007-remediation-3.red.contract.test.ts:517"
+        ],
+        "notes": "Its population names seven consumers and the dirty x nonliteral cross-product; only three consumers are bound, four still read worktree policy and schemas, and no test dirties the tree while omitting the candidate. See R7-F003."
+      }
+    ],
+    "findings": [
+      {
+        "finding_id": "R7-F001",
+        "defect_class_id": "CONSERVATIVE_WIDENING_DEAD",
+        "severity": "P1",
+        "topic_ids": [
+          "remediation-class:R3-F004",
+          "prior-class:CONSERVATIVE_WIDENING_DEAD",
+          "prior-class:STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+          "changed-path:scripts/run-round-close-controls.mjs",
+          "changed-path:tests/contract/pre-r0007-remediation-3.red.contract.test.ts"
+        ],
+        "evidence": "scripts/run-round-close-controls.mjs:8353 branches on Object.hasOwn(transition,'previous_state_artifact'), but law/schemas/review-state.schema.json:57-89 defines the transition object with additionalProperties:false and a fixed property list that excludes previous_state_artifact, and a whole-tree grep finds no writer (only the reconstruct function itself and the synthetic literals at tests/contract/pre-r0007-remediation-3.red.contract.test.ts:364,368). Every real transition therefore takes the void path at 8366 and reconstructs the predecessor from six selected fields. scripts/run-round-close-controls.mjs:8650 adds an expectedClasses parameter whose sole production call at 9437 passes four arguments, so the repaired_class_population check evaluates expectedClasses===null and is always true. scripts/run-round-close-controls.mjs:9348 builds expected.state_before_digest as transport.state_before_digest, which reauthenticateTransportV6 compares with transport[field]!==value, a tautology. All three are reached in tests only via controllerFunction (tests/contract/pre-r0007-remediation-3.red.contract.test.ts:123), which extracts the declaration text and evaluates it with stubbed dependencies.",
+        "population_query": "For each identifier added to scripts/run-round-close-controls.mjs by commit 850c8a8 for class R3-F004, enumerate every production call site and every persisted-artifact schema that admits the field; report each identifier for which no production call site supplies a non-default value, or whose governing schema forbids the field.",
+        "affected_population": [
+          "scripts/run-round-close-controls.mjs:8353 reconstructStateIdentityV6 previous_state_artifact branch (schema-forbidden by law/schemas/review-state.schema.json:57, no writer)",
+          "scripts/run-round-close-controls.mjs:8650 reauthenticateRepairEvidenceV6 expectedClasses parameter (sole call site 9437 omits it)",
+          "scripts/run-round-close-controls.mjs:9348 reauthenticateTransportV6 expected.state_before_digest (self-comparison against transport.state_before_digest)"
+        ],
+        "repair_condition": "For each of the three sites, a test that drives review-scope and review-check end to end (no controllerFunction extraction) must fail after mutating one unselected byte of the persisted predecessor state artifact, after deleting one entry from repair_evidence.repaired_classes, and after substituting review-states/<state_before_digest>.json bytes; and law/schemas/review-state.schema.json must admit whatever field the transition identity actually binds. A grep for previous_state_artifact must find at least one production writer, reauthenticateRepairEvidenceV6 must be called with a non-null expectedClasses derived from the prior review result, and no key of the expected object may be read from the transport it authenticates."
+      },
+      {
+        "finding_id": "R7-F002",
+        "defect_class_id": "REVIEW_STATE_TRANSITION_BYPASS",
+        "severity": "P1",
+        "topic_ids": [
+          "remediation-class:R3-F004",
+          "prior-class:REVIEW_STATE_TRANSITION_BYPASS",
+          "prior-class:STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+          "changed-path:tests/contract/pre-r0007-remediation-3.red.contract.test.ts"
+        ],
+        "evidence": "OM-017.md:71 requires that all twelve edges, attempts zero through two, and every terminal be executable mutation populations, and work/rounds/R-0007/remediation-3-closure-matrix.json:147,154 declares PASS, ESCALATION_REQUIRED and REVIEW_TRANSPORT_BLOCKED terminals and the mutation 'exercise every edge and terminal'. The only test bound to that population, R3-004-ALL-EDGES-AND-TERMINALS at tests/contract/pre-r0007-remediation-3.red.contract.test.ts:466, reads law/policy/round-close-controls.json and asserts Object.values(allowed_transitions).flat() has length 12 and that terminal_states sorts to the three names. No edge is traversed, no terminal is reached, and no transport attempt is driven; nothing in the file invokes review-scope or review-check.",
+        "population_query": "Enumerate the twelve edges of law/policy/round-close-controls.json review_state_machine.allowed_transitions, the three terminal_states, and transport attempts 0, 1 and 2; for each, report whether any test in tests/contract/pre-r0007-remediation-3.red.contract.test.ts causes the controller to persist a state or transport artifact for it.",
+        "affected_population": [
+          "DRAFT->PREFLIGHT_GREEN",
+          "PREFLIGHT_GREEN->CANDIDATE_FROZEN",
+          "PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN",
+          "CANDIDATE_FROZEN->CYCLE_1_ACTIVE",
+          "CYCLE_1_ACTIVE->PASS",
+          "CYCLE_1_ACTIVE->REPAIR_REQUIRED",
+          "CYCLE_1_ACTIVE->REVIEW_TRANSPORT_BLOCKED",
+          "REPAIR_REQUIRED->PREFLIGHT_GREEN",
+          "NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE",
+          "CYCLE_2_ACTIVE->PASS",
+          "CYCLE_2_ACTIVE->ESCALATION_REQUIRED",
+          "CYCLE_2_ACTIVE->REVIEW_TRANSPORT_BLOCKED",
+          "terminal PASS",
+          "terminal ESCALATION_REQUIRED",
+          "terminal REVIEW_TRANSPORT_BLOCKED",
+          "transport attempts 0, 1 and 2"
+        ],
+        "repair_condition": "For each of the twelve edges, each of the three terminals and each of attempts 0..2, an executable case must spawn the controller so that the transition is persisted, then mutate one byte of the consumed predecessor, transport, result or repair artifact and assert a specific blocking finding code; a declaration-count assertion over law/policy/round-close-controls.json must not be accepted as coverage for any member of that population."
+      },
+      {
+        "finding_id": "R7-F003",
+        "defect_class_id": "REVIEWER_BINDING_CENSUS_NOT_CANDIDATE_BOUND",
+        "severity": "P1",
+        "topic_ids": [
+          "remediation-class:R3-F005",
+          "prior-class:REVIEWER_BINDING_CENSUS_NOT_CANDIDATE_BOUND",
+          "prior-class:REVIEW_SCOPE_CORE_IDENTITY_NOT_RECOMPUTED",
+          "obligation:R7-P0-CANDIDATE-IDENTITY",
+          "changed-path:scripts/run-round-close-controls.mjs",
+          "changed-path:law/register/DECISIONS.md"
+        ],
+        "evidence": "scripts/run-round-close-controls.mjs:10632-10646 sets candidateBoundRevision and candidateBoundPolicy only when the command is policy-check, entry-check or status AND --candidate is a 40-hex existing commit; otherwise livePolicy=readJson(policyPath), i.e. worktree bytes, and the switch at 10654 selects v3 handlers from that worktree schemaVersion. policyCheckV3:3493, entryCheckV3:3547 and statusV3:5413 never call resolveConsumerCandidateV8 and never emit REVIEWER_BINDING_CANDIDATE_REQUIRED. scripts/run-round-close-controls.mjs:5713-5725 resolveConsumerCandidateV8 reads worktree policy and the worktree profile's decision_id to decide whether the literal-candidate rule applies at all. loadPolicy:125 returns worktree policy for every command other than the three strict ones, and validateDocument:3212 reads schemas from the worktree whenever candidateBoundRevision is null, which includes smart-converge (the freeze gate, 4152), review-scope (8957), review-check (10241) and impact-plan (4118). smartConvergeV3:4144 resolves --head, default 'HEAD', with git rev-parse rather than resolveExactCandidateV6. R3-005-CANDIDATE-BOUND-DISPATCH (tests/contract/pre-r0007-remediation-3.red.contract.test.ts:482) dirties the tree only while supplying --candidate, and R3-005-ALL-CONSUMERS-LITERAL-SHA (:517) omits the candidate only on a clean tree, so the dirty x omitted cross-product the matrix declares is untested. law/register/DECISIONS.md DII-251 asserts the opposite of the implemented behaviour.",
+        "population_query": "For every command case in the dispatch switch of scripts/run-round-close-controls.mjs:10654-10774, report (a) whether candidateBoundPolicy governs loadPolicy, (b) whether candidateBoundRevision governs validateDocument, and (c) whether the command rejects omitted, symbolic, abbreviated and ambiguous candidate revisions; and independently, for each of policy-check, entry-check and status, report the handler selected when law/policy/round-close-controls.json schemaVersion is dirtied to 3.0.0 in the worktree and --candidate is omitted.",
+        "affected_population": [
+          "worktree schemaVersion selects the handler for policy-check, entry-check and status whenever --candidate is omitted, symbolic or abbreviated (scripts/run-round-close-controls.mjs:10636)",
+          "worktree profile decision_id selects whether a literal candidate is required (scripts/run-round-close-controls.mjs:5722)",
+          "smart-converge",
+          "review-scope",
+          "review-check",
+          "impact-plan",
+          "claims-check",
+          "claims-materialize",
+          "claim-produce",
+          "review-topic-count",
+          "manifest",
+          "envelope",
+          "rehearse",
+          "materialize: all load policy from law/policy/round-close-controls.json worktree bytes via loadPolicy:125 and all JSON Schemas from worktree bytes via validateDocument:3212",
+          "smart-converge additionally accepts symbolic --head (default HEAD) and abbreviated revisions at scripts/run-round-close-controls.mjs:4144"
+        ],
+        "repair_condition": "Before livePolicy is assigned, the bootstrap must resolve exactly one literal 40-hex candidate for every command in the dispatch switch, failing closed with REVIEWER_BINDING_CANDIDATE_REQUIRED when the revision is omitted, symbolic, abbreviated or ambiguous, and must load law/policy/round-close-controls.json from that Git object; loadPolicy and validateDocument must never read the worktree once a candidate is resolved. A machine check must assert that for every command name, running it with a dirtied worktree policy schemaVersion and with each of {omitted, HEAD, 12-hex prefix} yields the same handler and the same REVIEWER_BINDING_CANDIDATE_REQUIRED verdict as on a clean tree."
+      },
+      {
+        "finding_id": "R7-F004",
+        "defect_class_id": "AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+        "severity": "P1",
+        "topic_ids": [
+          "remediation-class:R3-F002",
+          "prior-class:AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+          "obligation:R7-P1-GENERATED-IDENTITY",
+          "changed-path:scripts/run-round-close-controls.mjs",
+          "changed-path:work/rounds/R-0007/affected-test-graph.json"
+        ],
+        "evidence": "scripts/run-round-close-controls.mjs:458-464 scanProgramSource returns inside catch before executables.add, so any path absent from the candidate tree is dropped silently; package.json:24-27,44 reach node packages/cli/dist/bin.js from build, lint, typecheck, test and ci:governance, and that generated file is untracked, so it never appears in executables or closure_digest. scanProject:471-491 records only depth-1 references, never recursing into the nine referenced projects of packages/cli/tsconfig.json, never following the extends chain to tsconfig.base.json, and never deriving outDir, rootDir or include, although work/rounds/R-0007/remediation-3-closure-matrix.json:63 demands every reachable TypeScript project reference and output. scanProgramSource extracts only literal first arguments of spawnSync/execFileSync/spawn/execFile and never follows import or require edges, so second-order executables are invisible. executableProgramsV7:433-436 matches a fixed allowlist /\\b(?:node|vitest|tsc|git|prettier|pnpm)\\b/, so eslint, changeset and any other program named in a script string is never derived. validateGateCommandClosureV6:583 compares closure_digest only when context.profile.decision_id==='DII-251'.",
+        "population_query": "For each of the sixteen rows of law/policy/round-close-controls.json convergence.commands, compute the transitive closure over root and workspace scripts, tsconfig references, tsconfig extends chains, tsconfig outputs, import/require edges of every scanned executable, and every program token in every command part; diff that closure against the scripts, programs, executables and project_references sets that deriveGateCommandClosureV7 produces for the same gate at candidate 25d0c17.",
+        "affected_population": [
+          "packages/cli/dist/bin.js reached by root scripts build, lint, typecheck, test and ci:governance and absent from every gate closure",
+          "tsconfig.base.json reached by extends from all thirteen packages/*/tsconfig.json and never derived",
+          "the nine depth-2 project references of packages/cli/tsconfig.json (../authority, ../evidence, ../effects-check, ../loop, ../schemas, ../sensors, ../skills, ../spec, ../utils) and their own reference sets",
+          "tsconfig outDir/rootDir/include outputs for all thirteen workspace projects",
+          "import and require edges of every executable added by scanProgramSource",
+          "every program token outside {node, vitest, tsc, git, prettier, pnpm} appearing in any reachable script string",
+          "all sixteen gate rows when context.profile.decision_id is not the literal DII-251"
+        ],
+        "repair_condition": "deriveGateCommandClosureV7 must compute a fixpoint that includes tsconfig references transitively, extends chains, declared outputs, and module import/require edges of every scanned executable; an executable path that cannot be read from the candidate object must produce a blocking finding rather than be dropped; program derivation must come from parsing the command string rather than a name allowlist; and the closure_digest comparison in validateGateCommandClosureV6 must apply for every profile. A machine check must show that mutating each member of the affected population above changes the derived closure_digest for at least one gate or produces GATE_COMMAND_CLOSURE_DERIVATION_INVALID."
+      },
+      {
+        "finding_id": "R7-F005",
+        "defect_class_id": "AUTHORITATIVE_GATE_CANDIDATE_RED",
+        "severity": "P1",
+        "topic_ids": [
+          "remediation-class:R3-F001",
+          "prior-class:AUTHORITATIVE_GATE_CANDIDATE_RED",
+          "prior-class:AUTHORITATIVE_GATE_POPULATION_OMITTED",
+          "changed-path:law/policy/round-close-controls.json",
+          "changed-path:.devai/config/round-close-controls.json",
+          "changed-path:tests/contract/pre-r0007-remediation-3.red.contract.test.ts"
+        ],
+        "evidence": "law/policy/round-close-controls.json:517-519 replaces the materializations argv 'node scripts/run-round-close-controls.mjs policy-check' with 'materializations-check', whose handler materializationsCheckV8 at scripts/run-round-close-controls.mjs:6454-6473 only runs git diff --no-index between the two policy files. No remaining argv row reaches policy-check, so reviewerBindingV4, validateNormativeSourceCoverageV6 and deriveControlProvenanceV6 (invoked only from policyCheckV4:6365-6373) left the freeze roster. R3-001-LITERAL-ROSTER at tests/contract/pre-r0007-remediation-3.red.contract.test.ts:162-175 asserts the roster has sixteen rows and then spawns exactly one of them. executeCompleteGatePopulationV8 at scripts/run-round-close-controls.mjs:4135 is called from executePolicyGates:4289 with the runner (gate)=>({gate}), which executes nothing; retention after a red ordinal comes from the pre-existing break-free loop, so R3-001-ALL-FAILURE-ORDINALS proves nothing about the controller. results.push at 4466-4472 records node_id, outcome, result, task_key and output_digest but no exit_code for passing gates. scripts/run-round-close-controls.mjs:4313 skips any gate whose freshness profile fails to resolve, and 4482 replaces the entire sixteen-row population with [] when impact planning is blocking.",
+        "population_query": "For each of the sixteen ids in law/policy/round-close-controls.json convergence.commands, report (a) whether an executable contract spawns its exact argv from a detached candidate checkout and asserts exit 0, and (b) for each of the sixteen failure ordinals, whether the emitted smart-converge passes[].results contains sixteen ordered records carrying gate_id and exit_code.",
+        "affected_population": [
+          "formatting",
+          "preparation",
+          "action-registry",
+          "trace",
+          "repository-references",
+          "materializations",
+          "diff-check",
+          "ordinary",
+          "stage1",
+          "stage2",
+          "t4",
+          "t5",
+          "t6",
+          "changesets",
+          "coverage",
+          "governance",
+          "the removed policy-check gate semantics (reviewer binding census, normative source coverage, control provenance derivation)",
+          "scripts/run-round-close-controls.mjs:4313 silent gate skip",
+          "scripts/run-round-close-controls.mjs:4482 empty result population under blocking findings"
+        ],
+        "repair_condition": "An executable contract must spawn all sixteen literal argv arrays from a clean detached candidate checkout and assert exit 0 for each without controller argument injection; smart-converge must emit exactly sixteen ordered records containing gate_id and exit_code for every one of the sixteen injected failure ordinals and when impact planning is blocking; no gate may be skipped without a blocking finding naming it; and the roster must retain a gate that executes the reviewer-binding, normative-source-coverage and control-provenance checks."
+      },
+      {
+        "finding_id": "R7-F006",
+        "defect_class_id": "AFFECTED_TEST_INPUT_POPULATION_INCOMPLETE",
+        "severity": "P1",
+        "topic_ids": [
+          "remediation-class:R3-F003",
+          "prior-class:AFFECTED_TEST_INPUT_POPULATION_INCOMPLETE",
+          "obligation:R7-P1-AFFECTED-TESTS",
+          "changed-path:scripts/run-round-close-controls.mjs"
+        ],
+        "evidence": "OM-017.md:63-66 enumerates thirteen loader families and requires that anything not proved safe select full suite and whole coverage. hasAmbiguousLoaderV6 at scripts/run-round-close-controls.mjs:3696-3729 recognises alias only when the initializer is exactly require or globalThis.require (:3698), destructuring only when the source object is module (:3699), and computed access only on module (:3705) or on module/globalThis with a literal 'require' key (:3706). Consequently 'const load = module.require; load(name);', 'const { require: load } = globalThis; load(name);', 'globalThis[loaderName](name);' and 'const load = process.mainModule.require; load(name);' match no branch, and their subsequent calls match none of the six families at :3709-3716. work/rounds/R-0007/affected-test-graph.json:82 owns packages/cli/src/**/*.ts, so buildImpactPlan:3868-3874 classifies such a file as owned and the UNKNOWN_DEPENDENCY fallback at :3866 does not rescue it; neither full-suite nor full-coverage is selected. R3-003-INDIRECT-LOADER-FAMILIES (tests/contract/pre-r0007-remediation-3.red.contract.test.ts:313) exercises five forms, none of them these.",
+        "population_query": "For each of the thirteen loader families named in product/owner-mandates/OM-017.md:63-66, construct a minimal source file under an owned selector of work/rounds/R-0007/affected-test-graph.json, run impact-plan over a base..candidate range containing it, and report every family whose plan omits DYNAMIC_DEPENDENCY_AMBIGUOUS on both the full-suite and whole-coverage nodes.",
+        "affected_population": [
+          "aliased via member expression: const load = module.require; load(name)",
+          "destructured from a non-module object: const { require: load } = globalThis; load(name)",
+          "computed on globalThis: globalThis[loaderName](name)",
+          "aliased via process.mainModule: const load = process.mainModule.require; load(name)",
+          "every such form located under any owned selector, including packages/cli/src/**/*.ts (work/rounds/R-0007/affected-test-graph.json:82)"
+        ],
+        "repair_condition": "Loader classification must be derived from binding flow rather than a regex list: any identifier bound, directly or transitively, from an expression whose property name is require, resolve or createRequire, and any call through a computed member on any object, must mark the file ambiguous. A machine check must assert that all thirteen OM-017 families, each placed under an owned selector, produce DYNAMIC_DEPENDENCY_AMBIGUOUS on both the full-suite and the whole-coverage node, in candidate bytes and in base/preimage bytes."
+      },
+      {
+        "finding_id": "R7-F007",
+        "defect_class_id": "ENTRY_READINESS_CONTRADICTS_ENTRY_BLOCK",
+        "severity": "P1",
+        "topic_ids": [
+          "obligation:R7-P0-DEPLOY-REFUSAL",
+          "prior-class:REVIEW_CENSUS_AND_CANDIDATE_PROOF_INCOMPLETE",
+          "changed-path:scripts/run-round-close-controls.mjs",
+          "changed-path:tests/contract/pre-r0007-close-controls.red.contract.test.ts"
+        ],
+        "evidence": "entryCheckV4 at scripts/run-round-close-controls.mjs:6409-6417 now pushes ENTRY_BLOCKED_DECLARATION_UNBOUND into findings, and policyCheckV4:6388 computes entry_ready as resolution.selected!==null && declarationDiagnostic===null && findings.length===0. statusV4:10624 computes entry_ready as binding?.selected!==null && findings.length===0, with no declaration term. Because OM-017 now binds the reviewer, status --candidate <sha> reports entry_ready true for the same candidate on which entry-check exits 1 with ENTRY_BLOCKED_DECLARATION_UNBOUND. tests/contract/pre-r0007-close-controls.red.contract.test.ts:253 was edited in this range from entry_ready: false to entry_ready: true, locking the contradiction into the contract instead of repairing it.",
+        "population_query": "For the exact candidate, invoke policy-check, entry-check and status with the same literal --candidate and compare the emitted entry_ready values and the union of ENTRY_BLOCKED_* codes across findings and diagnostics; report every consumer whose entry_ready disagrees with the others.",
+        "affected_population": [
+          "scripts/run-round-close-controls.mjs:10624 statusV4 entry_ready omits the B0 declaration term",
+          "tests/contract/pre-r0007-close-controls.red.contract.test.ts:253 asserts the contradictory value",
+          "statusV3 at scripts/run-round-close-controls.mjs:5413, reachable through the worktree-policy dispatch of R7-F003, likewise reports readiness without the declaration"
+        ],
+        "repair_condition": "entry_ready must be computed by one shared function for policy-check, entry-check and status, and must be false whenever any ENTRY_BLOCKED_* condition holds. A machine check must assert that for the exact candidate the three consumers emit identical entry_ready values and that status.entry_ready is false while ENTRY_BLOCKED_DECLARATION_UNBOUND is present."
+      },
+      {
+        "finding_id": "R7-F008",
+        "defect_class_id": "RECHECKED_TOPIC_EVIDENCE_UNAUTHENTICATED",
+        "severity": "P2",
+        "topic_ids": [
+          "obligation:R7-P0-HISTORY-INTEGRITY",
+          "prior-class:RECHECKED_TOPIC_EVIDENCE_UNAUTHENTICATED",
+          "changed-path:work/audit/R-0007-pre-entry/remediation-3-red-evidence.json",
+          "changed-path:law/policy/governed-sequencing.json"
+        ],
+        "evidence": "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json:17 records observed.test_files_failed 1 while :29 records observed_test_files_failed 7 for the same replay of a command (:10-15) naming exactly one test file, so at most one test file can fail. The document's inspector_candidate_sha was 7715c5184e4ac7c8e73f97c125f9680504f4f2b5 at commit dfe84b8 and was rewritten to 2dfe86b54c79dfe04780e607af4dac16ef000808 at commits 22863db and b325e69, both after the implementation commit 850c8a8. Its interpretation at :86 states that no Engineer implementation change preceded the evidence, but commit 3ae14eb, which precedes 2dfe86b, changed law/policy/round-close-controls.json (the R3-F001 materializations argv repair) and work/rounds/R-0007/affected-test-graph.json (the R3-F002 closure digests), both declared implementation_surfaces in work/rounds/R-0007/remediation-3-closure-matrix.json:44-48,86-90; exercised_implementation_paths at :33-36 omits them. law/policy/governed-sequencing.json records 3ae14eb and c82d6d3 as law_commits and 850c8a8 as the only implementation_commit.",
+        "population_query": "For the red_evidence entry of law/policy/governed-sequencing.json and for work/audit/R-0007-pre-entry/remediation-3-red-evidence.json, verify (a) internal consistency of every observed count against the declared command, (b) that the evidence commit is an ancestor of every commit that modifies any path listed as an implementation_surface in work/rounds/R-0007/remediation-3-closure-matrix.json, and (c) that no commit after the first implementation commit modifies the evidence file.",
+        "affected_population": [
+          "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json:17 vs :29 contradictory failed-test-file counts",
+          "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json:9 re-anchored at commits 22863db and b325e69, after implementation 850c8a8",
+          "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json:33-36 omits law/policy/round-close-controls.json and work/rounds/R-0007/affected-test-graph.json",
+          "commit 3ae14eb modifies two declared implementation surfaces before the recorded evidence commit 2dfe86b",
+          "law/policy/governed-sequencing.json classifies 3ae14eb and c82d6d3 as law_commits"
+        ],
+        "repair_condition": "The recorded red-evidence commit must be an ancestor of every commit that touches any path declared as an implementation_surface in the closure matrix; every observed count in the evidence document must be internally consistent with the recorded command; exercised_implementation_paths must equal the set of implementation surfaces present at that commit; and git log must show no modification of the evidence file at or after the first implementation commit."
+      },
+      {
+        "finding_id": "R7-F009",
+        "defect_class_id": "SPECIMEN_SCOPED_DECISION_ID_GATE",
+        "severity": "P1",
+        "topic_ids": [
+          "control:product/owner-mandates/OM-017.md",
+          "control:product/owner-mandates/OM-015.md",
+          "changed-path:scripts/run-round-close-controls.mjs",
+          "changed-path:tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts"
+        ],
+        "evidence": "Commit 850c8a8 introduces nine literal 'DII-251' comparisons in scripts/run-round-close-controls.mjs at lines 583, 5722, 8818, 9143, 9179, 9218, 10112, 10533 and 10575. Each gates a campaign-3 hardening: closure-digest comparison, the literal-candidate requirement, exact prior-result path resolution, state persistence, predecessor-artifact authentication, the exact artifact chain for transports and results, and result persistence. Under any other profile the controller silently reverts to the pre-campaign behaviour, which is the specimen-only fix forbidden by product/owner-mandates/OM-017.md:92-95. The existing guard at tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts:437-438 asserts only that the controller does not contain 'DII-246' or 'DII-248', so the new literals evade it; the same test was edited in this range only to add DII-251 to the expected provenance list.",
+        "population_query": "Grep scripts/run-round-close-controls.mjs for the regex 'DII-[0-9]+' inside string literals and report every occurrence together with the behaviour it gates and the set of profiles for which that behaviour is disabled.",
+        "affected_population": [
+          "scripts/run-round-close-controls.mjs:583 closure_digest comparison",
+          "scripts/run-round-close-controls.mjs:5722 literal-candidate requirement in resolveConsumerCandidateV8",
+          "scripts/run-round-close-controls.mjs:8818 prior review-result path resolution",
+          "scripts/run-round-close-controls.mjs:9143 review-scope state persistence",
+          "scripts/run-round-close-controls.mjs:9179 predecessor state artifact authentication",
+          "scripts/run-round-close-controls.mjs:9218 exactArtifactChain for transports, payloads and results",
+          "scripts/run-round-close-controls.mjs:10112 invalid-transport state persistence",
+          "scripts/run-round-close-controls.mjs:10533 review-result persistence",
+          "scripts/run-round-close-controls.mjs:10575 next-state persistence"
+        ],
+        "repair_condition": "Every one of the nine behaviours must be selected by a capability declared in law/policy/round-close-controls.json (for example a policy_version or a named feature flag) rather than by a profile decision-id literal, and the controller guard must be strengthened from the two named ids to a assertion that scripts/run-round-close-controls.mjs contains no string literal matching /DII-[0-9]+/."
+      },
+      {
+        "finding_id": "R7-F010",
+        "defect_class_id": "REMEDIATION_MATRIX_POPULATION_FLOOR_REMOVED",
+        "severity": "P2",
+        "topic_ids": [
+          "control:product/owner-mandates/OM-016.md",
+          "changed-path:law/schemas/remediation-closure-matrix.schema.json",
+          "changed-path:work/rounds/R-0007/close-control-profile.json"
+        ],
+        "evidence": "law/schemas/remediation-closure-matrix.schema.json:53-54 changes classes from minItems 8 / maxItems 8 to minItems 1 / maxItems 64, and :75-76 loosens finding_id from the const-like pattern ^R2-F00[1-8]$ to ^R[0-9]+-F[0-9]{3}$; test_ids at :104 loosens correspondingly. work/rounds/R-0007/close-control-profile.json repoints sources.remediation_closure_matrix from work/rounds/R-0007/remediation-2-closure-matrix.json to work/rounds/R-0007/remediation-3-closure-matrix.json, so loadV4Context:5556 no longer loads or schema-validates the eight R2 classes at runtime. After both changes a one-class matrix satisfies the schema and nothing mechanically requires the still-open R2 population to remain enumerated.",
+        "population_query": "For every finding_id whose disposition is OPEN in work/rounds/R-0007/prior-finding-registry.json, report whether it appears in the matrix bound by work/rounds/R-0007/close-control-profile.json sources.remediation_closure_matrix and is therefore schema-validated at runtime.",
+        "affected_population": [
+          "law/schemas/remediation-closure-matrix.schema.json:53 classes.minItems lowered from 8 to 1",
+          "law/schemas/remediation-closure-matrix.schema.json:75 finding_id pattern generalized",
+          "work/rounds/R-0007/close-control-profile.json sources.remediation_closure_matrix repointed away from remediation-2",
+          "the eight R2-F001..R2-F008 classes, which remain OPEN in work/rounds/R-0007/prior-finding-registry.json but are no longer bound by any profile source"
+        ],
+        "repair_condition": "Either the profile must bind every campaign closure matrix whose classes remain OPEN in the prior-finding registry, or the schema must require that the bound matrix enumerate the union of all OPEN prior finding ids. A machine check must assert that the set of finding_ids in the bound matrix is a superset of the OPEN dispositions in work/rounds/R-0007/prior-finding-registry.json."
+      }
+    ],
+    "terminal_record": {
+      "topic_count": 61,
+      "accounted_count": 61,
+      "finding_count": 10,
+      "unresolved_p0_p1": 8,
+      "complete_class_sweeps": 5,
+      "continued_after_blockers": true,
+      "entry_block_intent_preserved": true
+    }
+  }
+}

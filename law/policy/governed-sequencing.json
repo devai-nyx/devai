@@ -23,6 +23,12 @@
     "required_after_commit": "3925a2f89f8f5ce041e247a29c00fd624b711765",
     "description": "Every later substantive Engineer implementation must bind its exact changed implementation paths to both the prior failing Inspector sources and the durable Auditor observation."
   },
+  "implementation_path_manifests": {
+    "required_after_commit": "ca0667d7874ab64a89b45c52e14ec24cbe56de0c",
+    "manifest_suffix": ".implementation-paths.json",
+    "rule": "every substantive Engineer commit after the boundary must have every substantive implementation path named in an implementation-path manifest committed by a prior Inspector commit",
+    "reason": "DII-253. The manifest existed as an Auditor procedure and was checked after the Engineer commit for R7-F012, so it reported an unnamed path instead of preventing it. A control that runs after the act it governs is a report, not a gate."
+  },
   "implementation_surfaces": {
     "prefixes": [
       "packages/",
@@ -476,9 +482,362 @@
           "packages/cli/src/command-router.ts"
         ]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["477237c8b7c33c2c59e2262ec9147311feaf6e5b"],
+      "law_commits": ["55b0a78ca9585c1166d1eba109a97596e2f8649e"],
+      "red_evidence": {
+        "commit": "3d950ed09d6ec0f11b986ec532146b54c01c67a1",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-close-controls.red.contract.test.ts --reporter=dot",
+        "evidence_path": "work/audit/R-0007-pre-entry/control-red-evidence.json",
+        "evidence_sha256": "700821ace5f24febf7a1457b7aefa5e5d391ac92cd4dd7e4334551d5ef1040ac",
+        "tests": ["tests/contract/pre-r0007-close-controls.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "package.json",
+          "packages/schemas/src/roster.ts",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["c0b26d6a7a2949dd5b64933844f9d0add26fc2cf"],
+      "law_commits": ["55b0a78ca9585c1166d1eba109a97596e2f8649e"],
+      "red_evidence": {
+        "commit": "988b01a01d048345197c4c432edfa2212bedb04e",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts --reporter=verbose",
+        "evidence_path": "work/audit/R-0007-pre-entry/impact-dag-red-evidence.json",
+        "evidence_sha256": "f40971600d156a8c24ab66fccaa3eff77fa0ec1a1140463326cf83211c56a32a",
+        "tests": ["tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["5b5bae5c9b3bedbaf1facd6dcab2363993ffcca1"],
+      "law_commits": ["55b0a78ca9585c1166d1eba109a97596e2f8649e"],
+      "red_evidence": {
+        "commit": "ba95820f2157ddeab79d9a8d4a73c4dea3ea78de",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts --reporter=verbose",
+        "evidence_path": "work/audit/R-0007-pre-entry/output-freshness-red-evidence.json",
+        "evidence_sha256": "5608b3949a8e1f370ca0946e2d4f447492c95710b09bacc1f147a1a52e215231",
+        "tests": ["tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": [
+        "acda29ec3e8d3fa7f34da1f2a6198087f9f36755",
+        "a4ac90bdd999af12dcf8ffbc8eb44148ab68d1f6"
+      ],
+      "law_commits": ["0332ce727d006d03429d1f46fef8ecbc563aa8af"],
+      "red_evidence": {
+        "commit": "28d07305fd33681aab56cad0bdce00158c9afe0e",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts --reporter=dot",
+        "evidence_path": "work/audit/R-0007-pre-entry/cycle1-complete-class-red-evidence.json",
+        "evidence_sha256": "5a33cf75410619951b89c9a8276a77b0e1dfdf301795caefc0a1ac70469376eb",
+        "tests": ["tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "packages/schemas/src/roster.ts",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": [
+        "2736248dc88dfe374dac685dc8313cfde49ea828",
+        "f24e14b85ba750df9dd52081687883b92fbaabfd",
+        "7f0b7a4f6613c451918cd9f49263a21a8f045637"
+      ],
+      "law_commits": [
+        "9d36281b9715f98747788afa8d21c0d4f8cf7bda",
+        "36c9ac2afcaa3a51d9f67b93682663753bc9cf77",
+        "7fc56358e09c1c98d5f031192ec6f396462607df",
+        "cd5aad133ab5346f9abec28cb7ac7239b6f08bc3",
+        "a1e219b09d80b001731fabd1570ff27966765760",
+        "03d28e7ac8821f3184a44c19c808c7195c2b9ffd",
+        "fb4e20a773d614a3be8b11ee447a6bdb9b600e5a",
+        "97ecbc3ba5d3a02cbaefa8257ac4dc6ee482751e",
+        "b5efa1641182419774fde6c26f96e92873553e58",
+        "7956a4d2bf51e2d8cd78b3a8c1bc2ffd5151d910",
+        "4067b07f37dfa63388d132c52cae646daa632ee4"
+      ],
+      "red_evidence": {
+        "commit": "9401c63746d70abdfba82547a4b432def56e64fe",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-close-controls.red.contract.test.ts tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts tests/contract/pre-r0007-remediation-1.red.contract.test.ts --reporter=dot",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-sequencing-red-evidence.json",
+        "evidence_sha256": "c741507796d4d60036544c3769f2096b5d944c4aff6cb3e5a7cc9d3faf49cf0b",
+        "tests": [
+          "tests/contract/pre-r0007-close-controls.red.contract.test.ts",
+          "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
+          "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
+          "tests/contract/pre-r0007-remediation-1.red.contract.test.ts"
+        ],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "packages/schemas/src/roster.ts",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["cfd5631ac6a23dd8476cdb8d66b7dde4298fae3d"],
+      "law_commits": ["2e02614f6fdc1d4dd5981a702b236a340173e1b5"],
+      "red_evidence": {
+        "commit": "bab28b72f438ed80bf445dc1286dfdf08d0d212c",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts --reporter=dot",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-late-sequencing-red-evidence.json",
+        "evidence_sha256": "ab82b41676d5c2cd3999a9dcf9f4ceeddba50f86d588e56b03fe0dc098fca41f",
+        "tests": ["tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "packages/schemas/src/roster.ts",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["320d1653b70abab71dc2166a5ff1e4246f479462"],
+      "law_commits": ["2e02614f6fdc1d4dd5981a702b236a340173e1b5"],
+      "red_evidence": {
+        "commit": "92ef37219af43476416373bc683ac80650ba7db8",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-close-controls.red.contract.test.ts tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts tests/contract/pre-r0007-remediation-1.red.contract.test.ts tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts --reporter=dot",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-late-sequencing-red-evidence.json",
+        "evidence_sha256": "ab82b41676d5c2cd3999a9dcf9f4ceeddba50f86d588e56b03fe0dc098fca41f",
+        "tests": [
+          "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
+          "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
+          "tests/contract/pre-r0007-remediation-1.red.contract.test.ts"
+        ],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["a7820ff7daa9781fcca04ec67b4a7ffb39fab1e4"],
+      "law_commits": ["2e02614f6fdc1d4dd5981a702b236a340173e1b5"],
+      "red_evidence": {
+        "commit": "7142bc07f58e4e5236585da67e9b82f43156bf09",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t 'atomically rejects stale-candidate|accepts one authentic current per-topic reused-topic proof|accepts the full failure, complete repair|rejects independently mutated claim proof: registry-runtime' --reporter=verbose",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-late-sequencing-red-evidence.json",
+        "evidence_sha256": "ab82b41676d5c2cd3999a9dcf9f4ceeddba50f86d588e56b03fe0dc098fca41f",
+        "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["bf76df9029f578b1b4597c53f3f42828969be813"],
+      "law_commits": ["2e02614f6fdc1d4dd5981a702b236a340173e1b5"],
+      "red_evidence": {
+        "commit": "cb9ba36cffe4c166081900071489f9410d2919bb",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t 'accepts the full failure, complete repair|rejects a forged v2 repair identity link' --reporter=dot",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-1-late-sequencing-red-evidence.json",
+        "evidence_sha256": "ab82b41676d5c2cd3999a9dcf9f4ceeddba50f86d588e56b03fe0dc098fca41f",
+        "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": [
+        "c200bca2eda64e5b984d6b7c45fae4b73ff999b2",
+        "62451c21d94e12337286231a73d07dd3316427b5",
+        "26210d5ec43074ace50b3778f63301d95bab0d60"
+      ],
+      "law_commits": ["5d707ca386aaa97c2c92d36f75dcd2de49b414c0"],
+      "red_evidence": {
+        "commit": "c7955c2711ae61a07df89704489847e3074af592",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-2.red.contract.test.ts --reporter=json --outputFile=/tmp/devai-r7-remediation2-red.json",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-2-red-evidence.json",
+        "evidence_sha256": "1a7f55abc98ddbc21a06f627bf3e0c533f3fd825a2a18ff5f6f69b226fe4006a",
+        "tests": ["tests/contract/pre-r0007-remediation-2.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["5763ad738c3f57ac5327ddcdbc55567d3ce75735"],
+      "law_commits": ["19e185a26e34aa06513873ddabf8f6033a66dd76"],
+      "red_evidence": {
+        "commit": "787a651aa23bcf54711b0b2900b0643df3c0dc94",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-sequencing-red-evidence.json",
+        "evidence_sha256": "ee4bb8a7cd35033dbb51810de011cda0ae696828787a3ce3084e65c5b6b57562",
+        "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": [
+        "f387c0e484f6dadd860470c334cd42002ba90877",
+        "389a911a42e5eb68af71326a0ef41de019ef120f"
+      ],
+      "law_commits": ["19e185a26e34aa06513873ddabf8f6033a66dd76"],
+      "red_evidence": {
+        "commit": "6f189580015dec33747a2992b41ddb4f59b779d6",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t \"coordinated removal of every command-closure|removal of the independent baseline pointer\"",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-sequencing-red-evidence.json",
+        "evidence_sha256": "ee4bb8a7cd35033dbb51810de011cda0ae696828787a3ce3084e65c5b6b57562",
+        "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["29dcadfc2095be8f10cfb762546d0eca12460b71"],
+      "law_commits": ["19e185a26e34aa06513873ddabf8f6033a66dd76"],
+      "red_evidence": {
+        "commit": "8b57513ad7d8d2cdd73483bd304163c50b33b94a",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t R2-006-MANDATE-REMOVAL",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-sequencing-red-evidence.json",
+        "evidence_sha256": "ee4bb8a7cd35033dbb51810de011cda0ae696828787a3ce3084e65c5b6b57562",
+        "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["83de5ef4c2d3d618ba0bc9f4e808e87f65146fd6"],
+      "law_commits": ["19e185a26e34aa06513873ddabf8f6033a66dd76"],
+      "red_evidence": {
+        "commit": "cf5f394d925a64071a14a2e21bf7f428bbd0306e",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t \"provides one schema-valid, independently self-digested fixture foundation\"",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-2-review-run-1-repair-sequencing-red-evidence.json",
+        "evidence_sha256": "ee4bb8a7cd35033dbb51810de011cda0ae696828787a3ce3084e65c5b6b57562",
+        "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["850c8a8f2ccd0b46e1ed693bd58878c0bd9adcce"],
+      "law_commits": [
+        "12030b4193876556874ba3c230a451a3cddc1e77",
+        "49ab9117eb38fa44033bb87b07decc381e3cd3df",
+        "3ae14eb5abcdc7a861e98e51e6f205fd19e40c9e",
+        "c82d6d350cea854ff685a16b8855a1e0f1e7aa72"
+      ],
+      "red_evidence": {
+        "commit": "2dfe86b54c79dfe04780e607af4dac16ef000808",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-3.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json",
+        "evidence_sha256": "e38c287d2b66dab8f83b6fd8267507daa9e0f313a6b132cb5541f65c56871567",
+        "tests": ["tests/contract/pre-r0007-remediation-3.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": [
+        "cabdb3ed9816c043f50291e547e1bd7b2c4e0090",
+        "f8061667ff0a659900bbcaa7fae5a6d7b140808a",
+        "cae574a48c19ed497c9e70ab29f19860c1644096",
+        "faa4d3b964b8cd8dd29f3c460c8f5fe0c98fe093",
+        "d4a3e37db0d5e66a5ed390c2d0740221e2a9c4d1",
+        "e717a3d946d257feb3ad3bdec1724d7aab0285ae",
+        "493928c2e50c014b30ec67ecb7b12c30139cec93",
+        "2abff2a0fafbe724f419f4997bdbb590829a501d",
+        "bb9f79cd5332e8396f847f187b7c72a86986eb09",
+        "3145baee1dfcb0eddc1db4ef714e48a9da7e5843",
+        "e0e8c4ab03e3e436af16174743b5234c15f8e005",
+        "49644596d32851ef56ffa4b982e51175881fb1cf"
+      ],
+      "law_commits": [
+        "875d6c42faeba0e6355d2f9e48e27e86b576dd91",
+        "5b6ff667b2d5236615fc4d9114514ef9509c15dc",
+        "4ded20588cc364434e052cb3ee2820a15dc15b24"
+      ],
+      "red_evidence": {
+        "commit": "3e863e5e355434ffbd28aadbf386985ade1927ba",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-remediation-4.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-4-red-evidence-conforming.json",
+        "evidence_sha256": "9a1e5861cb79a3e527e1a31863ecacc56a6519a8aa421eaeda9333fe4cfc7c31",
+        "tests": ["tests/contract/pre-r0007-remediation-4.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          ".devai/config/round-close-controls.json",
+          "scripts/run-round-close-controls.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["87aa821d376af83a12a19bea0f4fe05a415250c9"],
+      "law_commits": ["284307a12b07f9635156f1c306fdb6b98a93fc5f"],
+      "red_evidence": {
+        "commit": "31fe8bcf8bfa2462d1d659b25118a1837b3c866c",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-5-manifest-gate-red-evidence.json",
+        "evidence_sha256": "f0ad958b3930a59b6bc4e9ecb31ed45d9b35d063a9ea79b5de0df093db5c5386",
+        "tests": [
+          "tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
+          "tests/contract/pre-r0007-manifest-gate.implementation-paths.json"
+        ],
+        "exercised_implementation_paths": [
+          "package.json",
+          "scripts/check-implementation-path-manifest.mjs"
+        ]
+      }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["f020c41cd088a76a8205597f1d03bbbbb451cf84"],
+      "red_evidence": {
+        "commit": "f39673c0e0b1d375263f56cc10b4717ca7a4fce0",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
+        "evidence_path": "work/audit/R-0007-pre-entry/remediation-5-manifest-gate-foreign-history-red.json",
+        "evidence_sha256": "2ff921012b8545d051801066e6e14dbb6014f015b25c22fb9475c6d8b298e705",
+        "tests": ["tests/contract/pre-r0007-manifest-gate.red.contract.test.ts"],
+        "exercised_implementation_paths": ["scripts/check-implementation-path-manifest.mjs"]
+      },
+      "law_commits": ["284307a12b07f9635156f1c306fdb6b98a93fc5f"]
     }
   ],
   "historical_commit_exceptions": [
+    {
+      "round": "R-0007",
+      "implementation_commits": ["775f47dbb592ddcf8dc53f0b65a6bb75cff23757"],
+      "reason": "The R7-F012 repair under DII-253 was bound to the prospective Inspector red at 3e2a3e0, whose sources name scripts/run-round-close-controls.mjs and .devai/config/round-close-controls.json but not packages/schemas/src/roster.ts. The roster entry became necessary only because the repair added law/schemas/round-close-controls.schema.json, and the roster is an explicit bijection with that directory. The Auditor subset check against the Inspector implementation-path manifest detected the unnamed path, but ran after the commit rather than before it, so it reported the violation instead of preventing it. No forward repair conforms: a bound red must precede its implementation, and after the repair landed there is no honest failing observation left to record for a revert. History is not rewritten and this exact-commit disclosure grants no prospective exception. The subset check is being made an enforced control so this class cannot recur."
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["bef98f91b9f8cc7f50e554e907c0e54af38056e7"],
+      "reason": "The literal-gate self-preparation repair added package.json and vitest.config.ts after the bound Inspector red at 3e863e5, whose immutable source did not name vitest.config.ts. The strict detached-candidate Inspector commit e75ba57 followed the Engineer repair and therefore cannot be relabelled as prior semantic red; a post-repair observation cannot repair that ordering defect. History is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["2a6dc6b2207b482f1fdecf5ba16a2790c067291d"],
+      "reason": "The remediation-2 Engineer implementation followed DII-249, Inspector c7955c2, the complete eight-class closure matrix, and Auditor 8e7dd7e red evidence, but the immutable Inspector source did not literally enumerate the .devai/config/round-close-controls.json and packages/schemas/src/roster.ts implementation paths required by prospective exact-source binding. The real 28-test control red and five-test schema-roster red remain preserved; history is not rewritten and this exact-commit disclosure grants no prospective exception."
+    },
     {
       "round": "R-0005",
       "implementation_commits": [

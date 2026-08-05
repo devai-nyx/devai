@@ -4387,6 +4387,601 @@ PASS, publication, merge, exact-main CI, PC-0007, closure, release, package publ
 tag, GitHub Release, Pages deployment, evidence promotion, predecessor mutation, real
 external mutation, or R-0007+ authority.
 
+### DII-246 — Generalize round close into bounded content-addressed convergence
+`type: decision · status: active · authority: Architect · provenance: session-draft pre-R-0007 convergence machinery; OM-014; approved campaign; R-0006 closure lessons`
+
+R-0007 through R-0009 use one generic round-close policy and an explicit per-round
+profile. The generic engine contains no round, historical mandate, audit destination,
+or reviewer-model default. A round profile binds its authorization, plan, prompt,
+affected-test graph, semantic obligations, current-claim registry, runtime paths, and
+review budget. The profile begins with a model-neutral reviewer slot. Preparation may
+validate while returning `ENTRY_BLOCKED_REVIEWER_UNBOUND`; entry fails until exactly
+one later active Owner mandate binds one literal independent read-only model with no
+fallback.
+
+The affected-test planner is a versioned explicit DAG over governed production inputs,
+stable test shards, shared inputs, aggregate gates, outputs, and full-suite and
+whole-coverage fallbacks. Local reuse is limited to a structurally valid PASS whose key
+binds command, working directory, complete transitive content, dependency keys,
+outputs, environment, toolchain, policy, and graph. Unknown or incomplete dependency
+proof widens to the full suite. Remote CI executes the complete authoritative
+population without trusting local cache, and coverage remains indivisible.
+
+Review scope comes from schema-validated semantic obligations, exact changed paths,
+active controls, current claims, prior finding classes, candidate identities, and
+convergence evidence. Markdown scanning is only an unregistered-obligation lint.
+Structured results disposition every changed and unchanged topic exactly once and bind
+the exact candidate, manifest, and policy. Fresh reuse still requires independent
+digest and evidence recomputation. Findings include a complete same-class population
+query and repair condition; incomplete population is `BLOCKED`.
+
+The state machine admits two substantive cycles only. Cycle 1 is exhaustive; one
+role-pure complete-class repair phase invalidates and regenerates every candidate-bound
+artifact; cycle 2 reviews the entire new population. Cycle-2 failure becomes
+`ESCALATION_REQUIRED`, and cycle 3 is mechanically forbidden. One invalid transport
+attempt may retry the unchanged cycle; a second becomes `REVIEW_TRANSPORT_BLOCKED`.
+
+The committed R-0007 profile, graph, obligation registry, and current-claim registry
+are prospective preparation. They do not declare R-0007, resolve its reviewer, start
+B0, authorize deployment, publish a candidate, promote evidence, mutate real-stynx,
+or alter immutable R-0006 evidence. The Engineer must implement and materialize these
+contracts, the Inspector must prove their fail-closed cases, and the Auditor must
+preserve exact current evidence before this machinery can govern entry.
+
+### DII-247 — Repair the complete cycle-1 convergence-control defect population
+`type: decision · status: active · authority: Architect · provenance: session-draft pre-R-0007 machinery review cycle 1; OM-014; DII-246; Auditor 730c969; Inspector 28d0730; Auditor a916695`
+
+The first independent machinery review found eight control classes, F001 through F008,
+across reviewer-binding census, authoritative convergence gates, conservative impact
+widening, cache identity, review census, canonical result streams, review transitions,
+and current-claim recomputation. The authoritative class population is
+`work/rounds/R-0007/prior-finding-registry.json`; point repairs do not satisfy it.
+
+The convergence policy command roster is the mandatory ordered gate population. The
+affected-test DAG is a supplemental local precision population and may never replace,
+omit, or manufacture an authoritative gate result. Both convergence passes bind the
+same exact head, start and finish clean, execute or freshly reuse every authoritative
+gate, prohibit second-pass writes, and prove semantic equivalence. Remote execution
+disables all local reuse.
+
+Owner reviewer authority is discovered only by a complete structural census of every
+tracked active Owner mandate carrying the `devai_reviewer_binding` marker. Prose
+substrings have no authority. Zero, duplicate, inactive, conflicting, ambiguous, or
+fallback-capable bindings block entry. This decision does not create such a binding;
+the R-0007 slot remains intentionally unbound.
+
+Review scope requires an independently generated exact-candidate manifest and covers
+exactly seven source classes: semantic obligations, changed paths, active controls,
+current claims, previous finding classes, candidate identity, and convergence
+evidence. Result streams and state transitions are exact-candidate, exact-manifest,
+exact-reviewer, and exact-cycle bound. Cycle 2 requires a distinct regenerated
+candidate after the one complete-class repair phase; cycle 3 remains mechanically
+impossible.
+
+Freshness reuse requires equality of every current record identity and still-fresh
+PASS proof for every dependency. Materialized claims are recomputed from resolved
+producer arguments, complete source manifests, deterministic extraction, canonical
+value digests, and rendered locations. Unknown, dynamic, incomplete, dirty, staged,
+untracked, deleted, or renamed inputs widen conservatively, and coverage remains whole
+only.
+
+DII-247 is prospective and does not rewrite R-0006 history, start R-0007, resolve its
+reviewer, authorize deployment, publish a candidate, promote evidence, or mutate the
+predecessor. One complete second review of the regenerated machinery candidate is the
+last substantive review authorized by OM-014; a second failure requires escalation.
+
+### DII-248 — Bind remediation review to independently recomputable proof chains
+`type: decision · status: active · authority: Architect · provenance: session-draft pre-R-0007 convergence-control remediation campaign 1; OM-015; DII-246; DII-247; cycle-2 result at 5068e5f5b56dd15cd733c9c5d2663b09b2f43c13`
+
+OM-015 authorizes a separately named remediation campaign for the five cycle-2 defect
+classes recorded as `C2-F001`, `C2-F005`, `C2-F006`, `C2-F007`, and `C2-F008`. The
+authoritative class population is retained beside every earlier class in
+`work/rounds/R-0007/prior-finding-registry.json`; no point example can close a class.
+
+Reviewer authority comes only from a complete schema-valid structured marker whose
+mandate identifier, active status, exact round, literal model, read-only role, complete
+census, budget, retry limit, and forbidden fallback all validate. Mandate prose and
+partial markers do not enter the binding census.
+The census reads the exact candidate tree, never mutable worktree bytes. Its selected
+binding digest is required in the candidate manifest and must match at scope generation,
+review validation, state transition, and transport validation. A deleted or unreadable
+tracked mandate fails closed rather than crashing or silently shrinking the census.
+The repository can authenticate the authorized model and exact review bytes, but no
+provider-signed Codex invocation-verification API is available to this controller.
+Reviewer execution provenance is therefore an explicit external-orchestration trust
+boundary: a role-pure Auditor captures task/invocation ID, selected model, input
+identities, and output digest without claiming cryptographic attestation. A self-asserted
+receipt must never be described as stronger proof.
+
+Convergence is an independently authenticated exact-base/exact-candidate record with
+two complete ordered passes over the authoritative population. Each pass proves clean
+boundaries, exact stable head and tree, exactly-once gate results, output and task-key
+digests, and semantic equivalence; pass 2 proves no writes. The candidate manifest must
+carry the convergence record digest, while both artifacts carry the same independently
+recomputed candidate-identity digest. Missing, malformed, partial, stale, substituted,
+or cross-digest-mismatched evidence invalidates scope generation atomically.
+The exact base is not caller-selected. Before B0 the round profile keeps an explicitly
+unbound declaration slot. B0 must add a structured round-declaration marker to its
+candidate-tree decision and bind the profile to that decision ID and exact then-main
+base. Smart convergence, scope, claims, and review require the caller base, profile
+base, candidate-tree marker base, and merge ancestry to agree; the candidate manifest
+binds the declaration entry digest. A shortened later-ancestor range fails closed.
+The marker validates against `law/schemas/round-declaration.schema.json`; prose does not
+declare or move a base.
+
+Review result finding identifiers are globally unique across the canonical JSON or
+JSONL stream. A reused topic is accepted only after recomputing its current input
+manifest, referenced-evidence manifest and digest, and every required task-freshness key
+from current artifacts; copied topic digests or prose have no standing.
+An obligation whose required evidence is not yet expressed as mechanically resolvable
+references and task nodes is always rechecked and cannot use `REUSED_FRESH_PASS`.
+Historical findings are grouped into one mandatory topic per defect class while
+retaining every finding ID, origin cycle, origin evidence reference, and disposition;
+repeated appearances of one class never create duplicate topic IDs or lose history.
+
+Review state, transport attempts, results, candidate manifests, scope manifests, and
+complete-class repair evidence are schema-validated, self-digested, and linked by exact
+identity digests. The complete declared transition chain is verified. A second
+remediation review requires the authenticated first-run failure, its exact candidate,
+manifest, scope and result, a distinct regenerated candidate, and one repair record
+covering every failed defect class and affected instance. `PASS`,
+`ESCALATION_REQUIRED`, and `REVIEW_TRANSPORT_BLOCKED` are terminal.
+
+Scope-generation failure invalidates and removes only the stale derivative scope; it
+never deletes or rewrites authenticated review state or transition history. A terminal
+state refuses every new scope, transport, or review transition for the same campaign.
+
+A transport attempt binds the authenticated state that existed before parsing the
+payload. Its self-digest never contains a future state digest. The subsequent state
+transition may consume the completed transport digest. This one-way order prevents a
+transport-to-state-to-transport hash cycle.
+
+Materialized current claims bind and independently recompute resolved producer
+arguments, the complete source manifest, producer output, deterministic extraction,
+canonical extracted-value digest, and each rendered location's current content digest
+and verification digest. The complete ledger is self-digested. A pure topic-count
+producer derives its value from candidate primitives and declaration registries without
+reading the review-scope artifact; scope then consumes the completed ledger. This fixed
+order prevents a claims-to-scope-to-claims digest cycle. Any absent or mismatched proof
+field fails the complete ledger.
+
+Claim producers resolve candidate and base identities from the authenticated
+convergence primitive, never from the later candidate manifest. A claim unavailable
+before publication is retained in the candidate-bound ledger only as a schema-valid
+`DEFERRED_POST_PUBLICATION` declaration. After exact-head CI exists, a separate
+self-digested post-publication ledger must prove every claim and bind the immutable
+pre-review claims digest; it does not rewrite the reviewed candidate manifest.
+
+Dynamic runtime parameters come only from the authenticated convergence primitive or
+from a phase-specific, self-digested, candidate-bound runtime-input manifest. The
+complete runtime-input population and every input's evidence manifest are independently
+recomputed. Git identity and external producer output use explicit virtual source
+entries rather than an empty filesystem expansion. Tracked candidate prose contains
+stable claim-ID references only: candidate ranges, topic populations, artifact hashes,
+and CI receipts remain in ignored structured evidence so proving them never changes the
+SHA being proved.
+
+Every declared producer must emit deterministic structured output compatible with its
+extractor. The controller supplies side-effect-free JSON-file extraction and file-digest
+producer verbs where generic tools do not emit the required shape. Acceptance exercises
+the complete live per-round claim registry, not only synthetic one-claim fixtures.
+Checkout-dependent producer paths are normalized to sorted repository-relative paths.
+The exact-head CI producer also proves that the selected PR's head OID equals the claim
+candidate before it accepts the complete required check population; green checks from a
+different PR or SHA have no standing. The required-check population is nonempty,
+complete, deterministically ordered, and entirely terminal-success.
+
+The affected-test plan and every node result from both convergence passes are retained
+in a schema-valid self-digested runtime artifact. Candidate and convergence manifests
+bind its digest, and review scope uses that exact digest rather than a changed-path
+summary. Post-publication claims have an explicit deterministic materialization phase;
+hand-authored receipts have no standing.
+
+Remediation review run 1 at candidate `42ecafda98086ec5d89c738685a342e6a2323299`
+failed with six additional complete defect classes, recorded as `R1-F001` through
+`R1-F006`. The single OM-015 repair phase binds all six together. They remain mandatory
+prior-finding topics in the regenerated scope; repairing a point example or omitting an
+affected instance cannot satisfy the repair record.
+
+Every authoritative convergence gate has one versioned gate-specific freshness
+profile. That profile declares its complete effective candidate-tree input selectors,
+package or gate dependency selectors, executable-version probes, environment inputs,
+and required persistent outputs. Expansion of a package script is part of the
+declaration, not an implementation shortcut. A cache key is independently recomputed
+from the resolved raw-byte input population, dependency results, tool versions,
+environment, policy, graph, and current required-output population. Missing, changed,
+unresolved, or multiply matched declarations force execution; a gate with no persistent
+output records an explicit `none` output contract rather than inheriting an empty
+generic output list.
+
+Committed change discovery uses status-aware NUL records from the exact declared range.
+Each rename is one authenticated record retaining both preimage and postimage, and the
+union of those paths participates in node, shared-input, coverage, fallback, and review
+topic matching. The two paths receive distinct exactly-once changed-path topics linked
+by the same rename record. Name-only discovery has no standing for impact or review.
+
+Every review disposition, including rechecked PASS, rechecked FAIL, reuse, and BLOCKED,
+is evidence-bearing. Validation independently recomputes the exact current input
+manifest, evidence manifest and digest, evidence-reference set and digest, every
+required task-freshness record, and the disposition proof digest. Reviewer-supplied
+digests, paths, or explanatory prose are claims to verify, never authentication.
+
+Before parsing or persisting reviewer transport, `review-check` independently derives
+the scope's round, cycle, candidate commit, candidate tree, policy version, and complete
+ordered predecessor-candidate-manifest population from the invocation, exact Git
+objects, current policy, authenticated state, and repair chain. All six must equal both
+the scope fields and its identity proof. A mismatch is a pre-transport identity failure:
+it writes no transport artifact, increments no attempt counter, and performs no state
+transition.
+
+The review state is accepted only as the tip of one canonical digest chain. State and
+cycle must match the declared state graph; every transition has a monotonic ordinal,
+cycle, exact predecessor state and transition digests, candidate and manifest identity,
+and the result, transport, and repair digests required by that edge. Every nonzero
+transport count resolves the complete persisted predecessor-linked attempt population.
+A valid result transition consumes the exact successful transport payload digest.
+Repair and cycle-2 edges consume the exact prior failure result, failure state,
+transport, candidate, scope, and complete-class repair record. Terminal states require
+their matching terminal evidence and reject all successors.
+
+Active controls are no longer a profile path allowlist. The controller derives a
+self-digested census from raw blobs in the exact candidate tree: active applicable Owner
+mandates, the profile decision and its transitive active decision provenance (including
+DII-246 and DII-248), the policy itself, every path in the policy schema map, the round
+profile, affected-test graph, obligation/current-claim/prior-finding registries, bound
+round declaration, and every other tracked manifest referenced by those sources. Each
+entry binds a stable control identity, kind, path, active status, derivation edge, and
+raw-byte digest. Missing, unresolved, inactive, duplicate-ID, duplicate-path,
+conflicting, untracked, or extra entries fail the census atomically. Candidate manifest,
+review scope, state, and result all consume the exact census digest.
+
+This decision authorizes implementation and at most two new exhaustive machinery-review
+runs under OM-015. It does not start or close R-0007, bind its governed reviewer, alter
+R-0006, deploy, publish packages, promote evidence, or mutate the predecessor.
+
+### DII-249 — Close remediation classes by mechanically complete populations
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-016; remediation review run 2 at 0dbe660db28261287690ea88762407a8d92ba490; DII-246; DII-247; DII-248`
+
+OM-016 creates a separately named second remediation campaign after the first campaign
+exhausted its review budget. The eight Run-2 findings are one complete repair
+population. The versioned closure matrix at
+`work/rounds/R-0007/remediation-2-closure-matrix.json` binds each finding to its
+deterministic population query, complete expected population, adversarial mutations,
+exact Inspector test IDs, implementation surfaces, and evidence. Neither a green point
+fixture nor a nonempty declaration closes a matrix row.
+
+The authoritative gate roster is exact and ordered. Before candidate freeze the
+controller must execute or authenticate one still-fresh PASS for all sixteen commands,
+including repository-wide formatting. Gate freshness is conservative by proof: every
+profile covers the complete tracked candidate-tree universe and recursively resolved
+root-script closure, every declared executable probe, the digest of the complete
+process environment without exposing values, policy and graph inputs, transitive
+dependency results, and every persistent output. A narrower profile is valid only when
+the controller can mechanically prove it is a superset of the expanded command
+semantics. Unknown expansion disables reuse rather than shrinking the key.
+
+The affected-test population begins with every tracked candidate path, not a selected
+extension allowlist. Known prompt, template, fixture, configuration, and other runtime
+assets map to their dependent shards. Any otherwise unclassified tracked change widens
+to the full suite and whole coverage. Computed `import`, template import, `require`,
+`require.resolve`, `import.meta.resolve`, `createRequire`, `module.require`, `eval`, or
+equivalent unresolved loader syntax also widens unless a deterministic resolver proves
+the exact dependency.
+
+Review evidence is typed and byte-backed. Candidate blobs, exact Git range and change
+records, convergence gate results, active-control census entries, materialized claims,
+candidate manifests, and convergence artifacts have explicit resolvers. An unresolved
+reference produces no digest and cannot satisfy any disposition. Hashing prose, a
+reference string, or a declaration that evidence ought to exist is forbidden.
+
+Review state uses independently reconstructable state and edge identities. Every
+transition's declared cycle, from/to state identity, predecessor state and transition,
+candidate, manifest, scope, result, transport, and repair links are recomputed from the
+exact artifact population. Every persisted transport is revalidated against its exact
+pre-attempt state and reviewer/census identity. Every persisted result reruns complete
+topic, finding, terminal, and count authentication. Every consumed repair record reruns
+schema, self-digest, failure-chain, prior-candidate, manifest, scope, and repaired-class
+validation. Terminal states reject successors.
+
+Active controls derive from the exact-candidate structured provenance graph at
+`work/rounds/R-0007/control-provenance.json`. The controller starts at DII-249,
+traverses DII-246 through DII-248 from structured edges, validates each exact decision
+section in `law/register/DECISIONS.md`, validates each Owner mandate container, and then
+derives the policy schema map, profile sources, bound declaration, prior-finding
+evidence, obligation sources, and manifest roots. Runtime code contains no decision ID
+or Owner path population. Profile `additional_controls` is only a linting hint and has
+no authority. Every census entry digests the real exact-candidate source blob.
+
+Every reviewer-binding consumer requires an explicit resolved full candidate SHA.
+There is no `WORKTREE` authority default. Preparation and status may resolve `HEAD` to
+one immutable commit before the census, but dirty tracked bytes never participate.
+Missing, abbreviated, ambiguous, or unresolved candidate identity fails closed.
+
+Semantic-obligation coverage binds every governing normative source by exact candidate
+blob digest to one or more known stable obligation IDs. Every obligation is covered by
+at least one source. Adding, deleting, duplicating, or changing a registry row or a
+normative source without regenerating the exact mapping fails scope generation. This
+whole-source binding is the v5 unregistered-requirement lint; legacy Markdown regexes
+remain non-authoritative.
+
+The complete prior-finding registry retains R2-F001 through R2-F008 alongside every
+earlier class. Inspector red contracts and Auditor red evidence precede Engineer
+implementation. Before either independent review, the exact matrix, all sixteen gates,
+the focused and complete suites, tier gates, whole coverage, sequencing, SHA references,
+governance, diff, and clean-tree checks must be green at one frozen SHA. Any semantic
+change invalidates that evidence.
+
+This decision authorizes implementation and at most two new exhaustive independent
+machinery reviews under OM-016. It does not silently select the governed R-0007 reviewer
+model, weaken entry, manufacture PASS, alter R-0006, deploy, publish, promote evidence,
+or mutate the predecessor.
+
+### DII-250 — Rebuild close-control proof from independently derived populations
+`type: decision · status: active · authority: Architect · provenance: session-draft remediation campaign 2 Review Run 1 failure at 45e38de5a6dc615cd4d986e3144029a5d3407715; OM-016; DII-246; DII-247; DII-248; DII-249`
+
+Review Run 1 proved that internally consistent declarations are not proof of complete
+populations. The one OM-016 repair phase therefore reopens R2-F001 through R2-F008 and
+binds them to independently derived runtime checks.
+
+Authoritative convergence records all sixteen ordered gate dispositions even after a
+failure. A red gate prevents freeze but never truncates the later accounting
+population. Executable Inspector adversaries inject failure at every ordinal.
+
+Gate command closure is computed recursively from the policy argv, root and workspace
+package scripts, executable invocations, TypeScript project references, and generated
+outputs. Hand-authored nonempty script/program arrays have no evidentiary standing.
+Freshness identity binds the literal candidate commit, tree, every tree entry's path,
+mode, type and raw blob, history identity for history-sensitive gates, dependency
+results, complete environment and toolchain manifests, and every declared output,
+including ignored `dist` and build-info files. Cache reuse compares the producing
+candidate and every identity field.
+
+Impact classification starts from every candidate and preimage path. The complete
+runtime/test asset population includes the actual skills fixture tree. Every unknown
+path or unresolved computed-loader family selects both the full suite and whole
+coverage. Loader discovery covers aliases, calls/applications, computed properties,
+global/module wrappers, and deleted or renamed preimages conservatively.
+
+Review topics consume only causally prior immutable evidence. Scope and transport do
+not prove their own creation. Unresolved evidence fails scope generation. Role/path
+evidence binds the exact commit, author, paths, classification and verdict population.
+
+State validation reauthenticates the exact persisted predecessor artifact and every
+transition, transport, result and repair field. Cycle semantics come from the declared
+edge. Emission and validation use the same exact predecessor digest. Every one of the
+twelve edges, attempts zero through two, and all three terminals receive executable
+mutation coverage.
+
+The active-control census derives its decision graph from the exact register beginning
+at DII-250 and derives applicable Owner mandates transitively from exact source
+references. Duplicate IDs are rejected before map construction. Profile sources,
+round authority, policy schemas, prior evidence and normative sources are independently
+enumerated and compared with, rather than defined by, the provenance declaration.
+
+Reviewer binding loads policy, profile and linked authority from the literal 40-hex
+candidate object. Symbolic or abbreviated revisions are rejected at authoritative
+boundaries. Preparation policy and status may resolve `HEAD` once before entering that
+boundary; mutable tracked worktree bytes never participate.
+
+The obligation registry is compared with the separate per-round obligation baseline.
+That baseline fixes the complete normative-source and obligation-ID populations outside
+the registry being checked. Any deletion, addition, duplicate, coordinated registry
+edit, unresolved source, or byte drift fails before topic generation.
+
+This decision authorizes only the complete repair and final Review Run 2 allowed by
+OM-016. It does not start R-0007, bind its governed reviewer, alter R-0006, deploy,
+publish, promote evidence, or mutate the predecessor.
+
+### DII-251 — Bind exact-candidate closure and Claude Opus 5 review
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-017; remediation campaign 2 Review Run 2 failure at 7a39cc31c47a5858e15f2ba3cf7244dd6d744f22; DII-246; DII-247; DII-248; DII-249; DII-250`
+
+Remediation campaign 3 repairs the five still-open P1 populations as one unit before
+candidate freeze. The literal policy command roster is the executable authority:
+commands receive every required argument in their declared argv, and convergence may
+not inject, repair, or reinterpret arguments. All sixteen commands are executed or
+authenticated exactly once and remain visible after a red ordinal.
+
+Command closure is a recursively resolved graph. Resolution begins at every policy
+argv, follows root package scripts, `pnpm --filter` workspace selection and workspace
+package scripts, TypeScript project references and declared outputs, imported or
+spawned repository executables, generated outputs, environment, toolchain, policy,
+and history-sensitive Git inputs. Validation compares declarations with this derived
+population. A label, nonempty array, or script-name heuristic is not completeness
+proof.
+
+Impact planning uses status-aware candidate and base Git objects. Added and modified
+paths use candidate blobs; deleted paths use base blobs; renames and copies inspect
+both preimage and postimage. JavaScript and TypeScript loader analysis covers direct,
+aliased, destructured, wrapped, applied, bound, optional, computed, eval-based,
+`createRequire`, `require.resolve`, `import.meta.resolve`, and dynamic-import forms.
+Any unproved form selects both the full suite and whole coverage.
+
+Review state identity is the digest of the complete canonical persisted predecessor
+artifact, excluding only its self-digest field under one declared canonicalization.
+Every transition stores and reauthenticates that exact identity. Transport validation
+recomputes payload, validation, state-before, prior-attempt, result, topic-count,
+finding-count, terminal, and repair-population identities from exact bytes before any
+mutation. All twelve edges, attempts zero through two, and all terminals are runtime
+mutation populations.
+
+An immutable bootstrap parses only the literal candidate argument required by the
+selected command, resolves it to one 40-hex commit, and loads the round-close policy
+from that Git object before version dispatch. All policy, profile, schema, mandate,
+scope, and authority bytes thereafter come from that candidate. Authoritative
+commands reject missing, symbolic, abbreviated, and ambiguous revisions. Dirty
+worktree substitutions cannot alter dispatch or verdict.
+
+The R-0007 profile resolves the Owner-authorized reviewer binding to OM-017 and the
+literal selector `claude-opus-5`; fallback and aliases are forbidden. Both remediation
+campaign reviews and governed R-0007 review must retain provider-reported model usage
+showing exactly `claude-opus-5`. Model unavailability is transport blocking, not
+permission to substitute another model.
+
+The Inspector provides executable red mutations across the full five-class matrix
+before Engineer repair, and the Auditor retains red and green evidence. Reviews retain
+the prior 69-topic census, add every campaign-3 path, and recheck every earlier class
+exactly once. Review Run 1 PASS ends review; otherwise one complete-class repair and
+one Review Run 2 are allowed. Review Run 3 is refused.
+
+This decision authorizes campaign-3 control implementation and the Owner-bound
+reviewer resolution required for later R-0007 entry. It does not bypass any R-0007
+entry or batch gate, alter closed R-0006 artifacts, deploy, publish, promote evidence,
+or mutate the predecessor.
+
+### DII-252 — Derive close-control behaviour from generic capabilities, not decision specimens
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-017; remediation campaign 3 Review Run 1 failure at 25d0c17d84eff057817ab5849912f77b86a4f311, recorded at work/audit/R-0007-pre-entry/remediation-3-review-run-1.json; DII-246; DII-247; DII-248; DII-249; DII-250; DII-251`
+
+DII-251 stated the correct contracts but was implemented as a specimen. Nine control
+behaviours were selected by comparing a profile `decision_id` against the literal
+`DII-251`, so every other profile silently reverted to pre-campaign behaviour. Control
+behaviour is not a property of a decision identifier. Every close-control behaviour is
+selected by a named generic capability declared in `law/policy/round-close-controls.json`
+under `control_capabilities`, keyed to the policy schema version. No production control
+source may contain a string literal matching `DII-[0-9]+`, and the Inspector contract
+scans the complete controller for that pattern rather than a list of retired ids.
+
+Reviewer binding is resolved before dispatch for every authoritative consumer, not for a
+selected subset. The bootstrap resolves exactly one literal 40-hex candidate commit
+before any policy byte is read, and refuses omitted, symbolic, abbreviated, ambiguous,
+and non-commit revisions with `REVIEWER_BINDING_CANDIDATE_REQUIRED`. Policy, profile,
+schemas, mandates, graph, obligations, claims, and linked authority load from that Git
+object alone. Mutable tracked worktree bytes cannot select a handler, a schema, or a
+verdict. `smart-converge` resolves its head by the same rule and does not accept `HEAD`.
+
+An authoritative gate may not be removed from the roster by degrading it. The literal
+roster retains a gate that performs reviewer-binding census, normative-source coverage,
+and control-provenance derivation. Because a static policy argv cannot carry a candidate
+SHA, that gate is self-binding: it accepts no candidate argument, refuses to run on a
+dirty tree, resolves the checked-out commit to one literal 40-hex identity, proves the
+working tree matches that commit's tree, and then loads all authority from that Git
+object. Any mutable byte fails it closed, so worktree substitution cannot influence it.
+Convergence emits exactly one ordered terminal record per declared command, each
+carrying `gate_id`, `outcome`, and `exit_code`, and retains the complete population after
+any failure ordinal and under blocking impact plans. A gate whose freshness profile does
+not resolve becomes an explicit blocking record naming it, never a silent skip.
+
+Command closure is a fixpoint, not a depth-limited scan. Derivation traverses root and
+selected workspace scripts, TypeScript `references` transitively and `extends` chains,
+declared and derived build outputs, and the import, require, and spawn edges of every
+scanned executable until no new member appears. Programs are parsed generically from
+literal command strings; a program-name allowlist is not derivation. An executable that
+cannot be read from the candidate object is a blocking finding, never a silent drop. The
+closure digest is compared for every profile.
+
+Loader classification is binding-flow analysis, not specimen matching. Any identifier
+bound directly or transitively from an expression whose property name is `require`,
+`resolve`, or `createRequire`, and any call through a computed member access, marks the
+file ambiguous. Every unproved form selects both the full suite and whole coverage with
+`DYNAMIC_DEPENDENCY_AMBIGUOUS`, in candidate bytes and in base or preimage bytes alike.
+
+Review state identity binds the complete canonical persisted predecessor artifact. The
+review-state schema admits the authenticated predecessor artifact that transition
+identity actually binds, a production writer persists it, repair reauthentication derives
+its expected class population from authenticated prior failure evidence, and no field of
+an expected identity is read from the transport it authenticates.
+
+Entry readiness is one computation. `policy-check`, `entry-check`, and `status` consume a
+single shared readiness function, and `entry_ready` is false whenever any
+`ENTRY_BLOCKED_*` condition holds. While the R-0007 B0 declaration is unbound, all three
+consumers report `entry_ready` false. No contract may assert a readiness value that
+contradicts a blocking entry check.
+
+Closure-matrix population has a floor derived from evidence, not from a literal count.
+The profile binds one current closure matrix whose `finding_id` set is a superset of every
+`OPEN` disposition in the prior-finding registry, validated against the independently
+loaded registry at runtime. A coordinated deletion from both the matrix and its tests
+still fails. Carried classes are recorded honestly at their real closure state; a class is
+`GREEN_PROVED` only when its complete executable population is green.
+
+Red evidence is prospective and immutable. The Inspector red commit and the Auditor
+red-evidence commit precede every implementation-surface commit, evidence counts are
+internally consistent and accurately named as suites or files, and no commit at or after
+the first implementation commit modifies the evidence. Historically retrospective
+evidence is superseded prospectively and labelled as non-temporal replay rather than
+rewritten.
+
+**Amendment — what a transition identity binds.** Binding every field of a transition into
+the predecessor identity was the wrong resolution and is withdrawn. A transition's own
+bytes are already authenticated by `transition_digest_sha256`, so re-binding them into
+`previous_state_digest` adds no authentication while making the identity irreproducible
+by any independent party: a fixture, an auditor, or a reviewer recomputing the chain must
+replicate the controller's field selection exactly and stay in step with it forever. An
+identity only the producing implementation can compute is not an independently checkable
+identity.
+
+The obligation R7-F001 states is that no byte of the **predecessor state artifact** is
+left unselected. The predecessor's own self-digest satisfies that exactly: it is computed
+over the complete canonical predecessor body minus its self-digest field, so mutating any
+byte changes it. `previous_state_digest` therefore binds the predecessor state artifact's
+`state_digest_sha256`, and `previous_state_artifact` retains the path, that digest and the
+declared canonicalization so the artifact remains independently retrievable.
+
+Authentication of that claim does not come from recomputing a private derivation. It comes
+from corroboration against the authenticated state chain, the same rule the transport
+state-before identity follows: the retained artifact must exist, its self-digest must
+recompute from its own bytes, it must equal the claimed value, and the claimed value must
+be a member of the chain the state itself records. A substituted digest fails because no
+matching artifact exists and it is absent from the chain; a mutated predecessor fails
+because its self-digest changes.
+
+This makes the identity reproducible by anyone holding the artifacts, which is the
+property a reviewer needs, without weakening what is bound.
+
+This decision authorizes the campaign-3 complete-class repair. It does not bypass any
+R-0007 entry or batch gate, does not bind the B0 declaration, does not alter closed
+R-0006 artifacts, and does not deploy, publish, tag, promote evidence, or mutate the
+predecessor.
+
+### DII-253 — Persist every state boundary; disclosure is not permission
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-017; independent readiness pre-check of candidate 46fdc7709437ea6289d0f97ffda27c7fdb273254; Owner decisions of 2026-08-02 selecting redesign over mandate rider and full re-derivation of the closure matrix; DII-249; DII-250; DII-251; DII-252`
+
+OM-017 requires that each transition authenticates the complete exact persisted
+predecessor artifact, and that all twelve edges are executable mutation populations. The
+campaign-3 implementation did not meet that requirement. `review-scope` constructed the
+preflight, freeze and activation transitions as one atomic burst and called
+`persistStateV5` once, so the intermediate states were never materialized. Four edges —
+`PREFLIGHT_GREEN->CANDIDATE_FROZEN`, `CANDIDATE_FROZEN->CYCLE_1_ACTIVE`,
+`PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN` and `NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE` — were
+then exempted from predecessor-artifact corroboration by a hard-coded set of edge literals
+in the controller. A state artifact presenting a null predecessor on any of those edges
+passed authentication.
+
+The exemption was disclosed as a declared limitation rather than repaired. That was the
+wrong remedy twice over: an Architect record cannot narrow an Owner mandate, and the
+limitation described the controller's behaviour as a property of the machine when it was a
+property of the implementation.
+
+**Every non-initial transition binds a persisted predecessor.** `review-scope` folds over
+the transitions it emits, materializing and persisting the state at each boundary, so the
+predecessor artifact each transition names actually exists. The exemption is deleted, not
+declared. The sole null predecessor is the initial `DRAFT->PREFLIGHT_GREEN` edge, which is
+the base case of the chain rather than an exception: `DRAFT` is the machine's initial
+state, so no predecessor artifact exists to authenticate.
+
+**Control behaviour is selected by Architect-owned declaration, never by literals in the
+controller.** DII-252 established this for decision-id specimens. The same rule governs the
+state-machine vocabulary: edge-to-cycle derivation, cycle paths and active states, terminal
+and repair guards, cycle and retry budgets, blocked-state mapping, verdict-to-next-state
+mapping and the initial state are declared in `law/policy/round-close-controls.json` and
+read from the exact candidate. A literal that duplicates its own declaration is a defect
+whether or not the two currently agree, because nothing prevents them from diverging. The
+policy document is itself schema-validated on load, alongside the round profile.
+
+**Disclosure is not permission.** The closure-matrix schema previously stated that a class
+may be `GREEN_PROVED` while a named boundary of its population remains unbound, provided
+the boundary is declared. That clause was authored inside this campaign at `9038a7d` and
+the matrix closure then rested on it. It inverted the floor it was meant to record: naming
+an unproved boundary became a way to keep a closure state the class had not earned. A class
+that does not prove its complete population now records that boundary in
+`unbound_population_boundaries`, and a non-empty list mechanically forbids `GREEN_PROVED`
+and `REVIEWED_PASS`. Every class of the matrix is re-derived against its own
+`required_behavior` under that floor rather than carried forward.
+
+This decision authorizes the campaign-3 R7-F012 repair. It does not amend OM-017, which is
+satisfied as written and not relaxed. It does not bypass any R-0007 entry or batch gate,
+does not bind the B0 declaration, does not alter closed R-0006 artifacts, and does not
+deploy, publish, tag, promote evidence, or mutate the predecessor.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

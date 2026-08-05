@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "remediation-5-manifest-gate-red-evidence",
+  "type": "audit-record",
+  "authority": "Auditor",
+  "date": "2026-08-02",
+  "finding_id": "R7-F013",
+  "defect_class_id": "IMPLEMENTATION_PATH_MANIFEST_UNENFORCED",
+  "decision_id": "DII-253",
+  "origin_evidence": "work/audit/R-0007-pre-entry/remediation-4-readiness-pre-check.md",
+  "observations": [
+    {
+      "commit": "31fe8bcf8bfa2462d1d659b25118a1837b3c866c",
+      "command": "pnpm vitest run tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
+        "tests/contract/pre-r0007-manifest-gate.implementation-paths.json"
+      ],
+      "exercised_implementation_paths": [
+        "package.json",
+        "scripts/check-implementation-path-manifest.mjs"
+      ],
+      "tests_failed": 4,
+      "tests_passed": 0,
+      "working_tree": "clean",
+      "interrupted": false
+    }
+  ],
+  "failing_contracts": [
+    {
+      "test_id": "R7-023-MANIFEST-GATE-EXISTS",
+      "observed": "scripts/check-implementation-path-manifest.mjs must exist: expected false to be true",
+      "proves": "the manifest is an Auditor procedure with no executable control behind it."
+    },
+    {
+      "test_id": "R7-023-MANIFEST-GATE-REJECTS-UNNAMED-PATH",
+      "observed": "MODULE_NOT_FOUND in place of a blocking finding naming scripts/unnamed-by-the-manifest.mjs",
+      "proves": "a governed history whose Engineer diff touches a path no prior Inspector manifest names is not blocked."
+    },
+    {
+      "test_id": "R7-023-MANIFEST-GATE-ACCEPTS-NAMED-PATH",
+      "observed": "MODULE_NOT_FOUND",
+      "proves": "no control exists to accept a conforming diff either, so the gate cannot yet discriminate in the passing direction."
+    },
+    {
+      "test_id": "R7-023-MANIFEST-GATE-IGNORES-NON-IMPLEMENTATION",
+      "observed": "MODULE_NOT_FOUND",
+      "proves": "no control exists to leave a documentation-only diff alone."
+    }
+  ],
+  "why_this_repair_exists": "The equivalent manifest for R7-F012 was checked after the Engineer commit at 775f47d rather than before it. It found that packages/schemas/src/roster.ts was unnamed, but by then no forward repair conformed, and the Owner accepted a second exact-commit exception on 2026-08-02 while directing that the check become an enforced control. This record is that control's prospective red, and the manifest for it was written before the implementation rather than after."
+}

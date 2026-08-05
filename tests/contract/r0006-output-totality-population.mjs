@@ -459,9 +459,9 @@ try {
   dependencyFixture.scanner = {
     name: 'devai-test-scanner',
     version: '1.0.0',
-    database_updated_at: '2026-07-28T00:00:00.000Z',
+    database_updated_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
   };
-  dependencyFixture.generated_at = '2026-07-28T00:00:00.000Z';
+  dependencyFixture.generated_at = new Date(Date.now() - 60 * 60 * 1000).toISOString();
   dependencyFixture.lockfile_sha256 = undefined;
   writeFileSync(dependencyFixturePath, `${JSON.stringify(dependencyFixture, null, 2)}\n`);
   const readingsDir = join(producerDir, 'sensor-readings');
@@ -470,7 +470,7 @@ try {
     schemaVersion: '1.0.0',
     id,
     sensor: { name: kind, kind },
-    timestamp: '2026-07-28T00:00:00.000Z',
+    timestamp: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
     status: 'pass',
     deterministic: true,
     command: 'pnpm run governance:check',

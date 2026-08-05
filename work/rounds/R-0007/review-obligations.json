@@ -1,0 +1,318 @@
+{
+  "schemaVersion": "1.0.0",
+  "registry_version": "1.0.0",
+  "round": "R-0007",
+  "obligations": [
+    {
+      "obligation_id": "R7-P0-AUTHORITY",
+      "claim": "Every product, documentation, generated-output, site, review, and publication action remains within active Owner and role-path authority.",
+      "risk": "P0",
+      "source_refs": [
+        "product/owner-mandates/OM-002.md",
+        "product/owner-mandates/OM-014.md",
+        "work/rounds/EXECUTION-CONTRACT.md#authority-and-commits"
+      ],
+      "governing_paths": [
+        "product/**",
+        "law/**",
+        "work/rounds/**",
+        "packages/**",
+        "tests/**",
+        "work/audit/**"
+      ],
+      "required_evidence": ["active-control-census", "git:role-path-census", "git:exact-range"],
+      "required_adversaries": ["wrong-role-path", "inactive-authority", "undeclared-scope"],
+      "reuse_policy": "always-recheck",
+      "finding_classes": []
+    },
+    {
+      "obligation_id": "R7-P0-REVIEWER-BINDING",
+      "claim": "Preparation may report an unbound reviewer, but round entry requires exactly one active Owner mandate binding one literal model with no fallback.",
+      "risk": "P0",
+      "source_refs": [
+        "product/owner-mandates/OM-014.md#model-neutral-reviewer-binding",
+        "work/rounds/R-0007/close-control-profile.json"
+      ],
+      "governing_paths": [
+        "product/owner-mandates/**",
+        "work/rounds/R-0007/close-control-profile.json",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "required_evidence": ["reviewer-binding", "gate:materializations"],
+      "required_adversaries": [
+        "missing-binding",
+        "inactive-binding",
+        "ambiguous-binding",
+        "conflicting-binding",
+        "silent-fallback"
+      ],
+      "reuse_policy": "always-recheck",
+      "finding_classes": []
+    },
+    {
+      "obligation_id": "R7-P0-DEPLOY-REFUSAL",
+      "claim": "The R-0007 artifact may be deploy-ready but no deploy or release operation can execute without a later exact-candidate external grant.",
+      "risk": "P0",
+      "source_refs": ["work/rounds/R-0007/AUTHORIZATION.md", "work/rounds/R-0007/plan.md#stops"],
+      "governing_paths": [
+        ".github/**",
+        "packages/**",
+        "scripts/**",
+        "docs/**",
+        "work/rounds/R-0007/**"
+      ],
+      "required_evidence": ["path:work/rounds/R-0007/AUTHORIZATION.md", "candidate-manifest"],
+      "required_adversaries": ["missing-grant", "wrong-sha", "dirty-tree", "release-wording"],
+      "reuse_policy": "always-recheck",
+      "finding_classes": []
+    },
+    {
+      "obligation_id": "R7-P0-HISTORY-INTEGRITY",
+      "claim": "Predecessor history is immutable, recomputable, and never presented as successor current standing.",
+      "risk": "P0",
+      "source_refs": ["AGENTS.md", "work/rounds/R-0007/plan.md#acceptance"],
+      "governing_paths": ["docs/**", "law/**", "work/rounds/R-0007/**"],
+      "required_evidence": ["path:AGENTS.md", "git:exact-range"],
+      "required_adversaries": [
+        "mutable-main-history",
+        "copied-predecessor-standing",
+        "predecessor-write"
+      ],
+      "reuse_policy": "always-recheck",
+      "finding_classes": []
+    },
+    {
+      "obligation_id": "R7-P0-CANDIDATE-IDENTITY",
+      "claim": "Claims, convergence, review, site artifact, publication, and closure standing bind the exact candidate and invalidate after semantic change.",
+      "risk": "P0",
+      "source_refs": [
+        "work/rounds/EXECUTION-CONTRACT.md#candidate-identity-convergence-and-review-freeze",
+        "product/owner-mandates/OM-014.md#candidate-identity-and-two-cycle-limit"
+      ],
+      "governing_paths": [
+        "law/**",
+        "product/**",
+        "packages/**",
+        "tests/**",
+        "docs/**",
+        "work/rounds/**",
+        "work/audit/**"
+      ],
+      "required_evidence": ["candidate-manifest", "current-claims", "review-scope"],
+      "required_adversaries": [
+        "wrong-sha",
+        "post-freeze-source-change",
+        "stale-manifest",
+        "alternate-object-store"
+      ],
+      "reuse_policy": "always-recheck",
+      "finding_classes": []
+    },
+    {
+      "obligation_id": "R7-P1-AFFECTED-TESTS",
+      "claim": "Local convergence executes every affected test and reuses only complete content-addressed PASS results; uncertainty widens to the full suite.",
+      "risk": "P1",
+      "source_refs": [
+        "product/owner-mandates/OM-014.md#content-addressed-affected-test-execution",
+        "work/rounds/R-0007/affected-test-graph.json"
+      ],
+      "governing_paths": [
+        "packages/**",
+        "scripts/**",
+        "tests/**",
+        "law/**",
+        "product/**",
+        "work/rounds/**",
+        ".github/**"
+      ],
+      "required_evidence": [
+        "impact-execution",
+        "convergence-evidence",
+        "path:work/rounds/R-0007/affected-test-graph.json"
+      ],
+      "required_adversaries": [
+        "changed-test",
+        "transitive-source",
+        "shared-input",
+        "unknown-source",
+        "tampered-cache",
+        "missing-output",
+        "remote-mode",
+        "gate-specific-toolchain-change",
+        "gate-specific-dependency-change",
+        "committed-rename-preimage",
+        "committed-rename-postimage"
+      ],
+      "reuse_policy": "always-recheck",
+      "finding_classes": []
+    },
+    {
+      "obligation_id": "R7-P1-REVIEW-CENSUS",
+      "claim": "Every semantic obligation and changed or unchanged review topic receives exactly one independently supported disposition.",
+      "risk": "P1",
+      "source_refs": [
+        "product/owner-mandates/OM-014.md#semantic-review-obligations-and-structured-results",
+        "law/schemas/review-scope-manifest.schema.json",
+        "law/schemas/review-result.schema.json"
+      ],
+      "governing_paths": [
+        "work/rounds/R-0007/review-obligations.json",
+        "work/rounds/R-0007/current-claims.json",
+        "work/audit/R-0007/**"
+      ],
+      "required_evidence": ["review-scope", "active-control-census"],
+      "required_adversaries": [
+        "omit-unchanged-topic",
+        "duplicate-topic",
+        "unknown-topic",
+        "false-fresh-reuse",
+        "truncated-result",
+        "rechecked-evidence-substitution",
+        "scope-identity-substitution",
+        "missing-policy-schema-control",
+        "inactive-or-duplicate-control"
+      ],
+      "reuse_policy": "always-recheck",
+      "finding_classes": []
+    },
+    {
+      "obligation_id": "R7-P1-TWO-CYCLE",
+      "claim": "The reviewer performs at most two exhaustive substantive cycles, with one complete-class repair phase and mechanical refusal of cycle 3.",
+      "risk": "P1",
+      "source_refs": [
+        "product/owner-mandates/OM-014.md#candidate-identity-and-two-cycle-limit",
+        "law/policy/round-close-controls.json"
+      ],
+      "governing_paths": [
+        "scripts/run-round-close-controls.mjs",
+        ".devai/state/round-runs/R-0007/**",
+        "work/audit/R-0007/**"
+      ],
+      "required_evidence": ["review-state", "review-transport"],
+      "required_adversaries": [
+        "cycle-one-fail",
+        "partial-class-repair",
+        "cycle-two-fail",
+        "cycle-three",
+        "second-transport-failure",
+        "state-cycle-inversion",
+        "missing-or-tampered-transport",
+        "forged-result-or-repair-predecessor"
+      ],
+      "reuse_policy": "always-recheck",
+      "finding_classes": []
+    },
+    {
+      "obligation_id": "R7-P1-GENERATED-IDENTITY",
+      "claim": "CLI reference pages and the five planned projections are reproducible from stable sources and reject direct output edits.",
+      "risk": "P1",
+      "source_refs": ["work/rounds/R-0007/plan.md#acceptance"],
+      "governing_paths": ["packages/**", "scripts/**", "docs/**", "law/**"],
+      "required_evidence": ["gate:preparation", "git:exact-range"],
+      "required_adversaries": ["hand-edited-output", "missing-page", "source-output-drift"],
+      "reuse_policy": "always-recheck",
+      "finding_classes": []
+    },
+    {
+      "obligation_id": "R7-P2-CURRENT-CLAIMS",
+      "claim": "Mutable counts, coverage, hashes, gate results, and CI identities are generated or checked from exact source evidence rather than handwritten.",
+      "risk": "P2",
+      "source_refs": [
+        "product/owner-mandates/OM-014.md#semantic-review-obligations-and-structured-results",
+        "work/rounds/R-0007/current-claims.json"
+      ],
+      "governing_paths": ["docs/**", "work/rounds/R-0007/**", "work/audit/R-0007/**"],
+      "required_evidence": ["current-claims", "claim-runtime-inputs"],
+      "required_adversaries": [
+        "candidate-change",
+        "source-change",
+        "stale-rendered-value",
+        "handwritten-current-count"
+      ],
+      "reuse_policy": "always-recheck",
+      "finding_classes": []
+    }
+  ],
+  "normative_sources": [
+    {
+      "path": "AGENTS.md",
+      "source_digest_sha256": "01b125350c38bb76e6359b41eebc6a1a9a8147ed6f6406161f599e217c45874b",
+      "obligation_ids": ["R7-P0-AUTHORITY", "R7-P0-HISTORY-INTEGRITY"]
+    },
+    {
+      "path": "product/owner-mandates/OM-014.md",
+      "source_digest_sha256": "4b65116f0f9fd743f395bcdd90fc53895778c0e9f71e68276274ec1429a1f003",
+      "obligation_ids": [
+        "R7-P0-REVIEWER-BINDING",
+        "R7-P0-CANDIDATE-IDENTITY",
+        "R7-P1-AFFECTED-TESTS",
+        "R7-P1-REVIEW-CENSUS",
+        "R7-P1-TWO-CYCLE",
+        "R7-P2-CURRENT-CLAIMS"
+      ]
+    },
+    {
+      "path": "product/owner-mandates/OM-015.md",
+      "source_digest_sha256": "be3f8e47ac87d77bebafa527eeff1e5d83e806cec1689f1898ca0d70e49f4a5a",
+      "obligation_ids": ["R7-P0-CANDIDATE-IDENTITY", "R7-P1-REVIEW-CENSUS", "R7-P1-TWO-CYCLE"]
+    },
+    {
+      "path": "product/owner-mandates/OM-016.md",
+      "source_digest_sha256": "dd54b30fa3d7bee0a2ada70f9d2bfec6396142c515e5422e997f00113d188105",
+      "obligation_ids": [
+        "R7-P0-AUTHORITY",
+        "R7-P0-CANDIDATE-IDENTITY",
+        "R7-P1-AFFECTED-TESTS",
+        "R7-P1-REVIEW-CENSUS",
+        "R7-P1-TWO-CYCLE"
+      ]
+    },
+    {
+      "path": "product/owner-mandates/OM-017.md",
+      "source_digest_sha256": "8ed49721986f7ada60505c0802ab6d71ef27cf4e179c8e0520fcd3ff88c88bd1",
+      "obligation_ids": [
+        "R7-P0-AUTHORITY",
+        "R7-P0-REVIEWER-BINDING",
+        "R7-P0-CANDIDATE-IDENTITY",
+        "R7-P1-AFFECTED-TESTS",
+        "R7-P1-REVIEW-CENSUS",
+        "R7-P1-TWO-CYCLE"
+      ]
+    },
+    {
+      "path": "product/owner-mandates/OM-018.md",
+      "source_digest_sha256": "796601caa98eaf1df2f0042b536dc4f845120c318dd5664772cc773a95212145",
+      "obligation_ids": ["R7-P0-REVIEWER-BINDING", "R7-P0-CANDIDATE-IDENTITY", "R7-P1-TWO-CYCLE"]
+    },
+    {
+      "path": "work/rounds/EXECUTION-CONTRACT.md",
+      "source_digest_sha256": "c4388f4e17ce8e5abf844697d30fbaadc2612261dd9ad41907f54ce6a0b44e89",
+      "obligation_ids": [
+        "R7-P0-AUTHORITY",
+        "R7-P0-CANDIDATE-IDENTITY",
+        "R7-P1-REVIEW-CENSUS",
+        "R7-P1-TWO-CYCLE"
+      ]
+    },
+    {
+      "path": "work/rounds/R-0007/AUTHORIZATION.md",
+      "source_digest_sha256": "e9d2cee5117647cfd5c62a20e3be9ce7bb5c6c05445fcf7ccbeed90fa23be444",
+      "obligation_ids": ["R7-P0-DEPLOY-REFUSAL"]
+    },
+    {
+      "path": "work/rounds/R-0007/plan.md",
+      "source_digest_sha256": "8027c05fe0d0c794619154da3aee0ecf38ecd8e6c00f16dd73082aa0f3928bf7",
+      "obligation_ids": [
+        "R7-P0-DEPLOY-REFUSAL",
+        "R7-P0-HISTORY-INTEGRITY",
+        "R7-P1-GENERATED-IDENTITY",
+        "R7-P2-CURRENT-CLAIMS"
+      ]
+    },
+    {
+      "path": "work/rounds/R-0007/prompts/00-orchestrator.md",
+      "source_digest_sha256": "255bb1b85a73667dba9f95d0f34e88dfd9863816e7c6b53b0c351553a429d0be",
+      "obligation_ids": ["R7-P0-AUTHORITY", "R7-P0-DEPLOY-REFUSAL", "R7-P0-CANDIDATE-IDENTITY"]
+    }
+  ]
+}

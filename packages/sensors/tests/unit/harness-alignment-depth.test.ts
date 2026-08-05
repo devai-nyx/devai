@@ -174,7 +174,9 @@ describe('harness invariant-alignment parser and evidence depth', () => {
       reading('devai policy check evidence', { lifecycle: 'experimental' }),
       reading('devai policy check evidence', { candidate_sha: 'not-a-sha' }),
       reading('devai policy check evidence', { completed_at: 'invalid' }),
-      reading('devai policy check evidence', { completed_at: '2026-07-28T00:00:00.000Z' }),
+      reading('devai policy check evidence', {
+        completed_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+      }),
       reading('devai policy check evidence', { completed_at: '2026-07-20T00:00:00.000Z' }),
       reading('if true; devai policy check evidence; fi'),
       reading(42),

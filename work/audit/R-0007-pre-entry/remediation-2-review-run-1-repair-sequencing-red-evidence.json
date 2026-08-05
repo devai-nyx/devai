@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0.0",
+  "campaign": "pre-R-0007-convergence-control-remediation-2",
+  "authority": "OM-016",
+  "reviewed_failure_candidate": "45e38de5a6dc615cd4d986e3144029a5d3407715",
+  "observations": [
+    {
+      "commit": "787a651aa23bcf54711b0b2900b0643df3c0dc94",
+      "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "tests_failed": 32,
+      "tests_passed": 108
+    },
+    {
+      "commit": "6f189580015dec33747a2992b41ddb4f59b779d6",
+      "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t \"coordinated removal of every command-closure|removal of the independent baseline pointer\"",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "tests_failed": 2,
+      "tests_passed": 0
+    },
+    {
+      "commit": "8b57513ad7d8d2cdd73483bd304163c50b33b94a",
+      "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t R2-006-MANDATE-REMOVAL",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "tests_failed": 1,
+      "tests_passed": 0
+    },
+    {
+      "commit": "cf5f394d925a64071a14a2e21bf7f428bbd0306e",
+      "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t \"provides one schema-valid, independently self-digested fixture foundation\"",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "tests_failed": 1,
+      "tests_passed": 0
+    }
+  ],
+  "interpretation": "These are four exact prior Inspector boundaries for the complete Run-1 repair, coordinated proof deletion, transitively derived Owner mandate population, and compatibility-mode repair. Each failed before its corresponding Engineer change and literally binds the sole implementation path."
+}

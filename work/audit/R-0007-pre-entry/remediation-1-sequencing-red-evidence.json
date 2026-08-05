@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0007",
+  "authority": "Auditor",
+  "observations": [
+    {
+      "commit": "9401c63746d70abdfba82547a4b432def56e64fe",
+      "command": "pnpm vitest run tests/contract/pre-r0007-close-controls.red.contract.test.ts tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts tests/contract/pre-r0007-remediation-1.red.contract.test.ts --reporter=dot",
+      "exit_code": 1,
+      "result": {
+        "test_files_failed": 4,
+        "tests_failed": 94,
+        "tests_passed": 7,
+        "output_sha256": "254420d33cc401d8e251f534260d39103129d930a55fe5fe4820dd21cb67b08b"
+      },
+      "tests": [
+        "tests/contract/pre-r0007-close-controls.red.contract.test.ts",
+        "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
+        "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
+        "tests/contract/pre-r0007-remediation-1.red.contract.test.ts"
+      ],
+      "exercised_implementation_paths": [
+        ".devai/config/round-close-controls.json",
+        "packages/schemas/src/roster.ts",
+        "scripts/run-round-close-controls.mjs"
+      ]
+    }
+  ]
+}

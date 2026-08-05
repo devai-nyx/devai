@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0007",
+  "purpose": "remediation review run 1 complete-class repair red evidence",
+  "observations": [
+    {
+      "commit": "bab28b72f438ed80bf445dc1286dfdf08d0d212c",
+      "command": "pnpm vitest run tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts --reporter=dot",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts"],
+      "exercised_implementation_paths": [
+        ".devai/config/round-close-controls.json",
+        "packages/schemas/src/roster.ts",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "test_files_failed": 1,
+      "tests_failed": 14,
+      "tests_passed": 3,
+      "output_sha256": "da5f943c8ea572384698d2c845d0f43eab43a31938515154eef92d763fb2d175",
+      "defect_classes": [
+        "R1-F001/AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+        "R1-F002/COMMITTED_RENAME_PREIMAGE_OMITTED",
+        "R1-F003/RECHECKED_TOPIC_EVIDENCE_UNAUTHENTICATED",
+        "R1-F004/REVIEW_SCOPE_CORE_IDENTITY_NOT_RECOMPUTED",
+        "R1-F005/STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+        "R1-F006/ACTIVE_CONTROL_CENSUS_ALLOWLIST_INCOMPLETE"
+      ],
+      "population_counts": {
+        "gate_mutations": 98,
+        "rename_boundaries": 8,
+        "disposition_topic_proof_combinations": 196,
+        "scope_identity_fields": 6,
+        "state_cycle_history_attempt_combinations": 360,
+        "state_chain_corruption_classes": 14,
+        "active_control_census_mutations": 88
+      },
+      "repair_condition": "all fourteen failing contracts pass together without weakening the three already-green boundary controls or any prior contract"
+    }
+  ],
+  "review_run": 1,
+  "review_state": "REPAIR_REQUIRED",
+  "round_started": false,
+  "deployment_authorized": false
+}

@@ -218,7 +218,10 @@ describe('governed command depth', () => {
         scope: 'fixture',
         tier: 'unit',
         status: 'pass',
-        timestamp: '2026-07-27T12:00:00.000Z',
+        // Relative to the real clock: this record is compared against a 168-hour freshness
+        // window, so a hard-coded instant passes only until it ages out. One did, silently, and
+        // turned a green sixteen-command gate red seven days after it was written.
+        timestamp: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
         metrics: { passed: 4, failed: 0, duration_ms: 250 },
       }),
     );
@@ -229,7 +232,10 @@ describe('governed command depth', () => {
         scope: 'fixture',
         tier: 'coverage',
         status: 'pass',
-        timestamp: '2026-07-27T12:00:00.000Z',
+        // Relative to the real clock: this record is compared against a 168-hour freshness
+        // window, so a hard-coded instant passes only until it ages out. One did, silently, and
+        // turned a green sixteen-command gate red seven days after it was written.
+        timestamp: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
         metrics: { coverage_pct: { lines: 75 } },
       }),
     );

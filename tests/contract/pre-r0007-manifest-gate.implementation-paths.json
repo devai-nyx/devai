@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0.0",
+  "finding_id": "R7-F013",
+  "decision_id": "DII-253",
+  "red_contract": "tests/contract/pre-r0007-manifest-gate.red.contract.test.ts",
+  "description": "Exact implementation surfaces the implementation-path manifest gate may be built on. Written before the Engineer commit this time, which is the whole point of the control: the equivalent manifest for R7-F012 was checked after the fact and so disclosed an unnamed path instead of preventing it.",
+  "allowed_paths": ["scripts/check-implementation-path-manifest.mjs", "package.json"],
+  "rationale": {
+    "scripts/check-implementation-path-manifest.mjs": "The gate itself: for every substantive Engineer commit after the declared boundary, every substantive implementation path in its diff must be named in an implementation-path manifest committed by a prior Inspector commit.",
+    "package.json": "Wires the gate into the existing ci:governance chain. The literal sixteen-command roster is unchanged, so the gate is added without altering any authoritative argv."
+  },
+  "forbidden": [
+    "law/**",
+    "product/**",
+    "work/**",
+    "any change to the sixteen literal convergence commands",
+    "any relaxation of an existing schema floor",
+    "any widening of an existing allowlist"
+  ]
+}

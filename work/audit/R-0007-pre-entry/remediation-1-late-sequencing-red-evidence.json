@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0007",
+  "purpose": "exact-scope sequencing bindings for review-run-1 complete-class repairs",
+  "observations": [
+    {
+      "commit": "bab28b72f438ed80bf445dc1286dfdf08d0d212c",
+      "command": "pnpm vitest run tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts --reporter=dot",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts"],
+      "exercised_implementation_paths": [
+        ".devai/config/round-close-controls.json",
+        "packages/schemas/src/roster.ts",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "tests_failed": 14,
+      "tests_passed": 3,
+      "output_sha256": "da5f943c8ea572384698d2c845d0f43eab43a31938515154eef92d763fb2d175"
+    },
+    {
+      "commit": "92ef37219af43476416373bc683ac80650ba7db8",
+      "command": "pnpm vitest run tests/contract/pre-r0007-close-controls.red.contract.test.ts tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts tests/contract/pre-r0007-remediation-1.red.contract.test.ts tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts --reporter=dot",
+      "exit_code": 1,
+      "tests": [
+        "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
+        "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
+        "tests/contract/pre-r0007-remediation-1.red.contract.test.ts"
+      ],
+      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "tests_failed": 104,
+      "tests_passed": 45,
+      "output_sha256": "05f458cae59707e5edb0d591bf253aa1b0a737e519116a082b99553ce0782522"
+    },
+    {
+      "commit": "7142bc07f58e4e5236585da67e9b82f43156bf09",
+      "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t 'atomically rejects stale-candidate|accepts one authentic current per-topic reused-topic proof|accepts the full failure, complete repair|rejects independently mutated claim proof: registry-runtime' --reporter=verbose",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "tests_failed": 2,
+      "tests_passed": 2,
+      "output_sha256": "34a60fa52e937fe54ef3ea5d10c2dd6ce72496731aea99b882810dffb80e978d"
+    },
+    {
+      "commit": "cb9ba36cffe4c166081900071489f9410d2919bb",
+      "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t 'accepts the full failure, complete repair|rejects a forged v2 repair identity link' --reporter=dot",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "tests_failed": 4,
+      "tests_passed": 1,
+      "output_sha256": "590d3c0dd347aecfca2bb83e00def5f4368378f63ed0396a723d8c364c1f1c2b"
+    }
+  ],
+  "round_started": false,
+  "deployment_authorized": false
+}

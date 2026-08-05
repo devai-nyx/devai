@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0007",
+  "purpose": "review repair evidence v2 identity-link red evidence",
+  "observations": [
+    {
+      "commit": "cb9ba36cffe4c166081900071489f9410d2919bb",
+      "command": "pnpm vitest run tests/contract/pre-r0007-remediation-1.red.contract.test.ts -t 'accepts the full failure, complete repair|rejects a forged v2 repair identity link' --reporter=dot",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-remediation-1.red.contract.test.ts"],
+      "exercised_implementation_paths": ["scripts/run-round-close-controls.mjs"],
+      "tests_failed": 4,
+      "tests_passed": 1,
+      "tests_skipped": 101,
+      "output_sha256": "590d3c0dd347aecfca2bb83e00def5f4368378f63ed0396a723d8c364c1f1c2b",
+      "defect_class": "REPAIR_EVIDENCE_V2_IDENTITY_LINKS_UNAUTHENTICATED",
+      "affected_fields": [
+        "prior_failure_transition_digest",
+        "prior_failure_transport_digest",
+        "new_candidate_manifest_digest",
+        "repair_state_before_digest"
+      ],
+      "repair_condition": "independently recompute and compare all four repair-evidence v2 identity links before accepting a cycle-2 repair; the valid path passes and each forged field fails with REVIEW_REPAIR_EVIDENCE_INCOMPLETE"
+    }
+  ],
+  "review_run": 1,
+  "review_state": "REPAIR_REQUIRED",
+  "round_started": false
+}

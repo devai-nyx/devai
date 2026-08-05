@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0007",
+  "purpose": "policy-v5 fixture migration runtime red evidence",
+  "observations": [
+    {
+      "commit": "92ef37219af43476416373bc683ac80650ba7db8",
+      "command": "pnpm vitest run tests/contract/pre-r0007-close-controls.red.contract.test.ts tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts tests/contract/pre-r0007-remediation-1.red.contract.test.ts tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts --reporter=dot",
+      "exit_code": 1,
+      "tests": [
+        "tests/contract/pre-r0007-close-controls.red.contract.test.ts",
+        "tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts",
+        "tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts",
+        "tests/contract/pre-r0007-remediation-1.red.contract.test.ts",
+        "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts"
+      ],
+      "exercised_implementation_paths": [
+        ".devai/config/round-close-controls.json",
+        "packages/schemas/src/roster.ts",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "test_files_failed": 3,
+      "test_files_passed": 2,
+      "tests_failed": 104,
+      "tests_passed": 45,
+      "output_sha256": "05f458cae59707e5edb0d591bf253aa1b0a737e519116a082b99553ce0782522",
+      "defect_classes": [
+        "V5_TASK_FRESHNESS_RECORD_SHAPE_MISMATCH",
+        "AFFECTED_TEST_EXECUTION_V2_PROOF_MISSING",
+        "ACTIVE_CONTROL_CENSUS_CONSTRUCTION_INVALID",
+        "SECOND_PASS_CACHE_REUSE_INVALID",
+        "DOWNSTREAM_V5_PROOF_CHAIN_UNREACHABLE"
+      ],
+      "repair_condition": "all 149 close-control tests pass together with schema-valid v5 task, affected-execution, active-census, cache-reuse, and downstream proof artifacts and without weakening any Inspector assertion"
+    }
+  ],
+  "review_run": 1,
+  "review_state": "REPAIR_REQUIRED",
+  "round_started": false,
+  "deployment_authorized": false
+}

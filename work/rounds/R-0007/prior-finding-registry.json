@@ -1,0 +1,893 @@
+{
+  "schemaVersion": "1.0.0",
+  "round": "R-0007",
+  "registry_version": "pre-entry-remediation-campaign-3",
+  "finding_classes": [
+    {
+      "finding_id": "F001",
+      "defect_class_id": "BINDING_CENSUS_ABSENT",
+      "severity": "P0",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["reviewer-binding"],
+      "population_query": "Enumerate every tracked active Owner mandate and structurally parse reviewer-binding markers for R-0007.",
+      "affected_population": ["policy-check", "entry-check", "status"],
+      "repair_condition": "Exactly one active structured binding matches the profile; zero, duplicate, conflicting, inactive, substring-only, and fallback bindings fail closed.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F002",
+      "defect_class_id": "AUTHORITATIVE_GATE_POPULATION_OMITTED",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["smart-convergence"],
+      "population_query": "Compare every policy convergence command ID with each cold convergence pass result.",
+      "affected_population": ["all sixteen policy convergence commands"],
+      "repair_condition": "Both cold passes execute every authoritative policy command at stable exact-head clean boundaries; pass 2 writes nothing and is semantically equivalent.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F003",
+      "defect_class_id": "CONSERVATIVE_WIDENING_DEAD",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["impact-planning"],
+      "population_query": "Exercise staged, unstaged, untracked, deleted, renamed, dynamic-load, incomplete-population, and coverage-relevant changes.",
+      "affected_population": [
+        "WORKTREE and committed change discovery",
+        "full-suite fallback",
+        "whole coverage fallback"
+      ],
+      "repair_condition": "Every ambiguous or incomplete change executes full-suite and whole-coverage with explicit reason codes.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F004",
+      "defect_class_id": "CACHE_RECORD_IDENTITY_UNBOUND",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["freshness"],
+      "population_query": "Tamper each freshness identity field and each transitive dependency result while preserving a valid self-digest.",
+      "affected_population": ["every affected-test and policy-gate cache record"],
+      "repair_condition": "Reuse requires exact current identity equality and still-fresh dependency PASS proofs; any mismatch executes the complete dependent population.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F005",
+      "defect_class_id": "REVIEW_CENSUS_AND_CANDIDATE_PROOF_INCOMPLETE",
+      "severity": "P0",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["review-scope"],
+      "population_query": "Census all seven authoritative topic source classes and verify the pre-existing exact-candidate manifest.",
+      "affected_population": [
+        "semantic obligations",
+        "changed paths",
+        "active controls",
+        "current claims",
+        "previous finding classes",
+        "candidate identity",
+        "convergence evidence"
+      ],
+      "repair_condition": "Scope generation fails without an authentic exact-candidate manifest and emits every source class atomically without round-specific fabricated topics.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F006",
+      "defect_class_id": "REVIEW_REUSE_AND_STREAM_CANONICALITY",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["review-result"],
+      "population_query": "Mutate JSONL record order, duplicate headers or terminals, append trailing records, orphan findings, and attempt prohibited reuse.",
+      "affected_population": [
+        "all review JSONL records",
+        "all topic dispositions",
+        "all finding links"
+      ],
+      "repair_condition": "Only one header-first and one terminal-last stream with exact topic and finding linkage passes; obligation reuse policy is enforced.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F007",
+      "defect_class_id": "REVIEW_STATE_TRANSITION_BYPASS",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["review-state"],
+      "population_query": "Attempt every undeclared state transition, same-candidate cycle 2, stale PASS reuse, cycle 3, and cross-identity transport retry.",
+      "affected_population": ["review-check", "review state", "transport state"],
+      "repair_condition": "Only declared identity-bound transitions pass; cycle 2 requires a distinct regenerated candidate and cycle-1 complete-class repair evidence.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "F008",
+      "defect_class_id": "CLAIM_DIGEST_PLACEHOLDER_ACCEPTED",
+      "severity": "P2",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-1-failure.md",
+      "topic_ids": ["current-claims"],
+      "population_query": "Recompute every materialized claim producer, extractor, source manifest, value, digest, and rendered location.",
+      "affected_population": ["every materialized current claim"],
+      "repair_condition": "Any producer, source, extracted-value, value-digest, or rendered-location mismatch fails claims-check.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "C2-F001",
+      "defect_class_id": "BINDING_CENSUS_ABSENT",
+      "severity": "P0",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
+      "topic_ids": ["reviewer-binding"],
+      "population_query": "Parse every tracked Owner mandate and census only complete reviewer-binding markers whose mandate ID and active status agree with the containing mandate.",
+      "affected_population": [
+        "general mandates mentioning R-0007",
+        "partial and malformed marker-shaped blocks",
+        "zero, one, duplicate, conflicting, inactive, ambiguous, and fallback-capable complete bindings"
+      ],
+      "repair_condition": "General mandate prose never becomes a binding; exactly one complete schema-valid active binding matching the profile passes and every other population fails closed.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "C2-F005",
+      "defect_class_id": "REVIEW_CENSUS_AND_CANDIDATE_PROOF_INCOMPLETE",
+      "severity": "P0",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
+      "topic_ids": ["review-scope"],
+      "population_query": "Delete, truncate, stale, partially populate, tamper, substitute, and cross-digest-mismatch candidate and convergence evidence across every identity, gate, pass, and digest field.",
+      "affected_population": [
+        "candidate manifest required convergence and candidate-identity digests",
+        "two independently authenticated complete equivalent convergence passes",
+        "atomic review-scope generation without fallback evidence"
+      ],
+      "repair_condition": "Only exact cross-bound candidate and convergence records with two complete equivalent passes pass; every malformed, missing, stale, partial, tampered, substituted, or mismatched record fails atomically.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "C2-F006",
+      "defect_class_id": "REVIEW_REUSE_AND_STREAM_CANONICALITY",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
+      "topic_ids": ["review-result"],
+      "population_query": "Duplicate each finding ID in JSON and JSONL, then mutate every reusable topic input, evidence reference, evidence byte, evidence digest, and required freshness task key independently.",
+      "affected_population": [
+        "global finding-ID namespace",
+        "current topic-input manifests",
+        "referenced-evidence manifests and digests",
+        "nonempty required current task-freshness keys"
+      ],
+      "repair_condition": "Duplicate finding IDs always fail and REUSED_FRESH_PASS requires independent exact recomputation of every current input, evidence, and required nonempty task key.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "C2-F007",
+      "defect_class_id": "REVIEW_STATE_TRANSITION_BYPASS",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
+      "topic_ids": ["review-state"],
+      "population_query": "Attempt every undeclared, skipped, stale, cross-identity, forged-predecessor, unauthenticated-repair, same-candidate second-run, post-terminal, cycle-3, and exhausted-transport transition.",
+      "affected_population": [
+        "schema and self-digest validation for every linked record",
+        "complete predecessor-linked transition history",
+        "authenticated first failure and complete-class repair evidence",
+        "terminal PASS, ESCALATION_REQUIRED, and REVIEW_TRANSPORT_BLOCKED"
+      ],
+      "repair_condition": "Only the complete authenticated declared chain passes; review 2 binds the exact prior failure and distinct regenerated candidate, and terminal states reject every successor.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "C2-F008",
+      "defect_class_id": "CLAIM_DIGEST_PLACEHOLDER_ACCEPTED",
+      "severity": "P2",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/independent-machinery-review-2-failure.md",
+      "topic_ids": ["current-claims"],
+      "population_query": "Mutate or omit every producer, source-manifest, output, extracted-value, canonical digest, structured rendered marker, rendered content, and per-location verification field independently.",
+      "affected_population": [
+        "runtime materialized claim ledger distinct from declaration registry",
+        "every proof field for every claim",
+        "every structured per-claim rendered location"
+      ],
+      "repair_condition": "claims-check reads runtime materialization and independently recomputes every field and exact marker at every location; any omission, placeholder, substring-only match, or mismatch fails the ledger.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R1-F001",
+      "defect_class_id": "AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
+      "topic_ids": ["authoritative-gate-freshness"],
+      "population_query": "Expand every convergence command and compare its complete effective inputs, dependency selectors, toolchain probes, and required outputs with its gate freshness declaration and computed task key.",
+      "affected_population": [
+        "formatting",
+        "preparation",
+        "action-registry",
+        "trace",
+        "repository-references",
+        "materializations",
+        "diff-check",
+        "ordinary",
+        "stage1",
+        "stage2",
+        "t4",
+        "t5",
+        "t6",
+        "changesets",
+        "coverage",
+        "governance"
+      ],
+      "repair_condition": "Every authoritative gate resolves one complete versioned gate-specific freshness profile; changing or removing any declared input, dependency, executable version, or required output forces execution.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R1-F002",
+      "defect_class_id": "COMMITTED_RENAME_PREIMAGE_OMITTED",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
+      "topic_ids": ["committed-rename-planning"],
+      "population_query": "Parse the exact committed range with name-status NUL records and match both paths of every rename against node, shared-input, coverage, fallback, and review-topic selectors.",
+      "affected_population": [
+        "governed-to-ungoverned renames",
+        "cross-package renames",
+        "cross-shard renames",
+        "shared-to-nonshared renames",
+        "coverage-to-noncoverage renames",
+        "preimage and postimage changed-path topics"
+      ],
+      "repair_condition": "Every committed rename retains its preimage and postimage as one authenticated change record and uses their union for invalidation and exactly-once changed-path topics.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R1-F003",
+      "defect_class_id": "RECHECKED_TOPIC_EVIDENCE_UNAUTHENTICATED",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
+      "topic_ids": ["all-disposition-proof"],
+      "population_query": "Substitute each input, evidence, evidence-reference, task-freshness, and proof-digest field independently for every disposition and revalidate the self-digested result.",
+      "affected_population": [
+        "RECHECKED_PASS",
+        "RECHECKED_FAIL",
+        "REUSED_FRESH_PASS",
+        "BLOCKED",
+        "all seven review topic source classes"
+      ],
+      "repair_condition": "Every disposition independently recomputes the exact current input manifest, evidence manifest and digest, evidence-reference set and digest, required task-freshness records, and final proof digest.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R1-F004",
+      "defect_class_id": "REVIEW_SCOPE_CORE_IDENTITY_NOT_RECOMPUTED",
+      "severity": "P0",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
+      "topic_ids": ["review-scope-core-identity"],
+      "population_query": "Mutate and re-self-digest each scope identity field independently while invoking review-check against the original exact candidate and cycle.",
+      "affected_population": [
+        "round",
+        "cycle",
+        "review_candidate",
+        "candidate_tree",
+        "policy_version",
+        "previous_candidate_manifest_digests"
+      ],
+      "repair_condition": "Review validation independently derives and matches all six fields before transport persistence; any mismatch consumes no transport attempt and performs no state transition.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R1-F005",
+      "defect_class_id": "STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
+      "topic_ids": ["review-state-complete-chain"],
+      "population_query": "Cross every state with cycles, canonical and noncanonical histories, predecessor identities, transport attempts, prior results, and repair records, including missing, malformed, tampered, and cross-identity artifacts.",
+      "affected_population": [
+        "cycle-1 and cycle-2 active states",
+        "REPAIR_REQUIRED and regenerated-candidate states",
+        "transport attempt zero, one, and two",
+        "PASS, ESCALATION_REQUIRED, and REVIEW_TRANSPORT_BLOCKED terminals",
+        "prior result and complete-class repair chains"
+      ],
+      "repair_condition": "State, cycle, canonical transition history, predecessor state, result, repair, and every persisted transport attempt form one independently authenticated digest chain with exact terminal evidence.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R1-F006",
+      "defect_class_id": "ACTIVE_CONTROL_CENSUS_ALLOWLIST_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-1-failure.md",
+      "topic_ids": ["active-control-census"],
+      "population_query": "Derive authority and decision references transitively from the exact candidate tree, enumerate every policy schema, and resolve the profile, graph, registries, declaration, and tracked manifests to raw candidate blobs.",
+      "affected_population": [
+        "DII-246",
+        "DII-248",
+        "active applicable Owner mandates",
+        "every round-close policy schema",
+        "affected-test graph",
+        "obligation registry",
+        "current-claim registry",
+        "prior-finding registry",
+        "round profile and declaration manifests"
+      ],
+      "repair_condition": "The exact-candidate census contains every uniquely resolved active control and raw-byte digest; unresolved, duplicate, inactive, untracked, or extra controls fail atomically.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F001",
+      "defect_class_id": "AUTHORITATIVE_GATE_CANDIDATE_RED",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": ["candidate-authoritative-gates", "formatting"],
+      "population_query": "Execute every ordered authoritative policy command against the exact detached candidate and retain each terminal result.",
+      "affected_population": [
+        "all sixteen authoritative gates",
+        "law/policy/governed-sequencing.json"
+      ],
+      "repair_condition": "Every authoritative command, including repository-wide formatting, passes at the same clean frozen candidate.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F002",
+      "defect_class_id": "AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": ["authoritative-gate-freshness", "v5-task-runtime-alignment"],
+      "population_query": "Recursively expand all sixteen gate commands and prove complete tracked inputs, dependency outputs, executables, environment, policy, graph, and persistent outputs against each sole profile.",
+      "affected_population": [
+        "all sixteen gate profiles",
+        "root script closure",
+        "complete tracked tree",
+        "complete environment",
+        "toolchains",
+        "persistent outputs"
+      ],
+      "repair_condition": "A mechanically complete superset proof exists for every profile and any effective identity change prevents reuse.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F003",
+      "defect_class_id": "AFFECTED_TEST_INPUT_POPULATION_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": [
+        "affected-test-dag",
+        "impact-planning",
+        "unknown-dynamic-fallback",
+        "whole-coverage"
+      ],
+      "population_query": "Enumerate every tracked runtime/test asset and computed-loader family and prove a dependent shard or conservative full-suite and whole-coverage fallback.",
+      "affected_population": [
+        "109 non-TypeScript/MJS package assets",
+        "all other tracked paths",
+        "computed module-loader families"
+      ],
+      "repair_condition": "Every tracked change is classified and every unproved dependency widens to the full suite and whole coverage.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F004",
+      "defect_class_id": "RECHECKED_TOPIC_EVIDENCE_UNAUTHENTICATED",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": [
+        "all-disposition-proof",
+        "independent-reuse-evidence",
+        "complete-class-enforcement"
+      ],
+      "population_query": "Resolve every source and evidence reference for all seven topic classes to typed candidate, Git, convergence, census, claim, change-record, or task artifacts.",
+      "affected_population": [
+        "82 previously synthetic topic evidence populations",
+        "all seven topic classes",
+        "all four dispositions"
+      ],
+      "repair_condition": "No synthetic prose/reference digest exists; unresolved or substituted evidence fails validation.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F005",
+      "defect_class_id": "STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": ["review-state-complete-chain", "repair-evidence-v2", "transport-chain"],
+      "population_query": "Mutate and re-self-digest every state, edge, predecessor, transport identity, result identity/count, and repair-v2 link across the declared graph and attempts.",
+      "affected_population": [
+        "all twelve edges",
+        "all state and predecessor identities",
+        "attempts zero through two",
+        "result and repair chains",
+        "all terminals"
+      ],
+      "repair_condition": "Every consumed artifact and edge is independently reconstructed and reauthenticated before any mutation.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F006",
+      "defect_class_id": "ACTIVE_CONTROL_CENSUS_ALLOWLIST_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": [
+        "active-control-census",
+        "generic-engine-profile-isolation",
+        "active-census-runtime-alignment"
+      ],
+      "population_query": "Traverse the structured exact-candidate provenance graph from DII-249 and compare every derived identity and raw blob digest with the census.",
+      "affected_population": [
+        "DII-246 through DII-249",
+        "all applicable mandates",
+        "all schemas and profile sources",
+        "declaration and manifest roots",
+        "prior-review and obligation sources"
+      ],
+      "repair_condition": "No runtime hardcoding or profile authority remains; the full structured exact-candidate population and raw blobs match exactly.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F007",
+      "defect_class_id": "REVIEWER_BINDING_CENSUS_NOT_CANDIDATE_BOUND",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": ["reviewer-binding", "binding-census"],
+      "population_query": "Dirty each mandate and profile binding while HEAD stays fixed and invoke every binding authority consumer with and without an explicit candidate.",
+      "affected_population": [
+        "policy-check",
+        "entry-check",
+        "status",
+        "convergence",
+        "candidate proof",
+        "review-scope",
+        "review-check"
+      ],
+      "repair_condition": "Every consumer resolves one explicit full candidate SHA and mutable worktree bytes never affect authority.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R2-F008",
+      "defect_class_id": "SEMANTIC_OBLIGATION_POPULATION_UNCHECKED",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-1-review-run-2-failure.md",
+      "topic_ids": ["semantic-obligation-completeness"],
+      "population_query": "Change every normative source and obligation row independently and validate exact source-digest-to-obligation coverage.",
+      "affected_population": [
+        "all ten obligations",
+        "OM-014 through OM-016",
+        "execution contract",
+        "R-0007 authorization, plan, and orchestrator",
+        "AGENTS authority"
+      ],
+      "repair_condition": "Every exact-candidate normative source is digest-bound to known obligations and every obligation is covered; any population or byte drift fails.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R3-F001",
+      "defect_class_id": "AUTHORITATIVE_GATE_CANDIDATE_RED",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
+      "topic_ids": ["literal-authoritative-roster", "candidate-convergence"],
+      "population_query": "Execute all sixteen exact policy argv arrays from the detached exact candidate and retain every terminal result after any red ordinal.",
+      "affected_population": ["all sixteen authoritative gates", "literal materializations argv"],
+      "repair_condition": "Every literal argv passes without hidden argument rewriting and all sixteen ordered results remain present after any failure.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R3-F002",
+      "defect_class_id": "AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
+      "topic_ids": ["recursive-workspace-command-closure"],
+      "population_query": "Recursively derive every root and workspace script, TypeScript project reference and output, and imported or spawned executable reachable from all sixteen argv arrays.",
+      "affected_population": [
+        "all sixteen gate rows",
+        "all root scripts",
+        "all thirteen workspace packages",
+        "all reachable TypeScript projects and executables"
+      ],
+      "repair_condition": "Any reachable invocation or project edge mutation changes closure and freshness identity or fails validation without relying on script-name assumptions.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R3-F003",
+      "defect_class_id": "AFFECTED_TEST_INPUT_POPULATION_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
+      "topic_ids": ["candidate-and-preimage-loader-analysis"],
+      "population_query": "Load candidate and base/preimage Git blobs for every status record and conservatively classify every JavaScript and TypeScript loader form.",
+      "affected_population": [
+        "all tracked candidate paths",
+        "deleted and renamed preimages",
+        "109 runtime assets",
+        "all direct and indirect loader families"
+      ],
+      "repair_condition": "Every unresolved loader in either candidate or preimage bytes selects full suite and whole coverage.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R3-F004",
+      "defect_class_id": "STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
+      "topic_ids": ["exact-predecessor-and-transport-chain"],
+      "population_query": "Mutate and re-self-digest every predecessor, transition, transport, validation, result, count, terminal, and repair-population byte over all edges and attempts.",
+      "affected_population": [
+        "all twelve edges",
+        "attempts zero through two",
+        "complete predecessor artifacts",
+        "transport and result bytes",
+        "repair-v2 populations",
+        "all terminals"
+      ],
+      "repair_condition": "Every consumed artifact is reauthenticated from complete exact bytes before any mutation.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R3-F005",
+      "defect_class_id": "REVIEWER_BINDING_CENSUS_NOT_CANDIDATE_BOUND",
+      "severity": "P1",
+      "origin_cycle": 2,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-2-review-run-2-failure.md",
+      "topic_ids": ["candidate-bound-bootstrap-and-policy-dispatch"],
+      "population_query": "Dirty policy, profile, schemas, and mandates independently and invoke every authoritative consumer with literal and nonliteral candidate inputs.",
+      "affected_population": [
+        "all seven authoritative consumers",
+        "policy",
+        "profile",
+        "schemas",
+        "mandates"
+      ],
+      "repair_condition": "A literal candidate is resolved before dispatch and every authority byte loads from that Git object; dirty substitutions and nonliteral revisions fail closed.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F001",
+      "defect_class_id": "CONSERVATIVE_WIDENING_DEAD",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
+      "topic_ids": [
+        "remediation-class:R3-F004",
+        "prior-class:CONSERVATIVE_WIDENING_DEAD",
+        "prior-class:STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+        "changed-path:scripts/run-round-close-controls.mjs",
+        "changed-path:tests/contract/pre-r0007-remediation-3.red.contract.test.ts"
+      ],
+      "population_query": "For each identifier added to scripts/run-round-close-controls.mjs by commit 850c8a8 for class R3-F004, enumerate every production call site and every persisted-artifact schema that admits the field; report each identifier for which no production call site supplies a non-default value, or whose governing schema forbids the field.",
+      "affected_population": [
+        "scripts/run-round-close-controls.mjs:8353 reconstructStateIdentityV6 previous_state_artifact branch (schema-forbidden by law/schemas/review-state.schema.json:57, no writer)",
+        "scripts/run-round-close-controls.mjs:8650 reauthenticateRepairEvidenceV6 expectedClasses parameter (sole call site 9437 omits it)",
+        "scripts/run-round-close-controls.mjs:9348 reauthenticateTransportV6 expected.state_before_digest (self-comparison against transport.state_before_digest)"
+      ],
+      "repair_condition": "For each of the three sites, a test that drives review-scope and review-check end to end (no controllerFunction extraction) must fail after mutating one unselected byte of the persisted predecessor state artifact, after deleting one entry from repair_evidence.repaired_classes, and after substituting review-states/<state_before_digest>.json bytes; and law/schemas/review-state.schema.json must admit whatever field the transition identity actually binds. A grep for previous_state_artifact must find at least one production writer, reauthenticateRepairEvidenceV6 must be called with a non-null expectedClasses derived from the prior review result, and no key of the expected object may be read from the transport it authenticates.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F002",
+      "defect_class_id": "REVIEW_STATE_TRANSITION_BYPASS",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
+      "topic_ids": [
+        "remediation-class:R3-F004",
+        "prior-class:REVIEW_STATE_TRANSITION_BYPASS",
+        "prior-class:STATE_AND_TRANSPORT_CHAIN_INCOMPLETE",
+        "changed-path:tests/contract/pre-r0007-remediation-3.red.contract.test.ts"
+      ],
+      "population_query": "Enumerate the twelve edges of law/policy/round-close-controls.json review_state_machine.allowed_transitions, the three terminal_states, and transport attempts 0, 1 and 2; for each, report whether any test in tests/contract/pre-r0007-remediation-3.red.contract.test.ts causes the controller to persist a state or transport artifact for it.",
+      "affected_population": [
+        "DRAFT->PREFLIGHT_GREEN",
+        "PREFLIGHT_GREEN->CANDIDATE_FROZEN",
+        "PREFLIGHT_GREEN->NEW_CANDIDATE_FROZEN",
+        "CANDIDATE_FROZEN->CYCLE_1_ACTIVE",
+        "CYCLE_1_ACTIVE->PASS",
+        "CYCLE_1_ACTIVE->REPAIR_REQUIRED",
+        "CYCLE_1_ACTIVE->REVIEW_TRANSPORT_BLOCKED",
+        "REPAIR_REQUIRED->PREFLIGHT_GREEN",
+        "NEW_CANDIDATE_FROZEN->CYCLE_2_ACTIVE",
+        "CYCLE_2_ACTIVE->PASS",
+        "CYCLE_2_ACTIVE->ESCALATION_REQUIRED",
+        "CYCLE_2_ACTIVE->REVIEW_TRANSPORT_BLOCKED",
+        "terminal PASS",
+        "terminal ESCALATION_REQUIRED",
+        "terminal REVIEW_TRANSPORT_BLOCKED",
+        "transport attempts 0, 1 and 2"
+      ],
+      "repair_condition": "For each of the twelve edges, each of the three terminals and each of attempts 0..2, an executable case must spawn the controller so that the transition is persisted, then mutate one byte of the consumed predecessor, transport, result or repair artifact and assert a specific blocking finding code; a declaration-count assertion over law/policy/round-close-controls.json must not be accepted as coverage for any member of that population.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F003",
+      "defect_class_id": "REVIEWER_BINDING_CENSUS_NOT_CANDIDATE_BOUND",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
+      "topic_ids": [
+        "remediation-class:R3-F005",
+        "prior-class:REVIEWER_BINDING_CENSUS_NOT_CANDIDATE_BOUND",
+        "prior-class:REVIEW_SCOPE_CORE_IDENTITY_NOT_RECOMPUTED",
+        "obligation:R7-P0-CANDIDATE-IDENTITY",
+        "changed-path:scripts/run-round-close-controls.mjs",
+        "changed-path:law/register/DECISIONS.md"
+      ],
+      "population_query": "For every command case in the dispatch switch of scripts/run-round-close-controls.mjs:10654-10774, report (a) whether candidateBoundPolicy governs loadPolicy, (b) whether candidateBoundRevision governs validateDocument, and (c) whether the command rejects omitted, symbolic, abbreviated and ambiguous candidate revisions; and independently, for each of policy-check, entry-check and status, report the handler selected when law/policy/round-close-controls.json schemaVersion is dirtied to 3.0.0 in the worktree and --candidate is omitted.",
+      "affected_population": [
+        "worktree schemaVersion selects the handler for policy-check, entry-check and status whenever --candidate is omitted, symbolic or abbreviated (scripts/run-round-close-controls.mjs:10636)",
+        "worktree profile decision_id selects whether a literal candidate is required (scripts/run-round-close-controls.mjs:5722)",
+        "smart-converge",
+        "review-scope",
+        "review-check",
+        "impact-plan",
+        "claims-check",
+        "claims-materialize",
+        "claim-produce",
+        "review-topic-count",
+        "manifest",
+        "envelope",
+        "rehearse",
+        "materialize: all load policy from law/policy/round-close-controls.json worktree bytes via loadPolicy:125 and all JSON Schemas from worktree bytes via validateDocument:3212",
+        "smart-converge additionally accepts symbolic --head (default HEAD) and abbreviated revisions at scripts/run-round-close-controls.mjs:4144"
+      ],
+      "repair_condition": "Before livePolicy is assigned, the bootstrap must resolve exactly one literal 40-hex candidate for every command in the dispatch switch, failing closed with REVIEWER_BINDING_CANDIDATE_REQUIRED when the revision is omitted, symbolic, abbreviated or ambiguous, and must load law/policy/round-close-controls.json from that Git object; loadPolicy and validateDocument must never read the worktree once a candidate is resolved. A machine check must assert that for every command name, running it with a dirtied worktree policy schemaVersion and with each of {omitted, HEAD, 12-hex prefix} yields the same handler and the same REVIEWER_BINDING_CANDIDATE_REQUIRED verdict as on a clean tree.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F004",
+      "defect_class_id": "AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
+      "topic_ids": [
+        "remediation-class:R3-F002",
+        "prior-class:AUTHORITATIVE_GATE_FRESHNESS_KEY_INCOMPLETE",
+        "obligation:R7-P1-GENERATED-IDENTITY",
+        "changed-path:scripts/run-round-close-controls.mjs",
+        "changed-path:work/rounds/R-0007/affected-test-graph.json"
+      ],
+      "population_query": "For each of the sixteen rows of law/policy/round-close-controls.json convergence.commands, compute the transitive closure over root and workspace scripts, tsconfig references, tsconfig extends chains, tsconfig outputs, import/require edges of every scanned executable, and every program token in every command part; diff that closure against the scripts, programs, executables and project_references sets that deriveGateCommandClosureV7 produces for the same gate at candidate 25d0c17.",
+      "affected_population": [
+        "packages/cli/dist/bin.js reached by root scripts build, lint, typecheck, test and ci:governance and absent from every gate closure",
+        "tsconfig.base.json reached by extends from all thirteen packages/*/tsconfig.json and never derived",
+        "the nine depth-2 project references of packages/cli/tsconfig.json (../authority, ../evidence, ../effects-check, ../loop, ../schemas, ../sensors, ../skills, ../spec, ../utils) and their own reference sets",
+        "tsconfig outDir/rootDir/include outputs for all thirteen workspace projects",
+        "import and require edges of every executable added by scanProgramSource",
+        "every program token outside {node, vitest, tsc, git, prettier, pnpm} appearing in any reachable script string",
+        "all sixteen gate rows when context.profile.decision_id is not the literal DII-251"
+      ],
+      "repair_condition": "deriveGateCommandClosureV7 must compute a fixpoint that includes tsconfig references transitively, extends chains, declared outputs, and module import/require edges of every scanned executable; an executable path that cannot be read from the candidate object must produce a blocking finding rather than be dropped; program derivation must come from parsing the command string rather than a name allowlist; and the closure_digest comparison in validateGateCommandClosureV6 must apply for every profile. A machine check must show that mutating each member of the affected population above changes the derived closure_digest for at least one gate or produces GATE_COMMAND_CLOSURE_DERIVATION_INVALID.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F005",
+      "defect_class_id": "AUTHORITATIVE_GATE_CANDIDATE_RED",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
+      "topic_ids": [
+        "remediation-class:R3-F001",
+        "prior-class:AUTHORITATIVE_GATE_CANDIDATE_RED",
+        "prior-class:AUTHORITATIVE_GATE_POPULATION_OMITTED",
+        "changed-path:law/policy/round-close-controls.json",
+        "changed-path:.devai/config/round-close-controls.json",
+        "changed-path:tests/contract/pre-r0007-remediation-3.red.contract.test.ts"
+      ],
+      "population_query": "For each of the sixteen ids in law/policy/round-close-controls.json convergence.commands, report (a) whether an executable contract spawns its exact argv from a detached candidate checkout and asserts exit 0, and (b) for each of the sixteen failure ordinals, whether the emitted smart-converge passes[].results contains sixteen ordered records carrying gate_id and exit_code.",
+      "affected_population": [
+        "formatting",
+        "preparation",
+        "action-registry",
+        "trace",
+        "repository-references",
+        "materializations",
+        "diff-check",
+        "ordinary",
+        "stage1",
+        "stage2",
+        "t4",
+        "t5",
+        "t6",
+        "changesets",
+        "coverage",
+        "governance",
+        "the removed policy-check gate semantics (reviewer binding census, normative source coverage, control provenance derivation)",
+        "scripts/run-round-close-controls.mjs:4313 silent gate skip",
+        "scripts/run-round-close-controls.mjs:4482 empty result population under blocking findings"
+      ],
+      "repair_condition": "An executable contract must spawn all sixteen literal argv arrays from a clean detached candidate checkout and assert exit 0 for each without controller argument injection; smart-converge must emit exactly sixteen ordered records containing gate_id and exit_code for every one of the sixteen injected failure ordinals and when impact planning is blocking; no gate may be skipped without a blocking finding naming it; and the roster must retain a gate that executes the reviewer-binding, normative-source-coverage and control-provenance checks.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F006",
+      "defect_class_id": "AFFECTED_TEST_INPUT_POPULATION_INCOMPLETE",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
+      "topic_ids": [
+        "remediation-class:R3-F003",
+        "prior-class:AFFECTED_TEST_INPUT_POPULATION_INCOMPLETE",
+        "obligation:R7-P1-AFFECTED-TESTS",
+        "changed-path:scripts/run-round-close-controls.mjs"
+      ],
+      "population_query": "For each of the thirteen loader families named in product/owner-mandates/OM-017.md:63-66, construct a minimal source file under an owned selector of work/rounds/R-0007/affected-test-graph.json, run impact-plan over a base..candidate range containing it, and report every family whose plan omits DYNAMIC_DEPENDENCY_AMBIGUOUS on both the full-suite and whole-coverage nodes.",
+      "affected_population": [
+        "aliased via member expression: const load = module.require; load(name)",
+        "destructured from a non-module object: const { require: load } = globalThis; load(name)",
+        "computed on globalThis: globalThis[loaderName](name)",
+        "aliased via process.mainModule: const load = process.mainModule.require; load(name)",
+        "every such form located under any owned selector, including packages/cli/src/**/*.ts (work/rounds/R-0007/affected-test-graph.json:82)"
+      ],
+      "repair_condition": "Loader classification must be derived from binding flow rather than a regex list: any identifier bound, directly or transitively, from an expression whose property name is require, resolve or createRequire, and any call through a computed member on any object, must mark the file ambiguous. A machine check must assert that all thirteen OM-017 families, each placed under an owned selector, produce DYNAMIC_DEPENDENCY_AMBIGUOUS on both the full-suite and the whole-coverage node, in candidate bytes and in base/preimage bytes.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F007",
+      "defect_class_id": "ENTRY_READINESS_CONTRADICTS_ENTRY_BLOCK",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
+      "topic_ids": [
+        "obligation:R7-P0-DEPLOY-REFUSAL",
+        "prior-class:REVIEW_CENSUS_AND_CANDIDATE_PROOF_INCOMPLETE",
+        "changed-path:scripts/run-round-close-controls.mjs",
+        "changed-path:tests/contract/pre-r0007-close-controls.red.contract.test.ts"
+      ],
+      "population_query": "For the exact candidate, invoke policy-check, entry-check and status with the same literal --candidate and compare the emitted entry_ready values and the union of ENTRY_BLOCKED_* codes across findings and diagnostics; report every consumer whose entry_ready disagrees with the others.",
+      "affected_population": [
+        "scripts/run-round-close-controls.mjs:10624 statusV4 entry_ready omits the B0 declaration term",
+        "tests/contract/pre-r0007-close-controls.red.contract.test.ts:253 asserts the contradictory value",
+        "statusV3 at scripts/run-round-close-controls.mjs:5413, reachable through the worktree-policy dispatch of R7-F003, likewise reports readiness without the declaration"
+      ],
+      "repair_condition": "entry_ready must be computed by one shared function for policy-check, entry-check and status, and must be false whenever any ENTRY_BLOCKED_* condition holds. A machine check must assert that for the exact candidate the three consumers emit identical entry_ready values and that status.entry_ready is false while ENTRY_BLOCKED_DECLARATION_UNBOUND is present.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F008",
+      "defect_class_id": "RECHECKED_TOPIC_EVIDENCE_UNAUTHENTICATED",
+      "severity": "P2",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
+      "topic_ids": [
+        "obligation:R7-P0-HISTORY-INTEGRITY",
+        "prior-class:RECHECKED_TOPIC_EVIDENCE_UNAUTHENTICATED",
+        "changed-path:work/audit/R-0007-pre-entry/remediation-3-red-evidence.json",
+        "changed-path:law/policy/governed-sequencing.json"
+      ],
+      "population_query": "For the red_evidence entry of law/policy/governed-sequencing.json and for work/audit/R-0007-pre-entry/remediation-3-red-evidence.json, verify (a) internal consistency of every observed count against the declared command, (b) that the evidence commit is an ancestor of every commit that modifies any path listed as an implementation_surface in work/rounds/R-0007/remediation-3-closure-matrix.json, and (c) that no commit after the first implementation commit modifies the evidence file.",
+      "affected_population": [
+        "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json:17 vs :29 contradictory failed-test-file counts",
+        "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json:9 re-anchored at commits 22863db and b325e69, after implementation 850c8a8",
+        "work/audit/R-0007-pre-entry/remediation-3-red-evidence.json:33-36 omits law/policy/round-close-controls.json and work/rounds/R-0007/affected-test-graph.json",
+        "commit 3ae14eb modifies two declared implementation surfaces before the recorded evidence commit 2dfe86b",
+        "law/policy/governed-sequencing.json classifies 3ae14eb and c82d6d3 as law_commits"
+      ],
+      "repair_condition": "The recorded red-evidence commit must be an ancestor of every commit that touches any path declared as an implementation_surface in the closure matrix; every observed count in the evidence document must be internally consistent with the recorded command; exercised_implementation_paths must equal the set of implementation surfaces present at that commit; and git log must show no modification of the evidence file at or after the first implementation commit.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F009",
+      "defect_class_id": "SPECIMEN_SCOPED_DECISION_ID_GATE",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
+      "topic_ids": [
+        "control:product/owner-mandates/OM-017.md",
+        "control:product/owner-mandates/OM-015.md",
+        "changed-path:scripts/run-round-close-controls.mjs",
+        "changed-path:tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts"
+      ],
+      "population_query": "Grep scripts/run-round-close-controls.mjs for the regex 'DII-[0-9]+' inside string literals and report every occurrence together with the behaviour it gates and the set of profiles for which that behaviour is disabled.",
+      "affected_population": [
+        "scripts/run-round-close-controls.mjs:583 closure_digest comparison",
+        "scripts/run-round-close-controls.mjs:5722 literal-candidate requirement in resolveConsumerCandidateV8",
+        "scripts/run-round-close-controls.mjs:8818 prior review-result path resolution",
+        "scripts/run-round-close-controls.mjs:9143 review-scope state persistence",
+        "scripts/run-round-close-controls.mjs:9179 predecessor state artifact authentication",
+        "scripts/run-round-close-controls.mjs:9218 exactArtifactChain for transports, payloads and results",
+        "scripts/run-round-close-controls.mjs:10112 invalid-transport state persistence",
+        "scripts/run-round-close-controls.mjs:10533 review-result persistence",
+        "scripts/run-round-close-controls.mjs:10575 next-state persistence"
+      ],
+      "repair_condition": "Every one of the nine behaviours must be selected by a capability declared in law/policy/round-close-controls.json (for example a policy_version or a named feature flag) rather than by a profile decision-id literal, and the controller guard must be strengthened from the two named ids to a assertion that scripts/run-round-close-controls.mjs contains no string literal matching /DII-[0-9]+/.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F010",
+      "defect_class_id": "REMEDIATION_MATRIX_POPULATION_FLOOR_REMOVED",
+      "severity": "P2",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-review-run-1.json",
+      "topic_ids": [
+        "control:product/owner-mandates/OM-016.md",
+        "changed-path:law/schemas/remediation-closure-matrix.schema.json",
+        "changed-path:work/rounds/R-0007/close-control-profile.json"
+      ],
+      "population_query": "For every finding_id whose disposition is OPEN in work/rounds/R-0007/prior-finding-registry.json, report whether it appears in the matrix bound by work/rounds/R-0007/close-control-profile.json sources.remediation_closure_matrix and is therefore schema-validated at runtime.",
+      "affected_population": [
+        "law/schemas/remediation-closure-matrix.schema.json:53 classes.minItems lowered from 8 to 1",
+        "law/schemas/remediation-closure-matrix.schema.json:75 finding_id pattern generalized",
+        "work/rounds/R-0007/close-control-profile.json sources.remediation_closure_matrix repointed away from remediation-2",
+        "the eight R2-F001..R2-F008 classes, which remain OPEN in work/rounds/R-0007/prior-finding-registry.json but are no longer bound by any profile source"
+      ],
+      "repair_condition": "Either the profile must bind every campaign closure matrix whose classes remain OPEN in the prior-finding registry, or the schema must require that the bound matrix enumerate the union of all OPEN prior finding ids. A machine check must assert that the set of finding_ids in the bound matrix is a superset of the OPEN dispositions in work/rounds/R-0007/prior-finding-registry.json.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F011",
+      "defect_class_id": "AUTHORITATIVE_CONSUMER_UNCAUGHT_THROW",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-3-repair-handoff.md",
+      "topic_ids": ["review-scope"],
+      "population_query": "For every authoritative consumer, invoke it with each required revision argument omitted and report any invocation that terminates without emitting a structured result.",
+      "affected_population": [
+        "review-scope invoked without --base terminates on an uncaught git rev-parse of an empty revision"
+      ],
+      "repair_condition": "No authoritative consumer may terminate without emitting a structured result. A missing or unresolvable required revision is a blocking finding, never an uncaught throw.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F012",
+      "defect_class_id": "UNDECLARED_STATE_MACHINE_CONTROL_SELECTOR",
+      "severity": "P0",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-4-readiness-pre-check.md",
+      "topic_ids": [
+        "control:product/owner-mandates/OM-017.md",
+        "changed-path:scripts/run-round-close-controls.mjs",
+        "changed-path:law/policy/round-close-controls.json",
+        "changed-path:law/schemas/remediation-closure-matrix.schema.json"
+      ],
+      "population_query": "Enumerate every site in scripts/run-round-close-controls.mjs that selects review-state-machine control behaviour from a literal in its own source rather than from law/policy/round-close-controls.json read off the exact candidate; and every declared edge whose transition is accepted without corroborating a persisted predecessor state artifact.",
+      "affected_population": [
+        "scripts/run-round-close-controls.mjs:8703 four-edge predecessor-authentication exemption keyed on hard-coded edge literals",
+        "scripts/run-round-close-controls.mjs:8679 and :9048 edge-to-cycle derivation from hard-coded state sets, mutually divergent in form",
+        "scripts/run-round-close-controls.mjs:9484 cycle-1 and cycle-2 emitted transition sequences hard-coded, and persisted by a single persistStateV5 call so intermediate states never exist",
+        "scripts/run-round-close-controls.mjs:9654 and :9937 hard-coded state/cycle sets and canonical cycle-1 prefix duplicating law/policy/round-close-controls.json state_cycle_binding",
+        "scripts/run-round-close-controls.mjs:9376, :9894 and :9989 hard-coded repair, predecessor and terminal guards",
+        "scripts/run-round-close-controls.mjs:9344, :9810, :10520 and :10667 hard-coded cycle and retry budgets and blocked-state mapping",
+        "scripts/run-round-close-controls.mjs:10983 and :11049 hard-coded verdict-to-next-state mapping and initial state",
+        "tests/contract/helpers/r0007-review-harness.ts:593 and :635 mirror the same literals, so the oracle cannot detect controller drift",
+        "law/policy/round-close-controls.json is loaded without schema validation; loadV4Context validates only the round profile"
+      ],
+      "repair_condition": "Every emitted transition persists its target state before the next edge, so each non-initial transition corroborates a predecessor artifact that exists; the four-edge exemption is deleted rather than declared. All state-machine control vocabulary is read from the candidate-bound policy document, which is itself schema-validated on load. A contract must prove the controller follows the declaration in both directions: removing a declaration changes behaviour and adding one changes behaviour, so an implementation retaining literals intersected with policy cannot pass.",
+      "disposition": "OPEN"
+    },
+    {
+      "finding_id": "R7-F013",
+      "defect_class_id": "IMPLEMENTATION_PATH_MANIFEST_UNENFORCED",
+      "severity": "P1",
+      "origin_cycle": 1,
+      "origin_evidence": "work/audit/R-0007-pre-entry/remediation-5-manifest-gate-red-evidence.json",
+      "topic_ids": [
+        "control:product/owner-mandates/OM-017.md",
+        "changed-path:scripts/check-implementation-path-manifest.mjs",
+        "changed-path:package.json"
+      ],
+      "population_query": "For every substantive Engineer commit after the declared boundary, report each substantive implementation path in its diff that no implementation-path manifest carried by a prior Inspector commit names.",
+      "affected_population": [
+        "the implementation-path manifest existed only as an Auditor procedure with no executable control",
+        "775f47d touched packages/schemas/src/roster.ts, which the manifest at the bound red 3e2a3e0 did not name, and the check ran after the commit rather than before it"
+      ],
+      "repair_condition": "An executable gate rejects any substantive Engineer commit whose implementation paths are not all named by a manifest present at its parent and authored by an Inspector, and the gate runs inside an authoritative governance command rather than as a procedure.",
+      "disposition": "OPEN"
+    }
+  ]
+}

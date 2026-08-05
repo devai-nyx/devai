@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    OM-002; OM-003; OM-010; Constitution Articles 6–10 and 27; R-0001 rehearsal lessons; R-0002-PREFLIGHT-AUDIT; R-0006-PREFLIGHT-ALIGNMENT-AUDIT,
+    OM-002; OM-003; OM-010; OM-014; DII-246; Constitution Articles 6–10 and 27; R-0001 rehearsal lessons; R-0002-PREFLIGHT-AUDIT; R-0006-PREFLIGHT-ALIGNMENT-AUDIT,
   ]
 ---
 
@@ -109,6 +109,121 @@ A command that cannot run is a blocker or a newly governed defect, never a green
 Declared DB skips remain skips only under their existing contract and are exercised with
 the configured PostgreSQL service at release-candidate time.
 
+## Prospective affected-test convergence for R-0007 through R-0009
+
+OM-014, OM-015, and DII-246 through DII-248 replace R-0006's round-specific close wrapper prospectively with a
+generic policy and schema-validated per-round profile. No engine default may supply a
+round, mandate, audit path, or reviewer model. The profile binds the round sources,
+explicit affected-test graph, semantic obligations, current claims, runtime paths,
+review budget, and reviewer authorization.
+
+Local convergence may reuse only a structurally valid content-addressed PASS whose key
+binds the command, working directory, complete transitive input manifest, dependency
+keys and still-fresh dependency PASS results, output digests, environment, toolchain,
+policy, and graph. The ordered policy command roster remains the mandatory
+authoritative convergence population; the affected-test graph is a supplemental local
+precision population and cannot omit or substitute a policy gate. Both passes bind one
+stable exact head, start and finish clean, prohibit second-pass writes, and produce
+semantically equivalent result populations. Changed tests execute
+themselves and changed sources execute every transitively dependent shard. Unknown,
+dynamic, or incomplete proof widens to the full suite. Dirty, untracked, deleted, and
+renamed inputs participate; timestamps alone do not. Remote CI trusts no local cache,
+and coverage is wholly executed or wholly reused without partial merging.
+
+Preparation may accept an unbound reviewer slot only while reporting
+`ENTRY_BLOCKED_REVIEWER_UNBOUND`. Entry requires exactly one active Owner mandate that
+contains the structured `devai_reviewer_binding` marker and binds the round to one
+literal independent read-only model. The engine performs a complete census of all
+tracked active Owner mandates; prose substrings have no authority. Missing, inactive,
+ambiguous, or conflicting bindings stop entry; silent fallback is forbidden.
+
+Only a complete schema-valid structured binding marker enters that census. A marker
+binds its own mandate ID and active status as well as the exact round, model, role,
+census, budget, retry limit, and forbidden fallback. General mandate prose, round-name
+substrings, and partial or malformed marker-shaped objects have no binding authority.
+The census is read from the exact candidate tree. Its digest is mandatory in the
+candidate manifest and must remain equal through scope, review, state, and transport;
+missing or unreadable candidate mandate entries fail closed.
+Repository machinery authenticates the selected reviewer binding and exact result bytes,
+not provider execution. Because no provider-signed receipt verifier is available, a
+role-pure Auditor must record the external task/invocation ID, model, exact inputs, and
+output digest as an explicit orchestration trust boundary, without claiming
+cryptographic provenance.
+
+Review scope is generated from registered obligations, exact changes, active controls,
+current claims, prior finding classes, candidate identities, and convergence evidence.
+An authentic exact-candidate manifest is required before scope generation; the
+controller never fabricates one. Materialized current claims are recomputed from their
+resolved producer, complete source manifest, deterministic extraction, canonical value
+digest, and rendered locations. Revalidation also authenticates producer output and
+each rendered location's current content and verification digests; one absent, stale,
+placeholder, or mismatched proof fails the entire self-digested ledger. Claim producers
+must not consume review scope. The pure review-topic-count producer depends only on
+candidate primitives and declaration registries; materialized claims complete before
+candidate manifest and review-scope generation, keeping the digest graph acyclic.
+Candidate and base parameters resolve from authenticated convergence, not from the
+later manifest. Post-publication-only claims remain explicit deferred declarations in
+the candidate-bound ledger. A separate post-publication ledger later proves them and
+binds the immutable pre-review claims digest without changing the reviewed candidate.
+Runtime parameters resolve only from convergence or phase-specific self-digested,
+candidate-bound runtime-input manifests with complete evidence. Git identity and
+external producer output receive explicit virtual source-manifest entries. Volatile
+candidate, range, topic-count, artifact, and CI values stay in ignored structured
+evidence; tracked prose may name their stable claim IDs but never copies a value whose
+proof would require changing the candidate that it proves.
+Claim producers emit deterministic structured values that their declared extractors can
+actually consume. Acceptance materializes and revalidates the complete live registry.
+Exact-head CI receipts require both a PR head OID equal to the candidate and the complete
+required green check population; an unrelated green PR is rejected.
+The required-check census must be nonempty, complete, deterministically sorted, and all
+terminal-success.
+Checkout-dependent producer paths are normalized to deterministically sorted
+repository-relative paths. Both affected-task passes retain every node's plan outcome,
+reasons, task key, dependency keys, output proof, and result in a self-digested artifact
+bound by convergence, candidate manifest, and review scope. Post-publication receipts
+are produced only by the explicit atomic materialization phase, never by hand.
+Every changed and unchanged topic receives exactly one structured disposition. Fresh
+reuse still requires independent recomputation of the current topic-input manifest,
+referenced-evidence manifest and digest, and every required task-freshness key. Finding
+IDs are globally unique across the canonical JSON or JSONL stream. Obligations with
+unstructured evidence requirements are always rechecked. Prior findings produce one
+topic per defect class with their complete origin population. Malformed,
+truncated, duplicate, omitted, unknown, or identity-mismatched results are invalid.
+
+Scope generation requires the independently authenticated convergence record named by
+the candidate manifest. Both artifacts share an independently recomputed candidate-
+identity digest. The convergence record binds exact base, candidate and tree plus two
+complete ordered passes over every authoritative gate; each pass has clean boundaries,
+exactly-once result, output and task-key digests, and one semantic-population digest,
+while pass 2 has no writes. Missing, partial, stale, malformed, substituted, or
+cross-digest-mismatched convergence has no fallback and invalidates scope atomically.
+The exact base comes from a structured B0 declaration marker in the exact candidate
+tree, not from caller preference. Before B0 the profile declaration slot remains
+explicitly unbound. B0 binds its decision ID and then-main SHA; later convergence,
+scope, claims, and review require that profile value, marker value, caller argument,
+candidate ancestry, and candidate-manifest declaration digest to agree.
+The B0 marker validates against `law/schemas/round-declaration.schema.json`; prose alone
+cannot declare or move the base.
+
+Cycle 1 exhausts the complete population and continues after blockers. One role-pure
+repair phase closes every reported class and regenerates every invalidated artifact.
+Scope failure removes only stale derivative scope while preserving authenticated state
+and transition history. PASS, escalation, and transport-blocked states refuse re-entry.
+Cycle 2 reviews the complete new population. Cycle-2 failure becomes
+`ESCALATION_REQUIRED`; cycle 3 is refused. One invalid transport attempt may retry the
+unchanged cycle; a second becomes `REVIEW_TRANSPORT_BLOCKED`. Continued work then
+requires a separately named remediation campaign and fresh Owner authority.
+
+Every state, transport, result, candidate, scope, and repair-evidence record is schema-
+validated, self-digested, exact-identity bound, and linked to its predecessor. The
+controller verifies the full transition chain, not only the current state label. A
+second review after repair requires the authenticated first failure and its exact
+candidate, manifest, scope, result and state, a distinct regenerated candidate, and a
+complete-class repair record covering every failed class and affected instance.
+Transport records bind only the authenticated pre-parse state; a later state transition
+consumes the completed transport digest, so neither artifact hashes a future artifact.
+`PASS`, `ESCALATION_REQUIRED`, and `REVIEW_TRANSPORT_BLOCKED` have no outgoing edge.
+
 ## Candidate identity, convergence, and review freeze
 
 Every source close distinguishes three Git identities:
@@ -177,7 +292,8 @@ Before push:
 - ask the independently selected close reviewer for a read-only exact-candidate review
   and resolve every actionable finding; OM-013 replaces the otherwise-required
   `claude-opus-5` selector with explicit `gpt-5.6-sol` for R-0006 only and does not
-  weaken any review-content, verdict, or evidence requirement;
+  weaken any review-content, verdict, or evidence requirement; R-0007 through R-0009
+  instead require exactly one later active Owner model binding before entry;
 - leave no untracked product or evidence artifacts.
 
 After push, inspect the exact candidate’s GitHub checks. Merge only when every required
