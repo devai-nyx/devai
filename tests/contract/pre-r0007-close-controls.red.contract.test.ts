@@ -35,7 +35,7 @@ function run(
     {
       cwd: ROOT,
       encoding: 'utf8',
-      env: { ...process.env, ...env },
+      env: { ...process.env, CI: '', GITHUB_ACTIONS: '', ...env },
       // The authenticated v5 impact population is intentionally larger than Node's 1 MiB
       // spawnSync default; retain the complete JSON rather than accepting a truncated plan.
       maxBuffer: 4 * 1024 * 1024,

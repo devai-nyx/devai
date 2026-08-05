@@ -214,7 +214,11 @@ function run(fixtureValue: Fixture, command: string, args: readonly string[] = [
   const result = spawnSync(
     'node',
     [SCRIPT, command, '--repo-root', fixtureValue.root, '--round', ROUND, ...bound, '--json'],
-    { cwd: fixtureValue.root, encoding: 'utf8', env: { ...process.env } },
+    {
+      cwd: fixtureValue.root,
+      encoding: 'utf8',
+      env: { ...process.env, CI: '', GITHUB_ACTIONS: '' },
+    },
   );
   let value: Record<string, unknown> = {};
   try {

@@ -227,6 +227,7 @@ function fixture(): Fixture {
 
 function run(root: string, args: readonly string[]) {
   return spawnSync(process.execPath, [SCRIPT, ...args, '--repo-root', root, '--json'], {
+    env: { ...process.env, CI: '', GITHUB_ACTIONS: '' },
     cwd: root,
     encoding: 'utf8',
   });
