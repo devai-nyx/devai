@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { defineConfig } from 'vitest/config';
+import { evidencePreservingProjects } from './vitest.scheduler.js';
 
 // Vitest evaluates its root configuration once in the coordinator process, before it
 // creates any workers. Keep the authoritative literal `pnpm vitest run` independently
@@ -10,4 +11,11 @@ execFileSync('pnpm', ['run', 'devai:prepare'], {
   stdio: 'inherit',
 });
 
-export default defineConfig({});
+export default defineConfig({
+  test: {
+    projects: evidencePreservingProjects({
+      ordinaryName: 'ordinary-parallel',
+      serializedName: 'detached-candidate-serial',
+    }),
+  },
+});
