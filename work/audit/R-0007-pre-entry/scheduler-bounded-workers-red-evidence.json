@@ -7,6 +7,10 @@
   "diagnostic_commit": "9abc20ebf6105599abb1cd7156221d150a191f40",
   "red_commit": "17e9a54a6f637672e2518f20f0b8a0884e15a468",
   "pre_red_commit": "ecabbddd743110dd713d8e9efef1dae9f4775533",
+  "command": "pnpm vitest run tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts --reporter=verbose",
+  "observed_exit": 1,
+  "tests": ["tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts"],
+  "exercised_implementation_paths": ["vitest.scheduler.ts"],
   "observations": [
     {
       "kind": "complete_full_suite_diagnostic",
