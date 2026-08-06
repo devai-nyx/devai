@@ -10,6 +10,7 @@
       "source_refs": [
         "product/owner-mandates/OM-002.md",
         "product/owner-mandates/OM-014.md",
+        "product/owner-mandates/OM-019.md",
         "work/rounds/EXECUTION-CONTRACT.md#authority-and-commits"
       ],
       "governing_paths": [
@@ -236,7 +237,7 @@
   "normative_sources": [
     {
       "path": "AGENTS.md",
-      "source_digest_sha256": "01b125350c38bb76e6359b41eebc6a1a9a8147ed6f6406161f599e217c45874b",
+      "source_digest_sha256": "e87b8ab46c997d8d85b924c9376f937ba3d40448059dc8b43e15f1ca4e48096c",
       "obligation_ids": ["R7-P0-AUTHORITY", "R7-P0-HISTORY-INTEGRITY"]
     },
     {
@@ -285,8 +286,19 @@
       "obligation_ids": ["R7-P0-REVIEWER-BINDING", "R7-P0-CANDIDATE-IDENTITY", "R7-P1-TWO-CYCLE"]
     },
     {
+      "path": "product/owner-mandates/OM-019.md",
+      "source_digest_sha256": "2c793ba3b2fa43db83dbaeb9dbedd979838bb6e53b0ad764976736eac675658e",
+      "obligation_ids": [
+        "R7-P0-AUTHORITY",
+        "R7-P0-CANDIDATE-IDENTITY",
+        "R7-P1-AFFECTED-TESTS",
+        "R7-P1-REVIEW-CENSUS",
+        "R7-P1-TWO-CYCLE"
+      ]
+    },
+    {
       "path": "work/rounds/EXECUTION-CONTRACT.md",
-      "source_digest_sha256": "c4388f4e17ce8e5abf844697d30fbaadc2612261dd9ad41907f54ce6a0b44e89",
+      "source_digest_sha256": "84e0a24caf0d24d7f9855016718f2e5f99540d12fac220b4531e7eb52f1f29e4",
       "obligation_ids": [
         "R7-P0-AUTHORITY",
         "R7-P0-CANDIDATE-IDENTITY",
@@ -296,12 +308,12 @@
     },
     {
       "path": "work/rounds/R-0007/AUTHORIZATION.md",
-      "source_digest_sha256": "e9d2cee5117647cfd5c62a20e3be9ce7bb5c6c05445fcf7ccbeed90fa23be444",
+      "source_digest_sha256": "c6dd788730f2e302f9490c24f79d738361c345737a8ffb07ac731a02afbee3f9",
       "obligation_ids": ["R7-P0-DEPLOY-REFUSAL"]
     },
     {
       "path": "work/rounds/R-0007/plan.md",
-      "source_digest_sha256": "8027c05fe0d0c794619154da3aee0ecf38ecd8e6c00f16dd73082aa0f3928bf7",
+      "source_digest_sha256": "8a53ec9bfb3d9a83aaff5b06fa794af7d78d31cb5b0921df1269ea63df104eed",
       "obligation_ids": [
         "R7-P0-DEPLOY-REFUSAL",
         "R7-P0-HISTORY-INTEGRITY",
@@ -311,7 +323,7 @@
     },
     {
       "path": "work/rounds/R-0007/prompts/00-orchestrator.md",
-      "source_digest_sha256": "255bb1b85a73667dba9f95d0f34e88dfd9863816e7c6b53b0c351553a429d0be",
+      "source_digest_sha256": "29cbf5b77fcf35894f247b2bf59615a7df8456284b3d25f41981db91896fbb2f",
       "obligation_ids": ["R7-P0-AUTHORITY", "R7-P0-DEPLOY-REFUSAL", "R7-P0-CANDIDATE-IDENTITY"]
     }
   ]

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "round": "R-0007",
-  "root_decision": "DII-251",
+  "root_decision": "DII-254",
   "decision_register": "law/register/DECISIONS.md",
   "discovery_mode": {
     "decisions": "exact-register-transitive-from-root",
@@ -39,19 +39,24 @@
       "decision_id": "DII-251",
       "status": "active",
       "depends_on": ["DII-246", "DII-247", "DII-248", "DII-249", "DII-250"]
+    },
+    {
+      "decision_id": "DII-252",
+      "status": "active",
+      "depends_on": ["DII-246", "DII-247", "DII-248", "DII-249", "DII-250", "DII-251"]
+    },
+    {
+      "decision_id": "DII-253",
+      "status": "active",
+      "depends_on": ["DII-249", "DII-250", "DII-251", "DII-252"]
+    },
+    {
+      "decision_id": "DII-254",
+      "status": "active",
+      "depends_on": ["DII-252", "DII-253"]
     }
   ],
   "owner_mandates": [
-    {
-      "mandate_id": "OM-002",
-      "path": "product/owner-mandates/OM-002.md",
-      "required_status": "active"
-    },
-    {
-      "mandate_id": "OM-003",
-      "path": "product/owner-mandates/OM-003.md",
-      "required_status": "active"
-    },
     {
       "mandate_id": "OM-014",
       "path": "product/owner-mandates/OM-014.md",
@@ -73,8 +78,8 @@
       "required_status": "active"
     },
     {
-      "mandate_id": "OM-018",
-      "path": "product/owner-mandates/OM-018.md",
+      "mandate_id": "OM-019",
+      "path": "product/owner-mandates/OM-019.md",
       "required_status": "active"
     }
   ],
@@ -99,6 +104,7 @@
     "product/owner-mandates/OM-016.md",
     "product/owner-mandates/OM-017.md",
     "product/owner-mandates/OM-018.md",
+    "product/owner-mandates/OM-019.md",
     "work/rounds/EXECUTION-CONTRACT.md",
     "work/rounds/R-0007/AUTHORIZATION.md",
     "work/rounds/R-0007/plan.md",

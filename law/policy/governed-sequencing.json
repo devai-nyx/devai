@@ -820,6 +820,24 @@
         "exercised_implementation_paths": ["scripts/check-implementation-path-manifest.mjs"]
       },
       "law_commits": ["284307a12b07f9635156f1c306fdb6b98a93fc5f"]
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["e77221eeff30f9b67dbdfc37d2d0f3f82521624a"],
+      "law_commits": ["aa06297fd7b5ff3e9899a0bb16fd5c1c29379c0e"],
+      "red_evidence": {
+        "commit": "34db0961aceb21b3da3b02e6d9195ed8c9f97f2f",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts --reporter=verbose",
+        "evidence_path": "work/audit/R-0007-pre-entry/round-artifact-uniqueness-red-evidence.json",
+        "evidence_sha256": "2f92b16ac0d0cc83955bff567b13389c28770f7098866005f418bdc6471ba3e7",
+        "tests": ["tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts"],
+        "exercised_implementation_paths": [
+          "package.json",
+          "packages/cli/src/commands/doctor.ts",
+          "scripts/check-round-artifact-uniqueness.mjs"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [

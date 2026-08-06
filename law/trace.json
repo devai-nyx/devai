@@ -743,6 +743,11 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/r0006-entry-control.red.contract.test.ts",
           "target_type": "test"
         },
@@ -834,6 +839,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -1438,6 +1448,11 @@
         },
         {
           "suite": "contract",
+          "path": "tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
           "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
           "target_type": "test"
         },
@@ -1679,6 +1694,11 @@
         {
           "suite": "contract",
           "path": "tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts",
+          "target_type": "test"
+        },
+        {
+          "suite": "contract",
+          "path": "tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts",
           "target_type": "test"
         },
         {
@@ -3362,6 +3382,19 @@
       "lifecycle": "supported",
       "assertion_count": 45,
       "assertion_digest_sha256": "b4eed493bfc48998f662a75906e852170a55db018a899962fb0b4571412b0438"
+    },
+    {
+      "path": "tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts",
+      "suite": "contract",
+      "invariant_ids": [
+        "INV-DEVAI-002",
+        "INV-DEVAI-003",
+        "INV-DEVAI-017",
+        "INV-DEVAI-020"
+      ],
+      "lifecycle": "supported",
+      "assertion_count": 6,
+      "assertion_digest_sha256": "db92a80ea3b433bb298a96a568c3862d62435a85e2a57437347cddd267612790"
     },
     {
       "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
