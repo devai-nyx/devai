@@ -2,7 +2,7 @@
   "schemaVersion": "2.0.0",
   "round": "R-0007",
   "policy_version": "5.0.0",
-  "decision_id": "DII-252",
+  "decision_id": "DII-255",
   "phase": "pre-entry-preparation",
   "declaration": {
     "binding": "b0-decision-required",
@@ -28,6 +28,7 @@
       "product/owner-mandates/OM-017.md",
       "product/owner-mandates/OM-018.md",
       "product/owner-mandates/OM-019.md",
+      "product/owner-mandates/OM-020.md",
       "work/rounds/EXECUTION-CONTRACT.md",
       "law/policy/round-close-controls.json"
     ],

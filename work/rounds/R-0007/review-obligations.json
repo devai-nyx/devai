@@ -11,6 +11,7 @@
         "product/owner-mandates/OM-002.md",
         "product/owner-mandates/OM-014.md",
         "product/owner-mandates/OM-019.md",
+        "product/owner-mandates/OM-020.md",
         "work/rounds/EXECUTION-CONTRACT.md#authority-and-commits"
       ],
       "governing_paths": [
@@ -54,7 +55,11 @@
       "obligation_id": "R7-P0-DEPLOY-REFUSAL",
       "claim": "The R-0007 artifact may be deploy-ready but no deploy or release operation can execute without a later exact-candidate external grant.",
       "risk": "P0",
-      "source_refs": ["work/rounds/R-0007/AUTHORIZATION.md", "work/rounds/R-0007/plan.md#stops"],
+      "source_refs": [
+        "product/owner-mandates/OM-020.md",
+        "work/rounds/R-0007/AUTHORIZATION.md",
+        "work/rounds/R-0007/plan.md#stops"
+      ],
       "governing_paths": [
         ".github/**",
         "packages/**",
@@ -88,7 +93,8 @@
       "risk": "P0",
       "source_refs": [
         "work/rounds/EXECUTION-CONTRACT.md#candidate-identity-convergence-and-review-freeze",
-        "product/owner-mandates/OM-014.md#candidate-identity-and-two-cycle-limit"
+        "product/owner-mandates/OM-014.md#candidate-identity-and-two-cycle-limit",
+        "product/owner-mandates/OM-020.md"
       ],
       "governing_paths": [
         "law/**",
@@ -115,6 +121,7 @@
       "risk": "P1",
       "source_refs": [
         "product/owner-mandates/OM-014.md#content-addressed-affected-test-execution",
+        "product/owner-mandates/OM-020.md",
         "work/rounds/R-0007/affected-test-graph.json"
       ],
       "governing_paths": [
@@ -293,6 +300,17 @@
         "R7-P0-CANDIDATE-IDENTITY",
         "R7-P1-AFFECTED-TESTS",
         "R7-P1-REVIEW-CENSUS",
+        "R7-P1-TWO-CYCLE"
+      ]
+    },
+    {
+      "path": "product/owner-mandates/OM-020.md",
+      "source_digest_sha256": "0cecabc7e78dd52885b632c766602eab5200954f65b3f92cf0d8ccd6ae31a7eb",
+      "obligation_ids": [
+        "R7-P0-AUTHORITY",
+        "R7-P0-DEPLOY-REFUSAL",
+        "R7-P0-CANDIDATE-IDENTITY",
+        "R7-P1-AFFECTED-TESTS",
         "R7-P1-TWO-CYCLE"
       ]
     },

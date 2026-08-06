@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "round": "R-0007",
-  "root_decision": "DII-254",
+  "root_decision": "DII-255",
   "decision_register": "law/register/DECISIONS.md",
   "discovery_mode": {
     "decisions": "exact-register-transitive-from-root",
@@ -54,6 +54,11 @@
       "decision_id": "DII-254",
       "status": "active",
       "depends_on": ["DII-252", "DII-253"]
+    },
+    {
+      "decision_id": "DII-255",
+      "status": "active",
+      "depends_on": ["DII-251", "DII-254"]
     }
   ],
   "owner_mandates": [
@@ -81,6 +86,11 @@
       "mandate_id": "OM-019",
       "path": "product/owner-mandates/OM-019.md",
       "required_status": "active"
+    },
+    {
+      "mandate_id": "OM-020",
+      "path": "product/owner-mandates/OM-020.md",
+      "required_status": "active"
     }
   ],
   "manifest_roots": [
@@ -105,6 +115,7 @@
     "product/owner-mandates/OM-017.md",
     "product/owner-mandates/OM-018.md",
     "product/owner-mandates/OM-019.md",
+    "product/owner-mandates/OM-020.md",
     "work/rounds/EXECUTION-CONTRACT.md",
     "work/rounds/R-0007/AUTHORIZATION.md",
     "work/rounds/R-0007/plan.md",
