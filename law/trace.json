@@ -3349,7 +3349,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 75,
-      "assertion_digest_sha256": "878ed2439b00b820060fe2d3925bfe6ef35dadf98d8ce7325c81d3cedf29f77c"
+      "assertion_digest_sha256": "f3399e373d0678f96dcddc1c8b67249353bb578893cef28824dc0f4b170796e3"
     },
     {
       "path": "tests/contract/pre-r0007-remediation-3.red.contract.test.ts",
@@ -3401,7 +3401,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 45,
-      "assertion_digest_sha256": "6349a8fc4987cd48ec4d0fcc50ccb02f3661f321e6a574a0b69d5c619c21531c"
+      "assertion_digest_sha256": "c0522a5ebf31dcb3a8ce85aa4c51096c630c14254360a68713d2409169e1d288"
     },
     {
       "path": "tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts",
@@ -3426,8 +3426,8 @@
         "INV-DEVAI-020"
       ],
       "lifecycle": "supported",
-      "assertion_count": 22,
-      "assertion_digest_sha256": "18963a62664cc2a4fadc3e3d20d81b366778036ff357dfde4641076780961c10"
+      "assertion_count": 23,
+      "assertion_digest_sha256": "6d4375465c2ad2c95905dabf5930b670fdbefef4433ce3451c4b9edd9a3073ea"
     },
     {
       "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",
