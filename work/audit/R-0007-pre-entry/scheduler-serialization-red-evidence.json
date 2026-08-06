@@ -11,13 +11,8 @@
       "commit": "53bddd7454b6d9a052b22f088f792c245432802a",
       "command": "pnpm vitest run tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts --reporter=verbose",
       "exit_code": 1,
-      "tests": [
-        "tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts"
-      ],
-      "exercised_implementation_paths": [
-        "vitest.config.ts",
-        "vitest.scheduler.ts"
-      ],
+      "tests": ["tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts"],
+      "exercised_implementation_paths": ["vitest.config.ts", "vitest.scheduler.ts"],
       "tests_failed": 4,
       "tests_passed": 1,
       "interrupted": false
