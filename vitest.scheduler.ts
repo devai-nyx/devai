@@ -32,6 +32,7 @@ export function evidencePreservingProjects({
         name: ordinaryName,
         include: [...include],
         exclude: [...defaultExclude, ...SERIALIZED_DETACHED_CONTRACTS],
+        maxWorkers: 2,
         sequence: { groupOrder: 0 },
       },
     },
