@@ -391,7 +391,7 @@ describe('OM-016 / DII-249 remediation campaign 2 complete populations', () => {
   describe('R2-F006 structured exact-candidate active-control provenance', () => {
     it('R2-006-TRANSITIVE-PROVENANCE retains DII-249 policy authority under the current profile root', () => {
       expect(policy.decision_id).toBe('DII-249');
-      expect(profile.decision_id).toBe('DII-252');
+      expect(profile.decision_id).toBe('DII-256');
       expect(policy.control_capabilities).toMatchObject({
         gate_closure_fixpoint_derivation: true,
         predecessor_artifact_authentication: true,
@@ -464,6 +464,8 @@ describe('OM-016 / DII-249 remediation campaign 2 complete populations', () => {
           'product/owner-mandates/OM-016.md',
           'product/owner-mandates/OM-017.md',
           'product/owner-mandates/OM-018.md',
+          'product/owner-mandates/OM-019.md',
+          'product/owner-mandates/OM-020.md',
           'work/rounds/EXECUTION-CONTRACT.md',
           'work/rounds/R-0007/AUTHORIZATION.md',
           'work/rounds/R-0007/plan.md',

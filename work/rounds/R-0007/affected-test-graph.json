@@ -1585,6 +1585,7 @@
         "scripts/check-governed-sequencing.mjs",
         "scripts/check-governed-sha-references.mjs",
         "scripts/check-implementation-path-manifest.mjs",
+        "scripts/check-round-artifact-uniqueness.mjs",
         "scripts/generate-action-registry.mjs"
       ],
       "project_references": [
@@ -1672,7 +1673,7 @@
         "packages/utils/tsconfig.json-rootDir->packages/utils/src",
         "tsconfig.base.json"
       ],
-      "closure_digest": "ab1936428412115c496d20f03328bd64e11d2efa5bc37fd76d3095cb13c80990"
+      "closure_digest": "9e4cf945d084af580ff0346762ab67badba6e32c1ea63b43118d089991ad5520"
     }
   ]
 }

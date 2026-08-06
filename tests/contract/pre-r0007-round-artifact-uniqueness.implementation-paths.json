@@ -1,0 +1,7 @@
+{
+  "allowed_paths": [
+    "package.json",
+    "packages/cli/src/commands/doctor.ts",
+    "scripts/check-round-artifact-uniqueness.mjs"
+  ]
+}

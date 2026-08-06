@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "round-artifact-uniqueness-red-evidence",
+  "type": "audit-record",
+  "authority": "Auditor",
+  "date": "2026-08-06",
+  "defect_class_id": "ROUND_ARTIFACT_UNIQUENESS_UNENFORCED",
+  "decision_id": "DII-254",
+  "origin_evidence": "product/owner-mandates/OM-019.md",
+  "observations": [
+    {
+      "commit": "34db0961aceb21b3da3b02e6d9195ed8c9f97f2f",
+      "command": "pnpm vitest run tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts --reporter=verbose",
+      "exit_code": 1,
+      "tests": ["tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts"],
+      "exercised_implementation_paths": [
+        "package.json",
+        "packages/cli/src/commands/doctor.ts",
+        "scripts/check-round-artifact-uniqueness.mjs"
+      ],
+      "tests_failed": 8,
+      "tests_passed": 0,
+      "working_tree": "clean detached local clone",
+      "interrupted": false
+    }
+  ],
+  "failing_contracts": [
+    {
+      "test_id": "ROUND-ARTIFACT-WIRING",
+      "observed": "ci:governance omitted the gate and doctor carried no round-artifact-uniqueness check",
+      "proves": "neither required integration point enforced DII-254"
+    },
+    {
+      "test_id": "ROUND-ARTIFACT-CANONICAL-PASS",
+      "observed": "the executable selector was absent",
+      "proves": "no single machine could accept the canonical round identity"
+    },
+    {
+      "test_id": "ROUND-ARTIFACT-AMBIGUITY-POPULATION",
+      "observed": "six adversarial class tests received MODULE_NOT_FOUND instead of class-specific findings",
+      "proves": "duplicate, missing, forbidden, cross-round, escaping, shared-root, reviewer, and proposal conflicts were not mechanically rejected"
+    }
+  ],
+  "acceptance_observation": {
+    "implementation_commit": "e77221eeff30f9b67dbdfc37d2d0f3f82521624a",
+    "command": "pnpm vitest run tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts packages/cli/tests/unit/doctor-depth.test.ts --reporter=verbose",
+    "exit_code": 0,
+    "tests_passed": 12,
+    "tests_failed": 0
+  }
+}

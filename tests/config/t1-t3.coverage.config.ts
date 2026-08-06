@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vitest/config';
+import { evidencePreservingProjects } from '../../vitest.scheduler.js';
 
 interface ThresholdPolicy {
   coverage: {
@@ -17,20 +18,26 @@ const policy = JSON.parse(
 
 process.env['DEVAI_V8_SUBPROCESS_COVERAGE_DIR'] = resolve('scratch/coverage/t1-t6-child-v8');
 
+const COVERAGE_INCLUDE = [
+  'packages/*/tests/unit/**/*.test.ts',
+  'packages/*/tests/contract/**/*.test.ts',
+  'tests/contract/**/*.test.ts',
+  'tests/integration/**/*.test.ts',
+  'tests/regression/**/*.test.ts',
+  'tests/e2e/**/*.test.ts',
+  'tests/containment/**/*.test.ts',
+] as const;
+
 export default defineConfig({
   test: {
     name: 'T1 + T3 merged coverage',
     environment: 'node',
     testTimeout: 15_000,
-    include: [
-      'packages/*/tests/unit/**/*.test.ts',
-      'packages/*/tests/contract/**/*.test.ts',
-      'tests/contract/**/*.test.ts',
-      'tests/integration/**/*.test.ts',
-      'tests/regression/**/*.test.ts',
-      'tests/e2e/**/*.test.ts',
-      'tests/containment/**/*.test.ts',
-    ],
+    projects: evidencePreservingProjects({
+      ordinaryName: 'coverage-parallel',
+      serializedName: 'coverage-detached-candidate-serial',
+      include: COVERAGE_INCLUDE,
+    }),
     passWithNoTests: false,
     coverage: {
       provider: 'custom',

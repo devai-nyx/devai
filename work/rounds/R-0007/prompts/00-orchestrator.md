@@ -1,66 +1,91 @@
-# R-0007 ORCHESTRATOR — product, docs, and deploy-ready site
+# R-0007 ORCHESTRATOR — CLI contract and executor substrate
 
-R-0007 remains dormant until live entry validation passes. Read OM-002, OM-003,
-OM-014, DII-246, the shared execution contract, authorization, plan, close-control
-profile, affected-test graph, obligation registry, current-claim registry, R-0006
-closure, combined audit, docs migration manifest, product contracts, action registry,
-docs generators, History, Docusaurus configuration, and deploy workflow.
+## Model and coordination
 
-Before B0, fetch and prove clean `main == origin/main`, run preparation policy
-validation, prove graph and obligation population completeness, and confirm the OM-018
-admission gate PASS and Review Run 2 PASS. Per OM-018 the pre-B0 handoff is
-declaration-tolerant: do **not** run `round-close:entry-check` before B0 — it is
-declaration-bearing and correctly blocks on the unbound declaration. Run it after B0
-and before B1. The reviewer is already bound by Owner mandate: OM-017 binds one literal
-independent read-only model selector with no fallback, retained by OM-018; the exact
-selector lives in the mandate and profile, never in this prompt.
-Do not select, infer, or substitute a model; an inactive, ambiguous, conflicting, or
-unavailable binding stops the round. Silent fallback is forbidden.
+- Root orchestrator: use the active session selected by the operator; this prompt does not
+  select a model.
+- Use at most the available concurrency; keep one slot for the orchestrator.
+- Spawn agents only for bounded tasks with exact role, worktree, path allowlist, base SHA, tests, and stop conditions.
+- No two active agents may edit the same file or worktree.
+- A role change is a new agent/session and commit boundary.
+- Specialist selection follows explicit task authority and availability; never infer or
+  substitute the independently bound close reviewer.
 
-At B0, record a schema-valid structured round-declaration marker in the Architect
-decision and update the profile declaration slot with that decision ID and the exact
-then-main SHA. Every later base argument must equal that candidate-tree marker and be an
-ancestor of the candidate; never select a shorter convenient range.
+## Mandatory reads and entry
 
-Execute B0 through B9 by risk slice. Install the deploy-refusal guard before changing
-site configuration. The Owner batch follows only approved line-level dispositions.
-The Architect classifies every historical or active reference. The Engineer generates
-outputs; nobody hand-edits them. Build and hash the site locally but never deploy.
+Read `AGENTS.md`, current Owner mandates, consolidated audit/backlog, shared execution
+contract, live authorization/plan/prompts, CLI ADR, action/sensor registries and schemas,
+versioning policy, release discipline, current handlers, tests, package scripts, and this
+entire committed R-0007 packet, including `inventory/old-to-new-command-map.md`. Re-read live
+remote and release evidence. Classify every commit after the recognized
+`b1a814a93b0dc186c28a1341354cdf4444609728` PASS; if no
+existing rule carries the PASS across that exact delta, stop for Owner disposition. If a stable or
+RC 1.0 publication exists, or authorization is not expressly GRANTED, stop.
 
-Before each affected gate, generate the impact plan. Execute every selected shard and
-every conservative widening. Reuse a local PASS only when its complete content,
-dependency, output, environment, toolchain, policy, and graph key verifies. An unknown
-or incomplete relationship runs the full suite. Coverage remains whole-only. Remote
-exact-head and exact-main CI run every authoritative gate without local cache trust.
+Create a dedicated `codex/` integration worktree only after entry passes. Never mutate
+the predecessor. Preserve exact red evidence. Use role-pure commits and read every gate
+output before committing.
 
-Before independent review, finish an internal P0/P1/P2 obligation rehearsal, repair
-the complete population of every discovered defect class, materialize and validate all
-current claims, converge twice, pass the candidate-only clone rehearsal, freeze one
-exact candidate, and generate its complete semantic review scope. Any semantic or
-current-tree change invalidates candidate, convergence, claims, rehearsal, manifests,
-review, and publication standing.
+The independent close reviewer is already bound by Owner mandate OM-017. The exact selector
+lives only in the mandate and profile, with no fallback.
 
-The Owner-bound reviewer processes every topic exactly once, including unchanged
-topics, and continues after blockers. `REUSED_FRESH_PASS` requires independent current
-digest and evidence verification and is forbidden for changed topics. Each finding
-must name a deterministic same-class population query, every affected instance, and a
-machine-checkable repair condition. Truncated, malformed, omitted, duplicated,
-unknown, stale, or identity-mismatched output is invalid and never PASS.
+Do not select, infer, or substitute a model for that role. Silent fallback is forbidden. An
+unavailable or conflicting binding blocks review without changing the selector.
 
-Cycle 1 reviews the complete population. One role-pure repair phase may close every
-reported class, after which all invalidated artifacts are regenerated and cycle 2
-reviews the entire new population. Cycle-2 failure stops as `ESCALATION_REQUIRED`.
-Cycle 3 is forbidden. One transport-invalid attempt may retry the unchanged cycle; a
-second stops as `REVIEW_TRANSPORT_BLOCKED`.
+## Wave execution
 
-Publish only the exact validated reviewed head. Merge only with green exact-head CI,
-then verify exact-main CI. Close through the governed two-PR ceremony. No Pages action,
-deployment, package publication, tag, GitHub Release, external release claim, evidence
-promotion, real-stynx mutation, or predecessor mutation is authorized.
+Execute the split prompts in order:
+
+1. `01-entry-authority-audit.md`
+2. `02-inspector-red.md`
+3. `03-architect-setpoint.md`
+4. `04-executor-substrate.md`
+5. `05-engineer-implementation.md`
+6. `06-inspector-acceptance.md`
+7. `07-user-documentation.md` — canonical descriptors and R-0009 handoff only
+8. `08-documentation-acceptance.md` — handoff acceptance only
+9. `09-audit-review-close.md`
+
+Within an eligible wave, maximize safe parallelism using disjoint worktrees and files.
+Do not begin an Engineer wave before the corresponding Inspector red and Architect
+setpoint are committed. Wave 4 must pass its focused executor gates before Wave 5
+consumes the substrate. Do not begin final review before documentation acceptance.
+
+## Global implementation setpoint
+
+- Seven default domains: init, doctor, check, sense, round, evidence, release.
+- Hidden task/catalog plumbing only.
+- Public vocabulary: suite, preset, kind, slice, tier.
+- Harness, not F5, in public onboarding.
+- Remote consent: `--write --publish`.
+- Check suites: quick, standard, full, release.
+- Sense presets: baseline, structural, governed, sweep.
+- Every task requires one active round and normally executes through `round run`.
+- Every task declares exactly one `routine`, `agent`, `human`, or `composite` executor.
+- Agent selection is `exact`, explicitly allowlisted `preferred`, or named/versioned
+  `policy`; fallback is never implicit.
+- Model/runtime/effort availability is canonical registry data. Discipline remains the
+  authority source, and resolved execution is evidenced separately from the immutable
+  task request.
+- Registry counts are unbound until mechanically recomputed from the live one-to-one map.
+- Canonical descriptors are policy-derived and part of acceptance; R-0009 owns the complete user corpus.
+
+## Verification and close
+
+Run the complete minimum and exit floors, coverage, DB-enabled cases, production binary
+population, migration map, suite/preset membership, executor/model-routing/evidence
+contracts, canonical descriptor and migration-handoff coverage,
+links, generated parity, and obsolete-vocabulary checks. Converge twice with a clean
+second pass, obtain independent exact-candidate review, and restart convergence/review
+after any repair.
+
+Do not push, open a PR, merge, publish, tag, release, deploy, or archive without the
+then-current explicit authorization.
 
 Final report:
 
-`ENTRY BINDING / REFERENCE MAP / PRODUCT DISPOSITIONS / P0 DOCS / P1 DOCS / P2 DOCS /
-CLI PAGES / PROJECTIONS / HISTORY HASHES / SITE ARTIFACT SHA / DEPLOY GUARD / IMPACT
-PLAN / COLD-WARM EXECUTIONS / CURRENT CLAIMS / REVIEW TOPICS / REVIEW CYCLES / BATCH
-COMMITS / GATES / EXACT-HEAD CI / EXACT-MAIN CI / CLOSURE / DEPLOYMENT NONCLAIM`.
+`AUTHORIZATION / LIVE VERSION STANDING / BASE SHA / CURRENT POPULATION / TARGET
+POPULATION / MIGRATION MAP / SUITES / PRESETS / KINDS / SLICES / TIERS / ROUND-TASK
+CONTAINMENT / EXECUTORS / MODEL+EFFORT ROUTING / EXECUTION EVIDENCE /
+AUTHORITY+EFFECTS / USER DOCS / TESTS / COVERAGE / CONVERGENCE / REVIEW /
+AUDIT / NONRELEASE CLAIM`.

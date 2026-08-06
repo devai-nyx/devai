@@ -1,27 +1,25 @@
 ---
 id: R-0010-AUTHORIZATION
-title: Authorization gate for genuine evidence observation
+title: Authorization for 1.0.0 release-candidate preparation
 type: authorization
-status: draft
-date: 2026-07-24
+status: active
+date: 2026-08-05
 authority: Owner
 supersedes: null
 superseded_by: null
-provenance: [OM-002 requires a fresh later mandate]
+provenance: [OM-002; OM-019]
 ---
 
 # R-0010 authorization
 
-**STATUS: PENDING — DO NOT OPEN THE STREAK**
+**REPOSITORY PHASE: GRANTED**
 
-OM-002 authorizes preparation of this plan and prompt only. A fresh direct Owner mandate
-after published R-0008 and closed R-0009 must:
+**EXTERNAL RELEASE PHASE: PENDING**
 
-1. authorize a genuine successor qualifying-run campaign from zero;
-2. bind the then-current accepted graduation conjuncts and revocation rules;
-3. name the observation window and allowed operational subjects;
-4. preserve source-PR full runs and weekly-audit nonpromotion;
-5. state that activation, even if earned, is a second Owner gate.
+OM-002 authorizes building, packing, hashing, attesting, dry-running, and auditing the
+1.0.0 candidate and its hermetic adopter migration. It forbids package publication,
+tag creation/push, GitHub Release creation, and Pages deployment.
 
-Until that mandate is quoted here, no R-0010 declaration, run counting, decision, or
-activation is authorized.
+R-0010 stops at the external authorization gate. It does not close BL-020 or BL-024 and
+does not close the round until a later Owner instruction grants the external phase and
+post-publication verification succeeds.

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "temporary-planning-1.0.0",
+  "round": "R-0008",
+  "authority": "PENDING",
+  "classes": [
+    {
+      "id": "R8-F001",
+      "class": "CROSS_GATE_EQUIVALENCE_UNDERBOUND",
+      "population": "all derived claims and ordered producer-consumer pairs across 16 gates",
+      "required": "identity mismatch names check, ordinal, producer identity, consumer identity",
+      "state": "RED_REQUIRED"
+    },
+    {
+      "id": "R8-F002",
+      "class": "ASSERTION_PROPERTY_LOSS",
+      "population": "threshold, instrumentation, build, process-order, combined-root, standalone properties",
+      "required": "each unsound edge rejected and missing assertion executed",
+      "state": "RED_REQUIRED"
+    },
+    {
+      "id": "R8-F003",
+      "class": "CACHE_RESULT_FORGEABLE",
+      "population": "every signed result and trust-envelope field",
+      "required": "self-digest forgery, wrong-key signature, replay and ambiguity never reuse",
+      "state": "RED_REQUIRED"
+    },
+    {
+      "id": "R8-F004",
+      "class": "EXPECTED_IDENTITY_SELF_SOURCED",
+      "population": "every expected identity source",
+      "required": "expected identity independently recomputed before artifact read",
+      "state": "RED_REQUIRED"
+    },
+    {
+      "id": "R8-F005",
+      "class": "FALSE_GREEN_TERMINAL_EVIDENCE",
+      "population": "ordinals 1-16 and both convergence passes",
+      "required": "invalid reuse executes/blocks, retains 16 records, and cannot freeze",
+      "state": "RED_REQUIRED"
+    },
+    {
+      "id": "R8-F006",
+      "class": "DERIVED_ARTIFACT_NONATOMIC",
+      "population": "trace, command closure, policy materialization and schema projections",
+      "required": "source and derived bytes change atomically under valid role authority",
+      "state": "RED_REQUIRED"
+    },
+    {
+      "id": "R8-F007",
+      "class": "OPTIMISATION_CORRECTNESS_UNPROVED",
+      "population": "cold disabled, cold enabled, warm enabled repeated paired runs",
+      "required": "semantic population equality precedes timing; count units remain distinct",
+      "state": "RED_REQUIRED"
+    },
+    {
+      "id": "R8-F008",
+      "class": "INDEPENDENT_LITERAL_EXECUTABILITY_REGRESSED",
+      "population": "all 16 argv from clean detached empty-state checkout",
+      "required": "no cache, signer, injected argv or hidden prerequisite",
+      "state": "RED_REQUIRED"
+    }
+  ]
+}

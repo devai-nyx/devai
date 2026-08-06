@@ -4982,6 +4982,120 @@ satisfied as written and not relaxed. It does not bypass any R-0007 entry or bat
 does not bind the B0 declaration, does not alter closed R-0006 artifacts, and does not
 deploy, publish, tag, promote evidence, or mutate the predecessor.
 
+### DII-254 — Resolve governed round artifacts through one fail-closed identity
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-019; ADR-012; DII-252; DII-253`
+
+OM-019 adopts a new six-round sequence while the repository still contains previously
+prepared plans under the same round numbers. A human-readable supersession statement is not
+enough to prevent a controller, operator, reviewer, or later prompt from selecting the wrong
+plan. Governed round discovery therefore has one policy-owned identity contract and one
+mechanical uniqueness gate.
+
+For each registered round state, policy names one canonical directory and whether plan,
+authorization, close-control profile, reviewer binding, and runtime root are required. A
+required plan and authorization are exact canonical paths. A profile, when required, must be
+the single profile at the canonical path, must declare the same round, and must select those
+same plan and authorization paths. Its runtime state root must be repository-relative,
+contained below `.devai/state/round-runs/<round>/`, and globally unique among registered
+rounds. Its reviewer marker must resolve to exactly one active, schema-valid structured Owner
+binding whose mandate id, round, model selector, role, and no-fallback rule equal the profile.
+
+The gate fails closed on duplicate round registry entries, duplicate canonical directories,
+missing required artifacts, forbidden artifacts in a state that does not admit them,
+cross-round profile identity, source-path mismatch, path escape, shared runtime root, missing
+reviewer binding, competing complete bindings, or profile/binding mismatch. Diagnostics name
+the round, artifact class, and conflicting paths or identities. One generic finding without
+the conflicting population is insufficient.
+
+Proposal and working-draft roots are declared separately from runtime-discoverable roots.
+They may contain planning prose but may not contain a runtime-discoverable
+`close-control-profile.json`, reviewer binding, declaration marker, or runtime state root.
+Their presence grants no authority and satisfies no required canonical artifact. Conversely,
+archived or historical material is not treated as active merely because its prose names a
+round.
+
+Git tracking state is deliberately not an equivalence input to the uniqueness calculation:
+the gate must inspect the bytes actually presented to it so an untracked conflicting artifact
+cannot hide from a local check. Standing is a separate question. Per OM-019, exact-candidate
+and remote-CI proof authenticate only committed canonical plan and control bytes; an
+uncommitted drafting note never becomes normative merely because the local gate can see it.
+
+The gate is wired into governance validation and has executable adversaries for every failure
+class above. It is a selector-integrity control only. It does not declare a round, bind B0,
+select a reviewer, authenticate a cache result, extend the PASS at
+`b1a814a93b0dc186c28a1341354cdf4444609728`, authorize
+R-0007/R-0008 implementation, or permit any external effect.
+
+### DII-255 — Serialize the expensive detached-candidate contract cohort without reducing proof
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-020; DII-251; DII-254`
+
+The literal ordinary and merged-coverage lanes execute a small cohort of pre-R-0007
+contracts that create disposable candidate repositories, perform frozen offline installs,
+and synchronously replay candidate-bound controls. When those files run alongside the broad
+parallel population, otherwise-green assertions exceed their unchanged local timeouts. The
+same assertions complete within those timeouts on the same candidate when isolated. A
+migrating timeout is not an admissible PASS and repeated lucky retries are not a scheduler
+contract.
+
+The canonical scheduler therefore partitions the test census into two disjoint projects.
+The ordinary project runs first with the existing parallel defaults and excludes the exact
+expensive cohort. The detached-candidate project runs second, includes exactly that cohort,
+and disables file parallelism so no two cohort files compete with one another or with the
+ordinary population. The coverage configuration applies the identical partition while
+retaining its one merged custom coverage provider and thresholds.
+
+The cohort is:
+
+- `tests/contract/pre-r0007-close-controls.red.contract.test.ts`;
+- `tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts`;
+- `tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts`;
+- `tests/contract/pre-r0007-manifest-gate.red.contract.test.ts`;
+- `tests/contract/pre-r0007-remediation-1.red.contract.test.ts`;
+- `tests/contract/pre-r0007-remediation-2.red.contract.test.ts`;
+- `tests/contract/pre-r0007-remediation-3.red.contract.test.ts`;
+- `tests/contract/pre-r0007-remediation-4.red.contract.test.ts`;
+- `tests/contract/pre-r0007-remediation-5.red.contract.test.ts`;
+- `tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts`;
+- `tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts`; and
+- `tests/contract/r0006-output-totality-cycle5.red.contract.test.ts`.
+
+The partition must prove exact file-census equality, disjoint membership, and exactly-once
+selection under both literal commands. It must not change a test body, assertion, timeout,
+literal authoritative argv, gate order, detached installation, coverage include/exclude,
+coverage provider, or 70/60/70/70 floor. Environment-based worker overrides, hidden skips,
+shards, cache substitution, and proof reuse remain forbidden. The repair changes scheduling
+only; it loses no proof property and creates no PASS until fresh exact-HEAD ordinary and
+coverage commands finish green.
+
+### DII-256 — Bound ordinary-project concurrency after the complete scheduler diagnostic
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-020; DII-255`
+
+The first uninterrupted full-suite diagnostic of DII-255 selected all 170 test files
+exactly once and allowed the serialized detached-candidate cohort to complete in sequence,
+but the ordinary project retained the host-sized worker default. Seven ordinary-project
+assertions then exceeded their unchanged local limits: six assertions with a 5,000 ms
+limit and one fresh-clone assertion with a 15,000 ms limit. The failures migrated across
+otherwise-green files that synchronously launch the CLI, policy controller, or nested
+Vitest discovery. The same run also exposed a separate register-provenance defect in the
+DII-255 header; that defect is corrected as an Architect-owned source error and is not
+classified as contention.
+
+The repository-owned scheduler must therefore cap the ordinary project at two workers.
+This is a fixed canonical configuration value, applied identically by the root and merged
+coverage configurations through their shared helper. It is not an environment override,
+machine-local tuning, test timeout change, shard, skip, or cache. Two workers preserve
+bounded ordinary parallelism while preventing the unbounded host-sized fan-out that the
+complete diagnostic proved incompatible with the existing per-assertion limits. The
+detached-candidate cohort remains a second project with file parallelism disabled.
+
+The prospective contract must fail before implementation when the ordinary worker cap is
+absent or differs from two, and must still prove the exact 170-file census, disjoint
+cohort, unchanged literal commands, unchanged assertion timeouts, frozen offline install,
+literal sixteen-command roster, merged coverage provider, and 70/60/70/70 floor. A fresh
+exact-HEAD ordinary run and a fresh exact-HEAD coverage run are the only admissible green
+evidence. The diagnostic described here is red input, not a PASS, and this amendment does
+not bind B0 or begin R-0007.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
