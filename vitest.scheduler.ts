@@ -32,7 +32,6 @@ export function evidencePreservingProjects({
 }: EvidencePreservingProjectOptions): TestProjectConfiguration[] {
   return [
     {
-      extends: true,
       test: {
         name: ordinaryName,
         include: [...include],
@@ -41,7 +40,6 @@ export function evidencePreservingProjects({
       },
     },
     {
-      extends: true,
       test: {
         name: serializedName,
         include: [...SERIALIZED_DETACHED_CONTRACTS],
