@@ -5026,6 +5026,47 @@ select a reviewer, authenticate a cache result, extend the PASS at
 `b1a814a93b0dc186c28a1341354cdf4444609728`, authorize
 R-0007/R-0008 implementation, or permit any external effect.
 
+### DII-255 — Serialize the expensive detached-candidate contract cohort without reducing proof
+`type: decision · status: active · authority: Architect · provenance: direct Owner OM-020; DII-251; DII-254`
+
+The literal ordinary and merged-coverage lanes execute a small cohort of pre-R-0007
+contracts that create disposable candidate repositories, perform frozen offline installs,
+and synchronously replay candidate-bound controls. When those files run alongside the broad
+parallel population, otherwise-green assertions exceed their unchanged local timeouts. The
+same assertions complete within those timeouts on the same candidate when isolated. A
+migrating timeout is not an admissible PASS and repeated lucky retries are not a scheduler
+contract.
+
+The canonical scheduler therefore partitions the test census into two disjoint projects.
+The ordinary project runs first with the existing parallel defaults and excludes the exact
+expensive cohort. The detached-candidate project runs second, includes exactly that cohort,
+and disables file parallelism so no two cohort files compete with one another or with the
+ordinary population. The coverage configuration applies the identical partition while
+retaining its one merged custom coverage provider and thresholds.
+
+The cohort is:
+
+- `tests/contract/pre-r0007-close-controls.red.contract.test.ts`;
+- `tests/contract/pre-r0007-cycle1-defect-classes.red.contract.test.ts`;
+- `tests/contract/pre-r0007-impact-dag.adversarial.contract.test.ts`;
+- `tests/contract/pre-r0007-manifest-gate.red.contract.test.ts`;
+- `tests/contract/pre-r0007-remediation-1.red.contract.test.ts`;
+- `tests/contract/pre-r0007-remediation-2.red.contract.test.ts`;
+- `tests/contract/pre-r0007-remediation-3.red.contract.test.ts`;
+- `tests/contract/pre-r0007-remediation-4.red.contract.test.ts`;
+- `tests/contract/pre-r0007-remediation-5.red.contract.test.ts`;
+- `tests/contract/pre-r0007-review-run-1-repairs.red.contract.test.ts`;
+- `tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts`; and
+- `tests/contract/r0006-output-totality-cycle5.red.contract.test.ts`.
+
+The partition must prove exact file-census equality, disjoint membership, and exactly-once
+selection under both literal commands. It must not change a test body, assertion, timeout,
+literal authoritative argv, gate order, detached installation, coverage include/exclude,
+coverage provider, or 70/60/70/70 floor. Environment-based worker overrides, hidden skips,
+shards, cache substitution, and proof reuse remain forbidden. The repair changes scheduling
+only; it loses no proof property and creates no PASS until fresh exact-HEAD ordinary and
+coverage commands finish green.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
