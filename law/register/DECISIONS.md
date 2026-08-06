@@ -5027,7 +5027,7 @@ select a reviewer, authenticate a cache result, extend the PASS at
 R-0007/R-0008 implementation, or permit any external effect.
 
 ### DII-255 — Serialize the expensive detached-candidate contract cohort without reducing proof
-`type: decision · status: active · authority: Architect · provenance: direct Owner OM-020; DII-251; DII-254`
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-020; DII-251; DII-254`
 
 The literal ordinary and merged-coverage lanes execute a small cohort of pre-R-0007
 contracts that create disposable candidate repositories, perform frozen offline installs,
@@ -5066,6 +5066,35 @@ coverage provider, or 70/60/70/70 floor. Environment-based worker overrides, hid
 shards, cache substitution, and proof reuse remain forbidden. The repair changes scheduling
 only; it loses no proof property and creates no PASS until fresh exact-HEAD ordinary and
 coverage commands finish green.
+
+### DII-256 — Bound ordinary-project concurrency after the complete scheduler diagnostic
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-020; DII-255`
+
+The first uninterrupted full-suite diagnostic of DII-255 selected all 170 test files
+exactly once and allowed the serialized detached-candidate cohort to complete in sequence,
+but the ordinary project retained the host-sized worker default. Seven ordinary-project
+assertions then exceeded their unchanged local limits: six assertions with a 5,000 ms
+limit and one fresh-clone assertion with a 15,000 ms limit. The failures migrated across
+otherwise-green files that synchronously launch the CLI, policy controller, or nested
+Vitest discovery. The same run also exposed a separate register-provenance defect in the
+DII-255 header; that defect is corrected as an Architect-owned source error and is not
+classified as contention.
+
+The repository-owned scheduler must therefore cap the ordinary project at two workers.
+This is a fixed canonical configuration value, applied identically by the root and merged
+coverage configurations through their shared helper. It is not an environment override,
+machine-local tuning, test timeout change, shard, skip, or cache. Two workers preserve
+bounded ordinary parallelism while preventing the unbounded host-sized fan-out that the
+complete diagnostic proved incompatible with the existing per-assertion limits. The
+detached-candidate cohort remains a second project with file parallelism disabled.
+
+The prospective contract must fail before implementation when the ordinary worker cap is
+absent or differs from two, and must still prove the exact 170-file census, disjoint
+cohort, unchanged literal commands, unchanged assertion timeouts, frozen offline install,
+literal sixteen-command roster, merged coverage provider, and 70/60/70/70 floor. A fresh
+exact-HEAD ordinary run and a fresh exact-HEAD coverage run are the only admissible green
+evidence. The diagnostic described here is red input, not a PASS, and this amendment does
+not bind B0 or begin R-0007.
 
 ## Appendix — Register-consistency guard
 
