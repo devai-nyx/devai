@@ -3349,7 +3349,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 75,
-      "assertion_digest_sha256": "8a1c53e8fb4dd5a02dd9b5dd5489f66332239443efb925ea2e404f5ad1f1c840"
+      "assertion_digest_sha256": "878ed2439b00b820060fe2d3925bfe6ef35dadf98d8ce7325c81d3cedf29f77c"
     },
     {
       "path": "tests/contract/pre-r0007-remediation-3.red.contract.test.ts",
@@ -3401,7 +3401,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 45,
-      "assertion_digest_sha256": "efb773e4c33f01f9be1442331342f5ab25e913516ab38469a0aa8cfc98e03bff"
+      "assertion_digest_sha256": "6349a8fc4987cd48ec4d0fcc50ccb02f3661f321e6a574a0b69d5c619c21531c"
     },
     {
       "path": "tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts",
@@ -3427,7 +3427,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 22,
-      "assertion_digest_sha256": "a3d66cdae072d7b0610e795789a303831dd1d247939be215ec96f3b2ab5c965b"
+      "assertion_digest_sha256": "18963a62664cc2a4fadc3e3d20d81b366778036ff357dfde4641076780961c10"
     },
     {
       "path": "tests/contract/r0004-governed-surface.red.contract.test.ts",

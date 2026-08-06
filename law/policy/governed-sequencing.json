@@ -846,7 +846,8 @@
       "round": "R-0007",
       "implementation_commits": [
         "fe2dcb4270057d26ece5f07483e5232429b7f960",
-        "215f589ad49231aba405d90ec7b1a0ba98718637"
+        "215f589ad49231aba405d90ec7b1a0ba98718637",
+        "7e6c00d27f0047b0b2db8f137f8da55a237ba617"
       ],
       "law_commits": ["d0ec29b73fd2bd9f79d677f5ba302f585a490c03"],
       "red_evidence": {
@@ -854,12 +855,9 @@
         "observed_exit": 1,
         "command": "pnpm vitest run tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts --reporter=verbose",
         "evidence_path": "work/audit/R-0007-pre-entry/scheduler-serialization-red-evidence.json",
-        "evidence_sha256": "255b8bfe07de8d62832e7703fe2e36a4328b862beaa23f674ee6b2403a5b5f17",
+        "evidence_sha256": "7f06779a3bf44d0196f9dd2fa67aa13f060e212f79306c3f988d6361ea916157",
         "tests": ["tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts"],
-        "exercised_implementation_paths": [
-          "vitest.config.ts",
-          "vitest.scheduler.ts"
-        ]
+        "exercised_implementation_paths": ["vitest.config.ts", "vitest.scheduler.ts"]
       }
     }
   ],
