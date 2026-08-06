@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "finding_id": "R7-F014",
-  "decision_id": "DII-255",
+  "finding_id": "R7-F015",
+  "decision_id": "DII-256",
   "red_contract": "tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts",
   "description": "Exact scheduling-only surfaces authorized by OM-020. Every test, literal command, cold-install proof, timeout, and coverage floor remains unchanged.",
   "allowed_paths": [
