@@ -1,8 +1,4 @@
-import {
-  defaultExclude,
-  defaultInclude,
-  type TestProjectConfiguration,
-} from 'vitest/config';
+import { defaultExclude, defaultInclude, type TestProjectConfiguration } from 'vitest/config';
 
 export const SERIALIZED_DETACHED_CONTRACTS = [
   'tests/contract/pre-r0007-close-controls.red.contract.test.ts',
