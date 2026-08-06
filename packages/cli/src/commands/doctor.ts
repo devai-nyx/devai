@@ -8,7 +8,6 @@ import {
   statSync,
 } from '@devai-nyx/authority';
 import { dirname, join, resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
 import type { CAC } from 'cac';
 import { validators } from '@devai-nyx/schemas';
 import {
@@ -252,9 +251,9 @@ async function checkRoundArtifactUniqueness(repoRoot: string): Promise<CheckResu
     };
   }
   try {
-    const moduleUrl = pathToFileURL(script);
-    moduleUrl.searchParams.set('repoRoot', repoRoot);
-    const module = (await import(moduleUrl.href)) as {
+    // The repository-owned gate is a plain ESM script rather than a typed package module.
+    // @ts-expect-error -- imported from the checked repository root at runtime.
+    const module = (await import('../../../../scripts/check-round-artifact-uniqueness.mjs')) as {
       report: {
         ok?: boolean;
         findings?: Array<{ code?: string; message?: string }>;
