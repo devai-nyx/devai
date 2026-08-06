@@ -35,7 +35,11 @@ function text(path: string): string {
 function listed(config?: string): Array<{ project: string; path: string }> {
   const args = ['vitest', 'list', '--filesOnly'];
   if (config !== undefined) args.push('--config', config);
-  const result = spawnSync('pnpm', args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  const result = spawnSync('pnpm', args, {
+    cwd: ROOT,
+    encoding: 'utf8',
+    maxBuffer: 8 * 1024 * 1024,
+  });
   expect(result.status, result.stderr).toBe(0);
   return result.stdout
     .split('\n')
@@ -55,7 +59,8 @@ describe('DII-255 evidence-preserving scheduler serialization', () => {
   it('declares the exact Architect-bound cohort once in shared workspace tooling', () => {
     expect(existsSync(SCHEDULER)).toBe(true);
     const source = text(SCHEDULER);
-    for (const path of SERIALIZED) expect(source.match(new RegExp(path.replaceAll('.', '\\.'), 'gu'))).toHaveLength(1);
+    for (const path of SERIALIZED)
+      expect(source.match(new RegExp(path.replaceAll('.', '\\.'), 'gu'))).toHaveLength(1);
     expect(source).toContain('fileParallelism: false');
     expect(source).toContain('groupOrder: 0');
     expect(source).toContain('groupOrder: 1');
@@ -67,8 +72,7 @@ describe('DII-255 evidence-preserving scheduler serialization', () => {
     const coverage = text(COVERAGE_CONFIG);
     expect(root).toContain("from './vitest.scheduler.js'");
     expect(coverage).toContain("from '../../vitest.scheduler.js'");
-    for (const source of [root, coverage])
-      expect(source).toContain('evidencePreservingProjects(');
+    for (const source of [root, coverage]) expect(source).toContain('evidencePreservingProjects(');
   });
 
   it('retains literal top-level commands, timeouts, cold install, argv roster, and floors', () => {
@@ -79,9 +83,9 @@ describe('DII-255 evidence-preserving scheduler serialization', () => {
     expect(pkg.scripts['test:coverage:t1-t3']).toBe(
       'pnpm run devai:prepare && vitest run --config tests/config/t1-t3.coverage.config.ts --coverage.reportsDirectory=scratch/coverage/t1-t3',
     );
-    expect(text(resolve(ROOT, 'tests/contract/pre-r0007-close-controls.red.contract.test.ts'))).toContain(
-      'vi.setConfig({ testTimeout: 30_000 })',
-    );
+    expect(
+      text(resolve(ROOT, 'tests/contract/pre-r0007-close-controls.red.contract.test.ts')),
+    ).toContain('vi.setConfig({ testTimeout: 30_000 })');
     const cold = text(resolve(ROOT, 'tests/contract/pre-r0007-remediation-4.red.contract.test.ts'));
     expect(cold).toContain("['install', '--offline', '--frozen-lockfile'");
     expect(cold).toContain('policy.convergence.commands');
