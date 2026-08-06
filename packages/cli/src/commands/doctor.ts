@@ -8,6 +8,7 @@ import {
   statSync,
 } from '@devai-nyx/authority';
 import { dirname, join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import type { CAC } from 'cac';
 import { validators } from '@devai-nyx/schemas';
 import {
@@ -239,6 +240,45 @@ function checkSchemasLoadable(repoRoot: string): CheckResult {
     info: { count: files.length },
     ...(errors.length > 0 && { errors }),
   };
+}
+
+async function checkRoundArtifactUniqueness(repoRoot: string): Promise<CheckResult> {
+  const script = join(repoRoot, 'scripts/check-round-artifact-uniqueness.mjs');
+  if (!existsSync(script)) {
+    return {
+      name: 'round-artifact-uniqueness',
+      ok: false,
+      errors: [`missing: ${script}`],
+    };
+  }
+  try {
+    const moduleUrl = pathToFileURL(script);
+    moduleUrl.searchParams.set('repoRoot', repoRoot);
+    const module = (await import(moduleUrl.href)) as {
+      report: {
+        ok?: boolean;
+        findings?: Array<{ code?: string; message?: string }>;
+      };
+    };
+    const report = module.report;
+    const errors = (report.findings ?? []).map(
+      (finding) => `[${finding.code ?? 'UNKNOWN'}] ${finding.message ?? 'unspecified finding'}`,
+    );
+    return {
+      name: 'round-artifact-uniqueness',
+      ok: report.ok === true,
+      info: { finding_count: errors.length },
+      ...(errors.length > 0 && { errors }),
+    };
+  } catch (error) {
+    return {
+      name: 'round-artifact-uniqueness',
+      ok: false,
+      errors: [
+        `round artifact uniqueness gate returned invalid output: ${error instanceof Error ? error.message : String(error)}`,
+      ],
+    };
+  }
 }
 
 function checkEvidenceChain(chainPath: string): CheckResult {
@@ -820,7 +860,7 @@ interface CheckSpec {
     chainPath: string,
     posture: Posture,
     skipDocsGovernance?: boolean,
-  ) => CheckResult;
+  ) => CheckResult | Promise<CheckResult>;
 }
 
 const CHECK_SPECS: readonly CheckSpec[] = [
@@ -838,6 +878,11 @@ const CHECK_SPECS: readonly CheckSpec[] = [
     name: 'schemas-loadable',
     postures: new Set<Posture>(['self']),
     run: (repoRoot) => checkSchemasLoadable(repoRoot),
+  },
+  {
+    name: 'round-artifact-uniqueness',
+    postures: new Set<Posture>(['self']),
+    run: (repoRoot) => checkRoundArtifactUniqueness(repoRoot),
   },
   {
     name: 'test-trace',
@@ -934,18 +979,18 @@ function annotatePointerOnlyAtTier3(
   });
 }
 
-function runChecks(
+async function runChecks(
   repoRoot: string,
   chainPath: string,
   posture: Posture,
   postureSource: 'flag' | 'auto',
   skipDocsGovernance?: boolean,
-): Report {
+): Promise<Report> {
   const profile = readProfile(repoRoot);
   const checks: CheckResult[] = [];
   for (const spec of CHECK_SPECS) {
     if (!spec.postures.has(posture)) continue;
-    const result = spec.run(repoRoot, chainPath, posture, skipDocsGovernance);
+    const result = await spec.run(repoRoot, chainPath, posture, skipDocsGovernance);
     // D-112: checks above the declared profile still run (floor, not
     // cage) but are reported advisory and never fail the run.
     const advisory = !profileAtLeast(profile, spec.minProfile ?? 'tier1');
@@ -1042,7 +1087,7 @@ export const doctor = defineCommand({
         '--skip <checks>',
         'Comma-separated list of checks to skip (e.g. "docs-governance" for pre-conversion adopters).',
       )
-      .action((options: DoctorOptions) => {
+      .action(async (options: DoctorOptions) => {
         const flag = resolvePostureFlag(options);
         if (typeof flag === 'object' && 'error' in flag) {
           process.stderr.write(`${flag.error}\n`);
@@ -1059,7 +1104,13 @@ export const doctor = defineCommand({
             .filter((s) => s.length > 0),
         );
         const skipDocsGovernance = skipSet.has('docs-governance');
-        const report = runChecks(repoRoot, chainPath, posture, postureSource, skipDocsGovernance);
+        const report = await runChecks(
+          repoRoot,
+          chainPath,
+          posture,
+          postureSource,
+          skipDocsGovernance,
+        );
         if (options.human) {
           process.stdout.write(renderHuman(report));
         } else {
