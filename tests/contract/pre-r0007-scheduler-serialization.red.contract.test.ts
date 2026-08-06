@@ -1,6 +1,6 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 //
-// Prospective red for DII-255 / OM-020. The authorized repair changes scheduling only:
+// Prospective red for DII-255, DII-256, and OM-020. The authorized repair changes scheduling only:
 // every existing test, timeout, literal argv, detached install, and coverage floor remains.
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
@@ -55,16 +55,17 @@ function listed(config?: string): Array<{ project: string; path: string }> {
     });
 }
 
-describe('DII-255 evidence-preserving scheduler serialization', () => {
+describe('DII-255 / DII-256 evidence-preserving scheduler serialization', () => {
   it('declares the exact Architect-bound cohort once in shared workspace tooling', () => {
     expect(existsSync(SCHEDULER)).toBe(true);
     const source = text(SCHEDULER);
     for (const path of SERIALIZED)
       expect(source.match(new RegExp(path.replaceAll('.', '\\.'), 'gu'))).toHaveLength(1);
     expect(source).toContain('fileParallelism: false');
+    expect(source.match(/maxWorkers: 2/gu)).toHaveLength(1);
     expect(source).toContain('groupOrder: 0');
     expect(source).toContain('groupOrder: 1');
-    expect(source).not.toMatch(/testTimeout|maxWorkers|VITEST_MAX_WORKERS|DEVAI_R7_DETACHED_GATE/u);
+    expect(source).not.toMatch(/testTimeout|VITEST_MAX_WORKERS|DEVAI_R7_DETACHED_GATE/u);
   });
 
   it('applies the shared disjoint partition to ordinary and merged coverage', () => {
