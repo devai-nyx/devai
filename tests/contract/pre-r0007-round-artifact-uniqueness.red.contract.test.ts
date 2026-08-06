@@ -225,9 +225,11 @@ describe('DII-254 governed round artifact uniqueness', () => {
 
     const root2 = fixture();
     const p = policy(root2) as { rounds: Array<{ requirements: Record<string, boolean> }> };
-    p.rounds[1]!.requirements.profile = true;
-    p.rounds[1]!.requirements.reviewer = true;
-    p.rounds[1]!.requirements.runtime_root = true;
+    const dormant = p.rounds[1];
+    if (dormant === undefined) throw new Error('fixture omitted R-9001');
+    dormant.requirements.profile = true;
+    dormant.requirements.reviewer = true;
+    dormant.requirements.runtime_root = true;
     writePolicy(root2, p);
     write(
       root2,
