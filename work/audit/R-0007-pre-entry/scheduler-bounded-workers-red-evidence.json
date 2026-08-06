@@ -53,11 +53,12 @@
         "failed": 1,
         "total": 1
       },
-      "tests": {
+      "test_counts": {
         "failed": 1,
         "passed": 4,
         "total": 5
       },
+      "tests": ["tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts"],
       "failed_contracts": [
         "declares the exact Architect-bound cohort once in shared workspace tooling"
       ],
