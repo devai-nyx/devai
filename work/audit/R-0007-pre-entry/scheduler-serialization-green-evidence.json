@@ -7,7 +7,7 @@
   "red_commit": "53bddd7454b6d9a052b22f088f792c245432802a",
   "red_evidence": {
     "path": "work/audit/R-0007-pre-entry/scheduler-serialization-red-evidence.json",
-    "sha256": "a16302639b955c63e14001dcf83828b6a575b41235cccd0a03123b365e002c26"
+    "sha256": "255b8bfe07de8d62832e7703fe2e36a4328b862beaa23f674ee6b2403a5b5f17"
   },
   "engineer_commits": [
     "fe2dcb4270057d26ece5f07483e5232429b7f960",
