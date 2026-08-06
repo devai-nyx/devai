@@ -4982,6 +4982,50 @@ satisfied as written and not relaxed. It does not bypass any R-0007 entry or bat
 does not bind the B0 declaration, does not alter closed R-0006 artifacts, and does not
 deploy, publish, tag, promote evidence, or mutate the predecessor.
 
+### DII-254 — Resolve governed round artifacts through one fail-closed identity
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-019; ADR-012; DII-252; DII-253`
+
+OM-019 adopts a new six-round sequence while the repository still contains previously
+prepared plans under the same round numbers. A human-readable supersession statement is not
+enough to prevent a controller, operator, reviewer, or later prompt from selecting the wrong
+plan. Governed round discovery therefore has one policy-owned identity contract and one
+mechanical uniqueness gate.
+
+For each registered round state, policy names one canonical directory and whether plan,
+authorization, close-control profile, reviewer binding, and runtime root are required. A
+required plan and authorization are exact canonical paths. A profile, when required, must be
+the single profile at the canonical path, must declare the same round, and must select those
+same plan and authorization paths. Its runtime state root must be repository-relative,
+contained below `.devai/state/round-runs/<round>/`, and globally unique among registered
+rounds. Its reviewer marker must resolve to exactly one active, schema-valid structured Owner
+binding whose mandate id, round, model selector, role, and no-fallback rule equal the profile.
+
+The gate fails closed on duplicate round registry entries, duplicate canonical directories,
+missing required artifacts, forbidden artifacts in a state that does not admit them,
+cross-round profile identity, source-path mismatch, path escape, shared runtime root, missing
+reviewer binding, competing complete bindings, or profile/binding mismatch. Diagnostics name
+the round, artifact class, and conflicting paths or identities. One generic finding without
+the conflicting population is insufficient.
+
+Proposal and working-draft roots are declared separately from runtime-discoverable roots.
+They may contain planning prose but may not contain a runtime-discoverable
+`close-control-profile.json`, reviewer binding, declaration marker, or runtime state root.
+Their presence grants no authority and satisfies no required canonical artifact. Conversely,
+archived or historical material is not treated as active merely because its prose names a
+round.
+
+Git tracking state is deliberately not an equivalence input to the uniqueness calculation:
+the gate must inspect the bytes actually presented to it so an untracked conflicting artifact
+cannot hide from a local check. Standing is a separate question. Per OM-019, exact-candidate
+and remote-CI proof authenticate only committed canonical plan and control bytes; an
+uncommitted drafting note never becomes normative merely because the local gate can see it.
+
+The gate is wired into governance validation and has executable adversaries for every failure
+class above. It is a selector-integrity control only. It does not declare a round, bind B0,
+select a reviewer, authenticate a cache result, extend the PASS at
+`b1a814a93b0dc186c28a1341354cdf4444609728`, authorize
+R-0007/R-0008 implementation, or permit any external effect.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

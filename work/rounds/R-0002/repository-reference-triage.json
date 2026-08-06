@@ -992,7 +992,7 @@
       "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
     },
     {
-      "locator": "work/rounds/EXECUTION-CONTRACT.md:35:24:devai-nyx/devai-original",
+      "locator": "work/rounds/EXECUTION-CONTRACT.md:41:24:devai-nyx/devai-original",
       "classification": "frozen-predecessor",
       "action": "retain",
       "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."

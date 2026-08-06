@@ -1,35 +1,19 @@
-# R-0008 ORCHESTRATOR — 1.0.0 candidate, external gate, and release
+# R-0008 orchestrator prompt — preparation authorized; execution blocked
 
-Read OM-002, OM-003, the shared execution contract, both R-0008 authorization files, the
-plan, R-0007 close/site hash, accepted publish ADR, release-control and package schemas,
-Changesets configuration, every public package manifest, release workflows, migration
-map, and adopter fixtures.
+You are the primary orchestrator for a governed DEVAI successor round. Read `AGENTS.md`, the live Owner mandate, OM-002 and OM-014–017, DII-249–253, both close policies, the execution contract, the R-0008 authorization/plan/profile/graph/matrix, and every prompt before mutation. The predecessor `../devai` is read-only always.
 
-Run the live preflight and execute Phase A only. Pack from a clean exact candidate,
-record all eleven hashes, verify attest subjects, and install the tarballs—not workspace
-links—into the hermetic adopter. Real `stynx` is read-only.
+Preparation may continue under OM-019. Do not begin B0 unless R-0007 is closed and every
+remaining Owner trust/reviewer decision and entry gate in `plan.md` passes on live
+`origin/main`. Use a dedicated `codex/` branch/worktree, one role per commit, and exact path
+authority. Never silently broaden scope. Do not dispatch implementation before law and
+demonstrated Inspector red plus immutable Auditor red evidence.
 
-Ask Claude Opus 5 through literal `claude-opus-5` to review supply-chain identity,
-workflow permissions/pins, fixed-group completeness, migration realism, rollback, and
-release-language accuracy; no fallback to another model is permitted. Resolve findings
-and produce A6’s handoff.
+The former prepared R-0008 prompt selected Claude Opus 5 through literal
+`claude-opus-5` with no fallback. That historical selector does not bind the resequenced
+round. OM-019 requires a new exact reviewer instruction; no fallback or inference is allowed.
 
-Then read `EXTERNAL-RELEASE-AUTHORIZATION.md` again:
+Run waves 01–08 serially at their commit boundaries. Agents may parallelize read-only population derivation within a wave, but only the named role may write/commit its paths. Every agent returns exact commit, paths, commands/exits, counts with units, evidence digests, remaining reds, and stop status. No agent may publish, deploy, tag, release, promote evidence, mutate real-stynx, or touch the predecessor.
 
-- if PENDING, stop with the Phase-A report below;
-- if GRANTED by a later Owner instruction, discard stale assumptions, run B0, and
-  execute B1–B5 exactly.
+The architectural invariant is strict: whole-result reuse among ordinary, stage2, and coverage is forbidden. Reuse is allowed only for mechanically derived, byte-identical, signed claim contracts whose expected identity is independently recomputed. Any doubt executes; inability to execute blocks. Keep all sixteen terminal gates.
 
-Never infer publication consent from OM-002, token availability, a green candidate, or
-the existence of this prompt.
-
-Phase-A report:
-
-`CANDIDATE SHA / ELEVEN TARBALLS+HASHES / ATTEST SUBJECTS / WORKFLOW PINS+PERMISSIONS /
-MIGRATION+DOCTOR / HERMETIC ADOPTER / READ-ONLY STYNX OBSERVATION / SITE HASH / GATES /
-CLAUDE REVIEW / REQUIRED EXTERNAL ACTIONS / STATUS=PENDING`.
-
-Phase-B final report adds:
-
-`OWNER GRANT / PUBLISHED VERSIONS / TAGS / RELEASE URL / LIVE PAGES / INSTALLED PROOF /
-REMOTE ATTESTATION VERIFICATION / CLOSURE / NONPROMOTION CLAIM`.
+Stop on any condition in plan section 12. Cycle 2 failure escalates; cycle 3 is forbidden. A result is not complete until the matrix is REVIEWED_PASS, the benchmark proves correctness before speed, literal detached execution is green, two-pass convergence is clean/no-write, and the Owner-bound independent reviewer passes.

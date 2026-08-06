@@ -1,70 +1,77 @@
 ---
 id: R-0010-PLAN
-title: Genuine evidence observation and promotion eligibility
+title: DEVAI 1.0.0 release candidate and adopter proof
 type: round-plan
 status: draft
-date: 2026-07-24
+date: 2026-08-05
 authority: Architect
 supersedes: null
 superseded_by: null
-provenance: [OM-002 preparation only; BL-037; BL-038; R-0010-AUTHORIZATION]
+provenance: [OM-002; OM-019; BL-020; BL-024; R-0010-EXTERNAL-AUTHORIZATION]
 ---
 
-# R-0010 — Genuine evidence observation and promotion eligibility
+# R-0010 — DEVAI 1.0.0 release candidate and adopter proof
 
 ## Objective
 
-Collect real successor usage from zero, decide scorecard-skill unification from that
-evidence, and determine actions-evidence promotion eligibility without relabelling,
-manufactured runs, or automatic activation.
+Build an exact, independently verifiable 1.0.0 candidate for the eleven-package fixed
+group, prove the 0.7-to-1.0 migration hermetically, and prepare the release/site
+transaction. Stop before external effects until the pending Owner gate is granted.
 
 ## Entry gates
 
-- `AUTHORIZATION.md` contains a fresh GRANTED Owner mandate.
-- R-0008 is published/closed and R-0009 is merged/closed.
-- Accepted qualification, streak, source-PR, weekly-audit, revocation, and activation
-  rules are re-read from then-current law.
-- An Auditor proves the opening standing and counters are zero.
+R-0009 is merged and closed; product/docs/site artifact is current; all four coverage
+floors and T1–T6 are green; release workflows have never published; GitHub and package
+token availability is checked without revealing secrets.
 
-## Batches and observation window
+## Phase A — authorized repository preparation
 
-| Batch | Role                     | Work                                                                                                                             | Commit/observation gate                                |
-| ----- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| B0    | Auditor                  | Establish zero baseline and current operational population                                                                       | No predecessor or synthetic run                        |
-| B1    | Architect                | Declare R-0010; pre-register measurement plan for both scorecard skills and every BL-038 conjunct before observing outcomes      | No post-hoc metric choice                              |
-| B2    | Engineer + Inspector     | Enable only already-authorized observation; verify qualifying/nonqualifying classification and revocation drills                 | Instrumentation cannot change verdicts                 |
-| B3    | Auditor                  | Observe real successor runs over the authorized window; publish checkpoint reports with source, subject, outcome, and exclusions | No manufactured, duplicate, source-PR, or weekly count |
-| B4    | Architect                | After sufficient evidence, decide BL-037 keep/separate or unify with compatibility/migration rules                               | Decision cites observed usage                          |
-| B5    | Inspector                | Verify BL-037 implementation if changed and independently recompute every BL-038 graduation conjunct                             | All conjuncts independently true or round stays open   |
-| B6    | Auditor                  | Prove zero relabelling and issue eligibility or not-yet-eligible report                                                          | Evidence chain and raw runs resolve                    |
-| B7    | Owner gate               | Decide whether earned eligibility should activate                                                                                | No default activation                                  |
-| B8    | Architect + machine verb | Record eligibility/Owner disposition and close only when BL-037/038 acceptance is met                                            | Activation state matches Owner act                     |
+| Batch | Role      | Work                                                                                                                                                                        | Commit gate                              |
+| ----- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| A0    | Architect | Declare R-0010 with pending external disposition and exact candidate rules                                                                                                  | No released wording                      |
+| A1    | Inspector | Red contracts for fixed-group completeness, immutable workflow pins, tarball/source identity, attestations, version/tag mismatch, migration consent, and deploy subject     | All release/adopter failures fail closed |
+| A2    | Engineer  | Implement BL-020 release workflow using immutable action SHAs, eleven-package Changesets handling, exact pack staging, SBOM/hash manifest, and GitHub artifact attestations | Workflow lint and hermetic dry-run       |
+| A3    | Engineer  | Implement BL-024 `adopt upgrade --from 0.7`, migration map, explicit consent, doctor checks, and installed-tarball paths                                                    | No sibling-checkout dependence           |
+| A4    | Inspector | Pack all eleven packages; install exact tarballs into the stynx-shaped fixture; run migration, doctor, local evidence, and supported E2E                                    | All bytes and behavior exact             |
+| A5    | Auditor   | Compare real `stynx` read-only; audit tarballs, hashes, attest subjects, changelogs, versions, site artifact, and remote prerequisites                                      | No real-stynx write; no external action  |
+| A6    | Architect | Prepare release notes and the exact external handoff; update the pending gate only by quoting a later Owner grant                                                           | Candidate reproducible from clean clone  |
 
-R-0010 may remain open across checkpoints. Time passing alone is not evidence. If the
-authorized window ends without enough qualifying observations, B6 records
-not-yet-eligible and the round remains open or receives a new Owner disposition; it does
-not lower criteria.
+At A6, stop and return control to the Owner. R-0010 remains open, BL-020/024 remain
+active, and `release_disposition` remains pending.
+
+## Phase B — pending external authorization
+
+Execute only after `EXTERNAL-RELEASE-AUTHORIZATION.md` is GRANTED for the revalidated
+candidate:
+
+| Batch | Role                     | Work                                                                                                                                                  | Commit gate                           |
+| ----- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| B0    | Auditor                  | Revalidate candidate SHA, green checks, package/site hashes, registry state, token usability, and absence of conflicting versions/tags                | Exact handoff still current           |
+| B1    | Owner + Architect        | Record release/deploy authorization and final go/no-go decision                                                                                       | Exact subject and rollback named      |
+| B2    | Engineer                 | Publish eleven packages, push exact tags, create GitHub Release, and deploy the bound Pages artifact in the authorized order                          | Stop immediately on partial failure   |
+| B3    | Inspector                | Resolve 1.0.0 from GitHub Packages in a clean fixture; verify tarball attestations/hashes, migration, release assets, tags, and live Pages provenance | Published bytes equal candidate       |
+| B4    | Auditor                  | Audit registry, GitHub Release, Pages, source SHA, and adopter proof independently                                                                    | No subject mismatch or hidden failure |
+| B5    | Architect + machine verb | Append closing decision and close R-0010 with published disposition                                                                                   | BL-020/024 close only here            |
 
 ## Acceptance
 
-- BL-037 cites real usage for both skills and preserves output compatibility or explicit
-  migration.
-- Every BL-038 conjunct is independently recomputable from successor-only evidence.
-- Revocation restores full execution.
-- Source PRs and weekly audits do not count.
-- Auditor proves no relabelling, duplicate counting, synthetic run, or predecessor
-  standing.
-- Activation occurs only through B7’s separate Owner act.
+- Exactly eleven 1.0.0 tarballs derive from one source commit and one fixed group.
+- Each tarball has an independently verifiable hash and GitHub build attestation.
+- Workflow actions are immutable-SHA pinned and permissions are least privilege.
+- The migration is explicit-consent, reproducible, and independent of a sibling checkout.
+- Real `stynx` is never modified under OM-002.
+- After Phase B only: packages resolve from GitHub Packages, tags and Release point to
+  the validated commit, live Pages serves the validated artifact, and the installed
+  adopter proof is green.
 
 ## Stops
 
-Stop before B0 while authorization is pending. After grant, stop on a changed
-qualification rule, untrusted subject, manufactured or duplicate run, missing raw
-evidence, source/weekly count, relabelled verdict, failed revocation drill, or inferred
-activation.
+During Phase A, any publish/tag/Release/Pages operation is a hard violation. During
+Phase B, stop on candidate drift, conflicting existing version/tag, token/scope failure,
+partial publication, attestation mismatch, live-site mismatch, or real-stynx mutation.
 
-## Claim ceiling
+## Claims
 
-Before B6: campaign in progress. After a positive B6: promotion eligibility earned.
-Only after B7: activation authorized or declined. None implies general autonomous-loop
-readiness.
+Phase A may claim **release candidate prepared** only. Phase B may claim **DEVAI 1.0.0
+released** only after B3/B4 prove the exact external state. Neither claim implies
+evidence promotion or autonomous-loop readiness.

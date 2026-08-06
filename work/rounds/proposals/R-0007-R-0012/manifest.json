@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "ADOPTED_MIGRATION_SOURCE_NON_RUNTIME",
+  "created": "2026-08-02",
+  "repository": "/Users/aarusso/Development/stech/devaii",
+  "sequence": [
+    {
+      "round": "R-0007",
+      "title": "CLI contract and executor substrate",
+      "sources": ["work/rounds/R-0007"],
+      "depends_on": ["R-0006"],
+      "authority": "OM-019_GRANTED_SUBJECT_TO_ENTRY"
+    },
+    {
+      "round": "R-0008",
+      "title": "Authenticated cross-gate claim reuse",
+      "sources": ["work/rounds/R-0008"],
+      "depends_on": ["R-0007"],
+      "authority": "OM-019_PREPARATION_GRANTED_TRUST_AND_REVIEWER_PENDING"
+    },
+    {
+      "round": "R-0009",
+      "title": "Product, user documentation, and deploy-ready site",
+      "sources": ["work/rounds/R-0007", "work/rounds/R-0007 documentation waves"],
+      "depends_on": ["R-0008"],
+      "authority": "OM-019_REBOUND_DEPENDENCY_BLOCKED"
+    },
+    {
+      "round": "R-0010",
+      "title": "1.0.0 release candidate and adopter proof",
+      "sources": ["work/rounds/R-0008"],
+      "depends_on": ["R-0009"],
+      "authority": "OM-019_REBOUND_EXTERNAL_PHASE_PENDING"
+    },
+    {
+      "round": "R-0011",
+      "title": "Evidence-reuse authorization preparation",
+      "sources": ["work/rounds/R-0009"],
+      "depends_on": ["R-0010 published close"],
+      "authority": "OM-019_REBOUND_PUBLISHED_CLOSE_REQUIRED"
+    },
+    {
+      "round": "R-0012",
+      "title": "Genuine evidence observation and promotion eligibility",
+      "sources": ["work/rounds/R-0010"],
+      "depends_on": ["R-0010 published close", "R-0011 close"],
+      "authority": "FRESH_OWNER_MANDATE_REQUIRED"
+    }
+  ],
+  "supersession_effect": "OM-019_ADOPTED_CANONICAL_PLANS_LIVE_AT_WORK_ROUNDS",
+  "repository_files_modified": true
+}

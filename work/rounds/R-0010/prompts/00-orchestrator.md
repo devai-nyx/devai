@@ -1,31 +1,35 @@
-# R-0010 ORCHESTRATOR — genuine evidence observation
+# R-0010 ORCHESTRATOR — 1.0.0 candidate, external gate, and release
 
-First read `AUTHORIZATION.md`. If it says PENDING, stop immediately; preparation is
-complete and execution is forbidden.
+Read OM-002, OM-003, the shared execution contract, both R-0010 authorization files, the
+plan, R-0009 close/site hash, accepted publish ADR, release-control and package schemas,
+Changesets configuration, every public package manifest, release workflows, migration
+map, and adopter fixtures.
 
-After a fresh GRANTED mandate, read OM-002, OM-003, the shared execution contract, this
-plan, R-0008 published audit, R-0009 zero-baseline handoff, current promotion law, raw
-evidence schemas, revocation behavior, scorecard-skill manifests, and all qualifying-run
-classifiers.
+Run the live preflight and execute Phase A only. Pack from a clean exact candidate,
+record all eleven hashes, verify attest subjects, and install the tarballs—not workspace
+links—into the hermetic adopter. Real `stynx` is read-only.
 
-Execute B0–B8 without compressing the observation window. Pre-register metrics before
-seeing outcomes. Record only real successor operations that satisfy every current
-qualifier. Keep raw evidence and exclusions. Ask Claude Opus 5 through literal
-`claude-opus-5` at each checkpoint to challenge qualification, duplicate/synthetic
-detection, metric selection, skill compatibility, and revocation; no fallback to
-another model is permitted.
+Ask Claude Opus 5 through literal `claude-opus-5` to review supply-chain identity,
+workflow permissions/pins, fixed-group completeness, migration realism, rollback, and
+release-language accuracy; no fallback to another model is permitted. Resolve findings
+and produce A6’s handoff.
 
-If evidence is insufficient, report that fact and keep the round open. Never change
-criteria to finish. If eligibility is proven, stop at B7 for the separate Owner
-activation decision.
+Then read `EXTERNAL-RELEASE-AUTHORIZATION.md` again:
 
-Checkpoint report:
+- if PENDING, stop with the Phase-A report below;
+- if GRANTED by a later Owner instruction, discard stale assumptions, run B0, and
+  execute B1–B5 exactly.
 
-`AUTHORIZATION / ZERO BASELINE / PRE-REGISTERED METRICS / WINDOW / QUALIFYING RUNS /
-EXCLUDED RUNS+REASONS / RAW EVIDENCE HEAD / REVOCATION / BL-037 SIGNAL / BL-038
-CONJUNCTS / CLAUDE REVIEW / STATUS`.
+Never infer publication consent from OM-002, token availability, a green candidate, or
+the existence of this prompt.
 
-Final report adds:
+Phase-A report:
 
-`BL-037 DECISION / INDEPENDENT ELIGIBILITY RECOMPUTATION / ZERO-RELABEL AUDIT / OWNER
-ACTIVATION DECISION / CLOSURE / NONREADINESS CLAIM`.
+`CANDIDATE SHA / ELEVEN TARBALLS+HASHES / ATTEST SUBJECTS / WORKFLOW PINS+PERMISSIONS /
+MIGRATION+DOCTOR / HERMETIC ADOPTER / READ-ONLY STYNX OBSERVATION / SITE HASH / GATES /
+CLAUDE REVIEW / REQUIRED EXTERNAL ACTIONS / STATUS=PENDING`.
+
+Phase-B final report adds:
+
+`OWNER GRANT / PUBLISHED VERSIONS / TAGS / RELEASE URL / LIVE PAGES / INSTALLED PROOF /
+REMOTE ATTESTATION VERIFICATION / CLOSURE / NONPROMOTION CLAIM`.

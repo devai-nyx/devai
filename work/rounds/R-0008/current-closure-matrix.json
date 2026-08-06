@@ -1,0 +1,308 @@
+{
+  "schemaVersion": "R8-planning-1.0.0",
+  "round": "R-0008",
+  "authority": "OM-019_PREPARATION_GRANTED_EXECUTION_BLOCKED",
+  "reviewed_candidate": null,
+  "review_evidence": null,
+  "review_run_budget": 2,
+  "classes": [
+    {
+      "finding_id": "R8-F001",
+      "defect_class_id": "CROSS_GATE_EQUIVALENCE_UNDERBOUND",
+      "severity": "P0",
+      "population_query": "Derive every producer-claim/consumer-claim pair from the complete sixteen-gate recursive command closure and compare canonical claim contracts component by component.",
+      "expected_complete_population": [
+        "all sixteen authoritative gates",
+        "all recursively derived sub-assertions",
+        "all ordered producer-consumer pairs"
+      ],
+      "adversarial_mutations": [
+        "omit population selector",
+        "change argv or cwd",
+        "change instrumentation mode",
+        "remove threshold contract",
+        "remove ordering predecessor",
+        "alias two distinct claims by label"
+      ],
+      "required_behavior": [
+        "named check CROSS_GATE_EQUIVALENCE_IDENTITY_MISMATCH fails closed",
+        "payload names producer_gate_id, consumer_gate_id, producer_claim_identity, recomputed_consumer_claim_identity",
+        "ineligible pair executes consumer claim"
+      ],
+      "test_ids": ["R8-001-EQUIVALENCE-COMPLETE", "R8-002-IDENTITY-ORDINAL"],
+      "test_paths": ["tests/contract/r0008-cross-gate-reuse.red.contract.test.ts"],
+      "implementation_surfaces": [
+        "law/schemas/gate-claim-contract.schema.json",
+        "law/schemas/affected-test-graph.schema.json",
+        "scripts/run-round-close-controls.mjs",
+        "work/rounds/R-0008/affected-test-graph.json"
+      ],
+      "evidence_refs": [
+        "work/audit/R-0008/red-evidence.json",
+        "work/audit/R-0008/equivalence-census.json"
+      ],
+      "closure_state": "RED_REQUIRED"
+    },
+    {
+      "finding_id": "R8-F002",
+      "defect_class_id": "ASSERTION_PROPERTY_LOSS",
+      "severity": "P0",
+      "population_query": "Enumerate threshold, build-before-test, separate-process order, combined-root execution, instrumentation, output, and independent-literal-execution obligations for ordinary, stage2, and coverage.",
+      "expected_complete_population": [
+        "coverage thresholds and V8 environment",
+        "stage2 build dependency",
+        "stage2 T1-before-T2 separate-process order",
+        "ordinary uninstrumented root all-tier run",
+        "R7-F005 detached literal executability"
+      ],
+      "adversarial_mutations": [
+        "reuse ordinary for coverage",
+        "reuse ordinary for stage2",
+        "reuse coverage for ordinary",
+        "reorder T2 before T1",
+        "remove build",
+        "run thresholds against ordinary stdout"
+      ],
+      "required_behavior": [
+        "named check GATE_ASSERTION_NOT_PROVEN rejects every unsound edge",
+        "payload contains exact failing assertion_id and gate ordinal",
+        "consumer executes its missing assertion"
+      ],
+      "test_ids": [
+        "R8-003-COVERAGE-NOT-ORDINARY",
+        "R8-004-STAGE2-NOT-ORDINARY",
+        "R8-005-ORDER-PRESERVED"
+      ],
+      "test_paths": ["tests/contract/r0008-gate-property-preservation.red.contract.test.ts"],
+      "implementation_surfaces": [
+        "law/policy/round-close-controls.json",
+        "law/schemas/gate-claim-contract.schema.json",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "evidence_refs": [
+        "work/audit/R-0008/red-evidence.json",
+        "work/audit/R-0008/property-preservation.json"
+      ],
+      "closure_state": "RED_REQUIRED"
+    },
+    {
+      "finding_id": "R8-F003",
+      "defect_class_id": "CACHE_RESULT_FORGEABLE",
+      "severity": "P0",
+      "population_query": "For every reusable result field and signature envelope field, mutate, substitute, truncate, duplicate, replay, or forge it and invoke the production verifier.",
+      "expected_complete_population": [
+        "claim result body",
+        "claim identity",
+        "producer identity",
+        "public-key id and trust epoch",
+        "signature",
+        "candidate and tree",
+        "policy/profile/graph/schema digests",
+        "output proofs"
+      ],
+      "adversarial_mutations": [
+        "recompute self-digest after changing PASS",
+        "sign with untrusted key",
+        "replay valid result on another candidate",
+        "replay after policy or toolchain change",
+        "substitute producer gate",
+        "duplicate ambiguous matching results"
+      ],
+      "required_behavior": [
+        "named check REUSE_ATTESTATION_INVALID or REUSE_IDENTITY_REPLAYED fails",
+        "payload names exact expected identity and presented identity",
+        "no invalid result yields REUSE_FRESH; consumer executes"
+      ],
+      "test_ids": [
+        "R8-006-SELF-DIGEST-NOT-AUTH",
+        "R8-007-SIGNATURE-FORGERY",
+        "R8-008-REPLAY-MATRIX"
+      ],
+      "test_paths": ["tests/contract/r0008-cache-authentication.red.contract.test.ts"],
+      "implementation_surfaces": [
+        "law/schemas/gate-result-attestation.schema.json",
+        "law/policy/round-close-controls.json",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "evidence_refs": [
+        "work/audit/R-0008/red-evidence.json",
+        "work/audit/R-0008/adversarial-authentication.json"
+      ],
+      "closure_state": "RED_REQUIRED"
+    },
+    {
+      "finding_id": "R8-F004",
+      "defect_class_id": "EXPECTED_IDENTITY_SELF_SOURCED",
+      "severity": "P0",
+      "population_query": "Trace every expected identity component to exact candidate objects, trusted policy, runtime probes, dependency attestations, and observed outputs; prove no expected field originates in the candidate cache artifact.",
+      "expected_complete_population": [
+        "all equivalence-key components",
+        "all attestation verification inputs",
+        "all output freshness inputs"
+      ],
+      "adversarial_mutations": [
+        "put forged expected key in artifact",
+        "put forged argv/profile digest in artifact",
+        "replace artifact path with symlink or alternate record",
+        "make verifier default missing expected field from artifact"
+      ],
+      "required_behavior": [
+        "named check EXPECTED_REUSE_IDENTITY_UNAVAILABLE blocks reuse",
+        "exact missing source and ordinal appear in payload",
+        "artifact-provided expected value has no authority"
+      ],
+      "test_ids": ["R8-009-INDEPENDENT-RECOMPUTATION", "R8-010-NO-SELF-AUTH"],
+      "test_paths": ["tests/contract/r0008-independent-identity.red.contract.test.ts"],
+      "implementation_surfaces": [
+        "scripts/run-round-close-controls.mjs",
+        "law/schemas/gate-result-attestation.schema.json"
+      ],
+      "evidence_refs": [
+        "work/audit/R-0008/red-evidence.json",
+        "work/audit/R-0008/identity-reproduction.json"
+      ],
+      "closure_state": "RED_REQUIRED"
+    },
+    {
+      "finding_id": "R8-F005",
+      "defect_class_id": "FALSE_GREEN_TERMINAL_EVIDENCE",
+      "severity": "P0",
+      "population_query": "Inject each invalid reuse at every gate ordinal and compare all sixteen terminal records, overall convergence eligibility, and semantic population digests.",
+      "expected_complete_population": [
+        "ordinals 1 through 16",
+        "both convergence passes",
+        "EXECUTE, REUSE_FRESH, BLOCKED terminal shapes"
+      ],
+      "adversarial_mutations": [
+        "invalid reuse before first failure",
+        "invalid reuse after prior failure",
+        "drop reused source result",
+        "change consumer assertion population",
+        "record REUSE_FRESH after verifier failure"
+      ],
+      "required_behavior": [
+        "invalid reuse never emits REUSED_FRESH_PASS",
+        "all sixteen ordered identities remain",
+        "gate executes or becomes explicitly BLOCKED",
+        "candidate cannot freeze on any failed assertion"
+      ],
+      "test_ids": ["R8-011-ALL-ORDINALS", "R8-012-FALSE-GREEN-IMPOSSIBLE"],
+      "test_paths": ["tests/contract/r0008-false-green.red.contract.test.ts"],
+      "implementation_surfaces": [
+        "law/schemas/round-convergence.schema.json",
+        "law/schemas/affected-test-execution.schema.json",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "evidence_refs": [
+        "work/audit/R-0008/red-evidence.json",
+        "work/audit/R-0008/terminal-population.json"
+      ],
+      "closure_state": "RED_REQUIRED"
+    },
+    {
+      "finding_id": "R8-F006",
+      "defect_class_id": "DERIVED_ARTIFACT_NONATOMIC",
+      "severity": "P1",
+      "population_query": "For every commit changing a declared source, enumerate projections and command-closure digests invalidated by that diff and verify regenerated bytes are present in that same commit under valid role authority.",
+      "expected_complete_population": [
+        "law/trace.json",
+        "command_closure entries and digests",
+        ".devai/config/round-close-controls.json",
+        "any generated schema registry outputs"
+      ],
+      "adversarial_mutations": [
+        "regenerate in following commit",
+        "leave old closure digest",
+        "mix Architect and Engineer paths",
+        "run generator from mutable noncandidate bytes"
+      ],
+      "required_behavior": [
+        "named check DERIVED_ARTIFACT_NOT_ATOMIC blocks commit gate",
+        "payload names source commit, derived path, expected producer role",
+        "role impurity remains a stop"
+      ],
+      "test_ids": ["R8-013-ATOMIC-DERIVATION", "R8-014-ROLE-PURE-ACTIVATION"],
+      "test_paths": ["tests/contract/r0008-derived-artifact-atomicity.red.contract.test.ts"],
+      "implementation_surfaces": [
+        "law/policy/governed-sequencing.json",
+        "scripts/check-governed-sequencing.mjs",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "evidence_refs": [
+        "work/audit/R-0008/red-evidence.json",
+        "work/audit/R-0008/commit-derivation-census.json"
+      ],
+      "closure_state": "RED_REQUIRED"
+    },
+    {
+      "finding_id": "R8-F007",
+      "defect_class_id": "OPTIMISATION_CORRECTNESS_UNPROVED",
+      "severity": "P1",
+      "population_query": "Run paired cold/no-reuse and warm/reuse convergence on one exact candidate and compare complete assertion, gate, file, suite, case, skip, threshold, output, and terminal populations before comparing duration.",
+      "expected_complete_population": [
+        "all sixteen gates",
+        "all claim contracts",
+        "both convergence passes",
+        "ordinary/stage2/coverage protected assertions"
+      ],
+      "adversarial_mutations": [
+        "record suite count as file count",
+        "omit slow gate from benchmark",
+        "compare different candidates",
+        "accept faster run with different semantic population",
+        "measure only selected commands"
+      ],
+      "required_behavior": [
+        "correctness equality precedes timing",
+        "count names retain units",
+        "a population mismatch invalidates benchmark",
+        "zero or negative saving disables activation"
+      ],
+      "test_ids": ["R8-015-PAIRED-POPULATION", "R8-016-NAMED-COUNTS"],
+      "test_paths": ["tests/contract/r0008-optimisation-benchmark.red.contract.test.ts"],
+      "implementation_surfaces": [
+        "law/schemas/round-convergence.schema.json",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "evidence_refs": [
+        "work/audit/R-0008/benchmark.json",
+        "work/audit/R-0008/acceptance-evidence.json"
+      ],
+      "closure_state": "RED_REQUIRED"
+    },
+    {
+      "finding_id": "R8-F008",
+      "defect_class_id": "INDEPENDENT_LITERAL_EXECUTABILITY_REGRESSED",
+      "severity": "P0",
+      "population_query": "Execute each policy argv alone from a clean detached exact-candidate checkout with empty DEVAI runtime state and no reuse signer or prior cache.",
+      "expected_complete_population": ["all sixteen literal commands in policy order"],
+      "adversarial_mutations": [
+        "remove nested preparation",
+        "require controller-only environment token",
+        "require cache",
+        "inject hidden argv",
+        "skip gate when signer unavailable"
+      ],
+      "required_behavior": [
+        "each literal argv passes independently",
+        "absence of reuse state causes honest execution",
+        "controller never repairs argv",
+        "all failures name exact gate ordinal and argv"
+      ],
+      "test_ids": ["R8-017-R7-F005", "R8-018-NO-HIDDEN-PREREQUISITE"],
+      "test_paths": ["tests/contract/r0008-independent-roster.red.contract.test.ts"],
+      "implementation_surfaces": [
+        "package.json",
+        "vitest.config.ts",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "evidence_refs": ["work/audit/R-0008/literal-roster.json"],
+      "closure_state": "RED_REQUIRED"
+    }
+  ],
+  "declared_limitations": [
+    "No whole-result reuse edge among ordinary, stage2, and coverage is sound.",
+    "An independently verifiable signer trust root does not currently exist in the inspected source.",
+    "Positive wall-clock saving cannot be determined before the paired benchmark run."
+  ]
+}

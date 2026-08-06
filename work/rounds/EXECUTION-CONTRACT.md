@@ -1,6 +1,6 @@
 ---
 id: ROUND-EXECUTION-CONTRACT
-title: Shared execution contract for R-0002 through R-0010
+title: Shared execution contract for R-0002 through R-0012
 type: execution-contract
 status: draft
 date: 2026-07-27
@@ -9,7 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   [
-    OM-002; OM-003; OM-010; OM-014; DII-246; Constitution Articles 6–10 and 27; R-0001 rehearsal lessons; R-0002-PREFLIGHT-AUDIT; R-0006-PREFLIGHT-ALIGNMENT-AUDIT,
+    OM-002; OM-003; OM-010; OM-014; OM-019; DII-246; DII-254; Constitution Articles 6–10 and 27; R-0001 rehearsal lessons; R-0002-PREFLIGHT-AUDIT; R-0006-PREFLIGHT-ALIGNMENT-AUDIT,
   ]
 ---
 
@@ -17,6 +17,12 @@ provenance:
 
 Every round orchestrator must load and obey this file. A round plan may narrow it but
 may not weaken it.
+
+OM-019 adopts the dependency sequence R-0007 CLI/executor, R-0008 authenticated
+convergence-claim reuse, R-0009 product/docs/site, R-0010 release, R-0011 evidence-reuse
+preparation, and R-0012 observation/promotion. Earlier number-to-subject mappings remain
+history only. Canonical plans and controls are committed candidate inputs; an uncommitted
+draft has no execution standing.
 
 ## Live entry preflight
 
@@ -109,7 +115,7 @@ A command that cannot run is a blocker or a newly governed defect, never a green
 Declared DB skips remain skips only under their existing contract and are exercised with
 the configured PostgreSQL service at release-candidate time.
 
-## Prospective affected-test convergence for R-0007 through R-0009
+## Prospective affected-test convergence for R-0007 through R-0011
 
 OM-014, OM-015, and DII-246 through DII-248 replace R-0006's round-specific close wrapper prospectively with a
 generic policy and schema-validated per-round profile. No engine default may supply a
@@ -292,7 +298,7 @@ Before push:
 - ask the independently selected close reviewer for a read-only exact-candidate review
   and resolve every actionable finding; OM-013 replaces the otherwise-required
   `claude-opus-5` selector with explicit `gpt-5.6-sol` for R-0006 only and does not
-  weaken any review-content, verdict, or evidence requirement; R-0007 through R-0009
+  weaken any review-content, verdict, or evidence requirement; R-0007 through R-0011
   instead require exactly one later active Owner model binding before entry;
 - leave no untracked product or evidence artifacts.
 
@@ -338,4 +344,4 @@ Stop on:
 - role impurity;
 - an uncatalogued deferral;
 - external publish, tag, Release, or Pages action without the specific later grant;
-- evidence promotion or R-0010 streak opening without its fresh Owner mandate.
+- evidence promotion or R-0012 streak opening without its fresh Owner mandate.

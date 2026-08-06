@@ -14,16 +14,18 @@ Read terminal evidence through immutable GitHub objects instead.
 Read and follow, in order:
 
 1. `product/owner-mandates/OM-002.md`
-2. `work/audit/R-0002-preflight/consolidated-audit.md`
-3. `work/audit/R-0002-preflight/backlog-register.md`
-4. `work/rounds/EXECUTION-CONTRACT.md`
-5. `work/rounds/R-0002/AUTHORIZATION.md`
-6. `work/rounds/R-0002/plan.md`
-7. `work/rounds/R-0002/prompts/00-orchestrator.md`
+2. `product/owner-mandates/OM-019.md`
+3. `work/rounds/EXECUTION-CONTRACT.md`
+4. the next round's `AUTHORIZATION.md`
+5. the next round's `plan.md`
+6. the next round's `prompts/00-orchestrator.md`
+7. every additional source named by its close-control profile
 
 R-0001 is closed historical intent. Do not rerun it or edit its plan, prompts, handoffs,
-audit, backlog, or PC-0001. Future rounds R-0003 through R-0010 are prepared under
-`work/rounds/`; each remains dormant until its own entry gate passes.
+audit, backlog, or PC-0001. OM-019 adopts R-0007 through R-0012 as: CLI/executor,
+authenticated convergence claims, product/docs/site, release, evidence-reuse preparation,
+then genuine observation. Canonical plans are committed under `work/rounds/`; each remains
+dormant until its own entry gate passes.
 
 ## Standing rules
 
@@ -48,5 +50,5 @@ audit, backlog, or PC-0001. Future rounds R-0003 through R-0010 are prepared und
 - Deferrals are governed records. Missing scope never becomes an informal “later” list.
 - No package publication, tag, GitHub Release, Pages deployment, real-stynx mutation, or
   evidence streak is authorized by OM-002.
-- Nothing is ratified before R-0003; nothing is released before R-0008’s separate
-  external gate; R-0010 requires a fresh Owner mandate.
+- Nothing is ratified before R-0003; nothing is released before R-0010’s separate external
+  gate; R-0012 requires a fresh Owner mandate before observation or promotion.

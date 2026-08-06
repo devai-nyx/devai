@@ -1,22 +1,19 @@
 ---
 id: R-0009-AUTHORIZATION
-title: Authorization for evidence-reuse preparation
+title: Authorization for product, documentation, and deploy-ready site
 type: authorization
 status: active
-date: 2026-07-24
+date: 2026-08-05
 authority: Owner
 supersedes: null
 superseded_by: null
-provenance: [OM-002]
+provenance: [OM-002; OM-019]
 ---
 
 # R-0009 authorization
 
-**STATUS: GRANTED AFTER FULL R-0008 CLOSE**
+**STATUS: GRANTED AFTER R-0008 CLOSE FOR PREPARATION — DEPLOYMENT FORBIDDEN**
 
-R-0009 may re-bind first-parent evidence authorization to successor records, prove its
-fail-closed paths, retain `semantic-review` as unable to PASS absent qualifying adapter
-evidence, and install observation instrumentation.
-
-It may not open or count a promotion streak, reuse evidence on source PRs, activate
-promotion, or execute before published R-0008 closes.
+OM-002 authorizes the approved product semantic corrections, generated references,
+documentation re-bind, frozen History page, and deploy-ready successor site. It does not
+authorize GitHub Pages deployment or any release claim.

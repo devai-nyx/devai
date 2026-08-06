@@ -1,86 +1,217 @@
 ---
 id: R-0007-PLAN
-title: Product, documentation, and deploy-ready site
+title: CLI contract, round-subordinate tasks, and executor substrate
 type: round-plan
 status: draft
-date: 2026-07-24
+date: 2026-08-05
 authority: Architect
 supersedes: null
 superseded_by: null
-provenance: [OM-002; OM-014; DII-246; BL-019; BL-021; BL-032; BL-039; BL-044]
+provenance:
+  - OM-019
+  - DII-254
+  - work/rounds/R-0007/history/plan.pre-om-019.md
 ---
 
-# R-0007 — Product, documentation, and deploy-ready site
+# R-0007 — CLI contract and executor substrate
 
 ## Objective
 
-Apply the approved semantic product dispositions, generate the complete CLI reference
-and derived projections, re-bind active docs by risk, finalize frozen History, and
-produce an exact deployable successor site artifact without deploying it.
+Replace the oversized 147-action user surface with seven workflow-facing domains while
+preserving useful internal services, fail-closed historical migration, exact authority
+boundaries, and complete machine-readable output. Make task execution subordinate to
+governed rounds and produce canonical machine descriptors plus minimum migration/operator
+guidance for every named category. R-0009 owns the coherent user-facing documentation corpus.
+Make the subordinate task contract executor-neutral and auditable so
+a round can dispatch deterministic routines, LLM agents, human checkpoints, or governed
+composites without conflating model capability with authority.
+
+## Owner-set product direction
+
+- DEVAI has not released `1.0.0` or `1.0.0-rc`; this is the intended pre-RC breaking-change window.
+- Default help exposes only `init`, `doctor`, `check`, `sense`, `round`, `evidence`, and `release`.
+- `task` and `catalog` remain hidden plumbing.
+- Public terminology is `suite`, `preset`, `kind`, `slice`, and `tier`.
+- Public harness initialization is `init apply harness`, not `init apply f5`.
+- Remote consent is `--write --publish`; `--publish` never implies `--write`.
+- Sensor presets are `baseline`, `structural`, `governed`, and `sweep`.
+- Check suites are `quick`, `standard`, `full`, and `release`.
+- Every governed task belongs to exactly one round and ordinary users operate it through `round run`.
+- Every new task declares one closed executor kind: `routine`, `agent`, `human`, or `composite`.
+- Agent selection records runtime/model/effort through `exact`, explicitly allowlisted
+  `preferred`, or named-versioned `policy` resolution; no implicit fallback is allowed.
+- Mutable model availability belongs to an Architect-owned model/runtime registry, not
+  hard-coded task-schema enums.
 
 ## Entry gates
 
-R-0006 is merged and closed; 70/60/70/70 and all production gates are green; action and
-schema populations are stable; the OM-018 admission gate has passed — one cold
-uninterrupted sixteen-command run from a clean detached frozen candidate, attested
-externally — and Review Run 2 has passed against it. Per OM-018, readiness is separated
-from entry: the pre-B0 handoff is declaration-tolerant, B0 binds the declaration, and
-the declaration-bearing `round-close:entry-check -- --round R-0007` runs **after** B0
-and before B1. The reviewer binding is `claude-opus-5` under OM-017 as retained by
-OM-018; an inactive, ambiguous, or conflicting binding means R-0007 remains dormant.
-The external Pages gate remains ungranted.
+- OM-019 and `AUTHORIZATION.md` grant this scope after B0 declaration and entry check.
+- The exact delta after recognized candidate `b1a814a93b0dc186c28a1341354cdf4444609728` is classified and receives an explicit standing disposition.
+- Live package/tag evidence confirms no stable `1.0.0` or `1.0.0-rc` publication.
+- The applicable authorization is `GRANTED`, not conditional or pending.
+- Exact live `origin/main`, open PRs, required checks, and the current registry population are re-read.
+- The predecessor checkout remains read-only.
+- Entry install, prepare, tests, and coverage floors pass or their honest red state is recorded.
 
-## Risk slices
+## Target surface
 
-- P0: authority tables, state/proof placement, destructive operations, mutable/current
-  claims, repository identity, deploy guard, History integrity.
-- P1: commands, adoption, CI, round procedures, generated CLI reference.
-- P2: theory, historical labels, counts, diagrams, derived indexes.
+No target or historical count is pre-authorized. Entry recomputes the live registry,
+generated views, runtime registrations, built binary, consumers, and one-to-one migration
+fixture. Every source identity receives exactly one keep, fold, or tombstone disposition
+before any target count gains standing.
 
-P0 completes before P1; P1 before P2.
+## Preset and suite setpoints
+
+### Sense presets
+
+| Preset       | Required population                                                                                                               | Intended use                                     |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `baseline`   | build, lint, type check, unit test                                                                                                | fast local feedback                              |
+| `structural` | baseline plus API/routes/data/RBAC/data-handling/dependency inventories and spec depth/alignment                                  | repository understanding and reference alignment |
+| `governed`   | structural plus spec freshness/idiomaticity, test-invariant alignment, harness coverage/depth/coherence/alignment, and docs drift | governed pull-request and round evidence         |
+| `sweep`      | every registered read-only sensor kind in canonical order                                                                         | exhaustive round-bound observation               |
+
+`sweep` requires `--round R-NNNN`, performs no implicit persistence, and lists excluded
+write-capable operations. Old preset spellings migrate as `tier1 -> baseline`, `tier2 ->
+structural`, `tier3 -> governed`, and `all -> governed`.
+
+### Check suites
+
+| Suite      | Required population                                                                                                         | Intended use                                           |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `quick`    | build, lint, type check, unit tests, essential schema/config loading                                                        | developer feedback                                     |
+| `standard` | quick plus invariant/journey/glossary/trace/test-trace/strategy/action coverage and ordinary policy checks                  | default PR acceptance                                  |
+| `full`     | standard plus full tests, inventory, docs/CI/policy, mutation, security/performance, harness, and coverage gates            | complete deterministic local verification              |
+| `release`  | full plus evidence, release scorecard, dependency/security, provenance, changeset/version, and workflow-reference readiness | eligibility for separately authorized release ceremony |
+
+The exact ordered membership of every suite and preset is Architect-owned policy,
+machine-consumed by the runtime, and rendered into documentation. Prose must never carry
+an independent copy of these lists.
+
+## Task executor setpoint
+
+The breaking task schema revision requires `round_id` and a closed `executor`
+discriminated union:
+
+- `routine`: a registered action or explicit shell-free argv with relative cwd,
+  declared inputs/outputs/effects, timeout, and authority checks;
+- `agent`: a rostered runtime/model/effort, optional registered skill ID,
+  prompt-composition reference, bounded iterations, capabilities, and one selection
+  mode;
+- `human`: a required governance role, instructions/reference, completion evidence,
+  and timeout/escalation behavior;
+- `composite`: explicit same-round child task IDs and dependency order, with cycles
+  rejected before dispatch.
+
+`discipline` remains the authority source. Executor kind, model capability, and model
+size never grant path, publication, or external-action authority.
+
+Agent selection modes are `exact` (no substitution), `preferred` (only an explicit
+ordered fallback allowlist), and `policy` (only a named, versioned routing policy).
+Model/runtime registry entries bind stable ID, vendor/family, adapter, exact provider
+identifier or governed alias, supported efforts, capabilities, eligible agent classes,
+availability, and replacement metadata. Model names remain registry data so roster
+updates do not require task-schema changes.
+
+The task stores the immutable requested executor contract. A separate rostered
+task-execution evidence record stores the resolved runtime/model/effort or canonical
+argv, adapter/tool versions, prompt ID/hash, input and output digests, selection/fallback
+decision, usage/cost where applicable, timestamps, verdict, and evidence references.
+Exact mismatch blocks before execution.
+
+Existing pre-revision task records are inventoried at entry. They remain historical and
+cannot execute until an explicit mapping supplies round and executor fields. The runtime
+must not infer these fields from `model_tier`, tags, prompts, worktrees, or prior runs.
 
 ## Batches
 
-| Batch | Role                                                   | Work                                                                                                                                                           | Commit gate                                                     |
-| ----- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| B0    | Architect                                              | Declare the round with a structured exact-base marker, bind the profile declaration slot, and freeze a per-reference semantic mapping; no bulk rewrite         | Exact then-main base and every source occurrence classified     |
-| B1    | Engineer                                               | Add a fail-closed deploy-refusal guard that requires the later external-release grant and exact candidate identity                                             | Accidental deploy exits nonzero                                 |
-| B2    | Inspector                                              | Commit product/docs/reference/site reds, including repository existence, command/action resolution, generated-byte identity, and hard-coded performance claims | Reds match all five items                                       |
-| B3    | Owner                                                  | Apply BL-044 line-by-line dispositions to journeys/use cases and record rationale                                                                              | Only OM-002-approved setpoint changes                           |
-| B4    | Architect                                              | Re-bind P0 docs and BL-021 History using re-read frozen hashes; distinguish predecessor history from successor standing                                        | Authority, links, and history verification                      |
-| B5    | Engineer                                               | Generate BL-019’s CLI pages and the five BL-032 projections from stable sources                                                                                | Reproducible bytes; direct output edits rejected                |
-| B6    | Architect                                              | Complete P1/P2 semantic documentation and BL-039 site/versioned 1.0 source with candidate-not-release wording                                                  | No stale live doctrine or copied predecessor snapshot           |
-| B7    | Inspector                                              | Run product contracts, docs CLI check, links, site drift, repository-existence sweeps, and full gates                                                          | Zero missing/drifted pages and broken links                     |
-| B8    | Auditor                                                | Hash the exact built site artifact, audit all risk slices, materialize current claims, converge twice, and freeze the exact candidate                          | Exact candidate, claims, impact plan, and review scope validate |
-| B9    | Independent reviewer + role-pure repair + machine verb | Review the complete semantic topic population within two cycles, publish the exact reviewed head, then close source and closure PRs                            | PASS within budget; no Pages action                             |
+| Batch | Role                           | Work                                                                                                                                                                                       | Commit gate                                                                       |
+| ----- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| B0    | Owner + Auditor                | Record only the granted mandate; inventory current surface, version standing, terminology, consumers, and defects                                                                          | No implementation; exact baseline and authority                                   |
+| B1    | Inspector                      | Commit red contracts for population, migration, help, vocabulary, suites, presets, round-task containment, executors, model routing, effects, and output totality                          | Reds prove admitted defects without weakening prior evidence                      |
+| B2    | Architect                      | Decide CLI IA, registry dispositions, schemas, suite/preset descriptors, task-round/executor model, model/runtime registry, execution evidence, and documentation information architecture | One canonical meaning for every public term and enumeration                       |
+| B3A   | Engineer                       | Implement the typed executor substrate, registry resolver, four executor adapters/boundaries, legacy refusal, and requested/resolved execution evidence                                    | Focused executor contracts pass; no implicit fallback or authority widening       |
+| B3B   | Engineer                       | Implement registry/router/help plus init, check, sense, round/task, evidence, and release façades in parallel role-pure worktrees                                                          | Round/CLI consumes B3A; no shelling through retired routes; generated views exact |
+| B4    | Inspector                      | Verify all retained/historical routes, façade behavior, executor dispatch, model routing, effect authority, suite/preset membership, task containment, and source/binary parity            | Complete executable population; no silent skips                                   |
+| B5    | Architect                      | Produce canonical machine descriptors and minimum migration/operator material consumed by R-0009                                                                                           | No duplicated mutable enumeration                                                 |
+| B6    | Inspector                      | Run descriptor, migration, example, obsolete-vocabulary, model-roster, and generated-byte acceptance                                                                                       | Canonical material matches runtime and policy exactly                             |
+| B7    | Auditor + independent reviewer | Audit complete classes, converge twice, review exact candidate, and record honest pre-RC/non-release result                                                                                | Every topic dispositioned; any repair restarts convergence/review                 |
+| B8    | Architect + machine verb       | Close only through the then-authorized ceremony                                                                                                                                            | No inferred publication, readiness, or release claim                              |
+
+## Canonical reference handoff to R-0009
+
+B5 creates canonical descriptors and minimum safe migration/operator guidance. The R-0009
+handoff covers:
+
+1. CLI overview and seven-workflow mental model.
+2. Vocabulary: suite, preset, kind, slice, tier, round, subordinate task, role, effect, verdict, lifecycle, porcelain, and plumbing.
+3. Check suites: membership, ordering, cost, prerequisites, outputs, exit behavior, when to use, and examples.
+4. Sense presets: membership, cumulative relationships, sweep exclusions, persistence boundary, outputs, and examples.
+5. Sensor kinds: generated complete registry with purpose, emitter, inputs, outputs, mapped scorecard cells, diagnostic standing, preset membership, prerequisites, and effect.
+6. Inventory slices: exact contents, supported stacks, deterministic inputs, output body, limitations, and examples.
+7. Adoption tiers: obligations and advisory/binding behavior; explicitly distinct from suites and presets.
+8. Rounds, tasks, and executors: ownership, cardinality, lifecycle, waves,
+   dependencies, resource isolation, recovery, hidden task plumbing, four executor kinds,
+   three agent-selection modes, fallback refusal, model/runtime/effort resolution, and
+   requested-versus-resolved evidence.
+9. Authority and effects: roles, read/harness-write/local-write/remote-write, `--write`, and `--publish`.
+10. Migration guide: every old command and vocabulary spelling to its successor or removal disposition.
+11. Model/runtime reference: generated roster of vendors/families, adapters, runnable
+    models or governed aliases, supported efforts, capabilities, availability,
+    replacement metadata, and selection eligibility.
+
+Every descriptor must answer for each value: what it means, what it contains, when
+to use it, when not to use it, required inputs and tools, output contract, expected
+effects, failure/unknown/skipped semantics, cost class, and at least one correct example.
+
+Sensor-kind and migration tables are generated from canonical machine records. Suite,
+preset, slice, tier, executor, selection, model/runtime, role, effect, verdict, and
+lifecycle tables are rendered from their
+respective canonical policies/schemas. Narrative pages link to generated tables rather
+than repeating mutable populations.
+
+No new `devai docs` user domain is introduced. R-0007 does not claim complete narrative
+documentation or a deploy-ready site. R-0009 owns conceptual education, generated pages,
+site integration, links, and final user-facing completeness.
 
 ## Acceptance
 
-- Every active product action reference resolves or is explicitly non-active.
-- Performance use case uses the real command, reading kind, and policy thresholds.
-- History publishes recomputable predecessor hashes and honest nonclaims.
-- Every CLI page in the current generation manifest and all five projections generate
-  deterministically.
-- Historical material is labelled; active docs contain no retired doctrine.
-- Site build, typecheck, links, generated-byte, and drift checks pass.
-- The built artifact is hash-bound to the exact source commit.
-- The explicit affected-test graph accounts for every governed source and stable test
-  shard or widens conservatively; a warm unchanged local convergence starts no test
-  process, while remote CI executes the complete authoritative population.
-- Every changed and unchanged semantic review topic has exactly one valid structured
-  disposition, and every finding names its complete same-class population.
-- Cycle 3 is mechanically unavailable. Cycle-2 failure stops for Owner escalation.
-- No deploy command or workflow executes.
+- Default help shows exactly seven workflow domains.
+- `task` and `catalog` are absent from default help and visible only in expanded plumbing help.
+- Every task record requires a valid `round_id` and belongs to its declared active round.
+- Every task record requires exactly one valid executor contract.
+- `round run` is the normal task execution path.
+- Deterministic routines run without an LLM; agent work uses only rostered
+  runtime/model/effort combinations; human completion requires evidence; composites
+  reject cycles and cross-round children.
+- `exact` never substitutes; `preferred` uses only its explicit ordered allowlist;
+  `policy` uses only its named/versioned routing policy, and every resolution is recorded.
+- Requested executor data remains immutable and resolved execution evidence is complete.
+- Legacy task records cannot execute until explicitly mapped; no round/executor/model/
+  effort inference is permitted.
+- All 147 formerly runnable routes have exactly one retained/folded/tombstoned disposition.
+- Old vocabulary and flags fail closed with exact migration guidance.
+- `sense migrate` is correctly declared as a DB-writing action.
+- `release status`, chain-head inspection, and report-only translation are classified by their actual effects.
+- Suites and presets are registry-derived and match their canonical descriptors structurally.
+- Every registered sensor kind and inventory slice appears exactly once in user-facing reference output.
+- Every executor kind, agent-selection mode, runtime, rostered model, and supported
+  effort appears exactly once in its canonical user-facing reference.
+- The R-0009 handoff contains enough canonical semantics to explain every enumeration without copying a mutable list.
+- All action envelopes, error envelopes, authority refusals, and aggregate exits are total.
+- All unchanged 70/60/70/70 coverage floors remain green.
 
 ## Stops
 
-Stop on a new Owner product choice, unresolved reviewer binding, mechanical reference
-replacement, mutable-main historical citation, direct edit of generated output,
-unknown dependency treated as a skip, incomplete topic or finding-class population,
-cycle-2 failure, missing deploy refusal, Pages deployment, or wording that calls the
-candidate released.
+Stop on missing authority, live evidence of a stable/RC publication, role impurity,
+predecessor mutation, registry-count guesswork, undocumented enumeration, duplicated
+policy truth, implicit task independence, implicit sensor persistence, write-effect
+under-declaration, implicit model fallback, unrostered runnable model, executor-derived
+authority, task-request mutation, weakened tests/coverage, generated/source/binary drift, or any
+external publication without its separate grant.
 
-## Exit claim
+## Claim ceiling
 
-Product and documentation are semantically current and the site artifact is
-deploy-ready. Nothing has been deployed or released.
+Completion establishes a simplified pre-RC CLI/executor contract and canonical reference
+handoff. It does not establish complete user documentation, site readiness, release,
+deployment, production readiness, autonomous readiness, or evidence promotion.
