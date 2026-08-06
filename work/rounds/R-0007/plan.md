@@ -9,6 +9,7 @@ supersedes: null
 superseded_by: null
 provenance:
   - OM-019
+  - OM-021
   - DII-254
   - work/rounds/R-0007/history/plan.pre-om-019.md
 ---
@@ -25,6 +26,9 @@ guidance for every named category. R-0009 owns the coherent user-facing document
 Make the subordinate task contract executor-neutral and auditable so
 a round can dispatch deterministic routines, LLM agents, human checkpoints, or governed
 composites without conflating model capability with authority.
+Establish the GitHub Actions execution foundation and replace unconditional per-commit full
+regression with mechanically derived, fail-closed validation classes, while retaining a
+mandatory complete cold lane for frozen candidates and round close.
 
 ## Owner-set product direction
 
@@ -42,6 +46,10 @@ composites without conflating model capability with authority.
   `preferred`, or named-versioned `policy` resolution; no implicit fallback is allowed.
 - Mutable model availability belongs to an Architect-owned model/runtime registry, not
   hard-coded task-schema enums.
+- CI validation is selected by a machine-derived risk class, never by an author assertion.
+- GitHub dependency caches accelerate acquisition only and have no test-verdict standing.
+- Fast feedback and cold authoritative lanes are distinct; the latter is never satisfied by
+  DEVAI result reuse.
 
 ## Entry gates
 
@@ -50,8 +58,73 @@ composites without conflating model capability with authority.
 - Live package/tag evidence confirms no stable `1.0.0` or `1.0.0-rc` publication.
 - The applicable authorization is `GRANTED`, not conditional or pending.
 - Exact live `origin/main`, open PRs, required checks, and the current registry population are re-read.
+- Live repository visibility, Actions plan/features, runner classes, cache/artifact limits,
+  rulesets/required checks, fork policy, and current workflow critical path are inventoried.
 - The predecessor checkout remains read-only.
 - Entry install, prepare, tests, and coverage floors pass or their honest red state is recorded.
+
+## GitHub Actions and commit-validation setpoint
+
+R-0007 performs a live, versioned census of applicable GitHub Actions capabilities. Each
+capability receives exactly one `adopt`, `defer`, or `reject` disposition with security,
+semantic, cost, and measured critical-path rationale. The minimum adopted foundation is:
+
+- pnpm content-store caching keyed by runner OS/architecture, exact Node and pnpm identities,
+  lockfile digest, and effective package-manager configuration; every job still runs frozen
+  installation, and neither `node_modules` nor verdict/evidence state is cached;
+- reusable workflow or composite-action setup that removes duplicated checkout/toolchain/
+  install/report plumbing while keeping inputs, outputs, permissions, and caller/callee
+  workflow identities explicit;
+- a mechanically derived job DAG that parallelizes only independent checks, preserves build
+  dependencies and tier/process order, and uses matrices only where each cell is a complete
+  declared population;
+- event-specific concurrency: superseded PR feedback may cancel; main, merge-queue, frozen
+  candidate, convergence, and round-close authoritative runs must not be cancelled or silently
+  replaced;
+- immutable full-SHA action references, least-privilege job permissions, explicit fork/PR
+  cache boundaries, bounded retention, structured reports, annotations, workflow summaries,
+  and timing telemetry;
+- artifacts for reports and inter-job bytes only, with digest verification before consumption
+  and no PASS authority until R-0008's authenticated-claim contract is separately authorized;
+- a fast feedback lane plus a mandatory cache-independent DEVAI-result cold lane. Dependency
+  download caching remains permitted in the cold lane only because frozen install revalidates
+  the lockfile and cached bytes carry no verdict.
+
+GitHub-hosted larger runners, merge queues, rulesets, or other paid/administrative features
+are adopted only if entry proves availability, cost acceptance, and separate authority for any
+settings mutation. Self-hosted runners, mutable action tags, caching `node_modules`, raw cache
+hits as evidence, unsound test sharding, and artifacts trusted merely because GitHub stored
+them are rejected.
+
+### Mechanical commit validation classes
+
+Replace the unconditional `pnpm vitest run` before every commit with one classifier command
+that derives a machine-readable validation plan from the exact base-to-candidate diff and the
+candidate-bound affected-test, command-closure, schema, materialization, and governance graphs.
+It must process additions, modifications, deletions, exact renames, symlinks, generated-source
+edges, package scripts, workflow YAML, mixed-role/mixed-class commits, and unresolved dynamic
+dependencies. Authors cannot select or lower the class. The strictest derived class wins;
+unknown or incomplete derivation widens, never narrows.
+
+| Class                 | Typical scope                                                                                | Mandatory minimum                                                                                                                                        |
+| --------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `governance-text`     | Owner mandates, round plans/prompts, non-executable docs                                     | changed-file formatting and `git diff --check`; frontmatter/schema; exact references; authority census; uniqueness; affected trace/digest checks         |
+| `law-and-schema`      | law, policy, schemas, registries, canonical descriptors/materializations                     | prepare; schema/policy/trace/materialization/governance checks; complete mechanically affected tests; full Vitest if closure is incomplete               |
+| `runtime-and-tests`   | packages, scripts, workspace tooling, workflows, test code/config                            | prepare and static checks; complete affected-test closure; affected tier, DB, workflow, and coverage gates; full Vitest if impact is broad or unresolved |
+| `candidate-and-close` | classifier/trust activation, frozen candidate, convergence, round close, release eligibility | complete applicable authoritative cold population from the active close profile, including literal independent execution where required                  |
+
+Every class retains `git diff --check`. The classifier result binds base/candidate, changed
+path statuses, derived dependencies, selected and omitted commands with reasons, policy/graph/
+toolchain identity, and observed exits. Any classifier/policy/graph implementation change is
+`candidate-and-close` for bootstrap. A scheduled or main-bound cold sentinel compares the
+classifier's predicted population with complete execution; one false negative disables
+classified validation and restores the former complete floor until a governed repair closes
+the complete defect class.
+
+Activation requires paired current-workflow and candidate-workflow runs on the same exact
+source and runner class. Compare semantic populations before queue/setup/install/job/critical-
+path durations. A speed feature with no positive median critical-path saving and no separately
+proved security or operability benefit remains disabled.
 
 ## Target surface
 
@@ -125,18 +198,19 @@ must not infer these fields from `model_tier`, tags, prompts, worktrees, or prio
 
 ## Batches
 
-| Batch | Role                           | Work                                                                                                                                                                                       | Commit gate                                                                       |
-| ----- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| B0    | Owner + Auditor                | Record only the granted mandate; inventory current surface, version standing, terminology, consumers, and defects                                                                          | No implementation; exact baseline and authority                                   |
-| B1    | Inspector                      | Commit red contracts for population, migration, help, vocabulary, suites, presets, round-task containment, executors, model routing, effects, and output totality                          | Reds prove admitted defects without weakening prior evidence                      |
-| B2    | Architect                      | Decide CLI IA, registry dispositions, schemas, suite/preset descriptors, task-round/executor model, model/runtime registry, execution evidence, and documentation information architecture | One canonical meaning for every public term and enumeration                       |
-| B3A   | Engineer                       | Implement the typed executor substrate, registry resolver, four executor adapters/boundaries, legacy refusal, and requested/resolved execution evidence                                    | Focused executor contracts pass; no implicit fallback or authority widening       |
-| B3B   | Engineer                       | Implement registry/router/help plus init, check, sense, round/task, evidence, and release façades in parallel role-pure worktrees                                                          | Round/CLI consumes B3A; no shelling through retired routes; generated views exact |
-| B4    | Inspector                      | Verify all retained/historical routes, façade behavior, executor dispatch, model routing, effect authority, suite/preset membership, task containment, and source/binary parity            | Complete executable population; no silent skips                                   |
-| B5    | Architect                      | Produce canonical machine descriptors and minimum migration/operator material consumed by R-0009                                                                                           | No duplicated mutable enumeration                                                 |
-| B6    | Inspector                      | Run descriptor, migration, example, obsolete-vocabulary, model-roster, and generated-byte acceptance                                                                                       | Canonical material matches runtime and policy exactly                             |
-| B7    | Auditor + independent reviewer | Audit complete classes, converge twice, review exact candidate, and record honest pre-RC/non-release result                                                                                | Every topic dispositioned; any repair restarts convergence/review                 |
-| B8    | Architect + machine verb       | Close only through the then-authorized ceremony                                                                                                                                            | No inferred publication, readiness, or release claim                              |
+| Batch | Role                           | Work                                                                                                                                                                                                                                                | Commit gate                                                                          |
+| ----- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| B0    | Owner + Auditor                | Record only the granted mandate; inventory current surface, version standing, terminology, consumers, and defects                                                                                                                                   | No implementation; exact baseline and authority                                      |
+| B1    | Inspector                      | Commit red contracts for population, migration, help, vocabulary, suites, presets, round-task containment, executors, model routing, effects, output totality, Actions security/DAG/cache behavior, and validation classification                   | Reds prove admitted defects without weakening prior evidence                         |
+| B2    | Architect                      | Decide CLI IA, registry dispositions, schemas, suite/preset descriptors, task-round/executor model, model/runtime registry, execution evidence, GitHub Actions feature dispositions, validation classes, and documentation information architecture | One canonical meaning for every public term, enumeration, and CI validation decision |
+| B3A   | Engineer                       | Implement the typed executor substrate, registry resolver, four executor adapters/boundaries, legacy refusal, and requested/resolved execution evidence                                                                                             | Focused executor contracts pass; no implicit fallback or authority widening          |
+| B3B   | Engineer                       | Implement registry/router/help plus init, check, sense, round/task, evidence, and release façades in parallel role-pure worktrees                                                                                                                   | Round/CLI consumes B3A; no shelling through retired routes; generated views exact    |
+| B3C   | Engineer                       | Implement classified validation and GitHub Actions foundation: cache-safe setup, reusable workflow plumbing, semantic DAG/concurrency, reports/artifacts, telemetry, and cold sentinel                                                              | Cache never grants PASS; classifier fails closed; cold lane retains complete proof   |
+| B4    | Inspector                      | Verify all retained/historical routes, façade behavior, executor dispatch, model routing, effect authority, suite/preset membership, task containment, and source/binary parity                                                                     | Complete executable population; no silent skips                                      |
+| B5    | Architect                      | Produce canonical machine descriptors and minimum migration/operator material consumed by R-0009                                                                                                                                                    | No duplicated mutable enumeration                                                    |
+| B6    | Inspector                      | Run descriptor, migration, example, obsolete-vocabulary, model-roster, and generated-byte acceptance                                                                                                                                                | Canonical material matches runtime and policy exactly                                |
+| B7    | Auditor + independent reviewer | Audit complete classes, converge twice, review exact candidate, and record honest pre-RC/non-release result                                                                                                                                         | Every topic dispositioned; any repair restarts convergence/review                    |
+| B8    | Architect + machine verb       | Close only through the then-authorized ceremony                                                                                                                                                                                                     | No inferred publication, readiness, or release claim                                 |
 
 ## Canonical reference handoff to R-0009
 
@@ -197,6 +271,16 @@ site integration, links, and final user-facing completeness.
 - Every registered sensor kind and inventory slice appears exactly once in user-facing reference output.
 - Every executor kind, agent-selection mode, runtime, rostered model, and supported
   effort appears exactly once in its canonical user-facing reference.
+- Every applicable GitHub Actions feature has one live `adopt`/`defer`/`reject` disposition.
+- Dependency cache poisoning or a cache miss changes duration only, never verdict or population.
+- Reusable setup preserves explicit permissions, inputs, toolchain, and workflow identity.
+- PR cancellation cannot cancel or replace main/merge-queue/frozen-candidate/round-close proof.
+- The validation classifier assigns all four classes correctly across additions, deletions,
+  renames, symlinks, generated edges, YAML/script indirection, mixed changes, and unknowns.
+- Governance-text commits do not run unconditional full Vitest; runtime/law uncertainty widens;
+  candidate-and-close executes the complete active cold profile.
+- The cold sentinel detects seeded classifier omissions and automatically disables narrowing.
+- Paired evidence proves equal semantic populations before any CI wall-time claim.
 - The R-0009 handoff contains enough canonical semantics to explain every enumeration without copying a mutable list.
 - All action envelopes, error envelopes, authority refusals, and aggregate exits are total.
 - All unchanged 70/60/70/70 coverage floors remain green.
@@ -207,11 +291,14 @@ Stop on missing authority, live evidence of a stable/RC publication, role impuri
 predecessor mutation, registry-count guesswork, undocumented enumeration, duplicated
 policy truth, implicit task independence, implicit sensor persistence, write-effect
 under-declaration, implicit model fallback, unrostered runnable model, executor-derived
-authority, task-request mutation, weakened tests/coverage, generated/source/binary drift, or any
+authority, task-request mutation, cache-derived PASS, mutable action pin, permission widening,
+unsound matrix/shard, cancelled authoritative run, classifier false negative, self-selected
+validation class, missing cold sentinel, weakened tests/coverage, generated/source/binary drift, or any
 external publication without its separate grant.
 
 ## Claim ceiling
 
 Completion establishes a simplified pre-RC CLI/executor contract and canonical reference
-handoff. It does not establish complete user documentation, site readiness, release,
+handoff plus a measured, fail-closed GitHub Actions and commit-validation foundation. It does
+not establish authenticated result reuse (R-0008), complete user documentation, site readiness, release,
 deployment, production readiness, autonomous readiness, or evidence promotion.

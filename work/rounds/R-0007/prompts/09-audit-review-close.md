@@ -21,6 +21,10 @@
 - Output/error totality.
 - User-document completeness and example validity.
 - Full gates, coverage floors, generated parity, and clean state.
+- GitHub Actions live feature dispositions, immutable pins/permissions, cache/artifact trust,
+  reusable workflow identities, semantic DAG/concurrency, fast/cold event mapping, and costs.
+- Four-class validation derivation, adversarial widening, classifier bootstrap, cold-sentinel
+  failover, complete machine evidence, and paired critical-path benchmark.
 - Honest removed-capability and non-release disclosure.
 
 Converge twice; the second pass is immediate, no-write, and clean. Review the exact

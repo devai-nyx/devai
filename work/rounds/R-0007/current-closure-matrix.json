@@ -1883,6 +1883,228 @@
       ],
       "closure_state": "GREEN_PROVED",
       "verdict_scope": "pre-entry"
+    },
+    {
+      "finding_id": "R7-F014",
+      "defect_class_id": "CI_CACHE_OR_ARTIFACT_ACQUIRES_VERDICT_AUTHORITY",
+      "severity": "P0",
+      "population_query": "Enumerate every GitHub Actions cache restore/save and artifact upload/download edge, its key or digest inputs, branch/fork visibility, consumer, and every code path by which restored bytes can affect a gate verdict.",
+      "expected_complete_population": [
+        "all dependency cache edges in every workflow and reusable workflow",
+        "all workflow artifact producer-consumer edges",
+        "frozen pnpm installation after every restore",
+        "fork and base-branch cache access boundaries",
+        "all DEVAI result, evidence, generated output, credential, node_modules and .devai/state paths"
+      ],
+      "adversarial_mutations": [
+        "poison a matching dependency cache",
+        "force cache miss and partial restore-key match",
+        "replay a base-branch cache in a pull request",
+        "replace a downloaded artifact while retaining its name",
+        "map cache-hit or artifact-exists directly to PASS"
+      ],
+      "required_behavior": [
+        "frozen installation and every semantic gate still execute",
+        "cache state changes duration only and never verdict or population",
+        "artifact bytes are digest-validated but remain non-authoritative transport before R-0008",
+        "forbidden paths and secrets are never cached",
+        "named check CI_UNAUTHENTICATED_BYTES_HAVE_NO_VERDICT_AUTHORITY blocks every substitution"
+      ],
+      "test_ids": [
+        "R7-024-CACHE-ACQUISITION-ONLY",
+        "R7-024-ARTIFACT-NOT-PASS",
+        "R7-024-FORK-POISONING-FAILS-CLOSED"
+      ],
+      "test_paths": ["tests/contract/r0007-ci-acceleration.red.contract.test.ts"],
+      "implementation_surfaces": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/round-gates.yml",
+        ".github/workflows/reusable-evidence-gate.yml",
+        "package.json"
+      ],
+      "evidence_refs": ["work/audit/R-0007/ci-cache-artifact-evidence.json"],
+      "closure_state": "RED_REQUIRED",
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-021 places this implementation inside R-0007 after valid B0 and red proof."
+      ]
+    },
+    {
+      "finding_id": "R7-F015",
+      "defect_class_id": "CI_DAG_OR_CONCURRENCY_LOSES_SEMANTIC_PROOF",
+      "severity": "P0",
+      "population_query": "Derive the complete GitHub Actions job/needs/matrix/event/concurrency graph and compare every edge and cell with build, tier-order, instrumentation, population, and authoritative-run completion obligations.",
+      "expected_complete_population": [
+        "all jobs and reusable-workflow calls",
+        "all needs edges and matrix cells",
+        "pull_request, push-main, workflow_dispatch, merge-queue if available, frozen candidate and round-close events",
+        "stage2 build-before-T1 and T1-before-T2",
+        "coverage provider, output and threshold assertions"
+      ],
+      "adversarial_mutations": [
+        "remove a semantic needs edge",
+        "parallelize T1 and T2",
+        "create an incomplete matrix cell population",
+        "cancel a main or frozen-candidate run with a newer event",
+        "treat one matrix success as aggregate success"
+      ],
+      "required_behavior": [
+        "only proven-independent jobs parallelize",
+        "ordered and instrumented properties remain explicit",
+        "matrix aggregation proves every declared cell exactly once",
+        "only superseded feedback runs may cancel",
+        "named check CI_SEMANTIC_DEPENDENCY_LOST identifies the exact job edge or event"
+      ],
+      "test_ids": [
+        "R7-025-DAG-PRESERVES-ORDER",
+        "R7-025-MATRIX-COMPLETE",
+        "R7-025-AUTHORITATIVE-RUN-NOT-CANCELLED"
+      ],
+      "test_paths": ["tests/contract/r0007-ci-acceleration.red.contract.test.ts"],
+      "implementation_surfaces": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/round-gates.yml",
+        "law/policy/round-close-controls.json"
+      ],
+      "evidence_refs": ["work/audit/R-0007/ci-dag-concurrency-evidence.json"],
+      "closure_state": "RED_REQUIRED",
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-021 places this implementation inside R-0007 after valid B0 and red proof."
+      ]
+    },
+    {
+      "finding_id": "R7-F016",
+      "defect_class_id": "COMMIT_VALIDATION_CLASSIFIER_UNDERBOUND",
+      "severity": "P0",
+      "population_query": "For every changed-path status and dependency kind, derive the four-class validation decision and compare selected and omitted commands with complete affected-test, command-closure, schema, materialization, workflow, and governance dependencies.",
+      "expected_complete_population": [
+        "governance-text",
+        "law-and-schema",
+        "runtime-and-tests",
+        "candidate-and-close",
+        "additions, modifications, deletions, exact renames and symlinks",
+        "generated-source, package-script, workflow-YAML, schema, trace and dynamic dependency edges",
+        "mixed commits and classifier-owning changes"
+      ],
+      "adversarial_mutations": [
+        "hide executable behavior behind a documentation extension",
+        "rename runtime code into a governance path",
+        "delete a schema input",
+        "change a package script through workflow indirection",
+        "supply a lower author-selected class",
+        "make dynamic dependency resolution ambiguous"
+      ],
+      "required_behavior": [
+        "classification is mechanically derived from exact bytes and status",
+        "strictest class wins for mixed changes",
+        "unknown or incomplete closure widens",
+        "classifier/policy/graph activation selects candidate-and-close",
+        "machine output names every selected and omitted command with a reason",
+        "named check COMMIT_VALIDATION_CLASS_UNDERBOUND blocks narrowing"
+      ],
+      "test_ids": [
+        "R7-026-FOUR-CLASS-CROSS-PRODUCT",
+        "R7-026-STRICTEST-CLASS-WINS",
+        "R7-026-UNKNOWN-WIDENS",
+        "R7-026-NO-AUTHOR-OVERRIDE"
+      ],
+      "test_paths": ["tests/contract/r0007-validation-classifier.red.contract.test.ts"],
+      "implementation_surfaces": [
+        "scripts/derive-commit-validation-plan.mjs",
+        "law/schemas/commit-validation-plan.schema.json",
+        "law/policy/round-close-controls.json",
+        "work/rounds/R-0007/affected-test-graph.json",
+        "package.json",
+        "AGENTS.md",
+        "work/rounds/EXECUTION-CONTRACT.md"
+      ],
+      "evidence_refs": ["work/audit/R-0007/commit-validation-classifier-evidence.json"],
+      "closure_state": "RED_REQUIRED",
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-021 places this implementation inside R-0007 after valid B0 and red proof."
+      ]
+    },
+    {
+      "finding_id": "R7-F017",
+      "defect_class_id": "CLASSIFIER_FALSE_NEGATIVE_HAS_NO_COLD_FAILOVER",
+      "severity": "P0",
+      "population_query": "For every validation class and omittable command, compare the classifier prediction with a scheduled or main-bound complete cold sentinel and enumerate every mismatch response.",
+      "expected_complete_population": [
+        "all four validation classes",
+        "every command omitted by a narrowed plan",
+        "scheduled/main cold sentinel",
+        "disablement state and restoration of the former complete floor"
+      ],
+      "adversarial_mutations": [
+        "seed one affected test omitted by the classifier",
+        "make the narrowed lane green while the cold lane fails",
+        "drop the mismatch record",
+        "continue narrowing after a false negative",
+        "cancel the cold sentinel"
+      ],
+      "required_behavior": [
+        "the mismatch is a named CLASSIFIER_FALSE_NEGATIVE",
+        "narrowing is disabled fail-closed",
+        "the prior complete floor is restored until governed repair",
+        "authoritative cold execution is retained and non-cancellable",
+        "mismatch evidence binds exact candidate and both populations"
+      ],
+      "test_ids": ["R7-027-COLD-SENTINEL-DETECTS", "R7-027-AUTOMATIC-FULL-FLOOR"],
+      "test_paths": ["tests/contract/r0007-validation-classifier.red.contract.test.ts"],
+      "implementation_surfaces": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/round-gates.yml",
+        "scripts/derive-commit-validation-plan.mjs",
+        "law/policy/round-close-controls.json"
+      ],
+      "evidence_refs": ["work/audit/R-0007/commit-validation-sentinel-evidence.json"],
+      "closure_state": "RED_REQUIRED",
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-021 places this implementation inside R-0007 after valid B0 and red proof."
+      ]
+    },
+    {
+      "finding_id": "R7-F018",
+      "defect_class_id": "CI_OPTIMISATION_STANDING_UNMEASURED",
+      "severity": "P1",
+      "population_query": "Census every applicable GitHub Actions feature and run paired current/candidate workflows on one exact candidate and runner class, comparing semantic populations before queue, setup, install, job and critical-path timing.",
+      "expected_complete_population": [
+        "one adopt/defer/reject disposition per applicable feature",
+        "cold cache-miss and warm cache-hit runs",
+        "fast feedback and cold authoritative lanes",
+        "queue, setup, install, job, artifact and critical-path durations",
+        "file, suite, case, coverage and terminal populations"
+      ],
+      "adversarial_mutations": [
+        "omit an available feature from the census",
+        "compare different candidates or runner classes",
+        "claim saving from summed job time instead of critical path",
+        "accept a faster run with a different population",
+        "enable a feature with no saving, security or operability benefit"
+      ],
+      "required_behavior": [
+        "semantic equality precedes timing",
+        "counts retain their units",
+        "median absolute and percentage critical-path change is recorded",
+        "no-benefit features remain disabled",
+        "GitHub plan, cost, retention and administrative prerequisites are factual and current"
+      ],
+      "test_ids": ["R7-028-FEATURE-CENSUS-TOTAL", "R7-028-PAIRED-CRITICAL-PATH"],
+      "test_paths": ["tests/contract/r0007-ci-acceleration.red.contract.test.ts"],
+      "implementation_surfaces": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/round-gates.yml",
+        "law/schemas/commit-validation-plan.schema.json"
+      ],
+      "evidence_refs": ["work/audit/R-0007/ci-optimisation-benchmark.json"],
+      "closure_state": "RED_REQUIRED",
+      "verdict_scope": "b0-dependent",
+      "b0_blocked_members": [
+        "OM-021 places this implementation inside R-0007 after valid B0 and red proof."
+      ]
     }
   ],
   "declared_limitations": [
@@ -1950,8 +2172,13 @@
       "R3-F004",
       "R7-F001",
       "R7-F002",
-      "R7-F005"
+      "R7-F005",
+      "R7-F014",
+      "R7-F015",
+      "R7-F016",
+      "R7-F017",
+      "R7-F018"
     ],
-    "blocked_reason": "OM-018 defers these populations into R-0007 as governed batch work. They are not proved and are not represented as proved; full round closure remains blocked until R-0007 discharges them."
+    "blocked_reason": "OM-018 and OM-021 defer these populations into R-0007 as governed batch work. They are not proved and are not represented as proved; full round closure remains blocked until R-0007 discharges them."
   }
 }

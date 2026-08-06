@@ -57,3 +57,21 @@ failure semantics while preserving their distinct execution mechanisms.
 
 This diagnostic does not prove live release standing, adopter command usage, current
 remote CI state, or authorization for R-0007. Those are mandatory live entry checks.
+
+## GitHub Actions and commit-floor diagnosis (OM-021 amendment)
+
+- `.github/workflows/ci.yml` repeats checkout, Node setup, package-manager prewarm, Corepack,
+  and frozen pnpm installation in static, fast, changesets, coverage and governance jobs; the
+  three round-gate jobs repeat the same setup again. No pnpm store cache is declared.
+- `ci.yml` cancels superseded runs for every event under one ref-based concurrency group, while
+  `round-gates.yml` is non-cancelling. Entry must distinguish feedback cancellation from
+  non-cancellable main/frozen-candidate/round-close evidence.
+- `round-gates.yml` and `reusable-evidence-gate.yml` already use `workflow_call`, but setup,
+  permissions, identity-bearing inputs, reports, artifacts and timing are not yet one canonical
+  execution contract.
+- The current standing commit floor runs `pnpm vitest run` for every commit regardless of
+  changed-path risk. The affected-test graph and command-closure machinery provide inputs for
+  classification, but no machine command currently emits one of the four OM-021 validation
+  classes with a total selected/omitted-command explanation and cold-sentinel failover.
+- These observations identify candidates, not accepted savings. Live GitHub plan/features,
+  cache/runner limits, required checks and paired critical-path timings remain entry-run facts.

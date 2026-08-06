@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "R8-planning-1.0.0",
+  "schemaVersion": "R8-planning-2.0.0",
   "round": "R-0008",
-  "authority": "OM-019_PREPARATION_GRANTED_EXECUTION_BLOCKED",
+  "authority": "OM-019_OM-021_PREPARATION_GRANTED_EXECUTION_BLOCKED",
   "reviewed_candidate": null,
   "review_evidence": null,
   "review_run_budget": 2,
@@ -298,11 +298,159 @@
       ],
       "evidence_refs": ["work/audit/R-0008/literal-roster.json"],
       "closure_state": "RED_REQUIRED"
+    },
+    {
+      "finding_id": "R8-F009",
+      "defect_class_id": "GITHUB_ATTESTATION_IDENTITY_UNDERBOUND",
+      "severity": "P0",
+      "population_query": "Enumerate every GitHub-produced reusable claim and independently verify its subject bytes and complete candidate-authorized OIDC/Sigstore workflow identity policy.",
+      "expected_complete_population": [
+        "issuer",
+        "repository and owner",
+        "workflow path and immutable ref",
+        "reusable-workflow caller/callee chain",
+        "triggering event, source ref and environment",
+        "subject name/digest and canonical DEVAI envelope bytes",
+        "repository visibility and GitHub-plan eligibility"
+      ],
+      "adversarial_mutations": [
+        "change issuer or repository",
+        "use the right workflow path at an unauthorized ref",
+        "call through an unauthorized reusable workflow",
+        "replay a pull-request attestation as main or round-close",
+        "change artifact bytes or subject digest",
+        "accept an attestation feature unavailable to the repository plan"
+      ],
+      "required_behavior": [
+        "named check GITHUB_CLAIM_ATTESTATION_IDENTITY_MISMATCH fails closed",
+        "payload names exact expected and presented workflow identity fields and subject digest",
+        "verification is independently reproducible from retained bundle and subject bytes",
+        "the consumer executes or blocks and never emits REUSED_FRESH_PASS"
+      ],
+      "test_ids": ["R8-019-GITHUB-WORKFLOW-IDENTITY", "R8-020-GITHUB-SUBJECT-BYTES"],
+      "test_paths": ["tests/contract/r0008-github-attestation.red.contract.test.ts"],
+      "implementation_surfaces": [
+        "law/schemas/github-actions-claim-provenance.schema.json",
+        "law/policy/round-close-controls.json",
+        "scripts/run-round-close-controls.mjs",
+        ".github/workflows/reusable-evidence-gate.yml"
+      ],
+      "evidence_refs": ["work/audit/R-0008/github-attestation-adversaries.json"],
+      "closure_state": "RED_REQUIRED"
+    },
+    {
+      "finding_id": "R8-F010",
+      "defect_class_id": "GITHUB_STORAGE_OR_CONCLUSION_TRUSTED_AS_PASS",
+      "severity": "P0",
+      "population_query": "Trace every cache key/hit, artifact ID/name/digest, job/workflow conclusion and actor field to all reuse eligibility decisions in the GitHub fast lane.",
+      "expected_complete_population": [
+        "all Actions cache restore/save edges",
+        "all evidence artifact upload/download edges",
+        "all job and workflow conclusion consumers",
+        "all actor and run metadata consumers",
+        "all fast-lane reuse decisions"
+      ],
+      "adversarial_mutations": [
+        "forge cache contents under a matching key",
+        "replace an artifact while retaining ID or name",
+        "supply success conclusion without canonical claim",
+        "imitate an authorized actor name",
+        "duplicate two matching artifacts"
+      ],
+      "required_behavior": [
+        "named check GITHUB_UNAUTHENTICATED_RESULT_HAS_NO_AUTHORITY rejects substitution",
+        "cache and storage metadata locate bytes but grant no verdict",
+        "only an independently recomputed claim plus verified attestation can be eligible",
+        "missing, duplicate or ambiguous bytes execute the consumer"
+      ],
+      "test_ids": ["R8-021-GITHUB-CACHE-NOT-PASS", "R8-022-GITHUB-CONCLUSION-NOT-PASS"],
+      "test_paths": ["tests/contract/r0008-github-attestation.red.contract.test.ts"],
+      "implementation_surfaces": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/reusable-evidence-gate.yml",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "evidence_refs": ["work/audit/R-0008/github-storage-non-authority.json"],
+      "closure_state": "RED_REQUIRED"
+    },
+    {
+      "finding_id": "R8-F011",
+      "defect_class_id": "REUSABLE_WORKFLOW_CONFUSED_DEPUTY",
+      "severity": "P0",
+      "population_query": "Enumerate every reusable workflow caller/callee, input, secret, permission, ref and output that can produce or verify a reusable DEVAI claim.",
+      "expected_complete_population": [
+        "all callers of reusable-evidence-gate",
+        "complete caller and callee workflow refs",
+        "all typed inputs and outputs",
+        "effective permissions and secrets",
+        "producer and verifier separation"
+      ],
+      "adversarial_mutations": [
+        "invoke the callee from an unauthorized caller",
+        "omit or substitute candidate/policy/claim inputs",
+        "inherit broader secrets or permissions",
+        "verify an artifact produced in the verifier job itself",
+        "bind only the callee while changing the caller"
+      ],
+      "required_behavior": [
+        "named check GITHUB_REUSABLE_WORKFLOW_IDENTITY_UNAUTHORIZED identifies exact caller/callee",
+        "all identity-bearing inputs are explicit and independently checked",
+        "permissions are least privilege and no secret becomes claim authority",
+        "reuse is denied without a separately authenticated producer subject"
+      ],
+      "test_ids": ["R8-023-CALLER-CALLEE-BOUND", "R8-024-NO-VERIFIER-SELF-ATTESTATION"],
+      "test_paths": ["tests/contract/r0008-github-attestation.red.contract.test.ts"],
+      "implementation_surfaces": [
+        ".github/workflows/reusable-evidence-gate.yml",
+        ".github/workflows/ci.yml",
+        "law/schemas/github-actions-claim-provenance.schema.json"
+      ],
+      "evidence_refs": ["work/audit/R-0008/reusable-workflow-identity.json"],
+      "closure_state": "RED_REQUIRED"
+    },
+    {
+      "finding_id": "R8-F012",
+      "defect_class_id": "FAST_LANE_REPLACES_COLD_AUTHORITY",
+      "severity": "P0",
+      "population_query": "For every GitHub event and required check, derive whether it invokes fast feedback, mandatory cold authority, or both, and prove cold execution has DEVAI result reuse disabled and cannot be cancelled or satisfied by fast-lane conclusions.",
+      "expected_complete_population": [
+        "pull-request feedback",
+        "push to main",
+        "merge queue if live and adopted",
+        "frozen exact candidate",
+        "convergence and round close",
+        "all required check identities and concurrency groups"
+      ],
+      "adversarial_mutations": [
+        "make fast success satisfy the cold required check",
+        "enable claim reuse in cold authority",
+        "cancel frozen-candidate cold execution",
+        "omit one literal or protected property from cold execution",
+        "compare fast and cold runs from different candidates or runner classes"
+      ],
+      "required_behavior": [
+        "named check COLD_AUTHORITATIVE_LANE_NOT_PROVEN blocks close",
+        "fast and cold check identities are unambiguous",
+        "cold execution has no DEVAI result reuse and retains complete applicable population",
+        "authoritative runs are non-cancellable",
+        "benchmark compares equal semantic populations before critical-path timing"
+      ],
+      "test_ids": ["R8-025-FAST-CANNOT-SATISFY-COLD", "R8-026-COLD-NONCANCELLABLE"],
+      "test_paths": ["tests/contract/r0008-github-lanes.red.contract.test.ts"],
+      "implementation_surfaces": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/round-gates.yml",
+        "law/policy/round-close-controls.json",
+        "scripts/run-round-close-controls.mjs"
+      ],
+      "evidence_refs": ["work/audit/R-0008/github-fast-cold-lanes.json"],
+      "closure_state": "RED_REQUIRED"
     }
   ],
   "declared_limitations": [
     "No whole-result reuse edge among ordinary, stage2, and coverage is sound.",
     "An independently verifiable signer trust root does not currently exist in the inspected source.",
+    "GitHub attestation availability and the exact repository/workflow identity policy require live entry verification and later Owner binding.",
     "Positive wall-clock saving cannot be determined before the paired benchmark run."
   ]
 }

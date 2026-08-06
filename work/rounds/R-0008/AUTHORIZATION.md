@@ -7,7 +7,7 @@ date: 2026-08-05
 authority: Owner grant quoted by Architect
 supersedes: R-0008-AUTHORIZATION@2026-07-24
 superseded_by: null
-provenance: [OM-019]
+provenance: [OM-019, OM-021]
 ---
 
 # R-0008 authorization
@@ -18,5 +18,6 @@ provenance: [OM-019]
 
 R-0008 may not enter or implement until R-0007 closes and a later Owner instruction binds
 the exact reviewer selector, Ed25519 verification trust root, trust epoch, private-key custody
-boundary, and role-pure atomic projection mechanism. No whole-gate substitution among
+boundary, complete GitHub OIDC/Sigstore repository/workflow identity policy, and role-pure
+atomic projection mechanism. No whole-gate substitution among
 ordinary, stage2, and coverage is authorized. No external effect is authorized.

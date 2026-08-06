@@ -2,13 +2,15 @@
 
 ## Agents
 
-Spawn three `gpt-5.6-sol` agents at `xhigh`, each as Inspector in a dedicated worktree:
+Spawn four `gpt-5.6-sol` agents at `xhigh`, each as Inspector in a dedicated worktree:
 
 1. Surface/migration Inspector — action population, old-route rejection, seven-domain help, hidden plumbing.
 2. Semantics/executor Inspector — suite/preset membership, vocabulary, task-round
    containment, executor kinds, model routing, effects and consent.
 3. Output/docs-contract Inspector — action envelope totality, execution evidence,
    generated/built parity, documentation enumeration coverage.
+4. CI/classification Inspector — GitHub Actions cache, reusable workflow, DAG/concurrency,
+   permissions/pins/artifacts/telemetry, four validation classes, and cold-sentinel failover.
 
 Each agent receives a disjoint test-file allowlist. No production, law, docs, scripts, or
 generated file edits are allowed.
@@ -34,5 +36,16 @@ generated file edits are allowed.
 - Every enumerated documentation category, including executor kinds, selection modes,
   runtimes, rostered models, and supported efforts, has an exact completeness/bijection check.
 - Built/source catalog disagreement is loud, never skipped.
+- Cache hit/miss/corruption changes acquisition only; frozen install and gate verdict remain.
+- Mutable action tags, permission widening, fork cache poisoning, artifact-as-PASS, and hidden
+  reusable-workflow inputs fail closed.
+- Reversing semantic `needs`, parallelizing ordered tiers, incomplete matrix cells, and
+  cancelling an authoritative event are rejected with named checks.
+- The classifier handles additions, deletions, renames, symlinks, generated edges, workflow
+  YAML/package-script indirection, mixed changes, and unknown dynamic dependencies; strictest
+  class wins and authors cannot override it.
+- Governance-text avoids unconditional full Vitest; law/runtime ambiguity widens; classifier
+  changes and candidate/close boundaries select the complete active cold profile.
+- A seeded false-negative omission is detected by the cold sentinel and disables narrowing.
 
 Read the red output before every Inspector commit.

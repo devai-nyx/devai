@@ -17,6 +17,15 @@ Status: planning evidence only. No authority is granted and no repository mutati
 - The existing key binds task ID, argv, cwd, profile, complete candidate input and dependency manifests, policy, graph, toolchain, environment, outputs, and candidate (`scripts/run-round-close-controls.mjs:4524-4565`; schema at `law/schemas/task-freshness.schema.json:9-193`). It binds an execution-shaped task, not an independently named assertion/claim.
 - Cache records are self-digested and schema checked (`scripts/run-round-close-controls.mjs:3939-3975`) but not signed by an independently trusted producer. A same-user writer can fabricate a structurally valid record and recompute its SHA-256. Therefore the current cache is integrity checked, not authenticated against cache poisoning.
 - Only `EXECUTED_PASS` is reusable; remote mode disables local cache (`law/policy/round-close-controls.json:118-150,492-504`). Coverage is whole-only and its retained output population is digest-bound (`work/rounds/R-0007/affected-test-graph.json:621-650`).
+- GitHub CI currently refuses evidence mode in the default workflow. A reusable local-evidence
+  verifier exists, but it trusts an actor allowlist and local evidence semantics rather than an
+  independently verified GitHub OIDC/Sigstore subject bound to canonical DEVAI claim bytes.
+- No current workflow generates or verifies a GitHub artifact attestation for a gate-claim
+  envelope. Cache keys, artifact metadata, job conclusions and actor labels therefore have no
+  admissible remote claim authority.
+- The R-0007 OM-021 amendment owns dependency caching, reusable setup, semantic DAG/concurrency,
+  risk-classified validation and the mandatory cold sentinel. R-0008 may add remote fast-lane
+  claim reuse only on top of that foundation and may not change the cold lane into reuse.
 
 ## Population facts
 
@@ -43,5 +52,9 @@ The only safe optimisation class is reuse of a separately authenticated assertio
 1. No Owner mandate currently grants R-0008 or a signing trust root. The plan supplies a request only.
 2. DII-254 is now occupied by the uniqueness decision. R-0008 entry must recheck the next
    gapless free identifier immediately before its Architect declaration; plans reserve no ID.
-3. Authenticated anti-forgery reuse needs an independently verifiable signature trust root. SHA-256 self-digests alone are insufficient. If the Owner will not authorize an Ed25519 public-key trust policy and controlled signer, cross-gate reuse must stop before implementation.
+3. Authenticated anti-forgery reuse needs independently verifiable producer trust. SHA-256
+   self-digests alone are insufficient. Local/offline production requires an Owner-bound
+   Ed25519 public-key policy and controlled signer. GitHub production requires an Owner-bound
+   OIDC/Sigstore issuer/repository/workflow-ref/reusable-workflow/event/ref/environment/subject
+   policy and live plan eligibility. An unavailable trust path disables that reuse path.
 4. Repository rules assign `law/**` to Architect and `.devai/config/**` to the executing Engineer (`AGENTS.md`; `work/rounds/EXECUTION-CONTRACT.md:33-43`), while the user requires a derived artifact to be regenerated in the same commit that invalidates it. A law-policy change immediately invalidates `.devai/config/round-close-controls.json` (`law/policy/round-close-controls.json:85-116,615-620`). One ordinary role-pure commit cannot modify both. Entry must obtain an Architect decision defining an atomic, role-pure activation mechanism, or stop. The plan does not invent a mixed-role exception.

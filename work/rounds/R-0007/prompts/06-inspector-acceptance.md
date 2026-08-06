@@ -27,5 +27,17 @@ Spawn three fresh `gpt-5.6-sol` Inspector agents at `xhigh`:
   explicitly migrated.
 - Prove `--publish` alone cannot publish and `--allow-publish` is rejected.
 - Prove generated/source/binary parity with no skip-if-unbuilt silence.
+- Prove the complete Actions feature census has exactly one adopt/defer/reject disposition.
+- Poison, miss, replay, and cross-branch the dependency cache; verdict and semantic population
+  remain identical and frozen install always executes.
+- Prove full-SHA pins, least privilege, explicit reusable-workflow inputs/outputs, artifact
+  digest validation, bounded retention, and correct event cancellation behavior.
+- Exhaust the four validation classes across additions, deletions, renames, symlinks,
+  generated relationships, YAML/script indirection, mixed changes, unknown dependencies, and
+  classifier-self changes. Authors cannot lower a class and selected/omitted reasons are total.
+- Seed a classifier false negative and prove the cold sentinel disables narrowing and restores
+  the prior complete floor.
+- Compare current and candidate workflow semantic populations before accepting any paired
+  median critical-path saving.
 
 Return defects to the owning role; do not accommodate broken implementation in tests.

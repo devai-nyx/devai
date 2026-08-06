@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "2.0.0",
   "status": "PLANNING_ONLY",
   "planning_source": {
     "path": "/Users/aarusso/Development/stech/devaii-pre-r0007-remediation-3",
@@ -55,7 +55,17 @@
     }
   ],
   "allowed_initial_equivalence_classes": [],
-  "activation_rule": "No class becomes active until derived claim contracts are byte-identical, Inspector adversaries are green, Auditor evidence proves signature verification and fail-closed behavior, and a benchmark produces a positive saving without population loss.",
+  "producer_modes": {
+    "local": "Owner-bound Ed25519 trust root and epoch required",
+    "github_actions": "Owner-bound OIDC/Sigstore issuer, repository, workflow/ref, reusable-workflow chain, event/ref/environment and subject policy required",
+    "github_cache": "untrusted locator and transport only; never verdict authority",
+    "github_artifact": "subject bytes require digest plus attestation verification; storage metadata is not authority"
+  },
+  "ci_lanes": {
+    "fast_feedback": "may consume only independently reproduced authenticated equivalent claims after R-0008 activation",
+    "cold_authoritative": "complete applicable population with DEVAI result reuse disabled and non-cancellable execution"
+  },
+  "activation_rule": "No class becomes active until derived claim contracts are byte-identical, Inspector local and GitHub adversaries are green, Auditor evidence proves signature or OIDC/Sigstore attestation verification and fail-closed behavior, the cold authoritative lane remains complete, and a paired benchmark produces a positive critical-path saving without population loss.",
   "forecast_saving_for_named_three_whole_gates_seconds": 0,
   "forecast_note": "The user's approximate one-hour redundancy cannot be claimed as removable under the protected properties. Any positive expected saving must be produced by the benchmark wave from independently equivalent sub-assertions."
 }

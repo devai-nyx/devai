@@ -13,6 +13,9 @@ integration Engineer. Spawn as many disjoint agents as capacity permits:
 6. Release façades and `--publish` consent.
 7. Init/doctor, `harness`, and upgrade `--tier` vocabulary.
 8. Generated views and source/built parity integration.
+9. CI execution foundation and validation classifier: pnpm-store cache, reusable setup,
+   semantic job DAG/concurrency, immutable pins/least privilege, reports/artifacts/telemetry,
+   four-class planner, and complete cold sentinel.
 
 ## Rules
 
@@ -28,6 +31,13 @@ integration Engineer. Spawn as many disjoint agents as capacity permits:
 - Do not hand-edit generated outputs.
 - Do not create new user-facing docs in this wave.
 - Each commit passes prepare, affected tests, typecheck/lint, and diff-check.
+- Until the classifier is lawfully activated, obey the pre-existing commit floor. Its own
+  activation is candidate-and-close and must pass the complete prior floor plus every seeded
+  classifier adversary. After activation, read and obey the machine-selected class.
+- Never cache `node_modules`, outputs with verdict standing, `.devai/state`, credentials, or
+  unverified evidence. Never accept a cache hit, artifact ID, or workflow conclusion as PASS.
+- Preserve semantic `needs`, stage2 order, coverage instrumentation, and the non-cancellable
+  authoritative cold lane. GitHub settings changes are outside this wave.
 
 The integration Engineer may resolve imports and regenerate materializations but may not
 rewrite another role's policy or tests.

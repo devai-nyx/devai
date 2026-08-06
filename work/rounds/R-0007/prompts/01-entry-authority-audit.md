@@ -19,6 +19,14 @@
 4. Search every adopter/current-doc invocation of routes or vocabulary that will change.
 5. Freeze an exact machine-readable 147-row command migration denominator and an exact
    task-schema/model-runtime migration inventory for Inspector ownership in the next wave.
+6. Inventory every applicable GitHub Actions feature and current workflow job/needs graph,
+   duplicated setup/install work, queue/setup/install/job/critical-path durations, action pins,
+   permissions, cache/artifact/report/retention behavior, event concurrency, repository
+   visibility/plan, fork policy, rulesets and required checks. Assign no feature disposition
+   until live availability and present semantics are evidenced.
+7. Inventory every current commit-floor selector and affected-test/command-closure dependency
+   used to derive the four validation classes. Unknown or non-mechanical boundaries are defects,
+   not candidates for optimistic classification.
 
 ## Stop conditions
 

@@ -17,7 +17,9 @@ Read `AGENTS.md`, current Owner mandates, consolidated audit/backlog, shared exe
 contract, live authorization/plan/prompts, CLI ADR, action/sensor registries and schemas,
 versioning policy, release discipline, current handlers, tests, package scripts, and this
 entire committed R-0007 packet, including `inventory/old-to-new-command-map.md`. Re-read live
-remote and release evidence. Classify every commit after the recognized
+remote and release evidence. Read OM-021 and inventory live GitHub Actions capabilities,
+repository visibility/plan, runner/cache/artifact limits, rulesets, required checks, fork
+policy, workflow DAG, and current critical path without mutating GitHub settings. Classify every commit after the recognized
 `b1a814a93b0dc186c28a1341354cdf4444609728` PASS; if no
 existing rule carries the PASS across that exact delta, stop for Owner disposition. If a stable or
 RC 1.0 publication exists, or authorization is not expressly GRANTED, stop.
@@ -69,13 +71,22 @@ consumes the substrate. Do not begin final review before documentation acceptanc
   task request.
 - Registry counts are unbound until mechanically recomputed from the live one-to-one map.
 - Canonical descriptors are policy-derived and part of acceptance; R-0009 owns the complete user corpus.
+- GitHub dependency caches accelerate downloads only; frozen installation always runs and a
+  cache hit never grants PASS.
+- Commit validation has four mechanically derived classes: governance-text, law-and-schema,
+  runtime-and-tests, and candidate-and-close. Authors cannot lower the class; uncertainty widens.
+- Superseded PR feedback may cancel, but main, merge-queue, frozen-candidate, convergence, and
+  round-close authoritative runs cannot.
+- A complete cold sentinel remains mandatory and one classifier false negative disables narrowing.
 
 ## Verification and close
 
 Run the complete minimum and exit floors, coverage, DB-enabled cases, production binary
 population, migration map, suite/preset membership, executor/model-routing/evidence
 contracts, canonical descriptor and migration-handoff coverage,
-links, generated parity, and obsolete-vocabulary checks. Converge twice with a clean
+links, generated parity, obsolete-vocabulary checks, GitHub feature dispositions, workflow
+security/DAG/cache contracts, classification adversaries, cold-sentinel failover, and paired
+critical-path evidence. Converge twice with a clean
 second pass, obtain independent exact-candidate review, and restart convergence/review
 after any repair.
 
@@ -87,5 +98,6 @@ Final report:
 `AUTHORIZATION / LIVE VERSION STANDING / BASE SHA / CURRENT POPULATION / TARGET
 POPULATION / MIGRATION MAP / SUITES / PRESETS / KINDS / SLICES / TIERS / ROUND-TASK
 CONTAINMENT / EXECUTORS / MODEL+EFFORT ROUTING / EXECUTION EVIDENCE /
-AUTHORITY+EFFECTS / USER DOCS / TESTS / COVERAGE / CONVERGENCE / REVIEW /
+AUTHORITY+EFFECTS / CI FEATURE DISPOSITIONS / VALIDATION CLASSES / FAST+COLD LANES /
+CI WALL TIME / USER DOCS / TESTS / COVERAGE / CONVERGENCE / REVIEW /
 AUDIT / NONRELEASE CLAIM`.

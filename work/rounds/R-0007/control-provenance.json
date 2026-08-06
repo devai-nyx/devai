@@ -96,6 +96,11 @@
       "mandate_id": "OM-020",
       "path": "product/owner-mandates/OM-020.md",
       "required_status": "active"
+    },
+    {
+      "mandate_id": "OM-021",
+      "path": "product/owner-mandates/OM-021.md",
+      "required_status": "active"
     }
   ],
   "manifest_roots": [
@@ -121,6 +126,7 @@
     "product/owner-mandates/OM-018.md",
     "product/owner-mandates/OM-019.md",
     "product/owner-mandates/OM-020.md",
+    "product/owner-mandates/OM-021.md",
     "work/rounds/EXECUTION-CONTRACT.md",
     "work/rounds/R-0007/AUTHORIZATION.md",
     "work/rounds/R-0007/plan.md",

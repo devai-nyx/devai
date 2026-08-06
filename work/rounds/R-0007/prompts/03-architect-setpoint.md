@@ -2,13 +2,16 @@
 
 ## Agents
 
-Spawn three `gpt-5.6-sol` agents at `xhigh`, each as Architect with disjoint paths:
+Spawn four `gpt-5.6-sol` agents at `xhigh`, each as Architect with disjoint paths:
 
 1. CLI-law Architect — ADR, action registry, effects, authority, dispositions, counts, migration guidance.
 2. Workflow/executor Architect — suite/preset/slice/tier policies, round-task/executor
    schema semantics, model/runtime registry, routing policy, execution evidence,
    lifecycle and output contracts.
 3. Information Architect — user-doc architecture, canonical-source routing, generated/reference boundaries, migration narrative.
+4. CI Architect — GitHub Actions feature disposition registry, fast/cold lane semantics,
+   semantic DAG/concurrency, cache/artifact authority, four validation classes, machine output,
+   bootstrap widening, sentinel failover, benchmark and rollback policy.
 
 ## Binding decisions
 
@@ -31,6 +34,12 @@ Spawn three `gpt-5.6-sol` agents at `xhigh`, each as Architect with disjoint pat
 - Define `--publish` as independent consent in addition to `--write`.
 - Preserve historical identities; folds and tombstones never dispatch.
 - Freeze documentation pages, generated tables, semantic fields, and completeness gates.
+- Freeze one adopt/defer/reject disposition for every live applicable Actions feature.
+- Define dependency cache as acquisition-only and artifacts as unauthenticated transport until R-0008.
+- Define event-specific fast/cold lanes and forbid cancellation of authoritative events.
+- Define the four commit-validation classes, exact derivation inputs, strictest-class rule,
+  unknown widening, classifier bootstrap, sentinel comparison, automatic disablement, evidence
+  schema, and paired critical-path activation threshold.
 
 Do not write package implementation or tests. Any unresolved semantic choice blocks the
 Engineer wave.
