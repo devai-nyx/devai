@@ -2,7 +2,7 @@
   "schemaVersion": "2.0.0",
   "round": "R-0007",
   "policy_version": "5.0.0",
-  "decision_id": "DII-255",
+  "decision_id": "DII-256",
   "phase": "pre-entry-preparation",
   "declaration": {
     "binding": "b0-decision-required",

@@ -859,6 +859,20 @@
         "tests": ["tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts"],
         "exercised_implementation_paths": ["vitest.config.ts", "vitest.scheduler.ts"]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["d94368da5406d6b9ce467dee31cb3932dcc4a6c4"],
+      "law_commits": ["ecabbddd743110dd713d8e9efef1dae9f4775533"],
+      "red_evidence": {
+        "commit": "17e9a54a6f637672e2518f20f0b8a0884e15a468",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts --reporter=verbose",
+        "evidence_path": "work/audit/R-0007-pre-entry/scheduler-bounded-workers-red-evidence.json",
+        "evidence_sha256": "f4f1992c089aec428ce270ef2f5b33e30d32fa4854d02712c3ecbb9b1821729e",
+        "tests": ["tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts"],
+        "exercised_implementation_paths": ["vitest.scheduler.ts"]
+      }
     }
   ],
   "historical_commit_exceptions": [

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "round": "R-0007",
-  "root_decision": "DII-255",
+  "root_decision": "DII-256",
   "decision_register": "law/register/DECISIONS.md",
   "discovery_mode": {
     "decisions": "exact-register-transitive-from-root",
@@ -59,6 +59,11 @@
       "decision_id": "DII-255",
       "status": "active",
       "depends_on": ["DII-251", "DII-254"]
+    },
+    {
+      "decision_id": "DII-256",
+      "status": "active",
+      "depends_on": ["DII-255"]
     }
   ],
   "owner_mandates": [

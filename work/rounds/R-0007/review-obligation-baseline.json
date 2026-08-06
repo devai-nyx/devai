@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "round": "R-0007",
-  "authority_decision": "DII-255",
+  "authority_decision": "DII-256",
   "derivation": "independent-policy-baseline",
   "obligation_ids": [
     "R7-P0-AUTHORITY",
