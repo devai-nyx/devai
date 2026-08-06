@@ -869,7 +869,7 @@
         "observed_exit": 1,
         "command": "pnpm vitest run tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts --reporter=verbose",
         "evidence_path": "work/audit/R-0007-pre-entry/scheduler-bounded-workers-red-evidence.json",
-        "evidence_sha256": "17cb90b95c36aa0f5106b5daf0fa426988e9e15d40acc07d265d63cb842c0eab",
+        "evidence_sha256": "8f40b7032af07a13eb95f4baea25ac0426b7c8624f0c5d8060bbed0b714ba7b4",
         "tests": ["tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts"],
         "exercised_implementation_paths": ["vitest.scheduler.ts"]
       }
