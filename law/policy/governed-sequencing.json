@@ -823,7 +823,10 @@
     },
     {
       "round": "R-0007",
-      "implementation_commits": ["e77221eeff30f9b67dbdfc37d2d0f3f82521624a"],
+      "implementation_commits": [
+        "e77221eeff30f9b67dbdfc37d2d0f3f82521624a",
+        "b5969b1468b1187f1eefb6a212403d544939ce17"
+      ],
       "law_commits": ["aa06297fd7b5ff3e9899a0bb16fd5c1c29379c0e"],
       "red_evidence": {
         "commit": "34db0961aceb21b3da3b02e6d9195ed8c9f97f2f",

@@ -3329,7 +3329,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 75,
-      "assertion_digest_sha256": "41c3231e9f31fb89f46f965614b8df8b48a66637da3ce7bc019a5c537b380eb7"
+      "assertion_digest_sha256": "8a1c53e8fb4dd5a02dd9b5dd5489f66332239443efb925ea2e404f5ad1f1c840"
     },
     {
       "path": "tests/contract/pre-r0007-remediation-3.red.contract.test.ts",
@@ -3381,7 +3381,7 @@
       ],
       "lifecycle": "supported",
       "assertion_count": 45,
-      "assertion_digest_sha256": "b4eed493bfc48998f662a75906e852170a55db018a899962fb0b4571412b0438"
+      "assertion_digest_sha256": "efb773e4c33f01f9be1442331342f5ab25e913516ab38469a0aa8cfc98e03bff"
     },
     {
       "path": "tests/contract/pre-r0007-round-artifact-uniqueness.red.contract.test.ts",
