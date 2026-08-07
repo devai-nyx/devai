@@ -19,6 +19,7 @@
       ],
       "kind": "type_check",
       "emitter_module": "packages/sensors/src/type-check.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F2",
@@ -47,6 +48,7 @@
       ],
       "kind": "lint",
       "emitter_module": "packages/sensors/src/lint.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F2",
@@ -75,6 +77,12 @@
       ],
       "kind": "build",
       "emitter_module": "packages/sensors/src/build.ts",
+      "effect": "local-write",
+      "effect_basis": {
+        "capabilities": ["proc:pnpm-build", "fs:workspace"],
+        "source_paths": ["packages/sensors/src/build.ts", "packages/cli/src/command-manifest.ts"],
+        "rationale": "The sensor executes the workspace build, whose compiler outputs materialize under package directories; fs:workspace derives local-write."
+      },
       "cells": [
         {
           "substrate": "F2",
@@ -103,6 +111,12 @@
       ],
       "kind": "unit_test",
       "emitter_module": "packages/sensors/src/test.ts",
+      "effect": "harness-write",
+      "effect_basis": {
+        "capabilities": ["proc:pnpm-vitest", "fs:f5-state"],
+        "source_paths": ["packages/sensors/src/test.ts", "packages/cli/src/command-manifest.ts"],
+        "rationale": "The sensor executes the unit-test harness, including bounded test-runtime materialization; the harness state capability derives harness-write."
+      },
       "cells": [
         {
           "substrate": "F3",
@@ -131,6 +145,12 @@
       ],
       "kind": "integration_test",
       "emitter_module": "packages/sensors/src/test.ts",
+      "effect": "harness-write",
+      "effect_basis": {
+        "capabilities": ["proc:pnpm-vitest", "fs:f5-state"],
+        "source_paths": ["packages/sensors/src/test.ts", "packages/cli/src/command-manifest.ts"],
+        "rationale": "The sensor executes the integration-test harness and its bounded runtime fixtures; the harness state capability derives harness-write."
+      },
       "cells": [
         {
           "substrate": "F3",
@@ -159,6 +179,12 @@
       ],
       "kind": "e2e_test",
       "emitter_module": "packages/sensors/src/test.ts",
+      "effect": "harness-write",
+      "effect_basis": {
+        "capabilities": ["proc:pnpm-vitest", "fs:f5-state"],
+        "source_paths": ["packages/sensors/src/test.ts", "packages/cli/src/command-manifest.ts"],
+        "rationale": "The sensor executes the end-to-end test harness and its bounded runtime fixtures; the harness state capability derives harness-write."
+      },
       "cells": [
         {
           "substrate": "F3",
@@ -187,6 +213,15 @@
       ],
       "kind": "migration_check",
       "emitter_module": "packages/sensors/src/migrate-check.ts",
+      "effect": "local-write",
+      "effect_basis": {
+        "capabilities": ["proc:psql", "db:write", "fs:f5-state"],
+        "source_paths": [
+          "packages/sensors/src/migrate-check.ts",
+          "packages/cli/src/command-manifest.ts"
+        ],
+        "rationale": "The sensor creates roles and tracking tables, applies migration SQL, and may persist a body; db:write derives local-write."
+      },
       "cells": [
         {
           "substrate": "F2",
@@ -215,6 +250,15 @@
       ],
       "kind": "inventory_regeneration",
       "emitter_module": "packages/cli/src/commands/sense/readings-rebuild.ts",
+      "effect": "harness-write",
+      "effect_basis": {
+        "capabilities": ["fs:f5-state"],
+        "source_paths": [
+          "packages/cli/src/commands/sense/readings-rebuild.ts",
+          "packages/cli/src/command-manifest.ts"
+        ],
+        "rationale": "The readings rebuild command writes synthesized SensorReading files below .devai/state, whose capability derives harness-write."
+      },
       "cells": [
         {
           "substrate": "F4",
@@ -243,6 +287,7 @@
       ],
       "kind": "test_weakening_review",
       "emitter_module": "packages/sensors/src/test-weakening.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F3",
@@ -271,6 +316,7 @@
       ],
       "kind": "trace_resolution",
       "emitter_module": "packages/sensors/src/trace-resolve.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F1",
@@ -299,6 +345,7 @@
       ],
       "kind": "security_scan",
       "emitter_module": "packages/sensors/src/security-scan.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F2",
@@ -327,6 +374,7 @@
       ],
       "kind": "perf_test",
       "emitter_module": "packages/sensors/src/perf-test.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F2",
@@ -355,6 +403,16 @@
       ],
       "kind": "llm_judge",
       "emitter_module": "packages/sensors/src/judge.ts",
+      "effect": "remote-write",
+      "effect_basis": {
+        "capabilities": ["net:llm-provider"],
+        "source_paths": [
+          "packages/sensors/src/judge.ts",
+          "packages/cli/src/commands/sense/judge.ts",
+          "packages/cli/src/command-manifest.ts"
+        ],
+        "rationale": "The judge invokes a configured external model provider. The binding authority vocabulary conservatively derives remote-write from every net capability."
+      },
       "cells": [
         {
           "substrate": "F1",
@@ -383,6 +441,15 @@
       ],
       "kind": "runtime_probe_api",
       "emitter_module": "packages/sensors/src/runtime-probe.ts",
+      "effect": "remote-write",
+      "effect_basis": {
+        "capabilities": ["net:runtime-probe"],
+        "source_paths": [
+          "packages/sensors/src/runtime-probe.ts",
+          "packages/cli/src/command-manifest.ts"
+        ],
+        "rationale": "API charters issue network requests with caller-declared HTTP methods and optional bodies; net capability conservatively derives remote-write."
+      },
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
@@ -406,6 +473,15 @@
       ],
       "kind": "runtime_probe_auth",
       "emitter_module": "packages/sensors/src/runtime-probe.ts",
+      "effect": "remote-write",
+      "effect_basis": {
+        "capabilities": ["net:runtime-probe"],
+        "source_paths": [
+          "packages/sensors/src/runtime-probe.ts",
+          "packages/cli/src/command-manifest.ts"
+        ],
+        "rationale": "Auth charters issue credentialed network requests with caller-declared HTTP methods and optional bodies; net capability derives remote-write."
+      },
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
@@ -429,6 +505,15 @@
       ],
       "kind": "runtime_probe_data",
       "emitter_module": "packages/sensors/src/runtime-probe-data.ts",
+      "effect": "remote-write",
+      "effect_basis": {
+        "capabilities": ["net:runtime-probe", "db:unclassified"],
+        "source_paths": [
+          "packages/sensors/src/runtime-probe-data.ts",
+          "packages/cli/src/command-manifest.ts"
+        ],
+        "rationale": "Data charters open a target connection and may permit idempotent or isolated destructive SQL; net capability conservatively derives remote-write."
+      },
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
@@ -452,6 +537,7 @@
       ],
       "kind": "inventory_api",
       "emitter_module": "packages/sensors/src/inventory-api.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F4",
@@ -484,6 +570,7 @@
       ],
       "kind": "inventory_routes",
       "emitter_module": "packages/sensors/src/inventory-routes.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F4",
@@ -516,6 +603,7 @@
       ],
       "kind": "inventory_data_model",
       "emitter_module": "packages/sensors/src/inventory-data-model.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F4",
@@ -548,6 +636,7 @@
       ],
       "kind": "inventory_rbac",
       "emitter_module": "packages/sensors/src/inventory-rbac.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F4",
@@ -582,6 +671,7 @@
       ],
       "kind": "inventory_data_handling",
       "emitter_module": "packages/sensors/src/inventory-data-handling.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F4",
@@ -614,6 +704,7 @@
       ],
       "kind": "inventory_dep_graph",
       "emitter_module": "packages/sensors/src/inventory-dep-graph.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F4",
@@ -646,6 +737,7 @@
       ],
       "kind": "inventory_coverage",
       "emitter_module": "packages/sensors/src/inventory-coverage.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F4",
@@ -678,6 +770,7 @@
       ],
       "kind": "spec_depth",
       "emitter_module": "packages/sensors/src/spec-depth.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F1",
@@ -706,6 +799,7 @@
       ],
       "kind": "spec_idiomaticity",
       "emitter_module": "packages/sensors/src/spec-idiomaticity.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F1",
@@ -734,6 +828,7 @@
       ],
       "kind": "spec_freshness",
       "emitter_module": "packages/sensors/src/spec-freshness.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F1",
@@ -762,6 +857,7 @@
       ],
       "kind": "plant_coverage",
       "emitter_module": "packages/sensors/src/plant-coverage.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F2",
@@ -790,6 +886,7 @@
       ],
       "kind": "test_coverage_depth",
       "emitter_module": "packages/sensors/src/test-coverage-depth.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F3",
@@ -820,6 +917,7 @@
       ],
       "kind": "test_invariant_alignment",
       "emitter_module": "packages/sensors/src/test-invariant-alignment.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F3",
@@ -848,6 +946,7 @@
       ],
       "kind": "inventory_adherence",
       "emitter_module": "packages/sensors/src/inventory-adherence.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F4",
@@ -876,6 +975,7 @@
       ],
       "kind": "inventory_determinism",
       "emitter_module": "packages/sensors/src/inventory-determinism.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F4",
@@ -904,6 +1004,7 @@
       ],
       "kind": "harness_security",
       "emitter_module": "packages/sensors/src/harness-security.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F5",
@@ -932,6 +1033,7 @@
       ],
       "kind": "harness_green_main",
       "emitter_module": "packages/sensors/src/harness-green-main.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F5",
@@ -960,6 +1062,7 @@
       ],
       "kind": "spec_alignment",
       "emitter_module": "packages/sensors/src/spec-alignment.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F1",
@@ -988,6 +1091,7 @@
       ],
       "kind": "spec_security_coverage",
       "emitter_module": "packages/sensors/src/spec-security-coverage.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F1",
@@ -1018,6 +1122,7 @@
       ],
       "kind": "spec_performance_targets",
       "emitter_module": "packages/sensors/src/spec-performance-targets.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F1",
@@ -1048,6 +1153,7 @@
       ],
       "kind": "spec_robustness_targets",
       "emitter_module": "packages/sensors/src/spec-robustness-targets.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F1",
@@ -1076,6 +1182,7 @@
       ],
       "kind": "plant_depth",
       "emitter_module": "packages/sensors/src/plant-depth.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F2",
@@ -1104,6 +1211,7 @@
       ],
       "kind": "plant_coherence",
       "emitter_module": "packages/sensors/src/plant-coherence.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F2",
@@ -1132,6 +1240,7 @@
       ],
       "kind": "test_coherence",
       "emitter_module": "packages/sensors/src/test-coherence.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F3",
@@ -1160,6 +1269,7 @@
       ],
       "kind": "test_idiomaticity",
       "emitter_module": "packages/sensors/src/test-idiomaticity.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F3",
@@ -1188,6 +1298,7 @@
       ],
       "kind": "test_security_coverage",
       "emitter_module": "packages/sensors/src/test-security-coverage.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F3",
@@ -1218,6 +1329,7 @@
       ],
       "kind": "test_performance_coverage",
       "emitter_module": "packages/sensors/src/test-performance-coverage.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F3",
@@ -1248,6 +1360,7 @@
       ],
       "kind": "test_robustness_coverage",
       "emitter_module": "packages/sensors/src/test-robustness-coverage.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F3",
@@ -1276,6 +1389,7 @@
       ],
       "kind": "harness_coverage",
       "emitter_module": "packages/sensors/src/harness-coverage.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F5",
@@ -1304,6 +1418,7 @@
       ],
       "kind": "harness_depth",
       "emitter_module": "packages/sensors/src/harness-depth.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F5",
@@ -1332,6 +1447,7 @@
       ],
       "kind": "harness_coherence",
       "emitter_module": "packages/sensors/src/harness-coherence.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F5",
@@ -1362,6 +1478,7 @@
       ],
       "kind": "harness_invariant_alignment",
       "emitter_module": "packages/sensors/src/harness-invariant-alignment.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F5",
@@ -1390,6 +1507,7 @@
       ],
       "kind": "harness_idiomaticity",
       "emitter_module": "packages/sensors/src/harness-idiomaticity.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F5",
@@ -1418,6 +1536,7 @@
       ],
       "kind": "harness_performance",
       "emitter_module": "packages/sensors/src/harness-performance.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F5",
@@ -1446,6 +1565,7 @@
       ],
       "kind": "harness_robustness",
       "emitter_module": "packages/sensors/src/harness-robustness.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F5",
@@ -1474,6 +1594,7 @@
       ],
       "kind": "inventory_performance",
       "emitter_module": "packages/sensors/src/inventory-performance.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F4",
@@ -1504,6 +1625,7 @@
       ],
       "kind": "decision_record_integrity",
       "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
+      "effect": "read",
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
@@ -1529,6 +1651,7 @@
       ],
       "kind": "decision_citation_resolution",
       "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
+      "effect": "read",
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
@@ -1552,6 +1675,7 @@
       ],
       "kind": "archive_immutability",
       "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
+      "effect": "read",
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
@@ -1575,6 +1699,7 @@
       ],
       "kind": "round_record_integrity",
       "emitter_module": "packages/cli/src/commands/sense/governance-ledger.ts",
+      "effect": "read",
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
@@ -1598,6 +1723,7 @@
       ],
       "kind": "docs_drift",
       "emitter_module": "packages/sensors/src/docs-drift.ts",
+      "effect": "read",
       "cells": [
         {
           "substrate": "F5",
@@ -1626,6 +1752,7 @@
       ],
       "kind": "site_drift",
       "emitter_module": "packages/sensors/src/site-drift.ts",
+      "effect": "read",
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {
@@ -1651,6 +1778,7 @@
       ],
       "kind": "action_effect_inference",
       "emitter_module": "packages/sensors/src/action-effect-inference.ts",
+      "effect": "read",
       "diagnostic": true,
       "tiers": ["SWEEP"],
       "design_note": {

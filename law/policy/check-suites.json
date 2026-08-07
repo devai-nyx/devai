@@ -1,0 +1,376 @@
+{
+  "$schema": "../schemas/check-suites.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "check-suites",
+  "status": "active",
+  "authority": "Architect",
+  "decision": "ADR-022",
+  "ordering": "members-execute-in-declared-order-without-coalescing",
+  "unknown_behavior": "error-never-pass",
+  "prerequisites": [
+    "clean-or-explicitly-described-worktree",
+    "frozen-install-complete",
+    "pnpm-run-devai-prepare"
+  ],
+  "suites": [
+    {
+      "name": "quick",
+      "members": ["build", "lint", "type-check", "unit-test", "schema-config-load"],
+      "excluded": []
+    },
+    {
+      "name": "standard",
+      "members": [
+        "build",
+        "lint",
+        "type-check",
+        "unit-test",
+        "schema-config-load",
+        "invariant-validation",
+        "journey-validation",
+        "glossary-validation",
+        "trace-validation",
+        "test-trace-validation",
+        "strategy-validation",
+        "action-coverage",
+        "ordinary-policy"
+      ],
+      "excluded": []
+    },
+    {
+      "name": "full",
+      "members": [
+        "build",
+        "lint",
+        "type-check",
+        "unit-test",
+        "schema-config-load",
+        "invariant-validation",
+        "journey-validation",
+        "glossary-validation",
+        "trace-validation",
+        "test-trace-validation",
+        "strategy-validation",
+        "action-coverage",
+        "ordinary-policy",
+        "full-tests",
+        "inventory-integrity",
+        "docs-ci-policy",
+        "mutation",
+        "security-performance",
+        "harness-integrity",
+        "coverage"
+      ],
+      "excluded": []
+    },
+    {
+      "name": "release",
+      "members": [
+        "build",
+        "lint",
+        "type-check",
+        "unit-test",
+        "schema-config-load",
+        "invariant-validation",
+        "journey-validation",
+        "glossary-validation",
+        "trace-validation",
+        "test-trace-validation",
+        "strategy-validation",
+        "action-coverage",
+        "ordinary-policy",
+        "full-tests",
+        "inventory-integrity",
+        "docs-ci-policy",
+        "mutation",
+        "security-performance",
+        "harness-integrity",
+        "coverage",
+        "evidence-integrity",
+        "release-scorecard",
+        "dependency-security",
+        "provenance-readiness",
+        "changeset-version",
+        "workflow-reference"
+      ],
+      "excluded": []
+    }
+  ],
+  "member_definitions": [
+    {
+      "id": "build",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "build"]
+      },
+      "effect": "local-write",
+      "cost": "medium",
+      "output": "action-envelope-plus-build-reading"
+    },
+    {
+      "id": "lint",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "lint"]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-lint-reading"
+    },
+    {
+      "id": "type-check",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "typecheck"]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-type-check-reading"
+    },
+    {
+      "id": "unit-test",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "test:t1"]
+      },
+      "effect": "harness-write",
+      "cost": "medium",
+      "output": "action-envelope-plus-test-report"
+    },
+    {
+      "id": "schema-config-load",
+      "binding": {
+        "kind": "action",
+        "argv": [
+          "node",
+          "packages/cli/dist/bin.js",
+          "policy",
+          "check",
+          "schemas",
+          "--repo-root",
+          ".",
+          "--format",
+          "json"
+        ]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-schema-canon-report"
+    },
+    {
+      "id": "invariant-validation",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "complete-invariant-schema-and-reference-population"
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-population-report"
+    },
+    {
+      "id": "journey-validation",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "complete-journey-schema-and-reference-population"
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-population-report"
+    },
+    {
+      "id": "glossary-validation",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "complete-glossary-schema-and-reference-population"
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-population-report"
+    },
+    {
+      "id": "trace-validation",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "trace:check"]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-trace-report"
+    },
+    {
+      "id": "test-trace-validation",
+      "binding": {
+        "kind": "test-file",
+        "argv": ["pnpm", "vitest", "run", "packages/spec/tests/unit/test-trace-validator.test.ts"]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-test-report"
+    },
+    {
+      "id": "strategy-validation",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "complete-test-strategy-population"
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-strategy-report"
+    },
+    {
+      "id": "action-coverage",
+      "binding": {
+        "kind": "test-file",
+        "argv": [
+          "pnpm",
+          "vitest",
+          "run",
+          "packages/cli/tests/contract/action-coverage.contract.test.ts"
+        ]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-test-report"
+    },
+    {
+      "id": "ordinary-policy",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "ci:governance"]
+      },
+      "effect": "harness-write",
+      "cost": "high",
+      "output": "action-envelope-plus-governance-report"
+    },
+    {
+      "id": "full-tests",
+      "binding": {
+        "kind": "literal-argv",
+        "argv": ["pnpm", "vitest", "run"]
+      },
+      "effect": "harness-write",
+      "cost": "high",
+      "output": "action-envelope-plus-complete-test-report"
+    },
+    {
+      "id": "inventory-integrity",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "complete-inventory-population-and-determinism"
+      },
+      "effect": "read",
+      "cost": "medium",
+      "output": "action-envelope-plus-inventory-report"
+    },
+    {
+      "id": "docs-ci-policy",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "ci:stage1"]
+      },
+      "effect": "harness-write",
+      "cost": "high",
+      "output": "action-envelope-plus-stage1-report"
+    },
+    {
+      "id": "mutation",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "mutation-policy-and-required-scenarios"
+      },
+      "effect": "harness-write",
+      "cost": "high",
+      "output": "action-envelope-plus-mutation-report"
+    },
+    {
+      "id": "security-performance",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "security-and-performance-population"
+      },
+      "effect": "read",
+      "cost": "high",
+      "output": "action-envelope-plus-security-performance-report"
+    },
+    {
+      "id": "harness-integrity",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "test:t6"]
+      },
+      "effect": "harness-write",
+      "cost": "high",
+      "output": "action-envelope-plus-containment-report"
+    },
+    {
+      "id": "coverage",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "test:coverage:t1-t3"]
+      },
+      "effect": "harness-write",
+      "cost": "high",
+      "output": "action-envelope-plus-complete-coverage-report"
+    },
+    {
+      "id": "evidence-integrity",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "evidence-chain-and-complete-current-population"
+      },
+      "effect": "read",
+      "cost": "medium",
+      "output": "action-envelope-plus-evidence-report"
+    },
+    {
+      "id": "release-scorecard",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "release-eligibility-scorecard"
+      },
+      "effect": "read",
+      "cost": "medium",
+      "output": "action-envelope-plus-nonpublication-release-report"
+    },
+    {
+      "id": "dependency-security",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "dependency-and-security-readiness"
+      },
+      "effect": "read",
+      "cost": "medium",
+      "output": "action-envelope-plus-dependency-security-report"
+    },
+    {
+      "id": "provenance-readiness",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "artifact-and-source-provenance-readiness"
+      },
+      "effect": "read",
+      "cost": "medium",
+      "output": "action-envelope-plus-provenance-report"
+    },
+    {
+      "id": "changeset-version",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "ci:changesets"]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-changeset-version-report"
+    },
+    {
+      "id": "workflow-reference",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "ci:workflows"]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-workflow-reference-report"
+    }
+  ]
+}

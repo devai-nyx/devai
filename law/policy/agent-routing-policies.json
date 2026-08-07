@@ -1,0 +1,87 @@
+{
+  "$schema": "../schemas/agent-routing-policies.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "agent-routing-policies",
+  "status": "active",
+  "authority": "Architect",
+  "decision": "ADR-022",
+  "registry": "law/policy/model-runtime-registry.json",
+  "identity": {
+    "key": ["policy_id", "policy_version"],
+    "implicit_latest": "forbidden",
+    "alias_resolution": "forbidden",
+    "missing_or_duplicate": "TASK_ROUTING_POLICY_UNAVAILABLE"
+  },
+  "resolution": {
+    "exact": {
+      "considered": "only-requested-registry-id",
+      "substitution": "forbidden",
+      "mismatch": "block-before-execution"
+    },
+    "preferred": {
+      "considered": "requested-registry-ids-in-declared-order",
+      "outside_allowlist": "forbidden",
+      "exhausted": "TASK_MODEL_UNAVAILABLE"
+    },
+    "policy": {
+      "considered": "named-versioned-policy-registry-ids-in-declared-order",
+      "outside_policy": "forbidden",
+      "exhausted": "TASK_MODEL_UNAVAILABLE"
+    },
+    "common_checks": [
+      "registry-entry-exists",
+      "runtime-id-matches-request",
+      "provider-model-or-governed-alias-matches-request",
+      "effort-is-supported",
+      "agent-class-is-eligible",
+      "required-capabilities-are-supported",
+      "registry-entry-is-available",
+      "runtime-host-preflight-passes",
+      "adapter-reports-exact-resolved-identity"
+    ],
+    "first_mismatch": "fail-closed-without-invocation",
+    "request_mutation": "forbidden",
+    "decision_evidence": [
+      "mode",
+      "considered_registry_ids",
+      "selected_registry_id",
+      "rejection_codes",
+      "fallback_used",
+      "fallback_reason"
+    ],
+    "authority_source": "task.discipline",
+    "executor_or_model_authority": "none"
+  },
+  "policies": [
+    {
+      "policy_id": "governed-coding",
+      "policy_version": "1.0.0",
+      "status": "active",
+      "eligible_agent_classes": ["coding-agent"],
+      "registry_ids": ["codex-cli:gpt-5.6-sol"],
+      "allowed_efforts": ["high", "xhigh"],
+      "fallback": "forbidden",
+      "rationale": "Use the exact model and effort combinations exercised by the committed R-0007 coding-agent prompts."
+    },
+    {
+      "policy_id": "governed-operations",
+      "policy_version": "1.0.0",
+      "status": "active",
+      "eligible_agent_classes": ["ops-agent"],
+      "registry_ids": ["codex-cli:gpt-5.6-sol"],
+      "allowed_efforts": ["high"],
+      "fallback": "forbidden",
+      "rationale": "Use the exact operational model bound by the committed R-0007 prompts without inferring a provider fallback."
+    },
+    {
+      "policy_id": "governed-review",
+      "policy_version": "1.0.0",
+      "status": "active",
+      "eligible_agent_classes": ["review-agent"],
+      "registry_ids": ["claude-cli:claude-opus-5"],
+      "allowed_efforts": ["default"],
+      "fallback": "forbidden",
+      "rationale": "A one-entry policy may support ordinary governed review tasks; the independently Owner-bound round-close reviewer still resolves through its exact mandate and cannot be substituted by this policy."
+    }
+  ]
+}

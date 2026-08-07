@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/model-runtime-registry.schema.json",
+  "title": "Model and runtime registry",
+  "description": "Closed Architect-owned roster of executable agent runtimes and model entries. Roster availability permits resolution but never replaces host preflight, grants authority, or permits implicit fallback.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "status",
+    "authority",
+    "decision",
+    "availability_semantics",
+    "runtimes",
+    "models"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../schemas/model-runtime-registry.schema.json"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "const": "model-runtime-registry"
+    },
+    "status": {
+      "const": "active"
+    },
+    "authority": {
+      "const": "Architect"
+    },
+    "decision": {
+      "const": "ADR-022"
+    },
+    "availability_semantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registry_value",
+        "host_preflight_required",
+        "unavailable_behavior",
+        "authority_from_capability"
+      ],
+      "properties": {
+        "registry_value": {
+          "const": "available means eligible for attempted resolution, not proved reachable on this host"
+        },
+        "host_preflight_required": {
+          "const": true
+        },
+        "unavailable_behavior": {
+          "const": "fail-or-consider-next-explicitly-authorized-entry"
+        },
+        "authority_from_capability": {
+          "const": "forbidden"
+        }
+      }
+    },
+    "runtimes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/runtime"
+      }
+    },
+    "models": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/model"
+      }
+    }
+  },
+  "$defs": {
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "vendor",
+        "family",
+        "adapter_id",
+        "adapter_module",
+        "transport",
+        "capabilities",
+        "available",
+        "availability_basis"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "vendor": {
+          "type": "string",
+          "minLength": 1
+        },
+        "family": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adapter_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "adapter_module": {
+          "type": "string",
+          "pattern": "^packages/[A-Za-z0-9._/-]+\\.ts$"
+        },
+        "transport": {
+          "enum": ["provider-api", "host-cli"]
+        },
+        "executable": {
+          "type": "string",
+          "minLength": 1
+        },
+        "credential_binding": {
+          "type": ["string", "null"]
+        },
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "availability_basis": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "runtime_id",
+        "vendor",
+        "family",
+        "adapter_id",
+        "provider_identifier",
+        "identifier_kind",
+        "supported_efforts",
+        "capabilities",
+        "eligible_agent_classes",
+        "available",
+        "availability_basis",
+        "replacement"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9:._-]*$"
+        },
+        "runtime_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "vendor": {
+          "type": "string",
+          "minLength": 1
+        },
+        "family": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adapter_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "provider_identifier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identifier_kind": {
+          "enum": ["exact", "governed-alias"]
+        },
+        "supported_efforts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          }
+        },
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "eligible_agent_classes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["coding-agent", "review-agent", "ops-agent"]
+          }
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "availability_basis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "replacement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "model_id", "reason"],
+          "properties": {
+            "state": {
+              "enum": ["none", "deprecated", "replaced"]
+            },
+            "model_id": {
+              "type": ["string", "null"]
+            },
+            "reason": {
+              "type": ["string", "null"]
+            }
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "$schema": "../schemas/model-runtime-registry.schema.json",
+      "schemaVersion": "1.0.0",
+      "id": "model-runtime-registry",
+      "status": "active",
+      "authority": "Architect",
+      "decision": "ADR-022",
+      "availability_semantics": {
+        "registry_value": "available means eligible for attempted resolution, not proved reachable on this host",
+        "host_preflight_required": true,
+        "unavailable_behavior": "fail-or-consider-next-explicitly-authorized-entry",
+        "authority_from_capability": "forbidden"
+      },
+      "runtimes": [
+        {
+          "id": "codex-cli",
+          "vendor": "OpenAI",
+          "family": "codex",
+          "adapter_id": "codex-cli-adapter",
+          "adapter_module": "packages/skills/src/llm/cli-client.ts",
+          "transport": "host-cli",
+          "executable": "codex",
+          "credential_binding": "host-cli-session",
+          "capabilities": ["text-generation", "structured-output"],
+          "available": true,
+          "availability_basis": "rostered adapter; exact host reachability is a mandatory runtime preflight"
+        }
+      ],
+      "models": [
+        {
+          "id": "codex-cli:gpt-5.6-sol",
+          "runtime_id": "codex-cli",
+          "vendor": "OpenAI",
+          "family": "codex",
+          "adapter_id": "codex-cli-adapter",
+          "provider_identifier": "gpt-5.6-sol",
+          "identifier_kind": "exact",
+          "supported_efforts": ["high", "xhigh", "ultra"],
+          "capabilities": ["text-generation", "structured-output"],
+          "eligible_agent_classes": ["coding-agent", "review-agent", "ops-agent"],
+          "available": true,
+          "availability_basis": "rostered; host executable, login, and exact model identity remain runtime checks",
+          "replacement": {
+            "state": "none",
+            "model_id": null,
+            "reason": null
+          }
+        }
+      ]
+    }
+  ]
+}
