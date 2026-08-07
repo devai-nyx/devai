@@ -15,6 +15,8 @@ export * from './run-command.js';
 export * from './runtime-probe.js';
 export * from './sensor-reading.js';
 export * from './sensor-registry.js';
+export * from './sense-presets.js';
+export * from './inventory-slices.js';
 export * from './test.js';
 export * from './test-weakening.js';
 export * from './test-weakening-config.js';

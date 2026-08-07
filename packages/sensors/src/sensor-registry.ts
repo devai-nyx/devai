@@ -4,6 +4,13 @@ import { fileURLToPath } from 'node:url';
 import { validators } from '@devai-nyx/schemas';
 
 export type SensorRegistryTier = 'BASELINE' | 'TIER2' | 'TIER3' | 'SWEEP';
+export type SensorEffect = 'read' | 'harness-write' | 'local-write' | 'remote-write';
+
+export interface SensorEffectBasis {
+  readonly capabilities: readonly string[];
+  readonly source_paths: readonly string[];
+  readonly rationale: string;
+}
 
 export interface SensorCell {
   readonly substrate: string;
@@ -28,6 +35,8 @@ export interface SensorRegistryEntry {
   readonly provenance: readonly string[];
   readonly kind: string;
   readonly emitter_module: string;
+  readonly effect: SensorEffect;
+  readonly effect_basis?: SensorEffectBasis;
   readonly cells?: readonly SensorCell[];
   readonly diagnostic?: true;
   readonly tiers: readonly SensorRegistryTier[];
@@ -60,6 +69,8 @@ export interface SensorDescriptor {
   readonly readingKinds: readonly SensorKind[];
   readonly lifecycle: 'supported';
   readonly emitterModule: string;
+  readonly effect: SensorEffect;
+  readonly capabilities: readonly string[];
   readonly cells: readonly SensorCell[];
   readonly diagnostic: boolean;
   readonly tiers: readonly SensorRegistryTier[];
@@ -172,6 +183,8 @@ export const SENSOR_DESCRIPTORS: readonly SensorDescriptor[] = Object.freeze(
     readingKinds: Object.freeze([entry.kind]),
     lifecycle: 'supported' as const,
     emitterModule: entry.emitter_module,
+    effect: entry.effect,
+    capabilities: Object.freeze([...(entry.effect_basis?.capabilities ?? [])]),
     cells: Object.freeze([...(entry.cells ?? [])]),
     diagnostic: entry.diagnostic === true,
     tiers: Object.freeze([...entry.tiers]),

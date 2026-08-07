@@ -55,3 +55,18 @@ export { senseTestWeakeningCmd } from './test-weakening.js';
 export { senseTraceResolveCmd } from './trace-resolve.js';
 export { senseTypeCheckCmd } from './type-check.js';
 export { senseRunSetCmd } from './run-set.js';
+export { senseInventoryCmd, executeInventorySlice } from './inventory.js';
+export { senseMigrateCmd, executeSenseMigration } from './migrate.js';
+export { senseRecordCmd, recordSensorReading } from './record.js';
+export {
+  resolveSenseSelection,
+  type ResolvedSenseSelection,
+  type SenseMemberAuthority,
+  type SenseSelection,
+} from './facade.js';
+export {
+  SENSE_SENSOR_ADAPTERS,
+  sensorAdapter,
+  type SenseAdapterRequest,
+  type SenseSensorAdapter,
+} from './adapters.js';
