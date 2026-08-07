@@ -65,8 +65,9 @@ function fixture(): { readonly repo: string; readonly baseSha: string } {
   mkdirSync(join(repo, 'src'), { recursive: true });
   writeFileSync(join(repo, 'src/value.ts'), "export const value = 'base';\n");
   writeJson(join(repo, '.devai/state/tasks/TASK-0028.json'), {
-    schemaVersion: '1.0.0',
+    schemaVersion: '2.0.0',
     id: 'TASK-0028',
+    round_id: 'R-0028',
     status: 'in_progress',
     discipline: 'engineer',
     title: 'Produce one attributed candidate',
@@ -75,6 +76,17 @@ function fixture(): { readonly repo: string; readonly baseSha: string } {
     created_at: '2026-07-21T12:00:00.000Z',
     db_isolation: 'database',
     iteration_count: 0,
+    executor: {
+      kind: 'agent',
+      runtime: 'codex-cli',
+      model: 'model-primary',
+      effort: 'high',
+      selection: { mode: 'exact', registry_id: 'primary' },
+      skill_id: 'SKILL-feedback-iteration',
+      prompt_composition_id: 'PC-0123456789abcdef',
+      max_iterations: 1,
+      capabilities: ['fs:workspace'],
+    },
     intent_diff: {
       summary: 'Change the fixture value.',
       planned_files: ['src/value.ts'],

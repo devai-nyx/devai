@@ -58,6 +58,7 @@ describe('repository-name reference triage', () => {
       references: ReferenceDisposition[];
     };
     expect(report.schemaVersion).toBe('1.0.0');
+    expect(report.references).toHaveLength(187);
     expect(new Set(report.references.map((reference) => reference.locator)).size).toBe(
       report.references.length,
     );

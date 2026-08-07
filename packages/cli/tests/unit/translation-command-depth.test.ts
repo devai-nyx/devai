@@ -58,7 +58,7 @@ beforeAll(() => {
         criteria: [
           {
             claim: 'The action-effects structure remains deterministic.',
-            demonstrated_by: [{ kind: 'structural', validator: 'policy check action effects' }],
+            demonstrated_by: [{ kind: 'structural', validator: 'check --only action-effects' }],
           },
         ],
       },
@@ -74,8 +74,9 @@ beforeAll(() => {
   };
   writeJson('scratch/translation-depth-witness.json', witness);
   writeJson('.devai/state/tasks/TASK-9001.json', {
-    schemaVersion: '1.0.0',
+    schemaVersion: '2.0.0',
     id: 'TASK-9001',
+    round_id: 'R-0007',
     status: 'in_progress',
     discipline: 'engineer',
     title: 'Exercise translation validation depth',
@@ -84,6 +85,17 @@ beforeAll(() => {
     created_at: '2026-07-27T00:00:00.000Z',
     db_isolation: 'database',
     iteration_count: 0,
+    executor: {
+      kind: 'agent',
+      runtime: 'codex-cli',
+      model: 'model-primary',
+      effort: 'high',
+      selection: { mode: 'exact', registry_id: 'primary' },
+      skill_id: 'SKILL-translation-depth',
+      prompt_composition_id: 'PC-0123456789abcdef',
+      max_iterations: 1,
+      capabilities: ['fs:workspace'],
+    },
     intent_diff: { planned_files: ['packages/cli/src/**'] },
   });
   writeJson('record/proofs/work/skill-runs/SKILL-translation-depth/2026-07-27T00-00-00-000Z.json', {
@@ -167,8 +179,9 @@ describe('translation command production depth', () => {
     ).toContain('TRANSLATION_WITNESS_INVALID');
 
     writeJson('.devai/state/tasks/TASK-9001.json', {
-      schemaVersion: '1.0.0',
+      schemaVersion: '2.0.0',
       id: 'TASK-9001',
+      round_id: 'R-0007',
       status: 'in_progress',
       discipline: 'inspector',
       title: 'Wrong authority',
@@ -177,6 +190,17 @@ describe('translation command production depth', () => {
       created_at: '2026-07-27T00:00:00.000Z',
       db_isolation: 'database',
       iteration_count: 0,
+      executor: {
+        kind: 'agent',
+        runtime: 'codex-cli',
+        model: 'model-primary',
+        effort: 'high',
+        selection: { mode: 'exact', registry_id: 'primary' },
+        skill_id: 'SKILL-translation-depth',
+        prompt_composition_id: 'PC-0123456789abcdef',
+        max_iterations: 1,
+        capabilities: ['fs:workspace'],
+      },
       intent_diff: { planned_files: ['packages/cli/src/**'] },
     });
     expect(

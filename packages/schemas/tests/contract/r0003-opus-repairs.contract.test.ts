@@ -163,7 +163,7 @@ describe('R-0003 first Opus review repairs', () => {
       { cwd: ROOT, encoding: 'utf8' },
     );
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain('167 repository references verified');
+    expect(result.stdout).toContain('187 repository references verified');
     expect(text('work/rounds/R-0005/documentation-reconciliation.md')).toContain('commit-scoped');
   });
 });

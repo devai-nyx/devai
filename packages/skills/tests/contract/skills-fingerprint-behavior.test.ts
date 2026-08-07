@@ -4,11 +4,18 @@
 // reached, or an explicit N/A reason where not — plus a normalized behavior
 // signature for every skill regardless. Zero silent omissions.
 import { aroundEach, describe, expect, it } from 'vitest';
-import { mkdirSync, mkdtempSync, realpathSync, rmSync, symlinkSync } from 'node:fs';
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  realpathSync,
+  rmSync,
+  symlinkSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { withAuthorityHostTestScope } from '../unit/authority-host-test-scope.js';
-import { baseline, canonical, normalize } from './r20-harness.js';
+import { canonical, normalize } from './r20-harness.js';
 import {
   assertRosterComplete,
   isDeclaredRuntimeNoise,
@@ -90,7 +97,14 @@ describe('R20 baseline: fingerprint + behavior corpus (52/52)', () => {
     }
     expect(Object.keys(rows)).toHaveLength(52);
     const current = canonical({ skills: rows });
-    const { expected } = baseline('fingerprint-behavior.json', current);
+    const expected = canonical(
+      JSON.parse(
+        readFileSync(
+          join(import.meta.dirname, '..', 'baselines', 'fingerprint-behavior.json'),
+          'utf8',
+        ),
+      ) as unknown,
+    );
     expect(current).toBe(expected);
   }, 600_000);
 });

@@ -31,20 +31,26 @@ describe('R-0005 evidence and lifecycle red-first contracts', () => {
     expect(source).toContain('errata');
   });
 
-  it('KR-R5-003 / BL-011 derives the close SWEEP from every live registry kind', () => {
+  it('KR-R5-003 / BL-011 derives the close SWEEP from every live read-only registry kind', () => {
     const registry = json('law/policy/sensor-registry.json') as {
-      entries: { kind: string; tiers: string[] }[];
+      entries: { kind: string; effect: string }[];
     };
-    const sweepKinds = registry.entries
-      .filter((entry) => entry.tiers.includes('SWEEP'))
-      .map((entry) => entry.kind);
-    expect(sweepKinds).toHaveLength(59);
-    const runner = read('packages/cli/src/commands/sense/run-set.ts');
-    expect(runner).toContain(
-      "type SensorSet = 'baseline' | 'tier1' | 'tier2' | 'tier3' | 'all' | 'sweep'",
+    const policy = json('law/policy/sense-presets.json') as {
+      presets: Array<{ name: string; members: string[]; excluded: string[] }>;
+    };
+    const sweep = policy.presets.find((preset) => preset.name === 'sweep');
+    expect(sweep).toBeDefined();
+    expect(sweep?.members).toEqual(
+      registry.entries.filter((entry) => entry.effect === 'read').map((entry) => entry.kind),
     );
-    expect(runner).toContain("sensorTierKinds('SWEEP')");
-    expect(runner).toContain('proofEpoch');
+    expect(sweep?.excluded).toEqual(
+      registry.entries.filter((entry) => entry.effect !== 'read').map((entry) => entry.kind),
+    );
+    expect(sweep?.members).toHaveLength(49);
+    expect(sweep?.excluded).toHaveLength(10);
+    const facade = read('packages/cli/src/commands/sense/facade.ts');
+    expect(facade).toContain('SENSE_SWEEP_READ_POPULATION_DIVERGENCE');
+    expect(facade).toContain('SENSE_SWEEP_EXCLUSION_POPULATION_DIVERGENCE');
   });
 
   it('KR-R5-004 / BL-045 requires exact subject and explicit expiry in local evidence', () => {
@@ -63,7 +69,7 @@ describe('R-0005 evidence and lifecycle red-first contracts', () => {
   it('KR-R5-005 / BL-015 reaches zero only through the bounded prompt-overlay rule', () => {
     const result = spawnSync(
       'node',
-      [BIN, 'policy', 'check', 'prompt', 'overlays', '--format', 'json'],
+      [BIN, 'check', '--only', 'prompt-overlays'],
       { cwd: ROOT, encoding: 'utf8', env: subprocessCoverageEnvironment() },
     );
     expect(result.status, result.stderr).toBe(0);
