@@ -34,10 +34,24 @@ function root(): string {
   return path;
 }
 
+function routineExecutor(): TaskRecord['executor'] {
+  return {
+    kind: 'routine',
+    argv: ['pnpm', 'test'],
+    cwd: '.',
+    inputs: [],
+    outputs: [],
+    effects: ['read'],
+    timeout_ms: 1_000,
+    authority_checks: ['discipline'],
+  };
+}
+
 function task(id: string): TaskRecord {
   return {
-    schemaVersion: '1.0.0',
+    schemaVersion: '2.0.0',
     id,
+    round_id: 'R-0007',
     status: 'queued',
     discipline: 'inspector',
     title: `Test ${id}`,
@@ -46,6 +60,7 @@ function task(id: string): TaskRecord {
     created_at: '2026-07-24T12:00:00.000Z',
     db_isolation: 'database',
     iteration_count: 0,
+    executor: routineExecutor(),
   };
 }
 
@@ -149,11 +164,13 @@ describe('task record persistence', () => {
         repoRoot: repo,
         task: {
           id: 'TASK-0001',
+          round_id: 'R-0007',
           discipline: 'engineer',
           title: 'Spawn fixture',
           target_modules: [],
           target_substrates: ['F2'],
           db_isolation: 'database',
+          executor: routineExecutor(),
         },
       });
       expect(spawned).toMatchObject({
@@ -201,11 +218,13 @@ describe('task record persistence', () => {
         repoRoot: repo,
         task: {
           id: 'TASK-0011',
+          round_id: 'R-0007',
           discipline: 'engineer',
           title: 'Lock holder',
           target_modules: ['MOD-SHARED'],
           target_substrates: ['F2'],
           db_isolation: 'database',
+          executor: routineExecutor(),
         },
       });
       expect(first.task.status).toBe('ready');
@@ -214,11 +233,13 @@ describe('task record persistence', () => {
         repoRoot: repo,
         task: {
           id: 'TASK-0012',
+          round_id: 'R-0007',
           discipline: 'inspector',
           title: 'Lock contender',
           target_modules: ['MOD-SHARED'],
           target_substrates: ['F3'],
           db_isolation: 'database',
+          executor: routineExecutor(),
         },
       });
       expect(second.task.status).toBe('lock_denied');
