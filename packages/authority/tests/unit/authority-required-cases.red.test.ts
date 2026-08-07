@@ -91,7 +91,7 @@ describe('R19 materialization total precedence inventory', () => {
     api: Awaited<ReturnType<typeof runtimeApi>>,
     issuer = createIssuer(api, { invocation_id: 'invocation-materialize' }),
   ) {
-    const action = actionDocumentWithId('adopt upgrade', 'local-write', {
+    const action = actionDocumentWithId('init upgrade', 'local-write', {
       kind: 'derived-machine',
       actor: 'upgrade',
       transition: 'upgrade',
@@ -102,7 +102,7 @@ describe('R19 materialization total precedence inventory', () => {
     const authorization = expectSuccess(
       api.authorizePolicyMaterialization(
         {
-          action_id: 'adopt upgrade',
+          action_id: 'init upgrade',
           invocation_id: 'invocation-materialize',
           target_operation: 'create',
           declaration: { as_role: 'architect' },
