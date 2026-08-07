@@ -44,10 +44,9 @@ function broker(name: string, role: Role, argv: readonly string[], bootstrapPoli
   });
 }
 
-const AGENT_TASK = {
+const TASK_INVOCATION = {
   id: 'TASK-7001',
   round_id: 'R-0007',
-  executor: { kind: 'agent', skill_id: 'SKILL-feedback-iteration' },
 } as const;
 
 function roundRunArgv(role: Role = 'engineer'): readonly string[] {
@@ -57,9 +56,9 @@ function roundRunArgv(role: Role = 'engineer'): readonly string[] {
     'round',
     'run',
     '--round',
-    AGENT_TASK.round_id,
+    TASK_INVOCATION.round_id,
     '--task',
-    AGENT_TASK.id,
+    TASK_INVOCATION.id,
     '--as-role',
     role,
     '--write',
@@ -73,9 +72,9 @@ function taskStartArgv(options: { readonly withDb?: boolean } = {}): readonly st
     'task',
     'start',
     '--round',
-    AGENT_TASK.round_id,
+    TASK_INVOCATION.round_id,
     '--task',
-    AGENT_TASK.id,
+    TASK_INVOCATION.id,
     ...(options.withDb === true ? ['--with-db'] : []),
     '--as-role',
     'engineer',
@@ -140,7 +139,7 @@ describe('authority broker production boundary depth', () => {
     }
   });
 
-  it('commits exact-plan effects as one unit and rejects conflicting targets', () => {
+  it('applies bounded-batch effects immediately and refuses unadapted processes', () => {
     const host = broker(
       'init apply owner',
       'owner',
@@ -155,9 +154,8 @@ describe('authority broker production boundary depth', () => {
       host.scope.apply_effect(effect('writeFileSync', ['product/broker-b.json', '{}\n']), () => {
         applied += 1;
       });
-      expect(applied).toBe(0);
-      host.commit_exact?.();
       expect(applied).toBe(2);
+      expect(host.commit_exact).toBeUndefined();
       expect(() =>
         host.scope.apply_effect(
           effect('spawnSync', ['git', ['update-ref', 'refs/heads/x', 'HEAD']], 'process'),
@@ -166,23 +164,6 @@ describe('authority broker production boundary depth', () => {
       ).toThrow('AUTHORITY_HOST_PROCESS_ADAPTER_REQUIRED');
     } finally {
       host.dispose();
-    }
-
-    const conflict = broker(
-      'init apply owner',
-      'owner',
-      [process.execPath, 'devai', 'init', 'apply', 'owner', '--as-role', 'owner', '--write'],
-      true,
-    );
-    try {
-      conflict.scope.apply_effect(
-        effect('writeFileSync', ['product/conflict.json', '{}\n']),
-        () => undefined,
-      );
-      conflict.scope.apply_effect(effect('rmSync', ['product/conflict.json']), () => undefined);
-      expect(() => conflict.commit_exact?.()).toThrow('AUTHORITY_EXACT_PLAN_TARGET_CONFLICT');
-    } finally {
-      conflict.dispose();
     }
   });
 
@@ -220,7 +201,7 @@ describe('authority broker production boundary depth', () => {
     }
   });
 
-  it('fails closed for retired sessions and agent-task write scopes', () => {
+  it('fails closed for retired sessions and task action scopes', () => {
     expectHistoricalRefusal(
       ['work', 'session', 'start'],
       'ACTION_TOMBSTONED',
@@ -233,20 +214,16 @@ describe('authority broker production boundary depth', () => {
       invocation.dispose();
     }
 
-    expect(AGENT_TASK.executor).toEqual({
-      kind: 'agent',
-      skill_id: 'SKILL-feedback-iteration',
-    });
-    const skill = broker('task start', 'engineer', taskStartArgv());
+    const task = broker('task start', 'engineer', taskStartArgv());
     try {
       expect(() =>
-        skill.scope.apply_effect(
+        task.scope.apply_effect(
           effect('writeFileSync', ['law/forbidden.json', '{}\n']),
           () => undefined,
         ),
-      ).toThrow('AUTHORITY_SKILL_WRITE_SCOPE_DENIED');
+      ).toThrow('AUTHORITY_ACTION_DENIED');
     } finally {
-      skill.dispose();
+      task.dispose();
     }
   });
 
