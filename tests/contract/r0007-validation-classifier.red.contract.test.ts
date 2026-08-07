@@ -19,6 +19,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 const ROOT = resolve(import.meta.dirname, '../..');
 const CLASSIFIER = join(ROOT, 'scripts/derive-commit-validation-plan.mjs');
 const POLICY = 'law/policy/round-close-controls.json';
+const CLASSIFIER_POLICY = 'law/policy/commit-validation.json';
 const GRAPH = 'work/rounds/R-0007/affected-test-graph.json';
 const temporaryRoots: string[] = [];
 
@@ -72,6 +73,7 @@ function fixture(): Fixture {
   git(root, ['init', '-q']);
   put(root, '.gitignore', '.devai/state/\n');
   copy(root, POLICY);
+  if (existsSync(join(ROOT, CLASSIFIER_POLICY))) copy(root, CLASSIFIER_POLICY);
   copy(root, GRAPH);
   put(root, 'product/owner-mandates/OM-900.md', '---\nid: OM-900\nstatus: active\n---\n');
   put(root, 'docs/guide.md', '# Guide\n');
@@ -215,6 +217,10 @@ function expectCompletePlan(
     policy_identity: {
       path: POLICY,
       digest_sha256: sha256File(join(fixtureRoot, POLICY)),
+    },
+    classifier_policy_identity: {
+      path: CLASSIFIER_POLICY,
+      digest_sha256: sha256File(join(fixtureRoot, CLASSIFIER_POLICY)),
     },
     graph_identity: {
       path: GRAPH,

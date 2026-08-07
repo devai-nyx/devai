@@ -21,9 +21,9 @@ describe('ADR roster records', () => {
     .filter((f) => /^ADR-\d{3}-.+\.md$/.test(f))
     .sort();
 
-  it('roster is gapless ADR-001..020', () => {
+  it('roster is gapless ADR-001..024', () => {
     const nums = files.map((f) => Number(f.slice(4, 7)));
-    expect(nums).toEqual(Array.from({ length: 20 }, (_, i) => i + 1));
+    expect(nums).toEqual(Array.from({ length: 24 }, (_, i) => i + 1));
   });
 
   it('every front-matter validates against record-meta', () => {
@@ -46,7 +46,8 @@ describe('ADR roster records', () => {
     }
   });
 
-  it('lifecycle discipline preserves fifteen active ADRs and all replacements', () => {
+  it('lifecycle discipline preserves nineteen active ADRs and all replacements', () => {
+    let activeCount = 0;
     for (const f of files) {
       const fm = frontMatter(f);
       if (f === 'ADR-005-ci-economy.md') {
@@ -67,6 +68,7 @@ describe('ADR roster records', () => {
       } else {
         expect(fm.status, f).toBe('active');
         expect(fm.superseded_by, f).toBeNull();
+        activeCount += 1;
       }
       if (
         f === 'ADR-014-ci-checker-adr-association.md' ||
@@ -81,6 +83,7 @@ describe('ADR roster records', () => {
       }
       expect(fm.provenance, f).toBeTruthy();
     }
+    expect(activeCount).toBe(19);
     expect(frontMatter('ADR-013-ci-economy-correction.md').supersedes).toEqual(['ADR-005']);
     expect(frontMatter('ADR-014-ci-checker-adr-association.md').supersedes).toEqual([]);
     expect(frontMatter('ADR-015-ci-governance-path-coverage.md').supersedes).toEqual(['ADR-014']);
