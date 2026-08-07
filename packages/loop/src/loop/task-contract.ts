@@ -77,10 +77,7 @@ export interface CompositeTaskExecutor {
 }
 
 export type TaskExecutor =
-  | RoutineTaskExecutor
-  | AgentTaskExecutor
-  | HumanTaskExecutor
-  | CompositeTaskExecutor;
+  RoutineTaskExecutor | AgentTaskExecutor | HumanTaskExecutor | CompositeTaskExecutor;
 
 export interface TaskIterationRecord {
   readonly iteration: number;
@@ -231,10 +228,7 @@ export type TaskRoundValidation =
 
 /** Pure pre-resource validation for the requested, task-owned active round. */
 export function validateTaskRound(options: ValidateTaskRoundOptions): TaskRoundValidation {
-  if (
-    typeof options.requested_round_id !== 'string' ||
-    options.requested_round_id.length === 0
-  ) {
+  if (typeof options.requested_round_id !== 'string' || options.requested_round_id.length === 0) {
     return { ok: false, code: 'TASK_ROUND_REQUIRED', operation: options.operation };
   }
   if (typeof options.task_round_id !== 'string' || options.task_round_id.length === 0) {

@@ -96,9 +96,7 @@ export type AgentResolution =
 export interface ResolveAgentExecutorOptions {
   readonly request: AgentExecutorRequest;
   readonly registry: readonly SimpleAgentRegistryEntry[] | ModelRuntimeRegistry;
-  readonly policies?:
-    | AgentRoutingPolicyRegistry
-    | Readonly<Record<string, readonly string[]>>;
+  readonly policies?: AgentRoutingPolicyRegistry | Readonly<Record<string, readonly string[]>>;
   readonly agentClass?: AgentClass;
   /** Optional exact adapter report. Supplying it makes a mismatch fail closed. */
   readonly reportedIdentity?: Readonly<{
@@ -271,7 +269,8 @@ function policySelection(
   if (Array.isArray(canonicalPolicies)) {
     const policy = canonicalPolicies.find(
       (entry) =>
-        entry.policy_id === selection.policy_id && entry.policy_version === selection.policy_version,
+        entry.policy_id === selection.policy_id &&
+        entry.policy_version === selection.policy_version,
     );
     return policy === undefined ? undefined : { ids: policy.registry_ids, policy };
   }
@@ -298,7 +297,7 @@ function fail(
       rejection_codes: rejectionCodes,
       fallback_used: fallbackUsed,
       fallback_reason: fallbackUsed
-        ? rejectionCodes.at(-1) ?? 'explicit-ordered-fallback-exhausted'
+        ? (rejectionCodes.at(-1) ?? 'explicit-ordered-fallback-exhausted')
         : null,
     },
   };
@@ -367,13 +366,7 @@ export function resolveAgentExecutor(options: ResolveAgentExecutorOptions): Agen
   } else {
     const selectedPolicy = policySelection(request.selection, options.policies);
     if (selectedPolicy === undefined) {
-      return fail(
-        request,
-        'TASK_ROUTING_POLICY_UNAVAILABLE',
-        request.selection.mode,
-        [],
-        [],
-      );
+      return fail(request, 'TASK_ROUTING_POLICY_UNAVAILABLE', request.selection.mode, [], []);
     }
     ids = selectedPolicy.ids;
     policy = selectedPolicy.policy;
@@ -453,14 +446,16 @@ export function resolveAgentExecutor(options: ResolveAgentExecutorOptions): Agen
         selected_registry_id: entry.id,
         rejection_codes: rejectionCodes,
         fallback_used: fallbackUsed,
-        fallback_reason: fallbackUsed ? rejectionCodes.at(-1) ?? 'explicit-ordered-fallback' : null,
+        fallback_reason: fallbackUsed
+          ? (rejectionCodes.at(-1) ?? 'explicit-ordered-fallback')
+          : null,
       },
     };
   }
 
   const code =
     request.selection.mode === 'exact'
-      ? rejectionCodes[0] ?? 'TASK_MODEL_UNAVAILABLE'
+      ? (rejectionCodes[0] ?? 'TASK_MODEL_UNAVAILABLE')
       : 'TASK_MODEL_UNAVAILABLE';
   return fail(request, code, request.selection.mode, considered, rejectionCodes);
 }

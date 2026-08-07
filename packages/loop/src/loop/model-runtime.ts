@@ -177,8 +177,7 @@ export function validateModelRuntimeRegistry(candidate: unknown): ModelRuntimeRe
   if (
     availability['host_preflight_required'] !== true ||
     availability['authority_from_capability'] !== 'forbidden' ||
-    availability['unavailable_behavior'] !==
-      'fail-or-consider-next-explicitly-authorized-entry'
+    availability['unavailable_behavior'] !== 'fail-or-consider-next-explicitly-authorized-entry'
   ) {
     throw new ModelRuntimeRegistryError(
       'TASK_MODEL_REGISTRY_IDENTITY_MISMATCH',
@@ -198,7 +197,10 @@ export function validateModelRuntimeRegistry(candidate: unknown): ModelRuntimeRe
     const entry = record(raw, 'TASK_MODEL_REGISTRY_INVALID', 'runtime entry must be an object');
     const id = nonemptyString(entry['id'], 'TASK_MODEL_REGISTRY_INVALID', 'runtime id is required');
     if (runtimeIds.has(id)) {
-      throw new ModelRuntimeRegistryError('TASK_MODEL_REGISTRY_DUPLICATE', `duplicate runtime ${id}`);
+      throw new ModelRuntimeRegistryError(
+        'TASK_MODEL_REGISTRY_DUPLICATE',
+        `duplicate runtime ${id}`,
+      );
     }
     runtimeIds.add(id);
     const adapterModule = nonemptyString(
@@ -226,8 +228,16 @@ export function validateModelRuntimeRegistry(candidate: unknown): ModelRuntimeRe
         `host runtime ${id} executable is required`,
       );
     }
-    nonemptyString(entry['vendor'], 'TASK_MODEL_REGISTRY_INVALID', `runtime ${id} vendor is required`);
-    nonemptyString(entry['family'], 'TASK_MODEL_REGISTRY_INVALID', `runtime ${id} family is required`);
+    nonemptyString(
+      entry['vendor'],
+      'TASK_MODEL_REGISTRY_INVALID',
+      `runtime ${id} vendor is required`,
+    );
+    nonemptyString(
+      entry['family'],
+      'TASK_MODEL_REGISTRY_INVALID',
+      `runtime ${id} family is required`,
+    );
     nonemptyString(
       entry['adapter_id'],
       'TASK_MODEL_REGISTRY_INVALID',
@@ -238,7 +248,11 @@ export function validateModelRuntimeRegistry(candidate: unknown): ModelRuntimeRe
       'TASK_MODEL_REGISTRY_INVALID',
       `runtime ${id} capabilities are invalid`,
     );
-    boolean(entry['available'], 'TASK_MODEL_REGISTRY_INVALID', `runtime ${id} availability is invalid`);
+    boolean(
+      entry['available'],
+      'TASK_MODEL_REGISTRY_INVALID',
+      `runtime ${id} availability is invalid`,
+    );
     runtimes.set(id, entry as unknown as RuntimeRegistryEntry);
   }
 
@@ -277,7 +291,11 @@ export function validateModelRuntimeRegistry(candidate: unknown): ModelRuntimeRe
       'TASK_MODEL_REGISTRY_INVALID',
       `model ${id} family is required`,
     );
-    if (adapterId !== runtime.adapter_id || vendor !== runtime.vendor || family !== runtime.family) {
+    if (
+      adapterId !== runtime.adapter_id ||
+      vendor !== runtime.vendor ||
+      family !== runtime.family
+    ) {
       throw new ModelRuntimeRegistryError(
         'TASK_MODEL_REGISTRY_IDENTITY_MISMATCH',
         `model ${id} does not match runtime ${runtimeId}`,
@@ -315,7 +333,11 @@ export function validateModelRuntimeRegistry(candidate: unknown): ModelRuntimeRe
         `model ${id} has an unknown agent class`,
       );
     }
-    boolean(entry['available'], 'TASK_MODEL_REGISTRY_INVALID', `model ${id} availability is invalid`);
+    boolean(
+      entry['available'],
+      'TASK_MODEL_REGISTRY_INVALID',
+      `model ${id} availability is invalid`,
+    );
     const replacement = record(
       entry['replacement'],
       'TASK_MODEL_REGISTRY_INVALID',

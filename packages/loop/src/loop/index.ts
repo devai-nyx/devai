@@ -1,8 +1,100 @@
+export { executeAgentExecutor, validateAgentExecutor } from './agent-executor.js';
+export type {
+  AgentAuthority,
+  AgentExecutionResult,
+  AgentExecutorRequest as AgentAdapterRequest,
+  AgentPromptComposition,
+  AgentSkillMetadata,
+  ExecuteAgentOptions,
+  ResolvedAgentAdapterTarget,
+  ValidateAgentOptions,
+  ValidatedAgentExecutor,
+} from './agent-executor.js';
+export {
+  AGENT_ROUTING_POLICIES_PATH,
+  loadAgentRoutingPolicies,
+  resolveAgentExecutor,
+  validateAgentRoutingPolicies,
+} from './agent-routing.js';
+export type {
+  AgentExecutorRequest as AgentRoutingRequest,
+  AgentResolution,
+  AgentResolvedExecutor,
+  AgentRoutingPolicy,
+  AgentRoutingPolicyRegistry,
+  AgentSelection as AgentRoutingSelection,
+  AgentSelectionEvidence,
+  LoadAgentRoutingPoliciesOptions,
+  ResolveAgentExecutorOptions,
+  SimpleAgentRegistryEntry,
+} from './agent-routing.js';
 export * from './backlog.js';
+export { validateCompositeExecutor } from './composite-executor.js';
+export type {
+  CompositeChild,
+  CompositeDependency as ExecutorCompositeDependency,
+  CompositeExecutorRequest,
+  CompositeParent,
+  CompositeValidationFailure,
+  CompositeValidationOptions,
+  CompositeValidationResult,
+  CompositeValidationSuccess,
+} from './composite-executor.js';
 export * from './db.js';
+export {
+  executorFailure,
+  isExecutorEffect,
+  isRelativeExecutorPath,
+  isUniqueNonEmptyStrings,
+  permissionTierAllows,
+} from './executor-adapters.js';
+export type {
+  AgentClass as ExecutorAgentClass,
+  ExecutorDiscipline,
+  ExecutorEffect,
+  ExecutorFailure,
+  PermissionTier as ExecutorPermissionTier,
+} from './executor-adapters.js';
+export { completeHumanTask } from './human-executor.js';
+export type {
+  HumanCompletionFailure,
+  HumanCompletionIdentity,
+  HumanCompletionOptions,
+  HumanCompletionResult,
+  HumanCompletionSuccess,
+  HumanExecutorRequest,
+  HumanExecutorRole,
+} from './human-executor.js';
 export * from './locks.js';
+export {
+  MODEL_RUNTIME_REGISTRY_PATH,
+  loadModelRuntimeRegistry,
+  ModelRuntimeRegistryError,
+  validateModelRuntimeRegistry,
+} from './model-runtime.js';
+export type {
+  AgentClass as ModelAgentClass,
+  LoadModelRuntimeRegistryOptions,
+  ModelIdentifierKind,
+  ModelRuntimeEntry,
+  ModelRuntimeRegistry,
+  RegistryCandidateReader,
+  RuntimeRegistryEntry,
+  RuntimeTransport,
+} from './model-runtime.js';
 export * from './pg-locks.js';
 export * from './prompts.js';
+export { executeRoutineExecutor, validateRoutineExecutor } from './routine-executor.js';
+export type {
+  ExecuteRoutineOptions,
+  RoutineActionRegistryEntry,
+  RoutineAuthority,
+  RoutineExecutionResult,
+  RoutineExecutorRequest,
+  RoutineProcessResult,
+  RoutineValidationOptions,
+  ValidatedRoutineExecutor,
+} from './routine-executor.js';
 export * from './scorecard.js';
 export * from './scorecard-na.js';
 export * from './sensor-integrity.js';

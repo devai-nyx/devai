@@ -14,12 +14,30 @@ function compareUtf8Bytes(left, right) {
   return Buffer.compare(Buffer.from(left), Buffer.from(right));
 }
 
+if (!Array.isArray(registry.entries)) {
+  throw new Error('ACTION_REGISTRY_COUNT_GUARD');
+}
+const actualCounts = { keep: 0, fold: 0, tombstone: 0 };
+const dispositionNames = Object.keys(actualCounts);
+for (const entry of registry.entries) {
+  if (!Object.hasOwn(actualCounts, entry?.disposition)) {
+    throw new Error('ACTION_REGISTRY_COUNT_GUARD');
+  }
+  actualCounts[entry.disposition] += 1;
+}
+const declaredCounts = registry.counts;
 if (
-  registry?.counts?.keep !== 147 ||
-  registry?.counts?.fold !== 38 ||
-  registry?.counts?.tombstone !== 1 ||
-  !Array.isArray(registry.entries) ||
-  registry.entries.length !== 186
+  declaredCounts === null ||
+  typeof declaredCounts !== 'object' ||
+  Object.keys(declaredCounts).length !== dispositionNames.length ||
+  dispositionNames.some(
+    (disposition) =>
+      !Number.isSafeInteger(declaredCounts[disposition]) ||
+      declaredCounts[disposition] < 0 ||
+      declaredCounts[disposition] !== actualCounts[disposition],
+  ) ||
+  dispositionNames.reduce((total, disposition) => total + declaredCounts[disposition], 0) !==
+    registry.entries.length
 ) {
   throw new Error('ACTION_REGISTRY_COUNT_GUARD');
 }
