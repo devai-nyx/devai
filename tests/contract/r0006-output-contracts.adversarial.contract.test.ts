@@ -61,14 +61,33 @@ describe('R-0006 action-result adversaries', () => {
   });
 
   it('normalizes a pre-dispatch authority refusal with the routed action identity', () => {
-    const result = run(['adopt', 'ci', 'scaffold', '--write', '--format', 'json']);
+    const result = run([
+      'init',
+      'apply',
+      'harness',
+      '--include',
+      'ci',
+      '--write',
+      '--as-role',
+      'inspector',
+      '--format',
+      'json',
+    ]);
     expect(result.status).toBe(2);
     expect(result.stdout).toBe('');
     const envelope = parsed(result.stderr);
     expect(validators.actionResult(envelope), JSON.stringify(validators.actionResult.errors)).toBe(
       true,
     );
-    expect(envelope).toMatchObject({ action_id: 'adopt ci scaffold', ok: false });
+    expect(envelope).toMatchObject({
+      action_id: 'init apply harness',
+      ok: false,
+      error: {
+        code: 'AUTHORITY_HUMAN_ROLE_DENIED',
+        class: 'routing-authority',
+        exit: 2,
+      },
+    });
   });
 
   it('preserves the human presentation outside the machine contract', () => {

@@ -7,6 +7,7 @@
 import { spawnSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { canonicalJsonV2 } from '../../packages/utils/src/canonical-json/index.js';
 import {
   SENSOR_DESCRIPTORS,
   SENSOR_READING_KINDS,
@@ -56,7 +57,21 @@ function withoutSensorTimestamp(value: Record<string, unknown>): {
   expect(Array.isArray(result)).toBe(false);
   const resultRecord = result as Record<string, unknown>;
   expect(resultRecord['media_type']).toBe('application/json');
-  const reading = resultRecord['value'];
+  const aggregate = resultRecord['value'];
+  expect(aggregate).toBeTypeOf('object');
+  expect(aggregate).not.toBeNull();
+  expect(Array.isArray(aggregate)).toBe(false);
+  const aggregateRecord = aggregate as Record<string, unknown>;
+  const results = aggregateRecord['results'];
+  expect(results).toBeInstanceOf(Array);
+  expect(results).toHaveLength(1);
+  const firstResult = (results as unknown[])[0];
+  expect(firstResult).toBeTypeOf('object');
+  expect(firstResult).not.toBeNull();
+  expect(Array.isArray(firstResult)).toBe(false);
+  const firstResultRecord = firstResult as Record<string, unknown>;
+  expect(firstResultRecord['stdout']).toBeTypeOf('string');
+  const reading = JSON.parse(firstResultRecord['stdout'] as string) as unknown;
   expect(reading).toBeTypeOf('object');
   expect(reading).not.toBeNull();
   expect(Array.isArray(reading)).toBe(false);
@@ -67,7 +82,19 @@ function withoutSensorTimestamp(value: Record<string, unknown>): {
   expect(timestamp).toBeTypeOf('string');
   expect(Number.isNaN(Date.parse(timestamp as string))).toBe(false);
   return {
-    stable: { ...value, result: { ...resultRecord, value: stableReading } },
+    stable: {
+      ...value,
+      result: {
+        ...resultRecord,
+        value: {
+          ...aggregateRecord,
+          results: [
+            { ...firstResultRecord, stdout: canonicalJsonV2(stableReading) },
+            ...(results as unknown[]).slice(1),
+          ],
+        },
+      },
+    },
     timestamp: timestamp as string,
   };
 }
