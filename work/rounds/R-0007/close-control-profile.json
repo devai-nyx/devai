@@ -6,8 +6,8 @@
   "phase": "pre-entry-preparation",
   "declaration": {
     "binding": "b0-decision-required",
-    "decision_id": null,
-    "exact_base": null
+    "decision_id": "DII-257",
+    "exact_base": "9b435e5ca479a837baffe2b597c8ba582fec08f4"
   },
   "sources": {
     "authorization": "work/rounds/R-0007/AUTHORIZATION.md",

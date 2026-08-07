@@ -5096,6 +5096,45 @@ exact-HEAD ordinary run and a fresh exact-HEAD coverage run are the only admissi
 evidence. The diagnostic described here is red input, not a PASS, and this amendment does
 not bind B0 or begin R-0007.
 
+### DII-257 — Declare the local R-0007 opening base and entry ceiling
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner steering 2026-08-06; OM-019; OM-020; OM-021; DII-256`
+
+R-0007 opens locally from exact live `origin/main`
+`9b435e5ca479a837baffe2b597c8ba582fec08f4`. At B0, `git ls-remote origin
+refs/heads/main` and the tracked `origin/main` both resolved to that commit, and it is an
+ancestor of the committed preparation candidate. The Owner's later direct steering on
+2026-08-06 overrides OM-020's earlier publication-before-B0 sequencing only to permit this
+local declaration and entry check. It defers push, pull request, merge, and source
+reconciliation until after R-0008 closes; it grants no external publication or release
+effect.
+
+The governing R-0007 plan digest at declaration is
+`95b0a1c7400b6b4cd8e10e2c984d1577a342c3f9bc525b9d30df090e12f3d514`. The claims ceiling is
+repository-local R-0007 execution under OM-019 and OM-021 after a successful exact-candidate
+entry check. Package publication, tag, GitHub Release, Pages deployment, evidence promotion,
+real-stynx mutation, predecessor mutation, threshold reduction, population reduction,
+reviewer fallback, and any R-0008 implementation remain forbidden.
+
+The opening posture deliberately retains every `RED_REQUIRED` class whose closure matrix
+marks it `b0-dependent`; those classes are governed R-0007 work, not pre-entry PASS claims.
+The pre-B0 candidate passed its exact policy posture, complete 170-file ordinary population,
+the separate 170-file V8-instrumented population with the unchanged 70/60/70/70 floors,
+stage-one validation, governance, changeset classification, and diff cleanliness. This
+decision does not carry those results across later semantic changes and does not manufacture
+a review PASS.
+
+```json
+{
+  "schemaVersion": "1.0.0",
+  "devai_round_declaration": true,
+  "round": "R-0007",
+  "decision_id": "DII-257",
+  "authority": "Architect",
+  "exact_base": "9b435e5ca479a837baffe2b597c8ba582fec08f4",
+  "base_source": "origin/main-at-b0"
+}
+```
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check
