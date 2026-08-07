@@ -46,6 +46,32 @@ function errorEnvelope(text: string): Record<string, unknown> {
   return value;
 }
 
+function withoutSensorTimestamp(value: Record<string, unknown>): {
+  readonly stable: Record<string, unknown>;
+  readonly timestamp: string;
+} {
+  const result = value['result'];
+  expect(result).toBeTypeOf('object');
+  expect(result).not.toBeNull();
+  expect(Array.isArray(result)).toBe(false);
+  const resultRecord = result as Record<string, unknown>;
+  expect(resultRecord['media_type']).toBe('application/json');
+  const reading = resultRecord['value'];
+  expect(reading).toBeTypeOf('object');
+  expect(reading).not.toBeNull();
+  expect(Array.isArray(reading)).toBe(false);
+  expect(validators.sensorReading(reading), JSON.stringify(validators.sensorReading.errors)).toBe(
+    true,
+  );
+  const { timestamp, ...stableReading } = reading as Record<string, unknown>;
+  expect(timestamp).toBeTypeOf('string');
+  expect(Number.isNaN(Date.parse(timestamp as string))).toBe(false);
+  return {
+    stable: { ...value, result: { ...resultRecord, value: stableReading } },
+    timestamp: timestamp as string,
+  };
+}
+
 function runtimeEntry(entry: (typeof ACTION_REGISTRY)[number]): RegistryEntry {
   return {
     name: entry.action_id,
@@ -194,9 +220,15 @@ describe('R-0006 output-totality contracts migrated to the R-0007 surface', () =
     expect(historicalViolations).toEqual([]);
 
     const invalid: string[] = [];
+    let taskRoutes = 0;
     for (const entry of registry) {
       const args =
-        entry.name === 'sense run' ? [...entry.path, 'inventory_determinism'] : [...entry.path];
+        entry.name === 'sense run'
+          ? [...entry.path, 'inventory_determinism']
+          : entry.path[0] === 'task'
+            ? [...entry.path, '--round', 'R-0007']
+            : [...entry.path];
+      if (entry.path[0] === 'task') taskRoutes += 1;
       const consent = entry.name === 'sense run' ? [] : consentFor(entry.effects);
       for (const machine of [['--json'], ['--format', 'json']] as const) {
         const route = routeArgv(
@@ -214,6 +246,7 @@ describe('R-0006 output-totality contracts migrated to the R-0007 surface', () =
         }
       }
     }
+    expect(taskRoutes).toBe(10);
     expect(invalid).toEqual([]);
   });
 
@@ -307,8 +340,13 @@ describe('R-0006 output-totality contracts migrated to the R-0007 surface', () =
     expect(format.status, format.stderr).toBe(0);
     expect(json.stderr).toBe('');
     expect(format.stderr).toBe('');
-    expect(envelope(format.stdout)).toEqual(envelope(json.stdout));
-    expect(envelope(json.stdout)).toMatchObject({ action_id: 'sense run', ok: true });
+    const jsonEnvelope = envelope(json.stdout);
+    const formatEnvelope = envelope(format.stdout);
+    const jsonProjection = withoutSensorTimestamp(jsonEnvelope);
+    const formatProjection = withoutSensorTimestamp(formatEnvelope);
+    expect(formatProjection.stable).toEqual(jsonProjection.stable);
+    expect([jsonProjection.timestamp, formatProjection.timestamp]).toHaveLength(2);
+    expect(jsonEnvelope).toMatchObject({ action_id: 'sense run', ok: true });
   }, 360_000);
 
   it('lets retired-route refusal win before any missing-infrastructure inspection', () => {
