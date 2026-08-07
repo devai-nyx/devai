@@ -26,10 +26,7 @@ const CONDITIONAL_SKIP_SOURCE_ALLOWLIST = [
   'packages/cli/tests/contract/action-coverage.contract.test.ts',
   'packages/cli/tests/contract/successor-operational-law.contract.test.ts',
   'tests/e2e/bare-domain-help.e2e.test.ts',
-  'tests/e2e/cli-help.smoke.test.ts',
   'tests/e2e/post-merge-auditor.e2e.test.ts',
-  'tests/e2e/usage-exit-codes.e2e.test.ts',
-  'tests/integration/action-effects-binding.integration.test.ts',
   'tests/integration/ci-scaffold.integration.test.ts',
   'tests/integration/hooks-install.integration.test.ts',
   'tests/integration/runtime-probe-data.integration.test.ts',
@@ -223,18 +220,7 @@ describe('R-0004 governed surface red-first contracts', () => {
 
     const effect = spawnSync(
       'node',
-      [
-        DRIVER,
-        'check',
-        '--only',
-        'action-effects',
-        '--repo-root',
-        ROOT,
-        '--tsconfig',
-        'tests/config/tsconfig.effects.json',
-        '--format',
-        'json',
-      ],
+      [DRIVER, 'check', '--only', 'action-effects', '--repo-root', ROOT, '--format', 'json'],
       { cwd: ROOT, encoding: 'utf8' },
     );
     expect(effect.status, effect.stderr).toBe(0);

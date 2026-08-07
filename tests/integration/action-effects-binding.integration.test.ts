@@ -15,18 +15,7 @@ describe('binding action-effect CLI', () => {
   it('binds every kept, folded, and tombstoned action to the canonical effect registry', () => {
     const result = spawnSync(
       'node',
-      [
-        DRIVER,
-        'check',
-        '--only',
-        'action-effects',
-        '--repo-root',
-        REPO_ROOT,
-        '--tsconfig',
-        'tests/config/tsconfig.effects.json',
-        '--format',
-        'json',
-      ],
+      [DRIVER, 'check', '--only', 'action-effects', '--repo-root', REPO_ROOT, '--format', 'json'],
       { cwd: REPO_ROOT, encoding: 'utf8', env: subprocessCoverageEnvironment() },
     );
     expect(result.status, result.stderr).toBe(0);
