@@ -41,15 +41,11 @@ function expectFoldedRoute(): void {
   const refusal = run(['adopt', 'ci', 'scaffold', '--format', 'json']);
   expect(refusal.status).toBe(2);
   expect(refusal.stdout).toBe('');
-  expect(envelope(refusal.stderr)).toMatchObject({
-    action_id: 'adopt ci scaffold',
-    ok: false,
-    error: {
-      code: 'ACTION_FOLDED',
-      class: 'routing-authority',
-      exit: 2,
-      remediation: 'init apply harness --include ci',
-    },
+  expect(JSON.parse(refusal.stderr)).toMatchObject({
+    code: 'ACTION_FOLDED',
+    class: 'routing-authority',
+    exit: 2,
+    remediation: 'init apply harness --include ci',
   });
 }
 

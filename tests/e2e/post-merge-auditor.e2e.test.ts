@@ -95,14 +95,10 @@ function expectFoldedPostMergeRoute(): void {
   expect(result.status).toBe(2);
   expect(result.stdout).toBe('');
   expect(JSON.parse(result.stderr)).toMatchObject({
-    action_id: 'govern auditor post-merge',
-    ok: false,
-    error: {
-      code: 'ACTION_FOLDED',
-      class: 'routing-authority',
-      exit: 2,
-      remediation: 'round close --post-merge-receipt',
-    },
+    code: 'ACTION_FOLDED',
+    class: 'routing-authority',
+    exit: 2,
+    remediation: 'round close --post-merge-receipt',
   });
 }
 
@@ -312,7 +308,21 @@ describe('Article 34 post-merge Auditor composite', () => {
 
       expect(after).not.toBe(before);
       expect(git(['merge-base', '--is-ancestor', before, after]).status).toBe(0);
-      expect(`${merged.stdout}${merged.stderr}`).toMatch(/post-merge.*fail/i);
+      const injectedFailure = `${merged.stdout}\n${merged.stderr}`
+        .split(/\r?\n/u)
+        .map((line) => {
+          try {
+            return JSON.parse(line) as Record<string, unknown>;
+          } catch {
+            return null;
+          }
+        })
+        .find((entry) => entry?.['code'] === 'POST_MERGE_OBSERVATION_INJECTED_FAILURE');
+      expect(injectedFailure).toMatchObject({
+        code: 'POST_MERGE_OBSERVATION_INJECTED_FAILURE',
+        operation: 'close-post-merge',
+        exit: 2,
+      });
       const failed = join(repo, '.git/devai/post-merge-observations', after, 'status.json');
       expect(JSON.parse(readFileSync(failed, 'utf8'))).toMatchObject({ status: 'error' });
     },

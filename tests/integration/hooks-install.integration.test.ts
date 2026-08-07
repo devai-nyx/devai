@@ -49,15 +49,11 @@ function expectFoldedRoute(): void {
   const refusal = run(['adopt', 'hooks', 'install', '--format', 'json']);
   expect(refusal.status).toBe(2);
   expect(refusal.stdout).toBe('');
-  expect(envelope(refusal.stderr)).toMatchObject({
-    action_id: 'adopt hooks install',
-    ok: false,
-    error: {
-      code: 'ACTION_FOLDED',
-      class: 'routing-authority',
-      exit: 2,
-      remediation: 'init apply architect --include hooks',
-    },
+  expect(JSON.parse(refusal.stderr)).toMatchObject({
+    code: 'ACTION_FOLDED',
+    class: 'routing-authority',
+    exit: 2,
+    remediation: 'init apply architect --include hooks',
   });
 }
 
