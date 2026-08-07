@@ -158,6 +158,17 @@ function staticCommandDescriptions(path: string): Map<string, string> {
       }
     }
   }
+  if (path.endsWith('/task/index.ts')) {
+    for (const match of sourceText.matchAll(
+      /transitionCommand\(\s*'(task (?:finish|escalate))',\s*'([^']+)'/gu,
+    )) {
+      const name = match[1];
+      const description = match[2];
+      if (name !== undefined && description !== undefined) {
+        descriptions.set(name, description);
+      }
+    }
+  }
   return descriptions;
 }
 
@@ -214,10 +225,9 @@ describe('R-0004 governed surface red-first contracts', () => {
       'node',
       [
         DRIVER,
-        'policy',
         'check',
-        'action',
-        'effects',
+        '--only',
+        'action-effects',
         '--repo-root',
         ROOT,
         '--tsconfig',
@@ -334,6 +344,7 @@ describe('R-0004 governed surface red-first contracts', () => {
     expect(
       [root.scripts.build, root.scripts.test, root.scripts.lint, root.scripts.typecheck].some(
         (script) =>
+          script !== undefined &&
           /packages\/cli\/dist\/bin\.js sense (?:build|lint|test|type check)/u.test(script),
       ),
     ).toBe(false);
