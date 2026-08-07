@@ -153,7 +153,7 @@ function helpDomains(help: string): readonly string[] {
       continue;
     }
     if (!inCommandSection) continue;
-    const match = line.match(/^  ([a-z][a-z0-9-]*)\s{2,}/u);
+    const match = line.match(/^\s{2}([a-z][a-z0-9-]*)\s{2,}/u);
     if (match?.[1] !== undefined) domains.add(match[1]);
   }
   return [...domains].sort(compareUtf8);
