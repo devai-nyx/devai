@@ -466,6 +466,7 @@ describe('OM-016 / DII-249 remediation campaign 2 complete populations', () => {
           'product/owner-mandates/OM-018.md',
           'product/owner-mandates/OM-019.md',
           'product/owner-mandates/OM-020.md',
+          'product/owner-mandates/OM-021.md',
           'work/rounds/EXECUTION-CONTRACT.md',
           'work/rounds/R-0007/AUTHORIZATION.md',
           'work/rounds/R-0007/plan.md',
