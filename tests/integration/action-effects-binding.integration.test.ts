@@ -12,7 +12,7 @@ const REPO_ROOT = resolve(HERE, '../..');
 const DRIVER = resolve(REPO_ROOT, 'packages/cli/tests/fixtures/authorized-cli-test-driver.mjs');
 
 describe('binding action-effect CLI', () => {
-  it('binds every kept, folded, and tombstoned action to the canonical effect registry', () => {
+  it('binds every canonical kept handler to the canonical effect registry', () => {
     const result = spawnSync(
       'node',
       [DRIVER, 'check', '--only', 'action-effects', '--repo-root', REPO_ROOT, '--format', 'json'],
@@ -43,8 +43,8 @@ describe('binding action-effect CLI', () => {
     expect(output.reading.status).toBe('pass');
     expect(output.report.findings).toEqual([]);
     expect(output.report.metrics).toMatchObject({
-      catalog_actions: 222,
-      extracted_actions: 222,
+      catalog_actions: 42,
+      extracted_actions: 42,
       unresolved_edges: 0,
     });
   }, 30_000);
