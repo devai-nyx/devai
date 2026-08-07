@@ -52,6 +52,10 @@ export type SpawnTaskInput = Omit<
   readonly round_id?: unknown;
   /** Untrusted callers may omit this field; spawnTask refuses them at runtime. */
   readonly executor?: unknown;
+  /** Preserve an already queued task's immutable creation time when starting it. */
+  readonly created_at?: string;
+  /** Preserve retry state when a queued task re-enters resource acquisition. */
+  readonly iteration_count?: number;
   readonly status?: TaskStatus;
 };
 
@@ -170,12 +174,12 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
     throw new Error('TASK_EXECUTOR_REQUIRED');
   }
   const requested = opts.task as ValidatedSpawnTaskInput;
-  const createdAt = new Date().toISOString();
+  const createdAt = requested.created_at ?? new Date().toISOString();
   const preflight: TaskRecord = {
     schemaVersion: '2.0.0',
     ...requested,
     status: requested.status ?? 'queued',
-    iteration_count: 0,
+    iteration_count: requested.iteration_count ?? 0,
     created_at: createdAt,
   };
   parsers.task.parse(preflight);
@@ -184,16 +188,18 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
   const lockResult = acquireLocks({
     locksDir,
     taskId: requested.id,
-    targets: requested.target_modules.map((m) => `F2:${m}`),
+    targets: requested.target_modules.map((module) => `F2:${module}`),
   });
 
   // Lock-denied: never attempt worktree/DB; persist the record and return.
   if (lockResult.denied.length > 0) {
+    // Acquisition is all-or-nothing: release any keys claimed before the conflict.
+    releaseLocks({ locksDir, taskId: requested.id });
     const task: TaskRecord = {
       schemaVersion: '2.0.0',
       ...requested,
       status: 'lock_denied',
-      iteration_count: 0,
+      iteration_count: requested.iteration_count ?? 0,
       created_at: createdAt,
     };
     saveTask(opts.repoRoot, task);
@@ -228,7 +234,7 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
         schemaVersion: '2.0.0',
         ...requested,
         status: 'cancelled',
-        iteration_count: 0,
+        iteration_count: requested.iteration_count ?? 0,
         created_at: createdAt,
       };
       saveTask(opts.repoRoot, task);
@@ -257,7 +263,7 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
         schemaVersion: '2.0.0',
         ...requested,
         status: 'cancelled',
-        iteration_count: 0,
+        iteration_count: requested.iteration_count ?? 0,
         created_at: createdAt,
       };
       saveTask(opts.repoRoot, task);
@@ -283,7 +289,7 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
         schemaVersion: '2.0.0',
         ...requested,
         status: 'cancelled',
-        iteration_count: 0,
+        iteration_count: requested.iteration_count ?? 0,
         created_at: createdAt,
       };
       saveTask(opts.repoRoot, task);
@@ -306,8 +312,9 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
     // If we composed a full environment, the task is in_progress (ready
     // to run). Otherwise it's just 'ready' awaiting environment.
     status: composed ? 'in_progress' : 'ready',
-    iteration_count: 0,
+    iteration_count: requested.iteration_count ?? 0,
     created_at: createdAt,
+    ...(composed && { spawned_at: new Date().toISOString() }),
     ...(worktreePath !== null && { worktree_id: worktreeId, branch: requested.id }),
   };
   saveTask(opts.repoRoot, task);
@@ -344,7 +351,11 @@ export interface TransitionOptions {
 
 export function completeTask(opts: TransitionOptions): TaskRecord {
   const task = loadTask(opts.repoRoot, opts.taskId);
-  const updated: TaskRecord = { ...task, status: 'completed' };
+  const updated: TaskRecord = {
+    ...task,
+    status: 'completed',
+    completed_at: new Date().toISOString(),
+  };
   saveTask(opts.repoRoot, updated);
   if (opts.destroyWorktree === true && typeof task.worktree_id === 'string') {
     try {

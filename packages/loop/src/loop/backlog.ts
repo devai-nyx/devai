@@ -18,6 +18,8 @@ import { dirname, join } from 'node:path';
 export interface BacklogEntry {
   /** Task id assigned at append time. */
   readonly id: string;
+  /** Owning governed round for schema-2 queue entries. Legacy entries may omit it. */
+  readonly round_id?: string;
   readonly title: string;
   readonly priority: number;
   readonly discipline?: 'owner' | 'architect' | 'inspector' | 'engineer' | 'auditor';
@@ -93,6 +95,7 @@ export function appendBacklog(
   const id = partial.id ?? `TASK-${String(nextN).padStart(4, '0')}`;
   const entry: BacklogEntry = {
     id,
+    ...(partial.round_id !== undefined && { round_id: partial.round_id }),
     title: partial.title,
     priority: partial.priority,
     status: partial.status ?? 'queued',
