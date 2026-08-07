@@ -12,6 +12,7 @@
         "product/owner-mandates/OM-014.md",
         "product/owner-mandates/OM-019.md",
         "product/owner-mandates/OM-020.md",
+        "product/owner-mandates/OM-021.md",
         "work/rounds/EXECUTION-CONTRACT.md#authority-and-commits"
       ],
       "governing_paths": [
@@ -57,6 +58,7 @@
       "risk": "P0",
       "source_refs": [
         "product/owner-mandates/OM-020.md",
+        "product/owner-mandates/OM-021.md",
         "work/rounds/R-0007/AUTHORIZATION.md",
         "work/rounds/R-0007/plan.md#stops"
       ],
@@ -94,7 +96,8 @@
       "source_refs": [
         "work/rounds/EXECUTION-CONTRACT.md#candidate-identity-convergence-and-review-freeze",
         "product/owner-mandates/OM-014.md#candidate-identity-and-two-cycle-limit",
-        "product/owner-mandates/OM-020.md"
+        "product/owner-mandates/OM-020.md",
+        "product/owner-mandates/OM-021.md"
       ],
       "governing_paths": [
         "law/**",
@@ -122,6 +125,7 @@
       "source_refs": [
         "product/owner-mandates/OM-014.md#content-addressed-affected-test-execution",
         "product/owner-mandates/OM-020.md",
+        "product/owner-mandates/OM-021.md",
         "work/rounds/R-0007/affected-test-graph.json"
       ],
       "governing_paths": [
@@ -158,7 +162,10 @@
       "obligation_id": "R7-P0-CI-VERDICT-AUTHORITY",
       "claim": "GitHub dependency caches, artifacts, run metadata, actors, job names and conclusions have no PASS authority; only the separately authorized R-0008 claim verifier may authenticate reusable result evidence.",
       "risk": "P0",
-      "source_refs": ["work/rounds/R-0007/plan.md#github-actions-and-commit-validation-setpoint"],
+      "source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "work/rounds/R-0007/plan.md#github-actions-and-commit-validation-setpoint"
+      ],
       "governing_paths": [".github/**", "scripts/**", "package.json", "law/**"],
       "required_evidence": ["ci-cache-artifact-evidence", "gate:governance"],
       "required_adversaries": [
@@ -175,7 +182,10 @@
       "obligation_id": "R7-P0-CLASSIFIED-VALIDATION",
       "claim": "Commit validation is mechanically classified from complete candidate-bound dependencies; uncertainty widens, the strictest class wins, and a complete cold sentinel disables narrowing after any false negative.",
       "risk": "P0",
-      "source_refs": ["work/rounds/R-0007/plan.md#mechanical-commit-validation-classes"],
+      "source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "work/rounds/R-0007/plan.md#mechanical-commit-validation-classes"
+      ],
       "governing_paths": [
         "AGENTS.md",
         "work/rounds/EXECUTION-CONTRACT.md",
@@ -358,6 +368,18 @@
         "R7-P0-CANDIDATE-IDENTITY",
         "R7-P1-AFFECTED-TESTS",
         "R7-P1-TWO-CYCLE"
+      ]
+    },
+    {
+      "path": "product/owner-mandates/OM-021.md",
+      "source_digest_sha256": "f5f6ea37313d3c47c2f671cbcca2593e307f9c30e830dbbbb9a041e3500d93ea",
+      "obligation_ids": [
+        "R7-P0-AUTHORITY",
+        "R7-P0-DEPLOY-REFUSAL",
+        "R7-P0-CANDIDATE-IDENTITY",
+        "R7-P0-CI-VERDICT-AUTHORITY",
+        "R7-P0-CLASSIFIED-VALIDATION",
+        "R7-P1-AFFECTED-TESTS"
       ]
     },
     {
