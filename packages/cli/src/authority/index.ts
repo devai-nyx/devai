@@ -22,8 +22,9 @@ import {
 } from '@devai-nyx/skills/post-merge-auditor';
 import type { RegistryEntry } from '../define-command.js';
 import { validateDeclaredCapabilityConsistency } from '../command-manifest.js';
-import { invocationIsNonMutating, invocationUsesSensorInternal } from '../command-router.js';
+import { invocationIsNonMutating } from '../command-router.js';
 import { createAuthorityHostBroker } from './broker.js';
+import { resolveInvocationEntry } from './sense-selection.js';
 import {
   runWithAuthorityPolicyMaterialization,
   runWithAuthoritySessionOperation,
@@ -511,6 +512,7 @@ export function attachAuthorityCommandBoundaries(
       );
     }
     command.commandAction = function governedCommandAction(...args: unknown[]) {
+      const invocationEntry = resolveInvocationEntry(entry, process.argv);
       const scope = pendingHostScope;
       const dispose = pendingHostDispose;
       const dryRun = pendingHostDryRun;
@@ -530,13 +532,8 @@ export function attachAuthorityCommandBoundaries(
       if (
         !scope ||
         !dispose ||
-        (scope.action_id !== entry.name &&
-          !(
-            scope.action_id === 'sense run' &&
-            scope.effect === 'read' &&
-            invocationUsesSensorInternal(entry.internal_name, process.argv)
-          )) ||
-        scope.effect !== (dryRun ? 'read' : entry.effects)
+        scope.action_id !== entry.name ||
+        scope.effect !== (dryRun ? 'read' : invocationEntry.effects)
       ) {
         throw new Error('AUTHORITY_FINAL_BOUNDARY_REQUIRED');
       }
@@ -588,8 +585,9 @@ export function authorizeCliArgv(
   if (argv.some((value) => value === '--help' || value === '-h' || value === '--help-all')) {
     return undefined;
   }
-  const entry = entryForArgv(argv, entries);
-  if (!entry) return undefined;
+  const registeredEntry = entryForArgv(argv, entries);
+  if (!registeredEntry) return undefined;
+  const entry = resolveInvocationEntry(registeredEntry, argv);
   if (entry.previous_name === 'skill run') {
     const skillId = argv[2 + entry.path.length];
     if (skillId !== undefined && skillRoleFor(skillId) === undefined) {
@@ -777,7 +775,7 @@ export function authorizeCliArgv(
   if (
     entry.effects === 'remote-write' &&
     !argv.includes('--dry-run') &&
-    !argv.includes('--allow-publish')
+    !argv.includes('--publish')
   ) {
     return renderAuthorityResult(
       taggedFailure('usage-error', 'AUTHORITY_PUBLISH_CONSENT_REQUIRED'),
@@ -931,7 +929,7 @@ export function createAuthorityCliHarness(deps: Readonly<JsonRecord>) {
       const dryRun = argv.includes('--dry-run') || argv.includes('--plan');
       const consent = {
         write: argv.includes('--write'),
-        allow_publish: argv.includes('--allow-publish'),
+        allow_publish: argv.includes('--publish'),
         experimental: argv.includes('--experimental'),
       };
       const runtimeInput = {

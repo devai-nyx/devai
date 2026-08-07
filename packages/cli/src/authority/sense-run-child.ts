@@ -24,6 +24,7 @@ export function readOnlyDevaiChild(
       [
         '--write',
         '--allow-publish',
+        '--publish',
         '--execute',
         '--apply',
         '--as-role',

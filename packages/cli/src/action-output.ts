@@ -195,24 +195,21 @@ function restoreAndEmit(
   process.stdout.write = originalStdout;
   process.stderr.write = originalStderr;
   process.exit = originalExit;
-  if (exit === 0 && stdout.length > 0) {
+  if (exit === 0 && stderr.length === 0) {
     originalStdout.call(process.stdout, renderActionSuccess(entry, stdout));
     process.exitCode = 0;
     return;
   }
   const effectiveExit = exit === 0 ? 7 : normalizeExit(exit);
-  originalStderr.call(
-    process.stderr,
-    renderActionFailure(
-      entry,
-      stderr.length > 0
+  const diagnostic =
+    exit === 0 && stdout.length > 0 && stderr.length > 0
+      ? `action wrote to both success and error channels; stdout=${JSON.stringify(stdout.trim())}; stderr=${JSON.stringify(stderr.trim())}`
+      : stderr.length > 0
         ? stderr
         : stdout.length > 0
           ? stdout
-          : 'action failed without a diagnostic',
-      effectiveExit,
-    ),
-  );
+          : 'action failed without a diagnostic';
+  originalStderr.call(process.stderr, renderActionFailure(entry, diagnostic, effectiveExit));
   process.exitCode = effectiveExit;
 }
 

@@ -1,75 +1,10 @@
 import type { RegistryEntry } from './define-command.js';
-import {
-  ARCHIVED_SENSOR_KINDS,
-  SENSOR_READING_KINDS,
-  isArchivedSensorKind,
-  isSensorKind,
-} from '@devai-nyx/sensors';
+import { ARCHIVED_SENSOR_KINDS, isArchivedSensorKind, isSensorKind } from '@devai-nyx/sensors';
 import { cliError, renderCliError } from './cli-error.js';
+import { resolveInvocationEntry } from './authority/sense-selection.js';
+import { ACTION_REGISTRY } from './generated/action-registry.js';
 
 export const EXIT_USAGE = 2;
-
-const SENSOR_INTERNAL_COMMAND: Readonly<Record<string, readonly string[]>> = {
-  action_effect_inference: ['check-action-effects'],
-  archive_immutability: ['sense-archive-immutability'],
-  build: ['sense-build'],
-  decision_citation_resolution: ['sense-decision-citation-resolution'],
-  decision_record_integrity: ['sense-decision-record-integrity'],
-  docs_drift: ['sense-docs-drift'],
-  e2e_test: ['sense-test', 'e2e'],
-  harness_coherence: ['sense-harness-coherence'],
-  harness_coverage: ['sense-harness-coverage'],
-  harness_depth: ['sense-harness-depth'],
-  harness_green_main: ['sense-harness-green-main'],
-  harness_idiomaticity: ['sense-harness-idiomaticity'],
-  harness_invariant_alignment: ['sense-harness-invariant-alignment'],
-  harness_performance: ['sense-harness-performance'],
-  harness_robustness: ['sense-harness-robustness'],
-  harness_security: ['sense-harness-security'],
-  integration_test: ['sense-test', 'integration'],
-  inventory_adherence: ['sense-inventory-adherence'],
-  inventory_api: ['sense-api'],
-  inventory_coverage: ['sense-coverage'],
-  inventory_data_handling: ['sense-data-handling'],
-  inventory_data_model: ['sense-data-model'],
-  inventory_dep_graph: ['sense-dep-graph'],
-  inventory_determinism: ['sense-inventory-determinism'],
-  inventory_performance: ['sense-inventory-performance'],
-  inventory_rbac: ['sense-rbac'],
-  inventory_regeneration: ['sense-readings-rebuild'],
-  inventory_routes: ['sense-routes'],
-  lint: ['sense-lint'],
-  llm_judge: ['sense-judge'],
-  migration_check: ['sense-migrate-check'],
-  perf_test: ['sense-perf-test'],
-  plant_coherence: ['sense-plant-coherence'],
-  plant_coverage: ['sense-plant-coverage'],
-  plant_depth: ['sense-plant-depth'],
-  round_record_integrity: ['sense-round-record-integrity'],
-  runtime_probe_api: ['sense-runtime-api'],
-  runtime_probe_auth: ['sense-runtime-auth'],
-  runtime_probe_data: ['sense-runtime-data'],
-  security_scan: ['sense-security-scan'],
-  site_drift: ['sense-site-drift'],
-  spec_alignment: ['sense-spec-alignment'],
-  spec_depth: ['sense-spec-depth'],
-  spec_freshness: ['sense-spec-freshness'],
-  spec_idiomaticity: ['sense-spec-idiomaticity'],
-  spec_performance_targets: ['sense-spec-performance-targets'],
-  spec_robustness_targets: ['sense-spec-robustness-targets'],
-  spec_security_coverage: ['sense-spec-security-coverage'],
-  test_coherence: ['sense-test-coherence'],
-  test_coverage_depth: ['sense-test-coverage-depth'],
-  test_idiomaticity: ['sense-test-idiomaticity'],
-  test_invariant_alignment: ['sense-test-invariant-alignment'],
-  test_performance_coverage: ['sense-test-performance-coverage'],
-  test_robustness_coverage: ['sense-test-robustness-coverage'],
-  test_security_coverage: ['sense-test-security-coverage'],
-  test_weakening_review: ['sense-test-weakening'],
-  trace_resolution: ['sense-trace-resolve'],
-  type_check: ['sense-type-check'],
-  unit_test: ['sense-test', 'unit'],
-};
 
 function wantsJson(args: readonly string[]): boolean {
   const format = args.lastIndexOf('--format');
@@ -77,20 +12,28 @@ function wantsJson(args: readonly string[]): boolean {
 }
 
 const DOMAIN_SUMMARIES: Readonly<Record<string, string>> = {
-  adopt: 'Install and evolve DEVAI adoption infrastructure.',
-  agent: 'Inspect and invoke bounded skills, prompts, and LLM bridges.',
   catalog: 'Inspect the live action catalog.',
-  docs: 'Generate, validate, synthesize, render, and publish documentation.',
+  check: 'Run governed validation suites and checks.',
+  doctor: 'Diagnose the declared adoption posture.',
   evidence: 'Record, render, redact, and verify audit evidence.',
-  experimental: 'Explicitly opted-in non-production capabilities.',
-  govern: 'Score, triage, resolve gaps, and close governance rounds.',
-  inventory: 'Derive deterministic repository inventories.',
-  policy: 'Run policy-firewall checks.',
-  release: 'Evaluate and observe release readiness.',
+  init: 'Adopt and upgrade DEVAI in a repository.',
+  release: 'Check, publish, and verify releases.',
+  round: 'Plan, run, assess, and close governed rounds.',
   sense: 'Observe repository and runtime state through sensors.',
-  spec: 'Authoring support and validation for the reference signal.',
-  work: 'Supervised backlog, task, worktree, lock, DB, and state operations.',
+  task: 'Operate round-bound task plumbing.',
 };
+
+const DEFAULT_DOMAIN_ORDER = [
+  'init',
+  'doctor',
+  'check',
+  'sense',
+  'round',
+  'evidence',
+  'release',
+] as const;
+
+const EXPANDED_DOMAIN_ORDER = [...DEFAULT_DOMAIN_ORDER, 'task', 'catalog'] as const;
 
 function startsWithPath(path: readonly string[], prefix: readonly string[]): boolean {
   return prefix.every((part, index) => path[index] === part);
@@ -109,6 +52,7 @@ export function renderHelp(
 ): string {
   const visible = entries.filter(
     (entry) =>
+      entry.disposition === 'keep' &&
       entry.lifecycle !== 'retired' &&
       startsWithPath(entry.path, prefix) &&
       (includeAll || entry.tier === 'porcelain' || entry.path.length === prefix.length),
@@ -117,37 +61,13 @@ export function renderHelp(
   lines.push(`Usage: devai${prefix.length > 0 ? ` ${prefix.join(' ')}` : ''} <command> [options]`);
   lines.push('');
   if (prefix.length === 0) {
-    lines.push('Common:');
-    lines.push(
-      ...renderRows([
-        ['init', 'Adopt DEVAI in a repository.'],
-        ['doctor', 'Diagnose the declared adoption posture.'],
-        ['sense', DOMAIN_SUMMARIES.sense ?? ''],
-        ['spec', DOMAIN_SUMMARIES.spec ?? ''],
-        ['evidence', DOMAIN_SUMMARIES.evidence ?? ''],
-      ]),
-    );
-    lines.push('');
     lines.push('Domains:');
-    const domains = Array.from(
-      new Set<string>(
-        visible
-          .map((entry) => entry.path[0])
-          .filter((domain): domain is string => domain !== undefined),
-      ),
-    )
-      .filter((domain) => domain !== 'init' && domain !== 'doctor' && domain !== 'experimental')
-      .sort();
+    const domains = includeAll ? EXPANDED_DOMAIN_ORDER : DEFAULT_DOMAIN_ORDER;
     lines.push(
       ...renderRows(
         domains.map((domain) => [domain, DOMAIN_SUMMARIES[domain] ?? 'DEVAI command domain.']),
       ),
     );
-    if (visible.some((entry) => entry.path[0] === 'experimental')) {
-      lines.push('');
-      lines.push('Experimental:');
-      lines.push(...renderRows([['experimental', DOMAIN_SUMMARIES.experimental ?? '']]));
-    }
   } else {
     const exact = visible.find((entry) => entry.path.length === prefix.length);
     if (exact !== undefined) {
@@ -232,33 +152,123 @@ export type RouteResult =
   | { readonly kind: 'dispatch'; readonly argv: string[] }
   | { readonly kind: 'output'; readonly text: string; readonly exitCode: number };
 
-function singleSensorKind(args: readonly string[]): string | undefined {
-  if (args.includes('--write') || args.includes('--allow-publish')) return undefined;
-  const senseIndex = args.findIndex(
-    (value, index) => value === 'sense' && args[index + 1] === 'run',
-  );
-  if (senseIndex < 0) return undefined;
-  const kind = args[senseIndex + 2];
-  return kind === undefined || kind.startsWith('-') || !isSensorKind(kind) ? undefined : kind;
-}
-
-function singleSensorRunIsReadOnly(args: readonly string[]): boolean {
-  return singleSensorKind(args) !== undefined;
-}
-
-export function invocationUsesSensorInternal(
-  internalName: string,
+function migrationRefusal(
   args: readonly string[],
-): boolean {
-  const kind = singleSensorKind(args);
-  const internal = kind === undefined ? undefined : SENSOR_INTERNAL_COMMAND[kind];
-  return internal !== undefined && internal[0] === internalName;
+  code: string,
+  message: string,
+  remediation: string,
+  context: Readonly<Record<string, unknown>>,
+): RouteResult {
+  const error = cliError({
+    code,
+    class: 'routing-authority',
+    exit: EXIT_USAGE,
+    message,
+    remediation,
+    refs: { doc: 'work/rounds/R-0007/inventory/old-to-new-command-map.md' },
+    context,
+  });
+  return {
+    kind: 'output',
+    text: renderCliError(error, wantsJson(args)),
+    exitCode: EXIT_USAGE,
+  };
+}
+
+function vocabularyMigrationRefusal(args: readonly string[]): RouteResult | undefined {
+  if (args.includes('--allow-publish')) {
+    return migrationRefusal(
+      args,
+      'CLI_VOCABULARY_RETIRED',
+      "Option '--allow-publish' is retired.",
+      'Use --publish with --write.',
+      { option: '--allow-publish', replacement: '--publish' },
+    );
+  }
+
+  if (args[0] === 'check' && args.includes('--profile')) {
+    const index = args.indexOf('--profile');
+    const suite = args[index + 1];
+    return migrationRefusal(
+      args,
+      'CLI_VOCABULARY_RETIRED',
+      "Option '--profile' is retired for check.",
+      suite === undefined ? 'Use --suite <name>.' : `Use --suite ${suite}.`,
+      { option: '--profile', replacement: '--suite', ...(suite === undefined ? {} : { suite }) },
+    );
+  }
+
+  if (args.includes('--profile')) {
+    return migrationRefusal(
+      args,
+      'CLI_VOCABULARY_RETIRED',
+      "Option '--profile' is retired.",
+      'Use --tier <tier>.',
+      { option: '--profile', replacement: '--tier' },
+    );
+  }
+
+  if (args[0] === 'sense' && args[1] === 'run' && args.includes('--set')) {
+    const index = args.indexOf('--set');
+    const oldSet = args[index + 1];
+    const replacements: Readonly<Record<string, string>> = {
+      baseline: 'baseline',
+      tier1: 'baseline',
+      tier2: 'structural',
+      tier3: 'governed',
+      all: 'governed',
+      sweep: 'sweep --round R-NNNN',
+    };
+    const replacement = oldSet === undefined ? undefined : replacements[oldSet];
+    return migrationRefusal(
+      args,
+      'CLI_VOCABULARY_RETIRED',
+      "Option '--set' is retired for sense run.",
+      replacement === undefined ? 'Use --preset <name>.' : `Use --preset ${replacement}.`,
+      {
+        option: '--set',
+        replacement: '--preset',
+        ...(oldSet === undefined ? {} : { value: oldSet }),
+      },
+    );
+  }
+
+  return undefined;
+}
+
+function historicalRouteRefusal(args: readonly string[]): RouteResult | undefined {
+  if (args[0] === 'init' && (args[1] === 'apply-f5' || (args[1] === 'apply' && args[2] === 'f5'))) {
+    return migrationRefusal(
+      args,
+      'CLI_VOCABULARY_RETIRED',
+      "The 'f5' adoption vocabulary is retired.",
+      'Use devai init apply harness.',
+      { route: args.slice(0, args[1] === 'apply-f5' ? 2 : 3), replacement: 'init apply harness' },
+    );
+  }
+
+  const optionIndex = args.findIndex((argument) => argument.startsWith('-'));
+  const words = args.slice(0, optionIndex < 0 ? args.length : optionIndex);
+  const historical = ACTION_REGISTRY.filter((entry) => entry.disposition !== 'keep')
+    .filter((entry) => startsWithPath(words, entry.path))
+    .sort((left, right) => right.path.length - left.path.length)[0];
+  if (historical === undefined) return undefined;
+  return migrationRefusal(
+    args,
+    historical.disposition === 'tombstone' ? 'ACTION_TOMBSTONED' : 'ACTION_FOLDED',
+    `Action '${historical.action_id}' is ${historical.disposition === 'tombstone' ? 'removed' : 'retired'}.`,
+    historical.migration ?? 'Run devai --help.',
+    {
+      action: historical.action_id,
+      disposition: historical.disposition,
+      migration: historical.migration,
+    },
+  );
 }
 
 export function invocationIsNonMutating(internalName: string, args: readonly string[]): boolean {
   if (args.includes('--check')) return true;
   if (internalName === 'mutation-verify' && !args.includes('--save-baseline')) return true;
-  if (internalName === 'sense-run' && singleSensorRunIsReadOnly(args)) return true;
   return (
     ['init', 'adopt', 'upgrade', 'ci-scaffold', 'hooks-install', 'state-prune'].includes(
       internalName,
@@ -272,17 +282,10 @@ export function routeArgv(
   version: string,
 ): RouteResult {
   const args = argv.slice(2);
-  if (args[0] === 'sense' && args[1] === 'run' && args.includes('--list')) {
-    return {
-      kind: 'output',
-      text: `${JSON.stringify({
-        schemaVersion: '1.0.0',
-        count: SENSOR_READING_KINDS.length,
-        kinds: SENSOR_READING_KINDS,
-      })}\n`,
-      exitCode: 0,
-    };
-  }
+  const vocabularyRefusal = vocabularyMigrationRefusal(args);
+  if (vocabularyRefusal !== undefined) return vocabularyRefusal;
+  const historyRefusal = historicalRouteRefusal(args);
+  if (historyRefusal !== undefined) return historyRefusal;
   if (
     args[0] === 'sense' &&
     args[1] === 'run' &&
@@ -290,61 +293,27 @@ export function routeArgv(
     !args[2].startsWith('-')
   ) {
     const kind = args[2];
-    if (isSensorKind(kind)) {
-      const internal = SENSOR_INTERNAL_COMMAND[kind];
-      if (internal === undefined) {
-        const error = cliError({
-          code: 'SENSOR_REGISTRY_DIVERGENCE',
-          class: 'contract-violation',
-          exit: 7,
-          message: `Registered sensor kind '${kind}' has no CLI emitter binding.`,
-          remediation: 'Run devai policy check sensor integrity.',
-          refs: { record: 'DII-103' },
-          context: { kind },
-        });
-        return { kind: 'output', text: renderCliError(error, wantsJson(args)), exitCode: 7 };
-      }
-      let remaining = args.slice(3).filter((arg) => arg !== '--json');
-      const formatIndex = remaining.lastIndexOf('--format');
-      if (formatIndex >= 0 && remaining[formatIndex + 1] === 'json') {
-        remaining = remaining.filter(
-          (_, index) => index !== formatIndex && index !== formatIndex + 1,
-        );
-      }
-      return {
-        kind: 'dispatch',
-        argv: [...argv.slice(0, 2), ...internal, ...remaining],
-      };
+    if (!isSensorKind(kind)) {
+      const archived = isArchivedSensorKind(kind);
+      const disposition = ARCHIVED_SENSOR_KINDS.find((entry) => entry.kind === kind);
+      const error = cliError({
+        code: archived ? 'SENSOR_KIND_RETIRED' : 'SENSOR_KIND_UNKNOWN',
+        class: 'routing-authority',
+        exit: 2,
+        message: archived
+          ? `Sensor kind '${kind}' is retired.`
+          : `Sensor kind '${kind}' is not registered.`,
+        remediation:
+          disposition?.replacement === null || disposition === undefined
+            ? 'Run devai sense run --list.'
+            : `Use devai sense run ${disposition.replacement}.`,
+        refs: { record: 'DII-103' },
+        context: { kind },
+      });
+      return { kind: 'output', text: renderCliError(error, wantsJson(args)), exitCode: 2 };
     }
-    const archived = isArchivedSensorKind(kind);
-    const disposition = ARCHIVED_SENSOR_KINDS.find((entry) => entry.kind === kind);
-    const error = cliError({
-      code: archived ? 'SENSOR_KIND_RETIRED' : 'SENSOR_KIND_UNKNOWN',
-      class: 'routing-authority',
-      exit: 2,
-      message: archived
-        ? `Sensor kind '${kind}' is retired.`
-        : `Sensor kind '${kind}' is not registered.`,
-      remediation:
-        disposition?.replacement === null || disposition === undefined
-          ? 'Run devai sense run --list.'
-          : `Use devai sense run ${disposition.replacement}.`,
-      refs: { record: 'DII-103' },
-      context: { kind },
-    });
-    return { kind: 'output', text: renderCliError(error, wantsJson(args)), exitCode: 2 };
-  }
-  if (args[0] === 'work' && args[1] === 'backlog' && args[2] === 'compact') {
-    const error = cliError({
-      code: 'ACTION_RETIRED',
-      class: 'routing-authority',
-      exit: 2,
-      message: "Action 'work backlog compact' is retired.",
-      remediation: 'Use devai work backlog list.',
-      refs: { record: 'DII-104' },
-      context: { action: 'work backlog compact', successor: 'work backlog list' },
-    });
-    return { kind: 'output', text: renderCliError(error, wantsJson(args)), exitCode: 2 };
+    // Canonical kinds remain positional values of the direct `sense run`
+    // facade. They never translate back through retired child CLI routes.
   }
   const obsoleteFlag = args.find((arg) => ['--execute', '--apply', '--human'].includes(arg));
   if (obsoleteFlag !== undefined) {
@@ -373,6 +342,7 @@ export function routeArgv(
   const optionIndex = args.findIndex((arg) => arg.startsWith('-'));
   const words = args.slice(0, optionIndex < 0 ? args.length : optionIndex);
   const exact = entries
+    .filter((entry) => entry.disposition === 'keep')
     .filter((entry) => startsWithPath(words, entry.path))
     .sort((a, b) => b.path.length - a.path.length)[0];
   if (exact !== undefined) {
@@ -415,34 +385,52 @@ export function routeArgv(
         exitCode: 0,
       };
     }
-    if (!wantsHelp) {
-      if (
-        exact.effects === 'local-write' &&
-        !remaining.includes('--write') &&
-        !invocationIsNonMutating(exact.internal_name, remaining)
-      ) {
-        return {
-          kind: 'output',
-          text: `devai ${exact.name}: local mutation requires --write\n`,
-          exitCode: EXIT_USAGE,
-        };
-      }
-      if (
-        exact.effects === 'remote-write' &&
-        !remaining.includes('--dry-run') &&
-        !invocationIsNonMutating(exact.internal_name, remaining) &&
-        (!remaining.includes('--write') || !remaining.includes('--allow-publish'))
-      ) {
-        return {
-          kind: 'output',
-          text: `devai ${exact.name}: remote mutation requires --write --allow-publish\n`,
-          exitCode: EXIT_USAGE,
-        };
-      }
+    let routedEntry: RegistryEntry;
+    try {
+      routedEntry = resolveInvocationEntry(exact, argv);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      const refusal = cliError({
+        code: 'SENSE_SELECTION_INVALID',
+        class: 'routing-authority',
+        exit: EXIT_USAGE,
+        message: `Sense selection is invalid: ${detail}.`,
+        remediation: 'Choose one registered kind or one canonical --preset, then retry.',
+        refs: { doc: 'law/policy/sense-presets.json' },
+        context: { detail },
+      });
+      return {
+        kind: 'output',
+        text: renderCliError(refusal, wantsJson(args)),
+        exitCode: EXIT_USAGE,
+      };
+    }
+    if (
+      (routedEntry.effects === 'harness-write' || routedEntry.effects === 'local-write') &&
+      !remaining.includes('--write') &&
+      !invocationIsNonMutating(routedEntry.internal_name, remaining)
+    ) {
+      return {
+        kind: 'output',
+        text: `devai ${exact.name}: local mutation requires --write\n`,
+        exitCode: EXIT_USAGE,
+      };
+    }
+    if (
+      routedEntry.effects === 'remote-write' &&
+      !remaining.includes('--dry-run') &&
+      !invocationIsNonMutating(routedEntry.internal_name, remaining) &&
+      (!remaining.includes('--write') || !remaining.includes('--publish'))
+    ) {
+      return {
+        kind: 'output',
+        text: `devai ${exact.name}: remote mutation requires --write --publish\n`,
+        exitCode: EXIT_USAGE,
+      };
     }
     let translated = remaining;
     if (exact.internal_name !== 'skill-run' && exact.internal_name !== 'loop-run') {
-      translated = translated.filter((arg) => arg !== '--write' && arg !== '--allow-publish');
+      translated = translated.filter((arg) => arg !== '--write' && arg !== '--publish');
     }
     if (
       ['init', 'adopt', 'upgrade', 'ci-scaffold', 'hooks-install'].includes(exact.internal_name) &&
@@ -458,7 +446,9 @@ export function routeArgv(
     };
   }
 
-  const prefixMatches = entries.filter((entry) => startsWithPath(entry.path, words));
+  const prefixMatches = entries.filter(
+    (entry) => entry.disposition === 'keep' && startsWithPath(entry.path, words),
+  );
   if (prefixMatches.length > 0) {
     // R17.C.2 (D-131): a bare valid domain/group path renders that node's
     // help exactly as `--help` would, instead of falling through to the

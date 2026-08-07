@@ -37,9 +37,6 @@ import {
   canonicalSha256,
   sha256Bytes,
 } from './policy.js';
-import { readOnlyDevaiChild } from './sense-run-child.js';
-
-export { readOnlyDevaiChild } from './sense-run-child.js';
 
 type JsonRecord = Record<string, unknown>;
 type HumanRole = 'owner' | 'architect' | 'inspector' | 'engineer' | 'auditor';
@@ -322,15 +319,10 @@ function fsTarget(
   };
 }
 
-function readOnlyProcess(
-  request: AuthorityHostEffectRequest,
-  entries: readonly RegistryEntry[] = [],
-  parentAction?: string,
-): boolean {
+function readOnlyProcess(request: AuthorityHostEffectRequest, parentAction?: string): boolean {
   const executable = request.arguments[0];
   const args = request.arguments[1];
   if (typeof executable !== 'string' || !Array.isArray(args)) return false;
-  if (readOnlyDevaiChild(executable, args, entries, parentAction)) return true;
   if (
     parentAction === 'sense lint' &&
     basename(executable) === 'npx' &&
@@ -898,7 +890,9 @@ export function createAuthorityHostBroker(input: BrokerInput): {
   const repositoryRoot = realpathSync(input.repository_root);
   const invocationId = `cli-${String(process.pid)}-${randomUUID()}`;
   const now = new Date().toISOString();
-  const contracts = actionContractRegistry(input.entries);
+  const contracts = actionContractRegistry(
+    input.entries.map((entry) => (entry.name === input.entry.name ? input.entry : entry)),
+  );
   const { policy, sources } = policyFor(input, now);
   const issuer = createAuthorityDecisionIssuer({
     issuer_id: 'devai-cli-authority',
@@ -967,7 +961,7 @@ export function createAuthorityHostBroker(input: BrokerInput): {
   const actionPlanner = input.entry.authority_contract.planner;
   const actionConsent = {
     ...input.entry.authority_contract.consent,
-    allow_publish: input.argv.includes('--allow-publish'),
+    allow_publish: input.argv.includes('--publish'),
     experimental: input.argv.includes('--experimental'),
   } as JsonRecord;
   const actionEnvelope = makeEnvelope({
@@ -1216,7 +1210,7 @@ export function createAuthorityHostBroker(input: BrokerInput): {
 
   const applyEffect = (request: AuthorityHostEffectRequest, apply: () => unknown): unknown => {
     if (request.kind === 'process') {
-      if (readOnlyProcess(request, input.entries, input.entry.name)) return apply();
+      if (readOnlyProcess(request, input.entry.name)) return apply();
       if (input.entry.effects === 'read')
         throw new Error('AUTHORITY_HOST_PROCESS_ADAPTER_REQUIRED');
       const target = processTarget(

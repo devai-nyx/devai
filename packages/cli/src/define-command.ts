@@ -11,6 +11,7 @@ import {
   type ActionOutputContract,
   type ActionErrorContract,
 } from './command-manifest.js';
+import { ACTION_REGISTRY } from './generated/action-registry.js';
 
 /**
  * Authority owner of a CLI action (Phase 11.G, absorbed from the
@@ -131,25 +132,23 @@ export function defineCommand(definition: CommandDefinition): CommandDefinition 
 }
 
 export function getActionsList(opts: { authority?: ActionAuthority } = {}): readonly CommandSpec[] {
-  let all: RegistryEntry[] = publicRegistry();
+  let all = ACTION_REGISTRY.filter((entry) => entry.disposition === 'keep');
   if (opts.authority !== undefined) all = all.filter((c) => c.authority === opts.authority);
-  // Strip extended_doc: it is not part of the public CommandSpec surface and
-  // the action catalog schema (action-catalog.schema.json) disallows it.
-  return all.map(
-    ({
-      extended_doc: _omit,
-      internal_name: _internal,
-      runtime_args: _args,
-      runtime_options: _options,
-      runtime_supports_human: _human,
-      authority_contract: _authorityContract,
-      output_contract: _outputContract,
-      error_contract: _errorContract,
-      disposition: _disposition,
-      migration: _migration,
-      ...spec
-    }) => spec,
-  );
+  return all.map((entry) => ({
+    name: entry.action_id,
+    previous_name: entry.internal_binding,
+    path: entry.path,
+    lifecycle: entry.lifecycle,
+    lifecycle_reason: entry.lifecycle_reason,
+    promotion_criteria: entry.promotion_criteria,
+    visibility: entry.visibility,
+    tier: entry.tier,
+    profiles: entry.profiles,
+    effects: entry.effect,
+    authority: entry.authority ?? 'mesh_controller',
+    description: publicText(entry.description),
+    authority_contract_version: entry.authority_contract_version,
+  }));
 }
 
 /**
@@ -215,7 +214,7 @@ export function attachRuntimeContracts(
     }
     if (entry.effects === 'remote-write') {
       options.push({
-        flags: '--allow-publish',
+        flags: '--publish',
         description: 'Authorize remote publication in addition to --write.',
       });
     }
