@@ -17,7 +17,6 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = join(HERE, '..', '..', 'packages', 'cli');
-const DRIVER = join(PKG_ROOT, 'tests', 'fixtures', 'authorized-cli-test-driver.mjs');
 const REAL_BIN = join(PKG_ROOT, 'dist', 'bin.js');
 const CONSTITUTION = join(PKG_ROOT, '..', '..', 'law', 'constitution.md');
 const skipIfNotBuilt = existsSync(REAL_BIN) ? it : it.skip;
@@ -45,7 +44,18 @@ function commitFile(name: string, content: string): void {
 function materializeAuthorityPolicy(): void {
   const result = spawnSync(
     'node',
-    [REAL_BIN, 'adopt', 'upgrade', '--target', repo, '--as-role', 'architect', '--write'],
+    [
+      REAL_BIN,
+      'init',
+      'upgrade',
+      '--target',
+      repo,
+      '--as-role',
+      'architect',
+      '--write',
+      '--format',
+      'json',
+    ],
     { cwd: repo, env: gitEnv, encoding: 'utf8' },
   );
   expect(result.status, result.stderr).toBe(0);
@@ -56,20 +66,44 @@ function install() {
   return spawnSync(
     'node',
     [
-      DRIVER,
-      'adopt',
-      'hooks',
-      'install',
-      '--repo-root',
+      REAL_BIN,
+      'init',
+      'apply',
+      'architect',
+      '--target',
       repo,
+      '--include',
+      'hooks',
       '--hook',
       'post-merge',
       '--as-role',
       'architect',
       '--write',
+      '--format',
+      'json',
     ],
     { cwd: repo, env: gitEnv, encoding: 'utf8' },
   );
+}
+
+function expectFoldedPostMergeRoute(): void {
+  const result = spawnSync(
+    'node',
+    [REAL_BIN, 'govern', 'auditor', 'post-merge', '--format', 'json'],
+    { cwd: repo, env: gitEnv, encoding: 'utf8' },
+  );
+  expect(result.status).toBe(2);
+  expect(result.stdout).toBe('');
+  expect(JSON.parse(result.stderr)).toMatchObject({
+    action_id: 'govern auditor post-merge',
+    ok: false,
+    error: {
+      code: 'ACTION_FOLDED',
+      class: 'routing-authority',
+      exit: 2,
+      remediation: 'round close --post-merge-receipt',
+    },
+  });
 }
 
 beforeEach(() => {
@@ -114,11 +148,16 @@ describe('Article 34 post-merge Auditor composite', () => {
   skipIfNotBuilt(
     'refuses a missing host receipt before creating state or a worktree',
     () => {
-      const result = spawnSync('node', [REAL_BIN, 'govern', 'auditor', 'post-merge'], {
-        cwd: repo,
-        env: gitEnv,
-        encoding: 'utf8',
-      });
+      expectFoldedPostMergeRoute();
+      const result = spawnSync(
+        'node',
+        [REAL_BIN, 'round', 'close', '--post-merge-receipt', '--repo-root', repo],
+        {
+          cwd: repo,
+          env: gitEnv,
+          encoding: 'utf8',
+        },
+      );
 
       expect(result.status).not.toBe(0);
       expect(result.stderr).toMatch(/host receipt missing/i);
@@ -144,7 +183,16 @@ describe('Article 34 post-merge Auditor composite', () => {
       );
       const result = spawnSync(
         'node',
-        [REAL_BIN, 'govern', 'auditor', 'post-merge', '--host-receipt', forged],
+        [
+          REAL_BIN,
+          'round',
+          'close',
+          '--post-merge-receipt',
+          '--host-receipt',
+          forged,
+          '--repo-root',
+          repo,
+        ],
         { cwd: repo, env: gitEnv, encoding: 'utf8' },
       );
 
