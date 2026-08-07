@@ -644,6 +644,36 @@
       "rationale": "Immutable historical text records the repository name used when that evidence was created."
     },
     {
+      "locator": "law/policy/github-actions-features.json:127:17:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "law/policy/github-actions-features.json:173:17:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "law/policy/github-actions-features.json:188:17:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "law/policy/github-actions-features.json:67:17:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "law/policy/github-actions-features.json:82:17:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
       "locator": "law/register/attestation/genesis-attestation.json:6:37:devai-nyx/devai-original",
       "classification": "frozen-predecessor",
       "action": "retain",
@@ -1002,6 +1032,96 @@
       "classification": "frozen-predecessor",
       "action": "retain",
       "rationale": "Frozen predecessor identity; retained as an immutable historical or genesis binding."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:21:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:24:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:26:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:27:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:28:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:29:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:30:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:31:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:32:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:33:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:34:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:37:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:38:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:39:91:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
+    },
+    {
+      "locator": "work/rounds/R-0007/inventory/github-actions-current-state.md:6:16:devai-nyx/devai",
+      "classification": "active-successor",
+      "action": "retain",
+      "rationale": "Live successor reference; the active repository keeps the devai identity."
     }
   ]
 }
