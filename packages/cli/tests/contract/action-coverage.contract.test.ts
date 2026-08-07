@@ -2,6 +2,8 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validators } from '@devai-nyx/schemas';
+import { listSkills } from '@devai-nyx/skills';
 import { describe, expect, it } from 'vitest';
 import { subprocessCoverageEnvironment } from '../../../../tests/helpers/subprocess-coverage.js';
 
@@ -74,49 +76,62 @@ describe('Catalog contracts', () => {
   });
 
   skipIfNotBuilt('validates action coverage through the materialized domains policy', () => {
-    const r = run(['spec', 'validate', 'action', 'coverage', '--repo-root', REPO_ROOT]);
+    const r = run(['check', '--only', 'action-coverage', '--repo-root', REPO_ROOT]);
     expect(r.status, r.stderr).toBe(0);
     const parsed = JSON.parse(r.stdout) as {
       ok: boolean;
-      in_scope_count: number;
-      claimed_count: number;
+      registeredCount: number;
+      inScopeCount: number;
+      claimedCount: number;
       unclaimed: string[];
+      orphanClaims: string[];
     };
     expect(parsed.ok).toBe(true);
-    expect(parsed.in_scope_count).toBeGreaterThan(0);
-    expect(parsed.claimed_count).toBe(parsed.in_scope_count);
+    expect(parsed.registeredCount).toBeGreaterThan(0);
+    expect(parsed.inScopeCount).toBe(parsed.registeredCount);
+    expect(parsed.claimedCount).toBe(parsed.inScopeCount);
     expect(parsed.unclaimed).toEqual([]);
+    expect(parsed.orphanClaims).toEqual([]);
   });
 
-  skipIfNotBuilt('pins the absent generated CLI reference pages without relabeling drift', () => {
-    const r = run(['docs', 'cli', '--check', '--repo-root', REPO_ROOT]);
-    expect(r.status).toBe(2);
-    const parsed = JSON.parse(r.stdout) as { ok: boolean; drift: string[] };
-    expect(parsed.ok).toBe(false);
-    expect(parsed.drift).toEqual([
-      'README.md: missing',
-      'catalog.md: missing',
-      'spec.md: missing',
-      'govern.md: missing',
-      'release.md: missing',
-      'sense.md: missing',
-      'docs.md: missing',
-      'round.md: missing',
-      'evidence.md: missing',
-      'policy.md: missing',
-      'doctor.md: missing',
-      'init.md: missing',
-      'adopt.md: missing',
-      'agent.md: missing',
-      'work.md: missing',
-      'inventory.md: missing',
-      'experimental.md: missing',
-      'verify.md: missing',
-    ]);
+  skipIfNotBuilt('pins the canonical CLI descriptor handoff without claiming R-0009', () => {
+    const r = run(['check', '--only', 'cli-reference', '--repo-root', REPO_ROOT]);
+    expect(r.status, r.stderr).toBe(0);
+    const parsed = JSON.parse(r.stdout) as {
+      scope: string;
+      narrative_documentation_complete: boolean;
+      deploy_ready_site: boolean;
+      categories: Record<string, DescriptorCategory>;
+      migration: DescriptorCategory;
+    };
+    expect(parsed).toMatchObject({
+      scope: 'r0007-canonical-descriptor-handoff',
+      narrative_documentation_complete: false,
+      deploy_ready_site: false,
+    });
+    const descriptors = [
+      ...Object.entries(parsed.categories),
+      ['migration', parsed.migration],
+    ] as const;
+    expect(descriptors.length).toBeGreaterThan(1);
+    for (const [id, descriptor] of descriptors) {
+      expect(descriptor.canonical_source, `${id}: canonical source`).toMatch(
+        /^(?:law|work\/rounds\/R-0007)\//u,
+      );
+      expect(descriptor.expected_ids.length, `${id}: empty canonical population`).toBeGreaterThan(
+        0,
+      );
+      expect(descriptor.documented_ids, `${id}: documentation population drift`).toEqual(
+        descriptor.expected_ids,
+      );
+      expect(descriptor.missing, `${id}: missing values`).toEqual([]);
+      expect(descriptor.extra, `${id}: extra values`).toEqual([]);
+      expect(descriptor.duplicates, `${id}: duplicate values`).toEqual([]);
+    }
   });
 
   skipIfNotBuilt('every documented internal cross-reference resolves', () => {
-    const r = run(['docs', 'links', '--repo-root', REPO_ROOT]);
+    const r = run(['check', '--only', 'docs-links', '--repo-root', REPO_ROOT]);
     expect(r.status).toBe(0);
     const parsed = JSON.parse(r.stdout) as { broken_count: number };
     expect(parsed.broken_count).toBe(0);
@@ -152,27 +167,38 @@ describe('Catalog contracts', () => {
   );
 });
 
+interface DescriptorCategory {
+  readonly canonical_source: string;
+  readonly expected_ids: readonly string[];
+  readonly documented_ids: readonly string[];
+  readonly missing: readonly string[];
+  readonly extra: readonly string[];
+  readonly duplicates: readonly string[];
+}
+
 describe('Skill manifest contracts', () => {
-  skipIfNotBuilt('every skill manifest validates against skill-manifest.schema.json', () => {
-    // `skill list` already runs the validator-or-exit gate; reaching
-    // exit 0 here is the contract being asserted.
-    const r = run(['agent', 'skill', 'list']);
-    expect(r.status).toBe(0);
+  it('every skill manifest validates against skill-manifest.schema.json', () => {
+    const manifests = listSkills();
+    expect(manifests.length).toBeGreaterThan(0);
+    for (const manifest of manifests) {
+      expect(
+        validators.skillManifest(manifest),
+        `skill '${manifest.id}' schema errors: ${JSON.stringify(validators.skillManifest.errors ?? [])}`,
+      ).toBe(true);
+    }
   });
 
-  skipIfNotBuilt('every skill has agent_class + permission_tier declared (Phase 10.G)', () => {
-    const r = run(['agent', 'skill', 'list']);
-    const parsed = JSON.parse(r.stdout) as {
-      skills: Array<{ id: string; agent_class?: string; permission_tier?: string }>;
-    };
-    for (const s of parsed.skills) {
+  it('every skill has agent_class + permission_tier declared (Phase 10.G)', () => {
+    const skills = listSkills();
+    expect(skills.length).toBeGreaterThan(0);
+    for (const s of skills) {
       expect(s.agent_class, `skill '${s.id}' agent_class`).toBeTruthy();
       expect(s.permission_tier, `skill '${s.id}' permission_tier`).toBeTruthy();
     }
   });
 
   skipIfNotBuilt('keeps the bounded prompt-overlay policy green', () => {
-    const r = run(['policy', 'check', 'prompt', 'overlays']);
+    const r = run(['check', '--only', 'prompt-overlays']);
     expect(r.status).toBe(0);
     const parsed = JSON.parse(r.stdout) as {
       ok: boolean;
