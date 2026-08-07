@@ -21,7 +21,7 @@ type Builder = (typeof VALID_BUILDERS)[number];
 const VALID_KINDS = ['library', 'application'] as const;
 type RepoKind = (typeof VALID_KINDS)[number];
 
-interface PublishOptions {
+export interface PublishOptions {
   readonly repoRoot?: string;
   readonly builder?: string;
   readonly message?: string;
@@ -470,7 +470,7 @@ export function publish(repoRoot: string, plan: PublishPlan): PublishResult {
   }
 }
 
-interface RunSummary {
+export interface RunSummary {
   readonly ok: boolean;
   readonly detect?: DetectResult;
   readonly build?: { readonly status: number };
@@ -509,6 +509,153 @@ function emitOutput(payload: RunSummary, human: boolean): void {
     }
   } else {
     process.stdout.write(JSON.stringify(payload, null, 2) + '\n');
+  }
+}
+
+/**
+ * Execute the existing detect -> preflight -> build -> publish service without
+ * routing through the retired `docs publish` command identity.
+ *
+ * Consent and release-controller authority are enforced by the public action
+ * boundary before this service is entered. A dry run performs detect, preflight,
+ * and build only; it never calls the remote publication adapter.
+ */
+export function runDocsPublish(options: PublishOptions): RunSummary {
+  const start = Date.now();
+  const repoRoot = resolve(options.repoRoot ?? DEFAULT_REPO_ROOT);
+  const dryRun = options.dryRun === true;
+  const force = options.force === true;
+
+  let det: DetectResult;
+  try {
+    det = detect(repoRoot, options.builder);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    emitTelemetry({
+      attempts_total: 1,
+      errors_total: { stage: 'detect' },
+      duration_ms: Date.now() - start,
+      outcome: 'failure',
+    });
+    return { ok: false, dry_run: dryRun, error: { stage: 'detect', message: msg } };
+  }
+
+  const pf = preflights(repoRoot, det.gh_pages_branch, { force });
+  if (!pf.ok && !dryRun) {
+    emitTelemetry({
+      attempts_total: 1,
+      errors_total: { stage: 'publish' },
+      duration_ms: Date.now() - start,
+      outcome: 'failure',
+    });
+    return {
+      ok: false,
+      dry_run: false,
+      detect: det,
+      error: { stage: 'publish', message: pf.reason },
+    };
+  }
+
+  let buildRes: BuildResult;
+  try {
+    buildRes = build(repoRoot, det);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    emitTelemetry({
+      attempts_total: 1,
+      errors_total: { stage: 'build' },
+      duration_ms: Date.now() - start,
+      outcome: 'failure',
+    });
+    return {
+      ok: false,
+      dry_run: dryRun,
+      detect: det,
+      error: { stage: 'build', message: msg },
+    };
+  }
+  if (buildRes.status !== 0) {
+    const tail = buildRes.stderr.split('\n').slice(-20).join('\n');
+    emitTelemetry({
+      attempts_total: 1,
+      errors_total: { stage: 'build' },
+      duration_ms: Date.now() - start,
+      outcome: 'failure',
+    });
+    return {
+      ok: false,
+      dry_run: dryRun,
+      detect: det,
+      build: { status: buildRes.status },
+      error: {
+        stage: 'build',
+        message: `builder exited ${String(buildRes.status)}; tail:\n${tail}`,
+      },
+    };
+  }
+  if (!existsSync(buildRes.output_dir_abs)) {
+    emitTelemetry({
+      attempts_total: 1,
+      errors_total: { stage: 'build' },
+      duration_ms: Date.now() - start,
+      outcome: 'failure',
+    });
+    return {
+      ok: false,
+      dry_run: dryRun,
+      detect: det,
+      build: { status: buildRes.status },
+      error: {
+        stage: 'build',
+        message: `expected output directory ${buildRes.output_dir_abs} does not exist after build`,
+      },
+    };
+  }
+
+  const plan = planPublish(repoRoot, det, buildRes, options.message);
+  if (dryRun) {
+    if (!pf.ok) {
+      process.stderr.write(`docs publish [dry-run]: preflight would fail: ${pf.reason}\n`);
+    }
+    emitTelemetry({
+      attempts_total: 1,
+      duration_ms: Date.now() - start,
+      outcome: 'dry_run',
+    });
+    return { ok: true, dry_run: true, detect: det, build: { status: 0 }, plan };
+  }
+
+  try {
+    const result = publish(repoRoot, plan);
+    emitTelemetry({
+      attempts_total: 1,
+      duration_ms: Date.now() - start,
+      outcome: 'success',
+    });
+    return {
+      ok: true,
+      dry_run: false,
+      detect: det,
+      build: { status: 0 },
+      plan,
+      publish: result,
+    };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    emitTelemetry({
+      attempts_total: 1,
+      errors_total: { stage: 'publish' },
+      duration_ms: Date.now() - start,
+      outcome: 'failure',
+    });
+    return {
+      ok: false,
+      dry_run: false,
+      detect: det,
+      build: { status: 0 },
+      plan,
+      error: { stage: 'publish', message: msg },
+    };
   }
 }
 
@@ -564,171 +711,10 @@ export const docsPublish = defineCommand({
       .option('--force', 'Bypass the gh-pages-newer preflight gate (explicit ack)')
       .option('--human', 'Human-readable output')
       .action((options: PublishOptions) => {
-        const start = Date.now();
-        const repoRoot = resolve(options.repoRoot ?? DEFAULT_REPO_ROOT);
         const human = options.human === true;
-        const dryRun = options.dryRun === true;
-        const force = options.force === true;
-
-        // Stage 1: Detect.
-        let det: DetectResult;
-        try {
-          det = detect(repoRoot, options.builder);
-        } catch (err) {
-          const msg = err instanceof Error ? err.message : String(err);
-          emitTelemetry({
-            attempts_total: 1,
-            errors_total: { stage: 'detect' },
-            duration_ms: Date.now() - start,
-            outcome: 'failure',
-          });
-          emitOutput(
-            { ok: false, dry_run: dryRun, error: { stage: 'detect', message: msg } },
-            human,
-          );
-          process.exit(EXIT_FAIL);
-        }
-
-        // Preflight gates 1+2+4 (gate 3 is checked after build).
-        // Gate 4 requires fetch which is fine to run before build.
-        // Skip in dry-run? No — preflights still produce useful signal.
-        const pf = preflights(repoRoot, det.gh_pages_branch, { force });
-        if (!pf.ok && !dryRun) {
-          emitTelemetry({
-            attempts_total: 1,
-            errors_total: { stage: 'publish' },
-            duration_ms: Date.now() - start,
-            outcome: 'failure',
-          });
-          emitOutput(
-            {
-              ok: false,
-              dry_run: dryRun,
-              detect: det,
-              error: { stage: 'publish', message: pf.reason },
-            },
-            human,
-          );
-          process.exit(EXIT_FAIL);
-        }
-
-        // Stage 2: Build.
-        let buildRes: BuildResult;
-        try {
-          buildRes = build(repoRoot, det);
-        } catch (err) {
-          const msg = err instanceof Error ? err.message : String(err);
-          emitTelemetry({
-            attempts_total: 1,
-            errors_total: { stage: 'build' },
-            duration_ms: Date.now() - start,
-            outcome: 'failure',
-          });
-          emitOutput(
-            { ok: false, dry_run: dryRun, detect: det, error: { stage: 'build', message: msg } },
-            human,
-          );
-          process.exit(EXIT_FAIL);
-        }
-        if (buildRes.status !== 0) {
-          // Surface builder diagnostics (last few lines of stderr).
-          const tail = buildRes.stderr.split('\n').slice(-20).join('\n');
-          emitTelemetry({
-            attempts_total: 1,
-            errors_total: { stage: 'build' },
-            duration_ms: Date.now() - start,
-            outcome: 'failure',
-          });
-          emitOutput(
-            {
-              ok: false,
-              dry_run: dryRun,
-              detect: det,
-              build: { status: buildRes.status },
-              error: {
-                stage: 'build',
-                message: `builder exited ${String(buildRes.status)}; tail:\n${tail}`,
-              },
-            },
-            human,
-          );
-          process.exit(EXIT_FAIL);
-        }
-        if (!existsSync(buildRes.output_dir_abs)) {
-          emitTelemetry({
-            attempts_total: 1,
-            errors_total: { stage: 'build' },
-            duration_ms: Date.now() - start,
-            outcome: 'failure',
-          });
-          emitOutput(
-            {
-              ok: false,
-              dry_run: dryRun,
-              detect: det,
-              build: { status: buildRes.status },
-              error: {
-                stage: 'build',
-                message: `expected output directory ${buildRes.output_dir_abs} does not exist after build`,
-              },
-            },
-            human,
-          );
-          process.exit(EXIT_FAIL);
-        }
-
-        // Stage 3: Publish plan.
-        const plan = planPublish(repoRoot, det, buildRes, options.message);
-
-        if (dryRun) {
-          // In dry-run, surface preflight failures as a warning rather than abort.
-          if (!pf.ok) {
-            process.stderr.write(`docs publish [dry-run]: preflight would fail: ${pf.reason}\n`);
-          }
-          emitTelemetry({
-            attempts_total: 1,
-            duration_ms: Date.now() - start,
-            outcome: 'dry_run',
-          });
-          emitOutput({ ok: true, dry_run: true, detect: det, build: { status: 0 }, plan }, human);
-          process.exitCode = EXIT_PASS;
-          return;
-        }
-
-        // Real publish.
-        try {
-          const result = publish(repoRoot, plan);
-          emitTelemetry({
-            attempts_total: 1,
-            duration_ms: Date.now() - start,
-            outcome: 'success',
-          });
-          emitOutput(
-            { ok: true, dry_run: false, detect: det, build: { status: 0 }, plan, publish: result },
-            human,
-          );
-          process.exitCode = EXIT_PASS;
-        } catch (err) {
-          const msg = err instanceof Error ? err.message : String(err);
-          emitTelemetry({
-            attempts_total: 1,
-            errors_total: { stage: 'publish' },
-            duration_ms: Date.now() - start,
-            outcome: 'failure',
-          });
-          emitOutput(
-            {
-              ok: false,
-              dry_run: false,
-              detect: det,
-              build: { status: 0 },
-              plan,
-              error: { stage: 'publish', message: msg },
-            },
-            human,
-          );
-          process.exit(EXIT_FAIL);
-        }
+        const result = runDocsPublish(options);
+        emitOutput(result, human);
+        process.exitCode = result.ok ? EXIT_PASS : EXIT_FAIL;
       });
   },
 });
