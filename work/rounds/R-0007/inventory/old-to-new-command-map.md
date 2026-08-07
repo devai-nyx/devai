@@ -2,19 +2,29 @@
 id: R-0007-PROPOSED-CLI-MIGRATION-INVENTORY
 title: Former runnable CLI to consolidated CLI map
 type: inventory
-status: draft
-date: 2026-07-31
+status: active
+date: 2026-08-07
 authority: Architect
 ---
 
 # Binding old-to-new CLI inventory
 
-> Planning input. At authorized entry, verify that the left column bijects with the
-> exact live runnable population before using it as an Inspector fixture.
->
+The admitted left column bijects with the 147 runnable identities at the R-0007 opening
+base `9b435e5ca479a837baffe2b597c8ba582fec08f4`. The binding disposition produces 42
+runnable workflow actions, 169 folded historical identities, and 11 tombstones across
+222 never-reminted identities. The 42 runnable actions comprise 31 porcelain actions in
+the seven default domains and 11 hidden plumbing actions: ten `task` actions and
+`catalog actions`.
+
 > Task executor modeling adds no public top-level command and therefore does not change
 > this command migration denominator. Hidden `task` plumbing remains round-bound and is
 > consumed normally through `round run`.
+
+`sense run <kind>` is one parameterized action identity. Sensor kinds are canonical
+registry values with their own resolved effect contracts; they do not mint additional
+CLI action identities. The generic `sense run` registry entry carries the conservative
+maximum ceiling, while runtime dispatch must resolve and enforce the selected kind's
+strictly narrower or equal contract before checking authority and consent.
 
 `REMOVED` means tombstone with no runnable CLI successor. Every other changed route is
 folded with the shown migration guidance. Hidden `task` targets always require the
@@ -215,3 +225,7 @@ declared active `--round R-NNNN`.
 | sense `--set sweep`       | `--preset sweep --round R-NNNN`        |
 | adoption `--profile tier1 | tier2                                  | tier3` | `--tier tier1 | tier2          | tier3`   |
 | `--allow-publish`         | `--publish`, still requiring `--write` |
+
+The two consent flags are independent inputs. `--publish` never implies `--write`, and
+`--write` never implies `--publish`; an invocation whose resolved effect is
+`remote-write` requires both.

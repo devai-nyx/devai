@@ -121,7 +121,7 @@
       ],
       "properties": {
         "action_id": {
-          "const": "adopt upgrade"
+          "const": "init upgrade"
         },
         "invocation_id": {
           "type": "string",
@@ -705,7 +705,7 @@
         "mode": "cli-only"
       },
       "materialization": {
-        "action_id": "adopt upgrade",
+        "action_id": "init upgrade",
         "consent": {
           "write": true
         },

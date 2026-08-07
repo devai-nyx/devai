@@ -149,7 +149,8 @@
             }
           },
           "effect": {
-            "enum": ["read", "harness-write", "local-write", "remote-write"]
+            "enum": ["read", "harness-write", "local-write", "remote-write"],
+            "description": "Conservative action-level ceiling. Parameterized actions resolve a narrower registered member contract before authority and consent checks; the ceiling itself never authorizes an effect."
           },
           "authority": {
             "type": ["string", "null"],
@@ -245,6 +246,85 @@
                       "const": "router-only"
                     }
                   }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "disposition": {
+                  "const": "keep"
+                }
+              },
+              "required": ["disposition"]
+            },
+            "then": {
+              "properties": {
+                "path": {
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "init",
+                        "doctor",
+                        "check",
+                        "sense",
+                        "round",
+                        "evidence",
+                        "release",
+                        "task",
+                        "catalog"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "disposition": {
+                  "const": "keep"
+                },
+                "path": {
+                  "prefixItems": [
+                    {
+                      "enum": ["task", "catalog"]
+                    }
+                  ]
+                }
+              },
+              "required": ["disposition", "path"]
+            },
+            "then": {
+              "properties": {
+                "tier": {
+                  "const": "plumbing"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "disposition": {
+                  "const": "keep"
+                },
+                "path": {
+                  "prefixItems": [
+                    {
+                      "enum": ["init", "doctor", "check", "sense", "round", "evidence", "release"]
+                    }
+                  ]
+                }
+              },
+              "required": ["disposition", "path"]
+            },
+            "then": {
+              "properties": {
+                "tier": {
+                  "const": "porcelain"
                 }
               }
             }
@@ -562,10 +642,12 @@
           "required": ["write", "allow_publish", "experimental"],
           "properties": {
             "write": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Satisfied only by explicit --write consent for the resolved invocation."
             },
             "allow_publish": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Internal publication-consent bit satisfied only by explicit --publish; independent of and never implied by --write."
             },
             "experimental": {
               "type": "boolean"
@@ -840,7 +922,7 @@
       "id": "action-registry",
       "status": "active",
       "authority": "Architect",
-      "base_sha": "b60b4c52bff1779da84f48edc63cbf34652ab18e",
+      "base_sha": "9b435e5ca479a837baffe2b597c8ba582fec08f4",
       "identity_rule": "public-path-never-reminted",
       "ordering": "utf8-bytes",
       "generated_views": [
@@ -855,56 +937,59 @@
       },
       "entries": [
         {
-          "action_id": "adopt ci scaffold",
-          "internal_binding": "ci scaffold",
-          "path": ["adopt", "ci", "scaffold"],
+          "action_id": "catalog actions",
+          "internal_binding": "actions list",
+          "path": ["catalog", "actions"],
           "disposition": "keep",
           "lifecycle": "supported",
           "lifecycle_reason": "Supported mesh_controller action in the 0.5 command contract.",
           "migration": null,
           "never_remint": true,
-          "visibility": "standard",
+          "visibility": "common",
           "tier": "plumbing",
           "profiles": ["tier1", "tier2", "tier3"],
-          "effect": "local-write",
+          "effect": "read",
           "authority": "mesh_controller",
-          "description": "Generate a starter .github/workflows/devai-gates.yml that calls the canonical reusable-evidence-gate.yml. Plan-only unless --write; refuses to overwrite unless --force (D-123, item 5).",
+          "description": "List registered DEVAI actions as JSON.",
           "promotion_criteria": [],
           "authority_contract_version": "1.0.0",
           "authority_contract": {
             "schemaVersion": "1.0.0",
-            "action_id": "adopt ci scaffold",
-            "effect": "local-write",
-            "capabilities": ["fs:workspace"],
+            "action_id": "catalog actions",
+            "effect": "read",
+            "capabilities": [],
             "subject": {
-              "kind": "human",
-              "allowed_roles": ["engineer"]
+              "kind": "none"
             },
             "consent": {
-              "write": true,
+              "write": false,
               "allow_publish": false,
               "experimental": false
             },
             "planner": {
-              "kind": "bounded-batches",
-              "planner_id": "ci-scaffold-bounded-plan",
-              "target_kinds": ["fs"],
-              "bounds": {
-                "max_batches": 128,
-                "max_targets_per_batch": 64,
-                "max_total_targets": 8192
-              },
-              "recovery": "preserve-and-report"
+              "kind": "none"
             },
             "boundary": {
-              "kind": "mutation-adapters",
-              "adapter_ids": ["fs-authority-boundary"],
-              "final_reverification": true
+              "kind": "none"
             },
             "readiness": {
-              "requires_binding": true,
+              "requires_binding": false,
               "independent_acceptance_required": true
             }
+          },
+          "output_contract": {
+            "schemaVersion": "1.0.0",
+            "mode": "action-envelope",
+            "envelope_schema": "law/schemas/action-result.schema.json",
+            "success_channel": "stdout",
+            "payload_schema": "law/schemas/actions-list-output.schema.json"
+          },
+          "error_contract": {
+            "schemaVersion": "1.0.0",
+            "mode": "structured-error-envelope",
+            "envelope_schema": "law/schemas/action-result.schema.json",
+            "error_schema": "law/schemas/error.schema.json",
+            "error_channel": "stderr"
           }
         }
       ]

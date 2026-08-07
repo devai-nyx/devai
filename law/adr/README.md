@@ -10,7 +10,7 @@ provenance: [DII-153; DII-175; DII-178; REV-0003]
 
 # ADR roster
 
-ADR-001..020 are gapless; fifteen are active. ADR-005 is superseded by active ADR-013;
+ADR-001..024 are gapless; nineteen are active. ADR-005 is superseded by active ADR-013;
 ADR-011 is superseded by active ADR-016; ADR-014 is independently superseded by active
 ADR-015; and ADR-017 plus ADR-018 are superseded by active ADR-019. Each numbered ADR names the predecessor or
 successor input it supersedes and carries all six required body sections. Predecessor
@@ -33,6 +33,15 @@ bindings, comprehensive conditional-skip discovery, workflow association, and th
 coverage-safe predicate boundary, together with the single-sensor read-authority
 projection. ADR-020 aligns governance-history inline-array parsing with the validated
 semicolon-separated ADR syntax.
+
+ADR-021 through ADR-024 are active R-0007 setpoints. They supersede only their named
+provisional R-0007 plan sections and do not supersede a preexisting numbered ADR:
+ADR-021 binds the seven-domain CLI, exact action dispositions, effects, authority, and
+migration contract; ADR-022 binds suites, presets, round-subordinate executors, model
+routing, and execution evidence; ADR-023 binds the canonical-reference and R-0009
+documentation handoff; and ADR-024 binds GitHub Actions and commit-validation semantics.
+ADR-010, ADR-012, ADR-013, ADR-015, ADR-019, and every other previously active numbered
+ADR remain active except where the replacement topology above already says otherwise.
 
 ADR-005's sealed body retains the historical status phrase “Accepted and active in
 R-0003.” Its lifecycle frontmatter controls current successor state: ADR-005 is

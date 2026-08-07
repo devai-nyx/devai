@@ -32,7 +32,7 @@
           "const": ".devai/config/subprocess-effects.json"
         },
         "allowed_verbs": {
-          "const": ["devai adopt upgrade"]
+          "const": ["devai init upgrade"]
         },
         "authority_and_consent_required": {
           "const": true
@@ -135,7 +135,7 @@
       "source_authority": "F1-architect",
       "materialization": {
         "target": ".devai/config/subprocess-effects.json",
-        "allowed_verbs": ["devai adopt upgrade"],
+        "allowed_verbs": ["devai init upgrade"],
         "authority_and_consent_required": true,
         "byte_identity_required": true,
         "adopter_upgrade_path_required": true,
