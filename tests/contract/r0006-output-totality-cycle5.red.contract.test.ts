@@ -7,10 +7,15 @@
 import { spawnSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { SENSOR_READING_KINDS } from '../../packages/sensors/src/index.js';
+import {
+  SENSOR_DESCRIPTORS,
+  SENSOR_READING_KINDS,
+  type SensorEffect,
+} from '../../packages/sensors/src/index.js';
 import { validators } from '../../packages/schemas/src/index.js';
 import { emitPreDispatchActionResult } from '../../packages/cli/src/action-output.js';
-import { invocationIsNonMutating, routeArgv } from '../../packages/cli/src/command-router.js';
+import { resolveInvocationEntry } from '../../packages/cli/src/authority/sense-selection.js';
+import { routeArgv } from '../../packages/cli/src/command-router.js';
 import type { RegistryEntry } from '../../packages/cli/src/define-command.js';
 import { ACTION_REGISTRY } from '../../packages/cli/src/generated/action-registry.js';
 import { resolveCliVersion } from '../../packages/cli/src/version.js';
@@ -18,6 +23,7 @@ import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const BIN = resolve(ROOT, 'packages/cli/dist/bin.js');
+const NONCANONICAL_EXIT_STATUSES = [1, 50, 65, 126] as const;
 
 function run(args: readonly string[]) {
   return spawnSync('node', [BIN, ...args], {
@@ -34,89 +40,167 @@ function envelope(text: string): Record<string, unknown> {
   return value;
 }
 
-const NONCANONICAL_EXIT_PRODUCERS = [
-  ['spec blueprint diff', 1],
-  ['policy check dependencies', 1],
-  ['policy check sensor integrity', 1],
-  ['docs render mermaid', 1],
-  ['docs synthesize all', 1],
-  ['docs synthesize', 1],
-  ['inventory suggest', 1],
-  ['adopt pack graduate', 1],
-  ['adopt pack resolve', 1],
-  ['sense run', 1],
-  ['sense mutation run', 65],
-  ['agent skill run', 50],
-  ['evidence test record', 126],
-] as const;
+function errorEnvelope(text: string): Record<string, unknown> {
+  const value = JSON.parse(text) as Record<string, unknown>;
+  expect(validators.error(value), JSON.stringify(validators.error.errors)).toBe(true);
+  return value;
+}
+
+function runtimeEntry(entry: (typeof ACTION_REGISTRY)[number]): RegistryEntry {
+  return {
+    name: entry.action_id,
+    previous_name: entry.internal_binding,
+    internal_name: entry.internal_binding.replaceAll(' ', '-'),
+    path: entry.path,
+    disposition: entry.disposition,
+    migration: entry.migration,
+    lifecycle: entry.lifecycle,
+    lifecycle_reason: entry.lifecycle_reason,
+    promotion_criteria: entry.promotion_criteria,
+    visibility: entry.visibility,
+    tier: entry.tier,
+    profiles: entry.profiles,
+    effects: entry.effect,
+    authority: entry.authority ?? 'mesh_controller',
+    description: entry.description,
+    authority_contract_version: entry.authority_contract_version,
+    authority_contract: entry.authority_contract,
+    output_contract: entry.output_contract,
+    error_contract: entry.error_contract,
+  } as RegistryEntry;
+}
+
+function consentFor(effect: SensorEffect): readonly string[] {
+  if (effect === 'remote-write') return ['--write', '--publish'];
+  if (effect === 'local-write' || effect === 'harness-write') return ['--write'];
+  return [];
+}
+
+const fullRegistry = ACTION_REGISTRY.map(runtimeEntry);
+const registry = fullRegistry.filter((entry) => entry.disposition === 'keep');
+const version = resolveCliVersion();
 
 afterEach(() => {
   vi.restoreAllMocks();
   process.exitCode = undefined;
 });
 
-describe('R-0006 Codex cycle-5 output-totality red', () => {
-  const registry = ACTION_REGISTRY.filter((entry) => entry.disposition === 'keep').map(
-    (entry) =>
-      ({
-        name: entry.action_id,
-        path: entry.path,
-        internal_name: entry.internal_binding.replaceAll(' ', '-'),
-        effects: entry.effect,
-      }) as unknown as RegistryEntry,
-  );
-  const version = resolveCliVersion();
-
-  it('canonicalizes every noncanonical producer status and preserves its domain output', () => {
-    expect(NONCANONICAL_EXIT_PRODUCERS).toHaveLength(13);
-    for (const [actionId, status] of NONCANONICAL_EXIT_PRODUCERS) {
-      let rendered = '';
-      vi.spyOn(process.stderr, 'write').mockImplementation((chunk) => {
-        rendered += String(chunk);
-        return true;
-      });
-      const entry = { name: actionId } as RegistryEntry;
-      const domain = JSON.stringify({ action_id: actionId, verdict: 'REVIEW', status });
-      expect(emitPreDispatchActionResult(entry, { exit: status, stdout: domain, stderr: '' })).toBe(
-        true,
-      );
-      const result = envelope(rendered);
-      expect(result).toMatchObject({
-        action_id: actionId,
-        ok: false,
-        error: { exit: 7, message: domain },
-      });
-      expect(process.exitCode).toBe(7);
-      vi.restoreAllMocks();
-      process.exitCode = undefined;
+describe('R-0006 output-totality contracts migrated to the R-0007 surface', () => {
+  it('canonicalizes every noncanonical producer status for every one of the 42 live actions', () => {
+    expect(registry).toHaveLength(42);
+    expect(NONCANONICAL_EXIT_STATUSES).toHaveLength(4);
+    let assertions = 0;
+    for (const entry of registry) {
+      for (const status of NONCANONICAL_EXIT_STATUSES) {
+        let rendered = '';
+        vi.spyOn(process.stderr, 'write').mockImplementation((chunk) => {
+          rendered += String(chunk);
+          return true;
+        });
+        const domain = JSON.stringify({ action_id: entry.name, verdict: 'REVIEW', status });
+        expect(
+          emitPreDispatchActionResult(entry, { exit: status, stdout: domain, stderr: '' }),
+        ).toBe(true);
+        expect(envelope(rendered)).toMatchObject({
+          action_id: entry.name,
+          ok: false,
+          error: { exit: 7, message: domain },
+        });
+        expect(process.exitCode).toBe(7);
+        vi.restoreAllMocks();
+        process.exitCode = undefined;
+        assertions += 1;
+      }
     }
+    expect(assertions).toBe(168);
   });
 
-  it('keeps human and machine REVIEW meaning equivalent for a retained producer', () => {
+  it('keeps human and both machine spellings total for the live canonical catalog', () => {
+    const human = run(['catalog', 'actions', '--format', 'human']);
+    const json = run(['catalog', 'actions', '--json']);
+    const format = run(['catalog', 'actions', '--format', 'json']);
+    expect(human.status, human.stderr).toBe(0);
+    expect(json.status, json.stderr).toBe(0);
+    expect(format.status, format.stderr).toBe(0);
+    expect(human.stderr).toBe('');
+    expect(json.stderr).toBe('');
+    expect(format.stderr).toBe('');
+    expect(human.stdout.trim().split('\n')).toHaveLength(43);
+    const jsonEnvelope = envelope(json.stdout);
+    const formatEnvelope = envelope(format.stdout);
+    expect(formatEnvelope).toEqual(jsonEnvelope);
+    expect(jsonEnvelope).toMatchObject({ action_id: 'catalog actions', ok: true });
+    const result = jsonEnvelope['result'] as Record<string, unknown>;
+    expect(result['value']).toHaveLength(42);
+  });
+
+  it('refuses retired adopt pack resolve before dispatch with its exact migration', () => {
     const human = run(['adopt', 'pack', 'resolve', '--repo-root', '.']);
     const machine = run(['adopt', 'pack', 'resolve', '--repo-root', '.', '--json']);
-    expect(human.status).toBe(1);
-    expect(machine.status).toBe(7);
+    expect(human.status).toBe(2);
+    expect(machine.status).toBe(2);
+    expect(human.stdout).toBe('');
     expect(machine.stdout).toBe('');
-    const result = envelope(machine.stderr);
-    const error = result['error'] as Record<string, unknown>;
-    expect(error['exit']).toBe(machine.status);
-    expect(error['message']).toContain(human.stdout.trim());
+    expect(human.stderr).toBe(
+      "devai: Action 'adopt pack resolve' is retired. Remediation: sense inventory --slice pack\n",
+    );
+    expect(errorEnvelope(machine.stderr)).toMatchObject({
+      code: 'ACTION_FOLDED',
+      class: 'routing-authority',
+      exit: 2,
+      remediation: 'sense inventory --slice pack',
+      context: {
+        action: 'adopt pack resolve',
+        disposition: 'fold',
+        migration: 'sense inventory --slice pack',
+      },
+    });
   });
 
-  it('consumes both machine spellings for all 147 retained public actions', () => {
-    expect(registry).toHaveLength(147);
+  it('keeps exactly 42 live actions while all 169 folds and 11 tombstones stay router-only', () => {
+    const counts = {
+      keep: fullRegistry.filter((entry) => entry.disposition === 'keep').length,
+      fold: fullRegistry.filter((entry) => entry.disposition === 'fold').length,
+      tombstone: fullRegistry.filter((entry) => entry.disposition === 'tombstone').length,
+      porcelain: registry.filter((entry) => entry.tier === 'porcelain').length,
+      plumbing: registry.filter((entry) => entry.tier === 'plumbing').length,
+    };
+    expect(fullRegistry).toHaveLength(222);
+    expect(counts).toEqual({
+      keep: 42,
+      fold: 169,
+      tombstone: 11,
+      porcelain: 31,
+      plumbing: 11,
+    });
+
+    const historicalViolations: string[] = [];
+    for (const entry of fullRegistry.filter((candidate) => candidate.disposition !== 'keep')) {
+      if (
+        entry.output_contract.mode !== 'router-only' ||
+        entry.error_contract.mode !== 'router-only'
+      ) {
+        historicalViolations.push(`${entry.name}:non-router-contract`);
+      }
+      const route = routeArgv(['node', 'devai', ...entry.path], registry, version);
+      if (
+        route.kind !== 'output' ||
+        route.exitCode !== 2 ||
+        !route.text.includes(entry.migration ?? '')
+      ) {
+        historicalViolations.push(`${entry.name}:not-refused-with-migration`);
+      }
+    }
+    expect(historicalViolations).toEqual([]);
+
     const invalid: string[] = [];
     for (const entry of registry) {
-      const consent =
-        entry.effects === 'remote-write'
-          ? ['--write', '--allow-publish']
-          : entry.effects === 'local-write' || entry.effects === 'harness-write'
-            ? ['--write']
-            : [];
+      const args =
+        entry.name === 'sense run' ? [...entry.path, 'inventory_determinism'] : [...entry.path];
+      const consent = entry.name === 'sense run' ? [] : consentFor(entry.effects);
       for (const machine of [['--json'], ['--format', 'json']] as const) {
         const route = routeArgv(
-          ['node', 'devai', ...entry.path, ...consent, ...machine],
+          ['node', 'devai', ...args, ...consent, ...machine],
           registry,
           version,
         );
@@ -133,52 +217,113 @@ describe('R-0006 Codex cycle-5 output-totality red', () => {
     expect(invalid).toEqual([]);
   });
 
-  it('routes both machine spellings for all 59 sensor kinds through read-only sense run', () => {
-    expect(SENSOR_READING_KINDS).toHaveLength(59);
-    const invalid: string[] = [];
-    for (const kind of SENSOR_READING_KINDS) {
+  it('resolves all 59 sensor kinds to their actual effects and independent consent contracts', () => {
+    expect(SENSOR_DESCRIPTORS).toHaveLength(59);
+    expect(
+      Object.fromEntries(
+        (['read', 'harness-write', 'local-write', 'remote-write'] as const).map((effect) => [
+          effect,
+          SENSOR_DESCRIPTORS.filter((descriptor) => descriptor.effect === effect).length,
+        ]),
+      ),
+    ).toEqual({ read: 49, 'harness-write': 4, 'local-write': 2, 'remote-write': 4 });
+    const senseRun = registry.find((entry) => entry.name === 'sense run');
+    expect(senseRun).toBeDefined();
+    if (senseRun === undefined) throw new Error('sense run is not registered');
+
+    const violations: string[] = [];
+    let consentRefusals = 0;
+    for (const descriptor of SENSOR_DESCRIPTORS) {
+      const base = ['node', 'devai', 'sense', 'run', descriptor.kind];
+      const resolved = resolveInvocationEntry(senseRun, base);
+      if (
+        resolved.effects !== descriptor.effect ||
+        resolved.authority_contract.effect !== descriptor.effect ||
+        JSON.stringify(resolved.authority_contract.capabilities) !==
+          JSON.stringify(descriptor.capabilities) ||
+        resolved.authority_contract.consent.write !== (descriptor.effect !== 'read') ||
+        resolved.authority_contract.consent.allow_publish !== (descriptor.effect === 'remote-write')
+      ) {
+        violations.push(`${descriptor.kind}:resolved-contract-drift`);
+      }
+
       for (const machine of [['--json'], ['--format', 'json']] as const) {
-        const argv = ['node', 'devai', 'sense', 'run', kind, ...machine];
-        const route = routeArgv(argv, registry, version);
+        const route = routeArgv(
+          [...base, ...consentFor(descriptor.effect), ...machine],
+          registry,
+          version,
+        );
         if (
-          !invocationIsNonMutating('sense-run', argv) ||
           route.kind !== 'dispatch' ||
           route.argv.includes('--json') ||
           route.argv.includes('--format') ||
           route.argv.includes('json')
         ) {
-          invalid.push(`${kind}:${machine.join(' ')}`);
+          violations.push(`${descriptor.kind}:${machine.join(' ')}:canonical-dispatch`);
+        }
+      }
+
+      if (descriptor.effect === 'harness-write' || descriptor.effect === 'local-write') {
+        const refusal = routeArgv([...base, '--json'], registry, version);
+        if (
+          refusal.kind !== 'output' ||
+          refusal.exitCode !== 2 ||
+          !refusal.text.includes('--write')
+        ) {
+          violations.push(`${descriptor.kind}:missing-write-not-refused`);
+        }
+        consentRefusals += 1;
+      }
+      if (descriptor.effect === 'remote-write') {
+        for (const partial of [[], ['--write'], ['--publish']] as const) {
+          const refusal = routeArgv([...base, ...partial, '--json'], registry, version);
+          if (
+            refusal.kind !== 'output' ||
+            refusal.exitCode !== 2 ||
+            !refusal.text.includes('--write --publish')
+          ) {
+            violations.push(
+              `${descriptor.kind}:${partial.join('+') || 'none'}:consent-not-independent`,
+            );
+          }
+          consentRefusals += 1;
         }
       }
     }
-    expect(invalid).toEqual([]);
+    expect(consentRefusals).toBe(18);
+    expect(violations).toEqual([]);
   });
 
-  it('action-envelopes the parameterized sensor and list paths', () => {
-    for (const args of [
-      ['sense', 'run', 'inventory_determinism', '--json'],
-      ['sense', 'run', '--list', '--json'],
-      ['sense', 'run', '--list', '--format', 'json'],
-    ]) {
-      const result = run(args);
-      expect(result.status, result.stderr).toBe(0);
-      expect(result.stderr).toBe('');
-      expect(envelope(result.stdout)).toMatchObject({ action_id: 'sense run', ok: true });
-    }
+  it('censuses sensors through the canonical descriptors and envelopes a registered kind', () => {
+    expect(SENSOR_READING_KINDS).toEqual(SENSOR_DESCRIPTORS.map((descriptor) => descriptor.kind));
+    expect(new Set(SENSOR_READING_KINDS).size).toBe(59);
+    expect(SENSOR_DESCRIPTORS.map((descriptor) => descriptor.command)).toEqual(
+      SENSOR_READING_KINDS.map((kind) => `sense run ${kind}`),
+    );
+
+    const json = run(['sense', 'run', 'inventory_determinism', '--json']);
+    const format = run(['sense', 'run', 'inventory_determinism', '--format', 'json']);
+    expect(json.status, json.stderr).toBe(0);
+    expect(format.status, format.stderr).toBe(0);
+    expect(json.stderr).toBe('');
+    expect(format.stderr).toBe('');
+    expect(envelope(format.stdout)).toEqual(envelope(json.stdout));
+    expect(envelope(json.stdout)).toMatchObject({ action_id: 'sense run', ok: true });
   }, 360_000);
 
-  it('normalizes a non-allowlisted pre-dispatch exception into the action envelope', () => {
-    const missing = `/tmp/devai-r0006-cycle5-missing-${String(process.pid)}`;
+  it('lets retired-route refusal win before any missing-infrastructure inspection', () => {
+    const missing = `/tmp/devai-r0007-cycle5-missing-${String(process.pid)}`;
     const result = run(['adopt', 'pack', 'resolve', '--repo-root', missing, '--format', 'json']);
-    expect(result.status).toBe(6);
+    expect(result.status).toBe(2);
     expect(result.stdout).toBe('');
-    const output = envelope(result.stderr);
-    expect(output).toMatchObject({
-      action_id: 'adopt pack resolve',
-      ok: false,
-      error: { class: 'infrastructure', exit: 6 },
+    expect(errorEnvelope(result.stderr)).toMatchObject({
+      code: 'ACTION_FOLDED',
+      class: 'routing-authority',
+      exit: 2,
+      remediation: 'sense inventory --slice pack',
     });
-    expect((output['error'] as Record<string, unknown>)['exit']).toBe(result.status);
+    expect(result.stderr).not.toContain('infrastructure');
     expect(result.stderr).not.toContain('node:fs:');
+    expect(result.stderr).not.toContain(missing);
   });
 });
