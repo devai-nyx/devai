@@ -332,16 +332,28 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       expect(
         [...distinct],
         `entry_ready disagreed across consumers: ${JSON.stringify([...readiness])}`,
-      ).toHaveLength(1);
+      ).toEqual(['true']);
     });
 
-    it('R7-007-STATUS-FALSE-WHILE-BLOCKED reports false while the B0 declaration is unbound', () => {
+    it('R7-007-STATUS-TRUE-WHILE-BOUND reports ready for the exact DII-257 declaration', () => {
       const { root, candidate } = clone();
       const entry = run(root, ['entry-check', '--round', 'R-0007', '--candidate', candidate]);
-      expect(codes(entry), detail(entry)).toContain('ENTRY_BLOCKED_DECLARATION_UNBOUND');
+      expect(entry.status, detail(entry)).toBe(0);
+      expect(entry.value).toMatchObject({
+        ok: true,
+        entry_ready: true,
+        diagnostics: [],
+        findings: [],
+      });
 
       const status = run(root, ['status', '--round', 'R-0007', '--candidate', candidate]);
-      expect(status.value?.entry_ready, detail(status)).toBe(false);
+      expect(status.status, detail(status)).toBe(0);
+      expect(status.value).toMatchObject({
+        ok: true,
+        entry_ready: true,
+        diagnostics: [],
+        findings: [],
+      });
     });
   });
 
@@ -357,7 +369,7 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
       ).toEqual([]);
     });
 
-    it('R7-009-CAPABILITY-SELECTED-BEHAVIOUR keeps hardening under a foreign profile decision id', () => {
+    it('R7-009-CAPABILITY-SELECTED-BEHAVIOUR keeps the bound declaration under a foreign profile decision specimen', () => {
       const { root, candidate } = clone();
       const policy = json<{ control_capabilities?: Record<string, unknown> }>(root, POLICY_PATH);
       expect(
@@ -365,14 +377,19 @@ describe('OM-017 / DII-252 remediation campaign 3 Review Run 1 complete repair p
         'policy must declare generic control capabilities',
       ).toBeTypeOf('object');
 
-      // A profile carrying an unrelated decision id must not disable any hardening.
-      const profile = json<Record<string, unknown>>(root, PROFILE_PATH);
+      // The top-level decision id is a provenance specimen, not the bound declaration.
+      const profile = json<{
+        decision_id: string;
+        declaration: { decision_id: string; exact_base: string };
+      }>(root, PROFILE_PATH);
+      expect(profile.declaration.decision_id).toBe('DII-257');
       profile.decision_id = 'DII-900';
       putJson(root, PROFILE_PATH, profile);
-      commitAll(root, 'test: foreign profile decision id');
+      commitAll(root, 'test: foreign profile decision specimen');
       const foreign = git(root, ['rev-parse', 'HEAD']);
       const outcome = run(root, ['status', '--round', 'R-0007', '--candidate', foreign]);
-      expect(outcome.value?.entry_ready, detail(outcome)).toBe(false);
+      expect(outcome.status, detail(outcome)).toBe(0);
+      expect(outcome.value?.entry_ready, detail(outcome)).toBe(true);
 
       const omitted = run(root, ['status', '--round', 'R-0007']);
       expect(codes(omitted), detail(omitted)).toContain('REVIEWER_BINDING_CANDIDATE_REQUIRED');

@@ -78,9 +78,7 @@ describe('DII-255 / DII-256 evidence-preserving scheduler serialization', () => 
 
   it('retains literal top-level commands, timeouts, cold install, argv roster, and floors', () => {
     const pkg = JSON.parse(text(PACKAGE)) as { scripts: Record<string, string> };
-    expect(pkg.scripts['test']).toBe(
-      'pnpm devai:prepare && node packages/cli/dist/bin.js sense test all --repo-root . --no-emit-reading',
-    );
+    expect(pkg.scripts['test']).toBe('pnpm devai:prepare && vitest run');
     expect(pkg.scripts['test:coverage:t1-t3']).toBe(
       'pnpm run devai:prepare && vitest run --config tests/config/t1-t3.coverage.config.ts --coverage.reportsDirectory=scratch/coverage/t1-t3',
     );

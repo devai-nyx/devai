@@ -561,12 +561,14 @@ describe('OM-017 / DII-251 remediation campaign 3 complete populations', () => {
         candidate,
       ]);
       expect(result.status, `${result.stdout}\n${result.stderr}`).toBe(0);
-      expect(result.value).toMatchObject({ command: 'policy-check', round: 'R-0007' });
-      expect(result.value?.diagnostics).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({ code: 'ENTRY_BLOCKED_DECLARATION_UNBOUND' }),
-        ]),
-      );
+      expect(result.value).toMatchObject({
+        ok: true,
+        command: 'policy-check',
+        round: 'R-0007',
+        entry_ready: true,
+        diagnostics: [],
+        findings: [],
+      });
     });
 
     it('R3-005-CANDIDATE-BOUND-POLICY-SCHEMA ignores dirty schema substitution', () => {

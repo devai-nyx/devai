@@ -81,7 +81,12 @@ describe('pre-R-0007 generic close-control red contracts', () => {
     );
   });
 
-  it('accepts the Owner-bound reviewer during preparation and reports only the declaration diagnostic', () => {
+  it('accepts the Owner-bound reviewer and exact DII-257 declaration during preparation', () => {
+    expect(json('work/rounds/R-0007/close-control-profile.json').declaration).toEqual({
+      binding: 'b0-decision-required',
+      decision_id: 'DII-257',
+      exact_base: '9b435e5ca479a837baffe2b597c8ba582fec08f4',
+    });
     const result = run('policy-check', ['--phase', 'pre-entry-preparation', '--candidate', HEAD]);
     expect(result.status, JSON.stringify(result.value, null, 2)).toBe(0);
     expect(result.value).toMatchObject({
@@ -89,22 +94,22 @@ describe('pre-R-0007 generic close-control red contracts', () => {
       command: 'policy-check',
       round: 'R-0007',
       phase: 'pre-entry-preparation',
-      entry_ready: false,
+      entry_ready: true,
+      diagnostics: [],
+      findings: [],
     });
-    expect(result.value?.diagnostics).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ code: 'ENTRY_BLOCKED_DECLARATION_UNBOUND' }),
-      ]),
-    );
   });
 
-  it('fails entry closed while the B0 declaration is unbound', () => {
+  it('passes entry for the exact DII-257-bound candidate', () => {
     const result = run('entry-check', ['--candidate', HEAD]);
-    expect(result.status).toBe(1);
-    expect(result.value).toMatchObject({ ok: false, command: 'entry-check', entry_ready: false });
-    expect(result.value?.diagnostics).toEqual(
-      expect.arrayContaining([expect.objectContaining({ code: 'DECLARATION_PENDING_B0' })]),
-    );
+    expect(result.status, JSON.stringify(result.value, null, 2)).toBe(0);
+    expect(result.value).toMatchObject({
+      ok: true,
+      command: 'entry-check',
+      entry_ready: true,
+      diagnostics: [],
+      findings: [],
+    });
   });
 
   it('emits an auditable impact plan with conservative fallback for this control range', () => {
@@ -250,7 +255,7 @@ describe('pre-R-0007 generic close-control red contracts', () => {
       state: 'DRAFT',
       substantive_cycles: { used: 0, maximum: 2 },
       transport_retries_per_cycle: { used: 0, maximum: 1 },
-      entry_ready: false,
+      entry_ready: true,
       diagnostics: [],
       findings: [],
     });
