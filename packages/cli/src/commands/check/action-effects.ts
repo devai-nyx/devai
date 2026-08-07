@@ -13,6 +13,38 @@ interface Options {
   readonly human?: boolean;
 }
 
+export async function checkActionEffects(options: {
+  readonly repoRoot: string;
+  readonly tsconfig?: string;
+  readonly registry?: string;
+}) {
+  const repoRoot = resolve(options.repoRoot);
+  const registryPath = resolve(repoRoot, options.registry ?? 'law/policy/subprocess-effects.json');
+  const registry = JSON.parse(readFileSync(registryPath, 'utf8')) as {
+    templates: readonly {
+      executable?: unknown;
+      argv_shape?: unknown;
+      capabilities?: unknown;
+    }[];
+  };
+  const result = await senseActionEffectInference({
+    tsconfigPath: resolve(repoRoot, options.tsconfig ?? 'tsconfig.effects.json'),
+    catalog: ACTION_EFFECT_CONTRACTS.map((entry) => entry.action_id),
+    contracts: ACTION_EFFECT_CONTRACTS,
+    subprocessRegistry: registry,
+  });
+  try {
+    enforceEffectReport(result.report);
+    return { ok: true, ...result };
+  } catch (error) {
+    return {
+      ok: false,
+      ...result,
+      enforcement_error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
 export const checkActionEffectsCmd = defineCommand({
   name: 'check action-effects',
   description:
@@ -36,23 +68,10 @@ export const checkActionEffectsCmd = defineCommand({
       )
       .option('--human', 'Human-readable summary')
       .action(async (options: Options) => {
-        const repoRoot = resolve(options.repoRoot ?? '.');
-        const registryPath = resolve(
-          repoRoot,
-          options.registry ?? 'law/policy/subprocess-effects.json',
-        );
-        const registry = JSON.parse(readFileSync(registryPath, 'utf8')) as {
-          templates: readonly {
-            executable?: unknown;
-            argv_shape?: unknown;
-            capabilities?: unknown;
-          }[];
-        };
-        const result = await senseActionEffectInference({
-          tsconfigPath: resolve(repoRoot, options.tsconfig ?? 'tsconfig.effects.json'),
-          catalog: ACTION_EFFECT_CONTRACTS.map((entry) => entry.action_id),
-          contracts: ACTION_EFFECT_CONTRACTS,
-          subprocessRegistry: registry,
+        const result = await checkActionEffects({
+          repoRoot: options.repoRoot ?? '.',
+          ...(options.tsconfig !== undefined && { tsconfig: options.tsconfig }),
+          ...(options.registry !== undefined && { registry: options.registry }),
         });
 
         if (options.human === true) {
@@ -70,13 +89,12 @@ export const checkActionEffectsCmd = defineCommand({
         } else {
           process.stdout.write(JSON.stringify(result) + '\n');
         }
-        try {
-          enforceEffectReport(result.report);
+        if (result.ok) {
           process.exitCode = EXIT_PASS;
-        } catch (error) {
+        } else {
           if (options.human === true) {
             process.stderr.write(
-              `policy check action effects: BINDING FAIL — ${error instanceof Error ? error.message : String(error)}\n`,
+              `policy check action effects: BINDING FAIL — ${'enforcement_error' in result ? result.enforcement_error : 'effect report enforcement failed'}\n`,
             );
           }
           process.exitCode = EXIT_FAIL;

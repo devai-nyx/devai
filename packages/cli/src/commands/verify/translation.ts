@@ -30,7 +30,7 @@ import { senseTestWeakening } from '@devai-nyx/sensors';
 import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 
-interface Options {
+export interface TranslationValidationOptions {
   readonly witness: string;
   readonly repoRoot?: string;
   readonly databaseUrl?: string;
@@ -530,7 +530,9 @@ function writeJson(path: string, value: unknown): void {
   writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`);
 }
 
-async function executeValidation(options: Options): Promise<Record<string, unknown>> {
+export async function executeTranslationValidation(
+  options: TranslationValidationOptions,
+): Promise<Record<string, unknown>> {
   const startedAt = new Date().toISOString();
   const repoRoot = resolve(options.repoRoot ?? '.');
   if (options.databaseUrl === undefined || options.databaseUrl.length === 0) {
@@ -1084,9 +1086,9 @@ export const verifyTranslation = defineCommand({
       .option('--repo-root <path>', 'Repository root (default: current directory)')
       .option('--database-url <url>', 'Postgres administrative URL for per-validation isolation')
       .option('--human', 'Emit a human-readable summary instead of JSON')
-      .action(async (options: Options) => {
+      .action(async (options: TranslationValidationOptions) => {
         try {
-          const result = await executeValidation(options);
+          const result = await executeTranslationValidation(options);
           if (options.human === true) {
             process.stdout.write(
               `verify translation: ${String(result['verdict'])} (report-only; readiness ineligible)\n`,

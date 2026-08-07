@@ -1,7 +1,7 @@
 import { copyFileSync, existsSync, mkdirSync, readFileSync } from '@devai-nyx/authority';
 import { dirname, resolve } from 'node:path';
 import type { CAC } from 'cac';
-import { EXIT_FAIL, EXIT_PASS, EXIT_USAGE } from '@devai-nyx/utils';
+import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 
 /**
@@ -24,7 +24,7 @@ const DEFAULT_THRESHOLDS = '.devai/config/thresholds.json';
 const DEFAULT_BASELINE = '.devai/state/mutation/baseline.json';
 const DEFAULT_CURRENT = '.devai/state/mutation/current.json';
 
-interface Options {
+export interface MutationVerifyOptions {
   readonly baseline?: string;
   readonly current?: string;
   readonly thresholds?: string;
@@ -70,9 +70,93 @@ function readThresholds(p: string): Thresholds | undefined {
   return JSON.parse(readFileSync(p, 'utf8')) as Thresholds;
 }
 
-interface Finding {
+export interface MutationFinding {
   readonly kind: 'below_threshold' | 'regression_score' | 'regression_survived';
   readonly message: string;
+}
+
+export interface MutationVerifyReport {
+  readonly ok: boolean;
+  readonly current: { readonly mutation_score: number | null; readonly survived: number | null };
+  readonly baseline: {
+    readonly mutation_score: number | null;
+    readonly survived: number | null;
+  } | null;
+  readonly thresholds: Thresholds['mutation'] | null;
+  readonly findings: readonly MutationFinding[];
+  readonly saved_baseline: boolean;
+}
+
+export function checkMutationReport(options: MutationVerifyOptions): MutationVerifyReport {
+  const repoRoot = resolve(options.repoRoot ?? process.cwd());
+  const currentPath = resolve(repoRoot, options.current ?? DEFAULT_CURRENT);
+  if (!existsSync(currentPath)) {
+    throw new Error(`--current report not found at ${currentPath}`);
+  }
+  const current = readReport(currentPath);
+  const curScore = scoreOf(current);
+  const curSurvived = survivedOf(current);
+
+  const baselinePath = resolve(repoRoot, options.baseline ?? DEFAULT_BASELINE);
+  const baseline = existsSync(baselinePath) ? readReport(baselinePath) : undefined;
+  const baseScore = baseline ? scoreOf(baseline) : undefined;
+  const baseSurvived = baseline ? survivedOf(baseline) : undefined;
+
+  const thresholdsPath = resolve(repoRoot, options.thresholds ?? DEFAULT_THRESHOLDS);
+  const thresholds = readThresholds(thresholdsPath);
+  const minScore = thresholds?.mutation?.score_min;
+  const maxSurvived = thresholds?.mutation?.survived_max;
+
+  const findings: MutationFinding[] = [];
+  if (typeof minScore === 'number' && typeof curScore === 'number' && curScore < minScore) {
+    findings.push({
+      kind: 'below_threshold',
+      message: `mutation score ${curScore.toFixed(1)}% < threshold ${String(minScore)}%`,
+    });
+  }
+  if (
+    typeof maxSurvived === 'number' &&
+    typeof curSurvived === 'number' &&
+    curSurvived > maxSurvived
+  ) {
+    findings.push({
+      kind: 'below_threshold',
+      message: `survived mutants ${String(curSurvived)} > ceiling ${String(maxSurvived)}`,
+    });
+  }
+  if (typeof baseScore === 'number' && typeof curScore === 'number' && curScore < baseScore) {
+    findings.push({
+      kind: 'regression_score',
+      message: `mutation score regressed: ${curScore.toFixed(1)}% < baseline ${baseScore.toFixed(1)}%`,
+    });
+  }
+  if (
+    typeof baseSurvived === 'number' &&
+    typeof curSurvived === 'number' &&
+    curSurvived > baseSurvived
+  ) {
+    findings.push({
+      kind: 'regression_survived',
+      message: `survived mutants regressed: ${String(curSurvived)} > baseline ${String(baseSurvived)}`,
+    });
+  }
+
+  let savedBaseline = false;
+  if (options.saveBaseline === true && findings.length === 0) {
+    mkdirSync(dirname(baselinePath), { recursive: true });
+    copyFileSync(currentPath, baselinePath);
+    savedBaseline = true;
+  }
+  return {
+    ok: findings.length === 0,
+    current: { mutation_score: curScore ?? null, survived: curSurvived ?? null },
+    baseline: baseline
+      ? { mutation_score: baseScore ?? null, survived: baseSurvived ?? null }
+      : null,
+    thresholds: thresholds?.mutation ?? null,
+    findings,
+    saved_baseline: savedBaseline,
+  };
 }
 
 export const mutationVerify = defineCommand({
@@ -95,106 +179,32 @@ export const mutationVerify = defineCommand({
         '--save-baseline',
         'After a clean verify (no findings), copy --current → --baseline to ratchet the baseline forward. No-op on FAIL.',
       )
-      .action((options: Options) => {
+      .action((options: MutationVerifyOptions) => {
         try {
-          const repoRoot = resolve(options.repoRoot ?? process.cwd());
-          const currentPath = resolve(repoRoot, options.current ?? DEFAULT_CURRENT);
-          if (!existsSync(currentPath)) {
-            process.stderr.write(
-              `devai sense mutation verify: --current report not found at ${currentPath}\n`,
-            );
-            process.exit(EXIT_USAGE);
-          }
-          const current = readReport(currentPath);
-          const curScore = scoreOf(current);
-          const curSurvived = survivedOf(current);
-
-          const baselinePath = resolve(repoRoot, options.baseline ?? DEFAULT_BASELINE);
-          const baseline = existsSync(baselinePath) ? readReport(baselinePath) : undefined;
-          const baseScore = baseline ? scoreOf(baseline) : undefined;
-          const baseSurvived = baseline ? survivedOf(baseline) : undefined;
-
-          const thresholdsPath = resolve(repoRoot, options.thresholds ?? DEFAULT_THRESHOLDS);
-          const thresholds = readThresholds(thresholdsPath);
-          const minScore = thresholds?.mutation?.score_min;
-          const maxSurvived = thresholds?.mutation?.survived_max;
-
-          const findings: Finding[] = [];
-          if (typeof minScore === 'number' && typeof curScore === 'number' && curScore < minScore) {
-            findings.push({
-              kind: 'below_threshold',
-              message: `mutation score ${curScore.toFixed(1)}% < threshold ${String(minScore)}%`,
-            });
-          }
-          if (
-            typeof maxSurvived === 'number' &&
-            typeof curSurvived === 'number' &&
-            curSurvived > maxSurvived
-          ) {
-            findings.push({
-              kind: 'below_threshold',
-              message: `survived mutants ${String(curSurvived)} > ceiling ${String(maxSurvived)}`,
-            });
-          }
-          if (
-            typeof baseScore === 'number' &&
-            typeof curScore === 'number' &&
-            curScore < baseScore
-          ) {
-            findings.push({
-              kind: 'regression_score',
-              message: `mutation score regressed: ${curScore.toFixed(1)}% < baseline ${baseScore.toFixed(1)}%`,
-            });
-          }
-          if (
-            typeof baseSurvived === 'number' &&
-            typeof curSurvived === 'number' &&
-            curSurvived > baseSurvived
-          ) {
-            findings.push({
-              kind: 'regression_survived',
-              message: `survived mutants regressed: ${String(curSurvived)} > baseline ${String(baseSurvived)}`,
-            });
-          }
-
-          const result = {
-            ok: findings.length === 0,
-            current: { mutation_score: curScore ?? null, survived: curSurvived ?? null },
-            baseline: baseline
-              ? { mutation_score: baseScore ?? null, survived: baseSurvived ?? null }
-              : null,
-            thresholds: thresholds?.mutation ?? null,
-            findings,
-          };
-
-          let savedBaseline = false;
-          if (options.saveBaseline === true && result.ok) {
-            mkdirSync(dirname(baselinePath), { recursive: true });
-            copyFileSync(currentPath, baselinePath);
-            savedBaseline = true;
-          }
+          const result = checkMutationReport(options);
 
           if (options.human === true) {
             const verdict = result.ok ? 'PASS' : 'FAIL';
             process.stdout.write(`devai sense mutation verify: ${verdict}\n`);
             process.stdout.write(
-              `  current: score=${curScore?.toFixed?.(1) ?? 'n/a'}% survived=${curSurvived ?? 'n/a'}\n`,
+              `  current: score=${result.current.mutation_score?.toFixed?.(1) ?? 'n/a'}% survived=${result.current.survived ?? 'n/a'}\n`,
             );
-            if (baseline) {
+            if (result.baseline !== null) {
               process.stdout.write(
-                `  baseline: score=${baseScore?.toFixed?.(1) ?? 'n/a'}% survived=${baseSurvived ?? 'n/a'}\n`,
+                `  baseline: score=${result.baseline.mutation_score?.toFixed?.(1) ?? 'n/a'}% survived=${result.baseline.survived ?? 'n/a'}\n`,
               );
             }
-            for (const f of findings) {
+            for (const f of result.findings) {
               process.stdout.write(`  - ${f.kind}: ${f.message}\n`);
             }
-            if (savedBaseline) {
+            if (result.saved_baseline) {
+              const repoRoot = resolve(options.repoRoot ?? process.cwd());
+              const currentPath = resolve(repoRoot, options.current ?? DEFAULT_CURRENT);
+              const baselinePath = resolve(repoRoot, options.baseline ?? DEFAULT_BASELINE);
               process.stdout.write(`  baseline ratcheted: ${currentPath} → ${baselinePath}\n`);
             }
           } else {
-            process.stdout.write(
-              JSON.stringify({ ...result, saved_baseline: savedBaseline }) + '\n',
-            );
+            process.stdout.write(JSON.stringify(result) + '\n');
           }
 
           process.exit(result.ok ? EXIT_PASS : EXIT_FAIL);

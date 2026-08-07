@@ -13,7 +13,7 @@ interface Options {
   readonly human?: boolean;
 }
 
-interface BrokenLink {
+export interface BrokenLink {
   readonly source: string;
   readonly target: string;
   readonly resolved: string | null;
@@ -87,7 +87,7 @@ function walk(dir: string, repoRoot: string, found: string[]): void {
 
 const MD_LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
 
-function audit(repoRoot: string, scanDir: string): BrokenLink[] {
+export function auditDocumentationLinks(repoRoot: string, scanDir: string): BrokenLink[] {
   const broken: BrokenLink[] = [];
   const files: string[] = [];
   walk(scanDir, repoRoot, files);
@@ -165,7 +165,7 @@ export const docsLinks = defineCommand({
           process.stderr.write(`devai docs links: ${scanDir} not found\n`);
           process.exit(EXIT_FAIL);
         }
-        const broken = audit(repoRoot, scanDir);
+        const broken = auditDocumentationLinks(repoRoot, scanDir);
         if (options.human === true) {
           if (broken.length === 0) {
             process.stdout.write(`docs links: OK (${scanDir})\n`);

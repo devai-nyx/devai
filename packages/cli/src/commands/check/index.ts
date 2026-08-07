@@ -28,6 +28,34 @@ export { checkDependenciesCmd, checkDependencies } from './dependencies.js';
 export { checkActionEffectsCmd } from './action-effects.js';
 export { checkSchemasCmd, registerCheckSchemas, checkSchemaCanon } from './schemas.js';
 export type { SchemaCanonFinding, SchemaCanonReport } from './schemas.js';
+export { checkCmd } from './facade.js';
+export { executeCheckMember } from './adapters.js';
+export type { CheckExecutionOptions } from './adapters.js';
+export { buildCanonicalDescriptorHandoffReport } from './documentation-report.js';
+export type {
+  CanonicalDescriptorHandoffReport,
+  DocumentationCategoryResult,
+} from './documentation-report.js';
+export {
+  aggregateCheckResults,
+  loadCheckSuitePolicy,
+  resolveCheckPlan,
+  runCheckPlan,
+} from './contracts.js';
+export type {
+  CheckAggregate,
+  CheckBinding,
+  CheckCost,
+  CheckMemberDefinition,
+  CheckMemberResult,
+  CheckRunReport,
+  CheckStatus,
+  CheckSuiteDefinition,
+  CheckSuiteName,
+  CheckSuitePolicy,
+  ResolvedCheckMember,
+  ResolvedCheckPlan,
+} from './contracts.js';
 
 const DEFAULT_REPO_ROOT = '.';
 const DEFAULT_INVARIANTS_DIR = 'law/invariants';
