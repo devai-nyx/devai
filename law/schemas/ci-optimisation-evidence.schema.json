@@ -1,0 +1,892 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/ci-optimisation-evidence.schema.json",
+  "title": "R-0007 CI optimisation census and paired benchmark evidence",
+  "description": "Exact-candidate, same-runner, equal-population evidence required before activating a GitHub Actions optimisation.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "round",
+    "evidence_status",
+    "policy_identity",
+    "feature_policy_identity",
+    "applicable_features",
+    "feature_dispositions",
+    "paired_runs",
+    "excluded_observations",
+    "activation_decisions",
+    "digest_method",
+    "evidence_digest_sha256"
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha40": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "featureId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "commitValidationPolicyIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "digest_sha256"],
+      "properties": {
+        "path": {
+          "const": "law/policy/commit-validation.json"
+        },
+        "digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "featurePolicyIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "digest_sha256"],
+      "properties": {
+        "path": {
+          "const": "law/policy/github-actions-features.json"
+        },
+        "digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "semanticPopulation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["files", "suites", "cases", "executed", "reused", "coverage"],
+      "properties": {
+        "files": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "suites": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cases": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "executed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reused": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "statements", "branches", "functions", "lines"],
+          "properties": {
+            "mode": {
+              "enum": ["not-applicable", "whole-executed"]
+            },
+            "statements": {
+              "type": ["number", "null"],
+              "minimum": 0,
+              "maximum": 100
+            },
+            "branches": {
+              "type": ["number", "null"],
+              "minimum": 0,
+              "maximum": 100
+            },
+            "functions": {
+              "type": ["number", "null"],
+              "minimum": 0,
+              "maximum": 100
+            },
+            "lines": {
+              "type": ["number", "null"],
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        }
+      }
+    },
+    "timings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "queue",
+        "setup",
+        "install",
+        "jobs",
+        "gates",
+        "artifact_verification",
+        "critical_path"
+      ],
+      "properties": {
+        "queue": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "setup": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "install": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "jobs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/durationEntry"
+          }
+        },
+        "gates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/durationEntry"
+          }
+        },
+        "artifact_verification": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "critical_path": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "durationEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "duration_ms"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "benchmarkRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "workflow_identity",
+        "exact_candidate_sha",
+        "runner_class",
+        "cache_state",
+        "semantic_population",
+        "timings_ms",
+        "conclusion"
+      ],
+      "properties": {
+        "run_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "workflow_identity": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "exact_candidate_sha": {
+          "$ref": "#/$defs/sha40"
+        },
+        "runner_class": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cache_state": {
+          "enum": ["cold-miss", "warm-hit"]
+        },
+        "semantic_population": {
+          "$ref": "#/$defs/semanticPopulation"
+        },
+        "timings_ms": {
+          "$ref": "#/$defs/timings"
+        },
+        "conclusion": {
+          "const": "success"
+        }
+      }
+    },
+    "featureDisposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "feature_id",
+        "disposition",
+        "security_rationale",
+        "semantic_rationale",
+        "cost_rationale",
+        "immutable_source_refs",
+        "observed_at"
+      ],
+      "properties": {
+        "feature_id": {
+          "$ref": "#/$defs/featureId"
+        },
+        "disposition": {
+          "enum": ["adopt", "defer", "reject"]
+        },
+        "security_rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "semantic_rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cost_rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "immutable_source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "pairedRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pair_id",
+        "cache_state",
+        "exact_candidate_sha",
+        "runner_class",
+        "semantic_population_equal",
+        "baseline_runs",
+        "candidate_runs",
+        "median_critical_path_change"
+      ],
+      "properties": {
+        "pair_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cache_state": {
+          "enum": ["cold-miss", "warm-hit"]
+        },
+        "exact_candidate_sha": {
+          "$ref": "#/$defs/sha40"
+        },
+        "runner_class": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "semantic_population_equal": {
+          "const": true
+        },
+        "baseline_runs": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "$ref": "#/$defs/benchmarkRun"
+          }
+        },
+        "candidate_runs": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "$ref": "#/$defs/benchmarkRun"
+          }
+        },
+        "median_critical_path_change": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["absolute_ms", "percentage"],
+          "properties": {
+            "absolute_ms": {
+              "type": "number"
+            },
+            "percentage": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "activationDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "feature_id",
+        "decision",
+        "population_equal",
+        "threshold_result",
+        "security_or_operability_benefit",
+        "reason"
+      ],
+      "properties": {
+        "feature_id": {
+          "$ref": "#/$defs/featureId"
+        },
+        "decision": {
+          "enum": ["activate", "remain-disabled", "rollback"]
+        },
+        "population_equal": {
+          "type": "boolean"
+        },
+        "threshold_result": {
+          "enum": ["pass", "fail", "not-applicable"]
+        },
+        "security_or_operability_benefit": {
+          "type": "boolean"
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "excludedObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "workflow_identity",
+        "exact_candidate_sha",
+        "runner_class",
+        "cache_state",
+        "conclusion",
+        "exclusion_reason"
+      ],
+      "properties": {
+        "run_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "workflow_identity": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "exact_candidate_sha": {
+          "$ref": "#/$defs/sha40"
+        },
+        "runner_class": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cache_state": {
+          "enum": ["cold-miss", "warm-hit", "unknown"]
+        },
+        "conclusion": {
+          "enum": ["failure", "cancelled", "timed-out", "incomplete", "population-mismatch"]
+        },
+        "exclusion_reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    }
+  },
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "round": {
+      "const": "R-0007"
+    },
+    "evidence_status": {
+      "const": "complete-observation"
+    },
+    "policy_identity": {
+      "$ref": "#/$defs/commitValidationPolicyIdentity"
+    },
+    "feature_policy_identity": {
+      "$ref": "#/$defs/featurePolicyIdentity"
+    },
+    "applicable_features": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/featureId"
+      }
+    },
+    "feature_dispositions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/featureDisposition"
+      }
+    },
+    "paired_runs": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "$ref": "#/$defs/pairedRun"
+      }
+    },
+    "excluded_observations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/excludedObservation"
+      }
+    },
+    "activation_decisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/activationDecision"
+      }
+    },
+    "digest_method": {
+      "const": "sha256-canonical-json-with-evidence-digest-field-omitted"
+    },
+    "evidence_digest_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "round": "R-0007",
+      "evidence_status": "complete-observation",
+      "policy_identity": {
+        "path": "law/policy/commit-validation.json",
+        "digest_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      },
+      "feature_policy_identity": {
+        "path": "law/policy/github-actions-features.json",
+        "digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      "applicable_features": ["dependency-cache"],
+      "feature_dispositions": [
+        {
+          "feature_id": "dependency-cache",
+          "disposition": "adopt",
+          "security_rationale": "Cache data remains an untrusted acquisition input.",
+          "semantic_rationale": "A hit cannot authorize or reuse a validation verdict.",
+          "cost_rationale": "Activation depends on paired critical-path evidence.",
+          "immutable_source_refs": ["law/adr/ADR-024-r0007-ci-validation.md"],
+          "observed_at": "2026-08-07T00:00:00Z"
+        }
+      ],
+      "paired_runs": [
+        {
+          "pair_id": "cold-miss-pair",
+          "cache_state": "cold-miss",
+          "exact_candidate_sha": "3333333333333333333333333333333333333333",
+          "runner_class": "ubuntu-latest",
+          "semantic_population_equal": true,
+          "baseline_runs": [
+            {
+              "run_id": "cold-baseline-1",
+              "workflow_identity": "baseline-workflow",
+              "exact_candidate_sha": "3333333333333333333333333333333333333333",
+              "runner_class": "ubuntu-latest",
+              "cache_state": "cold-miss",
+              "semantic_population": {
+                "files": 1,
+                "suites": 1,
+                "cases": 1,
+                "executed": 1,
+                "reused": 0,
+                "coverage": {
+                  "mode": "not-applicable",
+                  "statements": null,
+                  "branches": null,
+                  "functions": null,
+                  "lines": null
+                }
+              },
+              "timings_ms": {
+                "queue": 0,
+                "setup": 1,
+                "install": 10,
+                "jobs": [{ "id": "validation", "duration_ms": 20 }],
+                "gates": [{ "id": "ordinary", "duration_ms": 20 }],
+                "artifact_verification": 0,
+                "critical_path": 31
+              },
+              "conclusion": "success"
+            },
+            {
+              "run_id": "cold-baseline-2",
+              "workflow_identity": "baseline-workflow",
+              "exact_candidate_sha": "3333333333333333333333333333333333333333",
+              "runner_class": "ubuntu-latest",
+              "cache_state": "cold-miss",
+              "semantic_population": {
+                "files": 1,
+                "suites": 1,
+                "cases": 1,
+                "executed": 1,
+                "reused": 0,
+                "coverage": {
+                  "mode": "not-applicable",
+                  "statements": null,
+                  "branches": null,
+                  "functions": null,
+                  "lines": null
+                }
+              },
+              "timings_ms": {
+                "queue": 0,
+                "setup": 1,
+                "install": 10,
+                "jobs": [{ "id": "validation", "duration_ms": 20 }],
+                "gates": [{ "id": "ordinary", "duration_ms": 20 }],
+                "artifact_verification": 0,
+                "critical_path": 31
+              },
+              "conclusion": "success"
+            },
+            {
+              "run_id": "cold-baseline-3",
+              "workflow_identity": "baseline-workflow",
+              "exact_candidate_sha": "3333333333333333333333333333333333333333",
+              "runner_class": "ubuntu-latest",
+              "cache_state": "cold-miss",
+              "semantic_population": {
+                "files": 1,
+                "suites": 1,
+                "cases": 1,
+                "executed": 1,
+                "reused": 0,
+                "coverage": {
+                  "mode": "not-applicable",
+                  "statements": null,
+                  "branches": null,
+                  "functions": null,
+                  "lines": null
+                }
+              },
+              "timings_ms": {
+                "queue": 0,
+                "setup": 1,
+                "install": 10,
+                "jobs": [{ "id": "validation", "duration_ms": 20 }],
+                "gates": [{ "id": "ordinary", "duration_ms": 20 }],
+                "artifact_verification": 0,
+                "critical_path": 31
+              },
+              "conclusion": "success"
+            }
+          ],
+          "candidate_runs": [
+            {
+              "run_id": "cold-candidate-1",
+              "workflow_identity": "candidate-workflow",
+              "exact_candidate_sha": "3333333333333333333333333333333333333333",
+              "runner_class": "ubuntu-latest",
+              "cache_state": "cold-miss",
+              "semantic_population": {
+                "files": 1,
+                "suites": 1,
+                "cases": 1,
+                "executed": 1,
+                "reused": 0,
+                "coverage": {
+                  "mode": "not-applicable",
+                  "statements": null,
+                  "branches": null,
+                  "functions": null,
+                  "lines": null
+                }
+              },
+              "timings_ms": {
+                "queue": 0,
+                "setup": 1,
+                "install": 9,
+                "jobs": [{ "id": "validation", "duration_ms": 20 }],
+                "gates": [{ "id": "ordinary", "duration_ms": 20 }],
+                "artifact_verification": 0,
+                "critical_path": 30
+              },
+              "conclusion": "success"
+            },
+            {
+              "run_id": "cold-candidate-2",
+              "workflow_identity": "candidate-workflow",
+              "exact_candidate_sha": "3333333333333333333333333333333333333333",
+              "runner_class": "ubuntu-latest",
+              "cache_state": "cold-miss",
+              "semantic_population": {
+                "files": 1,
+                "suites": 1,
+                "cases": 1,
+                "executed": 1,
+                "reused": 0,
+                "coverage": {
+                  "mode": "not-applicable",
+                  "statements": null,
+                  "branches": null,
+                  "functions": null,
+                  "lines": null
+                }
+              },
+              "timings_ms": {
+                "queue": 0,
+                "setup": 1,
+                "install": 9,
+                "jobs": [{ "id": "validation", "duration_ms": 20 }],
+                "gates": [{ "id": "ordinary", "duration_ms": 20 }],
+                "artifact_verification": 0,
+                "critical_path": 30
+              },
+              "conclusion": "success"
+            },
+            {
+              "run_id": "cold-candidate-3",
+              "workflow_identity": "candidate-workflow",
+              "exact_candidate_sha": "3333333333333333333333333333333333333333",
+              "runner_class": "ubuntu-latest",
+              "cache_state": "cold-miss",
+              "semantic_population": {
+                "files": 1,
+                "suites": 1,
+                "cases": 1,
+                "executed": 1,
+                "reused": 0,
+                "coverage": {
+                  "mode": "not-applicable",
+                  "statements": null,
+                  "branches": null,
+                  "functions": null,
+                  "lines": null
+                }
+              },
+              "timings_ms": {
+                "queue": 0,
+                "setup": 1,
+                "install": 9,
+                "jobs": [{ "id": "validation", "duration_ms": 20 }],
+                "gates": [{ "id": "ordinary", "duration_ms": 20 }],
+                "artifact_verification": 0,
+                "critical_path": 30
+              },
+              "conclusion": "success"
+            }
+          ],
+          "median_critical_path_change": { "absolute_ms": -1, "percentage": -3.2258 }
+        },
+        {
+          "pair_id": "warm-hit-pair",
+          "cache_state": "warm-hit",
+          "exact_candidate_sha": "3333333333333333333333333333333333333333",
+          "runner_class": "ubuntu-latest",
+          "semantic_population_equal": true,
+          "baseline_runs": [
+            {
+              "run_id": "warm-baseline-1",
+              "workflow_identity": "baseline-workflow",
+              "exact_candidate_sha": "3333333333333333333333333333333333333333",
+              "runner_class": "ubuntu-latest",
+              "cache_state": "warm-hit",
+              "semantic_population": {
+                "files": 1,
+                "suites": 1,
+                "cases": 1,
+                "executed": 1,
+                "reused": 0,
+                "coverage": {
+                  "mode": "not-applicable",
+                  "statements": null,
+                  "branches": null,
+                  "functions": null,
+                  "lines": null
+                }
+              },
+              "timings_ms": {
+                "queue": 0,
+                "setup": 1,
+                "install": 10,
+                "jobs": [{ "id": "validation", "duration_ms": 20 }],
+                "gates": [{ "id": "ordinary", "duration_ms": 20 }],
+                "artifact_verification": 0,
+                "critical_path": 31
+              },
+              "conclusion": "success"
+            },
+            {
+              "run_id": "warm-baseline-2",
+              "workflow_identity": "baseline-workflow",
+              "exact_candidate_sha": "3333333333333333333333333333333333333333",
+              "runner_class": "ubuntu-latest",
+              "cache_state": "warm-hit",
+              "semantic_population": {
+                "files": 1,
+                "suites": 1,
+                "cases": 1,
+                "executed": 1,
+                "reused": 0,
+                "coverage": {
+                  "mode": "not-applicable",
+                  "statements": null,
+                  "branches": null,
+                  "functions": null,
+                  "lines": null
+                }
+              },
+              "timings_ms": {
+                "queue": 0,
+                "setup": 1,
+                "install": 10,
+                "jobs": [{ "id": "validation", "duration_ms": 20 }],
+                "gates": [{ "id": "ordinary", "duration_ms": 20 }],
+                "artifact_verification": 0,
+                "critical_path": 31
+              },
+              "conclusion": "success"
+            },
+            {
+              "run_id": "warm-baseline-3",
+              "workflow_identity": "baseline-workflow",
+              "exact_candidate_sha": "3333333333333333333333333333333333333333",
+              "runner_class": "ubuntu-latest",
+              "cache_state": "warm-hit",
+              "semantic_population": {
+                "files": 1,
+                "suites": 1,
+                "cases": 1,
+                "executed": 1,
+                "reused": 0,
+                "coverage": {
+                  "mode": "not-applicable",
+                  "statements": null,
+                  "branches": null,
+                  "functions": null,
+                  "lines": null
+                }
+              },
+              "timings_ms": {
+                "queue": 0,
+                "setup": 1,
+                "install": 10,
+                "jobs": [{ "id": "validation", "duration_ms": 20 }],
+                "gates": [{ "id": "ordinary", "duration_ms": 20 }],
+                "artifact_verification": 0,
+                "critical_path": 31
+              },
+              "conclusion": "success"
+            }
+          ],
+          "candidate_runs": [
+            {
+              "run_id": "warm-candidate-1",
+              "workflow_identity": "candidate-workflow",
+              "exact_candidate_sha": "3333333333333333333333333333333333333333",
+              "runner_class": "ubuntu-latest",
+              "cache_state": "warm-hit",
+              "semantic_population": {
+                "files": 1,
+                "suites": 1,
+                "cases": 1,
+                "executed": 1,
+                "reused": 0,
+                "coverage": {
+                  "mode": "not-applicable",
+                  "statements": null,
+                  "branches": null,
+                  "functions": null,
+                  "lines": null
+                }
+              },
+              "timings_ms": {
+                "queue": 0,
+                "setup": 1,
+                "install": 9,
+                "jobs": [{ "id": "validation", "duration_ms": 20 }],
+                "gates": [{ "id": "ordinary", "duration_ms": 20 }],
+                "artifact_verification": 0,
+                "critical_path": 30
+              },
+              "conclusion": "success"
+            },
+            {
+              "run_id": "warm-candidate-2",
+              "workflow_identity": "candidate-workflow",
+              "exact_candidate_sha": "3333333333333333333333333333333333333333",
+              "runner_class": "ubuntu-latest",
+              "cache_state": "warm-hit",
+              "semantic_population": {
+                "files": 1,
+                "suites": 1,
+                "cases": 1,
+                "executed": 1,
+                "reused": 0,
+                "coverage": {
+                  "mode": "not-applicable",
+                  "statements": null,
+                  "branches": null,
+                  "functions": null,
+                  "lines": null
+                }
+              },
+              "timings_ms": {
+                "queue": 0,
+                "setup": 1,
+                "install": 9,
+                "jobs": [{ "id": "validation", "duration_ms": 20 }],
+                "gates": [{ "id": "ordinary", "duration_ms": 20 }],
+                "artifact_verification": 0,
+                "critical_path": 30
+              },
+              "conclusion": "success"
+            },
+            {
+              "run_id": "warm-candidate-3",
+              "workflow_identity": "candidate-workflow",
+              "exact_candidate_sha": "3333333333333333333333333333333333333333",
+              "runner_class": "ubuntu-latest",
+              "cache_state": "warm-hit",
+              "semantic_population": {
+                "files": 1,
+                "suites": 1,
+                "cases": 1,
+                "executed": 1,
+                "reused": 0,
+                "coverage": {
+                  "mode": "not-applicable",
+                  "statements": null,
+                  "branches": null,
+                  "functions": null,
+                  "lines": null
+                }
+              },
+              "timings_ms": {
+                "queue": 0,
+                "setup": 1,
+                "install": 9,
+                "jobs": [{ "id": "validation", "duration_ms": 20 }],
+                "gates": [{ "id": "ordinary", "duration_ms": 20 }],
+                "artifact_verification": 0,
+                "critical_path": 30
+              },
+              "conclusion": "success"
+            }
+          ],
+          "median_critical_path_change": { "absolute_ms": -1, "percentage": -3.2258 }
+        }
+      ],
+      "excluded_observations": [],
+      "activation_decisions": [
+        {
+          "feature_id": "dependency-cache",
+          "decision": "activate",
+          "population_equal": true,
+          "threshold_result": "pass",
+          "security_or_operability_benefit": false,
+          "reason": "Both paired states improve with equal semantic populations."
+        }
+      ],
+      "digest_method": "sha256-canonical-json-with-evidence-digest-field-omitted",
+      "evidence_digest_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+    }
+  ]
+}

@@ -1,0 +1,622 @@
+{
+  "schemaVersion": "1.0.0",
+  "policy_id": "github-actions-features",
+  "policy_version": "1.0.0",
+  "round": "R-0007",
+  "status": "active-setpoint-pending-implementation-and-benchmark",
+  "authority": "Architect",
+  "inventory_source": "work/rounds/R-0007/inventory/github-actions-current-state.md",
+  "sources": [
+    "product/owner-mandates/OM-021.md",
+    "work/rounds/R-0007/plan.md",
+    "law/adr/ADR-013-ci-economy-correction.md",
+    "law/adr/ADR-015-ci-governance-path-coverage.md",
+    "law/adr/ADR-024-r0007-ci-validation.md"
+  ],
+  "applicability_rule": "Capabilities named by OM-021, capabilities used by the three live workflows, and adjacent GitHub controls required to enforce their security, semantic-population, provenance, cancellation, fork, artifact, and activation boundaries.",
+  "applicable_features": [
+    "standard-hosted-runners",
+    "postgres-service-container",
+    "pnpm-content-store-cache",
+    "reusable-setup",
+    "dependency-dag",
+    "complete-matrix",
+    "event-specific-concurrency",
+    "immutable-action-pins",
+    "least-privilege-permissions",
+    "workflow-pr-approval-capability",
+    "fork-cache-boundaries",
+    "bounded-artifact-retention",
+    "structured-reports",
+    "annotations",
+    "workflow-summaries",
+    "timing-telemetry",
+    "artifact-transport",
+    "fast-feedback-lane",
+    "cold-authoritative-lane",
+    "main-scheduled-cold-sentinel",
+    "node-modules-cache",
+    "verdict-evidence-cache",
+    "mutable-action-references",
+    "unsound-test-sharding",
+    "artifact-pass-authority",
+    "self-hosted-runners",
+    "hosted-larger-runners",
+    "merge-queue",
+    "rulesets-required-checks",
+    "branch-protection-required-checks",
+    "repository-action-allowlist",
+    "repository-sha-pinning-enforcement",
+    "fork-contributor-approval",
+    "oidc-workflow-identity",
+    "artifact-attestations",
+    "authenticated-result-reuse",
+    "deployment-environments"
+  ],
+  "feature_dispositions": [
+    {
+      "feature_id": "standard-hosted-runners",
+      "category": "runner",
+      "disposition": "adopt",
+      "activation_state": "active-existing",
+      "security_rationale": "Ephemeral GitHub-hosted runners avoid granting repository workflows standing access to a maintained self-hosted machine.",
+      "semantic_rationale": "The live workflow and latest exact-main jobs consistently declare ubuntu-latest and expose a stable runner-class identity for paired comparisons.",
+      "cost_rationale": "The organization Free plan and existing public-repository execution establish the current baseline without a newly accepted paid-runner cost.",
+      "critical_path_rationale": "The runner class is retained as the comparison baseline; changing runner class during a benchmark would invalidate the timing pair.",
+      "immutable_source_refs": [
+        "github:devai-nyx/devai@9b435e5ca479a837baffe2b597c8ba582fec08f4:.github/workflows/ci.yml",
+        "product/owner-mandates/OM-021.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "postgres-service-container",
+      "category": "runner",
+      "disposition": "adopt",
+      "activation_state": "active-existing",
+      "security_rationale": "The service is scoped to the coverage job and carries no repository or publication credentials.",
+      "semantic_rationale": "DB-enabled coverage depends on PostgreSQL readiness and must not be removed or moved behind an unproved shard.",
+      "cost_rationale": "The service already executes on the standard hosted runner and has no separately observed billing decision.",
+      "critical_path_rationale": "Container initialization is measured separately from test execution so future setup changes do not hide DB-population changes.",
+      "immutable_source_refs": [
+        "github:devai-nyx/devai@9b435e5ca479a837baffe2b597c8ba582fec08f4:.github/workflows/ci.yml",
+        "work/rounds/R-0007/plan.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "pnpm-content-store-cache",
+      "category": "acquisition",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "Only the content-addressed pnpm store may be cached; node_modules, DEVAI state, verdicts, coverage, and evidence are excluded, and frozen installation always executes.",
+      "semantic_rationale": "Cache hit or miss changes dependency acquisition duration only and cannot change selected commands, test population, or verdict.",
+      "cost_rationale": "No cache currently exists, so storage and eviction behavior must be measured before activation.",
+      "critical_path_rationale": "Adoption targets repeated frozen-install time but requires positive equal-population paired median evidence.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "law/adr/ADR-024-r0007-ci-validation.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "reusable-setup",
+      "category": "composition",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "Reusable setup must declare every input, output, permission, toolchain identity, cache boundary, and calling workflow identity.",
+      "semantic_rationale": "Composition removes duplicated plumbing without hiding commands or changing the population executed by each caller.",
+      "cost_rationale": "Centralized setup lowers maintenance cost but provides no activation standing until workflow contracts pass.",
+      "critical_path_rationale": "Composition is retained if it improves operability even when runtime savings are neutral, provided it introduces no extra serial edge.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "dependency-dag",
+      "category": "dag",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "Explicit needs edges prevent a downstream authoritative job from running on absent or failed prerequisites.",
+      "semantic_rationale": "Only independent complete populations may run in parallel; build, T1/T2, DB coverage, and T4/T5/T6 order remain explicit.",
+      "cost_rationale": "Parallel independent work can reduce billed elapsed time only when it does not duplicate expensive populations unsafely.",
+      "critical_path_rationale": "The current 35m16s path identifies stage 2 and coverage as dominant, but no edge is removed without semantic proof.",
+      "immutable_source_refs": [
+        "github:devai-nyx/devai@9b435e5ca479a837baffe2b597c8ba582fec08f4:.github/workflows/ci.yml",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "complete-matrix",
+      "category": "dag",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "A matrix is permitted only when every cell is a closed declared population and cannot omit its own selector.",
+      "semantic_rationale": "Matrix expansion preserves exact-once complete cell membership; unproved test-file or case sharding is excluded.",
+      "cost_rationale": "Matrix overhead is acceptable only when paired evidence shows a positive critical-path or operability benefit.",
+      "critical_path_rationale": "Cells may shorten independent work but cannot split serial tier or instrumentation semantics.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "event-specific-concurrency",
+      "category": "concurrency",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "Only superseded pull-request feedback may be cancelled; authoritative events cannot lose terminal evidence.",
+      "semantic_rationale": "Main, merge-group, frozen-candidate, convergence, sentinel, and round-close runs use non-cancelling identities.",
+      "cost_rationale": "Cancelling obsolete PR feedback avoids waste without reducing authoritative population.",
+      "critical_path_rationale": "Cancellation affects queue consumption, not the measured duration or standing of an authoritative run.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "immutable-action-pins",
+      "category": "provenance",
+      "disposition": "adopt",
+      "activation_state": "active-existing",
+      "security_rationale": "Every external action reference is a literal 40-hex commit SHA with a readable version comment.",
+      "semantic_rationale": "Exact action bytes remain stable across reruns of one candidate.",
+      "cost_rationale": "Pin maintenance is accepted as a security requirement independent of timing.",
+      "critical_path_rationale": "The feature is retained for provenance even if it has no measurable speed benefit.",
+      "immutable_source_refs": [
+        "law/adr/ADR-015-ci-governance-path-coverage.md",
+        "github:devai-nyx/devai@9b435e5ca479a837baffe2b597c8ba582fec08f4:.github/workflows/ci.yml"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "least-privilege-permissions",
+      "category": "permissions",
+      "disposition": "adopt",
+      "activation_state": "active-existing",
+      "security_rationale": "The live workflows grant contents read and no broad write permission; future jobs must declare only the permissions they consume.",
+      "semantic_rationale": "A validation job cannot acquire publication, pull-request, release, or settings authority from its executor kind.",
+      "cost_rationale": "Least privilege is a hard security property and is not traded for timing.",
+      "critical_path_rationale": "Permission checks are retained regardless of measured duration.",
+      "immutable_source_refs": [
+        "law/adr/ADR-015-ci-governance-path-coverage.md",
+        "github:devai-nyx/devai@9b435e5ca479a837baffe2b597c8ba582fec08f4:.github/workflows/ci.yml"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "workflow-pr-approval-capability",
+      "category": "permissions",
+      "disposition": "reject",
+      "activation_state": "live-setting-enabled-use-rejected",
+      "security_rationale": "The repository setting currently permits workflows to approve pull-request reviews, but R-0007 validation jobs have no need for that authority and must not receive pull-request write permission.",
+      "semantic_rationale": "No validation, report, classifier, sentinel, or cold-proof command depends on approving a pull request.",
+      "cost_rationale": "The capability has no CI wall-time or operability benefit for this round; changing the live setting remains a separately authorized administrative action.",
+      "critical_path_rationale": "The capability is excluded from workflow implementation and timing comparisons.",
+      "immutable_source_refs": [
+        "work/rounds/R-0007/inventory/github-actions-current-state.md",
+        "work/rounds/R-0007/AUTHORIZATION.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "fork-cache-boundaries",
+      "category": "fork-boundary",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "Fork pull requests cannot save or restore privileged cache namespaces and no cache path may include DEVAI state, pins, credentials, outputs, or verdicts.",
+      "semantic_rationale": "Fork identity and event type participate in cache policy without changing validation selection.",
+      "cost_rationale": "Cold fork acquisition is accepted where isolation prevents cache poisoning.",
+      "critical_path_rationale": "Fork performance never justifies crossing trust namespaces.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "bounded-artifact-retention",
+      "category": "artifact",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "Every artifact upload declares a retention period no greater than the live 90-day repository maximum and excludes secrets and DEVAI authority state.",
+      "semantic_rationale": "Retention changes availability of transport bytes only, never gate truth.",
+      "cost_rationale": "Short explicit retention bounds storage consumption; exact duration is selected per artifact purpose during implementation.",
+      "critical_path_rationale": "Upload and verification time is measured independently before an artifact edge is activated.",
+      "immutable_source_refs": [
+        "work/rounds/R-0007/inventory/github-actions-current-state.md",
+        "product/owner-mandates/OM-021.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "structured-reports",
+      "category": "reporting",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "Reports are non-authoritative observations and cannot carry credentials or substitute for command exits.",
+      "semantic_rationale": "Structured file, suite, case, coverage, and command counts make population equality mechanically comparable.",
+      "cost_rationale": "Generation cost must be recorded and bounded against its diagnostic value.",
+      "critical_path_rationale": "Report generation remains off the critical path where it can run after the producing command without hiding failure.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "law/schemas/ci-optimisation-evidence.schema.json"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "annotations",
+      "category": "reporting",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "Annotations render existing diagnostics and never create or override a verdict.",
+      "semantic_rationale": "Machine diagnostics retain their stable code, path, and command identity when presented in the GitHub UI.",
+      "cost_rationale": "Bounded annotations reduce triage cost without requiring retained binary artifacts.",
+      "critical_path_rationale": "Annotation rendering is measured as reporting overhead and cannot gate before the underlying exit is known.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "law/adr/ADR-024-r0007-ci-validation.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "workflow-summaries",
+      "category": "reporting",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "Summaries are derived display surfaces with no authority and escape untrusted content before rendering.",
+      "semantic_rationale": "Each summary identifies exact base, candidate, class, selected and omitted commands, cold-lane state, and source report digests.",
+      "cost_rationale": "Small textual summaries reduce operator inspection time with negligible storage.",
+      "critical_path_rationale": "Summary publication occurs after command completion and is included in reporting telemetry.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "law/schemas/commit-validation-plan.schema.json"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "timing-telemetry",
+      "category": "reporting",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "Telemetry excludes secrets and mutable authority claims and binds exact workflow, runner, candidate, and cache state.",
+      "semantic_rationale": "Queue, setup, install, job, gate, artifact-verification, and critical-path durations are reported separately after population equality.",
+      "cost_rationale": "Telemetry is required to reject optimizations that do not produce a positive median benefit.",
+      "critical_path_rationale": "Repeated same-runner measurements, not anecdotal duration, govern activation.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "law/schemas/ci-optimisation-evidence.schema.json"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "artifact-transport",
+      "category": "artifact",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "Producer manifests bind every transported byte digest and consumers verify digests; artifact storage itself remains unauthenticated for PASS.",
+      "semantic_rationale": "Artifacts may carry reports or inter-job bytes but never a verdict, omitted command, coverage standing, or R-0008 claim.",
+      "cost_rationale": "Upload, download, retention, and verification costs must be lower than duplicated recomputation or provide a separate operability benefit.",
+      "critical_path_rationale": "Artifact verification time is recorded and included before judging any critical-path saving.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "fast-feedback-lane",
+      "category": "lane",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "The lane has no publication or merge proof standing and cannot lower the mechanically derived class.",
+      "semantic_rationale": "It executes the classifier-selected complete closure and reports every omission with a reason.",
+      "cost_rationale": "The lane targets faster developer feedback while the cold lane preserves authoritative cost.",
+      "critical_path_rationale": "Its timing is reported separately and cannot be presented as cold-proof duration.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "law/policy/commit-validation.json"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "cold-authoritative-lane",
+      "category": "lane",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "The lane starts without DEVAI result reuse and retains exact permissions, immutable actions, and fork isolation.",
+      "semantic_rationale": "It executes the complete active close-profile population with literal independent commands and unchanged coverage floors.",
+      "cost_rationale": "Complete proof cost is retained; only acquisition caching that cannot change verdict is eligible.",
+      "critical_path_rationale": "Frozen candidate, main authority, sentinel, convergence, and round close are measured and completed without cancellation.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "law/policy/round-close-controls.json"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "main-scheduled-cold-sentinel",
+      "category": "sentinel",
+      "disposition": "adopt",
+      "activation_state": "policy-adopted-not-active",
+      "security_rationale": "The sentinel can only disable narrowing; absent, malformed, stale, or unauthenticated health cannot enable it.",
+      "semantic_rationale": "It compares the predicted command population with complete same-candidate cold execution and names every false negative.",
+      "cost_rationale": "Scheduled and main-bound complete runs are the retained cost of detecting classifier omissions.",
+      "critical_path_rationale": "A false negative immediately returns the complete fallback plan and blocks any speed claim.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "tests/contract/r0007-validation-classifier.red.contract.test.ts"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "node-modules-cache",
+      "category": "acquisition",
+      "disposition": "reject",
+      "activation_state": "rejected",
+      "security_rationale": "A restored installation tree can contain mutable scripts, links, or platform-specific bytes outside frozen resolution.",
+      "semantic_rationale": "Skipping frozen installation would let cache state alter executable dependency bytes and verdict.",
+      "cost_rationale": "Any speed benefit surrenders a required proof property and is therefore ineligible.",
+      "critical_path_rationale": "The slower frozen installation is retained rather than accepting an unsound shortcut.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "verdict-evidence-cache",
+      "category": "reuse",
+      "disposition": "reject",
+      "activation_state": "rejected",
+      "security_rationale": "GitHub cache bytes have no signer, trust epoch, or authenticated claim binding.",
+      "semantic_rationale": "A cache key or hit cannot substitute for a command, test, coverage, or evidence verdict.",
+      "cost_rationale": "Result-reuse savings belong to R-0008 and cannot be purchased by weakening proof.",
+      "critical_path_rationale": "Complete execution remains the fallback until authenticated reuse is separately authorized and proved.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "work/rounds/R-0007/AUTHORIZATION.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "mutable-action-references",
+      "category": "provenance",
+      "disposition": "reject",
+      "activation_state": "rejected",
+      "security_rationale": "A tag or branch can resolve to different third-party bytes without changing the repository candidate.",
+      "semantic_rationale": "Mutable action resolution breaks exact-candidate reproducibility.",
+      "cost_rationale": "Convenient upgrades do not outweigh provenance loss.",
+      "critical_path_rationale": "Timing is irrelevant because the feature violates a hard action-identity rule.",
+      "immutable_source_refs": [
+        "law/adr/ADR-015-ci-governance-path-coverage.md",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "unsound-test-sharding",
+      "category": "dag",
+      "disposition": "reject",
+      "activation_state": "rejected",
+      "security_rationale": "An incomplete shard can conceal a failing test or instrumentation interaction.",
+      "semantic_rationale": "Only mechanically complete matrix cells or affected-test closure may partition work.",
+      "cost_rationale": "Unproved wall-time saving has no standing when population is reduced.",
+      "critical_path_rationale": "The complete population is retained until exact-once shard coverage is proved.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "artifact-pass-authority",
+      "category": "artifact",
+      "disposition": "reject",
+      "activation_state": "rejected",
+      "security_rationale": "Artifact names, storage, and ordinary digests do not authenticate a DEVAI claim producer or trust root.",
+      "semantic_rationale": "Transported PASS bytes cannot omit local execution or satisfy a gate in R-0007.",
+      "cost_rationale": "Avoided execution is not an eligible saving before R-0008 authenticated reuse.",
+      "critical_path_rationale": "Artifact verification time is measured only as transport overhead, never as a replacement proof.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "self-hosted-runners",
+      "category": "runner",
+      "disposition": "reject",
+      "activation_state": "rejected",
+      "security_rationale": "No self-hosted runner is registered and R-0007 has no host-hardening, credential-isolation, lifecycle, or incident authority for one.",
+      "semantic_rationale": "Mutable host state would introduce an unbound environment into exact-candidate proof.",
+      "cost_rationale": "Maintenance and security costs are unaccepted.",
+      "critical_path_rationale": "Potential speed does not justify an ungoverned runner trust boundary.",
+      "immutable_source_refs": [
+        "work/rounds/R-0007/inventory/github-actions-current-state.md",
+        "product/owner-mandates/OM-021.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "hosted-larger-runners",
+      "category": "runner",
+      "disposition": "defer",
+      "activation_state": "deferred-unproved",
+      "security_rationale": "GitHub-hosted isolation would remain preferable to self-hosting, but the exact runner entitlement is unproved.",
+      "semantic_rationale": "Any evaluation must hold source, population, and runner class constant within each baseline/candidate pair.",
+      "cost_rationale": "The organization Free plan provides no accepted larger-runner cost authority in this round.",
+      "critical_path_rationale": "No speed claim is made without live availability and paired runner-class evidence.",
+      "immutable_source_refs": [
+        "work/rounds/R-0007/inventory/github-actions-current-state.md",
+        "product/owner-mandates/OM-021.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "merge-queue",
+      "category": "administration",
+      "disposition": "defer",
+      "activation_state": "deferred-not-authorized",
+      "security_rationale": "A merge queue requires explicit protected-check identities and administrative configuration not currently present.",
+      "semantic_rationale": "A later queue must trigger the complete non-cancellable cold lane for the merge-group SHA.",
+      "cost_rationale": "Availability and administrative cost are unproved.",
+      "critical_path_rationale": "Queue-time effects cannot be benchmarked before the feature exists and its required population is bound.",
+      "immutable_source_refs": [
+        "work/rounds/R-0007/inventory/github-actions-current-state.md",
+        "product/owner-mandates/OM-021.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "rulesets-required-checks",
+      "category": "administration",
+      "disposition": "defer",
+      "activation_state": "deferred-not-authorized",
+      "security_rationale": "No ruleset exists and creating one is an external administrative mutation requiring separate authority.",
+      "semantic_rationale": "A later ruleset must require stable fast and complete cold check identities without treating fast feedback as close proof.",
+      "cost_rationale": "No settings change or plan cost is accepted by this policy commit.",
+      "critical_path_rationale": "Required-check waiting time is measured only after an authorized ruleset exists.",
+      "immutable_source_refs": [
+        "work/rounds/R-0007/inventory/github-actions-current-state.md",
+        "work/rounds/R-0007/AUTHORIZATION.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "branch-protection-required-checks",
+      "category": "administration",
+      "disposition": "defer",
+      "activation_state": "deferred-not-authorized",
+      "security_rationale": "Main is not branch-protected and protection mutation is outside the local B2 authority.",
+      "semantic_rationale": "Any later required-check population must be nonempty, exact-SHA bound, deterministic, and include cold authority where applicable.",
+      "cost_rationale": "The policy records no accepted administrative or queue cost.",
+      "critical_path_rationale": "No required-check duration claim is possible while the feature is absent.",
+      "immutable_source_refs": [
+        "work/rounds/R-0007/inventory/github-actions-current-state.md",
+        "work/rounds/R-0007/AUTHORIZATION.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "repository-action-allowlist",
+      "category": "administration",
+      "disposition": "defer",
+      "activation_state": "deferred-not-authorized",
+      "security_rationale": "The repository currently allows all actions; narrowing the platform allowlist is desirable only after a complete workflow-call census and separate settings authority.",
+      "semantic_rationale": "The source checker remains the active fail-closed protection and must continue scanning every workflow.",
+      "cost_rationale": "No administrative activation cost is accepted here.",
+      "critical_path_rationale": "The control is security-oriented and is not justified by a speed claim.",
+      "immutable_source_refs": [
+        "work/rounds/R-0007/inventory/github-actions-current-state.md",
+        "law/adr/ADR-015-ci-governance-path-coverage.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "repository-sha-pinning-enforcement",
+      "category": "administration",
+      "disposition": "defer",
+      "activation_state": "deferred-not-authorized",
+      "security_rationale": "Platform SHA enforcement is currently disabled; the source checker already rejects mutable references and remains mandatory.",
+      "semantic_rationale": "A later platform control is defense in depth and cannot replace repository validation.",
+      "cost_rationale": "Availability and administrative mutation authority are unproved.",
+      "critical_path_rationale": "The control has security value independent of wall time but is not active.",
+      "immutable_source_refs": [
+        "work/rounds/R-0007/inventory/github-actions-current-state.md",
+        "law/adr/ADR-015-ci-governance-path-coverage.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "fork-contributor-approval",
+      "category": "fork-boundary",
+      "disposition": "adopt",
+      "activation_state": "active-existing",
+      "security_rationale": "First-time contributor approval is retained as an existing platform boundary, while workflows independently avoid privileged cache and secret use.",
+      "semantic_rationale": "Approval never changes the mechanically selected validation population.",
+      "cost_rationale": "Human approval latency is accepted for new contributor trust and is not counted as test critical path.",
+      "critical_path_rationale": "Queue time is recorded separately from executable workflow duration.",
+      "immutable_source_refs": [
+        "work/rounds/R-0007/inventory/github-actions-current-state.md",
+        "product/owner-mandates/OM-021.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "oidc-workflow-identity",
+      "category": "identity",
+      "disposition": "defer",
+      "activation_state": "deferred-not-authorized",
+      "security_rationale": "OIDC subject, audience, issuer, trust epoch, and verifier policy belong to the separately gated R-0008 trust design.",
+      "semantic_rationale": "An unverified token or subject cannot authenticate a DEVAI result claim.",
+      "cost_rationale": "Identity integration and verification cost are not accepted in R-0007.",
+      "critical_path_rationale": "Identity verification time will be measured in R-0008 before authenticated reuse activation.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "work/rounds/R-0007/AUTHORIZATION.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "artifact-attestations",
+      "category": "identity",
+      "disposition": "defer",
+      "activation_state": "deferred-not-authorized",
+      "security_rationale": "Attestation issuer, subject, predicate, digest, trust root, and verification policy require the R-0008 Owner binding.",
+      "semantic_rationale": "An unverified attestation never satisfies a DEVAI gate.",
+      "cost_rationale": "Generation, storage, and verification costs remain unmeasured.",
+      "critical_path_rationale": "Attestation verification time must be included in later paired evidence.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-021.md",
+        "work/rounds/R-0007/AUTHORIZATION.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "authenticated-result-reuse",
+      "category": "reuse",
+      "disposition": "defer",
+      "activation_state": "deferred-not-authorized",
+      "security_rationale": "R-0007 has no authorized GitHub or offline signer trust root for equivalent result claims.",
+      "semantic_rationale": "Fast and cold R-0007 lanes execute their selected commands; whole-gate reuse among ordinary, stage2, and coverage is not inferred.",
+      "cost_rationale": "Potential avoided execution is explicitly deferred to R-0008.",
+      "critical_path_rationale": "No reuse saving is included in the R-0007 optimization benchmark.",
+      "immutable_source_refs": [
+        "product/owner-mandates/OM-019.md",
+        "product/owner-mandates/OM-021.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    },
+    {
+      "feature_id": "deployment-environments",
+      "category": "deployment",
+      "disposition": "reject",
+      "activation_state": "rejected",
+      "security_rationale": "No environment exists and R-0007 has no deployment or environment-secret authority.",
+      "semantic_rationale": "A deployment gate is outside the CLI and CI-foundation claim ceiling.",
+      "cost_rationale": "No deployment infrastructure or administrative cost is authorized.",
+      "critical_path_rationale": "Deployment is excluded from R-0007 CI timing and cannot be added as an optimization dependency.",
+      "immutable_source_refs": [
+        "work/rounds/R-0007/AUTHORIZATION.md",
+        "work/rounds/R-0007/inventory/github-actions-current-state.md"
+      ],
+      "observed_at": "2026-08-07T04:44:28Z"
+    }
+  ],
+  "invariants": {
+    "one_disposition_per_applicable_feature": true,
+    "adoption_is_not_activation": true,
+    "cache_authority": "acquisition-time-only-never-verdict",
+    "artifact_authority": "digest-verified-transport-only-never-pass",
+    "cold_lane_authority": "complete-active-profile-no-devai-result-reuse",
+    "administrative_mutation": "separate-owner-authority-required",
+    "unknown_capability": "defer-or-reject-never-assume"
+  }
+}

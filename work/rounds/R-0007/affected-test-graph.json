@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0.0",
-  "graph_version": "2.0.0",
+  "graph_version": "2.1.0",
   "round": "R-0007",
   "population": {
     "production": [
@@ -58,6 +58,25 @@
         ".github/**"
       ],
       "invalidates": ["governance", "full-suite", "full-coverage"]
+    },
+    {
+      "id": "commit-validation-control",
+      "selectors": [
+        "law/adr/ADR-024-r0007-ci-validation.md",
+        "law/policy/commit-validation.json",
+        "law/policy/github-actions-features.json",
+        "law/schemas/commit-validation-plan.schema.json",
+        "law/schemas/ci-optimisation-evidence.schema.json",
+        "law/schemas/github-actions-features.schema.json",
+        "work/rounds/R-0007/affected-test-graph.json",
+        "work/rounds/R-0007/inventory/github-actions-current-state.md",
+        "scripts/derive-commit-validation-plan.mjs",
+        "scripts/check-workflows.mjs",
+        ".github/workflows/**",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts",
+        "tests/contract/r0007-validation-classifier.red.contract.test.ts"
+      ],
+      "invalidates": ["commit-validation-contracts", "governance", "full-suite", "full-coverage"]
     }
   ],
   "nodes": [
@@ -238,6 +257,36 @@
       ],
       "depends_on": ["cli-tests", "skills-tests"],
       "command": ["pnpm", "vitest", "run", "tests"],
+      "cwd": ".",
+      "outputs": [],
+      "coverage_mode": "none"
+    },
+    {
+      "id": "commit-validation-contracts",
+      "kind": "test-shard",
+      "input_selectors": [
+        "law/adr/ADR-024-r0007-ci-validation.md",
+        "law/policy/commit-validation.json",
+        "law/policy/github-actions-features.json",
+        "law/schemas/commit-validation-plan.schema.json",
+        "law/schemas/ci-optimisation-evidence.schema.json",
+        "law/schemas/github-actions-features.schema.json",
+        "work/rounds/R-0007/affected-test-graph.json",
+        "work/rounds/R-0007/inventory/github-actions-current-state.md",
+        "scripts/derive-commit-validation-plan.mjs",
+        "scripts/check-workflows.mjs",
+        ".github/workflows/**",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts",
+        "tests/contract/r0007-validation-classifier.red.contract.test.ts"
+      ],
+      "depends_on": [],
+      "command": [
+        "pnpm",
+        "vitest",
+        "run",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts",
+        "tests/contract/r0007-validation-classifier.red.contract.test.ts"
+      ],
       "cwd": ".",
       "outputs": [],
       "coverage_mode": "none"

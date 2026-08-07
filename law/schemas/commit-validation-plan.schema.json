@@ -1,0 +1,547 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/commit-validation-plan.schema.json",
+  "title": "Mechanical commit-validation plan and sentinel fallback",
+  "description": "Candidate-bound validation selection with complete diff, closure, identity, omission, exit, and false-negative fallback records.",
+  "schema_version": "1.0.0",
+  "$defs": {
+    "sha40": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "argv": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "not": {
+          "pattern": "^<.*>$"
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "digest_sha256"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "roundClosePolicyIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "digest_sha256"],
+      "properties": {
+        "path": {
+          "const": "law/policy/round-close-controls.json"
+        },
+        "digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "commitValidationPolicyIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "digest_sha256"],
+      "properties": {
+        "path": {
+          "const": "law/policy/commit-validation.json"
+        },
+        "digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "affectedTestGraphIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "digest_sha256"],
+      "properties": {
+        "path": {
+          "const": "work/rounds/R-0007/affected-test-graph.json"
+        },
+        "digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "changedPath": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "path", "entry_type", "reason"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "pattern": "^(A|M|D|T|R100|C100)$"
+        },
+        "path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "old_path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "entry_type": {
+          "enum": ["regular-file", "symlink", "submodule", "absent"]
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "path_class": {
+          "enum": [
+            "governance-text",
+            "law-and-schema",
+            "runtime-and-tests",
+            "candidate-and-close",
+            "unknown"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "pattern": "^(R100|C100)$"
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "required": ["old_path"]
+          }
+        }
+      ]
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_path", "target", "kind", "reason"],
+      "properties": {
+        "source_path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "target": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "kind": {
+          "enum": [
+            "affected-test",
+            "command-closure",
+            "generated-source",
+            "schema-policy",
+            "materialization",
+            "package-script",
+            "workflow-call",
+            "governance",
+            "symlink-target",
+            "dynamic-unknown"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "argv", "cwd", "reason", "exit_code"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]*$"
+        },
+        "argv": {
+          "$ref": "#/$defs/argv"
+        },
+        "cwd": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "exit_code": {
+          "type": ["integer", "null"]
+        },
+        "population_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "severity", "reason"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z0-9][A-Z0-9_]*$"
+        },
+        "severity": {
+          "enum": ["info", "warning", "blocking"]
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "paths": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      }
+    },
+    "toolchainEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "argv", "observed"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]*$"
+        },
+        "argv": {
+          "$ref": "#/$defs/argv"
+        },
+        "observed": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "closureInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path", "digest_sha256", "reason"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "affected-test-graph",
+            "command-closure-policy",
+            "commit-validation-policy",
+            "schema",
+            "materialization",
+            "governance-control",
+            "workflow",
+            "package-script"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "disablement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["diagnostic", "until"],
+      "properties": {
+        "diagnostic": {
+          "const": "CLASSIFIER_FALSE_NEGATIVE"
+        },
+        "until": {
+          "const": "governed-repair"
+        }
+      }
+    },
+    "validationPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "classifier_version",
+        "round",
+        "base_sha",
+        "candidate_sha",
+        "validation_class",
+        "narrowing_enabled",
+        "widened",
+        "changed_paths",
+        "derived_dependencies",
+        "selected_commands",
+        "omitted_commands",
+        "diagnostics",
+        "policy_identity",
+        "classifier_policy_identity",
+        "graph_identity",
+        "toolchain_identity",
+        "diff_identity",
+        "closure_inputs",
+        "plan_digest_method",
+        "plan_digest_sha256"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "1.0.0"
+        },
+        "classifier_version": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "round": {
+          "type": "string",
+          "pattern": "^R-[0-9]{4}$"
+        },
+        "base_sha": {
+          "$ref": "#/$defs/sha40"
+        },
+        "candidate_sha": {
+          "$ref": "#/$defs/sha40"
+        },
+        "validation_class": {
+          "enum": ["governance-text", "law-and-schema", "runtime-and-tests", "candidate-and-close"]
+        },
+        "narrowing_enabled": {
+          "type": "boolean"
+        },
+        "widened": {
+          "type": "boolean"
+        },
+        "changed_paths": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/changedPath"
+          }
+        },
+        "derived_dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dependency"
+          }
+        },
+        "selected_commands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/command"
+          }
+        },
+        "omitted_commands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/command"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          }
+        },
+        "policy_identity": {
+          "$ref": "#/$defs/roundClosePolicyIdentity"
+        },
+        "classifier_policy_identity": {
+          "$ref": "#/$defs/commitValidationPolicyIdentity"
+        },
+        "graph_identity": {
+          "$ref": "#/$defs/affectedTestGraphIdentity"
+        },
+        "toolchain_identity": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/toolchainEntry"
+          }
+        },
+        "diff_identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["argv", "record_format", "digest_sha256"],
+          "properties": {
+            "argv": {
+              "$ref": "#/$defs/argv"
+            },
+            "record_format": {
+              "const": "status-aware-nul"
+            },
+            "digest_sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "closure_inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/closureInput"
+          }
+        },
+        "disablement": {
+          "$ref": "#/$defs/disablement"
+        },
+        "plan_digest_method": {
+          "const": "sha256-canonical-json-with-plan-digest-field-omitted"
+        },
+        "plan_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "sentinelMismatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command_id", "predicted", "observed_exit"],
+      "properties": {
+        "command_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]*$"
+        },
+        "predicted": {
+          "const": "OMITTED"
+        },
+        "observed_exit": {
+          "type": "integer"
+        }
+      }
+    },
+    "sentinelFailure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "ok",
+        "diagnostic",
+        "exact_base",
+        "exact_candidate",
+        "narrowing_enabled",
+        "mismatches",
+        "observation_identity",
+        "fallback_plan"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "1.0.0"
+        },
+        "ok": {
+          "const": false
+        },
+        "diagnostic": {
+          "const": "CLASSIFIER_FALSE_NEGATIVE"
+        },
+        "exact_base": {
+          "$ref": "#/$defs/sha40"
+        },
+        "exact_candidate": {
+          "$ref": "#/$defs/sha40"
+        },
+        "narrowing_enabled": {
+          "const": false
+        },
+        "mismatches": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/sentinelMismatch"
+          }
+        },
+        "observation_identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "fallback_plan": {
+          "$ref": "#/$defs/validationPlan"
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/validationPlan"
+    },
+    {
+      "$ref": "#/$defs/sentinelFailure"
+    }
+  ],
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "classifier_version": "1.0.0",
+      "round": "R-0007",
+      "base_sha": "0000000000000000000000000000000000000000",
+      "candidate_sha": "1111111111111111111111111111111111111111",
+      "validation_class": "law-and-schema",
+      "narrowing_enabled": false,
+      "widened": true,
+      "changed_paths": [
+        {
+          "status": "M",
+          "path": "law/policy/example.json",
+          "entry_type": "regular-file",
+          "reason": "The candidate changes normative machine law.",
+          "path_class": "law-and-schema"
+        }
+      ],
+      "derived_dependencies": [],
+      "selected_commands": [
+        {
+          "id": "diff-check",
+          "argv": ["git", "diff", "--check"],
+          "cwd": ".",
+          "reason": "Every class retains exact-range whitespace validation.",
+          "exit_code": null
+        }
+      ],
+      "omitted_commands": [],
+      "diagnostics": [],
+      "policy_identity": {
+        "path": "law/policy/round-close-controls.json",
+        "digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      "classifier_policy_identity": {
+        "path": "law/policy/commit-validation.json",
+        "digest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+      },
+      "graph_identity": {
+        "path": "work/rounds/R-0007/affected-test-graph.json",
+        "digest_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+      },
+      "toolchain_identity": [
+        {
+          "id": "node",
+          "argv": ["node", "--version"],
+          "observed": "v24.0.0"
+        }
+      ],
+      "diff_identity": {
+        "argv": ["git", "diff", "--name-status", "-z"],
+        "record_format": "status-aware-nul",
+        "digest_sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+      },
+      "closure_inputs": [
+        {
+          "kind": "commit-validation-policy",
+          "path": "law/policy/commit-validation.json",
+          "digest_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+          "reason": "The plan binds the candidate-local classifier policy."
+        }
+      ],
+      "plan_digest_method": "sha256-canonical-json-with-plan-digest-field-omitted",
+      "plan_digest_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    }
+  ]
+}

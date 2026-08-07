@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://devai.nyxk.com.br/schemas/github-actions-features.schema.json",
+  "title": "GitHub Actions feature disposition policy",
+  "description": "One-to-one R-0007 disposition census for applicable GitHub Actions capabilities.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "policy_id",
+    "policy_version",
+    "round",
+    "status",
+    "authority",
+    "inventory_source",
+    "sources",
+    "applicability_rule",
+    "applicable_features",
+    "feature_dispositions",
+    "invariants"
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "featureId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "sourceList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "featureDisposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "feature_id",
+        "category",
+        "disposition",
+        "activation_state",
+        "security_rationale",
+        "semantic_rationale",
+        "cost_rationale",
+        "critical_path_rationale",
+        "immutable_source_refs",
+        "observed_at"
+      ],
+      "properties": {
+        "feature_id": {
+          "$ref": "#/$defs/featureId"
+        },
+        "category": {
+          "enum": [
+            "runner",
+            "acquisition",
+            "composition",
+            "dag",
+            "concurrency",
+            "provenance",
+            "permissions",
+            "fork-boundary",
+            "reporting",
+            "artifact",
+            "lane",
+            "sentinel",
+            "administration",
+            "identity",
+            "reuse",
+            "deployment"
+          ]
+        },
+        "disposition": {
+          "enum": ["adopt", "defer", "reject"]
+        },
+        "activation_state": {
+          "enum": [
+            "active-existing",
+            "policy-adopted-not-active",
+            "deferred-not-authorized",
+            "deferred-unproved",
+            "live-setting-enabled-use-rejected",
+            "rejected"
+          ]
+        },
+        "security_rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "semantic_rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cost_rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "critical_path_rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "immutable_source_refs": {
+          "$ref": "#/$defs/sourceList"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "policy_id": {
+      "const": "github-actions-features"
+    },
+    "policy_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "round": {
+      "const": "R-0007"
+    },
+    "status": {
+      "const": "active-setpoint-pending-implementation-and-benchmark"
+    },
+    "authority": {
+      "const": "Architect"
+    },
+    "inventory_source": {
+      "const": "work/rounds/R-0007/inventory/github-actions-current-state.md"
+    },
+    "sources": {
+      "$ref": "#/$defs/sourceList"
+    },
+    "applicability_rule": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "applicable_features": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/featureId"
+      }
+    },
+    "feature_dispositions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/featureDisposition"
+      }
+    },
+    "invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "one_disposition_per_applicable_feature",
+        "adoption_is_not_activation",
+        "cache_authority",
+        "artifact_authority",
+        "cold_lane_authority",
+        "administrative_mutation",
+        "unknown_capability"
+      ],
+      "properties": {
+        "one_disposition_per_applicable_feature": {
+          "const": true
+        },
+        "adoption_is_not_activation": {
+          "const": true
+        },
+        "cache_authority": {
+          "const": "acquisition-time-only-never-verdict"
+        },
+        "artifact_authority": {
+          "const": "digest-verified-transport-only-never-pass"
+        },
+        "cold_lane_authority": {
+          "const": "complete-active-profile-no-devai-result-reuse"
+        },
+        "administrative_mutation": {
+          "const": "separate-owner-authority-required"
+        },
+        "unknown_capability": {
+          "const": "defer-or-reject-never-assume"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "schemaVersion": "1.0.0",
+      "policy_id": "github-actions-features",
+      "policy_version": "1.0.0",
+      "round": "R-0007",
+      "status": "active-setpoint-pending-implementation-and-benchmark",
+      "authority": "Architect",
+      "inventory_source": "work/rounds/R-0007/inventory/github-actions-current-state.md",
+      "sources": ["law/adr/ADR-024-r0007-ci-validation.md"],
+      "applicability_rule": "Every applicable feature receives exactly one disposition.",
+      "applicable_features": ["dependency-cache"],
+      "feature_dispositions": [
+        {
+          "feature_id": "dependency-cache",
+          "category": "acquisition",
+          "disposition": "adopt",
+          "activation_state": "policy-adopted-not-active",
+          "security_rationale": "Cache contents are untrusted acquisition inputs.",
+          "semantic_rationale": "A cache hit cannot authorize a validation result.",
+          "cost_rationale": "Measured install-time reduction is required before activation.",
+          "critical_path_rationale": "Only acquisition time may leave the critical path.",
+          "immutable_source_refs": ["law/adr/ADR-024-r0007-ci-validation.md"],
+          "observed_at": "2026-08-07T00:00:00Z"
+        }
+      ],
+      "invariants": {
+        "one_disposition_per_applicable_feature": true,
+        "adoption_is_not_activation": true,
+        "cache_authority": "acquisition-time-only-never-verdict",
+        "artifact_authority": "digest-verified-transport-only-never-pass",
+        "cold_lane_authority": "complete-active-profile-no-devai-result-reuse",
+        "administrative_mutation": "separate-owner-authority-required",
+        "unknown_capability": "defer-or-reject-never-assume"
+      }
+    }
+  ]
+}
