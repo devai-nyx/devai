@@ -10,53 +10,14 @@ import { join } from 'node:path';
 import { provisionTask, dropTask } from './db.js';
 import { acquireLocks, releaseLocks } from './locks.js';
 import { createWorktree, destroyWorktree } from './worktrees.js';
+import {
+  classifyTaskRecord,
+  type TaskRecord,
+  type TaskRecordClassification,
+  type TaskStatus,
+} from './task-contract.js';
 
-export type TaskStatus =
-  | 'queued'
-  | 'ready'
-  | 'lock_denied'
-  | 'in_progress'
-  | 'checkpoint'
-  | 'pre_merge'
-  | 'merging'
-  | 'completed'
-  | 'awaiting_human_review'
-  | 'experimental_blocked'
-  | 'escalated'
-  | 'rgr_pending'
-  | 'cancelled';
-
-export type TaskDiscipline = 'owner' | 'architect' | 'inspector' | 'engineer' | 'auditor';
-export type TaskSubstrate = 'F1' | 'F2' | 'F3' | 'F4' | 'F5';
-
-/**
- * Schema-conformant Task record per task.schema.json
- * (additionalProperties: false). Note: there is no `paused_rgr_id`
- * field — the RGR pause is encoded in `tags` as `rgr_pause:<RGR-id>`,
- * a convention this module owns end-to-end.
- */
-export interface TaskRecord {
-  schemaVersion: '1.0.0';
-  id: string; // TASK-[0-9]{4,}
-  status: TaskStatus;
-  discipline: TaskDiscipline;
-  title: string;
-  description?: string;
-  lifecycle?: 'supported' | 'experimental';
-  acceptance_commands?: string[][];
-  target_modules: string[]; // each ^MOD-
-  target_substrates: TaskSubstrate[]; // minItems 1
-  created_at: string;
-  db_isolation: 'database' | 'cluster';
-  iteration_count: number;
-  spawned_at?: string | null;
-  completed_at?: string | null;
-  branch?: string | null;
-  worktree_id?: string | null; // ^WT- when set
-  prompt_composition_id?: string | null;
-  priority?: number;
-  tags?: string[];
-}
+export * from './task-contract.js';
 
 const RGR_PAUSE_TAG_PREFIX = 'rgr_pause:';
 
@@ -120,25 +81,43 @@ export function saveTask(repoRoot: string, task: TaskRecord): void {
   writeFileSync(taskPath(repoRoot, task.id), JSON.stringify(validated, null, 2) + '\n');
 }
 
-export function loadTask(repoRoot: string, id: string): TaskRecord {
+export function readTaskRecord(repoRoot: string, id: string): TaskRecordClassification {
   const path = taskPath(repoRoot, id);
   if (!existsSync(path)) throw new Error(`task ${id} not found at ${path}`);
-  return parsers.task.parseJson<TaskRecord>(readFileSync(path, 'utf8'));
+  let value: unknown;
+  try {
+    value = JSON.parse(readFileSync(path, 'utf8')) as unknown;
+  } catch {
+    return { kind: 'invalid', executable: false, code: 'TASK_RECORD_INVALID' };
+  }
+  const classification = classifyTaskRecord(value);
+  if (classification.kind !== 'current') return classification;
+  const parsed = parsers.task.safeParse<TaskRecord>(classification.record);
+  return parsed.ok
+    ? { kind: 'current', executable: true, record: parsed.value }
+    : { kind: 'invalid', executable: false, code: 'TASK_RECORD_INVALID' };
+}
+
+export function loadTask(repoRoot: string, id: string): TaskRecord {
+  const classification = readTaskRecord(repoRoot, id);
+  if (classification.kind === 'current') return classification.record;
+  throw new Error(classification.code);
+}
+
+/** List every stored record classification without making legacy data executable. */
+export function listTaskRecords(repoRoot: string): readonly TaskRecordClassification[] {
+  const dir = tasksDir(repoRoot);
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((name) => name.endsWith('.json'))
+    .sort()
+    .map((name) => readTaskRecord(repoRoot, name.slice(0, -'.json'.length)));
 }
 
 export function listTasks(repoRoot: string): readonly TaskRecord[] {
-  const dir = tasksDir(repoRoot);
-  if (!existsSync(dir)) return [];
-  const records: TaskRecord[] = [];
-  for (const name of readdirSync(dir)) {
-    if (!name.endsWith('.json')) continue;
-    try {
-      records.push(parsers.task.parseJson<TaskRecord>(readFileSync(join(dir, name), 'utf8')));
-    } catch {
-      // skip
-    }
-  }
-  return records.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  return listTaskRecords(repoRoot).flatMap((classification) =>
+    classification.kind === 'current' ? [classification.record] : [],
+  );
 }
 
 export interface SpawnResult {
@@ -162,11 +141,31 @@ export interface SpawnResult {
  * taken are reversed (worktree destroyed, locks released). A failed
  * spawn never leaves the substrate half-initialized.
  *
- * Backward-compatible: with `withWorktree:false` and `withDb:false`
- * (the defaults), behavior is exactly the previous MVP — acquire locks
- * + persist record.
+ * With `withWorktree:false` and `withDb:false` (the defaults), the task is
+ * validated, locked, and persisted without provisioning extra resources.
  */
 export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
+  const requested = opts.task as Readonly<Record<string, unknown>>;
+  if (typeof requested['round_id'] !== 'string' || requested['round_id'].length === 0) {
+    throw new Error('TASK_ROUND_ID_REQUIRED');
+  }
+  if (
+    requested['executor'] === null ||
+    typeof requested['executor'] !== 'object' ||
+    Array.isArray(requested['executor'])
+  ) {
+    throw new Error('TASK_EXECUTOR_REQUIRED');
+  }
+  const createdAt = new Date().toISOString();
+  const preflight: TaskRecord = {
+    schemaVersion: '2.0.0',
+    ...opts.task,
+    status: opts.task.status ?? 'queued',
+    iteration_count: 0,
+    created_at: createdAt,
+  };
+  parsers.task.parse(preflight);
+
   const locksDir = join(opts.repoRoot, '.devai/state/locks');
   const lockResult = acquireLocks({
     locksDir,
@@ -177,11 +176,11 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
   // Lock-denied: never attempt worktree/DB; persist the record and return.
   if (lockResult.denied.length > 0) {
     const task: TaskRecord = {
-      schemaVersion: '1.0.0',
+      schemaVersion: '2.0.0',
       ...opts.task,
       status: 'lock_denied',
       iteration_count: 0,
-      created_at: new Date().toISOString(),
+      created_at: createdAt,
     };
     saveTask(opts.repoRoot, task);
     return {
@@ -212,11 +211,11 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
       // Rollback: release locks; no worktree to destroy.
       releaseLocks({ locksDir, taskId: opts.task.id });
       const task: TaskRecord = {
-        schemaVersion: '1.0.0',
+        schemaVersion: '2.0.0',
         ...opts.task,
         status: 'cancelled',
         iteration_count: 0,
-        created_at: new Date().toISOString(),
+        created_at: createdAt,
       };
       saveTask(opts.repoRoot, task);
       return {
@@ -241,11 +240,11 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
       }
       releaseLocks({ locksDir, taskId: opts.task.id });
       const task: TaskRecord = {
-        schemaVersion: '1.0.0',
+        schemaVersion: '2.0.0',
         ...opts.task,
         status: 'cancelled',
         iteration_count: 0,
-        created_at: new Date().toISOString(),
+        created_at: createdAt,
       };
       saveTask(opts.repoRoot, task);
       return {
@@ -267,11 +266,11 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
       }
       releaseLocks({ locksDir, taskId: opts.task.id });
       const task: TaskRecord = {
-        schemaVersion: '1.0.0',
+        schemaVersion: '2.0.0',
         ...opts.task,
         status: 'cancelled',
         iteration_count: 0,
-        created_at: new Date().toISOString(),
+        created_at: createdAt,
       };
       saveTask(opts.repoRoot, task);
       return {
@@ -288,13 +287,13 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
   // All steps succeeded — record final state.
   const composed = opts.withWorktree === true || opts.withDb === true;
   const task: TaskRecord = {
-    schemaVersion: '1.0.0',
+    schemaVersion: '2.0.0',
     ...opts.task,
     // If we composed a full environment, the task is in_progress (ready
     // to run). Otherwise it's just 'ready' awaiting environment.
     status: composed ? 'in_progress' : 'ready',
     iteration_count: 0,
-    created_at: new Date().toISOString(),
+    created_at: createdAt,
     ...(worktreePath !== null && { worktree_id: worktreeId, branch: opts.task.id }),
   };
   saveTask(opts.repoRoot, task);
