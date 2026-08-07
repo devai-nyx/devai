@@ -1,7 +1,8 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 import { spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { appendFileSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.setConfig({ testTimeout: 30_000 });
@@ -28,12 +29,13 @@ function run(
   command: string,
   args: readonly string[] = [],
   env: NodeJS.ProcessEnv = {},
+  repoRoot = ROOT,
 ): CommandResult {
   const result = spawnSync(
     'node',
-    [SCRIPT, command, '--repo-root', ROOT, '--round', 'R-0007', ...args, '--json'],
+    [SCRIPT, command, '--repo-root', repoRoot, '--round', 'R-0007', ...args, '--json'],
     {
-      cwd: ROOT,
+      cwd: repoRoot,
       encoding: 'utf8',
       env: { ...process.env, CI: '', GITHUB_ACTIONS: '', ...env },
       // The authenticated v5 impact population is intentionally larger than Node's 1 MiB
@@ -52,6 +54,27 @@ function run(
 
 function json(relativePath: string): Record<string, unknown> {
   return JSON.parse(readFileSync(resolve(ROOT, relativePath), 'utf8')) as Record<string, unknown>;
+}
+
+function cleanClone(): { root: string; candidate: string; dispose: () => void } {
+  const temporary = mkdtempSync(join(tmpdir(), 'devai-r0007-entry-'));
+  const root = join(temporary, 'repo');
+  const cloned = spawnSync('git', ['clone', '--quiet', '--local', '--no-hardlinks', ROOT, root], {
+    encoding: 'utf8',
+  });
+  if (cloned.status !== 0) {
+    rmSync(temporary, { recursive: true, force: true });
+    throw new Error(`fixture clone failed: ${cloned.stderr}`);
+  }
+  const candidate = spawnSync('git', ['rev-parse', 'HEAD'], {
+    cwd: root,
+    encoding: 'utf8',
+  }).stdout.trim();
+  return {
+    root,
+    candidate,
+    dispose: () => rmSync(temporary, { recursive: true, force: true }),
+  };
 }
 
 describe('pre-R-0007 generic close-control red contracts', () => {
@@ -100,16 +123,33 @@ describe('pre-R-0007 generic close-control red contracts', () => {
     });
   });
 
-  it('passes entry for the exact DII-257-bound candidate', () => {
-    const result = run('entry-check', ['--candidate', HEAD]);
-    expect(result.status, JSON.stringify(result.value, null, 2)).toBe(0);
-    expect(result.value).toMatchObject({
-      ok: true,
-      command: 'entry-check',
-      entry_ready: true,
-      diagnostics: [],
-      findings: [],
-    });
+  it('passes entry only for a clean exact DII-257-bound candidate', () => {
+    const fixture = cleanClone();
+    try {
+      const result = run('entry-check', ['--candidate', fixture.candidate], {}, fixture.root);
+      expect(result.status, JSON.stringify(result.value, null, 2)).toBe(0);
+      expect(result.value).toMatchObject({
+        ok: true,
+        command: 'entry-check',
+        entry_ready: true,
+        diagnostics: [],
+        findings: [],
+      });
+
+      appendFileSync(join(fixture.root, 'README.md'), '\nhermetic dirty-candidate marker\n');
+      const dirty = run('entry-check', ['--candidate', fixture.candidate], {}, fixture.root);
+      expect(dirty.status, JSON.stringify(dirty.value, null, 2)).toBe(1);
+      expect(dirty.value).toMatchObject({
+        ok: false,
+        command: 'entry-check',
+        entry_ready: false,
+        findings: expect.arrayContaining([
+          expect.objectContaining({ code: 'ENTRY_BLOCKED_DIRTY_WORKTREE' }),
+        ]),
+      });
+    } finally {
+      fixture.dispose();
+    }
   });
 
   it('emits an auditable impact plan with conservative fallback for this control range', () => {

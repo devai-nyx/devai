@@ -138,7 +138,7 @@ describe('R-0005 evidence and lifecycle red-first contracts', () => {
   it('KR-R5-011 / BL-178 binds the anti-skip contract to governed test sources', () => {
     const contract = read('tests/contract/r0004-governed-surface.red.contract.test.ts');
     expect(contract).toContain('CONDITIONAL_SKIP_SOURCE_ALLOWLIST');
-    expect(contract).toContain('tests/e2e/cli-help.smoke.test.ts');
+    expect(contract).toContain('tests/e2e/bare-domain-help.e2e.test.ts');
     expect(contract).toContain('tests/integration/runtime-probe-data.integration.test.ts');
     expect(contract).toContain('expect(observedConditionalSkipSources).toEqual');
   });
