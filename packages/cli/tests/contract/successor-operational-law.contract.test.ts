@@ -28,7 +28,7 @@ function run(args: readonly string[]): { status: number | null; stdout: string; 
 
 describe('successor operational law', () => {
   cliIt('validates all twenty successor ADR records through the production command', () => {
-    const result = run(['policy', 'check', 'adrs', '--repo-root', ROOT]);
+    const result = run(['check', '--only', 'adrs', '--repo-root', ROOT]);
     expect(result.status, result.stderr || result.stdout).toBe(0);
     const report = JSON.parse(result.stdout) as {
       ok: boolean;
@@ -41,7 +41,7 @@ describe('successor operational law', () => {
   });
 
   cliIt('evaluates non-vacuous successor glob guards through the production command', () => {
-    const result = run(['policy', 'check', 'glob', 'guards', '--repo-root', ROOT]);
+    const result = run(['check', '--only', 'glob-guards', '--repo-root', ROOT]);
     expect(result.status, result.stderr || result.stdout).toBe(0);
     const report = JSON.parse(result.stdout) as {
       ok: boolean;
@@ -60,7 +60,7 @@ describe('successor operational law', () => {
   });
 
   cliIt('resolves the successor trace through a materialized domains policy', () => {
-    const result = run(['spec', 'validate', 'trace', '--repo-root', ROOT]);
+    const result = run(['check', '--only', 'trace', '--repo-root', ROOT]);
     expect(result.status, result.stderr || result.stdout).toBe(0);
     const report = JSON.parse(result.stdout) as {
       ok: boolean;
@@ -93,7 +93,7 @@ describe('successor operational law', () => {
     const result = run([
       'sense',
       'run',
-      '--set',
+      '--preset',
       'sweep',
       '--round',
       'R-0999',
@@ -105,7 +105,14 @@ describe('successor operational law', () => {
       '--write',
     ]);
     expect(result.status, result.stderr || result.stdout).toBe(0);
-    expect(JSON.parse(result.stdout)).toMatchObject({ ok: true, dry_run: true, set: 'sweep' });
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      ok: true,
+      dry_run: true,
+      selection: { type: 'preset', value: 'sweep' },
+      aggregate_effect: 'read',
+      generic_ceiling: 'remote-write',
+      implicit_persistence: false,
+    });
   });
 
   cliIt('binds both authority-policy materializations to the current resolved rule set', () => {
@@ -125,6 +132,7 @@ describe('successor operational law', () => {
       const expected = buildTrustedAuthoritySources(registry, ${JSON.stringify(ROOT)}, resolveCliVersion());
       stdoutWrite(JSON.stringify({
         registry_length: registry.length,
+        action_ids: registry.map((entry) => entry.name),
         provenance: expected.provenance,
         rules_digest_sha256: canonicalSha256(expected.rules),
       }));
@@ -136,6 +144,7 @@ describe('successor operational law', () => {
     expect(result.status, result.stderr || result.stdout).toBe(0);
     const expected = JSON.parse(result.stdout) as {
       registry_length: number;
+      action_ids: string[];
       provenance: {
         resolved_digest_sha256: string;
         source_policy: unknown;
@@ -143,7 +152,28 @@ describe('successor operational law', () => {
       };
       rules_digest_sha256: string;
     };
-    expect(expected.registry_length).toBe(147);
+    const canonical = JSON.parse(
+      readFileSync(join(ROOT, 'law/policy/action-registry.json'), 'utf8'),
+    ) as {
+      counts: { keep: number; fold: number; tombstone: number };
+      entries: Array<{
+        action_id: string;
+        disposition: 'keep' | 'fold' | 'tombstone';
+        tier: 'porcelain' | 'plumbing';
+      }>;
+    };
+    const kept = canonical.entries.filter((entry) => entry.disposition === 'keep');
+    const retiredIds = new Set(
+      canonical.entries
+        .filter((entry) => entry.disposition !== 'keep')
+        .map((entry) => entry.action_id),
+    );
+    expect(canonical.counts).toEqual({ keep: 42, fold: 169, tombstone: 11 });
+    expect(kept.filter((entry) => entry.tier === 'porcelain')).toHaveLength(31);
+    expect(kept.filter((entry) => entry.tier === 'plumbing')).toHaveLength(11);
+    expect(expected.registry_length).toBe(42);
+    expect(expected.action_ids).toEqual(kept.map((entry) => entry.action_id));
+    expect(expected.action_ids.filter((actionId) => retiredIds.has(actionId))).toEqual([]);
     for (const relativePath of AUTHORITY_POLICY_PATHS) {
       const path = join(ROOT, relativePath);
       const policy = JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>;

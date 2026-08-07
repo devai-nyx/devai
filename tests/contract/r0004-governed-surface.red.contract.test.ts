@@ -14,6 +14,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import { describe, expect, it } from 'vitest';
+import { routeArgv } from '../../packages/cli/src/command-router.js';
 
 // Invariants: INV-DEVAI-017, INV-DEVAI-020
 
@@ -140,22 +141,20 @@ function staticCommandDescriptions(path: string): Map<string, string> {
   }
   visit(source);
   if (path.endsWith('/init/index.ts')) {
-    expect(sourceText).toContain('name: `init apply-${segment}`');
-    expect(sourceText).toContain(
-      '`Apply only the ${segment} bootstrap segment under its declared authority.`',
-    );
-    const ownerExact =
-      sourceText.includes("segment === 'owner'") &&
-      sourceText.includes('Apply the exact owner bootstrap segment under its declared authority.');
+    expect(sourceText).toContain('name: `init apply ${segment}`');
+    const initDescriptions = {
+      owner: 'Apply the Owner-owned initialization projection with explicit write consent.',
+      architect: 'Apply the Architect-owned initialization projection with explicit write consent.',
+      harness:
+        'Apply the canonical harness projection with explicit Architect-initiated write consent.',
+    } as const;
+    for (const description of Object.values(initDescriptions)) {
+      expect(sourceText).toContain(description);
+    }
     for (const match of sourceText.matchAll(/initApplyDefinition\('([^']+)'\)/gu)) {
       const segment = match[1];
-      if (segment !== undefined) {
-        descriptions.set(
-          `init apply-${segment}`,
-          ownerExact && segment === 'owner'
-            ? 'Apply the exact owner bootstrap segment under its declared authority.'
-            : `Apply only the ${segment} bootstrap segment under its declared authority.`,
-        );
+      if (segment === 'owner' || segment === 'architect' || segment === 'harness') {
+        descriptions.set(`init apply ${segment}`, initDescriptions[segment]);
       }
     }
   }
@@ -169,12 +168,32 @@ describe('R-0004 governed surface red-first contracts', () => {
     expect(existsSync(registryPath)).toBe(true);
     expect(existsSync(schemaPath)).toBe(true);
 
+    expect({
+      keep: DISPOSITION.actions.keep.length,
+      fold: DISPOSITION.actions.fold.length,
+      tombstone: DISPOSITION.actions.tombstone.length,
+    }).toEqual({ keep: 147, fold: 38, tombstone: 1 });
+
     const registry = readJson('law/policy/action-registry.json') as {
-      entries: { action_id: string; disposition: string }[];
+      entries: {
+        action_id: string;
+        disposition: string;
+        lifecycle: string;
+        tier: string;
+      }[];
     };
-    expect(registry.entries.filter((entry) => entry.disposition === 'keep')).toHaveLength(147);
-    expect(registry.entries.filter((entry) => entry.disposition === 'fold')).toHaveLength(38);
-    expect(registry.entries.filter((entry) => entry.disposition === 'tombstone')).toHaveLength(1);
+    const kept = registry.entries.filter((entry) => entry.disposition === 'keep');
+    expect(kept).toHaveLength(42);
+    expect(registry.entries.filter((entry) => entry.disposition === 'fold')).toHaveLength(169);
+    expect(registry.entries.filter((entry) => entry.disposition === 'tombstone')).toHaveLength(11);
+    expect(kept.filter((entry) => entry.tier === 'porcelain')).toHaveLength(31);
+    expect(kept.filter((entry) => entry.tier === 'plumbing')).toHaveLength(11);
+    expect(kept.every((entry) => entry.lifecycle === 'supported')).toBe(true);
+    expect(
+      registry.entries
+        .filter((entry) => entry.disposition !== 'keep')
+        .every((entry) => entry.lifecycle === 'retired'),
+    ).toBe(true);
 
     for (const generated of [
       'packages/cli/src/generated/action-registry.ts',
@@ -211,11 +230,11 @@ describe('R-0004 governed surface red-first contracts', () => {
     expect(effect.status, effect.stderr).toBe(0);
   }, 30_000);
 
-  it('BL-009 exposes the complete recursive schema canon through policy check schemas', () => {
+  it('BL-009 exposes the complete recursive schema canon through check --only schemas', () => {
     expect(existsSync(join(ROOT, 'law/schemas/action-registry.schema.json'))).toBe(true);
     const result = spawnSync(
       'node',
-      [BIN, 'policy', 'check', 'schemas', '--repo-root', ROOT, '--format', 'json'],
+      [BIN, 'check', '--only', 'schemas', '--repo-root', ROOT, '--format', 'json'],
       { cwd: ROOT, encoding: 'utf8' },
     );
     expect(result.status, result.stderr).toBe(0);
@@ -266,12 +285,14 @@ describe('R-0004 governed surface red-first contracts', () => {
   it('BL-027 routes leaf help to leaf metadata without granting authority', () => {
     const sessionDirectory = join(ROOT, '.devai/state/authority-sessions');
     const sessionsBefore = existsSync(sessionDirectory) ? readdirSync(sessionDirectory).sort() : [];
-    const result = spawnSync('node', [BIN, 'init', 'apply-owner', '--help'], {
+    const result = spawnSync('node', [BIN, 'init', 'apply', 'owner', '--help'], {
       cwd: ROOT,
       encoding: 'utf8',
     });
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain('Apply the exact owner bootstrap segment');
+    expect(result.stdout).toContain(
+      'Apply the Owner-owned initialization projection with explicit write consent.',
+    );
     expect(result.stdout).toContain('--as-role <role>');
     expect(result.stdout).toContain('--write');
     expect(result.stdout).not.toContain('<command>');
@@ -304,14 +325,18 @@ describe('R-0004 governed surface red-first contracts', () => {
     expect(changesets.fixed).toEqual([DISPOSITION.packages.fixed_group]);
   });
 
-  it('BL-031 binds root build and test to exact non-recursive porcelain argv', () => {
+  it('BL-031 binds root quality scripts to exact direct non-recursive argv', () => {
     const root = readJson('package.json') as { scripts: Record<string, string> };
-    expect(root.scripts.build).toBe(
-      'pnpm devai:prepare && node packages/cli/dist/bin.js sense build --repo-root . --no-emit-reading',
-    );
-    expect(root.scripts.test).toBe(
-      'pnpm devai:prepare && node packages/cli/dist/bin.js sense test all --repo-root . --no-emit-reading',
-    );
+    expect(root.scripts.build).toBe('pnpm devai:prepare && pnpm -r build');
+    expect(root.scripts.test).toBe('pnpm devai:prepare && vitest run');
+    expect(root.scripts.lint).toBe('pnpm devai:prepare && eslint --format=json .');
+    expect(root.scripts.typecheck).toBe('pnpm devai:prepare && tsc --noEmit -p tsconfig.json');
+    expect(
+      [root.scripts.build, root.scripts.test, root.scripts.lint, root.scripts.typecheck].some(
+        (script) =>
+          /packages\/cli\/dist\/bin\.js sense (?:build|lint|test|type check)/u.test(script),
+      ),
+    ).toBe(false);
     const build = readFileSync(join(ROOT, 'packages/cli/src/commands/sense/build.ts'), 'utf8');
     const test = readFileSync(join(ROOT, 'packages/cli/src/commands/sense/test.ts'), 'utf8');
     const runner = readFileSync(join(ROOT, 'packages/sensors/src/run-command.ts'), 'utf8');
@@ -365,7 +390,7 @@ describe('R-0004 governed surface red-first contracts', () => {
 
     const result = spawnSync(
       'node',
-      [BIN, 'policy', 'check', 'schemas', '--repo-root', ROOT, '--format', 'json'],
+      [BIN, 'check', '--only', 'schemas', '--repo-root', ROOT, '--format', 'json'],
       { cwd: ROOT, encoding: 'utf8' },
     );
     expect(result.status, result.stderr).toBe(0);
@@ -410,7 +435,7 @@ describe('R-0004 governed surface red-first contracts', () => {
         .filter((entry) => entry.disposition === 'keep' && observed.has(entry.internal_binding))
         .map((entry) => [entry.internal_binding, entry.description]),
     );
-    expect(observed.size).toBe(147);
+    expect(observed.size).toBe(42);
     expect(expectedByBinding.size).toBe(observed.size);
     const drift = [...observed]
       .filter(([name, description]) => description !== expectedByBinding.get(name))
@@ -566,30 +591,47 @@ describe('R-0004 governed surface red-first contracts', () => {
   it('BL-162 binds strict governance to a window covering the complete R-0004 range', () => {
     const root = readJson('package.json') as { scripts: Record<string, string> };
     expect(root.scripts['ci:governance']).toContain(
-      'check forbidden actions --strict --repo-root . --since-ref b60b4c52bff1779da84f48edc63cbf34652ab18e',
+      'check --only forbidden-actions --strict --repo-root . --since-ref b60b4c52bff1779da84f48edc63cbf34652ab18e --format json',
     );
   });
 
-  it('BL-030 keeps every public action and carries all folds and tombstones with migration', () => {
+  it('BL-030 separates the immutable R-0004 surface from the live registry and refuses retired routes', () => {
     expect(existsSync(join(ROOT, 'law/policy/action-registry.json'))).toBe(true);
     const registry = readJson('law/policy/action-registry.json') as {
-      entries: { action_id: string; disposition: string; migration: string | null }[];
+      entries: {
+        action_id: string;
+        path: string[];
+        disposition: string;
+        migration: string | null;
+      }[];
     };
+    expect({
+      keep: DISPOSITION.actions.keep.length,
+      fold: DISPOSITION.actions.fold.length,
+      tombstone: DISPOSITION.actions.tombstone.length,
+    }).toEqual({ keep: 147, fold: 38, tombstone: 1 });
+
     const keep = registry.entries.filter((entry) => entry.disposition === 'keep');
-    expect(keep.map((entry) => entry.action_id).sort()).toEqual(
+    expect(keep).toHaveLength(42);
+    expect(registry.entries.filter((entry) => entry.disposition === 'fold')).toHaveLength(169);
+    expect(registry.entries.filter((entry) => entry.disposition === 'tombstone')).toHaveLength(11);
+    expect(keep.map((entry) => entry.action_id).sort()).not.toEqual(
       DISPOSITION.actions.keep.map((entry) => entry.action_id).sort(),
-    );
-    expect(registry.entries.filter((entry) => entry.disposition === 'fold')).toHaveLength(
-      DISPOSITION.actions.fold.length,
-    );
-    expect(registry.entries.filter((entry) => entry.disposition === 'tombstone')).toHaveLength(
-      DISPOSITION.actions.tombstone.length,
     );
     expect(
       registry.entries
         .filter((entry) => entry.disposition !== 'keep')
         .every((entry) => typeof entry.migration === 'string' && entry.migration.length > 0),
     ).toBe(true);
+    const dispatchViolations = registry.entries
+      .filter((entry) => entry.disposition !== 'keep')
+      .map((entry) => ({
+        entry,
+        result: routeArgv(['node', 'devai', ...entry.path], [], '1.0.0-contract'),
+      }))
+      .filter(({ result }) => result.kind === 'dispatch')
+      .map(({ entry }) => `${entry.disposition}:${entry.action_id}`);
+    expect(dispatchViolations).toEqual([]);
   });
 
   it('BL-065/084 pins workflow actions, prewarms every job, and forbids optional required suites', () => {

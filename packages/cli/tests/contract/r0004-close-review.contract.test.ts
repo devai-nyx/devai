@@ -3,6 +3,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { join, matchesGlob, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
+import { routeArgv } from '../../src/command-router.js';
 
 // Invariants: INV-DEVAI-001, INV-DEVAI-017, INV-DEVAI-020
 
@@ -64,19 +65,40 @@ describe('R-0004 first Opus close-review contracts', () => {
     );
   });
 
-  it('registers policy check schemas through the canonical action path', () => {
+  it('registers check --only schemas while keeping policy check schemas router-only', () => {
     const registry = json<{
       counts: { keep: number; fold: number; tombstone: number };
-      entries: { action_id: string; internal_binding: string; disposition: string }[];
+      entries: {
+        action_id: string;
+        internal_binding: string;
+        path: string[];
+        disposition: string;
+        migration: string | null;
+        output_contract: { mode: string };
+      }[];
     }>('law/policy/action-registry.json');
-    expect(registry.counts).toEqual({ keep: 147, fold: 38, tombstone: 1 });
+    expect(registry.counts).toEqual({ keep: 42, fold: 169, tombstone: 11 });
+    expect(registry.entries).toContainEqual(
+      expect.objectContaining({
+        action_id: 'check',
+        internal_binding: 'check',
+        disposition: 'keep',
+      }),
+    );
     expect(registry.entries).toContainEqual(
       expect.objectContaining({
         action_id: 'policy check schemas',
         internal_binding: 'check schemas',
-        disposition: 'keep',
+        disposition: 'fold',
+        migration: 'check --only schemas',
+        output_contract: expect.objectContaining({ mode: 'router-only' }),
       }),
     );
+    const historical = registry.entries.find((entry) => entry.action_id === 'policy check schemas');
+    expect(historical).toBeDefined();
+    const refusal = routeArgv(['node', 'devai', ...(historical?.path ?? [])], [], '1.0.0-contract');
+    expect(refusal).toMatchObject({ kind: 'output', exitCode: 2 });
+    if (refusal.kind === 'output') expect(refusal.text).toContain('check --only schemas');
     const command = readFileSync(join(ROOT, 'packages/cli/src/commands/check/schemas.ts'), 'utf8');
     const router = readFileSync(join(ROOT, 'packages/cli/src/command-router.ts'), 'utf8');
     expect(command).toContain('defineCommand({');
