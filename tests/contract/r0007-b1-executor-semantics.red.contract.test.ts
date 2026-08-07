@@ -35,7 +35,10 @@ interface ActionRegistry {
 }
 
 interface SensorRegistry {
-  readonly entries: readonly { readonly kind: string }[];
+  readonly entries: readonly {
+    readonly kind: string;
+    readonly effect?: unknown;
+  }[];
 }
 
 interface NamedCollection {
@@ -385,35 +388,38 @@ describe('R-0007 B1 canonical suite and preset semantics', () => {
   });
 
   it('B1-SEM-003 derives sweep from read-only sensors and reports every write-capable exclusion', () => {
+    const sensors = readJson('law/policy/sensor-registry.json') as unknown as SensorRegistry;
+    const allowedEffects = new Set<ActionRegistryEntry['effect']>([
+      'read',
+      'harness-write',
+      'local-write',
+      'remote-write',
+    ]);
+    const invalidEffects = sensors.entries.flatMap((entry) =>
+      typeof entry.effect === 'string' &&
+      allowedEffects.has(entry.effect as ActionRegistryEntry['effect'])
+        ? []
+        : [`${entry.kind}:${JSON.stringify(entry.effect)}`],
+    );
+    expect(
+      invalidEffects,
+      'every live sensor kind needs one allowed effect in the sensor registry',
+    ).toEqual([]);
+
     const policy = locateCanonicalCollection('presets');
     if (policy === null) return;
     const sweep = policy.entries.find((entry) => entry.name === 'sweep');
     expect(sweep, 'sweep preset is absent').toBeDefined();
     if (sweep === undefined) return;
 
-    const sensors = readJson('law/policy/sensor-registry.json') as unknown as SensorRegistry;
-    const actions = readJson('law/policy/action-registry.json') as unknown as ActionRegistry;
-    const effectByKind = new Map(
-      actions.entries.flatMap((entry) => {
-        const prefix = 'sense run ';
-        return entry.disposition === 'keep' && entry.action_id.startsWith(prefix)
-          ? [[entry.action_id.slice(prefix.length), entry.effect] as const]
-          : [];
-      }),
-    );
-    const unresolved = sensors.entries
-      .map((entry) => entry.kind)
-      .filter((kind) => !effectByKind.has(kind));
-    expect(unresolved, 'every live sensor kind needs an effect-bound sense run action').toEqual([]);
-
     const readOnly = sensors.entries
-      .map((entry) => entry.kind)
-      .filter((kind) => effectByKind.get(kind) === 'read');
+      .filter((entry) => entry.effect === 'read')
+      .map((entry) => entry.kind);
     const excluded = sensors.entries
-      .map((entry) => entry.kind)
-      .filter((kind) => effectByKind.has(kind) && effectByKind.get(kind) !== 'read');
+      .filter((entry) => entry.effect !== 'read')
+      .map((entry) => entry.kind);
     expect(sweep.members).toEqual(readOnly);
-    expect(sorted(sweep.excluded)).toEqual(sorted(excluded));
+    expect(sweep.excluded).toEqual(excluded);
     expect(sweep.excluded).toContain('migration_check');
   });
 });
