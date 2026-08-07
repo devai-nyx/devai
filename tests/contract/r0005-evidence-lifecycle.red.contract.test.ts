@@ -69,7 +69,7 @@ describe('R-0005 evidence and lifecycle red-first contracts', () => {
   it('KR-R5-005 / BL-015 reaches zero only through the bounded prompt-overlay rule', () => {
     const result = spawnSync(
       'node',
-      [BIN, 'check', '--only', 'prompt-overlays'],
+      [BIN, 'check', '--only', 'prompt-overlays', '--format', 'json'],
       { cwd: ROOT, encoding: 'utf8', env: subprocessCoverageEnvironment() },
     );
     expect(result.status, result.stderr).toBe(0);
