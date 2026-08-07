@@ -60,7 +60,7 @@ const F1_PATHS_SELF = [
 ] as const;
 
 /**
- * Adopter-posture F1 paths — the substrate roots `init --execute`
+ * Adopter-posture F1 paths — the substrate roots `init apply harness --write`
  * seeds for adopters (see `buildBootstrapPlan` in
  * `@devai-nyx/skills` bootstrap service). Excludes `law/schemas/`
  * since adopters consume schemas from the sibling DEVAI checkout.
@@ -94,6 +94,7 @@ interface DoctorOptions {
   readonly adopter?: boolean;
   readonly auto?: boolean;
   readonly human?: boolean;
+  readonly probe?: string;
   /** Comma-separated list of checks to skip, e.g. "docs-governance". */
   readonly skip?: string;
 }
@@ -316,7 +317,7 @@ function checkEvidenceChain(chainPath: string): CheckResult {
  *      `<path>` is resolved relative to the pointer file's
  *      directory (or treated as absolute when it starts with `/`),
  *      must point at a file named constitution.md, and that file
- *      must exist. This is the shape `init --execute` writes for
+ *      must exist. This is the shape `init apply harness --write` writes for
  *      adopters when `findDevaiPacksRoot()` resolves a sibling
  *      DEVAI checkout — Phase 21.D's primary adopter-onboarding
  *      output.
@@ -481,7 +482,7 @@ function checkDevaiVersionMatch(repoRoot: string): CheckResult {
     info: { pinned, running, provenance: provenanceInfo },
     ...(!ok && {
       errors: [
-        `project.json devai_version (${pinned}) does not match the installed @devai-nyx/cli (${running}); re-run \`devai init\` or \`devai adopt upgrade\` to re-stamp`,
+        `project.json devai_version (${pinned}) does not match the installed @devai-nyx/cli (${running}); re-run \`devai init upgrade --as-role architect --write\` to re-stamp`,
       ],
     }),
   };
@@ -542,7 +543,7 @@ function checkAuthorityEnforcement(repoRoot: string): CheckResult {
       },
       ...(!ok && {
         errors: [
-          'authority posture is missing, stale, non-binding, or inconsistent; re-materialize with `devai adopt upgrade --as-role architect --write`',
+          'authority posture is missing, stale, non-binding, or inconsistent; re-materialize with `devai init upgrade --as-role architect --write`',
         ],
       }),
     };
@@ -607,7 +608,7 @@ function checkConstitutionBinding(repoRoot: string): CheckResult {
   const upstreamNote =
     status.upstreamAhead === true
       ? [
-          `pinned version ${status.pin?.version ?? '?'} lags upstream ${status.upstreamVersion ?? '?'} (informational; run \`devai adopt upgrade --constitution\` to refresh)`,
+          `pinned version ${status.pin?.version ?? '?'} lags upstream ${status.upstreamVersion ?? '?'} (informational; run \`devai init upgrade --constitution --as-role architect --write\` to refresh)`,
         ]
       : [];
   return {
@@ -839,7 +840,7 @@ function checkTestTrace(repoRoot: string): CheckResult {
  * adopter posture deliberately drops `workspace-layout` and
  * `schemas-loadable` (both check for DEVAI's own monorepo shape)
  * and runs an adopter-flavoured `f1-paths-present` that checks the
- * substrate roots `init --execute` seeds (minus `law/schemas/`).
+ * substrate roots `init apply harness --write` seeds (minus `law/schemas/`).
  *
  * `constitution-symlink` runs in the adopter posture too; it will
  * pass against adopters once Phase 21.D's init+doctor pair lands
@@ -1059,6 +1060,21 @@ function resolvePostureFlag(opts: DoctorOptions): PostureFlag | { error: string 
   return 'auto';
 }
 
+function runProbe(
+  probe: string,
+  repoRoot: string,
+  posture: Posture,
+  postureSource: 'flag' | 'auto',
+): Report {
+  if (probe !== 'llm') {
+    process.stderr.write(`devai doctor: --probe must be llm (got '${probe}')\n`);
+    process.exit(EXIT_USAGE);
+  }
+  const profile = readProfile(repoRoot);
+  const check = checkLlmBridges();
+  return { ok: check.ok, posture, posture_source: postureSource, profile, checks: [check] };
+}
+
 export const doctor = defineCommand({
   name: 'doctor',
   description:
@@ -1082,6 +1098,7 @@ export const doctor = defineCommand({
         'Default. Sniff repo-root for DEVAI workspace shape; pick --self when both packages/cli/src/bin.ts and examples/redox-pack-* are present, else --adopter.',
       )
       .option('--human', 'Emit a human-readable summary instead of JSON')
+      .option('--probe <probe>', 'Run one bounded diagnostic probe: llm')
       .option(
         '--skip <checks>',
         'Comma-separated list of checks to skip (e.g. "docs-governance" for pre-conversion adopters).',
@@ -1103,13 +1120,10 @@ export const doctor = defineCommand({
             .filter((s) => s.length > 0),
         );
         const skipDocsGovernance = skipSet.has('docs-governance');
-        const report = await runChecks(
-          repoRoot,
-          chainPath,
-          posture,
-          postureSource,
-          skipDocsGovernance,
-        );
+        const report =
+          options.probe === undefined
+            ? await runChecks(repoRoot, chainPath, posture, postureSource, skipDocsGovernance)
+            : runProbe(options.probe, repoRoot, posture, postureSource);
         if (options.human) {
           process.stdout.write(renderHuman(report));
         } else {

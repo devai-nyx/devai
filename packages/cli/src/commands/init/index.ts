@@ -4,10 +4,14 @@ import { dirname, join, resolve } from 'node:path';
 import type { CAC } from 'cac';
 import {
   appendVerbEvidence,
+  buildCiScaffoldPlan,
   buildBootstrapPlan,
   buildConstitutionBindingPlan,
+  buildHooksInstallPlan,
   buildUpgradePlan,
+  executeCiScaffoldPlan,
   executeBootstrapPlan,
+  executeHooksInstallPlan,
   introspectRepo,
   isAdoptionProfile,
   readProfile,
@@ -65,16 +69,18 @@ interface InitOptions {
   readonly force?: boolean;
   readonly stampVersion?: string;
   readonly introspect?: boolean;
-  readonly profile?: string;
+  readonly tier?: string;
+  readonly include?: string;
   readonly human?: boolean;
 }
 
-type InitSegment = 'owner' | 'architect' | 'f5';
+type InitSegment = 'owner' | 'architect' | 'harness';
+type InitInclude = 'ci' | 'hooks';
 
-function validateInitProfile(options: InitOptions): void {
-  if (options.profile !== undefined && !isAdoptionProfile(options.profile)) {
+function validateInitTier(options: InitOptions): void {
+  if (options.tier !== undefined && !isAdoptionProfile(options.tier)) {
     process.stderr.write(
-      `devai init: --profile must be one of tier1 | tier2 | tier3 (got '${options.profile}')\n`,
+      `devai init: --tier must be one of tier1 | tier2 | tier3 (got '${options.tier}')\n`,
     );
     process.exit(EXIT_USAGE);
   }
@@ -85,8 +91,7 @@ function initPlanFor(options: InitOptions) {
   return buildBootstrapPlan({
     targetRoot,
     version: options.stampVersion ?? resolveCliVersion(),
-    ...(options.profile !== undefined &&
-      isAdoptionProfile(options.profile) && { profile: options.profile }),
+    ...(options.tier !== undefined && isAdoptionProfile(options.tier) && { profile: options.tier }),
   });
 }
 
@@ -109,9 +114,18 @@ function segmentedPlan(plan: ReturnType<typeof buildBootstrapPlan>, segment: Ini
       return entry.path.startsWith('product/') || entry.path.startsWith('law/glossary/');
     }
     if (segment === 'architect') {
-      return entry.path.startsWith('docs/') && !entry.path.startsWith('product/');
+      return (
+        entry.path.startsWith('docs/') ||
+        entry.path.startsWith('work/') ||
+        (entry.path.startsWith('law/') && !entry.path.startsWith('law/glossary/'))
+      );
     }
-    return !entry.path.startsWith('docs/') && !entry.path.startsWith('.devai/state/');
+    return (
+      !entry.path.startsWith('product/') &&
+      !entry.path.startsWith('docs/') &&
+      !entry.path.startsWith('work/') &&
+      !entry.path.startsWith('law/')
+    );
   });
   return {
     ...plan,
@@ -124,11 +138,69 @@ function segmentedPlan(plan: ReturnType<typeof buildBootstrapPlan>, segment: Ini
   };
 }
 
+function canonicalInitPlanFor(options: InitOptions) {
+  const plan = initPlanFor(options);
+  const segments = (['owner', 'architect', 'harness'] as const).map((segment) => {
+    const projection = segmentedPlan(plan, segment);
+    return { segment, entries: projection.entries, summary: projection.summary };
+  });
+  const partition = segments.flatMap(({ entries }) => entries.map(({ path }) => path));
+  if (partition.length !== plan.entries.length || new Set(partition).size !== partition.length) {
+    throw new Error('INIT_SEGMENT_PARTITION_INVALID');
+  }
+  return {
+    ...plan,
+    segments,
+  };
+}
+
+function requestedIncludes(options: InitOptions, segment: InitSegment): readonly InitInclude[] {
+  if (options.include === undefined) return [];
+  const includes = options.include
+    .split(',')
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0);
+  const allowed = segment === 'architect' ? ['hooks'] : segment === 'harness' ? ['ci'] : [];
+  const invalid = includes.find((value) => !allowed.includes(value));
+  if (
+    includes.length === 0 ||
+    invalid !== undefined ||
+    new Set(includes).size !== includes.length
+  ) {
+    const expected = allowed.length === 0 ? 'no components' : allowed.join(' | ');
+    process.stderr.write(
+      `devai init apply ${segment}: --include accepts ${expected} (got '${options.include}')\n`,
+    );
+    process.exit(EXIT_USAGE);
+  }
+  return includes as readonly InitInclude[];
+}
+
+function executeIncludedComponents(
+  targetRoot: string,
+  includes: readonly InitInclude[],
+  force: boolean,
+): readonly Record<string, unknown>[] {
+  return includes.map((component) => {
+    if (component === 'ci') {
+      const plan = buildCiScaffoldPlan({ targetRoot });
+      const result = executeCiScaffoldPlan(plan, { force });
+      return { component, plan, result };
+    }
+    const plan = buildHooksInstallPlan({
+      targetRoot,
+      devaiVersion: resolveCliVersion(),
+    });
+    executeHooksInstallPlan(plan);
+    return { component, plan, result: { executed: true } };
+  });
+}
+
 function addInitOptions(command: ReturnType<CAC['command']>, includeIntrospection: boolean) {
   command
     .option('--target <path>', `Target directory (default: ${DEFAULT_REPO_ROOT})`)
     .option('--stamp-version <v>', 'DEVAI version stamp for reproducible plans')
-    .option('--profile <tier>', 'Adoption profile: tier1 | tier2 | tier3')
+    .option('--tier <tier>', 'Adoption tier: tier1 | tier2 | tier3')
     .option('--human', 'Human-readable output');
   if (includeIntrospection) command.option('--introspect', 'Include repository introspection');
   return command;
@@ -143,9 +215,9 @@ export const initPlan = defineCommand({
       cli.command('init-plan', 'Generate the non-authorizing bootstrap plan'),
       true,
     ).action((options: InitOptions) => {
-      validateInitProfile(options);
+      validateInitTier(options);
       const introspection = inspectForInit(options);
-      const plan = initPlanFor(options);
+      const plan = canonicalInitPlanFor(options);
       emit(
         introspection === null ? plan : { introspection, plan },
         options.human === true,
@@ -160,59 +232,75 @@ export const initPlan = defineCommand({
 
 function initApplyDefinition(segment: InitSegment) {
   return defineCommand({
-    name: `init apply-${segment}`,
+    name: `init apply ${segment}`,
     description:
       segment === 'owner'
-        ? 'Apply the exact owner bootstrap segment under its declared authority.'
-        : `Apply only the ${segment} bootstrap segment under its declared authority.`,
+        ? 'Apply the Owner-owned initialization projection with explicit write consent.'
+        : segment === 'architect'
+          ? 'Apply the Architect-owned initialization projection with explicit write consent.'
+          : 'Apply the canonical harness projection with explicit Architect-initiated write consent.',
     authority: 'mesh_controller' as const,
     register(cli: CAC): void {
-      addInitOptions(
+      const command = addInitOptions(
         cli.command(`init-apply-${segment}`, `Apply the exact ${segment} bootstrap segment`),
-        segment === 'f5',
-      )
-        .option('--force', 'Overwrite existing non-provenance files in this segment')
-        .action((options: InitOptions) => {
-          validateInitProfile(options);
-          const introspection = segment === 'f5' ? inspectForInit(options) : null;
-          const plan = segmentedPlan(initPlanFor(options), segment);
-          const result = executeBootstrapPlan(plan, { force: options.force === true });
-          if (segment === 'f5' && introspection !== null) {
-            const outPath = join(
-              resolve(options.target ?? DEFAULT_REPO_ROOT),
-              '.devai/state/init-introspection.json',
-            );
-            mkdirSync(dirname(outPath), { recursive: true });
-            writeFileSync(outPath, JSON.stringify(introspection, null, 2) + '\n');
-          }
-          emit(
-            introspection === null ? { plan, result } : { introspection, plan, result },
-            options.human === true,
-            `init apply-${segment}: ${String(result.created.length)} created, ${String(result.overwritten.length)} overwritten, ${String(result.skipped.length)} skipped, ${String(result.preserved.length)} preserved`,
+        segment === 'harness',
+      ).option('--force', 'Overwrite existing non-provenance files in this segment');
+      if (segment === 'architect') {
+        command.option('--include <component>', 'Also install the hooks component: hooks');
+      } else if (segment === 'harness') {
+        command.option('--include <component>', 'Also install the CI component: ci');
+      }
+      command.action((options: InitOptions) => {
+        validateInitTier(options);
+        const includes = requestedIncludes(options, segment);
+        const introspection = segment === 'harness' ? inspectForInit(options) : null;
+        const plan = segmentedPlan(initPlanFor(options), segment);
+        const result = executeBootstrapPlan(plan, { force: options.force === true });
+        if (segment === 'harness' && introspection !== null) {
+          const outPath = join(
+            resolve(options.target ?? DEFAULT_REPO_ROOT),
+            '.devai/state/init-introspection.json',
           );
-          process.exitCode = EXIT_PASS;
-        });
+          mkdirSync(dirname(outPath), { recursive: true });
+          writeFileSync(outPath, JSON.stringify(introspection, null, 2) + '\n');
+        }
+        const included = executeIncludedComponents(
+          options.target ?? DEFAULT_REPO_ROOT,
+          includes,
+          options.force === true,
+        );
+        emit(
+          introspection === null
+            ? { plan, result, included }
+            : { introspection, plan, result, included },
+          options.human === true,
+          `init apply ${segment}: ${String(result.created.length)} created, ${String(result.overwritten.length)} overwritten, ${String(result.skipped.length)} skipped, ${String(result.preserved.length)} preserved${included.length > 0 ? `, ${String(included.length)} included component(s)` : ''}`,
+        );
+        process.exitCode = EXIT_PASS;
+      });
     },
   });
 }
 
 export const initApplyOwner = initApplyDefinition('owner');
 export const initApplyArchitect = initApplyDefinition('architect');
-export const initApplyF5 = initApplyDefinition('f5');
+export const initApplyHarness = initApplyDefinition('harness');
+// Temporary source-assembly compatibility for the integration Engineer; this is not a route.
+export const initApplyF5 = initApplyHarness;
 
-export const upgrade = defineCommand({
-  name: 'upgrade',
+export const initUpgrade = defineCommand({
+  name: 'init upgrade',
   description: 'Plan an upgrade from one DEVAI version to another (no apply without --write)',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
-      .command('upgrade', 'Plan a DEVAI upgrade (or apply with --execute --force)')
+      .command('init-upgrade', 'Plan a DEVAI upgrade (or apply with --write --force)')
       .option('--target <path>', `Target directory (default: ${DEFAULT_REPO_ROOT})`)
-      .option('--from <v>', 'Current version (required unless --profile)')
-      .option('--to <v>', 'Target version (required unless --profile)')
+      .option('--from <v>', 'Current version (required unless --tier)')
+      .option('--to <v>', 'Target version (required unless --tier)')
       .option(
-        '--profile <tier>',
-        'Emit the climb checklist from the declared profile to <tier> (plan-only; D-112)',
+        '--tier <tier>',
+        'Emit the climb checklist from the declared adoption tier to <tier> (plan-only; D-112)',
       )
       .option(
         '--constitution',
@@ -234,7 +322,7 @@ export const upgrade = defineCommand({
           target?: string;
           from?: string;
           to?: string;
-          profile?: string;
+          tier?: string;
           constitution?: boolean;
           subprocessEffects?: boolean;
           operationalLaw?: boolean;
@@ -295,7 +383,7 @@ export const upgrade = defineCommand({
             const targetPath = join(targetRoot, '.devai/config/subprocess-effects.json');
             if (!existsSync(sourcePath)) {
               process.stderr.write(
-                'devai adopt upgrade --subprocess-effects: canonical F1 source is missing\n',
+                'devai init upgrade --subprocess-effects: canonical F1 source is missing\n',
               );
               process.exitCode = EXIT_FAIL;
               return;
@@ -306,14 +394,14 @@ export const upgrade = defineCommand({
               document = JSON.parse(bytes.toString('utf8')) as unknown;
             } catch {
               process.stderr.write(
-                'devai adopt upgrade --subprocess-effects: canonical F1 source is not valid JSON\n',
+                'devai init upgrade --subprocess-effects: canonical F1 source is not valid JSON\n',
               );
               process.exitCode = EXIT_FAIL;
               return;
             }
             if (!validators.subprocessEffects(document)) {
               process.stderr.write(
-                `devai adopt upgrade --subprocess-effects: canonical F1 source fails schema validation: ${JSON.stringify(validators.subprocessEffects.errors)}\n`,
+                `devai init upgrade --subprocess-effects: canonical F1 source fails schema validation: ${JSON.stringify(validators.subprocessEffects.errors)}\n`,
               );
               process.exitCode = EXIT_FAIL;
               return;
@@ -355,7 +443,7 @@ export const upgrade = defineCommand({
             const canonical = resolveCanonicalConstitution();
             if (canonical === null) {
               process.stderr.write(
-                'devai adopt upgrade --constitution: no canonical constitution text could be resolved\n',
+                'devai init upgrade --constitution: no canonical constitution text could be resolved\n',
               );
               process.exit(EXIT_FAIL);
             }
@@ -427,22 +515,22 @@ export const upgrade = defineCommand({
             process.exitCode = EXIT_PASS;
             return;
           }
-          // D-112: profile-climb checklist mode. Plan-only by design
+          // D-112: tier-climb checklist mode. Plan-only by design
           // (consistent with upgrade's plan/execute split): the human
           // works the list, then edits project.json's profile key.
-          if (options.profile !== undefined) {
-            if (!isAdoptionProfile(options.profile)) {
+          if (options.tier !== undefined) {
+            if (!isAdoptionProfile(options.tier)) {
               process.stderr.write(
-                `devai adopt upgrade: --profile must be one of tier1 | tier2 | tier3 (got '${options.profile}')\n`,
+                `devai init upgrade: --tier must be one of tier1 | tier2 | tier3 (got '${options.tier}')\n`,
               );
               process.exit(EXIT_USAGE);
             }
             const targetRoot = options.target ?? DEFAULT_REPO_ROOT;
             const declared = readProfile(targetRoot);
-            const steps = upgradeChecklist(declared, options.profile);
+            const steps = upgradeChecklist(declared, options.tier);
             if (options.human === true) {
               const lines = [
-                `upgrade --profile: ${declared} → ${options.profile} (${String(steps.length)} step(s))`,
+                `init upgrade --tier: ${declared} → ${options.tier} (${String(steps.length)} step(s))`,
                 ...steps.map((st, i) => `  ${String(i + 1)}. ${st.step}\n     ${st.detail}`),
               ];
               if (steps.length === 0) {
@@ -454,7 +542,7 @@ export const upgrade = defineCommand({
               process.stdout.write(lines.join('\n') + '\n');
             } else {
               process.stdout.write(
-                JSON.stringify({ from: declared, to: options.profile, steps }, null, 2) + '\n',
+                JSON.stringify({ from: declared, to: options.tier, steps }, null, 2) + '\n',
               );
             }
             process.exitCode = EXIT_PASS;
@@ -479,7 +567,7 @@ export const upgrade = defineCommand({
             return;
           }
           if (options.from === undefined || options.to === undefined) {
-            process.stderr.write('devai adopt upgrade: --from and --to are required\n');
+            process.stderr.write('devai init upgrade: --from and --to are required\n');
             process.exit(EXIT_FAIL);
           }
           const targetRoot = options.target ?? DEFAULT_REPO_ROOT;
@@ -517,3 +605,6 @@ export const upgrade = defineCommand({
       );
   },
 });
+
+// Temporary source-assembly compatibility for the integration Engineer; this is not a route.
+export const upgrade = initUpgrade;
