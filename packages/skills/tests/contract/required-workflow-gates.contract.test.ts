@@ -41,7 +41,7 @@ describe('required automatic workflow gates', () => {
     expect(workflowCommands(ci).some((command) => command.includes('r7-ci-execute-plan.mjs'))).toBe(
       true,
     );
-    expect(closeCommands()).toContainEqual({
+    expect(closeCommands().map(({ id, argv }) => ({ id, argv }))).toContainEqual({
       id: 'governance',
       argv: ['pnpm', 'run', 'ci:governance'],
     });
