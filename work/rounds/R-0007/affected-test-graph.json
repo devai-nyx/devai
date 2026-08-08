@@ -1007,7 +1007,7 @@
     {
       "gate_id": "stage1",
       "derivation": "recursive-policy-command-v1",
-      "closure_digest": "526b44e97eff272528c9c295d8c13c5a665f36c6b7569ab3fd96d5c017daba47",
+      "closure_digest": "b6f833525eaf631d6e177e49216cbacc6baba640a50f8fb4c8f3b2cea9231d00",
       "scripts": [
         "@devai-nyx/cli:build",
         "@devai-nyx/schemas:build",
@@ -1020,9 +1020,8 @@
         "trace:check",
         "typecheck"
       ],
-      "programs": ["find", "git", "lint", "node", "pnpm", "tsc", "typecheck"],
+      "programs": ["eslint", "find", "git", "node", "pnpm", "tsc"],
       "executables": [
-        "missing:packages/cli/dist/bin.js",
         "packages/schemas/scripts/copy-law.mjs",
         "scripts/check-workflows.mjs",
         "scripts/generate-action-registry.mjs",
@@ -1050,6 +1049,21 @@
         "packages/cli/tsconfig.json-include->packages/cli/src/**/*",
         "packages/cli/tsconfig.json-outDir->packages/cli/dist",
         "packages/cli/tsconfig.json-rootDir->packages/cli/src",
+        "packages/core/tsconfig.json",
+        "packages/core/tsconfig.json->packages/authority",
+        "packages/core/tsconfig.json->packages/cli",
+        "packages/core/tsconfig.json->packages/effects-check",
+        "packages/core/tsconfig.json->packages/evidence",
+        "packages/core/tsconfig.json->packages/loop",
+        "packages/core/tsconfig.json->packages/schemas",
+        "packages/core/tsconfig.json->packages/sensors",
+        "packages/core/tsconfig.json->packages/skills",
+        "packages/core/tsconfig.json->packages/spec",
+        "packages/core/tsconfig.json->packages/utils",
+        "packages/core/tsconfig.json-extends->tsconfig.base.json",
+        "packages/core/tsconfig.json-include->packages/core/src/**/*",
+        "packages/core/tsconfig.json-outDir->packages/core/dist",
+        "packages/core/tsconfig.json-rootDir->packages/core/src",
         "packages/effects-check/tsconfig.json",
         "packages/effects-check/tsconfig.json-extends->tsconfig.base.json",
         "packages/effects-check/tsconfig.json-include->packages/effects-check/src/**/*",
@@ -1112,13 +1126,28 @@
         "packages/utils/tsconfig.json-include->packages/utils/src/**/*",
         "packages/utils/tsconfig.json-outDir->packages/utils/dist",
         "packages/utils/tsconfig.json-rootDir->packages/utils/src",
-        "tsconfig.base.json"
+        "tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.json->packages/authority",
+        "tsconfig.json->packages/cli",
+        "tsconfig.json->packages/core",
+        "tsconfig.json->packages/effects-check",
+        "tsconfig.json->packages/evidence",
+        "tsconfig.json->packages/loop",
+        "tsconfig.json->packages/schemas",
+        "tsconfig.json->packages/sensors",
+        "tsconfig.json->packages/skills",
+        "tsconfig.json->packages/spec",
+        "tsconfig.json->packages/utils",
+        "tsconfig.json-extends->tsconfig.base.json",
+        "tsconfig.json-include->packages/*/tests/**/*.ts",
+        "tsconfig.json-include->tests/**/*.ts"
       ]
     },
     {
       "gate_id": "stage2",
       "derivation": "recursive-policy-command-v1",
-      "closure_digest": "35190bd54e2abc3819589acea81582f7e1315b29f55c441ebc37b81d12d8fbe6",
+      "closure_digest": "25a4484cdd8fc7a49396e896be8ecb6707b2e7150e6125dc9118c325d1419ca1",
       "scripts": [
         "@devai-nyx/cli:build",
         "@devai-nyx/schemas:build",
@@ -1130,7 +1159,6 @@
       ],
       "programs": ["build", "node", "pnpm", "tsc", "vitest"],
       "executables": [
-        "missing:packages/cli/dist/bin.js",
         "packages/schemas/scripts/copy-law.mjs",
         "scripts/generate-action-registry.mjs"
       ],
