@@ -4,14 +4,7 @@
 // reached, or an explicit N/A reason where not — plus a normalized behavior
 // signature for every skill regardless. Zero silent omissions.
 import { aroundEach, describe, expect, it } from 'vitest';
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  realpathSync,
-  rmSync,
-  symlinkSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { withAuthorityHostTestScope } from '../unit/authority-host-test-scope.js';

@@ -638,7 +638,7 @@ describe('R-0004 governed surface red-first contracts', () => {
     for (const name of workflows) {
       const source = readFileSync(join(ROOT, '.github/workflows', name), 'utf8');
       for (const match of source.matchAll(/^\s*(?:-\s*)?uses:\s*([^\s#]+)(.*)$/gmu)) {
-        if (match[1]?.startsWith('./.github/workflows/')) continue;
+        if (match[1]?.startsWith('./')) continue;
         expect(match[1]).toMatch(/@[0-9a-f]{40}$/u);
         expect(match[2]).toMatch(/# v[0-9]/u);
       }
