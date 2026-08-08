@@ -103,33 +103,33 @@ afterEach(() => {
 
 describe('R-0007 GitHub Actions acceleration red contracts', () => {
   it('R7-024-CACHE-ACQUISITION-ONLY rejects verdict caches and always retains frozen install', () => {
-    const root = workflowFixture();
+    const verdictCacheRoot = workflowFixture();
     replaceOnce(
-      root,
+      verdictCacheRoot,
+      '.github/actions/r7-pnpm-setup/action.yml',
+      '        path: ${{ steps.pnpm-store.outputs.path }}',
+      '        path: node_modules',
+    );
+    replaceOnce(
+      verdictCacheRoot,
+      '.github/actions/r7-pnpm-setup/action.yml',
+      "        key: r7-pnpm-store-${{ runner.os }}-${{ runner.arch }}-node-${{ hashFiles('.node-version') }}-pnpm-${{ hashFiles('package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', '.npmrc') }}-${{ steps.pnpm-store.outputs.candidate }}",
+      "        key: verdict-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}",
+    );
+
+    const conditionalInstallRoot = workflowFixture();
+    replaceOnce(
+      conditionalInstallRoot,
       '.github/actions/r7-pnpm-setup/action.yml',
       [
-        '    - name: Restore acquisition-only pnpm store cache',
-        '      id: pnpm-store-cache',
-        "      if: inputs.cache-enabled == 'true'",
-        '      uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4',
-        '      with:',
-        '        path: ${{ steps.pnpm-store.outputs.path }}',
-        "        key: r7-pnpm-store-${{ runner.os }}-${{ runner.arch }}-node-${{ hashFiles('.node-version') }}-pnpm-${{ hashFiles('package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', '.npmrc') }}-${{ steps.pnpm-store.outputs.candidate }}",
-        '',
         '    - name: Frozen dependency installation',
+        '      id: frozen-install',
         '      shell: bash',
         '      run: pnpm install --frozen-lockfile',
       ].join('\n'),
       [
-        '    - name: Restore verdict-bearing dependency cache',
-        '      id: pnpm-store-cache',
-        "      if: inputs.cache-enabled == 'true'",
-        `      uses: actions/cache@${ACTION_PIN} # v4`,
-        '      with:',
-        '        path: node_modules',
-        "        key: verdict-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}",
-        '',
-        '    - name: Skip frozen installation on cache hit',
+        '    - name: Frozen dependency installation',
+        '      id: frozen-install',
         "      if: steps.pnpm-store-cache.outputs.cache-hit != 'true'",
         '      shell: bash',
         '      run: pnpm install --frozen-lockfile',
@@ -139,9 +139,14 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
     expect(
       [
         diagnosticFailure(
-          root,
+          verdictCacheRoot,
           'CI_UNAUTHENTICATED_BYTES_HAVE_NO_VERDICT_AUTHORITY',
-          'node_modules cache can skip pnpm install --frozen-lockfile',
+          'node_modules cache adopts a verdict namespace',
+        ),
+        diagnosticFailure(
+          conditionalInstallRoot,
+          'CI_UNAUTHENTICATED_BYTES_HAVE_NO_VERDICT_AUTHORITY',
+          'cache hit can skip pnpm install --frozen-lockfile',
         ),
       ].filter(Boolean),
       'R7-F014 requires cache state to affect acquisition time only',
