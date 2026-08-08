@@ -115,6 +115,16 @@ operability benefit justifies the feature. Any semantic mismatch, false negative
 permission widening, mutable pin, cancellation of authoritative work, or threshold breach
 rolls back to the complete prior floor.
 
+B3C acceptance is limited to implementation and fail-safe behavior. It validates the
+complete feature census from `law/policy/github-actions-features.json`, the workflow and
+classifier adversaries, the disabled fallback state, and the complete local Vitest and
+coverage floors. Missing paired GitHub evidence is therefore an expected deny-by-default
+activation state during B3C, not permission to fabricate evidence or activate narrowing.
+B7 activation and round closure continue to require the canonical paired benchmark at
+`work/audit/R-0007/ci-optimisation-benchmark.json`; until that evidence exists and passes,
+no speed claim, classifier narrowing, cache acceleration, R7-F018 closure, or round-close
+claim is permitted.
+
 ## Consequences
 
 R-0007 can implement shorter feedback without converting cached or transported bytes into

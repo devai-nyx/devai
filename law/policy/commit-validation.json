@@ -444,6 +444,42 @@
   },
   "activation": {
     "initial_state": "disabled-pending-implementation-paired-benchmark-and-proved-rollback",
+    "current_state": "disabled-pending-paired-evidence",
+    "acceptance_boundaries": {
+      "B3C": {
+        "claim": "implementation-and-fail-safe-behavior-only",
+        "feature_census_source": "law/policy/github-actions-features.json",
+        "paired_benchmark_required": false,
+        "required_state": "disabled-pending-paired-evidence",
+        "required_proofs": [
+          "complete-feature-census-and-one-to-one-dispositions",
+          "cache-and-artifact-have-no-pass-authority",
+          "classifier-fails-closed-and-unknown-widens",
+          "cold-sentinel-restores-the-complete-active-floor",
+          "workflow-security-dag-concurrency-and-telemetry-contracts",
+          "full-local-vitest-and-coverage-regression"
+        ],
+        "prohibited_claims": [
+          "paired-benchmark-complete",
+          "positive-critical-path-saving",
+          "classified-validation-activated",
+          "cache-acceleration-activated",
+          "R7-F018-closed"
+        ]
+      },
+      "B7": {
+        "claim": "activation-and-round-close",
+        "paired_benchmark_required": true,
+        "required_evidence": "work/audit/R-0007/ci-optimisation-benchmark.json",
+        "required_before": [
+          "classified-validation-activation",
+          "cache-acceleration-activation",
+          "positive-critical-path-claim",
+          "R7-F018-closure",
+          "R-0007-round-close"
+        ]
+      }
+    },
     "sample_states": ["cold-miss", "warm-hit"],
     "minimum_runs_per_baseline_per_state": 3,
     "minimum_runs_per_candidate_per_state": 3,
