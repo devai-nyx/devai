@@ -87,133 +87,6 @@ function dbSelector() {
   };
 }
 
-function policySubjects(entry: RegistryEntry): JsonRecord[] {
-  const subject = entry.authority_contract.subject;
-  if (subject.kind === 'human') return [{ kind: 'human', roles: [...subject.allowed_roles] }];
-  if (subject.kind === 'derived-machine') {
-    const initiator =
-      subject.initiator === 'none'
-        ? 'none'
-        : {
-            allowed_roles: [...subject.initiator.allowed_roles],
-            preserve_in_context: true,
-          };
-    return [
-      {
-        kind: 'derived-machine',
-        actor: subject.actor,
-        transition: subject.transition,
-        initiator,
-      },
-    ];
-  }
-  return [];
-}
-
-function entriesForKind(entries: readonly RegistryEntry[], kind: string): RegistryEntry[] {
-  return entries.filter(
-    (entry) =>
-      entry.effects !== 'read' &&
-      entry.authority_contract.planner.kind !== 'none' &&
-      entry.authority_contract.planner.target_kinds.includes(kind as never),
-  );
-}
-
-function perActionRules(
-  entries: readonly RegistryEntry[],
-  kind: string,
-  selectorFor: (entry: RegistryEntry) => readonly JsonRecord[],
-): Array<ReturnType<typeof rule>> {
-  return entriesForKind(entries, kind).flatMap((entry) =>
-    selectorFor(entry).map((selector, index) =>
-      rule({
-        id: `self-${kind}-${entry.name.replaceAll(' ', '-')}-${String(index + 1)}`,
-        origin: 'additive-extension',
-        precedence: 500,
-        actionIds: [entry.name],
-        selector,
-        subjects: policySubjects(entry),
-        consent:
-          kind === 'remote' && selector.publication === true
-            ? { ...entry.authority_contract.consent, allow_publish: true }
-            : (entry.authority_contract.consent as JsonRecord),
-        rationale: `DEVAI-self typed ${kind} authority for ${entry.name}.`,
-      }),
-    ),
-  );
-}
-
-function remoteSelectors(entry: RegistryEntry): readonly JsonRecord[] {
-  if (entry.name === 'docs publish') {
-    return [
-      {
-        kind: 'remote',
-        system_id: 'github-pages',
-        endpoint_ids: ['publish-docs'],
-        operation_ids: ['publish'],
-        publication: true,
-      },
-    ];
-  }
-  if (entry.name === 'agent skill run') {
-    return [
-      {
-        kind: 'remote',
-        system_id: 'local-llm',
-        endpoint_ids: ['claude', 'codex'],
-        operation_ids: ['invoke'],
-        publication: false,
-      },
-      {
-        kind: 'remote',
-        system_id: 'git-origin',
-        endpoint_ids: ['current-branch'],
-        operation_ids: ['push'],
-        publication: true,
-      },
-      {
-        kind: 'remote',
-        system_id: 'github',
-        endpoint_ids: ['pull-requests'],
-        operation_ids: ['create'],
-        publication: true,
-      },
-      {
-        kind: 'remote',
-        system_id: 'local-validation',
-        endpoint_ids: [
-          'feedback-lint',
-          'feedback-typecheck',
-          'feedback-unit-test',
-          'feedback-acceptance',
-        ],
-        operation_ids: ['invoke'],
-        publication: false,
-      },
-    ];
-  }
-  if (entry.name === 'evidence test record') {
-    return [
-      {
-        kind: 'remote',
-        system_id: 'local-command',
-        endpoint_ids: ['test-runner'],
-        operation_ids: ['invoke'],
-        publication: false,
-      },
-    ];
-  }
-  return [
-    {
-      kind: 'remote',
-      system_id: 'local-llm',
-      endpoint_ids: ['claude', 'codex'],
-      operation_ids: ['invoke'],
-      publication: false,
-    },
-  ];
-}
-
 function rule(input: {
   id: string;
   origin: 'immutable-core' | 'additive-extension';
@@ -248,11 +121,11 @@ function subjectGroups(entries: readonly RegistryEntry[]) {
     owner: humanActions(entries, 'owner'),
     architect: humanActions(entries, 'architect'),
     inspector: humanActions(entries, 'inspector'),
-    engineer: humanActions(entries, 'engineer'),
+    engineer: ['round run', 'task finish', 'task start'].filter((actionId) =>
+      entries.some((entry) => entry.name === actionId),
+    ),
     auditor: humanActions(entries, 'auditor'),
-    harness: [
-      ...new Set([...machineActions(entries, 'harness'), 'init record', 'skill record']),
-    ].sort(),
+    harness: machineActions(entries, 'harness'),
     upgrade: machineActions(entries, 'upgrade'),
     release: machineActions(entries, 'release'),
   };
@@ -270,6 +143,15 @@ function machineSubject(actor: 'harness' | 'upgrade' | 'release') {
           : ['architect'],
       preserve_in_context: true,
     },
+  };
+}
+
+function harnessSubject(allowedRoles: readonly string[]) {
+  return {
+    kind: 'derived-machine',
+    actor: 'harness',
+    transition: 'harness-write',
+    initiator: { allowed_roles: [...allowedRoles], preserve_in_context: true },
   };
 }
 
@@ -481,15 +363,6 @@ export function buildTrustedAuthoritySources(
       rationale: 'Article 6 verb-attributed harness state directory transition.',
     }),
     rule({
-      id: 'core-harness-state-prune-coverage',
-      origin: 'immutable-core',
-      precedence: 900,
-      actionIds: ['work state prune'],
-      selector: fsSelector(repositoryId, 'coverage/**'),
-      subjects: [machineSubject('harness')],
-      rationale: 'Article 6 verb-attributed pruning of the declared disposable coverage root.',
-    }),
-    rule({
       id: 'core-harness-worktrees',
       origin: 'immutable-core',
       precedence: 900,
@@ -538,7 +411,7 @@ export function buildTrustedAuthoritySources(
       id: 'core-architect-post-merge-host-adapter',
       origin: 'immutable-core',
       precedence: 900,
-      actionIds: ['adopt hooks install'],
+      actionIds: ['init apply architect'],
       selector: fsSelector(repositoryId, '.devai/config/post-merge-host-adapter.json'),
       subjects: human('architect'),
       rationale:
@@ -549,7 +422,7 @@ export function buildTrustedAuthoritySources(
         id: `core-upgrade-init-introspection-${String(index + 1)}`,
         origin: 'immutable-core',
         precedence: 900,
-        actionIds: ['init apply-f5'],
+        actionIds: ['init apply harness'],
         selector: fsSelector(repositoryId, path),
         subjects: [machineSubject('upgrade')],
         rationale:
@@ -564,7 +437,7 @@ export function buildTrustedAuthoritySources(
       'docs/site/_site',
       'docs/site/_site/**',
       // Verb-attributed publish bookkeeping (Article 6 F5 state): the gate-4
-      // baseline `docs publish` persists after a successful gh-pages push,
+      // baseline `release publish docs` persists after a successful gh-pages push,
       // plus the state directory itself for repos that predate it. Absent
       // from this surface, the persist was denied at the policy layer and
       // the stale baseline forced --force on every later publish.
@@ -621,14 +494,82 @@ export function buildTrustedAuthoritySources(
     '.changeset/**',
   ];
   const additiveRules = defined([
-    ...perActionRules(entries, 'git-ref', () => [gitSelector(repositoryId)]),
-    ...perActionRules(entries, 'db', () => [dbSelector()]),
-    ...perActionRules(entries, 'remote', remoteSelectors),
+    rule({
+      id: 'self-git-ref-docs-publish-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['release publish docs'],
+      selector: gitSelector(repositoryId),
+      subjects: [machineSubject('release')],
+      consent: { write: true, allow_publish: true, experimental: false },
+      rationale: 'DEVAI-self typed git-ref authority for docs publish.',
+    }),
+    rule({
+      id: 'self-git-ref-work-task-spawn-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['round run', 'task start'],
+      selector: gitSelector(repositoryId),
+      subjects: [harnessSubject(['engineer'])],
+      rationale: 'DEVAI-self typed git-ref authority for work task spawn.',
+    }),
+    rule({
+      id: 'self-git-ref-work-task-complete-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['task finish'],
+      selector: gitSelector(repositoryId),
+      subjects: [harnessSubject(['engineer'])],
+      rationale: 'DEVAI-self typed git-ref authority for work task complete.',
+    }),
+    rule({
+      id: 'self-git-ref-verify-translation-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['check'],
+      selector: gitSelector(repositoryId),
+      subjects: [harnessSubject(['inspector'])],
+      rationale: 'DEVAI-self typed git-ref authority for verify translation.',
+    }),
+    rule({
+      id: 'self-db-work-task-spawn-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['task start'],
+      selector: dbSelector(),
+      subjects: [harnessSubject(['engineer'])],
+      rationale: 'DEVAI-self typed db authority for work task spawn.',
+    }),
+    rule({
+      id: 'self-db-verify-translation-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['check'],
+      selector: dbSelector(),
+      subjects: [harnessSubject(['inspector'])],
+      rationale: 'DEVAI-self typed db authority for verify translation.',
+    }),
+    rule({
+      id: 'self-remote-docs-publish-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['release publish docs'],
+      selector: {
+        kind: 'remote',
+        system_id: 'github-pages',
+        endpoint_ids: ['publish-docs'],
+        operation_ids: ['publish'],
+        publication: true,
+      },
+      subjects: [machineSubject('release')],
+      consent: { write: true, allow_publish: true, experimental: false },
+      rationale: 'DEVAI-self typed remote authority for docs publish.',
+    }),
     rule({
       id: 'self-engineer-packages',
       origin: 'additive-extension',
       precedence: 500,
-      actionIds: [...new Set([...groups.engineer, 'experimental loop run'])].sort(),
+      actionIds: groups.engineer,
       selector: fsSelector(repositoryId, 'packages/**'),
       subjects: [...human('engineer'), machineSubject('harness')],
       rationale: 'DEVAI-self Engineer implementation authority.',
@@ -637,7 +578,7 @@ export function buildTrustedAuthoritySources(
       id: 'self-engineer-scripts',
       origin: 'additive-extension',
       precedence: 500,
-      actionIds: [...new Set([...groups.engineer, 'experimental loop run'])].sort(),
+      actionIds: groups.engineer,
       selector: fsSelector(repositoryId, 'scripts/**'),
       subjects: [...human('engineer'), machineSubject('harness')],
       rationale: 'DEVAI-self Engineer tooling authority.',
@@ -646,10 +587,30 @@ export function buildTrustedAuthoritySources(
       id: 'self-engineer-workflows',
       origin: 'additive-extension',
       precedence: 500,
-      actionIds: [...new Set([...groups.engineer, 'experimental loop run'])].sort(),
+      actionIds: groups.engineer,
       selector: fsSelector(repositoryId, '.github/**'),
       subjects: [...human('engineer'), machineSubject('harness')],
       rationale: 'DEVAI-self Engineer workflow implementation authority.',
+    }),
+    rule({
+      id: 'self-upgrade-init-harness-ci-root',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['init apply harness'],
+      selector: fsSelector(repositoryId, '.github'),
+      subjects: [machineSubject('upgrade')],
+      rationale:
+        'DEVAI-self derived upgrade authority for the canonical init harness CI scaffold root.',
+    }),
+    rule({
+      id: 'self-upgrade-init-harness-ci',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['init apply harness'],
+      selector: fsSelector(repositoryId, '.github/**'),
+      subjects: [machineSubject('upgrade')],
+      rationale:
+        'DEVAI-self derived upgrade authority for canonical init harness CI scaffold outputs.',
     }),
     ...[
       '.git/hooks',
@@ -665,7 +626,7 @@ export function buildTrustedAuthoritySources(
         id: `self-architect-hooks-${String(index + 1)}`,
         origin: 'additive-extension',
         precedence: 500,
-        actionIds: ['adopt hooks install'],
+        actionIds: ['init apply architect'],
         selector: fsSelector(repositoryId, path),
         subjects: human('architect'),
         rationale:
@@ -677,7 +638,7 @@ export function buildTrustedAuthoritySources(
         id: `self-engineer-root-${String(index + 1)}`,
         origin: 'additive-extension',
         precedence: 500,
-        actionIds: [...new Set([...groups.engineer, 'experimental loop run'])].sort(),
+        actionIds: groups.engineer,
         selector: fsSelector(repositoryId, path),
         subjects: [...human('engineer'), machineSubject('harness')],
         rationale: 'DEVAI-self Engineer root tooling authority.',
@@ -694,6 +655,40 @@ export function buildTrustedAuthoritySources(
         rationale: 'DEVAI-self Architect governance authority.',
       }),
     ),
+    rule({
+      id: 'self-db-sense-migrate-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['sense migrate'],
+      selector: dbSelector(),
+      subjects: human('engineer'),
+      rationale: 'R-0007 typed db authority for sense migrate.',
+    }),
+    rule({
+      id: 'self-remote-sense-run-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['sense run'],
+      selector: {
+        kind: 'remote',
+        system_id: 'sensor-runtime',
+        endpoint_ids: ['selected-kind'],
+        operation_ids: ['invoke'],
+        publication: true,
+      },
+      subjects: [machineSubject('harness')],
+      consent: { write: true, allow_publish: true, experimental: false },
+      rationale: 'R-0007 typed remote authority for sense run.',
+    }),
+    rule({
+      id: 'self-db-task-finish-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['task finish'],
+      selector: dbSelector(),
+      subjects: [harnessSubject(['engineer'])],
+      rationale: 'R-0007 typed db authority for task finish.',
+    }),
   ]);
 
   const sourceDocument = {

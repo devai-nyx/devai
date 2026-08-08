@@ -324,7 +324,7 @@ function readOnlyProcess(request: AuthorityHostEffectRequest, parentAction?: str
   const args = request.arguments[1];
   if (typeof executable !== 'string' || !Array.isArray(args)) return false;
   if (
-    parentAction === 'sense lint' &&
+    parentAction === 'sense run' &&
     basename(executable) === 'npx' &&
     args.length === 3 &&
     args[0] === 'eslint' &&
@@ -334,7 +334,7 @@ function readOnlyProcess(request: AuthorityHostEffectRequest, parentAction?: str
     return true;
   }
   if (
-    parentAction === 'sense type check' &&
+    parentAction === 'sense run' &&
     basename(executable) === 'npx' &&
     args[0] === 'tsc' &&
     args[1] === '--noEmit' &&
@@ -348,7 +348,7 @@ function readOnlyProcess(request: AuthorityHostEffectRequest, parentAction?: str
     return true;
   }
   if (
-    parentAction === 'sense build' &&
+    parentAction === 'sense run' &&
     basename(executable) === 'pnpm' &&
     args.length === 2 &&
     args[0] === '-r' &&
@@ -356,7 +356,7 @@ function readOnlyProcess(request: AuthorityHostEffectRequest, parentAction?: str
   ) {
     return true;
   }
-  if (parentAction === 'sense test' && basename(executable) === 'pnpm') {
+  if (parentAction === 'sense run' && basename(executable) === 'pnpm') {
     const governedConfigs = [
       'tests/config/t1.unit.config.ts',
       'tests/config/t3.integration.config.ts',
@@ -467,7 +467,7 @@ function processTarget(
 
   if (
     executable === 'psql' &&
-    (actionName.startsWith('work db ') || actionName === 'experimental loop run')
+    ['check', 'sense migrate', 'task finish', 'task start'].includes(actionName)
   ) {
     const sqlIndex = args.indexOf('-c');
     const sql = sqlIndex >= 0 ? (args[sqlIndex + 1] ?? '') : '';
@@ -502,7 +502,7 @@ function processTarget(
 
   if (
     executable === 'docker' &&
-    actionName.startsWith('work db ') &&
+    ['sense migrate', 'task finish', 'task start'].includes(actionName) &&
     ['run', 'start', 'stop'].includes(verb ?? '')
   ) {
     const nameIndex = args.indexOf('--name');
@@ -521,7 +521,7 @@ function processTarget(
   }
 
   if (
-    actionName === 'verify translation' &&
+    actionName === 'check' &&
     ((executable === 'docker' && verb === 'run') ||
       (executable === 'sandbox-exec' && verb === '-p'))
   ) {
@@ -536,7 +536,7 @@ function processTarget(
 
   if (executable === 'git') {
     if (verb === 'push') {
-      if (actionName === 'docs publish') {
+      if (actionName === 'release publish docs') {
         return {
           kind: 'remote',
           id: 'remote:github-pages:publish-docs',
@@ -650,7 +650,7 @@ function processTarget(
     };
   }
 
-  if (actionName === 'docs publish') {
+  if (actionName === 'release publish docs') {
     const output =
       executable === 'npm' && args.join('\u0000') === '--prefix\u0000docs/site\u0000run\u0000build'
         ? 'docs/site/build'
@@ -756,7 +756,7 @@ function boundedSelectors(kind: string, repositoryId: string, actionName: string
       },
     ];
   }
-  if (actionName === 'docs publish') {
+  if (actionName === 'release publish docs') {
     return [
       {
         kind: 'remote',
@@ -1534,7 +1534,7 @@ export function createAuthorityHostBroker(input: BrokerInput): {
           }
         : undefined;
   const policyMaterialization =
-    input.entry.name === 'adopt upgrade'
+    input.entry.name === 'init upgrade'
       ? () => {
           const policyPath = resolve(repositoryRoot, POLICY_PATH);
           // The existing policy is never an authority for its own upgrade.
@@ -1576,7 +1576,7 @@ export function createAuthorityHostBroker(input: BrokerInput): {
           const authorization = expectSuccess(
             authorizePolicyMaterialization(
               {
-                action_id: 'adopt upgrade',
+                action_id: 'init upgrade',
                 invocation_id: invocationId,
                 dry_run: false,
                 declaration: input.declaration,

@@ -71,34 +71,10 @@ const SESSION_ID = /^AUTH-SESSION-[A-Za-z0-9]{16,}$/u;
 let pendingHostScope: AuthorityHostEffectScope | undefined;
 let pendingHostDispose: (() => void) | undefined;
 let pendingHostDryRun = false;
-let pendingInitRecord:
-  | ((segment: string) => Readonly<{ scope: AuthorityHostEffectScope; execute: () => void }>)
-  | undefined;
 let pendingSkillRecording: ((skillId: string, callback: () => unknown) => unknown) | undefined;
 let pendingSessionOperation: (() => unknown) | undefined;
 let pendingPolicyMaterialization: (() => unknown) | undefined;
 let pendingExactCommit: (() => void) | undefined;
-const INTERNAL_HARNESS_CONTRACTS: readonly ActionContract[] = [
-  {
-    action_id: 'init apply-owner',
-    effect: 'local-write',
-    capabilities: ['fs:workspace'],
-    subject: { kind: 'human', allowed_roles: ['owner'] },
-    consent: { write: true, allow_publish: false, experimental: false },
-    planner: {
-      kind: 'exact-plan',
-      planner_id: 'init-owner-plan',
-      target_kinds: ['fs'],
-      atomicity: 'whole-plan',
-    },
-    boundary: {
-      kind: 'mutation-adapters',
-      adapter_ids: ['fs-authority-boundary'],
-      final_reverification: true,
-    },
-    readiness: { requires_binding: true, independent_acceptance_required: true },
-  },
-];
 
 function isRecord(value: unknown): value is JsonRecord {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -125,9 +101,9 @@ function taggedFailure(category: FailureCategory, code: string): TaggedFailure {
 
 function authorityErrorCode(error: unknown): string | undefined {
   if (!(error instanceof Error)) return undefined;
-  return /^(?:AUTHORITY_|UNCLASSIFIED_RESOURCE$|POLICY_DENY$)/u.test(error.message)
-    ? error.message
-    : undefined;
+  return /^(AUTHORITY_[A-Z0-9_]+|UNCLASSIFIED_RESOURCE|POLICY_DENY)(?::|$)/u.exec(
+    error.message,
+  )?.[1];
 }
 
 function handleBoundaryError(error: unknown): undefined {
@@ -304,15 +280,16 @@ function formatFor(argv: readonly string[]): 'human' | 'json' {
 function actionId(argv: readonly string[]): string {
   if (argv[0] === 'catalog' && argv[1] === 'actions') return 'catalog actions';
   if (argv[0] === 'docs' && argv[1] === 'cli') return 'docs cli';
-  if (argv[0] === 'docs' && argv[1] === 'publish') return 'docs publish';
-  if (argv[0] === 'adopt' && argv[1] === 'upgrade') return 'adopt upgrade';
+  if (argv[0] === 'release' && argv[1] === 'publish' && argv[2] === 'docs')
+    return 'release publish docs';
+  if (argv[0] === 'init' && argv[1] === 'upgrade') return 'init upgrade';
   if (argv[0] === 'init' && argv[1] === 'record') return 'init record';
-  if (argv[0] === 'init' && argv[1] === 'apply-owner') return 'init apply-owner';
+  if (argv[0] === 'init' && argv[1] === 'apply' && argv[2] === 'owner') return 'init apply owner';
   return argv.slice(0, 2).join(' ');
 }
 
 function targetFor(action: string): JsonRecord {
-  if (action === 'docs publish') {
+  if (action === 'release publish docs') {
     return {
       kind: 'remote',
       id: 'remote:github-pages:publish-docs',
@@ -325,15 +302,15 @@ function targetFor(action: string): JsonRecord {
   return {
     kind: 'fs',
     id:
-      action === 'adopt upgrade'
+      action === 'init upgrade'
         ? 'fs:.devai/config/authority-policy.json'
         : 'fs:docs/reference/cli',
     repository_id: 'devai-self',
     canonical_relative_path:
-      action === 'adopt upgrade'
+      action === 'init upgrade'
         ? '.devai/config/authority-policy.json'
         : 'docs/reference/cli/index.md',
-    operation: action === 'adopt upgrade' ? 'create' : 'update',
+    operation: action === 'init upgrade' ? 'create' : 'update',
   };
 }
 
@@ -397,17 +374,15 @@ export function validateLiveAuthorityActionRegistry(entries: readonly RegistryEn
 }
 
 function targetRoot(entry: RegistryEntry, argv: readonly string[]): string {
-  const packTarget =
-    entry.name === 'adopt pack graduate' ? flagValue(argv, '--target-root') : undefined;
   const adoptionTarget = [
-    'adopt upgrade',
-    'init apply-owner',
-    'init apply-architect',
-    'init apply-f5',
+    'init upgrade',
+    'init apply owner',
+    'init apply architect',
+    'init apply harness',
   ].includes(entry.name)
     ? flagValue(argv, '--target')
     : undefined;
-  return resolve(packTarget ?? adoptionTarget ?? flagValue(argv, '--repo-root') ?? '.');
+  return resolve(adoptionTarget ?? flagValue(argv, '--repo-root') ?? '.');
 }
 
 function sessionRole(
@@ -472,10 +447,10 @@ function stageHostScope(
   const bootstrapPolicy =
     dryRun ||
     entry.effects === 'read' ||
-    entry.name === 'init apply-owner' ||
-    entry.name === 'init apply-architect' ||
-    entry.name === 'init apply-f5' ||
-    entry.name === 'adopt upgrade';
+    entry.name === 'init apply owner' ||
+    entry.name === 'init apply architect' ||
+    entry.name === 'init apply harness' ||
+    entry.name === 'init upgrade';
   const broker = createAuthorityHostBroker({
     entry,
     entries,
@@ -489,7 +464,6 @@ function stageHostScope(
   pendingHostScope = dryRun ? Object.freeze({ ...broker.scope, effect: 'read' }) : broker.scope;
   pendingHostDispose = broker.dispose;
   pendingHostDryRun = dryRun;
-  pendingInitRecord = broker.record_init;
   pendingSkillRecording = broker.record_skill;
   pendingSessionOperation = broker.session_operation;
   pendingPolicyMaterialization = broker.policy_materialization;
@@ -516,7 +490,6 @@ export function attachAuthorityCommandBoundaries(
       const scope = pendingHostScope;
       const dispose = pendingHostDispose;
       const dryRun = pendingHostDryRun;
-      const recordInit = pendingInitRecord;
       const recordSkill = pendingSkillRecording;
       const sessionOperation = pendingSessionOperation;
       const policyMaterialization = pendingPolicyMaterialization;
@@ -524,7 +497,6 @@ export function attachAuthorityCommandBoundaries(
       pendingHostScope = undefined;
       pendingHostDispose = undefined;
       pendingHostDryRun = false;
-      pendingInitRecord = undefined;
       pendingSkillRecording = undefined;
       pendingSessionOperation = undefined;
       pendingPolicyMaterialization = undefined;
@@ -549,10 +521,6 @@ export function attachAuthorityCommandBoundaries(
           return Promise.resolve(result).then(
             (value) => {
               if (!dryRun) exactCommit?.();
-              if (!dryRun && entry.name.startsWith('init apply-')) {
-                const recording = recordInit?.(entry.name.slice('init apply-'.length));
-                if (recording) runWithAuthorityHostEffects(recording.scope, recording.execute);
-              }
               dispose();
               return value;
             },
@@ -563,10 +531,6 @@ export function attachAuthorityCommandBoundaries(
           );
         }
         if (!dryRun) exactCommit?.();
-        if (!dryRun && entry.name.startsWith('init apply-')) {
-          const recording = recordInit?.(entry.name.slice('init apply-'.length));
-          if (recording) runWithAuthorityHostEffects(recording.scope, recording.execute);
-        }
         dispose();
         return result;
       } catch (error) {
@@ -598,7 +562,7 @@ export function authorizeCliArgv(
       return renderAuthorityResult(taggedFailure('refused', code), formatFor(argv));
     }
   }
-  if (entry.name === 'govern auditor post-merge') {
+  if (entry.name === 'round close' && argv.includes('--post-merge-receipt')) {
     const format = formatFor(argv);
     if (
       argv.includes('--as-role') ||
@@ -861,10 +825,9 @@ export function stripAuthorityArgv(argv: readonly string[]): string[] {
 }
 
 export function createAuthorityCliHarness(deps: Readonly<JsonRecord>) {
-  const contracts = buildAuthorityActionRegistry([
-    ...(Array.isArray(deps.action_contracts) ? deps.action_contracts : []),
-    ...INTERNAL_HARNESS_CONTRACTS,
-  ]) as ReturnType<typeof buildAuthorityActionRegistry>;
+  const contracts = buildAuthorityActionRegistry(
+    Array.isArray(deps.action_contracts) ? deps.action_contracts : [],
+  ) as ReturnType<typeof buildAuthorityActionRegistry>;
   const observations = {
     handler_calls: 0,
     llm_calls: 0,
@@ -1026,7 +989,7 @@ export function createAuthorityCliHarness(deps: Readonly<JsonRecord>) {
         return renderAuthorityResult(
           taggedFailure(
             'refused',
-            action === 'adopt upgrade'
+            action === 'init upgrade'
               ? 'AUTHORITY_MATERIALIZATION_ARCHITECT_REQUIRED'
               : 'AUTHORITY_HUMAN_ROLE_DENIED',
           ),
@@ -1042,7 +1005,7 @@ export function createAuthorityCliHarness(deps: Readonly<JsonRecord>) {
           );
         }
       }
-      if (action === 'init apply-owner' && deps.injected_internal_apply_receipt !== undefined) {
+      if (action === 'init apply owner' && deps.injected_internal_apply_receipt !== undefined) {
         return renderAuthorityResult(
           taggedFailure('refused', 'AUTHORITY_APPLY_RECEIPT_INVALID'),
           format,
@@ -1060,7 +1023,7 @@ export function createAuthorityCliHarness(deps: Readonly<JsonRecord>) {
           ? { kind: 'direct-cli' }
           : { kind: 'interactive-session', session_id: sessionId };
       const exposedPrincipal =
-        action === 'adopt upgrade'
+        action === 'init upgrade'
           ? {
               kind: 'machine',
               actor: 'upgrade',
@@ -1129,7 +1092,7 @@ export function createAuthorityCliHarness(deps: Readonly<JsonRecord>) {
         origin,
         readiness_eligible: !dryRun,
       };
-      if (action === 'adopt upgrade' && dryRun) {
+      if (action === 'init upgrade' && dryRun) {
         const bytes = Buffer.from(
           canonical({ policy_id: 'devai-authority', repository_id: deps.repository_id }),
         );
@@ -1151,7 +1114,7 @@ export function createAuthorityCliHarness(deps: Readonly<JsonRecord>) {
           format,
         );
       }
-      if (action === 'init apply-owner') {
+      if (action === 'init apply owner') {
         return renderAuthorityResult(
           {
             ok: true,

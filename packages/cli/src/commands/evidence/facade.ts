@@ -170,7 +170,7 @@ function collectLocal(options: CollectOptions, repoRoot: string): JsonRecord {
 
 export const evidenceCollect = defineCommand({
   name: 'evidence collect',
-  description: 'Collect governed evidence from an Actions tuple or local job artifacts.',
+  description: 'Collect governed evidence from one declared source into harness state.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
@@ -332,7 +332,7 @@ function servicePayload(kind: string, service: DirectCommandResult): JsonRecord 
 
 export const evidenceRecord = defineCommand({
   name: 'evidence record',
-  description: 'Record one governed generic, coverage, test, mutation, or RTD evidence kind.',
+  description: 'Record one governed evidence kind through the append-only evidence boundary.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
@@ -525,7 +525,7 @@ function explicitWrite(): boolean {
 
 export const evidenceRender = defineCommand({
   name: 'evidence render',
-  description: 'Render decisions, rounds, or the canonical test matrix.',
+  description: 'Render one evidence view from canonical records.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
@@ -670,7 +670,8 @@ function changedFiles(
 
 export const evidenceVerify = defineCommand({
   name: 'evidence verify',
-  description: 'Verify local evidence or the read-only compatibility chain.',
+  description:
+    'Verify a declared evidence scope, including optional read-only chain-head inspection.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli

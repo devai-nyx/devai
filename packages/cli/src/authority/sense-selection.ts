@@ -1,5 +1,7 @@
+import { resolve } from 'node:path';
 import { deriveActionEffectFromCapabilities, type ActionCapability } from '../command-manifest.js';
 import type { RegistryEntry } from '../define-command.js';
+import { resolveCheckPlan } from '../commands/check/contracts.js';
 import {
   resolveSenseSelection,
   type ResolvedSenseSelection,
@@ -61,6 +63,79 @@ function targetsFor(capabilities: readonly ActionCapability[]) {
   if (capabilities.some((capability) => capability.startsWith('db:'))) targets.push('db');
   if (capabilities.some((capability) => capability.startsWith('net:'))) targets.push('remote');
   return Object.freeze(targets);
+}
+
+function capabilitiesForEffect(
+  capabilities: readonly ActionCapability[],
+  effect: RegistryEntry['effects'],
+): readonly ActionCapability[] {
+  if (effect === 'local-write' || effect === 'remote-write') return capabilities;
+  return Object.freeze(
+    capabilities.filter((capability) => {
+      const capabilityEffect = deriveActionEffectFromCapabilities([capability]);
+      return (
+        capabilityEffect === 'read' ||
+        (effect === 'harness-write' && capabilityEffect === 'harness-write')
+      );
+    }),
+  );
+}
+
+function resolveCheckEntry(entry: RegistryEntry, argv: readonly string[]): RegistryEntry {
+  const repoRoot = resolve(flagValue(argv, '--repo-root') ?? '.');
+  const plan = resolveCheckPlan(repoRoot, {
+    ...(flagValue(argv, '--suite') !== undefined && { suite: flagValue(argv, '--suite') }),
+    ...(flagValue(argv, '--only') !== undefined && { only: flagValue(argv, '--only') }),
+  });
+  const effect = plan.maximum_effect;
+  if (effect === entry.effects) return entry;
+
+  const generic = entry.authority_contract;
+  const capabilities = capabilitiesForEffect(generic.capabilities, effect);
+  if (deriveActionEffectFromCapabilities(capabilities) !== effect) {
+    throw new Error(`CHECK_EFFECT_CAPABILITY_DIVERGENCE:${plan.selection.kind}`);
+  }
+  if (effect === 'read') {
+    return Object.freeze({
+      ...entry,
+      effects: effect,
+      authority_contract: Object.freeze({
+        ...generic,
+        effect,
+        capabilities,
+        subject: Object.freeze({ kind: 'none' as const }),
+        consent: Object.freeze({ write: false, allow_publish: false, experimental: false }),
+        planner: Object.freeze({ kind: 'none' as const }),
+        boundary: Object.freeze({ kind: 'none' as const }),
+        readiness: Object.freeze({
+          requires_binding: false,
+          independent_acceptance_required: true as const,
+        }),
+      }),
+    });
+  }
+
+  const targets = targetsFor(capabilities);
+  if (targets.length === 0) throw new Error(`CHECK_MUTATION_BOUNDARY_UNRESOLVED:${effect}`);
+  if (generic.planner.kind !== 'bounded-batches' || generic.boundary.kind !== 'mutation-adapters') {
+    throw new Error('CHECK_GENERIC_AUTHORITY_CONTRACT_INVALID');
+  }
+  return Object.freeze({
+    ...entry,
+    effects: effect,
+    authority_contract: Object.freeze({
+      ...generic,
+      effect,
+      capabilities,
+      planner: Object.freeze({ ...generic.planner, target_kinds: targets }),
+      boundary: Object.freeze({
+        ...generic.boundary,
+        adapter_ids: Object.freeze(
+          targets.map((target) => `${target}-authority-boundary` as const),
+        ),
+      }),
+    }),
+  });
 }
 
 function resolvedEntry(entry: RegistryEntry, selection: ResolvedSenseSelection): RegistryEntry {
@@ -136,5 +211,6 @@ export function resolveInvocationEntry(
   entry: RegistryEntry,
   argv: readonly string[],
 ): RegistryEntry {
+  if (entry.name === 'check') return resolveCheckEntry(entry, argv);
   return resolveSenseInvocation(entry, argv)?.entry ?? entry;
 }

@@ -1,12 +1,17 @@
 import type { CAC } from 'cac';
 import { readFileSync } from '@devai-nyx/authority';
+import { resolve } from 'node:path';
+import { runPostMergeAuditor } from '@devai-nyx/skills/post-merge-auditor';
 import {
   closeGovernedRound,
   closePhase,
   declareGovernedRound,
+  diffBlueprintAgainstInventory,
   emitRgr,
   governedRoundStatus,
   listRgrs,
+  loadBlueprint,
+  planScaffoldFromBlueprint,
   readRgr,
   requireActiveTaskRound,
   resolveRgr,
@@ -14,9 +19,11 @@ import {
   runRoundTasks,
   scaffoldGovernedRound,
   TaskServiceError,
+  validateBlueprint,
   type PhaseClosureDraft,
 } from '#core-compat';
 import { defineCommand } from '../../define-command.js';
+import { resolveCliVersion } from '../../version.js';
 import { dispatchRoundTask } from './dispatch.js';
 
 interface RoundOptions {
@@ -108,22 +115,54 @@ export const roundClose = defineCommand({
   register(cli: CAC): void {
     withRoundOptions(cli.command('round-close', 'Record an authorized round closure'))
       .option('--input <path>', 'Schema-valid phase-closure draft JSON')
-      .action((options: RoundOptions & { input?: string }) => {
-        try {
-          const round = requireActiveTaskRound({
-            repoRoot: root(options),
-            round: requiredRound(options),
-          });
-          if (options.input === undefined)
-            throw new TaskServiceError('ROUND_CLOSE_INPUT_REQUIRED', 64);
-          const draft = JSON.parse(readFileSync(options.input, 'utf8')) as PhaseClosureDraft;
-          if (draft.round_id !== round) throw new TaskServiceError('TASK_ROUND_MISMATCH');
-          const result = closePhase(root(options), draft);
-          emit(result, options.human === true, `round close: ${round} -> ${result.record.id}`);
-        } catch (error) {
-          failure('close', error);
-        }
-      });
+      .option(
+        '--post-merge-receipt',
+        'Process one verified merge-event receipt through the post-merge Auditor',
+      )
+      .option('--host-receipt <path>', 'Issuer-authentic merge-event receipt')
+      .action(
+        async (
+          options: RoundOptions & {
+            input?: string;
+            postMergeReceipt?: boolean;
+            hostReceipt?: string;
+          },
+        ) => {
+          if (options.postMergeReceipt === true) {
+            if (options.hostReceipt === undefined) {
+              process.stderr.write('HOST_RECEIPT_MISSING\n');
+              process.exitCode = 64;
+              return;
+            }
+            try {
+              const result = await runPostMergeAuditor({
+                repoRoot: resolve(root(options)),
+                hostReceiptPath: resolve(options.hostReceipt),
+                injectFailure: process.env['DEVAI_TEST_POST_MERGE_FAIL'] === '1',
+                devaiVersion: resolveCliVersion(),
+              });
+              emit(result, options.human === true, `round close post-merge: ${result.status}`);
+            } catch (error) {
+              failure('close-post-merge', error);
+            }
+            return;
+          }
+          try {
+            const round = requireActiveTaskRound({
+              repoRoot: root(options),
+              round: requiredRound(options),
+            });
+            if (options.input === undefined)
+              throw new TaskServiceError('ROUND_CLOSE_INPUT_REQUIRED', 64);
+            const draft = JSON.parse(readFileSync(options.input, 'utf8')) as PhaseClosureDraft;
+            if (draft.round_id !== round) throw new TaskServiceError('TASK_ROUND_MISMATCH');
+            const result = closePhase(root(options), draft);
+            emit(result, options.human === true, `round close: ${round} -> ${result.record.id}`);
+          } catch (error) {
+            failure('close', error);
+          }
+        },
+      );
   },
 });
 
@@ -276,24 +315,94 @@ export const roundPlan = defineCommand({
     withRoundOptions(cli.command('round-plan', 'Create governed round planning material'))
       .option('--scaffold', 'Scaffold the governed round')
       .option('--declare <record>', 'Declare from a schema-valid round record')
-      .action((options: RoundOptions & { scaffold?: boolean; declare?: string }) => {
-        try {
-          const round = requiredRound(options);
-          const result =
-            options.declare !== undefined
-              ? declareGovernedRound({
-                  repoRoot: root(options),
-                  round,
-                  recordPath: options.declare,
-                })
-              : options.scaffold === true
-                ? scaffoldGovernedRound({ repoRoot: root(options), round })
-                : governedRoundStatus({ repoRoot: root(options), round });
-          emit(result, options.human === true, `round plan: ${round}`);
-        } catch (error) {
-          failure('plan', error);
-        }
-      });
+      .option('--blueprint <operation>', 'Blueprint projection: plan or diff')
+      .option('--file <path>', 'Module-blueprint JSON input for --blueprint')
+      .option('--against <path>', 'Repository inventory root for --blueprint diff')
+      .action(
+        (
+          options: RoundOptions & {
+            scaffold?: boolean;
+            declare?: string;
+            blueprint?: string;
+            file?: string;
+            against?: string;
+          },
+        ) => {
+          try {
+            if (options.blueprint !== undefined) {
+              if (!['plan', 'diff'].includes(options.blueprint)) {
+                throw new TaskServiceError('ROUND_BLUEPRINT_OPERATION_INVALID', 2);
+              }
+              if (options.file === undefined) {
+                throw new TaskServiceError('ROUND_BLUEPRINT_FILE_REQUIRED', 2);
+              }
+              if (options.scaffold === true || options.declare !== undefined) {
+                throw new TaskServiceError('ROUND_PLAN_SELECTION_CONFLICT', 2);
+              }
+              const file = resolve(root(options), options.file);
+              const loaded = loadBlueprint(file);
+              if (!loaded.ok || loaded.blueprint === undefined) {
+                throw new TaskServiceError('ROUND_BLUEPRINT_SCHEMA_INVALID', 2);
+              }
+              if (options.blueprint === 'plan') {
+                const validation = validateBlueprint(loaded.blueprint);
+                if (!validation.ok) {
+                  emit(
+                    {
+                      ok: false,
+                      blueprint_id: loaded.blueprint.id,
+                      violations: validation.violations,
+                    },
+                    options.human === true,
+                    `round plan blueprint: ${loaded.blueprint.id} has ${String(validation.violations.length)} violation(s)`,
+                    false,
+                  );
+                  return;
+                }
+                const plan = planScaffoldFromBlueprint(loaded.blueprint);
+                emit(
+                  { kind: 'blueprint-plan', ...plan },
+                  options.human === true,
+                  `round plan blueprint: ${plan.blueprint_id} v${plan.blueprint_version}; ${String(plan.tasks.length)} task(s)`,
+                );
+                return;
+              }
+              const inventoryRoot = resolve(root(options), options.against ?? '.');
+              const diff = diffBlueprintAgainstInventory({
+                blueprint: loaded.blueprint,
+                inventoryRoot,
+              });
+              emit(
+                {
+                  kind: 'blueprint-diff',
+                  ok: diff.status === 'aligned',
+                  blueprint_id: loaded.blueprint.id,
+                  blueprint_version: loaded.blueprint.module.version,
+                  inventory_root: inventoryRoot,
+                  ...diff,
+                },
+                options.human === true,
+                `round plan blueprint diff: ${diff.status} (${String(diff.deltas.length)} delta(s))`,
+              );
+              return;
+            }
+            const round = requiredRound(options);
+            const result =
+              options.declare !== undefined
+                ? declareGovernedRound({
+                    repoRoot: root(options),
+                    round,
+                    recordPath: options.declare,
+                  })
+                : options.scaffold === true
+                  ? scaffoldGovernedRound({ repoRoot: root(options), round })
+                  : governedRoundStatus({ repoRoot: root(options), round });
+            emit(result, options.human === true, `round plan: ${round}`);
+          } catch (error) {
+            failure('plan', error);
+          }
+        },
+      );
   },
 });
 

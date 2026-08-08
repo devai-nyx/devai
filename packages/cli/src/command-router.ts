@@ -143,6 +143,15 @@ function suggestion(
   entries: readonly RegistryEntry[],
 ): string | undefined {
   const wanted = input.join(' ');
+  const historical = ACTION_REGISTRY.find(
+    (entry) =>
+      entry.disposition !== 'keep' &&
+      entry.migration !== null &&
+      (entry.internal_binding === wanted || entry.internal_binding.replaceAll(' ', '-') === wanted),
+  );
+  if (historical?.migration !== undefined && historical.migration !== null) {
+    return historical.migration;
+  }
   return entries
     .map((entry) => entry.path.join(' '))
     .sort((a, b) => distance(wanted, a) - distance(wanted, b))[0];
@@ -150,7 +159,18 @@ function suggestion(
 
 export type RouteResult =
   | { readonly kind: 'dispatch'; readonly argv: string[] }
-  | { readonly kind: 'output'; readonly text: string; readonly exitCode: number };
+  | {
+      readonly kind: 'output';
+      readonly text: string;
+      readonly exitCode: number;
+      readonly bypassActionOutput?: true;
+    };
+
+function flagValue(args: readonly string[], flag: string): string | undefined {
+  const index = args.indexOf(flag);
+  const value = index < 0 ? undefined : args[index + 1];
+  return value === undefined || value.startsWith('-') ? undefined : value;
+}
 
 function migrationRefusal(
   args: readonly string[],
@@ -166,6 +186,29 @@ function migrationRefusal(
     message,
     remediation,
     refs: { doc: 'work/rounds/R-0007/inventory/old-to-new-command-map.md' },
+    context,
+  });
+  return {
+    kind: 'output',
+    text: renderCliError(error, wantsJson(args)),
+    exitCode: EXIT_USAGE,
+  };
+}
+
+function usageRefusal(
+  args: readonly string[],
+  code: string,
+  message: string,
+  remediation: string,
+  context: Readonly<Record<string, unknown>>,
+): RouteResult {
+  const error = cliError({
+    code,
+    class: 'routing-authority',
+    exit: EXIT_USAGE,
+    message,
+    remediation,
+    refs: { record: 'DII-215' },
     context,
   });
   return {
@@ -268,6 +311,7 @@ function historicalRouteRefusal(args: readonly string[]): RouteResult | undefine
 
 export function invocationIsNonMutating(internalName: string, args: readonly string[]): boolean {
   if (args.includes('--check')) return true;
+  if (internalName === 'round-close' && args.includes('--post-merge-receipt')) return true;
   if (internalName === 'mutation-verify' && !args.includes('--save-baseline')) return true;
   return (
     ['init', 'adopt', 'upgrade', 'ci-scaffold', 'hooks-install', 'state-prune'].includes(
@@ -385,18 +429,101 @@ export function routeArgv(
         exitCode: 0,
       };
     }
+    if (exact.path[0] === 'task' && flagValue(remaining, '--round') === undefined) {
+      return {
+        kind: 'output',
+        text: `${JSON.stringify({
+          code: 'TASK_ROUND_REQUIRED',
+          operation: exact.name.slice('task '.length),
+          exit: 64,
+        })}\n`,
+        exitCode: 64,
+        bypassActionOutput: true,
+      };
+    }
+    const blueprintOperation = flagValue(remaining, '--blueprint');
+    if (
+      exact.name === 'round plan' &&
+      blueprintOperation !== undefined &&
+      !['plan', 'diff'].includes(blueprintOperation)
+    ) {
+      return usageRefusal(
+        args,
+        'ROUND_BLUEPRINT_OPERATION_INVALID',
+        `--blueprint must be plan or diff (got '${blueprintOperation}').`,
+        'Use --blueprint plan or --blueprint diff.',
+        { option: '--blueprint', value: blueprintOperation },
+      );
+    }
+    if (
+      exact.name === 'round plan' &&
+      blueprintOperation !== undefined &&
+      flagValue(remaining, '--file') === undefined
+    ) {
+      return usageRefusal(
+        args,
+        'ROUND_BLUEPRINT_FILE_REQUIRED',
+        '--file is required with --blueprint.',
+        'Provide --file <path>.',
+        { option: '--file', blueprint: blueprintOperation },
+      );
+    }
+    if (
+      exact.name === 'check' &&
+      flagValue(remaining, '--only') === 'blueprint' &&
+      flagValue(remaining, '--file') === undefined
+    ) {
+      return usageRefusal(
+        args,
+        'CHECK_BLUEPRINT_FILE_REQUIRED',
+        '--file is required with --only blueprint.',
+        'Provide --file <path>.',
+        { option: '--file', member: 'blueprint' },
+      );
+    }
+    if (
+      exact.name === 'task start' &&
+      remaining.includes('--with-db') &&
+      flagValue(remaining, '--database-url') === undefined
+    ) {
+      return usageRefusal(
+        args,
+        'TASK_DATABASE_URL_REQUIRED',
+        '--database-url is required with --with-db.',
+        'Provide --database-url <url>.',
+        { option: '--database-url', operation: 'start' },
+      );
+    }
+    if (
+      exact.name === 'task finish' &&
+      remaining.includes('--drop-db') &&
+      flagValue(remaining, '--database-url') === undefined
+    ) {
+      return usageRefusal(
+        args,
+        'TASK_DATABASE_URL_REQUIRED',
+        '--database-url is required with --drop-db.',
+        'Provide --database-url <url>.',
+        { option: '--database-url', operation: 'finish' },
+      );
+    }
     let routedEntry: RegistryEntry;
     try {
       routedEntry = resolveInvocationEntry(exact, argv);
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
+      const check = exact.name === 'check';
       const refusal = cliError({
-        code: 'SENSE_SELECTION_INVALID',
+        code: check ? 'CHECK_SELECTION_INVALID' : 'SENSE_SELECTION_INVALID',
         class: 'routing-authority',
         exit: EXIT_USAGE,
-        message: `Sense selection is invalid: ${detail}.`,
-        remediation: 'Choose one registered kind or one canonical --preset, then retry.',
-        refs: { doc: 'law/policy/sense-presets.json' },
+        message: `${check ? 'Check' : 'Sense'} selection is invalid: ${detail}.`,
+        remediation: check
+          ? 'Choose one canonical suite or member, then retry.'
+          : 'Choose one registered kind or one canonical --preset, then retry.',
+        refs: {
+          doc: check ? 'law/policy/check-suites.json' : 'law/policy/sense-presets.json',
+        },
         context: { detail },
       });
       return {
@@ -432,10 +559,7 @@ export function routeArgv(
     if (exact.internal_name !== 'skill-run' && exact.internal_name !== 'loop-run') {
       translated = translated.filter((arg) => arg !== '--write' && arg !== '--publish');
     }
-    if (
-      ['init', 'adopt', 'upgrade', 'ci-scaffold', 'hooks-install'].includes(exact.internal_name) &&
-      remaining.includes('--write')
-    ) {
+    if (exact.internal_name === 'init-upgrade' && remaining.includes('--write')) {
       translated = [...translated, '--execute'];
     }
     if (exact.internal_name === 'state-prune' && remaining.includes('--write'))

@@ -13987,6 +13987,10 @@ export const ACTION_REGISTRY = [
   },
 ] as const;
 
-export const ACTION_REGISTRY_BY_BINDING = new Map<string, RegistryActionRecord>(
-  ACTION_REGISTRY.map((entry) => [entry.internal_binding, entry] as const),
-);
+export const ACTION_REGISTRY_BY_BINDING = new Map<string, RegistryActionRecord>();
+for (const entry of ACTION_REGISTRY) {
+  const existing = ACTION_REGISTRY_BY_BINDING.get(entry.internal_binding);
+  if (existing === undefined || entry.disposition === 'keep') {
+    ACTION_REGISTRY_BY_BINDING.set(entry.internal_binding, entry);
+  }
+}

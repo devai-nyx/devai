@@ -14,8 +14,11 @@ import {
   executeHooksInstallPlan,
   introspectRepo,
   isAdoptionProfile,
+  HOOK_NAMES,
   readProfile,
   resolveCanonicalConstitution,
+  type CiScaffoldMode,
+  type HookName,
   upgradeChecklist,
   verifyConstitutionBinding,
 } from '#core-compat';
@@ -71,11 +74,18 @@ interface InitOptions {
   readonly introspect?: boolean;
   readonly tier?: string;
   readonly include?: string;
+  readonly hook?: string;
+  readonly command?: string;
+  readonly output?: string;
+  readonly devaiRef?: string;
+  readonly mode?: string;
+  readonly chainFile?: string;
   readonly human?: boolean;
 }
 
 type InitSegment = 'owner' | 'architect' | 'harness';
 type InitInclude = 'ci' | 'hooks';
+const CI_SCAFFOLD_MODES: readonly CiScaffoldMode[] = ['gate', 'verify'];
 
 function validateInitTier(options: InitOptions): void {
   if (options.tier !== undefined && !isAdoptionProfile(options.tier)) {
@@ -180,16 +190,25 @@ function executeIncludedComponents(
   targetRoot: string,
   includes: readonly InitInclude[],
   force: boolean,
+  options: InitOptions,
 ): readonly Record<string, unknown>[] {
   return includes.map((component) => {
     if (component === 'ci') {
-      const plan = buildCiScaffoldPlan({ targetRoot });
+      const plan = buildCiScaffoldPlan({
+        targetRoot,
+        ...(options.output !== undefined && { outputPath: options.output }),
+        ...(options.devaiRef !== undefined && { devaiRef: options.devaiRef }),
+        ...(options.mode !== undefined && { mode: options.mode as CiScaffoldMode }),
+        ...(options.chainFile !== undefined && { chainFile: options.chainFile }),
+      });
       const result = executeCiScaffoldPlan(plan, { force });
       return { component, plan, result };
     }
     const plan = buildHooksInstallPlan({
       targetRoot,
       devaiVersion: resolveCliVersion(),
+      ...(options.hook !== undefined && { hook: options.hook as HookName }),
+      ...(options.command !== undefined && { command: options.command }),
     });
     executeHooksInstallPlan(plan);
     return { component, plan, result: { executed: true } };
@@ -246,17 +265,49 @@ function initApplyDefinition(segment: InitSegment) {
         segment === 'harness',
       ).option('--force', 'Overwrite existing non-provenance files in this segment');
       if (segment === 'architect') {
-        command.option('--include <component>', 'Also install the hooks component: hooks');
+        command
+          .option('--include <component>', 'Also install the hooks component: hooks')
+          .option('--hook <name>', `${HOOK_NAMES.join(' | ')} (default: pre-push)`)
+          .option(
+            '--command <cmd>',
+            'Hook command (default: devai check --only forbidden-actions --strict)',
+          );
       } else if (segment === 'harness') {
-        command.option('--include <component>', 'Also install the CI component: ci');
+        command
+          .option('--include <component>', 'Also install the CI component: ci')
+          .option(
+            '--output <path>',
+            'CI output path (default: <target>/.github/workflows/devai-gates.yml)',
+          )
+          .option('--devai-ref <ref>', 'Reusable workflow git ref (default: main)')
+          .option('--mode <mode>', `${CI_SCAFFOLD_MODES.join(' | ')} (default: gate)`)
+          .option('--chain-file <path>', 'Evidence chain path passed to the reusable workflow');
       }
       command.action((options: InitOptions) => {
         validateInitTier(options);
         const includes = requestedIncludes(options, segment);
+        if (options.hook !== undefined && !HOOK_NAMES.includes(options.hook as HookName)) {
+          process.stderr.write(
+            `devai init apply architect: --hook must be one of ${HOOK_NAMES.join(' | ')} (got '${options.hook}')\n`,
+          );
+          process.exit(EXIT_USAGE);
+        }
+        if (
+          options.mode !== undefined &&
+          !CI_SCAFFOLD_MODES.includes(options.mode as CiScaffoldMode)
+        ) {
+          process.stderr.write(
+            `devai init apply harness: --mode must be one of ${CI_SCAFFOLD_MODES.join(' | ')} (got '${options.mode}')\n`,
+          );
+          process.exit(EXIT_USAGE);
+        }
         const introspection = segment === 'harness' ? inspectForInit(options) : null;
         const plan = segmentedPlan(initPlanFor(options), segment);
-        const result = executeBootstrapPlan(plan, { force: options.force === true });
-        if (segment === 'harness' && introspection !== null) {
+        const result =
+          includes.length === 0
+            ? executeBootstrapPlan(plan, { force: options.force === true })
+            : { created: [], overwritten: [], skipped: [], preserved: [] };
+        if (includes.length === 0 && segment === 'harness' && introspection !== null) {
           const outPath = join(
             resolve(options.target ?? DEFAULT_REPO_ROOT),
             '.devai/state/init-introspection.json',
@@ -268,13 +319,23 @@ function initApplyDefinition(segment: InitSegment) {
           options.target ?? DEFAULT_REPO_ROOT,
           includes,
           options.force === true,
+          options,
         );
+        const includedHuman = included.map((entry) => {
+          const component = entry['component'];
+          const componentPlan = entry['plan'] as Record<string, unknown>;
+          if (component === 'hooks') {
+            return `hooks install: ${String(componentPlan['action'])} ${String(componentPlan['path'])} (${String(componentPlan['manager'])}, ${String(componentPlan['hook'])} → \`${String(componentPlan['command'])}\`)`;
+          }
+          const componentResult = entry['result'] as Record<string, unknown>;
+          return `ci scaffold: ${componentResult['written'] === true ? 'wrote' : 'skipped'} ${String(componentPlan['path'])}`;
+        });
         emit(
           introspection === null
             ? { plan, result, included }
             : { introspection, plan, result, included },
           options.human === true,
-          `init apply ${segment}: ${String(result.created.length)} created, ${String(result.overwritten.length)} overwritten, ${String(result.skipped.length)} skipped, ${String(result.preserved.length)} preserved${included.length > 0 ? `, ${String(included.length)} included component(s)` : ''}`,
+          `init apply ${segment}: ${String(result.created.length)} created, ${String(result.overwritten.length)} overwritten, ${String(result.skipped.length)} skipped, ${String(result.preserved.length)} preserved${included.length > 0 ? `, ${String(included.length)} included component(s)\n${includedHuman.join('\n')}` : ''}`,
         );
         process.exitCode = EXIT_PASS;
       });
@@ -290,7 +351,7 @@ export const initApplyF5 = initApplyHarness;
 
 export const initUpgrade = defineCommand({
   name: 'init upgrade',
-  description: 'Plan an upgrade from one DEVAI version to another (no apply without --write)',
+  description: 'Plan or apply the canonical DEVAI upgrade transition.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli

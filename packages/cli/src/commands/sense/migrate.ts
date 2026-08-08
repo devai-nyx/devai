@@ -83,11 +83,14 @@ function migrationExit(reading: SensorReading): number {
 
 export const senseMigrateCmd = defineCommand({
   name: 'sense migrate',
-  description: 'Apply migrations through the governed local-write database boundary.',
+  description: 'Execute the DB-writing migration sensor with explicit Engineer write consent.',
   authority: 'sensor',
   register(cli: CAC): void {
     cli
-      .command('sense-migrate', 'Apply migrations through the governed database boundary')
+      .command(
+        'sense-migrate',
+        'Execute the DB-writing migration sensor with explicit Engineer write consent',
+      )
       .option('--repo-root <path>', 'Repository root (default: .)')
       .option('--migrations-dir <path>', 'Single migrations directory')
       .option('--migration-dirs <csv>', 'Ordered comma-separated migration directories')

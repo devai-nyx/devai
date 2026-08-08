@@ -5,85 +5,22 @@ on:
   push:
     branches:
       - main
+  merge_group:
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ci-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  evidence-mode:
-    name: Evidence mode is fail-closed
+  validation-plan:
+    name: Classified fast validation
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version-file: .node-version
-      - name: Refuse evidence reuse during bootstrap
-        env:
-          EVIDENCE_MODE: 'false'
-        run: node scripts/refuse-evidence-mode.mjs
-
-  static:
-    name: Stage 1 / static
-    needs: evidence-mode
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version-file: .node-version
-      - run: node scripts/prewarm-package-managers.mjs
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run ci:stage1
-
-  fast:
-    name: Stage 2 / T1, T2, law and record contracts
-    needs: static
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version-file: .node-version
-      - run: node scripts/prewarm-package-managers.mjs
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run ci:stage2
-
-  changesets:
-    name: Changeset classification
-    needs: static
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version-file: .node-version
-      - run: node scripts/prewarm-package-managers.mjs
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run ci:changesets
-
-  merged-coverage:
-    name: Stage 3 / merged T1+T3 coverage
-    needs:
-      - fast
-      - changesets
-    runs-on: ubuntu-latest
+    permissions:
+      contents: read
     services:
       postgres:
         image: postgres:15-alpine
@@ -101,36 +38,59 @@ jobs:
     env:
       DEVAI_DB_TESTS: '1'
       DEVAI_DB_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
+      EVIDENCE_MODE: 'false'
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check out exact event candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version-file: .node-version
-      - run: node scripts/prewarm-package-managers.mjs
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run ci:stage3
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
-  governance:
-    name: Governed repository enforcement
-    needs: static
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Set up frozen dependencies
+        uses: ./.github/actions/r7-pnpm-setup
         with:
-          fetch-depth: 0
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version-file: .node-version
-      - run: node scripts/prewarm-package-managers.mjs
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run ci:governance
+          cache-enabled: 'false'
+          telemetry-file: scratch/r7-ci/fast/telemetry.json
 
-  round-gates:
-    needs:
-      - merged-coverage
-      - governance
-    uses: ./.github/workflows/round-gates.yml
+      - name: Create report directory
+        run: mkdir -p scratch/r7-ci/fast
+
+      - name: Preserve fail-closed bootstrap evidence mode
+        run: node scripts/refuse-evidence-mode.mjs
+
+      - name: Bind exact base and candidate
+        id: range
+        run: >-
+          node scripts/r7-ci-resolve-range.mjs
+          --repo-root .
+          --event-path "$GITHUB_EVENT_PATH"
+          --output "$GITHUB_OUTPUT"
+
+      - name: Derive fail-closed validation plan
+        env:
+          BASE_SHA: ${{ steps.range.outputs.base }}
+          CANDIDATE_SHA: ${{ steps.range.outputs.candidate }}
+        run: >-
+          node scripts/derive-commit-validation-plan.mjs
+          --repo-root .
+          --round R-0007
+          --base "$BASE_SHA"
+          --candidate "$CANDIDATE_SHA"
+          --json
+          > scratch/r7-ci/fast/plan.json
+
+      - name: Execute every selected command from the machine plan
+        run: >-
+          node scripts/r7-ci-execute-plan.mjs
+          --repo-root .
+          --plan scratch/r7-ci/fast/plan.json
+          --output scratch/r7-ci/fast/execution.json
+          --activation-policy law/policy/commit-validation.json
+          --cold-policy law/policy/round-close-controls.json
+
+      - name: Publish non-authoritative fast-lane report
+        if: always()
+        uses: ./.github/actions/r7-report
+        with:
+          report-directory: scratch/r7-ci/fast
+          artifact-name: r7-fast-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}

@@ -12,11 +12,15 @@ interface VerifyOptions {
 
 export const evidenceVerify = defineCommand({
   name: 'evidence verify',
-  description: 'Verify the evidence chain (hash + link integrity)',
+  description:
+    'Verify a declared evidence scope, including optional read-only chain-head inspection.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
-      .command('evidence-verify', 'Verify the evidence chain (hash + link integrity)')
+      .command(
+        'evidence-verify',
+        'Verify a declared evidence scope, including optional read-only chain-head inspection',
+      )
       .option('--chain <path>', `Path to evidence chain file (default: ${DEFAULT_CHAIN_PATH})`)
       .option('--human', 'Emit a human-readable summary to stdout instead of JSON')
       .action((options: VerifyOptions) => {

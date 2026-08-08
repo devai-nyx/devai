@@ -245,7 +245,11 @@ export function validateRoutineExecutor(
 
   if (hasArgv) {
     const argv = executor.argv ?? [];
-    if (!isUniqueNonEmptyStrings(argv.slice(0, 1)) || argv.some((value) => value.includes('\0'))) {
+    if (
+      argv.length === 0 ||
+      !isUniqueNonEmptyStrings(argv.slice(0, 1)) ||
+      argv.some((value) => value.includes('\0'))
+    ) {
       return executorFailure(
         'TASK_ROUTINE_ARGV_INVALID',
         'literal argv requires a nonempty executable',

@@ -58,8 +58,7 @@ export function recordSensorReading(repoRoot: string, inputPath: string): Record
 
 export const senseRecordCmd = defineCommand({
   name: 'sense record',
-  description:
-    'Explicitly validate and persist one exact SensorReading or rebuild existing bodies.',
+  description: 'Persist or rebuild declared sensor readings through the harness boundary.',
   authority: 'sensor',
   register(cli: CAC): void {
     cli

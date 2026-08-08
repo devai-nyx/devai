@@ -28,7 +28,7 @@ export async function checkActionEffects(options: {
     }[];
   };
   const result = await senseActionEffectInference({
-    tsconfigPath: resolve(repoRoot, options.tsconfig ?? 'tsconfig.effects.json'),
+    tsconfigPath: resolve(repoRoot, options.tsconfig ?? 'tests/config/tsconfig.effects.json'),
     catalog: ACTION_EFFECT_CONTRACTS.map((entry) => entry.action_id),
     contracts: ACTION_EFFECT_CONTRACTS,
     subprocessRegistry: registry,
@@ -61,7 +61,10 @@ export const checkActionEffectsCmd = defineCommand({
     cli
       .command('check-action-effects', 'Run the shadow action-effect analyzer')
       .option('--repo-root <path>', 'Repository root (default: .)')
-      .option('--tsconfig <path>', 'Analyzer tsconfig (default: tsconfig.effects.json)')
+      .option(
+        '--tsconfig <path>',
+        'Analyzer tsconfig (default: tests/config/tsconfig.effects.json)',
+      )
       .option(
         '--registry <path>',
         'Subprocess-effects registry (default: law/policy/subprocess-effects.json)',

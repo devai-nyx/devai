@@ -218,11 +218,15 @@ function selectionFor(kind: string | undefined, preset: string | undefined): Sen
 
 export const senseRunSetCmd = defineCommand({
   name: 'sense run',
-  description: 'Run one resolved sensor kind or canonical preset without implicit persistence.',
+  description:
+    'Run one resolved sensor kind or preset; per-kind effect and authority are enforced before execution.',
   authority: 'sensor',
   register(cli: CAC): void {
     cli
-      .command('sense-run [kind]', 'Run one resolved sensor kind or canonical preset')
+      .command(
+        'sense-run [kind]',
+        'Run one resolved sensor kind or preset; per-kind effect and authority are enforced before execution',
+      )
       .option('--preset <name>', 'Canonical preset: baseline | structural | governed | sweep')
       .option('--round <id>', 'Round id required by the sweep preset')
       .option('--repo-root <path>', 'Repository root (default: .)')

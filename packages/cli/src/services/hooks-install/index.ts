@@ -101,7 +101,7 @@ function validatePostMergeAdapterInputs(plan: HooksInstallPlan): void {
 function postMergeCommand(targetRoot: string): string {
   const issuer = join(targetRoot, '.git/devai/issue-post-merge-receipt.cjs');
   const receipt = join(targetRoot, '.git/devai/post-merge-receipt.json');
-  return `node ${JSON.stringify(issuer)}\ndevai govern auditor post-merge --host-receipt ${JSON.stringify(receipt)}`;
+  return `node ${JSON.stringify(issuer)}\ndevai round close --post-merge-receipt --host-receipt ${JSON.stringify(receipt)}`;
 }
 
 function headAt(root: string): string {
@@ -222,7 +222,7 @@ export function buildHooksInstallPlan(opts: HooksInstallOptions): HooksInstallPl
     opts.command ??
     (hook === 'post-merge'
       ? postMergeCommand(resolve(opts.targetRoot))
-      : 'devai policy check forbidden actions --strict');
+      : 'devai check --only forbidden-actions --strict');
   const { path, manager } = resolveHookPath(opts.targetRoot, hook);
   const newBlock = block(command);
 

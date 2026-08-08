@@ -31,11 +31,14 @@ function renderHuman(report: CheckRunReport): string {
 
 export const checkCmd = defineCommand({
   name: 'check',
-  description: 'Run a canonical ordered check suite or one named check.',
+  description: 'Run a canonical check suite or one named check with fail-closed aggregate output.',
   authority: 'policy_firewall',
   register(cli: CAC): void {
     cli
-      .command('check', 'Run a canonical ordered check suite or one named check')
+      .command(
+        'check',
+        'Run a canonical check suite or one named check with fail-closed aggregate output',
+      )
       .option('--suite <name>', 'quick | standard | full | release (default: standard)')
       .option('--only <member>', 'Run one canonical or migration-bound check member')
       .option('--repo-root <path>', 'Repository root (default: .)')
@@ -91,8 +94,12 @@ export const checkCmd = defineCommand({
           const report = await runCheckPlan(plan, (member) =>
             executeCheckMember(member, executionOptions),
           );
+          const machineResult =
+            report.selection.kind === 'only' && report.results[0]?.value !== undefined
+              ? report.results[0].value
+              : report;
           process.stdout.write(
-            options.human === true ? renderHuman(report) : `${JSON.stringify(report)}\n`,
+            options.human === true ? renderHuman(report) : `${JSON.stringify(machineResult)}\n`,
           );
           process.exitCode = report.exit_code;
         } catch (error) {

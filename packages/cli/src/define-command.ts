@@ -94,7 +94,18 @@ export interface RegistryEntry extends CommandSpec {
 const registry: RegistryEntry[] = [];
 
 function publicRegistry(): RegistryEntry[] {
-  return registry.filter((entry) => entry.disposition === 'keep');
+  const definitions = registry.filter((entry) => entry.disposition === 'keep');
+  const byBinding = new Map<string, RegistryEntry>();
+  for (const entry of definitions) {
+    if (byBinding.has(entry.previous_name)) {
+      throw new Error(`ACTION_HANDLER_DUPLICATE: ${entry.name}`);
+    }
+    byBinding.set(entry.previous_name, entry);
+  }
+  return ACTION_REGISTRY.filter((entry) => entry.disposition === 'keep').flatMap((entry) => {
+    const definition = byBinding.get(entry.internal_binding);
+    return definition === undefined ? [] : [definition];
+  });
 }
 
 function publicText(value: string): string {
@@ -162,8 +173,11 @@ export function getFullRegistry(): readonly RegistryEntry[] {
 
 /** Mechanical W05.e surface guard over the post-collapse public catalog. */
 export function validateActionSurface(entries: readonly RegistryEntry[]): void {
-  if (entries.length === 0) {
-    throw new Error('ACTION_COUNT_GUARD: expected a nonempty canonical population');
+  const canonical = ACTION_REGISTRY.filter((entry) => entry.disposition === 'keep');
+  if (entries.length !== canonical.length) {
+    throw new Error(
+      `ACTION_COUNT_GUARD: expected ${String(canonical.length)} canonical handlers, received ${String(entries.length)}`,
+    );
   }
   const paths = entries.map((entry) => entry.path.join(' '));
   if (new Set(paths).size !== paths.length) {
@@ -171,6 +185,18 @@ export function validateActionSurface(entries: readonly RegistryEntry[]): void {
   }
   if (entries.some((entry) => entry.tier !== 'porcelain' && entry.tier !== 'plumbing')) {
     throw new Error('ACTION_TIER_MISSING');
+  }
+  const mismatch = canonical.findIndex(
+    (expected, index) =>
+      entries[index]?.name !== expected.action_id ||
+      entries[index]?.previous_name !== expected.internal_binding ||
+      entries[index]?.internal_name !== expected.internal_binding.replaceAll(' ', '-') ||
+      entries[index]?.path.join('\0') !== expected.path.join('\0'),
+  );
+  if (mismatch >= 0) {
+    throw new Error(
+      `ACTION_HANDLER_ORDER_DRIFT: expected ${canonical[mismatch]?.action_id ?? '<none>'}, received ${entries[mismatch]?.name ?? '<none>'}`,
+    );
   }
 }
 
@@ -181,7 +207,18 @@ export function attachRuntimeContracts(
     readonly options: readonly { readonly rawName: string; readonly description: string }[];
   }[],
 ): void {
+  const expectedHandlers = publicRegistry().map((entry) => entry.internal_name);
+  const registeredHandlers = commands.map((command) => command.name);
+  if (JSON.stringify(registeredHandlers) !== JSON.stringify(expectedHandlers)) {
+    const mismatch = registeredHandlers.findIndex(
+      (handler, index) => handler !== expectedHandlers[index],
+    );
+    throw new Error(
+      `ACTION_REGISTRATION_ORDER_DRIFT: expected ${expectedHandlers[mismatch] ?? '<none>'}, received ${registeredHandlers[mismatch] ?? '<none>'}`,
+    );
+  }
   for (const entry of registry) {
+    if (entry.disposition !== 'keep') continue;
     const command = commands.find((candidate) => candidate.name === entry.internal_name);
     if (command === undefined) throw new Error(`ACTION_HANDLER_MISSING: ${entry.name}`);
     entry.runtime_args = command.rawName.slice(command.name.length).trim();

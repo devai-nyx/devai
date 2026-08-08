@@ -148,11 +148,14 @@ export async function executeInventorySlice(
 
 export const senseInventoryCmd = defineCommand({
   name: 'sense inventory',
-  description: 'Read one canonical inventory slice without persisting observation state.',
+  description: 'Render one canonical repository inventory slice without persistence.',
   authority: 'sensor',
   register(cli: CAC): void {
     cli
-      .command('sense-inventory', 'Read one canonical inventory slice')
+      .command(
+        'sense-inventory',
+        'Render one canonical repository inventory slice without persistence',
+      )
       .option(
         '--slice <name>',
         `Required slice: ${INVENTORY_SLICES.map((slice) => slice.name).join(' | ')}`,

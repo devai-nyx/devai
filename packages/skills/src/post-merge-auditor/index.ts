@@ -307,7 +307,7 @@ export function createPostMergeHostScope(
   };
   return {
     scope: Object.freeze({
-      action_id: 'govern auditor post-merge',
+      action_id: 'round close',
       invocation_id: invocationId,
       effect: 'harness-write',
       receipt_store: issuer,

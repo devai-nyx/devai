@@ -100,12 +100,14 @@ const cliEntries = registry.entries.map((entry) => ({
   authority_contract_version: entry.authority_contract_version,
   authority_contract: entry.authority_contract,
 }));
-const effectEntries = registry.entries.map((entry) => ({
-  action_id: entry.internal_binding,
-  public_action_id: entry.action_id,
-  effect: entry.effect,
-  capabilities: entry.authority_contract.capabilities,
-}));
+const effectEntries = registry.entries
+  .filter((entry) => entry.disposition === 'keep')
+  .map((entry) => ({
+    action_id: entry.internal_binding,
+    public_action_id: entry.action_id,
+    effect: entry.effect,
+    capabilities: entry.authority_contract.capabilities,
+  }));
 const sensorEntries = registry.entries
   .filter((entry) => entry.authority === 'sensor' || entry.disposition === 'fold')
   .map((entry) => ({
@@ -124,9 +126,13 @@ const rawOutputs = new Map([
       'ACTION_REGISTRY',
       cliEntries,
     ) +
-      '\nexport const ACTION_REGISTRY_BY_BINDING = new Map<string, RegistryActionRecord>(\n' +
-      '  ACTION_REGISTRY.map((entry) => [entry.internal_binding, entry] as const),\n' +
-      ');\n',
+      '\nexport const ACTION_REGISTRY_BY_BINDING = new Map<string, RegistryActionRecord>();\n' +
+      'for (const entry of ACTION_REGISTRY) {\n' +
+      '  const existing = ACTION_REGISTRY_BY_BINDING.get(entry.internal_binding);\n' +
+      "  if (existing === undefined || entry.disposition === 'keep') {\n" +
+      '    ACTION_REGISTRY_BY_BINDING.set(entry.internal_binding, entry);\n' +
+      '  }\n' +
+      '}\n',
   ],
   [
     'packages/effects-check/src/generated/action-catalog.ts',

@@ -4,6 +4,7 @@ import type { CAC } from 'cac';
 import { loadDomains, validateInvariants } from '#core-compat';
 import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
 import { defineCommand, getActionsList, type ActionAuthority } from '../../define-command.js';
+import { ACTION_REGISTRY } from '../../generated/action-registry.js';
 import { DEFAULT_DOMAINS_PATH, DEFAULT_INVARIANTS_DIR, DEFAULT_REPO_ROOT } from './shared.js';
 // D-A-36: pack-tune resolution for adopter-facing authority override.
 import { maybeResolvePackParams } from '../sense/shared.js';
@@ -35,6 +36,61 @@ export interface ActionCoverageCheckResult {
   readonly adopterFacingAuthorities?: string[];
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+}
+
+function migrationTargets(
+  migration: string | null,
+  liveActionIds: readonly string[],
+): readonly string[] {
+  if (migration === null) return [];
+  return liveActionIds.filter((actionId) =>
+    new RegExp(`(?:^|[^a-z0-9])${escapeRegExp(actionId)}(?=$|[^a-z0-9])`, 'u').test(migration),
+  );
+}
+
+function projectCanonicalClaims(
+  sourceClaims: ReadonlySet<string>,
+  includeCompleteFoldMaterialization: boolean,
+): Readonly<{ readonly claimed: ReadonlySet<string>; readonly orphanClaims: readonly string[] }> {
+  const byActionId = new Map<string, (typeof ACTION_REGISTRY)[number]>(
+    ACTION_REGISTRY.map((entry) => [entry.action_id, entry] as const),
+  );
+  const liveActionIds = ACTION_REGISTRY.filter((entry) => entry.disposition === 'keep').map(
+    (entry) => entry.action_id,
+  );
+  const claimed = new Set<string>();
+  const orphanClaims: string[] = [];
+
+  for (const sourceClaim of sourceClaims) {
+    const entry = byActionId.get(sourceClaim);
+    if (entry === undefined) {
+      orphanClaims.push(sourceClaim);
+      continue;
+    }
+    if (entry.disposition === 'keep') claimed.add(entry.action_id);
+    if (entry.disposition === 'fold') {
+      for (const target of migrationTargets(entry.migration, liveActionIds)) claimed.add(target);
+    }
+    // Tombstones are known historical identities, not orphaned live claims.
+  }
+
+  if (includeCompleteFoldMaterialization) {
+    // In DEVAI-self, the complete Architect-owned fold population transfers
+    // predecessor invariant coverage to the canonical facade population.
+    // This is intentionally broader than an individual invariant's old
+    // spelling: a newly folded facade remains covered even when its exact
+    // predecessor alias was never an independently registered live action.
+    for (const entry of ACTION_REGISTRY) {
+      if (entry.disposition !== 'fold') continue;
+      for (const target of migrationTargets(entry.migration, liveActionIds)) claimed.add(target);
+    }
+  }
+
+  return Object.freeze({ claimed, orphanClaims: Object.freeze(orphanClaims) });
+}
+
 /**
  * D-A-38 — shared implementation for the scope-aware action-coverage gate.
  *
@@ -50,7 +106,7 @@ export function runActionCoverageCheck(
     domains: opts.domains,
     repoRoot: opts.repoRoot,
   });
-  const claimed = new Set<string>();
+  const sourceClaims = new Set<string>();
   for (const inv of result.invariants) {
     let parsed: { measurable_via?: readonly string[] };
     try {
@@ -62,7 +118,7 @@ export function runActionCoverageCheck(
     }
     const mv = parsed.measurable_via;
     if (mv === undefined) continue;
-    for (const action of mv) claimed.add(action);
+    for (const action of mv) sourceClaims.add(action);
   }
 
   const registry = getActionsList();
@@ -74,6 +130,9 @@ export function runActionCoverageCheck(
   } else {
     scope = detectSelfPosture(opts.repoRoot) ? 'self' : 'adopter';
   }
+
+  const projection = projectCanonicalClaims(sourceClaims, scope === 'self');
+  const claimed = projection.claimed;
 
   const adopterRoot = opts.adopterRoot ?? opts.repoRoot;
   const packParams =
@@ -103,16 +162,11 @@ export function runActionCoverageCheck(
     if (!inScopeActions.has(action.name)) continue;
     unclaimed.push(action.name);
   }
-  const orphanClaims: string[] = [];
-  for (const claim of claimed) {
-    if (!registry.some((a) => a.name === claim)) orphanClaims.push(claim);
-  }
-
   return {
     ok: unclaimed.length === 0,
     scope,
     unclaimed,
-    orphanClaims,
+    orphanClaims: [...projection.orphanClaims],
     registeredCount: registry.length,
     inScopeCount: inScopeActions.size,
     claimedCount: claimed.size,
