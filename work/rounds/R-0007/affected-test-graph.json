@@ -1020,7 +1020,7 @@
         "trace:check",
         "typecheck"
       ],
-      "programs": ["eslint", "find", "git", "node", "pnpm", "tsc"],
+      "programs": ["eslint", "find", "git", "lint", "node", "pnpm", "tsc", "typecheck"],
       "executables": [
         "packages/schemas/scripts/copy-law.mjs",
         "scripts/check-workflows.mjs",
