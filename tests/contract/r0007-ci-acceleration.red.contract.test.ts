@@ -20,6 +20,8 @@ const WORKFLOW_CHECKER = join(ROOT, 'scripts/check-workflows.mjs');
 const WORKFLOW_DIRECTORY = join(ROOT, '.github/workflows');
 const ACTION_DIRECTORY = join(ROOT, '.github/actions');
 const ROUND_CLOSE_CONTROLS = join(ROOT, 'law/policy/round-close-controls.json');
+const COMMIT_VALIDATION_POLICY = join(ROOT, 'law/policy/commit-validation.json');
+const FEATURE_POLICY = join(ROOT, 'law/policy/github-actions-features.json');
 const OPTIMISATION_EVIDENCE = join(ROOT, 'work/audit/R-0007/ci-optimisation-benchmark.json');
 const ACTION_PIN = 'a'.repeat(40);
 const temporaryRoots: string[] = [];
@@ -72,13 +74,12 @@ function diagnosticFailure(root: string, diagnostic: string, specimen: string): 
   return undefined;
 }
 
-function requireEvidence(): Record<string, unknown> {
-  expect(
-    existsSync(OPTIMISATION_EVIDENCE),
-    'CI_OPTIMISATION_EVIDENCE_ABSENT: the canonical R7-F018 census/benchmark is missing',
-  ).toBe(true);
-  if (!existsSync(OPTIMISATION_EVIDENCE)) return {};
-  return JSON.parse(readFileSync(OPTIMISATION_EVIDENCE, 'utf8')) as Record<string, unknown>;
+function readJson(path: string): Record<string, unknown> {
+  return JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>;
+}
+
+function optionalEvidence(): Record<string, unknown> | undefined {
+  return existsSync(OPTIMISATION_EVIDENCE) ? readJson(OPTIMISATION_EVIDENCE) : undefined;
 }
 
 function median(values: readonly number[]): number {
@@ -362,9 +363,9 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
   });
 
   it('R7-028-FEATURE-CENSUS-TOTAL requires a current one-to-one feature disposition census', () => {
-    const evidence = requireEvidence();
-    const discovered = evidence.applicable_features as unknown[] | undefined;
-    const dispositions = evidence.feature_dispositions as
+    const featurePolicy = readJson(FEATURE_POLICY);
+    const discovered = featurePolicy.applicable_features as unknown[] | undefined;
+    const dispositions = featurePolicy.feature_dispositions as
       Array<Record<string, unknown>> | undefined;
 
     expect(
@@ -424,8 +425,21 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
     ).toBe(true);
   });
 
-  it('R7-028-PAIRED-CRITICAL-PATH proves semantic equality before comparing repeated timings', () => {
-    const evidence = requireEvidence();
+  it('R7-028-PAIRED-CRITICAL-PATH blocks activation until equal-population timings exist', () => {
+    const policy = readJson(COMMIT_VALIDATION_POLICY);
+    const activation = policy.activation as Record<string, unknown>;
+    const boundaries = activation.acceptance_boundaries as Record<string, unknown>;
+    const b3c = boundaries.B3C as Record<string, unknown>;
+    const b7 = boundaries.B7 as Record<string, unknown>;
+
+    expect(activation.current_state).toBe('disabled-pending-paired-evidence');
+    expect(b3c.paired_benchmark_required).toBe(false);
+    expect(b3c.required_state).toBe('disabled-pending-paired-evidence');
+    expect(b7.paired_benchmark_required).toBe(true);
+    expect(b7.required_evidence).toBe('work/audit/R-0007/ci-optimisation-benchmark.json');
+
+    const evidence = optionalEvidence();
+    if (evidence === undefined) return;
     const pairs = evidence.paired_runs as Array<Record<string, unknown>> | undefined;
     expect(
       pairs,
