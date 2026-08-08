@@ -2,6 +2,7 @@
 import { spawnSync } from 'node:child_process';
 import {
   copyFileSync,
+  cpSync,
   existsSync,
   mkdirSync,
   mkdtempSync,
@@ -17,6 +18,8 @@ import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 const ROOT = resolve(import.meta.dirname, '../..');
 const WORKFLOW_CHECKER = join(ROOT, 'scripts/check-workflows.mjs');
 const WORKFLOW_DIRECTORY = join(ROOT, '.github/workflows');
+const ACTION_DIRECTORY = join(ROOT, '.github/actions');
+const ROUND_CLOSE_CONTROLS = join(ROOT, 'law/policy/round-close-controls.json');
 const OPTIMISATION_EVIDENCE = join(ROOT, 'work/audit/R-0007/ci-optimisation-benchmark.json');
 const ACTION_PIN = 'a'.repeat(40);
 const temporaryRoots: string[] = [];
@@ -43,11 +46,15 @@ function workflowFixture(): string {
   for (const file of readdirSync(WORKFLOW_DIRECTORY).filter((name) => /\.ya?ml$/u.test(name))) {
     copyFileSync(join(WORKFLOW_DIRECTORY, file), join(target, file));
   }
+  cpSync(ACTION_DIRECTORY, join(root, '.github/actions'), { recursive: true });
+  const policyTarget = join(root, 'law/policy');
+  mkdirSync(policyTarget, { recursive: true });
+  copyFileSync(ROUND_CLOSE_CONTROLS, join(policyTarget, 'round-close-controls.json'));
   return root;
 }
 
 function replaceOnce(root: string, file: string, needle: string, replacement: string): void {
-  const path = join(root, '.github/workflows', file);
+  const path = join(root, file);
   const source = readFileSync(path, 'utf8');
   if (!source.includes(needle)) throw new Error(`${file}: mutation anchor is absent: ${needle}`);
   writeFileSync(path, source.replace(needle, replacement));
@@ -99,17 +106,33 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
     const root = workflowFixture();
     replaceOnce(
       root,
-      'ci.yml',
-      ['      - run: corepack enable', '      - run: pnpm install --frozen-lockfile'].join('\n'),
+      '.github/actions/r7-pnpm-setup/action.yml',
       [
-        '      - run: corepack enable',
-        '      - id: dependency-cache',
-        `        uses: actions/cache@${ACTION_PIN} # v4`,
-        '        with:',
-        '          path: node_modules',
-        "          key: verdict-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}",
-        "      - if: steps.dependency-cache.outputs.cache-hit != 'true'",
-        '        run: pnpm install --frozen-lockfile',
+        '    - name: Restore acquisition-only pnpm store cache',
+        '      id: pnpm-store-cache',
+        "      if: inputs.cache-enabled == 'true'",
+        '      uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4',
+        '      with:',
+        '        path: ${{ steps.pnpm-store.outputs.path }}',
+        "        key: r7-pnpm-store-${{ runner.os }}-${{ runner.arch }}-node-${{ hashFiles('.node-version') }}-pnpm-${{ hashFiles('package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', '.npmrc') }}-${{ steps.pnpm-store.outputs.candidate }}",
+        '',
+        '    - name: Frozen dependency installation',
+        '      shell: bash',
+        '      run: pnpm install --frozen-lockfile',
+      ].join('\n'),
+      [
+        '    - name: Restore verdict-bearing dependency cache',
+        '      id: pnpm-store-cache',
+        "      if: inputs.cache-enabled == 'true'",
+        `      uses: actions/cache@${ACTION_PIN} # v4`,
+        '      with:',
+        '        path: node_modules',
+        "        key: verdict-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}",
+        '',
+        '    - name: Skip frozen installation on cache hit',
+        "      if: steps.pnpm-store-cache.outputs.cache-hit != 'true'",
+        '      shell: bash',
+        '      run: pnpm install --frozen-lockfile',
       ].join('\n'),
     );
 
@@ -129,8 +152,8 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
     const artifactRoot = workflowFixture();
     replaceOnce(
       artifactRoot,
-      'ci.yml',
-      '      - run: pnpm run ci:stage1',
+      '.github/workflows/ci.yml',
+      '      - name: Derive fail-closed validation plan',
       [
         `      - uses: actions/download-artifact@${ACTION_PIN} # v4`,
         '        with:',
@@ -138,14 +161,15 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
         '          path: transport',
         '      - id: transported-verdict',
         '        run: test -f transport/PASS && echo "verdict=PASS" >> "$GITHUB_OUTPUT"',
-        '      - run: pnpm run ci:stage1',
+        '',
+        '      - name: Derive fail-closed validation plan',
       ].join('\n'),
     );
 
     const hiddenInputRoot = workflowFixture();
     replaceOnce(
       hiddenInputRoot,
-      'reusable-evidence-gate.yml',
+      '.github/workflows/reusable-evidence-gate.yml',
       '  verify:\n    runs-on: ubuntu-latest',
       [
         '  verify:',
@@ -176,24 +200,24 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
     const forkRoot = workflowFixture();
     replaceOnce(
       forkRoot,
-      'ci.yml',
-      '      - run: pnpm install --frozen-lockfile',
+      '.github/actions/r7-pnpm-setup/action.yml',
+      '        path: ${{ steps.pnpm-store.outputs.path }}',
+      ['        path: |', '          .devai/state', '          .devai/pin'].join('\n'),
+    );
+    replaceOnce(
+      forkRoot,
+      '.github/actions/r7-pnpm-setup/action.yml',
+      "        key: r7-pnpm-store-${{ runner.os }}-${{ runner.arch }}-node-${{ hashFiles('.node-version') }}-pnpm-${{ hashFiles('package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', '.npmrc') }}-${{ steps.pnpm-store.outputs.candidate }}",
       [
-        `      - uses: actions/cache@${ACTION_PIN} # v4`,
-        '        with:',
-        '          path: |',
-        '            .devai/state',
-        '            .devai/pin',
-        '          key: base-${{ github.base_ref }}-${{ github.sha }}',
-        '          restore-keys: base-${{ github.base_ref }}-',
-        '      - run: pnpm install --frozen-lockfile',
+        '        key: base-${{ github.base_ref }}-${{ github.sha }}',
+        '        restore-keys: base-${{ github.base_ref }}-',
       ].join('\n'),
     );
 
     const mutablePinRoot = workflowFixture();
     replaceOnce(
       mutablePinRoot,
-      'ci.yml',
+      '.github/workflows/ci.yml',
       'actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4',
       'actions/checkout@v4 # v4',
     );
@@ -201,7 +225,7 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
     const permissionRoot = workflowFixture();
     replaceOnce(
       permissionRoot,
-      'ci.yml',
+      '.github/workflows/ci.yml',
       'permissions:\n  contents: read',
       'permissions: write-all',
     );
@@ -228,16 +252,30 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
     ).toEqual([]);
   });
 
-  it('R7-025-DAG-PRESERVES-ORDER rejects lost needs edges and reversed tier order', () => {
+  it('R7-025-DAG-PRESERVES-ORDER rejects lost needs edges and reversed cold stage order', () => {
     const needsRoot = workflowFixture();
-    replaceOnce(needsRoot, 'round-gates.yml', '    needs: regression\n', '');
+    replaceOnce(needsRoot, '.github/workflows/round-gates.yml', '    needs: regression\n', '');
 
     const tierRoot = workflowFixture();
     replaceOnce(
       tierRoot,
-      'ci.yml',
-      '      - run: pnpm run ci:stage2',
-      ['      - run: pnpm run test:t2', '      - run: pnpm run test:t1'].join('\n'),
+      '.github/workflows/cold-sentinel.yml',
+      [
+        '      - name: Cold 09 / stage 1',
+        '        continue-on-error: true',
+        '        run: node scripts/r7-ci-cold-sentinel.mjs --execute stage1 --ordinal 9 --records scratch/r7-ci/cold-sentinel/commands -- pnpm run ci:stage1',
+        '      - name: Cold 10 / stage 2',
+        '        continue-on-error: true',
+        '        run: node scripts/r7-ci-cold-sentinel.mjs --execute stage2 --ordinal 10 --records scratch/r7-ci/cold-sentinel/commands -- pnpm run ci:stage2',
+      ].join('\n'),
+      [
+        '      - name: Cold 09 / stage 2',
+        '        continue-on-error: true',
+        '        run: node scripts/r7-ci-cold-sentinel.mjs --execute stage2 --ordinal 9 --records scratch/r7-ci/cold-sentinel/commands -- pnpm run ci:stage2',
+        '      - name: Cold 10 / stage 1',
+        '        continue-on-error: true',
+        '        run: node scripts/r7-ci-cold-sentinel.mjs --execute stage1 --ordinal 10 --records scratch/r7-ci/cold-sentinel/commands -- pnpm run ci:stage1',
+      ].join('\n'),
     );
 
     expect(
@@ -250,10 +288,10 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
         diagnosticFailure(
           tierRoot,
           'CI_SEMANTIC_DEPENDENCY_LOST',
-          'T2 executes before T1 and without the required build boundary',
+          'cold stage2 executes before stage1 in the authoritative roster',
         ),
       ].filter(Boolean),
-      'R7-F015 requires semantic job edges and build/T1/T2 ordering',
+      'R7-F015 requires semantic job edges and declared cold command ordering',
     ).toEqual([]);
   });
 
@@ -261,25 +299,15 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
     const root = workflowFixture();
     replaceOnce(
       root,
-      'ci.yml',
-      '    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4\n        with:\n          fetch-depth: 0\n      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4\n        with:\n          node-version-file: .node-version\n      - run: node scripts/prewarm-package-managers.mjs\n      - run: corepack enable\n      - run: pnpm install --frozen-lockfile\n      - run: pnpm run ci:stage2',
+      '.github/workflows/ci.yml',
+      '    runs-on: ubuntu-latest\n    permissions:',
       [
         '    runs-on: ubuntu-latest',
         '    strategy:',
         '      fail-fast: false',
         '      matrix:',
         '        tier: [test:t1, test:t2]',
-        '    steps:',
-        '      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4',
-        '        with:',
-        '          fetch-depth: 0',
-        '      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4',
-        '        with:',
-        '          node-version-file: .node-version',
-        '      - run: node scripts/prewarm-package-managers.mjs',
-        '      - run: corepack enable',
-        '      - run: pnpm install --frozen-lockfile',
-        '      - run: pnpm run test:t1',
+        '    permissions:',
       ].join('\n'),
     );
 
@@ -296,25 +324,33 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
   });
 
   it('R7-025-AUTHORITATIVE-RUN-NOT-CANCELLED permits PR feedback cancellation only', () => {
-    const safeReferenceRoot = workflowFixture();
+    const unsafeFastRoot = workflowFixture();
     replaceOnce(
-      safeReferenceRoot,
-      'ci.yml',
-      '  cancel-in-progress: true',
+      unsafeFastRoot,
+      '.github/workflows/ci.yml',
       "  cancel-in-progress: ${{ github.event_name == 'pull_request' }}",
+      '  cancel-in-progress: true',
     );
-    const safeReference = runWorkflowChecker(safeReferenceRoot);
-    const current = runWorkflowChecker(ROOT);
-    const currentOutput = `${current.stderr}\n${current.stdout}`;
+    const unsafeColdRoot = workflowFixture();
+    replaceOnce(
+      unsafeColdRoot,
+      '.github/workflows/cold-sentinel.yml',
+      '  cancel-in-progress: false',
+      '  cancel-in-progress: true',
+    );
 
     expect(
       [
-        safeReference.status === 0
-          ? undefined
-          : `event-specific reference unexpectedly failed: ${safeReference.stderr}`,
-        current.status === 1 && currentOutput.includes('CI_SEMANTIC_DEPENDENCY_LOST')
-          ? undefined
-          : `push-main remains cancellable without CI_SEMANTIC_DEPENDENCY_LOST (exit ${String(current.status)})`,
+        diagnosticFailure(
+          unsafeFastRoot,
+          'CI_SEMANTIC_DEPENDENCY_LOST',
+          'fast workflow cancels authoritative push-main and merge-queue runs',
+        ),
+        diagnosticFailure(
+          unsafeColdRoot,
+          'CI_SEMANTIC_DEPENDENCY_LOST',
+          'cold sentinel cancellation can replace an authoritative observation',
+        ),
       ].filter(Boolean),
       'R7-F015 forbids cancellation of main, merge-queue, frozen-candidate, convergence, and close runs',
     ).toEqual([]);
