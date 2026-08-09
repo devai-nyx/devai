@@ -12,7 +12,7 @@ Spawn three fresh `gpt-5.6-sol` Inspector agents at `xhigh`:
 
 - Execute all 42 kept actions in every supported format and required refusal form.
 - Execute all historical routes and prove no folded/tombstoned handler dispatch.
-- Prove exact 42/170/11/223 registry counts from the migration fixture.
+- Prove exact 42/169/11/222 registry counts from the migration fixture.
 - Prove seven-domain default help and hidden plumbing discovery.
 - Prove exact quick/standard/full/release suite membership and aggregate exit precedence.
 - Prove exact baseline/structural/governed/sweep membership and canonical order.
