@@ -23,6 +23,7 @@ affected_rules:
   - scripts/derive-commit-validation-plan.mjs
   - scripts/check-workflows.mjs
   - .github/workflows/ci.yml
+  - .github/workflows/cold-sentinel.yml
   - .github/workflows/round-gates.yml
   - .github/workflows/reusable-evidence-gate.yml
 ---
