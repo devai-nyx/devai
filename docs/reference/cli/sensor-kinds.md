@@ -71,7 +71,7 @@ sources or renderer, never the bytes between markers.
 - **Population or projection:** Emitter `packages/sensors/src/build.ts`; standing scorecard cells `F2×T9`; preset membership `baseline`, `structural`, `governed`; registry tiers `BASELINE`, `SWEEP`.
 - **Prerequisites:** Reviewed effect sources `packages/sensors/src/build.ts`, `packages/cli/src/command-manifest.ts`. Capabilities `proc:pnpm-build`, `fs:workspace`.
 - **Required external tools:** Tools or services satisfying `proc:pnpm-build`, `fs:workspace`; exact availability is checked before execution.
-- **Accepted inputs:** `sense run build`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>`. plus the declared consent flags.
+- **Accepted inputs:** `sense run build`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>` plus the declared consent flags.
 - **Defaults:** Repository root `.`; no implicit persistence, preset, round, or sensor-specific input.
 - **Output contract:** A schema-valid [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json) plus action-bound aggregate output when invoked in a preset.
 - **Verdict semantics:** `pass` is an observation from this sensor, not a release claim; all non-pass states remain explicit.
@@ -95,7 +95,7 @@ sources or renderer, never the bytes between markers.
 - **Population or projection:** Emitter `packages/sensors/src/test.ts`; standing scorecard cells `F3×T1`; preset membership `baseline`, `structural`, `governed`; registry tiers `BASELINE`, `SWEEP`.
 - **Prerequisites:** Reviewed effect sources `packages/sensors/src/test.ts`, `packages/cli/src/command-manifest.ts`. Capabilities `proc:pnpm-vitest`, `fs:f5-state`.
 - **Required external tools:** Tools or services satisfying `proc:pnpm-vitest`, `fs:f5-state`; exact availability is checked before execution.
-- **Accepted inputs:** `sense run unit_test`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>`. plus the declared consent flags.
+- **Accepted inputs:** `sense run unit_test`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>` plus the declared consent flags.
 - **Defaults:** Repository root `.`; no implicit persistence, preset, round, or sensor-specific input.
 - **Output contract:** A schema-valid [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json) plus action-bound aggregate output when invoked in a preset.
 - **Verdict semantics:** `pass` is an observation from this sensor, not a release claim; all non-pass states remain explicit.
@@ -116,10 +116,10 @@ sources or renderer, never the bytes between markers.
 - **Stable ID:** integration_test
 - **User-facing label:** Integration Test
 - **Purpose:** Run the registered `integration_test` observation through `packages/sensors/src/test.ts` and emit its canonical reading.
-- **Population or projection:** Emitter `packages/sensors/src/test.ts`; standing scorecard cells `F3×T1`; preset membership Not applicable: the canonical source declares no values.; registry tiers `SWEEP`.
+- **Population or projection:** Emitter `packages/sensors/src/test.ts`; standing scorecard cells `F3×T1`; preset membership Not applicable: the canonical source declares no values; registry tiers `SWEEP`.
 - **Prerequisites:** Reviewed effect sources `packages/sensors/src/test.ts`, `packages/cli/src/command-manifest.ts`. Capabilities `proc:pnpm-vitest`, `fs:f5-state`.
 - **Required external tools:** Tools or services satisfying `proc:pnpm-vitest`, `fs:f5-state`; exact availability is checked before execution.
-- **Accepted inputs:** `sense run integration_test`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>`. plus the declared consent flags.
+- **Accepted inputs:** `sense run integration_test`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>` plus the declared consent flags.
 - **Defaults:** Repository root `.`; no implicit persistence, preset, round, or sensor-specific input.
 - **Output contract:** A schema-valid [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json) plus action-bound aggregate output when invoked in a preset.
 - **Verdict semantics:** `pass` is an observation from this sensor, not a release claim; all non-pass states remain explicit.
@@ -140,10 +140,10 @@ sources or renderer, never the bytes between markers.
 - **Stable ID:** e2e_test
 - **User-facing label:** E2e Test
 - **Purpose:** Run the registered `e2e_test` observation through `packages/sensors/src/test.ts` and emit its canonical reading.
-- **Population or projection:** Emitter `packages/sensors/src/test.ts`; standing scorecard cells `F3×T1`; preset membership Not applicable: the canonical source declares no values.; registry tiers `SWEEP`.
+- **Population or projection:** Emitter `packages/sensors/src/test.ts`; standing scorecard cells `F3×T1`; preset membership Not applicable: the canonical source declares no values; registry tiers `SWEEP`.
 - **Prerequisites:** Reviewed effect sources `packages/sensors/src/test.ts`, `packages/cli/src/command-manifest.ts`. Capabilities `proc:pnpm-vitest`, `fs:f5-state`.
 - **Required external tools:** Tools or services satisfying `proc:pnpm-vitest`, `fs:f5-state`; exact availability is checked before execution.
-- **Accepted inputs:** `sense run e2e_test`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>`. plus the declared consent flags.
+- **Accepted inputs:** `sense run e2e_test`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>` plus the declared consent flags.
 - **Defaults:** Repository root `.`; no implicit persistence, preset, round, or sensor-specific input.
 - **Output contract:** A schema-valid [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json) plus action-bound aggregate output when invoked in a preset.
 - **Verdict semantics:** `pass` is an observation from this sensor, not a release claim; all non-pass states remain explicit.
@@ -164,10 +164,10 @@ sources or renderer, never the bytes between markers.
 - **Stable ID:** migration_check
 - **User-facing label:** Migration Check
 - **Purpose:** Run the registered `migration_check` observation through `packages/sensors/src/migrate-check.ts` and emit its canonical reading.
-- **Population or projection:** Emitter `packages/sensors/src/migrate-check.ts`; standing scorecard cells `F2×T4`; preset membership Not applicable: the canonical source declares no values.; registry tiers `SWEEP`.
+- **Population or projection:** Emitter `packages/sensors/src/migrate-check.ts`; standing scorecard cells `F2×T4`; preset membership Not applicable: the canonical source declares no values; registry tiers `SWEEP`.
 - **Prerequisites:** Reviewed effect sources `packages/sensors/src/migrate-check.ts`, `packages/cli/src/command-manifest.ts`. Capabilities `proc:psql`, `db:write`, `fs:f5-state`.
 - **Required external tools:** Tools or services satisfying `proc:psql`, `db:write`, `fs:f5-state`; exact availability is checked before execution.
-- **Accepted inputs:** `sense run migration_check`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>`. plus the declared consent flags.
+- **Accepted inputs:** `sense run migration_check`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>` plus the declared consent flags.
 - **Defaults:** Repository root `.`; no implicit persistence, preset, round, or sensor-specific input.
 - **Output contract:** A schema-valid [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json) plus action-bound aggregate output when invoked in a preset.
 - **Verdict semantics:** `pass` is an observation from this sensor, not a release claim; all non-pass states remain explicit.
@@ -188,10 +188,10 @@ sources or renderer, never the bytes between markers.
 - **Stable ID:** inventory_regeneration
 - **User-facing label:** Inventory Regeneration
 - **Purpose:** Run the registered `inventory_regeneration` observation through `packages/cli/src/commands/sense/readings-rebuild.ts` and emit its canonical reading.
-- **Population or projection:** Emitter `packages/cli/src/commands/sense/readings-rebuild.ts`; standing scorecard cells `F4×T9`; preset membership Not applicable: the canonical source declares no values.; registry tiers `SWEEP`.
+- **Population or projection:** Emitter `packages/cli/src/commands/sense/readings-rebuild.ts`; standing scorecard cells `F4×T9`; preset membership Not applicable: the canonical source declares no values; registry tiers `SWEEP`.
 - **Prerequisites:** Reviewed effect sources `packages/cli/src/commands/sense/readings-rebuild.ts`, `packages/cli/src/command-manifest.ts`. Capabilities `fs:f5-state`.
 - **Required external tools:** Tools or services satisfying `fs:f5-state`; exact availability is checked before execution.
-- **Accepted inputs:** `sense run inventory_regeneration`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>`. plus the declared consent flags.
+- **Accepted inputs:** `sense run inventory_regeneration`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>` plus the declared consent flags.
 - **Defaults:** Repository root `.`; no implicit persistence, preset, round, or sensor-specific input.
 - **Output contract:** A schema-valid [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json) plus action-bound aggregate output when invoked in a preset.
 - **Verdict semantics:** `pass` is an observation from this sensor, not a release claim; all non-pass states remain explicit.
@@ -308,10 +308,10 @@ sources or renderer, never the bytes between markers.
 - **Stable ID:** llm_judge
 - **User-facing label:** Llm Judge
 - **Purpose:** Run the registered `llm_judge` observation through `packages/sensors/src/judge.ts` and emit its canonical reading.
-- **Population or projection:** Emitter `packages/sensors/src/judge.ts`; standing scorecard cells `F1×T3`; preset membership Not applicable: the canonical source declares no values.; registry tiers `SWEEP`.
+- **Population or projection:** Emitter `packages/sensors/src/judge.ts`; standing scorecard cells `F1×T3`; preset membership Not applicable: the canonical source declares no values; registry tiers `SWEEP`.
 - **Prerequisites:** Reviewed effect sources `packages/sensors/src/judge.ts`, `packages/cli/src/commands/sense/judge.ts`, `packages/cli/src/command-manifest.ts`. Capabilities `net:llm-provider`.
 - **Required external tools:** Tools or services satisfying `net:llm-provider`; exact availability is checked before execution.
-- **Accepted inputs:** `sense run llm_judge`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>`. plus the declared consent flags.
+- **Accepted inputs:** `sense run llm_judge`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>` plus the declared consent flags.
 - **Defaults:** Repository root `.`; no implicit persistence, preset, round, or sensor-specific input.
 - **Output contract:** A schema-valid [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json) plus action-bound aggregate output when invoked in a preset.
 - **Verdict semantics:** `pass` is an observation from this sensor, not a release claim; all non-pass states remain explicit.
@@ -321,7 +321,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `llm_judge` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `remote-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run llm_judge --repo-root . --as-role owner --write --dry-run --format json`
+- **New-grammar example:** `devai sense run llm_judge --repo-root . --as-role owner --write --publish --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/llm_judge.md`](../../../law/policy/sensor-notes/llm_judge.md)
 - **Related workflow:** `sense`
 
@@ -332,10 +332,10 @@ sources or renderer, never the bytes between markers.
 - **Stable ID:** runtime_probe_api
 - **User-facing label:** Runtime Probe Api
 - **Purpose:** Run the registered `runtime_probe_api` observation through `packages/sensors/src/runtime-probe.ts` and emit its canonical reading.
-- **Population or projection:** Emitter `packages/sensors/src/runtime-probe.ts`; standing diagnostic-only; preset membership Not applicable: the canonical source declares no values.; registry tiers `SWEEP`.
+- **Population or projection:** Emitter `packages/sensors/src/runtime-probe.ts`; standing diagnostic-only; preset membership Not applicable: the canonical source declares no values; registry tiers `SWEEP`.
 - **Prerequisites:** Reviewed effect sources `packages/sensors/src/runtime-probe.ts`, `packages/cli/src/command-manifest.ts`. Capabilities `net:runtime-probe`.
 - **Required external tools:** Tools or services satisfying `net:runtime-probe`; exact availability is checked before execution.
-- **Accepted inputs:** `sense run runtime_probe_api`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>`. plus the declared consent flags.
+- **Accepted inputs:** `sense run runtime_probe_api`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>` plus the declared consent flags.
 - **Defaults:** Repository root `.`; no implicit persistence, preset, round, or sensor-specific input.
 - **Output contract:** A schema-valid [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json) plus action-bound aggregate output when invoked in a preset.
 - **Verdict semantics:** `pass` is an observation from this sensor, not a release claim; all non-pass states remain explicit.
@@ -345,7 +345,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `runtime_probe_api` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `remote-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run runtime_probe_api --repo-root . --as-role owner --write --dry-run --format json`
+- **New-grammar example:** `devai sense run runtime_probe_api --repo-root . --as-role owner --write --publish --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/runtime_probe_api.md`](../../../law/policy/sensor-notes/runtime_probe_api.md)
 - **Related workflow:** `sense`
 
@@ -356,10 +356,10 @@ sources or renderer, never the bytes between markers.
 - **Stable ID:** runtime_probe_auth
 - **User-facing label:** Runtime Probe Auth
 - **Purpose:** Run the registered `runtime_probe_auth` observation through `packages/sensors/src/runtime-probe.ts` and emit its canonical reading.
-- **Population or projection:** Emitter `packages/sensors/src/runtime-probe.ts`; standing diagnostic-only; preset membership Not applicable: the canonical source declares no values.; registry tiers `SWEEP`.
+- **Population or projection:** Emitter `packages/sensors/src/runtime-probe.ts`; standing diagnostic-only; preset membership Not applicable: the canonical source declares no values; registry tiers `SWEEP`.
 - **Prerequisites:** Reviewed effect sources `packages/sensors/src/runtime-probe.ts`, `packages/cli/src/command-manifest.ts`. Capabilities `net:runtime-probe`.
 - **Required external tools:** Tools or services satisfying `net:runtime-probe`; exact availability is checked before execution.
-- **Accepted inputs:** `sense run runtime_probe_auth`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>`. plus the declared consent flags.
+- **Accepted inputs:** `sense run runtime_probe_auth`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>` plus the declared consent flags.
 - **Defaults:** Repository root `.`; no implicit persistence, preset, round, or sensor-specific input.
 - **Output contract:** A schema-valid [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json) plus action-bound aggregate output when invoked in a preset.
 - **Verdict semantics:** `pass` is an observation from this sensor, not a release claim; all non-pass states remain explicit.
@@ -369,7 +369,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `runtime_probe_auth` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `remote-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run runtime_probe_auth --repo-root . --as-role owner --write --dry-run --format json`
+- **New-grammar example:** `devai sense run runtime_probe_auth --repo-root . --as-role owner --write --publish --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/runtime_probe_auth.md`](../../../law/policy/sensor-notes/runtime_probe_auth.md)
 - **Related workflow:** `sense`
 
@@ -380,10 +380,10 @@ sources or renderer, never the bytes between markers.
 - **Stable ID:** runtime_probe_data
 - **User-facing label:** Runtime Probe Data
 - **Purpose:** Run the registered `runtime_probe_data` observation through `packages/sensors/src/runtime-probe-data.ts` and emit its canonical reading.
-- **Population or projection:** Emitter `packages/sensors/src/runtime-probe-data.ts`; standing diagnostic-only; preset membership Not applicable: the canonical source declares no values.; registry tiers `SWEEP`.
+- **Population or projection:** Emitter `packages/sensors/src/runtime-probe-data.ts`; standing diagnostic-only; preset membership Not applicable: the canonical source declares no values; registry tiers `SWEEP`.
 - **Prerequisites:** Reviewed effect sources `packages/sensors/src/runtime-probe-data.ts`, `packages/cli/src/command-manifest.ts`. Capabilities `net:runtime-probe`, `db:unclassified`.
 - **Required external tools:** Tools or services satisfying `net:runtime-probe`, `db:unclassified`; exact availability is checked before execution.
-- **Accepted inputs:** `sense run runtime_probe_data`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>`. plus the declared consent flags.
+- **Accepted inputs:** `sense run runtime_probe_data`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>` plus the declared consent flags.
 - **Defaults:** Repository root `.`; no implicit persistence, preset, round, or sensor-specific input.
 - **Output contract:** A schema-valid [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json) plus action-bound aggregate output when invoked in a preset.
 - **Verdict semantics:** `pass` is an observation from this sensor, not a release claim; all non-pass states remain explicit.
@@ -393,7 +393,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `runtime_probe_data` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `remote-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run runtime_probe_data --repo-root . --as-role owner --write --dry-run --format json`
+- **New-grammar example:** `devai sense run runtime_probe_data --repo-root . --as-role owner --write --publish --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/runtime_probe_data.md`](../../../law/policy/sensor-notes/runtime_probe_data.md)
 - **Related workflow:** `sense`
 

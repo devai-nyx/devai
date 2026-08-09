@@ -319,7 +319,7 @@ devai sense run --preset sweep --round R-0007 --repo-root . --dry-run --format j
 Consent is invocation-scoped and independent:
 
 - a non-read resolved effect requires explicit `--write`;
-- a remote resolved effect additionally requires explicit `--publish` for actual publication;
+- every remote resolved effect additionally requires explicit `--publish`, including a dry run;
 - `--publish` never implies `--write`;
 - `--write` never implies `--publish`; and
 - possession of a publication-capable action, role, model, adapter, or session does not satisfy
@@ -329,12 +329,15 @@ For a read-only action, a role declaration and write/publication consent are not
 are refused rather than ignored. For a non-read action, provide exactly one `--as-role <role>` or
 `--authority-session <id>`, not both. A caller cannot declare a machine actor.
 
-A remote dry run performs no publication and therefore does not need `--publish`, but it still
-requires the permitted role and `--write` so the runtime evaluates the same governed selection
-boundary:
+A remote dry run performs no publication, but its resolved `remote-write` effect still requires
+the permitted role and both independent consent flags, `--write` and `--publish`. It also enters
+documentation-publish detection: the selected repository must have a readable
+`.devai/config/project.json` whose `repo.kind` is `library` or `application` and whose
+`docs.builder` is `docusaurus` or `jekyll`; a library repository must use `docusaurus`. A missing,
+unreadable, or invalid project configuration fails at the detect stage before any build:
 
 ```sh
-devai release publish docs --repo-root . --dry-run --as-role architect --write --format json
+devai release publish docs --repo-root . --dry-run --as-role architect --write --publish --format json
 ```
 
 ## Safe examples

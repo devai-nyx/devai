@@ -3555,12 +3555,12 @@ against the action registry; edit those sources or the renderer, never the bytes
 - **Stable ID:** vocabulary:check-profile
 - **User-facing label:** Check Profile
 - **Purpose:** Replace one historical vocabulary or consent spelling with the canonical grammar.
-- **Population or projection:** Canonical successor spelling `--suite quick | standard | full | release`; the historical spelling never dispatches as an alias.
+- **Population or projection:** Exact historical spelling `check --profile quick | standard | full | release`; canonical successor spelling `--suite quick | standard | full | release`. The historical spelling never dispatches as an alias.
 - **Prerequisites:** Re-evaluate the complete invocation, resolved effect, role, and consent before execution.
 - **Required external tools:** Not applicable: migration lookup is a deterministic documentation projection.
-- **Accepted inputs:** Only the exact historical spelling class represented by `vocabulary:check-profile`.
+- **Accepted inputs:** Only the exact historical spelling `check --profile quick | standard | full | release`; prefixes and best-effort reinterpretation are forbidden.
 - **Defaults:** No alias, prefix match, or consent implication.
-- **Output contract:** One vocabulary migration row with exact successor spelling and fail-closed semantics.
+- **Output contract:** One vocabulary migration row with exact historical spelling, exact canonical successor, any independently required consent, and fail-closed semantics.
 - **Verdict semantics:** A missing, duplicate, conflicting, or unparseable row is a blocking documentation error.
 - **Declared effect:** Inherited only after resolving the complete successor action; migration text grants no effect.
 - **Consent flags:** Re-resolve consent from the canonical successor action.
@@ -3579,12 +3579,12 @@ against the action registry; edit those sources or the renderer, never the bytes
 - **Stable ID:** vocabulary:sense-set-baseline
 - **User-facing label:** Sense Set Baseline
 - **Purpose:** Replace one historical vocabulary or consent spelling with the canonical grammar.
-- **Population or projection:** Canonical successor spelling `--preset baseline`; the historical spelling never dispatches as an alias.
+- **Population or projection:** Exact historical spelling `sense --set baseline`; canonical successor spelling `--preset baseline`. The historical spelling never dispatches as an alias.
 - **Prerequisites:** Re-evaluate the complete invocation, resolved effect, role, and consent before execution.
 - **Required external tools:** Not applicable: migration lookup is a deterministic documentation projection.
-- **Accepted inputs:** Only the exact historical spelling class represented by `vocabulary:sense-set-baseline`.
+- **Accepted inputs:** Only the exact historical spelling `sense --set baseline`; prefixes and best-effort reinterpretation are forbidden.
 - **Defaults:** No alias, prefix match, or consent implication.
-- **Output contract:** One vocabulary migration row with exact successor spelling and fail-closed semantics.
+- **Output contract:** One vocabulary migration row with exact historical spelling, exact canonical successor, any independently required consent, and fail-closed semantics.
 - **Verdict semantics:** A missing, duplicate, conflicting, or unparseable row is a blocking documentation error.
 - **Declared effect:** Inherited only after resolving the complete successor action; migration text grants no effect.
 - **Consent flags:** Re-resolve consent from the canonical successor action.
@@ -3603,12 +3603,12 @@ against the action registry; edit those sources or the renderer, never the bytes
 - **Stable ID:** vocabulary:sense-set-tier1
 - **User-facing label:** Sense Set Tier1
 - **Purpose:** Replace one historical vocabulary or consent spelling with the canonical grammar.
-- **Population or projection:** Canonical successor spelling `--preset baseline`; the historical spelling never dispatches as an alias.
+- **Population or projection:** Exact historical spelling `sense --set tier1`; canonical successor spelling `--preset baseline`. The historical spelling never dispatches as an alias.
 - **Prerequisites:** Re-evaluate the complete invocation, resolved effect, role, and consent before execution.
 - **Required external tools:** Not applicable: migration lookup is a deterministic documentation projection.
-- **Accepted inputs:** Only the exact historical spelling class represented by `vocabulary:sense-set-tier1`.
+- **Accepted inputs:** Only the exact historical spelling `sense --set tier1`; prefixes and best-effort reinterpretation are forbidden.
 - **Defaults:** No alias, prefix match, or consent implication.
-- **Output contract:** One vocabulary migration row with exact successor spelling and fail-closed semantics.
+- **Output contract:** One vocabulary migration row with exact historical spelling, exact canonical successor, any independently required consent, and fail-closed semantics.
 - **Verdict semantics:** A missing, duplicate, conflicting, or unparseable row is a blocking documentation error.
 - **Declared effect:** Inherited only after resolving the complete successor action; migration text grants no effect.
 - **Consent flags:** Re-resolve consent from the canonical successor action.
@@ -3627,12 +3627,12 @@ against the action registry; edit those sources or the renderer, never the bytes
 - **Stable ID:** vocabulary:sense-set-tier2
 - **User-facing label:** Sense Set Tier2
 - **Purpose:** Replace one historical vocabulary or consent spelling with the canonical grammar.
-- **Population or projection:** Canonical successor spelling `--preset structural`; the historical spelling never dispatches as an alias.
+- **Population or projection:** Exact historical spelling `sense --set tier2`; canonical successor spelling `--preset structural`. The historical spelling never dispatches as an alias.
 - **Prerequisites:** Re-evaluate the complete invocation, resolved effect, role, and consent before execution.
 - **Required external tools:** Not applicable: migration lookup is a deterministic documentation projection.
-- **Accepted inputs:** Only the exact historical spelling class represented by `vocabulary:sense-set-tier2`.
+- **Accepted inputs:** Only the exact historical spelling `sense --set tier2`; prefixes and best-effort reinterpretation are forbidden.
 - **Defaults:** No alias, prefix match, or consent implication.
-- **Output contract:** One vocabulary migration row with exact successor spelling and fail-closed semantics.
+- **Output contract:** One vocabulary migration row with exact historical spelling, exact canonical successor, any independently required consent, and fail-closed semantics.
 - **Verdict semantics:** A missing, duplicate, conflicting, or unparseable row is a blocking documentation error.
 - **Declared effect:** Inherited only after resolving the complete successor action; migration text grants no effect.
 - **Consent flags:** Re-resolve consent from the canonical successor action.
@@ -3651,12 +3651,12 @@ against the action registry; edit those sources or the renderer, never the bytes
 - **Stable ID:** vocabulary:sense-set-tier3
 - **User-facing label:** Sense Set Tier3
 - **Purpose:** Replace one historical vocabulary or consent spelling with the canonical grammar.
-- **Population or projection:** Canonical successor spelling `--preset governed`; the historical spelling never dispatches as an alias.
+- **Population or projection:** Exact historical spelling `sense --set tier3`; canonical successor spelling `--preset governed`. The historical spelling never dispatches as an alias.
 - **Prerequisites:** Re-evaluate the complete invocation, resolved effect, role, and consent before execution.
 - **Required external tools:** Not applicable: migration lookup is a deterministic documentation projection.
-- **Accepted inputs:** Only the exact historical spelling class represented by `vocabulary:sense-set-tier3`.
+- **Accepted inputs:** Only the exact historical spelling `sense --set tier3`; prefixes and best-effort reinterpretation are forbidden.
 - **Defaults:** No alias, prefix match, or consent implication.
-- **Output contract:** One vocabulary migration row with exact successor spelling and fail-closed semantics.
+- **Output contract:** One vocabulary migration row with exact historical spelling, exact canonical successor, any independently required consent, and fail-closed semantics.
 - **Verdict semantics:** A missing, duplicate, conflicting, or unparseable row is a blocking documentation error.
 - **Declared effect:** Inherited only after resolving the complete successor action; migration text grants no effect.
 - **Consent flags:** Re-resolve consent from the canonical successor action.
@@ -3675,12 +3675,12 @@ against the action registry; edit those sources or the renderer, never the bytes
 - **Stable ID:** vocabulary:sense-set-all
 - **User-facing label:** Sense Set All
 - **Purpose:** Replace one historical vocabulary or consent spelling with the canonical grammar.
-- **Population or projection:** Canonical successor spelling `--preset governed`; the historical spelling never dispatches as an alias.
+- **Population or projection:** Exact historical spelling `sense --set all`; canonical successor spelling `--preset governed`. The historical spelling never dispatches as an alias.
 - **Prerequisites:** Re-evaluate the complete invocation, resolved effect, role, and consent before execution.
 - **Required external tools:** Not applicable: migration lookup is a deterministic documentation projection.
-- **Accepted inputs:** Only the exact historical spelling class represented by `vocabulary:sense-set-all`.
+- **Accepted inputs:** Only the exact historical spelling `sense --set all`; prefixes and best-effort reinterpretation are forbidden.
 - **Defaults:** No alias, prefix match, or consent implication.
-- **Output contract:** One vocabulary migration row with exact successor spelling and fail-closed semantics.
+- **Output contract:** One vocabulary migration row with exact historical spelling, exact canonical successor, any independently required consent, and fail-closed semantics.
 - **Verdict semantics:** A missing, duplicate, conflicting, or unparseable row is a blocking documentation error.
 - **Declared effect:** Inherited only after resolving the complete successor action; migration text grants no effect.
 - **Consent flags:** Re-resolve consent from the canonical successor action.
@@ -3699,12 +3699,12 @@ against the action registry; edit those sources or the renderer, never the bytes
 - **Stable ID:** vocabulary:sense-set-sweep
 - **User-facing label:** Sense Set Sweep
 - **Purpose:** Replace one historical vocabulary or consent spelling with the canonical grammar.
-- **Population or projection:** Canonical successor spelling `--preset sweep --round R-NNNN`; the historical spelling never dispatches as an alias.
+- **Population or projection:** Exact historical spelling `sense --set sweep`; canonical successor spelling `--preset sweep --round R-NNNN`. The historical spelling never dispatches as an alias.
 - **Prerequisites:** Re-evaluate the complete invocation, resolved effect, role, and consent before execution.
 - **Required external tools:** Not applicable: migration lookup is a deterministic documentation projection.
-- **Accepted inputs:** Only the exact historical spelling class represented by `vocabulary:sense-set-sweep`.
+- **Accepted inputs:** Only the exact historical spelling `sense --set sweep`; prefixes and best-effort reinterpretation are forbidden.
 - **Defaults:** No alias, prefix match, or consent implication.
-- **Output contract:** One vocabulary migration row with exact successor spelling and fail-closed semantics.
+- **Output contract:** One vocabulary migration row with exact historical spelling, exact canonical successor, any independently required consent, and fail-closed semantics.
 - **Verdict semantics:** A missing, duplicate, conflicting, or unparseable row is a blocking documentation error.
 - **Declared effect:** Inherited only after resolving the complete successor action; migration text grants no effect.
 - **Consent flags:** Re-resolve consent from the canonical successor action.
@@ -3723,12 +3723,12 @@ against the action registry; edit those sources or the renderer, never the bytes
 - **Stable ID:** vocabulary:adoption-profile
 - **User-facing label:** Adoption Profile
 - **Purpose:** Replace one historical vocabulary or consent spelling with the canonical grammar.
-- **Population or projection:** Canonical successor spelling `--tier tier1 | tier2          | tier3`; the historical spelling never dispatches as an alias.
+- **Population or projection:** Exact historical spelling `adoption --profile tier1 | tier2 | tier3`; canonical successor spelling `--tier tier1 | tier2 | tier3`. The historical spelling never dispatches as an alias.
 - **Prerequisites:** Re-evaluate the complete invocation, resolved effect, role, and consent before execution.
 - **Required external tools:** Not applicable: migration lookup is a deterministic documentation projection.
-- **Accepted inputs:** Only the exact historical spelling class represented by `vocabulary:adoption-profile`.
+- **Accepted inputs:** Only the exact historical spelling `adoption --profile tier1 | tier2 | tier3`; prefixes and best-effort reinterpretation are forbidden.
 - **Defaults:** No alias, prefix match, or consent implication.
-- **Output contract:** One vocabulary migration row with exact successor spelling and fail-closed semantics.
+- **Output contract:** One vocabulary migration row with exact historical spelling, exact canonical successor, any independently required consent, and fail-closed semantics.
 - **Verdict semantics:** A missing, duplicate, conflicting, or unparseable row is a blocking documentation error.
 - **Declared effect:** Inherited only after resolving the complete successor action; migration text grants no effect.
 - **Consent flags:** Re-resolve consent from the canonical successor action.
@@ -3747,12 +3747,12 @@ against the action registry; edit those sources or the renderer, never the bytes
 - **Stable ID:** vocabulary:allow-publish
 - **User-facing label:** Allow Publish
 - **Purpose:** Replace one historical vocabulary or consent spelling with the canonical grammar.
-- **Population or projection:** Canonical successor spelling `--write`; the historical spelling never dispatches as an alias.
-- **Prerequisites:** Re-evaluate the complete invocation, resolved effect, role, and consent before execution.
+- **Population or projection:** Exact historical spelling `--allow-publish`; canonical successor spelling `--publish`, still requiring `--write`. The historical spelling never dispatches as an alias.
+- **Prerequisites:** Re-evaluate the complete invocation, resolved effect, Architect role, and independent consent. The dry-run example requires readable `.devai/config/project.json` with valid `repo.kind` and `docs.builder`; missing, unreadable, or invalid configuration fails at detect before build.
 - **Required external tools:** Not applicable: migration lookup is a deterministic documentation projection.
-- **Accepted inputs:** Only the exact historical spelling class represented by `vocabulary:allow-publish`.
+- **Accepted inputs:** Only the exact historical spelling `--allow-publish`; prefixes and best-effort reinterpretation are forbidden.
 - **Defaults:** No alias, prefix match, or consent implication.
-- **Output contract:** One vocabulary migration row with exact successor spelling and fail-closed semantics.
+- **Output contract:** One vocabulary migration row with exact historical spelling, exact canonical successor, any independently required consent, and fail-closed semantics.
 - **Verdict semantics:** A missing, duplicate, conflicting, or unparseable row is a blocking documentation error.
 - **Declared effect:** Inherited only after resolving the complete successor action; migration text grants no effect.
 - **Consent flags:** `--publish` remains independent and remote write still requires `--write`.
@@ -3760,7 +3760,7 @@ against the action registry; edit those sources or the renderer, never the bytes
 - **When to use:** Use when converting the represented historical spelling in a script or runbook.
 - **When not to use:** Do not preserve the old spelling as a compatibility alias.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai release status --repo-root . --format json`
+- **New-grammar example:** `devai release publish docs --repo-root . --as-role architect --write --publish --dry-run --format json`
 - **Canonical source:** [`work/rounds/R-0007/inventory/old-to-new-command-map.md`](../../../work/rounds/R-0007/inventory/old-to-new-command-map.md)
 - **Related workflow:** `release`
 

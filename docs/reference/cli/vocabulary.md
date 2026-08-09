@@ -123,10 +123,16 @@ devai init apply architect --target . --tier tier1 --as-role architect --write -
 An **effect** is the maximum intrinsic mutation class of the resolved invocation. It answers “what
 may this invocation change?” Effects are conservative capability ceilings and are resolved before
 authority and consent. The effect does not grant authority; role, path policy, planner, mutation
-boundary, and explicit consent must all agree.
+boundary, and explicit consent must all agree. Every resolved `remote-write` invocation, including
+a dry run, requires independent `--write` and `--publish` consent.
+
+This dry run still enters documentation-publish detection. The selected repository must have a
+readable `.devai/config/project.json` whose `repo.kind` is `library` or `application` and whose
+`docs.builder` is `docusaurus` or `jekyll`; a library repository must use `docusaurus`. A missing,
+unreadable, or invalid project configuration fails at the detect stage before any build.
 
 ```sh
-devai release publish docs --repo-root . --dry-run --as-role architect --write --format json
+devai release publish docs --repo-root . --dry-run --as-role architect --write --publish --format json
 ```
 
 See [authority and effects](./authority-effects.md).

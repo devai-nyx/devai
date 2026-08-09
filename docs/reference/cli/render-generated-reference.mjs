@@ -63,8 +63,12 @@ function code(value) {
   return `\`${String(value).replaceAll('`', '\\`')}\``;
 }
 
-function list(values, empty = 'Not applicable: the canonical source declares no values.') {
+function list(values, empty = 'Not applicable: the canonical source declares no values') {
   return values.length === 0 ? empty : values.map(code).join(', ');
+}
+
+function clause(value) {
+  return value.replace(/[.!?]+$/gu, '');
 }
 
 function link(path, pointer = '#') {
@@ -126,8 +130,8 @@ function consentForEffect(effect) {
 
 function dryRunConsentArgs(effect) {
   if (effect === 'read') return '';
-  if (effect === 'harness-write' || effect === 'local-write' || effect === 'remote-write')
-    return ' --write';
+  if (effect === 'harness-write' || effect === 'local-write') return ' --write';
+  if (effect === 'remote-write') return ' --write --publish';
   throw new Error(`DOCS_EFFECT_UNKNOWN:${effect}`);
 }
 
@@ -146,9 +150,9 @@ function allowedRoles(action) {
 
 function roleInputs(action) {
   if (action.effect === 'read')
-    return 'No role declaration is accepted or required by this read action.';
+    return 'No role declaration is accepted or required by this read action';
   const roles = allowedRoles(action);
-  return `${code(`--as-role <${roles.join('|')}>`)} or a live ${code('--authority-session <id>')}.`;
+  return `${code(`--as-role <${roles.join('|')}>`)} or a live ${code('--authority-session <id>')}`;
 }
 
 const EFFECT_RANK = Object.freeze({
@@ -324,7 +328,7 @@ function renderSensePresets(policy) {
       const effect = maxEffect(memberEntries.map((sensor) => sensor.effect));
       const exclusions = excluded.map(
         (kind) =>
-          `${code(kind)} — ${text(sensePresets.exclusion_reasons[kind], `DOCS_PRESET_EXCLUSION_REASON_MISSING:${kind}`)}`,
+          `${code(kind)} — ${clause(text(sensePresets.exclusion_reasons[kind], `DOCS_PRESET_EXCLUSION_REASON_MISSING:${kind}`))}`,
       );
       return entry(policy.category_id, {
         stable_id: text(preset.name, 'DOCS_PRESET_ID_INVALID'),
@@ -1057,6 +1061,57 @@ function renderEfforts(policy) {
   );
 }
 
+function normalizeVocabularySpelling(value) {
+  return value
+    .replaceAll('\\|', '|')
+    .replace(/\s*\|\s*/gu, ' | ')
+    .replace(/\s+/gu, ' ')
+    .trim();
+}
+
+function vocabularyId(historical) {
+  if (/^check --profile [a-z][a-z0-9-]*(?: \| [a-z][a-z0-9-]*)*$/u.test(historical)) {
+    return 'vocabulary:check-profile';
+  }
+  const sense = historical.match(/^sense --set ([a-z][a-z0-9-]*)$/u);
+  if (sense !== null) return `vocabulary:sense-set-${sense[1]}`;
+  if (/^adoption --profile [a-z][a-z0-9-]*(?: \| [a-z][a-z0-9-]*)*$/u.test(historical)) {
+    return 'vocabulary:adoption-profile';
+  }
+  if (historical === '--allow-publish') return 'vocabulary:allow-publish';
+  throw new Error(`DOCS_MIGRATION_VOCABULARY_UNKNOWN:${historical}`);
+}
+
+function parseVocabularyRow(line, index) {
+  const spellingMatch = line.match(/^\| (check|sense|adoption) `([^`]+)`\s+\|\s+`([^`]+)`\s+\|$/u);
+  const consentMatch = line.match(
+    /^\| `([^`]+)`\s+\|\s+`([^`]+)`, still requiring `([^`]+)`\s+\|$/u,
+  );
+  if ((spellingMatch === null) === (consentMatch === null)) {
+    throw new Error(`DOCS_MIGRATION_VOCABULARY_ROW_INVALID:${index + 1}:${line}`);
+  }
+  const parsed =
+    spellingMatch === null
+      ? {
+          historical: normalizeVocabularySpelling(consentMatch[1]),
+          successor: normalizeVocabularySpelling(consentMatch[2]),
+          required: [normalizeVocabularySpelling(consentMatch[3])],
+        }
+      : {
+          historical: `${spellingMatch[1]} ${normalizeVocabularySpelling(spellingMatch[2])}`,
+          successor: normalizeVocabularySpelling(spellingMatch[3]),
+          required: [],
+        };
+  if (
+    parsed.historical.length === 0 ||
+    parsed.successor.length === 0 ||
+    parsed.required.some((value) => value.length === 0)
+  ) {
+    throw new Error(`DOCS_MIGRATION_VOCABULARY_EMPTY:${index + 1}:${line}`);
+  }
+  return { id: vocabularyId(parsed.historical), ...parsed };
+}
+
 function migrationRows() {
   const source = read('work/rounds/R-0007/inventory/old-to-new-command-map.md');
   const split = source.split('## Global vocabulary and consent migration');
@@ -1070,22 +1125,22 @@ function migrationRows() {
     new Set(actionRows.map((row) => row.old)).size !== actionRows.length
   )
     throw new Error('DOCS_MIGRATION_ACTION_ROWS_INVALID');
-  const vocabularyLines = split[1]
-    .split('\n')
-    .filter((line) => /^\| .+`.+\|/u.test(line) && !/^\| [- ]+\|/u.test(line));
-  return { actionRows, vocabularyLines };
-}
-
-function vocabularyId(line) {
-  const plain = line.replaceAll('`', '').replace(/\s+/gu, ' ').trim();
-  if (plain.startsWith('| check --profile ')) return 'vocabulary:check-profile';
-  if (plain.startsWith('| sense --set ')) {
-    const value = plain.slice('| sense --set '.length).split(/[ |]/u)[0];
-    return `vocabulary:sense-set-${value}`;
+  const vocabularySection = split[1].split('\n');
+  const headerIndex = vocabularySection.findIndex((line) =>
+    /^\| Old spelling\s+\| New spelling\s+\|$/u.test(line),
+  );
+  if (headerIndex < 0 || !/^\| -+\s+\| -+\s+\|$/u.test(vocabularySection[headerIndex + 1] ?? '')) {
+    throw new Error('DOCS_MIGRATION_VOCABULARY_TABLE_INVALID');
   }
-  if (plain.startsWith('| adoption --profile ')) return 'vocabulary:adoption-profile';
-  if (plain.startsWith('| --allow-publish ')) return 'vocabulary:allow-publish';
-  throw new Error(`DOCS_MIGRATION_VOCABULARY_UNKNOWN:${line}`);
+  const endIndex = vocabularySection.indexOf('', headerIndex + 2);
+  if (endIndex < 0) throw new Error('DOCS_MIGRATION_VOCABULARY_TABLE_UNTERMINATED');
+  const vocabularyLines = vocabularySection.slice(headerIndex + 2, endIndex);
+  if (vocabularyLines.length === 0) throw new Error('DOCS_MIGRATION_VOCABULARY_EMPTY');
+  const vocabularyRows = vocabularyLines.map(parseVocabularyRow);
+  if (new Set(vocabularyRows.map((row) => row.id)).size !== vocabularyRows.length) {
+    throw new Error('DOCS_MIGRATION_VOCABULARY_DUPLICATE');
+  }
+  return { actionRows, vocabularyRows };
 }
 
 function workflowFromGuidance(guidance) {
@@ -1099,7 +1154,7 @@ function migrationExample(entry, old) {
 }
 
 function renderMigration() {
-  const { actionRows, vocabularyLines } = migrationRows();
+  const { actionRows, vocabularyRows } = migrationRows();
   const actionEntries = actionRows.map((row) => {
     const matches = actions.filter(
       (candidate) => candidate.internal_binding === row.old || candidate.action_id === row.old,
@@ -1154,17 +1209,19 @@ function renderMigration() {
       ),
     });
   });
-  const vocabularyEntries = vocabularyLines.map((line) => {
-    const id = vocabularyId(line);
-    const successor = [...line.matchAll(/`([^`]*)`/gu)].at(-1)?.[1];
-    if (successor === undefined) throw new Error(`DOCS_MIGRATION_VOCABULARY_TARGET_INVALID:${id}`);
+  const vocabularyEntries = vocabularyRows.map((row) => {
+    const { id } = row;
+    const successorProjection =
+      row.required.length === 0
+        ? code(row.successor)
+        : `${code(row.successor)}, still requiring ${list(row.required)}`;
     const example =
       id === 'vocabulary:check-profile'
         ? 'devai check --suite quick --repo-root . --as-role inspector --write --format json'
         : id === 'vocabulary:adoption-profile'
           ? 'devai init plan --tier tier1 --target . --format json'
           : id === 'vocabulary:allow-publish'
-            ? 'devai release status --repo-root . --format json'
+            ? 'devai release publish docs --repo-root . --as-role architect --write --publish --dry-run --format json'
             : `devai sense run --preset ${id
                 .replace('vocabulary:sense-set-', '')
                 .replace(/^tier1$/u, 'baseline')
@@ -1178,15 +1235,17 @@ function renderMigration() {
       user_facing_label: human(id.replace('vocabulary:', '')),
       plain_language_purpose:
         'Replace one historical vocabulary or consent spelling with the canonical grammar.',
-      population_or_projection: `Canonical successor spelling ${code(successor)}; the historical spelling never dispatches as an alias.`,
+      population_or_projection: `Exact historical spelling ${code(row.historical)}; canonical successor spelling ${successorProjection}. The historical spelling never dispatches as an alias.`,
       prerequisites:
-        'Re-evaluate the complete invocation, resolved effect, role, and consent before execution.',
+        id === 'vocabulary:allow-publish'
+          ? `Re-evaluate the complete invocation, resolved effect, Architect role, and independent consent. The dry-run example requires readable ${code('.devai/config/project.json')} with valid ${code('repo.kind')} and ${code('docs.builder')}; missing, unreadable, or invalid configuration fails at detect before build.`
+          : 'Re-evaluate the complete invocation, resolved effect, role, and consent before execution.',
       required_external_tools:
         'Not applicable: migration lookup is a deterministic documentation projection.',
-      accepted_inputs: `Only the exact historical spelling class represented by ${code(id)}.`,
+      accepted_inputs: `Only the exact historical spelling ${code(row.historical)}; prefixes and best-effort reinterpretation are forbidden.`,
       defaults: 'No alias, prefix match, or consent implication.',
       output_contract:
-        'One vocabulary migration row with exact successor spelling and fail-closed semantics.',
+        'One vocabulary migration row with exact historical spelling, exact canonical successor, any independently required consent, and fail-closed semantics.',
       verdict_semantics:
         'A missing, duplicate, conflicting, or unparseable row is a blocking documentation error.',
       declared_effect:
