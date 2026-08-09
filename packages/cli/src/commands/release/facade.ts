@@ -424,7 +424,7 @@ export const releasePublishDocs = defineCommand({
         // The public router and authority broker consume --write and --publish
         // independently before dispatch. This service receives neither flag and
         // never recognizes the retired --allow-publish spelling.
-        const summary = runDocsPublish(options);
+        const summary = runDocsPublish(options, options.human === true ? 'stderr' : 'in-band');
         emitPublish(summary, options.human === true);
         process.exitCode = summary.ok ? EXIT_PASS : EXIT_FAIL;
       });

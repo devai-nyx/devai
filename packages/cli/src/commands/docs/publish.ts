@@ -74,19 +74,30 @@ interface TelemetryEvent {
   readonly outcome: 'success' | 'failure' | 'dry_run';
 }
 
-function emitTelemetry(event: TelemetryEvent): void {
+export interface PublishTelemetry {
+  readonly docs_publish_attempts_total: number;
+  readonly docs_publish_errors_total?: number;
+  readonly docs_publish_duration_ms: number;
+  readonly outcome: TelemetryEvent['outcome'];
+  readonly stage?: NonNullable<TelemetryEvent['errors_total']>['stage'];
+}
+
+function telemetryRecord(event: TelemetryEvent): PublishTelemetry {
   // ADR §8: emit via @stynx/logging if importable; else stderr summary.
   // @stynx/logging is not currently a dependency in DEVAI; fall back to a
   // single stderr line in a parseable JSON format.
-  const record: Record<string, unknown> = {
+  return {
     docs_publish_attempts_total: event.attempts_total,
     docs_publish_duration_ms: event.duration_ms,
     outcome: event.outcome,
+    ...(event.errors_total !== undefined && {
+      docs_publish_errors_total: 1,
+      stage: event.errors_total.stage,
+    }),
   };
-  if (event.errors_total) {
-    record['docs_publish_errors_total'] = 1;
-    record['stage'] = event.errors_total.stage;
-  }
+}
+
+function emitTelemetry(record: PublishTelemetry): void {
   try {
     process.stderr.write(`telemetry ${JSON.stringify(record)}\n`);
   } catch {
@@ -477,7 +488,30 @@ export interface RunSummary {
   readonly plan?: PublishPlan;
   readonly publish?: PublishResult;
   readonly dry_run: boolean;
+  readonly telemetry?: PublishTelemetry;
+  readonly warnings?: readonly string[];
   readonly error?: { readonly stage: 'detect' | 'build' | 'publish'; readonly message: string };
+}
+
+type TelemetryDelivery = 'stderr' | 'in-band';
+
+function completeRun(
+  summary: RunSummary,
+  event: TelemetryEvent,
+  delivery: TelemetryDelivery,
+  warnings: readonly string[] = [],
+): RunSummary {
+  const telemetry = telemetryRecord(event);
+  if (delivery === 'stderr') {
+    for (const warning of warnings) process.stderr.write(`${warning}\n`);
+    emitTelemetry(telemetry);
+    return summary;
+  }
+  return {
+    ...summary,
+    telemetry,
+    ...(warnings.length > 0 && { warnings }),
+  };
 }
 
 function emitOutput(payload: RunSummary, human: boolean): void {
@@ -520,7 +554,10 @@ function emitOutput(payload: RunSummary, human: boolean): void {
  * boundary before this service is entered. A dry run performs detect, preflight,
  * and build only; it never calls the remote publication adapter.
  */
-export function runDocsPublish(options: PublishOptions): RunSummary {
+export function runDocsPublish(
+  options: PublishOptions,
+  telemetryDelivery: TelemetryDelivery = 'stderr',
+): RunSummary {
   const start = Date.now();
   const repoRoot = resolve(options.repoRoot ?? DEFAULT_REPO_ROOT);
   const dryRun = options.dryRun === true;
@@ -531,29 +568,35 @@ export function runDocsPublish(options: PublishOptions): RunSummary {
     det = detect(repoRoot, options.builder);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    emitTelemetry({
-      attempts_total: 1,
-      errors_total: { stage: 'detect' },
-      duration_ms: Date.now() - start,
-      outcome: 'failure',
-    });
-    return { ok: false, dry_run: dryRun, error: { stage: 'detect', message: msg } };
+    return completeRun(
+      { ok: false, dry_run: dryRun, error: { stage: 'detect', message: msg } },
+      {
+        attempts_total: 1,
+        errors_total: { stage: 'detect' },
+        duration_ms: Date.now() - start,
+        outcome: 'failure',
+      },
+      telemetryDelivery,
+    );
   }
 
   const pf = preflights(repoRoot, det.gh_pages_branch, { force });
   if (!pf.ok && !dryRun) {
-    emitTelemetry({
-      attempts_total: 1,
-      errors_total: { stage: 'publish' },
-      duration_ms: Date.now() - start,
-      outcome: 'failure',
-    });
-    return {
-      ok: false,
-      dry_run: false,
-      detect: det,
-      error: { stage: 'publish', message: pf.reason },
-    };
+    return completeRun(
+      {
+        ok: false,
+        dry_run: false,
+        detect: det,
+        error: { stage: 'publish', message: pf.reason },
+      },
+      {
+        attempts_total: 1,
+        errors_total: { stage: 'publish' },
+        duration_ms: Date.now() - start,
+        outcome: 'failure',
+      },
+      telemetryDelivery,
+    );
   }
 
   let buildRes: BuildResult;
@@ -561,101 +604,117 @@ export function runDocsPublish(options: PublishOptions): RunSummary {
     buildRes = build(repoRoot, det);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    emitTelemetry({
-      attempts_total: 1,
-      errors_total: { stage: 'build' },
-      duration_ms: Date.now() - start,
-      outcome: 'failure',
-    });
-    return {
-      ok: false,
-      dry_run: dryRun,
-      detect: det,
-      error: { stage: 'build', message: msg },
-    };
+    return completeRun(
+      {
+        ok: false,
+        dry_run: dryRun,
+        detect: det,
+        error: { stage: 'build', message: msg },
+      },
+      {
+        attempts_total: 1,
+        errors_total: { stage: 'build' },
+        duration_ms: Date.now() - start,
+        outcome: 'failure',
+      },
+      telemetryDelivery,
+    );
   }
   if (buildRes.status !== 0) {
     const tail = buildRes.stderr.split('\n').slice(-20).join('\n');
-    emitTelemetry({
-      attempts_total: 1,
-      errors_total: { stage: 'build' },
-      duration_ms: Date.now() - start,
-      outcome: 'failure',
-    });
-    return {
-      ok: false,
-      dry_run: dryRun,
-      detect: det,
-      build: { status: buildRes.status },
-      error: {
-        stage: 'build',
-        message: `builder exited ${String(buildRes.status)}; tail:\n${tail}`,
+    return completeRun(
+      {
+        ok: false,
+        dry_run: dryRun,
+        detect: det,
+        build: { status: buildRes.status },
+        error: {
+          stage: 'build',
+          message: `builder exited ${String(buildRes.status)}; tail:\n${tail}`,
+        },
       },
-    };
+      {
+        attempts_total: 1,
+        errors_total: { stage: 'build' },
+        duration_ms: Date.now() - start,
+        outcome: 'failure',
+      },
+      telemetryDelivery,
+    );
   }
   if (!existsSync(buildRes.output_dir_abs)) {
-    emitTelemetry({
-      attempts_total: 1,
-      errors_total: { stage: 'build' },
-      duration_ms: Date.now() - start,
-      outcome: 'failure',
-    });
-    return {
-      ok: false,
-      dry_run: dryRun,
-      detect: det,
-      build: { status: buildRes.status },
-      error: {
-        stage: 'build',
-        message: `expected output directory ${buildRes.output_dir_abs} does not exist after build`,
+    return completeRun(
+      {
+        ok: false,
+        dry_run: dryRun,
+        detect: det,
+        build: { status: buildRes.status },
+        error: {
+          stage: 'build',
+          message: `expected output directory ${buildRes.output_dir_abs} does not exist after build`,
+        },
       },
-    };
+      {
+        attempts_total: 1,
+        errors_total: { stage: 'build' },
+        duration_ms: Date.now() - start,
+        outcome: 'failure',
+      },
+      telemetryDelivery,
+    );
   }
 
   const plan = planPublish(repoRoot, det, buildRes, options.message);
   if (dryRun) {
-    if (!pf.ok) {
-      process.stderr.write(`docs publish [dry-run]: preflight would fail: ${pf.reason}\n`);
-    }
-    emitTelemetry({
-      attempts_total: 1,
-      duration_ms: Date.now() - start,
-      outcome: 'dry_run',
-    });
-    return { ok: true, dry_run: true, detect: det, build: { status: 0 }, plan };
+    return completeRun(
+      { ok: true, dry_run: true, detect: det, build: { status: 0 }, plan },
+      {
+        attempts_total: 1,
+        duration_ms: Date.now() - start,
+        outcome: 'dry_run',
+      },
+      telemetryDelivery,
+      pf.ok ? [] : [`docs publish [dry-run]: preflight would fail: ${pf.reason}`],
+    );
   }
 
   try {
     const result = publish(repoRoot, plan);
-    emitTelemetry({
-      attempts_total: 1,
-      duration_ms: Date.now() - start,
-      outcome: 'success',
-    });
-    return {
-      ok: true,
-      dry_run: false,
-      detect: det,
-      build: { status: 0 },
-      plan,
-      publish: result,
-    };
+    return completeRun(
+      {
+        ok: true,
+        dry_run: false,
+        detect: det,
+        build: { status: 0 },
+        plan,
+        publish: result,
+      },
+      {
+        attempts_total: 1,
+        duration_ms: Date.now() - start,
+        outcome: 'success',
+      },
+      telemetryDelivery,
+    );
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    emitTelemetry({
-      attempts_total: 1,
-      errors_total: { stage: 'publish' },
-      duration_ms: Date.now() - start,
-      outcome: 'failure',
-    });
-    return {
-      ok: false,
-      dry_run: false,
-      detect: det,
-      build: { status: 0 },
-      plan,
-      error: { stage: 'publish', message: msg },
-    };
+    return completeRun(
+      {
+        ok: false,
+        dry_run: false,
+        detect: det,
+        build: { status: 0 },
+        plan,
+        error: { stage: 'publish', message: msg },
+      },
+      {
+        attempts_total: 1,
+        errors_total: { stage: 'publish' },
+        duration_ms: Date.now() - start,
+        outcome: 'failure',
+      },
+      telemetryDelivery,
+    );
   }
 }
 
