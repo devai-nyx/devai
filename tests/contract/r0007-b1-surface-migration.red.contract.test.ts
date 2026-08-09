@@ -70,7 +70,7 @@ function parseMigrationRows(): readonly MigrationRow[] {
   for (const line of source.split('\n')) {
     const match = line.match(/^\| `([^`]+)`\s+\|\s*(.+?)\s*\|\s*$/u);
     if (match?.[1] === undefined || match[2] === undefined) continue;
-    const rawMigration = match[2].trim().replace(/\s+/gu, ' ');
+    const rawMigration = match[2].trim().replace(/\s+/gu, ' ').replaceAll('\\|', '|');
     rows.push({
       oldAction: match[1],
       rawMigration,
