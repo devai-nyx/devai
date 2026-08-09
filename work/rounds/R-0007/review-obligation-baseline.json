@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "round": "R-0007",
-  "authority_decision": "DII-256",
+  "authority_decision": "DII-258",
   "derivation": "independent-policy-baseline",
   "obligation_ids": [
     "R7-P0-AUTHORITY",
@@ -27,6 +27,7 @@
     "product/owner-mandates/OM-019.md",
     "product/owner-mandates/OM-020.md",
     "product/owner-mandates/OM-021.md",
+    "product/owner-mandates/OM-022.md",
     "work/rounds/EXECUTION-CONTRACT.md",
     "work/rounds/R-0007/AUTHORIZATION.md",
     "work/rounds/R-0007/plan.md",

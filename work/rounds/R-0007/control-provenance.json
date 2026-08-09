@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "round": "R-0007",
-  "root_decision": "DII-256",
+  "root_decision": "DII-258",
   "decision_register": "law/register/DECISIONS.md",
   "discovery_mode": {
     "decisions": "exact-register-transitive-from-root",
@@ -64,6 +64,16 @@
       "decision_id": "DII-256",
       "status": "active",
       "depends_on": ["DII-255"]
+    },
+    {
+      "decision_id": "DII-257",
+      "status": "active",
+      "depends_on": ["DII-256"]
+    },
+    {
+      "decision_id": "DII-258",
+      "status": "active",
+      "depends_on": ["DII-257"]
     }
   ],
   "owner_mandates": [
@@ -88,6 +98,11 @@
       "required_status": "active"
     },
     {
+      "mandate_id": "OM-018",
+      "path": "product/owner-mandates/OM-018.md",
+      "required_status": "active"
+    },
+    {
       "mandate_id": "OM-019",
       "path": "product/owner-mandates/OM-019.md",
       "required_status": "active"
@@ -100,6 +115,11 @@
     {
       "mandate_id": "OM-021",
       "path": "product/owner-mandates/OM-021.md",
+      "required_status": "active"
+    },
+    {
+      "mandate_id": "OM-022",
+      "path": "product/owner-mandates/OM-022.md",
       "required_status": "active"
     }
   ],
@@ -127,6 +147,7 @@
     "product/owner-mandates/OM-019.md",
     "product/owner-mandates/OM-020.md",
     "product/owner-mandates/OM-021.md",
+    "product/owner-mandates/OM-022.md",
     "work/rounds/EXECUTION-CONTRACT.md",
     "work/rounds/R-0007/AUTHORIZATION.md",
     "work/rounds/R-0007/plan.md",

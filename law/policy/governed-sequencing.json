@@ -878,6 +878,30 @@
   "historical_commit_exceptions": [
     {
       "round": "R-0007",
+      "implementation_commits": [
+        "4a2f8a448db576957ece984c9611a19383525be1",
+        "e173023f275614ad25001c84b70886ff3e85e7b1",
+        "036edf4e9d4031d8e44eb72ef33dfeaf9e944d4a",
+        "60b29f8d2442176592c136cc5e5720532304bc16",
+        "952b33ef7eeb28b00b54d07be860b8e17cb95200",
+        "a1860416252aee63830321025b966471f1c36380",
+        "3104ac789f00058e842fad2fac56646fa4f83664",
+        "e0ea48e456ba4b8f2121cf0841e1480c94584298",
+        "6cd45d09b4f09b4d566013e05cd521455100ddb2",
+        "3aac8173b9be76e94cfb7efedecd36adf116b62e",
+        "c0621d31c16ca59b388984d896c6fd196ea2ba4f",
+        "9fb02c3da078fd3af312482590d6da1c803a5b3d",
+        "ff076d203338c3d6b40108342e3ef25d9a4e785e",
+        "0763eb3c1bb393761f0e6fb9149d76252586a740",
+        "3ac6fc6f3d9069915326c3778c96318d23c51ab4",
+        "9717369fb0533a5c65380ff37dce420128bf2782",
+        "5c741cd5f3a8ecf6019cf61d34dee9e1d9e7de68",
+        "c951ccf1b88e85fd8cd3ca8b2c465208083336a7"
+      ],
+      "reason": "OM-022 exact history-preserving disposition after the B7 Auditor observed zero normal bindings and 109 implementation paths absent from the commits' parent-tree Inspector manifests. These commits do not satisfy the prospective rule. Engineer 9717369 precedes Inspector 1143a68, Engineer 5c741cd precedes Inspector 0dcea78, and Engineer c951ccf precedes Inspector 376f7e3; those are actual test-after-implementation inversions. The other members retain only their real prior law/red evidence, where present. History is not rewritten, no round-wide or prospective exception is granted, and every later Engineer commit remains subject to one prior Inspector manifest and one normal binding. Auditor evidence: work/audit/R-0007/as-built.md."
+    },
+    {
+      "round": "R-0007",
       "implementation_commits": ["775f47dbb592ddcf8dc53f0b65a6bb75cff23757"],
       "reason": "The R7-F012 repair under DII-253 was bound to the prospective Inspector red at 3e2a3e0, whose sources name scripts/run-round-close-controls.mjs and .devai/config/round-close-controls.json but not packages/schemas/src/roster.ts. The roster entry became necessary only because the repair added law/schemas/round-close-controls.schema.json, and the roster is an explicit bijection with that directory. The Auditor subset check against the Inspector implementation-path manifest detected the unnamed path, but ran after the commit rather than before it, so it reported the violation instead of preventing it. No forward repair conforms: a bound red must precede its implementation, and after the repair landed there is no honest failing observation left to record for a revert. History is not rewritten and this exact-commit disclosure grants no prospective exception. The subset check is being made an enforced control so this class cannot recur."
     },
