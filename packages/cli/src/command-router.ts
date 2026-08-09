@@ -313,6 +313,8 @@ export function invocationIsNonMutating(internalName: string, args: readonly str
   if (args.includes('--check')) return true;
   if (internalName === 'round-close' && args.includes('--post-merge-receipt')) return true;
   if (internalName === 'mutation-verify' && !args.includes('--save-baseline')) return true;
+  if (internalName === 'init-upgrade' && args.includes('--tier') && !args.includes('--write'))
+    return true;
   return (
     ['init', 'adopt', 'upgrade', 'ci-scaffold', 'hooks-install', 'state-prune'].includes(
       internalName,
