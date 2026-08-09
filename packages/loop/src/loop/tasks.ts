@@ -253,7 +253,7 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
       // Rollback worktree + locks.
       if (opts.withWorktree === true) {
         try {
-          destroyWorktree({ repoRoot: opts.repoRoot, id: worktreeId });
+          destroyWorktree({ repoRoot: opts.repoRoot, id: worktreeId, deleteBranch: true });
         } catch {
           // best-effort
         }
@@ -279,7 +279,7 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
     if (!dbRes.ok) {
       if (opts.withWorktree === true) {
         try {
-          destroyWorktree({ repoRoot: opts.repoRoot, id: worktreeId });
+          destroyWorktree({ repoRoot: opts.repoRoot, id: worktreeId, deleteBranch: true });
         } catch {
           // best-effort
         }

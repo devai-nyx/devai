@@ -4,6 +4,7 @@ import {
   lstatSync,
   mkdirSync,
   readFileSync,
+  realpathSync,
   rmSync,
   writeFileSync,
 } from '@devai-nyx/authority';
@@ -123,6 +124,7 @@ export function destroyWorktree(opts: {
   repoRoot: string;
   id: string;
   forceHumanAdopted?: boolean;
+  deleteBranch?: boolean;
 }): void {
   if (!/^WT-[A-Za-z0-9._-]+$/u.test(opts.id)) {
     throw new Error(`invalid managed worktree id: ${opts.id}`);
@@ -143,6 +145,7 @@ export function destroyWorktree(opts: {
     ) {
       throw new Error('WORKTREE_REGISTRY_PATH_INVALID');
     }
+    const canonicalRecordedPath = realpathSync(recordedPath);
     const registeredPaths = execFileSync('git', ['worktree', 'list', '--porcelain'], {
       cwd: opts.repoRoot,
       encoding: 'utf8',
@@ -151,7 +154,7 @@ export function destroyWorktree(opts: {
       .split('\n')
       .filter((line) => line.startsWith('worktree '))
       .map((line) => resolve(line.slice('worktree '.length)));
-    if (!registeredPaths.includes(recordedPath)) {
+    if (!registeredPaths.includes(canonicalRecordedPath)) {
       throw new Error('WORKTREE_GIT_REGISTRATION_MISSING');
     }
     try {
@@ -166,6 +169,12 @@ export function destroyWorktree(opts: {
       } catch {
         // give up
       }
+    }
+    if (opts.deleteBranch === true) {
+      execFileSync('git', ['branch', '-D', '--', record.branch], {
+        cwd: opts.repoRoot,
+        stdio: ['ignore', 'pipe', 'pipe'],
+      });
     }
   }
   registry.worktrees = registry.worktrees.filter((w) => w.id !== opts.id);
