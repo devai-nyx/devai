@@ -5135,6 +5135,77 @@ a review PASS.
 }
 ```
 
+### DII-258 — Repair the complete B7 pre-freeze class without widening R-0007
+`type: decision · status: active · authority: Architect · provenance: session-draft under direct Owner OM-022; OM-017; OM-018; OM-019; OM-021; DII-257; work/audit/R-0007/as-built.md`
+
+The B7 pre-freeze audit stops the opening candidate on eight complete classes. The repair is
+one governed continuation of R-0007, not a new round, a waiver, or permission to publish.
+OM-017 remains the sole reviewer authority and therefore the independent reviewer is literal
+`claude-opus-5` with fallback forbidden. OM-019 assigns narrative/site completion to R-0009
+and authenticated reuse, performance activation, and rollback to R-0008. R-0007 retains a
+canonical CLI/operator handoff and an implemented but disabled fail-closed validation
+foundation; it makes no site, activation, reuse, or saving claim.
+
+OM-022 authorizes exact historical disposition of only its 18 listed R-0007 Engineer commits.
+The canonical sequencing policy may name those immutable commits as exact historical
+exceptions, and the implementation-path-manifest checker may consume the same population.
+The record must preserve the Auditor's 109 missing path observations and the three actual
+test-after-implementation inversions. The exception means noncompliance is disclosed and
+history is not rewritten. It is never a normal binding, parent-tree manifest, prospective
+waiver, round-wide bypass, wildcard, or author-selected input. Every later Engineer commit
+remains subject to one prior Inspector manifest and one normal binding.
+
+OM-018's controller-decomposition deferral is discharged through five explicit concerns:
+
+1. `scripts/round-close-controls/runtime.mjs` owns deterministic serialization, hashing,
+   process/Git execution, candidate bytes, filesystem snapshots, and state I/O;
+2. `scripts/round-close-controls/legacy.mjs` owns the retained pre-v3 compatibility commands;
+3. `scripts/round-close-controls/impact.mjs` owns change discovery, graph closure, freshness,
+   and affected execution planning;
+4. `scripts/round-close-controls/governed.mjs` owns candidate-bound policy/profile loading,
+   claims, convergence, control provenance, and review-topic construction; and
+5. `scripts/round-close-controls/review-lifecycle.mjs` owns review state, transport,
+   authentication, repair evidence, terminal validation, and status.
+
+`scripts/run-round-close-controls.mjs` becomes a bootstrap and dispatch entrypoint only. Each
+top-level controller function belongs to exactly one concern module or the entrypoint, and
+the entrypoint contains no duplicated implementation of an extracted concern. Module imports
+must be static and repository-local. Dynamic evaluation, source concatenation, generated
+code, subprocess delegation back into the old monolith, and duplicated control literals are
+forbidden. Literal argv, candidate binding, persisted bytes, findings, exits, and human/JSON
+output remain byte- or semantic-equivalent as applicable. Existing full controller adversaries
+and a new module-boundary/end-to-end contract must pass before the extraction commits.
+
+The independent R7-F005 proof is a standalone Inspector program at
+`tests/contract/r0007-b7-independent-gates.proof.mjs`, deliberately outside every Vitest
+include pattern and every command in the sixteen-row roster. It reads the exact candidate's
+literal roster and, for each of all sixteen members, creates a different detached clone,
+performs a real offline frozen install, executes the argv without rewriting or injection,
+records its terminal exit and output digests, and verifies unchanged exact HEAD/tree/clean
+status. It continues through all rows after a failure. One sequential clone, shared generated
+outputs, a recursive test, a diagnostic timeout, or a smaller population proves less and is
+forbidden.
+
+The two B6 acceptance populations retain their original execution budgets: five seconds for
+the complete inventory-member runtime proof and 90 seconds for the complete canonical-example
+routing proof. Timeout inflation, worker or coverage-environment overrides, skipped members,
+coalesced invocations, cache substitution, and reduced populations are forbidden. Engineer
+may make the inventory execution share one invocation-scoped read snapshot across its
+extractors and may read each glossary source once per invocation. Engineer may also replace
+eager CLI handler loading with candidate-registry-first routing and lazy loading of only the
+selected canonical handler group, while preserving full registration whenever runtime help
+metadata is required. Lightweight package subpath exports may expose the already-public
+sensor registry and preset policy without changing their population. The canonical registry,
+authority/effect resolution, handler identity, argv translation, output/error envelopes,
+human and JSON help, subprocess coverage, and every example remain unchanged. Inspector must
+observe both original-budget cases under the coverage profile before the repair and green
+after it.
+
+The repair must preserve Auditor red before repair, Architect law before Engineer changes,
+prospective Inspector implementation-path manifests, role-pure commits, unchanged
+70/60/70/70 coverage floors, two fresh convergence passes, and a new exact-candidate audit
+and independent review. Any later semantic finding restarts convergence and review.
+
 ## Appendix — Register-consistency guard
 
 This is an implementation note, not an unnumbered decision. A mechanical check

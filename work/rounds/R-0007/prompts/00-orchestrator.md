@@ -52,6 +52,12 @@ Within an eligible wave, maximize safe parallelism using disjoint worktrees and 
 Do not begin an Engineer wave before the corresponding Inspector red and Architect
 setpoint are committed. Wave 4 must pass its focused executor gates before Wave 5
 consumes the substrate. Do not begin final review before documentation acceptance.
+If the Wave 9 pre-freeze audit reports a complete class, preserve the Auditor red and follow
+the DII-258 role order before convergence. In particular, the OM-022 exact historical
+disposition, controller decomposition, and standalone independent sixteen-command proof are
+Wave 9 prerequisites, not review findings that may be narrated away. The two B6
+coverage-profile cases must be repaired through bounded implementation performance inside
+their original five-second and 90-second budgets, never through timeout or proof widening.
 
 ## Global implementation setpoint
 
@@ -78,6 +84,8 @@ consumes the substrate. Do not begin final review before documentation acceptanc
 - Superseded PR feedback may cancel, but main, merge-queue, frozen-candidate, convergence, and
   round-close authoritative runs cannot.
 - A complete cold sentinel remains mandatory and one classifier false negative disables narrowing.
+- R-0007 leaves classified narrowing and cache acceleration disabled and makes no timing,
+  activation, or reuse claim. R-0008 owns paired activation evidence and rollback.
 
 ## Verification and close
 
@@ -86,7 +94,11 @@ population, migration map, suite/preset membership, executor/model-routing/evide
 contracts, canonical descriptor and migration-handoff coverage,
 links, generated parity, obsolete-vocabulary checks, GitHub feature dispositions, workflow
 security/DAG/cache contracts, classification adversaries, cold-sentinel failover, and paired
-critical-path evidence. Converge twice with a clean
+critical-path evidence only when it is in current-round scope. For R-0007, prove disabled
+fail-closed standing, the five-module DII-258 controller decomposition, and all 16 literal
+commands independently from different freshly installed detached clones outside every roster
+suite. Re-run both original-budget B6 coverage reds and the complete unchanged coverage
+population. Converge twice with a clean
 second pass, obtain independent exact-candidate review, and restart convergence/review
 after any repair.
 

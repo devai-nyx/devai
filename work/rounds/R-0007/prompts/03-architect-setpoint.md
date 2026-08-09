@@ -39,7 +39,8 @@ Spawn four `gpt-5.6-sol` agents at `xhigh`, each as Architect with disjoint path
 - Define event-specific fast/cold lanes and forbid cancellation of authoritative events.
 - Define the four commit-validation classes, exact derivation inputs, strictest-class rule,
   unknown widening, classifier bootstrap, sentinel comparison, automatic disablement, evidence
-  schema, and paired critical-path activation threshold.
+  schema, and disabled R-0007 standing. OM-019 assigns paired critical-path activation and
+  rollback to R-0008 under its own later authority.
 
 Do not write package implementation or tests. Any unresolved semantic choice blocks the
 Engineer wave.

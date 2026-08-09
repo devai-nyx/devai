@@ -28,7 +28,9 @@ a round can dispatch deterministic routines, LLM agents, human checkpoints, or g
 composites without conflating model capability with authority.
 Establish the GitHub Actions execution foundation and replace unconditional per-commit full
 regression with mechanically derived, fail-closed validation classes, while retaining a
-mandatory complete cold lane for frozen candidates and round close.
+mandatory complete cold lane for frozen candidates and round close. Under OM-019, R-0007
+leaves narrowing and cache acceleration disabled; R-0008 owns authentication, activation,
+paired performance evidence, and rollback.
 
 ## Owner-set product direction
 
@@ -121,10 +123,12 @@ classifier's predicted population with complete execution; one false negative di
 classified validation and restores the former complete floor until a governed repair closes
 the complete defect class.
 
-Activation requires paired current-workflow and candidate-workflow runs on the same exact
-source and runner class. Compare semantic populations before queue/setup/install/job/critical-
-path durations. A speed feature with no positive median critical-path saving and no separately
-proved security or operability benefit remains disabled.
+R-0007 does not activate narrowing or cache acceleration. It retains the complete fallback
+floor and records the implemented fail-closed foundation only. R-0008 must separately bind
+its trust root, then obtain paired current-workflow and candidate-workflow runs on the same
+exact source and runner class before any activation or wall-time claim. Semantic populations
+precede timing; a feature with no positive median critical-path saving and no separately proved
+security or operability benefit remains disabled.
 
 ## Target surface
 
@@ -198,19 +202,19 @@ must not infer these fields from `model_tier`, tags, prompts, worktrees, or prio
 
 ## Batches
 
-| Batch | Role                           | Work                                                                                                                                                                                                                                                | Commit gate                                                                          |
-| ----- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| B0    | Owner + Auditor                | Record only the granted mandate; inventory current surface, version standing, terminology, consumers, and defects                                                                                                                                   | No implementation; exact baseline and authority                                      |
-| B1    | Inspector                      | Commit red contracts for population, migration, help, vocabulary, suites, presets, round-task containment, executors, model routing, effects, output totality, Actions security/DAG/cache behavior, and validation classification                   | Reds prove admitted defects without weakening prior evidence                         |
-| B2    | Architect                      | Decide CLI IA, registry dispositions, schemas, suite/preset descriptors, task-round/executor model, model/runtime registry, execution evidence, GitHub Actions feature dispositions, validation classes, and documentation information architecture | One canonical meaning for every public term, enumeration, and CI validation decision |
-| B3A   | Engineer                       | Implement the typed executor substrate, registry resolver, four executor adapters/boundaries, legacy refusal, and requested/resolved execution evidence                                                                                             | Focused executor contracts pass; no implicit fallback or authority widening          |
-| B3B   | Engineer                       | Implement registry/router/help plus init, check, sense, round/task, evidence, and release façades in parallel role-pure worktrees                                                                                                                   | Round/CLI consumes B3A; no shelling through retired routes; generated views exact    |
-| B3C   | Engineer                       | Implement classified validation and GitHub Actions foundation: cache-safe setup, reusable workflow plumbing, semantic DAG/concurrency, reports/artifacts, telemetry, and cold sentinel                                                              | Cache never grants PASS; classifier fails closed; cold lane retains complete proof   |
-| B4    | Inspector                      | Verify all retained/historical routes, façade behavior, executor dispatch, model routing, effect authority, suite/preset membership, task containment, and source/binary parity                                                                     | Complete executable population; no silent skips                                      |
-| B5    | Architect                      | Produce canonical machine descriptors and minimum migration/operator material consumed by R-0009                                                                                                                                                    | No duplicated mutable enumeration                                                    |
-| B6    | Inspector                      | Run descriptor, migration, example, obsolete-vocabulary, model-roster, and generated-byte acceptance                                                                                                                                                | Canonical material matches runtime and policy exactly                                |
-| B7    | Auditor + independent reviewer | Audit complete classes, converge twice, review exact candidate, and record honest pre-RC/non-release result                                                                                                                                         | Every topic dispositioned; any repair restarts convergence/review                    |
-| B8    | Architect + machine verb       | Close only through the then-authorized ceremony                                                                                                                                                                                                     | No inferred publication, readiness, or release claim                                 |
+| Batch | Role                                                              | Work                                                                                                                                                                                                                                                                                                                                                                                                             | Commit gate                                                                                                                        |
+| ----- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| B0    | Owner + Auditor                                                   | Record only the granted mandate; inventory current surface, version standing, terminology, consumers, and defects                                                                                                                                                                                                                                                                                                | No implementation; exact baseline and authority                                                                                    |
+| B1    | Inspector                                                         | Commit red contracts for population, migration, help, vocabulary, suites, presets, round-task containment, executors, model routing, effects, output totality, Actions security/DAG/cache behavior, and validation classification                                                                                                                                                                                | Reds prove admitted defects without weakening prior evidence                                                                       |
+| B2    | Architect                                                         | Decide CLI IA, registry dispositions, schemas, suite/preset descriptors, task-round/executor model, model/runtime registry, execution evidence, GitHub Actions feature dispositions, validation classes, and documentation information architecture                                                                                                                                                              | One canonical meaning for every public term, enumeration, and CI validation decision                                               |
+| B3A   | Engineer                                                          | Implement the typed executor substrate, registry resolver, four executor adapters/boundaries, legacy refusal, and requested/resolved execution evidence                                                                                                                                                                                                                                                          | Focused executor contracts pass; no implicit fallback or authority widening                                                        |
+| B3B   | Engineer                                                          | Implement registry/router/help plus init, check, sense, round/task, evidence, and release façades in parallel role-pure worktrees                                                                                                                                                                                                                                                                                | Round/CLI consumes B3A; no shelling through retired routes; generated views exact                                                  |
+| B3C   | Engineer                                                          | Implement classified validation and GitHub Actions foundation: cache-safe setup, reusable workflow plumbing, semantic DAG/concurrency, reports/artifacts, telemetry, and cold sentinel                                                                                                                                                                                                                           | Cache never grants PASS; classifier fails closed; cold lane retains complete proof                                                 |
+| B4    | Inspector                                                         | Verify all retained/historical routes, façade behavior, executor dispatch, model routing, effect authority, suite/preset membership, task containment, and source/binary parity                                                                                                                                                                                                                                  | Complete executable population; no silent skips                                                                                    |
+| B5    | Architect                                                         | Produce canonical machine descriptors and minimum migration/operator material consumed by R-0009                                                                                                                                                                                                                                                                                                                 | No duplicated mutable enumeration                                                                                                  |
+| B6    | Inspector                                                         | Run descriptor, migration, example, obsolete-vocabulary, model-roster, and generated-byte acceptance                                                                                                                                                                                                                                                                                                             | Canonical material matches runtime and policy exactly                                                                              |
+| B7    | Auditor + Inspector + Architect + Engineer + independent reviewer | Audit complete classes; repair the exact OM-022 historical exception consumer; decompose the close controller by DII-258; repair both B6 coverage-profile cases within their original 5-second and 90-second budgets; execute the non-reentrant independent 16-command proof; align stale OM-017/OM-019 close inputs; converge twice; review the exact candidate; and record an honest pre-RC/non-release result | Every topic dispositioned; any repair restarts convergence/review; no timeout inflation, activation, reuse, site, or savings claim |
+| B8    | Architect + machine verb                                          | Close only through the then-authorized ceremony                                                                                                                                                                                                                                                                                                                                                                  | No inferred publication, readiness, or release claim                                                                               |
 
 ## Canonical reference handoff to R-0009
 
@@ -280,7 +284,14 @@ site integration, links, and final user-facing completeness.
 - Governance-text commits do not run unconditional full Vitest; runtime/law uncertainty widens;
   candidate-and-close executes the complete active cold profile.
 - The cold sentinel detects seeded classifier omissions and automatically disables narrowing.
-- Paired evidence proves equal semantic populations before any CI wall-time claim.
+- R-0007 leaves classified narrowing and dependency-cache acceleration disabled and makes no
+  CI wall-time claim; paired activation evidence remains an R-0008 obligation.
+- The close controller is decomposed into the five DII-258 concern modules without changing
+  literal argv, candidate identity, persisted state, result, or exit semantics.
+- The complete B6 inventory and canonical-example acceptance populations pass under the
+  coverage profile inside their unchanged five-second and 90-second budgets.
+- All 16 authoritative commands pass independently in different freshly installed detached
+  clones, outside every suite that the roster itself invokes.
 - The R-0009 handoff contains enough canonical semantics to explain every enumeration without copying a mutable list.
 - All action envelopes, error envelopes, authority refusals, and aggregate exits are total.
 - All unchanged 70/60/70/70 coverage floors remain green.
@@ -299,6 +310,8 @@ external publication without its separate grant.
 ## Claim ceiling
 
 Completion establishes a simplified pre-RC CLI/executor contract and canonical reference
-handoff plus a measured, fail-closed GitHub Actions and commit-validation foundation. It does
-not establish authenticated result reuse (R-0008), complete user documentation, site readiness, release,
-deployment, production readiness, autonomous readiness, or evidence promotion.
+handoff plus an implemented, disabled, fail-closed GitHub Actions and commit-validation
+foundation. It does not establish authenticated result reuse, validation/cache activation,
+paired performance standing or rollback (R-0008), complete user documentation or site
+readiness (R-0009), release, deployment, production readiness, autonomous readiness, or
+evidence promotion.
