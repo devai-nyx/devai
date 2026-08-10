@@ -32,12 +32,10 @@
   "devDependencies": {
     "vitest": "^4.0.18"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/devai-nyx/devai.git",
     "directory": "packages/effects-check"
-  }
+  },
+  "private": true
 }

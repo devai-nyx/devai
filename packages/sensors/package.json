@@ -58,7 +58,5 @@
     "@types/pg": "^8.11.0",
     "vitest": "^4.0.18"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  }
+  "private": true
 }

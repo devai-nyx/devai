@@ -28,12 +28,10 @@
   "dependencies": {
     "minimatch": "^9.0.0"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/devai-nyx/devai.git",
     "directory": "packages/utils"
-  }
+  },
+  "private": true
 }
