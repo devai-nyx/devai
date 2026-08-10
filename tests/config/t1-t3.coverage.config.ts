@@ -1,7 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vitest/config';
-import { evidencePreservingProjects } from '../../vitest.scheduler.js';
 
 interface ThresholdPolicy {
   coverage: {
@@ -30,14 +29,10 @@ const COVERAGE_INCLUDE = [
 
 export default defineConfig({
   test: {
-    name: 'T1 + T3 merged coverage',
+    name: 'RC merged coverage',
     environment: 'node',
     testTimeout: 15_000,
-    projects: evidencePreservingProjects({
-      ordinaryName: 'coverage-parallel',
-      serializedName: 'coverage-detached-candidate-serial',
-      include: COVERAGE_INCLUDE,
-    }),
+    include: [...COVERAGE_INCLUDE],
     passWithNoTests: false,
     coverage: {
       provider: 'custom',

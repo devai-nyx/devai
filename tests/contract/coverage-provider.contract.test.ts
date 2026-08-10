@@ -1,4 +1,3 @@
-// Invariants: INV-DEVAI-001, INV-DEVAI-014, INV-DEVAI-017
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -114,7 +113,7 @@ function fixtureCoverage(outerHit: number, innerHit: number): CoverageData {
   };
 }
 
-describe('R-0006 coverage measurement integrity', () => {
+describe('subprocess coverage measurement integrity', () => {
   it('does not project an enclosing hit onto an exact zero-hit statement or function', async () => {
     const provider = (await import('../config/subprocess-v8-coverage-provider.js')) as unknown as {
       mergeCanonicalHits?: (current: FixtureCoverageMap, subprocess: FixtureCoverageMap) => void;
@@ -292,7 +291,7 @@ describe('R-0006 coverage measurement integrity', () => {
       retainSubprocessCoverageInputs?: (source: string, evidence: string) => Promise<number>;
     };
     expect(provider.retainSubprocessCoverageInputs).toBeTypeOf('function');
-    const root = mkdtempSync(join(tmpdir(), 'devai-r0006-coverage-retention-'));
+    const root = mkdtempSync(join(tmpdir(), 'devai-coverage-retention-'));
     temporaryDirectories.push(root);
     const source = join(root, 'source');
     const evidence = join(root, 'evidence');
