@@ -1,0 +1,149 @@
+#!/usr/bin/env node
+
+import { execFileSync } from 'node:child_process';
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+
+const packageRoot = resolve(import.meta.dirname, '..');
+const smokeRoot = mkdtempSync(join(tmpdir(), 'devai-installed-tarball-smoke-'));
+const packRoot = join(smokeRoot, 'pack');
+const projectRoot = join(smokeRoot, 'project');
+
+function run(command, args, cwd = projectRoot) {
+  return execFileSync(command, args, {
+    cwd,
+    encoding: 'utf8',
+    env: { ...process.env, NO_COLOR: '1' },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+}
+
+function filesUnder(root) {
+  return readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(root, entry.name);
+    return entry.isDirectory() ? filesUnder(path) : [path];
+  });
+}
+
+try {
+  mkdirSync(packRoot, { recursive: true });
+  mkdirSync(projectRoot, { recursive: true });
+  const packed = JSON.parse(
+    run('pnpm', ['pack', '--json', '--pack-destination', packRoot], packageRoot),
+  );
+  const tarball = packed?.filename;
+  if (typeof tarball !== 'string') throw new Error('PACK_TARBALL_MISSING');
+
+  run('pnpm', ['init'], projectRoot);
+  run('pnpm', ['add', '--offline', resolve(packageRoot, tarball)], projectRoot);
+  const binary = join(projectRoot, 'node_modules/.bin/devai');
+  const installedPackage = join(projectRoot, 'node_modules/@devai-nyx/cli');
+
+  const version = run(binary, ['--version']).trim();
+  if (!version.startsWith('devai/1.0.0 ')) {
+    throw new Error(`INSTALLED_VERSION_INVALID:${version}`);
+  }
+  const help = run(binary, ['--help']);
+  if (!help.includes('Usage: devai <command>')) throw new Error('INSTALLED_HELP_INVALID');
+
+  const pinRoot = join(projectRoot, '.devai/pin');
+  mkdirSync(pinRoot, { recursive: true });
+  copyFileSync(
+    join(installedPackage, 'dist/runtime/law/constitution.md'),
+    join(pinRoot, 'constitution.md'),
+  );
+
+  const envelope = JSON.parse(run(binary, ['catalog', 'actions', '--format', 'json']));
+  const actions = envelope?.result?.value;
+  if (!Array.isArray(actions) || actions.length !== 41) {
+    throw new Error(`INSTALLED_CATALOG_INVALID:${String(actions?.length)}`);
+  }
+
+  const representatives = [
+    ['catalog', 'actions'],
+    ['check'],
+    ['doctor'],
+    ['evidence', 'verify'],
+    ['init', 'plan'],
+    ['release', 'status'],
+    ['round', 'status'],
+    ['sense', 'inventory'],
+    ['task', 'status'],
+  ];
+  for (const action of representatives) {
+    const output = run(binary, [...action, '--help']);
+    if (!output.includes(`Usage: devai ${action.join(' ')}`)) {
+      throw new Error(`INSTALLED_DOMAIN_HELP_INVALID:${action.join(' ')}`);
+    }
+  }
+
+  const packageJson = JSON.parse(readFileSync(join(installedPackage, 'package.json'), 'utf8'));
+  const dependencyNames = Object.keys(packageJson.dependencies ?? {});
+  if (dependencyNames.some((name) => name.startsWith('@devai-nyx/'))) {
+    throw new Error('INSTALLED_DEVAI_RUNTIME_DEPENDENCY');
+  }
+  if (JSON.stringify(packageJson).includes('workspace:*')) {
+    throw new Error('INSTALLED_WORKSPACE_PROTOCOL');
+  }
+
+  const recipes = filesUnder(join(installedPackage, 'dist/resources/recipes')).filter((path) =>
+    path.endsWith('/SKILL.md'),
+  );
+  const templates = filesUnder(
+    join(installedPackage, 'dist/resources/operations/scaffold/templates'),
+  );
+  const schemas = filesUnder(join(installedPackage, 'dist/runtime/index/schemas'));
+  const requiredAssets = [
+    'dist/law/policy/action-registry.json',
+    'dist/law/policy/authority-policy.json',
+    'dist/law/policy/sensor-registry.json',
+    'dist/runtime/index/round-execution.json',
+    'dist/runtime/index/sense-presets.json',
+    'dist/runtime/index/sensor-registry.json',
+    'dist/runtime/law/constitution.md',
+  ];
+  if (recipes.length !== 7) throw new Error(`INSTALLED_RECIPE_COUNT_INVALID:${recipes.length}`);
+  if (templates.length !== 19) {
+    throw new Error(`INSTALLED_TEMPLATE_COUNT_INVALID:${templates.length}`);
+  }
+  if (requiredAssets.some((path) => !existsSync(join(installedPackage, path)))) {
+    throw new Error('INSTALLED_RUNTIME_ASSET_MISSING');
+  }
+  if (
+    existsSync(join(installedPackage, 'dist/runtime/index/schemas/predecessor-archive')) ||
+    existsSync(join(installedPackage, 'dist/runtime/index/schemas/REGEN-STATUS.md'))
+  ) {
+    throw new Error('INSTALLED_HISTORY_SCHEMA_PRESENT');
+  }
+
+  const tarballPath = resolve(packageRoot, tarball);
+  const installedFiles = filesUnder(installedPackage);
+
+  process.stdout.write(
+    JSON.stringify({
+      tarball: tarballPath,
+      tarball_bytes: statSync(tarballPath).size,
+      packed_files: packed.files?.length,
+      installed_bytes: installedFiles.reduce((total, path) => total + statSync(path).size, 0),
+      version,
+      actions: actions.length,
+      domains: representatives.length,
+      recipes: recipes.length,
+      templates: templates.length,
+      schemas: schemas.length,
+      runtime_dependencies: dependencyNames.sort(),
+    }) + '\n',
+  );
+} finally {
+  rmSync(smokeRoot, { recursive: true, force: true });
+}

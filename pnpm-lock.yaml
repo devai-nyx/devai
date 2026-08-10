@@ -64,33 +64,9 @@ importers:
 
   packages/cli:
     dependencies:
-      '@devai-nyx/authority':
-        specifier: workspace:*
-        version: link:../authority
-      '@devai-nyx/effects-check':
-        specifier: workspace:*
-        version: link:../effects-check
-      '@devai-nyx/evidence':
-        specifier: workspace:*
-        version: link:../evidence
-      '@devai-nyx/loop':
-        specifier: workspace:*
-        version: link:../loop
-      '@devai-nyx/schemas':
-        specifier: workspace:*
-        version: link:../schemas
-      '@devai-nyx/sensors':
-        specifier: workspace:*
-        version: link:../sensors
-      '@devai-nyx/skills':
-        specifier: workspace:*
-        version: link:../skills
-      '@devai-nyx/spec':
-        specifier: workspace:*
-        version: link:../spec
-      '@devai-nyx/utils':
-        specifier: workspace:*
-        version: link:../utils
+      '@anthropic-ai/sdk':
+        specifier: ^0.91.1
+        version: 0.91.1
       ajv:
         specifier: ^8.17.0
         version: 8.20.0
@@ -100,31 +76,22 @@ importers:
       cac:
         specifier: ^6.7.0
         version: 6.7.14
-      istanbul-lib-coverage:
-        specifier: ^3.2.2
-        version: 3.2.2
-    devDependencies:
-      '@types/istanbul-lib-coverage':
-        specifier: ^2.0.6
-        version: 2.0.6
-      '@types/node':
-        specifier: ^24.0.0
-        version: 24.13.3
+      minimatch:
+        specifier: ^9.0.0
+        version: 9.0.9
+      openai:
+        specifier: ^4.65.0
+        version: 4.104.0
+      pg:
+        specifier: ^8.13.0
+        version: 8.22.0
       typescript:
         specifier: ^5.6.0
         version: 5.9.3
-      vitest:
-        specifier: ^4.0.18
-        version: 4.1.10(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@24.13.3)(yaml@2.9.0))
-
-  packages/core:
-    dependencies:
+    devDependencies:
       '@devai-nyx/authority':
         specifier: workspace:*
         version: link:../authority
-      '@devai-nyx/cli':
-        specifier: workspace:*
-        version: link:../cli
       '@devai-nyx/effects-check':
         specifier: workspace:*
         version: link:../effects-check
@@ -149,6 +116,21 @@ importers:
       '@devai-nyx/utils':
         specifier: workspace:*
         version: link:../utils
+      '@types/istanbul-lib-coverage':
+        specifier: ^2.0.6
+        version: 2.0.6
+      '@types/node':
+        specifier: ^24.0.0
+        version: 24.13.3
+      istanbul-lib-coverage:
+        specifier: ^3.2.2
+        version: 3.2.2
+      rolldown:
+        specifier: 1.1.5
+        version: 1.1.5
+      vitest:
+        specifier: ^4.0.18
+        version: 4.1.10(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@24.13.3)(yaml@2.9.0))
 
   packages/effects-check:
     dependencies:
@@ -1852,7 +1834,7 @@ snapshots:
       obug: 2.1.4
       std-env: 4.2.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.10(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@24.13.3)(yaml@2.9.0))
+      vitest: 4.1.10(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(yaml@2.9.0))
 
   '@vitest/expect@4.1.10':
     dependencies:

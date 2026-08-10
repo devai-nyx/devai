@@ -3,6 +3,9 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
+    "paths": {
+      "#core-compat": ["./src/core-compat.ts"]
+    },
     "types": ["node"]
   },
   "include": ["src/**/*"],
