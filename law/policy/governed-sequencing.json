@@ -873,6 +873,46 @@
         "tests": ["tests/contract/pre-r0007-scheduler-serialization.red.contract.test.ts"],
         "exercised_implementation_paths": ["vitest.scheduler.ts"]
       }
+    },
+    {
+      "round": "R-0007",
+      "implementation_commits": ["c77508c9554062cfb01a379a2b5ef45100e01303"],
+      "law_commits": ["df26f231e4914736bca1fc32a96ac3a2b624f5a8"],
+      "red_evidence": {
+        "commit": "7d884232bc50bc9f82dd456fac2574b29ef768c3",
+        "observed_exit": 1,
+        "command": "pnpm vitest run tests/contract/r0007-b7-historical-exception.red.contract.test.ts tests/contract/governed-sequencing.contract.test.ts tests/contract/r0007-b7-controller-decomposition.red.contract.test.ts tests/contract/r0007-ci-acceleration.red.contract.test.ts tests/contract/r0007-b6-enumeration-parity-runtime-structure.contract.test.ts",
+        "evidence_path": "work/audit/R-0007/b7-repair-red-evidence.json",
+        "evidence_sha256": "135fb6e98ba055ca195d47beee51c64baa8fd739dc56d4c983201fe6418c115a",
+        "tests": [
+          "tests/contract/r0007-b7-historical-exception.red.contract.test.ts",
+          "tests/contract/governed-sequencing.contract.test.ts",
+          "tests/contract/r0007-b7-controller-decomposition.red.contract.test.ts",
+          "tests/contract/r0007-ci-acceleration.red.contract.test.ts",
+          "tests/contract/r0007-b6-enumeration-parity-runtime-structure.contract.test.ts",
+          "tests/contract/r0007-b7-historical-exception.implementation-paths.json",
+          "tests/contract/r0007-b7-controller-decomposition.implementation-paths.json",
+          "tests/contract/r0007-b7-original-budget-performance.implementation-paths.json"
+        ],
+        "exercised_implementation_paths": [
+          "scripts/check-governed-sequencing.mjs",
+          "scripts/check-implementation-path-manifest.mjs",
+          "scripts/run-round-close-controls.mjs",
+          "scripts/round-close-controls/runtime.mjs",
+          "scripts/round-close-controls/legacy.mjs",
+          "scripts/round-close-controls/impact.mjs",
+          "scripts/round-close-controls/governed.mjs",
+          "scripts/round-close-controls/review-lifecycle.mjs",
+          "packages/cli/src/bin.ts",
+          "packages/cli/src/command-router.ts",
+          "packages/cli/src/commands/sense/facade.ts",
+          "packages/cli/src/commands/sense/inventory.ts",
+          "packages/sensors/package.json",
+          "packages/loop/src/inventory/walker.ts",
+          "packages/loop/src/inventory/ts-ast.ts",
+          "packages/loop/src/inventory/glossary-coverage.ts"
+        ]
+      }
     }
   ],
   "historical_commit_exceptions": [
