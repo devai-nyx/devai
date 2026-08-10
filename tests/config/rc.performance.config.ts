@@ -2,9 +2,12 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    name: 'T4 regression',
+    name: 'RC performance',
     environment: 'node',
-    include: ['tests/regression/**/*.test.ts'],
+    include: [
+      'tests/e2e/inventory-sensors.smoke.test.ts',
+      'tests/regression/**/*.test.ts',
+    ],
     passWithNoTests: false,
   },
 });

@@ -2,9 +2,10 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    name: 'T5 smoke / E2E',
+    name: 'RC E2E',
     environment: 'node',
     include: ['tests/e2e/**/*.test.ts'],
+    exclude: ['**/node_modules/**', '**/dist/**', 'tests/e2e/inventory-sensors.smoke.test.ts'],
     passWithNoTests: false,
   },
 });

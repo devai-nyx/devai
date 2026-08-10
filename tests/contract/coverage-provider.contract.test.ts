@@ -280,7 +280,7 @@ describe('subprocess coverage measurement integrity', () => {
   });
 
   it('configures an auditable statement-level coverage artifact', async () => {
-    const config = (await import('../config/t1-t3.coverage.config.js')).default as {
+    const config = (await import('../config/rc.coverage.config.js')).default as {
       test?: { coverage?: { reporter?: string[] } };
     };
     expect(config.test?.coverage?.reporter).toContain('json');
