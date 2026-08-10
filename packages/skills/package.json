@@ -1,7 +1,7 @@
 {
   "name": "@devai-nyx/skills",
   "version": "1.0.0",
-  "description": "DEVAI skills, LLM clients, prompt firewall, bootstrap, and post-merge services.",
+  "description": "Private DEVAI recipe, operation, model-bridge, bootstrap, and post-merge services.",
   "license": "Apache-2.0",
   "author": "Antonio Augusto Russo <aarusso@nyxk.com.br>",
   "type": "module",
@@ -25,10 +25,10 @@
   "files": [
     "dist",
     "src",
-    "prompts"
+    "resources"
   ],
   "scripts": {
-    "build": "tsc -b && node scripts/copy-constitution.mjs && node scripts/copy-policy.mjs && node scripts/copy-prompts.mjs",
+    "build": "tsc -b && node scripts/copy-constitution.mjs && node scripts/copy-policy.mjs",
     "clean": "tsc -b --clean",
     "test": "vitest run tests"
   },
