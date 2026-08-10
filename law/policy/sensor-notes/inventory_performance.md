@@ -9,13 +9,12 @@ sensor_kind: inventory_performance
 emitter: packages/sensors/src/inventory-performance.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Inventory Performance
 
-This note binds the successor-local design standing for `inventory_performance`. Its canonical emitter
-is `packages/sensors/src/inventory-performance.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `inventory_performance`. Its canonical emitter
+is `packages/sensors/src/inventory-performance.ts`.
 
 Bound cells: F4×T7.
 

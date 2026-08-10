@@ -147,7 +147,7 @@ or renderer, never the bytes between markers.
 - **User-facing label:** Anthropic claude-opus-5
 - **Purpose:** Select the exact rostered `claude-opus-5` model through `claude-cli`.
 - **Population or projection:** Runtime `claude-cli`; vendor/family `Anthropic`/`claude`; adapter `claude-cli-adapter`; identifier kind `exact`; efforts `default`; capabilities `text-generation`, `structured-output-best-effort`, `repository-context`; eligible classes `coding-agent`, `review-agent`, `ops-agent`; available `true`; replacement `none`.
-- **Prerequisites:** Owner-bound exact R-0007 selector; host identity and availability remain mandatory preflights; runtime adapter and provider/host preflight remain mandatory.
+- **Prerequisites:** exact host selector; host identity and availability remain mandatory preflights; runtime adapter and provider/host preflight remain mandatory.
 - **Required external tools:** The `claude-cli` runtime adapter and its declared credential or host session.
 - **Accepted inputs:** An `exact`, explicit `preferred`, or named-versioned `policy` selection that includes `claude-cli:claude-opus-5`, one of `default`, and supported capabilities.
 - **Defaults:** No implicit latest version, alias, effort, or fallback.
@@ -195,7 +195,7 @@ or renderer, never the bytes between markers.
 - **User-facing label:** OpenAI gpt-5.6-sol
 - **Purpose:** Select the exact rostered `gpt-5.6-sol` model through `codex-cli`.
 - **Population or projection:** Runtime `codex-cli`; vendor/family `OpenAI`/`codex`; adapter `codex-cli-adapter`; identifier kind `exact`; efforts `low`, `medium`, `high`, `xhigh`, `max`, `ultra`; capabilities `text-generation`, `structured-output`, `repository-context`; eligible classes `coding-agent`, `review-agent`, `ops-agent`; available `true`; replacement `none`.
-- **Prerequisites:** exact model used by the committed R-0007 role prompts; host identity is rechecked before invocation; runtime adapter and provider/host preflight remain mandatory.
+- **Prerequisites:** exact configured model; host identity is rechecked before invocation; runtime adapter and provider/host preflight remain mandatory.
 - **Required external tools:** The `codex-cli` runtime adapter and its declared credential or host session.
 - **Accepted inputs:** An `exact`, explicit `preferred`, or named-versioned `policy` selection that includes `codex-cli:gpt-5.6-sol`, one of `low`, `medium`, `high`, `xhigh`, `max`, `ultra`, and supported capabilities.
 - **Defaults:** No implicit latest version, alias, effort, or fallback.

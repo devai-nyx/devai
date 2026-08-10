@@ -257,7 +257,7 @@ export function buildTrustedAuthoritySources(
       subjects: human('architect'),
       rationale: 'Article 6 Architect reference authority.',
     }),
-    ...['law', 'law/**', 'work/rounds', 'work/rounds/**'].map((path, index) =>
+    ...['law', 'law/**'].map((path, index) =>
       rule({
         id: `core-architect-governance-${String(index + 1)}`,
         origin: 'immutable-core',
@@ -265,18 +265,7 @@ export function buildTrustedAuthoritySources(
         actionIds: groups.architect,
         selector: fsSelector(repositoryId, path),
         subjects: human('architect'),
-        rationale: 'Article 6 Architect successor law and governed-round authority.',
-      }),
-    ),
-    ...['work/audit', 'work/audit/**'].map((path, index) =>
-      rule({
-        id: `core-auditor-governed-observation-${String(index + 1)}`,
-        origin: 'immutable-core',
-        precedence: 750,
-        actionIds: groups.auditor,
-        selector: fsSelector(repositoryId, path),
-        subjects: human('auditor'),
-        rationale: 'Article 6 Auditor governed observation authority.',
+        rationale: 'Article 6 Architect law authority.',
       }),
     ),
     rule({
@@ -600,7 +589,7 @@ export function buildTrustedAuthoritySources(
         actionIds: groups.architect,
         selector: fsSelector(repositoryId, path),
         subjects: human('architect'),
-        rationale: 'DEVAI-self Architect governance authority.',
+        rationale: 'DEVAI source Architect authority.',
       }),
     ),
     rule({
@@ -610,7 +599,7 @@ export function buildTrustedAuthoritySources(
       actionIds: ['sense migrate'],
       selector: dbSelector(),
       subjects: human('engineer'),
-      rationale: 'R-0007 typed db authority for sense migrate.',
+      rationale: 'Typed database authority for sense migrate.',
     }),
     rule({
       id: 'self-remote-sense-run-1',
@@ -626,7 +615,7 @@ export function buildTrustedAuthoritySources(
       },
       subjects: [machineSubject('harness')],
       consent: { write: true, allow_publish: true, experimental: false },
-      rationale: 'R-0007 typed remote authority for sense run.',
+      rationale: 'Typed remote authority for sense run.',
     }),
     rule({
       id: 'self-db-task-finish-1',
@@ -635,7 +624,7 @@ export function buildTrustedAuthoritySources(
       actionIds: ['task finish'],
       selector: dbSelector(),
       subjects: [harnessSubject(['engineer'])],
-      rationale: 'R-0007 typed db authority for task finish.',
+      rationale: 'Typed database authority for task finish.',
     }),
   ]);
 

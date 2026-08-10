@@ -9,13 +9,12 @@ sensor_kind: harness_idiomaticity
 emitter: packages/sensors/src/harness-idiomaticity.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Harness Idiomaticity
 
-This note binds the successor-local design standing for `harness_idiomaticity`. Its canonical emitter
-is `packages/sensors/src/harness-idiomaticity.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `harness_idiomaticity`. Its canonical emitter
+is `packages/sensors/src/harness-idiomaticity.ts`.
 
 Bound cells: F5×T5.
 

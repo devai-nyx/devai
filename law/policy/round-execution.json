@@ -4,7 +4,6 @@
   "id": "round-execution",
   "status": "active",
   "authority": "Architect",
-  "decision": "ADR-022",
   "task_contract": {
     "schema": "law/schemas/task.schema.json",
     "required_schema_version": "2.0.0",

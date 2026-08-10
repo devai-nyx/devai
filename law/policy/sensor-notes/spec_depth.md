@@ -9,13 +9,12 @@ sensor_kind: spec_depth
 emitter: packages/sensors/src/spec-depth.ts
 standing: cell
 tiers: [TIER2, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Spec Depth
 
-This note binds the successor-local design standing for `spec_depth`. Its canonical emitter
-is `packages/sensors/src/spec-depth.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `spec_depth`. Its canonical emitter
+is `packages/sensors/src/spec-depth.ts`.
 
 Bound cells: F1×T2.
 

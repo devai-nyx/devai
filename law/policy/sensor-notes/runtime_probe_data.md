@@ -9,13 +9,12 @@ sensor_kind: runtime_probe_data
 emitter: packages/sensors/src/runtime-probe-data.ts
 standing: diagnostic
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Runtime Probe Data
 
-This note binds the successor-local design standing for `runtime_probe_data`. Its canonical emitter
-is `packages/sensors/src/runtime-probe-data.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `runtime_probe_data`. Its canonical emitter
+is `packages/sensors/src/runtime-probe-data.ts`.
 
 Diagnostic-only; no cell binding.
 

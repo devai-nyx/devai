@@ -9,13 +9,12 @@ sensor_kind: spec_idiomaticity
 emitter: packages/sensors/src/spec-idiomaticity.ts
 standing: cell
 tiers: [TIER3, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Spec Idiomaticity
 
-This note binds the successor-local design standing for `spec_idiomaticity`. Its canonical emitter
-is `packages/sensors/src/spec-idiomaticity.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `spec_idiomaticity`. Its canonical emitter
+is `packages/sensors/src/spec-idiomaticity.ts`.
 
 Bound cells: F1×T5.
 

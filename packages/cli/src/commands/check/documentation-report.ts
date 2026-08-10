@@ -13,9 +13,7 @@ export interface DocumentationCategoryResult {
 }
 
 export interface CanonicalDescriptorHandoffReport {
-  readonly scope: 'r0007-canonical-descriptor-handoff';
-  readonly narrative_documentation_complete: false;
-  readonly deploy_ready_site: false;
+  readonly scope: 'current-canonical-descriptors';
   readonly categories: Readonly<Record<string, DocumentationCategoryResult>>;
 }
 
@@ -204,14 +202,6 @@ export function buildCanonicalDescriptorHandoffReport(
   repoRoot: string,
 ): CanonicalDescriptorHandoffReport {
   const architecture = json(repoRoot, 'law/policy/documentation-information-architecture.json');
-  const claim = architecture['claim_ceiling'] as JsonRecord;
-  if (
-    claim['canonical_descriptor_handoff'] !== true ||
-    claim['narrative_documentation_complete'] !== false ||
-    claim['deploy_ready_site'] !== false
-  ) {
-    throw new Error('CHECK_DESCRIPTOR_CLAIM_CEILING_INVALID');
-  }
   const categories: Record<string, DocumentationCategoryResult> = {};
   for (const category of records(
     architecture['categories'],
@@ -225,9 +215,7 @@ export function buildCanonicalDescriptorHandoffReport(
     categories[id] = bijection(canonicalSource, categoryPopulation(repoRoot, id));
   }
   return {
-    scope: 'r0007-canonical-descriptor-handoff',
-    narrative_documentation_complete: false,
-    deploy_ready_site: false,
+    scope: 'current-canonical-descriptors',
     categories,
   };
 }

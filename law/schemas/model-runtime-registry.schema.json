@@ -11,7 +11,6 @@
     "id",
     "status",
     "authority",
-    "decision",
     "availability_semantics",
     "runtimes",
     "models"
@@ -31,9 +30,6 @@
     },
     "authority": {
       "const": "Architect"
-    },
-    "decision": {
-      "const": "ADR-022"
     },
     "availability_semantics": {
       "type": "object",
@@ -238,56 +234,5 @@
       }
     }
   },
-  "examples": [
-    {
-      "$schema": "../schemas/model-runtime-registry.schema.json",
-      "schemaVersion": "1.0.0",
-      "id": "model-runtime-registry",
-      "status": "active",
-      "authority": "Architect",
-      "decision": "ADR-022",
-      "availability_semantics": {
-        "registry_value": "available means eligible for attempted resolution, not proved reachable on this host",
-        "host_preflight_required": true,
-        "unavailable_behavior": "fail-or-consider-next-explicitly-authorized-entry",
-        "authority_from_capability": "forbidden"
-      },
-      "runtimes": [
-        {
-          "id": "codex-cli",
-          "vendor": "OpenAI",
-          "family": "codex",
-          "adapter_id": "codex-cli-adapter",
-          "adapter_module": "packages/skills/src/llm/cli-client.ts",
-          "transport": "host-cli",
-          "executable": "codex",
-          "credential_binding": "host-cli-session",
-          "capabilities": ["text-generation", "structured-output"],
-          "available": true,
-          "availability_basis": "rostered adapter; exact host reachability is a mandatory runtime preflight"
-        }
-      ],
-      "models": [
-        {
-          "id": "codex-cli:gpt-5.6-sol",
-          "runtime_id": "codex-cli",
-          "vendor": "OpenAI",
-          "family": "codex",
-          "adapter_id": "codex-cli-adapter",
-          "provider_identifier": "gpt-5.6-sol",
-          "identifier_kind": "exact",
-          "supported_efforts": ["high", "xhigh", "ultra"],
-          "capabilities": ["text-generation", "structured-output"],
-          "eligible_agent_classes": ["coding-agent", "review-agent", "ops-agent"],
-          "available": true,
-          "availability_basis": "rostered; host executable, login, and exact model identity remain runtime checks",
-          "replacement": {
-            "state": "none",
-            "model_id": null,
-            "reason": null
-          }
-        }
-      ]
-    }
-  ]
+  "examples": [{}]
 }

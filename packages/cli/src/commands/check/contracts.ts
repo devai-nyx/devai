@@ -32,7 +32,6 @@ export interface CheckSuitePolicy {
   readonly id: 'check-suites';
   readonly status: 'active';
   readonly authority: 'Architect';
-  readonly decision: 'ADR-022';
   readonly ordering: 'members-execute-in-declared-order-without-coalescing';
   readonly unknown_behavior: 'error-never-pass';
   readonly prerequisites: readonly string[];
@@ -132,7 +131,7 @@ export function loadCheckSuitePolicy(repoRoot: string): CheckSuitePolicy {
     policy['id'] !== 'check-suites' ||
     policy['status'] !== 'active' ||
     policy['authority'] !== 'Architect' ||
-    policy['decision'] !== 'ADR-022' ||
+    policy['decision'] !== undefined ||
     policy['ordering'] !== 'members-execute-in-declared-order-without-coalescing' ||
     policy['unknown_behavior'] !== 'error-never-pass'
   ) {
@@ -215,7 +214,6 @@ export function loadCheckSuitePolicy(repoRoot: string): CheckSuitePolicy {
     id: 'check-suites',
     status: 'active',
     authority: 'Architect',
-    decision: 'ADR-022',
     ordering: 'members-execute-in-declared-order-without-coalescing',
     unknown_behavior: 'error-never-pass',
     prerequisites,
@@ -281,7 +279,8 @@ export function resolveCheckPlan(
   const byId = new Map(policy.member_definitions.map((member) => [member.id, member]));
   if (options.only !== undefined) {
     const selector = options.only;
-    const canonicalMember = byId.get(selector) ?? byId.get(CURRENT_SELECTOR_ALIASES[selector] ?? '');
+    const canonicalMember =
+      byId.get(selector) ?? byId.get(CURRENT_SELECTOR_ALIASES[selector] ?? '');
     if (canonicalMember !== undefined) {
       const member = {
         ...canonicalMember,

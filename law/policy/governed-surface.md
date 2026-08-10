@@ -5,7 +5,6 @@ type: policy
 status: active
 date: 2026-07-26
 authority: Architect
-provenance: [session-draft R-0004 B2, DII-162, R-0004-SURFACE-DISPOSITION]
 ---
 
 # Governed action and package surface
@@ -29,7 +28,7 @@ must not introduce an action, effect, or lifecycle absent from the registry.
 
 ## Sensor standing
 
-Every live sensor kind resolves a successor-local design note under
+Every live sensor kind resolves a current design note under
 `law/policy/sensor-notes/`. The nine diagnostic-only kinds remain diagnostic and the
 fifty cell-bound kinds retain their measured bindings. Notes document standing; they
 grant no filesystem, database, network, release, or publication authority.
@@ -46,5 +45,5 @@ accept no caller-supplied command string and do not recursively invoke themselve
 Required tool absence fails closed. CI pins third-party actions to immutable 40-hex
 commits with readable major-version annotations and prewarms every install job.
 
-This policy authorizes no publication, deployment, tag, release, Pages mutation,
-real-stynx write, R-0008 external action, R-0009 activation, or R-0010 observation.
+Publication, deployment, tagging, release creation, Pages mutation, and external-project
+writes require their own explicit action authority and consent.

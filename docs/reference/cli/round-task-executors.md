@@ -25,7 +25,7 @@ move a task across rounds or bypass the active-round check.
 Read the container before running anything:
 
 ```sh
-devai round status --round R-0007 --repo-root . --format json
+devai round status --round R-1000 --repo-root . --format json
 ```
 
 ## Plans, waves, and tasks
@@ -58,10 +58,10 @@ keeps its dependants blocked; an independent, resource-disjoint branch may conti
 Select one task deliberately:
 
 ```sh
-devai round run --round R-0007 --task TASK-7001 --repo-root . --as-role engineer --write --format json
+devai round run --round R-1000 --task TASK-7001 --repo-root . --as-role engineer --write --format json
 ```
 
-The example assumes the task exists, is ready, belongs to `R-0007`, and has Engineer discipline.
+The example assumes the task exists, is ready, belongs to `R-1000`, and has Engineer discipline.
 If any assumption is false, dispatch must refuse rather than reinterpret the request.
 
 ## Lifecycle and checkpoints
@@ -121,7 +121,7 @@ The generated descriptors below own the complete kind population and every per-k
 - **When to use:** Use `routine` only when its closed execution contract matches the task.
 - **When not to use:** Do not use it to bypass round containment, role authority, or evidence requirements.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-0007 --repo-root . --as-role owner --write --format json`
+- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
 - **Canonical source:** [`law/schemas/task.schema.json`](../../../law/schemas/task.schema.json#/properties/executor)
 - **Related workflow:** `round`
 
@@ -145,7 +145,7 @@ The generated descriptors below own the complete kind population and every per-k
 - **When to use:** Use `agent` only when its closed execution contract matches the task.
 - **When not to use:** Do not use it to bypass round containment, role authority, or evidence requirements.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-0007 --repo-root . --as-role owner --write --format json`
+- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
 - **Canonical source:** [`law/schemas/task.schema.json`](../../../law/schemas/task.schema.json#/properties/executor)
 - **Related workflow:** `round`
 
@@ -169,7 +169,7 @@ The generated descriptors below own the complete kind population and every per-k
 - **When to use:** Use `human` only when its closed execution contract matches the task.
 - **When not to use:** Do not use it to bypass round containment, role authority, or evidence requirements.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-0007 --repo-root . --as-role owner --write --format json`
+- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
 - **Canonical source:** [`law/schemas/task.schema.json`](../../../law/schemas/task.schema.json#/properties/executor)
 - **Related workflow:** `round`
 
@@ -193,7 +193,7 @@ The generated descriptors below own the complete kind population and every per-k
 - **When to use:** Use `composite` only when its closed execution contract matches the task.
 - **When not to use:** Do not use it to bypass round containment, role authority, or evidence requirements.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-0007 --repo-root . --as-role owner --write --format json`
+- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
 - **Canonical source:** [`law/schemas/task.schema.json`](../../../law/schemas/task.schema.json#/properties/executor)
 - **Related workflow:** `round`
 

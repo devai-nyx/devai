@@ -3,7 +3,6 @@
   "id": "mutation-strength",
   "status": "active",
   "authority": "Architect",
-  "decision": "DII-213",
   "thresholds": {
     "source": "law/policy/thresholds.json#/mutation",
     "score_operator": ">=",

@@ -8,8 +8,6 @@ import {
   checkForbiddenRegistryCoverage,
   checkPrCompliance,
   checkPromptOverlays,
-  decisionCitationResolution,
-  decisionRecordIntegrity,
   loadBlueprint,
   loadDomains,
   loadRecipes,
@@ -29,7 +27,6 @@ import { executeRoutineExecutor, type ExecutorEffect } from '@devai-nyx/loop';
 import { validators } from '@devai-nyx/schemas';
 import {
   senseBuild,
-  senseDocsDrift,
   senseHarnessPerformance,
   senseHarnessSecurity,
   senseInventoryPerformance,
@@ -40,7 +37,6 @@ import {
   senseTest,
   senseTestPerformanceCoverage,
   senseTestSecurityCoverage,
-  senseTraceResolve,
   senseTypeCheck,
   type SensorReading,
 } from '@devai-nyx/sensors';
@@ -559,69 +555,6 @@ function provenanceReadinessReport(repoRoot: string): RawExecution {
   return fromValue({ ok: malformed.length === 0, records: candidates, malformed });
 }
 
-async function ordinaryPolicyReport(
-  member: ResolvedCheckMember,
-  repoRoot: string,
-): Promise<RawExecution> {
-  const steps: readonly (readonly string[])[] = [
-    ['node', 'scripts/check-governed-sequencing.mjs'],
-    ['node', 'scripts/check-implementation-path-manifest.mjs'],
-    ['node', 'scripts/check-round-artifact-uniqueness.mjs'],
-    ['node', 'scripts/check-governed-sha-references.mjs'],
-  ];
-  const results: RawExecution[] = [];
-  for (const argv of steps) results.push(await executeArgv(member, argv, repoRoot));
-  results.push(fromValue(forbiddenActionsReport({ repoRoot, strict: true })));
-  results.push(fromValue(decisionRecordIntegrity({ repoRoot })));
-  results.push(fromValue(decisionCitationResolution({ repoRoot })));
-  results.push(fromValue(senseTraceResolve({ repoRoot })));
-  results.push(fromValue(senseDocsDrift({ repoRoot })));
-  const status = results.some((result) => result.status === 'error')
-    ? 'error'
-    : results.some((result) => result.status === 'fail')
-      ? 'fail'
-      : results.some((result) => result.status === 'review')
-        ? 'review'
-        : results.some((result) => result.status === 'unknown')
-          ? 'unknown'
-          : 'pass';
-  return { status, value: { status, results } };
-}
-
-async function docsCiPolicyReport(
-  member: ResolvedCheckMember,
-  repoRoot: string,
-): Promise<RawExecution> {
-  const results: RawExecution[] = [];
-  for (const argv of [
-    ['node', 'scripts/check-workflows.mjs'],
-    ['node', 'scripts/generate-action-registry.mjs', '--check'],
-    ['node', 'scripts/generate-trace.mjs', '.', '--check'],
-    [
-      'node',
-      'scripts/generate-repository-reference-triage.mjs',
-      '.',
-      '--check',
-      '--target',
-      'work/rounds/R-0002/repository-reference-triage.json',
-    ],
-  ] as const) {
-    results.push(await executeArgv(member, argv, repoRoot));
-  }
-  results.push(fromValue(senseLint({ cwd: repoRoot })));
-  results.push(fromValue(senseTypeCheck({ cwd: repoRoot, strategy: 'root' }).aggregate));
-  const status = results.some((result) => result.status === 'error')
-    ? 'error'
-    : results.some((result) => result.status === 'fail')
-      ? 'fail'
-      : results.some((result) => result.status === 'review')
-        ? 'review'
-        : results.some((result) => result.status === 'unknown')
-          ? 'unknown'
-          : 'pass';
-  return { status, value: { status, results } };
-}
-
 async function directService(
   member: ResolvedCheckMember,
   options: CheckExecutionOptions,
@@ -659,14 +592,10 @@ async function directService(
       return fromValue(strategyReport(repoRoot));
     case 'action-coverage':
       return fromValue(actionCoverageReport(repoRoot));
-    case 'ordinary-policy':
-      return ordinaryPolicyReport(member, repoRoot);
     case 'full-tests':
       return executeArgv(member, ['pnpm', 'vitest', 'run'], repoRoot);
     case 'inventory-integrity':
       return fromValue(await inventoryIntegrityReport(repoRoot));
-    case 'docs-ci-policy':
-      return docsCiPolicyReport(member, repoRoot);
     case 'mutation':
       return mutationPolicyReport(repoRoot);
     case 'mutation-verification':

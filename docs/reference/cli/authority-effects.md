@@ -63,7 +63,7 @@ and commit boundary.
 - **When to use:** Use `owner` only when operating within that discipline's canonical path and action authority.
 - **When not to use:** Do not use a role declaration to widen executor, model, mutation, publication, or path authority.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-0007 --repo-root . --as-role owner --write --format json`
+- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
 - **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/authority-policy.json`](../../../law/policy/authority-policy.json#/rules)
 - **Related workflow:** `round`
 
@@ -74,7 +74,7 @@ and commit boundary.
 - **Stable ID:** architect
 - **User-facing label:** Architect
 - **Purpose:** Identify the human `architect` discipline; only matching authority-policy rules grant bounded actions and paths.
-- **Population or projection:** 57 matching authority rules; selectors `law/glossary`, `law/glossary/**`, `docs`, `docs/**`, `law`, `law/**`, `work/rounds`, `work/rounds/**`, `.devai/local`, `.devai/local/rounds`, `.devai/local/rounds/*`, `.devai/local/rounds/**`, `.devai/state/**`, `.devai/state`, `.devai/worktrees/**`, `.devai/worktrees`, `record/derived/inventory/**`, `record/proofs/**`, `.devai/config/**`, `.devai/config/post-merge-host-adapter.json`, `.devai/state/init-introspection.json`, `.devai`, `.devai/config`, `.devai/constitution.md`, `.devai/pin`, `.devai/pin/constitution.md`, `.devai/pin/versions.json`, `.gitignore`, `packages/**`, `scripts/**`, `.github/**`, `.github`, `.git/hooks`, `.git/hooks/**`, `.git/devai`, `.git/devai/**`, `.husky`, `.husky/**`, `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `tsconfig*.json`, `vitest*.ts`, `eslint.config.*`, `.prettier*`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `SECURITY.md`, `CHANGELOG.md`, `.changeset/**`, `remote:sensor-runtime`; governed actions `init apply architect`, `init apply owner`, `round plan`, `round seal`, `check`, `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `release check`, `release drift`, `release verify`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense record`, `sense run`, `task escalate`, `task finish`, `task pause`, `task queue add`, `task queue complete`, `task resume`, `task start`, `init apply harness`, `init upgrade`.
+- **Population or projection:** 55 matching authority rules; selectors `law/glossary`, `law/glossary/**`, `docs`, `docs/**`, `law`, `law/**`, `.devai/local`, `.devai/local/rounds`, `.devai/local/rounds/*`, `.devai/local/rounds/**`, `.devai/state/**`, `.devai/state`, `.devai/worktrees/**`, `.devai/worktrees`, `record/derived/inventory/**`, `record/proofs/**`, `.devai/config/**`, `.devai/config/post-merge-host-adapter.json`, `.devai/state/init-introspection.json`, `.devai`, `.devai/config`, `.devai/constitution.md`, `.devai/pin`, `.devai/pin/constitution.md`, `.devai/pin/versions.json`, `.gitignore`, `packages/**`, `scripts/**`, `.github/**`, `.github`, `.git/hooks`, `.git/hooks/**`, `.git/devai`, `.git/devai/**`, `.husky`, `.husky/**`, `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `tsconfig*.json`, `vitest*.ts`, `eslint.config.*`, `.prettier*`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `SECURITY.md`, `CHANGELOG.md`, `.changeset/**`, `remote:sensor-runtime`; governed actions `init apply architect`, `init apply owner`, `round plan`, `round seal`, `check`, `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `release check`, `release drift`, `release verify`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense record`, `sense run`, `task escalate`, `task finish`, `task pause`, `task queue add`, `task queue complete`, `task resume`, `task start`, `init apply harness`, `init upgrade`.
 - **Prerequisites:** An invocation-scoped `--as-role architect` declaration or live repository-bound authority session, plus a matching action/path rule.
 - **Required external tools:** Not applicable: a role is a governance discipline, not an executor or adapter.
 - **Accepted inputs:** `--as-role architect` only on a non-read action whose canonical authority contract allowlists this role.
@@ -87,7 +87,7 @@ and commit boundary.
 - **When to use:** Use `architect` only when operating within that discipline's canonical path and action authority.
 - **When not to use:** Do not use a role declaration to widen executor, model, mutation, publication, or path authority.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-0007 --repo-root . --as-role architect --write --format json`
+- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role architect --write --format json`
 - **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/authority-policy.json`](../../../law/policy/authority-policy.json#/rules)
 - **Related workflow:** `round`
 
@@ -111,7 +111,7 @@ and commit boundary.
 - **When to use:** Use `inspector` only when operating within that discipline's canonical path and action authority.
 - **When not to use:** Do not use a role declaration to widen executor, model, mutation, publication, or path authority.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-0007 --repo-root . --as-role inspector --write --format json`
+- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/authority-policy.json`](../../../law/policy/authority-policy.json#/rules)
 - **Related workflow:** `round`
 
@@ -135,7 +135,7 @@ and commit boundary.
 - **When to use:** Use `engineer` only when operating within that discipline's canonical path and action authority.
 - **When not to use:** Do not use a role declaration to widen executor, model, mutation, publication, or path authority.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-0007 --repo-root . --as-role engineer --write --format json`
+- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role engineer --write --format json`
 - **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/authority-policy.json`](../../../law/policy/authority-policy.json#/rules)
 - **Related workflow:** `round`
 
@@ -159,7 +159,7 @@ and commit boundary.
 - **When to use:** Use `auditor` only when operating within that discipline's canonical path and action authority.
 - **When not to use:** Do not use a role declaration to widen executor, model, mutation, publication, or path authority.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-0007 --repo-root . --as-role auditor --write --format json`
+- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role auditor --write --format json`
 - **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/authority-policy.json`](../../../law/policy/authority-policy.json#/rules)
 - **Related workflow:** `round`
 
@@ -311,7 +311,7 @@ That distinction matters for parameterized facades:
 Inspect a parameterized population without running it:
 
 ```sh
-devai sense run --preset sweep --round R-0007 --repo-root . --dry-run --format json
+devai sense run --preset sweep --round R-1000 --repo-root . --dry-run --format json
 ```
 
 ## Consent flags

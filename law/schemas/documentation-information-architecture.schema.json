@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/documentation-information-architecture.schema.json",
-  "title": "R-0007 documentation information architecture",
-  "description": "Canonical routing, page-manifest, generated-reference boundary, semantic-field contract, completeness gates, and R-0009 claim ceiling for the R-0007 CLI documentation handoff.",
+  "title": "Documentation information architecture",
+  "description": "Canonical routing, page manifest, generated-reference boundary, semantic-field contract, and completeness gates for current CLI documentation.",
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -12,16 +12,12 @@
     "id",
     "status",
     "authority",
-    "decision",
     "ordering",
-    "claim_ceiling",
     "source_routing_rules",
     "semantic_fields",
     "pages",
     "categories",
-    "completeness_gates",
-    "r0007_handoff",
-    "r0009_completion"
+    "completeness_gates"
   ],
   "properties": {
     "$schema": {
@@ -31,7 +27,7 @@
       "const": "1.0.0"
     },
     "id": {
-      "const": "r0007-documentation-information-architecture"
+      "const": "documentation-information-architecture"
     },
     "status": {
       "const": "active"
@@ -39,14 +35,8 @@
     "authority": {
       "const": "Architect"
     },
-    "decision": {
-      "const": "ADR-023"
-    },
     "ordering": {
       "const": "policy-declared-page-category-and-projection-order"
-    },
-    "claim_ceiling": {
-      "$ref": "#/$defs/claimCeiling"
     },
     "source_routing_rules": {
       "$ref": "#/$defs/sourceRoutingRules"
@@ -80,18 +70,12 @@
       "items": {
         "$ref": "#/$defs/gate"
       }
-    },
-    "r0007_handoff": {
-      "$ref": "#/$defs/handoff"
-    },
-    "r0009_completion": {
-      "$ref": "#/$defs/completion"
     }
   },
   "$defs": {
     "repositoryPath": {
       "type": "string",
-      "pattern": "^(?:docs|law|work/rounds/R-0007)/[A-Za-z0-9._/#*-]+$"
+      "pattern": "^(?:docs|law)/[A-Za-z0-9._/#*-]+$"
     },
     "sourceRef": {
       "type": "object",
@@ -108,34 +92,6 @@
         "projection": {
           "type": "string",
           "minLength": 1
-        }
-      }
-    },
-    "claimCeiling": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "canonical_descriptor_handoff",
-        "narrative_documentation_complete",
-        "deploy_ready_site",
-        "released",
-        "deployed"
-      ],
-      "properties": {
-        "canonical_descriptor_handoff": {
-          "const": true
-        },
-        "narrative_documentation_complete": {
-          "const": false
-        },
-        "deploy_ready_site": {
-          "const": false
-        },
-        "released": {
-          "const": false
-        },
-        "deployed": {
-          "const": false
         }
       }
     },
@@ -181,8 +137,6 @@
         "purpose",
         "content_mode",
         "mutable_population_mode",
-        "r0007_delivery",
-        "r0009_completion",
         "category_ids",
         "source_refs"
       ],
@@ -208,12 +162,6 @@
         },
         "mutable_population_mode": {
           "enum": ["none", "generated-from-canonical-source"]
-        },
-        "r0007_delivery": {
-          "enum": ["canonical-descriptor", "minimum-operator-handoff"]
-        },
-        "r0009_completion": {
-          "enum": ["conceptual-narrative", "generated-page-and-site-integration"]
         },
         "category_ids": {
           "type": "array",
@@ -284,18 +232,10 @@
           "pattern": "^docs-[a-z0-9-]+$"
         },
         "phase": {
-          "enum": ["b2-policy", "r0007-b5", "r0007-b6", "r0009"]
+          "const": "current"
         },
         "scope": {
-          "enum": [
-            "policy",
-            "page-manifest",
-            "category",
-            "entry",
-            "example",
-            "narrative",
-            "claim"
-          ]
+          "enum": ["policy", "page-manifest", "category", "entry", "example", "narrative", "claim"]
         },
         "condition": {
           "type": "string",
@@ -306,145 +246,7 @@
           "pattern": "^DOCS_[A-Z0-9_]+$"
         }
       }
-    },
-    "handoff": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["round", "scope", "required_outputs", "completion_claim"],
-      "properties": {
-        "round": {
-          "const": "R-0007"
-        },
-        "scope": {
-          "const": "canonical-current-state-descriptors-and-operator-guidance"
-        },
-        "required_outputs": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        "completion_claim": {
-          "const": "handoff-complete-only"
-        }
-      }
-    },
-    "completion": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "round",
-        "entry_dependency",
-        "scope",
-        "currently_exists",
-        "currently_authorized"
-      ],
-      "properties": {
-        "round": {
-          "const": "R-0009"
-        },
-        "entry_dependency": {
-          "const": "R-0008-closed-and-r0009-entry-check-passed"
-        },
-        "scope": {
-          "const": "complete-narrative-user-documentation-generated-pages-site-integration-and-deploy-ready-artifact"
-        },
-        "currently_exists": {
-          "const": false
-        },
-        "currently_authorized": {
-          "const": false
-        }
-      }
     }
   },
-  "examples": [
-    {
-      "$schema": "../schemas/documentation-information-architecture.schema.json",
-      "schemaVersion": "1.0.0",
-      "id": "r0007-documentation-information-architecture",
-      "status": "active",
-      "authority": "Architect",
-      "decision": "ADR-023",
-      "ordering": "policy-declared-page-category-and-projection-order",
-      "claim_ceiling": {
-        "canonical_descriptor_handoff": true,
-        "narrative_documentation_complete": false,
-        "deploy_ready_site": false,
-        "released": false,
-        "deployed": false
-      },
-      "source_routing_rules": {
-        "canonical_sources_only": true,
-        "narrative_population_copy": "forbidden",
-        "generated_order": "canonical-source-order",
-        "generated_write_mode": "check-without-write-or-deterministic-materialization",
-        "missing_source": "fail-closed",
-        "unknown_projection": "fail-closed"
-      },
-      "semantic_fields": ["stable_id"],
-      "pages": [
-        {
-          "page_id": "cli-overview",
-          "planned_path": "docs/reference/cli/index.md",
-          "title": "CLI overview",
-          "purpose": "Route readers into the workflow surface.",
-          "content_mode": "narrative-with-generated-links",
-          "mutable_population_mode": "none",
-          "r0007_delivery": "minimum-operator-handoff",
-          "r0009_completion": "conceptual-narrative",
-          "category_ids": [],
-          "source_refs": [
-            {
-              "path": "law/policy/action-registry.json",
-              "pointer": "#/entries",
-              "projection": "current workflow-domain mental model"
-            }
-          ]
-        }
-      ],
-      "categories": [
-        {
-          "category_id": "check-suites",
-          "page_id": "check-suites",
-          "canonical_source": "law/policy/check-suites.json",
-          "source_refs": [
-            {
-              "path": "law/policy/check-suites.json",
-              "pointer": "#/suites",
-              "projection": "entry identifiers in declared order"
-            }
-          ],
-          "population_contract": "source-derived-exact-ordered-bijection-no-copied-list",
-          "ordering": "source-order",
-          "rendering": "generated-reference"
-        }
-      ],
-      "completeness_gates": [
-        {
-          "gate_id": "docs-policy-schema",
-          "phase": "b2-policy",
-          "scope": "policy",
-          "condition": "the policy validates against this schema",
-          "failure": "DOCS_POLICY_SCHEMA_INVALID"
-        }
-      ],
-      "r0007_handoff": {
-        "round": "R-0007",
-        "scope": "canonical-current-state-descriptors-and-operator-guidance",
-        "required_outputs": ["machine-readable category report"],
-        "completion_claim": "handoff-complete-only"
-      },
-      "r0009_completion": {
-        "round": "R-0009",
-        "entry_dependency": "R-0008-closed-and-r0009-entry-check-passed",
-        "scope": "complete-narrative-user-documentation-generated-pages-site-integration-and-deploy-ready-artifact",
-        "currently_exists": false,
-        "currently_authorized": false
-      }
-    }
-  ]
+  "examples": [{}]
 }

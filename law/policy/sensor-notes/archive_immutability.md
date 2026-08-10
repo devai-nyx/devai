@@ -9,13 +9,12 @@ sensor_kind: archive_immutability
 emitter: packages/cli/src/commands/sense/governance-ledger.ts
 standing: diagnostic
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Archive Immutability
 
-This note binds the successor-local design standing for `archive_immutability`. Its canonical emitter
-is `packages/cli/src/commands/sense/governance-ledger.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `archive_immutability`. Its canonical emitter
+is `packages/cli/src/commands/sense/governance-ledger.ts`.
 
 Diagnostic-only; no cell binding.
 

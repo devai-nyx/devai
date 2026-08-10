@@ -353,7 +353,7 @@ function renderSensePresets(policy) {
           'Do not use as an acceptance suite, as implicit persistence, or to omit a required selected member.',
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
         new_grammar_example: code(
-          `devai sense run --preset ${preset.name}${preset.round_required === true ? ' --round R-0007' : ''} --repo-root .${effect === 'read' ? '' : ` --as-role owner${dryRunConsentArgs(effect)}`} --dry-run --format json`,
+          `devai sense run --preset ${preset.name}${preset.round_required === true ? ' --round R-1000' : ''} --repo-root .${effect === 'read' ? '' : ` --as-role owner${dryRunConsentArgs(effect)}`} --dry-run --format json`,
         ),
         canonical_source_link: sourceRefs(policy),
         related_workflow: code('sense'),
@@ -708,7 +708,7 @@ function renderRoles(policy) {
           'Do not use a role declaration to widen executor, model, mutation, publication, or path authority.',
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
         new_grammar_example: code(
-          `devai round run --round R-0007 --repo-root . --as-role ${id} --write --format json`,
+          `devai round run --round R-1000 --repo-root . --as-role ${id} --write --format json`,
         ),
         canonical_source_link: sourceRefs(policy),
         related_workflow: code('round'),
@@ -810,7 +810,7 @@ function renderExecutorKinds(policy) {
           'Do not use it to bypass round containment, role authority, or evidence requirements.',
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
         new_grammar_example: code(
-          'devai round run --round R-0007 --repo-root . --as-role owner --write --format json',
+          'devai round run --round R-1000 --repo-root . --as-role owner --write --format json',
         ),
         canonical_source_link: sourceRefs(policy),
         related_workflow: code('round'),

@@ -119,13 +119,6 @@ try {
   if (requiredAssets.some((path) => !existsSync(join(installedPackage, path)))) {
     throw new Error('INSTALLED_RUNTIME_ASSET_MISSING');
   }
-  if (
-    existsSync(join(installedPackage, 'dist/runtime/index/schemas/predecessor-archive')) ||
-    existsSync(join(installedPackage, 'dist/runtime/index/schemas/REGEN-STATUS.md'))
-  ) {
-    throw new Error('INSTALLED_HISTORY_SCHEMA_PRESENT');
-  }
-
   const tarballPath = resolve(packageRoot, tarball);
   const installedFiles = filesUnder(installedPackage);
 

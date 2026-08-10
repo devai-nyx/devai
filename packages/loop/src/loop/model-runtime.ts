@@ -45,7 +45,6 @@ export interface ModelRuntimeRegistry {
   readonly id: 'model-runtime-registry';
   readonly status: 'active';
   readonly authority: 'Architect';
-  readonly decision: 'ADR-022';
   readonly availability_semantics: Readonly<Record<string, unknown>>;
   readonly runtimes: readonly RuntimeRegistryEntry[];
   readonly models: readonly ModelRuntimeEntry[];
@@ -162,11 +161,11 @@ export function validateModelRuntimeRegistry(candidate: unknown): ModelRuntimeRe
     root['id'] !== 'model-runtime-registry' ||
     root['status'] !== 'active' ||
     root['authority'] !== 'Architect' ||
-    root['decision'] !== 'ADR-022'
+    root['decision'] !== undefined
   ) {
     throw new ModelRuntimeRegistryError(
       'TASK_MODEL_REGISTRY_IDENTITY_MISMATCH',
-      'registry identity does not match the active ADR-022 contract',
+      'registry identity does not match the active runtime contract',
     );
   }
   const availability = record(

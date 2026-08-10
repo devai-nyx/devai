@@ -1,13 +1,47 @@
 {
   "schemaVersion": "1.0.0",
-  "roles": ["operator", "architect", "engineer", "inspector", "auditor", "owner"],
+  "roles": ["operator", "owner", "architect", "inspector", "engineer", "auditor"],
   "cases": [
     {
-      "id": "UC-devai-doctor",
-      "title": "Operator runs doctor to verify repo health (self or adopter)",
+      "id": "UC-devai-cli-current-actions",
+      "title": "Use the current DEVAI CLI",
+      "goal": "Select and run one of the 41 supported release-candidate actions.",
+      "actors": ["operator", "owner", "architect", "inspector", "engineer", "auditor"],
+      "preconditions": [
+        "DEVAI is installed in an adopter repository.",
+        "The caller satisfies the selected action authority and consent contract."
+      ],
+      "triggers": [
+        "A developer needs to inspect, initialize, check, sense, execute, record, or verify work."
+      ],
       "mainFlow": [
         {
-          "action": "Operator runs `devai doctor --self|--adopter|--auto --format human` (Phase 21.B)",
+          "id": "step-01",
+          "action": "Use `catalog actions`: List registered DEVAI actions as JSON.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "catalog actions"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-02",
+          "action": "Use `check`: Run a canonical check suite or one named check with fail-closed aggregate output.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "check"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-03",
+          "action": "Use `doctor`: Composite repo health check. Posture: --self (full DEVAI checks), --adopter (subset that applies to adopter repos), --auto (default; sniff repo-root for DEVAI shape).",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
@@ -18,203 +52,297 @@
           }
         },
         {
-          "action": "Doctor walks the workspace, F1 substrate paths, schemas, constitution pointer, agent sync, chain dir, evidence chain, LLM bridges",
+          "id": "step-04",
+          "action": "Use `evidence collect`: Collect governed evidence from one declared source into harness state.",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "doctor"
+                "id": "evidence collect"
               }
             ]
           }
         },
         {
-          "action": "Operator reads the OK/FAIL summary and acts on flagged checks",
+          "id": "step-05",
+          "action": "Use `evidence record`: Record one governed evidence kind through the append-only evidence boundary.",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "doctor"
+                "id": "evidence record"
               }
             ]
           }
-        }
-      ]
-    },
-    {
-      "id": "UC-devai-init",
-      "title": "Operator bootstraps DEVAI under a target repo",
-      "mainFlow": [
+        },
         {
-          "action": "Operator runs `devai init plan` to build the role-separated bootstrap plan (deny-by-default on existing files)",
+          "id": "step-06",
+          "action": "Use `evidence redact`: Apply a redaction policy to a record, re-link downstream, and log a redaction event",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "init plan",
-                "provisional": true
+                "id": "evidence redact"
               }
             ]
           }
         },
         {
-          "action": "Owner and Architect review the plan, invoke their separate `devai init apply-* --as-role <role> --write` segments, then the Architect materializes policy with `devai adopt upgrade --write`",
+          "id": "step-07",
+          "action": "Use `evidence render`: Render one evidence view from canonical records.",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "init apply-owner",
-                "provisional": true
-              },
-              {
-                "id": "init apply-architect",
-                "provisional": true
-              },
-              {
-                "id": "adopt upgrade"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "UC-devai-pack-resolve",
-      "title": "Architect resolves which stack-adapter pack matches the adopter repo",
-      "mainFlow": [
-        {
-          "action": "Architect runs `devai adopt pack resolve --adopter-root <repo>` and reads the matched pack id",
-          "actorRole": "architect",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "adopt pack resolve"
+                "id": "evidence render"
               }
             ]
           }
         },
         {
-          "action": "Architect tunes `extractor_params` in the matched pack to fit the adopter's directory shape",
-          "actorRole": "architect",
+          "id": "step-08",
+          "action": "Use `evidence verify`: Verify a declared evidence scope, including optional read-only chain-head inspection.",
+          "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "adopt pack resolve"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "UC-devai-introspect",
-      "title": "Architect runs first-introspection on a brownfield adopter",
-      "mainFlow": [
-        {
-          "action": "Architect runs each sense verb in turn: `sense api`, `sense routes`, `sense data-model`, `sense data-handling`, `sense dep-graph`, `sense rbac`, `sense coverage`",
-          "actorRole": "architect",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "sense inventory api",
-                "provisional": true
-              },
-              {
-                "id": "sense inventory routes",
-                "provisional": true
-              },
-              {
-                "id": "sense inventory data model",
-                "provisional": true
-              },
-              {
-                "id": "sense inventory data handling",
-                "provisional": true
-              },
-              {
-                "id": "sense inventory dep graph",
-                "provisional": true
-              },
-              {
-                "id": "sense inventory rbac",
-                "provisional": true
-              },
-              {
-                "id": "sense inventory coverage",
-                "provisional": true
+                "id": "evidence verify"
               }
             ]
           }
         },
         {
-          "action": "Architect calls `inv suggest --from-inventory` to propose INV-CANDIDATE records bridging brownfield to spec",
-          "actorRole": "architect",
+          "id": "step-09",
+          "action": "Use `init apply architect`: Apply the Architect-owned initialization projection with explicit write consent.",
+          "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "inventory suggest",
-                "provisional": true
+                "id": "init apply architect"
               }
             ]
           }
         },
         {
-          "action": "Architect graduates candidates to invariants under `docs/arch/invariants/`",
-          "actorRole": "architect",
+          "id": "step-10",
+          "action": "Use `init apply harness`: Apply the canonical harness projection with explicit Architect-initiated write consent.",
+          "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "inventory suggest",
-                "provisional": true
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "UC-devai-blueprint",
-      "title": "Owner authors a module-blueprint; Engineer scaffolds it",
-      "mainFlow": [
-        {
-          "action": "Owner authors a `module-blueprint.json` under `docs/arch/blueprints/`",
-          "actorRole": "owner",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "spec blueprint validate",
-                "provisional": true
+                "id": "init apply harness"
               }
             ]
           }
         },
         {
-          "action": "Architect validates: `devai spec blueprint validate <path>`",
-          "actorRole": "architect",
+          "id": "step-11",
+          "action": "Use `init apply owner`: Apply the Owner-owned initialization projection with explicit write consent.",
+          "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "spec blueprint validate",
-                "provisional": true
+                "id": "init apply owner"
               }
             ]
           }
         },
         {
-          "action": "Architect plans: `devai spec blueprint plan <path>` (deterministic scaffold plan, no file writes)",
-          "actorRole": "architect",
+          "id": "step-12",
+          "action": "Use `init plan`: Build the exact segmented bootstrap plan without authorizing a mutation.",
+          "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "spec blueprint plan",
-                "provisional": true
+                "id": "init plan"
               }
             ]
           }
         },
         {
-          "action": "Engineer invokes the exact `devai-scaffold` variant through the host and reviews the bounded output",
-          "actorRole": "engineer",
+          "id": "step-13",
+          "action": "Use `init upgrade`: Plan or apply the canonical DEVAI upgrade transition.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "init upgrade"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-14",
+          "action": "Use `release check`: Evaluate release eligibility without granting publication authority.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "release check"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-15",
+          "action": "Use `release drift`: Inspect and record release-runtime drift under the release controller.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "release drift"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-16",
+          "action": "Use `release status`: Read release-control status without persisting evidence or state.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "release status"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-17",
+          "action": "Use `release verify`: Verify post-deployment release state under the release controller.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "release verify"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-18",
+          "action": "Use `round assess`: Compute or render the active round assessment and governed triage views.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round assess"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-19",
+          "action": "Use `round close`: Execute the authorized round-close transition; never infer release or publication.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round close"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-20",
+          "action": "Use `round gap create`: Create a governed round gap record through the harness boundary.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round gap create"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-21",
+          "action": "Use `round gap list`: List governed gaps for the active round.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round gap list"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-22",
+          "action": "Use `round gap resolve`: Resolve a governed round gap through the harness boundary.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round gap resolve"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-23",
+          "action": "Use `round gap show`: Show one governed round gap.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round gap show"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-24",
+          "action": "Use `round plan`: Create or render Architect-owned round planning material from canonical inputs.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round plan"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-25",
+          "action": "Use `round run`: Advance selected ready tasks within one active round through their declared executors.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round run"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-26",
+          "action": "Use `round seal`: Seal Architect-owned round material without publishing it.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round seal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-27",
+          "action": "Use `round status`: Read one governed round in place and report its schema-valid canonical status.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "round status"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-28",
+          "action": "Use `sense inventory`: Render one canonical repository inventory slice without persistence.",
+          "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
@@ -222,349 +350,171 @@
               }
             ]
           }
-        }
-      ]
-    },
-    {
-      "id": "UC-devai-scorecard",
-      "title": "Auditor computes the F\u00d7T scorecard and assesses repo state",
-      "mainFlow": [
-        {
-          "action": "Auditor runs `devai govern score compute --readings-dir .devai/state/sensor-readings/ --format human` to compute the scorecard",
-          "actorRole": "auditor",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "govern score compute"
-              }
-            ]
-          }
         },
         {
-          "action": "Auditor optionally passes `--scorecard-na <path>` to apply per-repo N/A carve-outs (Phase 34.B)",
-          "actorRole": "auditor",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "govern score compute"
-              }
-            ]
-          }
-        },
-        {
-          "action": "Auditor runs `devai govern score assess <scorecard-file>` to generate a narrative assessment with per-cell-class advice (Phase 22.F / 23.I)",
-          "actorRole": "auditor",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "govern score assess",
-                "provisional": true
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "UC-devai-loop",
-      "title": "Engineer drives an autonomous loop iteration end-to-end",
-      "mainFlow": [
-        {
-          "action": "Engineer adds a backlog entry: `devai work backlog add ...`",
-          "actorRole": "engineer",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "work backlog add",
-                "provisional": true
-              }
-            ]
-          }
-        },
-        {
-          "action": "Engineer runs `devai experimental loop run --max-iterations 1 --llm-timeout-ms <ms>` (Phase 24.C / 25.C)",
-          "actorRole": "engineer",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "experimental loop run",
-                "provisional": true
-              }
-            ]
-          }
-        },
-        {
-          "action": "Round coordination acquires bounded runtime state and invokes the exact host-selected recipe variant",
-          "actorRole": "engineer",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "experimental loop run",
-                "provisional": true
-              }
-            ]
-          }
-        },
-        {
-          "action": "Engineer reviews the iteration's evidence, completes or escalates the task",
-          "actorRole": "engineer",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "experimental loop run",
-                "provisional": true
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "UC-devai-evidence",
-      "title": "Auditor verifies the hash-chained evidence ledger",
-      "mainFlow": [
-        {
-          "action": "Auditor runs `devai evidence chain verify` to confirm chain integrity (Article 32)",
-          "actorRole": "auditor",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "evidence chain verify"
-              }
-            ]
-          }
-        },
-        {
-          "action": "Auditor runs `devai evidence chain head` to record the current head hash",
-          "actorRole": "auditor",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "evidence chain head",
-                "provisional": true
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "UC-devai-release-gate",
-      "title": "Operator gates a release on scorecard + invariant state",
-      "mainFlow": [
-        {
-          "action": "Operator runs `devai release gate --scorecard <path>` to compute a deploy-gate decision (Phase 11.B)",
+          "id": "step-29",
+          "action": "Use `sense migrate`: Execute the DB-writing migration sensor with explicit Engineer write consent.",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "release gate",
-                "provisional": true
+                "id": "sense migrate"
               }
             ]
           }
         },
         {
-          "action": "On PASS: deploy; on FAIL: gate rejects, operator addresses the failing cell(s)",
+          "id": "step-30",
+          "action": "Use `sense record`: Persist or rebuild declared sensor readings through the harness boundary.",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "release gate",
-                "provisional": true
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "UC-devai-test-weakening",
-      "title": "Inspector audits a PR for unjustified test weakening",
-      "mainFlow": [
-        {
-          "action": "Inspector runs `devai sense test weakening --base-ref main` against the PR's changed test files",
-          "actorRole": "inspector",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "sense test weakening",
-                "provisional": true
+                "id": "sense record"
               }
             ]
           }
         },
         {
-          "action": "Inspector reviews the SensorReading findings: assertion drops, .skip additions, INV-* removals",
-          "actorRole": "inspector",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "sense test weakening",
-                "provisional": true
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "UC-devai-sensor-perf",
-      "title": "Operator monitors sensor wall-clock latency against the framework p95 SLO",
-      "mainFlow": [
-        {
-          "action": "Operator runs `pnpm test:perf` (or `node scripts/perf-bench.mjs`) to benchmark the 7 L0 inventory sensors against a synthetic fixture across 5 samples after warm-up; emits a JSON metrics line with p50_ms + p95_ms.",
+          "id": "step-31",
+          "action": "Use `sense run`: Run one resolved sensor kind or preset; per-kind effect and authority are enforced before execution.",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "sense run inventory performance"
+                "id": "sense run"
               }
             ]
           }
         },
         {
-          "action": "Operator inspects the emitted `perf_test` SensorReading; the cell is graded PASS / REVIEW / FAIL against the latency thresholds (default pass: p95_ms \u2264 1500ms; review: p95_ms \u2264 3000ms). The 1500ms p95 SLO derives from the Phase 19.C / 26.L performance smoke baseline (stynx-class adopter repos: ~17 packages, ~10k LOC).",
+          "id": "step-32",
+          "action": "Use `task escalate`: Escalate one round-subordinate task through hidden plumbing.",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "sense run inventory performance"
+                "id": "task escalate"
               }
             ]
           }
         },
         {
-          "action": "If p95 exceeds the threshold, operator investigates the slow sensor's evidence (sensor `duration_ms` per sample, hashed input, configuration drift) and either tunes thresholds in pack config or files a perf-class invariant against the regressed sensor.",
+          "id": "step-33",
+          "action": "Use `task finish`: Finish one round-subordinate task and release its declared resources.",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "sense run inventory performance"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "UC-devai-round-lifecycle",
-      "title": "Maintainer opens, observes, and archives a governed round",
-      "goal": "Carry one human-directed round from disposable local planning state to an immutable durable record without crossing into experimental autonomy.",
-      "actors": ["owner", "architect", "inspector", "engineer", "auditor"],
-      "preconditions": [
-        "DEVAI adoption has seeded the local and durable round directories",
-        "The repository has a binding authority policy"
-      ],
-      "triggers": ["A maintainer is authorized to open a reserved governance round"],
-      "mainFlow": [
-        {
-          "id": "round-scaffold",
-          "action": "Maintainer runs `devai round scaffold` with explicit write consent to create a deterministic gitignored local skeleton",
-          "actorRole": "owner",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "round scaffold",
-                "provisional": true
+                "id": "task finish"
               }
             ]
           }
         },
         {
-          "id": "round-declare",
-          "action": "Owner runs `devai round declare` to bind the approved goal, role-separated waves, gates, and worktree identity",
-          "actorRole": "owner",
-          "refs": {
-            "actionRefs": [
-              {
-                "id": "round declare",
-                "provisional": true
-              }
-            ]
-          }
-        },
-        {
-          "id": "round-status",
-          "action": "Any participant runs `devai round status` to observe the schema-valid current state without mutation",
+          "id": "step-34",
+          "action": "Use `task pause`: Pause one round-subordinate task on a governed gap.",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "round status",
-                "provisional": true
+                "id": "task pause"
               }
             ]
           }
         },
         {
-          "id": "round-close-work",
-          "action": "Role-separated participants complete the declared work, binding gates, close decision, phase closure, audit observations, and prompt logs",
+          "id": "step-35",
+          "action": "Use `task queue add`: Add one task to an active round queue through hidden plumbing.",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "govern phase close"
+                "id": "task queue add"
               }
             ]
           }
         },
         {
-          "id": "round-archive",
-          "action": "Architect runs `devai round archive` with explicit write consent; incomplete closure is refused, while a complete round is sealed and moved to `docs/meta/rounds/round-NN/`",
-          "actorRole": "architect",
+          "id": "step-36",
+          "action": "Use `task queue complete`: Complete one active-round queue item through hidden plumbing.",
+          "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "round archive",
-                "provisional": true
+                "id": "task queue complete"
               }
             ]
           }
-        }
-      ],
-      "alternateFlows": [
+        },
         {
-          "id": "round-resume",
-          "when": "Status reports an incomplete wave or gate",
-          "steps": [
-            {
-              "action": "Maintainer leaves the round in local state, completes the named gap, and checks status again",
-              "actorRole": "operator",
-              "refs": {
-                "actionRefs": [
-                  {
-                    "id": "round status",
-                    "provisional": true
-                  }
-                ]
+          "id": "step-37",
+          "action": "Use `task queue list`: List active-round queue items through hidden plumbing.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "task queue list"
               }
-            }
-          ]
-        }
-      ],
-      "exceptions": [
+            ]
+          }
+        },
         {
-          "id": "round-archive-refused",
-          "when": "A binding gate, close decision, phase closure, record field, or required attributable artifact is missing",
-          "handling": "Archive exits nonzero with the specific missing precondition and does not partially move or seal the round"
+          "id": "step-38",
+          "action": "Use `task queue next`: Select the next ready active-round queue item through hidden plumbing.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "task queue next"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-39",
+          "action": "Use `task resume`: Resume one paused round-subordinate task after its governed gap resolves.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "task resume"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-40",
+          "action": "Use `task start`: Start one round-subordinate task and provision only its declared resources.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "task start"
+              }
+            ]
+          }
+        },
+        {
+          "id": "step-41",
+          "action": "Use `task status`: Read task and managed-resource status for one active round.",
+          "actorRole": "operator",
+          "refs": {
+            "actionRefs": [
+              {
+                "id": "task status"
+              }
+            ]
+          }
         }
       ],
       "postconditions": [
-        "The round is either intact in disposable local state or fully sealed in the durable ledger",
-        "Supported round commands have not invoked the experimental autonomous loop"
+        "The selected action returns its declared result envelope or a fail-closed refusal."
       ],
       "acceptanceCriteria": [
-        "Scaffold, declaration, and status are deterministic and schema-valid",
-        "Archive is atomic and fail-closed over every closure precondition",
-        "Init and adoption seed the scratch/archive layout and gitignore boundary",
-        "Supported round commands remain separate from experimental autonomous execution"
+        "Every action reference resolves exactly once in the current action registry.",
+        "No deprecated, retired, folded, aliased, or tombstoned action is described."
       ]
     }
-  ],
-  "provenance": [
-    "ex-use-cases/devai-cli.json@devai-original",
-    "REV-0006 Owner marks applied 2026-07-23: stale hand-maintained generatedAt removed; all 12 imported use cases mapped to successor or explicitly provisional predecessor CLI action identifiers",
-    "UC-devai-round-lifecycle absorbed from devai-original after successor rehearsal seed; source re-read 2026-07-23"
   ]
 }

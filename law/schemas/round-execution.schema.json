@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/round-execution.schema.json",
   "title": "Round execution policy",
-  "description": "Schema for the Architect-owned round/task containment, selection, ordering, role, resource, lifecycle, failure, rollback, legacy migration, output, and public vocabulary policy.",
+  "description": "Schema for the Architect-owned round/task containment, selection, ordering, role, resource, lifecycle, failure, rollback, current migration, output, and public vocabulary policy.",
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -12,7 +12,6 @@
     "id",
     "status",
     "authority",
-    "decision",
     "task_contract",
     "selection",
     "dependencies",
@@ -40,9 +39,6 @@
     },
     "authority": {
       "const": "Architect"
-    },
-    "decision": {
-      "const": "ADR-022"
     },
     "task_contract": {
       "$ref": "#/$defs/section"
@@ -253,131 +249,5 @@
       }
     }
   },
-  "examples": [
-    {
-      "$schema": "../schemas/round-execution.schema.json",
-      "schemaVersion": "1.0.0",
-      "id": "round-execution",
-      "status": "active",
-      "authority": "Architect",
-      "decision": "ADR-022",
-      "task_contract": {
-        "cardinality": "exactly-one-active-round-per-task"
-      },
-      "selection": {
-        "required_round_argument": true
-      },
-      "dependencies": {
-        "same_round_required": true
-      },
-      "roles": {
-        "path_authority": "discipline-only"
-      },
-      "resources": {
-        "all_or_nothing": true
-      },
-      "lifecycle": {
-        "initial": "queued",
-        "terminal": ["completed"],
-        "transitions": [
-          {
-            "from": "queued",
-            "to": ["ready"]
-          }
-        ],
-        "undeclared_transition": "TASK_LIFECYCLE_TRANSITION_FORBIDDEN",
-        "timestamps": "monotonic-and-evidenced"
-      },
-      "failure": {
-        "implicit_fallback": "forbidden"
-      },
-      "rollback": {
-        "destructive_reset": "forbidden"
-      },
-      "legacy_migration": {
-        "classification": "historical-non-executable"
-      },
-      "outputs": {
-        "requested_executor_copy": "forbidden"
-      },
-      "vocabularies": {
-        "inventory_slices": [
-          {
-            "name": "pack",
-            "members": ["pack"]
-          },
-          {
-            "name": "adherence",
-            "members": ["adherence"]
-          },
-          {
-            "name": "components",
-            "members": ["components"]
-          },
-          {
-            "name": "contracts",
-            "members": ["contracts"]
-          },
-          {
-            "name": "coverage",
-            "members": ["coverage"]
-          },
-          {
-            "name": "dependencies",
-            "members": ["dependencies"]
-          },
-          {
-            "name": "glossary",
-            "members": ["glossary"]
-          },
-          {
-            "name": "modules",
-            "members": ["modules"]
-          },
-          {
-            "name": "routes",
-            "members": ["routes"]
-          },
-          {
-            "name": "schemas",
-            "members": ["schemas"]
-          },
-          {
-            "name": "tests",
-            "members": ["tests"]
-          },
-          {
-            "name": "all",
-            "members": ["all"]
-          }
-        ],
-        "adoption_tiers": [
-          {
-            "name": "tier1",
-            "members": ["tier1"]
-          },
-          {
-            "name": "tier2",
-            "members": ["tier2"]
-          },
-          {
-            "name": "tier3",
-            "members": ["tier3"]
-          }
-        ],
-        "surface_tiers": [
-          {
-            "name": "porcelain",
-            "members": ["init"]
-          },
-          {
-            "name": "plumbing",
-            "members": ["task"]
-          }
-        ],
-        "verdicts": ["pass", "review", "fail", "unknown", "na", "skipped", "error", "killed"],
-        "action_lifecycles": ["supported", "experimental", "retired"]
-      }
-    }
-  ]
+  "examples": [{}]
 }

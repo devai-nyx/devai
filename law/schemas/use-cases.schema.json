@@ -1,9 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/use-cases.schema.json",
-  "$comment": "REDOX-UseCases: absorbed from /Users/aarusso/Development/tools/redox/src/schemas/UseCases.schema.json in Phase 17.B (D-57). Distinct from DEVAI's journey.schema.json (operator-paths-through-DEVAI per D-48); use-cases here are inferred end-user flows discovered in adopter repos.",
   "title": "Use Cases (Adopter)",
-  "description": "Inferred end-user use-case / journey inventory discovered by deterministic static introspection (controller summaries, route metadata, RBAC bindings) plus optional LLM-inferred actor/flow elaboration. Distinct from DEVAI's journey.schema.json (operator paths through DEVAI itself, per D-48). Emitted as a SensorReading body at tier L0 by inventory_coverage sensors (Phase 17.C). Per D-57 (brownfield-adoption substrate).",
+  "description": "End-user use-case inventory discovered from adopter behavior or authored for current DEVAI operator interactions.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -48,22 +47,6 @@
           "minimum": 0
         }
       }
-    },
-    "provenance": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "Absorption/supersession provenance per the record meta-structure (§5.1)."
-    },
-    "supersedes": {
-      "type": ["array", "null"],
-      "items": {
-        "type": "string"
-      }
-    },
-    "superseded_by": {
-      "type": ["string", "null"]
     }
   },
   "required": ["schemaVersion", "roles", "cases"],
@@ -126,10 +109,6 @@
           "type": "string",
           "minLength": 1,
           "description": "Space-separated canonical CLI action path."
-        },
-        "provisional": {
-          "const": true,
-          "description": "Present only when id preserves the predecessor canonical path pending successor CLI binding."
         }
       },
       "required": ["id"]
@@ -279,22 +258,5 @@
     }
   },
   "schema_version": "1.0.0",
-  "examples": [
-    {
-      "schemaVersion": "1.0.0",
-      "generatedAt": "2026-05-18T05:30:00.000Z",
-      "roles": ["operator"],
-      "cases": [
-        {
-          "id": "UC-devai-doctor",
-          "title": "Operator runs doctor to verify repo health (self or adopter)",
-          "mainFlow": [
-            {
-              "action": "Operator runs `devai doctor --self|--adopter|--auto --format human` (Phase 21.B)"
-            }
-          ]
-        }
-      ]
-    }
-  ]
+  "examples": [{}]
 }

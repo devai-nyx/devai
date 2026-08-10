@@ -36,7 +36,7 @@ Use a preset for a repeatable observation population. Use a positional kind when
 is needed. See the generated [sense-preset reference](./sense-presets.md).
 
 ```sh
-devai sense run --preset sweep --round R-0007 --repo-root . --dry-run --format json
+devai sense run --preset sweep --round R-1000 --repo-root . --dry-run --format json
 ```
 
 ### Kind
@@ -88,7 +88,7 @@ shape `R-NNNN`. It owns intent, task population, active/closed standing, evidenc
 the applicable close contract. A round result does not imply release.
 
 ```sh
-devai round status --round R-0007 --repo-root . --format json
+devai round status --round R-1000 --repo-root . --format json
 ```
 
 ### Task
@@ -99,7 +99,7 @@ operators execute it through `round run`; direct `task` routes are hidden plumbi
 bypass round containment.
 
 ```sh
-devai round run --round R-0007 --task TASK-7001 --repo-root . --as-role engineer --write --format json
+devai round run --round R-1000 --task TASK-7001 --repo-root . --as-role engineer --write --format json
 ```
 
 See [rounds, tasks, and executors](./round-task-executors.md) for dependency, resource, selection,

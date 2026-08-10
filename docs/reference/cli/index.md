@@ -4,9 +4,8 @@ DEVAI presents exactly seven workflow domains. Choose the domain from the outcom
 then choose one leaf action, suite, preset, kind, slice, tier, round, or task selection inside
 that domain. The hidden `task` and `catalog` surfaces are plumbing, not additional workflows.
 
-This page is the minimum R-0007 operator handoff. It does not claim that the R-0009 narrative
-corpus or deploy-ready site exists, and documentation does not establish release, deployment,
-or readiness.
+This page is the current operator guide. It describes the supported CLI surface; documentation
+does not by itself establish release, deployment, or readiness.
 
 ## Choose a workflow
 
@@ -15,8 +14,8 @@ or readiness.
 | plan or apply adoption and upgrades                                       | `init`     | `devai init plan --target . --tier tier1 --format json`                               |
 | diagnose the repository's declared posture                                | `doctor`   | `devai doctor --repo-root . --format json`                                            |
 | validate a governed rule population                                       | `check`    | `devai check --only cli-reference --repo-root . --format json`                        |
-| observe the repository or runtime                                         | `sense`    | `devai sense run --preset sweep --round R-0007 --repo-root . --dry-run --format json` |
-| plan, inspect, run, or close governed work                                | `round`    | `devai round status --round R-0007 --repo-root . --format json`                       |
+| observe the repository or runtime                                         | `sense`    | `devai sense run --preset sweep --round R-1000 --repo-root . --dry-run --format json` |
+| plan, inspect, run, or close governed work                                | `round`    | `devai round status --round R-1000 --repo-root . --format json`                       |
 | collect, record, render, redact, or verify evidence                       | `evidence` | `devai evidence verify --scope chain --show-head --repo-root . --format json`         |
 | inspect release control or enter a separately authorized release ceremony | `release`  | `devai release status --repo-root . --format json`                                    |
 
@@ -141,7 +140,7 @@ other. Preview or inspect whenever the leaf offers `--dry-run`, plan output, sta
   authority contract. Cost is selected-kind or selected-preset data, not a domain value.
 - **Use / do not use:** use to observe or inventory. Do not use a reading as a check verdict, and
   do not assume that producing a reading makes an intrinsically write-capable probe read-only.
-- **Example:** `devai sense run --preset sweep --round R-0007 --repo-root . --dry-run --format json`.
+- **Example:** `devai sense run --preset sweep --round R-1000 --repo-root . --dry-run --format json`.
 - **Canonical source and related workflow:** [sensor registry](../../../law/policy/sensor-registry.json),
   [sense presets](./sense-presets.md), [sensor kinds](./sensor-kinds.md); use `evidence` for explicit
   persistence and verification.
@@ -162,7 +161,7 @@ other. Preview or inspect whenever the leaf offers `--dry-run`, plan output, sta
   from a fast status read to external-dependent task execution.
 - **Use / do not use:** use as the ordinary entry point for governed task execution. Do not call
   hidden task plumbing to bypass containment, and do not infer release from round closure.
-- **Example:** `devai round status --round R-0007 --repo-root . --format json`.
+- **Example:** `devai round status --round R-1000 --repo-root . --format json`.
 - **Canonical source and related workflow:** [round-execution policy](../../../law/policy/round-execution.json),
   [round/task/executor guide](./round-task-executors.md); use `evidence` to inspect execution proof.
 
@@ -256,8 +255,8 @@ authorized.
    the selected ready tasks:
 
    ```sh
-   devai round status --round R-0007 --repo-root . --format json
-   devai round run --round R-0007 --task TASK-7001 --repo-root . --as-role engineer --write --format json
+   devai round status --round R-1000 --repo-root . --format json
+   devai round run --round R-1000 --task TASK-7001 --repo-root . --as-role engineer --write --format json
    ```
 
 8. Verify the evidence scope before consulting release control:
@@ -276,5 +275,5 @@ authorized.
 - Select obligations in [adoption tiers](./adoption-tiers.md).
 - Operate governed work with [rounds, tasks, and executors](./round-task-executors.md).
 - Check role and mutation boundaries in [authority and effects](./authority-effects.md).
-Canonical routing: [action registry](../../../law/policy/action-registry.json),
-[documentation information architecture](../../../law/policy/documentation-information-architecture.json).
+  Canonical routing: [action registry](../../../law/policy/action-registry.json),
+  [documentation information architecture](../../../law/policy/documentation-information-architecture.json).

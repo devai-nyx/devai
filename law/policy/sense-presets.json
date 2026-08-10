@@ -4,7 +4,6 @@
   "id": "sense-presets",
   "status": "active",
   "authority": "Architect",
-  "decision": "ADR-022",
   "registry": "law/policy/sensor-registry.json",
   "ordering": "canonical-sensor-registry-order",
   "implicit_persistence": "forbidden",

@@ -106,7 +106,7 @@ mutable populations.
 - **When to use:** Use to run the complete named `sweep` observation population.
 - **When not to use:** Do not use as an acceptance suite, as implicit persistence, or to omit a required selected member.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run --preset sweep --round R-0007 --repo-root . --dry-run --format json`
+- **New-grammar example:** `devai sense run --preset sweep --round R-1000 --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sense-presets.json`](../../../law/policy/sense-presets.json#/presets)
 - **Related workflow:** `sense`
 
@@ -140,7 +140,7 @@ sensor as excluded with a reason. The caller cannot omit a read-only member or a
 excluded member while retaining the sweep identity.
 
 ```sh
-devai sense run --preset sweep --round R-0007 --format json
+devai sense run --preset sweep --round R-1000 --format json
 ```
 
 The round argument binds the observation to its round context. It does not persist the

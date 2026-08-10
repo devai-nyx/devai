@@ -9,13 +9,12 @@ sensor_kind: test_invariant_alignment
 emitter: packages/sensors/src/test-invariant-alignment.ts
 standing: cell
 tiers: [TIER3, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Test Invariant Alignment
 
-This note binds the successor-local design standing for `test_invariant_alignment`. Its canonical emitter
-is `packages/sensors/src/test-invariant-alignment.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `test_invariant_alignment`. Its canonical emitter
+is `packages/sensors/src/test-invariant-alignment.ts`.
 
 Bound cells: F3×T4.
 

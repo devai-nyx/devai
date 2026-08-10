@@ -9,13 +9,12 @@ sensor_kind: docs_drift
 emitter: packages/sensors/src/docs-drift.ts
 standing: cell
 tiers: [TIER3, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Docs Drift
 
-This note binds the successor-local design standing for `docs_drift`. Its canonical emitter
-is `packages/sensors/src/docs-drift.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `docs_drift`. Its canonical emitter
+is `packages/sensors/src/docs-drift.ts`.
 
 Bound cells: F5×T3.
 

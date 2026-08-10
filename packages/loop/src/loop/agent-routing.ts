@@ -54,7 +54,6 @@ export interface AgentRoutingPolicyRegistry {
   readonly id: 'agent-routing-policies';
   readonly status: 'active';
   readonly authority: 'Architect';
-  readonly decision: 'ADR-022';
   readonly registry: typeof import('./model-runtime.js').MODEL_RUNTIME_REGISTRY_PATH;
   readonly identity: Readonly<Record<string, unknown>>;
   readonly resolution: Readonly<Record<string, unknown>>;
@@ -143,7 +142,7 @@ export function validateAgentRoutingPolicies(candidate: unknown): AgentRoutingPo
     candidate['id'] !== 'agent-routing-policies' ||
     candidate['status'] !== 'active' ||
     candidate['authority'] !== 'Architect' ||
-    candidate['decision'] !== 'ADR-022' ||
+    candidate['decision'] !== undefined ||
     candidate['registry'] !== 'law/policy/model-runtime-registry.json' ||
     !isRecord(candidate['identity']) ||
     !isRecord(candidate['resolution']) ||

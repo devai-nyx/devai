@@ -9,13 +9,12 @@ sensor_kind: inventory_coverage
 emitter: packages/sensors/src/inventory-coverage.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Inventory Coverage
 
-This note binds the successor-local design standing for `inventory_coverage`. Its canonical emitter
-is `packages/sensors/src/inventory-coverage.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `inventory_coverage`. Its canonical emitter
+is `packages/sensors/src/inventory-coverage.ts`.
 
 Bound cells: F4×T1, F4×T2.
 

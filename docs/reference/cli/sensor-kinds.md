@@ -4,8 +4,8 @@ title: Sensor-kind catalog
 
 # Sensor-kind catalog
 
-This is the R-0007 canonical descriptor handoff, not the complete R-0009 narrative or a
-release/readiness claim. The generated section derives its population and stable order from
+This is the current canonical sensor descriptor reference, not a release or readiness claim.
+The generated section derives its population and stable order from
 the live sensor registry and joins preset membership from canonical preset policy. Edit the
 sources or renderer, never the bytes between markers.
 

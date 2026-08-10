@@ -9,13 +9,12 @@ sensor_kind: unit_test
 emitter: packages/sensors/src/test.ts
 standing: cell
 tiers: [BASELINE, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Unit Test
 
-This note binds the successor-local design standing for `unit_test`. Its canonical emitter
-is `packages/sensors/src/test.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `unit_test`. Its canonical emitter
+is `packages/sensors/src/test.ts`.
 
 Bound cells: F3×T1.
 

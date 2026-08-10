@@ -9,13 +9,12 @@ sensor_kind: lint
 emitter: packages/sensors/src/lint.ts
 standing: cell
 tiers: [BASELINE, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Lint
 
-This note binds the successor-local design standing for `lint`. Its canonical emitter
-is `packages/sensors/src/lint.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `lint`. Its canonical emitter
+is `packages/sensors/src/lint.ts`.
 
 Bound cells: F2×T5.
 

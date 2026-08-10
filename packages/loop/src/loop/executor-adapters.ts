@@ -1,5 +1,5 @@
 /**
- * Shared, side-effect-free contracts for the R-0007 executor adapters.
+ * Shared, side-effect-free contracts for executor adapters.
  *
  * Discipline is deliberately carried as data supplied by the task boundary. Neither
  * this module nor an adapter is allowed to manufacture authority from an executor,

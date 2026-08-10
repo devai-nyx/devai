@@ -362,5 +362,5 @@ conformance verdict.
 - [Documentation information architecture](../../../law/policy/documentation-information-architecture.json)
   — deterministic rendering and no-copy rule.
 
-This is the R-0007 canonical operator handoff. It does not claim complete R-0009
-narrative documentation, readiness, release, or deployment.
+This is the current canonical inventory-slice reference. It describes the supported
+inventory projections, not readiness, release, or deployment.

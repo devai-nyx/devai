@@ -9,13 +9,12 @@ sensor_kind: test_coverage_depth
 emitter: packages/sensors/src/test-coverage-depth.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Test Coverage Depth
 
-This note binds the successor-local design standing for `test_coverage_depth`. Its canonical emitter
-is `packages/sensors/src/test-coverage-depth.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `test_coverage_depth`. Its canonical emitter
+is `packages/sensors/src/test-coverage-depth.ts`.
 
 Bound cells: F3×T2.
 

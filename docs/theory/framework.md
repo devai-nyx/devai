@@ -25,7 +25,7 @@ slug: /framework
 | [Invariants](./framework/invariants.md)         | The atomic spec unit; trace; per-invariant change policy.                                                                                                    |
 | [Test policy](./framework/test-policy.md) (W09) | Six test suites, journeys, DB tests, mutation scenarios, weakening, quarantine, coverage, per-batch verification.                                            |
 | Contracts                                       | API/data contracts under `docs/reference/contracts/`.                                                                                                        |
-| Schemas                                         | The schema roster is derived from `law/policy/population-registry.json` and guarded by the schema liveness checks; no prose count is authoritative.          |
+| Schemas                                         | The schema roster is explicit in `packages/schemas/src/roster.ts` and guarded by schema liveness checks; no prose count is authoritative.                    |
 | Glossary                                        | Canonical vocabulary under `law/glossary/`; cite by term.                                                                                                    |
 | Product                                         | Owner-authored journeys and use-cases under `product/`.                                                                                                      |
 

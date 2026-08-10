@@ -9,13 +9,12 @@ sensor_kind: type_check
 emitter: packages/sensors/src/type-check.ts
 standing: cell
 tiers: [BASELINE, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Type Check
 
-This note binds the successor-local design standing for `type_check`. Its canonical emitter
-is `packages/sensors/src/type-check.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `type_check`. Its canonical emitter
+is `packages/sensors/src/type-check.ts`.
 
 Bound cells: F2×T8.
 

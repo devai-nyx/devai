@@ -9,13 +9,12 @@ sensor_kind: inventory_regeneration
 emitter: packages/cli/src/commands/sense/readings-rebuild.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Inventory Regeneration
 
-This note binds the successor-local design standing for `inventory_regeneration`. Its canonical emitter
-is `packages/cli/src/commands/sense/readings-rebuild.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `inventory_regeneration`. Its canonical emitter
+is `packages/cli/src/commands/sense/readings-rebuild.ts`.
 
 Bound cells: F4×T9.
 

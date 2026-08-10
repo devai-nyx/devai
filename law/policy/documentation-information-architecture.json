@@ -1,18 +1,10 @@
 {
   "$schema": "../schemas/documentation-information-architecture.schema.json",
   "schemaVersion": "1.0.0",
-  "id": "r0007-documentation-information-architecture",
+  "id": "documentation-information-architecture",
   "status": "active",
   "authority": "Architect",
-  "decision": "ADR-023",
   "ordering": "policy-declared-page-category-and-projection-order",
-  "claim_ceiling": {
-    "canonical_descriptor_handoff": true,
-    "narrative_documentation_complete": false,
-    "deploy_ready_site": false,
-    "released": false,
-    "deployed": false
-  },
   "source_routing_rules": {
     "canonical_sources_only": true,
     "narrative_population_copy": "forbidden",
@@ -50,8 +42,6 @@
       "purpose": "Explain the seven-workflow mental model, typical adoption-to-release journey, and command-selection route without exposing plumbing as an eighth workflow.",
       "content_mode": "narrative-with-generated-links",
       "mutable_population_mode": "none",
-      "r0007_delivery": "minimum-operator-handoff",
-      "r0009_completion": "conceptual-narrative",
       "category_ids": [],
       "source_refs": [
         {
@@ -68,8 +58,6 @@
       "purpose": "Define suite, preset, kind, slice, tier, round, subordinate task, role, effect, verdict, lifecycle, porcelain, and plumbing while keeping their populations source-derived.",
       "content_mode": "narrative-with-generated-links",
       "mutable_population_mode": "generated-from-canonical-source",
-      "r0007_delivery": "canonical-descriptor",
-      "r0009_completion": "conceptual-narrative",
       "category_ids": ["verdicts", "action-lifecycles", "surface-tiers"],
       "source_refs": [
         {
@@ -91,8 +79,6 @@
       "purpose": "Render each check suite's exact membership, order, prerequisites, outputs, exit behavior, cost, use guidance, and examples.",
       "content_mode": "generated-reference",
       "mutable_population_mode": "generated-from-canonical-source",
-      "r0007_delivery": "canonical-descriptor",
-      "r0009_completion": "generated-page-and-site-integration",
       "category_ids": ["check-suites"],
       "source_refs": [
         {
@@ -109,8 +95,6 @@
       "purpose": "Render exact preset membership, cumulative relationships, sweep exclusions, persistence boundary, outputs, costs, and examples.",
       "content_mode": "generated-reference",
       "mutable_population_mode": "generated-from-canonical-source",
-      "r0007_delivery": "canonical-descriptor",
-      "r0009_completion": "generated-page-and-site-integration",
       "category_ids": ["sense-presets"],
       "source_refs": [
         {
@@ -127,8 +111,6 @@
       "purpose": "Render every live kind with emitter, inputs, outputs, scorecard or diagnostic standing, preset membership, prerequisites, and effect.",
       "content_mode": "generated-reference",
       "mutable_population_mode": "generated-from-canonical-source",
-      "r0007_delivery": "canonical-descriptor",
-      "r0009_completion": "generated-page-and-site-integration",
       "category_ids": ["sensor-kinds"],
       "source_refs": [
         {
@@ -150,8 +132,6 @@
       "purpose": "Render each slice's exact contents, supported stacks, deterministic inputs, output body, limitations, effects, and examples.",
       "content_mode": "generated-reference",
       "mutable_population_mode": "generated-from-canonical-source",
-      "r0007_delivery": "canonical-descriptor",
-      "r0009_completion": "generated-page-and-site-integration",
       "category_ids": ["inventory-slices"],
       "source_refs": [
         {
@@ -168,8 +148,6 @@
       "purpose": "Explain obligations, advisory versus binding behavior, climb requirements, and the distinction from check suites, sense presets, and surface tiers.",
       "content_mode": "narrative-with-generated-links",
       "mutable_population_mode": "generated-from-canonical-source",
-      "r0007_delivery": "canonical-descriptor",
-      "r0009_completion": "conceptual-narrative",
       "category_ids": ["adoption-tiers"],
       "source_refs": [
         {
@@ -186,8 +164,6 @@
       "purpose": "Explain one-round task containment, lifecycle, waves, dependencies, resources, recovery, hidden task plumbing, executor kinds, selection modes, fallback refusal, and requested-versus-resolved execution evidence.",
       "content_mode": "narrative-with-generated-links",
       "mutable_population_mode": "generated-from-canonical-source",
-      "r0007_delivery": "minimum-operator-handoff",
-      "r0009_completion": "conceptual-narrative",
       "category_ids": ["executor-kinds", "agent-selection-modes"],
       "source_refs": [
         {
@@ -219,8 +195,6 @@
       "purpose": "Explain role authority, four effect classes, independent write and publish consent, refusals, and safe examples without deriving authority from executor or model capability.",
       "content_mode": "narrative-with-generated-links",
       "mutable_population_mode": "generated-from-canonical-source",
-      "r0007_delivery": "minimum-operator-handoff",
-      "r0009_completion": "conceptual-narrative",
       "category_ids": ["roles", "effects"],
       "source_refs": [
         {
@@ -247,8 +221,6 @@
       "purpose": "Render vendors, families, adapters, exact provider models or governed aliases, efforts, capabilities, availability, replacement metadata, and selection eligibility without promising an unrostered combination.",
       "content_mode": "generated-reference",
       "mutable_population_mode": "generated-from-canonical-source",
-      "r0007_delivery": "canonical-descriptor",
-      "r0009_completion": "generated-page-and-site-integration",
       "category_ids": ["runtimes", "rostered-models", "supported-efforts"],
       "source_refs": [
         {
@@ -514,105 +486,80 @@
   "completeness_gates": [
     {
       "gate_id": "docs-policy-schema",
-      "phase": "b2-policy",
+      "phase": "current",
       "scope": "policy",
       "condition": "the policy validates against documentation-information-architecture.schema.json",
       "failure": "DOCS_POLICY_SCHEMA_INVALID"
     },
     {
       "gate_id": "docs-page-manifest-unique",
-      "phase": "b2-policy",
+      "phase": "current",
       "scope": "page-manifest",
       "condition": "page identifiers and planned paths are nonempty and unique and every category points to one declared page",
       "failure": "DOCS_PAGE_MANIFEST_INVALID"
     },
     {
       "gate_id": "docs-source-routing-resolves",
-      "phase": "r0007-b5",
+      "phase": "current",
       "scope": "category",
       "condition": "every canonical source exists at the candidate and every declared pointer or projection resolves without inference",
       "failure": "DOCS_CANONICAL_SOURCE_UNRESOLVED"
     },
     {
       "gate_id": "docs-category-census-exact",
-      "phase": "r0007-b6",
+      "phase": "current",
       "scope": "category",
       "condition": "the machine report contains exactly the policy category identifiers with no missing or extra category",
       "failure": "DOCS_CATEGORY_CENSUS_DRIFT"
     },
     {
       "gate_id": "docs-category-bijection",
-      "phase": "r0007-b6",
+      "phase": "current",
       "scope": "category",
       "condition": "each category's expected and documented identifiers are an exact ordered bijection with no missing extra or duplicate identifier",
       "failure": "DOCS_CATEGORY_BIJECTION_FAILED"
     },
     {
       "gate_id": "docs-entry-semantics-complete",
-      "phase": "r0007-b6",
+      "phase": "current",
       "scope": "entry",
       "condition": "every documented value has every policy semantic field and every field is nonempty or carries an explicit not-applicable reason",
       "failure": "DOCS_ENTRY_SEMANTICS_INCOMPLETE"
     },
     {
       "gate_id": "docs-source-parity",
-      "phase": "r0007-b6",
+      "phase": "current",
       "scope": "category",
       "condition": "all supplemental-source projections agree with the canonical population and semantic assignment",
       "failure": "DOCS_SOURCE_PARITY_FAILED"
     },
     {
       "gate_id": "docs-generated-deterministic",
-      "phase": "r0007-b6",
+      "phase": "current",
       "scope": "entry",
       "condition": "two renders from identical canonical bytes are byte-identical and the check path performs no writes",
       "failure": "DOCS_GENERATED_BYTES_DRIFT"
     },
     {
       "gate_id": "docs-narrative-no-population-copy",
-      "phase": "r0007-b6",
+      "phase": "current",
       "scope": "narrative",
       "condition": "narrative pages link to generated tables and contain no independently maintained complete mutable enumeration",
       "failure": "DOCS_NARRATIVE_DUPLICATES_CANON"
     },
     {
       "gate_id": "docs-examples-new-grammar",
-      "phase": "r0007-b6",
+      "phase": "current",
       "scope": "example",
       "condition": "every required example uses only the new grammar and passes a read-only or dry-run fixture or fails with its documented precondition",
       "failure": "DOCS_EXAMPLE_INVALID"
     },
     {
-      "gate_id": "docs-handoff-claim-ceiling",
-      "phase": "r0007-b6",
-      "scope": "claim",
-      "condition": "the R-0007 report states narrative_documentation_complete false and deploy_ready_site false",
-      "failure": "DOCS_HANDOFF_OVERCLAIM"
-    },
-    {
-      "gate_id": "docs-r0009-page-set",
-      "phase": "r0009",
+      "gate_id": "docs-page-set",
+      "phase": "current",
       "scope": "page-manifest",
       "condition": "every planned page exists at its exact path with all generated links and no undeclared competing canonical CLI page",
-      "failure": "DOCS_R0009_PAGE_SET_INCOMPLETE"
+      "failure": "DOCS_PAGE_SET_INCOMPLETE"
     }
-  ],
-  "r0007_handoff": {
-    "round": "R-0007",
-    "scope": "canonical-current-state-descriptors-and-operator-guidance",
-    "required_outputs": [
-      "schema-valid information-architecture policy",
-      "machine-readable exact category report",
-      "deterministic generated reference descriptors",
-      "minimum round-task-executor operator guidance"
-    ],
-    "completion_claim": "handoff-complete-only"
-  },
-  "r0009_completion": {
-    "round": "R-0009",
-    "entry_dependency": "R-0008-closed-and-r0009-entry-check-passed",
-    "scope": "complete-narrative-user-documentation-generated-pages-site-integration-and-deploy-ready-artifact",
-    "currently_exists": false,
-    "currently_authorized": false
-  }
+  ]
 }

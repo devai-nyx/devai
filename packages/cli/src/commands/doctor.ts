@@ -79,7 +79,6 @@ const READING_ORDER_SOURCES = [
   'README.md',
   'law/constitution.md',
   'law/adr',
-  'work/rounds',
   'law/schemas',
 ] as const;
 const FIVE_ROLES = ['Owner', 'Architect', 'Inspector', 'Engineer', 'Auditor'] as const;
@@ -240,45 +239,6 @@ function checkSchemasLoadable(repoRoot: string): CheckResult {
     info: { count: files.length },
     ...(errors.length > 0 && { errors }),
   };
-}
-
-async function checkRoundArtifactUniqueness(repoRoot: string): Promise<CheckResult> {
-  const script = join(repoRoot, 'scripts/check-round-artifact-uniqueness.mjs');
-  if (!existsSync(script)) {
-    return {
-      name: 'round-artifact-uniqueness',
-      ok: false,
-      errors: [`missing: ${script}`],
-    };
-  }
-  try {
-    // The repository-owned gate is a plain ESM script rather than a typed package module.
-    // @ts-expect-error -- imported from the checked repository root at runtime.
-    const module = (await import('../../../../scripts/check-round-artifact-uniqueness.mjs')) as {
-      report: {
-        ok?: boolean;
-        findings?: Array<{ code?: string; message?: string }>;
-      };
-    };
-    const report = module.report;
-    const errors = (report.findings ?? []).map(
-      (finding) => `[${finding.code ?? 'UNKNOWN'}] ${finding.message ?? 'unspecified finding'}`,
-    );
-    return {
-      name: 'round-artifact-uniqueness',
-      ok: report.ok === true,
-      info: { finding_count: errors.length },
-      ...(errors.length > 0 && { errors }),
-    };
-  } catch (error) {
-    return {
-      name: 'round-artifact-uniqueness',
-      ok: false,
-      errors: [
-        `round artifact uniqueness gate returned invalid output: ${error instanceof Error ? error.message : String(error)}`,
-      ],
-    };
-  }
 }
 
 function checkEvidenceChain(chainPath: string): CheckResult {
@@ -878,11 +838,6 @@ const CHECK_SPECS: readonly CheckSpec[] = [
     name: 'schemas-loadable',
     postures: new Set<Posture>(['self']),
     run: (repoRoot) => checkSchemasLoadable(repoRoot),
-  },
-  {
-    name: 'round-artifact-uniqueness',
-    postures: new Set<Posture>(['self']),
-    run: (repoRoot) => checkRoundArtifactUniqueness(repoRoot),
   },
   {
     name: 'test-trace',

@@ -4,7 +4,6 @@
   "id": "check-suites",
   "status": "active",
   "authority": "Architect",
-  "decision": "ADR-022",
   "ordering": "members-execute-in-declared-order-without-coalescing",
   "unknown_behavior": "error-never-pass",
   "prerequisites": [
@@ -32,8 +31,7 @@
         "trace-validation",
         "test-trace-validation",
         "strategy-validation",
-        "action-coverage",
-        "ordinary-policy"
+        "action-coverage"
       ],
       "excluded": []
     },
@@ -52,10 +50,8 @@
         "test-trace-validation",
         "strategy-validation",
         "action-coverage",
-        "ordinary-policy",
         "full-tests",
         "inventory-integrity",
-        "docs-ci-policy",
         "mutation",
         "security-performance",
         "harness-integrity",
@@ -78,10 +74,8 @@
         "test-trace-validation",
         "strategy-validation",
         "action-coverage",
-        "ordinary-policy",
         "full-tests",
         "inventory-integrity",
-        "docs-ci-policy",
         "mutation",
         "security-performance",
         "harness-integrity",
@@ -233,16 +227,6 @@
       "output": "action-envelope-plus-test-report"
     },
     {
-      "id": "ordinary-policy",
-      "binding": {
-        "kind": "package-script",
-        "argv": ["pnpm", "run", "ci:governance"]
-      },
-      "effect": "harness-write",
-      "cost": "high",
-      "output": "action-envelope-plus-governance-report"
-    },
-    {
       "id": "full-tests",
       "binding": {
         "kind": "literal-argv",
@@ -261,16 +245,6 @@
       "effect": "read",
       "cost": "medium",
       "output": "action-envelope-plus-inventory-report"
-    },
-    {
-      "id": "docs-ci-policy",
-      "binding": {
-        "kind": "package-script",
-        "argv": ["pnpm", "run", "ci:stage1"]
-      },
-      "effect": "harness-write",
-      "cost": "high",
-      "output": "action-envelope-plus-stage1-report"
     },
     {
       "id": "mutation",

@@ -9,13 +9,12 @@ sensor_kind: inventory_determinism
 emitter: packages/sensors/src/inventory-determinism.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Inventory Determinism
 
-This note binds the successor-local design standing for `inventory_determinism`. Its canonical emitter
-is `packages/sensors/src/inventory-determinism.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `inventory_determinism`. Its canonical emitter
+is `packages/sensors/src/inventory-determinism.ts`.
 
 Bound cells: F4×T8.
 

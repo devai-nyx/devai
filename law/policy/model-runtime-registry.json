@@ -4,7 +4,6 @@
   "id": "model-runtime-registry",
   "status": "active",
   "authority": "Architect",
-  "decision": "ADR-022",
   "availability_semantics": {
     "registry_value": "available means eligible for attempted resolution, not proved reachable on this host",
     "host_preflight_required": true,
@@ -133,7 +132,7 @@
       "capabilities": ["text-generation", "structured-output-best-effort", "repository-context"],
       "eligible_agent_classes": ["coding-agent", "review-agent", "ops-agent"],
       "available": true,
-      "availability_basis": "Owner-bound exact R-0007 selector; host identity and availability remain mandatory preflights",
+      "availability_basis": "exact host selector; host identity and availability remain mandatory preflights",
       "replacement": {
         "state": "none",
         "model_id": null,
@@ -152,7 +151,7 @@
       "capabilities": ["text-generation", "structured-output", "repository-context"],
       "eligible_agent_classes": ["coding-agent", "review-agent", "ops-agent"],
       "available": true,
-      "availability_basis": "exact model used by the committed R-0007 role prompts; host identity is rechecked before invocation",
+      "availability_basis": "exact configured model; host identity is rechecked before invocation",
       "replacement": {
         "state": "none",
         "model_id": null,

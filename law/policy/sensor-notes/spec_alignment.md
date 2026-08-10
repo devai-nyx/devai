@@ -9,13 +9,12 @@ sensor_kind: spec_alignment
 emitter: packages/sensors/src/spec-alignment.ts
 standing: cell
 tiers: [TIER2, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Spec Alignment
 
-This note binds the successor-local design standing for `spec_alignment`. Its canonical emitter
-is `packages/sensors/src/spec-alignment.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `spec_alignment`. Its canonical emitter
+is `packages/sensors/src/spec-alignment.ts`.
 
 Bound cells: F1×T4.
 

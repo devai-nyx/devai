@@ -9,13 +9,12 @@ sensor_kind: spec_freshness
 emitter: packages/sensors/src/spec-freshness.ts
 standing: cell
 tiers: [TIER3, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Spec Freshness
 
-This note binds the successor-local design standing for `spec_freshness`. Its canonical emitter
-is `packages/sensors/src/spec-freshness.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `spec_freshness`. Its canonical emitter
+is `packages/sensors/src/spec-freshness.ts`.
 
 Bound cells: F1×T9.
 

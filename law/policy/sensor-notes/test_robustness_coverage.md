@@ -9,13 +9,12 @@ sensor_kind: test_robustness_coverage
 emitter: packages/sensors/src/test-robustness-coverage.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Test Robustness Coverage
 
-This note binds the successor-local design standing for `test_robustness_coverage`. Its canonical emitter
-is `packages/sensors/src/test-robustness-coverage.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `test_robustness_coverage`. Its canonical emitter
+is `packages/sensors/src/test-robustness-coverage.ts`.
 
 Bound cells: F3×T8.
 

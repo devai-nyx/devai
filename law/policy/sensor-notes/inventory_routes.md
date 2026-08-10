@@ -9,13 +9,12 @@ sensor_kind: inventory_routes
 emitter: packages/sensors/src/inventory-routes.ts
 standing: cell
 tiers: [TIER2, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Inventory Routes
 
-This note binds the successor-local design standing for `inventory_routes`. Its canonical emitter
-is `packages/sensors/src/inventory-routes.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `inventory_routes`. Its canonical emitter
+is `packages/sensors/src/inventory-routes.ts`.
 
 Bound cells: F4×T1, F4×T2.
 

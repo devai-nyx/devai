@@ -9,13 +9,12 @@ sensor_kind: inventory_rbac
 emitter: packages/sensors/src/inventory-rbac.ts
 standing: cell
 tiers: [TIER2, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Inventory Rbac
 
-This note binds the successor-local design standing for `inventory_rbac`. Its canonical emitter
-is `packages/sensors/src/inventory-rbac.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `inventory_rbac`. Its canonical emitter
+is `packages/sensors/src/inventory-rbac.ts`.
 
 Bound cells: F4×T1, F4×T6.
 

@@ -74,8 +74,6 @@ try {
   cpSync(join(repositoryRoot, 'law/schemas'), join(runtimeIndex, 'schemas'), {
     recursive: true,
   });
-  rmSync(join(runtimeIndex, 'schemas/predecessor-archive'), { recursive: true, force: true });
-  rmSync(join(runtimeIndex, 'schemas/REGEN-STATUS.md'), { force: true });
   for (const name of ['sensor-registry.json', 'round-execution.json', 'sense-presets.json']) {
     cpSync(join(repositoryRoot, 'law/policy', name), join(runtimeIndex, name));
   }

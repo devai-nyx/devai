@@ -9,13 +9,12 @@ sensor_kind: inventory_adherence
 emitter: packages/sensors/src/inventory-adherence.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Inventory Adherence
 
-This note binds the successor-local design standing for `inventory_adherence`. Its canonical emitter
-is `packages/sensors/src/inventory-adherence.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `inventory_adherence`. Its canonical emitter
+is `packages/sensors/src/inventory-adherence.ts`.
 
 Bound cells: F4×T4.
 

@@ -4,7 +4,6 @@
   "id": "agent-routing-policies",
   "status": "active",
   "authority": "Architect",
-  "decision": "ADR-022",
   "registry": "law/policy/model-runtime-registry.json",
   "identity": {
     "key": ["policy_id", "policy_version"],
@@ -61,7 +60,7 @@
       "registry_ids": ["codex-cli:gpt-5.6-sol"],
       "allowed_efforts": ["high", "xhigh"],
       "fallback": "forbidden",
-      "rationale": "Use the exact model and effort combinations exercised by the committed R-0007 coding-agent prompts."
+      "rationale": "Use only exact model and effort combinations explicitly selected by the current host configuration."
     },
     {
       "policy_id": "governed-operations",
@@ -71,7 +70,7 @@
       "registry_ids": ["codex-cli:gpt-5.6-sol"],
       "allowed_efforts": ["high"],
       "fallback": "forbidden",
-      "rationale": "Use the exact operational model bound by the committed R-0007 prompts without inferring a provider fallback."
+      "rationale": "Use the exact operational model selected by the current host without inferring a provider fallback."
     },
     {
       "policy_id": "governed-review",
@@ -81,7 +80,7 @@
       "registry_ids": ["claude-cli:claude-opus-5"],
       "allowed_efforts": ["default"],
       "fallback": "forbidden",
-      "rationale": "A one-entry policy may support ordinary governed review tasks; the independently Owner-bound round-close reviewer still resolves through its exact mandate and cannot be substituted by this policy."
+      "rationale": "A one-entry policy supports an explicitly selected review task and cannot be substituted by an implicit fallback."
     }
   ]
 }
