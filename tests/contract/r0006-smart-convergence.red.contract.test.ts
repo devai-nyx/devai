@@ -643,7 +643,7 @@ describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
           details: expect.objectContaining({
             path: 'work/audit/R-0006/as-built.md',
             implementation_paths: expect.arrayContaining([
-              'scripts/run-round-close-controls.mjs',
+              'scripts/round-close-controls/runtime.mjs',
               '.devai/config/round-close-controls.json',
             ]),
           }),

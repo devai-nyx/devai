@@ -20,6 +20,13 @@ vi.setConfig({ testTimeout: 120_000 });
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const SCRIPT = join(ROOT, 'scripts/run-round-close-controls.mjs');
+const CONTROLLER_CONCERN_PATHS = [
+  'scripts/round-close-controls/runtime.mjs',
+  'scripts/round-close-controls/legacy.mjs',
+  'scripts/round-close-controls/impact.mjs',
+  'scripts/round-close-controls/governed.mjs',
+  'scripts/round-close-controls/review-lifecycle.mjs',
+] as const;
 const TEST_PATH = 'tests/contract/pre-r0007-remediation-3.red.contract.test.ts';
 const MATRIX_PATH = 'work/rounds/R-0007/remediation-3-closure-matrix.json';
 const POLICY_PATH = 'law/policy/round-close-controls.json';
@@ -129,13 +136,27 @@ function sha256(value: string): string {
 }
 
 function controllerFunction<T>(name: string, dependencies: Record<string, unknown>): T {
-  const source = readFileSync(SCRIPT, 'utf8');
-  const file = ts.createSourceFile('controller.mjs', source, ts.ScriptTarget.Latest, true);
-  const declaration = file.statements.find(
-    (statement): statement is ts.FunctionDeclaration =>
-      ts.isFunctionDeclaration(statement) && statement.name?.text === name,
-  );
+  let declaration: ts.FunctionDeclaration | undefined;
+  let file: ts.SourceFile | undefined;
+  for (const path of CONTROLLER_CONCERN_PATHS.map((entry) => join(ROOT, entry))) {
+    try {
+      const source = readFileSync(path, 'utf8');
+      const candidate = ts.createSourceFile(path, source, ts.ScriptTarget.Latest, true);
+      const found = candidate.statements.find(
+        (statement): statement is ts.FunctionDeclaration =>
+          ts.isFunctionDeclaration(statement) && statement.name?.text === name,
+      );
+      if (found !== undefined) {
+        declaration = found;
+        file = candidate;
+        break;
+      }
+    } catch {
+      // Before the extraction, missing concern modules keep this Inspector contract red.
+    }
+  }
   if (declaration === undefined) throw new Error(`controller function ${name} is missing`);
+  if (file === undefined) throw new Error(`controller source for ${name} is missing`);
   const names = Object.keys(dependencies);
   const factory = new Function(...names, `${declaration.getText(file)}; return ${name};`);
   return factory(...names.map((key) => dependencies[key])) as T;

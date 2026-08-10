@@ -26,6 +26,13 @@ vi.setConfig({ testTimeout: 300_000 });
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const SCRIPT = join(ROOT, 'scripts/run-round-close-controls.mjs');
+const CONTROLLER_CONCERN_PATHS = [
+  'scripts/round-close-controls/runtime.mjs',
+  'scripts/round-close-controls/legacy.mjs',
+  'scripts/round-close-controls/impact.mjs',
+  'scripts/round-close-controls/governed.mjs',
+  'scripts/round-close-controls/review-lifecycle.mjs',
+] as const;
 const ROUND = 'R-9000';
 const STATE = `.devai/state/round-runs/${ROUND}/close`;
 const roots: string[] = [];
@@ -2874,7 +2881,10 @@ describe('OM-015 / DII-248 remediation campaign 1 populations', () => {
     });
 
     it('R2-F004 computes role-path evidence from commit, author, paths, classification, and verdict', () => {
-      const production = readFileSync(SCRIPT, 'utf8');
+      const production = [SCRIPT, ...CONTROLLER_CONCERN_PATHS.map((path) => join(ROOT, path))]
+        .filter(existsSync)
+        .map((path) => readFileSync(path, 'utf8'))
+        .join('\n');
       expect(production).toContain('rolePathEvidenceV7');
       for (const field of [
         'commit_sha',

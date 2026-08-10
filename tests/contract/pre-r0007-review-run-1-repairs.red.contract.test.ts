@@ -20,6 +20,13 @@ function text(relativePath: string): string {
   return readFileSync(resolve(ROOT, relativePath), 'utf8');
 }
 
+function controllerText(): string {
+  return [CONTROLLER_PATH, ...CONTROLLER_CONCERN_PATHS]
+    .filter((path) => existsSync(resolve(ROOT, path)))
+    .map(text)
+    .join('\n');
+}
+
 function json(relativePath: string): Record<string, unknown> {
   return JSON.parse(text(relativePath)) as Record<string, unknown>;
 }
@@ -37,10 +44,7 @@ function requireRecords(value: unknown, label: string): Record<string, unknown>[
 }
 
 function expectRuntimeGuards(...guards: string[]): void {
-  const controller = [CONTROLLER_PATH, ...CONTROLLER_CONCERN_PATHS]
-    .filter((path) => existsSync(resolve(ROOT, path)))
-    .map(text)
-    .join('\n');
+  const controller = controllerText();
   const missing = guards.filter((guard) => !controller.includes(guard));
   expect(missing, 'missing runtime guards').toEqual([]);
 }
@@ -296,7 +300,7 @@ describe('OM-015 review run 1 complete-class repair populations', () => {
 
   describe('R1-F002 committed status-aware NUL rename population', () => {
     it('forbids name-only committed discovery and requires exact status-aware NUL parsing', () => {
-      const controller = text(CONTROLLER_PATH);
+      const controller = controllerText();
       expect(controller.includes('--name-status')).toBe(true);
       expect(controller.includes('--find-renames')).toBe(true);
       expect(controller.includes("'-z'")).toBe(true);
@@ -370,7 +374,7 @@ describe('OM-015 review run 1 complete-class repair populations', () => {
     });
 
     it('rejects combined wrong round/cycle/candidate before transport, attempts, or state writes', () => {
-      const controller = text(CONTROLLER_PATH);
+      const controller = controllerText();
       const identityGuard = controller.indexOf('REVIEW_SCOPE_IDENTITY_COMBINED_INVALID');
       const transportWrite = controller.indexOf('writeAuthenticatedTransportV5');
       expect(identityGuard).toBeGreaterThan(-1);
