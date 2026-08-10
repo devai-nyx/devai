@@ -158,7 +158,8 @@ function controllerFunction<T>(name: string, dependencies: Record<string, unknow
   if (declaration === undefined) throw new Error(`controller function ${name} is missing`);
   if (file === undefined) throw new Error(`controller source for ${name} is missing`);
   const names = Object.keys(dependencies);
-  const factory = new Function(...names, `${declaration.getText(file)}; return ${name};`);
+  const declarationText = declaration.getText(file).replace(/^export\s+/u, '');
+  const factory = new Function(...names, `${declarationText}; return ${name};`);
   return factory(...names.map((key) => dependencies[key])) as T;
 }
 
