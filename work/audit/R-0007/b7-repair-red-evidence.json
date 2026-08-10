@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "r0007-b7-repair-red-evidence",
+  "type": "audit-record",
+  "authority": "Auditor",
+  "date": "2026-08-09",
+  "round": "R-0007",
+  "finding_ids": ["AB-F003", "AB-F005", "AB-F006", "AB-F008"],
+  "decision_id": "DII-258",
+  "owner_authority": "OM-022",
+  "red_commit": "7d884232bc50bc9f82dd456fac2574b29ef768c3",
+  "observations": [
+    {
+      "commit": "7d884232bc50bc9f82dd456fac2574b29ef768c3",
+      "command": "pnpm vitest run tests/contract/r0007-b7-historical-exception.red.contract.test.ts tests/contract/governed-sequencing.contract.test.ts tests/contract/r0007-b7-controller-decomposition.red.contract.test.ts tests/contract/r0007-ci-acceleration.red.contract.test.ts tests/contract/r0007-b6-enumeration-parity-runtime-structure.contract.test.ts",
+      "exit_code": 1,
+      "tests": [
+        "tests/contract/r0007-b7-historical-exception.red.contract.test.ts",
+        "tests/contract/governed-sequencing.contract.test.ts",
+        "tests/contract/r0007-b7-controller-decomposition.red.contract.test.ts",
+        "tests/contract/r0007-ci-acceleration.red.contract.test.ts",
+        "tests/contract/r0007-b6-enumeration-parity-runtime-structure.contract.test.ts",
+        "tests/contract/r0007-b7-historical-exception.implementation-paths.json",
+        "tests/contract/r0007-b7-controller-decomposition.implementation-paths.json",
+        "tests/contract/r0007-b7-original-budget-performance.implementation-paths.json"
+      ],
+      "exercised_implementation_paths": [
+        "scripts/check-implementation-path-manifest.mjs",
+        "scripts/run-round-close-controls.mjs",
+        "scripts/round-close-controls/runtime.mjs",
+        "scripts/round-close-controls/legacy.mjs",
+        "scripts/round-close-controls/impact.mjs",
+        "scripts/round-close-controls/governed.mjs",
+        "scripts/round-close-controls/review-lifecycle.mjs",
+        "packages/cli/src/bin.ts",
+        "packages/cli/src/command-router.ts",
+        "packages/cli/src/commands/sense/facade.ts",
+        "packages/cli/src/commands/sense/inventory.ts",
+        "packages/sensors/package.json",
+        "packages/loop/src/inventory/walker.ts",
+        "packages/loop/src/inventory/ts-ast.ts",
+        "packages/loop/src/inventory/glossary-coverage.ts"
+      ],
+      "test_files_failed": 4,
+      "test_files_total": 5,
+      "tests_failed": 14,
+      "tests_passed": 27,
+      "tests_total": 41,
+      "working_tree": "clean",
+      "interrupted": false
+    }
+  ],
+  "failed_classes": [
+    {
+      "finding_id": "AB-F003",
+      "observed": "The live policy does not contain the exact OM-022 18-commit disposition and the implementation-path-manifest checker neither accepts the exact historical commit nor rejects malformed, duplicate, non-Engineer, normal-bound, and round-wide exception inputs with the required diagnostics."
+    },
+    {
+      "finding_id": "AB-F005",
+      "observed": "The commit-validation policy still binds R-0007 activation to paired evidence instead of retaining disabled standing and assigning activation authority to R-0008."
+    },
+    {
+      "finding_id": "AB-F006",
+      "observed": "The close controller remains an 11,397-line monolith and none of the five DII-258 concern modules exists."
+    },
+    {
+      "finding_id": "AB-F008",
+      "observed": "Under the governed T1+T3 coverage profile, the complete inventory-member proof timed out at the unchanged 5,000 ms budget and the complete canonical-example proof timed out at the unchanged 90,000 ms budget."
+    }
+  ],
+  "implementation_path_manifests": [
+    "tests/contract/r0007-b7-historical-exception.implementation-paths.json",
+    "tests/contract/r0007-b7-controller-decomposition.implementation-paths.json",
+    "tests/contract/r0007-b7-original-budget-performance.implementation-paths.json"
+  ],
+  "interpretation": "This is the prospective exact-candidate Auditor red for one bounded Engineer commit. It authorizes no test, policy, timeout, worker, coverage, population, workflow, generated-output, or external-effect change. The twenty-seven passing tests preserve already-correct refusal and acceleration behavior while the fourteen failures discriminate the exact missing policy, checker, controller, and original-budget inventory performance behavior. The separately preserved B6 example-routing red remains the authority for the original 90-second canonical-example repair."
+}
