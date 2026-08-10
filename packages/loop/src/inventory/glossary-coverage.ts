@@ -1,7 +1,6 @@
-import { readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { listSpecFiles } from '@devai-nyx/spec';
-import { walkFiles } from './walker.js';
+import { readInventorySource, walkFiles } from './walker.js';
 
 export interface TermCoverage {
   readonly id: string;
@@ -51,7 +50,7 @@ export function glossaryCoverage(opts: GlossaryCoverageOptions): GlossaryCoverag
   const entries: GlossaryRecord[] = [];
   for (const file of listSpecFiles(glossaryDir, 'GE-')) {
     try {
-      const parsed = JSON.parse(readFileSync(file, 'utf8')) as GlossaryRecord;
+      const parsed = JSON.parse(readInventorySource(file)) as GlossaryRecord;
       entries.push(parsed);
     } catch {
       // Skip malformed glossary files; spec validate-glossary catches them.
@@ -74,7 +73,7 @@ export function glossaryCoverage(opts: GlossaryCoverageOptions): GlossaryCoverag
     for (const file of sources) {
       let text;
       try {
-        text = readFileSync(file, 'utf8').toLowerCase();
+        text = readInventorySource(file).toLowerCase();
       } catch {
         continue;
       }

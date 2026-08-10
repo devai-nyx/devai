@@ -14,8 +14,9 @@ import {
   regenerateInventory,
   resolveStackAdapterPack,
   validateContracts,
+  withInventoryReadSnapshot,
 } from '#core-compat';
-import { INVENTORY_SLICES, inventorySlice } from '@devai-nyx/sensors';
+import { INVENTORY_SLICES, inventorySlice } from '@devai-nyx/sensors/inventory-slices';
 import { EXIT_FAIL, EXIT_PASS, EXIT_REVIEW, EXIT_USAGE } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 
@@ -130,19 +131,21 @@ export async function executeInventorySlice(
   readonly results: readonly InventoryMemberResult[];
   readonly implicit_persistence: false;
 }> {
-  const descriptor = inventorySlice(name);
-  if (descriptor === undefined) throw new Error(`SENSE_INVENTORY_SLICE_UNKNOWN:${name}`);
-  const repoRoot = resolve(options.repoRoot ?? '.');
-  const results: InventoryMemberResult[] = [];
-  for (const member of descriptor.members) {
-    results.push(await inventoryMember(member, options, repoRoot));
-  }
-  return Object.freeze({
-    slice: descriptor.name,
-    members: descriptor.members,
-    status: results.some((result) => result.status === 'review') ? 'review' : 'pass',
-    results: Object.freeze(results),
-    implicit_persistence: false,
+  return withInventoryReadSnapshot(async () => {
+    const descriptor = inventorySlice(name);
+    if (descriptor === undefined) throw new Error(`SENSE_INVENTORY_SLICE_UNKNOWN:${name}`);
+    const repoRoot = resolve(options.repoRoot ?? '.');
+    const results: InventoryMemberResult[] = [];
+    for (const member of descriptor.members) {
+      results.push(await inventoryMember(member, options, repoRoot));
+    }
+    return Object.freeze({
+      slice: descriptor.name,
+      members: descriptor.members,
+      status: results.some((result) => result.status === 'review') ? 'review' : 'pass',
+      results: Object.freeze(results),
+      implicit_persistence: false,
+    });
   });
 }
 

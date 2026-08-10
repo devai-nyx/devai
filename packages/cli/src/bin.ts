@@ -5,6 +5,8 @@ import { routeArgv } from './command-router.js';
 import {
   attachRuntimeContracts,
   getFullRegistry,
+  type CommandDefinition,
+  type RegistryEntry,
   validateActionSurface,
 } from './define-command.js';
 import {
@@ -20,58 +22,7 @@ import {
   publicActionForArgv,
   runCliStage,
 } from './action-output.js';
-import { actionsList } from './commands/actions-list.js';
-import { checkCmd } from './commands/check/facade.js';
-import { doctor } from './commands/doctor.js';
-import {
-  evidenceCollect,
-  evidenceRecord,
-  evidenceRedact,
-  evidenceRender,
-  evidenceVerify,
-} from './commands/evidence/facade.js';
-import {
-  initApplyArchitect,
-  initApplyHarness,
-  initApplyOwner,
-  initPlan,
-  initUpgrade,
-} from './commands/init/index.js';
-import {
-  releaseCheck,
-  releaseDrift,
-  releasePublishDocs,
-  releaseStatus,
-  releaseVerify,
-} from './commands/release/facade.js';
-import {
-  roundAssess,
-  roundClose,
-  roundGapCreate,
-  roundGapList,
-  roundGapResolve,
-  roundGapShow,
-  roundPlan,
-  roundRun,
-  roundSeal,
-  roundStatus,
-} from './commands/round/workflow.js';
-import { senseInventoryCmd } from './commands/sense/inventory.js';
-import { senseMigrateCmd } from './commands/sense/migrate.js';
-import { senseRecordCmd } from './commands/sense/record.js';
-import { senseRunSetCmd } from './commands/sense/run-set.js';
-import {
-  taskEscalate,
-  taskFinish,
-  taskPause,
-  taskQueueAdd,
-  taskQueueComplete,
-  taskQueueList,
-  taskQueueNext,
-  taskResume,
-  taskStart,
-  taskStatus,
-} from './commands/task/index.js';
+import { ACTION_REGISTRY } from './generated/action-registry.js';
 
 const pkgVersion = resolveCliVersion();
 
@@ -79,61 +30,214 @@ const cli = cac('devai');
 cli.version(pkgVersion);
 cli.help();
 
-const canonicalCommands = [
-  actionsList,
-  checkCmd,
-  doctor,
-  evidenceCollect,
-  evidenceRecord,
-  evidenceRedact,
-  evidenceRender,
-  evidenceVerify,
-  initApplyArchitect,
-  initApplyHarness,
-  initApplyOwner,
-  initPlan,
-  initUpgrade,
-  releaseCheck,
-  releaseDrift,
-  releasePublishDocs,
-  releaseStatus,
-  releaseVerify,
-  roundAssess,
-  roundClose,
-  roundGapCreate,
-  roundGapList,
-  roundGapResolve,
-  roundGapShow,
-  roundPlan,
-  roundRun,
-  roundSeal,
-  roundStatus,
-  senseInventoryCmd,
-  senseMigrateCmd,
-  senseRecordCmd,
-  senseRunSetCmd,
-  taskEscalate,
-  taskFinish,
-  taskPause,
-  taskQueueAdd,
-  taskQueueComplete,
-  taskQueueList,
-  taskQueueNext,
-  taskResume,
-  taskStart,
-  taskStatus,
+const DOMAIN_ORDER = [
+  'catalog',
+  'check',
+  'doctor',
+  'evidence',
+  'init',
+  'release',
+  'round',
+  'sense',
+  'task',
 ] as const;
+type CommandDomain = (typeof DOMAIN_ORDER)[number];
 
-for (const command of canonicalCommands) command.register(cli);
+function publicText(value: string): string {
+  return value
+    .replaceAll(process.cwd(), '<repo-root>')
+    .replaceAll('--execute', '--write')
+    .replaceAll('--apply', '--write')
+    .replaceAll('--human', '--format human');
+}
 
-const registry = getFullRegistry();
-const machineAction = publicActionForArgv(process.argv, registry);
-const initialized = runCliStage(machineAction, 'initialization', () => {
-  attachRuntimeContracts(cli.commands);
-  attachAuthorityCommandBoundaries(cli.commands, registry);
-  attachActionOutputBoundaries(cli.commands, registry);
-});
-if (initialized.ok) {
+function canonicalRegistry(): readonly RegistryEntry[] {
+  return ACTION_REGISTRY.filter((entry) => entry.disposition === 'keep').map(
+    (entry) =>
+      ({
+        name: entry.action_id,
+        previous_name: entry.internal_binding,
+        internal_name: entry.internal_binding.replaceAll(' ', '-'),
+        disposition: entry.disposition,
+        migration: entry.migration,
+        path: entry.path,
+        description: publicText(entry.description),
+        authority: entry.authority ?? 'mesh_controller',
+        lifecycle: entry.lifecycle,
+        lifecycle_reason: entry.lifecycle_reason,
+        promotion_criteria: entry.promotion_criteria,
+        visibility: entry.visibility,
+        tier: entry.tier,
+        profiles: entry.profiles,
+        effects: entry.effect,
+        authority_contract_version: entry.authority_contract_version,
+        authority_contract: entry.authority_contract,
+        output_contract: entry.output_contract,
+        error_contract: entry.error_contract,
+      }) as RegistryEntry,
+  );
+}
+
+function invocationActionForArgv(
+  argv: readonly string[],
+  entries: readonly RegistryEntry[],
+): RegistryEntry | undefined {
+  const words = argv.slice(2).filter((value) => !value.startsWith('-'));
+  return entries
+    .filter((entry) => entry.path.every((part, index) => words[index] === part))
+    .sort((left, right) => right.path.length - left.path.length)[0];
+}
+
+function needsRuntimeMetadata(argv: readonly string[]): boolean {
+  const args = argv.slice(2);
+  const format = args.lastIndexOf('--format');
+  return (
+    args.length === 0 ||
+    args.some((value) => ['--help', '-h', '--all', '--help-all'].includes(value)) ||
+    (format >= 0 && args[format + 1] === 'human')
+  );
+}
+
+async function commandsFor(domain: CommandDomain): Promise<readonly CommandDefinition[]> {
+  switch (domain) {
+    case 'catalog': {
+      const { actionsList } = await import('./commands/actions-list.js');
+      return [actionsList];
+    }
+    case 'check': {
+      const { checkCmd } = await import('./commands/check/facade.js');
+      return [checkCmd];
+    }
+    case 'doctor': {
+      const { doctor } = await import('./commands/doctor.js');
+      return [doctor];
+    }
+    case 'evidence': {
+      const { evidenceCollect, evidenceRecord, evidenceRedact, evidenceRender, evidenceVerify } =
+        await import('./commands/evidence/facade.js');
+      return [evidenceCollect, evidenceRecord, evidenceRedact, evidenceRender, evidenceVerify];
+    }
+    case 'init': {
+      const { initApplyArchitect, initApplyHarness, initApplyOwner, initPlan, initUpgrade } =
+        await import('./commands/init/index.js');
+      return [initApplyArchitect, initApplyHarness, initApplyOwner, initPlan, initUpgrade];
+    }
+    case 'release': {
+      const { releaseCheck, releaseDrift, releasePublishDocs, releaseStatus, releaseVerify } =
+        await import('./commands/release/facade.js');
+      return [releaseCheck, releaseDrift, releasePublishDocs, releaseStatus, releaseVerify];
+    }
+    case 'round': {
+      const {
+        roundAssess,
+        roundClose,
+        roundGapCreate,
+        roundGapList,
+        roundGapResolve,
+        roundGapShow,
+        roundPlan,
+        roundRun,
+        roundSeal,
+        roundStatus,
+      } = await import('./commands/round/workflow.js');
+      return [
+        roundAssess,
+        roundClose,
+        roundGapCreate,
+        roundGapList,
+        roundGapResolve,
+        roundGapShow,
+        roundPlan,
+        roundRun,
+        roundSeal,
+        roundStatus,
+      ];
+    }
+    case 'sense': {
+      const [{ senseInventoryCmd }, { senseMigrateCmd }, { senseRecordCmd }, { senseRunSetCmd }] =
+        await Promise.all([
+          import('./commands/sense/inventory.js'),
+          import('./commands/sense/migrate.js'),
+          import('./commands/sense/record.js'),
+          import('./commands/sense/run-set.js'),
+        ]);
+      return [senseInventoryCmd, senseMigrateCmd, senseRecordCmd, senseRunSetCmd];
+    }
+    case 'task': {
+      const {
+        taskEscalate,
+        taskFinish,
+        taskPause,
+        taskQueueAdd,
+        taskQueueComplete,
+        taskQueueList,
+        taskQueueNext,
+        taskResume,
+        taskStart,
+        taskStatus,
+      } = await import('./commands/task/index.js');
+      return [
+        taskEscalate,
+        taskFinish,
+        taskPause,
+        taskQueueAdd,
+        taskQueueComplete,
+        taskQueueList,
+        taskQueueNext,
+        taskResume,
+        taskStart,
+        taskStatus,
+      ];
+    }
+  }
+}
+
+async function registerDomains(domains: readonly CommandDomain[]): Promise<void> {
+  const groups = await Promise.all(domains.map(commandsFor));
+  for (const command of groups.flat()) command.register(cli);
+}
+
+function renderRouteOutput(
+  machineAction: RegistryEntry | undefined,
+  route: Extract<ReturnType<typeof routeArgv>, { readonly kind: 'output' }>,
+): void {
+  if (
+    route.bypassActionOutput === true ||
+    !emitPreDispatchActionResult(machineAction, {
+      exit: route.exitCode,
+      stdout: route.exitCode === 0 ? route.text : '',
+      stderr: route.exitCode === 0 ? '' : route.text,
+    })
+  ) {
+    const stream = route.exitCode === 0 ? process.stdout : process.stderr;
+    stream.write(route.text);
+    process.exitCode = route.exitCode;
+  }
+}
+
+function preserveHumanOutputBeforeExplicitExit(): void {
+  const args = process.argv.slice(2);
+  const format = args.lastIndexOf('--format');
+  if (args.includes('--json') || (format >= 0 && args[format + 1] === 'json')) return;
+  type BlockingStream = NodeJS.WriteStream & {
+    readonly _handle?: { readonly setBlocking?: (value: boolean) => void };
+  };
+  for (const stream of [process.stdout, process.stderr] as readonly BlockingStream[]) {
+    stream._handle?.setBlocking?.(true);
+  }
+}
+
+async function main(): Promise<void> {
+  const fullRegistry = needsRuntimeMetadata(process.argv);
+  if (fullRegistry) await registerDomains(DOMAIN_ORDER);
+  const registry = fullRegistry
+    ? (() => {
+        attachRuntimeContracts(cli.commands);
+        return getFullRegistry();
+      })()
+    : canonicalRegistry();
+  const invocationAction = invocationActionForArgv(process.argv, registry);
+  const machineAction = publicActionForArgv(process.argv, registry);
   const validated = runCliStage(machineAction, 'registry-validation', () => {
     validateActionSurface(registry);
     validateLiveAuthorityActionRegistry(registry);
@@ -144,48 +248,81 @@ if (initialized.ok) {
       )
     : undefined;
   const route = routed?.ok === true ? routed.value : undefined;
-  if (route === undefined) {
-    // The stage boundary already emitted the sole structured failure.
-  } else if (route.kind === 'output') {
+  if (route === undefined) return;
+  if (route.kind === 'output') {
+    renderRouteOutput(machineAction, route);
+    return;
+  }
+
+  if (!fullRegistry && invocationAction !== undefined) {
+    const domain = invocationAction.path[0];
+    if (DOMAIN_ORDER.includes(domain as CommandDomain)) {
+      try {
+        await registerDomains([domain as CommandDomain]);
+      } catch (error) {
+        runCliStage(machineAction, 'initialization', () => {
+          throw error;
+        });
+        return;
+      }
+    }
+  }
+  const handlerRegistry = fullRegistry ? registry : getFullRegistry();
+  const initialized = runCliStage(machineAction, 'initialization', () => {
+    attachAuthorityCommandBoundaries(cli.commands, handlerRegistry);
+    attachActionOutputBoundaries(cli.commands, handlerRegistry);
+  });
+  if (!initialized.ok) return;
+
+  const authorized = runCliStage(machineAction, 'authorization', () =>
+    authorizeCliArgv(
+      process.argv,
+      registry,
+      (skillId) => getSkill(skillId)?.manifest.authority_role,
+    ),
+  );
+  const authorityResult = authorized.ok ? authorized.value : undefined;
+  if (!authorized.ok) return;
+  if (authorityResult !== undefined) {
     if (
-      route.bypassActionOutput === true ||
       !emitPreDispatchActionResult(machineAction, {
-        exit: route.exitCode,
-        stdout: route.exitCode === 0 ? route.text : '',
-        stderr: route.exitCode === 0 ? '' : route.text,
+        exit: authorityResult.exit_code,
+        stdout: authorityResult.stdout,
+        stderr: authorityResult.stderr,
       })
     ) {
-      const stream = route.exitCode === 0 ? process.stdout : process.stderr;
-      stream.write(route.text);
-      process.exitCode = route.exitCode;
+      const stream = authorityResult.stdout.length > 0 ? process.stdout : process.stderr;
+      stream.write(
+        authorityResult.stdout.length > 0 ? authorityResult.stdout : authorityResult.stderr,
+      );
+      process.exitCode = authorityResult.exit_code;
     }
-  } else {
-    const authorized = runCliStage(machineAction, 'authorization', () =>
-      authorizeCliArgv(
-        process.argv,
-        registry,
-        (skillId) => getSkill(skillId)?.manifest.authority_role,
-      ),
-    );
-    const authorityResult = authorized.ok ? authorized.value : undefined;
-    if (!authorized.ok) {
-      // The stage boundary already emitted the sole structured failure.
-    } else if (authorityResult !== undefined) {
-      if (
-        !emitPreDispatchActionResult(machineAction, {
-          exit: authorityResult.exit_code,
-          stdout: authorityResult.stdout,
-          stderr: authorityResult.stderr,
-        })
-      ) {
-        const stream = authorityResult.stdout.length > 0 ? process.stdout : process.stderr;
-        stream.write(
-          authorityResult.stdout.length > 0 ? authorityResult.stdout : authorityResult.stderr,
-        );
-        process.exitCode = authorityResult.exit_code;
-      }
-    } else {
-      runCliStage(machineAction, 'handler-dispatch', () => cli.parse(route.argv));
+    return;
+  }
+  const args = process.argv.slice(2);
+  const format = args.lastIndexOf('--format');
+  const human = !args.includes('--json') && !(format >= 0 && args[format + 1] === 'json');
+  if (human) {
+    preserveHumanOutputBeforeExplicitExit();
+    runCliStage(machineAction, 'handler-dispatch', () => cli.parse(route.argv));
+    return;
+  }
+  const dispatched = runCliStage(machineAction, 'handler-dispatch', () => {
+    cli.parse(route.argv, { run: false });
+    return cli.runMatchedCommand() as unknown;
+  });
+  const pending = dispatched.ok
+    ? (dispatched.value as PromiseLike<unknown> | undefined)
+    : undefined;
+  if (pending !== undefined && typeof pending.then === 'function') {
+    try {
+      await pending;
+    } catch (error) {
+      runCliStage(machineAction, 'handler-dispatch', () => {
+        throw error;
+      });
     }
   }
 }
+
+await main();

@@ -79,12 +79,93 @@ try {
 
 const suffix = declaration.manifest_suffix ?? '.implementation-paths.json';
 const findings = [];
+const SHA40 = /^[0-9a-f]{40}$/u;
+
+function commitObservation(sha) {
+  try {
+    const [author, subject] = git(['show', '-s', '--format=%an%x00%s', sha]).split('\0');
+    const paths = git(['show', '--name-only', '--format=', sha]).split('\n').filter(Boolean);
+    const token = /\br([0-9]{4})\b/iu.exec(subject ?? '')?.[1];
+    return {
+      author,
+      paths,
+      round: token === undefined ? null : `R-${token}`,
+    };
+  } catch {
+    return null;
+  }
+}
+
+const normalOwners = new Map();
+for (const binding of Array.isArray(policy.bindings) ? policy.bindings : []) {
+  for (const sha of Array.isArray(binding?.implementation_commits)
+    ? binding.implementation_commits
+    : []) {
+    const owners = normalOwners.get(sha) ?? [];
+    owners.push(binding);
+    normalOwners.set(sha, owners);
+  }
+}
+
+if (Array.isArray(policy.historical_exceptions) && policy.historical_exceptions.length > 0) {
+  findings.push('round-wide historical exceptions cannot bypass parent-tree manifests');
+} else if (
+  policy.historical_exceptions !== undefined &&
+  !Array.isArray(policy.historical_exceptions)
+) {
+  findings.push('round-wide historical exceptions must be an array when present');
+}
+
+const exactExceptions = new Map();
+const historicalCommitExceptions = policy.historical_commit_exceptions ?? [];
+if (!Array.isArray(historicalCommitExceptions)) {
+  findings.push('malformed historical commit exception: expected an array');
+} else {
+  for (const exception of historicalCommitExceptions) {
+    const commits = exception?.implementation_commits;
+    if (
+      exception === null ||
+      typeof exception !== 'object' ||
+      Array.isArray(exception) ||
+      typeof exception.round !== 'string' ||
+      !/^R-[0-9]{4}$/u.test(exception.round) ||
+      !Array.isArray(commits) ||
+      commits.length === 0 ||
+      commits.some((sha) => typeof sha !== 'string' || !SHA40.test(sha)) ||
+      typeof exception.reason !== 'string' ||
+      exception.reason.trim().length === 0
+    ) {
+      findings.push('malformed historical commit exception: exact SHA, round, and reason required');
+      continue;
+    }
+    for (const sha of commits) {
+      if (exactExceptions.has(sha)) {
+        findings.push(`${sha}: duplicate historical commit exception ownership`);
+        continue;
+      }
+      exactExceptions.set(sha, exception);
+      const observed = commitObservation(sha);
+      if (
+        observed === null ||
+        observed.author !== 'DEVAI Engineer' ||
+        !observed.paths.some(substantiveImplementationPath) ||
+        (observed.round !== null && observed.round !== exception.round)
+      ) {
+        findings.push(`${sha}: exception must name an exact substantive Engineer commit`);
+      }
+      if ((normalOwners.get(sha)?.length ?? 0) > 0) {
+        findings.push(`${sha}: exception already has normal governed-sequencing ownership`);
+      }
+    }
+  }
+}
 
 for (const sha of range) {
   if (git(['show', '-s', '--format=%an', sha]) !== 'DEVAI Engineer') continue;
   const changed = git(['show', '--name-only', '--format=', sha]).split('\n').filter(Boolean);
   const implementation = changed.filter(substantiveImplementationPath);
   if (implementation.length === 0) continue;
+  if (exactExceptions.has(sha)) continue;
 
   // Manifests are read at the parent, so a manifest introduced by the very commit it would
   // authorize grants nothing. That is the ordering the gate exists to enforce.

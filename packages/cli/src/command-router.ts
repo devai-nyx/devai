@@ -1,5 +1,9 @@
 import type { RegistryEntry } from './define-command.js';
-import { ARCHIVED_SENSOR_KINDS, isArchivedSensorKind, isSensorKind } from '@devai-nyx/sensors';
+import {
+  ARCHIVED_SENSOR_KINDS,
+  isArchivedSensorKind,
+  isSensorKind,
+} from '@devai-nyx/sensors/registry';
 import { cliError, renderCliError } from './cli-error.js';
 import { resolveInvocationEntry } from './authority/sense-selection.js';
 import { ACTION_REGISTRY } from './generated/action-registry.js';

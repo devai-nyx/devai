@@ -1,11 +1,10 @@
 import {
   SENSOR_REGISTRY,
-  SENSE_PRESET_POLICY,
   isSensorKind,
-  sensePreset,
   type SensorEffect,
   type SensorRegistryEntry,
-} from '@devai-nyx/sensors';
+} from '@devai-nyx/sensors/registry';
+import { SENSE_PRESET_POLICY, sensePreset } from '@devai-nyx/sensors/presets';
 
 export type SenseSelection =
   | { readonly kind: string; readonly preset?: never }

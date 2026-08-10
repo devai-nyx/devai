@@ -212,7 +212,10 @@ for (const exception of historicalCommitExceptions) {
     const owners = exactExceptionOwners.get(sha) ?? [];
     owners.push(exception);
     exactExceptionOwners.set(sha, owners);
-    if (!substantiveEngineer(candidate.commit) || candidate.commit.round !== exception.round) {
+    if (
+      !substantiveEngineer(candidate.commit) ||
+      (candidate.commit.round !== null && candidate.commit.round !== exception.round)
+    ) {
       findings.push({
         rule: 'historical-commit-exception',
         sha,
