@@ -14,7 +14,7 @@ export interface CiScaffoldPlan {
 
 export const LEDGER_WORKFLOW_FILE = 'devai-ledger-verify.yml';
 export const VERIFIER_REPOSITORY = 'devai-nyx/devai-verifier';
-export const VERIFIER_COMMIT = '3320a703e49bf90713b8be5784beda424d58b9d9';
+export const VERIFIER_COMMIT = 'd85b6874e46fc371a000e736c22f1913a5878c5e';
 export const CHECKOUT_COMMIT = '11d5960a326750d5838078e36cf38b85af677262';
 export const SETUP_NODE_COMMIT = '49933ea5288caeca8642d1e84afbd3f7d6820020';
 

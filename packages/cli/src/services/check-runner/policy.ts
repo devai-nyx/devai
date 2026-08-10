@@ -53,19 +53,59 @@ interface PolicyBuildOptions {
 function git(
   repoRoot: string,
   args: readonly string[],
-  options: Readonly<{ encoding?: BufferEncoding | null; allowFailure?: boolean }> = {},
+  options: Readonly<{
+    encoding?: BufferEncoding | null;
+    allowFailure?: boolean;
+    input?: string | Buffer;
+  }> = {},
 ): string | Buffer {
   const encoding = options.encoding === null ? null : (options.encoding ?? 'utf8');
   const result = spawnSync('git', [...args], {
     cwd: repoRoot,
     encoding,
     maxBuffer: 64 * 1024 * 1024,
+    ...(options.input !== undefined && { input: options.input }),
   });
   if (result.error !== undefined || (result.status !== 0 && options.allowFailure !== true)) {
     const detail = result.error?.message ?? String(result.stderr || result.stdout).trim();
     throw new Error(`CHECK_RUNNER_GIT: git ${args.join(' ')} failed: ${detail}`);
   }
   return result.stdout ?? (encoding === null ? Buffer.alloc(0) : '');
+}
+
+function objectContentDigests(
+  repoRoot: string,
+  objectIds: readonly string[],
+): ReadonlyMap<string, string> {
+  const unique = [...new Set(objectIds)].sort();
+  if (unique.length === 0) return new Map();
+  const output = Buffer.from(
+    git(repoRoot, ['cat-file', '--batch'], {
+      encoding: null,
+      input: `${unique.join('\n')}\n`,
+    }),
+  );
+  const digests = new Map<string, string>();
+  let offset = 0;
+  for (const expectedObjectId of unique) {
+    const newline = output.indexOf(0x0a, offset);
+    if (newline < 0) throw new Error('CHECK_RUNNER_GIT: truncated cat-file header');
+    const header = output.subarray(offset, newline).toString('utf8');
+    const match = /^([0-9a-f]+) ([a-z]+) (\d+)$/u.exec(header);
+    if (match?.[1] === undefined || match[3] === undefined || match[1] !== expectedObjectId) {
+      throw new Error('CHECK_RUNNER_GIT: unexpected cat-file header');
+    }
+    const size = Number(match[3]);
+    const contentStart = newline + 1;
+    const contentEnd = contentStart + size;
+    if (!Number.isSafeInteger(size) || size < 0 || output[contentEnd] !== 0x0a) {
+      throw new Error('CHECK_RUNNER_GIT: truncated cat-file content');
+    }
+    digests.set(expectedObjectId, sha256Hex(output.subarray(contentStart, contentEnd)));
+    offset = contentEnd + 1;
+  }
+  if (offset !== output.length) throw new Error('CHECK_RUNNER_GIT: extra cat-file output');
+  return digests;
 }
 
 function gitText(repoRoot: string, args: readonly string[]): string {
@@ -204,20 +244,37 @@ function cleanStatus(repoRoot: string): boolean {
 
 function committedSnapshot(repoRoot: string, commit: string): readonly SnapshotEntry[] {
   const output = git(repoRoot, ['ls-tree', '-r', '-z', '--full-tree', commit], { encoding: null });
-  const entries: SnapshotEntry[] = [];
+  const rawEntries: Array<
+    Readonly<{ path: string; mode: string; type: string; objectId: string }>
+  > = [];
   for (const record of Buffer.from(output).toString('utf8').split('\0')) {
     if (record === '') continue;
     const match = /^(\d+) ([a-z]+) ([0-9a-f]+)\t(.+)$/u.exec(record);
     if (match === null) throw new Error('CHECK_RUNNER_GIT: malformed ls-tree record');
     const [, mode, type, objectId, rawPath] = match;
-    if (mode === undefined || type === undefined || objectId === undefined || rawPath === undefined) {
+    if (
+      mode === undefined ||
+      type === undefined ||
+      objectId === undefined ||
+      rawPath === undefined
+    ) {
       throw new Error('CHECK_RUNNER_GIT: incomplete ls-tree record');
     }
     const path = normalizePath(rawPath);
-    const content = git(repoRoot, ['cat-file', '-p', objectId], { encoding: null });
-    entries.push({ path, mode, type, contentDigest: sha256Hex(Buffer.from(content)) });
+    rawEntries.push({ path, mode, type, objectId });
   }
-  return entries.sort((left, right) => left.path.localeCompare(right.path));
+  const contentDigests = objectContentDigests(
+    repoRoot,
+    rawEntries.map((entry) => entry.objectId),
+  );
+  const entries: SnapshotEntry[] = rawEntries.map(({ path, mode, type, objectId }) => {
+    const contentDigest = contentDigests.get(objectId);
+    if (contentDigest === undefined) throw new Error('CHECK_RUNNER_GIT: object digest missing');
+    return { path, mode, type, contentDigest };
+  });
+  return entries.sort((left, right) =>
+    left.path < right.path ? -1 : left.path > right.path ? 1 : 0,
+  );
 }
 
 function worktreeSnapshot(repoRoot: string): readonly SnapshotEntry[] {
@@ -257,7 +314,9 @@ function worktreeSnapshot(repoRoot: string): readonly SnapshotEntry[] {
       : (modes.get(path) ?? (stat.mode & 0o111 ? '100755' : '100644'));
     entries.push({ path, mode, type: 'blob', contentDigest: sha256Hex(content) });
   }
-  return entries.sort((left, right) => left.path.localeCompare(right.path));
+  return entries.sort((left, right) =>
+    left.path < right.path ? -1 : left.path > right.path ? 1 : 0,
+  );
 }
 
 function parseChangedPaths(output: Buffer): readonly string[] {
@@ -270,7 +329,8 @@ function parseChangedPaths(output: Buffer): readonly string[] {
     if (/^[RC]\d+$/u.test(status)) {
       const before = fields[index++];
       const after = fields[index++];
-      if (before === undefined || after === undefined) throw new Error('CHECK_RUNNER_GIT: rename truncated');
+      if (before === undefined || after === undefined)
+        throw new Error('CHECK_RUNNER_GIT: rename truncated');
       paths.add(normalizePath(before));
       paths.add(normalizePath(after));
     } else {
@@ -282,7 +342,12 @@ function parseChangedPaths(output: Buffer): readonly string[] {
   return [...paths].sort();
 }
 
-function changedPaths(repoRoot: string, base: string, candidate: string, clean: boolean): readonly string[] {
+function changedPaths(
+  repoRoot: string,
+  base: string,
+  candidate: string,
+  clean: boolean,
+): readonly string[] {
   const args = clean
     ? ['diff', '--name-status', '-z', '-M', '--find-renames', base, candidate]
     : ['diff', '--name-status', '-z', '-M', '--find-renames', base, '--'];
@@ -317,7 +382,9 @@ function selectedNodeIds(
     profile.requiredNodes.forEach((nodeId) => selected.add(nodeId));
     if (profile.mode === 'affected') {
       for (const path of changes) {
-        if (descriptor.dynamicFallbackSelectors.some((selector) => selectorMatches(selector, path))) {
+        if (
+          descriptor.dynamicFallbackSelectors.some((selector) => selectorMatches(selector, path))
+        ) {
           if (descriptor.fallbackNodeId === null) throw new Error('CHECK_RUNNER_UNKNOWN_PATH');
           impacted.add(descriptor.fallbackNodeId);
           continue;
@@ -382,11 +449,10 @@ export function buildTaskPlan(options: PolicyBuildOptions): TaskPlan {
       throw new Error('CHECK_RUNNER_BASE_REQUIRED: --affected requires --base');
     }
     assertCommit(repoRoot, options.baseCommit, 'BASE');
-    const ancestor = spawnSync(
-      'git',
-      ['merge-base', '--is-ancestor', options.baseCommit, commit],
-      { cwd: repoRoot, encoding: 'utf8' },
-    );
+    const ancestor = spawnSync('git', ['merge-base', '--is-ancestor', options.baseCommit, commit], {
+      cwd: repoRoot,
+      encoding: 'utf8',
+    });
     if (ancestor.status !== 0) throw new Error('CHECK_RUNNER_BASE_NOT_ANCESTOR');
     changes = changedPaths(repoRoot, options.baseCommit, commit, clean);
   } else if (!clean) {
@@ -396,7 +462,10 @@ export function buildTaskPlan(options: PolicyBuildOptions): TaskPlan {
   const entries = clean ? committedSnapshot(repoRoot, commit) : worktreeSnapshot(repoRoot);
   const descriptorDigest = sha256Hex(descriptor);
   const taskKeys = new Map<string, string>();
-  const plannedById = new Map<string, Omit<PlannedTask, 'cacheState' | 'reason' | 'cachedResultDigest'>>();
+  const plannedById = new Map<
+    string,
+    Omit<PlannedTask, 'cacheState' | 'reason' | 'cachedResultDigest'>
+  >();
   const ordered = topologicalTasks(descriptor);
   for (const task of ordered) {
     const selectedToolchain: Record<string, string> = {};
@@ -439,7 +508,11 @@ export function buildTaskPlan(options: PolicyBuildOptions): TaskPlan {
       dependencies: [...task.dependencies],
       argv: [...task.argv],
       cwd: task.cwd,
-      inputDigest: sha256Hex({ inputs, toolchain: selectedToolchain, environment: selectedEnvironment }),
+      inputDigest: sha256Hex({
+        inputs,
+        toolchain: selectedToolchain,
+        environment: selectedEnvironment,
+      }),
       inputPaths: inputs.map((entry) => entry.path),
       matchedChangedPaths: changes.filter((path) =>
         task.inputSelectors.some((selector) => selectorMatches(selector, path)),
