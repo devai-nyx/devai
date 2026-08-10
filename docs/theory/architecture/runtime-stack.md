@@ -26,7 +26,7 @@ Generated TypeScript types are not committed (per [`.gitignore`](https://github.
 Each choice was made by elimination:
 
 **CLI framework — `cac` over `commander` and `oclif`:**
-`commander` is mature but verbose for ~60 commands (see [`tool-surface.md`](./tool-surface.md)). `oclif` is heavy: plugin architecture, manifest generation, command lifecycle hooks — none of which DEVAI needs since all commands ship in one binary. `cac` is the right size: a clean declarative API, sub-command grouping out of the box, no overkill.
+`commander` is mature but verbose for this CLI. `oclif` is unnecessarily heavy; `cac` provides the required declarative command grouping without a plugin runtime.
 
 **Workspace manager — `pnpm` over plain npm and Nx:**
 Plain npm workspaces work but lack a content-addressable store, which makes installs in CI slow and disk-hungry across multiple worktrees. Nx is an orchestration framework — DEVAI _is_ an orchestration framework, so layering Nx on top would conflict on the same surface. `pnpm`'s store + workspace primitives are exactly what DEVAI needs and nothing more.

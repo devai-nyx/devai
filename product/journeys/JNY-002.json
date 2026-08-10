@@ -65,7 +65,7 @@
   "postconditions": [
     "Backlog item moves status=completed",
     ".devai/state/tasks/<id>.json final state is `completed`",
-    "Evidence chain extends by N+1 records (sense reads + skill runs + commit hashes)",
+    "Evidence chain extends by N+1 records from sensor, recipe, operation, and commit evidence",
     "Replay against the same inputs would produce identical PromptComposition IDs"
   ],
   "acceptance_criteria": [

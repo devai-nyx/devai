@@ -124,7 +124,7 @@ For supported readiness, deterministic sensing and human-supervised verification
 - `node_modules/@devai-nyx/core/examples/redox-pack-*/stack-adapter.json` — npm-package manifests.
 - `examples/redox-pack-*/stack-adapter.json` — sibling-checkout manifests.
 - [../law/schemas/stack-adapter.schema.json](../../law/schemas/stack-adapter.schema.json) — pack schema.
-- [adoption.md](./adoption.md) — full long-form adoption walkthrough.
+- [Recipes](../reference/recipes/README.md) — current host-assisted surface.
 
 ---
 

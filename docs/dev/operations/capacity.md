@@ -105,8 +105,7 @@ For the GitHub Actions matrix CI uses today:
 
 ## See also
 
-- [`slos.md`](./slos.md) — what counts as green at these capacity levels.
-- [`loop-runbook.md`](./loop-runbook.md) — cost discipline.
+- [`testing.md`](./testing.md) — focused and RC-gate test policy.
 - D-11 (worktree cap), Article 30 (Cost discipline).
 
 ---

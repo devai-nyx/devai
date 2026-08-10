@@ -213,12 +213,12 @@
           }
         },
         {
-          "action": "Engineer scaffolds via `skill run SKILL-scaffold-<axis>` and reviews the rendered output",
+          "action": "Engineer invokes the exact `devai-scaffold` variant through the host and reviews the bounded output",
           "actorRole": "engineer",
           "refs": {
             "actionRefs": [
               {
-                "id": "agent skill run"
+                "id": "sense inventory"
               }
             ]
           }
@@ -294,7 +294,7 @@
           }
         },
         {
-          "action": "Loop acquires locks, spawns a worktree, provisions a per-task DB, runs SKILL-feedback-iteration via the LLM bridge",
+          "action": "Round coordination acquires bounded runtime state and invokes the exact host-selected recipe variant",
           "actorRole": "engineer",
           "refs": {
             "actionRefs": [

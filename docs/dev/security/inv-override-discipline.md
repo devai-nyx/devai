@@ -107,7 +107,6 @@ Every override is a record. Over time, the override log shows:
 
 ## See also
 
-- [`forbidden-actions.md`](./forbidden-actions.md) — adjacent governance discipline.
 - `GE-019` (Invariant), `GE-026` (Severity ladder), `GE-027` (inv-override).
 - `inv-override.schema.json` — the canonical structure.
 - Phase 10.B commit body.

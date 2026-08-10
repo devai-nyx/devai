@@ -104,7 +104,7 @@ Quarantine is **a temporary state** subject to Auditor scrutiny. The Auditor sur
 
 ## Coverage policy
 
-Per [Phase 33 IO-shape heuristic](../../adopters/common-pitfalls.md):
+Use the IO-shape heuristic:
 
 - **Interface-injected packages** (sensors take options; no live DB clients in src): aim for ≥80% via mocks. Estimated 2-3 hr/package burn-down.
 - **IO-bound packages** (live DB clients, network calls): use the integration suite as the dominant coverage signal; don't try to hit ≥80% with unit-suite mocks.
@@ -134,7 +134,6 @@ The four CI-gate commands required locally before every commit:
 
 - [Constitution Articles 29-31](../../reference/law.md) — sensor, weakening, quarantine.
 - [Scorecard](./scorecard.md) — verdict semantics + thresholds.
-- [`adopters/common-pitfalls`](../../adopters/common-pitfalls.md) — operational coverage notes.
 - [`meta/test-matrix`](../../dev/index.md) — DEVAI's own current suite measurements.
 
 ---

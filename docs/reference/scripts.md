@@ -36,7 +36,6 @@ sidebar_position: 3
 | `scripts/gen-aspect-grid.mjs`     | R14 W10 — generate `framework/aspect-grid.md` from sensor design notes                                                                                        | Per `npm run sync-docs` invocation                                                                              |
 | `scripts/gen-self-scorecard.mjs`  | Render the canonical/site self-scorecard pair and provenance manifest from one explicit schema-valid scorecard, its exact measured SHA, and a freshness bound | Invoked directly by the Auditor-owned exact-candidate flow; deliberately **not** called by ordinary `sync-docs` |
 | `scripts/gen-test-matrix.mjs`     | R14 W10 — generate `meta/test-matrix.md` from vitest configs + test file globs                                                                                | Per `npm run sync-docs` invocation                                                                              |
-| `scripts/gen-skill-catalog.mjs`   | R14 W10 — generate `reference/skills/` catalog from `devai agent skill list`                                                                                  | Per `npm run sync-docs` invocation                                                                              |
 | `scripts/gen-schema-browser.mjs`  | R14 W10 — generate `law/schemas/` browser from `law/schemas/*.schema.json`                                                                                    | Per `npm run sync-docs` invocation                                                                              |
 
 ## `docs/site/scripts/sync-docs.mjs`
@@ -67,7 +66,6 @@ provenance remains a separate claim.
 
 - [Test policy](../theory/framework/test-policy.md) — what each test suite probes.
 - [Adopters → install](../adopters/install.md) — initial `pnpm install` + build verification.
-- [Lightweight CI](../adopters/lightweight-ci.md) — how the scripts integrate into the CI freshness-check model.
 
 ---
 

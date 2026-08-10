@@ -57,7 +57,7 @@ The MVP floor is intentionally below the long-term PASS target of 80% lines beca
 - For lint/typecheck cells, `max_errors=0` is the canonical hard gate; any non-zero count flips the cell to FAIL.
 - The `freshness` block governs UNKNOWN — a sensor reading older than its budget flips the cell to UNKNOWN regardless of value.
 
-See [tool-surface.md](../theory/architecture/tool-surface.md) for the score-compute resolution chain and [`scorecard.schema.json`](../../law/schemas/scorecard.schema.json) for the verdict envelope.
+See [`scorecard.schema.json`](../../law/schemas/scorecard.schema.json) for the verdict envelope.
 
 ## Why a single schema, per-repo values
 
@@ -73,7 +73,7 @@ The original STYNX form lived only in `stynx/.devai/config/thresholds.json` and 
 
 - Schema: [`../docs/reference/contracts/thresholds.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/thresholds.schema.json)
 - DEVAI's own baseline: `.devai/config/thresholds.json` at the repo root
-- Scorecard semantics: [`../law/schemas/scorecard.schema.json`](../../law/schemas/scorecard.schema.json), `score compute` in [`../docs/theory/architecture/tool-surface.md`](../theory/architecture/tool-surface.md)
+- Scorecard semantics: [`scorecard.schema.json`](../../law/schemas/scorecard.schema.json)
 
 ---
 

@@ -111,7 +111,7 @@ cat record/proofs/llm-usage.jsonl | jq '.cost_usd' | awk '{s+=$1} END {print s}'
 export DEVAI_LLM_BUDGET_USD=10.00
 ```
 
-If you're hitting the budget repeatedly, raise it or shorten the loop's `--max-iterations`. See [`loop-runbook.md`](./loop-runbook.md) §"Cost control".
+If repeated work exceeds its budget, reduce scope and rerun the focused operation.
 
 ## 9. Test suite times out
 
@@ -137,7 +137,7 @@ Most common blocks: scorecard decision is not `pass`; invariants directory empty
 
 ## See also
 
-- [`evidence-chain-runbook.md`](./evidence-chain-runbook.md), [`lock-runbook.md`](./lock-runbook.md), [`worktree-runbook.md`](./worktree-runbook.md), [`loop-runbook.md`](./loop-runbook.md), [`capacity.md`](./capacity.md), [`slos.md`](./slos.md).
+- [`evidence-chain-runbook.md`](./evidence-chain-runbook.md), [`lock-runbook.md`](./lock-runbook.md), [`worktree-runbook.md`](./worktree-runbook.md), [`capacity.md`](./capacity.md), [`testing.md`](./testing.md).
 - `docs/dev/security/threat-model.md` for security-flavored incidents.
 
 ---

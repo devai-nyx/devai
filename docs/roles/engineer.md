@@ -129,10 +129,10 @@ When the spec is silent, contradictory, or unclear, the Engineer does **not** gu
 ## See also
 
 - [`README.md`](./README.md) — role index.
-- [`architect.md`](./architect.md), [`inspector.md`](./inspector.md) — the roles Engineer most often interacts with.
+- [`README.md`](./README.md) — current human authority overview.
 - `GE-003` (Engineer), `GE-018` (RGR), `GE-017` (Task).
 - Constitution Articles 6 (Authority), 19 (Escalation), 25 (Module locking), 27 (Worktree discipline).
-- [`../meta/ops/worktree-runbook.md`](../dev/operations/worktree-runbook.md), [`../meta/ops/loop-runbook.md`](../dev/operations/loop-runbook.md).
+- [`../meta/ops/worktree-runbook.md`](../dev/operations/worktree-runbook.md).
 
 ---
 

@@ -88,10 +88,10 @@ The recap is **stylized**. It builds a forensic trail readable forward (most rec
 
 **The word "phase" appears at TWO scopes.** This is load-bearing — the canon does NOT rename either; readers must rely on context.
 
-| Scope                                                    | "Phase" means                                                    | Identifier                             | Lives in                                                       |
-| -------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------- |
-| **Project lifecycle** (this doc)                         | A multi-week / multi-wave milestone in the project's overall arc | `Phase NN` (integer)                   | `work/rounds/R-0001/plan.md` Status block + per-phase sections |
-| **Round execution** ([round-break.md](./round-break.md)) | An optional grouping of steps within a single wave               | `R<n>-W<m>-<L>` (letter within a wave) | `work/rounds/R-NNNN/prompts/<nn>-<wave>.md` Phases section     |
+| Scope                            | "Phase" means                                                    | Identifier           | Lives in                                                       |
+| -------------------------------- | ---------------------------------------------------------------- | -------------------- | -------------------------------------------------------------- |
+| **Project lifecycle** (this doc) | A multi-week / multi-wave milestone in the project's overall arc | `Phase NN` (integer) | `work/rounds/R-0001/plan.md` Status block + per-phase sections |
+| **Round execution**              | An optional grouping of steps within a single wave               | `R<n>-W<m>-<L>`      | local planning state                                           |
 
 **Disambiguation rule:** when context could be ambiguous, qualify:
 
@@ -171,13 +171,13 @@ Project-lifecycle phases run for weeks to months and contain many commits. Round
 - The CONTENT of any specific phase (that's per-project).
 - How many sub-batches a phase has (varies by scope).
 - Whether to use markdown headers vs. tables for sub-batch tracking (style choice).
-- Round-execution discipline (covered by [round-break.md](./round-break.md)).
+- Round-execution discipline is host-managed and local.
 
 ## Cross-references
 
-- Round-execution canon: [`round-break.md`](./round-break.md).
+- Recipe boundaries: [`recipes`](../reference/recipes/README.md).
 - Identifier conventions for other artifacts: [`CONVENTIONS.md §5`](./CONVENTIONS.md#5-identifier-conventions).
-- DEVAI's frozen pre-v1 build-plan archive is a historical worked example. New DEVAI execution uses the [governed-round ceremony](./governed-rounds.md) and sealed round ledger.
+- New DEVAI execution uses explicit local actions and the preview round recipe.
 
 ---
 

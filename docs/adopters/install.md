@@ -114,8 +114,8 @@ A freshly bootstrapped adopter plus a `CLAUDE.md`, `AGENTS.md`, and materialized
 
 ## Step 5 — Pick a path: brownfield or greenfield
 
-- Existing repo, want DEVAI to inventory what's there: follow [first-introspection.md](./first-introspection.md).
-- New module, want DEVAI to scaffold from a blueprint: follow [blueprint-authoring.md](./blueprint-authoring.md).
+- Existing repo: run `sense inventory` after explicit initialization.
+- New module: use the bounded `devai-scaffold` recipe variant.
 
 Both paths converge: `devai spec blueprint diff <spec> --against <repo>` compares a blueprint against a brownfield inventory. The same substrate handles both.
 
@@ -125,7 +125,7 @@ Both paths converge: `devai spec blueprint diff <spec> --against <repo>` compare
 - `pnpm test` reports `Class extends value [object Module]`: typecheck/build wasn't run first. `pnpm gen-types && pnpm build` resolves it.
 - `pnpm exec devai` shows "command not found": confirm `@devai-nyx/cli` is installed in the current workspace and the GitHub Packages token has `read:packages`.
 
-See [common-pitfalls.md](./common-pitfalls.md) for the longer list.
+Use `devai doctor` and focused checks to diagnose setup failures.
 
 ---
 

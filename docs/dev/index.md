@@ -26,8 +26,6 @@ cannot run is a blocker or a recorded backlog item, never a silent skip.
 
 ## Runbooks
 
-- [Development process](process.md)
 - [Contributing](contributing.md)
-- [Round workflow](round-workflow/)
 - [Operations](operations/)
 - [Security](security/)

@@ -113,9 +113,7 @@ DEVAI does not implement per-role secret access at the OS level — that's the o
 
 ## See also
 
-- [`../ops/loop-runbook.md`](../operations/loop-runbook.md) — experimental activation and containment.
-- [`forbidden-actions.md`](./forbidden-actions.md) — secrets-related forbidden actions (`cat .env`, etc.).
-- [`audit-requirements.md`](./audit-requirements.md) — what gets recorded after redaction.
+- [`README.md`](./README.md) — current security boundary.
 - Constitution Articles 14 (Security-sensitive change policy), 30 (Cost discipline).
 
 ---

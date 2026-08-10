@@ -41,14 +41,12 @@ pnpm test:integration
 
 ## Rule 2: Real-provider tests are explicit opt-in
 
-Runtime backend resolution may discover host credentials, but the ordinary test suite never invokes them implicitly. Tests use deterministic mocks unless `DEVAI_LLM_TESTS=1` is explicitly set. When real-provider testing is enabled, backend resolution is:
+The ordinary test suite never invokes host credentials implicitly. Tests use deterministic
+mocks unless `DEVAI_LLM_TESTS=1` is explicitly set. Real-provider tests must also name the
+provider and model explicitly in their invocation; there is no repository provider default.
 
-1. `.devai/config/llm.json` `default_family`, if configured.
-2. `claude-cli` when the host `claude` CLI is on PATH.
-3. `codex-cli` when the host `codex` CLI is on PATH.
-4. `mock` only when no natural real provider is available, or when explicitly requested.
-
-Direct SDK backends still work with `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`. Host CLI backends inherit the operator's logged-in OAuth session and need no exported API key.
+Direct SDK backends use their provider API key. Host CLI backends inherit the operator's
+logged-in session and need no exported API key.
 
 ### Hermetic mode
 

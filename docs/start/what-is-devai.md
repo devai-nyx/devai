@@ -63,7 +63,7 @@ alone are advisory for those unrestricted surfaces.
 
 - For the architectural argument in long form: synthesis paper (under §2 Theory).
 - For the formal control-theoretic treatment: control-engineering paper (under §2 Theory).
-- For the adopter walk-through: [`devai init plan` and role-separated apply commands](../adopters/adoption.md).
+- Start with `devai init plan`, then use the explicit role-separated apply actions shown by the plan.
 - For the per-role view: [Roles](../roles).
 
 ---

@@ -32,7 +32,7 @@ If your team has stronger commit conventions (e.g., enforcing a specific scope s
 
 ## Phase A landmines
 
-See [`docs/adopters/common-pitfalls.md`'s "Phase A landmines" subsection](../common-pitfalls.md#phase-a-landmines) for the narrative behind why these templates exist.
+These templates are explicit inputs; DEVAI never selects or publishes one implicitly.
 
 ---
 

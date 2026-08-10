@@ -13,7 +13,7 @@ The **15-invariant scaffold pack** for NestJS + Angular + Postgres greenfield cl
 
 - Includes a starter constitution pin, ADR template, 15 baseline invariants covering common security / data / RBAC concerns.
 - Used as an explicit scaffold source after the role-separated bootstrap; current `devai init` has no implicit `--pack` mutation.
-- See [adopters/blueprint-authoring](../adopters/blueprint-authoring.md) for the greenfield path.
+- Use the bounded [`devai-scaffold`](./recipes/README.md) recipe for host-assisted generation.
 
 ## `examples/sample-f1/`
 

@@ -77,7 +77,7 @@ The compilation link from Owner to Architect is the `related_invariants` array o
 ## See also
 
 - [`README.md`](./README.md) — role index.
-- [`architect.md`](./architect.md) — the role Owner most often collaborates with.
+- [`README.md`](./README.md) — current human authority overview.
 - `GE-001` (Owner).
 - D-7 (Owner tier compiles to Architect tier).
 - Constitution Article 6.

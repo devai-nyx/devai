@@ -93,7 +93,7 @@ Rules:
     ├── worktrees/
     ├── sensor-readings/
     ├── sensors/
-    ├── skills/
+    ├── recipe-runs/
     ├── rtd-manifests/
     ├── evidence-chain.json
     └── llm-usage.jsonl
@@ -103,7 +103,7 @@ Rules:
 
 - Invariants: `INV-<DOMAIN>-<NNN>` (e.g. `INV-RBAC-001`, `INV-AIT-001`).
 - ADRs: `ADR-<SCOPE>-<NNNN>` (e.g. `ADR-FE-CONTRACTS-0001`).
-- Skills: `SKILL-<verb>-<noun>` (e.g. `SKILL-compute-scorecard`, `SKILL-round-audit`).
+- Recipes: one of the seven canonical `devai-<purpose>` names plus a declared variant.
 - DEVAI CLI: `devai <noun> <verb>` (e.g. `devai evidence test matrix`, `devai evidence test record`).
 
 ## 6. Authority
@@ -137,9 +137,9 @@ Rules:
   closeout stay under `.devai/state/round-runs/R-NNNN/`; attributable Auditor
   observations stay under `work/audit/R-NNNN/`. Closing occurs in place.
 - The orchestrator is strictly non-worker: it declares, dispatches, gates, and closes. Waves do the editing.
-- Every prompt under `prompts/` carries a metadata header (`role`, `effort`, optional `model` + `vendor`). See [prompt-header.md](./prompt-header.md).
+- Every host recipe uses the canonical host-neutral body and thin adapter front matter.
 
-See [round-break.md](./round-break.md) for the operational playbook: artifact templates, log row schemas, parallelism rules, gate processing algorithm, close criteria, and right-sizing guidance.
+See the [recipe reference](../reference/recipes/README.md) for current permission boundaries.
 
 ---
 

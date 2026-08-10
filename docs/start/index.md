@@ -17,20 +17,20 @@ slug: /
 
 Pick the entry point that matches what you came here to do.
 
-| You want to…                                                                                          | Start at                                                                                        |
-| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| **Understand the theory** — why DEVAI uses control-theoretic vocabulary literally, not metaphorically | [§2 Theory](../theory) — the metaphor map plus the unified theory document                      |
-| **Adopt DEVAI in your repo** — install, declare a role, run the introspection, get a green scorecard  | [§5 Adopters](../adopters) — install → first introspection → packs → operations                 |
-| **Operate as a role-holder** (Owner / Architect / Inspector / Engineer / Auditor)                     | [§4 Roles](../roles) — authority chain, per-role walkthroughs, coupled-triplet coordination     |
-| **Reference a verb, skill, schema, or sensor**                                                        | [§6 Reference](../reference) — auto-generated CLI / skills / schemas, plus scripts and examples |
-| **Contribute to DEVAI itself, or audit its self-application**                                         | [§7 Meta](../dev) — Article-36 surface: self-scorecard, test matrix, dev process, build plan    |
+| You want to…                                                                                          | Start at                                                                                     |
+| ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| **Understand the theory** — why DEVAI uses control-theoretic vocabulary literally, not metaphorically | [§2 Theory](../theory) — the metaphor map plus the unified theory document                   |
+| **Adopt DEVAI in your repo** — install, declare a role, run the introspection, get a green scorecard  | [§5 Adopters](../adopters) — install → first introspection → packs → operations              |
+| **Operate as a role-holder** (Owner / Architect / Inspector / Engineer / Auditor)                     | [§4 Roles](../roles) — authority chain, per-role walkthroughs, coupled-triplet coordination  |
+| **Reference an action, recipe, operation, schema, or sensor**                                         | [§6 Reference](../reference) — CLI, recipes, schemas, scripts, and examples                  |
+| **Contribute to DEVAI itself, or audit its self-application**                                         | [§7 Meta](../dev) — Article-36 surface: self-scorecard, test matrix, dev process, build plan |
 
 ## Status
 
 The current constitutional, package, authority, and lifecycle posture is
-recorded on the [status page](./status.md). Live action and skill inventories come
-from `devai catalog actions` and `devai agent skill list`; schemas and tests are
-queried from their registries rather than frozen as prose counts.
+recorded on the [status page](./status.md). Live actions come from `devai catalog
+actions`; the seven recipe manifests live under `packages/skills/resources/recipes/`.
+Schemas and tests are queried from their registries rather than frozen as prose counts.
 
 DEVAI applies itself per Article 36. The
 [self-scorecard](./status.md) is current only when its displayed
@@ -53,7 +53,7 @@ The control-theoretic framing is not metaphorical. It governs how authority is a
 
 ## Reading order
 
-A curated walk-through, in suggested order, lives at [Reading order](./reading-order.md). For the impatient: install via the [adopter guide](../adopters/install.md), declare your [role](../adopters/role-declaration.md), preview with `devai init plan`, then run [`devai init apply-f5 --introspect --as-role architect --write`](../adopters/first-introspection.md) against your repo.
+A curated walk-through lives at [Reading order](./reading-order.md). Start with the [adopter guide](../adopters/install.md), preview with `devai init plan`, and apply only the explicit actions emitted by that plan.
 
 ---
 

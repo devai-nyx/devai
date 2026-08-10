@@ -11,14 +11,14 @@ A curated path through the published documentation, in the order most readers wi
 
 A 30-minute walk-through to get oriented before installing.
 
-| Step | Read                                                                 | Time   | Why                                                                                                             |
-| ---- | -------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------- |
-| 1    | [What is DEVAI?](./what-is-devai.md)                                 | 5 min  | One-paragraph framing + the five substrates and five roles                                                      |
-| 2    | [Theory — the metaphor map](../theory)                               | 10 min | The control-theoretic vocabulary made literal; routes to the unified theory document                            |
-| 3    | [Adopters — install](../adopters/install.md)                         | 5 min  | Clone DEVAI, install the CLI, verify gates green                                                                |
-| 4    | [Adopters — role declaration](../adopters/role-declaration.md)       | 5 min  | The five-role authority model from an adopter's perspective                                                     |
-| 5    | [Adopters — first introspection](../adopters/first-introspection.md) | 5 min  | The brownfield path: role-separated bootstrap, `init apply-f5 --introspect`, and the seven L0 inventory sensors |
-| 6    | [Adopters — pack resolution](../adopters/pack-resolution.md)         | 5 min  | How `devai adopt pack resolve` matches your repo to a stack-adapter pack                                        |
+| Step | Read                                                           | Time   | Why                                                                                  |
+| ---- | -------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------ |
+| 1    | [What is DEVAI?](./what-is-devai.md)                           | 5 min  | One-paragraph framing + the five substrates and five roles                           |
+| 2    | [Theory — the metaphor map](../theory)                         | 10 min | The control-theoretic vocabulary made literal; routes to the unified theory document |
+| 3    | [Adopters — install](../adopters/install.md)                   | 5 min  | Clone DEVAI, install the CLI, verify gates green                                     |
+| 4    | [Adopters — role declaration](../adopters/role-declaration.md) | 5 min  | The five-role authority model from an adopter's perspective                          |
+| 5    | [Canonical recipes](../reference/recipes/README.md)            | 5 min  | Host-assisted work and exact permission boundaries                                   |
+| 6    | [Adopters — pack resolution](../adopters/pack-resolution.md)   | 5 min  | How `devai adopt pack resolve` matches your repo to a stack-adapter pack             |
 
 After this, the rest of [§5 Adopters](../adopters) is reference material — read what you need when you need it.
 
@@ -27,10 +27,7 @@ After this, the rest of [§5 Adopters](../adopters) is reference material — re
 If you've declared a role at session start, read your role's walkthrough first:
 
 - [Owner](../roles/owner.md) — business specs (journeys, use-cases) under F1
-- [Architect](../roles/architect.md) — engineering specs, invariants, contracts, ADRs under F1
-- [Inspector](../roles/inspector.md) — tests under F3
 - [Engineer](../roles/engineer.md) — code under F2
-- [Auditor](../roles/auditor.md) — read-only; produces reports, scorecards, backlogs
 
 Then read cross-role coordination (under §4 Roles) for the coupled-triplet pattern that handles cross-substrate work.
 
@@ -58,12 +55,12 @@ DEVAI applies to itself per [Article 36](../reference/law.md). Reading [§7 Meta
 | [Build plan](../dev/round-ledger.md)            | Per-phase implementation plan with prefix-index navigation                                                                              |
 | [Decision log](../reference/decisions-index.md) | D-1 through current; one rationale per decision                                                                                         |
 
-## For everyone else (the CLI/skills/schemas reference)
+## For everyone else (the CLI/recipes/schemas reference)
 
 [§6 Reference](../reference) is auto-generated:
 
 - [CLI](../reference/cli.md) — every verb, with authority tag, description, and per-action options
-- [Skills](../reference/skills) — skill manifests with inputs / outputs / authorship
+- [Recipes](../reference/recipes/README.md) — the seven host-invoked recipes and their boundaries
 - [Schemas](../../law/schemas) — every JSON Schema browsable inline (under Framework because contracts are framework-tier)
 - Scripts (under §6 Reference) — `pnpm` scripts and `scripts/*.mjs` utilities
 - Sensors quick-ref (under §6 Reference) — sensor kinds organised by substrate and transversal
