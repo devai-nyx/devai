@@ -25,6 +25,7 @@
         "tests/contract/r0007-b7-original-budget-performance.implementation-paths.json"
       ],
       "exercised_implementation_paths": [
+        "scripts/check-governed-sequencing.mjs",
         "scripts/check-implementation-path-manifest.mjs",
         "scripts/run-round-close-controls.mjs",
         "scripts/round-close-controls/runtime.mjs",
