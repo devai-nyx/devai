@@ -220,7 +220,7 @@
     {
       "nodeId": "build",
       "dependencies": ["generate"],
-      "argv": ["pnpm", "run", "build"],
+      "argv": ["pnpm", "-r", "build"],
       "cwd": ".",
       "runner": "pnpm-script-v1",
       "inputSelectors": [
