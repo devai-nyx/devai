@@ -62,7 +62,7 @@ function readContracts(actions: readonly string[]) {
   }));
 }
 
-describe('R24 effect-inference red contracts', () => {
+describe('effect-inference contracts', () => {
   it('fails when statically extracted entries differ from the runtime catalog', async () => {
     const api = await effectsApi();
     await expect(

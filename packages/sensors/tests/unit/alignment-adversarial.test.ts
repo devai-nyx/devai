@@ -61,7 +61,7 @@ afterEach(() => {
   rmSync(repo, { recursive: true, force: true });
 });
 
-describe('R21 W09 adversarial alignment semantics', () => {
+describe('adversarial alignment semantics', () => {
   it('rejects the canonical action when it is only an argument to another executable', () => {
     prepare('grep devai policy check dependencies README.md');
     expect(sense().status).not.toBe('pass');

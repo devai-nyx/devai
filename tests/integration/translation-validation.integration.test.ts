@@ -61,7 +61,7 @@ function frameStatus(result: ReturnType<typeof evaluateTranslationFrames>, name:
   return result.frames.find((frame) => frame.name === name)?.status;
 }
 
-describe('R28 independent translation validation red contracts', () => {
+describe('independent translation validation contracts', () => {
   it('emits a typed untrusted witness while fixing runtime-owned identity and authority fields', () => {
     const witness = createTranslationWitness({
       recipe_name: 'devai-fix',

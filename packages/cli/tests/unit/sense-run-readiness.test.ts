@@ -49,16 +49,18 @@ if (canonicalSenseRun === undefined) throw new Error('SENSE_RUN_REGISTRY_ENTRY_M
 
 const senseRunEntry = {
   name: canonicalSenseRun.action_id,
-  previous_name: canonicalSenseRun.internal_binding,
-  internal_name: canonicalSenseRun.internal_binding.replaceAll(' ', '-'),
+  handler: canonicalSenseRun.handler,
+  internal_name: canonicalSenseRun.handler.replaceAll(' ', '-'),
   path: canonicalSenseRun.path,
-  disposition: canonicalSenseRun.disposition,
-  migration: canonicalSenseRun.migration,
-  lifecycle: canonicalSenseRun.lifecycle,
-  lifecycle_reason: canonicalSenseRun.lifecycle_reason,
-  promotion_criteria: canonicalSenseRun.promotion_criteria,
-  visibility: canonicalSenseRun.visibility,
-  tier: canonicalSenseRun.tier,
+  status: canonicalSenseRun.status,
+  lifecycle: canonicalSenseRun.status === 'preview' ? 'experimental' : 'supported',
+  lifecycle_reason:
+    canonicalSenseRun.status === 'preview'
+      ? 'Preview action; contract may change before v1.0.'
+      : 'Stable action.',
+  promotion_criteria: [],
+  visibility: canonicalSenseRun.status === 'internal' ? 'maintainer' : 'standard',
+  tier: canonicalSenseRun.status === 'internal' ? 'plumbing' : 'porcelain',
   profiles: canonicalSenseRun.profiles,
   effects: canonicalSenseRun.effect,
   authority: canonicalSenseRun.authority ?? 'mesh_controller',

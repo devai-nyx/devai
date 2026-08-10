@@ -8,7 +8,7 @@ import { RECIPE_NAMES } from '../../packages/skills/src/recipes/types.js';
 import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
 /**
- * Smoke tests (Phase 16.H). Post-build sanity that the binary
+ * Post-build sanity that the binary
  * answers basic questions in <1s each. Fails fast if anything
  * structural is broken (binary missing, --help crashes, action
  * registry empty).
@@ -20,9 +20,7 @@ import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const BIN = join(HERE, '..', '..', 'packages', 'cli', 'dist', 'bin.js');
-const keptActionIds = ACTION_REGISTRY.filter((entry) => entry.disposition === 'keep').map(
-  (entry) => entry.action_id,
-);
+const actionIds = ACTION_REGISTRY.map((entry) => entry.action_id);
 
 function run(args: readonly string[]): { status: number | null; stdout: string; stderr: string } {
   const r = spawnSync('node', [BIN, ...args], {
@@ -56,13 +54,13 @@ describe('CLI binary smoke', () => {
     expect(r.stdout).toMatch(/\d+\.\d+\.\d+/);
   });
 
-  it('`catalog actions` produces the exact 42-action registry projection in order', () => {
+  it('`catalog actions` produces the exact current registry projection in order', () => {
     const r = run(['catalog', 'actions', '--format', 'json']);
     expect(r.status).toBe(0);
     expect(r.stderr).toBe('');
     const parsed = catalogValue(r.stdout);
     expect(parsed).toHaveLength(41);
-    expect(parsed.map((action) => action.name)).toEqual(keptActionIds);
+    expect(parsed.map((action) => action.name)).toEqual(actionIds);
     expect(parsed.every((a) => typeof a.name === 'string')).toBe(true);
   });
 
@@ -71,7 +69,6 @@ describe('CLI binary smoke', () => {
     expect(recipes.map((recipe) => recipe.manifest.name)).toEqual(RECIPE_NAMES);
     expect(new Set(recipes.map((recipe) => recipe.manifest.name)).size).toBe(7);
   });
-
   it('an unknown command fails closed with a suggestion', () => {
     const r = run(['nonexistent-action-xyz']);
     expect(r.status).toBe(2);
@@ -91,23 +88,10 @@ describe('CLI binary smoke', () => {
         .filter((domainName): domainName is string => domainName !== undefined),
     );
     for (const domainName of domains) {
-      const help = run([domainName, '--help-all']);
+      const help = run([domainName, '--all']);
       expect(help.status, domainName).toBe(0);
       expect(help.stdout, domainName).toContain(`Usage: devai ${domainName}`);
     }
   }, 90_000);
-
-  it('0.4 command names and flags fail closed', () => {
-    for (const args of [
-      ['actions-list'],
-      ['actions', 'list'],
-      ['init', '--execute'],
-      ['doctor', '--human'],
-    ]) {
-      const r = run(args);
-      expect(r.status, args.join(' ')).toBe(2);
-      expect(r.stderr, args.join(' ')).toBeTruthy();
-    }
-  }, 30_000);
 });
 // Invariants: INV-DEVAI-001

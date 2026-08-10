@@ -1,5 +1,5 @@
 // Invariants: INV-DEVAI-001, INV-DEVAI-015, INV-DEVAI-017, INV-DEVAI-020
-// R-0007 B4 Inspector acceptance: the canonical CLI cannot reach PostgreSQL
+// The canonical CLI cannot reach PostgreSQL
 // without bound Engineer/write authority and does execute the migration with it.
 import { spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
@@ -14,13 +14,13 @@ const CLI = resolve(ROOT, 'packages/cli/dist/bin.js');
 const ADMIN_URL =
   process.env['DEVAI_DB_URL'] ??
   `postgresql://${process.env['USER'] ?? 'postgres'}@127.0.0.1:5432/postgres`;
-const DATABASE_NAME = `devai_r7_b4_authority_effect_${randomUUID().replaceAll('-', '').slice(0, 20)}`;
+const DATABASE_NAME = `devai_authority_effect_${randomUUID().replaceAll('-', '').slice(0, 20)}`;
 const databaseUrl = new URL(ADMIN_URL);
 databaseUrl.pathname = `/${DATABASE_NAME}`;
 const DATABASE_URL = databaseUrl.toString();
-const TABLE = 'r0007_b4_authority_effect_probe';
-const MIGRATION = '001-r0007-b4-authority-effect.sql';
-const FIXTURE = mkdtempSync(join(tmpdir(), 'devai-r0007-b4-authority-effect-postgres-'));
+const TABLE = 'authority_effect_probe';
+const MIGRATION = '001-authority-effect.sql';
+const FIXTURE = mkdtempSync(join(tmpdir(), 'devai-authority-effect-postgres-'));
 const MIGRATIONS = join(FIXTURE, 'migrations');
 
 interface PgClient {
@@ -118,7 +118,7 @@ afterAll(async () => {
   }
 });
 
-describe('R-0007 B4 PostgreSQL authority/effect acceptance', () => {
+describe('PostgreSQL authority/effect acceptance', () => {
   it('refuses missing write consent and wrong-role authority before any DB mutation', async () => {
     const noWrite = invoke(['--as-role', 'engineer']);
     expect(noWrite.error).toBeUndefined();

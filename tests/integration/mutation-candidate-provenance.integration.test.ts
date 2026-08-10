@@ -229,7 +229,7 @@ afterEach(() => {
   for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
 });
 
-describe('R28 D-173 recorder-derived candidate provenance red contracts', () => {
+describe('recorder-derived candidate provenance contracts', () => {
   it('rejects an invalid evidence intent id before resolving candidate state', () => {
     const { repo, baseSha } = fixture();
     expect(() =>

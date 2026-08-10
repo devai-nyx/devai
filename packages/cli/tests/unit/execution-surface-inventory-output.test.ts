@@ -102,7 +102,7 @@ function emit(
   }
 }
 
-describe('R-0007 B4 execution-surface inventory discovery', () => {
+describe('execution-surface inventory discovery', () => {
   it('exposes every exact slice once and composes all in atomic slice order', () => {
     expect(INVENTORY_SLICES).toEqual(EXPECTED_INVENTORY_SLICES);
     expect(new Set(INVENTORY_SLICES.map((slice) => slice.name)).size).toBe(INVENTORY_SLICES.length);
@@ -123,7 +123,7 @@ describe('R-0007 B4 execution-surface inventory discovery', () => {
   });
 });
 
-describe('R-0007 B4 execution-surface action output totality', () => {
+describe('execution-surface action output totality', () => {
   it('emits one schema-valid empty success and one schema-valid refusal for every current action', () => {
     expect(current).toHaveLength(41);
     for (const entry of current) {

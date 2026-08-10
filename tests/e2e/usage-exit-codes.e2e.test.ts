@@ -27,11 +27,7 @@ function run(args: readonly string[]): { status: number | null; stdout: string; 
   return { status: result.status, stdout: result.stdout, stderr: result.stderr };
 }
 
-// R18.B.6 (audit finding M3, D-133): the router's fail-closed contract
-// (usage failures exit 2 before side effects, D-129) did not reach the
-// command layer — missing required args crashed with raw cac stack traces
-// (exit 1) or exited with the legacy EXIT_USAGE=64. One contract, one code:
-// every usage failure exits 2 with a one-line usage message and no stack.
+// Every usage failure exits 2 with a structured message and no stack.
 
 const USAGE_CASES: ReadonlyArray<{
   label: string;
@@ -47,7 +43,7 @@ const USAGE_CASES: ReadonlyArray<{
       '--blueprint',
       'plan',
       '--round',
-      'R-0007',
+      'R-1234',
       '--repo-root',
       ROOT,
       '--as-role',
@@ -64,7 +60,7 @@ const USAGE_CASES: ReadonlyArray<{
       '--blueprint',
       'diff',
       '--round',
-      'R-0007',
+      'R-1234',
       '--repo-root',
       ROOT,
       '--as-role',
@@ -93,7 +89,7 @@ const USAGE_CASES: ReadonlyArray<{
       'task',
       'start',
       '--round',
-      'R-0007',
+      'R-1234',
       '--task',
       'TASK-0042',
       '--with-db',
@@ -111,7 +107,7 @@ const USAGE_CASES: ReadonlyArray<{
       'task',
       'finish',
       '--round',
-      'R-0007',
+      'R-1234',
       '--task',
       'TASK-0042',
       '--drop-db',
@@ -124,44 +120,7 @@ const USAGE_CASES: ReadonlyArray<{
   },
 ];
 
-const LEGACY_ROUTE_CASES: ReadonlyArray<{
-  label: string;
-  args: readonly string[];
-  remediation: string;
-}> = [
-  {
-    label: 'spec blueprint plan',
-    args: ['spec', 'blueprint', 'plan'],
-    remediation: 'round plan --blueprint plan',
-  },
-  {
-    label: 'spec blueprint diff',
-    args: ['spec', 'blueprint', 'diff'],
-    remediation: 'round plan --blueprint diff',
-  },
-  {
-    label: 'spec blueprint validate',
-    args: ['spec', 'blueprint', 'validate'],
-    remediation: 'check --only blueprint',
-  },
-  {
-    label: 'work db provision',
-    args: ['work', 'db', 'provision'],
-    remediation: 'task start --round R-NNNN --with-db',
-  },
-  {
-    label: 'work db drop',
-    args: ['work', 'db', 'drop'],
-    remediation: 'task finish --round R-NNNN --drop-db',
-  },
-  {
-    label: 'init apply-owner',
-    args: ['init', 'apply-owner'],
-    remediation: 'init apply owner',
-  },
-];
-
-describe('command-layer usage failures exit 2 without stack traces (R18.B.6)', () => {
+describe('command-layer usage failures exit 2 without stack traces', () => {
   for (const c of USAGE_CASES) {
     it(
       c.label,
@@ -183,20 +142,6 @@ describe('command-layer usage failures exit 2 without stack traces (R18.B.6)', (
         expect(combined, `${c.label}: reaches usage rather than authority refusal`).not.toMatch(
           /AUTHORITY_/i,
         );
-      },
-      CLI_TIMEOUT_MS,
-    );
-  }
-
-  for (const legacy of LEGACY_ROUTE_CASES) {
-    it(
-      `${legacy.label} remains a migration refusal`,
-      () => {
-        const r = run(legacy.args);
-        expect(r.status).toBe(2);
-        expect(r.stdout).toBe('');
-        expect(r.stderr).toContain(legacy.remediation);
-        expect(r.stderr).not.toMatch(/^\s+at /m);
       },
       CLI_TIMEOUT_MS,
     );

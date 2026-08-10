@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 // Invariants: INV-DEVAI-020
 
-describe('R25 binding effect-check red contracts', () => {
+describe('binding effect-check contracts', () => {
   async function enforce(report: {
     readonly findings: readonly Readonly<{
       code: string;
