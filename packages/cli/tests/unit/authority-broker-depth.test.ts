@@ -2,7 +2,6 @@
 import type { AuthorityHostEffectRequest } from '@devai-nyx/authority';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createAuthorityHostBroker } from '../../src/authority/broker.js';
-import { routeArgv } from '../../src/command-router.js';
 import { getFullRegistry, type RegistryEntry } from '../../src/define-command.js';
 import { resolveCliVersion } from '../../src/version.js';
 
@@ -28,9 +27,7 @@ afterAll(() => {
 type Role = 'owner' | 'architect' | 'inspector' | 'engineer' | 'auditor';
 
 function broker(name: string, role: Role, argv: readonly string[], bootstrapPolicy = false) {
-  const entry = entries.find(
-    (candidate) => candidate.name === name && candidate.disposition === 'keep',
-  );
+  const entry = entries.find((candidate) => candidate.name === name);
   if (entry === undefined) throw new Error(`missing action ${name}`);
   return createAuthorityHostBroker({
     entry,
@@ -80,22 +77,6 @@ function taskStartArgv(options: { readonly withDb?: boolean } = {}): readonly st
     'engineer',
     '--write',
   ];
-}
-
-function expectHistoricalRefusal(
-  argv: readonly string[],
-  code: 'ACTION_FOLDED' | 'ACTION_TOMBSTONED',
-  remediation: string,
-): void {
-  const result = routeArgv(
-    [process.execPath, 'devai', ...argv, '--json'],
-    entries,
-    resolveCliVersion(),
-  );
-  expect(result.kind).toBe('output');
-  if (result.kind !== 'output') throw new Error(`historical route dispatched: ${argv.join(' ')}`);
-  expect(result.exitCode).toBe(2);
-  expect(JSON.parse(result.text)).toMatchObject({ code, remediation });
 }
 
 function effect(
@@ -201,12 +182,7 @@ describe('authority broker production boundary depth', () => {
     }
   });
 
-  it('fails closed for retired sessions and task action scopes', () => {
-    expectHistoricalRefusal(
-      ['work', 'session', 'start'],
-      'ACTION_TOMBSTONED',
-      'REMOVED; use invocation-scoped --as-role',
-    );
+  it('keeps task action scopes bounded', () => {
     const invocation = broker('round run', 'auditor', roundRunArgv('auditor'));
     try {
       expect(invocation.session_operation).toBeUndefined();
@@ -237,17 +213,6 @@ describe('authority broker production boundary depth', () => {
       '--as-role',
       'inspector',
       '--write',
-    ] as const;
-    const releaseDocsArgv = [
-      process.execPath,
-      'devai',
-      'release',
-      'publish',
-      'docs',
-      '--as-role',
-      'architect',
-      '--write',
-      '--publish',
     ] as const;
     const evidenceTestArgv = [
       process.execPath,
@@ -338,7 +303,6 @@ describe('authority broker production boundary depth', () => {
       ['task start', 'engineer', taskStartArgv({ withDb: true }), 'docker', ['stop', 'fixture-db']],
       ['check', 'inspector', checkTranslationArgv, 'docker', ['run', '--rm', 'fixture']],
       ['check', 'inspector', checkTranslationArgv, 'sandbox-exec', ['-p', '(version 1)', 'node']],
-      ['release publish docs', 'architect', releaseDocsArgv, 'git', ['push', 'origin', 'gh-pages']],
       ['task start', 'engineer', taskStartArgv(), 'git', ['push', 'origin', 'HEAD']],
       [
         'init upgrade',
@@ -347,14 +311,6 @@ describe('authority broker production boundary depth', () => {
         'git',
         ['fetch', 'upstream remote!', 'branch/name'],
       ],
-      [
-        'release publish docs',
-        'architect',
-        releaseDocsArgv,
-        'git',
-        ['checkout', '--orphan', 'gh-pages'],
-      ],
-      ['release publish docs', 'architect', releaseDocsArgv, 'git', ['branch', '-D', 'temporary']],
       [
         'round run',
         'engineer',
@@ -368,20 +324,6 @@ describe('authority broker production boundary depth', () => {
       ['round run', 'engineer', roundRunArgv(), 'git', ['commit', '-m', 'fixture']],
       ['round run', 'engineer', roundRunArgv(), 'git', ['mv', 'scratch/a', 'scratch/b']],
       ['task start', 'engineer', taskStartArgv(), 'gh', ['pr', 'create', '--draft']],
-      [
-        'release publish docs',
-        'architect',
-        releaseDocsArgv,
-        'npm',
-        ['--prefix', 'docs/site', 'run', 'build'],
-      ],
-      [
-        'release publish docs',
-        'architect',
-        releaseDocsArgv,
-        'bundle',
-        ['exec', 'jekyll', 'build', '-s', 'docs/site', '-d', 'docs/site/_site'],
-      ],
       ['evidence record', 'auditor', evidenceTestArgv, 'sh', ['-c', 'pnpm test']],
       ['round run', 'engineer', roundRunArgv(), 'claude', ['-p', 'fixture']],
       ['round run', 'engineer', roundRunArgv(), 'codex', ['exec', 'fixture']],
@@ -412,57 +354,6 @@ describe('authority broker production boundary depth', () => {
       }
     }
     expect(classified).toBe(cases.length);
-  });
-
-  it('refuses every historical process-matrix route before broker dispatch', () => {
-    const cases = [
-      [['adopt', 'upgrade'], 'ACTION_FOLDED', 'init upgrade'],
-      [
-        ['agent', 'skill', 'run'],
-        'ACTION_FOLDED',
-        'normally round run; hidden task start --round R-NNNN --task TASK-NNNN after the task declares an agent executor and registered skill ID',
-      ],
-      [['docs', 'publish'], 'ACTION_FOLDED', 'release publish docs'],
-      [['docs', 'render', 'mermaid'], 'ACTION_FOLDED', 'round plan --documents diagrams'],
-      [['evidence', 'test', 'record'], 'ACTION_FOLDED', 'evidence record --kind test'],
-      [['experimental', 'loop', 'run'], 'ACTION_TOMBSTONED', 'REMOVED'],
-      [['init', 'apply-owner'], 'ACTION_FOLDED', 'init apply owner'],
-      [['sense', 'build'], 'ACTION_FOLDED', 'sense run build'],
-      [['sense', 'lint'], 'ACTION_FOLDED', 'sense run lint'],
-      [
-        ['sense', 'test'],
-        'ACTION_FOLDED',
-        'sense run <unit_test | integration_test | e2e_test> or a preset',
-      ],
-      [['sense', 'type', 'check'], 'ACTION_FOLDED', 'sense run type_check'],
-      [['verify', 'translation'], 'ACTION_FOLDED', 'check --only translation'],
-      [
-        ['work', 'db', 'provision'],
-        'ACTION_FOLDED',
-        'internal to task start --round R-NNNN --with-db',
-      ],
-      [
-        ['work', 'db', 'start', 'shared'],
-        'ACTION_TOMBSTONED',
-        'REMOVED; operator-owned container tooling',
-      ],
-      [
-        ['work', 'db', 'stop', 'shared'],
-        'ACTION_TOMBSTONED',
-        'REMOVED; operator-owned container tooling',
-      ],
-      [['work', 'session', 'end'], 'ACTION_TOMBSTONED', 'REMOVED; use invocation-scoped --as-role'],
-      [
-        ['work', 'session', 'start'],
-        'ACTION_TOMBSTONED',
-        'REMOVED; use invocation-scoped --as-role',
-      ],
-      [['work', 'state', 'prune'], 'ACTION_TOMBSTONED', 'REMOVED from CLI'],
-    ] as const;
-
-    for (const [argv, code, remediation] of cases) {
-      expectHistoricalRefusal(argv, code, remediation);
-    }
   });
 
   it('admits only exact read-only subprocess shapes for sensor actions', () => {
@@ -512,7 +403,7 @@ describe('authority broker production boundary depth', () => {
     }
   });
 
-  it('fails closed for malformed filesystem targets, escapes, descriptors, and retired sessions', () => {
+  it('fails closed for malformed filesystem targets, escapes, and descriptors', () => {
     const host = broker('round run', 'engineer', roundRunArgv());
     try {
       expect(() =>
@@ -539,11 +430,5 @@ describe('authority broker production boundary depth', () => {
     } finally {
       host.dispose();
     }
-
-    expectHistoricalRefusal(
-      ['work', 'session', 'end'],
-      'ACTION_TOMBSTONED',
-      'REMOVED; use invocation-scoped --as-role',
-    );
   });
 });

@@ -10,13 +10,10 @@ const registry = JSON.parse(
 ) as {
   entries: Array<{
     action_id: string;
-    disposition: 'keep' | 'fold' | 'tombstone';
     authority_contract: Record<string, unknown>;
   }>;
 };
-const contracts = registry.entries
-  .filter((entry) => entry.disposition === 'keep')
-  .map((entry) => entry.authority_contract);
+const contracts = registry.entries.map((entry) => entry.authority_contract);
 
 function harness(
   overrides: Record<string, unknown> = {},
@@ -54,11 +51,6 @@ describe('authority CLI harness branch matrix', () => {
       [['unknown', 'action'], 7, 'AUTHORITY_ACTION_CONTRACT_NOT_FOUND'],
       [['init', 'record'], 2, 'AUTHORITY_INTERNAL_ACTION_NOT_ROUTABLE'],
       [['catalog', 'actions', '--as-role', 'architect'], 2, 'AUTHORITY_DECLARATION_NOT_APPLICABLE'],
-      [
-        ['release', 'publish', 'docs', '--as-role', 'architect', '--write'],
-        2,
-        'AUTHORITY_PUBLISH_CONSENT_REQUIRED',
-      ],
       [
         [
           'round',

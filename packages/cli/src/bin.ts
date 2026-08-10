@@ -95,7 +95,7 @@ function needsRuntimeMetadata(argv: readonly string[]): boolean {
   const format = args.lastIndexOf('--format');
   return (
     args.length === 0 ||
-    args.some((value) => ['--help', '-h', '--all', '--help-all'].includes(value)) ||
+    args.some((value) => ['--help', '-h', '--all'].includes(value)) ||
     (format >= 0 && args[format + 1] === 'human')
   );
 }

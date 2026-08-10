@@ -17,7 +17,6 @@ export interface CanonicalDescriptorHandoffReport {
   readonly narrative_documentation_complete: false;
   readonly deploy_ready_site: false;
   readonly categories: Readonly<Record<string, DocumentationCategoryResult>>;
-  readonly migration: DocumentationCategoryResult;
 }
 
 function json(repoRoot: string, path: string): JsonRecord {
@@ -59,7 +58,6 @@ function uniqueSorted(values: readonly string[]): readonly string[] {
 function schemaEnums(registrySchema: JsonRecord): {
   readonly roles: readonly string[];
   readonly effects: readonly string[];
-  readonly lifecycles: readonly string[];
 } {
   const defs = registrySchema['$defs'] as JsonRecord;
   const authority = defs['authorityContract'] as JsonRecord;
@@ -79,10 +77,6 @@ function schemaEnums(registrySchema: JsonRecord): {
     effects: strings(
       (properties['effect'] as JsonRecord)['enum'],
       'CHECK_DESCRIPTOR_EFFECTS_INVALID',
-    ),
-    lifecycles: strings(
-      (properties['lifecycle'] as JsonRecord)['enum'],
-      'CHECK_DESCRIPTOR_LIFECYCLES_INVALID',
     ),
   };
 }
@@ -145,7 +139,10 @@ function categoryPopulation(repoRoot: string, categoryId: string): readonly stri
         'CHECK_DESCRIPTOR_VERDICTS_INVALID',
       );
     case 'action-lifecycles':
-      return schemaEnums(registrySchema()).lifecycles;
+      return strings(
+        (roundExecution()['vocabularies'] as JsonRecord)['action_lifecycles'],
+        'CHECK_DESCRIPTOR_LIFECYCLES_INVALID',
+      );
     case 'surface-tiers':
       return names(
         (roundExecution()['vocabularies'] as JsonRecord)['surface_tiers'],
@@ -192,47 +189,6 @@ function categoryPopulation(repoRoot: string, categoryId: string): readonly stri
   }
 }
 
-function vocabularyId(oldSpelling: string): string {
-  const plain = oldSpelling.replaceAll('`', '').replace(/\s+/gu, ' ').trim();
-  if (plain.startsWith('check --profile ')) return 'vocabulary:check-profile';
-  if (plain.startsWith('sense --set ')) {
-    const value = plain.slice('sense --set '.length).split(' ')[0];
-    if (value === undefined || value.length === 0) {
-      throw new Error('CHECK_DESCRIPTOR_VOCABULARY_INVALID');
-    }
-    return `vocabulary:sense-set-${value}`;
-  }
-  if (plain.startsWith('adoption --profile ')) return 'vocabulary:adoption-profile';
-  if (plain === '--allow-publish') return 'vocabulary:allow-publish';
-  throw new Error(`CHECK_DESCRIPTOR_VOCABULARY_UNKNOWN:${plain}`);
-}
-
-function migrationPopulation(repoRoot: string): readonly string[] {
-  const source = readFileSync(
-    join(repoRoot, 'work/rounds/R-0007/inventory/old-to-new-command-map.md'),
-    'utf8',
-  );
-  const [actionsSource, vocabularySource] = source.split(
-    '## Global vocabulary and consent migration',
-  );
-  if (actionsSource === undefined || vocabularySource === undefined) {
-    throw new Error('CHECK_DESCRIPTOR_MIGRATION_SECTIONS_MISSING');
-  }
-  const actions = [...actionsSource.matchAll(/^\| `([^`]+)`\s*\|/gmu)].map(
-    (match) => `action:${match[1] ?? ''}`,
-  );
-  const vocabularyRows = vocabularySource.split('\n').flatMap((line) => {
-    const match = line.match(/^\| (.+?)\s+\|/u);
-    if (match?.[1] === undefined || !match[1].includes('`')) return [];
-    return [vocabularyId(match[1])];
-  });
-  const population = [...actions, ...vocabularyRows];
-  if (new Set(population).size !== population.length) {
-    throw new Error('CHECK_DESCRIPTOR_MIGRATION_DUPLICATE');
-  }
-  return population;
-}
-
 function bijection(canonicalSource: string, ids: readonly string[]): DocumentationCategoryResult {
   return {
     canonical_source: canonicalSource,
@@ -268,15 +224,10 @@ export function buildCanonicalDescriptorHandoffReport(
     }
     categories[id] = bijection(canonicalSource, categoryPopulation(repoRoot, id));
   }
-  const migration = architecture['migration'] as JsonRecord;
-  if (typeof migration['canonical_source'] !== 'string') {
-    throw new Error('CHECK_DESCRIPTOR_MIGRATION_INVALID');
-  }
   return {
     scope: 'r0007-canonical-descriptor-handoff',
     narrative_documentation_complete: false,
     deploy_ready_site: false,
     categories,
-    migration: bijection(migration['canonical_source'], migrationPopulation(repoRoot)),
   };
 }

@@ -19,7 +19,6 @@
     "semantic_fields",
     "pages",
     "categories",
-    "migration",
     "completeness_gates",
     "r0007_handoff",
     "r0009_completion"
@@ -74,9 +73,6 @@
       "items": {
         "$ref": "#/$defs/category"
       }
-    },
-    "migration": {
-      "$ref": "#/$defs/migration"
     },
     "completeness_gates": {
       "type": "array",
@@ -151,7 +147,6 @@
         "narrative_population_copy",
         "generated_order",
         "generated_write_mode",
-        "historical_vocabulary_scope",
         "missing_source",
         "unknown_projection"
       ],
@@ -167,9 +162,6 @@
         },
         "generated_write_mode": {
           "const": "check-without-write-or-deterministic-materialization"
-        },
-        "historical_vocabulary_scope": {
-          "const": "migration-and-history-only"
         },
         "missing_source": {
           "const": "fail-closed"
@@ -218,7 +210,7 @@
           "enum": ["none", "generated-from-canonical-source"]
         },
         "r0007_delivery": {
-          "enum": ["canonical-descriptor", "minimum-operator-handoff", "safe-migration-handoff"]
+          "enum": ["canonical-descriptor", "minimum-operator-handoff"]
         },
         "r0009_completion": {
           "enum": ["conceptual-narrative", "generated-page-and-site-integration"]
@@ -282,46 +274,6 @@
         }
       }
     },
-    "migration": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "page_id",
-        "canonical_source",
-        "action_rows",
-        "vocabulary_rows",
-        "identity",
-        "count_contract",
-        "rendering",
-        "aliases"
-      ],
-      "properties": {
-        "page_id": {
-          "const": "migration"
-        },
-        "canonical_source": {
-          "const": "work/rounds/R-0007/inventory/old-to-new-command-map.md"
-        },
-        "action_rows": {
-          "const": "all-table-rows-before-global-vocabulary-and-consent-migration"
-        },
-        "vocabulary_rows": {
-          "const": "all-table-rows-under-global-vocabulary-and-consent-migration"
-        },
-        "identity": {
-          "const": "action:<old-action> or vocabulary:<normalized-old-spelling>"
-        },
-        "count_contract": {
-          "const": "derived-never-copied; every-source-row-exactly-once"
-        },
-        "rendering": {
-          "const": "deterministic-generated-table-with-minimum-safe-operator-narrative"
-        },
-        "aliases": {
-          "const": "forbidden"
-        }
-      }
-    },
     "gate": {
       "type": "object",
       "additionalProperties": false,
@@ -340,7 +292,6 @@
             "page-manifest",
             "category",
             "entry",
-            "migration",
             "example",
             "narrative",
             "claim"
@@ -365,7 +316,7 @@
           "const": "R-0007"
         },
         "scope": {
-          "const": "canonical-descriptors-and-minimum-safe-migration-operator-guidance"
+          "const": "canonical-current-state-descriptors-and-operator-guidance"
         },
         "required_outputs": {
           "type": "array",
@@ -431,7 +382,6 @@
         "narrative_population_copy": "forbidden",
         "generated_order": "canonical-source-order",
         "generated_write_mode": "check-without-write-or-deterministic-materialization",
-        "historical_vocabulary_scope": "migration-and-history-only",
         "missing_source": "fail-closed",
         "unknown_projection": "fail-closed"
       },
@@ -449,9 +399,9 @@
           "category_ids": [],
           "source_refs": [
             {
-              "path": "law/adr/ADR-021-r0007-cli-contract.md",
-              "pointer": "#",
-              "projection": "workflow-domain mental model"
+              "path": "law/policy/action-registry.json",
+              "pointer": "#/entries",
+              "projection": "current workflow-domain mental model"
             }
           ]
         }
@@ -473,16 +423,6 @@
           "rendering": "generated-reference"
         }
       ],
-      "migration": {
-        "page_id": "migration",
-        "canonical_source": "work/rounds/R-0007/inventory/old-to-new-command-map.md",
-        "action_rows": "all-table-rows-before-global-vocabulary-and-consent-migration",
-        "vocabulary_rows": "all-table-rows-under-global-vocabulary-and-consent-migration",
-        "identity": "action:<old-action> or vocabulary:<normalized-old-spelling>",
-        "count_contract": "derived-never-copied; every-source-row-exactly-once",
-        "rendering": "deterministic-generated-table-with-minimum-safe-operator-narrative",
-        "aliases": "forbidden"
-      },
       "completeness_gates": [
         {
           "gate_id": "docs-policy-schema",
@@ -494,7 +434,7 @@
       ],
       "r0007_handoff": {
         "round": "R-0007",
-        "scope": "canonical-descriptors-and-minimum-safe-migration-operator-guidance",
+        "scope": "canonical-current-state-descriptors-and-operator-guidance",
         "required_outputs": ["machine-readable category report"],
         "completion_claim": "handoff-complete-only"
       },

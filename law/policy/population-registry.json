@@ -53,7 +53,7 @@
     {
       "id": "skills",
       "title": "Skill manifests",
-      "path": "packages/core/src/skills/**",
+      "path": "packages/skills/resources/**",
       "record_schema": "skill-manifest.schema.json",
       "count_guard": {
         "state": "backlogged",

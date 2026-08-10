@@ -534,7 +534,7 @@ export function authorizeCliArgv(
   entries: readonly RegistryEntry[],
   skillRoleFor: (skillId: string) => string | undefined = () => undefined,
 ): CliResult | undefined {
-  if (argv.some((value) => value === '--help' || value === '-h' || value === '--help-all')) {
+  if (argv.some((value) => value === '--help' || value === '-h')) {
     return undefined;
   }
   const registeredEntry = entryForArgv(argv, entries);

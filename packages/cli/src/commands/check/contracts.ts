@@ -41,7 +41,7 @@ export interface CheckSuitePolicy {
 }
 
 export interface ResolvedCheckMember extends CheckMemberDefinition {
-  readonly source: 'suite-policy' | 'migration-map';
+  readonly source: 'suite-policy' | 'current-selector';
   readonly service_id: string;
 }
 
@@ -224,21 +224,7 @@ export function loadCheckSuitePolicy(repoRoot: string): CheckSuitePolicy {
   };
 }
 
-function migrationOnlySelectors(repoRoot: string): readonly string[] {
-  const source = readFileSync(
-    join(repoRoot, 'work/rounds/R-0007/inventory/old-to-new-command-map.md'),
-    'utf8',
-  );
-  const selectors: string[] = [];
-  for (const match of source.matchAll(/check --only ([a-z][a-z0-9-]*)/gu)) {
-    const selector = match[1];
-    if (selector !== undefined && !selectors.includes(selector)) selectors.push(selector);
-  }
-  if (selectors.length === 0) throw new Error('CHECK_MIGRATION_SELECTORS_MISSING');
-  return selectors;
-}
-
-const SELECTOR_ALIASES: Readonly<Record<string, string>> = {
+const CURRENT_SELECTOR_ALIASES: Readonly<Record<string, string>> = {
   schemas: 'schema-config-load',
   invariants: 'invariant-validation',
   journeys: 'journey-validation',
@@ -247,6 +233,34 @@ const SELECTOR_ALIASES: Readonly<Record<string, string>> = {
   'test-trace': 'test-trace-validation',
   'invariant-strategies': 'strategy-validation',
 };
+
+const CURRENT_ONLY_SELECTORS = new Set([
+  'action-coverage',
+  'action-effects',
+  'adrs',
+  'blueprint',
+  'ci-economy',
+  'cli-reference',
+  'dependencies',
+  'docs-governance',
+  'docs-links',
+  'forbidden-actions',
+  'glob-guards',
+  'glossary',
+  'invariant-strategies',
+  'invariants',
+  'journeys',
+  'mutation',
+  'overrides',
+  'pr-compliance',
+  'prompt-overlays',
+  'schema',
+  'schemas',
+  'sensor-integrity',
+  'test-trace',
+  'trace',
+  'translation',
+]);
 
 function maximumEffect(members: readonly CheckMemberDefinition[]): ExecutorEffect {
   return members.reduce<ExecutorEffect>(
@@ -267,12 +281,12 @@ export function resolveCheckPlan(
   const byId = new Map(policy.member_definitions.map((member) => [member.id, member]));
   if (options.only !== undefined) {
     const selector = options.only;
-    const canonicalMember = byId.get(selector) ?? byId.get(SELECTOR_ALIASES[selector] ?? '');
+    const canonicalMember = byId.get(selector) ?? byId.get(CURRENT_SELECTOR_ALIASES[selector] ?? '');
     if (canonicalMember !== undefined) {
       const member = {
         ...canonicalMember,
         id: selector,
-        source: byId.has(selector) ? ('suite-policy' as const) : ('migration-map' as const),
+        source: byId.has(selector) ? ('suite-policy' as const) : ('current-selector' as const),
         service_id: selector === 'mutation' ? 'mutation-verification' : selector,
       };
       return {
@@ -283,13 +297,11 @@ export function resolveCheckPlan(
         maximum_effect: member.effect,
       };
     }
-    if (!migrationOnlySelectors(repoRoot).includes(selector)) {
-      throw new Error(`CHECK_MEMBER_UNKNOWN:${selector}`);
-    }
+    if (!CURRENT_ONLY_SELECTORS.has(selector)) throw new Error(`CHECK_MEMBER_UNKNOWN:${selector}`);
     const effect: ExecutorEffect = selector === 'translation' ? 'local-write' : 'read';
     const member: ResolvedCheckMember = {
       id: selector,
-      source: 'migration-map',
+      source: 'current-selector',
       service_id: selector,
       binding: { kind: 'runtime-gate', gate_id: `check-${selector}` },
       effect,

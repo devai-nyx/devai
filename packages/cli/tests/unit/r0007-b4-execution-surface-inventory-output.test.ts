@@ -1,5 +1,5 @@
 // Invariants: INV-DEVAI-001, INV-DEVAI-015, INV-DEVAI-017, INV-DEVAI-020
-// R-0007 B4 execution-surface acceptance: inventory discovery and every kept
+// Execution-surface acceptance: inventory discovery and every current
 // action's machine success/refusal boundary remain complete and structured.
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { INVENTORY_SLICES } from '@devai-nyx/sensors';
@@ -15,7 +15,7 @@ import { getFullRegistry, type RegistryEntry } from '../../src/define-command.js
 const ORIGINAL_ARGV = [...process.argv];
 const ORIGINAL_EXIT_CODE = process.exitCode;
 const ORIGINAL_STDOUT = process.stdout.write;
-let kept: readonly RegistryEntry[] = [];
+let current: readonly RegistryEntry[] = [];
 
 const EXPECTED_INVENTORY_SLICES = [
   { name: 'pack', members: ['stack-adapter-pack-resolution'] },
@@ -51,7 +51,7 @@ beforeAll(async () => {
   process.argv = [process.execPath, 'devai', '--help'];
   process.stdout.write = (() => true) as typeof process.stdout.write;
   await import('../../src/bin.js');
-  kept = getFullRegistry().filter((entry) => entry.disposition === 'keep');
+  current = getFullRegistry();
   process.stdout.write = ORIGINAL_STDOUT;
   process.argv = [...ORIGINAL_ARGV];
 });
@@ -114,8 +114,8 @@ describe('R-0007 B4 execution-surface inventory discovery', () => {
   });
 
   it('renders every inventory slice through the registered command help', () => {
-    expect(kept).toHaveLength(42);
-    const help = renderHelp(kept, '1.0.0', ['sense', 'inventory']);
+    expect(current).toHaveLength(41);
+    const help = renderHelp(current, '1.0.0', ['sense', 'inventory']);
     expect(help).toContain('Usage: devai sense inventory');
     expect(help).toContain('--slice <name>');
     for (const slice of INVENTORY_SLICES) expect(help, slice.name).toContain(slice.name);
@@ -124,9 +124,9 @@ describe('R-0007 B4 execution-surface inventory discovery', () => {
 });
 
 describe('R-0007 B4 execution-surface action output totality', () => {
-  it('emits one schema-valid empty success and one schema-valid refusal for every kept action', () => {
-    expect(kept).toHaveLength(42);
-    for (const entry of kept) {
+  it('emits one schema-valid empty success and one schema-valid refusal for every current action', () => {
+    expect(current).toHaveLength(41);
+    for (const entry of current) {
       const success = emit(entry, { exit: 0, stdout: '', stderr: '' });
       expect(success.stderr, entry.name).toBe('');
       expect(success.exitCode, entry.name).toBe(0);
@@ -153,7 +153,7 @@ describe('R-0007 B4 execution-surface action output totality', () => {
     }
   });
 
-  it('maps every governed failure exit to a total structured error for every kept action', () => {
+  it('maps every governed failure exit to a total structured error for every current action', () => {
     const expected = {
       2: 'routing-authority',
       3: 'gate-fail',
@@ -163,7 +163,7 @@ describe('R-0007 B4 execution-surface action output totality', () => {
       7: 'contract-violation',
     } as const;
 
-    for (const entry of kept) {
+    for (const entry of current) {
       expect(parseEnvelope(renderActionSuccess(entry, '')), entry.name).toMatchObject({
         action_id: entry.name,
         ok: true,

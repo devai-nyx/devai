@@ -34,7 +34,7 @@ export function buildCiScaffoldPlan(opts: CiScaffoldOptions): CiScaffoldPlan {
   const devaiRef = opts.devaiRef ?? 'main';
   const mode = opts.mode ?? 'gate';
   const chainFile = opts.chainFile ?? 'record/proofs/chain.json';
-  const content = `# Scaffolded by \`devai adopt ci scaffold\` (D-123, item 5). Calls the
+  const content = `# Scaffolded by \`devai init apply harness --include ci\`. Calls the
 # canonical reusable-evidence-gate.yml so this repo's evidence gate
 # can't drift from devai's own gate logic (D-121). Edit the \`on:\`
 # triggers below to fit this repo; extend reusable-evidence-gate.yml

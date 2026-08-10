@@ -74,7 +74,7 @@ and commit boundary.
 - **Stable ID:** architect
 - **User-facing label:** Architect
 - **Purpose:** Identify the human `architect` discipline; only matching authority-policy rules grant bounded actions and paths.
-- **Population or projection:** 67 matching authority rules; selectors `law/glossary`, `law/glossary/**`, `docs`, `docs/**`, `law`, `law/**`, `work/rounds`, `work/rounds/**`, `.devai/local`, `.devai/local/rounds`, `.devai/local/rounds/*`, `.devai/local/rounds/**`, `.devai/state/**`, `.devai/state`, `.devai/worktrees/**`, `.devai/worktrees`, `record/derived/inventory/**`, `record/proofs/**`, `.devai/config/**`, `.devai/config/post-merge-host-adapter.json`, `.devai/state/init-introspection.json`, `docs/site/build`, `docs/site/build/**`, `docs/site/_site`, `docs/site/_site/**`, `.devai/state/docs-publish-baseline.txt`, `.devai`, `.devai/config`, `.devai/constitution.md`, `.devai/pin`, `.devai/pin/constitution.md`, `.devai/pin/versions.json`, `.gitignore`, `git-ref:refs/**`, `remote:github-pages`, `packages/**`, `scripts/**`, `.github/**`, `.github`, `.git/hooks`, `.git/hooks/**`, `.git/devai`, `.git/devai/**`, `.husky`, `.husky/**`, `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `tsconfig*.json`, `vitest*.ts`, `eslint.config.*`, `.prettier*`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `SECURITY.md`, `CHANGELOG.md`, `.changeset/**`, `remote:sensor-runtime`; governed actions `init apply architect`, `init apply owner`, `round plan`, `round seal`, `check`, `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `release check`, `release drift`, `release verify`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense record`, `sense run`, `task escalate`, `task finish`, `task pause`, `task queue add`, `task queue complete`, `task resume`, `task start`, `init apply harness`, `init upgrade`, `release publish docs`.
+- **Population or projection:** 57 matching authority rules; selectors `law/glossary`, `law/glossary/**`, `docs`, `docs/**`, `law`, `law/**`, `work/rounds`, `work/rounds/**`, `.devai/local`, `.devai/local/rounds`, `.devai/local/rounds/*`, `.devai/local/rounds/**`, `.devai/state/**`, `.devai/state`, `.devai/worktrees/**`, `.devai/worktrees`, `record/derived/inventory/**`, `record/proofs/**`, `.devai/config/**`, `.devai/config/post-merge-host-adapter.json`, `.devai/state/init-introspection.json`, `.devai`, `.devai/config`, `.devai/constitution.md`, `.devai/pin`, `.devai/pin/constitution.md`, `.devai/pin/versions.json`, `.gitignore`, `packages/**`, `scripts/**`, `.github/**`, `.github`, `.git/hooks`, `.git/hooks/**`, `.git/devai`, `.git/devai/**`, `.husky`, `.husky/**`, `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `tsconfig*.json`, `vitest*.ts`, `eslint.config.*`, `.prettier*`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `SECURITY.md`, `CHANGELOG.md`, `.changeset/**`, `remote:sensor-runtime`; governed actions `init apply architect`, `init apply owner`, `round plan`, `round seal`, `check`, `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `release check`, `release drift`, `release verify`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense record`, `sense run`, `task escalate`, `task finish`, `task pause`, `task queue add`, `task queue complete`, `task resume`, `task start`, `init apply harness`, `init upgrade`.
 - **Prerequisites:** An invocation-scoped `--as-role architect` declaration or live repository-bound authority session, plus a matching action/path rule.
 - **Required external tools:** Not applicable: a role is a governance discipline, not an executor or adapter.
 - **Accepted inputs:** `--as-role architect` only on a non-read action whose canonical authority contract allowlists this role.
@@ -329,16 +329,9 @@ For a read-only action, a role declaration and write/publication consent are not
 are refused rather than ignored. For a non-read action, provide exactly one `--as-role <role>` or
 `--authority-session <id>`, not both. A caller cannot declare a machine actor.
 
-A remote dry run performs no publication, but its resolved `remote-write` effect still requires
-the permitted role and both independent consent flags, `--write` and `--publish`. It also enters
-documentation-publish detection: the selected repository must have a readable
-`.devai/config/project.json` whose `repo.kind` is `library` or `application` and whose
-`docs.builder` is `docusaurus` or `jekyll`; a library repository must use `docusaurus`. A missing,
-unreadable, or invalid project configuration fails at the detect stage before any build:
-
-```sh
-devai release publish docs --repo-root . --dry-run --as-role architect --write --publish --format json
-```
+A remote dry run performs no publication, but a selected sensor whose resolved effect is
+`remote-write` still requires its permitted role and both independent consent flags,
+`--write` and `--publish`.
 
 ## Safe examples
 
@@ -361,14 +354,13 @@ Perform that local write only after reviewing `init plan`:
 devai init apply architect --target . --tier tier1 --as-role architect --write --format json
 ```
 
-Inspect the full consent shape of a remote publication leaf without dispatching it:
+Inspect the remote-capable sensor action without dispatching it:
 
 ```sh
-devai release publish docs --repo-root . --as-role architect --write --publish --help
+devai sense run --help
 ```
 
-The last command is help-only. Removing `--help` would request a real external effect and requires
-separate authorization beyond this guide.
+The last command is help-only. A selected sensor kind determines the actual effect and consent.
 
 ## Refusals and non-pass behavior
 
@@ -401,6 +393,5 @@ not prove the command's verdict, readiness, round closure, release eligibility, 
 success, deployment, or evidence promotion.
 
 Canonical sources: [ADR-010](../../../law/adr/ADR-010-capabilities-and-effects.md),
-[ADR-021](../../../law/adr/ADR-021-r0007-cli-contract.md),
 [ADR-022](../../../law/adr/ADR-022-r0007-executor-substrate.md),
 [authority policy](../../../law/policy/authority-policy.json).

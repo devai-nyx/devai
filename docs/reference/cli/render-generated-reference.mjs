@@ -114,7 +114,7 @@ const actionRegistry = json('law/policy/action-registry.json');
 const actions = objects(actionRegistry.entries, 'DOCS_ACTION_REGISTRY_INVALID');
 const authorityPolicy = json('law/policy/authority-policy.json');
 const keptAction = (id) => {
-  const matches = actions.filter((entry) => entry.action_id === id && entry.disposition === 'keep');
+  const matches = actions.filter((entry) => entry.action_id === id);
   if (matches.length !== 1) throw new Error(`DOCS_ACTION_ROUTE_INVALID:${id}:${matches.length}`);
   return matches[0];
 };
@@ -623,7 +623,6 @@ function schemaEnums() {
       actionSchema.$defs.authorityContract.properties.subject.oneOf[1].properties.allowed_roles
         .items.enum,
     effects: properties.effect.enum,
-    lifecycles: properties.lifecycle.enum,
   };
 }
 
@@ -637,7 +636,7 @@ const SIMPLE = Object.freeze({
   },
   'action-lifecycles': {
     title: 'Action lifecycles',
-    source: schemaEnums().lifecycles,
+    source: roundExecution.vocabularies.action_lifecycles,
     workflow: 'catalog',
     purpose: (id) => `Describe an action whose canonical lifecycle is ${code(id)}.`,
   },
@@ -1061,225 +1060,6 @@ function renderEfforts(policy) {
   );
 }
 
-function normalizeVocabularySpelling(value) {
-  return value
-    .replaceAll('\\|', '|')
-    .replace(/\s*\|\s*/gu, ' | ')
-    .replace(/\s+/gu, ' ')
-    .trim();
-}
-
-function vocabularyId(historical) {
-  if (/^check --profile [a-z][a-z0-9-]*(?: \| [a-z][a-z0-9-]*)*$/u.test(historical)) {
-    return 'vocabulary:check-profile';
-  }
-  const sense = historical.match(/^sense --set ([a-z][a-z0-9-]*)$/u);
-  if (sense !== null) return `vocabulary:sense-set-${sense[1]}`;
-  if (/^adoption --profile [a-z][a-z0-9-]*(?: \| [a-z][a-z0-9-]*)*$/u.test(historical)) {
-    return 'vocabulary:adoption-profile';
-  }
-  if (historical === '--allow-publish') return 'vocabulary:allow-publish';
-  throw new Error(`DOCS_MIGRATION_VOCABULARY_UNKNOWN:${historical}`);
-}
-
-function parseVocabularyRow(line, index) {
-  const spellingMatch = line.match(/^\| (check|sense|adoption) `([^`]+)`\s+\|\s+`([^`]+)`\s+\|$/u);
-  const consentMatch = line.match(
-    /^\| `([^`]+)`\s+\|\s+`([^`]+)`, still requiring `([^`]+)`\s+\|$/u,
-  );
-  if ((spellingMatch === null) === (consentMatch === null)) {
-    throw new Error(`DOCS_MIGRATION_VOCABULARY_ROW_INVALID:${index + 1}:${line}`);
-  }
-  const parsed =
-    spellingMatch === null
-      ? {
-          historical: normalizeVocabularySpelling(consentMatch[1]),
-          successor: normalizeVocabularySpelling(consentMatch[2]),
-          required: [normalizeVocabularySpelling(consentMatch[3])],
-        }
-      : {
-          historical: `${spellingMatch[1]} ${normalizeVocabularySpelling(spellingMatch[2])}`,
-          successor: normalizeVocabularySpelling(spellingMatch[3]),
-          required: [],
-        };
-  if (
-    parsed.historical.length === 0 ||
-    parsed.successor.length === 0 ||
-    parsed.required.some((value) => value.length === 0)
-  ) {
-    throw new Error(`DOCS_MIGRATION_VOCABULARY_EMPTY:${index + 1}:${line}`);
-  }
-  return { id: vocabularyId(parsed.historical), ...parsed };
-}
-
-function migrationRows() {
-  const source = read('work/rounds/R-0007/inventory/old-to-new-command-map.md');
-  const split = source.split('## Global vocabulary and consent migration');
-  if (split.length !== 2) throw new Error('DOCS_MIGRATION_SECTIONS_INVALID');
-  const actionRows = [...split[0].matchAll(/^\| `([^`]+)`\s*\|\s*(.*?)\s*\|$/gmu)].map((match) => ({
-    old: match[1],
-    target: match[2],
-  }));
-  if (
-    actionRows.length === 0 ||
-    new Set(actionRows.map((row) => row.old)).size !== actionRows.length
-  )
-    throw new Error('DOCS_MIGRATION_ACTION_ROWS_INVALID');
-  const vocabularySection = split[1].split('\n');
-  const headerIndex = vocabularySection.findIndex((line) =>
-    /^\| Old spelling\s+\| New spelling\s+\|$/u.test(line),
-  );
-  if (headerIndex < 0 || !/^\| -+\s+\| -+\s+\|$/u.test(vocabularySection[headerIndex + 1] ?? '')) {
-    throw new Error('DOCS_MIGRATION_VOCABULARY_TABLE_INVALID');
-  }
-  const endIndex = vocabularySection.indexOf('', headerIndex + 2);
-  if (endIndex < 0) throw new Error('DOCS_MIGRATION_VOCABULARY_TABLE_UNTERMINATED');
-  const vocabularyLines = vocabularySection.slice(headerIndex + 2, endIndex);
-  if (vocabularyLines.length === 0) throw new Error('DOCS_MIGRATION_VOCABULARY_EMPTY');
-  const vocabularyRows = vocabularyLines.map(parseVocabularyRow);
-  if (new Set(vocabularyRows.map((row) => row.id)).size !== vocabularyRows.length) {
-    throw new Error('DOCS_MIGRATION_VOCABULARY_DUPLICATE');
-  }
-  return { actionRows, vocabularyRows };
-}
-
-function workflowFromGuidance(guidance) {
-  return guidance.match(/\b(init|doctor|check|sense|round|evidence|release)\b/u)?.[1] ?? 'round';
-}
-
-function migrationExample(entry, old) {
-  if (entry.disposition === 'keep') return `devai ${old} --help`;
-  if (entry.disposition === 'tombstone') return 'devai --help';
-  return `devai ${workflowFromGuidance(entry.migration ?? '')} --help`;
-}
-
-function renderMigration() {
-  const { actionRows, vocabularyRows } = migrationRows();
-  const actionEntries = actionRows.map((row) => {
-    const matches = actions.filter(
-      (candidate) => candidate.internal_binding === row.old || candidate.action_id === row.old,
-    );
-    if (matches.length !== 1)
-      throw new Error(`DOCS_MIGRATION_REGISTRY_MATCH_INVALID:${row.old}:${matches.length}`);
-    const action = matches[0];
-    const plainTarget = row.target.replaceAll('`', '').replaceAll('**', '').trim();
-    const expectedDisposition =
-      /^retained\b/u.test(plainTarget) || plainTarget === row.old
-        ? 'keep'
-        : /REMOVED/u.test(plainTarget)
-          ? 'tombstone'
-          : 'fold';
-    if (action.disposition !== expectedDisposition)
-      throw new Error(`DOCS_MIGRATION_DISPOSITION_DRIFT:${row.old}`);
-    const guidance =
-      action.disposition === 'keep'
-        ? `Retained as ${code(action.action_id)}.`
-        : action.disposition === 'fold'
-          ? `Refuses the old route and reports ${code(action.migration)}.`
-          : `Removed; refusal guidance is ${code(action.migration)}.`;
-    return entry('migration', {
-      stable_id: `action:${row.old}`,
-      user_facing_label: row.old,
-      plain_language_purpose: `Migrate the complete historical ${code(row.old)} identity without aliasing it.`,
-      population_or_projection: `${code(action.disposition)} registry disposition. ${guidance}`,
-      prerequisites:
-        'Identify the complete historical invocation and re-evaluate the successor under current authority.',
-      required_external_tools:
-        'Not applicable: migration lookup is a deterministic documentation projection.',
-      accepted_inputs: `The exact historical identity ${code(row.old)} only; prefixes and best-effort reinterpretation are forbidden.`,
-      defaults: 'No alias, silent dispatch, authority carry-over, or guessed successor.',
-      output_contract: `One migration row with registry disposition, successor/refusal guidance, effect, consent, and source identity.`,
-      verdict_semantics:
-        'A missing, duplicate, conflicting, or unparseable row is a blocking documentation error.',
-      declared_effect: `${code(action.effect)} historical/canonical registry ceiling; the successor must be resolved again before execution.`,
-      consent_flags: consentForEffect(action.effect),
-      cost_class: code('fast'),
-      when_to_use: 'Use when converting this exact historical command in a script or runbook.',
-      when_not_to_use:
-        action.disposition === 'tombstone'
-          ? 'Do not dispatch it; the capability is removed from the CLI.'
-          : 'Do not keep the historical spelling as an alias.',
-      failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-      new_grammar_example: code(migrationExample(action, row.old)),
-      canonical_source_link: `${link('work/rounds/R-0007/inventory/old-to-new-command-map.md')}; ${link('law/policy/action-registry.json', '#/entries')}`,
-      related_workflow: code(
-        action.disposition === 'keep'
-          ? action.path[0]
-          : workflowFromGuidance(action.migration ?? 'round'),
-      ),
-    });
-  });
-  const vocabularyEntries = vocabularyRows.map((row) => {
-    const { id } = row;
-    const successorProjection =
-      row.required.length === 0
-        ? code(row.successor)
-        : `${code(row.successor)}, still requiring ${list(row.required)}`;
-    const example =
-      id === 'vocabulary:check-profile'
-        ? 'devai check --suite quick --repo-root . --as-role inspector --write --format json'
-        : id === 'vocabulary:adoption-profile'
-          ? 'devai init plan --tier tier1 --target . --format json'
-          : id === 'vocabulary:allow-publish'
-            ? 'devai release publish docs --repo-root . --as-role architect --write --publish --dry-run --format json'
-            : `devai sense run --preset ${id
-                .replace('vocabulary:sense-set-', '')
-                .replace(/^tier1$/u, 'baseline')
-                .replace(/^tier2$/u, 'structural')
-                .replace(
-                  /^tier3$|^all$/u,
-                  'governed',
-                )}${id.endsWith('sweep') ? ' --round R-0007' : ''} --repo-root .${id.endsWith('sweep') ? '' : ' --as-role owner --write'} --dry-run --format json`;
-    return entry('migration', {
-      stable_id: id,
-      user_facing_label: human(id.replace('vocabulary:', '')),
-      plain_language_purpose:
-        'Replace one historical vocabulary or consent spelling with the canonical grammar.',
-      population_or_projection: `Exact historical spelling ${code(row.historical)}; canonical successor spelling ${successorProjection}. The historical spelling never dispatches as an alias.`,
-      prerequisites:
-        id === 'vocabulary:allow-publish'
-          ? `Re-evaluate the complete invocation, resolved effect, Architect role, and independent consent. The dry-run example requires readable ${code('.devai/config/project.json')} with valid ${code('repo.kind')} and ${code('docs.builder')}; missing, unreadable, or invalid configuration fails at detect before build.`
-          : 'Re-evaluate the complete invocation, resolved effect, role, and consent before execution.',
-      required_external_tools:
-        'Not applicable: migration lookup is a deterministic documentation projection.',
-      accepted_inputs: `Only the exact historical spelling ${code(row.historical)}; prefixes and best-effort reinterpretation are forbidden.`,
-      defaults: 'No alias, prefix match, or consent implication.',
-      output_contract:
-        'One vocabulary migration row with exact historical spelling, exact canonical successor, any independently required consent, and fail-closed semantics.',
-      verdict_semantics:
-        'A missing, duplicate, conflicting, or unparseable row is a blocking documentation error.',
-      declared_effect:
-        'Inherited only after resolving the complete successor action; migration text grants no effect.',
-      consent_flags:
-        id === 'vocabulary:allow-publish'
-          ? `${code('--publish')} remains independent and remote write still requires ${code('--write')}.`
-          : 'Re-resolve consent from the canonical successor action.',
-      cost_class: code('fast'),
-      when_to_use:
-        'Use when converting the represented historical spelling in a script or runbook.',
-      when_not_to_use: 'Do not preserve the old spelling as a compatibility alias.',
-      failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-      new_grammar_example: code(example),
-      canonical_source_link: link('work/rounds/R-0007/inventory/old-to-new-command-map.md'),
-      related_workflow: code(workflowFromGuidance(example)),
-    });
-  });
-  const allIds = [...actionEntries, ...vocabularyEntries].map(
-    (block) => block.match(/id="([^"]+)"/u)?.[1],
-  );
-  if (new Set(allIds).size !== allIds.length) throw new Error('DOCS_MIGRATION_DUPLICATE');
-  return [
-    '## Command migrations',
-    '',
-    ...actionEntries.flatMap((value) => [value, '']),
-    '## Vocabulary and consent migrations',
-    '',
-    ...vocabularyEntries.flatMap((value) => [value, '']),
-  ]
-    .join('\n')
-    .trimEnd();
-}
-
 const CATEGORY_RENDERERS = Object.freeze({
   'check-suites': renderCheckSuites,
   'sense-presets': renderSensePresets,
@@ -1328,8 +1108,6 @@ const routes = categories.map((policy) => {
     throw new Error(`DOCS_CATEGORY_ROUTE_UNRESOLVED:${policy.category_id}`);
   return { id: policy.category_id, page, rendered: render(policy) };
 });
-routes.push({ id: 'migration', page: pages.get('migration'), rendered: renderMigration() });
-
 const selected =
   REQUESTED.length === 0 ? routes : routes.filter((route) => REQUESTED.includes(route.id));
 for (const requested of REQUESTED)

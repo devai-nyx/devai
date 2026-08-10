@@ -26,8 +26,8 @@ replace the example identifiers with identifiers that exist in the target reposi
 ## Contract shared by all seven workflows
 
 For workflow identifier `W`, its exact population is the ordered projection of entries in the
-[action registry](../../../law/policy/action-registry.json) whose disposition is `keep`, whose
-surface tier is `porcelain`, and whose first path component is `W`. This formula, rather than a
+[action registry](../../../law/policy/action-registry.json) whose status is `stable` or `preview`
+and whose first path component is `W`. This formula, rather than a
 copied action list, keeps the overview aligned with the live registry. `devai W --help` shows the
 current leaves, and `devai --all` additionally exposes plumbing for maintainers and automation.
 
@@ -79,8 +79,8 @@ other. Preview or inspect whenever the leaf offers `--dry-run`, plan output, sta
 - **Use / do not use:** use for adoption and governed upgrades. Do not use it to run checks,
   sensors, rounds, or a release ceremony.
 - **Example:** `devai init plan --target . --tier tier1 --format json`.
-- **Canonical source and related workflow:** [action registry](../../../law/policy/action-registry.json),
-  [ADR-021](../../../law/adr/ADR-021-r0007-cli-contract.md); follow with `doctor`.
+- **Canonical source and related workflow:** [action registry](../../../law/policy/action-registry.json);
+  follow with `doctor`.
 
 ### `doctor` — Declared-posture diagnosis
 
@@ -190,19 +190,15 @@ other. Preview or inspect whenever the leaf offers `--dry-run`, plan output, sta
 ### `release` — Release control
 
 - **Stable identifier and label:** `release`; “Release control.”
-- **Purpose and exact projection:** inspect release-control status, evaluate eligibility, record
-  drift or verification, and enter a separately authorized publication operation. Its exact
-  leaves are the registry projection with `W = release`.
+- **Purpose and exact projection:** inspect release-control status, evaluate eligibility, and
+  record drift or verification. Its exact leaves are the registry projection with `W = release`.
 - **Prerequisites, tools, inputs, and defaults:** status needs a repository; other leaves require
-  their declared artifact, environment, scorecard, evidence, runtime, builder, or provider
-  inputs. Publication also depends on separate external authority and available host tools.
+  their declared artifact, environment, scorecard, evidence, or runtime inputs.
 - **Output and verdict:** status is observation; eligibility and verification report their
-  governed verdicts; publication reports its bounded operation. Review, unknown, failure, missing
-  evidence, external errors, and N/A remain nonclaims. A release-suite or release-check result is
-  not publication.
-- **Effect, consent, and cost:** status is read-only. Other leaves can write harness state or a
-  remote. A remote write requires the permitted role, `--write`, and independent `--publish`.
-  Cost is leaf-dependent and can be `external-dependent`.
+  governed verdicts. Review, unknown, failure, missing evidence, external errors, and N/A remain
+  nonclaims. A release-suite or release-check result is not publication.
+- **Effect, consent, and cost:** status is read-only. Other leaves can write harness state and
+  require the permitted role plus `--write`. Cost is leaf-dependent.
 - **Use / do not use:** use only at the applicable release-control stage. Do not use it to infer
   authority from documentation, a round result, or stored evidence.
 - **Example:** `devai release status --repo-root . --format json`.
@@ -272,8 +268,7 @@ authorized.
    ```
 
 9. Continue only under the applicable release authorization. A release check observes
-   eligibility; a publish action is a separate remote effect and requires both consent flags.
-   Neither documentation nor completion of the preceding commands grants that authority.
+   eligibility; it does not publish packages, tags, releases, documentation, or deployments.
 
 ## Continue reading
 
@@ -281,7 +276,5 @@ authorized.
 - Select obligations in [adoption tiers](./adoption-tiers.md).
 - Operate governed work with [rounds, tasks, and executors](./round-task-executors.md).
 - Check role and mutation boundaries in [authority and effects](./authority-effects.md).
-- Use the generated [migration reference](./migration.md) only when translating historical input.
-
-Canonical routing: [ADR-021](../../../law/adr/ADR-021-r0007-cli-contract.md),
+Canonical routing: [action registry](../../../law/policy/action-registry.json),
 [documentation information architecture](../../../law/policy/documentation-information-architecture.json).

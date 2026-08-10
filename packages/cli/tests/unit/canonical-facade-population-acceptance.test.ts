@@ -1,5 +1,5 @@
 // Invariants: INV-DEVAI-001, INV-DEVAI-015, INV-DEVAI-017, INV-DEVAI-020
-// Inspector acceptance: the 42 kept actions have a one-to-one executable
+// Inspector acceptance: the 41 current actions have a one-to-one executable
 // facade population, and every facade has a bounded, non-silent refusal probe.
 import { createRequire } from 'node:module';
 import {
@@ -29,7 +29,6 @@ import {
 import {
   releaseCheck,
   releaseDrift,
-  releasePublishDocs,
   releaseStatus,
   releaseVerify,
 } from '../../src/commands/release/facade.js';
@@ -66,7 +65,6 @@ const FACADES: readonly FacadeDefinition[] = [
   initUpgrade,
   releaseCheck,
   releaseDrift,
-  releasePublishDocs,
   releaseStatus,
   releaseVerify,
   ...roundWorkflowCommands,
@@ -93,7 +91,6 @@ const REFUSAL_ARGS: Readonly<Record<string, readonly string[]>> = {
   'init upgrade': ['--tier', 'not-a-tier'],
   'release check': ['--environment', 'not-an-environment'],
   'release drift': ['--environment', 'not-an-environment'],
-  'release publish docs': ['--builder', 'not-a-builder'],
   'release status': ['--kind', 'not-a-kind'],
   'release verify': [],
   'round assess': [],
@@ -123,22 +120,21 @@ const REFUSAL_ARGS: Readonly<Record<string, readonly string[]>> = {
 };
 
 describe('canonical facade population acceptance', () => {
-  it('binds exactly one executable facade to every kept action', () => {
-    const kept = ACTION_REGISTRY.filter((entry) => entry.disposition === 'keep');
+  it('binds exactly one executable facade to every current action', () => {
     const facadeNames = FACADES.map((definition) => definition.name).sort();
-    const keptBindings = kept.map((entry) => entry.internal_binding).sort();
+    const currentBindings = ACTION_REGISTRY.map((entry) => entry.handler).sort();
 
-    expect(FACADES).toHaveLength(42);
-    expect(kept).toHaveLength(42);
-    expect(new Set(facadeNames).size).toBe(42);
-    expect(facadeNames).toEqual(keptBindings);
-    expect(Object.keys(REFUSAL_ARGS).sort()).toEqual(keptBindings);
+    expect(FACADES).toHaveLength(41);
+    expect(ACTION_REGISTRY).toHaveLength(41);
+    expect(new Set(facadeNames).size).toBe(41);
+    expect(facadeNames).toEqual(currentBindings);
+    expect(Object.keys(REFUSAL_ARGS).sort()).toEqual(currentBindings);
 
     const cli = cac('devai-canonical-facade-population');
     for (const definition of FACADES) definition.register(cli);
   });
 
-  it('executes a bounded refusal probe for all 42 kept facades without external effects', async () => {
+  it('executes a bounded refusal probe for all 41 current facades without external effects', async () => {
     const cli = cac('devai-canonical-facade-refusals');
     for (const definition of FACADES) definition.register(cli);
 

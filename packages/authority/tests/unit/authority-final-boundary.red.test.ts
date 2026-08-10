@@ -7,7 +7,7 @@ import {
   dbTarget,
   expectBoundaryFailure,
   gitTarget,
-  publishTarget,
+  remoteTarget,
 } from './authority-boundary-testkit.js';
 import {
   boundedSubject,
@@ -204,7 +204,7 @@ describe('R19 target-specific final adapters', () => {
   it.each([
     ['git-ref', gitTarget, 'git:update:refs/heads/main'],
     ['database', dbTarget, 'db:devai-control:ddl'],
-    ['remote', publishTarget, 'remote:github-pages:publish-docs:publish'],
+    ['remote', remoteTarget, 'remote:sensor-runtime:observations:invoke'],
   ])('%s effect occurs only after authentic prepare/apply', async (_name, target, event) => {
     const { fixture, events, runtime, planHandle } = await exactRuntime(target);
     const adapterId = `${String(target.kind)}-authority-boundary`;

@@ -307,6 +307,6 @@
       }
     ],
     "verdicts": ["pass", "review", "fail", "unknown", "na", "skipped", "error", "killed"],
-    "action_lifecycles": ["supported", "experimental", "retired"]
+    "action_lifecycles": ["supported", "experimental"]
   }
 }

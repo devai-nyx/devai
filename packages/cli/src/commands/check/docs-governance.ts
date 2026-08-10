@@ -441,7 +441,7 @@ function checkGhPagesBranch(
       ruleId: 'docs-governance.gh-pages-branch',
       severity: 'warn',
       message: `Cannot check gh-pages branch — git ls-remote returned non-zero (remote may be unreachable)`,
-      remediation: `Run "devai docs publish" from the source branch once to create the ${branch} branch. See ADR-LOCAL-PUBLISH-WORKFLOW.`,
+      remediation: `Create the ${branch} branch only through the separately authorized site-publication process.`,
     };
   }
 
@@ -451,7 +451,7 @@ function checkGhPagesBranch(
       ruleId: 'docs-governance.gh-pages-branch',
       severity: 'warn',
       message: `gh-pages branch "${branch}" does not exist on origin — first publish has not run yet`,
-      remediation: `Run "devai docs publish" to create the ${branch} branch on origin. This is expected before the first publish. See ADR-LOCAL-PUBLISH-WORKFLOW.`,
+      remediation: `Create the ${branch} branch only through the separately authorized site-publication process.`,
     };
   }
 
@@ -464,12 +464,10 @@ function checkGhPagesBranch(
 
 /**
  * Rule 8 — No GH Actions docs-publish workflow.
- * Grep .github/workflows/*.yml|.yaml for devai docs publish or peaceiris/actions-gh-pages.
+ * Grep .github/workflows/*.yml|.yaml for known documentation-deployment actions.
  * FAIL if found. Per ADR-LOCAL-PUBLISH-WORKFLOW §10.
  */
 const CI_PUBLISH_PATTERNS = [
-  'devai docs publish',
-  'devai docs publish',
   'peaceiris/actions-gh-pages',
   'actions/deploy-pages',
   'JamesIves/github-pages-deploy-action',
@@ -519,7 +517,7 @@ function checkNoCiPublish(repoRoot: string): GovernanceFinding {
       severity: 'fail',
       message: `Found CI docs-publish workflow(s) — violates ADR-LOCAL-PUBLISH-WORKFLOW §10 (publish MUST be local-act, not CI-driven)`,
       remediation:
-        'Remove or disable the GH Actions docs-publish workflow. Use "devai docs publish" locally to push to gh-pages. The CI role is freshness-check only, not value-producer. See ADR-LOCAL-PUBLISH-WORKFLOW Decision 10.',
+        'Remove or disable the GH Actions documentation-deployment workflow. CI validates freshness and does not publish the site.',
       locations: violations.map((v) => `.github/workflows/${v.split(':')[0] ?? v}`),
     };
   }

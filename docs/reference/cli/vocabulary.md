@@ -126,15 +126,6 @@ authority and consent. The effect does not grant authority; role, path policy, p
 boundary, and explicit consent must all agree. Every resolved `remote-write` invocation, including
 a dry run, requires independent `--write` and `--publish` consent.
 
-This dry run still enters documentation-publish detection. The selected repository must have a
-readable `.devai/config/project.json` whose `repo.kind` is `library` or `application` and whose
-`docs.builder` is `docusaurus` or `jekyll`; a library repository must use `docusaurus`. A missing,
-unreadable, or invalid project configuration fails at the detect stage before any build.
-
-```sh
-devai release publish docs --repo-root . --dry-run --as-role architect --write --publish --format json
-```
-
 See [authority and effects](./authority-effects.md).
 
 ### Verdict
@@ -152,10 +143,9 @@ devai check --only cli-reference --repo-root . --format json
 
 ### Lifecycle
 
-An action's **lifecycle** records whether its identity is available for ordinary use, guarded by
-an explicit experimental boundary, or retained only to refuse historical dispatch with migration
-guidance. Lifecycle is independent of a result verdict and independent of the repository's
-adoption tier.
+An action's **lifecycle** records whether its identity is supported or guarded by an explicit
+experimental boundary. Lifecycle is independent of a result verdict and independent of the
+repository's adoption tier.
 
 Inspect a leaf without dispatching it:
 
@@ -436,7 +426,7 @@ remains in the [action registry](../../../law/policy/action-registry.json).
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
 - **New-grammar example:** `devai catalog actions --format json`
-- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/properties/entries/items/properties/lifecycle/enum)
+- **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/action_lifecycles)
 - **Related workflow:** `catalog`
 
 <!-- devai:generated-entry category="action-lifecycles" id="experimental" -->
@@ -460,31 +450,7 @@ remains in the [action registry](../../../law/policy/action-registry.json).
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
 - **New-grammar example:** `devai catalog actions --format json`
-- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/properties/entries/items/properties/lifecycle/enum)
-- **Related workflow:** `catalog`
-
-<!-- devai:generated-entry category="action-lifecycles" id="retired" -->
-
-### `retired` — Retired
-
-- **Stable ID:** retired
-- **User-facing label:** Retired
-- **Purpose:** Describe an action whose canonical lifecycle is `retired`.
-- **Population or projection:** The single canonical action-lifecycles value `retired` and all records that select it.
-- **Prerequisites:** A schema-valid canonical record selecting this exact value.
-- **Required external tools:** Not applicable: this is a vocabulary value, not an executable adapter.
-- **Accepted inputs:** Accepted only where the linked canonical schema or policy exposes this exact value.
-- **Defaults:** No undocumented value or alias is inferred.
-- **Output contract:** Appears in the enclosing action, reading, catalog, or execution-evidence schema.
-- **Verdict semantics:** Not applicable: this value classifies a record; the enclosing operation owns verdict semantics.
-- **Declared effect:** Not applicable: this vocabulary value grants no action effect.
-- **Consent flags:** Not applicable: consent belongs to the enclosing resolved action.
-- **Cost class:** `fast`
-- **When to use:** Use only when `retired` exactly describes the canonical record.
-- **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
-- **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai catalog actions --format json`
-- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/properties/entries/items/properties/lifecycle/enum)
+- **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/action_lifecycles)
 - **Related workflow:** `catalog`
 
 <!-- devai:generated-reference:end category="action-lifecycles" -->

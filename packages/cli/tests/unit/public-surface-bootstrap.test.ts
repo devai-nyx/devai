@@ -57,12 +57,8 @@ describe('public CLI bootstrap', () => {
     expect(helpDomains(help)).not.toContain('catalog');
   }, 15_000);
 
-  it.each(['--all', '--help-all'])(
-    '%s exposes only task and catalog as expanded plumbing',
-    async (flag) => {
-      const help = await rootHelp(flag);
-      expect(helpDomains(help)).toEqual([...DEFAULT_DOMAINS, 'task', 'catalog']);
-    },
-    15_000,
-  );
+  it('--all exposes only task and catalog as expanded plumbing', async () => {
+    const help = await rootHelp('--all');
+    expect(helpDomains(help)).toEqual([...DEFAULT_DOMAINS, 'task', 'catalog']);
+  }, 15_000);
 });

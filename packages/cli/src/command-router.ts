@@ -110,7 +110,6 @@ export function renderHelp(
     lines.push('Options:');
     lines.push('  --help       Show help for this command path.');
     lines.push('  --all        Include plumbing commands in help.');
-    lines.push('  --help-all   Compatibility spelling for --all.');
     lines.push('  --version    Show the DEVAI CLI version.');
   }
   lines.push('');
@@ -221,8 +220,7 @@ export function routeArgv(
       });
       return { kind: 'output', text: renderCliError(error, wantsJson(args)), exitCode: 2 };
     }
-    // Canonical kinds remain positional values of the direct `sense run`
-    // facade. They never translate back through retired child CLI routes.
+    // Canonical kinds remain positional values of the direct `sense run` facade.
   }
   const privateFlag = args.find((arg) => ['--execute', '--apply', '--human'].includes(arg));
   if (privateFlag !== undefined) {
@@ -236,12 +234,11 @@ export function routeArgv(
     args.length === 0 ||
     args[0] === '--help' ||
     args[0] === '-h' ||
-    args[0] === '--all' ||
-    args[0] === '--help-all'
+    args[0] === '--all'
   ) {
     return {
       kind: 'output',
-      text: renderHelp(entries, version, [], args.includes('--all') || args.includes('--help-all')),
+      text: renderHelp(entries, version, [], args.includes('--all')),
       exitCode: 0,
     };
   }
@@ -278,8 +275,7 @@ export function routeArgv(
     const wantsHelp =
       remaining.includes('--help') ||
       remaining.includes('-h') ||
-      remaining.includes('--all') ||
-      remaining.includes('--help-all');
+      remaining.includes('--all');
     if (wantsHelp) {
       return {
         kind: 'output',
@@ -287,7 +283,7 @@ export function routeArgv(
           entries,
           version,
           exact.path,
-          remaining.includes('--all') || remaining.includes('--help-all'),
+          remaining.includes('--all'),
         ),
         exitCode: 0,
       };
@@ -445,7 +441,7 @@ export function routeArgv(
         entries,
         version,
         words,
-        args.includes('--all') || args.includes('--help-all'),
+        args.includes('--all'),
       ),
       exitCode: 0,
     };

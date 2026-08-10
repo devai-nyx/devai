@@ -378,13 +378,12 @@ This is inspection, not an ordinary workflow recommendation. Plumbing retains th
 argument, containment, authority, effect, consent, output, and lifecycle checks. Operators should
 prefer `round status`, `round assess`, `round gap ...`, and `round run`.
 
-## Migration boundary
+## Legacy task-record boundary
 
 Task records that predate the required round and executor fields remain historical and
 non-executable. They need an explicit digest-bound mapping to a round and a complete executor
 contract, producing a new record while preserving the original. Runtime inference from tags,
-prompts, worktrees, branches, or previous executions is forbidden. See the generated
-[migration reference](./migration.md) for historical command and vocabulary translation.
+prompts, worktrees, branches, or previous executions is forbidden.
 
 ## Nonclaims
 

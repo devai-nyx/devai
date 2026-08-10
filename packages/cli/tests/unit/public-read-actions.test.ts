@@ -1,6 +1,5 @@
 // Invariants: INV-DEVAI-001, INV-DEVAI-015, INV-DEVAI-017, INV-DEVAI-020
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { routeArgv } from '../../src/command-router.js';
 import { ACTION_REGISTRY } from '../../src/generated/action-registry.js';
 
 const originalArgv = [...process.argv];
@@ -44,18 +43,10 @@ async function run(args: readonly string[]): Promise<{
   };
 }
 
-const kept = ACTION_REGISTRY.filter((entry) => entry.disposition === 'keep');
-const retired = ACTION_REGISTRY.filter((entry) => entry.disposition !== 'keep');
-
-const expectedCatalog = kept.map((entry) => ({
+const expectedCatalog = ACTION_REGISTRY.map((entry) => ({
   name: entry.action_id,
-  previous_name: entry.internal_binding,
   path: entry.path,
-  lifecycle: entry.lifecycle,
-  lifecycle_reason: entry.lifecycle_reason,
-  promotion_criteria: entry.promotion_criteria,
-  visibility: entry.visibility,
-  tier: entry.tier,
+  status: entry.status,
   profiles: entry.profiles,
   effects: entry.effect,
   authority: entry.authority ?? 'mesh_controller',
@@ -64,8 +55,8 @@ const expectedCatalog = kept.map((entry) => ({
 }));
 
 describe('public read-action runtime seams', () => {
-  it('catalog actions returns the exact 42 kept actions in canonical registry order', async () => {
-    expect(kept).toHaveLength(42);
+  it('catalog actions returns the exact 41 current actions in canonical registry order', async () => {
+    expect(ACTION_REGISTRY).toHaveLength(41);
 
     const result = await run(['catalog', 'actions']);
     expect(result.exit, result.stderr).toBe(0);
@@ -81,49 +72,4 @@ describe('public read-action runtime seams', () => {
     });
   }, 30_000);
 
-  it('keeps every fold and tombstone router-only with exact migration guidance', () => {
-    expect(retired).toHaveLength(180);
-
-    const violations = retired.flatMap((entry) => {
-      const result = routeArgv(
-        ['node', 'devai', ...entry.path, '--format', 'json'],
-        [],
-        '1.0.0-contract',
-      );
-      if (result.kind !== 'output') return [`${entry.action_id}:dispatched`];
-      if (result.exitCode !== 2) return [`${entry.action_id}:exit=${String(result.exitCode)}`];
-      const error = JSON.parse(result.text) as {
-        readonly code?: string;
-        readonly class?: string;
-        readonly exit?: number;
-        readonly remediation?: string;
-        readonly context?: {
-          readonly action?: string;
-          readonly disposition?: string;
-          readonly migration?: string | null;
-        };
-      };
-      const f5Vocabulary = entry.action_id === 'init apply-f5';
-      const expectedCode = f5Vocabulary
-        ? 'CLI_VOCABULARY_RETIRED'
-        : entry.disposition === 'fold'
-          ? 'ACTION_FOLDED'
-          : 'ACTION_TOMBSTONED';
-      const expectedRemediation = f5Vocabulary ? 'Use devai init apply harness.' : entry.migration;
-      const context = error.context;
-      return error.code === expectedCode &&
-        error.class === 'routing-authority' &&
-        error.exit === 2 &&
-        error.remediation === expectedRemediation &&
-        (f5Vocabulary ||
-          (context !== undefined &&
-            context.action === entry.action_id &&
-            context.disposition === entry.disposition &&
-            context.migration === entry.migration))
-        ? []
-        : [`${entry.action_id}:${JSON.stringify(error)}`];
-    });
-
-    expect(violations).toEqual([]);
-  });
 });

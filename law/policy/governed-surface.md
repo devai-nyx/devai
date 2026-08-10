@@ -12,10 +12,9 @@ provenance: [session-draft R-0004 B2, DII-162, R-0004-SURFACE-DISPOSITION]
 
 ## Action identity
 
-`law/policy/action-registry.json` is the sole authority for public action paths,
-internal bindings, lifecycle, disposition, effect, tier, and authority contract. The
-public path is the permanent identity. A folded or tombstoned identity is never
-reminted and must retain nonempty migration guidance.
+`law/policy/action-registry.json` is the sole authority for current action paths,
+handlers, status, effect, profiles, and authority contracts. The v1.0rc catalog is a
+current-state list: it contains no compatibility aliases or historical dispositions.
 
 The CLI, effects checker, sensors, generated documentation, and contract tests consume
 byte-stable generated views of that registry. Generators compare UTF-8 bytes and do not
@@ -37,23 +36,8 @@ grant no filesystem, database, network, release, or publication authority.
 
 ## Package topology
 
-The fixed release group is exactly, in UTF-8 byte order:
-
-- `@devai-nyx/authority`
-- `@devai-nyx/cli`
-- `@devai-nyx/core`
-- `@devai-nyx/effects-check`
-- `@devai-nyx/evidence`
-- `@devai-nyx/loop`
-- `@devai-nyx/schemas`
-- `@devai-nyx/sensors`
-- `@devai-nyx/skills`
-- `@devai-nyx/spec`
-- `@devai-nyx/utils`
-
-`@devai-nyx/core` is an implementation-free export façade over the other ten public
-packages. It owns no runtime logic, performs no registration, and introduces no cycle.
-Adapters and examples remain private and outside the fixed release group.
+The release group contains exactly one package: `@devai-nyx/cli`. All implementation
+packages are private build inputs and are not independently publishable.
 
 ## Root process and workflow boundary
 

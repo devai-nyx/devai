@@ -18,7 +18,6 @@
     "narrative_population_copy": "forbidden",
     "generated_order": "canonical-source-order",
     "generated_write_mode": "check-without-write-or-deterministic-materialization",
-    "historical_vocabulary_scope": "migration-and-history-only",
     "missing_source": "fail-closed",
     "unknown_projection": "fail-closed"
   },
@@ -56,14 +55,9 @@
       "category_ids": [],
       "source_refs": [
         {
-          "path": "law/adr/ADR-021-r0007-cli-contract.md",
-          "pointer": "#",
-          "projection": "seven porcelain domains, hidden task/catalog plumbing, command-selection boundaries, and consent setpoint"
-        },
-        {
           "path": "law/policy/action-registry.json",
           "pointer": "#/entries",
-          "projection": "kept porcelain action paths grouped under their canonical workflow domain"
+          "projection": "current porcelain action paths grouped under their canonical workflow domain"
         }
       ]
     },
@@ -247,29 +241,6 @@
       ]
     },
     {
-      "page_id": "migration",
-      "planned_path": "docs/reference/cli/migration.md",
-      "title": "CLI migration",
-      "purpose": "Generate one fail-closed disposition for every historical command and vocabulary row and add only the minimum safe operator narrative.",
-      "content_mode": "generated-reference",
-      "mutable_population_mode": "generated-from-canonical-source",
-      "r0007_delivery": "safe-migration-handoff",
-      "r0009_completion": "generated-page-and-site-integration",
-      "category_ids": [],
-      "source_refs": [
-        {
-          "path": "work/rounds/R-0007/inventory/old-to-new-command-map.md",
-          "pointer": "#",
-          "projection": "every old-action and global-vocabulary table row exactly once"
-        },
-        {
-          "path": "law/policy/action-registry.json",
-          "pointer": "#/entries",
-          "projection": "kept, folded, and tombstoned runtime disposition parity"
-        }
-      ]
-    },
-    {
       "page_id": "model-runtime",
       "planned_path": "docs/reference/cli/model-runtime.md",
       "title": "Model and runtime roster",
@@ -387,7 +358,7 @@
     {
       "category_id": "roles",
       "page_id": "authority-effects",
-      "canonical_source": "law/schemas/action-registry.schema.json",
+      "canonical_source": "law/policy/round-execution.json",
       "source_refs": [
         {
           "path": "law/schemas/action-registry.schema.json",
@@ -450,9 +421,9 @@
       "canonical_source": "law/schemas/action-registry.schema.json",
       "source_refs": [
         {
-          "path": "law/schemas/action-registry.schema.json",
-          "pointer": "#/properties/entries/items/properties/lifecycle/enum",
-          "projection": "action lifecycle strings in schema order"
+          "path": "law/policy/round-execution.json",
+          "pointer": "#/vocabularies/action_lifecycles",
+          "projection": "current action lifecycle strings in policy order"
         }
       ],
       "population_contract": "source-derived-exact-ordered-bijection-no-copied-list",
@@ -540,16 +511,6 @@
       "rendering": "generated-reference"
     }
   ],
-  "migration": {
-    "page_id": "migration",
-    "canonical_source": "work/rounds/R-0007/inventory/old-to-new-command-map.md",
-    "action_rows": "all-table-rows-before-global-vocabulary-and-consent-migration",
-    "vocabulary_rows": "all-table-rows-under-global-vocabulary-and-consent-migration",
-    "identity": "action:<old-action> or vocabulary:<normalized-old-spelling>",
-    "count_contract": "derived-never-copied; every-source-row-exactly-once",
-    "rendering": "deterministic-generated-table-with-minimum-safe-operator-narrative",
-    "aliases": "forbidden"
-  },
   "completeness_gates": [
     {
       "gate_id": "docs-policy-schema",
@@ -615,32 +576,11 @@
       "failure": "DOCS_NARRATIVE_DUPLICATES_CANON"
     },
     {
-      "gate_id": "docs-migration-bijection",
-      "phase": "r0007-b6",
-      "scope": "migration",
-      "condition": "every old action and global vocabulary row appears exactly once and agrees with the canonical action disposition",
-      "failure": "DOCS_MIGRATION_BIJECTION_FAILED"
-    },
-    {
-      "gate_id": "docs-migration-fail-closed",
-      "phase": "r0007-b6",
-      "scope": "migration",
-      "condition": "folds name an exact successor, tombstones and removals refuse dispatch, and no historical spelling becomes an alias",
-      "failure": "DOCS_MIGRATION_NOT_FAIL_CLOSED"
-    },
-    {
       "gate_id": "docs-examples-new-grammar",
       "phase": "r0007-b6",
       "scope": "example",
       "condition": "every required example uses only the new grammar and passes a read-only or dry-run fixture or fails with its documented precondition",
       "failure": "DOCS_EXAMPLE_INVALID"
-    },
-    {
-      "gate_id": "docs-historical-vocabulary-contained",
-      "phase": "r0007-b6",
-      "scope": "narrative",
-      "condition": "historical command and vocabulary spellings occur only in migration or explicitly historical material",
-      "failure": "DOCS_HISTORICAL_VOCABULARY_ACTIVE"
     },
     {
       "gate_id": "docs-handoff-claim-ceiling",
@@ -659,13 +599,11 @@
   ],
   "r0007_handoff": {
     "round": "R-0007",
-    "scope": "canonical-descriptors-and-minimum-safe-migration-operator-guidance",
+    "scope": "canonical-current-state-descriptors-and-operator-guidance",
     "required_outputs": [
       "schema-valid information-architecture policy",
       "machine-readable exact category report",
       "deterministic generated reference descriptors",
-      "complete migration-table projection",
-      "minimum safe migration narrative",
       "minimum round-task-executor operator guidance"
     ],
     "completion_claim": "handoff-complete-only"

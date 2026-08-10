@@ -152,25 +152,17 @@ describe('successor operational law', () => {
     const canonical = JSON.parse(
       readFileSync(join(ROOT, 'law/policy/action-registry.json'), 'utf8'),
     ) as {
-      counts: { keep: number; fold: number; tombstone: number };
       entries: Array<{
         action_id: string;
-        disposition: 'keep' | 'fold' | 'tombstone';
-        tier: 'porcelain' | 'plumbing';
+        status: 'stable' | 'preview' | 'internal';
       }>;
     };
-    const kept = canonical.entries.filter((entry) => entry.disposition === 'keep');
-    const retiredIds = new Set(
-      canonical.entries
-        .filter((entry) => entry.disposition !== 'keep')
-        .map((entry) => entry.action_id),
-    );
-    expect(canonical.counts).toEqual({ keep: 42, fold: 169, tombstone: 11 });
-    expect(kept.filter((entry) => entry.tier === 'porcelain')).toHaveLength(31);
-    expect(kept.filter((entry) => entry.tier === 'plumbing')).toHaveLength(11);
-    expect(expected.registry_length).toBe(42);
-    expect(expected.action_ids).toEqual(kept.map((entry) => entry.action_id));
-    expect(expected.action_ids.filter((actionId) => retiredIds.has(actionId))).toEqual([]);
+    expect(canonical.entries).toHaveLength(41);
+    expect(canonical.entries.filter((entry) => entry.status === 'stable')).toHaveLength(20);
+    expect(canonical.entries.filter((entry) => entry.status === 'preview')).toHaveLength(10);
+    expect(canonical.entries.filter((entry) => entry.status === 'internal')).toHaveLength(11);
+    expect(expected.registry_length).toBe(41);
+    expect(expected.action_ids).toEqual(canonical.entries.map((entry) => entry.action_id));
     for (const relativePath of AUTHORITY_POLICY_PATHS) {
       const path = join(ROOT, relativePath);
       const policy = JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>;
