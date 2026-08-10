@@ -29,6 +29,7 @@ import {
 } from '#core-compat';
 import { validators } from '@devai-nyx/schemas';
 import type { RegistryEntry } from '../define-command.js';
+import { matchDeclaredCheckTaskProcess } from '../services/check-runner/authority-process.js';
 import {
   buildTrustedAuthoritySources,
   canonicalBytes,
@@ -101,6 +102,7 @@ const READ_ONLY_PROCESS_COMMANDS: Readonly<Record<string, readonly string[]>> = 
     'hash-object',
     'log',
     'ls-files',
+    'ls-tree',
     'ls-remote',
     'merge-base',
     'rev-list',
@@ -382,6 +384,7 @@ function processTarget(
   actionName: string,
   root: string,
   repositoryId: string,
+  invocationArgv: readonly string[],
 ): JsonRecord | undefined {
   const executableValue = request.arguments[0];
   const argumentValue = request.arguments[1];
@@ -389,6 +392,19 @@ function processTarget(
   const executable = basename(executableValue);
   const args = argumentValue.map(String);
   const verb = args[0];
+
+  if (actionName === 'check') {
+    const task = matchDeclaredCheckTaskProcess(root, invocationArgv, request);
+    if (task !== undefined) {
+      return {
+        kind: 'fs',
+        id: `fs:.devai/state/check-cache/v1:${safeLogical(task.nodeId, 'task')}`,
+        repository_id: repositoryId,
+        canonical_relative_path: '.devai/state/check-cache/v1',
+        operation: 'update',
+      };
+    }
+  }
 
   if (
     executable === 'psql' &&
@@ -1060,6 +1076,7 @@ export function createAuthorityHostBroker(input: BrokerInput): {
         input.entry.name,
         repositoryRoot,
         sources.repository_id,
+        input.argv,
       );
       if (!target) throw new Error('AUTHORITY_HOST_PROCESS_ADAPTER_REQUIRED');
       if (actionPlanner.kind === 'exact-plan') {

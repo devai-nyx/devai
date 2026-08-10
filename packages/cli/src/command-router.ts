@@ -184,6 +184,12 @@ function usageRefusal(
 
 export function invocationIsNonMutating(internalName: string, args: readonly string[]): boolean {
   if (args.includes('--check')) return true;
+  if (
+    internalName === 'check' &&
+    ['--task-plan', '--status', '--explain'].some((flag) => args.includes(flag))
+  ) {
+    return true;
+  }
   if (internalName === 'round-close' && args.includes('--post-merge-receipt')) return true;
   if (internalName === 'mutation-verify' && !args.includes('--save-baseline')) return true;
   if (internalName === 'init-upgrade' && args.includes('--tier') && !args.includes('--write'))

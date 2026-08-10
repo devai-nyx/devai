@@ -2,6 +2,12 @@ import { resolve } from 'node:path';
 import type { CAC } from 'cac';
 import { EXIT_FAIL, EXIT_USAGE } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
+import {
+  runCheckTasks,
+  type CheckRunnerReport,
+  type TaskOperation,
+  type TaskTarget,
+} from '../../services/check-runner/index.js';
 import { executeCheckMember, type CheckExecutionOptions } from './adapters.js';
 import { resolveCheckPlan, runCheckPlan, type CheckRunReport } from './contracts.js';
 
@@ -10,6 +16,68 @@ interface CheckCliOptions extends Omit<CheckExecutionOptions, 'repoRoot'> {
   readonly only?: string;
   readonly repoRoot?: string;
   readonly human?: boolean;
+  readonly affected?: boolean;
+  readonly local?: boolean;
+  readonly rc?: boolean;
+  readonly taskPlan?: boolean;
+  readonly run?: boolean;
+  readonly status?: boolean;
+  readonly explain?: boolean;
+  readonly base?: string;
+  readonly taskTimeoutMs?: string;
+}
+
+function exactlyOne<T extends string>(
+  values: readonly Readonly<{ name: T; selected: boolean | undefined }>[],
+  label: string,
+): T {
+  const selected = values.filter((entry) => entry.selected === true);
+  if (selected.length !== 1) {
+    throw new Error(`CHECK_RUNNER_SELECTION: select exactly one ${label}`);
+  }
+  return selected[0]?.name as T;
+}
+
+function runnerSelection(options: CheckCliOptions):
+  | Readonly<{ target: TaskTarget; operation: TaskOperation }>
+  | undefined {
+  const targetFlags = [options.affected, options.local, options.rc];
+  const operationFlags = [options.taskPlan, options.run, options.status, options.explain];
+  if (![...targetFlags, ...operationFlags].some((value) => value === true)) return undefined;
+  return {
+    target: exactlyOne<TaskTarget>(
+      [
+        { name: 'affected', selected: options.affected },
+        { name: 'local', selected: options.local },
+        { name: 'rc', selected: options.rc },
+      ],
+      'task target: --affected, --local, or --rc',
+    ),
+    operation: exactlyOne<TaskOperation>(
+      [
+        { name: 'plan', selected: options.taskPlan },
+        { name: 'run', selected: options.run },
+        { name: 'status', selected: options.status },
+        { name: 'explain', selected: options.explain },
+      ],
+      'task operation: --task-plan, --run, --status, or --explain',
+    ),
+  };
+}
+
+function renderRunnerHuman(report: CheckRunnerReport): string {
+  const lines = [
+    `check ${report.plan.target} ${report.operation}: ${String(report.plan.tasks.length)} task(s), tree=${report.plan.clean ? 'clean' : 'dirty'}`,
+  ];
+  for (const task of report.plan.tasks) {
+    const executed = report.execution?.find((entry) => entry.nodeId === task.nodeId);
+    lines.push(
+      `  ${(executed?.disposition ?? task.cacheState).toUpperCase()} ${task.nodeId}: ${executed?.reason ?? task.reason}`,
+    );
+  }
+  if (report.receipt !== undefined) lines.push(`  RECEIPT ${report.receipt.digest}`);
+  if (report.receiptRefusal !== undefined) lines.push(`  NO RECEIPT: ${report.receiptRefusal}`);
+  return `${lines.join('\n')}\n`;
 }
 
 function renderHuman(report: CheckRunReport): string {
@@ -56,10 +124,40 @@ export const checkCmd = defineCommand({
       .option('--mutation-baseline <path>', 'Mutation baseline for --only mutation')
       .option('--mutation-current <path>', 'Mutation current report for --only mutation')
       .option('--mutation-thresholds <path>', 'Mutation thresholds for --only mutation')
+      .option('--affected', 'Select tasks affected since the exact --base commit')
+      .option('--local', 'Select the complete cheap local task closure')
+      .option('--rc', 'Select the fixed release-candidate task closure')
+      .option('--task-plan', 'Plan selected tasks without executing them')
+      .option('--run', 'Execute or reuse selected tasks')
+      .option('--status', 'Show freshness status for selected tasks')
+      .option('--explain', 'Explain selection, invalidation, and reuse reasons')
+      .option('--base <commit>', 'Exact ancestor commit required with --affected')
+      .option('--task-timeout-ms <n>', 'Per-task timeout in milliseconds for --run')
       .option('--human', 'Human-readable aggregate')
       .action(async (options: CheckCliOptions) => {
         const repoRoot = resolve(options.repoRoot ?? '.');
         try {
+          const taskSelection = runnerSelection(options);
+          if (taskSelection !== undefined) {
+            if (options.suite !== undefined || options.only !== undefined) {
+              throw new Error('CHECK_RUNNER_SELECTION: task flags conflict with --suite/--only');
+            }
+            const timeout =
+              options.taskTimeoutMs === undefined ? undefined : Number(options.taskTimeoutMs);
+            const report = runCheckTasks({
+              repoRoot,
+              ...taskSelection,
+              ...(options.base !== undefined && { baseCommit: options.base }),
+              ...(timeout !== undefined && { timeoutMs: timeout }),
+            });
+            process.stdout.write(
+              options.human === true
+                ? renderRunnerHuman(report)
+                : `${JSON.stringify(report)}\n`,
+            );
+            process.exitCode = report.exitCode;
+            return;
+          }
           const plan = resolveCheckPlan(repoRoot, {
             ...(options.suite !== undefined && { suite: options.suite }),
             ...(options.only !== undefined && { only: options.only }),
@@ -108,7 +206,10 @@ export const checkCmd = defineCommand({
           process.exitCode =
             message.startsWith('CHECK_SUITE_UNKNOWN') ||
             message.startsWith('CHECK_MEMBER_UNKNOWN') ||
-            message.startsWith('CHECK_SELECTION_CONFLICT')
+            message.startsWith('CHECK_SELECTION_CONFLICT') ||
+            message.startsWith('CHECK_RUNNER_SELECTION') ||
+            message.startsWith('CHECK_RUNNER_BASE_REQUIRED') ||
+            message.startsWith('CHECK_RUNNER_TIMEOUT')
               ? EXIT_USAGE
               : EXIT_FAIL;
         }
