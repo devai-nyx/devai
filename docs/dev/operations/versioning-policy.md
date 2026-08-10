@@ -73,7 +73,3 @@ The three `upgrade` modes are independent — a major CLI-version bump, a consti
 - D-118 (`devai_version` machine-managed, canonical consumption model), D-119 (constitution binding), D-122 (provenance tracking, `devai_consumption` declaration).
 - [`local-evidence-runbook.md`](./local-evidence-runbook.md) — the other D-117-family mechanism this policy doc's neighbors document.
 - `CHANGELOG.md` — where the constitution-version rule is applied in practice.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/ops/versioning-policy.md (classification CURRENT).

@@ -66,7 +66,3 @@ provenance remains a separate claim.
 
 - [Test policy](../theory/framework/test-policy.md) — what each test suite probes.
 - [Adopters → install](../adopters/install.md) — initial `pnpm install` + build verification.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/reference/scripts.md (classification CURRENT).

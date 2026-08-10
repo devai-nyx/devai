@@ -125,7 +125,3 @@ For supported readiness, deterministic sensing and human-supervised verification
 - `examples/redox-pack-*/stack-adapter.json` — sibling-checkout manifests.
 - [../law/schemas/stack-adapter.schema.json](../../law/schemas/stack-adapter.schema.json) — pack schema.
 - [Recipes](../reference/recipes/README.md) — current host-assisted surface.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/pack-resolution.md (classification CURRENT).

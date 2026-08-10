@@ -1,7 +1,5 @@
 # Figure 2 — Three nested control loops
 
-**Source section:** devai-theory.md §11
-
 ## Purpose
 
 Visualize the central architectural claim: time-scale-separated nested loops where failure of an inner loop is _not_ a system failure — it's a signal that the loop above must take over.
@@ -20,7 +18,3 @@ Visualize the central architectural claim: time-scale-separated nested loops whe
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-02-three-loops.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-02-three-loops.md (classification CURRENT).

@@ -162,7 +162,3 @@ If you encounter a `schema_version` your loader does not support, you will see a
 - Examples: [`docs/reference/contracts/examples/mutation-scenario-simple.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/examples/mutation-scenario-simple.json), [`mutation-scenario-complex.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/examples/mutation-scenario-complex.json), [`mutation-scenario-external-runner.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/examples/mutation-scenario-external-runner.json)
 - Verifier: `packages/cli/src/commands/verify/mutation.ts` (unchanged by this contract)
 - Constitution: Articles 6 (substrate authority), 32 (sensor adapter uniformity), 36 (DEVAI applies to itself), 38 (JSON canon), 39 (explicit uncertainty over false precision)
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/mutation-scenarios.md (classification CURRENT).

@@ -35,7 +35,3 @@ Aggregate:
 
 - **Test quality.** This sensor measures _presence and distribution_, not whether tests actually cover meaningful behaviour.
 - **Test-pattern coverage** (auth/perf/error tests). Those are F3×T6/T7/T8, covered by 27.J/K/L.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/test_coherence.md (classification CURRENT).

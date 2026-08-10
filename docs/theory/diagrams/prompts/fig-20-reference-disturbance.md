@@ -1,7 +1,5 @@
 # Figure 19 — Reference-disturbance handling (sequence)
 
-**Source section:** devai-theory.md §11.2
-
 ## Purpose
 
 Sequence diagram for an Architect amendment: how the loop detects and adapts to a new invariant version mid-task.
@@ -23,7 +21,3 @@ Sequence diagram for an Architect amendment: how the loop detects and adapts to 
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-20-reference-disturbance.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-20-reference-disturbance.md (classification CURRENT).

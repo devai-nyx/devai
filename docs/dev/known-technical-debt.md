@@ -57,7 +57,3 @@ shows user-perceptible latency.
 - **Adding an entry.** New tech-debt finding goes here, not into a comment in the source. Each entry MUST have a _trigger_ — without one, it's not debt, it's just a complaint.
 - **Closing an entry.** When the trigger fires, execute the migration sketch, move the entry to `CHANGELOG.md` with a brief note on what changed, and delete it from here.
 - **Auditing.** This document is part of the Architect-authored security/governance surface. Items here are visible to anyone reading `docs/theory/architecture/`. Don't hide debt elsewhere.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/known-tech-debt.md (classification CURRENT).

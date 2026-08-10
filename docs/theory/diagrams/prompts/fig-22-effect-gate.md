@@ -1,7 +1,5 @@
 # Figure 22 — Effect gate: declared ⊇ inferred
 
-**Source section:** devai-theory.md §4.4
-
 ## Purpose
 
 The capability seam's design-time half: the static reachability analyzer's inferred effect set checked against the manifest's declared set, fail-closed, before the coverage gate.
@@ -19,7 +17,3 @@ The capability seam's design-time half: the static reachability analyzer's infer
 Authored via `docs/theory/diagrams/render-figures.py::fig22_effect_gate`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-22-effect-gate.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-22-effect-gate.md (classification CURRENT).

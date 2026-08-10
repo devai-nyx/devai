@@ -110,7 +110,3 @@ Timeout inflation and retries are not compliance — they mask the contention an
 3. Start `devai evidence test record --chain` for heavy tiers in your batch discipline.
 4. Add the weekly audit; only then populate `LOCAL_EVIDENCE_TRUSTED_ACTORS`.
 5. Fix DB isolation in concurrent tiers (this is a correctness fix — do it even if you never enable evidence mode).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/ci-economy.md (classification CURRENT).

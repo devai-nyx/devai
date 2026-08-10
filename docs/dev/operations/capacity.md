@@ -107,7 +107,3 @@ For the GitHub Actions matrix CI uses today:
 
 - [`testing.md`](./testing.md) — focused and RC-gate test policy.
 - D-11 (worktree cap), Article 30 (Cost discipline).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/ops/capacity.md (classification CURRENT).

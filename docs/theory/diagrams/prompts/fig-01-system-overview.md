@@ -1,7 +1,5 @@
 # Figure 1 — Top-level signal flow
 
-**Source section:** devai-theory.md §11
-
 ## Purpose
 
 The control-engineer's reading of DEVAI as a feedback loop with three additions over textbook (exogenous inputs not in the inner loop; supervisor switching K_i; non-trivial observer).
@@ -21,7 +19,3 @@ The control-engineer's reading of DEVAI as a feedback loop with three additions 
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-01-system-overview.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-01-system-overview.md (classification CURRENT).

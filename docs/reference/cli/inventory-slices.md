@@ -359,7 +359,7 @@ conformance verdict.
   accepted inputs, defaults, projections, aggregate result, and errors.
 - [Inventory action contract](../../../law/policy/action-registry.json) — public read
   route, authority, consent, and output envelope.
-- [Documentation information architecture](../../../law/adr/ADR-023-r0007-documentation-information-architecture.md)
+- [Documentation information architecture](../../../law/policy/documentation-information-architecture.json)
   — deterministic rendering and no-copy rule.
 
 This is the R-0007 canonical operator handoff. It does not claim complete R-0009

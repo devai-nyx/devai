@@ -1,7 +1,5 @@
 # Figure 9 — Inner-loop iteration (sequence diagram)
 
-**Source section:** devai-theory.md §7.6
-
 ## Purpose
 
 Per-iteration sequence: who calls whom in one inner-loop pass. Visually distinct from the flowchart-style diagrams; uses sequence-diagram conventions.
@@ -28,7 +26,3 @@ Per-iteration sequence: who calls whom in one inner-loop pass. Visually distinct
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-10-inner-loop-sequence.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-10-inner-loop-sequence.md (classification CURRENT).

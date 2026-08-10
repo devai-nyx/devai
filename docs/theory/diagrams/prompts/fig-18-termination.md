@@ -1,7 +1,5 @@
 # Figure 17 — Termination guarantee decision tree
 
-**Source section:** devai-theory.md §7.4
-
 ## Purpose
 
 Every path through the inner loop reaches one of four explicit terminal states; there is no silent-loop path.
@@ -22,7 +20,3 @@ Every path through the inner loop reaches one of four explicit terminal states; 
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-18-termination.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-18-termination.md (classification CURRENT).

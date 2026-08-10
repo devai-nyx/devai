@@ -33,7 +33,3 @@ If your team has stronger commit conventions (e.g., enforcing a specific scope s
 ## Phase A landmines
 
 These templates are explicit inputs; DEVAI never selects or publishes one implicitly.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/templates/README.md (classification CURRENT).

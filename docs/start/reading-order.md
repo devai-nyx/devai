@@ -46,14 +46,11 @@ The control-theoretic framing is binding on every later artifact. Read in this o
 
 DEVAI applies to itself per [Article 36](../reference/law.md). Reading [§7 Meta](../dev) is how you understand what DEVAI does _with_ itself:
 
-| Read                                            | Why                                                                                                                                     |
-| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| [Meta landing](../dev)                          | Article-36 framing; what's in §7 and why it's separate from §3 Framework                                                                |
-| [Self-scorecard](./status.md)                   | The exact-input projection contract; treat it as current only when its subject/render/freshness provenance matches the active candidate |
-| [Test matrix](../dev/index.md)                  | Suite structure and what each suite probes; fresh round evidence carries current pass/fail status                                       |
-| Dev process (under §7 Meta)                     | Session boundary, round-break canon, per-batch verification                                                                             |
-| [Build plan](../dev/round-ledger.md)            | Per-phase implementation plan with prefix-index navigation                                                                              |
-| [Decision log](../reference/decisions-index.md) | D-1 through current; one rationale per decision                                                                                         |
+| Read                           | Why                                                                                               |
+| ------------------------------ | ------------------------------------------------------------------------------------------------- |
+| [Meta landing](../dev)         | Article-36 framing; what's in §7 and why it's separate from §3 Framework                          |
+| [Test matrix](../dev/index.md) | Suite structure and what each suite probes; fresh round evidence carries current pass/fail status |
+| Dev process (under §7 Meta)    | Session boundary, round-break canon, per-batch verification                                       |
 
 ## For everyone else (the CLI/recipes/schemas reference)
 
@@ -65,7 +62,3 @@ DEVAI applies to itself per [Article 36](../reference/law.md). Reading [§7 Meta
 - Scripts (under §6 Reference) — `pnpm` scripts and `scripts/*.mjs` utilities
 - Sensors quick-ref (under §6 Reference) — sensor kinds organised by substrate and transversal
 - Examples (under §6 Reference) — packs and fixtures under `examples/`
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/start/reading-order.md (classification CURRENT).

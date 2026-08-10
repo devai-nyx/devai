@@ -57,7 +57,3 @@ git commit -m "test: ensure lint-staged skips state/"
 ```
 
 Your pre-commit hook should not touch the file. Verify with `git diff --cached --stat`. (Then `git restore --staged` + delete the marker.)
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/templates/lint-staged-snippet.md (classification CURRENT).

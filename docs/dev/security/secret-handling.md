@@ -115,7 +115,3 @@ DEVAI does not implement per-role secret access at the OS level — that's the o
 
 - [`README.md`](./README.md) — current security boundary.
 - Constitution Articles 14 (Security-sensitive change policy), 30 (Cost discipline).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/security/secret-handling.md (classification CURRENT).

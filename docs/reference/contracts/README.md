@@ -76,7 +76,3 @@ Whenever client-facing contracts land under this directory, the Phase-1 hard gat
 3. Cross-checks: every contract referenced by an invariant via `measurable_via` must exist; every contract must be cited by at least one invariant.
 
 Drift on any check is a hard-fail.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/contracts/README.md (classification CURRENT).

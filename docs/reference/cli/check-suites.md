@@ -167,10 +167,7 @@ results for current execution.
   membership, order, bindings, effects, costs, outputs, and prerequisites.
 - [Check-suite schema](../../../law/schemas/check-suites.schema.json) — closed descriptor
   shape and ordering constraints.
-- [Workflow and executor decision](../../../law/adr/ADR-022-r0007-executor-substrate.md) —
+- [Check suites](../../../law/policy/check-suites.json) —
   suite semantics, failure boundary, and non-publication posture.
 - [Check action contract](../../../law/policy/action-registry.json) — public route,
   authority, consent, and output envelope.
-
-This is the R-0007 canonical operator handoff. It does not claim complete R-0009
-narrative documentation, readiness, release, or deployment.

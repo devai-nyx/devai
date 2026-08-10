@@ -1,7 +1,5 @@
 # Figure 12 — Forbidden feedback paths
 
-**Source section:** devai-theory.md §4.5
-
 ## Purpose
 
 Central diagram for §9. Shows permitted (solid) and forbidden (red dashed × marker) edges in the signal-flow graph.
@@ -18,7 +16,3 @@ Central diagram for §9. Shows permitted (solid) and forbidden (red dashed × ma
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-13-forbidden-paths.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-13-forbidden-paths.md (classification CURRENT).

@@ -139,7 +139,3 @@ Most common blocks: scorecard decision is not `pass`; invariants directory empty
 
 - [`evidence-chain-runbook.md`](./evidence-chain-runbook.md), [`lock-runbook.md`](./lock-runbook.md), [`worktree-runbook.md`](./worktree-runbook.md), [`capacity.md`](./capacity.md), [`testing.md`](./testing.md).
 - `docs/dev/security/threat-model.md` for security-flavored incidents.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/ops/incident-playbook.md (classification CURRENT).

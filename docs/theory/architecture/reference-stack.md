@@ -64,7 +64,3 @@ Trigger conditions for a successor D-entry:
 In either case, a new D-entry supersedes this one explicitly. Adapter packs land
 additively under Article 1 while NestJS + Angular + Postgres remains the primary
 reference stack.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/reference-stack.md (classification CURRENT).

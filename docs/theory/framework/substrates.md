@@ -68,7 +68,3 @@ A client extension lives in `.devai/config/` and is picked up by the harness at 
 - [Constitution Article 6](../../reference/law.md) — the path enumeration that this page commentates on.
 - [Roles](../../roles) — how human and agent roles map to substrates.
 - [Aspect grid](./aspect-grid.md) — the 5×9 grid of substrates × transversals.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/substrates.md (classification CURRENT).

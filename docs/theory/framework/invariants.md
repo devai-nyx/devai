@@ -14,7 +14,8 @@ An invariant has:
 - **A unique ID** of the form `INV-<DOMAIN>-<NNN>` (e.g., `INV-AUTH-014`).
 - **A severity** — one of `must` or `should`. `must` is non-negotiable; `should` is graded into the scorecard with finite weight.
 - **A type** — `invariant`, `forbidden-action`, `obligation`, `policy`. The type governs how sensors probe the invariant.
-- **A canonical statement** — the prose form, written in CNL (controlled natural language) per the authoring guide under [`arch/invariant-authoring.md`](../architecture/invariant-authoring.md).
+- **A canonical statement** — the prose form, written so a sensor can evaluate it
+  without guessing.
 - **A rationale** — why the invariant exists. Linked to ADRs where relevant.
 - **A scope** — path globs declaring which substrate(s) the invariant applies to.
 - **A `change_policy`** — per-invariant mutability rules (see below).
@@ -46,9 +47,8 @@ This **grades the authority chain at invariant granularity**. A security-critica
 
 ## Authoring discipline
 
-The authoring guide at [`arch/invariant-authoring.md`](../architecture/invariant-authoring.md) covers the operational how-to: CNL grammar, ID assignment, severity selection, scope declaration, `measurable_via` selection.
-
-The taxonomy at [`arch/invariant-taxonomy.md`](../architecture/invariant-taxonomy.md) covers domain-by-domain conventions: which `<DOMAIN>` ID prefix to use, when an invariant should be a `forbidden-action` vs an `obligation`, etc.
+Use the [invariant schema](../../../law/schemas/invariant.schema.json) as the
+authoritative shape for IDs, severity, scope, and measurement declarations.
 
 ## Validation
 
@@ -61,15 +61,10 @@ The taxonomy at [`arch/invariant-taxonomy.md`](../architecture/invariant-taxonom
 
 Invariants aggregate into domain rollups. The scorecard's `Spec × Coverage` (F1 × T1) cell, for example, is computed from per-domain invariant rollups: domains with severity-`must` invariants present score higher than those with only `should` invariants.
 
-The aggregate-invariant mechanism is documented at [`arch/invariant-authoring.md`](../architecture/invariant-authoring.md); rollups are computed at `sense-spec-depth` and `sense-spec-alignment` runs.
+Rollups are computed from schema-valid invariant records and sensor readings.
 
 ## See also
 
 - [Constitution Articles 11-14](../../reference/law.md) — invariant binding text, trace, change policy.
-- [`docs/theory/architecture/invariant-authoring.md`](../architecture/invariant-authoring.md) — operational authoring guide.
-- [`docs/theory/architecture/invariant-taxonomy.md`](../architecture/invariant-taxonomy.md) — domain conventions.
+- [Invariant schema](../../../law/schemas/invariant.schema.json) — authoritative record shape.
 - [Test policy](./test-policy.md) — how tests reference invariants and how weakening is gated.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/invariants.md (classification CURRENT).

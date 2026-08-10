@@ -1,7 +1,5 @@
 # Figure 11 — Feedforward composition (layered detail)
 
-**Source section:** devai-theory.md §7.6
-
 ## Purpose
 
 Companion to Figure 5: shows the six prompt-composition layers and the deterministic stack hash that fingerprints them.
@@ -20,7 +18,3 @@ Companion to Figure 5: shows the six prompt-composition layers and the determini
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-12-feedforward-layers.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-12-feedforward-layers.md (classification CURRENT).

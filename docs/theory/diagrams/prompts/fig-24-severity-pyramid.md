@@ -1,7 +1,5 @@
 # Figure 24 — Severity ladder as hierarchy of norms
 
-**Source section:** devai-theory.md §5.2
-
 ## Purpose
 
 The five-tier severity vocabulary (Constitution 0.7.0, Article 11) as a normative pyramid, with the readiness-bearing boundary and the Q-weight reading annotated.
@@ -19,7 +17,3 @@ The five-tier severity vocabulary (Constitution 0.7.0, Article 11) as a normativ
 Authored via `docs/theory/diagrams/render-figures.py::fig24_severity_pyramid`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-24-severity-pyramid.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-24-severity-pyramid.md (classification CURRENT).

@@ -56,7 +56,3 @@ The baseline is updated via Architect-approved Inspector tasks when DEVAI's sour
 - [Adopters → pack resolution](../adopters/pack-resolution.md) — how a pack matches your repo.
 - [Adopters → install](../adopters/install.md) — initial setup including pack selection.
 - [Scorecard N/A overrides](../adopters/scorecard-na-overrides.md) — per-pack cell carve-outs.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/reference/examples.md (classification CURRENT).

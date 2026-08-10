@@ -94,8 +94,3 @@ Operator-driven worktree create/destroy doesn't auto-acquire locks — those are
 
 - [`lock-runbook.md`](./lock-runbook.md) — locks and worktrees compose.
 - Constitution Article 27 (Worktree discipline), Article 21 (Escalation lifecycle).
-- `GE-017` (Task), `GE-018` (RGR).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/ops/worktree-runbook.md (classification CURRENT).

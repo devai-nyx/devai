@@ -1,10 +1,13 @@
 # inv-override discipline
 
-**Scope:** the in-source `inv-override` annotation that records site-specific deviation from non-constitutional invariants. Per Phase 10.B and `GE-027`.
+**Scope:** the in-source `inv-override` annotation that records site-specific deviation
+from non-constitutional invariants.
 
 ## What an override is
 
-An invariant has a `severity:` per the 5-tier ladder (`constitutional | hard-fail | gate | warn | advisory`, Phase 10.A, `GE-026`). The two upper tiers — constitutional and hard-fail — are **not** overridable. The three lower tiers (gate / warn / advisory) **can** be overridden with an annotation.
+An invariant has a `severity:` in the five-tier ladder (`constitutional | hard-fail |
+gate | warn | advisory`). The two upper tiers — constitutional and hard-fail — are
+**not** overridable. The three lower tiers can be overridden with an annotation.
 
 An override is a structured comment in source code that says: "I know `INV-XX-NNN` says this surface should behave a certain way; here at this specific point, with this reason and this approver, we are deviating."
 
@@ -74,7 +77,9 @@ Overrides are an Engineer-tier mechanism (they live in source code). But the **a
 - It is **not** a way to escape constitutional/hard-fail invariants. The scanner rejects those outright.
 - It is **not** permanent. The `expires` field forces revisit.
 - It is **not** an alternative to fixing the code. The reviewer should ask: "could we fix this in N hours instead of carrying an override?" Often the answer is yes.
-- It is **not** an alternative to `RGR` (`GE-018`). RGR is for spec gaps; override is for cases where the spec is right but a specific call site needs a documented exception.
+- It is **not** an alternative to clarifying a specification gap. An override is for
+  cases where the specification is right but a specific call site needs a documented
+  exception.
 
 ## Anti-patterns
 
@@ -107,10 +112,4 @@ Every override is a record. Over time, the override log shows:
 
 ## See also
 
-- `GE-019` (Invariant), `GE-026` (Severity ladder), `GE-027` (inv-override).
 - `inv-override.schema.json` — the canonical structure.
-- Phase 10.B commit body.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/security/inv-override-discipline.md (classification CURRENT).

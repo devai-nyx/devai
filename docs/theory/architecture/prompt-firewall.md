@@ -91,7 +91,3 @@ A successor D-entry would be needed if:
 - The unified verdict shape proves insufficient for some validator's findings. So far the `firewall-verdict.findings[]` array has absorbed every new validator with just a new `code` value.
 - A real prompt-injection vector emerges that the overlay model doesn't cover (e.g., dynamic content inserted by a tool call). The validator would extend, the schema might extend, but the unified-verdict choice would still hold.
 - The path-reservation list grows large enough to need its own schema. Currently the reservations are a fixed list + client extensions; growth to dozens of reservations might warrant promoting them.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/prompt-firewall.md (classification CURRENT).

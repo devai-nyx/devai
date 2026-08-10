@@ -515,5 +515,5 @@ checks the identifiers against the action-registry schema.
 
 <!-- devai:generated-reference:end category="surface-tiers" -->
 
-Canonical routing: [ADR-022](../../../law/adr/ADR-022-r0007-executor-substrate.md),
+Canonical routing: [action registry](../../../law/policy/action-registry.json),
 [documentation information architecture](../../../law/policy/documentation-information-architecture.json).

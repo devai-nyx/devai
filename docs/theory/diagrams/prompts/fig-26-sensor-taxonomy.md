@@ -1,7 +1,5 @@
 # Figure 26 — Sensor taxonomy
 
-**Source section:** devai-theory.md §6.2
-
 ## Purpose
 
 The canonical sensor roster as a one-level tree: 58 kinds, one SensorReading envelope, nine families mirroring the aspect grid.
@@ -19,7 +17,3 @@ The canonical sensor roster as a one-level tree: 58 kinds, one SensorReading env
 Authored via `docs/theory/diagrams/render-figures.py::fig26_sensor_taxonomy`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-26-sensor-taxonomy.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-26-sensor-taxonomy.md (classification CURRENT).

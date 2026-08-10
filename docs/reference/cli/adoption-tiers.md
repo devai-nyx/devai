@@ -193,6 +193,6 @@ repository and invocation; a suite or preset describes its exact population; rel
 its own separately authorized inputs and effects. Moving to a higher tier does not publish,
 deploy, close a round, or promote evidence.
 
-Canonical sources: [ADR-022](../../../law/adr/ADR-022-r0007-executor-substrate.md),
-[round-execution policy](../../../law/policy/round-execution.json),
+Canonical sources: [action registry](../../../law/policy/action-registry.json),
+[round-execution policy](../../../law/policy/round-execution.json), and
 [project-config schema](../../../law/schemas/project-config.schema.json).

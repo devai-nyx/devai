@@ -28,14 +28,12 @@ Pick the entry point that matches what you came here to do.
 ## Status
 
 The current constitutional, package, authority, and lifecycle posture is
-recorded on the [status page](./status.md). Live actions come from `devai catalog
+defined by the current policy files. Live actions come from `devai catalog
 actions`; the seven recipe manifests live under `packages/skills/resources/recipes/`.
 Schemas and tests are queried from their registries rather than frozen as prose counts.
 
 DEVAI applies itself per Article 36. The
-[self-scorecard](./status.md) is current only when its displayed
-subject, render, and deployment provenance passes the exact-SHA freshness
-contract; missing or stale evidence remains visibly non-promoting.
+Evidence claims are valid only for their exact subject and freshness bound.
 
 ## What this is
 
@@ -54,7 +52,3 @@ The control-theoretic framing is not metaphorical. It governs how authority is a
 ## Reading order
 
 A curated walk-through lives at [Reading order](./reading-order.md). Start with the [adopter guide](../adopters/install.md), preview with `devai init plan`, and apply only the explicit actions emitted by that plan.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/start/index.md (classification CURRENT).

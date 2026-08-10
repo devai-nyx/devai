@@ -37,7 +37,3 @@ The 1-page template:
 
 (Deferred concerns.)
 ```
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/README.md (classification CURRENT).

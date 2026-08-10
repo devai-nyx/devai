@@ -1,7 +1,5 @@
 # Figure 23 — Host seam path domains (Article 6)
 
-**Source section:** devai-theory.md §4.4
-
 ## Purpose
 
 The capability seam's runtime half: every governed mutation crosses a capability module bound to one Article-6 path domain; cross-domain writes are refused.
@@ -20,7 +18,3 @@ The capability seam's runtime half: every governed mutation crosses a capability
 Authored via `docs/theory/diagrams/render-figures.py::fig23_path_domains`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-23-path-domains.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-23-path-domains.md (classification CURRENT).

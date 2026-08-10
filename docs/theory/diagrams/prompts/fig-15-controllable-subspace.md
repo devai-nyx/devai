@@ -1,7 +1,5 @@
 # Figure 14 — Controllable subspace 𝒞(k)
 
-**Source section:** devai-theory.md §11.4
-
 ## Purpose
 
 Visualizes that the controller's reach is deliberately bounded: 𝒞(k) ⊆ span(F2) ∪ span(F5⁺) by the forbidden-edge topology.
@@ -23,7 +21,3 @@ Visualizes that the controller's reach is deliberately bounded: 𝒞(k) ⊆ span
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-15-controllable-subspace.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-15-controllable-subspace.md (classification CURRENT).

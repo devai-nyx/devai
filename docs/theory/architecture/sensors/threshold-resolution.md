@@ -68,7 +68,3 @@ T-1's directive ("walk all 28 trilogy sensors and expose hard-coded thresholds")
 - **`test_performance_coverage.thresholds`** — formalises the previously-implicit "≥1 perf test ≥1%" boundary.
 
 Other sensors either had pack-config exposure shipped at their introduction (Phases 26 + 27 + 28) or are count-based / equality-based and have no meaningful threshold to expose.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/threshold-resolution.md (classification CURRENT).

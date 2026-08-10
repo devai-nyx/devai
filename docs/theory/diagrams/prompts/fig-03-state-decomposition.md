@@ -1,7 +1,5 @@
 # Figure 3 — State decomposition by authority + lifecycle
 
-**Source section:** devai-theory.md §3.1
-
 ## Purpose
 
 A simple but load-bearing visual: 5 colored boxes side-by-side, one per substrate. The colors carry through the entire paper, so this figure functions as the visual key.
@@ -18,7 +16,3 @@ A simple but load-bearing visual: 5 colored boxes side-by-side, one per substrat
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-03-state-decomposition.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-03-state-decomposition.md (classification CURRENT).

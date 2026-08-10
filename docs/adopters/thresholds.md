@@ -74,7 +74,3 @@ The original STYNX form lived only in `stynx/.devai/config/thresholds.json` and 
 - Schema: [`../docs/reference/contracts/thresholds.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/thresholds.schema.json)
 - DEVAI's own baseline: `.devai/config/thresholds.json` at the repo root
 - Scorecard semantics: [`scorecard.schema.json`](../../law/schemas/scorecard.schema.json)
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/thresholds.md (classification CURRENT).

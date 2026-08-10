@@ -1,7 +1,5 @@
 # Figure 16 — RGR loop with timescale callouts
 
-**Source section:** devai-theory.md §11.2
-
 ## Purpose
 
 Repeats Figure 4 (with slightly more detail in the wait-loop) emphasizing the timescale separation of the outermost loop.
@@ -20,7 +18,3 @@ Repeats Figure 4 (with slightly more detail in the wait-loop) emphasizing the ti
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-17-rgr-loop-redux.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-17-rgr-loop-redux.md (classification CURRENT).

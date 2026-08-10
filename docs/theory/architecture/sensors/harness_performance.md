@@ -27,7 +27,3 @@ Graceful degradation: when `gh` is not on PATH or auth missing, emit `status: 'u
 
 - **Per-job duration.** Aggregate workflow duration only.
 - **Resource consumption** (runner minutes, costs).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/harness_performance.md (classification CURRENT).

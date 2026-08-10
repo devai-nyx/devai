@@ -1,6 +1,7 @@
 # Evidence chain runbook
 
-**Scope:** verifying, inspecting, and recovering the hash-chained evidence log at `record/proofs/chain.json`. Per Articles 32–33 and `GE-021` (Evidence chain).
+**Scope:** verifying, inspecting, and recovering the hash-chained evidence log at
+`record/proofs/chain.json`.
 
 The evidence chain is the immutable audit trail. Every governed action emits a record with `prev_hash` + `manifest_hash`, making tampering detectable. Treat this file as append-only operationally; the only writes are by the framework (`evidence emit`, `init apply-f5 --force` provenance preservation, `evidence redact`).
 
@@ -103,10 +104,6 @@ In either case, the recovery itself emits an `evidence.recovery` event so the au
 ## See also
 
 - [`incident-playbook.md`](./incident-playbook.md) — broader gate-failure diagnostics.
-- [`local-evidence-runbook.md`](./local-evidence-runbook.md) — the local-CI-evidence mechanism that feeds this chain on a trusted verification (D-117).
+- [`local-evidence-runbook.md`](./local-evidence-runbook.md) — the local evidence
+  mechanism that feeds this chain after trusted verification.
 - Constitution Article 32 (Evidence chain), Article 33 (Provenance).
-- `GE-021` (Evidence chain), `GE-025` (Agent-run).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/ops/evidence-chain-runbook.md (classification CURRENT).

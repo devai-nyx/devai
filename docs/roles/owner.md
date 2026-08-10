@@ -9,7 +9,9 @@
 
 ## What the Owner does
 
-The Owner is the voice of _what the software is for_. The Owner writes in natural language, close to user intent. The Owner does **not** translate intent into machine-checkable invariants — that's the Architect's job (per D-7).
+The Owner is the voice of _what the software is for_. The Owner writes in natural
+language, close to user intent. The Architect translates that intent into
+machine-checkable contracts when needed.
 
 The compilation link from Owner to Architect is the `related_invariants` array on each Owner-authored artifact. The Owner says "this journey requires this invariant"; the Architect authors the invariant.
 
@@ -78,10 +80,4 @@ The compilation link from Owner to Architect is the `related_invariants` array o
 
 - [`README.md`](./README.md) — role index.
 - [`README.md`](./README.md) — current human authority overview.
-- `GE-001` (Owner).
-- D-7 (Owner tier compiles to Architect tier).
 - Constitution Article 6.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/roles/owner.md (classification CURRENT).

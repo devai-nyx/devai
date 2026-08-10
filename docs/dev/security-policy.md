@@ -19,7 +19,3 @@ The autonomous loop is experimental. Mutation requires project opt-in plus `--ex
 Secrets must enter through environment or host credential stores, never CLI arguments or committed configuration. `devai work db start shared` accepts its password only through `DEVAI_DB_PASSWORD` and emits a redacted connection URL. GitHub Packages reads require an authenticated `read:packages` token; never commit npm credentials.
 
 See [secret handling](./security/secret-handling.md), [authority enforcement](./security/authority-enforcement.md), and the [threat model](./security/threat-model.md) for the detailed controls and residual risks.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path SECURITY.md (classification STALE).

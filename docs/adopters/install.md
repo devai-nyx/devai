@@ -126,7 +126,3 @@ Both paths converge: `devai spec blueprint diff <spec> --against <repo>` compare
 - `pnpm exec devai` shows "command not found": confirm `@devai-nyx/cli` is installed in the current workspace and the GitHub Packages token has `read:packages`.
 
 Use `devai doctor` and focused checks to diagnose setup failures.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/install.md (classification CURRENT).

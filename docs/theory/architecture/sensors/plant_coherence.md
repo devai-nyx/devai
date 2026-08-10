@@ -34,7 +34,3 @@ Findings cite each incoherent directory + the buckets present.
 - **Import-graph cycles.** Already covered by the dep-graph SR (Phase 17.B-onward). A future sub-cell could refine but adds little marginal signal.
 - **Directory-naming consistency itself.** Could refine — defer.
 - **Cross-package layering rules.** Substrate-level architectural coherence is its own concern.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/plant_coherence.md (classification CURRENT).

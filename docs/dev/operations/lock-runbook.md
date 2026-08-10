@@ -91,7 +91,3 @@ See [`capacity.md`](./capacity.md). The file-lock backend scales to ~hundreds of
 
 - [`worktree-runbook.md`](./worktree-runbook.md) — worktrees and locks interact: each task with a worktree typically holds locks on its target module.
 - Constitution Article 25 (Module locking), Article 27 (Worktree discipline).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/ops/lock-runbook.md (classification CURRENT).

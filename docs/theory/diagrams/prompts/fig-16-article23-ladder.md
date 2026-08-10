@@ -1,7 +1,5 @@
 # Figure 15 — Article-23 ladder (supervisory state machine)
 
-**Source section:** devai-theory.md §7.4
-
 ## Purpose
 
 The four-tier escalation as discrete gain scheduling. Each tier is a distinct controller configuration π_i; transitions trigger on inner-loop verdicts.
@@ -20,7 +18,3 @@ The four-tier escalation as discrete gain scheduling. Each tier is a distinct co
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-16-article23-ladder.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-16-article23-ladder.md (classification CURRENT).

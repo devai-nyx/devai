@@ -113,7 +113,3 @@ Descriptors: **62**. Reading kinds: **64**.
 ## Parser boundary
 
 Pack detection and declared-only hints do not create a parser. `inventory_api` has a NestJS-shaped AST walker; Express, Laravel, and Spring AST parsers are absent. `inventory_routes` has Angular and React walkers; AngularJS and Blade parsers are absent. Those stacks require independent validation and cannot claim complete inventory support.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/reference/sensor-registry.md (classification CURRENT).

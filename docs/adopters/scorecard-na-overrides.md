@@ -126,7 +126,3 @@ The mechanism's existence is the entire story; there's no separate counter to ma
 - **Per-cell evidence in the scorecard** — even an N/A cell carries `sensor_readings: undefined` because the overlay drops them; PR review can see which cells the carve-out affected.
 
 When in doubt: **don't override**. The override should be the last resort after both "fix the defect" and "author the substrate" have been ruled out.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/scorecard-na-overrides.md (classification CURRENT).

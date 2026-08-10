@@ -175,7 +175,3 @@ Verdict mapping was formalized in D-87 (Phase 32.C). If your scorecard cell F2×
 - [D-87](../../law/adr/README.md) / [D-88](../../law/adr/README.md) — Phase 32 framing + closeout; documents the `unknown` verdict for pre-seed failures.
 - The frozen pre-v1 build-plan archive preserves the original Phase 30.F `--pre-seed` + `--role-bootstrap` design intent (I-1 closure).
 - REJ-2 in D-87 — why DEVAI doesn't couple `sense-migrate-check` to an adopter-side migration runner (layering violation).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/sense-migrate-check.md (classification CURRENT).

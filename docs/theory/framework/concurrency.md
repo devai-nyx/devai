@@ -68,7 +68,3 @@ The single-branch rule simplifies the merge graph: a task knows what it's rebasi
 - [Constitution Articles 24-28](../../reference/law.md) — the binding text.
 - [Loop](./loop.md) — how concurrency fits the cycle/iteration model.
 - [Roles → cross-role coordination](../../roles) — worked examples of triplet flow.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/concurrency.md (classification CURRENT).

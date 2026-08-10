@@ -1,7 +1,5 @@
 # Figure 13 — Prompt firewall as topology check
 
-**Source section:** devai-theory.md §4.5
-
 ## Purpose
 
 Layer 1 of the input-saturation defense: catches authority-inverting overlays _before_ the LLM is called, complementing the actuation-layer checks of Figure 10.
@@ -22,7 +20,3 @@ Layer 1 of the input-saturation defense: catches authority-inverting overlays _b
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-14-prompt-firewall.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-14-prompt-firewall.md (classification CURRENT).

@@ -28,7 +28,3 @@ If any workflow has no `on.*.paths` filter (runs on everything), the sensor shor
 
 - **Whether the workflow actually does anything meaningful for the covered paths.** That's idiomaticity/depth territory.
 - **Branch coverage** (does every branch trigger CI?). Adjacent concern; defer.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/harness_coverage.md (classification CURRENT).

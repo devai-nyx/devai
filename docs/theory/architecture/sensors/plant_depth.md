@@ -33,7 +33,3 @@ These thresholds match common "max file size" conventions (e.g. Airbnb style gui
 
 - **Cyclomatic complexity per function.** A simpler heuristic (raw LOC) gives 80% of the signal at 5% of the cost (no TS AST parse). A future `plant_depth_cyclomatic` kind could refine.
 - **Dead-code detection.** A future `plant_dead_code` kind via knip integration.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/plant_depth.md (classification CURRENT).

@@ -44,7 +44,3 @@ framework-specific jobs.
 
 The N/A-aware aggregate reports execution health separately from readiness and
 preserves UNKNOWN as non-promoting.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/ops/structural-sensor-exemptions.md (classification CURRENT).

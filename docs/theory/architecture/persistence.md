@@ -41,7 +41,3 @@ Trigger conditions for a successor D-entry:
 - The empirical cost of hand-writing migrations exceeds the benefits, measured against a real adopter survey. So far, raw SQL has been a net positive for the same adopters who would have struggled with ORM-mediated migration race conditions.
 
 A new D-entry supersedes this one; the migration directory layout stays stable across the transition for adopter sanity.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/persistence.md (classification CURRENT).

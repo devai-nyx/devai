@@ -392,6 +392,5 @@ A policy allow proves only that one resolved invocation may attempt its bounded 
 not prove the command's verdict, readiness, round closure, release eligibility, publication
 success, deployment, or evidence promotion.
 
-Canonical sources: [ADR-010](../../../law/adr/ADR-010-capabilities-and-effects.md),
-[ADR-022](../../../law/adr/ADR-022-r0007-executor-substrate.md),
-[authority policy](../../../law/policy/authority-policy.json).
+Canonical sources: [authority policy](../../../law/policy/authority-policy.json),
+[action registry](../../../law/policy/action-registry.json).

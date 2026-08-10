@@ -1,7 +1,5 @@
 # Figure 4 — RGR loop (reference-modification feedback)
 
-**Source section:** devai-theory.md §7.5
-
 ## Purpose
 
 Establishes the RGR as the outermost-feedback path that modifies r, not u — the framework's only structured way for spec drift to occur, and the most important behavioral discipline.
@@ -18,7 +16,3 @@ Establishes the RGR as the outermost-feedback path that modifies r, not u — th
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-04-rgr-loop.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-04-rgr-loop.md (classification CURRENT).

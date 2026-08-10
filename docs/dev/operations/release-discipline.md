@@ -119,7 +119,3 @@ Failed probes → observations → record persisted; `rollback_recommended: true
 - [`incident-playbook.md`](./incident-playbook.md) — what to do when `rollback_recommended: true` fires.
 - [`../../docs/theory/architecture/known-tech-debt.md`](../known-technical-debt.md) — the "build detectors" item with migration sketch.
 - [`../../reference/cli/release.md`](../../reference/cli.md) — auto-generated CLI reference; this page is the discipline doc that names what those one-liners can't.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/ops/release-discipline.md (classification CURRENT).

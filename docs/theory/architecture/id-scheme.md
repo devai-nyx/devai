@@ -51,7 +51,3 @@ A successor D-entry would be needed if:
 - The collision-resistance assumptions for content-hash IDs degrade (e.g., a hash truncation change that increases collision probability for the entity volumes DEVAI now handles).
 - Sequential allocation under parallel agent execution becomes a real bottleneck (it has not, since the per-domain partitioning keeps contention low).
 - A new entity kind doesn't fit any of the three shapes. The fallback is to pick the closest shape and document the choice in a successor entry, not invent a fourth shape.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/id-scheme.md (classification CURRENT).

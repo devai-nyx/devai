@@ -1,7 +1,5 @@
 # (Inset chip row) — Nine transversal properties
 
-**Source section:** devai-theory.md §3.3
-
 ## Purpose
 
 A horizontal chip row labelling the nine transversal properties (T1–T9). Functions as a quick reference next to the actual scorecard table.
@@ -17,7 +15,3 @@ A horizontal chip row labelling the nine transversal properties (T1–T9). Funct
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-07-scorecard-chips.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-07-scorecard-chips.md (classification CURRENT).

@@ -181,10 +181,7 @@ or tool availability remains a runtime prerequisite when declared by a selected 
   intrinsic effects, capability bases, emitters, and design-note routing.
 - [Sense-preset schema](../../../law/schemas/sense-presets.schema.json) — closed preset
   shape and round requirement.
-- [Workflow and executor decision](../../../law/adr/ADR-022-r0007-executor-substrate.md) —
+- [Sense presets](../../../law/policy/sense-presets.json) —
   effect resolution, read-only sweep, and fail-closed selection.
 - [Sense action contract](../../../law/policy/action-registry.json) — public route,
   generic ceiling, consent, and output envelope.
-
-This is the R-0007 canonical operator handoff. It does not claim complete R-0009
-narrative documentation, readiness, release, or deployment.

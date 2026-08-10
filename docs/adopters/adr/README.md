@@ -82,7 +82,3 @@ DEVAI itself uses the same `law/adr/` record family for both `D-NNN` governance 
 - Contracts authoring (breaking changes trigger a new ADR): [`../../docs/reference/contracts/README.md`](../../reference/contracts/README.md).
 - Identifier convention: [CONVENTIONS.md](../CONVENTIONS.md) §5.
 - Docs layout: [`../docs-layout.md`](../docs-layout.md).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/adr/README.md (classification CURRENT).

@@ -1,7 +1,5 @@
 # Figure 18 — Task lifecycle state machine
 
-**Source section:** devai-theory.md §9
-
 ## Purpose
 
 Per-task linearizable state machine over the lifecycle. Reads bottom-to-top as an L-shape with branches for RGR / cancellation / escalation off the in-progress state.
@@ -20,7 +18,3 @@ Per-task linearizable state machine over the lifecycle. Reads bottom-to-top as a
 Authored via `docs/theory/diagrams/render-figures.py::see file`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-19-task-lifecycle.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-19-task-lifecycle.md (classification CURRENT).

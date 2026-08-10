@@ -84,7 +84,3 @@ No current trigger fires for either rollback.
 - [`db-isolation.md`](./db-isolation.md) — how per-task databases are provisioned when the gated tests run.
 - [`../../docs/theory/architecture/test-weakening.md`](../../theory/architecture/test-weakening.md) — the detector that ensures tests don't silently degrade.
 - [`incident-playbook.md`](./incident-playbook.md) — diagnosing "tests failing in CI but passing locally" symptoms.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/ops/testing.md (classification CURRENT).

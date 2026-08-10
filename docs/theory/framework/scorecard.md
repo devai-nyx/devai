@@ -89,8 +89,3 @@ A merge requires Cycle B clean; the post-merge Cycle C runs after.
 - [Constitution Articles 17 + 18 + 23](../../reference/law.md) — gates and tie-breakers.
 - [Loop](./loop.md) — the three cycles in operational detail.
 - [Aspect grid](./aspect-grid.md) — the cell-by-cell sensor mapping.
-- [Self-scorecard](../../start/status.md) — DEVAI's own scorecard at last sweep.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/scorecard.md (classification CURRENT).

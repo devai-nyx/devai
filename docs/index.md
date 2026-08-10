@@ -16,9 +16,8 @@ predecessor's evidence standing.
 - [Adopter guidance](adopters/)
 - [Contributor runbooks](dev/)
 - [Reference](reference/)
-- [History and genesis](reference/history.md)
 
 Everything remains **draft** until the founding ratification round completes.
-Current standing is described on the [status page](start/status.md); the
-[History](reference/history.md) page records the provisional predecessor
+Current commands are described in the [CLI reference](reference/cli/index.md); the
+[recipe reference](reference/recipes/README.md) records the bounded host surface.
 binding without treating it as readiness evidence.

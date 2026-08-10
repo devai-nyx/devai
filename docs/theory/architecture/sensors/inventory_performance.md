@@ -35,7 +35,3 @@ If no inventory SRs exist (adopter hasn't run sense-inventory-* yet): `status='r
 - **Per-sensor wall-clock budgets.** Per-kind p95 is exposed in `metrics` but doesn't drive PASS/REVIEW/FAIL on its own; only the overall p95 does.
 - **Memory/CPU profiling.** Wall-clock only.
 - **Trend analysis over time.** Single-snapshot only.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/inventory_performance.md (classification CURRENT).

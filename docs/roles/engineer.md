@@ -10,9 +10,11 @@
 
 ## What the Engineer does
 
-The Engineer writes code that **satisfies Architect-authored invariants**. The Engineer's authority is over the plant (`GE-007` / F2), not over the reference signal (`GE-006` / F1) or the sensors (`GE-008` / F3).
+The Engineer writes code that satisfies the declared product and engineering
+contracts.
 
-When the spec is silent, contradictory, or unclear, the Engineer does **not** guess — the Engineer emits an RGR (Reference Gap Report, `GE-018`) and pauses on it. This is the only allowed escalation path back to the Architect for semantic clarification.
+When the specification is silent, contradictory, or unclear, the Engineer pauses the
+task and records the question for the responsible human.
 
 ## A typical day
 
@@ -87,7 +89,7 @@ When the spec is silent, contradictory, or unclear, the Engineer does **not** gu
 
 | Pattern                                                          | Why bad                                                                                            |
 | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Editing a test file to make it pass                              | Sensor weakening. Tests are sensors (D-1, Article 39). Refused at the tool layer.                  |
+| Editing a test file only to make it pass                         | Sensor weakening. Tests must continue to verify the intended behavior.                             |
 | Editing an invariant because the code is "obviously right"       | Cross-role. The harness will refuse; if the harness somehow allowed it, the PR review will reject. |
 | Adding code without a named invariant claim                      | Code without a spec is plant without setpoint. Author the invariant first (escalate to Architect). |
 | Sprinkling `inv-override` annotations to silence findings        | Override expires; tech debt accumulates. Fix the code or amend the invariant.                      |
@@ -130,10 +132,5 @@ When the spec is silent, contradictory, or unclear, the Engineer does **not** gu
 
 - [`README.md`](./README.md) — role index.
 - [`README.md`](./README.md) — current human authority overview.
-- `GE-003` (Engineer), `GE-018` (RGR), `GE-017` (Task).
 - Constitution Articles 6 (Authority), 19 (Escalation), 25 (Module locking), 27 (Worktree discipline).
 - [`../meta/ops/worktree-runbook.md`](../dev/operations/worktree-runbook.md).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/roles/engineer.md (classification CURRENT).

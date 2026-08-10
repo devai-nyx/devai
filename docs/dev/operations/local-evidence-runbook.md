@@ -88,9 +88,5 @@ A trusted `gate`-mode verification (or a `strict`-mode local check) appends a `l
 ## See also
 
 - [`evidence-chain-runbook.md`](./evidence-chain-runbook.md) — the canonical Article 32 chain this mechanism feeds.
-- `law/adr/ADR-CI-ECONOMY.md` — the originating law (Decisions 1–3).
-- D-117 (`law/register/DECISIONS.md`) — the promotion decision.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/ops/local-evidence-runbook.md (classification CURRENT).
+- [CLI reference](../../reference/cli/index.md) — current command surface and
+  contracts.

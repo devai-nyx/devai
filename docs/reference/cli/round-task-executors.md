@@ -391,6 +391,5 @@ Successful task dispatch proves only the recorded execution attempt and verdict 
 candidate. It does not by itself close the round, publish evidence, establish release eligibility,
 or authorize deployment.
 
-Canonical sources: [ADR-022](../../../law/adr/ADR-022-r0007-executor-substrate.md),
-[round-execution policy](../../../law/policy/round-execution.json),
-[R-0007 plan](../../../work/rounds/R-0007/plan.md).
+Canonical sources: [round execution policy](../../../law/policy/round-execution.json),
+[task execution schema](../../../law/schemas/task-execution-evidence.schema.json).

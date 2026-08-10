@@ -78,7 +78,3 @@ empty section is not.
 - Predecessors / superseded by: links here
 - External: issues, RFCs, papers
 -->
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/adr/TEMPLATE.md (classification CURRENT).

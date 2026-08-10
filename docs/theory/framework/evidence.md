@@ -70,7 +70,3 @@ Scorecard composition is polymorphic over sensor types via this contract — the
 - [Constitution Articles 32, 38](../../reference/law.md) — sensor adapter uniformity, JSON canon.
 - [Persistence design note](../architecture/persistence.md) — operational detail on chain storage + rotation.
 - [Security](../../dev/security) — threat model, audit requirements, secret-handling.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/evidence.md (classification CURRENT).

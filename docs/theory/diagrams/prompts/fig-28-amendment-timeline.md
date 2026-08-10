@@ -1,7 +1,5 @@
 # Figure 28 — Constitutional amendment timeline
 
-**Source section:** devai-theory.md §10.3
-
 ## Purpose
 
 The amendment history 0.1.1 → 0.6.0 as a case-law timeline, one holding per version.
@@ -18,7 +16,3 @@ The amendment history 0.1.1 → 0.6.0 as a case-law timeline, one holding per ve
 Authored via `docs/theory/diagrams/render-figures.py::fig28_amendment_timeline`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-28-amendment-timeline.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-28-amendment-timeline.md (classification CURRENT).

@@ -41,7 +41,3 @@ Pick by purpose:
 ## Adopter contract anchor
 
 Every page in §3 describes a property of DEVAI that holds for _every_ adopter that runs the framework. If a property is DEVAI-specific (e.g., "DEVAI's self-scorecard shows 35 PASS / 2 FAIL"), it lives in §7 Meta, not here.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/index.md (classification STALE).

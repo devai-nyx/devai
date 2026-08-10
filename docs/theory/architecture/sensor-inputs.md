@@ -51,7 +51,3 @@ The output belongs only to `sense run --incremental --dry-run`. R26 does not
 change SensorReading, skip a sensor, populate a cache, or persist replay
 provenance. Those boundaries are required by Articles 17, 36, and 39 and by
 D-161's single-schema ruling.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensor-inputs.md (classification CURRENT).

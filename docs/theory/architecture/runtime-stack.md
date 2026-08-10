@@ -59,7 +59,3 @@ Each row is independently revisitable:
 - **`ajv` → something else:** triggered only if JSON Schema Draft 2020-12 support drops or a meaningfully faster validator emerges. Currently no trigger.
 
 Per the soft framing of D-29, any row can be revisited with a new D-entry without constitutional impact.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/runtime-stack.md (classification CURRENT).

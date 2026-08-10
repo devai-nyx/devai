@@ -106,7 +106,3 @@ will be promoted to `stable` and the compat rules become binding.
 - Predecessor contracts
 - External standards (RFC, ISO, ecosystem conventions)
 -->
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/contracts/TEMPLATE.md (classification CURRENT).

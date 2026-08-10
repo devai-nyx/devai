@@ -27,7 +27,3 @@ Graceful degradation: same gh-unavailable contract as 28.G + 26.K.
 
 - **Specific failure causes.** This sensor measures rate, not root cause.
 - **Job-level flakiness** (one job flaky in an otherwise-green run). Aggregate workflow level only.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/harness_robustness.md (classification CURRENT).

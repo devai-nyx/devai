@@ -29,7 +29,7 @@ DEVAI ships six vitest configurations. Each probes the plant at a different leve
 - **Purpose.** DB-gated subprocess tests that walk the CLI surface end-to-end.
 - **Gating.** Ordinary CI is deterministic. Live DB and real-provider cases use explicit environment opt-ins; real LLM cases run only when `DEVAI_LLM_TESTS=1`.
 - **Timing.** Measured by the current CI/test-matrix evidence; provider and DB opt-ins materially change it.
-- **Coverage caveat.** Per [Phase 37 finding](../../dev/round-ledger.md), the integration suite is the **only** suite that produces realistic CLI coverage; the unit suite under-measures because it doesn't capture subprocess-spawned CLI execution.
+- **Coverage caveat.** Integration tests produce the most realistic CLI coverage because unit tests do not capture every subprocess-spawned CLI execution.
 - **When it runs.** Cycle B at every merge attempt; CI on every push (via `pnpm test:coverage:integration` for merged unit+integration coverage).
 
 ### E2E (`vitest.e2e.config.ts`)
@@ -135,7 +135,3 @@ The four CI-gate commands required locally before every commit:
 - [Constitution Articles 29-31](../../reference/law.md) — sensor, weakening, quarantine.
 - [Scorecard](./scorecard.md) — verdict semantics + thresholds.
 - [`meta/test-matrix`](../../dev/index.md) — DEVAI's own current suite measurements.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/test-policy.md (classification CURRENT).

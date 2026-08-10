@@ -88,7 +88,3 @@ A successor D-entry would be needed if:
 - Filesystem-snapshot isolation becomes operationally viable on macOS (e.g., via APFS clone semantics that Postgres can leverage). Currently the macOS-host requirement keeps snapshot modes off-the-table.
 - The template rebuild cost grows enough to be the binding overhead (currently it's well below a minute for the canonical reference repo).
 - A consistent need for cluster-isolation across most tasks emerges, shifting the default. Currently `cluster` is rare enough to remain opt-in.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/ops/db-isolation.md (classification CURRENT).

@@ -106,10 +106,5 @@ change the R21 read-only observation contract.
 ## See also
 
 - [Aspect grid](../theory/framework/aspect-grid.md) — generated cell × sensor table.
-- [Self-scorecard](../start/status.md) — exact-input projection contract; no current verdict is implied by the link itself.
 - [docs/theory/architecture/sensors](../theory/architecture/sensors) — full per-sensor design notes.
 - [CLI](./cli.md) — auto-generated CLI reference; every `sense-*` verb has its options listed.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/reference/sensors-quick-ref.md (classification CURRENT).

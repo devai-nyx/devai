@@ -105,7 +105,3 @@ Every `docs/reference/contracts/README.md` lists its contracts in an index. Samp
 - Docs layout: [`../docs-layout.md`](../docs-layout.md).
 - Database DDL conventions: [`../database-layout.md`](../database-layout.md).
 - DEVAI's R1 cross-repo contracts: [`../../docs/reference/contracts/`](../../reference/contracts) (test-result, thresholds, evidence-chain, inventory).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/contracts/README.md (classification CURRENT).

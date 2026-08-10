@@ -32,7 +32,3 @@ Compute:
 
 - **Test naming style.** Already covered by 27.H `test_coherence`.
 - **Pattern catalogues** (page-object, builder-pattern). Adopter-specific; defer.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/test_idiomaticity.md (classification CURRENT).

@@ -36,7 +36,3 @@ The forward direction is hard-fail because stale spec is a correctness problem (
 - **Per-claim verification of _semantic_ alignment** (does the file actually implement what the invariant says?). That requires an LLM judge and is deferred to a future `spec_alignment_judge` kind in Phase 29+.
 - **Test alignment** (do tests claim invariants in `trace.json`?). That's F3×T4 already covered by `test_invariant_alignment` (26.G).
 - **Cross-cell aggregation.** Per-cell only; the scorecard rolls up.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/spec_alignment.md (classification CURRENT).

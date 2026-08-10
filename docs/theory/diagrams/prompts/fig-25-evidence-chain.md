@@ -1,7 +1,5 @@
 # Figure 25 — Evidence chain and dark promotion
 
-**Source section:** devai-theory.md §8
-
 ## Purpose
 
 Two lanes of the rule of written record: the hash-chained ledger, and the three-beat dark-promotion arc for Actions-run evidence.
@@ -18,7 +16,3 @@ Two lanes of the rule of written record: the hash-chained ledger, and the three-
 Authored via `docs/theory/diagrams/render-figures.py::fig25_evidence_chain`.
 Re-rendering: `python3 docs/theory/diagrams/render-figures.py`.
 Output: `docs/theory/diagrams/svg/fig-25-evidence-chain.svg`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/diagrams/prompts/fig-25-evidence-chain.md (classification CURRENT).

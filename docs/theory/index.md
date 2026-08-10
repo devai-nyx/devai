@@ -6,30 +6,14 @@ slug: /theory
 
 # Theory
 
-> DEVAI uses two vocabularies literally, not metaphorically: the vocabulary of
-> **feedback control** (Articles 1–3) and the vocabulary of **constitutional
-> law** (the Constitution itself, Article 40). The control framing dictates how
-> authority is allocated, how concurrency is mediated, how failures are routed,
-> and how convergence is gated; the legal framing makes those constraints
-> legible, amendable only by due process, and enforceable by an independent
-> observer.
+DEVAI treats software delivery as a feedback loop: product contracts state the
+target, implementation changes the system, tests and sensors observe it, and
+evidence records what was actually verified.
 
-## The canonical treatment
+## Framework
 
-The complete theoretical framework lives in one maintained document:
-
-**[`devai-theory.md`](./devai-theory.md)** — the unified treatment (~90-minute
-full read; chapters are self-contained). It develops the architecture through
-both framings in parallel, condenses the formal discrete-time MIMO model for
-control engineers (Chapter 11), records the provenance of the design and its
-rejected alternatives (Appendix C), and carries 28 figures rendered from the
-committed sources under `docs/theory/diagrams/`. A PDF can be built with
-`bash docs/theory/build/build-theory.sh`.
-
-It supersedes the three historical papers formerly kept under
-`docs/theory/papers/` (the two-orchestra predecessor and the two Phase-13
-snapshots, retired per D-166); their final texts remain in git history,
-anchored in the document's Appendix C.
+The [framework index](./framework.md) explains the current product concepts and
+links to the focused reference pages.
 
 ## The metaphor map, at a glance
 
@@ -59,7 +43,3 @@ anchored in the document's Appendix C.
 - The Constitution itself: [`framework/constitution`](../reference/law.md). Forty articles; cite by number.
 - The scorecard mechanics: [`framework/scorecard`](./framework/scorecard.md).
 - The supported and experimental loop boundaries: [`framework/loop`](./framework/loop.md).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/theory/index.md (classification CURRENT).

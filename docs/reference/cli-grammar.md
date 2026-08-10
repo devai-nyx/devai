@@ -76,7 +76,3 @@ A successor D-entry would be needed if:
 - The noun catalog itself proves unstable — e.g., if two nouns repeatedly produce ambiguous placement for new commands. So far the substrate-matching has kept noun choice deterministic.
 - Three-level nesting becomes load-bearing. This would imply a substrate is large enough to warrant its own sub-grouping, which would also indicate that substrate should probably be a separate framework, not a nested area of DEVAI.
 - The flat verb-noun pattern proves measurably easier in adopter usability tests. No evidence currently supports this.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/cli-grammar.md (classification STALE).

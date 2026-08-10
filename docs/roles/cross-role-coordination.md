@@ -109,7 +109,3 @@ Triplets are the pattern for **deliberate cross-substrate change**, not for fail
 - [Constitution Articles 24-26](../reference/law.md) — binding text.
 - [Loop](../theory/framework/loop.md) — how triplets interact with cycle stages.
 - [Concurrency](../theory/framework/concurrency.md) — locks, worktrees, pipelined rebase mechanics.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/roles/cross-role-coordination.md (classification CURRENT).

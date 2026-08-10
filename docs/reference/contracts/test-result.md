@@ -194,7 +194,3 @@ This split is deliberate. The chain is append-only and hash-linked; the result f
 - Schema: [`docs/reference/contracts/test-result.schema.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/test-result.schema.json) in DEVAI.
 - Sample: [`docs/reference/contracts/examples/test-result-example.json`](https://github.com/devai-nyx/devai/blob/d76cd12d2241a1a28a32a0fe629c6531da7fe74d/docs/framework/contracts/examples/test-result-example.json).
 - Consumers will move into the `devai` CLI in DEVAI R2; today they live in STYNX `scripts/`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/contracts/test-result.md (classification CURRENT).

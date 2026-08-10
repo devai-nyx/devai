@@ -33,7 +33,7 @@ What the system protects:
 | ------------------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
 | Five-role authority chain            | Fail-closed role, policy, resource, plan, and final-adapter enforcement inside DEVAI CLI/runtime | Articles 6–10, D-135, [`authority-enforcement.md`](./authority-enforcement.md) |
 | Tests are sensors, not malleable     | Test-weakening detection                                                                         | Article 39, Phase 4                                                            |
-| Spec drift is reviewable, not silent | RGR escalation path                                                                              | Article 19, [`GE-018`](../../../law/glossary/GE-018.json)                      |
+| Spec drift is reviewable, not silent | Explicit human review                                                                            | [`Constitution`](../../../law/constitution.md)                                 |
 | Tamper-evident audit                 | Hash-chained evidence                                                                            | [`security overview`](./README.md)                                             |
 | Runtime command safety               | Forbidden actions registry                                                                       | [`security overview`](./README.md)                                             |
 | Override audit trail                 | `inv-override` annotation with expires/approver                                                  | Phase 10.B, [`inv-override-discipline.md`](./inv-override-discipline.md)       |
@@ -79,7 +79,3 @@ If you need to defend against any of these, layer additional controls outside DE
 - [`authority-enforcement.md`](./authority-enforcement.md)
 - [`README.md`](./README.md)
 - Constitution Articles 6 (Authority), 14 (Security-sensitive change policy), 19 (Escalation), 32–33 (Evidence), 39 (Tests as sensors), 40 (Amendment process).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/meta/security/threat-model.md (classification CURRENT).

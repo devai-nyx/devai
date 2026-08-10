@@ -30,7 +30,3 @@ Perf testing is rarer than security testing in most codebases; thresholds reflec
 
 - **Perf test quality.** Whether perf assertions actually catch regressions is downstream.
 - **Continuous perf monitoring.** F5 concern.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/test_performance_coverage.md (classification CURRENT).
