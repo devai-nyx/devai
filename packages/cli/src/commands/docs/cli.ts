@@ -133,12 +133,7 @@ function renderIndex(actions: readonly ActionEntry[]): string {
   lines.push('');
   lines.push('## See also');
   lines.push('');
-  lines.push(
-    '- [`../../adopters/user-guide.md`](../../adopters/user-guide.md) — narrative introduction.',
-  );
-  lines.push(
-    '- [`../../adopters/adoption.md`](../../adopters/adoption.md) — adopting DEVAI in a fresh client repo.',
-  );
+  lines.push('- [`../recipes/README.md`](../recipes/README.md) — canonical host recipe surface.');
   lines.push('- [`../../roles/`](../../roles/) — which role is allowed to invoke which actions.');
   lines.push('- `devai catalog actions --format human` — live enumeration from the registry.');
   lines.push('');

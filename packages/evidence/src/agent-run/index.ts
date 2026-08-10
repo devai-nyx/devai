@@ -24,7 +24,7 @@ import {
  */
 
 export interface AgentRunCaller {
-  readonly kind: 'skill' | 'sense' | 'loop' | 'cli' | 'subagent';
+  readonly kind: 'recipe' | 'sense' | 'loop' | 'cli' | 'subagent';
   readonly name: string;
   readonly version?: string;
 }

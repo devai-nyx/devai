@@ -150,7 +150,8 @@ describe('task-execution evidence acceptance', () => {
       runtime: 'codex-cli',
       model: 'gpt-5.6-sol',
       effort: 'xhigh',
-      skill_id: 'SKILL-round-execute',
+      recipe_name: 'devai-round',
+      recipe_variant: 'run',
       prompt_composition_id: 'PROMPT-7105',
       selection: { mode: 'exact', registry_id: 'codex-cli:gpt-5.6-sol' },
     });
@@ -164,7 +165,8 @@ describe('task-execution evidence acceptance', () => {
           runtime: 'codex-cli',
           model: 'gpt-5.6-sol',
           effort: 'xhigh',
-          skill_id: 'SKILL-round-execute',
+          recipe_name: 'devai-round',
+          recipe_variant: 'run',
         },
         {
           selection: {
@@ -203,7 +205,8 @@ describe('task-execution evidence acceptance', () => {
       runtime: 'codex-cli',
       model: 'gpt-5.6-sol',
       effort: 'high',
-      skill_id: null,
+      recipe_name: null,
+      recipe_variant: null,
     } as const;
     const provider = {
       prompt: { prompt_composition_id: 'PROMPT-7201', prompt_sha256: 'f'.repeat(64) },

@@ -5,7 +5,7 @@ import { assessScorecard, computeScorecard } from '../../src/loop/scorecard.js';
 import type { SensorReading } from '@devai-nyx/sensors';
 
 /**
- * Phase 22.F (closes D-A-16): `SKILL-assess-state` narrative
+ * Assessment narrative coverage.
  * gains an actionable-advice paragraph when the scorecard is
  * heavily UNKNOWN (more than half of cells).
  *

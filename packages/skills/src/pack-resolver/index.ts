@@ -38,23 +38,6 @@ export interface StackAdapterDetectSignal {
   readonly weight?: number;
 }
 
-export interface StackAdapterPromptOverlay {
-  readonly layer: 'global' | 'role' | 'task' | 'payload' | 'overlay';
-  readonly name: string;
-  readonly body: string;
-  /**
-   * P3.10: 'append' (default) appends the component alongside the
-   * writer's own contribution; 'replace_layer' removes the writer's
-   * own namespaced component for `layer` (the `${skill_id}.${layer}`
-   * entry) before appending. Shared writer components
-   * (writer.output-contract, the word-budget entry) survive
-   * regardless. Used by stack packs whose stack idiom contradicts
-   * the default global (e.g. Laravel-Blade vs the OO controller
-   * grouping rule).
-   */
-  readonly mode?: 'append' | 'replace_layer';
-}
-
 export interface StackAdapterPack {
   readonly schemaVersion: '1.0.0';
   readonly id: string;
@@ -71,7 +54,6 @@ export interface StackAdapterPack {
     readonly priority?: number;
   };
   readonly extractor_params?: Readonly<Record<string, unknown>>;
-  readonly prompt_overlays?: Readonly<Record<string, readonly StackAdapterPromptOverlay[]>>;
   readonly seed_invariants?: readonly string[];
   readonly tags?: readonly string[];
   readonly notes?: string;

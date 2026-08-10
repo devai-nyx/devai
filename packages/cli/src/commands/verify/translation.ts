@@ -11,7 +11,7 @@ import {
   evaluateTranslationFrames,
   provisionValidationDatabase,
   recoverValidationLeases,
-  resolveSkillRecordPath,
+  resolveRecipeRecordPath,
   runLinuxIsolated,
 } from '#core-compat';
 import {
@@ -46,7 +46,8 @@ interface TestRef {
 interface TranslationWitness {
   readonly id: string;
   readonly task_id: string;
-  readonly skill_id: string;
+  readonly recipe_name: string;
+  readonly recipe_variant: string;
   readonly base_sha: string;
   readonly candidate_sha: string;
   readonly test_overlay_sha?: string;
@@ -584,16 +585,17 @@ export async function executeTranslationValidation(
     trace,
     refs,
   });
-  const skillRecordPath = resolveSkillRecordPath({
+  const recipeRecordPath = resolveRecipeRecordPath({
     repo_root: repoRoot,
-    skill_id: witness.skill_id,
+    recipe_name: witness.recipe_name,
+    recipe_variant: witness.recipe_variant,
     witness_id: witness.id,
   });
-  const skillRecord = json(resolve(repoRoot, skillRecordPath)) as {
+  const recipeRecord = json(resolve(repoRoot, recipeRecordPath)) as {
     readonly evidence?: { readonly translation_witness?: unknown };
   };
-  if (!isDeepStrictEqual(skillRecord.evidence?.translation_witness, rawWitness)) {
-    throw new Error('TRANSLATION_SKILL_RECORD_WITNESS_MISMATCH');
+  if (!isDeepStrictEqual(recipeRecord.evidence?.translation_witness, rawWitness)) {
+    throw new Error('TRANSLATION_RECIPE_RECORD_WITNESS_MISMATCH');
   }
   requireGit(repoRoot, ['cat-file', '-e', `${witness.base_sha}^{commit}`], 'BASE_OBJECT_INVALID');
   requireGit(
@@ -730,7 +732,7 @@ export async function executeTranslationValidation(
   });
   const lifecycleEvents: StateChange[] = [
     { path: relative(repoRoot, leasePath), operation: 'create' },
-    { path: skillRecordPath, operation: 'append' },
+    { path: recipeRecordPath, operation: 'append' },
   ];
 
   let databaseCreated = false;
@@ -861,8 +863,9 @@ export async function executeTranslationValidation(
       validation_id: validationId,
       witness_id: witness.id,
       lease_id: leaseId,
-      skill_id: witness.skill_id,
-      skill_record_path: skillRecordPath,
+      recipe_name: witness.recipe_name,
+      recipe_variant: witness.recipe_variant,
+      recipe_record_path: recipeRecordPath,
     }),
     ...recovery.recovered.map((recoveredLeaseId) => ({
       path: `.devai/state/translation-validation/leases/${recoveredLeaseId}.json`,
@@ -1011,7 +1014,8 @@ export async function executeTranslationValidation(
     id: validationId,
     witness_id: witness.id,
     task_id: witness.task_id,
-    skill_id: witness.skill_id,
+    recipe_name: witness.recipe_name,
+    recipe_variant: witness.recipe_variant,
     base_sha: witness.base_sha,
     candidate_sha: witness.candidate_sha,
     ...(witness.test_overlay_sha === undefined

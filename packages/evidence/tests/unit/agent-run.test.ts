@@ -43,7 +43,7 @@ describe('agent-run proof records', () => {
     await withAuthorityHostTestScope(() => {
       const first = emitAgentRun({
         repoRoot: repo,
-        caller: { kind: 'skill', name: 'fixture', version: '1.0.0' },
+        caller: { kind: 'recipe', name: 'devai-fix', version: '1.0.0' },
         started_at: '2026-07-24T10:00:00.000Z',
         ended_at: '2026-07-24T10:00:01.000Z',
         files_read: ['law/constitution.md'],

@@ -6,10 +6,9 @@ import {
   buildExpectedDiffManifest,
   classifyTranslationPath,
   createTranslationWitness,
-  deriveMutatingLlmSkillIds,
   evaluateTranslationFrames,
   recoverValidationLeases,
-  resolveSkillRecordPath,
+  resolveRecipeRecordPath,
   validateInvariantStrategies,
 } from '../../packages/spec/src/translation-validation/index.js';
 
@@ -65,7 +64,8 @@ function frameStatus(result: ReturnType<typeof evaluateTranslationFrames>, name:
 describe('R28 independent translation validation red contracts', () => {
   it('emits a typed untrusted witness while fixing runtime-owned identity and authority fields', () => {
     const witness = createTranslationWitness({
-      skill_id: 'SKILL-feedback-iteration',
+      recipe_name: 'devai-fix',
+      recipe_variant: 'test',
       authority_role: 'engineer',
       emitted_at: '2026-07-20T20:00:00.000Z',
       claim: {
@@ -117,7 +117,8 @@ describe('R28 independent translation validation red contracts', () => {
     expect(witness).toMatchObject({
       schemaVersion: '1.0.0',
       trust: 'untrusted-claim',
-      skill_id: 'SKILL-feedback-iteration',
+      recipe_name: 'devai-fix',
+      recipe_variant: 'test',
       frame: { authority_role: 'engineer' },
     });
     expect(witness['id']).toMatch(/^TW-[a-f0-9]{16}$/u);
@@ -388,29 +389,16 @@ describe('R28 independent translation validation red contracts', () => {
     expect(frameStatus(result, 'strategy-coverage')).toBe('FAIL');
   });
 
-  it('derives the mutating LLM population from both registry predicates', () => {
-    expect(
-      deriveMutatingLlmSkillIds([
-        { id: 'SKILL-mutating', llm_backed: true, host_mutation_policy: 'write_requires_flag' },
-        {
-          id: 'SKILL-deterministic',
-          llm_backed: false,
-          host_mutation_policy: 'write_requires_flag',
-        },
-        { id: 'SKILL-review', llm_backed: true, host_mutation_policy: 'evidence_only' },
-      ]),
-    ).toEqual(['SKILL-mutating']);
-  });
-
   it('derives exact trusted state paths and excludes caller-selected extras', () => {
     expect(
       buildExpectedDiffManifest({
         validation_id: 'VR-0123456789abcdef',
         witness_id: 'TW-0123456789abcdef',
         lease_id: 'TVL-0123456789abcdef',
-        skill_id: 'SKILL-feedback-iteration',
-        skill_record_path:
-          'record/proofs/work/skill-runs/SKILL-feedback-iteration/2026-07-20T20-00-00-000Z.json',
+        recipe_name: 'devai-fix',
+        recipe_variant: 'test',
+        recipe_record_path:
+          'record/proofs/work/recipe-runs/devai-fix/test/2026-07-20T20-00-00-000Z.json',
       }),
     ).toEqual([
       {
@@ -430,7 +418,7 @@ describe('R28 independent translation validation red contracts', () => {
         operation: 'create',
       },
       {
-        path: 'record/proofs/work/skill-runs/SKILL-feedback-iteration/2026-07-20T20-00-00-000Z.json',
+        path: 'record/proofs/work/recipe-runs/devai-fix/test/2026-07-20T20-00-00-000Z.json',
         operation: 'append',
       },
       {
@@ -440,15 +428,16 @@ describe('R28 independent translation validation red contracts', () => {
     ]);
   });
 
-  it('resolves one existing skill record by embedded witness content, never caller path', () => {
-    const repoRoot = mkdtempSync(join(tmpdir(), 'devai-r28-skill-record-'));
-    const directory = join(repoRoot, 'record/proofs/work/skill-runs/SKILL-feedback-iteration');
+  it('resolves one existing recipe record by embedded witness content, never caller path', () => {
+    const repoRoot = mkdtempSync(join(tmpdir(), 'devai-r28-recipe-record-'));
+    const directory = join(repoRoot, 'record/proofs/work/recipe-runs/devai-fix/test');
     const translationWitness = {
       schemaVersion: '1.0.0',
       id: 'TW-0123456789abcdef',
       trust: 'untrusted-claim',
       task_id: 'TASK-0028',
-      skill_id: 'SKILL-feedback-iteration',
+      recipe_name: 'devai-fix',
+      recipe_variant: 'test',
       stage: 'invariants-tests-to-code',
       base_sha: 'a'.repeat(40),
       candidate_sha: 'b'.repeat(40),
@@ -499,67 +488,71 @@ describe('R28 independent translation validation red contracts', () => {
       writeFileSync(
         join(directory, 'failed.json'),
         JSON.stringify({
-          skill_id: 'SKILL-feedback-iteration',
+          recipe_name: 'devai-fix',
+          recipe_variant: 'test',
           status: 'fail',
           evidence: { translation_witness: translationWitness },
         }),
       );
       expect(() =>
-        resolveSkillRecordPath({
+        resolveRecipeRecordPath({
           repo_root: repoRoot,
-          skill_id: 'SKILL-feedback-iteration',
+          recipe_name: 'devai-fix',
+          recipe_variant: 'test',
           witness_id: 'TW-0123456789abcdef',
         }),
-      ).toThrow(/SKILL_RECORD_NOT_FOUND/u);
+      ).toThrow(/RECIPE_RECORD_NOT_FOUND/u);
       writeFileSync(
         join(directory, '2026-07-20T20-00-00-000Z.json'),
         JSON.stringify({
-          skill_id: 'SKILL-feedback-iteration',
+          recipe_name: 'devai-fix',
+          recipe_variant: 'test',
           status: 'pass',
           evidence: { translation_witness: translationWitness },
         }),
       );
       expect(
-        resolveSkillRecordPath({
+        resolveRecipeRecordPath({
           repo_root: repoRoot,
-          skill_id: 'SKILL-feedback-iteration',
+          recipe_name: 'devai-fix',
+          recipe_variant: 'test',
           witness_id: 'TW-0123456789abcdef',
         }),
-      ).toBe(
-        'record/proofs/work/skill-runs/SKILL-feedback-iteration/2026-07-20T20-00-00-000Z.json',
-      );
+      ).toBe('record/proofs/work/recipe-runs/devai-fix/test/2026-07-20T20-00-00-000Z.json');
       writeFileSync(
         join(directory, 'malformed-lookalike.json'),
         JSON.stringify({
-          skill_id: 'SKILL-feedback-iteration',
+          recipe_name: 'devai-fix',
+          recipe_variant: 'test',
           status: 'pass',
           evidence: { translation_witness: { id: 'TW-0123456789abcdef' } },
         }),
       );
       expect(
-        resolveSkillRecordPath({
+        resolveRecipeRecordPath({
           repo_root: repoRoot,
-          skill_id: 'SKILL-feedback-iteration',
+          recipe_name: 'devai-fix',
+          recipe_variant: 'test',
           witness_id: 'TW-0123456789abcdef',
         }),
-      ).toBe(
-        'record/proofs/work/skill-runs/SKILL-feedback-iteration/2026-07-20T20-00-00-000Z.json',
-      );
+      ).toBe('record/proofs/work/recipe-runs/devai-fix/test/2026-07-20T20-00-00-000Z.json');
       writeFileSync(
         join(directory, 'duplicate.json'),
         JSON.stringify({
-          skill_id: 'SKILL-feedback-iteration',
+          recipe_name: 'devai-fix',
+          recipe_variant: 'test',
           status: 'pass',
           evidence: { translation_witness: translationWitness },
         }),
       );
       expect(() =>
-        resolveSkillRecordPath({
+        resolveRecipeRecordPath({
           repo_root: repoRoot,
-          skill_id: 'SKILL-feedback-iteration',
+          recipe_name: 'devai-fix',
+          recipe_variant: 'test',
           witness_id: 'TW-0123456789abcdef',
         }),
-      ).toThrow(/SKILL_RECORD_NOT_UNIQUE/u);
+      ).toThrow(/RECIPE_RECORD_NOT_UNIQUE/u);
     } finally {
       rmSync(repoRoot, { recursive: true, force: true });
     }

@@ -10,7 +10,8 @@
     "id",
     "witness_id",
     "task_id",
-    "skill_id",
+    "recipe_name",
+    "recipe_variant",
     "base_sha",
     "candidate_sha",
     "strategy",
@@ -43,9 +44,20 @@
       "type": "string",
       "pattern": "^TASK-[0-9]{4,}$"
     },
-    "skill_id": {
+    "recipe_name": {
+      "enum": [
+        "devai-assess",
+        "devai-plan",
+        "devai-fix",
+        "devai-docs",
+        "devai-scaffold",
+        "devai-verify",
+        "devai-round"
+      ]
+    },
+    "recipe_variant": {
       "type": "string",
-      "pattern": "^SKILL-[a-z][a-z0-9-]*$"
+      "pattern": "^[a-z][a-z0-9-]*$"
     },
     "base_sha": {
       "$ref": "#/$defs/gitSha"
@@ -492,7 +504,8 @@
       "id": "VR-0123456789abcdef",
       "witness_id": "TW-0123456789abcdef",
       "task_id": "TASK-0028",
-      "skill_id": "SKILL-feedback-iteration",
+      "recipe_name": "devai-fix",
+      "recipe_variant": "test",
       "base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "candidate_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "strategy": "regression",

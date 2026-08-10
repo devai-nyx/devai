@@ -79,7 +79,6 @@ export const ROSTER = [
   'sensor-input-spec.schema.json',
   'sensor-registry.schema.json',
   'sensor-reading.schema.json',
-  'skill-manifest.schema.json',
   'stack-adapter.schema.json',
   'subprocess-effects.schema.json',
   'task-execution-evidence.schema.json',

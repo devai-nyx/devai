@@ -17,7 +17,7 @@ import { buildSensorReading, type SensorReading, type SensorStatus } from './sen
  *                  as "METHOD path" when the api-map endpoint has no
  *                  explicit id)
  *   - useCases[]:  empty in 17.C4 (LLM-assisted use-case inference is
- *                  deferred to 17.F SKILL-write-use-cases or a later
+ *                  deferred to a documentation recipe or a later
  *                  sub-batch); seeded as []
  *   - links[]:     empty for the same reason — a Triad requires a
  *                  use-case to bind to. Path-shaped matches between
@@ -499,7 +499,7 @@ export function senseInventoryCoverage(opts: InventoryCoverageOptions): Inventor
       findings.push({
         severity: 'warning',
         code: 'COVERAGE_NO_USE_CASES',
-        message: `Coverage matrix assembled with ${String(routeIds.length)} routes and ${String(endpointIds.length)} endpoints, but no use-cases authored under ${useCasesDir}. Author use-cases (manual or via 17.F SKILL-write-use-cases) to populate triads.`,
+        message: `Coverage matrix assembled with ${String(routeIds.length)} routes and ${String(endpointIds.length)} endpoints, but no use-cases authored under ${useCasesDir}. Author use-cases manually or through a bounded documentation recipe to populate triads.`,
       });
     } else if (unmappedRoutes.length > 0 || unmappedEndpoints.length > 0) {
       status = 'review';

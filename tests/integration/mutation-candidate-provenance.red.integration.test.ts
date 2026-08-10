@@ -29,7 +29,8 @@ type MutationEvidenceRecorder = (input: {
   readonly intent_id: string;
   readonly candidate_sha: string;
   readonly timestamp: string;
-  readonly skill_id?: string;
+  readonly recipe_name?: string;
+  readonly recipe_variant?: string;
   readonly witness?: Readonly<Record<string, unknown>>;
   readonly state_paths?: readonly string[];
 }) => unknown;
@@ -82,7 +83,8 @@ function fixture(): { readonly repo: string; readonly baseSha: string } {
       model: 'model-primary',
       effort: 'high',
       selection: { mode: 'exact', registry_id: 'primary' },
-      skill_id: 'SKILL-feedback-iteration',
+      recipe_name: 'devai-fix',
+      recipe_variant: 'test',
       prompt_composition_id: 'PC-0123456789abcdef',
       max_iterations: 1,
       capabilities: ['fs:workspace'],
@@ -133,7 +135,8 @@ function intent(baseSha: string, overrides: Readonly<Record<string, unknown>> = 
     id: 'MI-0123456789abcdef',
     trust: 'untrusted-intent',
     task_id: 'TASK-0028',
-    skill_id: 'SKILL-feedback-iteration',
+    recipe_name: 'devai-fix',
+    recipe_variant: 'test',
     stage: 'invariants-tests-to-code',
     base_sha: baseSha,
     submitted_at: '2026-07-21T12:01:00.000Z',
@@ -178,20 +181,22 @@ function writeAttributionState(
 ): readonly string[] {
   const witnessId = String(candidate.witness['id']);
   const witnessPath = `record/proofs/compliance/translation-validation/witnesses/${witnessId}.json`;
-  const skillPath = 'record/proofs/work/skill-runs/SKILL-feedback-iteration/record.json';
+  const recipePath = 'record/proofs/work/recipe-runs/devai-fix/test/record.json';
   const agentRunPath = 'record/proofs/work/agent-runs/AR-01234567-89ab-7cde-8fab-0123456789ab.json';
   const taskPath = '.devai/state/tasks/TASK-0028.json';
   writeJson(join(repo, witnessPath), candidate.witness);
-  writeJson(join(repo, skillPath), {
-    skill_id: 'SKILL-feedback-iteration',
+  writeJson(join(repo, recipePath), {
+    recipe_name: 'devai-fix',
+    recipe_variant: 'test',
     status: 'pass',
     evidence: { translation_witness: candidate.witness },
   });
-  const paths = [witnessPath, skillPath, agentRunPath, taskPath];
+  const paths = [witnessPath, recipePath, agentRunPath, taskPath];
   if (options.duplicateWitnessId === true) {
-    const duplicatePath = 'record/proofs/work/skill-runs/SKILL-feedback-iteration/stale.json';
+    const duplicatePath = 'record/proofs/work/recipe-runs/devai-fix/test/stale.json';
     writeJson(join(repo, duplicatePath), {
-      skill_id: 'SKILL-feedback-iteration',
+      recipe_name: 'devai-fix',
+      recipe_variant: 'test',
       status: 'pass',
       evidence: {
         translation_witness: { ...candidate.witness, notes: ['stale duplicate identity'] },
@@ -205,11 +210,11 @@ function writeAttributionState(
     started_at: '2026-07-21T12:01:00.000Z',
     ended_at: '2026-07-21T12:02:00.000Z',
     caller: {
-      kind: 'skill',
-      name: options.callerName ?? 'SKILL-feedback-iteration',
+      kind: 'recipe',
+      name: options.callerName ?? 'devai-fix',
     },
     files_read: [],
-    files_written: [join(repo, skillPath), join(repo, witnessPath)],
+    files_written: [join(repo, recipePath), join(repo, witnessPath)],
     commands_run: [],
     compliance: { invariant_ids: ['INV-DEVAI-021'] },
     outcome: { status: 'pass' },
@@ -237,7 +242,7 @@ describe('R28 D-173 recorder-derived candidate provenance red contracts', () => 
     ).toThrow(/MUTATION_INTENT_ID_INVALID/u);
   });
 
-  it('uses the Linux resolver identity predicate before accepting a unique skill record', async () => {
+  it('uses the Linux resolver identity predicate before accepting a unique recipe record', async () => {
     const { repo, baseSha } = fixture();
     const candidate = await requireRecorder()({
       repo_root: repo,
@@ -253,14 +258,15 @@ describe('R28 D-173 recorder-derived candidate provenance red contracts', () => 
         intent_id: 'MI-0123456789abcdef',
         candidate_sha: candidate.candidate_sha,
         timestamp: '2026-07-21T12:02:00.000Z',
-        skill_id: 'SKILL-feedback-iteration',
+        recipe_name: 'devai-fix',
+        recipe_variant: 'test',
         witness: candidate.witness,
         state_paths: statePaths,
       }),
-    ).toThrow(/MUTATION_EVIDENCE_SKILL_RECORD_NOT_UNIQUE/u);
+    ).toThrow(/MUTATION_EVIDENCE_RECIPE_RECORD_NOT_UNIQUE/u);
   });
 
-  it('rejects an agent-run record that is not bound to the invoking skill', async () => {
+  it('rejects an agent-run record that is not bound to the invoking recipe', async () => {
     const { repo, baseSha } = fixture();
     const candidate = await requireRecorder()({
       repo_root: repo,
@@ -269,14 +275,15 @@ describe('R28 D-173 recorder-derived candidate provenance red contracts', () => 
       run: async () =>
         writeFileSync(join(repo, 'src/value.ts'), "export const value = 'produced';\n"),
     });
-    const statePaths = writeAttributionState(repo, candidate, { callerName: 'SKILL-other' });
+    const statePaths = writeAttributionState(repo, candidate, { callerName: 'devai-plan' });
     expect(() =>
       requireEvidenceRecorder()({
         repo_root: repo,
         intent_id: 'MI-0123456789abcdef',
         candidate_sha: candidate.candidate_sha,
         timestamp: '2026-07-21T12:02:00.000Z',
-        skill_id: 'SKILL-feedback-iteration',
+        recipe_name: 'devai-fix',
+        recipe_variant: 'test',
         witness: candidate.witness,
         state_paths: statePaths,
       }),
@@ -301,7 +308,8 @@ describe('R28 D-173 recorder-derived candidate provenance red contracts', () => 
         intent_id: 'MI-0123456789abcdef',
         candidate_sha: candidate.candidate_sha,
         timestamp: '2026-07-21T12:02:00.000Z',
-        skill_id: 'SKILL-feedback-iteration',
+        recipe_name: 'devai-fix',
+        recipe_variant: 'test',
         witness: candidate.witness,
         state_paths: statePaths,
       }),

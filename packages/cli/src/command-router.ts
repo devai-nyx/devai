@@ -230,12 +230,7 @@ export function routeArgv(
       exitCode: EXIT_USAGE,
     };
   }
-  if (
-    args.length === 0 ||
-    args[0] === '--help' ||
-    args[0] === '-h' ||
-    args[0] === '--all'
-  ) {
+  if (args.length === 0 || args[0] === '--help' || args[0] === '-h' || args[0] === '--all') {
     return {
       kind: 'output',
       text: renderHelp(entries, version, [], args.includes('--all')),
@@ -273,18 +268,11 @@ export function routeArgv(
       }
     }
     const wantsHelp =
-      remaining.includes('--help') ||
-      remaining.includes('-h') ||
-      remaining.includes('--all');
+      remaining.includes('--help') || remaining.includes('-h') || remaining.includes('--all');
     if (wantsHelp) {
       return {
         kind: 'output',
-        text: renderHelp(
-          entries,
-          version,
-          exact.path,
-          remaining.includes('--all'),
-        ),
+        text: renderHelp(entries, version, exact.path, remaining.includes('--all')),
         exitCode: 0,
       };
     }
@@ -414,10 +402,7 @@ export function routeArgv(
         exitCode: EXIT_USAGE,
       };
     }
-    let translated = remaining;
-    if (exact.internal_name !== 'skill-run' && exact.internal_name !== 'loop-run') {
-      translated = translated.filter((arg) => arg !== '--write' && arg !== '--publish');
-    }
+    let translated = remaining.filter((arg) => arg !== '--write' && arg !== '--publish');
     if (exact.internal_name === 'init-upgrade' && remaining.includes('--write')) {
       translated = [...translated, '--execute'];
     }
@@ -437,12 +422,7 @@ export function routeArgv(
     // paths that match nothing.
     return {
       kind: 'output',
-      text: renderHelp(
-        entries,
-        version,
-        words,
-        args.includes('--all'),
-      ),
+      text: renderHelp(entries, version, words, args.includes('--all')),
       exitCode: 0,
     };
   }

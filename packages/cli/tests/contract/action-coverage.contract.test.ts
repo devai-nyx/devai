@@ -2,8 +2,6 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { validators } from '@devai-nyx/schemas';
-import { listSkills } from '@devai-nyx/skills';
 import { describe, expect, it } from 'vitest';
 import { subprocessCoverageEnvironment } from '../../../../tests/helpers/subprocess-coverage.js';
 
@@ -176,38 +174,4 @@ interface DescriptorCategory {
   readonly duplicates: readonly string[];
 }
 
-describe('Skill manifest contracts', () => {
-  it('every skill manifest validates against skill-manifest.schema.json', () => {
-    const manifests = listSkills();
-    expect(manifests.length).toBeGreaterThan(0);
-    for (const manifest of manifests) {
-      expect(
-        validators.skillManifest(manifest),
-        `skill '${manifest.id}' schema errors: ${JSON.stringify(validators.skillManifest.errors ?? [])}`,
-      ).toBe(true);
-    }
-  });
-
-  it('every skill has agent_class + permission_tier declared (Phase 10.G)', () => {
-    const skills = listSkills();
-    expect(skills.length).toBeGreaterThan(0);
-    for (const s of skills) {
-      expect(s.agent_class, `skill '${s.id}' agent_class`).toBeTruthy();
-      expect(s.permission_tier, `skill '${s.id}' permission_tier`).toBeTruthy();
-    }
-  });
-
-  skipIfNotBuilt('keeps the bounded prompt-overlay policy green', () => {
-    const r = run(['check', '--only', 'prompt-overlays']);
-    expect(r.status).toBe(0);
-    const parsed = JSON.parse(r.stdout) as {
-      ok: boolean;
-      manifests_checked: number;
-      findings: Array<{ code: string }>;
-    };
-    expect(parsed.ok).toBe(true);
-    expect(parsed.manifests_checked).toBe(52);
-    expect(parsed.findings).toEqual([]);
-  });
-});
 // Invariants: INV-DEVAI-001

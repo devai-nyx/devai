@@ -175,7 +175,8 @@
             }
           }
         },
-        "skill_id": {},
+        "recipe_name": {},
+        "recipe_variant": {},
         "prompt_composition_id": {},
         "max_iterations": {},
         "capabilities": {},
@@ -550,9 +551,20 @@
         "selection": {
           "$ref": "#/$defs/agentSelection"
         },
-        "skill_id": {
+        "recipe_name": {
+          "enum": [
+            "devai-assess",
+            "devai-plan",
+            "devai-fix",
+            "devai-docs",
+            "devai-scaffold",
+            "devai-verify",
+            "devai-round"
+          ]
+        },
+        "recipe_variant": {
           "type": "string",
-          "pattern": "^SKILL-"
+          "pattern": "^[a-z][a-z0-9-]*$"
         },
         "prompt_composition_id": {
           "type": "string",

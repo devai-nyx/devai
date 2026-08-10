@@ -43,7 +43,8 @@ export interface ResolvedAgentExecutor {
   readonly runtime: string;
   readonly model: string;
   readonly effort: string;
-  readonly skill_id: string | null;
+  readonly recipe_name: string | null;
+  readonly recipe_variant: string | null;
 }
 
 export interface ResolvedHumanExecutor {
@@ -254,9 +255,12 @@ function validateAgentSelection(task: TaskRecordBinding, evidence: TaskExecution
     'selected registry identity was not recorded as considered',
   );
   requireSemantic(
-    resolved.skill_id === (typeof request['skill_id'] === 'string' ? request['skill_id'] : null),
-    'TASK_EXECUTION_EVIDENCE_SKILL_MISMATCH',
-    'resolved skill identity differs from the immutable request',
+    resolved.recipe_name ===
+      (typeof request['recipe_name'] === 'string' ? request['recipe_name'] : null) &&
+      resolved.recipe_variant ===
+        (typeof request['recipe_variant'] === 'string' ? request['recipe_variant'] : null),
+    'TASK_EXECUTION_EVIDENCE_RECIPE_MISMATCH',
+    'resolved recipe identity differs from the immutable request',
   );
 
   if (requested['mode'] === 'exact') {

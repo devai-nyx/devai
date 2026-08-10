@@ -51,27 +51,27 @@
       }
     },
     {
-      "id": "skills",
-      "title": "Skill manifests",
-      "path": "packages/skills/resources/**",
-      "record_schema": "skill-manifest.schema.json",
+      "id": "recipes",
+      "title": "Canonical recipe manifests",
+      "path": "packages/skills/resources/recipes/*/devai.recipe.json",
+      "record_schema": "packages/skills/resources/recipes/recipe.schema.json",
       "count_guard": {
-        "state": "backlogged",
-        "mechanism": "Manifest roster parity",
-        "source": null,
-        "backlog_ref": "R-0001/P4-P5"
+        "state": "implemented",
+        "mechanism": "Exact seven-recipe roster parity",
+        "source": "packages/skills/tests/recipes/catalog.test.ts",
+        "backlog_ref": null
       },
       "liveness_guard": {
-        "state": "backlogged",
-        "mechanism": "Every supported skill retains a registry consumer and executable entry",
-        "source": null,
-        "backlog_ref": "R-0001/P5"
+        "state": "implemented",
+        "mechanism": "Every recipe variant binds typed deterministic operations and host-neutral instructions",
+        "source": "packages/skills/tests/recipes/catalog.test.ts",
+        "backlog_ref": null
       },
       "tombstone_guard": {
-        "state": "backlogged",
-        "mechanism": "Retired skill ids remain reserved with successor guidance",
-        "source": null,
-        "backlog_ref": "post-bootstrap/W04"
+        "state": "implemented",
+        "mechanism": "Recipe manifests reject alias, migration, lifecycle, and history metadata",
+        "source": "packages/skills/tests/recipes/catalog.test.ts",
+        "backlog_ref": null
       }
     },
     {

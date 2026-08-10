@@ -68,7 +68,8 @@
         "runtime": {},
         "model": {},
         "effort": {},
-        "skill_id": {},
+        "recipe_name": {},
+        "recipe_variant": {},
         "role": {},
         "completion_evidence": {},
         "child_task_ids": {},
@@ -269,7 +270,10 @@
           "type": "string",
           "minLength": 1
         },
-        "skill_id": {
+        "recipe_name": {
+          "type": ["string", "null"]
+        },
+        "recipe_variant": {
           "type": ["string", "null"]
         }
       }

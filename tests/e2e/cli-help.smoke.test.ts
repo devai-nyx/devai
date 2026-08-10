@@ -3,7 +3,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { ACTION_REGISTRY } from '../../packages/cli/src/generated/action-registry.js';
-import { listSkills } from '../../packages/skills/src/skills/index.js';
+import { loadRecipes } from '../../packages/skills/src/recipes/loader.js';
+import { RECIPE_NAMES } from '../../packages/skills/src/recipes/types.js';
 import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
 /**
@@ -60,19 +61,15 @@ describe('CLI binary smoke', () => {
     expect(r.status).toBe(0);
     expect(r.stderr).toBe('');
     const parsed = catalogValue(r.stdout);
-    expect(parsed).toHaveLength(42);
+    expect(parsed).toHaveLength(41);
     expect(parsed.map((action) => action.name)).toEqual(keptActionIds);
     expect(parsed.every((a) => typeof a.name === 'string')).toBe(true);
   });
 
-  it('the direct skill registry census produces 52 unique manifests', () => {
-    // DEVAI R2 bumped 37 → 42 (added 5 round-execute composers).
-    // DEVAI R3-W3 bumped 42 → 52 (added 10 SKILL-fix-<gate-id> catalog-fill skills:
-    // typecheck, coverage, mutation, spec-validate, action-coverage, docs-links,
-    // prompt-overlays, forbidden-actions, adrs, overrides).
-    const manifests = listSkills();
-    expect(manifests).toHaveLength(52);
-    expect(new Set(manifests.map((manifest) => manifest.id)).size).toBe(manifests.length);
+  it('the canonical recipe census produces exactly seven unique recipes', () => {
+    const recipes = loadRecipes();
+    expect(recipes.map((recipe) => recipe.manifest.name)).toEqual(RECIPE_NAMES);
+    expect(new Set(recipes.map((recipe) => recipe.manifest.name)).size).toBe(7);
   });
 
   it('an unknown command fails closed with a suggestion', () => {
