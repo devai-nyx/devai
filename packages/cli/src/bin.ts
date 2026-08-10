@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import { cac } from 'cac';
-import { getSkill } from '#core-compat';
 import { routeArgv } from './command-router.js';
 import {
   attachRuntimeContracts,
@@ -277,11 +276,7 @@ async function main(): Promise<void> {
   if (!initialized.ok) return;
 
   const authorized = runCliStage(machineAction, 'authorization', () =>
-    authorizeCliArgv(
-      process.argv,
-      registry,
-      (skillId) => getSkill(skillId)?.manifest.authority_role,
-    ),
+    authorizeCliArgv(process.argv, registry),
   );
   const authorityResult = authorized.ok ? authorized.value : undefined;
   if (!authorized.ok) return;

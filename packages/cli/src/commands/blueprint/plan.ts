@@ -66,7 +66,7 @@ export const blueprintPlan = defineCommand({
           process.stdout.write(`  module_slug: ${plan.module_slug}\n`);
           for (const task of plan.tasks) {
             process.stdout.write(
-              `  ${task.skill_id}: ${String(task.target_paths.length)} file(s)\n`,
+              `  ${task.operation_id}: ${String(task.target_paths.length)} file(s)\n`,
             );
             for (const p of task.target_paths) process.stdout.write(`    - ${p}\n`);
           }

@@ -12,7 +12,7 @@ import {
   decisionRecordIntegrity,
   loadBlueprint,
   loadDomains,
-  listSkills,
+  loadRecipes,
   regenerateInventory,
   scanForbiddenActions,
   scanInvOverrides,
@@ -735,7 +735,7 @@ async function directService(
     case 'pr-compliance':
       return fromValue(prComplianceReport(options));
     case 'prompt-overlays':
-      return fromValue(checkPromptOverlays({ manifests: listSkills() }));
+      return fromValue(checkPromptOverlays({ manifests: loadRecipes() }));
     case 'sensor-integrity':
       return fromValue(checkSensorIntegrity({ repoRoot }));
     case 'blueprint':

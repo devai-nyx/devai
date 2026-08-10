@@ -16,7 +16,8 @@ export interface AgentExecutorRequest {
   readonly prompt_composition_id: string;
   readonly max_iterations: number;
   readonly capabilities: readonly string[];
-  readonly skill_id?: string;
+  readonly recipe_name?: string;
+  readonly recipe_variant?: string;
 }
 
 export interface ResolvedAgentAdapterTarget {
@@ -29,8 +30,9 @@ export interface ResolvedAgentAdapterTarget {
   readonly eligible_agent_classes: readonly AgentClass[];
 }
 
-export interface AgentSkillMetadata {
-  readonly id: string;
+export interface AgentRecipeMetadata {
+  readonly name: string;
+  readonly variant: string;
   readonly agent_class: AgentClass;
   readonly permission_tier: PermissionTier;
   readonly capabilities: readonly string[];
@@ -54,7 +56,7 @@ export interface ValidateAgentOptions {
   readonly resolved: ResolvedAgentAdapterTarget;
   readonly authority: AgentAuthority;
   readonly promptComposition: AgentPromptComposition;
-  readonly skill?: AgentSkillMetadata;
+  readonly recipe?: AgentRecipeMetadata;
   readonly preflight?: (target: ResolvedAgentAdapterTarget) => boolean | ExecutorFailure;
   readonly authorize?: (request: {
     readonly discipline: ExecutorDiscipline;
@@ -68,7 +70,7 @@ export interface ValidatedAgentExecutor {
   readonly discipline: ExecutorDiscipline;
   readonly resolved: ResolvedAgentAdapterTarget;
   readonly prompt: AgentPromptComposition;
-  readonly skill?: AgentSkillMetadata;
+  readonly recipe?: AgentRecipeMetadata;
 }
 
 export function validateAgentExecutor(
@@ -139,46 +141,50 @@ export function validateAgentExecutor(
     );
   }
 
-  if (executor.skill_id !== undefined) {
-    const skill = options.skill;
-    if (skill === undefined || skill.id !== executor.skill_id) {
+  if (executor.recipe_name !== undefined) {
+    const recipe = options.recipe;
+    if (
+      recipe === undefined ||
+      recipe.name !== executor.recipe_name ||
+      recipe.variant !== executor.recipe_variant
+    ) {
       return executorFailure(
-        'TASK_AGENT_SKILL_UNAVAILABLE',
-        'the requested skill is not registered',
+        'TASK_AGENT_RECIPE_UNAVAILABLE',
+        'the requested recipe variant is not registered',
       );
     }
-    if (skill.authority_role !== authority.discipline) {
+    if (recipe.authority_role !== authority.discipline) {
       return executorFailure(
-        'TASK_AGENT_SKILL_AUTHORITY_MISMATCH',
-        'skill authority must match the task discipline; it cannot widen task authority',
+        'TASK_AGENT_RECIPE_AUTHORITY_MISMATCH',
+        'recipe authority must match the task discipline; it cannot widen task authority',
       );
     }
-    if (skill.agent_class !== authority.agent_class) {
+    if (recipe.agent_class !== authority.agent_class) {
       return executorFailure(
-        'TASK_AGENT_SKILL_CLASS_MISMATCH',
-        'skill and task agent classes are incompatible',
+        'TASK_AGENT_RECIPE_CLASS_MISMATCH',
+        'recipe and task agent classes are incompatible',
       );
     }
-    if (!permissionTierAllows(authority.permission_tier, skill.permission_tier)) {
+    if (!permissionTierAllows(authority.permission_tier, recipe.permission_tier)) {
       return executorFailure(
-        'TASK_AGENT_SKILL_PERMISSION_DENIED',
-        'skill permission tier exceeds task authority',
+        'TASK_AGENT_RECIPE_PERMISSION_DENIED',
+        'recipe variant permission tier exceeds task authority',
       );
     }
-    const skillCapabilities = new Set(skill.capabilities);
+    const recipeCapabilities = new Set(recipe.capabilities);
     const incompatible = executor.capabilities.filter(
-      (capability) => !skillCapabilities.has(capability),
+      (capability) => !recipeCapabilities.has(capability),
     );
     if (incompatible.length > 0) {
       return executorFailure(
-        'TASK_AGENT_SKILL_CAPABILITY_MISMATCH',
-        `skill does not declare: ${incompatible.join(', ')}`,
+        'TASK_AGENT_RECIPE_CAPABILITY_MISMATCH',
+        `recipe variant does not declare: ${incompatible.join(', ')}`,
       );
     }
-  } else if (options.skill !== undefined) {
+  } else if (options.recipe !== undefined) {
     return executorFailure(
-      'TASK_AGENT_SKILL_UNREQUESTED',
-      'an adapter may not attach a skill absent from the immutable request',
+      'TASK_AGENT_RECIPE_UNREQUESTED',
+      'an adapter may not attach a recipe absent from the immutable request',
     );
   }
 
@@ -203,7 +209,7 @@ export function validateAgentExecutor(
     discipline: authority.discipline,
     resolved,
     prompt: promptComposition,
-    ...(options.skill !== undefined && { skill: options.skill }),
+    ...(options.recipe !== undefined && { recipe: options.recipe }),
   };
 }
 
@@ -213,7 +219,7 @@ export interface ExecuteAgentOptions extends ValidateAgentOptions {
     readonly executor: AgentExecutorRequest;
     readonly resolved: ResolvedAgentAdapterTarget;
     readonly prompt: AgentPromptComposition;
-    readonly skill?: AgentSkillMetadata;
+    readonly recipe?: AgentRecipeMetadata;
   }) => unknown | Promise<unknown>;
 }
 
@@ -237,7 +243,7 @@ export async function executeAgentExecutor(
     executor: options.executor,
     resolved: validated.resolved,
     prompt: validated.prompt,
-    ...(validated.skill !== undefined && { skill: validated.skill }),
+    ...(validated.recipe !== undefined && { recipe: validated.recipe }),
   });
   return {
     ok: true,

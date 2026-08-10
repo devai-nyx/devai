@@ -11,8 +11,8 @@ import { dirname, join } from 'node:path';
  * Phase-9 Batch 9.D — backlog mechanics (MVP). Per Article 35, the
  * backlog is the only work queue. The MVP stores entries as one JSON
  * line per task in .devai/state/backlog.jsonl, sorted by priority
- * descending at read time. `SKILL-compile-backlog` (Phase 8
- * deterministic) and `devai work backlog add` both append.
+ * descending at read time. Deterministic compilation and task queue
+ * operations both append.
  */
 
 export interface BacklogEntry {

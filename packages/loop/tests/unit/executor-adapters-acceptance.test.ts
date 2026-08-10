@@ -8,7 +8,7 @@ import {
   type AgentAuthority,
   type AgentExecutorRequest,
   type AgentPromptComposition,
-  type AgentSkillMetadata,
+  type AgentRecipeMetadata,
   type ResolvedAgentAdapterTarget,
 } from '../../src/loop/agent-executor.js';
 import {
@@ -107,8 +107,9 @@ const PROMPT: AgentPromptComposition = {
   id: 'PC-0123456789abcdef',
   digest: 'a'.repeat(64),
 };
-const SKILL: AgentSkillMetadata = {
-  id: 'skill-fixture',
+const RECIPE: AgentRecipeMetadata = {
+  name: 'devai-fix',
+  variant: 'lint',
   agent_class: 'coding-agent',
   permission_tier: 'read',
   capabilities: ['code.read', 'code.write'],
@@ -385,32 +386,32 @@ describe('agent executor acceptance', () => {
     ).toBe('TASK_AGENT_CAPABILITY_UNAUTHORIZED');
   });
 
-  it('keeps skills, preflight, and authorization within task discipline', async () => {
-    const withSkill = agent({ skill_id: 'skill-fixture' });
+  it('keeps recipe variants, preflight, and authorization within task discipline', async () => {
+    const withRecipe = agent({ recipe_name: 'devai-fix', recipe_variant: 'lint' });
     const validate = (overrides: Partial<Parameters<typeof validateAgentExecutor>[0]> = {}) =>
       validateAgentExecutor({
-        executor: withSkill,
+        executor: withRecipe,
         resolved: RESOLVED,
         authority: AGENT_AUTHORITY,
         promptComposition: PROMPT,
-        skill: SKILL,
+        recipe: RECIPE,
         ...overrides,
       });
-    expect(code(validate({ skill: undefined }))).toBe('TASK_AGENT_SKILL_UNAVAILABLE');
-    expect(code(validate({ skill: { ...SKILL, id: 'other' } }))).toBe(
-      'TASK_AGENT_SKILL_UNAVAILABLE',
+    expect(code(validate({ recipe: undefined }))).toBe('TASK_AGENT_RECIPE_UNAVAILABLE');
+    expect(code(validate({ recipe: { ...RECIPE, name: 'devai-plan' } }))).toBe(
+      'TASK_AGENT_RECIPE_UNAVAILABLE',
     );
-    expect(code(validate({ skill: { ...SKILL, authority_role: 'auditor' } }))).toBe(
-      'TASK_AGENT_SKILL_AUTHORITY_MISMATCH',
+    expect(code(validate({ recipe: { ...RECIPE, authority_role: 'auditor' } }))).toBe(
+      'TASK_AGENT_RECIPE_AUTHORITY_MISMATCH',
     );
-    expect(code(validate({ skill: { ...SKILL, agent_class: 'review-agent' } }))).toBe(
-      'TASK_AGENT_SKILL_CLASS_MISMATCH',
+    expect(code(validate({ recipe: { ...RECIPE, agent_class: 'review-agent' } }))).toBe(
+      'TASK_AGENT_RECIPE_CLASS_MISMATCH',
     );
-    expect(code(validate({ skill: { ...SKILL, permission_tier: 'act' } }))).toBe(
-      'TASK_AGENT_SKILL_PERMISSION_DENIED',
+    expect(code(validate({ recipe: { ...RECIPE, permission_tier: 'act' } }))).toBe(
+      'TASK_AGENT_RECIPE_PERMISSION_DENIED',
     );
-    expect(code(validate({ skill: { ...SKILL, capabilities: [] } }))).toBe(
-      'TASK_AGENT_SKILL_CAPABILITY_MISMATCH',
+    expect(code(validate({ recipe: { ...RECIPE, capabilities: [] } }))).toBe(
+      'TASK_AGENT_RECIPE_CAPABILITY_MISMATCH',
     );
     expect(
       code(
@@ -419,10 +420,10 @@ describe('agent executor acceptance', () => {
           resolved: RESOLVED,
           authority: AGENT_AUTHORITY,
           promptComposition: PROMPT,
-          skill: SKILL,
+          recipe: RECIPE,
         }),
       ),
-    ).toBe('TASK_AGENT_SKILL_UNREQUESTED');
+    ).toBe('TASK_AGENT_RECIPE_UNREQUESTED');
     expect(code(validate({ preflight: () => false }))).toBe('TASK_AGENT_PREFLIGHT_FAILED');
     expect(
       code(validate({ preflight: () => ({ ok: false, code: 'PREFLIGHT', message: 'no' }) })),
@@ -434,11 +435,11 @@ describe('agent executor acceptance', () => {
 
     const invokeAgent = vi.fn(() => ({ verdict: 'PASS' }));
     const result = await executeAgentExecutor({
-      executor: withSkill,
+      executor: withRecipe,
       resolved: RESOLVED,
       authority: AGENT_AUTHORITY,
       promptComposition: PROMPT,
-      skill: SKILL,
+      recipe: RECIPE,
       preflight: () => true,
       authorize: () => true,
       invokeAgent,

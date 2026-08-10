@@ -17,7 +17,7 @@ import { regenerateInventory } from '@devai-nyx/loop';
 import { assessScorecard, computeScorecard, loadScorecardFailureMaxAgeMs } from '@devai-nyx/loop';
 import { loadScorecardNaConfig, resolveScorecardNaPath, scorecardNaCellSet } from '@devai-nyx/loop';
 import { loadReadingsFromDir } from '@devai-nyx/loop';
-import { getSkill } from '../skills/index.js';
+import { compileBacklogObservation as compileBacklog } from '../operations/backlog.js';
 
 type JsonRecord = Record<string, unknown>;
 
@@ -414,27 +414,11 @@ function archiveIncompleteObservation(stateRoot: string, mergeSha: string): void
 }
 
 async function compileBacklogObservation(
-  worktreeRoot: string,
+  _worktreeRoot: string,
   scorecard: unknown,
-  timestamp: string,
+  _timestamp: string,
 ): Promise<JsonRecord> {
-  const skill = getSkill('SKILL-compile-backlog');
-  if (
-    skill === null ||
-    skill.manifest.deterministic !== true ||
-    skill.manifest.llm_backed !== false
-  ) {
-    throw new Error('POST_MERGE_BACKLOG_OBSERVER_UNAVAILABLE');
-  }
-  const result = await skill.run({
-    repoRoot: worktreeRoot,
-    timestamp,
-    inputs: { scorecard },
-  });
-  if (result.status !== 'pass' || !isRecord(result.evidence)) {
-    throw new Error('POST_MERGE_BACKLOG_OBSERVATION_FAILED');
-  }
-  return result.evidence;
+  return compileBacklog(scorecard);
 }
 
 function backlogDelta(current: JsonRecord, previous: JsonRecord | null): JsonRecord {

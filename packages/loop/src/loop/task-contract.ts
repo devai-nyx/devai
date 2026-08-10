@@ -48,7 +48,8 @@ export interface AgentTaskExecutor {
   readonly model: string;
   readonly effort: string;
   readonly selection: AgentSelection;
-  readonly skill_id?: string;
+  readonly recipe_name?: string;
+  readonly recipe_variant?: string;
   readonly prompt_composition_id: string;
   readonly max_iterations: number;
   readonly capabilities: readonly string[];

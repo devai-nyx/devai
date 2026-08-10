@@ -15,7 +15,6 @@ import { assertAuthorityPathCapability } from '@devai-nyx/authority';
 import {
   applyAuthorityHostEffectsAtomically,
   mkdirSync,
-  runWithAuthorityHostEffects,
   writeFileSync,
   type AuthorityHostEffectRequest,
   type AuthorityHostEffectScope,
@@ -25,7 +24,6 @@ import {
   computeManifestHash,
   deriveEvidenceId,
   gatherGitContext,
-  skillAllowsWritePath,
   type EvidenceChain,
   type EvidenceRecord,
 } from '#core-compat';
@@ -91,35 +89,6 @@ const INTERNAL_INIT_RECORD_CONTRACT = Object.freeze({
   readiness: { requires_binding: true, independent_acceptance_required: true as const },
 });
 
-const INTERNAL_SKILL_RECORD_CONTRACT = Object.freeze({
-  schemaVersion: '1.0.0' as const,
-  action_id: 'skill record',
-  effect: 'harness-write' as const,
-  capabilities: ['fs:f5-state'] as const,
-  subject: {
-    kind: 'derived-machine' as const,
-    actor: 'harness' as const,
-    transition: 'harness-write' as const,
-    initiator: {
-      allowed_roles: ['owner', 'architect', 'inspector', 'engineer', 'auditor'] as const,
-      preserve_in_context: true as const,
-    },
-  },
-  consent: { write: true, allow_publish: false, experimental: false },
-  planner: {
-    kind: 'exact-plan' as const,
-    planner_id: 'skill-record-exact-plan',
-    target_kinds: ['fs'] as const,
-    atomicity: 'whole-plan' as const,
-  },
-  boundary: {
-    kind: 'mutation-adapters' as const,
-    adapter_ids: ['fs-authority-boundary'] as const,
-    final_reverification: true as const,
-  },
-  readiness: { requires_binding: true, independent_acceptance_required: true as const },
-});
-
 const POLICY_PATH = '.devai/config/authority-policy.json';
 const READ_ONLY_PROCESS_COMMANDS: Readonly<Record<string, readonly string[]>> = Object.freeze({
   command: ['-v'],
@@ -174,14 +143,6 @@ function actionContractRegistry(entries: readonly RegistryEntry[]) {
       raw: INTERNAL_INIT_RECORD_CONTRACT,
       canonical_bytes: canonicalBytes(INTERNAL_INIT_RECORD_CONTRACT),
       view: INTERNAL_INIT_RECORD_CONTRACT,
-    }),
-  );
-  documents.set(
-    INTERNAL_SKILL_RECORD_CONTRACT.action_id,
-    Object.freeze({
-      raw: INTERNAL_SKILL_RECORD_CONTRACT,
-      canonical_bytes: canonicalBytes(INTERNAL_SKILL_RECORD_CONTRACT),
-      view: INTERNAL_SKILL_RECORD_CONTRACT,
     }),
   );
   return Object.freeze({
@@ -421,7 +382,6 @@ function processTarget(
   actionName: string,
   root: string,
   repositoryId: string,
-  selectedSkillId?: string,
 ): JsonRecord | undefined {
   const executableValue = request.arguments[0];
   const argumentValue = request.arguments[1];
@@ -429,41 +389,6 @@ function processTarget(
   const executable = basename(executableValue);
   const args = argumentValue.map(String);
   const verb = args[0];
-
-  if (actionName === 'agent skill run' && selectedSkillId === 'SKILL-feedback-iteration') {
-    let endpointId: string | undefined;
-    if (executable === 'npx' && args.join('\u0000') === 'eslint\u0000--format=json\u0000.') {
-      endpointId = 'feedback-lint';
-    } else if (executable === 'npx' && args.join('\u0000') === 'tsc\u0000--noEmit') {
-      endpointId = 'feedback-typecheck';
-    } else if (executable === 'pnpm' && args.join('\u0000') === 'test') {
-      endpointId = 'feedback-unit-test';
-    } else if (
-      executable === 'node' &&
-      args.length === 4 &&
-      args[0] === '--test' &&
-      args[1] === '--test-name-pattern' &&
-      (args[2]?.length ?? 0) > 0 &&
-      (args[2]?.length ?? 0) <= 256 &&
-      typeof args[3] === 'string' &&
-      !isAbsolute(args[3]) &&
-      !args[3].split(/[\\/]/u).includes('..') &&
-      /(?:^|\/)[^/]+\.(?:test|spec)\.[cm]?[jt]s$/u.test(args[3])
-    ) {
-      canonicalRelativePath(root, args[3]);
-      endpointId = 'feedback-acceptance';
-    }
-    if (endpointId !== undefined) {
-      return {
-        kind: 'remote',
-        id: `remote:local-validation:${endpointId}`,
-        system_id: 'local-validation',
-        endpoint_id: endpointId,
-        operation_id: 'invoke',
-        publication: false,
-      };
-    }
-  }
 
   if (
     executable === 'psql' &&
@@ -535,18 +460,6 @@ function processTarget(
   }
 
   if (executable === 'git') {
-    if (verb === 'push') {
-      if (actionName === 'agent skill run') {
-        return {
-          kind: 'remote',
-          id: 'remote:git-origin:current-branch',
-          system_id: 'git-origin',
-          endpoint_id: 'current-branch',
-          operation_id: 'push',
-          publication: true,
-        };
-      }
-    }
     if (verb === 'fetch') {
       const remote = safeLogical(args.at(-2), 'origin');
       const branch = safeLogical(args.at(-1), 'remote');
@@ -656,10 +569,7 @@ function processTarget(
     };
   }
 
-  if (
-    ['claude', 'codex'].includes(executable) &&
-    ['experimental loop run', 'agent skill run'].includes(actionName)
-  ) {
+  if (['claude', 'codex'].includes(executable) && actionName === 'sense run') {
     return {
       kind: 'remote',
       id: `remote:local-llm:${executable}`,
@@ -726,38 +636,12 @@ function boundedSelectors(kind: string, repositoryId: string, actionName: string
       },
     ];
   }
-  if (actionName === 'agent skill run') {
+  if (actionName === 'sense run' && kind === 'remote') {
     return [
       {
-        kind: 'remote',
+        kind,
         system_id: 'local-llm',
         endpoint_ids: ['claude', 'codex'],
-        operation_ids: ['invoke'],
-        publication: false,
-      },
-      {
-        kind: 'remote',
-        system_id: 'git-origin',
-        endpoint_ids: ['current-branch'],
-        operation_ids: ['push'],
-        publication: true,
-      },
-      {
-        kind: 'remote',
-        system_id: 'github',
-        endpoint_ids: ['pull-requests'],
-        operation_ids: ['create'],
-        publication: true,
-      },
-      {
-        kind: 'remote',
-        system_id: 'local-validation',
-        endpoint_ids: [
-          'feedback-lint',
-          'feedback-typecheck',
-          'feedback-unit-test',
-          'feedback-acceptance',
-        ],
         operation_ids: ['invoke'],
         publication: false,
       },
@@ -840,7 +724,6 @@ export function createAuthorityHostBroker(input: BrokerInput): {
     scope: AuthorityHostEffectScope;
     execute: () => void;
   }>;
-  readonly record_skill: (skillId: string, callback: () => unknown) => unknown;
   readonly session_operation?: () => unknown;
   readonly policy_materialization?: () => unknown;
   readonly commit_exact?: () => void;
@@ -1177,9 +1060,6 @@ export function createAuthorityHostBroker(input: BrokerInput): {
         input.entry.name,
         repositoryRoot,
         sources.repository_id,
-        input.entry.name === 'agent skill run'
-          ? input.argv[2 + input.entry.path.length]
-          : undefined,
       );
       if (!target) throw new Error('AUTHORITY_HOST_PROCESS_ADAPTER_REQUIRED');
       if (actionPlanner.kind === 'exact-plan') {
@@ -1215,13 +1095,6 @@ export function createAuthorityHostBroker(input: BrokerInput): {
       return undefined;
     }
     const target = fsTarget(request, repositoryRoot, sources.repository_id, descriptorTargets);
-    if (input.entry.name === 'agent skill run') {
-      const skillId = input.argv[2 + input.entry.path.length];
-      const path = String(target.canonical_relative_path ?? '');
-      if (skillId === undefined || !skillAllowsWritePath(skillId, path)) {
-        throw new Error(`AUTHORITY_SKILL_WRITE_SCOPE_DENIED:${path}`);
-      }
-    }
     if (request.symbol === 'closeSync') {
       try {
         return authorizeTarget(
@@ -1715,55 +1588,6 @@ export function createAuthorityHostBroker(input: BrokerInput): {
           );
         },
       });
-    },
-    record_skill: (skillId: string, callback: () => unknown) => {
-      if (!/^SKILL-[a-z][a-z0-9-]*$/u.test(skillId)) {
-        throw new Error('AUTHORITY_SKILL_ID_INVALID');
-      }
-      const recordEffects: CapturedFilesystemEffect[] = [];
-      const allowedRoots = [
-        '.devai/state',
-        '.devai/state/skills',
-        `.devai/state/skills/${skillId}`,
-        '.devai/state/agent-runs',
-      ];
-      const internalScope: AuthorityHostEffectScope = Object.freeze({
-        action_id: INTERNAL_SKILL_RECORD_CONTRACT.action_id,
-        invocation_id: invocationId,
-        effect: INTERNAL_SKILL_RECORD_CONTRACT.effect,
-        receipt_store: issuer,
-        apply_effect: (request: AuthorityHostEffectRequest, apply: () => unknown) => {
-          if (request.kind === 'process') {
-            if (readOnlyProcess(request)) return apply();
-            throw new Error('AUTHORITY_HOST_PROCESS_ADAPTER_REQUIRED');
-          }
-          if (
-            request.symbol === 'mkdirSync' &&
-            typeof request.arguments[0] === 'string' &&
-            existsSync(request.arguments[0]) &&
-            lstatSync(request.arguments[0]).isDirectory()
-          ) {
-            return undefined;
-          }
-          const target = fsTarget(request, repositoryRoot, sources.repository_id);
-          const path = String(target.canonical_relative_path ?? '');
-          if (!allowedRoots.some((root) => path === root || path.startsWith(`${root}/`))) {
-            throw new Error('AUTHORITY_SKILL_RECORD_TARGET_DENIED');
-          }
-          recordEffects.push({ request, apply, target });
-          return undefined;
-        },
-      });
-      const result = runWithAuthorityHostEffects(internalScope, callback);
-      commitCapturedExact(
-        {
-          name: INTERNAL_SKILL_RECORD_CONTRACT.action_id,
-          effects: INTERNAL_SKILL_RECORD_CONTRACT.effect,
-          authority_contract: INTERNAL_SKILL_RECORD_CONTRACT,
-        },
-        recordEffects,
-      );
-      return result;
     },
     dispose: () => {
       if (typeof runtime.dispose === 'function') runtime.dispose();

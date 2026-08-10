@@ -89,7 +89,7 @@ export function emit(reading: SensorReading, human: boolean): void {
  * scorecard machinery (in `@devai-nyx/skills` via
  * `loadReadingsFromDir`) reads from this directory; without
  * persistence, the autonomous loop's scorecard → backlog →
- * SKILL-feedback-iteration chain receives all-UNKNOWN cells and
+ * assessment recipes receive all-UNKNOWN cells and
  * produces no useful work for adopters.
  *
  * Pre-21.E, the sense-* commands built SensorReading records and

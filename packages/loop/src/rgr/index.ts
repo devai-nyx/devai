@@ -14,7 +14,7 @@ import { canonicalSha256, nextCounterId } from '@devai-nyx/utils';
  *
  * Per Phase 11.C / D-39: canonical DEVAI already had the
  * rgr.schema.json + the task pause-rgr / resume-rgr lifecycle
- * + a SKILL-emit-rgr template, but had no top-level CLI to
+ * + an RGR template, but had no top-level CLI to
  * create / list / resolve RGRs and no persistence to a stable
  * .devai/state/rgr/ directory. This module fills that gap.
  *

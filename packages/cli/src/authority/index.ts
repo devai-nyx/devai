@@ -28,7 +28,6 @@ import { resolveInvocationEntry } from './sense-selection.js';
 import {
   runWithAuthorityPolicyMaterialization,
   runWithAuthoritySessionOperation,
-  runWithAuthoritySkillRecording,
 } from './command-capabilities.js';
 import { buildTrustedAuthoritySources } from './policy.js';
 import { resolveCliVersion } from '../version.js';
@@ -62,16 +61,10 @@ interface CliResult {
 }
 
 const ROLES = new Set<HumanRole>(['owner', 'architect', 'inspector', 'engineer', 'auditor']);
-const MULTI_ROLE_SKILLS = new Set([
-  'SKILL-round-execute',
-  'SKILL-round-orchestrate',
-  'SKILL-round-verify-publish',
-]);
 const SESSION_ID = /^AUTH-SESSION-[A-Za-z0-9]{16,}$/u;
 let pendingHostScope: AuthorityHostEffectScope | undefined;
 let pendingHostDispose: (() => void) | undefined;
 let pendingHostDryRun = false;
-let pendingSkillRecording: ((skillId: string, callback: () => unknown) => unknown) | undefined;
 let pendingSessionOperation: (() => unknown) | undefined;
 let pendingPolicyMaterialization: (() => unknown) | undefined;
 let pendingExactCommit: (() => void) | undefined;
@@ -324,18 +317,7 @@ function entryForArgv(
     .sort((a, b) => b.path.length - a.path.length)[0];
 }
 
-function routeRoles(
-  entry: RegistryEntry,
-  argv: readonly string[],
-  skillRoleFor: (skillId: string) => string | undefined,
-): readonly HumanRole[] {
-  if (entry.handler === 'skill run') {
-    const skillId = argv[2 + entry.path.length];
-    const role = skillId === undefined ? undefined : skillRoleFor(skillId);
-    if (role === 'harness') return ['owner', 'architect', 'inspector', 'engineer', 'auditor'];
-    if (role === 'orchestrator') return ['architect'];
-    return role === undefined || !ROLES.has(role as HumanRole) ? [] : [role as HumanRole];
-  }
+function routeRoles(entry: RegistryEntry, _argv: readonly string[]): readonly HumanRole[] {
   const subject = entry.authority_contract.subject;
   if (subject.kind === 'human') return subject.allowed_roles;
   return subject.kind === 'derived-machine' && subject.initiator !== 'none'
@@ -452,7 +434,6 @@ function stageHostScope(
   pendingHostScope = dryRun ? Object.freeze({ ...broker.scope, effect: 'read' }) : broker.scope;
   pendingHostDispose = broker.dispose;
   pendingHostDryRun = dryRun;
-  pendingSkillRecording = broker.record_skill;
   pendingSessionOperation = broker.session_operation;
   pendingPolicyMaterialization = broker.policy_materialization;
   pendingExactCommit = broker.commit_exact;
@@ -478,14 +459,12 @@ export function attachAuthorityCommandBoundaries(
       const scope = pendingHostScope;
       const dispose = pendingHostDispose;
       const dryRun = pendingHostDryRun;
-      const recordSkill = pendingSkillRecording;
       const sessionOperation = pendingSessionOperation;
       const policyMaterialization = pendingPolicyMaterialization;
       const exactCommit = pendingExactCommit;
       pendingHostScope = undefined;
       pendingHostDispose = undefined;
       pendingHostDryRun = false;
-      pendingSkillRecording = undefined;
       pendingSessionOperation = undefined;
       pendingPolicyMaterialization = undefined;
       pendingExactCommit = undefined;
@@ -500,9 +479,7 @@ export function attachAuthorityCommandBoundaries(
       try {
         const result = runWithAuthoritySessionOperation(sessionOperation, () =>
           runWithAuthorityPolicyMaterialization(policyMaterialization, () =>
-            runWithAuthoritySkillRecording(recordSkill, () =>
-              runWithAuthorityHostEffects(scope, () => Reflect.apply(original, this, args)),
-            ),
+            runWithAuthorityHostEffects(scope, () => Reflect.apply(original, this, args)),
           ),
         );
         if (result && typeof (result as PromiseLike<unknown>).then === 'function') {
@@ -532,7 +509,6 @@ export function attachAuthorityCommandBoundaries(
 export function authorizeCliArgv(
   argv: readonly string[],
   entries: readonly RegistryEntry[],
-  skillRoleFor: (skillId: string) => string | undefined = () => undefined,
 ): CliResult | undefined {
   if (argv.some((value) => value === '--help' || value === '-h')) {
     return undefined;
@@ -540,16 +516,6 @@ export function authorizeCliArgv(
   const registeredEntry = entryForArgv(argv, entries);
   if (!registeredEntry) return undefined;
   const entry = resolveInvocationEntry(registeredEntry, argv);
-  if (entry.handler === 'skill run') {
-    const skillId = argv[2 + entry.path.length];
-    if (skillId !== undefined && skillRoleFor(skillId) === undefined) {
-      return renderAuthorityResult(taggedFailure('usage-error', 'SKILL_UNKNOWN'), formatFor(argv));
-    }
-    if (skillId !== undefined && MULTI_ROLE_SKILLS.has(skillId)) {
-      const code = 'AUTHORITY_SKILL_ROLE_COMPOSITION_FORBIDDEN';
-      return renderAuthorityResult(taggedFailure('refused', code), formatFor(argv));
-    }
-  }
   if (entry.name === 'round close' && argv.includes('--post-merge-receipt')) {
     const format = formatFor(argv);
     if (
@@ -734,7 +700,7 @@ export function authorizeCliArgv(
       format,
     );
   }
-  if (!role || !routeRoles(entry, argv, skillRoleFor).includes(role as HumanRole)) {
+  if (!role || !routeRoles(entry, argv).includes(role as HumanRole)) {
     return renderAuthorityResult(taggedFailure('refused', 'AUTHORITY_HUMAN_ROLE_DENIED'), format);
   }
   const handlerSupportsDryRun = entry.runtime_options?.some(

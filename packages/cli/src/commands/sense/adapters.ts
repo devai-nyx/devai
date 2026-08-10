@@ -63,7 +63,7 @@ import {
 import {
   archiveImmutability,
   computeReverseAdherence,
-  createLlmClient,
+  createModelBridge,
   decisionCitationResolution,
   decisionRecordIntegrity,
   loadDomains,
@@ -265,24 +265,6 @@ async function runtimeProbe(
   ).reading;
 }
 
-async function llmJudge(request: SenseAdapterRequest): Promise<SensorReading> {
-  const aspect = stringInput(request, 'aspect', { required: true }) ?? '';
-  const rubric = stringInput(request, 'rubric', { required: true }) ?? '';
-  const evidence = stringInput(request, 'evidence', { required: true }) ?? '';
-  const family = stringInput(request, 'family');
-  if (family !== undefined && !['claude', 'codex', 'auto'].includes(family)) {
-    throw new Error(`SENSE_INPUT_INVALID:family`);
-  }
-  const client = createLlmClient({
-    repoRoot: request.repoRoot,
-    ...(family === undefined ? {} : { family: family as 'claude' | 'codex' | 'auto' }),
-    ...(stringInput(request, 'model') === undefined
-      ? {}
-      : { model: stringInput(request, 'model') }),
-  });
-  return senseJudge({ aspect, rubric, evidence }, client);
-}
-
 const ADAPTERS: Readonly<Record<SensorKind, SenseSensorAdapter>> = Object.freeze({
   type_check: (request) => senseTypeCheck({ cwd: request.repoRoot }).aggregate,
   lint: (request) => senseLint({ cwd: request.repoRoot }),
@@ -304,7 +286,25 @@ const ADAPTERS: Readonly<Record<SensorKind, SenseSensorAdapter>> = Object.freeze
   trace_resolution: (request) => senseTraceResolve({ repoRoot: request.repoRoot }),
   security_scan: (request) => senseSecurityScan({ repoRoot: request.repoRoot }),
   perf_test: (request) => sensePerfTest({ repoRoot: request.repoRoot }),
-  llm_judge: llmJudge,
+  llm_judge: (request) => {
+    const provider = stringInput(request, 'family') ?? process.env.DEVAI_LLM_BACKEND;
+    const model = stringInput(request, 'model') ?? process.env.DEVAI_LLM_MODEL;
+    if (!['claude', 'codex', 'claude-cli', 'codex-cli'].includes(provider ?? '')) {
+      throw new Error('SENSE_MODEL_PROVIDER_REQUIRED');
+    }
+    if (model === undefined) throw new Error('SENSE_MODEL_NAME_REQUIRED');
+    return senseJudge(
+      {
+        aspect: stringInput(request, 'aspect', { required: true }) ?? '',
+        rubric: stringInput(request, 'rubric', { required: true }) ?? '',
+        evidence: stringInput(request, 'evidence', { required: true }) ?? '',
+      },
+      createModelBridge({
+        provider: provider as 'claude' | 'codex' | 'claude-cli' | 'codex-cli',
+        model,
+      }),
+    );
+  },
   runtime_probe_api: (request) => runtimeProbe(request, 'api'),
   runtime_probe_auth: (request) => runtimeProbe(request, 'auth'),
   runtime_probe_data: (request) => runtimeProbe(request, 'data'),

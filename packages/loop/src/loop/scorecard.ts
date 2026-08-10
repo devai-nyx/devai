@@ -411,7 +411,7 @@ export interface Assessment {
  *   - narrative encodes the green/yellow/red status read.
  *   - deltas: empty (no previous scorecard available in the MVP API).
  *   - backlog_actions / recommended_priorities: empty arrays. The real
- *     auditor will populate them; SKILL-compile-backlog (Phase 8) is
+ *     auditor will populate them; deterministic backlog compilation is
  *     where the work lives.
  */
 export function assessScorecard(

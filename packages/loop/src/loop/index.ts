@@ -4,7 +4,7 @@ export type {
   AgentExecutionResult,
   AgentExecutorRequest as AgentAdapterRequest,
   AgentPromptComposition,
-  AgentSkillMetadata,
+  AgentRecipeMetadata,
   ExecuteAgentOptions,
   ResolvedAgentAdapterTarget,
   ValidateAgentOptions,

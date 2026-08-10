@@ -56,3 +56,12 @@ export function loadRecipes(resourcesRoot = DEFAULT_RESOURCES_ROOT): readonly Lo
     };
   });
 }
+
+export function loadRecipe(
+  name: (typeof RECIPE_NAMES)[number],
+  resourcesRoot = DEFAULT_RESOURCES_ROOT,
+): LoadedRecipe {
+  const recipe = loadRecipes(resourcesRoot).find((candidate) => candidate.manifest.name === name);
+  if (recipe === undefined) throw new Error(`RECIPE_UNKNOWN:${name}`);
+  return recipe;
+}
