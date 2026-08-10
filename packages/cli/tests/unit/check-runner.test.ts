@@ -1,12 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import {
-  mkdtempSync,
-  mkdirSync,
-  readFileSync,
-  realpathSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import {
@@ -171,11 +164,7 @@ function commit(root: string, path: string, content: string): string {
   return git(root, ['rev-parse', 'HEAD']);
 }
 
-function plan(
-  root: string,
-  target: 'affected' | 'local' | 'rc',
-  baseCommit?: string,
-) {
+function plan(root: string, target: 'affected' | 'local' | 'rc', baseCommit?: string) {
   const cacheResults = new Map<string, string>();
   return withRunnerScope(() =>
     buildTaskPlan({
@@ -198,10 +187,7 @@ function plan(
   );
 }
 
-function run(
-  root: string,
-  overrides: Partial<CheckRunnerOptions> = {},
-) {
+function run(root: string, overrides: Partial<CheckRunnerOptions> = {}) {
   return withRunnerScope(() =>
     runCheckTasks({
       repoRoot: root,
@@ -233,9 +219,9 @@ describe('content-addressed check runner', () => {
     const affected = plan(state.root, 'affected', state.base);
     expect(affected.changedPaths).toEqual([path]);
     expect(affected.tasks.map((task) => task.nodeId)).toContain('test:unit');
-    expect(affected.tasks.find((task) => task.nodeId === 'test:unit')?.matchedChangedPaths).toContain(
-      path,
-    );
+    expect(
+      affected.tasks.find((task) => task.nodeId === 'test:unit')?.matchedChangedPaths,
+    ).toContain(path);
   });
 
   it('accounts for both sides of renames and for deleted paths', () => {
@@ -301,7 +287,11 @@ describe('content-addressed check runner', () => {
     expect(generateResult?.resultDigest).toMatch(/^[0-9a-f]{64}$/u);
     const stored = JSON.parse(
       readFileSync(
-        join(state.root, '.devai/state/check-cache/v1/results', `${generateResult?.resultDigest}.json`),
+        join(
+          state.root,
+          '.devai/state/check-cache/v1/results',
+          `${generateResult?.resultDigest}.json`,
+        ),
         'utf8',
       ),
     ) as { outputDigests: Record<string, string> };
@@ -431,6 +421,28 @@ describe('content-addressed check runner', () => {
         ),
       ),
     ).toMatchObject({ nodeId: 'test:local-full', cwd: realpathSync(state.root) });
+    const declared = JSON.parse(readFileSync(join(state.root, 'test-tasks.json'), 'utf8')) as {
+      tasks: Array<Record<string, unknown>>;
+    };
+    declared.tasks.push({
+      nodeId: 'build',
+      dependencies: [],
+      argv: ['pnpm', '-r', 'build'],
+      cwd: '.',
+      runner: 'pnpm-v1',
+      inputSelectors: [{ kind: 'prefix', pattern: 'src/' }],
+      toolchainKeys: ['pnpm'],
+      allowlistedEnv: [],
+      outputContract: { kind: 'build', requiredResult: 'pass' },
+    });
+    writeFileSync(join(state.root, 'test-tasks.json'), `${JSON.stringify(declared, null, 2)}\n`);
+    expect(
+      matchDeclaredCheckTaskProcess(
+        state.root,
+        invocation,
+        request('pnpm', ['-r', 'build'], state.root, false),
+      ),
+    ).toMatchObject({ nodeId: 'build', cwd: realpathSync(state.root) });
     expect(
       matchDeclaredCheckTaskProcess(
         state.root,
@@ -476,5 +488,4 @@ describe('content-addressed check runner', () => {
     }
     expect(invocationIsNonMutating('check', ['--local', '--run'])).toBe(false);
   });
-
 });

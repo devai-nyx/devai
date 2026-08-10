@@ -48,7 +48,10 @@ export function matchDeclaredCheckTaskProcess(
   }
   if (
     executable === 'pnpm' &&
-    !(argv.length === 2 && argv[0] === 'run' && typeof argv[1] === 'string')
+    !(
+      (argv.length === 2 && argv[0] === 'run' && typeof argv[1] === 'string') ||
+      (argv.length === 2 && argv[0] === '-r' && argv[1] === 'build')
+    )
   ) {
     return undefined;
   }
@@ -64,7 +67,8 @@ export function matchDeclaredCheckTaskProcess(
     (candidate) =>
       candidate.argv[0] === executable &&
       JSON.stringify(candidate.argv.slice(1)) === JSON.stringify(argv) &&
-      existsSync(resolve(root, candidate.cwd)) && realpathSync(resolve(root, candidate.cwd)) === cwd,
+      existsSync(resolve(root, candidate.cwd)) &&
+      realpathSync(resolve(root, candidate.cwd)) === cwd,
   );
   return task === undefined ? undefined : { nodeId: task.nodeId, cwd };
 }
