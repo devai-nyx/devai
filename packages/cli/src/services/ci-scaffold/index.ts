@@ -1,24 +1,9 @@
 import { existsSync, mkdirSync, writeFileSync } from '@devai-nyx/authority';
 import { dirname, join } from 'node:path';
 
-/**
- * D-123 (item 5): a starter CI workflow that calls the canonical
- * `reusable-evidence-gate.yml` (D-121) instead of every adopter
- * hand-rolling (or copy-pasting and drifting from) their own inline
- * pipeline the way stynx's original devai-gates.yml did. Adopters can
- * still edit triggers/inputs freely; the gate job body itself is
- * never duplicated locally, so it can't drift from devai's own gate
- * logic.
- */
-
-export type CiScaffoldMode = 'gate' | 'verify';
-
 export interface CiScaffoldOptions {
   readonly targetRoot: string;
   readonly outputPath?: string;
-  readonly devaiRef?: string;
-  readonly mode?: CiScaffoldMode;
-  readonly chainFile?: string;
 }
 
 export interface CiScaffoldPlan {
@@ -27,43 +12,117 @@ export interface CiScaffoldPlan {
   readonly exists: boolean;
 }
 
-const DEFAULT_OUTPUT_RELATIVE = '.github/workflows/devai-gates.yml';
+export const LEDGER_WORKFLOW_FILE = 'devai-ledger-verify.yml';
+export const VERIFIER_REPOSITORY = 'devai-nyx/devai-verifier';
+export const VERIFIER_COMMIT = 'cd6ee947f2afb0804a3fdddc3325b3e2654cf36f';
+export const CHECKOUT_COMMIT = '11d5960a326750d5838078e36cf38b85af677262';
+export const SETUP_NODE_COMMIT = '49933ea5288caeca8642d1e84afbd3f7d6820020';
 
-export function buildCiScaffoldPlan(opts: CiScaffoldOptions): CiScaffoldPlan {
-  const path = opts.outputPath ?? join(opts.targetRoot, DEFAULT_OUTPUT_RELATIVE);
-  const devaiRef = opts.devaiRef ?? 'main';
-  const mode = opts.mode ?? 'gate';
-  const chainFile = opts.chainFile ?? 'record/proofs/chain.json';
-  const content = `# Scaffolded by \`devai init apply harness --include ci\`. Calls the
-# canonical reusable-evidence-gate.yml so this repo's evidence gate
-# can't drift from devai's own gate logic (D-121). Edit the \`on:\`
-# triggers below to fit this repo; extend reusable-evidence-gate.yml
-# upstream in devai-nyx/devai instead of duplicating gate internals
-# here.
-name: devai-gates
+const DEFAULT_OUTPUT_RELATIVE = `.github/workflows/${LEDGER_WORKFLOW_FILE}`;
+
+export function ledgerVerificationWorkflow(): string {
+  const backslash = '\\';
+  return `name: DEVAI ledger verification
 
 on:
-  pull_request:
-    branches: [main]
+  pull_request: {}
   push:
     branches: [main]
   workflow_dispatch: {}
 
 concurrency:
-  group: devai-gates-\${{ github.ref }}
-  cancel-in-progress: true
+  group: devai-ledger-verify-\${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: \${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
 
+env:
+  CANDIDATE_SHA: \${{ github.event.pull_request.head.sha || github.sha }}
+
 jobs:
-  evidence-gate:
-    uses: devai-nyx/devai/.github/workflows/reusable-evidence-gate.yml@${devaiRef}
-    with:
-      mode: ${mode}
-      chain-file: ${chainFile}
+  verify-ledger:
+    name: Verify externally attested local ledger
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@${CHECKOUT_COMMIT} # v4
+        with:
+          ref: \${{ env.CANDIDATE_SHA }}
+          path: candidate
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Check out pinned independent verifier
+        uses: actions/checkout@${CHECKOUT_COMMIT} # v4
+        with:
+          repository: ${VERIFIER_REPOSITORY}
+          ref: ${VERIFIER_COMMIT}
+          path: .devai-verifier
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up verifier runtime
+        uses: actions/setup-node@${SETUP_NODE_COMMIT} # v4
+        with:
+          node-version: 24
+
+      - name: Materialize externally controlled verification inputs
+        shell: bash
+        env:
+          ENVELOPE_B64: \${{ secrets.DEVAI_LEDGER_ENVELOPE_B64 }}
+          RESULTS_TGZ_B64: \${{ secrets.DEVAI_LEDGER_RESULTS_TGZ_B64 }}
+          TASK_POLICY_B64: \${{ secrets.DEVAI_LEDGER_TASK_POLICY_B64 }}
+          TRUST_STORE_B64: \${{ secrets.DEVAI_LEDGER_TRUST_STORE_B64 }}
+        run: |
+          set -euo pipefail
+          test -n "$ENVELOPE_B64"
+          test -n "$RESULTS_TGZ_B64"
+          test -n "$TASK_POLICY_B64"
+          test -n "$TRUST_STORE_B64"
+          control="$RUNNER_TEMP/devai-ledger-control"
+          mkdir -p "$control/results"
+          printf '%s' "$ENVELOPE_B64" | base64 --decode > "$control/envelope.json"
+          printf '%s' "$TASK_POLICY_B64" | base64 --decode > "$control/task-policy.json"
+          printf '%s' "$TRUST_STORE_B64" | base64 --decode > "$control/trust-store.json"
+          printf '%s' "$RESULTS_TGZ_B64" | base64 --decode > "$control/results.tgz"
+          if tar -tzf "$control/results.tgz" | grep -Eq '(^/|(^|/)${backslash}.${backslash}.(/|$))'; then
+            echo 'DEVAI_LEDGER_RESULTS_ARCHIVE_PATH_INVALID' >&2
+            exit 2
+          fi
+          tar -xzf "$control/results.tgz" -C "$control/results"
+
+      - name: Bind exact candidate identity
+        id: candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C candidate rev-parse HEAD)" = "$CANDIDATE_SHA"
+          echo "tree=$(git -C candidate rev-parse "\${CANDIDATE_SHA}^{tree}")" >> "$GITHUB_OUTPUT"
+
+      - name: Verify ledger only
+        shell: bash
+        env:
+          POLICY_DIGEST: \${{ vars.DEVAI_LEDGER_POLICY_DIGEST }}
+        run: |
+          set -euo pipefail
+          test "$POLICY_DIGEST" != ""
+          node .devai-verifier/src/cli.js ${backslash}
+            --envelope "$RUNNER_TEMP/devai-ledger-control/envelope.json" ${backslash}
+            --results-dir "$RUNNER_TEMP/devai-ledger-control/results" ${backslash}
+            --task-policy "$RUNNER_TEMP/devai-ledger-control/task-policy.json" ${backslash}
+            --trust "$RUNNER_TEMP/devai-ledger-control/trust-store.json" ${backslash}
+            --repository "\${{ github.repository }}" ${backslash}
+            --commit "$CANDIDATE_SHA" ${backslash}
+            --tree "\${{ steps.candidate.outputs.tree }}" ${backslash}
+            --policy-digest "$POLICY_DIGEST"
 `;
-  return { path, content, exists: existsSync(path) };
+}
+
+export function buildCiScaffoldPlan(opts: CiScaffoldOptions): CiScaffoldPlan {
+  const path = opts.outputPath ?? join(opts.targetRoot, DEFAULT_OUTPUT_RELATIVE);
+  return { path, content: ledgerVerificationWorkflow(), exists: existsSync(path) };
 }
 
 export interface CiScaffoldResult {

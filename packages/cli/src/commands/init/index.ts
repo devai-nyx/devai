@@ -17,7 +17,6 @@ import {
   HOOK_NAMES,
   readProfile,
   resolveCanonicalConstitution,
-  type CiScaffoldMode,
   type HookName,
   upgradeChecklist,
   verifyConstitutionBinding,
@@ -77,15 +76,11 @@ interface InitOptions {
   readonly hook?: string;
   readonly command?: string;
   readonly output?: string;
-  readonly devaiRef?: string;
-  readonly mode?: string;
-  readonly chainFile?: string;
   readonly human?: boolean;
 }
 
 type InitSegment = 'owner' | 'architect' | 'harness';
 type InitInclude = 'ci' | 'hooks';
-const CI_SCAFFOLD_MODES: readonly CiScaffoldMode[] = ['gate', 'verify'];
 
 function validateInitTier(options: InitOptions): void {
   if (options.tier !== undefined && !isAdoptionProfile(options.tier)) {
@@ -197,9 +192,6 @@ function executeIncludedComponents(
       const plan = buildCiScaffoldPlan({
         targetRoot,
         ...(options.output !== undefined && { outputPath: options.output }),
-        ...(options.devaiRef !== undefined && { devaiRef: options.devaiRef }),
-        ...(options.mode !== undefined && { mode: options.mode as CiScaffoldMode }),
-        ...(options.chainFile !== undefined && { chainFile: options.chainFile }),
       });
       const result = executeCiScaffoldPlan(plan, { force });
       return { component, plan, result };
@@ -277,11 +269,8 @@ function initApplyDefinition(segment: InitSegment) {
           .option('--include <component>', 'Also install the CI component: ci')
           .option(
             '--output <path>',
-            'CI output path (default: <target>/.github/workflows/devai-gates.yml)',
-          )
-          .option('--devai-ref <ref>', 'Reusable workflow git ref (default: main)')
-          .option('--mode <mode>', `${CI_SCAFFOLD_MODES.join(' | ')} (default: gate)`)
-          .option('--chain-file <path>', 'Evidence chain path passed to the reusable workflow');
+            'CI output path (default: <target>/.github/workflows/devai-ledger-verify.yml)',
+          );
       }
       command.action((options: InitOptions) => {
         validateInitTier(options);
@@ -289,15 +278,6 @@ function initApplyDefinition(segment: InitSegment) {
         if (options.hook !== undefined && !HOOK_NAMES.includes(options.hook as HookName)) {
           process.stderr.write(
             `devai init apply architect: --hook must be one of ${HOOK_NAMES.join(' | ')} (got '${options.hook}')\n`,
-          );
-          process.exit(EXIT_USAGE);
-        }
-        if (
-          options.mode !== undefined &&
-          !CI_SCAFFOLD_MODES.includes(options.mode as CiScaffoldMode)
-        ) {
-          process.stderr.write(
-            `devai init apply harness: --mode must be one of ${CI_SCAFFOLD_MODES.join(' | ')} (got '${options.mode}')\n`,
           );
           process.exit(EXIT_USAGE);
         }

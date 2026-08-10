@@ -676,7 +676,7 @@ async function directService(
     case 'harness-integrity':
       return executeArgv(
         member,
-        ['pnpm', 'vitest', 'run', '--config', 'tests/config/t6.containment.config.ts'],
+        ['pnpm', 'vitest', 'run', '--config', 'tests/config/rc.containment.config.ts'],
         repoRoot,
       );
     case 'coverage':
@@ -687,8 +687,8 @@ async function directService(
           'vitest',
           'run',
           '--config',
-          'tests/config/t1-t3.coverage.config.ts',
-          '--coverage.reportsDirectory=scratch/coverage/t1-t3',
+          'tests/config/rc.coverage.config.ts',
+          '--coverage.reportsDirectory=scratch/coverage/rc',
         ],
         repoRoot,
       );

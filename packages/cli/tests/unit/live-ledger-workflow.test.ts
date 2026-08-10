@@ -1,0 +1,126 @@
+import { execFileSync, spawnSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+import { afterEach, describe, expect, it } from 'vitest';
+import {
+  buildCiScaffoldPlan,
+  ledgerVerificationWorkflow,
+  VERIFIER_COMMIT,
+} from '../../src/services/ci-scaffold/index.js';
+import { checkCiEconomy } from '../../src/commands/check/ci-economy.js';
+
+const ROOT = resolve(import.meta.dirname, '../../../..');
+const CHECKER = join(ROOT, 'scripts/check-workflows.mjs');
+const roots: string[] = [];
+
+function fixture(source = ledgerVerificationWorkflow(), file = 'devai-ledger-verify.yml') {
+  const root = mkdtempSync(join(tmpdir(), 'devai-ledger-workflow-'));
+  roots.push(root);
+  const directory = join(root, '.github/workflows');
+  mkdirSync(directory, { recursive: true });
+  writeFileSync(join(directory, file), source);
+  return root;
+}
+
+function check(root: string) {
+  return spawnSync(process.execPath, [CHECKER], { cwd: root, encoding: 'utf8' });
+}
+
+afterEach(() => {
+  for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
+});
+
+describe('live ledger-verification workflow', () => {
+  it('keeps the checked-in workflow byte-identical to the current scaffold', () => {
+    const expected = ledgerVerificationWorkflow();
+    const checkedIn = readFileSync(join(ROOT, '.github/workflows/devai-ledger-verify.yml'), 'utf8');
+    const target = fixture();
+    const plan = buildCiScaffoldPlan({ targetRoot: target });
+
+    expect(checkedIn).toBe(expected);
+    expect(plan).toMatchObject({
+      path: join(target, '.github/workflows/devai-ledger-verify.yml'),
+      content: expected,
+      exists: true,
+    });
+    expect(execFileSync(process.execPath, [CHECKER], { cwd: ROOT, encoding: 'utf8' })).toBe(
+      'workflow contract: PASS\n',
+    );
+  });
+
+  it.each([
+    {
+      name: 'mutable verifier ref',
+      mutate: (source: string) => source.replace(VERIFIER_COMMIT, 'main'),
+      diagnostic: 'CI_VERIFIER_REF_MUTABLE',
+    },
+    {
+      name: 'wrong immutable verifier pin',
+      mutate: (source: string) => source.replace(VERIFIER_COMMIT, 'a'.repeat(40)),
+      diagnostic: 'CI_VERIFIER_PIN_MISMATCH',
+    },
+    {
+      name: 'candidate-local verifier',
+      mutate: (source: string) =>
+        source.replace(
+          'node .devai-verifier/src/cli.js',
+          'node candidate/scripts/verify-ledger.mjs',
+        ),
+      diagnostic: 'CI_CANDIDATE_LOCAL_VERIFIER_FORBIDDEN',
+    },
+    {
+      name: 'remote product tests',
+      mutate: (source: string) => source.replace('test "$POLICY_DIGEST" != ""', 'pnpm vitest run'),
+      diagnostic: 'CI_PRODUCT_EXECUTION_FORBIDDEN',
+    },
+    {
+      name: 'candidate SHA drift',
+      mutate: (source: string) =>
+        source.replaceAll(
+          '${{ github.event.pull_request.head.sha || github.sha }}',
+          '${{ github.sha }}',
+        ),
+      diagnostic: 'CI_CANDIDATE_SHA_UNBOUND',
+    },
+  ])('rejects $name', ({ mutate, diagnostic }) => {
+    const result = check(fixture(mutate(ledgerVerificationWorkflow())));
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(diagnostic);
+  });
+
+  it('rejects extra and obsolete workflow files', () => {
+    const root = fixture();
+    writeFileSync(join(root, '.github/workflows/cold-sentinel.yml'), 'name: old\non: push\n');
+    const result = check(root);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('CI_WORKFLOW_SET_INVALID');
+    expect(result.stderr).toContain('CI_OBSOLETE_WORKFLOW_PRESENT');
+  });
+
+  it('exposes only the current init scaffold help surface', () => {
+    const source = readFileSync(join(ROOT, 'packages/cli/src/commands/init/index.ts'), 'utf8');
+    expect(source).toContain('.github/workflows/devai-ledger-verify.yml');
+    expect(source).not.toContain('--devai-ref');
+    expect(source).not.toContain('--chain-file');
+    expect(source).not.toContain('--mode <mode>');
+  });
+
+  it('binds live check adapters to canonical local and RC config names', () => {
+    const source = readFileSync(join(ROOT, 'packages/cli/src/commands/check/adapters.ts'), 'utf8');
+    expect(source).toContain('tests/config/rc.containment.config.ts');
+    expect(source).toContain('tests/config/rc.coverage.config.ts');
+    expect(source).toContain('--coverage.reportsDirectory=scratch/coverage/rc');
+    expect(source).not.toContain('tests/config/t6.containment.config.ts');
+    expect(source).not.toContain('tests/config/t1-t3.coverage.config.ts');
+
+    const economy = checkCiEconomy({ repoRoot: ROOT });
+    expect(economy.workflows_scanned).toBe(1);
+    expect(
+      economy.findings.find((finding) => finding.ruleId === 'ci-economy.evidence-gate-wired'),
+    ).toMatchObject({ severity: 'pass' });
+    expect(
+      economy.findings.some((finding) => finding.ruleId === 'ci-economy.scheduled-audit'),
+    ).toBe(false);
+  });
+});
