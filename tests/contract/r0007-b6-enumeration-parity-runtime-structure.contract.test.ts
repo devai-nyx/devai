@@ -254,5 +254,5 @@ describe('R-0007 B6 runtime/reference enumeration parity', () => {
         20,
       );
     }
-  });
+  }, 5_000);
 });

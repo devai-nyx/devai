@@ -1,7 +1,7 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -10,6 +10,14 @@ vi.setConfig({ testTimeout: 30_000 });
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const SCRIPT = join(ROOT, 'scripts/run-round-close-controls.mjs');
+const CONTROLLER_SOURCES = [
+  SCRIPT,
+  join(ROOT, 'scripts/round-close-controls/runtime.mjs'),
+  join(ROOT, 'scripts/round-close-controls/legacy.mjs'),
+  join(ROOT, 'scripts/round-close-controls/impact.mjs'),
+  join(ROOT, 'scripts/round-close-controls/governed.mjs'),
+  join(ROOT, 'scripts/round-close-controls/review-lifecycle.mjs'),
+] as const;
 const roots: string[] = [];
 
 interface Fixture {
@@ -607,9 +615,10 @@ describe('R-0006 OM-011 exhaustive review-scope red contracts', () => {
       '### P1 — the active as-built again presents superseded readings as current',
     );
     expect(readFileSync(join(ROOT, finalRecord), 'utf8')).toContain('verdict: PASS');
-    expect(readFileSync(join(ROOT, 'scripts/run-round-close-controls.mjs'), 'utf8')).not.toContain(
-      finalRecord,
-    );
+    const controllerPopulation = CONTROLLER_SOURCES.filter(existsSync)
+      .map((path) => readFileSync(path, 'utf8'))
+      .join('\n');
+    expect(controllerPopulation).not.toContain(finalRecord);
   });
 
   it('fails the policy gate when a governed current claim drifts from machine sources', () => {

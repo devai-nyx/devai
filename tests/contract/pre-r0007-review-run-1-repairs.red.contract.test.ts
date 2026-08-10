@@ -1,10 +1,17 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const CONTROLLER_PATH = 'scripts/run-round-close-controls.mjs';
+const CONTROLLER_CONCERN_PATHS = [
+  'scripts/round-close-controls/runtime.mjs',
+  'scripts/round-close-controls/legacy.mjs',
+  'scripts/round-close-controls/impact.mjs',
+  'scripts/round-close-controls/governed.mjs',
+  'scripts/round-close-controls/review-lifecycle.mjs',
+] as const;
 const ROSTER_PATH = 'packages/schemas/src/roster.ts';
 const MATERIALIZATION_PATH = '.devai/config/round-close-controls.json';
 const IMPLEMENTATION_PATHS = [MATERIALIZATION_PATH, ROSTER_PATH, CONTROLLER_PATH] as const;
@@ -30,7 +37,10 @@ function requireRecords(value: unknown, label: string): Record<string, unknown>[
 }
 
 function expectRuntimeGuards(...guards: string[]): void {
-  const controller = text(CONTROLLER_PATH);
+  const controller = [CONTROLLER_PATH, ...CONTROLLER_CONCERN_PATHS]
+    .filter((path) => existsSync(resolve(ROOT, path)))
+    .map(text)
+    .join('\n');
   const missing = guards.filter((guard) => !controller.includes(guard));
   expect(missing, 'missing runtime guards').toEqual([]);
 }
@@ -423,7 +433,6 @@ describe('OM-015 review run 1 complete-class repair populations', () => {
     });
 
     it('derives transitive decisions, every schema, round registry, declaration, and referenced manifest from raw candidate blobs', () => {
-      const controller = text(CONTROLLER_PATH);
       const provenance = json('work/rounds/R-0007/control-provenance.json');
       const decisions = requireRecords(provenance.decisions, 'control provenance decisions');
       expect(decisions.map(({ decision_id }) => decision_id)).toEqual([
@@ -438,11 +447,17 @@ describe('OM-015 review run 1 complete-class repair populations', () => {
         'DII-254',
         'DII-255',
         'DII-256',
+        'DII-257',
+        'DII-258',
       ]);
-      expect(controller.includes("'DII-246'")).toBe(false);
-      expect(controller.includes("'DII-248'")).toBe(false);
-      expect(controller.includes('active_control_census_digest')).toBe(true);
-      expect(/cat-file['"],\s*['"]blob/u.test(controller)).toBe(true);
+      const controllerPopulation = [CONTROLLER_PATH, ...CONTROLLER_CONCERN_PATHS]
+        .filter((path) => existsSync(resolve(ROOT, path)))
+        .map(text)
+        .join('\n');
+      expect(controllerPopulation.includes("'DII-246'")).toBe(false);
+      expect(controllerPopulation.includes("'DII-248'")).toBe(false);
+      expect(controllerPopulation.includes('active_control_census_digest')).toBe(true);
+      expect(/cat-file['"],\s*['"]blob/u.test(controllerPopulation)).toBe(true);
       expectRuntimeGuards(
         'deriveControlProvenanceV6',
         'deriveActiveControlCensusV5',

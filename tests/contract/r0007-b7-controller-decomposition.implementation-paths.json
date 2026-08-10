@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "finding_id": "AB-F006",
+  "decision_id": "DII-258",
+  "red_contract": "tests/contract/r0007-b7-controller-decomposition.red.contract.test.ts",
+  "description": "Prospectively binds the complete five-concern close-controller decomposition. Every listed path is an implementation surface; no package, policy, test, workflow, or generated-output path is authorized by this manifest.",
+  "allowed_paths": [
+    "scripts/run-round-close-controls.mjs",
+    "scripts/round-close-controls/runtime.mjs",
+    "scripts/round-close-controls/legacy.mjs",
+    "scripts/round-close-controls/impact.mjs",
+    "scripts/round-close-controls/governed.mjs",
+    "scripts/round-close-controls/review-lifecycle.mjs"
+  ],
+  "rationale": {
+    "scripts/run-round-close-controls.mjs": "Retains only candidate bootstrap, complete structured error containment, and command dispatch.",
+    "scripts/round-close-controls/runtime.mjs": "Owns deterministic serialization, hashing, process and Git execution, candidate bytes, filesystem snapshots, and state I/O.",
+    "scripts/round-close-controls/legacy.mjs": "Owns retained pre-v3 compatibility commands without reminting command identities.",
+    "scripts/round-close-controls/impact.mjs": "Owns change discovery, graph closure, freshness, and affected execution planning.",
+    "scripts/round-close-controls/governed.mjs": "Owns candidate-bound authority loading, claims, convergence, provenance, and review-topic construction.",
+    "scripts/round-close-controls/review-lifecycle.mjs": "Owns review state, transport, authentication, repair evidence, terminal validation, and status."
+  },
+  "forbidden": [
+    "dynamic evaluation or source concatenation",
+    "generated controller modules",
+    "subprocess delegation back into the former monolith",
+    "literal argv, policy, state, output, finding, or exit changes",
+    "any test, timeout, coverage, workflow, package, or law edit"
+  ]
+}

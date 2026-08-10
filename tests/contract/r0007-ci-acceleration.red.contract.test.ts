@@ -425,18 +425,30 @@ describe('R-0007 GitHub Actions acceleration red contracts', () => {
     ).toBe(true);
   });
 
-  it('R7-028-PAIRED-CRITICAL-PATH blocks activation until equal-population timings exist', () => {
+  it('R7-028-PAIRED-CRITICAL-PATH keeps R-0007 disabled and defers activation to R-0008', () => {
     const policy = readJson(COMMIT_VALIDATION_POLICY);
     const activation = policy.activation as Record<string, unknown>;
     const boundaries = activation.acceptance_boundaries as Record<string, unknown>;
     const b3c = boundaries.B3C as Record<string, unknown>;
     const b7 = boundaries.B7 as Record<string, unknown>;
 
-    expect(activation.current_state).toBe('disabled-pending-paired-evidence');
+    expect(activation.current_state).toBe('disabled-pending-r0008-activation-authority');
+    expect(activation.activation_owner).toBe('R-0008-under-separate-entry-and-review-authority');
     expect(b3c.paired_benchmark_required).toBe(false);
-    expect(b3c.required_state).toBe('disabled-pending-paired-evidence');
-    expect(b7.paired_benchmark_required).toBe(true);
-    expect(b7.required_evidence).toBe('work/audit/R-0007/ci-optimisation-benchmark.json');
+    expect(b3c.required_state).toBe('disabled-pending-r0008-activation-authority');
+    expect(b7.paired_benchmark_required).toBe(false);
+    expect(b7.required_state).toBe('disabled-pending-r0008-activation-authority');
+    expect(b7.prohibited_claims).toEqual(
+      expect.arrayContaining([
+        'paired-benchmark-complete',
+        'positive-critical-path-saving',
+        'classified-validation-activated',
+        'cache-acceleration-activated',
+        'authenticated-result-reuse',
+      ]),
+    );
+    expect(activation.evidence_path).toBeNull();
+    expect(activation.evidence_path_binding).toBe('R-0008-entry-and-review-authority-required');
 
     const evidence = optionalEvidence();
     if (evidence === undefined) return;

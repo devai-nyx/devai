@@ -316,6 +316,31 @@ describe('governed sequencing', () => {
     expect(JSON.parse(result.stdout as string)).toMatchObject({ ok: true, commits_checked: 1 });
   });
 
+  it('admits an exact historical exception whose immutable subject omitted the round token', () => {
+    const { root, base } = fixture();
+    const implementation = commit(
+      root,
+      'DEVAI Engineer',
+      'implement immutable historical work without a round token',
+      'packages/fixture/index.ts',
+    );
+    configureBindings(
+      root,
+      [],
+      [
+        {
+          round: 'R-0007',
+          implementation_commits: [implementation],
+          reason: 'OM-022 exact immutable disposition; the original subject cannot be rewritten.',
+        },
+      ],
+    );
+
+    const result = check(root, base);
+    expect(result.status, `${result.stdout}\n${result.stderr}`).toBe(0);
+    expect(JSON.parse(result.stdout as string)).toMatchObject({ ok: true, commits_checked: 1 });
+  });
+
   it.each([
     'apps/fixture/index.ts',
     'pnpm-workspace.yaml',

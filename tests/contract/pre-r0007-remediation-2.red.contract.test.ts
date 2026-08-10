@@ -1,7 +1,7 @@
 // Invariants: INV-DEVAI-002, INV-DEVAI-003, INV-DEVAI-017, INV-DEVAI-020
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import ts from 'typescript';
 import { describe, expect, it, vi } from 'vitest';
@@ -10,6 +10,13 @@ vi.setConfig({ testTimeout: 180_000 });
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const CONTROLLER_PATH = 'scripts/run-round-close-controls.mjs';
+const CONTROLLER_CONCERN_PATHS = [
+  'scripts/round-close-controls/runtime.mjs',
+  'scripts/round-close-controls/legacy.mjs',
+  'scripts/round-close-controls/impact.mjs',
+  'scripts/round-close-controls/governed.mjs',
+  'scripts/round-close-controls/review-lifecycle.mjs',
+] as const;
 const GRAPH_PATH = 'work/rounds/R-0007/affected-test-graph.json';
 const POLICY_PATH = 'law/policy/round-close-controls.json';
 const PROFILE_PATH = 'work/rounds/R-0007/close-control-profile.json';
@@ -37,8 +44,12 @@ function json<T>(path: string): T {
   return JSON.parse(readFileSync(resolve(ROOT, path), 'utf8')) as T;
 }
 
-function source(path = CONTROLLER_PATH): string {
-  return readFileSync(resolve(ROOT, path), 'utf8');
+function source(path?: string): string {
+  if (path !== undefined) return readFileSync(resolve(ROOT, path), 'utf8');
+  return [CONTROLLER_PATH, ...CONTROLLER_CONCERN_PATHS]
+    .filter((candidate) => existsSync(resolve(ROOT, candidate)))
+    .map((candidate) => readFileSync(resolve(ROOT, candidate), 'utf8'))
+    .join('\n');
 }
 
 function required<T>(value: T | null | undefined, label: string): T {
@@ -55,7 +66,8 @@ function controllerFunction<T>(name: string, dependencies: Record<string, unknow
   );
   if (declaration === undefined) throw new Error(`controller function ${name} is missing`);
   const names = Object.keys(dependencies);
-  const factory = new Function(...names, `${declaration.getText(file)}; return ${name};`);
+  const declarationSource = declaration.getText(file).replace(/^export\s+/u, '');
+  const factory = new Function(...names, `${declarationSource}; return ${name};`);
   return factory(...names.map((key) => dependencies[key])) as T;
 }
 
@@ -467,6 +479,7 @@ describe('OM-016 / DII-249 remediation campaign 2 complete populations', () => {
           'product/owner-mandates/OM-019.md',
           'product/owner-mandates/OM-020.md',
           'product/owner-mandates/OM-021.md',
+          'product/owner-mandates/OM-022.md',
           'work/rounds/EXECUTION-CONTRACT.md',
           'work/rounds/R-0007/AUTHORIZATION.md',
           'work/rounds/R-0007/plan.md',
