@@ -54,7 +54,7 @@ export const actionsList = defineCommand({
         if (options.human === true) {
           const rows = actions.map(
             (action) =>
-              `${action.name.padEnd(46)} ${action.lifecycle.padEnd(12)} ${action.effects.padEnd(13)} ${action.description}`,
+              `${action.name.padEnd(46)} ${action.status.padEnd(12)} ${action.effects.padEnd(13)} ${action.description}`,
           );
           process.stdout.write(
             `COMMAND${' '.repeat(39)} LIFECYCLE    EFFECTS       DESCRIPTION\n${rows.join('\n')}\n`,

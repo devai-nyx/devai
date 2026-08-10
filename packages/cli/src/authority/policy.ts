@@ -430,32 +430,6 @@ export function buildTrustedAuthoritySources(
       }),
     ),
     ...[
-      '.devai/worktrees',
-      '.devai/worktrees/**',
-      'docs/site/build',
-      'docs/site/build/**',
-      'docs/site/_site',
-      'docs/site/_site/**',
-      // Verb-attributed publish bookkeeping (Article 6 F5 state): the gate-4
-      // baseline `release publish docs` persists after a successful gh-pages push,
-      // plus the state directory itself for repos that predate it. Absent
-      // from this surface, the persist was denied at the policy layer and
-      // the stale baseline forced --force on every later publish.
-      '.devai/state',
-      '.devai/state/docs-publish-baseline.txt',
-    ].map((path, index) =>
-      rule({
-        id: `core-release-runtime-${String(index + 1)}`,
-        origin: 'immutable-core',
-        precedence: 900,
-        actionIds: groups.release,
-        selector: fsSelector(repositoryId, path),
-        subjects: [machineSubject('release')],
-        consent: { write: true, allow_publish: true, experimental: false },
-        rationale: 'Article 6 Architect-initiated release transition runtime surface.',
-      }),
-    ),
-    ...[
       '.devai',
       '.devai/config',
       '.devai/constitution.md',
@@ -494,16 +468,6 @@ export function buildTrustedAuthoritySources(
     '.changeset/**',
   ];
   const additiveRules = defined([
-    rule({
-      id: 'self-git-ref-docs-publish-1',
-      origin: 'additive-extension',
-      precedence: 500,
-      actionIds: ['release publish docs'],
-      selector: gitSelector(repositoryId),
-      subjects: [machineSubject('release')],
-      consent: { write: true, allow_publish: true, experimental: false },
-      rationale: 'DEVAI-self typed git-ref authority for docs publish.',
-    }),
     rule({
       id: 'self-git-ref-work-task-spawn-1',
       origin: 'additive-extension',
@@ -548,22 +512,6 @@ export function buildTrustedAuthoritySources(
       selector: dbSelector(),
       subjects: [harnessSubject(['inspector'])],
       rationale: 'DEVAI-self typed db authority for verify translation.',
-    }),
-    rule({
-      id: 'self-remote-docs-publish-1',
-      origin: 'additive-extension',
-      precedence: 500,
-      actionIds: ['release publish docs'],
-      selector: {
-        kind: 'remote',
-        system_id: 'github-pages',
-        endpoint_ids: ['publish-docs'],
-        operation_ids: ['publish'],
-        publication: true,
-      },
-      subjects: [machineSubject('release')],
-      consent: { write: true, allow_publish: true, experimental: false },
-      rationale: 'DEVAI-self typed remote authority for docs publish.',
     }),
     rule({
       id: 'self-engineer-packages',

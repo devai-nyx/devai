@@ -3,7 +3,7 @@
 
 export const ACTION_EFFECT_CONTRACTS = [
   {
-    action_id: 'actions list',
+    action_id: 'catalog actions',
     public_action_id: 'catalog actions',
     effect: 'read',
     capabilities: [],
@@ -103,19 +103,6 @@ export const ACTION_EFFECT_CONTRACTS = [
     public_action_id: 'release drift',
     effect: 'harness-write',
     capabilities: ['fs:f5-state', 'fs:proofs'],
-  },
-  {
-    action_id: 'release publish docs',
-    public_action_id: 'release publish docs',
-    effect: 'remote-write',
-    capabilities: [
-      'fs:f5-state',
-      'fs:workspace',
-      'fs:worktree-admin',
-      'net:github-pages',
-      'proc:dynamic',
-      'proc:git',
-    ],
   },
   {
     action_id: 'release status',

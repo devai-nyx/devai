@@ -15,11 +15,6 @@ import { validators } from '@devai-nyx/schemas';
 import { executeRuntimeProbe, type RuntimeProbeCharter } from '@devai-nyx/sensors';
 import { EXIT_FAIL, EXIT_PASS, EXIT_USAGE } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
-import {
-  runDocsPublish,
-  type PublishOptions as DocsPublishOptions,
-  type RunSummary as DocsPublishSummary,
-} from '../docs/publish.js';
 
 const DEFAULT_REPO_ROOT = process.cwd();
 const KNOWN_ENVS = ['dev', 'staging', 'stage', 'prod', 'preview', 'other'] as const;
@@ -375,58 +370,6 @@ export const releaseDrift = defineCommand({
         } catch (error) {
           failure('release drift', error);
         }
-      });
-  },
-});
-
-function emitPublish(summary: DocsPublishSummary, human: boolean): void {
-  if (!human) {
-    process.stdout.write(`${JSON.stringify(summary)}\n`);
-    return;
-  }
-  if (summary.ok && summary.dry_run && summary.plan !== undefined) {
-    process.stdout.write(
-      [
-        'release publish docs [dry-run]',
-        `  branch: ${summary.plan.branch}`,
-        `  source: ${summary.plan.commit_sha_source}`,
-        `  file_count: ${String(summary.plan.file_count)}`,
-        `  total_bytes: ${String(summary.plan.total_bytes)}`,
-      ].join('\n') + '\n',
-    );
-    return;
-  }
-  if (summary.ok && summary.publish !== undefined) {
-    process.stdout.write(
-      `release publish docs: pushed ${summary.publish.commit_sha ?? '?'} to origin/${summary.publish.remote_branch}\n`,
-    );
-    return;
-  }
-  process.stderr.write(
-    `release publish docs failed at ${summary.error?.stage ?? 'publish'}: ${summary.error?.message ?? 'unknown failure'}\n`,
-  );
-}
-
-export const releasePublishDocs = defineCommand({
-  name: 'release publish docs',
-  description: 'Publish documentation only with independent --write and --publish consent.',
-  authority: 'release_controller',
-  register(cli: CAC): void {
-    cli
-      .command('release-publish-docs', 'Build and publish documentation to GitHub Pages')
-      .option('--repo-root <path>', `Repo root (default: ${DEFAULT_REPO_ROOT})`)
-      .option('--builder <name>', 'Override docs.builder (docusaurus | jekyll)')
-      .option('--message <text>', 'Publish commit message')
-      .option('--dry-run', 'Run detect, preflight, and build without publishing')
-      .option('--force', 'Bypass only the gh-pages-newer preflight')
-      .option('--human', 'Human-readable output')
-      .action((options: DocsPublishOptions) => {
-        // The public router and authority broker consume --write and --publish
-        // independently before dispatch. This service receives neither flag and
-        // never recognizes the retired --allow-publish spelling.
-        const summary = runDocsPublish(options, options.human === true ? 'stderr' : 'in-band');
-        emitPublish(summary, options.human === true);
-        process.exitCode = summary.ok ? EXIT_PASS : EXIT_FAIL;
       });
   },
 });

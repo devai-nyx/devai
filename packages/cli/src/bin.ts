@@ -52,22 +52,24 @@ function publicText(value: string): string {
 }
 
 function canonicalRegistry(): readonly RegistryEntry[] {
-  return ACTION_REGISTRY.filter((entry) => entry.disposition === 'keep').map(
+  return ACTION_REGISTRY.map(
     (entry) =>
       ({
         name: entry.action_id,
-        previous_name: entry.internal_binding,
-        internal_name: entry.internal_binding.replaceAll(' ', '-'),
-        disposition: entry.disposition,
-        migration: entry.migration,
+        handler: entry.handler,
+        internal_name: entry.handler.replaceAll(' ', '-'),
         path: entry.path,
+        status: entry.status,
         description: publicText(entry.description),
         authority: entry.authority ?? 'mesh_controller',
-        lifecycle: entry.lifecycle,
-        lifecycle_reason: entry.lifecycle_reason,
-        promotion_criteria: entry.promotion_criteria,
-        visibility: entry.visibility,
-        tier: entry.tier,
+        lifecycle: entry.status === 'preview' ? 'experimental' : 'supported',
+        lifecycle_reason:
+          entry.status === 'preview'
+            ? 'Preview action; contract may change before v1.0.'
+            : 'Stable action.',
+        promotion_criteria: [],
+        visibility: entry.status === 'internal' ? 'maintainer' : 'standard',
+        tier: entry.status === 'internal' ? 'plumbing' : 'porcelain',
         profiles: entry.profiles,
         effects: entry.effect,
         authority_contract_version: entry.authority_contract_version,
@@ -123,9 +125,9 @@ async function commandsFor(domain: CommandDomain): Promise<readonly CommandDefin
       return [initApplyArchitect, initApplyHarness, initApplyOwner, initPlan, initUpgrade];
     }
     case 'release': {
-      const { releaseCheck, releaseDrift, releasePublishDocs, releaseStatus, releaseVerify } =
+      const { releaseCheck, releaseDrift, releaseStatus, releaseVerify } =
         await import('./commands/release/facade.js');
-      return [releaseCheck, releaseDrift, releasePublishDocs, releaseStatus, releaseVerify];
+      return [releaseCheck, releaseDrift, releaseStatus, releaseVerify];
     }
     case 'round': {
       const {

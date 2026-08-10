@@ -17,27 +17,26 @@ function compareUtf8Bytes(left, right) {
 if (!Array.isArray(registry.entries)) {
   throw new Error('ACTION_REGISTRY_COUNT_GUARD');
 }
-const actualCounts = { keep: 0, fold: 0, tombstone: 0 };
-const dispositionNames = Object.keys(actualCounts);
+const actualCounts = { stable: 0, preview: 0, internal: 0, total: registry.entries.length };
+const statusNames = ['stable', 'preview', 'internal'];
 for (const entry of registry.entries) {
-  if (!Object.hasOwn(actualCounts, entry?.disposition)) {
+  if (!statusNames.includes(entry?.status)) {
     throw new Error('ACTION_REGISTRY_COUNT_GUARD');
   }
-  actualCounts[entry.disposition] += 1;
+  actualCounts[entry.status] += 1;
 }
 const declaredCounts = registry.counts;
 if (
   declaredCounts === null ||
   typeof declaredCounts !== 'object' ||
-  Object.keys(declaredCounts).length !== dispositionNames.length ||
-  dispositionNames.some(
-    (disposition) =>
-      !Number.isSafeInteger(declaredCounts[disposition]) ||
-      declaredCounts[disposition] < 0 ||
-      declaredCounts[disposition] !== actualCounts[disposition],
+  Object.keys(declaredCounts).length !== Object.keys(actualCounts).length ||
+  Object.keys(actualCounts).some(
+    (status) =>
+      !Number.isSafeInteger(declaredCounts[status]) ||
+      declaredCounts[status] < 0 ||
+      declaredCounts[status] !== actualCounts[status],
   ) ||
-  dispositionNames.reduce((total, disposition) => total + declaredCounts[disposition], 0) !==
-    registry.entries.length
+  declaredCounts.total !== registry.entries.length
 ) {
   throw new Error('ACTION_REGISTRY_COUNT_GUARD');
 }
@@ -51,15 +50,8 @@ for (const entry of registry.entries) {
     throw new Error('ACTION_PATH_DRIFT:' + entry.action_id);
   }
   if (
-    entry.disposition !== 'keep' &&
-    !(typeof entry.migration === 'string' && entry.migration.length > 0)
-  ) {
-    throw new Error('ACTION_MIGRATION_MISSING:' + entry.action_id);
-  }
-  const runnable = entry.disposition === 'keep';
-  if (
-    entry.output_contract?.mode !== (runnable ? 'action-envelope' : 'router-only') ||
-    entry.error_contract?.mode !== (runnable ? 'structured-error-envelope' : 'router-only')
+    entry.output_contract?.mode !== 'action-envelope' ||
+    entry.error_contract?.mode !== 'structured-error-envelope'
   ) {
     throw new Error('ACTION_RESULT_CONTRACT_MISSING:' + entry.action_id);
   }
@@ -81,40 +73,29 @@ function generatedModule(preamble, valueName, value) {
 
 const cliEntries = registry.entries.map((entry) => ({
   action_id: entry.action_id,
-  internal_binding: entry.internal_binding,
+  handler: entry.handler,
   path: entry.path,
-  disposition: entry.disposition,
-  lifecycle: entry.lifecycle,
-  lifecycle_reason: entry.lifecycle_reason,
-  migration: entry.migration,
-  never_remint: entry.never_remint,
-  visibility: entry.visibility,
-  tier: entry.tier,
+  status: entry.status,
   profiles: entry.profiles,
   effect: entry.effect,
   authority: entry.authority,
   description: entry.description,
-  promotion_criteria: entry.promotion_criteria,
   output_contract: entry.output_contract,
   error_contract: entry.error_contract,
   authority_contract_version: entry.authority_contract_version,
   authority_contract: entry.authority_contract,
 }));
-const effectEntries = registry.entries
-  .filter((entry) => entry.disposition === 'keep')
-  .map((entry) => ({
-    action_id: entry.internal_binding,
-    public_action_id: entry.action_id,
-    effect: entry.effect,
-    capabilities: entry.authority_contract.capabilities,
-  }));
+const effectEntries = registry.entries.map((entry) => ({
+  action_id: entry.action_id,
+  public_action_id: entry.action_id,
+  effect: entry.effect,
+  capabilities: entry.authority_contract.capabilities,
+}));
 const sensorEntries = registry.entries
-  .filter((entry) => entry.authority === 'sensor' || entry.disposition === 'fold')
+  .filter((entry) => entry.authority === 'sensor')
   .map((entry) => ({
     action_id: entry.action_id,
-    internal_binding: entry.internal_binding,
-    disposition: entry.disposition,
-    migration: entry.migration,
+    status: entry.status,
     effect: entry.effect,
   }));
 
@@ -126,12 +107,9 @@ const rawOutputs = new Map([
       'ACTION_REGISTRY',
       cliEntries,
     ) +
-      '\nexport const ACTION_REGISTRY_BY_BINDING = new Map<string, RegistryActionRecord>();\n' +
+      '\nexport const ACTION_REGISTRY_BY_HANDLER = new Map<string, RegistryActionRecord>();\n' +
       'for (const entry of ACTION_REGISTRY) {\n' +
-      '  const existing = ACTION_REGISTRY_BY_BINDING.get(entry.internal_binding);\n' +
-      "  if (existing === undefined || entry.disposition === 'keep') {\n" +
-      '    ACTION_REGISTRY_BY_BINDING.set(entry.internal_binding, entry);\n' +
-      '  }\n' +
+      '  ACTION_REGISTRY_BY_HANDLER.set(entry.handler, entry);\n' +
       '}\n',
   ],
   [

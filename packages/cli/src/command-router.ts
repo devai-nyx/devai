@@ -1,12 +1,7 @@
 import type { RegistryEntry } from './define-command.js';
-import {
-  ARCHIVED_SENSOR_KINDS,
-  isArchivedSensorKind,
-  isSensorKind,
-} from '@devai-nyx/sensors/registry';
+import { isSensorKind } from '@devai-nyx/sensors/registry';
 import { cliError, renderCliError } from './cli-error.js';
 import { resolveInvocationEntry } from './authority/sense-selection.js';
-import { ACTION_REGISTRY } from './generated/action-registry.js';
 
 export const EXIT_USAGE = 2;
 
@@ -21,7 +16,7 @@ const DOMAIN_SUMMARIES: Readonly<Record<string, string>> = {
   doctor: 'Diagnose the declared adoption posture.',
   evidence: 'Record, render, redact, and verify audit evidence.',
   init: 'Adopt and upgrade DEVAI in a repository.',
-  release: 'Check, publish, and verify releases.',
+  release: 'Check and verify releases.',
   round: 'Plan, run, assess, and close governed rounds.',
   sense: 'Observe repository and runtime state through sensors.',
   task: 'Operate round-bound task plumbing.',
@@ -56,8 +51,6 @@ export function renderHelp(
 ): string {
   const visible = entries.filter(
     (entry) =>
-      entry.disposition === 'keep' &&
-      entry.lifecycle !== 'retired' &&
       startsWithPath(entry.path, prefix) &&
       (includeAll || entry.tier === 'porcelain' || entry.path.length === prefix.length),
   );
@@ -147,15 +140,6 @@ function suggestion(
   entries: readonly RegistryEntry[],
 ): string | undefined {
   const wanted = input.join(' ');
-  const historical = ACTION_REGISTRY.find(
-    (entry) =>
-      entry.disposition !== 'keep' &&
-      entry.migration !== null &&
-      (entry.internal_binding === wanted || entry.internal_binding.replaceAll(' ', '-') === wanted),
-  );
-  if (historical?.migration !== undefined && historical.migration !== null) {
-    return historical.migration;
-  }
   return entries
     .map((entry) => entry.path.join(' '))
     .sort((a, b) => distance(wanted, a) - distance(wanted, b))[0];
@@ -174,29 +158,6 @@ function flagValue(args: readonly string[], flag: string): string | undefined {
   const index = args.indexOf(flag);
   const value = index < 0 ? undefined : args[index + 1];
   return value === undefined || value.startsWith('-') ? undefined : value;
-}
-
-function migrationRefusal(
-  args: readonly string[],
-  code: string,
-  message: string,
-  remediation: string,
-  context: Readonly<Record<string, unknown>>,
-): RouteResult {
-  const error = cliError({
-    code,
-    class: 'routing-authority',
-    exit: EXIT_USAGE,
-    message,
-    remediation,
-    refs: { doc: 'work/rounds/R-0007/inventory/old-to-new-command-map.md' },
-    context,
-  });
-  return {
-    kind: 'output',
-    text: renderCliError(error, wantsJson(args)),
-    exitCode: EXIT_USAGE,
-  };
 }
 
 function usageRefusal(
@@ -222,97 +183,6 @@ function usageRefusal(
   };
 }
 
-function vocabularyMigrationRefusal(args: readonly string[]): RouteResult | undefined {
-  if (args.includes('--allow-publish')) {
-    return migrationRefusal(
-      args,
-      'CLI_VOCABULARY_RETIRED',
-      "Option '--allow-publish' is retired.",
-      'Use --publish with --write.',
-      { option: '--allow-publish', replacement: '--publish' },
-    );
-  }
-
-  if (args[0] === 'check' && args.includes('--profile')) {
-    const index = args.indexOf('--profile');
-    const suite = args[index + 1];
-    return migrationRefusal(
-      args,
-      'CLI_VOCABULARY_RETIRED',
-      "Option '--profile' is retired for check.",
-      suite === undefined ? 'Use --suite <name>.' : `Use --suite ${suite}.`,
-      { option: '--profile', replacement: '--suite', ...(suite === undefined ? {} : { suite }) },
-    );
-  }
-
-  if (args.includes('--profile')) {
-    return migrationRefusal(
-      args,
-      'CLI_VOCABULARY_RETIRED',
-      "Option '--profile' is retired.",
-      'Use --tier <tier>.',
-      { option: '--profile', replacement: '--tier' },
-    );
-  }
-
-  if (args[0] === 'sense' && args[1] === 'run' && args.includes('--set')) {
-    const index = args.indexOf('--set');
-    const oldSet = args[index + 1];
-    const replacements: Readonly<Record<string, string>> = {
-      baseline: 'baseline',
-      tier1: 'baseline',
-      tier2: 'structural',
-      tier3: 'governed',
-      all: 'governed',
-      sweep: 'sweep --round R-NNNN',
-    };
-    const replacement = oldSet === undefined ? undefined : replacements[oldSet];
-    return migrationRefusal(
-      args,
-      'CLI_VOCABULARY_RETIRED',
-      "Option '--set' is retired for sense run.",
-      replacement === undefined ? 'Use --preset <name>.' : `Use --preset ${replacement}.`,
-      {
-        option: '--set',
-        replacement: '--preset',
-        ...(oldSet === undefined ? {} : { value: oldSet }),
-      },
-    );
-  }
-
-  return undefined;
-}
-
-function historicalRouteRefusal(args: readonly string[]): RouteResult | undefined {
-  if (args[0] === 'init' && (args[1] === 'apply-f5' || (args[1] === 'apply' && args[2] === 'f5'))) {
-    return migrationRefusal(
-      args,
-      'CLI_VOCABULARY_RETIRED',
-      "The 'f5' adoption vocabulary is retired.",
-      'Use devai init apply harness.',
-      { route: args.slice(0, args[1] === 'apply-f5' ? 2 : 3), replacement: 'init apply harness' },
-    );
-  }
-
-  const optionIndex = args.findIndex((argument) => argument.startsWith('-'));
-  const words = args.slice(0, optionIndex < 0 ? args.length : optionIndex);
-  const historical = ACTION_REGISTRY.filter((entry) => entry.disposition !== 'keep')
-    .filter((entry) => startsWithPath(words, entry.path))
-    .sort((left, right) => right.path.length - left.path.length)[0];
-  if (historical === undefined) return undefined;
-  return migrationRefusal(
-    args,
-    historical.disposition === 'tombstone' ? 'ACTION_TOMBSTONED' : 'ACTION_FOLDED',
-    `Action '${historical.action_id}' is ${historical.disposition === 'tombstone' ? 'removed' : 'retired'}.`,
-    historical.migration ?? 'Run devai --help.',
-    {
-      action: historical.action_id,
-      disposition: historical.disposition,
-      migration: historical.migration,
-    },
-  );
-}
-
 export function invocationIsNonMutating(internalName: string, args: readonly string[]): boolean {
   if (args.includes('--check')) return true;
   if (internalName === 'round-close' && args.includes('--post-merge-receipt')) return true;
@@ -332,10 +202,6 @@ export function routeArgv(
   version: string,
 ): RouteResult {
   const args = argv.slice(2);
-  const vocabularyRefusal = vocabularyMigrationRefusal(args);
-  if (vocabularyRefusal !== undefined) return vocabularyRefusal;
-  const historyRefusal = historicalRouteRefusal(args);
-  if (historyRefusal !== undefined) return historyRefusal;
   if (
     args[0] === 'sense' &&
     args[1] === 'run' &&
@@ -344,19 +210,12 @@ export function routeArgv(
   ) {
     const kind = args[2];
     if (!isSensorKind(kind)) {
-      const archived = isArchivedSensorKind(kind);
-      const disposition = ARCHIVED_SENSOR_KINDS.find((entry) => entry.kind === kind);
       const error = cliError({
-        code: archived ? 'SENSOR_KIND_RETIRED' : 'SENSOR_KIND_UNKNOWN',
+        code: 'SENSOR_KIND_UNKNOWN',
         class: 'routing-authority',
         exit: 2,
-        message: archived
-          ? `Sensor kind '${kind}' is retired.`
-          : `Sensor kind '${kind}' is not registered.`,
-        remediation:
-          disposition?.replacement === null || disposition === undefined
-            ? 'Run devai sense run --list.'
-            : `Use devai sense run ${disposition.replacement}.`,
+        message: `Sensor kind '${kind}' is not registered.`,
+        remediation: 'Run devai sense run --list.',
         refs: { record: 'DII-103' },
         context: { kind },
       });
@@ -365,12 +224,11 @@ export function routeArgv(
     // Canonical kinds remain positional values of the direct `sense run`
     // facade. They never translate back through retired child CLI routes.
   }
-  const obsoleteFlag = args.find((arg) => ['--execute', '--apply', '--human'].includes(arg));
-  if (obsoleteFlag !== undefined) {
-    const replacement = obsoleteFlag === '--human' ? '--format human' : '--write';
+  const privateFlag = args.find((arg) => ['--execute', '--apply', '--human'].includes(arg));
+  if (privateFlag !== undefined) {
     return {
       kind: 'output',
-      text: `devai: ${obsoleteFlag} is not part of the 0.5 public contract; use ${replacement}\n`,
+      text: `devai: unknown option ${privateFlag}\n`,
       exitCode: EXIT_USAGE,
     };
   }
@@ -392,7 +250,6 @@ export function routeArgv(
   const optionIndex = args.findIndex((arg) => arg.startsWith('-'));
   const words = args.slice(0, optionIndex < 0 ? args.length : optionIndex);
   const exact = entries
-    .filter((entry) => entry.disposition === 'keep')
     .filter((entry) => startsWithPath(words, entry.path))
     .sort((a, b) => b.path.length - a.path.length)[0];
   if (exact !== undefined) {
@@ -576,9 +433,7 @@ export function routeArgv(
     };
   }
 
-  const prefixMatches = entries.filter(
-    (entry) => entry.disposition === 'keep' && startsWithPath(entry.path, words),
-  );
+  const prefixMatches = entries.filter((entry) => startsWithPath(entry.path, words));
   if (prefixMatches.length > 0) {
     // R17.C.2 (D-131): a bare valid domain/group path renders that node's
     // help exactly as `--help` would, instead of falling through to the

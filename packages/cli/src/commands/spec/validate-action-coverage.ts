@@ -36,29 +36,12 @@ export interface ActionCoverageCheckResult {
   readonly adopterFacingAuthorities?: string[];
 }
 
-function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
-}
-
-function migrationTargets(
-  migration: string | null,
-  liveActionIds: readonly string[],
-): readonly string[] {
-  if (migration === null) return [];
-  return liveActionIds.filter((actionId) =>
-    new RegExp(`(?:^|[^a-z0-9])${escapeRegExp(actionId)}(?=$|[^a-z0-9])`, 'u').test(migration),
-  );
-}
-
 function projectCanonicalClaims(
   sourceClaims: ReadonlySet<string>,
-  includeCompleteFoldMaterialization: boolean,
+  _includeCompleteCatalog: boolean,
 ): Readonly<{ readonly claimed: ReadonlySet<string>; readonly orphanClaims: readonly string[] }> {
   const byActionId = new Map<string, (typeof ACTION_REGISTRY)[number]>(
     ACTION_REGISTRY.map((entry) => [entry.action_id, entry] as const),
-  );
-  const liveActionIds = ACTION_REGISTRY.filter((entry) => entry.disposition === 'keep').map(
-    (entry) => entry.action_id,
   );
   const claimed = new Set<string>();
   const orphanClaims: string[] = [];
@@ -69,23 +52,7 @@ function projectCanonicalClaims(
       orphanClaims.push(sourceClaim);
       continue;
     }
-    if (entry.disposition === 'keep') claimed.add(entry.action_id);
-    if (entry.disposition === 'fold') {
-      for (const target of migrationTargets(entry.migration, liveActionIds)) claimed.add(target);
-    }
-    // Tombstones are known historical identities, not orphaned live claims.
-  }
-
-  if (includeCompleteFoldMaterialization) {
-    // In DEVAI-self, the complete Architect-owned fold population transfers
-    // predecessor invariant coverage to the canonical facade population.
-    // This is intentionally broader than an individual invariant's old
-    // spelling: a newly folded facade remains covered even when its exact
-    // predecessor alias was never an independently registered live action.
-    for (const entry of ACTION_REGISTRY) {
-      if (entry.disposition !== 'fold') continue;
-      for (const target of migrationTargets(entry.migration, liveActionIds)) claimed.add(target);
-    }
+    claimed.add(entry.action_id);
   }
 
   return Object.freeze({ claimed, orphanClaims: Object.freeze(orphanClaims) });

@@ -280,8 +280,6 @@ function formatFor(argv: readonly string[]): 'human' | 'json' {
 function actionId(argv: readonly string[]): string {
   if (argv[0] === 'catalog' && argv[1] === 'actions') return 'catalog actions';
   if (argv[0] === 'docs' && argv[1] === 'cli') return 'docs cli';
-  if (argv[0] === 'release' && argv[1] === 'publish' && argv[2] === 'docs')
-    return 'release publish docs';
   if (argv[0] === 'init' && argv[1] === 'upgrade') return 'init upgrade';
   if (argv[0] === 'init' && argv[1] === 'record') return 'init record';
   if (argv[0] === 'init' && argv[1] === 'apply' && argv[2] === 'owner') return 'init apply owner';
@@ -289,16 +287,6 @@ function actionId(argv: readonly string[]): string {
 }
 
 function targetFor(action: string): JsonRecord {
-  if (action === 'release publish docs') {
-    return {
-      kind: 'remote',
-      id: 'remote:github-pages:publish-docs',
-      system_id: 'github-pages',
-      endpoint_id: 'publish-docs',
-      operation_id: 'publish',
-      publication: true,
-    };
-  }
   return {
     kind: 'fs',
     id:
@@ -341,7 +329,7 @@ function routeRoles(
   argv: readonly string[],
   skillRoleFor: (skillId: string) => string | undefined,
 ): readonly HumanRole[] {
-  if (entry.previous_name === 'skill run') {
+  if (entry.handler === 'skill run') {
     const skillId = argv[2 + entry.path.length];
     const role = skillId === undefined ? undefined : skillRoleFor(skillId);
     if (role === 'harness') return ['owner', 'architect', 'inspector', 'engineer', 'auditor'];
@@ -552,7 +540,7 @@ export function authorizeCliArgv(
   const registeredEntry = entryForArgv(argv, entries);
   if (!registeredEntry) return undefined;
   const entry = resolveInvocationEntry(registeredEntry, argv);
-  if (entry.previous_name === 'skill run') {
+  if (entry.handler === 'skill run') {
     const skillId = argv[2 + entry.path.length];
     if (skillId !== undefined && skillRoleFor(skillId) === undefined) {
       return renderAuthorityResult(taggedFailure('usage-error', 'SKILL_UNKNOWN'), formatFor(argv));

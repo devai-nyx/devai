@@ -536,16 +536,6 @@ function processTarget(
 
   if (executable === 'git') {
     if (verb === 'push') {
-      if (actionName === 'release publish docs') {
-        return {
-          kind: 'remote',
-          id: 'remote:github-pages:publish-docs',
-          system_id: 'github-pages',
-          endpoint_id: 'publish-docs',
-          operation_id: 'publish',
-          publication: true,
-        };
-      }
       if (actionName === 'agent skill run') {
         return {
           kind: 'remote',
@@ -650,26 +640,6 @@ function processTarget(
     };
   }
 
-  if (actionName === 'release publish docs') {
-    const output =
-      executable === 'npm' && args.join('\u0000') === '--prefix\u0000docs/site\u0000run\u0000build'
-        ? 'docs/site/build'
-        : executable === 'bundle' &&
-            args.join('\u0000') ===
-              'exec\u0000jekyll\u0000build\u0000-s\u0000docs/site\u0000-d\u0000docs/site/_site'
-          ? 'docs/site/_site'
-          : undefined;
-    if (output) {
-      return {
-        kind: 'fs',
-        id: `fs:${output}`,
-        repository_id: repositoryId,
-        canonical_relative_path: output,
-        operation: existsSync(resolve(root, output)) ? 'update' : 'create',
-      };
-    }
-  }
-
   if (
     actionName === 'evidence test record' &&
     executable === 'sh' &&
@@ -753,17 +723,6 @@ function boundedSelectors(kind: string, repositoryId: string, actionName: string
         database_id_glob: '**',
         object_id_glob: '**',
         operations: ['insert', 'update', 'delete', 'ddl', 'execute'],
-      },
-    ];
-  }
-  if (actionName === 'release publish docs') {
-    return [
-      {
-        kind: 'remote',
-        system_id: 'github-pages',
-        endpoint_ids: ['publish-docs'],
-        operation_ids: ['publish'],
-        publication: true,
       },
     ];
   }

@@ -166,9 +166,7 @@ function renderNounPage(noun: string, actions: readonly ActionEntry[]): string {
       lines.push(`**Authority:** ${AUTHORITY_LABEL[a.authority]}.`);
       lines.push('');
     }
-    lines.push(
-      `**Lifecycle:** ${a.lifecycle}. **Visibility:** ${a.visibility}. **Effects:** ${a.effects}.`,
-    );
+    lines.push(`**Status:** ${a.status}. **Effects:** ${a.effects}.`);
     lines.push('');
     lines.push(`**Profiles:** ${a.profiles.join(', ')}.`);
     lines.push('');
@@ -187,9 +185,7 @@ function renderNounPage(noun: string, actions: readonly ActionEntry[]): string {
         lines.push(`**Authority:** ${AUTHORITY_LABEL[a.authority]}.`);
         lines.push('');
       }
-      lines.push(
-        `**Lifecycle:** ${a.lifecycle}. **Visibility:** ${a.visibility}. **Effects:** ${a.effects}.`,
-      );
+      lines.push(`**Status:** ${a.status}. **Effects:** ${a.effects}.`);
       lines.push('');
       lines.push(`**Profiles:** ${a.profiles.join(', ')}.`);
       lines.push('');
