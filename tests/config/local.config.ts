@@ -1,3 +1,4 @@
+import { resolve } from 'node:path';
 import { defineConfig } from 'vitest/config';
 
 export const LOCAL_INCLUDE = [
@@ -15,6 +16,9 @@ export const RC_ONLY = [
 ] as const;
 
 export default defineConfig({
+  resolve: {
+    alias: { '#core-compat': resolve('packages/cli/src/core-compat.ts') },
+  },
   test: {
     name: 'local',
     environment: 'node',

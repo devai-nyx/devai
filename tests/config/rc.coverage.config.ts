@@ -19,6 +19,9 @@ const policy = JSON.parse(
 process.env['DEVAI_V8_SUBPROCESS_COVERAGE_DIR'] = resolve('scratch/coverage/rc-child-v8');
 
 export default defineConfig({
+  resolve: {
+    alias: { '#core-compat': resolve('packages/cli/src/core-compat.ts') },
+  },
   test: {
     name: 'RC coverage',
     environment: 'node',
