@@ -356,6 +356,20 @@ export function routeArgv(
         { option: '--database-url', operation: 'finish' },
       );
     }
+    if (exact.internal_name === 'init-bind') {
+      const selectors = ['--constitution', '--subprocess-effects', '--operational-law'].filter(
+        (selector) => remaining.includes(selector),
+      );
+      if (selectors.length > 1) {
+        return usageRefusal(
+          args,
+          'INIT_BIND_SELECTION_INVALID',
+          'init bind accepts only one binding selector per invocation.',
+          'Choose one of --constitution, --subprocess-effects, or --operational-law.',
+          { selectors },
+        );
+      }
+    }
     let routedEntry: RegistryEntry;
     try {
       routedEntry = resolveInvocationEntry(exact, argv);

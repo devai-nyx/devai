@@ -27,6 +27,7 @@ import {
   type EvidenceChain,
   type EvidenceRecord,
 } from '#runtime-core';
+import { resolveCanonicalConstitution } from '@devai-nyx/skills';
 import { validators } from '@devai-nyx/schemas';
 import type { RegistryEntry } from '../define-command.js';
 import { matchDeclaredCheckTaskProcess } from '../services/check-runner/authority-process.js';
@@ -91,6 +92,13 @@ const INTERNAL_INIT_RECORD_CONTRACT = Object.freeze({
 });
 
 const POLICY_PATH = '.devai/config/authority-policy.json';
+const CONSTITUTION_BOOTSTRAP_TARGETS = new Set([
+  '.devai/pin',
+  '.devai/pin/constitution.md',
+  '.devai/constitution.md',
+  '.devai/config',
+  '.devai/config/project.json',
+]);
 const READ_ONLY_PROCESS_COMMANDS: Readonly<Record<string, readonly string[]>> = Object.freeze({
   command: ['-v'],
   docker: ['version', 'ps'],
@@ -169,11 +177,28 @@ function validatePolicySchema(value: unknown): AuthorityResult {
   });
 }
 
+function isConstitutionBootstrap(input: BrokerInput): boolean {
+  return (
+    input.bootstrap_policy &&
+    input.entry.name === 'init bind' &&
+    input.argv.includes('--constitution') &&
+    !input.argv.includes('--operational-law') &&
+    !input.argv.includes('--subprocess-effects')
+  );
+}
+
 function policyFor(input: BrokerInput, now: string) {
+  const installedConstitution = isConstitutionBootstrap(input)
+    ? resolveCanonicalConstitution()
+    : null;
+  if (installedConstitution !== null && installedConstitution.version === null) {
+    throw new Error('AUTHORITY_BOOTSTRAP_CONSTITUTION_VERSION_MISSING');
+  }
   const sources = buildTrustedAuthoritySources(
     input.entries,
     input.repository_root,
     input.package_version,
+    installedConstitution?.text,
   );
   if (input.bootstrap_policy) return { policy: sources.virtualPolicy, sources };
 
@@ -752,6 +777,7 @@ export function createAuthorityHostBroker(input: BrokerInput): {
     input.entries.map((entry) => (entry.name === input.entry.name ? input.entry : entry)),
   );
   const { policy, sources } = policyFor(input, now);
+  const constitutionBootstrap = isConstitutionBootstrap(input);
   const issuer = createAuthorityDecisionIssuer({
     issuer_id: 'devai-cli-authority',
     issuer_version: '1.0.0',
@@ -870,6 +896,16 @@ export function createAuthorityHostBroker(input: BrokerInput): {
     effectCounter += 1;
     if (target.kind === 'fs') {
       const canonicalPath = String(target.canonical_relative_path ?? '');
+      if (
+        constitutionBootstrap &&
+        action.name === input.entry.name &&
+        (!CONSTITUTION_BOOTSTRAP_TARGETS.has(canonicalPath) ||
+          !['create', 'update'].includes(String(target.operation)))
+      ) {
+        throw new Error(
+          `AUTHORITY_BOOTSTRAP_TARGET_FORBIDDEN:${String(target.operation)}:${canonicalPath}`,
+        );
+      }
       try {
         assertAuthorityPathCapability(
           action.authority_contract.capabilities.filter((capability) =>

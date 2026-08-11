@@ -3,6 +3,7 @@ export const ROSTER = [
   'action-registry.schema.json',
   'action-result.schema.json',
   'actions-list-output.schema.json',
+  'assessment.schema.json',
   'authority-policy.schema.json',
   'authority-session.schema.json',
   'check-suites.schema.json',

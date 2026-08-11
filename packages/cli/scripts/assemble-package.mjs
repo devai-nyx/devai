@@ -15,6 +15,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { rolldown } from 'rolldown';
+import { ROSTER as schemaRoots } from '../../schemas/dist/roster.js';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repositoryRoot = resolve(packageRoot, '../..');
@@ -22,44 +23,6 @@ const distRoot = join(packageRoot, 'dist');
 const temporaryRoot = mkdtempSync(join(tmpdir(), 'devai-cli-assembly-'));
 const bundlePath = join(temporaryRoot, 'bin.js');
 const scaffoldModule = join(repositoryRoot, 'packages/skills/dist/operations/scaffold/index.js');
-
-const schemaRoots = [
-  'action-registry.schema.json',
-  'action-result.schema.json',
-  'actions-list-output.schema.json',
-  'authority-policy.schema.json',
-  'authority-session.schema.json',
-  'check-suites.schema.json',
-  'common-defs.schema.json',
-  'error.schema.json',
-  'evidence.schema.json',
-  'forbidden-actions.schema.json',
-  'glob-guards.schema.json',
-  'invariant.schema.json',
-  'inventory.schema.json',
-  'local-evidence-manifest.schema.json',
-  'meta.schema.json',
-  'model-runtime-registry.schema.json',
-  'mutation-scenario.schema.json',
-  'phase-closure.schema.json',
-  'proof-epoch.schema.json',
-  'record-meta.schema.json',
-  'release-control.schema.json',
-  'repo-introspection.schema.json',
-  'round-execution.schema.json',
-  'runtime-charter.schema.json',
-  'scorecard-na-config.schema.json',
-  'scorecard.schema.json',
-  'sense-presets.schema.json',
-  'sensor-reading.schema.json',
-  'sensor-registry.schema.json',
-  'subprocess-effects.schema.json',
-  'task-execution-evidence.schema.json',
-  'task.schema.json',
-  'trace.schema.json',
-  'translation-witness.schema.json',
-  'validation-result.schema.json',
-];
 
 const policyFiles = [
   'action-registry.json',

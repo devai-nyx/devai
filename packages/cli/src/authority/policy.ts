@@ -160,12 +160,18 @@ export function repositoryIdFor(root: string): string {
   return basename(absolute).replaceAll(/[^A-Za-z0-9._-]/gu, '-') || 'adopter-repository';
 }
 
-export function authorityBindings(root: string, packageVersion: string) {
+export function authorityBindings(
+  root: string,
+  packageVersion: string,
+  installedConstitutionText?: string,
+) {
   const pinnedConstitution = join(resolve(root), '.devai/pin/constitution.md');
-  if (!existsSync(pinnedConstitution)) {
+  if (!existsSync(pinnedConstitution) && installedConstitutionText === undefined) {
     throw new Error(`authority policy: bound Constitution not found at ${pinnedConstitution}`);
   }
-  const constitutionText = readFileSync(pinnedConstitution, 'utf8');
+  const constitutionText = existsSync(pinnedConstitution)
+    ? readFileSync(pinnedConstitution, 'utf8')
+    : installedConstitutionText!;
   const constitutionVersion = parseConstitutionVersion(constitutionText);
   if (constitutionVersion === null) {
     throw new Error(
@@ -186,8 +192,9 @@ export function buildTrustedAuthoritySources(
   entries: readonly RegistryEntry[],
   root: string,
   packageVersion: string,
+  installedConstitutionText?: string,
 ) {
-  const bindings = authorityBindings(root, packageVersion);
+  const bindings = authorityBindings(root, packageVersion, installedConstitutionText);
   const repositoryId = bindings.repository_id;
   const groups = subjectGroups(entries);
   const human = (role: string) => [{ kind: 'human', roles: [role] }];

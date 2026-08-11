@@ -14,6 +14,11 @@ describe('machine-proof path domain', () => {
     expect(classifyAuthorityPath('/repo', '../outside')).toBe('fs:workspace');
   });
 
+  it('classifies only the regular Constitution pointer as F5 root configuration', () => {
+    expect(classifyAuthorityPath('/repo', '.devai/constitution.md')).toBe('fs:f5-config');
+    expect(classifyAuthorityPath('/repo', '.devai/other.md')).toBe('fs:workspace');
+  });
+
   it('exposes frozen read and write capabilities with a bound database query', () => {
     const calls: string[] = [];
     const client = {

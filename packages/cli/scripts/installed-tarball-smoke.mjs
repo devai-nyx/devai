@@ -2,8 +2,8 @@
 
 import { execFileSync } from 'node:child_process';
 import {
-  copyFileSync,
   existsSync,
+  lstatSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -56,12 +56,41 @@ try {
   const help = run(binary, ['--help']);
   if (!help.includes('Usage: devai <command>')) throw new Error('INSTALLED_HELP_INVALID');
 
-  const pinRoot = join(projectRoot, '.devai/pin');
-  mkdirSync(pinRoot, { recursive: true });
-  copyFileSync(
-    join(installedPackage, 'dist/runtime/law/constitution.md'),
-    join(pinRoot, 'constitution.md'),
-  );
+  run(binary, [
+    'init',
+    'bind',
+    '--constitution',
+    '--target',
+    projectRoot,
+    '--as-role',
+    'architect',
+    '--write',
+    '--format',
+    'json',
+  ]);
+  run(binary, [
+    'init',
+    'bind',
+    '--target',
+    projectRoot,
+    '--as-role',
+    'architect',
+    '--write',
+    '--format',
+    'json',
+  ]);
+  const bindingFiles = [
+    '.devai/pin/constitution.md',
+    '.devai/constitution.md',
+    '.devai/config/project.json',
+    '.devai/config/authority-policy.json',
+  ];
+  if (bindingFiles.some((path) => !existsSync(join(projectRoot, path)))) {
+    throw new Error('INSTALLED_BINDING_ASSET_MISSING');
+  }
+  if (lstatSync(join(projectRoot, '.devai/constitution.md')).isSymbolicLink()) {
+    throw new Error('INSTALLED_CONSTITUTION_POINTER_SYMLINK');
+  }
 
   const envelope = JSON.parse(run(binary, ['catalog', 'actions', '--format', 'json']));
   const actions = envelope?.result?.value;

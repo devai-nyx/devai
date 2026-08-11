@@ -1,7 +1,11 @@
 // Invariants: INV-DEVAI-001, INV-DEVAI-015, INV-DEVAI-017, INV-DEVAI-020
 import type { AuthorityHostEffectRequest } from '@devai-nyx/authority';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createAuthorityHostBroker } from '../../src/authority/broker.js';
+import { routeArgv } from '../../src/command-router.js';
 import { getFullRegistry, type RegistryEntry } from '../../src/define-command.js';
 import { resolveCliVersion } from '../../src/version.js';
 
@@ -88,6 +92,94 @@ function effect(
 }
 
 describe('authority broker production boundary depth', () => {
+  it('bootstraps only the exact installed-Constitution binding in an unbound adopter', () => {
+    const root = mkdtempSync(join(tmpdir(), 'devai-init-bind-bootstrap-'));
+    const entry = entries.find((candidate) => candidate.name === 'init bind');
+    if (entry === undefined) throw new Error('missing action init bind');
+    const create = (argv: readonly string[]) =>
+      createAuthorityHostBroker({
+        entry,
+        entries,
+        argv,
+        role: 'architect',
+        declaration: { as_role: 'architect' },
+        repository_root: root,
+        package_version: resolveCliVersion(),
+        bootstrap_policy: true,
+      });
+
+    try {
+      const exact = create([
+        process.execPath,
+        'devai',
+        'init',
+        'bind',
+        '--constitution',
+        '--as-role',
+        'architect',
+        '--write',
+      ]);
+      try {
+        expect(
+          exact.scope.apply_effect(
+            effect('writeFileSync', [join(root, '.devai/config/project.json'), '{}\n']),
+            () => 'allowed',
+          ),
+        ).toBe('allowed');
+        expect(() =>
+          exact.scope.apply_effect(
+            effect('writeFileSync', [join(root, '.devai/config/other.json'), '{}\n']),
+            () => 'forbidden',
+          ),
+        ).toThrow('AUTHORITY_BOOTSTRAP_TARGET_FORBIDDEN');
+        expect(() =>
+          exact.scope.apply_effect(
+            effect('rmSync', [join(root, '.devai/config/project.json')]),
+            () => 'forbidden',
+          ),
+        ).toThrow('AUTHORITY_BOOTSTRAP_TARGET_FORBIDDEN');
+      } finally {
+        exact.dispose();
+      }
+
+      expect(() =>
+        create([
+          process.execPath,
+          'devai',
+          'init',
+          'bind',
+          '--constitution',
+          '--operational-law',
+          '--as-role',
+          'architect',
+          '--write',
+        ]),
+      ).toThrow('bound Constitution not found');
+      expect(
+        routeArgv(
+          [
+            process.execPath,
+            'devai',
+            'init',
+            'bind',
+            '--constitution',
+            '--operational-law',
+            '--write',
+            '--format',
+            'json',
+          ],
+          entries,
+          resolveCliVersion(),
+        ),
+      ).toMatchObject({ kind: 'output', exitCode: 2 });
+      expect(() =>
+        create([process.execPath, 'devai', 'init', 'bind', '--as-role', 'architect', '--write']),
+      ).toThrow('bound Constitution not found');
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
   it('authorizes bounded filesystem effects and tracks descriptor lifecycles', () => {
     const host = broker('round run', 'engineer', roundRunArgv());
     try {
