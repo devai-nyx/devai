@@ -1,5 +1,5 @@
 import type { CAC } from 'cac';
-import { findMmdc, renderMermaidInDocs } from '#core-compat';
+import { findMmdc, renderMermaidInDocs } from '#runtime-core';
 import { EXIT_FAIL, EXIT_PASS, EXIT_REVIEW } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 

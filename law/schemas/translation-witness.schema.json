@@ -387,7 +387,7 @@
                   "kind": "test",
                   "test_ref": {
                     "suite": "unit",
-                    "path": "packages/core/test/example.test.ts",
+                    "path": "packages/example/test/example.test.ts",
                     "names": ["requested behavior"]
                   }
                 }
@@ -400,14 +400,14 @@
         {
           "test_ref": {
             "suite": "unit",
-            "path": "packages/core/test/example.test.ts",
+            "path": "packages/example/test/example.test.ts",
             "names": ["requested behavior"]
           },
           "expected_at_base": "assertion-fail",
           "expected_at_candidate": "pass"
         }
       ],
-      "touched": ["packages/core/src/example.ts"],
+      "touched": ["packages/example/src/example.ts"],
       "frame": {
         "authority_role": "engineer",
         "spec_edits": "none",

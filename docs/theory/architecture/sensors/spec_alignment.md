@@ -33,6 +33,6 @@ The forward direction is hard-fail because stale spec is a correctness problem (
 
 ## Out of scope
 
-- **Per-claim verification of _semantic_ alignment** (does the file actually implement what the invariant says?). That requires an LLM judge and is deferred to a future `spec_alignment_judge` kind in Phase 29+.
-- **Test alignment** (do tests claim invariants in `trace.json`?). That's F3×T4 already covered by `test_invariant_alignment` (26.G).
+- **Per-claim verification of _semantic_ alignment** (does the file actually implement what the invariant says?). That requires an LLM judge and is outside the current deterministic kind.
+- **Test alignment** (do tests claim invariants in `trace.json`?). That is an F3×T4 concern covered by `test_invariant_alignment`.
 - **Cross-cell aggregation.** Per-cell only; the scorecard rolls up.

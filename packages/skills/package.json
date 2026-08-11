@@ -30,7 +30,7 @@
   "scripts": {
     "build": "tsc -b && node scripts/copy-constitution.mjs && node scripts/copy-policy.mjs",
     "clean": "tsc -b --clean",
-    "test": "vitest run tests"
+    "test": "pnpm --dir ../.. run test:skills"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",

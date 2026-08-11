@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/rtd-manifest.schema.json",
   "title": "RTD Manifest",
-  "description": "Hash-stamped aggregate view over the canonical spec contract slices (invariants, trace, journeys, glossary, tombstones, ADRs, forbidden-actions). Produced by `devai spec rtd bundle` (Phase 12.A / D-41). Distributed `spec validate-*` surfaces remain unchanged; this is an additive bundle for ADR citation, law-pack adoption, and external audit.",
+  "description": "Hash-stamped aggregate view over canonical specification slices. Produced through `devai evidence record --kind rtd` for citation and independent audit.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -34,7 +34,7 @@
     "components": {
       "type": "object",
       "additionalProperties": false,
-      "description": "One entry per aggregated contract slice. `hash` is a SHA-256 over the canonicalized JSON of the slice. `ok` reflects whether the slice's distributed validator (spec validate-X) passed. Counts are convenience numerics, never authoritative.",
+      "description": "One entry per aggregated contract slice. `hash` is a SHA-256 over canonical JSON and `ok` reflects the slice validator. Counts are convenience numerics, never authoritative.",
       "properties": {
         "invariants": {
           "$ref": "#/$defs/componentEntry"

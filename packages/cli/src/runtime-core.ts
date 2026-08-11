@@ -1,7 +1,6 @@
 /**
- * CLI assembly boundary for the packages that replaced the predecessor's
- * dissolved `core` bucket. This module is private to the CLI package; it is
- * deliberately not exported as a public compatibility facade.
+ * Private CLI assembly boundary for the internal implementation packages.
+ * This module is bundled into the published CLI and is not exported.
  */
 export * from '@devai-nyx/authority';
 export * from '@devai-nyx/evidence';

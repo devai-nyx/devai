@@ -71,7 +71,7 @@ interface InvariantRecord {
 
 /**
  * Load the tombstones registry (if it exists). Returns the set of
- * retired invariant ids. Absorbs LAW-00.AMENDMENT.2 (Batch 10.D).
+ * invariant ids that cannot be reused.
  */
 function loadTombstonedIds(invariantsDir: string): Set<string> {
   const path = join(invariantsDir, 'tombstones.json');

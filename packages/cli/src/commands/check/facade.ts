@@ -38,9 +38,9 @@ function exactlyOne<T extends string>(
   return selected[0]?.name as T;
 }
 
-function runnerSelection(options: CheckCliOptions):
-  | Readonly<{ target: TaskTarget; operation: TaskOperation }>
-  | undefined {
+function runnerSelection(
+  options: CheckCliOptions,
+): Readonly<{ target: TaskTarget; operation: TaskOperation }> | undefined {
   const targetFlags = [options.affected, options.local, options.rc];
   const operationFlags = [options.taskPlan, options.run, options.status, options.explain];
   if (![...targetFlags, ...operationFlags].some((value) => value === true)) return undefined;
@@ -108,7 +108,7 @@ export const checkCmd = defineCommand({
         'Run a canonical check suite or one named check with fail-closed aggregate output',
       )
       .option('--suite <name>', 'quick | standard | full | release (default: standard)')
-      .option('--only <member>', 'Run one canonical or migration-bound check member')
+      .option('--only <member>', 'Run one named canonical check member')
       .option('--repo-root <path>', 'Repository root (default: .)')
       .option('--schema <path>', 'Schema path for --only schema')
       .option('--instance <path>', 'Instance path for --only schema')
@@ -151,9 +151,7 @@ export const checkCmd = defineCommand({
               ...(timeout !== undefined && { timeoutMs: timeout }),
             });
             process.stdout.write(
-              options.human === true
-                ? renderRunnerHuman(report)
-                : `${JSON.stringify(report)}\n`,
+              options.human === true ? renderRunnerHuman(report) : `${JSON.stringify(report)}\n`,
             );
             process.exitCode = report.exitCode;
             return;

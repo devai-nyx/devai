@@ -1,6 +1,6 @@
-# __MODULE__ Module
+# **MODULE** Module
 
-Generated for __NAMESPACE__/__MODULE__ — spec __SPEC_VERSION__ sha __SPEC_SHA__.
+Generated for **NAMESPACE**/**MODULE** — spec **SPEC_VERSION** sha **SPEC_SHA**.
 
 ## Overview
 
@@ -35,4 +35,4 @@ cd domain/__moduleSlug__/api && npm ci && npm run build && npm test
 
 ## Decisions
 
-See `ADR-0001.md` and successors.
+See the module's architecture decision records under `docs/`.

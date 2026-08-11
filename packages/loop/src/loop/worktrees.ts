@@ -92,8 +92,8 @@ export function createWorktree(opts: CreateWorktreeOptions): WorktreeRecord {
   ) {
     throw new Error(
       `worktree cap exceeded: ${String(WORKTREE_CAP)} non-adopted worktrees already active. ` +
-        `Reap stale entries (devai work worktree reap) or wait for a task to complete. ` +
-        `Cap is governed by D-52; human-adopted worktrees are exempt.`,
+        'Complete or cancel an active task before creating another managed worktree; ' +
+        'human-adopted worktrees are exempt.',
     );
   }
 

@@ -83,25 +83,11 @@ export function resolveScorecardInputs(opts: ScorecardInputs): ResolvedScorecard
 }
 
 /**
- * Phase 25.B: extracted from the predecessor's skills implementation,
- * where it lived as a private helper. Walks `<dir>` for
- * `*.json` and one level into `<dir>/<kind>/*.json` subdirectories
- * — the canonical shape `persistSensorReading` writes since 21.E.
- * Both skills now use the same loader.
- *
- * DII-103 supersedes the predecessor's opt-in compaction: the loader
- * always selects current standing per sensor kind before returning
- * readings for any computation subset. Disk evidence remains intact.
+ * Walk `<dir>` for `*.json` and one level into `<dir>/<kind>/*.json`.
+ * The loader always selects the current standing for each sensor kind;
+ * disk evidence remains intact.
  */
-export interface LoadReadingsOptions {
-  /** Deprecated compatibility input. DII-103 makes this unconditional. */
-  readonly latestPerKind?: boolean;
-}
-
-export function loadReadingsFromDir(
-  dir: string,
-  options: LoadReadingsOptions = {},
-): SensorReading[] {
+export function loadReadingsFromDir(dir: string): SensorReading[] {
   const out: SensorReading[] = [];
   if (!existsSync(dir)) return out;
   for (const entry of readdirSync(dir).sort()) {
@@ -140,6 +126,5 @@ export function loadReadingsFromDir(
       }
     }
   }
-  void options;
   return filterLatestPerKind(out);
 }

@@ -5,7 +5,7 @@ import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 
 /**
- * CI-economy round — `devai policy check ci economy`.
+ * CI-economy check behind the canonical `check` facade.
  *
  * Enforces ADR-CI-ECONOMY's mechanical rules against a repo's
  * `.github/workflows/`. Mechanical rules (hard unless noted):
@@ -289,7 +289,7 @@ export function checkCiEconomy(opts: CheckCiEconomyOptions): CiEconomyReport {
       severity: 'pass',
       message:
         profile === 'gate-staged'
-          ? 'evidence substrate is wired into at least one workflow — gate-staged declaration is obsolete; graduate ci_economy.profile to "full" in .devai/config/project.json'
+          ? 'evidence substrate is wired into at least one workflow — the gate-staged declaration is no longer needed; set ci_economy.profile to "full" in .devai/config/project.json'
           : 'evidence substrate is wired into at least one workflow',
     });
   } else {
@@ -302,7 +302,7 @@ export function checkCiEconomy(opts: CheckCiEconomyOptions): CiEconomyReport {
         ? {
             ruleId: 'ci-economy.evidence-gate-wired',
             severity: 'warn',
-            message: `${notWiredMessage} — ADVISORY, not FAIL: ci_economy.profile = "gate-staged" declared in .devai/config/project.json (ADR-CI-ECONOMY Decision 8 as amended by D-116)`,
+            message: `${notWiredMessage} — ADVISORY, not FAIL: ci_economy.profile = "gate-staged" declared in .devai/config/project.json`,
             remediation:
               'Wire the pinned devai-nyx/devai-verifier checkout and CLI invocation, then graduate ci_economy.profile to "full".',
           }

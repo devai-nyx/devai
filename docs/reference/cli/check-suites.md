@@ -34,7 +34,7 @@ population.
 - **When to use:** Use when the `quick` acceptance population matches the required confidence level.
 - **When not to use:** Do not use to omit a stricter population required by a round, candidate, or close control.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite quick --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite quick --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/policy/check-suites.json`](../../../law/policy/check-suites.json#/suites)
 - **Related workflow:** `check`
 
@@ -58,7 +58,7 @@ population.
 - **When to use:** Use when the `standard` acceptance population matches the required confidence level.
 - **When not to use:** Do not use to omit a stricter population required by a round, candidate, or close control.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/policy/check-suites.json`](../../../law/policy/check-suites.json#/suites)
 - **Related workflow:** `check`
 
@@ -82,7 +82,7 @@ population.
 - **When to use:** Use when the `full` acceptance population matches the required confidence level.
 - **When not to use:** Do not use to omit a stricter population required by a round, candidate, or close control.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite full --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite full --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/policy/check-suites.json`](../../../law/policy/check-suites.json#/suites)
 - **Related workflow:** `check`
 
@@ -106,7 +106,7 @@ population.
 - **When to use:** Use to observe release eligibility before a separately authorized ceremony.
 - **When not to use:** Do not treat a passing report as publication, release, or deployment authority.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite release --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite release --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/policy/check-suites.json`](../../../law/policy/check-suites.json#/suites)
 - **Related workflow:** `check`
 

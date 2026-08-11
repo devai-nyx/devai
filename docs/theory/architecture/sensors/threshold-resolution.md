@@ -1,6 +1,6 @@
 # Sensor threshold resolution
 
-**Status:** Phase 29.K (closes T-1). Canonical reference for how each Phase 26-29 sensor's PASS/REVIEW/FAIL boundaries are tunable.
+This is the canonical reference for how registered sensor PASS/REVIEW/FAIL boundaries are tunable.
 
 ## Resolution chain
 
@@ -10,7 +10,7 @@ Every sensor with adopter-tunable thresholds follows the same precedence ladder:
 2. **Pack config** — `extractor_params.<sensor_kind>.thresholds` (or sensor-specific shape) in the matched `redox-pack-*` stack-adapter pack. Resolved via `resolveSensorParams` when `--pack-tune` or `--pack-id` is set.
 3. **Sensor default** — hard-coded constant in the sensor source.
 
-## Phase 26 sensors (10)
+## Core sensors
 
 | Kind                       | Pack key                                          | Default                |
 | -------------------------- | ------------------------------------------------- | ---------------------- |
@@ -25,23 +25,23 @@ Every sensor with adopter-tunable thresholds follows the same precedence ladder:
 | `harness_security`         | `harness_security.workflow_dir` (not a threshold) | `.github/workflows`    |
 | `harness_green_main`       | `harness_green_main.threshold_pct`                | `{pass:95, review:80}` |
 
-## Phase 27 sensors (11)
+## Specification, plant, and test sensors
 
-| Kind                        | Pack key                                                              | Default                                                                    |
-| --------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `spec_alignment`            | `spec_alignment.reverse_threshold_pct`                                | 80                                                                         |
-| `spec_security_coverage`    | `spec_security_coverage.{threat_model_globs, pii_registry_table}`     | —                                                                          |
-| `spec_performance_targets`  | **`spec_performance_targets.signals_required`** (Phase 29.K addition) | `{invariants:1, use_cases:1}`                                              |
-| `spec_robustness_targets`   | **`spec_robustness_targets.signals_required`** (Phase 29.K addition)  | `{invariants:1, error_contracts:1}`                                        |
-| `plant_depth`               | `plant_depth.thresholds`                                              | `{pass:500, review:1000}`                                                  |
-| `plant_coherence`           | `plant_coherence.max_review_incoherent`                               | 3                                                                          |
-| `test_coherence`            | `test_coherence.{min_per_package_ratio, pass_ratio}`                  | `{0.1, 0.3}`                                                               |
-| `test_idiomaticity`         | `test_idiomaticity.thresholds`                                        | `{review:0.5, fail:0.8}`                                                   |
-| `test_security_coverage`    | `test_security_coverage.thresholds`                                   | `{pass:5, review:2}`                                                       |
-| `test_performance_coverage` | **`test_performance_coverage.thresholds`** (Phase 29.K addition)      | `{pass:1, review:0}` (perf tests are rare; PASS at ≥1 + ≥1% reflects this) |
-| `test_robustness_coverage`  | `test_robustness_coverage.thresholds`                                 | `{pass:10, review:5}`                                                      |
+| Kind                        | Pack key                                                          | Default                                                                    |
+| --------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `spec_alignment`            | `spec_alignment.reverse_threshold_pct`                            | 80                                                                         |
+| `spec_security_coverage`    | `spec_security_coverage.{threat_model_globs, pii_registry_table}` | —                                                                          |
+| `spec_performance_targets`  | `spec_performance_targets.signals_required`                       | `{invariants:1, use_cases:1}`                                              |
+| `spec_robustness_targets`   | `spec_robustness_targets.signals_required`                        | `{invariants:1, error_contracts:1}`                                        |
+| `plant_depth`               | `plant_depth.thresholds`                                          | `{pass:500, review:1000}`                                                  |
+| `plant_coherence`           | `plant_coherence.max_review_incoherent`                           | 3                                                                          |
+| `test_coherence`            | `test_coherence.{min_per_package_ratio, pass_ratio}`              | `{0.1, 0.3}`                                                               |
+| `test_idiomaticity`         | `test_idiomaticity.thresholds`                                    | `{review:0.5, fail:0.8}`                                                   |
+| `test_security_coverage`    | `test_security_coverage.thresholds`                               | `{pass:5, review:2}`                                                       |
+| `test_performance_coverage` | `test_performance_coverage.thresholds`                            | `{pass:1, review:0}` (perf tests are rare; PASS at ≥1 + ≥1% reflects this) |
+| `test_robustness_coverage`  | `test_robustness_coverage.thresholds`                             | `{pass:10, review:5}`                                                      |
 
-## Phase 28 sensors (7)
+## Harness sensors
 
 | Kind                          | Pack key                                          | Default                |
 | ----------------------------- | ------------------------------------------------- | ---------------------- |
@@ -53,18 +53,18 @@ Every sensor with adopter-tunable thresholds follows the same precedence ladder:
 | `harness_performance`         | `harness_performance.thresholds`                  | see design note        |
 | `harness_robustness`          | `harness_robustness.thresholds`                   | `{pass:5, review:15}`  |
 
-## Phase 29 sensor (1)
+## Inventory performance
 
 | Kind                    | Pack key                           | Default                         |
 | ----------------------- | ---------------------------------- | ------------------------------- |
 | `inventory_performance` | `inventory_performance.thresholds` | `{pass:2000, review:5000}` (ms) |
 
-## Phase 29.K work scope
+## Tunable signals
 
-T-1's directive ("walk all 28 trilogy sensors and expose hard-coded thresholds") is largely **already complete** as of Phase 28.I — most sensors already accept pack-config overrides at the CLI verb layer. The Phase 29.K commit adds the genuine gaps surfaced by an audit of the canonical adopter pack:
+The following keys cover the sensor boundaries that are not simple presence or equality checks:
 
 - **`spec_performance_targets.signals_required`** — adopters with stricter perf-coverage expectations can require >1 perf invariant.
 - **`spec_robustness_targets.signals_required`** — same for error-semantics invariants + error contracts.
 - **`test_performance_coverage.thresholds`** — formalises the previously-implicit "≥1 perf test ≥1%" boundary.
 
-Other sensors either had pack-config exposure shipped at their introduction (Phases 26 + 27 + 28) or are count-based / equality-based and have no meaningful threshold to expose.
+Other sensors are count-based or equality-based and have no meaningful threshold to expose.

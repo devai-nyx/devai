@@ -57,7 +57,7 @@ const PROPERTIES: readonly Property[] = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7
  * are mechanically generated; "idiomaticity" applies to authored
  * code, not to derived data structures.
  *
- * Phase 22.D (closes D-A-14) removes F4×T6 from this set. The
+ * F4×T6 is intentionally excluded from this set. The
  * inventory_data_handling + inventory_rbac sensors specifically
  * surface security and privacy concerns at the inventory layer
  * (PII classifications, RBAC mappings), so F4×T6 is the natural
@@ -106,7 +106,7 @@ function scorecardId(isoTimestamp: string, sequence: number, prefix: 'SC' | 'AS'
 }
 
 /**
- * Compute a scorecard from a set of recent SensorReadings. Phase-6 MVP.
+ * Compute a scorecard from a set of recent SensorReadings.
  *
  * - Every substrate × property cell starts as 'UNKNOWN'.
  * - Degenerate cells (per Article 5) are marked 'N/A'.
@@ -141,7 +141,7 @@ export function computeScorecard(opts: ComputeScorecardOptions): Scorecard {
   const staleFailAfterMs = opts.staleFailAfterMs;
   const generatedAtMs = Date.parse(opts.timestamp);
   for (const reading of currentReadings) {
-    // Phase 22.D (closes D-A-14): mapSensorToCell may return >1
+    // mapSensorToCell may return more than one cell.
     // cell — e.g. an inventory SR contributes to both the F4×T1
     // "presence" row AND the per-kind semantic cell. The loop
     // applies the reading to every mapped cell, with the same
@@ -211,8 +211,7 @@ export function computeScorecard(opts: ComputeScorecardOptions): Scorecard {
 /**
  * Map a SensorReading to one or more scorecard cells.
  *
- * Most sensor kinds map to a single cell. Phase 22.D (closes
- * D-A-14) refines the seven L0 inventory kinds to ALSO contribute
+ * Most sensor kinds map to a single cell. The seven L0 inventory kinds also contribute
  * to a canonical "presence" cell at F4×T1 (Inventory × Coverage,
  * per Constitution Article 5), in addition to the per-kind
  * semantic cell. Rationale: T1 ("did we cover this surface?")
@@ -222,7 +221,7 @@ export function computeScorecard(opts: ComputeScorecardOptions): Scorecard {
  * seven kinds gives a single scorecard-level read on inventory
  * completeness.
  *
- * The per-kind semantic cells (added in Phase 21.E) are retained:
+ * The per-kind semantic cells are retained:
  * - inventory_api / inventory_routes / inventory_data_model /
  *   inventory_coverage → F4×T2 (Depth)
  * - inventory_data_handling / inventory_rbac → F4×T6 (Security
@@ -406,7 +405,7 @@ export interface Assessment {
 }
 
 /**
- * Build a schema-conformant Assessment from a Scorecard. Phase-6 MVP:
+ * Build a schema-conformant Assessment from a Scorecard:
  *
  *   - narrative encodes the green/yellow/red status read.
  *   - deltas: empty (no previous scorecard available in the MVP API).
@@ -449,7 +448,7 @@ export function assessScorecard(
     );
   }
 
-  // Phase 23.I (closes D-A-16): per-cell-class actionable lines.
+  // Per-cell-class actionable lines.
   // For FAIL cells, quote the SR's first finding (or err_head head)
   // verbatim so the adopter can act without opening the SR file.
   // For REVIEW cells, list the review finding codes. For UNKNOWN
@@ -501,7 +500,7 @@ export function assessScorecard(
 }
 
 /**
- * Phase 23.I (closes D-A-16): summarize a FAIL cell's underlying
+ * Summarize a FAIL cell's underlying
  * SR(s). Prefers the first finding's `code: message` (with optional
  * file:line), falling back to the SR's err_head head or sensor
  * name when no findings landed. Truncates to keep the narrative
@@ -537,7 +536,7 @@ function describeFailureFromRefs(
 }
 
 /**
- * Phase 23.I: list review reasons from REVIEW-status SR(s) backing
+ * List review reasons from REVIEW-status sensor readings backing
  * a REVIEW cell. Surfaces unique finding codes so the adopter can
  * decide which to triage.
  */

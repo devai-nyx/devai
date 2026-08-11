@@ -176,7 +176,7 @@ export const coverageAggregate = defineCommand({
               }
             } catch {
               // Skip malformed files. The aggregator is permissive — a
-              // hard validation gate would belong to `inv contracts`.
+              // hard validation belongs to the canonical check facade.
             }
           }
 
@@ -243,7 +243,7 @@ async function runFinalMode(
       // are strict but the on-disk shape is the same.
       map.merge(parsed as never);
     } catch {
-      // Skip malformed inputs; the validating gate belongs to `inv contracts`.
+      // Skip malformed inputs; the canonical check facade owns validation.
     }
   }
 

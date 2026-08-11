@@ -1,5 +1,5 @@
 /**
- * Reverse-direction adherence audit (Phase 11.F, D-39).
+ * Reverse-direction adherence audit.
  *
  * Forward visibility (canonical, already shipped via `spec validate-trace`):
  *   RTD invariant → test → test file → code area.

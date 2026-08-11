@@ -103,6 +103,6 @@ will be promoted to `stable` and the compat rules become binding.
 
 <!--
 - Related ADRs: `../../meta/adr/ADR-<SCOPE>-<NNNN>-<slug>.md` (replace with real link).
-- Predecessor contracts
+- Related or replaced contracts
 - External standards (RFC, ISO, ecosystem conventions)
 -->

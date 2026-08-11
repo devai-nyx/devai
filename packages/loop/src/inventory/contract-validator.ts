@@ -24,11 +24,11 @@ export interface ValidateContractsOptions {
 
 /**
  * Validate every `*.schema.json` file against the JSON Schema 2020-12
- * meta-schema (does the schema itself parse + compile?). Phase-3 minimum.
+ * meta-schema (does the schema itself parse and compile?).
  *
- * OpenAPI byte-identity regeneration (Phase-3 deliverable #8) is deferred:
+ * OpenAPI byte-identity regeneration is outside this validator's scope:
  * it requires running the generator and diffing — viable but heavier than
- * the Phase-3 MVP target. The CLI accepts a `--regen` flag that's a no-op
+ * this is a heavier operation. The CLI accepts a `--regen` flag that's a no-op
  * for now, preserving the future surface.
  */
 export function validateContracts(opts: ValidateContractsOptions): InventoryContractsResult {

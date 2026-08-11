@@ -23,7 +23,8 @@
   ],
   "scripts": {
     "build": "tsc -b",
-    "clean": "tsc -b --clean"
+    "clean": "tsc -b --clean",
+    "test": "pnpm --dir ../.. run test:utils"
   },
   "dependencies": {
     "minimatch": "^9.0.0"

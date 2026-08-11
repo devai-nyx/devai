@@ -1,15 +1,14 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 /**
- * Phase 17.G gap-2 close (D-57): stack-adapter pack resolver.
+ * Stack-adapter pack resolver.
  *
  * Walks examples/redox-pack-X (and any additional seed dirs) for
  * stack-adapter.json manifests, evaluates each pack's detect signals
  * against the adopter repo, and returns the highest-priority match.
  *
- * Detect-signal evaluation (OR semantics in 17.G):
+ * Detect-signal evaluation uses OR semantics:
  *   file_present          — repo-relative file exists
  *   dir_present           — repo-relative directory exists
  *   package_dep_present   — package.json dependencies / devDependencies
@@ -19,11 +18,6 @@ import { fileURLToPath } from 'node:url';
  * A pack matches when ANY signal hits. When multiple packs match,
  * the highest detect.priority wins; ties surface as an ambiguity
  * (resolver returns the first by id and notes the tie in the result).
- *
- * 17.G ships this resolver + a CLI verb (devai adopt pack resolve) +
- * writer-side overlay wiring (the runWriterSkill helper). Sensor-
- * side extractor_params wiring is explicitly deferred as follow-on;
- * the resolver's output shape supports both consumers.
  */
 
 export interface StackAdapterDetectSignal {
@@ -71,7 +65,7 @@ export interface FindPacksOptions {
   /**
    * Additional directories to scan for stack-adapter.json manifests.
    * Each path is treated as the pack directory itself (not its parent).
-   * Used by --seeds <path> plumbing (Phase 11).
+   * Used by callers that provide additional pack roots.
    */
   readonly additionalDirs?: readonly string[];
 }
@@ -236,53 +230,7 @@ export interface ResolveResult {
 }
 
 /**
- * Phase 19.B (D-61): walk up from this module's resolved location to
- * find the DEVAI workspace root (the directory carrying the `examples/`
- * tree of bundled stack-adapter packs). Used as the default pack-
- * discovery root for runtime consumers like the sense CLI, which take
- * `--repo-root` to mean the *adopter* repo and shouldn't be required
- * to also pass a DEVAI-internal path.
- *
- * Returns null if no examples/redox-pack-* directory is found above
- * this file — that happens only in unusual deployments; callers must
- * fall through to explicit configuration in that case.
- */
-let cachedDevaiPacksRoot: string | null | undefined;
-
-export function findDevaiPacksRoot(): string | null {
-  if (cachedDevaiPacksRoot !== undefined) return cachedDevaiPacksRoot;
-  let cursor: string;
-  try {
-    cursor = dirname(fileURLToPath(import.meta.url));
-  } catch {
-    cachedDevaiPacksRoot = null;
-    return null;
-  }
-  // Walk up to 8 levels (covers dist/<...>/pack-resolver layouts).
-  for (let i = 0; i < 8; i += 1) {
-    const examples = join(cursor, 'examples');
-    if (existsSync(examples)) {
-      try {
-        const entries = readdirSync(examples);
-        if (entries.some((n) => n.startsWith('redox-pack-'))) {
-          cachedDevaiPacksRoot = cursor;
-          return cursor;
-        }
-      } catch {
-        // ignore
-      }
-    }
-    const parent = dirname(cursor);
-    if (parent === cursor) break;
-    cursor = parent;
-  }
-  cachedDevaiPacksRoot = null;
-  return null;
-}
-
-/**
- * Phase 19.B (D-61): runtime wiring of `extractor_params`. Resolves
- * the best-fit stack-adapter pack for an adopter root, then returns
+ * Resolve the best-fit explicitly configured stack-adapter pack for an adopter root, then return
  * the per-sensor parameter subset declared by that pack for the
  * supplied `sensorKind` (`inventory_api`, `inventory_routes`,
  * `inventory_data_model`, etc.). Returns null when no pack matches.
@@ -290,15 +238,7 @@ export function findDevaiPacksRoot(): string | null {
  * no params for the requested sensor kind (legitimate; e.g. the
  * coverage sensor is framework-agnostic and packs typically omit it).
  *
- * The schema field has existed since Phase 17.G; this helper is the
- * runtime path that finally consumes it. Sensor adapters and the
- * `devai sense` CLI use this to opt into pack-tuned defaults while
- * preserving CLI-flag precedence (explicit flags always win).
- *
- * `packsRoot` is where the resolver looks for `examples/redox-pack-*`
- * (defaults to the auto-detected DEVAI workspace root via
- * `findDevaiPacksRoot`). `adopterRoot` is where detect signals are
- * evaluated.
+ * `packsRoot` is explicit; the installed package never searches sibling repositories.
  */
 export interface ResolveSensorParamsOptions {
   readonly packsRoot?: string;
@@ -316,8 +256,8 @@ export interface SensorParamsResolution {
 export function resolveSensorParams(
   opts: ResolveSensorParamsOptions,
 ): SensorParamsResolution | null {
-  const packsRoot = opts.packsRoot ?? findDevaiPacksRoot();
-  if (packsRoot === null) return null;
+  const packsRoot = opts.packsRoot;
+  if (packsRoot === undefined) return null;
   const result = resolveStackAdapterPack({
     repoRoot: packsRoot,
     adopterRoot: opts.adopterRoot,

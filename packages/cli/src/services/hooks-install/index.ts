@@ -11,14 +11,8 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /**
- * D-123 (item 5): local pre-push/pre-commit feedback wiring.
- *
- * Formalizes a pattern already present by hand in stynx and sgp
- * (husky-managed hooks running lint-staged) by giving adopters a
- * `devai adopt hooks install` verb that adds a devai check invocation to
- * the same hook file. Idempotent via a marker block: re-running never
- * duplicates the line, and existing hook content (lint-staged, etc.)
- * is preserved untouched.
+ * Local feedback wiring installed by `devai init apply architect --include hooks`.
+ * Repeated installation is idempotent, and existing hook content is preserved.
  */
 
 export type HookName = 'pre-commit' | 'pre-push' | 'post-merge';

@@ -52,10 +52,14 @@ authoritative shape for IDs, severity, scope, and measurement declarations.
 
 ## Validation
 
-- `devai spec validate invariants` — schema + cross-reference validation per invariant file.
-- `devai spec validate trace` — every invariant has at least one trace entry; every trace entry references a real invariant.
-- `devai spec validate action coverage` — every CLI action is claimed by at least one invariant's `measurable_via`. Coverage gaps are flagged.
-- `devai spec validate all` — runs all of the above.
+Use the content-addressed check graph so schema, cross-reference, trace, and action-coverage tasks
+are selected from the current policy rather than from a parallel validation command family:
+
+```bash
+devai check --affected --task-plan --base <exact-base-commit> --repo-root . --format json
+devai check --affected --run --base <exact-base-commit> --repo-root . \
+  --as-role inspector --write --format json
+```
 
 ## Aggregate invariants and rollups
 

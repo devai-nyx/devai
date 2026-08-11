@@ -69,7 +69,7 @@ interface JudgeStructuredResponse {
 const VALID_VERDICTS = new Set(['pass', 'review', 'fail', 'unknown']);
 
 /**
- * Soft-gate LLM evaluator. Phase-9 / Batch 9.C: real LLM-backed
+ * Soft-gate LLM evaluator with an LLM-backed
  * implementation. The caller supplies an `LlmClient` instance (mock
  * in tests, Anthropic/Codex in production) and the rubric body; the
  * judge instructs the model to emit a structured verdict, parses it,

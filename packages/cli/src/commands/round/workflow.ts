@@ -21,7 +21,7 @@ import {
   TaskServiceError,
   validateBlueprint,
   type PhaseClosureDraft,
-} from '#core-compat';
+} from '#runtime-core';
 import { defineCommand } from '../../define-command.js';
 import { resolveCliVersion } from '../../version.js';
 import { dispatchRoundTask } from './dispatch.js';

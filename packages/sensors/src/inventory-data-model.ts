@@ -124,7 +124,7 @@ const DEFAULT_MIGRATION_DIRS = ['migrations', 'db/migrations', 'db', 'database']
  * Tolerates comments, trailing commas, and case variations.
  * Returns one match per CREATE TABLE found. Each match carries
  * both the cleaned body (for structural parsing) AND the raw
- * body (for Phase 22.C inline-comment PII-annotation extraction).
+ * body for inline-comment PII-annotation extraction.
  */
 function* extractCreateTableBlocks(sql: string): Generator<{
   schema?: string;
@@ -170,7 +170,7 @@ function* extractCreateTableBlocks(sql: string): Generator<{
 }
 
 /**
- * Phase 22.C (closes D-A-13): extract `-- @key: value` annotations
+ * Extract `-- @key: value` annotations
  * from a raw (un-stripped) CREATE TABLE body. Walks the body
  * line-by-line; for each line that starts with a column name (the
  * `parseColumnLine` shape), reads trailing comments on the same
@@ -274,7 +274,7 @@ interface PiiRegistryRow {
 }
 
 /**
- * Phase 24.B (closes D-A-23): walk forward from `startIdx` in `sql`
+ * Walk forward from `startIdx` in `sql`
  * to find the matching statement-terminator `;`, respecting SQL
  * single-quote string literals (escape: `''`) and line-comment
  * trailers (`-- ...\n`). Returns the slice from `startIdx` up to
@@ -624,7 +624,7 @@ function parseSqlFile(absPath: string, fileRel: string): ParsedSqlFile {
   for (const block of extractCreateTableBlocks(text)) {
     const parsed = parseTableBody(block.body);
     if (parsed.columns.length === 0) continue;
-    // Phase 22.C (closes D-A-13): merge inline `-- @key: value`
+    // Merge inline `-- @key: value`
     // annotations from the raw (un-stripped) body into the parsed
     // columns. Annotations on columns the parser didn't recognize
     // are silently dropped (forward-compat).
@@ -656,7 +656,7 @@ function parseSqlFile(absPath: string, fileRel: string): ParsedSqlFile {
 }
 
 /**
- * Phase 22.C (closes D-A-13): merge pii-registry rows onto
+ * Merge pii-registry rows onto
  * matching DataModelColumn entries. Mutation-by-rebuild: returns
  * a new tables list with PII metadata filled in. Registry rows
  * targeting unknown (table, column) pairs are silently ignored

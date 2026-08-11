@@ -1,5 +1,5 @@
 /**
- * Phase 18.E: blueprint module — load, validate, diff, plan.
+ * Blueprint module: load, validate, diff, and plan.
  *
  * Public API:
  *   loadBlueprint(path)              — parse + AJV-validate
@@ -7,7 +7,7 @@
  *   diffBlueprintAgainstInventory()  — compare to brownfield inventory
  *   planScaffoldFromBlueprint()      — emit a deterministic scaffold plan
  *
- * Per D-59 (Phase 18 framing); per the INV-BLUEPRINT-* invariants
+ * Per the INV-BLUEPRINT-* invariants,
  * landed in 18.D.
  */
 
@@ -169,7 +169,7 @@ export interface ValidationResult {
 }
 
 /**
- * Check a blueprint against the Phase-18 BLUEPRINT-domain invariants.
+ * Check a blueprint against the BLUEPRINT-domain invariants.
  * Schema validation is upstream (loadBlueprint); this function checks
  * invariants that go beyond JSON-Schema reach (cross-field consistency).
  */

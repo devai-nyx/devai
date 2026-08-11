@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/meta.schema.json",
-  "title": "DEVAI-II schema meta-schema (thin declarative gate)",
-  "description": "Every schema in law/schemas/ (predecessor-archive excluded) validates against this in the T2 contract tier. Recursive canon rules (closed-world every node, no restated common vocabulary, enum generation markers, dereferenced-publish byte-match) live in `check schemas`, not here \u2014 deliberately not a custom dialect.",
+  "title": "DEVAI schema meta-schema",
+  "description": "Every shipped schema validates against this declarative gate. Recursive canonicalization rules live in `check schemas`, not in a custom JSON Schema dialect.",
   "schema_version": "1.0.0",
   "type": "object",
   "properties": {

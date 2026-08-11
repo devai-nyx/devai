@@ -320,6 +320,7 @@
         "schemaVersion",
         "action_id",
         "effect",
+        "capabilities",
         "subject",
         "consent",
         "planner",
@@ -367,7 +368,7 @@
               }
             ]
           },
-          "description": "Declared per-domain effect upper bound. Optional only for the R24 W01 compatibility window; the live consistency gate introduced red-first in W02 and completed in W03 rejects a catalogued action without this field. fs:unknown-write and db:unclassified are shadow-only migration values that R25 must eliminate."
+          "description": "Required per-domain effect upper bound for the catalogued action. Conservative fs:unknown-write and db:unclassified inference results must be covered by an explicit declaration before execution binding."
         },
         "subject": {
           "oneOf": [

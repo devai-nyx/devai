@@ -68,7 +68,7 @@ export interface InventoryCoverageOptions {
    */
   readonly framework?: string;
   /**
-   * Phase 22.H (closes D-A-18): directory under repoRoot to walk
+   * Directory under repoRoot to walk
    * for use-case files (default `product/use-cases`). Each
    * `*.json` file under this directory is parsed as a UseCases
    * record (per `use-cases.schema.json`) and its steps' `refs`
@@ -129,7 +129,7 @@ function pathPattern(p: string): RegExp {
 }
 
 /**
- * Phase 22.H (closes D-A-18): walk a use-cases directory and
+ * Walk a use-cases directory and
  * return the parsed records. Files that fail JSON parsing or
  * use-cases-schema validation are skipped with a finding (not
  * a hard fail — an adopter's authoring may be in progress).
@@ -214,7 +214,7 @@ type SynthesizedLink = {
 };
 
 /**
- * Phase 22.H (closes D-A-18) + Phase 23.C (closes D-A-20): from a
+ * From a
  * list of UseCases, synthesize `coverage-matrix.links[]` triads.
  * Walks every step in `mainFlow` + `alternateFlows.steps`. Three
  * cardinalities are emitted, each tagged with `linkKind`:
@@ -235,7 +235,7 @@ type SynthesizedLink = {
  * endpoints. Many of those step refs only declared endpoints and were
  * silently ignored. Post-23.C, single-axis steps produce links and
  * the violation count drops proportionally. The measured historical
- * counts remain in the predecessor's Phase 23.C record.
+ * prior counts are not part of the runtime result.
  *
  * De-duplication: the same (linkKind, routeId, endpointId, useCaseId)
  * 4-tuple may appear in multiple steps; the synthesizer emits each
@@ -317,7 +317,7 @@ function countInferredMatches(
 }
 
 /**
- * D-A-37 — resolve the routes-inventory body path with framework awareness.
+ * Resolve the routes-inventory body path with framework awareness.
  * Mirrors `sense-routes`'s body-write logic (it writes `routes-${framework}.json`).
  *
  * Resolution order:
@@ -428,7 +428,7 @@ export function senseInventoryCoverage(opts: InventoryCoverageOptions): Inventor
       ? countInferredMatches(routesInventory.routes, apiMap.endpoints)
       : 0;
 
-  // Phase 22.H (closes D-A-18): walk `product/use-cases/`
+  // Walk `product/use-cases/`.
   // (or pack-configured dir) for authored use-cases and
   // synthesize triads into the matrix's links[].
   const useCasesDir = opts.useCasesDir ?? join(opts.repoRoot, 'product/use-cases');

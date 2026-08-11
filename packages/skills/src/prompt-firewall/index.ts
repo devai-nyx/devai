@@ -4,8 +4,9 @@ import type { LoadedRecipe, RecipeManifest } from '../recipes/types.js';
 const STATIC_AUTHORITY_PATHS = [
   'law/**',
   'product/**',
-  'work/rounds/**',
-  'work/audit/**',
+  '.devai/config/**',
+  '.devai/pin/**',
+  '.devai/local/rounds/**',
   'record/**',
 ] as const;
 
@@ -33,9 +34,10 @@ function manifestOf(input: RecipeInput): RecipeManifest {
 function intersectsStaticAuthority(scope: string): boolean {
   const probes = [
     'law/policy/action-registry.json',
-    'product/owner-mandates/OM-001.md',
-    'work/rounds/R-0001/plan.md',
-    'work/audit/report.json',
+    'product/specification.md',
+    '.devai/config/project.json',
+    '.devai/local/rounds/R-1000/plan.json',
+    '.devai/local/rounds/R-1000/audit/report.json',
     'record/proofs/evidence.json',
   ];
   return (

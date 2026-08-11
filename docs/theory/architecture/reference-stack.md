@@ -1,9 +1,7 @@
 # Reference stack
 
 **Authority:** Architect (Constitution Article 6, F1).
-**Forensic anchors:** [D-5](../../../law/adr/README.md) established the primary
-reference stack; Constitution 0.5.0 Article 1 admits additional declared stacks
-through explicit F5 stack-adapter packs.
+Additional declared stacks are admitted through explicit F5 stack-adapter packs.
 
 ## Rule
 
@@ -54,13 +52,12 @@ Each of these collapses a significant design space. Adopters not on the canonica
 
 ## When to revisit
 
-Trigger conditions for a successor D-entry:
+Revisit the reference stack when:
 
 - A second stack earns first-class parser and fixture coverage beyond the
   current pack contract. The threshold is empirical adoption pressure, not a
   claim of universality.
-- The canonical-stack components diverge from their assumed behaviour (e.g. NestJS introduces a non-decorator module API; Angular drops `NgModule` entirely). At that point the sensor heuristics need to be re-anchored, and the D-entry's framing needs updating.
+- The canonical-stack components diverge from their assumed behaviour (for example, NestJS introduces a non-decorator module API or Angular drops `NgModule` entirely). At that point the sensor heuristics need to be re-anchored.
 
-In either case, a new D-entry supersedes this one explicitly. Adapter packs land
-additively under Article 1 while NestJS + Angular + Postgres remains the primary
-reference stack.
+Adapter packs land additively under Article 1 while NestJS + Angular + Postgres remains the
+primary reference stack.

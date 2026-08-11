@@ -18,7 +18,7 @@ superseded_by: null
 
 This is the immutable axiom set for DEVAI. Every other artifact in the framework — contracts, charters, skills, bootstrap layout, scorecard — derives from these axioms and may not contradict them.
 
-The constitution is part of substrate F5 (Harness). It is upgraded only via the DEVAI release process and version-bumped per change. Client repositories inherit the constitution at bootstrap time and pin to a specific version; constitutional upgrade in a client is an explicit `devai upgrade` operation, never an implicit one.
+The constitution is part of substrate F5 (Harness). It changes only through the DEVAI release process and is versioned per change. Adopter repositories pin an installed copy explicitly with `devai init bind --constitution --write`; binding is never implicit.
 
 The constitution states what must always be true. It does not state how mechanisms are implemented; those are in skills, charters, and contracts.
 
@@ -90,7 +90,7 @@ Authority is decided by a fixed path prefix of at most two segments — a table 
 - `.devai/local/rounds/` — role-bounded runtime round state; each role writes only its declared task or audit output through an authorized action.
 - `docs/` — Architect (published human documentation).
 - `record/` — machine only: `record/derived/` (F4) is written only by the regeneration subsystem; `record/proofs/` is appended only by executing verbs, hash-linked, attributed to the verb and committed by the session that produced it. A human edit under `record/` is an authority violation regardless of role.
-- `.devai/pin/` and `.devai/config/` — modified only via `devai upgrade`, materialized byte-identical from `law/policy/` sources; a checker never writes its own inputs.
+- `.devai/pin/` and `.devai/config/` — modified only through registered `init apply` or `init bind` actions, materialized from canonical package or policy sources; a checker never writes its own inputs.
 - `.devai/state/` — mutable head state written by executing verbs; never hand-edited.
 - `packages/` and root workspace configuration — Engineer (F2).
 - `tests/` and `packages/*/tests/` — Inspector (F3).
@@ -126,7 +126,7 @@ The authority chain is:
 
 **Human > Constitution > Architect/Owner > Contracts > Engineer**
 
-Closer-to-code documents lose against higher-level documents when they contradict. A function-level docstring that contradicts an architecture ADR loses; an ADR that contradicts the constitution loses; the constitution loses only to the human Architect operating outside any session (via `devai upgrade`).
+Closer-to-code documents lose against higher-level documents when they contradict. A function-level docstring that contradicts an architecture ADR loses; an ADR that contradicts the constitution loses. Constitution changes require an explicit Architect-authored release change and a new version.
 
 This rule prevents the canonical failure mode of agents rewriting high-level documents to match code they have written.
 
@@ -408,7 +408,7 @@ When uncertainty remains after available checks, the framework records explicit 
 
 ### Article 40. Constitution changes
 
-Clients adopt a specific constitution version through an explicit `devai upgrade` action. Client-specific rules belong in policy artifacts rather than local edits to the constitution.
+Adopters bind a specific constitution version through `devai init bind --constitution --write`. Client-specific rules belong in policy artifacts rather than local edits to the constitution.
 
 ---
 

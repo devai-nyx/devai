@@ -90,7 +90,7 @@ export interface InventoryApiOptions {
 /**
  * Resolve singular `scan_dir` + plural `scan_dir_alternates` to a
  * deduped list of existing absolute paths. Falls back to repoRoot.
- * Phase 20.E (closes D-A-3-area pack-widening).
+ * Supports pack-configured scan areas.
  */
 function uniqueExistingApiDirs(raw: readonly string[], repoRoot: string): string[] {
   if (raw.length === 0) return [repoRoot];

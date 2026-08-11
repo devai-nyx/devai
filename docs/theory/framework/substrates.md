@@ -15,7 +15,7 @@ What the framework is trying to achieve. The reference signal _r(t)_ in control-
 
 - **Contents.** Business specs (Owner-authored journeys + use-cases under `product/`), engineering specs (Architect-authored arch notes + invariants + trace + ADRs under `docs/theory/architecture/`, `framework/adr/`), contracts (`docs/reference/contracts/`), glossary (`law/glossary/`, joint Owner+Architect).
 - **Authors.** Owner for business tier, Architect for engineering tier, joint at glossary.
-- **Sensor regime.** Spec validators (`spec validate invariants`, `spec validate journeys`, `spec validate trace`, `spec validate glossary`), plus aspect-grid cells F1×T1..T9 measured by the `sense spec *` sensors.
+- **Sensor regime.** Contract and documentation tasks selected by `devai check`, plus registered sensor kinds resolved by `devai sense run`.
 
 ### F2 — Plant (the system under control)
 
@@ -23,7 +23,7 @@ The system the controller acts on. The plant _P_.
 
 - **Contents.** All source code under `apps/`, `libs/`, `packages/` (in monorepo layouts); DB migrations under `db/migrations/`; seeds under `db/seeds/`; infrastructure-as-code under `iac/`; root-level build scripts.
 - **Author.** Engineer.
-- **Sensor regime.** Type-checker, linter, builder, test runners. Plant transversal sensors `sense-plant-*` for the F2×T1..T9 row.
+- **Sensor regime.** Type-checker, linter, builder, test runners, and registered plant sensors.
 
 ### F3 — Observation (sensors on the plant)
 
@@ -31,23 +31,23 @@ The tests that measure what _P_ actually does, compared with what F1 says it sho
 
 - **Contents.** All `**/*.spec.ts`, `**/*.test.ts`, `tests/`, `e2e/`, configuration files that encode test intent.
 - **Author.** Inspector.
-- **Sensor regime.** Six vitest configurations (see [test policy](./test-policy.md)). Plus meta-sensors that probe Inspector's own substrate: `sense-test-coverage-depth`, `sense-test-weakening`, `sense-test-idiomaticity`, `sense-test-invariant-alignment`, etc.
+- **Sensor regime.** The task graph described by the [test policy](./test-policy.md), plus registered sensors that probe the observation substrate.
 
 ### F4 — Inventory (plant identification)
 
 A derived model of _P_. The controller's view of the plant's current state _x̂_.
 
-- **Contents.** `record/derived/inventory/` — generated artifacts from `inv modules`, `inv routes`, `inv components`, `inv dependencies`, `inv schemas`, `inv contracts`, `inv glossary`, `inv tests`, `inv coverage`. Plus the L0 sensors' outputs (`sense api`, `sense routes`, `sense data-model`, etc.) at `record/proofs/sensor-readings/`.
-- **Author.** No one — F4 is _never_ authored. Regenerated only by the inventory subsystem and the L0 sensors. Drift is detected by `inv regen` comparing fresh output to checked-in state.
-- **Sensor regime.** `sense-inventory-adherence`, `sense-inventory-determinism`, `sense-inventory-performance`.
+- **Contents.** Canonical read-only slices produced by `devai sense inventory` and registered sensor readings produced through the evidence boundary.
+- **Author.** No one — F4 is derived from the repository and declared inputs.
+- **Sensor regime.** Inventory and coherence sensor kinds resolved by `devai sense run`.
 
 ### F5 — Harness (the controller infrastructure)
 
 The DEVAI machinery as instantiated in the client repo. The control system itself, not the plant.
 
 - **Contents.** `.devai/` (excluding `inventory/` and `worktrees/`). The constitution as pinned, contracts schemas, skill manifests, agent prompts, role configurations, pack config.
-- **Author.** Modified only via `devai adopt upgrade`, never by ordinary disciplines.
-- **Sensor regime.** `sense-harness-*` sensors covering the F5×T1..T9 row including idiomaticity, coverage, performance, security, robustness, coherence, depth, alignment, green-main.
+- **Author.** Bound from declared sources with `devai init bind`; ordinary disciplines do not edit it directly.
+- **Sensor regime.** Registered harness sensor kinds resolved by `devai sense run`.
 
 ## Authority-by-path enforcement
 
@@ -61,7 +61,7 @@ A worker that tries to write outside its declared role's enumerated paths gets a
 
 Clients MAY extend the path mapping for client-specific disciplines (e.g., adding a `db/` Engineer path for a NestJS service that has migrations at a non-default location). Extensions are **additive**; the core mapping is **immutable**.
 
-A client extension lives in `.devai/config/` and is picked up by the harness at boot. The core mapping in Article 6 is never modified locally — only upgraded via `devai adopt upgrade`.
+A client extension lives in `.devai/config/` and is picked up by the harness at boot. Binding validates the declared extension without changing the core mapping.
 
 ## See also
 

@@ -6,7 +6,7 @@ import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 
 /**
- * R13 W04 — `devai policy check docs governance`.
+ * Documentation-governance check behind the canonical `check` facade.
  *
  * Enforces ADR-DOCS-GOVERNANCE (commit cf714e7). Nine rules:
  *
@@ -681,7 +681,7 @@ export interface CheckDocsGovernanceOptions {
 }
 
 // ---------------------------------------------------------------------------
-// R14 W12 — docs-ia.* rules (per ADR-DOCS-IA Decision 10)
+// Documentation information-architecture rules.
 // ---------------------------------------------------------------------------
 
 /**
@@ -846,7 +846,7 @@ function checkDocsIaSidebarCurated(
 
 /**
  * Rule docs-ia.framework-meta-split — law/ and docs/ exist as sibling
- * top-level categories in the successor source tree.
+ * top-level categories in the current source tree.
  */
 function checkDocsIaFrameworkMetaSplit(
   repoRoot: string,
@@ -871,7 +871,7 @@ function checkDocsIaFrameworkMetaSplit(
       ruleId: 'docs-ia.framework-meta-split',
       severity: 'fail',
       message: `Law/Docs sibling split missing: ${missing}`,
-      remediation: 'Create the missing successor law or documentation directory.',
+      remediation: 'Create the missing law or documentation directory.',
     };
   }
   return {

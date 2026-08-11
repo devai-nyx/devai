@@ -72,7 +72,7 @@ import {
   roundRecordIntegrity,
   validateInvariants,
   type GovernanceIntegrityReport,
-} from '#core-compat';
+} from '#runtime-core';
 import { validators } from '@devai-nyx/schemas';
 import { rebuildSensorReadings } from './readings-rebuild.js';
 

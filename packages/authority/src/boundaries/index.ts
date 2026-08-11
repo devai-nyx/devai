@@ -53,7 +53,7 @@ const READ_PROCESS_OWNERS = new Set([
 const GOVERNANCE_PROJECTION_EXCEPTION = 'writeGovernanceProjectionSync';
 const GOVERNANCE_PROJECTION_OWNER = 'packages/cli/src/commands/docs/governance-render.ts';
 const HOST_EFFECTS_MODULE = '@devai-nyx/authority';
-const SUCCESSOR_SOURCE_ROOTS = [
+const CANONICAL_SOURCE_ROOTS = [
   'packages/adapters/src',
   'packages/authority/src',
   'packages/cli/src',
@@ -866,7 +866,7 @@ export function validateDirectMutatorInventory(input: unknown) {
   }
   const unauthorized: Array<{ path: string; line: number; symbol: string }> = [];
   if (typeof input.repo_root === 'string') {
-    for (const sourceRoot of SUCCESSOR_SOURCE_ROOTS) {
+    for (const sourceRoot of CANONICAL_SOURCE_ROOTS) {
       const absoluteRoot = resolvePath(input.repo_root, sourceRoot);
       if (!existsSync(absoluteRoot)) continue;
       for (const relative of sourceFiles(absoluteRoot)) {

@@ -66,7 +66,7 @@ function errorFrom(text: string, exit: number): CliError {
       return (parsed as { error: CliError }).error;
     }
   } catch {
-    // Prose and malformed legacy output are normalized below.
+    // Unstructured service output is normalized below.
   }
   const normalized = normalizeExit(exit);
   const message = trimmed.replace(/^devai(?: [^:]+)?:\s*/u, '') || 'action failed';

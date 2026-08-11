@@ -31,7 +31,7 @@ export interface RegenOptions {
 }
 
 /**
- * Phase 22.G (closes D-A-17): InventoryRecord widens to carry
+ * InventoryRecord carries
  * per-surface `{id, file}` metadata so `computeReverseAdherence`
  * can read it. Pre-22.G, `modules` was `readonly string[]` and
  * `routes` carried `{method, path, module}` only — neither had
@@ -66,7 +66,7 @@ export interface InventoryRecord {
     invariants: readonly string[];
   }[];
   /**
-   * Phase 22.G (D-A-17): per-node dependency-graph surface
+   * Per-node dependency-graph surface
    * entries. Each entry carries `{id: DEP-<hash8>, file:
    * <source path>}` so `computeReverseAdherence` can read the
    * dependency surface with the same shape as the other three
@@ -98,7 +98,7 @@ export async function regenerateInventory(opts: RegenOptions): Promise<Inventory
   const checksumPaths = computeChecksumPaths(repoRoot, opts.checksumPaths);
   const checksums = computeChecksums(repoRoot, checksumPaths);
 
-  // Phase 22.G (D-A-17): derive per-route + per-component +
+  // Derive per-route, per-component, and
   // per-dependency-node ids so adherence-reverse can read the
   // {id, file} surface tuples.
   return {
@@ -142,7 +142,7 @@ export async function regenerateInventory(opts: RegenOptions): Promise<Inventory
 }
 
 /**
- * Phase 22.G (D-A-17): stable derived id for a per-route surface
+ * Stable derived id for a per-route surface
  * entry. The route extractor doesn't synthesize ids by default;
  * computeReverseAdherence reads `route.id`, so we derive a
  * deterministic id from the (method, path, module) triple.
@@ -169,7 +169,7 @@ function routeFile(
 }
 
 /**
- * Phase 22.G (D-A-17): stable derived id for a per-component
+ * Stable derived id for a per-component
  * surface entry. Derived from (kind, name, module) so two
  * components with the same name in different modules don't
  * collide.
@@ -180,7 +180,7 @@ function componentId(kind: string, name: string, module: string): string {
 }
 
 /**
- * Phase 22.G (D-A-17): stable derived id for a per-dependency-
+ * Stable derived id for a per-dependency-
  * graph-node surface entry. Each node is a source file path; the
  * id is `DEP-<sha256_hex_8>` derived from the path so the same
  * file regenerated across runs produces the same id.

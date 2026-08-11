@@ -161,12 +161,12 @@
         },
         {
           "id": "step-13",
-          "action": "Use `init upgrade`: Plan or apply the canonical DEVAI upgrade transition.",
+          "action": "Use `init bind`: Bind selected installed DEVAI contracts into an adopter repository.",
           "actorRole": "operator",
           "refs": {
             "actionRefs": [
               {
-                "id": "init upgrade"
+                "id": "init bind"
               }
             ]
           }
@@ -513,7 +513,7 @@
       ],
       "acceptanceCriteria": [
         "Every action reference resolves exactly once in the current action registry.",
-        "No deprecated, retired, folded, aliased, or tombstoned action is described."
+        "The use case describes exactly the current registered action population."
       ]
     }
   ]

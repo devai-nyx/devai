@@ -40,7 +40,6 @@ export interface RoutineExecutorRequest {
 export interface RoutineActionRegistryEntry {
   readonly action_id: string;
   readonly internal_binding: string;
-  readonly disposition: 'keep' | 'fold' | 'tombstone';
   readonly effect: ExecutorEffect;
   readonly authority_contract: {
     readonly effect: ExecutorEffect;
@@ -217,7 +216,7 @@ export function validateRoutineExecutor(
   let action: RoutineActionRegistryEntry | undefined;
   if (hasAction) {
     action = options.actionRegistry?.find((entry) => entry.action_id === executor.action_id);
-    if (action === undefined || action.disposition !== 'keep') {
+    if (action === undefined) {
       return executorFailure(
         'TASK_ROUTINE_ACTION_UNAVAILABLE',
         `registered action ${executor.action_id ?? ''} is missing or non-runnable`,

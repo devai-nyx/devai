@@ -38,7 +38,7 @@
     },
     "cycle": {
       "enum": ["A", "B", "C"],
-      "description": "Multi-cycle gate marker (Phase 16.D, D-50). A = local-dev checkpoint (L0 static only). B = branch-handoff / PR draft (L0 + L1 dynamic). C = merge / release / production deploy (all configured tiers including semantic). When the scorecard is computed via `devai govern score compute --cycle <A|B|C>`, the aggregator filters readings to those whose `tier` is appropriate for that cycle. Absent = aggregate across all tiers (current default, equivalent to Cycle C semantics)."
+      "description": "Multi-cycle gate marker. A is a local checkpoint using L0 readings; B is a branch handoff using L0 and L1; C covers merge, release, or deployment using all configured tiers. When omitted, the scorecard aggregates all tiers."
     },
     "thresholds_used": {
       "type": "object",

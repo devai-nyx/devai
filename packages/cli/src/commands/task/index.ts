@@ -13,7 +13,7 @@ import {
   startRoundTask,
   TaskServiceError,
   TASK_USAGE_EXIT,
-} from '#core-compat';
+} from '#runtime-core';
 import { defineCommand } from '../../define-command.js';
 
 interface CommonOptions {

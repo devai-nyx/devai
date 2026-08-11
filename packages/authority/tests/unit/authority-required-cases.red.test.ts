@@ -167,7 +167,7 @@ describe('R19 materialization total precedence inventory', () => {
 
   function materializationInput(authorization: unknown, overrides: Record<string, unknown> = {}) {
     return {
-      repository_id: 'devai-self',
+      repository_id: 'example-repository',
       enforcement: { mode: 'binding' },
       host_enforcement: { mode: 'cli-only' },
       authorization,
@@ -259,19 +259,19 @@ describe('R19 materialization total precedence inventory', () => {
       scenario === 'extension-invalid'
         ? [
             {
-              ...extensionArtifact('devai-self-authority', '1.0.0', [engineerRule]),
+              ...extensionArtifact('example-authority', '1.0.0', [engineerRule]),
               canonical_source_bytes: canonicalBytes({ tampered: true }),
             },
           ]
         : scenario === 'duplicate-extension'
           ? [
-              extensionArtifact('devai-self-authority', '1.0.0', [engineerRule]),
-              extensionArtifact('devai-self-authority', '1.0.1', [inspectorRule]),
+              extensionArtifact('example-authority', '1.0.0', [engineerRule]),
+              extensionArtifact('example-authority', '1.0.1', [inspectorRule]),
             ]
           : scenario === 'duplicate-rule'
-            ? [extensionArtifact('devai-self-authority', '1.0.0', duplicateRules)]
+            ? [extensionArtifact('example-authority', '1.0.0', duplicateRules)]
             : scenario === 'non-additive'
-              ? [extensionArtifact('devai-self-authority', '1.0.0', [nonAdditiveRule])]
+              ? [extensionArtifact('example-authority', '1.0.0', [nonAdditiveRule])]
               : [
                   extensionArtifact(
                     baseExtension.extension_id,
@@ -306,7 +306,7 @@ describe('R19 materialization total precedence inventory', () => {
             },
     });
     const input = materializationInput(authorization, {
-      repository_id: scenario === 'caller-binding' ? 'other-repository' : 'devai-self',
+      repository_id: scenario === 'caller-binding' ? 'other-repository' : 'example-repository',
       enforcement:
         scenario === 'shadow-invalid' ? { mode: 'shadow', shadow: {} } : { mode: 'binding' },
     });

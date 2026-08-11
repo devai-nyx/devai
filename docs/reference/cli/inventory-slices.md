@@ -34,7 +34,7 @@ costs, and examples. This page does not duplicate the mutable slice population.
 - **When to use:** Use for the exact deterministic `pack` repository projection.
 - **When not to use:** Does not choose among ambiguous packs or invent support for an unmatched stack.
 - **Non-pass semantics:** `review` is explicit and exits non-pass; implementation exceptions are `fail`. `unknown`, `skipped`, and `N/A` are not emitted by the current inventory payload.
-- **New-grammar example:** `devai sense inventory --slice pack --repo-root . --adopter-root . --format json`
+- **Example:** `devai sense inventory --slice pack --repo-root . --adopter-root . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/inventory_slices)
 - **Related workflow:** `sense`
 
@@ -58,7 +58,7 @@ costs, and examples. This page does not duplicate the mutable slice population.
 - **When to use:** Use for the exact deterministic `adherence` repository projection.
 - **When not to use:** A missing trace file is an execution error; no empty trace is synthesized.
 - **Non-pass semantics:** `review` is explicit and exits non-pass; implementation exceptions are `fail`. `unknown`, `skipped`, and `N/A` are not emitted by the current inventory payload.
-- **New-grammar example:** `devai sense inventory --slice adherence --repo-root . --trace law/trace.json --format json`
+- **Example:** `devai sense inventory --slice adherence --repo-root . --trace law/trace.json --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/inventory_slices)
 - **Related workflow:** `sense`
 
@@ -82,7 +82,7 @@ costs, and examples. This page does not duplicate the mutable slice population.
 - **When to use:** Use for the exact deterministic `components` repository projection.
 - **When not to use:** Does not infer undecorated components or non-TypeScript framework conventions.
 - **Non-pass semantics:** `review` is explicit and exits non-pass; implementation exceptions are `fail`. `unknown`, `skipped`, and `N/A` are not emitted by the current inventory payload.
-- **New-grammar example:** `devai sense inventory --slice components --repo-root . --format json`
+- **Example:** `devai sense inventory --slice components --repo-root . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/inventory_slices)
 - **Related workflow:** `sense`
 
@@ -106,7 +106,7 @@ costs, and examples. This page does not duplicate the mutable slice population.
 - **When to use:** Use for the exact deterministic `contracts` repository projection.
 - **When not to use:** Does not perform the deferred OpenAPI byte-regeneration comparison.
 - **Non-pass semantics:** `review` is explicit and exits non-pass; implementation exceptions are `fail`. `unknown`, `skipped`, and `N/A` are not emitted by the current inventory payload.
-- **New-grammar example:** `devai sense inventory --slice contracts --repo-root . --format json`
+- **Example:** `devai sense inventory --slice contracts --repo-root . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/inventory_slices)
 - **Related workflow:** `sense`
 
@@ -130,7 +130,7 @@ costs, and examples. This page does not duplicate the mutable slice population.
 - **When to use:** Use for the exact deterministic `coverage` repository projection.
 - **When not to use:** Malformed coverage JSON errors; no coverage run is started and statement-only line counts are an approximation.
 - **Non-pass semantics:** `review` is explicit and exits non-pass; implementation exceptions are `fail`. `unknown`, `skipped`, and `N/A` are not emitted by the current inventory payload.
-- **New-grammar example:** `devai sense inventory --slice coverage --repo-root . --coverage coverage/coverage-final.json --format json`
+- **Example:** `devai sense inventory --slice coverage --repo-root . --coverage coverage/coverage-final.json --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/inventory_slices)
 - **Related workflow:** `sense`
 
@@ -154,7 +154,7 @@ costs, and examples. This page does not duplicate the mutable slice population.
 - **When to use:** Use for the exact deterministic `dependencies` repository projection.
 - **When not to use:** Does not resolve dynamic imports, require calls, runtime loaders, or non-TypeScript dependency syntax.
 - **Non-pass semantics:** `review` is explicit and exits non-pass; implementation exceptions are `fail`. `unknown`, `skipped`, and `N/A` are not emitted by the current inventory payload.
-- **New-grammar example:** `devai sense inventory --slice dependencies --repo-root . --format json`
+- **Example:** `devai sense inventory --slice dependencies --repo-root . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/inventory_slices)
 - **Related workflow:** `sense`
 
@@ -178,7 +178,7 @@ costs, and examples. This page does not duplicate the mutable slice population.
 - **When to use:** Use for the exact deterministic `glossary` repository projection.
 - **When not to use:** Malformed glossary records are skipped here and must be rejected by the separate glossary validator.
 - **Non-pass semantics:** `review` is explicit and exits non-pass; implementation exceptions are `fail`. `unknown`, `skipped`, and `N/A` are not emitted by the current inventory payload.
-- **New-grammar example:** `devai sense inventory --slice glossary --repo-root . --format json`
+- **Example:** `devai sense inventory --slice glossary --repo-root . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/inventory_slices)
 - **Related workflow:** `sense`
 
@@ -202,7 +202,7 @@ costs, and examples. This page does not duplicate the mutable slice population.
 - **When to use:** Use for the exact deterministic `modules` repository projection.
 - **When not to use:** Does not infer undecorated modules or non-TypeScript module conventions.
 - **Non-pass semantics:** `review` is explicit and exits non-pass; implementation exceptions are `fail`. `unknown`, `skipped`, and `N/A` are not emitted by the current inventory payload.
-- **New-grammar example:** `devai sense inventory --slice modules --repo-root . --format json`
+- **Example:** `devai sense inventory --slice modules --repo-root . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/inventory_slices)
 - **Related workflow:** `sense`
 
@@ -226,7 +226,7 @@ costs, and examples. This page does not duplicate the mutable slice population.
 - **When to use:** Use for the exact deterministic `routes` repository projection.
 - **When not to use:** Protection is only a same-method UseGuards/Auth hint; global guards and non-NestJS routers are not inferred.
 - **Non-pass semantics:** `review` is explicit and exits non-pass; implementation exceptions are `fail`. `unknown`, `skipped`, and `N/A` are not emitted by the current inventory payload.
-- **New-grammar example:** `devai sense inventory --slice routes --repo-root . --format json`
+- **Example:** `devai sense inventory --slice routes --repo-root . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/inventory_slices)
 - **Related workflow:** `sense`
 
@@ -250,7 +250,7 @@ costs, and examples. This page does not duplicate the mutable slice population.
 - **When to use:** Use for the exact deterministic `schemas` repository projection.
 - **When not to use:** Database records are absent by default; a supplied unreachable URL errors instead of falling back to file-only output.
 - **Non-pass semantics:** `review` is explicit and exits non-pass; implementation exceptions are `fail`. `unknown`, `skipped`, and `N/A` are not emitted by the current inventory payload.
-- **New-grammar example:** `devai sense inventory --slice schemas --repo-root . --format json`
+- **Example:** `devai sense inventory --slice schemas --repo-root . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/inventory_slices)
 - **Related workflow:** `sense`
 
@@ -274,7 +274,7 @@ costs, and examples. This page does not duplicate the mutable slice population.
 - **When to use:** Use for the exact deterministic `tests` repository projection.
 - **When not to use:** Does not discover non-TypeScript test conventions or infer a non-unit suite without the filename marker.
 - **Non-pass semantics:** `review` is explicit and exits non-pass; implementation exceptions are `fail`. `unknown`, `skipped`, and `N/A` are not emitted by the current inventory payload.
-- **New-grammar example:** `devai sense inventory --slice tests --repo-root . --format json`
+- **Example:** `devai sense inventory --slice tests --repo-root . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/inventory_slices)
 - **Related workflow:** `sense`
 
@@ -298,7 +298,7 @@ costs, and examples. This page does not duplicate the mutable slice population.
 - **When to use:** Use for the exact deterministic `all` repository projection.
 - **When not to use:** Does not choose among ambiguous packs or invent support for an unmatched stack. A missing trace file is an execution error; no empty trace is synthesized. Does not infer undecorated components or non-TypeScript framework conventions. Does not perform the deferred OpenAPI byte-regeneration comparison. Malformed coverage JSON errors; no coverage run is started and statement-only line counts are an approximation. Does not resolve dynamic imports, require calls, runtime loaders, or non-TypeScript dependency syntax. Malformed glossary records are skipped here and must be rejected by the separate glossary validator. Does not infer undecorated modules or non-TypeScript module conventions. Protection is only a same-method UseGuards/Auth hint; global guards and non-NestJS routers are not inferred. Database records are absent by default; a supplied unreachable URL errors instead of falling back to file-only output. Does not discover non-TypeScript test conventions or infer a non-unit suite without the filename marker.
 - **Non-pass semantics:** `review` is explicit and exits non-pass; implementation exceptions are `fail`. `unknown`, `skipped`, and `N/A` are not emitted by the current inventory payload.
-- **New-grammar example:** `devai sense inventory --slice all --repo-root . --format json`
+- **Example:** `devai sense inventory --slice all --repo-root . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/inventory_slices)
 - **Related workflow:** `sense`
 

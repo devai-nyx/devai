@@ -18,7 +18,7 @@
     "build": "tsc -b --force && node scripts/assemble-package.mjs",
     "clean": "tsc -b --clean",
     "pack:smoke": "node scripts/installed-tarball-smoke.mjs",
-    "test": "vitest run tests/unit tests/contract"
+    "test": "pnpm --dir ../.. run test:cli"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",

@@ -7,24 +7,17 @@ import {
   writeFileSync,
 } from '@devai-nyx/authority';
 import { join } from 'node:path';
-import type { CAC } from 'cac';
 import { buildSensorReading, type SensorFinding, type SensorReading } from '@devai-nyx/sensors';
-import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
-import { defineCommand } from '../../define-command.js';
-import { DEFAULT_REPO_ROOT, persistSensorReading } from './shared.js';
+import { persistSensorReading } from './shared.js';
 
 /**
- * Phase 21.E (closes D-A-8): companion to the `--emit-reading`
- * default on the seven L0 sense commands. Walks
+ * Rebuild inventory readings from previously recorded sensor bodies. Walks
  * `<repoRoot>/.devai/state/sensors/<verb>/` body files and
  * synthesizes a minimal `SensorReading` for each, writing it to
  * `<repoRoot>/.devai/state/sensor-readings/<sensor-kind>/<id>.json`.
  *
- * Use case: adopters who ran the seven sensors pre-21.E now have
- * body files but no `SensorReading` records. Re-running the
- * sensors would refresh both, but for adopters who don't want to
- * incur the static-walk cost again, this aggregator backfills
- * the readings from the existing bodies.
+ * This provides the `sense record --rebuild` path without re-running
+ * the underlying static inventory walks.
  *
  * Limitations: the synthesized readings carry only `status: 'pass'`
  * + a body_path-like `evidence_path` pointer + the canonical
@@ -34,11 +27,6 @@ import { DEFAULT_REPO_ROOT, persistSensorReading } from './shared.js';
  * to attribute coverage to the sensor; it isn't a substitute for
  * a fresh sensor run when the sensor's findings matter.
  */
-
-interface Options {
-  readonly repoRoot?: string;
-  readonly human?: boolean;
-}
 
 const SENSOR_KINDS: ReadonlyArray<{
   readonly subdir: string;
@@ -89,7 +77,7 @@ function synthesizeReading(
     .digest('hex')
     .slice(0, 16);
   const id = `SR-${idSeed}`;
-  const command = `devai sense readings rebuild --repo-root . (synthesized from ${bodyRelPath})`;
+  const command = `devai sense record --rebuild --repo-root . (synthesized from ${bodyRelPath})`;
   const command_hash = createHash('sha256').update(command).digest('hex');
   const timestamp = new Date().toISOString();
   const reading = {
@@ -108,14 +96,14 @@ function synthesizeReading(
         severity: 'info',
         code: 'REBUILT_FROM_BODY',
         message:
-          'SensorReading synthesized post-hoc from an existing body file by `devai sense readings rebuild` (Phase 21.E). Findings + metrics from the original sensor run are not preserved.',
+          'SensorReading synthesized from an existing body file by `devai sense record --rebuild`. Findings and metrics from the original sensor run are not preserved.',
       },
     ],
   };
   return { id, reading };
 }
 
-/** Direct in-process adapter used by both the retired wrapper and `sense record --rebuild`. */
+/** Direct in-process adapter used by `sense record --rebuild`. */
 export function rebuildSensorReadings(repoRoot: string): RebuildSensorReadingsResult {
   const entries: RebuildEntry[] = [];
   const errors: string[] = [];
@@ -208,7 +196,7 @@ export function rebuildSensorReadings(repoRoot: string): RebuildSensorReadingsRe
     status = 'pass';
   }
   const reading = buildSensorReading({
-    sensorName: 'sense-readings-rebuild',
+    sensorName: 'inventory-regeneration',
     sensorKind: 'inventory_regeneration',
     command: ['devai', 'sense', 'record', '--rebuild'],
     status,
@@ -226,37 +214,3 @@ export function rebuildSensorReadings(repoRoot: string): RebuildSensorReadingsRe
   persistSensorReading(reading, repoRoot);
   return { report, reading };
 }
-
-export const senseReadingsRebuildCmd = defineCommand({
-  name: 'sense readings-rebuild',
-  description:
-    'Synthesize SensorReadings from existing .devai/state/sensors/<verb>/ bodies into .devai/state/sensor-readings/ (Phase 21.E).',
-  authority: 'sensor',
-  register(cli: CAC): void {
-    cli
-      .command(
-        'sense-readings-rebuild',
-        'Backfill .devai/state/sensor-readings/ from existing sensor body files (Phase 21.E, D-A-8 companion)',
-      )
-      .option('--repo-root <path>', `Working directory (default: ${DEFAULT_REPO_ROOT})`)
-      .option('--human', 'Human-readable summary')
-      .action((options: Options) => {
-        const repoRoot = options.repoRoot ?? DEFAULT_REPO_ROOT;
-        const { report } = rebuildSensorReadings(repoRoot);
-        if (options.human === true) {
-          process.stdout.write(
-            `sense readings-rebuild: created=${String(report.created)} skipped=${String(report.skipped)} errors=${String(report.errors.length)}\n`,
-          );
-          for (const e of report.entries) {
-            process.stdout.write(`  [${e.action}] ${e.kind}: ${e.reading_path}\n`);
-          }
-          for (const err of report.errors) {
-            process.stdout.write(`  [error] ${err}\n`);
-          }
-        } else {
-          process.stdout.write(JSON.stringify(report) + '\n');
-        }
-        process.exit(report.ok ? EXIT_PASS : EXIT_FAIL);
-      });
-  },
-});

@@ -4,9 +4,9 @@
     {
       "id": "SCHEMAS_DIR",
       "pattern": "law/schemas/*.schema.json",
-      "min_matches": 54,
+      "min_matches": 35,
       "description": "Schema type generation and package staging must retain the complete current schema roster.",
-      "source": "packages/schemas/scripts/gen-types.mjs"
+      "source": "packages/schemas/src/roster.ts"
     }
   ]
 }

@@ -3,10 +3,8 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
- * Phase-10 Batch 10.H — forbidden-action runtime gate.
- *
- * Absorbs LAW-12.FORBID.1 from the stech-law predecessor draft (D-38).
- * The canonical registry lives at law/policy/forbidden-actions.json;
+ * Forbidden-action runtime gate. The canonical registry lives at
+ * law/policy/forbidden-actions.json;
  * adopters receive its materialized copy under .devai/config/. The gate scans recent git
  * activity for matches against `detect_patterns` and reports findings.
  *

@@ -1,4 +1,4 @@
-// @devai-nyx/schemas — successor validator machinery (wireframe).
+// @devai-nyx/schemas — canonical validator registry.
 // W02.c: lazy per-schema compilation — compile on first access, never eagerly.
 // Schemas are authored in law/schemas/ (canonical); the build stages copies into
 // dist (prepack pattern). The wireframe resolves the authored tree directly.
@@ -145,7 +145,9 @@ function lazyValidator(name: SchemaName): ValidateFunction {
  * cannot become callable without joining the governed roster first.
  */
 export const validators = Object.freeze(
-  Object.fromEntries(AVAILABLE_SCHEMA_NAMES.map((name) => [validatorKey(name), lazyValidator(name)])),
+  Object.fromEntries(
+    AVAILABLE_SCHEMA_NAMES.map((name) => [validatorKey(name), lazyValidator(name)]),
+  ),
 ) as ValidatorRegistry;
 
 export interface SchemaIssue {

@@ -128,9 +128,8 @@ export function deriveActionEffectFromCapabilities(
   if (capabilities.some((capability) => capability.startsWith('net:'))) {
     return 'remote-write';
   }
-  // R24 shadow subprocess capabilities are evidence annotations. Their
-  // registry effect is checked independently; R25 binds that effect at the
-  // runtime seam. They do not alter the pre-existing public scalar in R24.
+  // Subprocess capabilities are evidence annotations. The registry effect is
+  // checked independently and bound at the runtime seam.
   if (
     capabilities.some((capability) =>
       [
@@ -170,13 +169,7 @@ export function validateDeclaredCapabilityConsistency(
     if (capabilities === undefined) {
       throw new Error(`${entry.name}: EFFECT_CAPABILITIES_MISSING`);
     }
-    // Compatibility boundary: state prune historically uses harness-write
-    // consent while pruning both F5 state and generated workspace coverage.
-    // Its domain set remains explicit and binding; changing the public scalar
-    // requires a separate Owner consent decision.
-    const derived = entry.name.endsWith('state prune')
-      ? 'harness-write'
-      : deriveActionEffectFromCapabilities(capabilities);
+    const derived = deriveActionEffectFromCapabilities(capabilities);
     if (entry.authority_contract.action_id !== entry.name || derived !== entry.effects) {
       throw new Error(`${entry.name}: EFFECT_CAPABILITIES_CATALOG_MISMATCH`);
     }

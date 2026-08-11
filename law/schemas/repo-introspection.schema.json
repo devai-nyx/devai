@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/repo-introspection.schema.json",
   "title": "Repo Introspection",
-  "description": "Output of `devai init --introspect` (Phase 11.D, absorbed from the sibling-exploration's bootstrap introspect, D-39). Records the auto-detected shape of a target repository so the bootstrap plan can populate sensible defaults in .devai/config/project.json instead of writing a static template.",
+  "description": "Repository-shape discovery consumed by `devai init plan` to populate appropriate .devai/config/project.json values.",
   "type": "object",
   "additionalProperties": false,
   "required": [

@@ -34,8 +34,7 @@ persist readings.
 
 Use a preset for a repeatable observation population. Use a positional kind when only one sensor
 is needed. Exact preset IDs come only from the candidate's generated
-[sense-preset reference](./sense-presets.md). An unknown ID yields UNKNOWN and is not mapped to an
-older or preferred preset.
+[sense-preset reference](./sense-presets.md). An unknown ID yields UNKNOWN and is not remapped.
 
 ### Kind
 
@@ -160,7 +159,7 @@ around the seven domains in the [CLI overview](./index.md). Porcelain may orches
 services, but it retains exact action, effect, consent, and output contracts.
 
 ```sh
-devai --help
+devai catalog actions --format json
 ```
 
 ### Plumbing
@@ -170,7 +169,7 @@ visible only in expanded help. Plumbing is not an eighth workflow, carries no br
 and cannot relax round containment or consent.
 
 ```sh
-devai --all
+devai catalog actions --format json
 ```
 
 ## Distinctions to preserve
@@ -219,7 +218,7 @@ sensor-state parity checked against the
 - **When to use:** Use only when `pass` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/verdicts); [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json#/properties/status/enum)
 - **Related workflow:** `check`
 
@@ -243,7 +242,7 @@ sensor-state parity checked against the
 - **When to use:** Use only when `review` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/verdicts); [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json#/properties/status/enum)
 - **Related workflow:** `check`
 
@@ -267,7 +266,7 @@ sensor-state parity checked against the
 - **When to use:** Use only when `fail` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/verdicts); [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json#/properties/status/enum)
 - **Related workflow:** `check`
 
@@ -291,7 +290,7 @@ sensor-state parity checked against the
 - **When to use:** Use only when `unknown` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/verdicts); [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json#/properties/status/enum)
 - **Related workflow:** `check`
 
@@ -315,7 +314,7 @@ sensor-state parity checked against the
 - **When to use:** Use only when `na` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/verdicts); [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json#/properties/status/enum)
 - **Related workflow:** `check`
 
@@ -339,7 +338,7 @@ sensor-state parity checked against the
 - **When to use:** Use only when `skipped` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/verdicts); [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json#/properties/status/enum)
 - **Related workflow:** `check`
 
@@ -363,7 +362,7 @@ sensor-state parity checked against the
 - **When to use:** Use only when `error` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/verdicts); [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json#/properties/status/enum)
 - **Related workflow:** `check`
 
@@ -387,7 +386,7 @@ sensor-state parity checked against the
 - **When to use:** Use only when `killed` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/verdicts); [`law/schemas/sensor-reading.schema.json`](../../../law/schemas/sensor-reading.schema.json#/properties/status/enum)
 - **Related workflow:** `check`
 
@@ -423,7 +422,7 @@ remains in the [action registry](../../../law/policy/action-registry.json).
 - **When to use:** Use only when `supported` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai catalog actions --format json`
+- **Example:** `devai catalog actions --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/action_lifecycles)
 - **Related workflow:** `catalog`
 
@@ -447,7 +446,7 @@ remains in the [action registry](../../../law/policy/action-registry.json).
 - **When to use:** Use only when `experimental` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai catalog actions --format json`
+- **Example:** `devai catalog actions --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/action_lifecycles)
 - **Related workflow:** `catalog`
 
@@ -483,7 +482,7 @@ checks the identifiers against the action-registry schema.
 - **When to use:** Use when the named surface tier is the exact requested scope.
 - **When not to use:** Do not treat it as a check suite, sense preset, or authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai catalog actions --format json`
+- **Example:** `devai catalog actions --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/surface_tiers); [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/properties/entries/items/properties/tier/enum)
 - **Related workflow:** `catalog`
 
@@ -507,7 +506,7 @@ checks the identifiers against the action-registry schema.
 - **When to use:** Use when the named surface tier is the exact requested scope.
 - **When not to use:** Do not treat it as a check suite, sense preset, or authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai catalog actions --format json`
+- **Example:** `devai catalog actions --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/surface_tiers); [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/properties/entries/items/properties/tier/enum)
 - **Related workflow:** `catalog`
 

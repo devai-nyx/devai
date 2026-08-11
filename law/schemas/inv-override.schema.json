@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/inv-override.schema.json",
   "title": "Invariant Override",
-  "description": "In-source override of a non-constitutional, non-hard-fail invariant. Parsed from `// inv-override:` annotation blocks in source files. Absorbs the LAW-00.OVERRIDE.1 mechanism from the stech-law predecessor draft (D-38). Constitutional and hard-fail invariants cannot be overridden — they require an Architect amendment.",
+  "description": "In-source override of a non-constitutional, non-hard-fail invariant. Parsed from `// inv-override:` annotation blocks in source files. Constitutional and hard-fail invariants cannot be overridden; they require an Architect amendment.",
   "type": "object",
   "additionalProperties": false,
   "required": [

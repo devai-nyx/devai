@@ -1,14 +1,13 @@
 ---
-title: DEVAI 1.0.0
+title: DEVAI 1.0.0-rc.1
 slug: /
 ---
 
 # DEVAI
 
-DEVAI is a human-supervised governance and control harness for AI-assisted
-software development on a declared stack. This successor begins with a clean
-genesis: it absorbs useful framework knowledge, but it does not inherit the
-predecessor's evidence standing.
+DEVAI is a human-supervised control harness for AI-assisted software development on a declared
+stack. The release candidate provides one CLI package, 41 actions, 59 sensor kinds, and seven
+host-invoked recipes.
 
 - [Start here](start/)
 - [Theory](theory/)
@@ -17,7 +16,6 @@ predecessor's evidence standing.
 - [Contributor runbooks](dev/)
 - [Reference](reference/)
 
-Everything remains **draft** until the founding ratification round completes.
 Current commands are described in the [CLI reference](reference/cli/index.md); the
-[recipe reference](reference/recipes/README.md) records the bounded host surface.
-binding without treating it as readiness evidence.
+[recipe reference](reference/recipes/README.md) records the bounded host surface. Evidence records
+describe completed checks without granting release or publication authority.

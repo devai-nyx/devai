@@ -20,10 +20,9 @@ import {
  * the validators their fields actually use, or leave it and
  * rely on the bundler / linter to drop unused imports.
  *
- * Phase 22.E (D-A-15) — replaced the pre-22.E hardcoded
- * `message`/`recipient` placeholders with a blueprint-driven
- * rendering via the __DTO_FIELDS_CREATE__ token.
+ * The __DTO_FIELDS_CREATE__ token keeps field rendering bound
+ * to the blueprint entity.
  */
 export class Create__classEntity__Dto {
-__DTO_FIELDS_CREATE__
+  __DTO_FIELDS_CREATE__;
 }

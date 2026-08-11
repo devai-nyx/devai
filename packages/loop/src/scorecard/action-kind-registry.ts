@@ -1,10 +1,9 @@
 /**
- * Exact predecessor measurable_via action-to-kind bridge.
+ * Exact measurable_via action-to-kind projection.
  *
- * The successor sensor law registry deliberately carries kinds, emitters,
- * cells, and tiers but has no action-id field. Keep this compatibility bridge
- * local until Architect authority extends that schema; do not treat it as a
- * second source for sensor kinds or scorecard cells.
+ * The sensor registry carries kinds, emitters, cells, and tiers but has no
+ * action-id field. Keep this projection local; do not treat it as a second
+ * source for sensor kinds or scorecard cells.
  */
 export const ACTION_TO_KIND: Readonly<Record<string, string>> = Object.freeze({
   'sense type-check': 'type_check',

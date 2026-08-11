@@ -21,11 +21,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, isAbsolute, join } from 'node:path';
 import { buildTokens, renderTemplate } from '@devai-nyx/utils';
 import { blueprintSha256, loadBlueprint, validateBlueprint, type Blueprint } from '@devai-nyx/spec';
-import {
-  findDevaiPacksRoot,
-  resolveStackAdapterPack,
-  type StackAdapterPack,
-} from '../../pack-resolver/index.js';
+import { resolveStackAdapterPack, type StackAdapterPack } from '../../pack-resolver/index.js';
 
 // ---------------------------------------------------------------------
 // Local result shape keeps the scaffolder independent from recipe hosts.
@@ -173,27 +169,17 @@ export function runScaffolder(opts: RunScaffolderOptions): ScaffoldOperationResu
     };
   }
 
-  // 2. Resolve stack-adapter pack.
-  //
-  // Phase 21.C (closes D-A-7): mirror the sensor fallback pattern in
-  // `resolveSensorParams`. When `ctx.repoRoot` is an adopter repo
-  // (no `examples/redox-pack-*` directly under it), walk up to find
-  // the sibling DEVAI checkout via `findDevaiPacksRoot()`; the pack
-  // catalogue is sourced from there, while detect signals are
-  // evaluated against the adopter root. Pre-21.C, the C-4 stynx
-  // pilot worked around this with a per-machine
-  // a repository-external symlink baked
-  // into its CI workflow; post-21.C that workaround is obsolete.
-  const packsRoot = findDevaiPacksRoot() ?? ctx.repoRoot;
+  // Resolve a bundled or caller-provided stack-adapter pack, while evaluating
+  // its detect signals against the adopter repository.
   const pack =
     ctx.canonicalPack ??
-    resolveStackAdapterPack({ repoRoot: packsRoot, adopterRoot: ctx.repoRoot }).matched;
+    resolveStackAdapterPack({ repoRoot: ctx.repoRoot, adopterRoot: ctx.repoRoot }).matched;
   if (pack === null) {
     return {
       operation_id: spec.operationId,
       status: 'skipped',
       notes: [
-        'No stack-adapter pack matched the adopter repo; scaffolders need a matching pack for templates. Use devai adopt pack resolve to inspect candidates.',
+        'No stack-adapter pack matched the adopter repository; configure a matching canonical pack before scaffolding.',
       ],
       evidence: { blueprint_id: blueprint.id, blueprint_version: blueprint.module.version },
     };

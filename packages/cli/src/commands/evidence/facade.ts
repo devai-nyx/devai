@@ -18,7 +18,7 @@ import {
   type ActionsEvidenceShadowDecision,
   type VerifyContext,
   type VerifyMode,
-} from '#core-compat';
+} from '#runtime-core';
 import { renderDecisionRecords, renderRoundRecords } from '@devai-nyx/loop';
 import { EXIT_FAIL, EXIT_PASS, EXIT_USAGE, redact } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';

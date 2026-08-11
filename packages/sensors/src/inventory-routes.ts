@@ -8,11 +8,11 @@ import { buildSensorReading, type SensorReading, type SensorStatus } from './sen
 import { DEFAULT_IGNORE_DIRS, parseSource, walkTsxJsx } from './inventory-walker.js';
 
 /**
- * Phase 20.E: resolve a list of scan dirs (singular `scan_dir` plus
+ * Resolve a list of scan dirs (singular `scan_dir` plus
  * `scan_dir_alternates` from the pack) to absolute paths, drop the
  * ones that don't exist, dedupe. Falls back to `repoRoot` when the
  * input list is empty so callers that supplied neither get the
- * Phase 17.C2 walk-the-repo behaviour. Returns at least one entry.
+ * repository-walk behavior. Returns at least one entry.
  */
 function uniqueExistingDirs(raw: readonly string[], repoRoot: string): string[] {
   if (raw.length === 0) return [repoRoot];

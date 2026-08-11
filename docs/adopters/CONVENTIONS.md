@@ -21,7 +21,7 @@ project-specific layout in its own `AGENTS.md`.
 - Architecture decisions use `ADR-<SCOPE>-<NNNN>`.
 - Recipe invocations use one of the seven canonical recipe names plus an explicit
   variant.
-- DEVAI commands use the `devai <noun> <verb>` form.
+- DEVAI commands use action IDs reported by `devai catalog actions`.
 
 ## Language
 

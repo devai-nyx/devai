@@ -318,7 +318,7 @@ export function validateActionsEvidenceShadowTuple(
     'shadow decision merge SHA is invalid',
   );
   requireTuple(shadow['fullCiResult'] === 'success', 'shadow decision full CI is not successful');
-  requireTuple(shadow['executeFullCi'] === true, 'R22 shadow decision did not execute full CI');
+  requireTuple(shadow['executeFullCi'] === true, 'shadow decision did not execute full CI');
   requireTuple(
     typeof shadow['reason'] === 'string' && shadow['reason'].length > 0,
     'shadow reason is missing',
@@ -349,11 +349,11 @@ export function validateActionsEvidenceShadowTuple(
     requireTuple(equivalent === true, `${disposition} must record shadow/full equivalence`);
     requireTuple(
       sameStringArray(shadow['reusableJobs'], ACTIONS_REUSABLE_JOBS),
-      'shadow reusable-job set does not match the R22 contract',
+      'shadow reusable-job set does not match the current contract',
     );
     requireTuple(
       sameStringArray(shadow['freshnessJobs'], ACTIONS_FRESHNESS_JOBS),
-      'shadow freshness-job set does not match the R22 contract',
+      'shadow freshness-job set does not match the current contract',
     );
   }
   if (disposition === 'promotion-hit') {

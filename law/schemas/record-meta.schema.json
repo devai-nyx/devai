@@ -49,15 +49,15 @@
   "$comment": "additionalProperties deliberately absent here: extending schemas close their own world.",
   "examples": [
     {
-      "id": "DII-REJ-A",
-      "title": "No backend-aware LLM timeout multiplier",
-      "type": "rejection",
+      "id": "REC-EXAMPLE",
+      "title": "Example active record",
+      "type": "example",
       "status": "active",
       "date": "2026-07-23",
       "authority": "Architect",
       "supersedes": null,
       "superseded_by": null,
-      "provenance": ["ex-REJ-1", "ex-D-83"]
+      "provenance": ["example:source-record"]
     }
   ]
 }

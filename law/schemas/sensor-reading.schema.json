@@ -117,7 +117,7 @@
     },
     "tier": {
       "enum": ["L0", "L1", "L2", "semantic"],
-      "description": "Sensor latency/scope tier (Phase 16.D, D-50). L0 = static (lint, typecheck, build, dead-code, dep-audit; module-local fast feedback). L1 = dynamic (unit, integration, API-contract, smoke tests; layer-local behaviour). L2 = integrity (coverage thresholds, hard-fail checks, protected-surface smoke, agent-registry checks; cross-layer integrity). semantic = trace-resolution, adherence audit, prompt firewall, runtime arbiter (system-wide semantic confidence). Optional during the substrate-only phase; sensor adapters that opt in declare their tier so progressive-gate consumers can filter."
+      "description": "Sensor latency and scope tier. L0 is static module-local feedback; L1 is dynamic layer-local behavior; L2 is cross-layer integrity; semantic covers system-wide semantic confidence. The optional tier lets progressive checks select the appropriate readings."
     },
     "status": {
       "enum": ["pass", "fail", "review", "skipped", "killed", "error", "unknown"],

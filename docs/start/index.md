@@ -25,7 +25,7 @@ without taking release authority away from its maintainers.
 The release candidate ships one publishable package, `@devai-nyx/cli`, with 41
 catalogued actions, 59 sensors, and 7 recipes. Seven public workflow domains cover
 adoption, diagnosis, validation, observation, work execution, evidence, and release
-inspection. Internal `task` and `catalog` actions are visible with `devai --all`.
+inspection. The action catalog includes stable, preview, and internal status for every action.
 
 Start read-only:
 

@@ -59,7 +59,7 @@ Selected defaults:
 - **Coverage** (T1): ≥80% for PASS, ≥50% for REVIEW (per-substrate).
 - **Test weakening** (Article 30): 20% max assertion-decrease ratio per file; absolute floor of 1 assertion; split-not-weaken exempt.
 - **Mutation kill-rate**: configurable per pack; default 75% PASS / 50% REVIEW.
-- **Test coverage depth** (F3 × T2): see [test policy](./test-policy.md) for the Phase 33 IO-shape heuristic.
+- **Test coverage depth** (F3 × T2): see [test policy](./test-policy.md) for the current content-addressed coverage policy.
 
 ## Tie-breaker ladder (Article 23)
 

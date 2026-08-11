@@ -1,11 +1,5 @@
 import { spawnSync } from '@devai-nyx/authority';
-import {
-  existsSync,
-  lstatSync,
-  readFileSync,
-  readlinkSync,
-  statSync,
-} from '@devai-nyx/authority';
+import { existsSync, lstatSync, readFileSync, readlinkSync, statSync } from '@devai-nyx/authority';
 import { dirname, join, resolve } from 'node:path';
 import type { CAC } from 'cac';
 import { validators } from '@devai-nyx/schemas';
@@ -182,9 +176,7 @@ function checkConstitutionSymlink(repoRoot: string): CheckResult {
       name: 'constitution-symlink',
       ok: false,
       info: { shape: 'symlink-invalid', target, resolved },
-      errors: [
-        `symlink ${linkPath} points to ${resolved}; expected an installed constitution.md`,
-      ],
+      errors: [`symlink ${linkPath} points to ${resolved}; expected an installed constitution.md`],
     };
   }
   // Plain file pointer (`# See <path>`).
@@ -247,16 +239,7 @@ function checkConstitutionSymlink(repoRoot: string): CheckResult {
   };
 }
 
-/**
- * D-118: `devai_version` in `.devai/config/project.json` is
- * machine-managed (stamped by initialization from the running
- * CLI's own version) — this check compares the pin against the
- * actually-installed `@devai-nyx/cli` and reports drift. Canonical
- * consumption is versioned GitHub Packages (D-118); a repo consuming
- * via a sibling-checkout dev convenience will drift here whenever
- * the checkout advances without a re-stamp, which is expected and
- * informational rather than a defect in that mode.
- */
+/** Compare the adopter's version pin with the installed CLI package. */
 function checkDevaiVersionMatch(repoRoot: string): CheckResult {
   const configPath = join(repoRoot, '.devai/config/project.json');
   if (!existsSync(configPath)) {
@@ -274,14 +257,8 @@ function checkDevaiVersionMatch(repoRoot: string): CheckResult {
     };
   }
   const running = resolveCliVersion();
-  // D-122 (item 2a): "which devai am I running" is always answerable —
-  // provenance names the resolution mode and, for a sibling-checkout,
-  // the exact commit, regardless of whether the version pin matches.
   const provenance = resolveCliProvenance();
-  const provenanceInfo = {
-    source: provenance.source,
-    ...(provenance.gitSha !== undefined && { git_sha: provenance.gitSha }),
-  };
+  const provenanceInfo = { source: provenance.source };
   if (pinned === undefined) {
     return {
       name: 'devai-version-match',
@@ -369,46 +346,6 @@ function checkAuthorityEnforcement(repoRoot: string): CheckResult {
       errors: [error instanceof Error ? error.message : String(error)],
     };
   }
-}
-
-/**
- * D-122 (item 2b): sibling-checkout consumption stops being a silent
- * default. Compares the repo's declared `devai_consumption` against
- * the running CLI's actual resolution mode (`resolveCliProvenance`).
- * Absence is assumed `npm-package` (the canonical model, D-118) — a
- * repo actually running via an undeclared sibling-checkout link
- * fails here even if `devai-version-match` happens to pass.
- */
-function checkDevaiConsumption(repoRoot: string): CheckResult {
-  const configPath = join(repoRoot, '.devai/config/project.json');
-  let declared: string | undefined;
-  if (existsSync(configPath)) {
-    try {
-      const parsed = JSON.parse(readFileSync(configPath, 'utf8')) as { devai_consumption?: string };
-      declared = parsed.devai_consumption;
-    } catch {
-      // malformed config surfaces via other checks; treat as undeclared here
-    }
-  }
-  const provenance = resolveCliProvenance();
-  const assumed = declared ?? 'npm-package';
-  const ok = assumed === provenance.source;
-  return {
-    name: 'devai-consumption-declared',
-    ok,
-    info: {
-      declared: declared ?? null,
-      actual: provenance.source,
-      ...(provenance.gitSha !== undefined && { git_sha: provenance.gitSha }),
-    },
-    ...(!ok && {
-      errors: [
-        declared === undefined
-          ? `running via a sibling-checkout (${provenance.gitSha ?? 'unknown SHA'}) but project.json declares no devai_consumption (absence assumes npm-package); declare "devai_consumption": "sibling-checkout" if this is intentional (dev-only convenience, D-118), or install @devai-nyx/cli as a real dependency`
-          : `project.json declares devai_consumption "${declared}" but the running CLI actually resolved as "${provenance.source}"`,
-      ],
-    }),
-  };
 }
 
 /**
@@ -500,7 +437,7 @@ function checkChainPathWritableDir(chainPath: string): CheckResult {
 }
 
 /**
- * Phase 20.C (D-A-6): surface availability of the optional CLI-bridge
+ * Surface availability of the optional CLI bridge
  * LLM backends (`claude-cli`, `codex-cli`). Always informational — an
  * adopter who uses `claude` (the SDK family with an API key) or `mock`
  * is unaffected; the check reports which bridges are wired so an
@@ -664,11 +601,6 @@ const CHECK_SPECS: readonly CheckSpec[] = [
     minProfile: 'tier3',
     run: (repoRoot) => checkConstitutionBinding(repoRoot),
   },
-  {
-    name: 'devai-consumption-declared',
-    minProfile: 'tier3',
-    run: (repoRoot) => checkDevaiConsumption(repoRoot),
-  },
 ];
 
 function annotatePointerOnlyAtTier3(
@@ -749,10 +681,7 @@ function renderHuman(report: Report): string {
   return lines.join('\n') + '\n';
 }
 
-function runProbe(
-  probe: string,
-  repoRoot: string,
-): Report {
+function runProbe(probe: string, repoRoot: string): Report {
   if (probe !== 'llm') {
     process.stderr.write(`devai doctor: --probe must be llm (got '${probe}')\n`);
     process.exit(EXIT_USAGE);

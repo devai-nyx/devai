@@ -17,12 +17,8 @@ import { ACTION_KEY, RESOURCE_KEY } from '../decorators/policy.decorator';
  *     rule engine (per-resource role tables, ABAC attribute
  *     checks, etc.).
  *
- * Phase 22.E (D-A-15) — removed the pre-22.E imports of
- * `POLICY_RULES` and `ROLES` from `'../policy.config'`, a file
- * the scaffolder never emits. The pre-22.E template did not
- * compile against the scaffolded output; this rewrite does.
  * Adopters who want a config-driven policy engine bind their
- * own at hand-finish time.
+ * own implementation when finishing the generated module.
  */
 @Injectable()
 export class __MODULE__PolicyGuard implements CanActivate {

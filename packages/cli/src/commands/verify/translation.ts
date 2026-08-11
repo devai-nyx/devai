@@ -13,7 +13,7 @@ import {
   recoverValidationLeases,
   resolveRecipeRecordPath,
   runLinuxIsolated,
-} from '#core-compat';
+} from '#runtime-core';
 import {
   existsSync,
   lstatSync,

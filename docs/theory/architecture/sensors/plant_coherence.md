@@ -31,6 +31,6 @@ Findings cite each incoherent directory + the buckets present.
 
 ## Out of scope
 
-- **Import-graph cycles.** Already covered by the dep-graph SR (Phase 17.B-onward). A future sub-cell could refine but adds little marginal signal.
+- **Import-graph cycles.** Already covered by the dependency-graph reading. A future sub-cell could refine it but currently adds little marginal signal.
 - **Directory-naming consistency itself.** Could refine — defer.
 - **Cross-package layering rules.** Substrate-level architectural coherence is its own concern.

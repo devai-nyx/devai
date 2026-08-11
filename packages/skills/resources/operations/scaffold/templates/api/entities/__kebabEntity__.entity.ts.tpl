@@ -9,14 +9,12 @@
  * Drizzle table builder, Prisma model, etc.) when they wire the
  * data layer.
  *
- * Phase 22.E (D-A-15) — replaced the pre-22.E TypeORM-decorated
- * hardcoded `message` / `recipient` fields with a blueprint-
- * driven rendering. The __ENTITY_TS_FIELDS__ token is built by
- * the scaffolder from the blueprint entity's `fields[]`.
+ * The __ENTITY_TS_FIELDS__ token is built from the blueprint
+ * entity's `fields[]` so the output stays blueprint-driven.
  */
 export class __classEntity__ {
   id!: string;
-__ENTITY_TS_FIELDS__
+  __ENTITY_TS_FIELDS__;
   created_at?: string;
   updated_at?: string;
 }

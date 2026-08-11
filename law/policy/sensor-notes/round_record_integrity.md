@@ -6,7 +6,7 @@ status: active
 date: 2026-07-26
 authority: Architect
 sensor_kind: round_record_integrity
-emitter: packages/cli/src/commands/sense/governance-ledger.ts
+emitter: packages/loop/src/governance-ledger/index.ts
 standing: diagnostic
 tiers: [SWEEP]
 ---
@@ -14,7 +14,7 @@ tiers: [SWEEP]
 # Round Record Integrity
 
 This note defines `round_record_integrity`. Its canonical emitter
-is `packages/cli/src/commands/sense/governance-ledger.ts`.
+is `packages/loop/src/governance-ledger/index.ts`.
 
 Diagnostic-only; no cell binding.
 

@@ -1,7 +1,7 @@
 import { writeFileSync } from '@devai-nyx/authority';
 import { resolve } from 'node:path';
 import type { CAC } from 'cac';
-import { buildRtdManifest, persistRtdManifest } from '#core-compat';
+import { buildRtdManifest, persistRtdManifest } from '#runtime-core';
 import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 
@@ -17,8 +17,7 @@ interface BundleOptions {
 
 export const rtdBundle = defineCommand({
   name: 'rtd bundle',
-  description:
-    'Build a hash-stamped RTD manifest aggregating invariants, trace, journeys, glossary, tombstones, ADRs, and forbidden-actions. Per Phase 12.A (D-41).',
+  description: 'Build a hash-stamped RTD manifest aggregating the current specification contract.',
   authority: 'specifier',
   register(cli: CAC): void {
     cli
@@ -64,7 +63,7 @@ export const rtdBundle = defineCommand({
             options.strict === true && !manifest.readiness.ok ? EXIT_FAIL : EXIT_PASS;
         } catch (err) {
           process.stderr.write(
-            `devai spec rtd bundle: ${err instanceof Error ? err.message : String(err)}\n`,
+            `devai evidence record --kind rtd: ${err instanceof Error ? err.message : String(err)}\n`,
           );
           process.exit(EXIT_FAIL);
         }

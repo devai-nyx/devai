@@ -417,7 +417,7 @@ describe('citation and archive integrity', () => {
     const root = fixtureRoot();
     expect(archiveImmutability({ repoRoot: root })).toEqual({ ok: true, findings: [] });
 
-    const archive = join(root, 'law/adr/predecessor');
+    const archive = join(root, 'law/adr/archive');
     mkdirSync(archive, { recursive: true });
     expect(archiveImmutability({ repoRoot: root }).findings[0]?.code).toBe(
       'ARCHIVE_MANIFEST_MISSING',
@@ -430,7 +430,7 @@ describe('citation and archive integrity', () => {
 
   it('reports malformed entries, missing files, hash mismatches, and undeclared files', () => {
     const root = fixtureRoot();
-    const archive = join(root, 'law/adr/predecessor');
+    const archive = join(root, 'law/adr/archive');
     write(join(archive, 'present.md'), 'present\n');
     write(join(archive, 'extra.md'), 'extra\n');
     write(
@@ -457,7 +457,7 @@ describe('citation and archive integrity', () => {
 
   it('accepts a completely pinned archive', () => {
     const root = fixtureRoot();
-    const archive = join(root, 'law/adr/predecessor');
+    const archive = join(root, 'law/adr/archive');
     const content = 'frozen\n';
     write(join(archive, 'frozen.md'), content);
     write(

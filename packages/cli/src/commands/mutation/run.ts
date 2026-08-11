@@ -33,8 +33,7 @@ import { isActionOutputExit } from '../../action-output.js';
  *   - reports the scenario as `Survived` (no runner configured) —
  *     useful for dry-run and config validation.
  *
- * Emits `.devai/state/mutation/current.json` in the existing
- * `verify-mutation` shape (Decision 6 of ADR-MUTATION-SCENARIOS):
+ * Emits `.devai/state/mutation/current.json` in the canonical mutation-report shape:
  *
  *     {
  *       "schemaVersion": "1.0.0",
@@ -46,24 +45,19 @@ import { isActionOutputExit } from '../../action-output.js';
  *       "scenarios": [ { id, status, duration_ms?, error? }, ... ]
  *     }
  *
- * The richer `metrics` / `scenarios` fields are additive: `verify-mutation`
- * reads only the flat `mutation_score` + `survived` (or the Stryker-style
- * `metrics.mutationScore` + `metrics.survived`), so this shape is
- * backward-compatible with every existing consumer.
+ * Aggregate fields drive threshold checks; `metrics` and `scenarios` retain
+ * detailed results for evidence review.
  *
- * NOT in scope for v1.0.0 of the contract (deferred per ADR):
+ * Not included in this deterministic runner:
  *   - AST mutators.
  *   - Multi-file atomic mutations executed by the built-in runner.
  *   - Parallel scenario execution.
  *
  * The built-in `string-replace` / `regex-replace` runner — that mutates
  * source files in place and invokes a configured `test_command` — is
- * intentionally NOT shipped in this commit. The cleaner separation of
- * concerns is: DEVAI owns the scenario contract + the
- * verify-mutation-consumable shape; the actual mutate-and-test loop is
- * an adopter-owned mutator module (the `--mutator` adapter slot). TEAT
- * keeps its existing run-teat-mutation-scenarios.ts as the prototype
- * adapter implementation per worker 04's migration spike.
+ * intentionally not included. DEVAI owns the scenario contract and canonical
+ * report shape; the mutate-and-test loop is supplied through the adopter's
+ * explicit `--mutator` adapter.
  */
 
 // ============================================================================
@@ -422,7 +416,7 @@ async function loadMutatorAdapter(mutatorArg: string, repoRoot: string): Promise
  * scenario passes its declared expectations. The verdict here is what's
  * surfaced in the per-scenario `scenarios[]` array; the *aggregate*
  * `survived` / `mutation_score` reflect the observed status, which is
- * what `verify-mutation` actually compares against thresholds.
+ * what the canonical mutation check compares against thresholds.
  *
  * For v1.0.0:
  *   - `tests-detect` with default threshold expects `Killed`.
@@ -569,14 +563,13 @@ function round1(n: number): number {
 
 export const mutationRun = defineCommand({
   name: 'mutation run',
-  description:
-    'Run mutation scenarios and emit `.devai/state/mutation/current.json` in the shape `verify-mutation` consumes. Per D-A-44 / ADR-MUTATION-SCENARIOS.',
+  description: 'Run mutation scenarios and emit the current mutation evidence report.',
   authority: 'sensor',
   extended_doc: [
     '### Invocation',
     '',
     '```',
-    'devai sense mutation run \\',
+    'devai evidence record --kind mutation --run \\',
     '  --scenarios tests/mutation/scenarios/ \\',
     '  --out .devai/state/mutation/current.json \\',
     '  [--mutator ./scripts/my-mutator.mjs] \\',
@@ -585,17 +578,17 @@ export const mutationRun = defineCommand({
     '',
     '### Flags',
     '',
-    '- `--scenarios <path>` (required) — directory, single JSON file, or simple `dir/**/*.json` pattern. Every file must validate against [`law/schemas/mutation-scenario.schema.json`](../../framework/contracts/mutation-scenario.schema.json) (D-A-44).',
+    '- `--scenarios <path>` (required) — directory, single JSON file, or simple `dir/**/*.json` pattern. Every file must validate against `law/schemas/mutation-scenario.schema.json`.',
     '- `--out <path>` — output `current.json` (default: `.devai/state/mutation/current.json`).',
     '- `--mutator <module>` — adopter ESM module path. Default export: `(scenario, ctx) => Promise<MutantReport>`. Mutually exclusive with `--external`.',
     '- `--external <path>` — pre-computed per-scenario report (single JSON file or directory of files). Use when an upstream framework (Stryker, Pitest) has already produced verdicts.',
     '- `--report-path <path>` — optional rich-report path embedded in `current.json.report_path`.',
-    '- `--fail-on-survivors` — exit non-zero if any scenario survived (default: emit current.json + exit 0; let `verify-mutation` apply thresholds).',
+    '- `--fail-on-survivors` — exit non-zero if any scenario survived.',
     '- `--format human` — human-readable summary.',
     '',
     '### Output shape',
     '',
-    'The emitted `current.json` preserves backward compatibility with `verify-mutation`:',
+    'The emitted `current.json` contains aggregate metrics and per-scenario results:',
     '',
     '```json',
     '{',
@@ -609,7 +602,7 @@ export const mutationRun = defineCommand({
     '}',
     '```',
     '',
-    '`verify-mutation` reads only `mutation_score` + `survived` (or the Stryker-compat `metrics.*`); the richer `scenarios` array is additive.',
+    'The canonical mutation check compares `mutation_score` and `survived` with thresholds and an optional baseline.',
     '',
     '### Exit codes',
     '',
@@ -620,9 +613,7 @@ export const mutationRun = defineCommand({
     '',
     '### See also',
     '',
-    '- [`devai sense mutation verify`](#sense-mutation-verify) — compare the current report with the saved baseline (Decision 6).',
     '- [`docs/adopters/mutation-scenarios.md`](../../adopters/mutation-scenarios.md) — adopter guide.',
-    '- [`law/adr/ADR-MUTATION-SCENARIOS.md`](../../meta/adr/ADR-MUTATION-SCENARIOS.md) — design ADR (D-A-44).',
   ].join('\n'),
   register(cli: CAC): void {
     cli

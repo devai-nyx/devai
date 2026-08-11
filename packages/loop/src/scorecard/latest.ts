@@ -18,7 +18,7 @@ function isNewer(candidate: SensorReading, current: SensorReading): boolean {
 }
 
 /**
- * DII-103 standing compaction.
+ * Applies the configured freshness boundary.
  *
  * Supported readings compete only with supported readings: experimental
  * observations never change production standing. Within each kind, only

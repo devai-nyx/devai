@@ -3,15 +3,13 @@ import { join, relative, sep } from 'node:path';
 import { minimatch } from 'minimatch';
 
 /**
- * D-124 (governance-roadmap item 7): a declarative registry of glob
- * patterns an adopter (or devai itself) depends on somewhere —
- * a CI trigger path, a generator's input directory, a
- * validation-loop target — plus a check that the pattern still
- * matches real files.
+ * A declarative registry of glob patterns an adopter depends on — a CI
+ * trigger path, generator input, or validation target — plus a check that
+ * each pattern still matches real files.
  *
  * Found via two real bugs: stynx's devai-gates.yml referenced
  * `docs/architecture/invariants/*.json` after the directory had been
- * renamed within the predecessor documentation tree, so its "validate
+ * renamed within the documentation tree, so its "validate
  * invariants against the schema" step had been silently validating
  * zero files (guarded by `[ -f "$f" ] || continue`) on every PR while
  * still reporting green; pec's `generate-test-obligations.mjs`

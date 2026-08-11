@@ -4,7 +4,7 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "paths": {
-      "#core-compat": ["./src/core-compat.ts"]
+      "#runtime-core": ["./src/runtime-core.ts"]
     },
     "types": ["node"]
   },

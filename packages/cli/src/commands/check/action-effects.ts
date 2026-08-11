@@ -52,10 +52,10 @@ export const checkActionEffectsCmd = defineCommand({
   authority: 'policy_firewall',
   lifecycle: 'supported',
   lifecycle_reason:
-    'R25 binding analyzer; under-declaration, unresolved edges, and unregistered subprocesses fail closed.',
+    'Binding analyzer; under-declaration, unresolved edges, and unregistered subprocesses fail closed.',
   promotion_criteria: [
-    'R24 ADR-EFFECTS records go after extractor equality, complete dispositions, subprocess classification, and the 10-second wall-clock gate.',
-    'R25 independently binds static findings and runtime seam enforcement.',
+    'Effect records require extractor equality, complete dispositions, subprocess classification, and the wall-clock gate.',
+    'Static findings and runtime-seam enforcement must agree.',
   ],
   register(cli: CAC): void {
     cli

@@ -34,7 +34,7 @@ function prepare(workflowRun: string, lifecycle: 'supported' | 'experimental' = 
     join(evidenceDir, 'dependency.json'),
     JSON.stringify({
       schemaVersion: '1.0.0',
-      command: 'devai policy check dependencies',
+      command: 'devai check --only dependencies',
       status: 'pass',
       lifecycle,
       candidate_sha: CANDIDATE,
@@ -63,12 +63,12 @@ afterEach(() => {
 
 describe('adversarial alignment semantics', () => {
   it('rejects the canonical action when it is only an argument to another executable', () => {
-    prepare('grep devai policy check dependencies README.md');
+    prepare('grep devai check --only dependencies README.md');
     expect(sense().status).not.toBe('pass');
   });
 
   it('does not let experimental evidence promote supported alignment', () => {
-    prepare('devai policy check dependencies', 'experimental');
+    prepare('devai check --only dependencies', 'experimental');
     expect(sense().status).not.toBe('pass');
   });
 });

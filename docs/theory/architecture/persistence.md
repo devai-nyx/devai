@@ -1,7 +1,6 @@
 # Persistence
 
 **Authority:** Architect (Constitution Article 6, F1).
-**Forensic anchor:** [D-16](../../../law/adr/README.md) — "Raw SQL migrations, no ORM (locked)."
 
 ## Rule
 
@@ -35,9 +34,9 @@ Raw SQL collapses this to one source of truth (the migration files), one reader 
 
 ## When to revisit
 
-Trigger conditions for a successor D-entry:
+Revisit this decision when:
 
 - A canonical-stack ORM emerges that can be wired safely to per-worktree DB provisioning _and_ that the sensor inventory can introspect without depending on the ORM's runtime. Currently no candidate fits.
 - The empirical cost of hand-writing migrations exceeds the benefits, measured against a real adopter survey. So far, raw SQL has been a net positive for the same adopters who would have struggled with ORM-mediated migration race conditions.
 
-A new D-entry supersedes this one; the migration directory layout stays stable across the transition for adopter sanity.
+Keep the migration directory layout stable across any transition so adopter tooling remains predictable.

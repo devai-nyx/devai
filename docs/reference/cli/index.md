@@ -27,9 +27,9 @@ replace the example identifiers with identifiers that exist in the target reposi
 
 For workflow identifier `W`, its exact population is the ordered projection of entries in the
 [action registry](../../../law/policy/action-registry.json) whose status is `stable` or `preview`
-and whose first path component is `W`. This formula, rather than a
-copied action list, keeps the overview aligned with the live registry. `devai W --help` shows the
-current leaves, and `devai --all` additionally exposes plumbing for maintainers and automation.
+and whose first path component is `W`. This formula, rather than a copied action list, keeps the
+overview aligned with the live registry. Query `devai catalog actions --format json` for the
+current stable, preview, and internal population.
 
 Machine output is one action-bound envelope on stdout. A successful envelope contains a closed
 result frame; a failed invocation emits one structured error envelope on stderr. Aggregate

@@ -20,9 +20,8 @@ function run(args: readonly string[]): { status: number | null; stdout: string; 
 
 // Typing a bare valid domain — the most
 // natural exploration gesture — must render that node's help, exactly as
-// `--help` would, not fall through to the unknown-command suggester (which
-// proposed `devai init` for `devai work`, exit 2). Table-driven over the
-// live registry so new domains inherit the contract.
+// `--help` would, not fall through to the unknown-command suggester.
+// Table-driven over the live registry so new domains inherit the contract.
 
 interface CatalogAction {
   readonly path: readonly string[];

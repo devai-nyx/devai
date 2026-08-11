@@ -59,8 +59,8 @@ devai doctor --repo-root . --format json
 
 Do not infer the effective tier from which commands happen to be installed or from a previous
 run. The project declaration and the canonical policy are the inputs. If a declaration is absent,
-the project-config schema defines the compatibility default; new adoption should declare the
-intended tier explicitly instead of relying on that default.
+the project-config schema defines the default. Declare the intended tier explicitly instead of
+relying on that default.
 
 ## Read binding and advisory results
 
@@ -131,7 +131,7 @@ its declared supplemental sources.
 - **When to use:** Use when the named adoption tier is the exact requested scope.
 - **When not to use:** Do not treat it as a check suite, sense preset, or authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai init plan --tier tier1 --target . --format json`
+- **Example:** `devai init plan --tier tier1 --target . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/adoption_tiers)
 - **Related workflow:** `init`
 
@@ -155,7 +155,7 @@ its declared supplemental sources.
 - **When to use:** Use when the named adoption tier is the exact requested scope.
 - **When not to use:** Do not treat it as a check suite, sense preset, or authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai init plan --tier tier2 --target . --format json`
+- **Example:** `devai init plan --tier tier2 --target . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/adoption_tiers)
 - **Related workflow:** `init`
 
@@ -179,7 +179,7 @@ its declared supplemental sources.
 - **When to use:** Use when the named adoption tier is the exact requested scope.
 - **When not to use:** Do not treat it as a check suite, sense preset, or authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai init plan --tier tier3 --target . --format json`
+- **Example:** `devai init plan --tier tier3 --target . --format json`
 - **Canonical source:** [`law/policy/round-execution.json`](../../../law/policy/round-execution.json#/vocabularies/adoption_tiers)
 - **Related workflow:** `init`
 

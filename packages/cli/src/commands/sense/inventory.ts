@@ -15,7 +15,7 @@ import {
   resolveStackAdapterPack,
   validateContracts,
   withInventoryReadSnapshot,
-} from '#core-compat';
+} from '#runtime-core';
 import { INVENTORY_SLICES, inventorySlice } from '@devai-nyx/sensors/inventory-slices';
 import { EXIT_FAIL, EXIT_PASS, EXIT_REVIEW, EXIT_USAGE } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';

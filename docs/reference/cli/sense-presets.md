@@ -34,7 +34,7 @@ mutable populations.
 - **When to use:** Use to run the complete named `baseline` observation population.
 - **When not to use:** Do not use as an acceptance suite, as implicit persistence, or to omit a required selected member.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run --preset baseline --repo-root . --as-role owner --write --dry-run --format json`
+- **Example:** `devai sense run --preset baseline --repo-root . --as-role owner --write --dry-run --format json`
 - **Canonical source:** [`law/policy/sense-presets.json`](../../../law/policy/sense-presets.json#/presets)
 - **Related workflow:** `sense`
 
@@ -58,7 +58,7 @@ mutable populations.
 - **When to use:** Use to run the complete named `structural` observation population.
 - **When not to use:** Do not use as an acceptance suite, as implicit persistence, or to omit a required selected member.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run --preset structural --repo-root . --as-role owner --write --dry-run --format json`
+- **Example:** `devai sense run --preset structural --repo-root . --as-role owner --write --dry-run --format json`
 - **Canonical source:** [`law/policy/sense-presets.json`](../../../law/policy/sense-presets.json#/presets)
 - **Related workflow:** `sense`
 
@@ -82,7 +82,7 @@ mutable populations.
 - **When to use:** Use to run the complete named `governed` observation population.
 - **When not to use:** Do not use as an acceptance suite, as implicit persistence, or to omit a required selected member.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run --preset governed --repo-root . --as-role owner --write --dry-run --format json`
+- **Example:** `devai sense run --preset governed --repo-root . --as-role owner --write --dry-run --format json`
 - **Canonical source:** [`law/policy/sense-presets.json`](../../../law/policy/sense-presets.json#/presets)
 - **Related workflow:** `sense`
 
@@ -106,7 +106,7 @@ mutable populations.
 - **When to use:** Use to run the complete named `sweep` observation population.
 - **When not to use:** Do not use as an acceptance suite, as implicit persistence, or to omit a required selected member.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run --preset sweep --round R-1000 --repo-root . --dry-run --format json`
+- **Example:** `devai sense run --preset sweep --round R-1000 --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sense-presets.json`](../../../law/policy/sense-presets.json#/presets)
 - **Related workflow:** `sense`
 
@@ -156,10 +156,9 @@ them. `--write` consents only to the resolved local or harness effects of select
 members. `--publish` is additionally required only for a resolved remote-write member;
 neither flag implies the other.
 
-The runtime resolves every member before any adapter executes. Unknown kinds, unknown
-or retired preset spellings, missing or invalid round identity, missing effect data, or
-authority/consent refusal block dispatch. There is no caller-selected omission and no
-implicit fallback.
+The runtime resolves every member before any adapter executes. Unknown kinds or presets, missing
+or invalid round identity, missing effect data, or authority/consent refusal block dispatch. There
+is no caller-selected omission.
 
 ## Interpret results conservatively
 

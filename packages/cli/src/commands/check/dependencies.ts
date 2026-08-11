@@ -10,7 +10,7 @@ import {
   type DependencySecurityResult,
   type DependencySeverity,
   type DependencyWaiver,
-} from '#core-compat';
+} from '#runtime-core';
 import { EXIT_FAIL, EXIT_PASS, EXIT_REVIEW } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 
@@ -509,10 +509,10 @@ export function checkDependencies(options: CheckDependenciesOptions): CheckDepen
         evaluateUniverseFixture('npm', NPM_LOCKFILE, npmFixturePath, npmLockfileDigest, observedAt),
       ]);
     }
-    const legacyFixturePath = environment.DEVAI_TEST_DEPENDENCY_SCAN_FIXTURE;
-    if (legacyFixturePath !== undefined) {
+    const fixturePath = environment.DEVAI_TEST_DEPENDENCY_SCAN_FIXTURE;
+    if (fixturePath !== undefined) {
       if (typeof pnpmLockfileDigest !== 'string') return pnpmLockfileDigest;
-      return evaluateFixture(legacyFixturePath, pnpmLockfileDigest, observedAt);
+      return evaluateFixture(fixturePath, pnpmLockfileDigest, observedAt);
     }
   }
 

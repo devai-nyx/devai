@@ -35,7 +35,7 @@ export interface InvariantInput {
   readonly measurable_via?: readonly string[];
 }
 
-/** Cell reachability comes only from the validated successor sensor registry. */
+/** Cell reachability comes only from the validated sensor registry. */
 const KIND_TO_CELLS = sensorCellMap();
 
 const VERDICT_ORDER: Readonly<Record<CellVerdict, number>> = {

@@ -9,14 +9,12 @@ invalidated nodes.
 as `pnpm run test:cli` are the leaf commands used by the affected profile.
 None of them prepares or builds the workspace implicitly.
 
-The RC profile prepares and builds once, then executes five disjoint nodes:
-
-- `test:coverage:rc`: all coverage-eligible package, contract, and
-  non-database integration tests exactly once;
-- `test:db:rc`: PostgreSQL tests;
-- `test:e2e:rc`: built-CLI and post-merge E2E tests;
-- `test:performance:rc`: performance and soak tests;
-- `test:containment:rc`: realpath and write-scope containment tests.
+The RC profile prepares and builds once, then executes one coverage node over
+the complete RC population: package, contract, integration, PostgreSQL, E2E,
+performance, soak, and containment tests. Every test is collected once by
+`test:coverage:rc`; the narrower `test:db:rc`, `test:e2e:rc`,
+`test:performance:rc`, and `test:containment:rc` commands are diagnostic slices,
+not additional RC-profile work.
 
 The coverage node reads the four unchanged floors from
 `law/policy/thresholds.json`: statements 70, branches 60, functions 70, and

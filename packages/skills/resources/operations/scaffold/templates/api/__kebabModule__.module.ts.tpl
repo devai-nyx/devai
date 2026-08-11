@@ -12,10 +12,8 @@ import { __MODULE__PolicyGuard } from './guards/policy.guard';
  * providing the service's repository dependency in this @Module's
  * `providers`.
  *
- * Phase 22.E (D-A-15) — removed the pre-22.E TypeORM import that
- * baked the data-layer choice into the scaffolded output. The
- * scaffolder is per D-59 deterministic + template-shaped, not
- * production-ready; adopters hand-finish.
+ * The scaffolder is deterministic and template-shaped, not
+ * production-ready; adopters select and bind the data layer.
  */
 @Module({
   imports: [],

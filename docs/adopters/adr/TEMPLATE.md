@@ -75,6 +75,6 @@ empty section is not.
 <!--
 - Contracts: `../path/to/contract.md`
 - Invariants: `INV-<DOMAIN>-<NNN>` (in `law/invariants/`)
-- Predecessors / superseded by: links here
+- Related / replaced by: links here
 - External: issues, RFCs, papers
 -->

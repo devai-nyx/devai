@@ -17,7 +17,7 @@ export const RC_ONLY = [
 
 export default defineConfig({
   resolve: {
-    alias: { '#core-compat': resolve('packages/cli/src/core-compat.ts') },
+    alias: { '#runtime-core': resolve('packages/cli/src/runtime-core.ts') },
   },
   test: {
     name: 'local',

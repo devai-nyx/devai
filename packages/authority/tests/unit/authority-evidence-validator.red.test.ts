@@ -45,7 +45,7 @@ describe('R19 audit-only authority evidence', () => {
     expect(value.evidence.canonical_bytes).toBeInstanceOf(Uint8Array);
     expect(value.evidence.view).toMatchObject({
       timestamp: NOW,
-      repository_id: 'devai-self',
+      repository_id: 'example-repository',
       issuer_audit: {
         issuer_id: 'test-authority-issuer',
         capability_material_present: false,

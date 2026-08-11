@@ -5,7 +5,7 @@
 **T6 Security and Privacy** (Constitution Article 5): "the artifact addresses confidentiality, integrity, availability, and privacy at a level appropriate to its responsibilities." For F1 (Spec), this means the authored spec substrate documents the three load-bearing security/privacy concerns:
 
 1. **A written threat model.** Some `docs/dev/security/threat-model*.md` or equivalent under `docs/dev/security/`.
-2. **A PII registry.** Adopters using the `pii_map` pattern (Phase 22.C onward) declare PII fields explicitly; presence of ≥ 1 such migration row.
+2. **A PII registry.** Adopters using the `pii_map` pattern declare PII fields explicitly; presence of at least one such migration row.
 3. **An RBAC invariant.** At least one invariant of `domain: 'RBAC'` (or an equivalent governance-coded role/permission invariant).
 
 ## Operational definition
@@ -13,7 +13,7 @@
 Three presence checks against the repo root:
 
 - **Threat model present?** Any file under `docs/dev/security/` matching `threat-model*.md` (case-insensitive).
-- **PII registry populated?** Greps `migrations/` (or pack-configured) for `INSERT INTO core.pii_map` (configurable table name). Presence-only — Phase 26.H already covers PII extraction quality; this sensor just checks the registry exists.
+- **PII registry populated?** Greps `migrations/` (or pack-configured) for `INSERT INTO core.pii_map` (configurable table name). This presence-only sensor checks that the registry exists; it does not judge extraction quality.
 - **RBAC invariant present?** Walks `law/invariants/*.json` and checks `domain === 'RBAC'`.
 
 The three are reported in `metrics`; the SR `findings` cite each absent signal explicitly.
@@ -33,5 +33,5 @@ The three are reported in `metrics`; the SR `findings` cite each absent signal e
 ## Out of scope
 
 - **Threat-model quality.** The sensor checks _presence_, not _content_. An LLM-judge variant could grade the threat-model's coverage of STRIDE/LINDDUN — deferred to a future `spec_security_coverage_judge` kind.
-- **PII completeness.** Whether every PII column is registered is an F4 concern, already covered by 26.H `inventory_adherence`.
-- **Authorization correctness.** Whether RBAC invariants are enforced is an F3 concern, covered by 27.J `test_security_coverage`.
+- **PII completeness.** Whether every PII column is registered is an F4 concern covered by `inventory_adherence`.
+- **Authorization correctness.** Whether RBAC invariants are enforced is an F3 concern covered by `test_security_coverage`.

@@ -564,7 +564,7 @@ export async function analyzeEffectProgram(input: AnalysisInput): Promise<Effect
               const edge = `${child.getSourceFile().fileName}:${String(child.getStart())}:${callName}`;
               dispositions.set(edge, {
                 edge,
-                reason: `Dynamic subprocess executable with argv shape ${JSON.stringify(shape)}; conservatively classified proc:dynamic and requires runtime-seam enforcement in R25.`,
+                reason: `Dynamic subprocess executable with argv shape ${JSON.stringify(shape)}; conservatively classified proc:dynamic and requires runtime-seam enforcement.`,
               });
             } else {
               const templateKey = JSON.stringify([executable, shape]);

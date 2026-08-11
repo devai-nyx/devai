@@ -10,11 +10,8 @@ import { join } from 'node:path';
 import { canonicalSha256 } from '@devai-nyx/utils';
 
 /**
- * Phase-10 Batch 10.I — agent-run evidence emitter.
- *
- * Records what an automated agent action read, wrote, and ran. Schema
- * conforms to agent-run.schema.json (LAW-12.EVIDENCE.1 absorbed from
- * the stech-law predecessor draft, D-38). Persisted under
+ * Agent-run evidence emitter. Records what an automated agent action read,
+ * wrote, and ran. Schema conforms to agent-run.schema.json and is persisted under
  * record/proofs/work/agent-runs/<run-id>.json. Each record participates in
  * a hash chain via prev_hash + manifest_hash.
  */

@@ -22,7 +22,7 @@ import {
   validateTestTrace,
   validateTrace,
   verifyChain,
-} from '#core-compat';
+} from '#runtime-core';
 import { executeRoutineExecutor, type ExecutorEffect } from '@devai-nyx/loop';
 import { validators } from '@devai-nyx/schemas';
 import {
@@ -43,7 +43,7 @@ import {
 import { validateInvariantStrategies, type InvariantLike } from '@devai-nyx/spec';
 import { ACTION_REGISTRY } from '../../generated/action-registry.js';
 import { auditDocumentationLinks } from '../docs/links.js';
-import { checkMutationReport } from '../mutation/verify.js';
+import { checkMutationReport } from '../mutation/report-check.js';
 import { executeTranslationValidation } from '../verify/translation.js';
 import { runActionCoverageCheck } from '../spec/validate-action-coverage.js';
 import { checkActionEffects } from './action-effects.js';

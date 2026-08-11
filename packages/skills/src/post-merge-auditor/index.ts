@@ -450,9 +450,7 @@ async function writeBundle(
       timestamp,
       integrationHead: mergeSha,
     });
-    const readings = loadReadingsFromDir(join(worktreeRoot, 'record/proofs/freshness/readings'), {
-      latestPerKind: true,
-    });
+    const readings = loadReadingsFromDir(join(worktreeRoot, 'record/proofs/freshness/readings'));
     const naCells = scorecardNaCellSet(loadScorecardNaConfig(resolveScorecardNaPath(worktreeRoot)));
     const scorecard = computeScorecard({
       timestamp,

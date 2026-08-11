@@ -26,7 +26,7 @@ import {
   gatherGitContext,
   type EvidenceChain,
   type EvidenceRecord,
-} from '#core-compat';
+} from '#runtime-core';
 import { validators } from '@devai-nyx/schemas';
 import type { RegistryEntry } from '../define-command.js';
 import { matchDeclaredCheckTaskProcess } from '../services/check-runner/authority-process.js';

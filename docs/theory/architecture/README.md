@@ -1,7 +1,6 @@
 # Architecture
 
 - [Runtime stack](runtime-stack.md)
-- [Prompt firewall](prompt-firewall.md)
 - [Canonical recipes](../../reference/recipes/README.md)
 
 Deterministic operations provide executable behavior. Recipes provide host-neutral

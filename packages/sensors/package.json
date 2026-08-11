@@ -39,7 +39,7 @@
   "scripts": {
     "build": "tsc -b && node scripts/copy-law.mjs",
     "clean": "tsc -b --clean",
-    "test": "vitest run tests"
+    "test": "pnpm --dir ../.. run test:sensors"
   },
   "repository": {
     "type": "git",

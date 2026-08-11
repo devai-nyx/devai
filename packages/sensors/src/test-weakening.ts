@@ -29,7 +29,7 @@ interface AssertionCounts {
  * after the change, flag if the after-count drops by more than the
  * threshold ratio.
  *
- * Phase-4 minimum: per D-21, default threshold is 20% decrease. Reports
+ * The default threshold is a 20% decrease. Reports
  * one finding per drift; the overall status is 'fail' if any finding
  * exceeds threshold, 'review' if any decrease at all, 'pass' otherwise.
  */

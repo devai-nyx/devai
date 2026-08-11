@@ -112,7 +112,7 @@ The generated descriptors below own the complete kind population and every per-k
 - **Prerequisites:** One active owning round and one schema-valid immutable requested executor contract.
 - **Required external tools:** Only the registered action or literal shell-free argv tools.
 - **Accepted inputs:** The exact `routine` task-schema branch; fields from other executor branches are rejected. Dispatch uses `--as-role <allowed-role>` or a live authority session plus `--write`.
-- **Defaults:** No executor kind is inferred for new or legacy tasks.
+- **Defaults:** No executor kind is inferred when the task omits its executor contract.
 - **Output contract:** Requested executor remains immutable; resolution and completion are recorded separately in task-execution evidence.
 - **Verdict semantics:** Incomplete, mismatched, cyclic, cross-round, timed-out, or unevidenced execution blocks completion.
 - **Declared effect:** Derived from the requested work and its registered actions; executor kind grants no effect.
@@ -121,7 +121,7 @@ The generated descriptors below own the complete kind population and every per-k
 - **When to use:** Use `routine` only when its closed execution contract matches the task.
 - **When not to use:** Do not use it to bypass round containment, role authority, or evidence requirements.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
+- **Example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
 - **Canonical source:** [`law/schemas/task.schema.json`](../../../law/schemas/task.schema.json#/properties/executor)
 - **Related workflow:** `round`
 
@@ -136,7 +136,7 @@ The generated descriptors below own the complete kind population and every per-k
 - **Prerequisites:** One active owning round and one schema-valid immutable requested executor contract.
 - **Required external tools:** A rostered runtime adapter and provider/host preflight.
 - **Accepted inputs:** The exact `agent` task-schema branch; fields from other executor branches are rejected. Dispatch uses `--as-role <allowed-role>` or a live authority session plus `--write`.
-- **Defaults:** No executor kind is inferred for new or legacy tasks.
+- **Defaults:** No executor kind is inferred when the task omits its executor contract.
 - **Output contract:** Requested executor remains immutable; resolution and completion are recorded separately in task-execution evidence.
 - **Verdict semantics:** Incomplete, mismatched, cyclic, cross-round, timed-out, or unevidenced execution blocks completion.
 - **Declared effect:** Derived from the requested work and its registered actions; executor kind grants no effect.
@@ -145,7 +145,7 @@ The generated descriptors below own the complete kind population and every per-k
 - **When to use:** Use `agent` only when its closed execution contract matches the task.
 - **When not to use:** Do not use it to bypass round containment, role authority, or evidence requirements.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
+- **Example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
 - **Canonical source:** [`law/schemas/task.schema.json`](../../../law/schemas/task.schema.json#/properties/executor)
 - **Related workflow:** `round`
 
@@ -160,7 +160,7 @@ The generated descriptors below own the complete kind population and every per-k
 - **Prerequisites:** One active owning round and one schema-valid immutable requested executor contract.
 - **Required external tools:** Not applicable unless the executor record declares a tool through a child or completion procedure.
 - **Accepted inputs:** The exact `human` task-schema branch; fields from other executor branches are rejected. Dispatch uses `--as-role <allowed-role>` or a live authority session plus `--write`.
-- **Defaults:** No executor kind is inferred for new or legacy tasks.
+- **Defaults:** No executor kind is inferred when the task omits its executor contract.
 - **Output contract:** Requested executor remains immutable; resolution and completion are recorded separately in task-execution evidence.
 - **Verdict semantics:** Incomplete, mismatched, cyclic, cross-round, timed-out, or unevidenced execution blocks completion.
 - **Declared effect:** Derived from the requested work and its registered actions; executor kind grants no effect.
@@ -169,7 +169,7 @@ The generated descriptors below own the complete kind population and every per-k
 - **When to use:** Use `human` only when its closed execution contract matches the task.
 - **When not to use:** Do not use it to bypass round containment, role authority, or evidence requirements.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
+- **Example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
 - **Canonical source:** [`law/schemas/task.schema.json`](../../../law/schemas/task.schema.json#/properties/executor)
 - **Related workflow:** `round`
 
@@ -184,7 +184,7 @@ The generated descriptors below own the complete kind population and every per-k
 - **Prerequisites:** One active owning round and one schema-valid immutable requested executor contract.
 - **Required external tools:** Not applicable unless the executor record declares a tool through a child or completion procedure.
 - **Accepted inputs:** The exact `composite` task-schema branch; fields from other executor branches are rejected. Dispatch uses `--as-role <allowed-role>` or a live authority session plus `--write`.
-- **Defaults:** No executor kind is inferred for new or legacy tasks.
+- **Defaults:** No executor kind is inferred when the task omits its executor contract.
 - **Output contract:** Requested executor remains immutable; resolution and completion are recorded separately in task-execution evidence.
 - **Verdict semantics:** Incomplete, mismatched, cyclic, cross-round, timed-out, or unevidenced execution blocks completion.
 - **Declared effect:** Derived from the requested work and its registered actions; executor kind grants no effect.
@@ -193,7 +193,7 @@ The generated descriptors below own the complete kind population and every per-k
 - **When to use:** Use `composite` only when its closed execution contract matches the task.
 - **When not to use:** Do not use it to bypass round containment, role authority, or evidence requirements.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
+- **Example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
 - **Canonical source:** [`law/schemas/task.schema.json`](../../../law/schemas/task.schema.json#/properties/executor)
 - **Related workflow:** `round`
 
@@ -215,107 +215,48 @@ failure semantics.
 
 - **Stable ID:** exact
 - **User-facing label:** Exact
-- **Purpose:** Require one exact roster entry with no substitution.
-- **Population or projection:** One registry_id.
-- **Prerequisites:** A schema-valid agent executor and model/runtime entries that are available in the canonical registry; host preflight is still mandatory.
+- **Purpose:** Require one runtime bridge and exact host model with no substitution.
+- **Population or projection:** One registry_id plus one exact host model identity.
+- **Prerequisites:** A schema-valid agent executor, a declared runtime bridge, an exact host model, and a successful host preflight.
 - **Required external tools:** The adapter declared by the selected runtime entry and its provider or host preflight.
-- **Accepted inputs:** Only the fields admitted by the `exact` conditional branch of agentSelection.
-- **Defaults:** No implicit mode, latest version, provider alias, or fallback.
-- **Output contract:** Resolved executor and selection/fallback decision are recorded separately from the immutable requested executor.
+- **Accepted inputs:** Only the fields admitted by the `exact` agentSelection contract.
+- **Defaults:** No model, runtime, effort, provider alias, or substitution is inferred.
+- **Output contract:** Resolved executor identity is recorded separately from the immutable requested executor.
 - **Verdict semantics:** The first unresolved, unavailable, capability, effort, adapter, or exact-identity mismatch blocks before provider invocation.
 - **Declared effect:** Not applicable: a selection mode grants no action effect; the resolved task work declares effects separately.
 - **Consent flags:** Not applicable: selection mode grants no consent; the resolved task actions enforce their own consent.
 - **Cost class:** `external-dependent`
-- **When to use:** Use `exact` when its explicit substitution boundary is intended and authorized.
-- **When not to use:** Do not use it to create implicit fallback, infer authority, or select an unrostered model/effort.
+- **When to use:** Use `exact` when one exact runtime and model identity are intended.
+- **When not to use:** Do not use it to infer authority, aliases, defaults, or model substitution.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai doctor --probe llm --repo-root .`
-- **Canonical source:** [`law/schemas/task.schema.json`](../../../law/schemas/task.schema.json#/$defs/agentSelection/properties/mode/enum); [`law/policy/agent-routing-policies.json`](../../../law/policy/agent-routing-policies.json)
-- **Related workflow:** `round`
-
-<!-- devai:generated-entry category="agent-selection-modes" id="preferred" -->
-
-### `preferred` — Preferred
-
-- **Stable ID:** preferred
-- **User-facing label:** Preferred
-- **Purpose:** Try only one task-owned ordered allowlist.
-- **Population or projection:** One ordered nonempty registry_ids allowlist.
-- **Prerequisites:** A schema-valid agent executor and model/runtime entries that are available in the canonical registry; host preflight is still mandatory.
-- **Required external tools:** The adapter declared by the selected runtime entry and its provider or host preflight.
-- **Accepted inputs:** Only the fields admitted by the `preferred` conditional branch of agentSelection.
-- **Defaults:** No implicit mode, latest version, provider alias, or fallback.
-- **Output contract:** Resolved executor and selection/fallback decision are recorded separately from the immutable requested executor.
-- **Verdict semantics:** The first unresolved, unavailable, capability, effort, adapter, or exact-identity mismatch blocks before provider invocation.
-- **Declared effect:** Not applicable: a selection mode grants no action effect; the resolved task work declares effects separately.
-- **Consent flags:** Not applicable: selection mode grants no consent; the resolved task actions enforce their own consent.
-- **Cost class:** `external-dependent`
-- **When to use:** Use `preferred` when its explicit substitution boundary is intended and authorized.
-- **When not to use:** Do not use it to create implicit fallback, infer authority, or select an unrostered model/effort.
-- **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai doctor --probe llm --repo-root .`
-- **Canonical source:** [`law/schemas/task.schema.json`](../../../law/schemas/task.schema.json#/$defs/agentSelection/properties/mode/enum); [`law/policy/agent-routing-policies.json`](../../../law/policy/agent-routing-policies.json)
-- **Related workflow:** `round`
-
-<!-- devai:generated-entry category="agent-selection-modes" id="policy" -->
-
-### `policy` — Policy
-
-- **Stable ID:** policy
-- **User-facing label:** Policy
-- **Purpose:** Resolve only through one named and versioned routing policy.
-- **Population or projection:** One policy_id and exact policy_version roster.
-- **Prerequisites:** A schema-valid agent executor and model/runtime entries that are available in the canonical registry; host preflight is still mandatory.
-- **Required external tools:** The adapter declared by the selected runtime entry and its provider or host preflight.
-- **Accepted inputs:** Only the fields admitted by the `policy` conditional branch of agentSelection.
-- **Defaults:** No implicit mode, latest version, provider alias, or fallback.
-- **Output contract:** Resolved executor and selection/fallback decision are recorded separately from the immutable requested executor.
-- **Verdict semantics:** The first unresolved, unavailable, capability, effort, adapter, or exact-identity mismatch blocks before provider invocation.
-- **Declared effect:** Not applicable: a selection mode grants no action effect; the resolved task work declares effects separately.
-- **Consent flags:** Not applicable: selection mode grants no consent; the resolved task actions enforce their own consent.
-- **Cost class:** `external-dependent`
-- **When to use:** Use `policy` when its explicit substitution boundary is intended and authorized.
-- **When not to use:** Do not use it to create implicit fallback, infer authority, or select an unrostered model/effort.
-- **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai doctor --probe llm --repo-root .`
-- **Canonical source:** [`law/schemas/task.schema.json`](../../../law/schemas/task.schema.json#/$defs/agentSelection/properties/mode/enum); [`law/policy/agent-routing-policies.json`](../../../law/policy/agent-routing-policies.json)
+- **Example:** `devai doctor --probe llm --repo-root .`
+- **Canonical source:** [`law/schemas/task.schema.json`](../../../law/schemas/task.schema.json#/$defs/agentSelection/properties/mode/const)
 - **Related workflow:** `round`
 
 <!-- devai:generated-reference:end category="agent-selection-modes" -->
 
-### Choose without implicit fallback
+### Select exactly
 
-Use exact selection when substitution is unacceptable. Only the requested registry identity may be
-considered, and the first runtime, model, effort, class, capability, availability, host-preflight,
-or adapter-identity mismatch blocks before provider invocation.
-
-```json
-{
-  "mode": "exact",
-  "registry_id": "codex-cli:gpt-5.6-sol"
-}
-```
-
-Use an ordered preferred allowlist only when the immutable task itself names every acceptable
-registry entry. Nothing outside that list may be considered. Do not invent a fallback example:
-the current canonical roster has no multiple equivalent entries for one requested runtime/model
-identity, so a multi-entry runnable fallback cannot be demonstrated from current policy.
-
-Use a named policy only with both its literal ID and version. There is no implicit latest version,
-alias expansion, or unrecorded provider substitution. This current policy specimen is rostered for
-a coding-agent request whose runtime/model/effort are `codex-cli`, `gpt-5.6-sol`, and `high`:
+Only the requested runtime bridge and exact host model identity may be considered. The first
+runtime, model, effort, class, capability, availability, host-preflight, or adapter-identity
+mismatch blocks before provider invocation.
 
 ```json
 {
-  "mode": "policy",
-  "policy_id": "governed-coding",
-  "policy_version": "1.0.0"
+  "kind": "agent",
+  "runtime": "codex-cli",
+  "model": "gpt-5.6-sol",
+  "effort": "high",
+  "selection": {
+    "mode": "exact",
+    "registry_id": "codex-cli"
+  }
 }
 ```
 
-The exact live combinations and availability metadata are generated in the
-[model/runtime reference](./model-runtime.md). `available` means roster-eligible, not
-host-reachable; provider/session preflight and adapter-reported exact identity remain mandatory.
+Runtime capabilities and availability metadata are generated in the
+[model/runtime reference](./model-runtime.md). Declared availability does not prove host
+reachability; provider/session preflight and adapter-reported exact identity remain mandatory.
 
 ## Requested versus resolved execution
 
@@ -324,10 +265,10 @@ it does not copy the object into a mutable execution record. Resolution and obse
 separate task-execution-evidence record.
 
 That record binds the task, round, candidate, task digest, and requested-executor digest, then
-records the resolved executor or argv, adapter/tool versions, input/output digests, selection
-decision, prompt identity, usage/cost where applicable, timestamps, verdict, failure disposition,
-and evidence references. Selection evidence includes what was considered, what was selected,
-rejection codes, and whether an explicitly authorized fallback was used.
+records the resolved executor or argv, adapter/tool versions, input/output digests, exact selection,
+prompt identity, usage/cost where applicable, timestamps, verdict, failure disposition, and
+evidence references. Selection evidence includes what was requested, what was selected, and any
+rejection codes.
 
 An exact mismatch or incomplete record blocks completion. If the request must change, create a new
 governed request; never mutate the old requested executor in place or silently retry another model.
@@ -335,7 +276,7 @@ governed request; never mutate the old requested executor in place or silently r
 Canonical contract:
 [task schema](../../../law/schemas/task.schema.json),
 [task-execution-evidence schema](../../../law/schemas/task-execution-evidence.schema.json), and
-[agent-routing policy](../../../law/policy/agent-routing-policies.json).
+[model runtime registry](../../../law/policy/model-runtime-registry.json).
 
 ## Authority stays with discipline
 
@@ -371,19 +312,12 @@ retained even when rollback succeeds.
 Expanded help exposes low-level task operations for orchestration and advanced automation:
 
 ```sh
-devai task --all
+devai catalog actions --format json
 ```
 
 This is inspection, not an ordinary workflow recommendation. Plumbing retains the same round
 argument, containment, authority, effect, consent, output, and lifecycle checks. Operators should
 prefer `round status`, `round assess`, `round gap ...`, and `round run`.
-
-## Legacy task-record boundary
-
-Task records that predate the required round and executor fields remain historical and
-non-executable. They need an explicit digest-bound mapping to a round and a complete executor
-contract, producing a new record while preserving the original. Runtime inference from tags,
-prompts, worktrees, branches, or previous executions is forbidden.
 
 ## Nonclaims
 

@@ -84,7 +84,7 @@ export function emit(reading: SensorReading, human: boolean): void {
 }
 
 /**
- * Phase 21.E (closes D-A-8): persist a SensorReading to
+ * Persist a SensorReading to
  * `<repoRoot>/.devai/state/sensor-readings/<kind>/<id>.json`. The
  * scorecard machinery (in `@devai-nyx/skills` via
  * `loadReadingsFromDir`) reads from this directory; without
@@ -94,7 +94,7 @@ export function emit(reading: SensorReading, human: boolean): void {
  *
  * Pre-21.E, the sense-* commands built SensorReading records and
  * emitted them to stdout via `emit()` but never persisted them.
- * The C-4 stynx pilot's Phase F discovery was that this gap made
+ * Omitting this record makes
  * the autonomous loop non-functional for adopters even though the
  * substrate wired correctly end-to-end.
  *

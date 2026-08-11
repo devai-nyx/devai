@@ -53,7 +53,7 @@ export function expectBoundaryFailure(
 
 export const gitTarget = {
   kind: 'git-ref',
-  id: 'git-ref:devai-self:refs/heads/main',
+  id: 'git-ref:example-repository:refs/heads/main',
   repository_id: REPOSITORY_ID,
   ref: 'refs/heads/main',
   operation: 'update',

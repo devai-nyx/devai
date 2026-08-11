@@ -49,7 +49,7 @@ Downstream branches do **not** rebase on every upstream commit. Checkpoint caden
 
 All agent work occurs in dedicated worktrees under `.devai/worktrees/<task-id>`. The repository root checkout is **reserved for human use**; agents do not operate in the root.
 
-**The active non-adopted agent worktree count is capped by F5 policy.** The current runtime default is three (`WORKTREE_CAP` in `packages/core/src/loop/worktrees.ts`; D-52). Harness-owned worktrees (the persistent inventory worktree, human-adopted review worktrees for escalated branches, and the dedicated soft-gate evaluator worktree) are tracked separately and do not count against the cap. Documentation must point to the policy source rather than freeze a second numeric authority.
+**The active agent worktree count is capped by F5 policy.** Harness-owned worktrees are tracked separately and do not count against the cap. Consult the active runtime policy instead of freezing a second numeric authority in documentation.
 
 A worktree is provisioned with:
 

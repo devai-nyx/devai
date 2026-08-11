@@ -33,7 +33,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `type_check` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run type_check --repo-root . --dry-run --format json`
+- **Example:** `devai sense run type_check --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/type_check.md`](../../../law/policy/sensor-notes/type_check.md)
 - **Related workflow:** `sense`
 
@@ -57,7 +57,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `lint` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run lint --repo-root . --dry-run --format json`
+- **Example:** `devai sense run lint --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/lint.md`](../../../law/policy/sensor-notes/lint.md)
 - **Related workflow:** `sense`
 
@@ -81,7 +81,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `build` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `local-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run build --repo-root . --as-role owner --write --dry-run --format json`
+- **Example:** `devai sense run build --repo-root . --as-role owner --write --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/build.md`](../../../law/policy/sensor-notes/build.md)
 - **Related workflow:** `sense`
 
@@ -105,7 +105,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `unit_test` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `harness-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run unit_test --repo-root . --as-role owner --write --dry-run --format json`
+- **Example:** `devai sense run unit_test --repo-root . --as-role owner --write --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/unit_test.md`](../../../law/policy/sensor-notes/unit_test.md)
 - **Related workflow:** `sense`
 
@@ -129,7 +129,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `integration_test` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `harness-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run integration_test --repo-root . --as-role owner --write --dry-run --format json`
+- **Example:** `devai sense run integration_test --repo-root . --as-role owner --write --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/integration_test.md`](../../../law/policy/sensor-notes/integration_test.md)
 - **Related workflow:** `sense`
 
@@ -153,7 +153,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `e2e_test` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `harness-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run e2e_test --repo-root . --as-role owner --write --dry-run --format json`
+- **Example:** `devai sense run e2e_test --repo-root . --as-role owner --write --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/e2e_test.md`](../../../law/policy/sensor-notes/e2e_test.md)
 - **Related workflow:** `sense`
 
@@ -177,7 +177,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `migration_check` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `local-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run migration_check --repo-root . --as-role owner --write --dry-run --format json`
+- **Example:** `devai sense run migration_check --repo-root . --as-role owner --write --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/migration_check.md`](../../../law/policy/sensor-notes/migration_check.md)
 - **Related workflow:** `sense`
 
@@ -201,7 +201,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `inventory_regeneration` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `harness-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run inventory_regeneration --repo-root . --as-role owner --write --dry-run --format json`
+- **Example:** `devai sense run inventory_regeneration --repo-root . --as-role owner --write --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/inventory_regeneration.md`](../../../law/policy/sensor-notes/inventory_regeneration.md)
 - **Related workflow:** `sense`
 
@@ -225,7 +225,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `test_weakening_review` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run test_weakening_review --repo-root . --dry-run --format json`
+- **Example:** `devai sense run test_weakening_review --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/test_weakening_review.md`](../../../law/policy/sensor-notes/test_weakening_review.md)
 - **Related workflow:** `sense`
 
@@ -249,7 +249,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `trace_resolution` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run trace_resolution --repo-root . --dry-run --format json`
+- **Example:** `devai sense run trace_resolution --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/trace_resolution.md`](../../../law/policy/sensor-notes/trace_resolution.md)
 - **Related workflow:** `sense`
 
@@ -273,7 +273,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `security_scan` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run security_scan --repo-root . --dry-run --format json`
+- **Example:** `devai sense run security_scan --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/security_scan.md`](../../../law/policy/sensor-notes/security_scan.md)
 - **Related workflow:** `sense`
 
@@ -297,7 +297,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `perf_test` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run perf_test --repo-root . --dry-run --format json`
+- **Example:** `devai sense run perf_test --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/perf_test.md`](../../../law/policy/sensor-notes/perf_test.md)
 - **Related workflow:** `sense`
 
@@ -309,7 +309,7 @@ sources or renderer, never the bytes between markers.
 - **User-facing label:** Llm Judge
 - **Purpose:** Run the registered `llm_judge` observation through `packages/sensors/src/judge.ts` and emit its canonical reading.
 - **Population or projection:** Emitter `packages/sensors/src/judge.ts`; standing scorecard cells `F1×T3`; preset membership Not applicable: the canonical source declares no values; registry tiers `SWEEP`.
-- **Prerequisites:** Reviewed effect sources `packages/sensors/src/judge.ts`, `packages/cli/src/commands/sense/judge.ts`, `packages/cli/src/command-manifest.ts`. Capabilities `net:llm-provider`.
+- **Prerequisites:** Reviewed effect sources `packages/sensors/src/judge.ts`, `packages/cli/src/commands/sense/adapters.ts`, `packages/cli/src/command-manifest.ts`. Capabilities `net:llm-provider`.
 - **Required external tools:** Tools or services satisfying `net:llm-provider`; exact availability is checked before execution.
 - **Accepted inputs:** `sense run llm_judge`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and `--as-role <owner|architect|inspector|engineer|auditor>` or a live `--authority-session <id>` plus the declared consent flags.
 - **Defaults:** Repository root `.`; no implicit persistence, preset, round, or sensor-specific input.
@@ -321,7 +321,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `llm_judge` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `remote-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run llm_judge --repo-root . --as-role owner --write --publish --dry-run --format json`
+- **Example:** `devai sense run llm_judge --repo-root . --as-role owner --write --publish --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/llm_judge.md`](../../../law/policy/sensor-notes/llm_judge.md)
 - **Related workflow:** `sense`
 
@@ -345,7 +345,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `runtime_probe_api` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `remote-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run runtime_probe_api --repo-root . --as-role owner --write --publish --dry-run --format json`
+- **Example:** `devai sense run runtime_probe_api --repo-root . --as-role owner --write --publish --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/runtime_probe_api.md`](../../../law/policy/sensor-notes/runtime_probe_api.md)
 - **Related workflow:** `sense`
 
@@ -369,7 +369,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `runtime_probe_auth` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `remote-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run runtime_probe_auth --repo-root . --as-role owner --write --publish --dry-run --format json`
+- **Example:** `devai sense run runtime_probe_auth --repo-root . --as-role owner --write --publish --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/runtime_probe_auth.md`](../../../law/policy/sensor-notes/runtime_probe_auth.md)
 - **Related workflow:** `sense`
 
@@ -393,7 +393,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `runtime_probe_data` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `remote-write`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run runtime_probe_data --repo-root . --as-role owner --write --publish --dry-run --format json`
+- **Example:** `devai sense run runtime_probe_data --repo-root . --as-role owner --write --publish --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/runtime_probe_data.md`](../../../law/policy/sensor-notes/runtime_probe_data.md)
 - **Related workflow:** `sense`
 
@@ -417,7 +417,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `inventory_api` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run inventory_api --repo-root . --dry-run --format json`
+- **Example:** `devai sense run inventory_api --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/inventory_api.md`](../../../law/policy/sensor-notes/inventory_api.md)
 - **Related workflow:** `sense`
 
@@ -441,7 +441,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `inventory_routes` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run inventory_routes --repo-root . --dry-run --format json`
+- **Example:** `devai sense run inventory_routes --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/inventory_routes.md`](../../../law/policy/sensor-notes/inventory_routes.md)
 - **Related workflow:** `sense`
 
@@ -465,7 +465,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `inventory_data_model` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run inventory_data_model --repo-root . --dry-run --format json`
+- **Example:** `devai sense run inventory_data_model --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/inventory_data_model.md`](../../../law/policy/sensor-notes/inventory_data_model.md)
 - **Related workflow:** `sense`
 
@@ -489,7 +489,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `inventory_rbac` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run inventory_rbac --repo-root . --dry-run --format json`
+- **Example:** `devai sense run inventory_rbac --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/inventory_rbac.md`](../../../law/policy/sensor-notes/inventory_rbac.md)
 - **Related workflow:** `sense`
 
@@ -513,7 +513,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `inventory_data_handling` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run inventory_data_handling --repo-root . --dry-run --format json`
+- **Example:** `devai sense run inventory_data_handling --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/inventory_data_handling.md`](../../../law/policy/sensor-notes/inventory_data_handling.md)
 - **Related workflow:** `sense`
 
@@ -537,7 +537,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `inventory_dep_graph` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run inventory_dep_graph --repo-root . --dry-run --format json`
+- **Example:** `devai sense run inventory_dep_graph --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/inventory_dep_graph.md`](../../../law/policy/sensor-notes/inventory_dep_graph.md)
 - **Related workflow:** `sense`
 
@@ -561,7 +561,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `inventory_coverage` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run inventory_coverage --repo-root . --dry-run --format json`
+- **Example:** `devai sense run inventory_coverage --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/inventory_coverage.md`](../../../law/policy/sensor-notes/inventory_coverage.md)
 - **Related workflow:** `sense`
 
@@ -585,7 +585,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `spec_depth` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run spec_depth --repo-root . --dry-run --format json`
+- **Example:** `devai sense run spec_depth --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/spec_depth.md`](../../../law/policy/sensor-notes/spec_depth.md)
 - **Related workflow:** `sense`
 
@@ -609,7 +609,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `spec_idiomaticity` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run spec_idiomaticity --repo-root . --dry-run --format json`
+- **Example:** `devai sense run spec_idiomaticity --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/spec_idiomaticity.md`](../../../law/policy/sensor-notes/spec_idiomaticity.md)
 - **Related workflow:** `sense`
 
@@ -633,7 +633,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `spec_freshness` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run spec_freshness --repo-root . --dry-run --format json`
+- **Example:** `devai sense run spec_freshness --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/spec_freshness.md`](../../../law/policy/sensor-notes/spec_freshness.md)
 - **Related workflow:** `sense`
 
@@ -657,7 +657,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `plant_coverage` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run plant_coverage --repo-root . --dry-run --format json`
+- **Example:** `devai sense run plant_coverage --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/plant_coverage.md`](../../../law/policy/sensor-notes/plant_coverage.md)
 - **Related workflow:** `sense`
 
@@ -681,7 +681,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `test_coverage_depth` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run test_coverage_depth --repo-root . --dry-run --format json`
+- **Example:** `devai sense run test_coverage_depth --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/test_coverage_depth.md`](../../../law/policy/sensor-notes/test_coverage_depth.md)
 - **Related workflow:** `sense`
 
@@ -705,7 +705,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `test_invariant_alignment` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run test_invariant_alignment --repo-root . --dry-run --format json`
+- **Example:** `devai sense run test_invariant_alignment --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/test_invariant_alignment.md`](../../../law/policy/sensor-notes/test_invariant_alignment.md)
 - **Related workflow:** `sense`
 
@@ -729,7 +729,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `inventory_adherence` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run inventory_adherence --repo-root . --dry-run --format json`
+- **Example:** `devai sense run inventory_adherence --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/inventory_adherence.md`](../../../law/policy/sensor-notes/inventory_adherence.md)
 - **Related workflow:** `sense`
 
@@ -753,7 +753,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `inventory_determinism` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run inventory_determinism --repo-root . --dry-run --format json`
+- **Example:** `devai sense run inventory_determinism --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/inventory_determinism.md`](../../../law/policy/sensor-notes/inventory_determinism.md)
 - **Related workflow:** `sense`
 
@@ -777,7 +777,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `harness_security` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run harness_security --repo-root . --dry-run --format json`
+- **Example:** `devai sense run harness_security --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/harness_security.md`](../../../law/policy/sensor-notes/harness_security.md)
 - **Related workflow:** `sense`
 
@@ -801,7 +801,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `harness_green_main` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run harness_green_main --repo-root . --dry-run --format json`
+- **Example:** `devai sense run harness_green_main --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/harness_green_main.md`](../../../law/policy/sensor-notes/harness_green_main.md)
 - **Related workflow:** `sense`
 
@@ -825,7 +825,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `spec_alignment` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run spec_alignment --repo-root . --dry-run --format json`
+- **Example:** `devai sense run spec_alignment --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/spec_alignment.md`](../../../law/policy/sensor-notes/spec_alignment.md)
 - **Related workflow:** `sense`
 
@@ -849,7 +849,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `spec_security_coverage` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run spec_security_coverage --repo-root . --dry-run --format json`
+- **Example:** `devai sense run spec_security_coverage --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/spec_security_coverage.md`](../../../law/policy/sensor-notes/spec_security_coverage.md)
 - **Related workflow:** `sense`
 
@@ -873,7 +873,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `spec_performance_targets` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run spec_performance_targets --repo-root . --dry-run --format json`
+- **Example:** `devai sense run spec_performance_targets --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/spec_performance_targets.md`](../../../law/policy/sensor-notes/spec_performance_targets.md)
 - **Related workflow:** `sense`
 
@@ -897,7 +897,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `spec_robustness_targets` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run spec_robustness_targets --repo-root . --dry-run --format json`
+- **Example:** `devai sense run spec_robustness_targets --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/spec_robustness_targets.md`](../../../law/policy/sensor-notes/spec_robustness_targets.md)
 - **Related workflow:** `sense`
 
@@ -921,7 +921,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `plant_depth` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run plant_depth --repo-root . --dry-run --format json`
+- **Example:** `devai sense run plant_depth --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/plant_depth.md`](../../../law/policy/sensor-notes/plant_depth.md)
 - **Related workflow:** `sense`
 
@@ -945,7 +945,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `plant_coherence` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run plant_coherence --repo-root . --dry-run --format json`
+- **Example:** `devai sense run plant_coherence --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/plant_coherence.md`](../../../law/policy/sensor-notes/plant_coherence.md)
 - **Related workflow:** `sense`
 
@@ -969,7 +969,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `test_coherence` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run test_coherence --repo-root . --dry-run --format json`
+- **Example:** `devai sense run test_coherence --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/test_coherence.md`](../../../law/policy/sensor-notes/test_coherence.md)
 - **Related workflow:** `sense`
 
@@ -993,7 +993,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `test_idiomaticity` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run test_idiomaticity --repo-root . --dry-run --format json`
+- **Example:** `devai sense run test_idiomaticity --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/test_idiomaticity.md`](../../../law/policy/sensor-notes/test_idiomaticity.md)
 - **Related workflow:** `sense`
 
@@ -1017,7 +1017,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `test_security_coverage` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run test_security_coverage --repo-root . --dry-run --format json`
+- **Example:** `devai sense run test_security_coverage --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/test_security_coverage.md`](../../../law/policy/sensor-notes/test_security_coverage.md)
 - **Related workflow:** `sense`
 
@@ -1041,7 +1041,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `test_performance_coverage` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run test_performance_coverage --repo-root . --dry-run --format json`
+- **Example:** `devai sense run test_performance_coverage --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/test_performance_coverage.md`](../../../law/policy/sensor-notes/test_performance_coverage.md)
 - **Related workflow:** `sense`
 
@@ -1065,7 +1065,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `test_robustness_coverage` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run test_robustness_coverage --repo-root . --dry-run --format json`
+- **Example:** `devai sense run test_robustness_coverage --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/test_robustness_coverage.md`](../../../law/policy/sensor-notes/test_robustness_coverage.md)
 - **Related workflow:** `sense`
 
@@ -1089,7 +1089,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `harness_coverage` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run harness_coverage --repo-root . --dry-run --format json`
+- **Example:** `devai sense run harness_coverage --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/harness_coverage.md`](../../../law/policy/sensor-notes/harness_coverage.md)
 - **Related workflow:** `sense`
 
@@ -1113,7 +1113,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `harness_depth` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run harness_depth --repo-root . --dry-run --format json`
+- **Example:** `devai sense run harness_depth --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/harness_depth.md`](../../../law/policy/sensor-notes/harness_depth.md)
 - **Related workflow:** `sense`
 
@@ -1137,7 +1137,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `harness_coherence` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run harness_coherence --repo-root . --dry-run --format json`
+- **Example:** `devai sense run harness_coherence --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/harness_coherence.md`](../../../law/policy/sensor-notes/harness_coherence.md)
 - **Related workflow:** `sense`
 
@@ -1161,7 +1161,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `harness_invariant_alignment` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run harness_invariant_alignment --repo-root . --dry-run --format json`
+- **Example:** `devai sense run harness_invariant_alignment --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/harness_invariant_alignment.md`](../../../law/policy/sensor-notes/harness_invariant_alignment.md)
 - **Related workflow:** `sense`
 
@@ -1185,7 +1185,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `harness_idiomaticity` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run harness_idiomaticity --repo-root . --dry-run --format json`
+- **Example:** `devai sense run harness_idiomaticity --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/harness_idiomaticity.md`](../../../law/policy/sensor-notes/harness_idiomaticity.md)
 - **Related workflow:** `sense`
 
@@ -1209,7 +1209,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `harness_performance` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run harness_performance --repo-root . --dry-run --format json`
+- **Example:** `devai sense run harness_performance --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/harness_performance.md`](../../../law/policy/sensor-notes/harness_performance.md)
 - **Related workflow:** `sense`
 
@@ -1233,7 +1233,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `harness_robustness` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run harness_robustness --repo-root . --dry-run --format json`
+- **Example:** `devai sense run harness_robustness --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/harness_robustness.md`](../../../law/policy/sensor-notes/harness_robustness.md)
 - **Related workflow:** `sense`
 
@@ -1257,7 +1257,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `inventory_performance` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run inventory_performance --repo-root . --dry-run --format json`
+- **Example:** `devai sense run inventory_performance --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/inventory_performance.md`](../../../law/policy/sensor-notes/inventory_performance.md)
 - **Related workflow:** `sense`
 
@@ -1267,8 +1267,8 @@ sources or renderer, never the bytes between markers.
 
 - **Stable ID:** decision_record_integrity
 - **User-facing label:** Decision Record Integrity
-- **Purpose:** Run the registered `decision_record_integrity` observation through `packages/cli/src/commands/sense/governance-ledger.ts` and emit its canonical reading.
-- **Population or projection:** Emitter `packages/cli/src/commands/sense/governance-ledger.ts`; standing diagnostic-only; preset membership `sweep`; registry tiers `SWEEP`.
+- **Purpose:** Run the registered `decision_record_integrity` observation through `packages/loop/src/governance-ledger/index.ts` and emit its canonical reading.
+- **Population or projection:** Emitter `packages/loop/src/governance-ledger/index.ts`; standing diagnostic-only; preset membership `sweep`; registry tiers `SWEEP`.
 - **Prerequisites:** The registered emitter and a readable repository root. No additional capability is declared by the registry.
 - **Required external tools:** Not applicable: no external tool is declared by the canonical sensor entry; the emitter still performs its own preflight.
 - **Accepted inputs:** `sense run decision_record_integrity`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and no role declaration for the resolved read-only kind.
@@ -1281,7 +1281,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `decision_record_integrity` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run decision_record_integrity --repo-root . --dry-run --format json`
+- **Example:** `devai sense run decision_record_integrity --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/decision_record_integrity.md`](../../../law/policy/sensor-notes/decision_record_integrity.md)
 - **Related workflow:** `sense`
 
@@ -1291,8 +1291,8 @@ sources or renderer, never the bytes between markers.
 
 - **Stable ID:** decision_citation_resolution
 - **User-facing label:** Decision Citation Resolution
-- **Purpose:** Run the registered `decision_citation_resolution` observation through `packages/cli/src/commands/sense/governance-ledger.ts` and emit its canonical reading.
-- **Population or projection:** Emitter `packages/cli/src/commands/sense/governance-ledger.ts`; standing diagnostic-only; preset membership `sweep`; registry tiers `SWEEP`.
+- **Purpose:** Run the registered `decision_citation_resolution` observation through `packages/loop/src/governance-ledger/index.ts` and emit its canonical reading.
+- **Population or projection:** Emitter `packages/loop/src/governance-ledger/index.ts`; standing diagnostic-only; preset membership `sweep`; registry tiers `SWEEP`.
 - **Prerequisites:** The registered emitter and a readable repository root. No additional capability is declared by the registry.
 - **Required external tools:** Not applicable: no external tool is declared by the canonical sensor entry; the emitter still performs its own preflight.
 - **Accepted inputs:** `sense run decision_citation_resolution`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and no role declaration for the resolved read-only kind.
@@ -1305,7 +1305,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `decision_citation_resolution` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run decision_citation_resolution --repo-root . --dry-run --format json`
+- **Example:** `devai sense run decision_citation_resolution --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/decision_citation_resolution.md`](../../../law/policy/sensor-notes/decision_citation_resolution.md)
 - **Related workflow:** `sense`
 
@@ -1315,8 +1315,8 @@ sources or renderer, never the bytes between markers.
 
 - **Stable ID:** archive_immutability
 - **User-facing label:** Archive Immutability
-- **Purpose:** Run the registered `archive_immutability` observation through `packages/cli/src/commands/sense/governance-ledger.ts` and emit its canonical reading.
-- **Population or projection:** Emitter `packages/cli/src/commands/sense/governance-ledger.ts`; standing diagnostic-only; preset membership `sweep`; registry tiers `SWEEP`.
+- **Purpose:** Run the registered `archive_immutability` observation through `packages/loop/src/governance-ledger/index.ts` and emit its canonical reading.
+- **Population or projection:** Emitter `packages/loop/src/governance-ledger/index.ts`; standing diagnostic-only; preset membership `sweep`; registry tiers `SWEEP`.
 - **Prerequisites:** The registered emitter and a readable repository root. No additional capability is declared by the registry.
 - **Required external tools:** Not applicable: no external tool is declared by the canonical sensor entry; the emitter still performs its own preflight.
 - **Accepted inputs:** `sense run archive_immutability`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and no role declaration for the resolved read-only kind.
@@ -1329,7 +1329,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `archive_immutability` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run archive_immutability --repo-root . --dry-run --format json`
+- **Example:** `devai sense run archive_immutability --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/archive_immutability.md`](../../../law/policy/sensor-notes/archive_immutability.md)
 - **Related workflow:** `sense`
 
@@ -1339,8 +1339,8 @@ sources or renderer, never the bytes between markers.
 
 - **Stable ID:** round_record_integrity
 - **User-facing label:** Round Record Integrity
-- **Purpose:** Run the registered `round_record_integrity` observation through `packages/cli/src/commands/sense/governance-ledger.ts` and emit its canonical reading.
-- **Population or projection:** Emitter `packages/cli/src/commands/sense/governance-ledger.ts`; standing diagnostic-only; preset membership `sweep`; registry tiers `SWEEP`.
+- **Purpose:** Run the registered `round_record_integrity` observation through `packages/loop/src/governance-ledger/index.ts` and emit its canonical reading.
+- **Population or projection:** Emitter `packages/loop/src/governance-ledger/index.ts`; standing diagnostic-only; preset membership `sweep`; registry tiers `SWEEP`.
 - **Prerequisites:** The registered emitter and a readable repository root. No additional capability is declared by the registry.
 - **Required external tools:** Not applicable: no external tool is declared by the canonical sensor entry; the emitter still performs its own preflight.
 - **Accepted inputs:** `sense run round_record_integrity`, `--repo-root <path>`, optional sensor-specific JSON through `--input`, `--dry-run`, and no role declaration for the resolved read-only kind.
@@ -1353,7 +1353,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `round_record_integrity` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run round_record_integrity --repo-root . --dry-run --format json`
+- **Example:** `devai sense run round_record_integrity --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/round_record_integrity.md`](../../../law/policy/sensor-notes/round_record_integrity.md)
 - **Related workflow:** `sense`
 
@@ -1377,7 +1377,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `docs_drift` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run docs_drift --repo-root . --dry-run --format json`
+- **Example:** `devai sense run docs_drift --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/docs_drift.md`](../../../law/policy/sensor-notes/docs_drift.md)
 - **Related workflow:** `sense`
 
@@ -1401,7 +1401,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `site_drift` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run site_drift --repo-root . --dry-run --format json`
+- **Example:** `devai sense run site_drift --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/site_drift.md`](../../../law/policy/sensor-notes/site_drift.md)
 - **Related workflow:** `sense`
 
@@ -1425,7 +1425,7 @@ sources or renderer, never the bytes between markers.
 - **When to use:** Use when the `action_effect_inference` observation and its declared standing are required.
 - **When not to use:** Do not use as a substitute for an acceptance suite, a different kind, or authority beyond `read`.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai sense run action_effect_inference --repo-root . --dry-run --format json`
+- **Example:** `devai sense run action_effect_inference --repo-root . --dry-run --format json`
 - **Canonical source:** [`law/policy/sensor-registry.json`](../../../law/policy/sensor-registry.json#/entries); [`law/policy/sensor-notes/action_effect_inference.md`](../../../law/policy/sensor-notes/action_effect_inference.md)
 - **Related workflow:** `sense`
 

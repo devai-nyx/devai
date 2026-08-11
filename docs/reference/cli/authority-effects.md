@@ -31,7 +31,7 @@ operation.
 
 The renderer derives the complete human-role population from the
 [action-registry schema](../../../law/schemas/action-registry.schema.json) and joins it to
-role/path rules in the [authority policy](../../../law/policy/authority-policy.json). The generated
+role/effect rules in the [action registry](../../../law/policy/action-registry.json). The generated
 entries own labels, exact projections, prerequisites, inputs/defaults, outputs, effects/consent,
 cost, use guidance, non-pass behavior, examples, and source links.
 
@@ -49,13 +49,13 @@ and commit boundary.
 
 - **Stable ID:** owner
 - **User-facing label:** Owner
-- **Purpose:** Identify the human `owner` discipline; only matching authority-policy rules grant bounded actions and paths.
-- **Population or projection:** 21 matching authority rules; selectors `product`, `product/**`, `law/glossary`, `law/glossary/**`, `.devai/state/**`, `.devai/state`, `.devai/worktrees/**`, `.devai/worktrees`, `record/derived/inventory/**`, `record/proofs/**`, `packages/**`, `scripts/**`, `.github/**`, `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `tsconfig*.json`, `vitest*.ts`, `eslint.config.*`, `.prettier*`, `remote:sensor-runtime`; governed actions `init apply owner`, `init apply architect`, `round plan`, `round seal`, `check`, `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `release check`, `release drift`, `release verify`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense record`, `sense run`, `task escalate`, `task finish`, `task pause`, `task queue add`, `task queue complete`, `task resume`, `task start`.
-- **Prerequisites:** An invocation-scoped `--as-role owner` declaration or live repository-bound authority session, plus a matching action/path rule.
+- **Purpose:** Identify the human `owner` discipline; only matching action authority contracts permit an invocation.
+- **Population or projection:** 11 matching action contracts; effects `harness-write`, `local-write`, `remote-write`; actions `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `init apply owner`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense record`, `sense run`.
+- **Prerequisites:** An invocation-scoped `--as-role owner` declaration or live repository-bound authority session, plus a matching action contract.
 - **Required external tools:** Not applicable: a role is a governance discipline, not an executor or adapter.
 - **Accepted inputs:** `--as-role owner` only on a non-read action whose canonical authority contract allowlists this role.
 - **Defaults:** No role is inferred from executor kind, model capability, environment, or prior invocation.
-- **Output contract:** The resolved authority evidence preserves the initiating human role and the exact matched rule.
+- **Output contract:** The resolved authority evidence preserves the initiating human role and exact action contract.
 - **Verdict semantics:** A missing declaration, disallowed role, selector mismatch, or stale session refuses before effects.
 - **Declared effect:** Not applicable: role discipline grants no effect by itself.
 - **Consent flags:** Not applicable: explicit effect-specific consent remains independently required.
@@ -63,8 +63,8 @@ and commit boundary.
 - **When to use:** Use `owner` only when operating within that discipline's canonical path and action authority.
 - **When not to use:** Do not use a role declaration to widen executor, model, mutation, publication, or path authority.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
-- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/authority-policy.json`](../../../law/policy/authority-policy.json#/rules)
+- **Example:** `devai round run --round R-1000 --repo-root . --as-role owner --write --format json`
+- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/action-registry.json`](../../../law/policy/action-registry.json#/entries/*/authority_contract)
 - **Related workflow:** `round`
 
 <!-- devai:generated-entry category="roles" id="architect" -->
@@ -73,13 +73,13 @@ and commit boundary.
 
 - **Stable ID:** architect
 - **User-facing label:** Architect
-- **Purpose:** Identify the human `architect` discipline; only matching authority-policy rules grant bounded actions and paths.
-- **Population or projection:** 55 matching authority rules; selectors `law/glossary`, `law/glossary/**`, `docs`, `docs/**`, `law`, `law/**`, `.devai/local`, `.devai/local/rounds`, `.devai/local/rounds/*`, `.devai/local/rounds/**`, `.devai/state/**`, `.devai/state`, `.devai/worktrees/**`, `.devai/worktrees`, `record/derived/inventory/**`, `record/proofs/**`, `.devai/config/**`, `.devai/config/post-merge-host-adapter.json`, `.devai/state/init-introspection.json`, `.devai`, `.devai/config`, `.devai/constitution.md`, `.devai/pin`, `.devai/pin/constitution.md`, `.devai/pin/versions.json`, `.gitignore`, `packages/**`, `scripts/**`, `.github/**`, `.github`, `.git/hooks`, `.git/hooks/**`, `.git/devai`, `.git/devai/**`, `.husky`, `.husky/**`, `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `tsconfig*.json`, `vitest*.ts`, `eslint.config.*`, `.prettier*`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `SECURITY.md`, `CHANGELOG.md`, `.changeset/**`, `remote:sensor-runtime`; governed actions `init apply architect`, `init apply owner`, `round plan`, `round seal`, `check`, `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `release check`, `release drift`, `release verify`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense record`, `sense run`, `task escalate`, `task finish`, `task pause`, `task queue add`, `task queue complete`, `task resume`, `task start`, `init apply harness`, `init upgrade`.
-- **Prerequisites:** An invocation-scoped `--as-role architect` declaration or live repository-bound authority session, plus a matching action/path rule.
+- **Purpose:** Identify the human `architect` discipline; only matching action authority contracts permit an invocation.
+- **Population or projection:** 18 matching action contracts; effects `harness-write`, `local-write`, `remote-write`; actions `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `init apply architect`, `init apply harness`, `init bind`, `release check`, `release drift`, `release verify`, `round close`, `round gap create`, `round gap resolve`, `round plan`, `round run`, `round seal`, `sense record`, `sense run`.
+- **Prerequisites:** An invocation-scoped `--as-role architect` declaration or live repository-bound authority session, plus a matching action contract.
 - **Required external tools:** Not applicable: a role is a governance discipline, not an executor or adapter.
 - **Accepted inputs:** `--as-role architect` only on a non-read action whose canonical authority contract allowlists this role.
 - **Defaults:** No role is inferred from executor kind, model capability, environment, or prior invocation.
-- **Output contract:** The resolved authority evidence preserves the initiating human role and the exact matched rule.
+- **Output contract:** The resolved authority evidence preserves the initiating human role and exact action contract.
 - **Verdict semantics:** A missing declaration, disallowed role, selector mismatch, or stale session refuses before effects.
 - **Declared effect:** Not applicable: role discipline grants no effect by itself.
 - **Consent flags:** Not applicable: explicit effect-specific consent remains independently required.
@@ -87,8 +87,8 @@ and commit boundary.
 - **When to use:** Use `architect` only when operating within that discipline's canonical path and action authority.
 - **When not to use:** Do not use a role declaration to widen executor, model, mutation, publication, or path authority.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role architect --write --format json`
-- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/authority-policy.json`](../../../law/policy/authority-policy.json#/rules)
+- **Example:** `devai round run --round R-1000 --repo-root . --as-role architect --write --format json`
+- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/action-registry.json`](../../../law/policy/action-registry.json#/entries/*/authority_contract)
 - **Related workflow:** `round`
 
 <!-- devai:generated-entry category="roles" id="inspector" -->
@@ -97,13 +97,13 @@ and commit boundary.
 
 - **Stable ID:** inspector
 - **User-facing label:** Inspector
-- **Purpose:** Identify the human `inspector` discipline; only matching authority-policy rules grant bounded actions and paths.
-- **Population or projection:** 19 matching authority rules; selectors `.devai/state/**`, `.devai/state`, `.devai/worktrees/**`, `.devai/worktrees`, `record/derived/inventory/**`, `record/proofs/**`, `git-ref:refs/**`, `db:**`, `packages/**`, `scripts/**`, `.github/**`, `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `tsconfig*.json`, `vitest*.ts`, `eslint.config.*`, `.prettier*`, `remote:sensor-runtime`; governed actions `check`, `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `release check`, `release drift`, `release verify`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense record`, `sense run`, `task escalate`, `task finish`, `task pause`, `task queue add`, `task queue complete`, `task resume`, `task start`.
-- **Prerequisites:** An invocation-scoped `--as-role inspector` declaration or live repository-bound authority session, plus a matching action/path rule.
+- **Purpose:** Identify the human `inspector` discipline; only matching action authority contracts permit an invocation.
+- **Population or projection:** 11 matching action contracts; effects `local-write`, `harness-write`, `remote-write`; actions `check`, `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense record`, `sense run`.
+- **Prerequisites:** An invocation-scoped `--as-role inspector` declaration or live repository-bound authority session, plus a matching action contract.
 - **Required external tools:** Not applicable: a role is a governance discipline, not an executor or adapter.
 - **Accepted inputs:** `--as-role inspector` only on a non-read action whose canonical authority contract allowlists this role.
 - **Defaults:** No role is inferred from executor kind, model capability, environment, or prior invocation.
-- **Output contract:** The resolved authority evidence preserves the initiating human role and the exact matched rule.
+- **Output contract:** The resolved authority evidence preserves the initiating human role and exact action contract.
 - **Verdict semantics:** A missing declaration, disallowed role, selector mismatch, or stale session refuses before effects.
 - **Declared effect:** Not applicable: role discipline grants no effect by itself.
 - **Consent flags:** Not applicable: explicit effect-specific consent remains independently required.
@@ -111,8 +111,8 @@ and commit boundary.
 - **When to use:** Use `inspector` only when operating within that discipline's canonical path and action authority.
 - **When not to use:** Do not use a role declaration to widen executor, model, mutation, publication, or path authority.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role inspector --write --format json`
-- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/authority-policy.json`](../../../law/policy/authority-policy.json#/rules)
+- **Example:** `devai round run --round R-1000 --repo-root . --as-role inspector --write --format json`
+- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/action-registry.json`](../../../law/policy/action-registry.json#/entries/*/authority_contract)
 - **Related workflow:** `round`
 
 <!-- devai:generated-entry category="roles" id="engineer" -->
@@ -121,13 +121,13 @@ and commit boundary.
 
 - **Stable ID:** engineer
 - **User-facing label:** Engineer
-- **Purpose:** Identify the human `engineer` discipline; only matching authority-policy rules grant bounded actions and paths.
-- **Population or projection:** 22 matching authority rules; selectors `.devai/state/**`, `.devai/state`, `.devai/worktrees/**`, `.devai/worktrees`, `record/derived/inventory/**`, `record/proofs/**`, `git-ref:refs/**`, `db:**`, `packages/**`, `scripts/**`, `.github/**`, `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `tsconfig*.json`, `vitest*.ts`, `eslint.config.*`, `.prettier*`, `remote:sensor-runtime`; governed actions `check`, `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `release check`, `release drift`, `release verify`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense record`, `sense run`, `task escalate`, `task finish`, `task pause`, `task queue add`, `task queue complete`, `task resume`, `task start`, `sense migrate`.
-- **Prerequisites:** An invocation-scoped `--as-role engineer` declaration or live repository-bound authority session, plus a matching action/path rule.
+- **Purpose:** Identify the human `engineer` discipline; only matching action authority contracts permit an invocation.
+- **Population or projection:** 18 matching action contracts; effects `harness-write`, `local-write`, `remote-write`; actions `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense migrate`, `sense record`, `sense run`, `task escalate`, `task finish`, `task pause`, `task queue add`, `task queue complete`, `task resume`, `task start`.
+- **Prerequisites:** An invocation-scoped `--as-role engineer` declaration or live repository-bound authority session, plus a matching action contract.
 - **Required external tools:** Not applicable: a role is a governance discipline, not an executor or adapter.
 - **Accepted inputs:** `--as-role engineer` only on a non-read action whose canonical authority contract allowlists this role.
 - **Defaults:** No role is inferred from executor kind, model capability, environment, or prior invocation.
-- **Output contract:** The resolved authority evidence preserves the initiating human role and the exact matched rule.
+- **Output contract:** The resolved authority evidence preserves the initiating human role and exact action contract.
 - **Verdict semantics:** A missing declaration, disallowed role, selector mismatch, or stale session refuses before effects.
 - **Declared effect:** Not applicable: role discipline grants no effect by itself.
 - **Consent flags:** Not applicable: explicit effect-specific consent remains independently required.
@@ -135,8 +135,8 @@ and commit boundary.
 - **When to use:** Use `engineer` only when operating within that discipline's canonical path and action authority.
 - **When not to use:** Do not use a role declaration to widen executor, model, mutation, publication, or path authority.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role engineer --write --format json`
-- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/authority-policy.json`](../../../law/policy/authority-policy.json#/rules)
+- **Example:** `devai round run --round R-1000 --repo-root . --as-role engineer --write --format json`
+- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/action-registry.json`](../../../law/policy/action-registry.json#/entries/*/authority_contract)
 - **Related workflow:** `round`
 
 <!-- devai:generated-entry category="roles" id="auditor" -->
@@ -145,13 +145,13 @@ and commit boundary.
 
 - **Stable ID:** auditor
 - **User-facing label:** Auditor
-- **Purpose:** Identify the human `auditor` discipline; only matching authority-policy rules grant bounded actions and paths.
-- **Population or projection:** 20 matching authority rules; selectors `.devai/local`, `.devai/local/rounds`, `.devai/local/rounds/*`, `.devai/state/**`, `.devai/state`, `.devai/worktrees/**`, `.devai/worktrees`, `record/derived/inventory/**`, `record/proofs/**`, `packages/**`, `scripts/**`, `.github/**`, `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `tsconfig*.json`, `vitest*.ts`, `eslint.config.*`, `.prettier*`, `remote:sensor-runtime`; governed actions `init apply architect`, `round plan`, `round seal`, `check`, `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `release check`, `release drift`, `release verify`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense record`, `sense run`, `task escalate`, `task finish`, `task pause`, `task queue add`, `task queue complete`, `task resume`, `task start`.
-- **Prerequisites:** An invocation-scoped `--as-role auditor` declaration or live repository-bound authority session, plus a matching action/path rule.
+- **Purpose:** Identify the human `auditor` discipline; only matching action authority contracts permit an invocation.
+- **Population or projection:** 10 matching action contracts; effects `harness-write`, `remote-write`; actions `evidence collect`, `evidence record`, `evidence redact`, `evidence render`, `round close`, `round gap create`, `round gap resolve`, `round run`, `sense record`, `sense run`.
+- **Prerequisites:** An invocation-scoped `--as-role auditor` declaration or live repository-bound authority session, plus a matching action contract.
 - **Required external tools:** Not applicable: a role is a governance discipline, not an executor or adapter.
 - **Accepted inputs:** `--as-role auditor` only on a non-read action whose canonical authority contract allowlists this role.
 - **Defaults:** No role is inferred from executor kind, model capability, environment, or prior invocation.
-- **Output contract:** The resolved authority evidence preserves the initiating human role and the exact matched rule.
+- **Output contract:** The resolved authority evidence preserves the initiating human role and exact action contract.
 - **Verdict semantics:** A missing declaration, disallowed role, selector mismatch, or stale session refuses before effects.
 - **Declared effect:** Not applicable: role discipline grants no effect by itself.
 - **Consent flags:** Not applicable: explicit effect-specific consent remains independently required.
@@ -159,16 +159,16 @@ and commit boundary.
 - **When to use:** Use `auditor` only when operating within that discipline's canonical path and action authority.
 - **When not to use:** Do not use a role declaration to widen executor, model, mutation, publication, or path authority.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai round run --round R-1000 --repo-root . --as-role auditor --write --format json`
-- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/authority-policy.json`](../../../law/policy/authority-policy.json#/rules)
+- **Example:** `devai round run --round R-1000 --repo-root . --as-role auditor --write --format json`
+- **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/$defs/authorityContract/properties/subject/oneOf/1/properties/allowed_roles/items/enum); [`law/policy/action-registry.json`](../../../law/policy/action-registry.json#/entries/*/authority_contract)
 - **Related workflow:** `round`
 
 <!-- devai:generated-reference:end category="roles" -->
 
 ## Path authority
 
-Role authority is positive and path-specific. The constitution and resolved authority policy own
-the mapping. In practical terms:
+Role authority is positive and target-specific. The action contract and runtime target classifier
+own the mapping. In practical terms:
 
 - business reference work stays with its business authority;
 - engineering law, governed round intent, and human documentation stay with engineering-reference
@@ -180,9 +180,10 @@ the mapping. In practical terms:
   human role editing them directly.
 
 This conceptual map is not an access-control list. Always use the exact
-[authority policy](../../../law/policy/authority-policy.json) and action contract for the candidate.
-An apparently adjacent directory, generated materialization, or host-tool file can have a different
-owner or machine-only boundary.
+[action contract](../../../law/policy/action-registry.json) and current
+[runtime authority policy](../../../packages/cli/src/authority/policy.ts). An apparently adjacent
+directory, generated materialization, or host-tool file can have a different owner or machine-only
+boundary.
 
 ## Canonical effect descriptors
 
@@ -214,7 +215,7 @@ per-action assignment in the [action registry](../../../law/policy/action-regist
 - **When to use:** Use only when `read` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/properties/entries/items/properties/effect/enum); [`law/policy/action-registry.json`](../../../law/policy/action-registry.json#/entries)
 - **Related workflow:** `check`
 
@@ -238,7 +239,7 @@ per-action assignment in the [action registry](../../../law/policy/action-regist
 - **When to use:** Use only when `harness-write` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/properties/entries/items/properties/effect/enum); [`law/policy/action-registry.json`](../../../law/policy/action-registry.json#/entries)
 - **Related workflow:** `check`
 
@@ -262,7 +263,7 @@ per-action assignment in the [action registry](../../../law/policy/action-regist
 - **When to use:** Use only when `local-write` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/properties/entries/items/properties/effect/enum); [`law/policy/action-registry.json`](../../../law/policy/action-registry.json#/entries)
 - **Related workflow:** `check`
 
@@ -286,7 +287,7 @@ per-action assignment in the [action registry](../../../law/policy/action-regist
 - **When to use:** Use only when `remote-write` exactly describes the canonical record.
 - **When not to use:** Do not use as a synonym for another canonical value or as an authority grant.
 - **Non-pass semantics:** `fail` is a negative finding; `error` is an execution or producer defect; `unknown` never passes; `review` requires human disposition; `skipped` reports an unexecuted member; `N/A` is valid only when the governing contract explicitly permits it.
-- **New-grammar example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
+- **Example:** `devai check --suite standard --repo-root . --as-role inspector --write --format json`
 - **Canonical source:** [`law/schemas/action-registry.schema.json`](../../../law/schemas/action-registry.schema.json#/properties/entries/items/properties/effect/enum); [`law/policy/action-registry.json`](../../../law/policy/action-registry.json#/entries)
 - **Related workflow:** `check`
 
@@ -394,5 +395,5 @@ A policy allow proves only that one resolved invocation may attempt its bounded 
 not prove the command's verdict, readiness, round closure, release eligibility, publication
 success, deployment, or evidence promotion.
 
-Canonical sources: [authority policy](../../../law/policy/authority-policy.json),
-[action registry](../../../law/policy/action-registry.json).
+Canonical sources: [action registry](../../../law/policy/action-registry.json),
+[runtime authority policy](../../../packages/cli/src/authority/policy.ts).

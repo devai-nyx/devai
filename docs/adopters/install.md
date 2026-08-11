@@ -5,7 +5,6 @@ version selected by your maintainers; do not rely on a moving tag.
 
 ```bash
 pnpm add --save-dev --save-exact @devai-nyx/cli@<exact-rc-version>
-pnpm exec devai --version
 pnpm exec devai catalog actions --format json
 ```
 
@@ -59,5 +58,5 @@ Inspect the installed candidate's binding contract before use:
 pnpm exec devai init bind --help
 ```
 
-Binding is explicit and has no legacy alias. Use only options reported by the installed CLI.
+Binding is explicit. Use only options reported by the installed CLI.
 Keep the package version, committed configuration, and recorded evidence under ordinary review.

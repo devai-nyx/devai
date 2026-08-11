@@ -24,7 +24,7 @@
   "scripts": {
     "build": "tsc -b",
     "clean": "tsc -b --clean",
-    "test": "vitest run tests"
+    "test": "pnpm --dir ../.. run test:spec"
   },
   "dependencies": {
     "@devai-nyx/authority": "workspace:*",

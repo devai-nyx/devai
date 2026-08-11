@@ -32,7 +32,7 @@ interface GlossaryRecord {
 
 /**
  * For each glossary entry, count how many source files mention its term
- * (case-insensitive substring match across .ts and .md). Phase-3 minimum:
+ * (case-insensitive substring match across .ts and .md):
  * returns the coverage map so downstream scoring can flag terms that have
  * zero usage (potentially dead concepts).
  *

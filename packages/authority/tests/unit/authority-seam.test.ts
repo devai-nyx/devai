@@ -33,7 +33,7 @@ const digest = (character: string): string => character.repeat(64);
 const provenance: AuthorityPolicyProvenance = {
   policy_id: 'devai-authority',
   policy_version: '1.0.0',
-  repository_id: 'devai-self',
+  repository_id: 'example-repository',
   framework_package: { name: '@devai-nyx/cli', version: '0.6.0' },
   constitution: { version: '0.5.0', digest_sha256: digest('d') },
   source_policy: {
@@ -43,7 +43,7 @@ const provenance: AuthorityPolicyProvenance = {
   },
   additive_extensions: [
     {
-      extension_id: 'devai-self-authority',
+      extension_id: 'example-authority',
       extension_version: '1.0.0',
       digest_sha256: digest('c'),
     },
@@ -64,7 +64,7 @@ const owner = declareHumanPrincipal({
 
 const baseRequest: MutationRequest = {
   request_id: 'request-1',
-  repository_id: 'devai-self',
+  repository_id: 'example-repository',
   declared_principal: owner,
   action_id: 'test action',
   dry_run: false,
@@ -153,7 +153,7 @@ function runtime(
 const fsTarget: ResourceTarget = {
   kind: 'fs',
   id: 'fs:README.md',
-  repository_id: 'devai-self',
+  repository_id: 'example-repository',
   canonical_relative_path: 'README.md',
   operation: 'update',
 };
@@ -216,7 +216,7 @@ describe('authority decision seam', () => {
         origin: {
           kind: 'ci-run',
           provider: 'github-actions',
-          repository_id: 'devai-self',
+          repository_id: 'example-repository',
           workflow_id: 'release',
           run_id: '42',
           event: 'push',
@@ -385,7 +385,7 @@ describe('authority decision seam', () => {
       {
         kind: 'git-ref',
         id: 'git:refs/heads/codex/r19',
-        repository_id: 'devai-self',
+        repository_id: 'example-repository',
         ref: 'refs/heads/codex/r19',
         operation: 'update',
       },
@@ -568,7 +568,7 @@ describe('authority decision seam', () => {
       selectors: [
         {
           kind: 'fs',
-          repository_id: 'devai-self',
+          repository_id: 'example-repository',
           canonical_relative_path_glob: 'packages/core/**',
           operations: ['update'],
         },
@@ -621,7 +621,7 @@ describe('authority decision seam', () => {
       selectors: [
         {
           kind: 'fs',
-          repository_id: 'devai-self',
+          repository_id: 'example-repository',
           canonical_relative_path_glob: 'packages/core/src/authority/**',
           operations: ['create', 'update'],
         },
@@ -661,7 +661,7 @@ describe('authority decision seam', () => {
       selectors: [
         {
           kind: 'fs',
-          repository_id: 'devai-self',
+          repository_id: 'example-repository',
           canonical_relative_path_glob: 'packages/**',
           operations: [],
         },
@@ -747,7 +747,7 @@ describe('authority decision seam', () => {
         selectors: [
           {
             kind: 'fs',
-            repository_id: 'devai-self',
+            repository_id: 'example-repository',
             canonical_relative_path_glob: 'packages/core/src/authority/**',
             operations: ['update'],
           },

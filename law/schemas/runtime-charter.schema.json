@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/runtime-charter.schema.json",
   "title": "Runtime Probe Charter",
-  "description": "Charter that scopes a runtime probe run. The charter declares mission, target environment, in-scope invariants, allowed credentials, the probe sequence, expected evidence, and side-effect policy. Consumed by `devai sense runtime api / runtime-auth / runtime-data` (Phase 11.A, D-39).",
+  "description": "Charter that scopes a runtime probe run. It declares the mission, target environment, in-scope invariants, allowed credentials, probe sequence, expected evidence, and side-effect policy consumed through `devai sense run`.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "id", "kind", "mission", "target", "probes"],

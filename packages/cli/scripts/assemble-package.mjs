@@ -133,7 +133,7 @@ try {
     ],
     resolve: {
       alias: {
-        '#core-compat': join(distRoot, 'core-compat.js'),
+        '#runtime-core': join(distRoot, 'runtime-core.js'),
       },
     },
     treeshake: true,
@@ -142,6 +142,7 @@ try {
     file: bundlePath,
     format: 'esm',
     codeSplitting: false,
+    comments: false,
     sourcemap: false,
   });
   const reachableSources = output.output
@@ -179,11 +180,11 @@ try {
 
   const packagedSchemas = schemaClosure(schemaRoots);
   copyFiles(join(repositoryRoot, 'law/schemas'), join(runtimeIndex, 'schemas'), packagedSchemas);
-  copyFiles(
-    join(repositoryRoot, 'law/policy'),
-    runtimeIndex,
-    ['sensor-registry.json', 'round-execution.json', 'sense-presets.json'],
-  );
+  copyFiles(join(repositoryRoot, 'law/policy'), runtimeIndex, [
+    'sensor-registry.json',
+    'round-execution.json',
+    'sense-presets.json',
+  ]);
 
   mkdirSync(join(distRoot, 'law'), { recursive: true });
   cpSync(join(repositoryRoot, 'law/constitution.md'), join(distRoot, 'law/constitution.md'));

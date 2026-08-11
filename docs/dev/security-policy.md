@@ -9,8 +9,7 @@ evidence record.
 
 ## Supported version
 
-Security fixes target the current v1.0 release candidate. Removed packages and actions receive no
-compatibility shim or backport promise.
+Security fixes target the current v1.0 release candidate.
 
 ## Security boundary
 

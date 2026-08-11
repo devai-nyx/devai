@@ -5,4 +5,3 @@ export * from './release/index.js';
 export * from './rgr/index.js';
 export * from './round-lifecycle/index.js';
 export * from './scorecard/index.js';
-export * from './sensor-inputs/index.js';

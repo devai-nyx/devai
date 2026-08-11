@@ -9,11 +9,8 @@ import { Update__classEntity__Dto } from '../dto/update-__kebabEntity__.dto';
  * scaffolded module compiles + runs end-to-end without a database.
  * Adopters wire their preferred data layer (TypeORM, stynx-data,
  * Drizzle, raw pg, etc.) by replacing the constructor body and
- * the four methods. Per D-59 the scaffolder is deterministic and
- * the output is template-shaped, not production-ready.
- *
- * Phase 22.E (D-A-15) — replaced the pre-22.E data-layer-bound
- * pattern that baked TypeORM into the scaffolded output.
+ * the four methods. The scaffolder is deterministic and the
+ * output is template-shaped, not production-ready.
  */
 @Injectable()
 export class __classEntity__Service {

@@ -31,7 +31,7 @@ process.env['DEVAI_V8_SUBPROCESS_COVERAGE_DIR'] = resolve('scratch/coverage/rc-c
 
 export default defineConfig({
   resolve: {
-    alias: { '#core-compat': resolve('packages/cli/src/core-compat.ts') },
+    alias: { '#runtime-core': resolve('packages/cli/src/runtime-core.ts') },
   },
   test: {
     name: 'RC coverage',

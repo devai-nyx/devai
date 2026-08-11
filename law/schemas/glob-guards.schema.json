@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/glob-guards.schema.json",
   "title": "Glob Guards Registry",
-  "description": "D-124 (governance-roadmap item 7). Adopter-declared glob patterns that MUST continue matching at least min_matches files. Catches the class of bug where a CI trigger path, a generator's input directory, or a validation-loop target silently stops matching anything after a rename, restructure, or format migration, while whatever consumed it keeps reporting green. The default registry lives at .devai/config/glob-guards.json; absent or empty is valid (nothing declared, nothing to check).",
+  "description": "Adopter-declared glob patterns that MUST continue matching at least min_matches files. This catches CI triggers, generator inputs, and validation targets that silently stop matching after a rename or restructure. The default registry lives at .devai/config/glob-guards.json; absent or empty is valid.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "guards"],

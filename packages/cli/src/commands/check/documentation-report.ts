@@ -96,7 +96,10 @@ function selectionModes(taskSchema: JsonRecord): readonly string[] {
   const selection = defs['agentSelection'] as JsonRecord;
   const properties = selection['properties'] as JsonRecord;
   const mode = properties['mode'] as JsonRecord;
-  return strings(mode['enum'], 'CHECK_DESCRIPTOR_SELECTION_MODES_INVALID');
+  if (typeof mode['const'] !== 'string') {
+    throw new Error('CHECK_DESCRIPTOR_SELECTION_MODES_INVALID: expected exact const');
+  }
+  return [mode['const']];
 }
 
 function categoryPopulation(repoRoot: string, categoryId: string): readonly string[] {

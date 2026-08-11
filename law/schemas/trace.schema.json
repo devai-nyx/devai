@@ -97,7 +97,7 @@
                 "target_type": {
                   "enum": ["test", "config-attestation", "script"],
                   "default": "test",
-                  "description": "D-123 (item 10): what kind of evidence `path` actually is. 'test' (default, back-compat: absent means test) — an executable test the named `suite`'s runner discovers and asserts against; the strongest evidence class. 'config-attestation' — a config file whose presence/content stands in for active verification (e.g. a policy file consumed at runtime, not exercised by a test), weaker evidence than an executing assertion. 'script' — an executable script that is not part of a test suite's discovery (a standalone verifier). `trace-resolve` tracks attestation-only invariants separately so trace completeness doesn't overstate how many invariants are actively test-verified."
+                  "description": "The evidence represented by `path`. 'test' is an executable test discovered by the named suite and is selected when omitted. 'config-attestation' is a configuration file consumed at runtime but not exercised by a test. 'script' is an executable verifier outside test discovery. Attestation-only invariants remain distinct so trace completeness does not overstate active verification."
                 },
                 "names": {
                   "type": "array",

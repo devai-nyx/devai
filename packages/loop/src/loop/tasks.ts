@@ -122,7 +122,7 @@ export function loadTask(repoRoot: string, id: string): TaskRecord {
   throw new Error(classification.code);
 }
 
-/** List every stored record classification without making legacy data executable. */
+/** List every stored record classification without making unsupported data executable. */
 export function listTaskRecords(repoRoot: string): readonly TaskRecordClassification[] {
   const dir = tasksDir(repoRoot);
   if (!existsSync(dir)) return [];

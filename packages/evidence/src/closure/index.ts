@@ -54,11 +54,10 @@ export interface PhaseClosureDraft {
   readonly validation_criteria: readonly ClosureCriterion[];
   readonly closed_at?: string;
   readonly supersedes?: string;
-  // Shipped-state fields stay optional in the schema for immutable historical
-  // records; the successor production verb requires both on every new closure.
+  // Shipped-state fields stay optional for immutable records; current closure
+  // writes require both fields.
   readonly merged_as?: string;
-  readonly release_disposition?:
-    'published' | 'changeset-pending' | 'none-needed' | 'missing';
+  readonly release_disposition?: 'published' | 'changeset-pending' | 'none-needed' | 'missing';
   readonly notes?: string;
 }
 

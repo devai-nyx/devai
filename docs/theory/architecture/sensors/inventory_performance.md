@@ -2,7 +2,7 @@
 
 ## Property semantics
 
-**T7 Performance and Efficiency** (Constitution Article 5) for F4 (Inventory): "how long do inventory walks take?" Concretely: the per-kind execution time of `sense-inventory-*` runs, aggregated from persisted SensorReading `duration_ms` fields. The last unreachable cell from D-77's carry-forward register (Phase 26-28 substrate-expansion trilogy residual).
+**T7 Performance and Efficiency** (Constitution Article 5) for F4 (Inventory): "how long do inventory walks take?" Concretely: the per-kind execution time of inventory readings, aggregated from persisted SensorReading `duration_ms` fields.
 
 ## Operational definition
 

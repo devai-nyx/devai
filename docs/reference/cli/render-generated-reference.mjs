@@ -99,7 +99,7 @@ const FIELD_LABELS = Object.freeze({
   when_to_use: 'When to use',
   when_not_to_use: 'When not to use',
   failure_unknown_review_skipped_na_semantics: 'Non-pass semantics',
-  new_grammar_example: 'New-grammar example',
+  example: 'Example',
   canonical_source_link: 'Canonical source',
   related_workflow: 'Related workflow',
 });
@@ -112,7 +112,6 @@ if (JSON.stringify(Object.keys(FIELD_LABELS)) !== JSON.stringify(SEMANTIC_FIELDS
 
 const actionRegistry = json('law/policy/action-registry.json');
 const actions = objects(actionRegistry.entries, 'DOCS_ACTION_REGISTRY_INVALID');
-const authorityPolicy = json('law/policy/authority-policy.json');
 const keptAction = (id) => {
   const matches = actions.filter((entry) => entry.action_id === id);
   if (matches.length !== 1) throw new Error(`DOCS_ACTION_ROUTE_INVALID:${id}:${matches.length}`);
@@ -289,7 +288,7 @@ function renderCheckSuites(policy) {
             ? 'Do not treat a passing report as publication, release, or deployment authority.'
             : 'Do not use to omit a stricter population required by a round, candidate, or close control.',
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-        new_grammar_example: code(
+        example: code(
           `devai check --suite ${suite.name} --repo-root . --as-role inspector --write --format json`,
         ),
         canonical_source_link: sourceRefs(policy),
@@ -352,7 +351,7 @@ function renderSensePresets(policy) {
         when_not_to_use:
           'Do not use as an acceptance suite, as implicit persistence, or to omit a required selected member.',
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-        new_grammar_example: code(
+        example: code(
           `devai sense run --preset ${preset.name}${preset.round_required === true ? ' --round R-1000' : ''} --repo-root .${effect === 'read' ? '' : ` --as-role owner${dryRunConsentArgs(effect)}`} --dry-run --format json`,
         ),
         canonical_source_link: sourceRefs(policy),
@@ -395,7 +394,7 @@ function renderNamedPopulation(policy, source, title, actionId, purposeNoun, exa
         when_to_use: `Use when the named ${purposeNoun} is the exact requested scope.`,
         when_not_to_use: `Do not treat it as a check suite, sense preset, or authority grant.`,
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-        new_grammar_example: code(example(value.name)),
+        example: code(example(value.name)),
         canonical_source_link: sourceRefs(policy),
         related_workflow: code(actionId.split(' ')[0]),
       }),
@@ -606,7 +605,7 @@ function renderInventorySlices(policy) {
         when_to_use: `Use for the exact deterministic ${code(slice.name)} repository projection.`,
         when_not_to_use: contracts.map((contract) => contract.limitations).join(' '),
         failure_unknown_review_skipped_na_semantics: `${code('review')} is explicit and exits non-pass; implementation exceptions are ${code('fail')}. ${code('unknown')}, ${code('skipped')}, and ${code('N/A')} are not emitted by the current inventory payload.`,
-        new_grammar_example: code(
+        example: code(
           `devai sense inventory --slice ${slice.name} --repo-root .${extra} --format json`,
         ),
         canonical_source_link: sourceRefs(policy),
@@ -649,54 +648,28 @@ const SIMPLE = Object.freeze({
   },
 });
 
-function subjectIncludesRole(subject, role) {
-  if (subject?.kind === 'human')
-    return (subject.roles ?? subject.allowed_roles ?? []).includes(role);
-  return subject?.kind === 'derived-machine' && subject.initiator !== 'none'
-    ? (subject.initiator?.allowed_roles ?? []).includes(role)
-    : false;
-}
-
-function selectorProjection(selector) {
-  if (typeof selector?.canonical_relative_path_glob === 'string')
-    return selector.canonical_relative_path_glob;
-  if (typeof selector?.database_id_glob === 'string') return `db:${selector.database_id_glob}`;
-  if (typeof selector?.ref_glob === 'string') return `git-ref:${selector.ref_glob}`;
-  if (typeof selector?.system_id === 'string') return `remote:${selector.system_id}`;
-  return text(selector?.kind ?? 'governed-selector', 'DOCS_AUTHORITY_SELECTOR_INVALID');
-}
-
 function renderRoles(policy) {
-  const rules = objects(authorityPolicy.rules, 'DOCS_AUTHORITY_RULES_INVALID');
   return category(
     'Roles',
     policy.category_id,
     strings(schemaEnums().roles, 'DOCS_ROLES_INVALID').map((id) => {
-      const applicable = rules.filter((rule) =>
-        objects(rule.subjects ?? [], `DOCS_AUTHORITY_SUBJECTS_INVALID:${rule.rule_id}`).some(
-          (subject) => subjectIncludesRole(subject, id),
-        ),
-      );
+      const applicable = actions.filter((action) => allowedRoles(action).includes(id));
       if (applicable.length === 0) throw new Error(`DOCS_ROLE_AUTHORITY_UNRESOLVED:${id}`);
-      const selectors = unique(applicable.map((rule) => selectorProjection(rule.selector)));
-      const actionIds = unique(
-        applicable.flatMap((rule) =>
-          strings(rule.action_ids, `DOCS_AUTHORITY_ACTIONS_INVALID:${rule.rule_id}`),
-        ),
-      );
+      const actionIds = applicable.map((action) => action.action_id);
+      const effects = unique(applicable.map((action) => action.effect));
       return entry(policy.category_id, {
         stable_id: id,
         user_facing_label: human(id),
-        plain_language_purpose: `Identify the human ${code(id)} discipline; only matching authority-policy rules grant bounded actions and paths.`,
-        population_or_projection: `${String(applicable.length)} matching authority rules; selectors ${list(selectors)}; governed actions ${list(actionIds)}.`,
-        prerequisites: `An invocation-scoped ${code(`--as-role ${id}`)} declaration or live repository-bound authority session, plus a matching action/path rule.`,
+        plain_language_purpose: `Identify the human ${code(id)} discipline; only matching action authority contracts permit an invocation.`,
+        population_or_projection: `${String(applicable.length)} matching action contracts; effects ${list(effects)}; actions ${list(actionIds)}.`,
+        prerequisites: `An invocation-scoped ${code(`--as-role ${id}`)} declaration or live repository-bound authority session, plus a matching action contract.`,
         required_external_tools:
           'Not applicable: a role is a governance discipline, not an executor or adapter.',
         accepted_inputs: `${code(`--as-role ${id}`)} only on a non-read action whose canonical authority contract allowlists this role.`,
         defaults:
           'No role is inferred from executor kind, model capability, environment, or prior invocation.',
         output_contract:
-          'The resolved authority evidence preserves the initiating human role and the exact matched rule.',
+          'The resolved authority evidence preserves the initiating human role and exact action contract.',
         verdict_semantics:
           'A missing declaration, disallowed role, selector mismatch, or stale session refuses before effects.',
         declared_effect: 'Not applicable: role discipline grants no effect by itself.',
@@ -707,7 +680,7 @@ function renderRoles(policy) {
         when_not_to_use:
           'Do not use a role declaration to widen executor, model, mutation, publication, or path authority.',
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-        new_grammar_example: code(
+        example: code(
           `devai round run --round R-1000 --repo-root . --as-role ${id} --write --format json`,
         ),
         canonical_source_link: sourceRefs(policy),
@@ -756,7 +729,7 @@ function renderSimple(policy) {
         when_not_to_use:
           'Do not use as a synonym for another canonical value or as an authority grant.',
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-        new_grammar_example: code(
+        example: code(
           descriptor.workflow === 'catalog'
             ? 'devai catalog actions --format json'
             : 'devai check --suite standard --repo-root . --as-role inspector --write --format json',
@@ -793,7 +766,7 @@ function renderExecutorKinds(policy) {
               ? 'A rostered runtime adapter and provider/host preflight.'
               : 'Not applicable unless the executor record declares a tool through a child or completion procedure.',
         accepted_inputs: `The exact ${code(id)} task-schema branch; fields from other executor branches are rejected. Dispatch uses ${code('--as-role <allowed-role>')} or a live authority session plus ${code('--write')}.`,
-        defaults: 'No executor kind is inferred for new or legacy tasks.',
+        defaults: 'No executor kind is inferred when the task omits its executor contract.',
         output_contract:
           'Requested executor remains immutable; resolution and completion are recorded separately in task-execution evidence.',
         verdict_semantics:
@@ -809,7 +782,7 @@ function renderExecutorKinds(policy) {
         when_not_to_use:
           'Do not use it to bypass round containment, role authority, or evidence requirements.',
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-        new_grammar_example: code(
+        example: code(
           'devai round run --round R-1000 --repo-root . --as-role owner --write --format json',
         ),
         canonical_source_link: sourceRefs(policy),
@@ -820,10 +793,9 @@ function renderExecutorKinds(policy) {
 }
 
 function selectionModes() {
-  return strings(
-    taskSchema.$defs.agentSelection.properties.mode.enum,
-    'DOCS_SELECTION_MODES_INVALID',
-  );
+  return [
+    text(taskSchema.$defs.agentSelection.properties.mode.const, 'DOCS_SELECTION_MODES_INVALID'),
+  ];
 }
 
 function renderSelectionModes(policy) {
@@ -835,25 +807,16 @@ function renderSelectionModes(policy) {
         stable_id: id,
         user_facing_label: human(id),
         plain_language_purpose:
-          id === 'exact'
-            ? 'Require one exact roster entry with no substitution.'
-            : id === 'preferred'
-              ? 'Try only one task-owned ordered allowlist.'
-              : 'Resolve only through one named and versioned routing policy.',
-        population_or_projection:
-          id === 'exact'
-            ? 'One registry_id.'
-            : id === 'preferred'
-              ? 'One ordered nonempty registry_ids allowlist.'
-              : 'One policy_id and exact policy_version roster.',
+          'Require one runtime bridge and exact host model with no substitution.',
+        population_or_projection: 'One registry_id plus one exact host model identity.',
         prerequisites:
-          'A schema-valid agent executor and model/runtime entries that are available in the canonical registry; host preflight is still mandatory.',
+          'A schema-valid agent executor, a declared runtime bridge, an exact host model, and a successful host preflight.',
         required_external_tools:
           'The adapter declared by the selected runtime entry and its provider or host preflight.',
-        accepted_inputs: `Only the fields admitted by the ${code(id)} conditional branch of agentSelection.`,
-        defaults: 'No implicit mode, latest version, provider alias, or fallback.',
+        accepted_inputs: `Only the fields admitted by the ${code(id)} agentSelection contract.`,
+        defaults: 'No model, runtime, effort, provider alias, or substitution is inferred.',
         output_contract:
-          'Resolved executor and selection/fallback decision are recorded separately from the immutable requested executor.',
+          'Resolved executor identity is recorded separately from the immutable requested executor.',
         verdict_semantics:
           'The first unresolved, unavailable, capability, effort, adapter, or exact-identity mismatch blocks before provider invocation.',
         declared_effect:
@@ -861,11 +824,11 @@ function renderSelectionModes(policy) {
         consent_flags:
           'Not applicable: selection mode grants no consent; the resolved task actions enforce their own consent.',
         cost_class: code('external-dependent'),
-        when_to_use: `Use ${code(id)} when its explicit substitution boundary is intended and authorized.`,
+        when_to_use: `Use ${code(id)} when one exact runtime and model identity are intended.`,
         when_not_to_use:
-          'Do not use it to create implicit fallback, infer authority, or select an unrostered model/effort.',
+          'Do not use it to infer authority, aliases, defaults, or model substitution.',
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-        new_grammar_example: code('devai doctor --probe llm --repo-root .'),
+        example: code('devai doctor --probe llm --repo-root .'),
         canonical_source_link: sourceRefs(policy),
         related_workflow: code('round'),
       }),
@@ -921,7 +884,7 @@ function renderSensorKinds(policy) {
         when_to_use: `Use when the ${code(sensor.kind)} observation and its declared standing are required.`,
         when_not_to_use: `Do not use as a substitute for an acceptance suite, a different kind, or authority beyond ${code(effect)}.`,
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-        new_grammar_example: code(
+        example: code(
           `devai sense run ${sensor.kind} --repo-root .${effect === 'read' ? '' : ` --as-role owner${dryRunConsentArgs(effect)}`} --dry-run --format json`,
         ),
         canonical_source_link: `${sourceRefs(policy)}; ${link(sensor.design_note.path)}`,
@@ -946,14 +909,14 @@ function renderRuntimes(policy) {
       entry(policy.category_id, {
         stable_id: runtime.id,
         user_facing_label: `${runtime.vendor} ${human(runtime.transport)} runtime`,
-        plain_language_purpose: `Connect a governed agent request through the rostered ${code(runtime.adapter_id)} adapter.`,
+        plain_language_purpose: `Connect an agent request through the declared ${code(runtime.adapter_id)} adapter.`,
         population_or_projection: `Vendor ${code(runtime.vendor)}; family ${code(runtime.family)}; transport ${code(runtime.transport)}; adapter ${code(runtime.adapter_id)} at ${code(runtime.adapter_module)}; capabilities ${list(runtime.capabilities)}.`,
         prerequisites: `${runtime.availability_basis}; host preflight is mandatory.`,
         required_external_tools:
           runtime.transport === 'host-cli'
             ? `${code(runtime.executable)} plus ${code(runtime.credential_binding)}.`
             : `${code(runtime.credential_binding)} and provider reachability.`,
-        accepted_inputs: `A task agent executor selecting a rostered model whose ${code('runtime_id')} is ${code(runtime.id)} and one supported effort.`,
+        accepted_inputs: `A task agent executor selecting ${code(runtime.id)}, an exact host model identity, and one supported effort.`,
         defaults: 'No adapter, credential, provider alias, or fallback is inferred.',
         output_contract: `Resolved runtime/model/effort, adapter/tool versions, selection decision, prompt and I/O digests, usage/cost, timestamps, verdict, and evidence references.`,
         verdict_semantics:
@@ -963,49 +926,11 @@ function renderRuntimes(policy) {
         consent_flags:
           'Not applicable: consent is resolved from the task work and its action effects, not from runtime availability.',
         cost_class: code('external-dependent'),
-        when_to_use: `Use only through a rostered model entry whose runtime is ${code(runtime.id)}.`,
+        when_to_use: `Use when the host selects ${code(runtime.id)} and supplies an exact model identity.`,
         when_not_to_use:
           'Do not treat registry availability as proof of host reachability or as governance authority.',
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-        new_grammar_example: code('devai doctor --probe llm --repo-root .'),
-        canonical_source_link: sourceRefs(policy),
-        related_workflow: code('round'),
-      }),
-    ),
-  );
-}
-
-function renderModels(policy) {
-  const models = sortedUtf8(
-    objects(modelRuntime.models, 'DOCS_MODELS_INVALID').map((value) => value.id),
-  ).map((id) => modelRuntime.models.find((value) => value.id === id));
-  return category(
-    'Rostered models',
-    policy.category_id,
-    models.map((model) =>
-      entry(policy.category_id, {
-        stable_id: model.id,
-        user_facing_label: `${model.vendor} ${model.provider_identifier}`,
-        plain_language_purpose: `Select the exact rostered ${code(model.provider_identifier)} model through ${code(model.runtime_id)}.`,
-        population_or_projection: `Runtime ${code(model.runtime_id)}; vendor/family ${code(model.vendor)}/${code(model.family)}; adapter ${code(model.adapter_id)}; identifier kind ${code(model.identifier_kind)}; efforts ${list(model.supported_efforts)}; capabilities ${list(model.capabilities)}; eligible classes ${list(model.eligible_agent_classes)}; available ${code(model.available)}; replacement ${code(model.replacement.state)}${model.replacement.model_id === null ? '' : ` by ${code(model.replacement.model_id)}`}.`,
-        prerequisites: `${model.availability_basis}; runtime adapter and provider/host preflight remain mandatory.`,
-        required_external_tools: `The ${code(model.runtime_id)} runtime adapter and its declared credential or host session.`,
-        accepted_inputs: `An ${code('exact')}, explicit ${code('preferred')}, or named-versioned ${code('policy')} selection that includes ${code(model.id)}, one of ${list(model.supported_efforts)}, and supported capabilities.`,
-        defaults: 'No implicit latest version, alias, effort, or fallback.',
-        output_contract:
-          'The immutable request digest and a separate resolved executor record with exact runtime/model/effort and selection/fallback evidence.',
-        verdict_semantics:
-          'Unavailable, unrostered, unsupported-effort, capability, adapter, or exact-identity mismatch blocks before invocation.',
-        declared_effect:
-          'Not applicable: model capability grants no action effect or governance authority.',
-        consent_flags:
-          'Not applicable: consent is resolved from the task work and its action effects, not from model selection.',
-        cost_class: code('external-dependent'),
-        when_to_use: `Use only when ${code(model.id)} and the chosen effort are explicitly rostered and selection-eligible.`,
-        when_not_to_use:
-          'Do not infer reachability, authority, a newer model, or fallback from this entry.',
-        failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-        new_grammar_example: code('devai doctor --probe llm --repo-root .'),
+        example: code('devai doctor --probe llm --repo-root .'),
         canonical_source_link: sourceRefs(policy),
         related_workflow: code('round'),
       }),
@@ -1014,11 +939,11 @@ function renderModels(policy) {
 }
 
 function renderEfforts(policy) {
-  const models = objects(modelRuntime.models, 'DOCS_MODELS_INVALID');
+  const runtimes = objects(modelRuntime.runtimes, 'DOCS_RUNTIMES_INVALID');
   const efforts = sortedUtf8(
     unique(
-      models.flatMap((model) =>
-        strings(model.supported_efforts, `DOCS_MODEL_EFFORTS_INVALID:${model.id}`),
+      runtimes.flatMap((runtime) =>
+        strings(runtime.efforts, `DOCS_RUNTIME_EFFORTS_INVALID:${runtime.id}`),
       ),
     ),
   );
@@ -1026,20 +951,20 @@ function renderEfforts(policy) {
     'Supported efforts',
     policy.category_id,
     efforts.map((id) => {
-      const supportedBy = models
-        .filter((model) => model.supported_efforts.includes(id))
-        .map((model) => model.id);
+      const supportedBy = runtimes
+        .filter((runtime) => runtime.efforts.includes(id))
+        .map((runtime) => runtime.id);
       return entry(policy.category_id, {
         stable_id: id,
         user_facing_label: human(id),
         plain_language_purpose: `Request the exact rostered ${code(id)} effort without inventing provider semantics.`,
         population_or_projection: `Supported by ${list(sortedUtf8(supportedBy))}.`,
         prerequisites:
-          'One rostered model entry that explicitly lists this effort and a successful runtime preflight.',
+          'One runtime bridge that explicitly lists this effort, an exact host model identity, and a successful preflight.',
         required_external_tools: 'The selected model runtime adapter and provider or host session.',
-        accepted_inputs: `An agent executor selecting ${code(id)} with one of the listed rostered models.`,
+        accepted_inputs: `An agent executor selecting ${code(id)} with one of the listed runtime bridges and an exact host model.`,
         defaults:
-          'No effort is inferred across models; task selection must satisfy the chosen model entry.',
+          'No effort is inferred across runtimes; the selected runtime must declare the requested effort.',
         output_contract:
           'Requested effort remains in the immutable executor digest and resolved effort appears in task-execution evidence.',
         verdict_semantics:
@@ -1049,10 +974,10 @@ function renderEfforts(policy) {
         consent_flags:
           'Not applicable: consent is resolved from the task work and its action effects, not from effort selection.',
         cost_class: code('external-dependent'),
-        when_to_use: `Use ${code(id)} only with a model listed in this generated projection.`,
-        when_not_to_use: 'Do not assume every runtime or model supports this effort.',
+        when_to_use: `Use ${code(id)} only with a runtime listed in this generated projection.`,
+        when_not_to_use: 'Do not assume every runtime or host model supports this effort.',
         failure_unknown_review_skipped_na_semantics: outcomeSemantics(),
-        new_grammar_example: code('devai doctor --probe llm --repo-root .'),
+        example: code('devai doctor --probe llm --repo-root .'),
         canonical_source_link: sourceRefs(policy),
         related_workflow: code('round'),
       });
@@ -1090,7 +1015,6 @@ const CATEGORY_RENDERERS = Object.freeze({
     ),
   'sensor-kinds': renderSensorKinds,
   runtimes: renderRuntimes,
-  'rostered-models': renderModels,
   'supported-efforts': renderEfforts,
 });
 

@@ -59,7 +59,6 @@ function action(overrides: Partial<RoutineActionRegistryEntry> = {}): RoutineAct
   return {
     action_id: 'fixture action',
     internal_binding: 'fixture action',
-    disposition: 'keep',
     effect: 'read',
     authority_contract: {
       effect: 'read',
@@ -188,14 +187,6 @@ describe('routine executor acceptance', () => {
     expect(code(validateRoutineExecutor({ executor: registered() }))).toBe(
       'TASK_ROUTINE_ACTION_UNAVAILABLE',
     );
-    expect(
-      code(
-        validateRoutineExecutor({
-          executor: registered(),
-          actionRegistry: [action({ disposition: 'fold' })],
-        }),
-      ),
-    ).toBe('TASK_ROUTINE_ACTION_UNAVAILABLE');
     expect(
       code(
         validateRoutineExecutor({

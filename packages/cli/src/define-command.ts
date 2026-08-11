@@ -212,15 +212,6 @@ export function attachRuntimeContracts(
     entry.runtime_supports_human = command.options.some((option) => option.rawName === '--human');
     const options = command.options
       .filter((option) => !['--human', '--execute', '--apply', '--write'].includes(option.rawName))
-      // D-139 supersedes implicit observation persistence. Keep the old CAC
-      // spelling as a harmless compatibility input, but do not advertise a
-      // switch whose behavior is now the unconditional default.
-      .filter((option) => option.rawName !== '--no-emit-reading')
-      .filter(
-        (option) =>
-          entry.handler !== 'inv contracts' ||
-          !['--regen', '--regen-config <path>'].includes(option.rawName),
-      )
       .map((option) => ({
         flags: option.rawName,
         description: publicText(option.description),
