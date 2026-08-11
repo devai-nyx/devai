@@ -32,7 +32,7 @@
     },
     "status": {
       "$ref": "common-defs.schema.json#/$defs/record_status",
-      "description": "DII-106 lifecycle: draft is non-binding; active is accepted and binding; superseded names a replacement; tombstoned records rejection or retirement."
+      "description": "Current lifecycle: draft is non-binding; active is accepted and binding; superseded names a replacement."
     },
     "date": {
       "type": "string",
@@ -53,7 +53,7 @@
     "superseded_by": {
       "type": ["string", "null"],
       "minLength": 1,
-      "description": "DII-120 lifecycle link: null until one active-to-superseded transition appends the non-empty replacement id; superseded and tombstoned records are terminal."
+      "description": "Null until one active-to-superseded transition appends the non-empty replacement id; superseded records are terminal."
     },
     "provenance": {
       "type": "array",

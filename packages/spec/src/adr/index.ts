@@ -202,8 +202,7 @@ export function validateAdrs(opts: ValidateAdrsOptions): AdrValidationResult {
   }
 
   // Sequential numbering: when N ADRs exist, they should be
-  // ADR-001..ADR-NNN with no gaps. Tombstoned ids are tracked
-  // separately at a later phase; for now, a gap is a finding.
+  // ADR-001..ADR-NNN with no gaps.
   const numbers = adrs
     .map((a) => a.n)
     .filter((n) => n > 0)

@@ -1,5 +1,5 @@
-import { existsSync, readFileSync } from 'node:fs';
-import { basename, dirname, isAbsolute, join, resolve } from 'node:path';
+import { readFileSync } from 'node:fs';
+import { basename, dirname, isAbsolute, resolve } from 'node:path';
 import { parsers } from '@devai-nyx/schemas';
 import { anchorExists } from './anchor-resolver.js';
 import { type DomainTaxonomy } from './domains-loader.js';
@@ -69,27 +69,6 @@ interface InvariantRecord {
   };
 }
 
-/**
- * Load the tombstones registry (if it exists). Returns the set of
- * invariant ids that cannot be reused.
- */
-function loadTombstonedIds(invariantsDir: string): Set<string> {
-  const path = join(invariantsDir, 'tombstones.json');
-  if (!existsSync(path)) return new Set();
-  try {
-    const parsed = JSON.parse(readFileSync(path, 'utf8')) as {
-      tombstones?: Array<{ id?: string }>;
-    };
-    const ids = new Set<string>();
-    for (const t of parsed.tombstones ?? []) {
-      if (typeof t.id === 'string') ids.add(t.id);
-    }
-    return ids;
-  } catch {
-    return new Set();
-  }
-}
-
 export function validateInvariants(opts: ValidateInvariantsOptions): InvariantsResult {
   const allFiles = listSpecFiles(opts.invariantsDir, 'INV-');
   const patterns = opts.companionPatterns ?? DEFAULT_COMPANION_PATTERNS;
@@ -101,7 +80,6 @@ export function validateInvariants(opts: ValidateInvariantsOptions): InvariantsR
   }
   const errors: SpecValidationError[] = [];
   const loaded: Array<{ file: string; record: InvariantRecord }> = [];
-  const tombstoned = loadTombstonedIds(opts.invariantsDir);
 
   for (const file of files) {
     const parsed = parsers.invariant.safeParseJson<InvariantRecord>(readFileSync(file, 'utf8'));
@@ -196,19 +174,6 @@ export function validateInvariants(opts: ValidateInvariantsOptions): InvariantsR
       file: d.files.join(' | '),
       message: `duplicate invariant id '${d.id}' across files: ${d.files.join(', ')}`,
     });
-  }
-
-  // Tombstone enforcement (Batch 10.D / LAW-00.AMENDMENT.2):
-  // an id that appears in tombstones.json MUST NOT be reused by a
-  // new active invariant.
-  for (const l of loaded) {
-    if (tombstoned.has(l.record.id)) {
-      errors.push({
-        file: l.file,
-        pointer: '/id',
-        message: `invariant id '${l.record.id}' is tombstoned (see law/invariants/tombstones.json); ids never reused`,
-      });
-    }
   }
 
   return {

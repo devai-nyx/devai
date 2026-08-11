@@ -255,11 +255,10 @@ function sealedTransitionAllowed(
     if (afterStatus === 'superseded') {
       return beforeReplacement === null && afterReplacement !== null;
     }
-    if (afterStatus === 'tombstoned') return afterReplacement === beforeReplacement;
     return false;
   }
   return (
-    ['superseded', 'tombstoned'].includes(beforeStatus) &&
+    beforeStatus === 'superseded' &&
     afterStatus === beforeStatus &&
     afterReplacement === beforeReplacement
   );
@@ -297,7 +296,7 @@ function sealedHistoryFindings(
       const candidate = parseRecordSource(entry.path, source);
       if (
         validators.recordMeta(candidate.frontmatter) &&
-        ['active', 'superseded', 'tombstoned'].includes(String(candidate.frontmatter['status']))
+        ['active', 'superseded'].includes(String(candidate.frontmatter['status']))
       ) {
         sealed = candidate;
         sealIndex = index;
@@ -344,7 +343,7 @@ function sealedHistoryFindings(
     }
     if (
       laterIndex < laterHistory.length - 1 &&
-      ['superseded', 'tombstoned'].includes(String(later.frontmatter['status']))
+      String(later.frontmatter['status']) === 'superseded'
     ) {
       priorTerminalStates.push(
         `${String(later.frontmatter['status'])}:${replacementId(later) ?? ''}`,
@@ -364,7 +363,7 @@ function sealedHistoryFindings(
     const restoredThroughTerminalTransition =
       String(originalSeal.frontmatter['status']) === 'active' &&
       priorTerminalStates.every((state) => state === finalTerminalState) &&
-      ['superseded', 'tombstoned'].includes(String(sealed.frontmatter['status'])) &&
+      String(sealed.frontmatter['status']) === 'superseded' &&
       bytesAndStableFieldsRestored &&
       sealedTransitionAllowed(originalSeal, sealed);
     if (!fullyRestored && !restoredThroughTerminalTransition) {

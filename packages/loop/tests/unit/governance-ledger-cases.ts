@@ -290,32 +290,21 @@ describe('governance record parsing and integrity', () => {
     );
   });
 
-  it('treats superseded and tombstoned records as terminal', () => {
-    for (const terminal of ['superseded', 'tombstoned']) {
-      const root = fixtureRoot();
-      const path = writeRecord(
-        root,
-        'ADR-001.md',
-        recordSource({
-          status: terminal,
-          ...(terminal === 'superseded' && { supersededBy: 'ADR-002' }),
-        }),
-      );
-      initGit(root);
-      commitAll(root, terminal);
-      writeFileSync(
-        path,
-        recordSource({
-          status: terminal === 'superseded' ? 'tombstoned' : 'active',
-          ...(terminal === 'superseded' && { supersededBy: 'ADR-002' }),
-        }),
-      );
-      commitAll(root, 'illegal-terminal-transition');
+  it('treats superseded records as terminal', () => {
+    const root = fixtureRoot();
+    const path = writeRecord(
+      root,
+      'ADR-001.md',
+      recordSource({ status: 'superseded', supersededBy: 'ADR-002' }),
+    );
+    initGit(root);
+    commitAll(root, 'supersede');
+    writeFileSync(path, recordSource({ status: 'active', supersededBy: 'ADR-002' }));
+    commitAll(root, 'illegal-terminal-transition');
 
-      expect(decisionRecordIntegrity({ repoRoot: root }).findings).toContainEqual(
-        expect.objectContaining({ code: 'DECISION_LOCKED_BODY_MUTATED' }),
-      );
-    }
+    expect(decisionRecordIntegrity({ repoRoot: root }).findings).toContainEqual(
+      expect.objectContaining({ code: 'DECISION_LOCKED_BODY_MUTATED' }),
+    );
   });
 
   it('permits one active-to-superseded scalar replacement transition', () => {

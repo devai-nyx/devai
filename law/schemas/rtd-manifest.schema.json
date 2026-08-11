@@ -48,9 +48,6 @@
         "glossary": {
           "$ref": "#/$defs/componentEntry"
         },
-        "tombstones": {
-          "$ref": "#/$defs/componentEntry"
-        },
         "adrs": {
           "$ref": "#/$defs/componentEntry"
         },
