@@ -288,7 +288,7 @@ export interface CanonFinding {
   rule: string;
   path: string;
 }
-const PREDICATE_KEYWORDS = new Set(['if', 'then', 'else', 'contains', 'oneOf']);
+const PREDICATE_KEYWORDS = new Set(['if', 'then', 'else', 'contains', 'oneOf', 'allOf']);
 
 export function checkSchema(name: string, schema: unknown): CanonFinding[] {
   const findings: CanonFinding[] = [];

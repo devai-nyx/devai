@@ -90,5 +90,25 @@
       }
     }
   },
-  "examples": []
+  "examples": [
+    {
+      "schema_version": "1.0.0",
+      "id": "example-string-replacement",
+      "kind": "mutation",
+      "target": { "file": "packages/example.ts" },
+      "mutations": [
+        {
+          "type": "string-replace",
+          "find": "before",
+          "replace": "after"
+        }
+      ],
+      "expectations": [
+        {
+          "assertion": "tests-detect",
+          "specs": ["tests/example.test.ts"]
+        }
+      ]
+    }
+  ]
 }

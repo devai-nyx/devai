@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { validators } from '../../src/index.js';
+import { checkSchema, validators } from '../../src/index.js';
 
 const ROOT = resolve(import.meta.dirname, '../../../..');
 
@@ -23,6 +23,9 @@ interface ActionRegistry {
 const registry = JSON.parse(
   readFileSync(resolve(ROOT, 'law/policy/action-registry.json'), 'utf8'),
 ) as ActionRegistry;
+const registrySchema = JSON.parse(
+  readFileSync(resolve(ROOT, 'law/schemas/action-registry.schema.json'), 'utf8'),
+) as unknown;
 
 describe('action registry schema', () => {
   it('accepts the current registry and rejects the removed upgrade machine identity', () => {
@@ -42,5 +45,27 @@ describe('action registry schema', () => {
     binding.authority_contract.subject.transition = 'upgrade';
 
     expect(validators.actionRegistry(removedIdentity)).toBe(false);
+  });
+
+  it('treats allOf branches as predicate fragments while retaining closed-object checks', () => {
+    expect(checkSchema('action-registry.schema.json', registrySchema)).toEqual([]);
+    expect(
+      checkSchema('example.schema.json', {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          nested: {
+            type: 'object',
+            properties: { value: { type: 'string' } },
+          },
+        },
+      }),
+    ).toEqual([
+      {
+        schema: 'example.schema.json',
+        rule: 'open-world-object',
+        path: '$root/properties/nested',
+      },
+    ]);
   });
 });

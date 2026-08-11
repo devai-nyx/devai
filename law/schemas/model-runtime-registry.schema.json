@@ -30,7 +30,19 @@
     "runtime": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "vendor", "family", "adapter_id", "adapter_module", "transport", "efforts", "capabilities", "eligible_agent_classes", "available", "availability_basis"],
+      "required": [
+        "id",
+        "vendor",
+        "family",
+        "adapter_id",
+        "adapter_module",
+        "transport",
+        "efforts",
+        "capabilities",
+        "eligible_agent_classes",
+        "available",
+        "availability_basis"
+      ],
       "properties": {
         "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
         "vendor": { "type": "string", "minLength": 1 },
@@ -53,11 +65,39 @@
       },
       "allOf": [
         {
-          "if": { "properties": { "transport": { "const": "host-cli" } }, "required": ["transport"] },
+          "if": {
+            "properties": { "transport": { "const": "host-cli" } },
+            "required": ["transport"]
+          },
           "then": { "required": ["executable"] }
         }
       ]
     }
   },
-  "examples": []
+  "examples": [
+    {
+      "$schema": "../schemas/model-runtime-registry.schema.json",
+      "schemaVersion": "1.0.0",
+      "id": "model-runtime-registry",
+      "status": "active",
+      "authority": "Architect",
+      "runtimes": [
+        {
+          "id": "example-host-cli",
+          "vendor": "Example",
+          "family": "example",
+          "adapter_id": "example-host-cli-adapter",
+          "adapter_module": "packages/skills/src/model-bridge/index.ts",
+          "transport": "host-cli",
+          "executable": "example",
+          "credential_binding": "host-cli-session",
+          "efforts": ["default"],
+          "capabilities": ["text-generation"],
+          "eligible_agent_classes": ["coding-agent"],
+          "available": true,
+          "availability_basis": "The host validates executable availability before use."
+        }
+      ]
+    }
+  ]
 }
