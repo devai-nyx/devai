@@ -299,10 +299,7 @@ export const initBind = defineCommand({
     cli
       .command('init-bind', 'Plan package binding materialization (or apply with --write)')
       .option('--target <path>', `Target directory (default: ${DEFAULT_REPO_ROOT})`)
-      .option(
-        '--constitution',
-        'Bind the installed Constitution text and digest pin.',
-      )
+      .option('--constitution', 'Bind the installed Constitution text and digest pin.')
       .option(
         '--subprocess-effects',
         'Bind subprocess-effects policy into .devai/config with byte identity.',
@@ -459,7 +456,6 @@ export const initBind = defineCommand({
             const pointerPath = join(targetRoot, '.devai/constitution.md');
             if (!existsSync(pointerPath)) {
               const binding = buildConstitutionBindingPlan(targetRoot, resolveCliVersion());
-              mkdirSync(dirname(pointerPath), { recursive: true });
               writeFileSync(pointerPath, binding.pointerFile.content);
             }
 
