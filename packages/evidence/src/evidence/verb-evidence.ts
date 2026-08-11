@@ -1,28 +1,23 @@
-import type { EvidenceArtifact } from './chain.js';
+import { resolve } from 'node:path';
+import { appendRecord, initChain, loadChain, type EvidenceArtifact } from './chain.js';
+import { gatherGitContext } from './git-context.js';
+import { deriveEvidenceId } from './id-generator.js';
 
 /**
- * Best-effort evidence-chain append for CLI verbs (D-120): `sense *`,
- * `spec validate-all`, `score compute`, and `evidence verify-local`
- * chain their own completion as a side effect, so the Article 32
- * ledger tracks the work adopters actually run instead of depending
- * on a separate manual `evidence emit` discipline (the portfolio
- * audit measured that discipline's sustained-compliance rate at
- * zero across four adopters).
+ * Append one current CLI operation to the adopter's evidence chain.
  *
- * Never throws and never alters the verb's exit code: a chain that
- * is missing, locked, or corrupt degrades to a stderr warning via
- * the returned error string (Article 39 — explicit, never silent).
+ * Never throws. Callers decide whether an append failure is fatal or a warning.
  */
 export interface VerbEvidenceInputs {
   readonly repoRoot: string;
   /** Override the chain path; default <repoRoot>/record/proofs/chain.json. */
   readonly chainPath?: string;
-  /** e.g. 'sense.type-check', 'spec.validate-all', 'score.compute'. */
+  /** Stable operation identifier, for example `verify.translation`. */
   readonly action: string;
   readonly status: 'completed' | 'failed';
   readonly artifacts?: readonly EvidenceArtifact[];
   readonly notes?: readonly string[];
-  /** True for implicit CLI post-ambles; explicit evidence APIs remain active in isolated tests. */
+  /** Skip persistence for explicitly non-recording operations. */
   readonly automatic?: boolean;
 }
 
@@ -36,9 +31,39 @@ export const VERB_EVIDENCE_ACTOR = 'devai-cli';
 
 export function appendVerbEvidence(inputs: VerbEvidenceInputs): VerbEvidenceResult {
   if (inputs.automatic === true) return { ok: true };
-  return {
-    ok: false,
-    error:
-      'LEGACY_EVIDENCE_WRITER_RETIRED: use a governed round-bound proof epoch; chain.json is read-only compatibility state',
-  };
+  try {
+    const chainPath = resolve(inputs.repoRoot, inputs.chainPath ?? 'record/proofs/chain.json');
+    initChain(chainPath);
+    const chain = loadChain(chainPath);
+    const timestamp = new Date().toISOString();
+    const git = gatherGitContext(inputs.repoRoot);
+    const artifacts = inputs.artifacts ? [...inputs.artifacts] : [];
+    const id = deriveEvidenceId({
+      timestamp,
+      actor: VERB_EVIDENCE_ACTOR,
+      actor_role: 'harness',
+      action: inputs.action,
+      status: inputs.status,
+      git_head_sha: git.head_sha,
+      artifact_sha256s: artifacts.map((artifact) => artifact.sha256),
+      previous_run_hash: chain.head,
+    });
+    appendRecord(chainPath, {
+      id,
+      timestamp,
+      actor: VERB_EVIDENCE_ACTOR,
+      actor_role: 'harness',
+      action: inputs.action,
+      status: inputs.status,
+      context: { repo_root: inputs.repoRoot, git },
+      artifacts,
+      ...(inputs.notes === undefined ? {} : { notes: inputs.notes }),
+    });
+    return { ok: true, id };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
 }

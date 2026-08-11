@@ -106,6 +106,7 @@ beforeAll(() => {
     status: 'pass',
     evidence: { translation_witness: witness },
   });
+  writeJson('record/proofs/chain.json', { head: null, records: [] });
 
   const command: CommandCapture = {
     option(): CommandCapture {
@@ -144,15 +145,22 @@ async function run(options: Options): Promise<{ stdout: string; stderr: string; 
 }
 
 describe('translation command production depth', () => {
-  it('executes the structural path through isolation failure and refuses the retired evidence writer', async () => {
+  it('records a report-only structural result when isolation infrastructure fails', async () => {
     const result = await run({
       witness: 'scratch/translation-depth-witness.json',
       repoRoot: repository,
       databaseUrl: 'postgres://127.0.0.1:1/postgres?connect_timeout=1',
     });
-    expect(result.stderr).toContain('LEGACY_EVIDENCE_WRITER_RETIRED');
+    expect(result.stderr).toBe('');
     expect(result.exit).toBe(2);
-    expect(result.stdout).toBe('');
+    const report = JSON.parse(result.stdout) as {
+      verdict: string;
+      report_only: boolean;
+      evidence_chain_refs: string[];
+    };
+    expect(report.verdict).toBe('FAIL');
+    expect(report.report_only).toBe(true);
+    expect(report.evidence_chain_refs).toEqual([expect.stringMatching(/^EV-[a-f0-9]{16}$/u)]);
   });
 
   it('fails closed at database, path, witness, and task authority preconditions', async () => {

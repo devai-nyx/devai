@@ -1,1 +1,4 @@
-{ "_status": "wireframe stub — genesis chain starts empty at real BR-1", "records": [] }
+{
+  "head": null,
+  "records": []
+}
