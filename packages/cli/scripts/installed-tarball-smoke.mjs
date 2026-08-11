@@ -105,7 +105,6 @@ try {
   const schemas = filesUnder(join(installedPackage, 'dist/runtime/index/schemas'));
   const requiredAssets = [
     'dist/law/policy/action-registry.json',
-    'dist/law/policy/authority-policy.json',
     'dist/law/policy/sensor-registry.json',
     'dist/runtime/index/round-execution.json',
     'dist/runtime/index/sense-presets.json',

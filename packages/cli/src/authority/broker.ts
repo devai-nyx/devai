@@ -1383,11 +1383,11 @@ export function createAuthorityHostBroker(input: BrokerInput): {
           }
         : undefined;
   const policyMaterialization =
-    input.entry.name === 'init upgrade'
+    input.entry.name === 'init bind'
       ? () => {
           const policyPath = resolve(repositoryRoot, POLICY_PATH);
-          // The existing policy is never an authority for its own upgrade.
-          // An explicit Architect invocation authorizes the upgrade machine to
+          // The existing policy is never an authority for its own replacement.
+          // An explicit Architect invocation authorizes the binding machine to
           // replace stale, divergent, or malformed bytes with the exact policy
           // derived from current trusted sources. Requiring the old digest to
           // match made legitimate package/Constitution/action changes
@@ -1425,7 +1425,7 @@ export function createAuthorityHostBroker(input: BrokerInput): {
           const authorization = expectSuccess(
             authorizePolicyMaterialization(
               {
-                action_id: 'init upgrade',
+                action_id: 'init bind',
                 invocation_id: invocationId,
                 dry_run: false,
                 declaration: input.declaration,

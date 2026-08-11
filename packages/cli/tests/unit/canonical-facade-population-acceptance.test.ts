@@ -23,8 +23,8 @@ import {
   initApplyArchitect,
   initApplyHarness,
   initApplyOwner,
+  initBind,
   initPlan,
-  initUpgrade,
 } from '../../src/commands/init/index.js';
 import {
   releaseCheck,
@@ -61,8 +61,8 @@ const FACADES: readonly FacadeDefinition[] = [
   initApplyArchitect,
   initApplyHarness,
   initApplyOwner,
+  initBind,
   initPlan,
-  initUpgrade,
   releaseCheck,
   releaseDrift,
   releaseStatus,
@@ -88,7 +88,7 @@ const REFUSAL_ARGS: Readonly<Record<string, readonly string[]>> = {
   'init apply harness': ['--tier', 'not-a-tier'],
   'init apply owner': ['--tier', 'not-a-tier'],
   'init plan': ['--tier', 'not-a-tier'],
-  'init upgrade': ['--tier', 'not-a-tier'],
+  'init bind': ['--unknown-option'],
   'release check': ['--environment', 'not-an-environment'],
   'release drift': ['--environment', 'not-an-environment'],
   'release status': ['--kind', 'not-a-kind'],

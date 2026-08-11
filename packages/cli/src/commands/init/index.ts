@@ -3,63 +3,27 @@ import { createHash } from 'node:crypto';
 import { dirname, join, resolve } from 'node:path';
 import type { CAC } from 'cac';
 import {
-  appendVerbEvidence,
-  buildCiScaffoldPlan,
   buildBootstrapPlan,
   buildConstitutionBindingPlan,
-  buildHooksInstallPlan,
-  buildUpgradePlan,
-  executeCiScaffoldPlan,
   executeBootstrapPlan,
-  executeHooksInstallPlan,
   introspectRepo,
-  isAdoptionProfile,
-  HOOK_NAMES,
-  readProfile,
   resolveCanonicalConstitution,
-  type HookName,
-  upgradeChecklist,
   verifyConstitutionBinding,
-} from '#core-compat';
+} from '@devai-nyx/skills';
 import { validators } from '@devai-nyx/schemas';
-import { EXIT_FAIL, EXIT_PASS, EXIT_USAGE } from '@devai-nyx/utils';
+import { isAdoptionProfile, EXIT_FAIL, EXIT_PASS, EXIT_USAGE } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 import { executeAuthorityPolicyMaterialization } from '../../authority/command-capabilities.js';
 import { resolveCliVersion } from '../../version.js';
+import { buildCiScaffoldPlan, executeCiScaffoldPlan } from '../../services/ci-scaffold/index.js';
+import {
+  buildHooksInstallPlan,
+  executeHooksInstallPlan,
+  HOOK_NAMES,
+  type HookName,
+} from '../../services/hooks-install/index.js';
 
 const DEFAULT_REPO_ROOT = '.';
-
-function materializeSelfVersionPin(targetRoot: string): {
-  path: string;
-  constitution_version: string;
-  devai_version: string;
-} | null {
-  const absoluteRoot = resolve(targetRoot);
-  const constitutionPath = join(absoluteRoot, 'law/constitution.md');
-  if (!existsSync(constitutionPath)) return null;
-  const path = '.devai/pin/versions.json';
-  const target = join(absoluteRoot, path);
-  if (!existsSync(target)) return null;
-  const constitution = readFileSync(constitutionPath, 'utf8');
-  const constitutionVersion = /^\*\*Version:\*\*\s+([^\s]+)$/m.exec(constitution)?.[1];
-  if (constitutionVersion === undefined) {
-    throw new Error('canonical self Constitution has no **Version:** binding');
-  }
-  const devaiVersion = resolveCliVersion();
-  writeFileSync(
-    target,
-    `${JSON.stringify(
-      {
-        devai_version: devaiVersion,
-        constitution_version: constitutionVersion,
-        _status: 'active materialization',
-      },
-      null,
-      2,
-    )}\n`,
-  );
-  return { path, constitution_version: constitutionVersion, devai_version: devaiVersion };
-}
 
 function emit(json: unknown, human: boolean, humanText: string): void {
   if (human) process.stdout.write(humanText.endsWith('\n') ? humanText : humanText + '\n');
@@ -326,49 +290,36 @@ function initApplyDefinition(segment: InitSegment) {
 export const initApplyOwner = initApplyDefinition('owner');
 export const initApplyArchitect = initApplyDefinition('architect');
 export const initApplyHarness = initApplyDefinition('harness');
-// Temporary source-assembly compatibility for the integration Engineer; this is not a route.
-export const initApplyF5 = initApplyHarness;
 
-export const initUpgrade = defineCommand({
-  name: 'init upgrade',
-  description: 'Plan or apply the canonical DEVAI upgrade transition.',
+export const initBind = defineCommand({
+  name: 'init bind',
+  description: 'Bind the installed DEVAI package contracts into an adopter repository.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
-      .command('init-upgrade', 'Plan a DEVAI upgrade (or apply with --write --force)')
+      .command('init-bind', 'Plan package binding materialization (or apply with --write)')
       .option('--target <path>', `Target directory (default: ${DEFAULT_REPO_ROOT})`)
-      .option('--from <v>', 'Current version (required unless --tier)')
-      .option('--to <v>', 'Target version (required unless --tier)')
-      .option(
-        '--tier <tier>',
-        'Emit the climb checklist from the declared adoption tier to <tier> (plan-only; D-112)',
-      )
       .option(
         '--constitution',
-        'Refresh .devai/pin/constitution.md from the resolved canonical text and update its digest pin.',
+        'Bind the installed Constitution text and digest pin.',
       )
       .option(
         '--subprocess-effects',
-        'Materialize the Architect-owned subprocess-effects F1 source into .devai/config with byte identity',
+        'Bind subprocess-effects policy into .devai/config with byte identity.',
       )
       .option(
         '--operational-law',
-        'Materialize the canonical domains, forbidden-actions, glob-guards, scorecard N/A, and threshold policies with byte identity',
+        'Bind current operational policies into .devai/config with byte identity.',
       )
-      .option('--execute', 'Apply the plan (default: print plan only)')
-      .option('--force', 'With --execute: overwrite changed files')
+      .option('--write', 'Materialize the selected binding.')
       .option('--human', 'Human-readable output')
       .action(
         (options: {
           target?: string;
-          from?: string;
-          to?: string;
-          tier?: string;
           constitution?: boolean;
           subprocessEffects?: boolean;
           operationalLaw?: boolean;
-          execute?: boolean;
-          force?: boolean;
+          write?: boolean;
           human?: boolean;
         }) => {
           if (options.operationalLaw === true) {
@@ -396,11 +347,11 @@ export const initUpgrade = defineCommand({
               };
             });
             const plan = materializations.map(({ bytes: _bytes, ...entry }) => entry);
-            if (options.execute !== true) {
+            if (options.write !== true) {
               emit(
                 { plan },
                 options.human === true,
-                `upgrade --operational-law (plan only): ${String(plan.length)} exact materializations`,
+                `init bind --operational-law (plan only): ${String(plan.length)} exact materializations`,
               );
               process.exitCode = EXIT_PASS;
               return;
@@ -413,7 +364,7 @@ export const initUpgrade = defineCommand({
             emit(
               { materialized: plan },
               options.human === true,
-              `upgrade --operational-law: ${String(plan.length)} exact materializations`,
+              `init bind --operational-law: ${String(plan.length)} exact materializations`,
             );
             process.exitCode = EXIT_PASS;
             return;
@@ -424,7 +375,7 @@ export const initUpgrade = defineCommand({
             const targetPath = join(targetRoot, '.devai/config/subprocess-effects.json');
             if (!existsSync(sourcePath)) {
               process.stderr.write(
-                'devai init upgrade --subprocess-effects: canonical F1 source is missing\n',
+                'devai init bind --subprocess-effects: canonical source is missing\n',
               );
               process.exitCode = EXIT_FAIL;
               return;
@@ -435,14 +386,14 @@ export const initUpgrade = defineCommand({
               document = JSON.parse(bytes.toString('utf8')) as unknown;
             } catch {
               process.stderr.write(
-                'devai init upgrade --subprocess-effects: canonical F1 source is not valid JSON\n',
+                'devai init bind --subprocess-effects: canonical source is not valid JSON\n',
               );
               process.exitCode = EXIT_FAIL;
               return;
             }
             if (!validators.subprocessEffects(document)) {
               process.stderr.write(
-                `devai init upgrade --subprocess-effects: canonical F1 source fails schema validation: ${JSON.stringify(validators.subprocessEffects.errors)}\n`,
+                `devai init bind --subprocess-effects: canonical source fails schema validation: ${JSON.stringify(validators.subprocessEffects.errors)}\n`,
               );
               process.exitCode = EXIT_FAIL;
               return;
@@ -454,11 +405,11 @@ export const initUpgrade = defineCommand({
               digest_sha256: digestSha256,
               byte_identity_required: true,
             };
-            if (options.execute !== true) {
+            if (options.write !== true) {
               emit(
                 { plan },
                 options.human === true,
-                `upgrade --subprocess-effects (plan only): ${plan.source} → ${plan.target} (${digestSha256})`,
+                `init bind --subprocess-effects (plan only): ${plan.source} → ${plan.target} (${digestSha256})`,
               );
               process.exitCode = EXIT_PASS;
               return;
@@ -468,23 +419,17 @@ export const initUpgrade = defineCommand({
             emit(
               { materialized: plan },
               options.human === true,
-              `upgrade --subprocess-effects: ${plan.target} (${digestSha256})`,
+              `init bind --subprocess-effects: ${plan.target} (${digestSha256})`,
             );
             process.exitCode = EXIT_PASS;
             return;
           }
-          // D-119: constitution-refresh mode. Vendors a fresh copy of
-          // the resolved canonical constitution text at the repo
-          // root, updates the {version, sha256} pin in project.json,
-          // and (on --execute) chains a constitution.updated record —
-          // constitutional changes in an adopter become an auditable
-          // Article 32 event, not a silent file edit.
           if (options.constitution === true) {
             const targetRoot = options.target ?? DEFAULT_REPO_ROOT;
             const canonical = resolveCanonicalConstitution();
             if (canonical === null) {
               process.stderr.write(
-                'devai init upgrade --constitution: no canonical constitution text could be resolved\n',
+                'devai init bind --constitution: no installed Constitution text could be resolved\n',
               );
               process.exit(EXIT_FAIL);
             }
@@ -492,7 +437,7 @@ export const initUpgrade = defineCommand({
             const toVersion = canonical.version ?? 'unknown';
             const fromVersion = before.pin?.version ?? 'none';
 
-            if (options.execute !== true) {
+            if (options.write !== true) {
               emit(
                 {
                   from: fromVersion,
@@ -501,7 +446,7 @@ export const initUpgrade = defineCommand({
                   sha256: canonical.sha256,
                 },
                 options.human === true,
-                `upgrade --constitution (plan only): ${fromVersion} → ${toVersion} (source: ${canonical.source})\n` +
+                `init bind --constitution (plan only): ${fromVersion} → ${toVersion} (source: ${canonical.source})\n` +
                   '  re-run with --write to refresh .devai/pin/constitution.md + the project.json pin',
               );
               process.exitCode = EXIT_PASS;
@@ -534,118 +479,35 @@ export const initUpgrade = defineCommand({
               );
             }
 
-            const chained = appendVerbEvidence({
-              repoRoot: targetRoot,
-              automatic: true,
-              action: 'constitution.updated',
-              status: 'completed',
-              notes: [`from=${fromVersion}`, `to=${toVersion}`, `source=${canonical.source}`],
-            });
-            if (!chained.ok) {
-              process.stderr.write(
-                `warning: could not append constitution.updated to the evidence chain: ${chained.error ?? 'unknown'}\n`,
-              );
-            }
-
             emit(
-              { from: fromVersion, to: toVersion, source: canonical.source, chained: chained.ok },
+              { from: fromVersion, to: toVersion, source: canonical.source },
               options.human === true,
-              `upgrade --constitution: ${fromVersion} → ${toVersion} (source: ${canonical.source})` +
-                (chained.ok ? '\n  chained: constitution.updated' : ''),
+              `init bind --constitution: ${fromVersion} → ${toVersion} (source: ${canonical.source})`,
             );
             process.exitCode = EXIT_PASS;
             return;
           }
-          // D-112: tier-climb checklist mode. Plan-only by design
-          // (consistent with upgrade's plan/execute split): the human
-          // works the list, then edits project.json's profile key.
-          if (options.tier !== undefined) {
-            if (!isAdoptionProfile(options.tier)) {
-              process.stderr.write(
-                `devai init upgrade: --tier must be one of tier1 | tier2 | tier3 (got '${options.tier}')\n`,
-              );
-              process.exit(EXIT_USAGE);
-            }
-            const targetRoot = options.target ?? DEFAULT_REPO_ROOT;
-            const declared = readProfile(targetRoot);
-            const steps = upgradeChecklist(declared, options.tier);
-            if (options.human === true) {
-              const lines = [
-                `init upgrade --tier: ${declared} → ${options.tier} (${String(steps.length)} step(s))`,
-                ...steps.map((st, i) => `  ${String(i + 1)}. ${st.step}\n     ${st.detail}`),
-              ];
-              if (steps.length === 0) {
-                lines.push('  nothing to do — target tier is not above the declared profile');
-              }
-              lines.push(
-                'When the list is done, set "profile" in .devai/config/project.json and re-run devai doctor.',
-              );
-              process.stdout.write(lines.join('\n') + '\n');
-            } else {
-              process.stdout.write(
-                JSON.stringify({ from: declared, to: options.tier, steps }, null, 2) + '\n',
-              );
-            }
-            process.exitCode = EXIT_PASS;
-            return;
-          }
-          if (options.execute === true && options.from === undefined && options.to === undefined) {
+          if (options.write === true) {
             const artifact = executeAuthorityPolicyMaterialization() as {
               path: string;
               operation: string;
               digest_sha256: string;
             };
-            const versionPin = materializeSelfVersionPin(options.target ?? DEFAULT_REPO_ROOT);
             emit(
-              { artifact, version_pin: versionPin },
+              { artifact },
               options.human === true,
-              `authority policy ${artifact.operation}: ${artifact.path} (${artifact.digest_sha256})` +
-                (versionPin === null
-                  ? ''
-                  : `\nversion pin materialized: ${versionPin.path} (${versionPin.constitution_version})`),
-            );
-            process.exitCode = EXIT_PASS;
-            return;
-          }
-          if (options.from === undefined || options.to === undefined) {
-            process.stderr.write('devai init upgrade: --from and --to are required\n');
-            process.exit(EXIT_FAIL);
-          }
-          const targetRoot = options.target ?? DEFAULT_REPO_ROOT;
-          const plan = buildUpgradePlan({
-            targetRoot,
-            fromVersion: options.from,
-            toVersion: options.to,
-          });
-          if (options.execute === true) {
-            // Reuse executeBootstrapPlan over the upgrade plan's entries
-            // by wrapping it in a BootstrapPlan shape.
-            const bootstrapShaped = {
-              target_root: targetRoot,
-              devai_version: options.to,
-              entries: plan.entries,
-              summary: { create: 0, overwrite: plan.entries.length, skip: 0 },
-            };
-            const result = executeBootstrapPlan(bootstrapShaped, { force: options.force === true });
-            emit(
-              { plan, result },
-              options.human === true,
-              `upgrade --write: ${String(result.created.length)} created, ${String(result.overwritten.length)} overwritten`,
+              `authority policy ${artifact.operation}: ${artifact.path} (${artifact.digest_sha256})`,
             );
             process.exitCode = EXIT_PASS;
             return;
           }
           emit(
-            plan,
+            { plan: 'authority-policy' },
             options.human === true,
-            `upgrade ${options.from} → ${options.to}: ${String(plan.entries.length)} entry(ies) to change\n` +
-              plan.entries.map((e) => `  ${e.action} ${e.path}`).join('\n'),
+            'init bind (plan only): materialize the installed authority policy; re-run with --write',
           );
           process.exitCode = EXIT_PASS;
         },
       );
   },
 });
-
-// Temporary source-assembly compatibility for the integration Engineer; this is not a route.
-export const upgrade = initUpgrade;

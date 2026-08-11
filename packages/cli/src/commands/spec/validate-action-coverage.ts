@@ -185,7 +185,7 @@ function safeStat(p: string): Stats | null {
 
 /**
  * Phase 29.G (closes R-2): detect whether the repo is DEVAI itself
- * or an adopter. Matches the doctor --self heuristic: presence of
+ * or an adopter. Source-repository detection uses the presence of
  * the canonical workspace markers (packages/cli/src/bin.ts +
  * examples/redox-pack-* directories).
  */

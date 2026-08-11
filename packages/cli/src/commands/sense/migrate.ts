@@ -1,5 +1,5 @@
 import type { CAC } from 'cac';
-import { resolveSensorParams } from '#core-compat';
+import { resolveSensorParams } from '@devai-nyx/skills';
 import { senseMigrateCheck, type SensorReading } from '@devai-nyx/sensors';
 import { EXIT_FAIL, EXIT_PASS, EXIT_REVIEW, EXIT_USAGE } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';

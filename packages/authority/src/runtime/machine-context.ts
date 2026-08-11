@@ -41,7 +41,7 @@ export function deriveMachineAuthorityContext(input: unknown, deps: unknown) {
     return failure('refused', 'AUTHORITY_ACTION_NOT_MACHINE_DERIVED');
   }
   const subject = action.subject;
-  if (!['harness-write', 'upgrade', 'release'].includes(subject.transition)) {
+  if (!['harness-write', 'bind', 'release'].includes(subject.transition)) {
     return failure('refused', 'AUTHORITY_MACHINE_TRANSITION_NOT_AUTHORIZING');
   }
   if (subject.initiator === 'none')

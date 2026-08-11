@@ -123,8 +123,8 @@ function validSubject(value: unknown): value is JsonRecord {
     );
   }
   return (
-    ['harness', 'upgrade', 'release'].includes(String(value.actor)) &&
-    ['harness-write', 'upgrade', 'release'].includes(String(value.transition)) &&
+    ['harness', 'binding', 'release'].includes(String(value.actor)) &&
+    ['harness-write', 'bind', 'release'].includes(String(value.transition)) &&
     (value.initiator === 'none' || isRecord(value.initiator))
   );
 }
@@ -273,7 +273,7 @@ function formatFor(argv: readonly string[]): 'human' | 'json' {
 function actionId(argv: readonly string[]): string {
   if (argv[0] === 'catalog' && argv[1] === 'actions') return 'catalog actions';
   if (argv[0] === 'docs' && argv[1] === 'cli') return 'docs cli';
-  if (argv[0] === 'init' && argv[1] === 'upgrade') return 'init upgrade';
+  if (argv[0] === 'init' && argv[1] === 'bind') return 'init bind';
   if (argv[0] === 'init' && argv[1] === 'record') return 'init record';
   if (argv[0] === 'init' && argv[1] === 'apply' && argv[2] === 'owner') return 'init apply owner';
   return argv.slice(0, 2).join(' ');
@@ -283,15 +283,15 @@ function targetFor(action: string): JsonRecord {
   return {
     kind: 'fs',
     id:
-      action === 'init upgrade'
+      action === 'init bind'
         ? 'fs:.devai/config/authority-policy.json'
         : 'fs:docs/reference/cli',
-    repository_id: 'devai-self',
+    repository_id: 'adopter-repository',
     canonical_relative_path:
-      action === 'init upgrade'
+      action === 'init bind'
         ? '.devai/config/authority-policy.json'
         : 'docs/reference/cli/index.md',
-    operation: action === 'init upgrade' ? 'create' : 'update',
+    operation: action === 'init bind' ? 'create' : 'update',
   };
 }
 
@@ -345,7 +345,7 @@ export function validateLiveAuthorityActionRegistry(entries: readonly RegistryEn
 
 function targetRoot(entry: RegistryEntry, argv: readonly string[]): string {
   const adoptionTarget = [
-    'init upgrade',
+    'init bind',
     'init apply owner',
     'init apply architect',
     'init apply harness',
@@ -420,7 +420,7 @@ function stageHostScope(
     entry.name === 'init apply owner' ||
     entry.name === 'init apply architect' ||
     entry.name === 'init apply harness' ||
-    entry.name === 'init upgrade';
+    entry.name === 'init bind';
   const broker = createAuthorityHostBroker({
     entry,
     entries,
@@ -943,7 +943,7 @@ export function createAuthorityCliHarness(deps: Readonly<JsonRecord>) {
         return renderAuthorityResult(
           taggedFailure(
             'refused',
-            action === 'init upgrade'
+            action === 'init bind'
               ? 'AUTHORITY_MATERIALIZATION_ARCHITECT_REQUIRED'
               : 'AUTHORITY_HUMAN_ROLE_DENIED',
           ),
@@ -977,11 +977,11 @@ export function createAuthorityCliHarness(deps: Readonly<JsonRecord>) {
           ? { kind: 'direct-cli' }
           : { kind: 'interactive-session', session_id: sessionId };
       const exposedPrincipal =
-        action === 'init upgrade'
+        action === 'init bind'
           ? {
               kind: 'machine',
-              actor: 'upgrade',
-              transition: 'upgrade',
+              actor: 'binding',
+              transition: 'bind',
               initiated_by: principal,
             }
           : principal;
@@ -1046,7 +1046,7 @@ export function createAuthorityCliHarness(deps: Readonly<JsonRecord>) {
         origin,
         readiness_eligible: !dryRun,
       };
-      if (action === 'init upgrade' && dryRun) {
+      if (action === 'init bind' && dryRun) {
         const bytes = Buffer.from(
           canonical({ policy_id: 'devai-authority', repository_id: deps.repository_id }),
         );

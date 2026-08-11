@@ -15,7 +15,7 @@ const DOMAIN_SUMMARIES: Readonly<Record<string, string>> = {
   check: 'Run governed validation suites and checks.',
   doctor: 'Diagnose the declared adoption posture.',
   evidence: 'Record, render, redact, and verify audit evidence.',
-  init: 'Adopt and upgrade DEVAI in a repository.',
+  init: 'Install and bind DEVAI in a repository.',
   release: 'Check and verify releases.',
   round: 'Plan, run, assess, and close governed rounds.',
   sense: 'Observe repository and runtime state through sensors.',
@@ -192,10 +192,8 @@ export function invocationIsNonMutating(internalName: string, args: readonly str
   }
   if (internalName === 'round-close' && args.includes('--post-merge-receipt')) return true;
   if (internalName === 'mutation-verify' && !args.includes('--save-baseline')) return true;
-  if (internalName === 'init-upgrade' && args.includes('--tier') && !args.includes('--write'))
-    return true;
   return (
-    ['init', 'adopt', 'upgrade', 'ci-scaffold', 'hooks-install', 'state-prune'].includes(
+    ['init', 'adopt', 'init-bind', 'ci-scaffold', 'hooks-install', 'state-prune'].includes(
       internalName,
     ) && !args.includes('--write')
   );
@@ -409,8 +407,8 @@ export function routeArgv(
       };
     }
     let translated = remaining.filter((arg) => arg !== '--write' && arg !== '--publish');
-    if (exact.internal_name === 'init-upgrade' && remaining.includes('--write')) {
-      translated = [...translated, '--execute'];
+    if (exact.internal_name === 'init-bind' && remaining.includes('--write')) {
+      translated = remaining.filter((arg) => arg !== '--publish');
     }
     if (exact.internal_name === 'state-prune' && remaining.includes('--write'))
       translated = [...translated, '--apply'];

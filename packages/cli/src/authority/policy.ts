@@ -126,16 +126,16 @@ function subjectGroups(entries: readonly RegistryEntry[]) {
     ),
     auditor: humanActions(entries, 'auditor'),
     harness: machineActions(entries, 'harness'),
-    upgrade: machineActions(entries, 'upgrade'),
+    binding: machineActions(entries, 'binding'),
     release: machineActions(entries, 'release'),
   };
 }
 
-function machineSubject(actor: 'harness' | 'upgrade' | 'release') {
+function machineSubject(actor: 'harness' | 'binding' | 'release') {
   return {
     kind: 'derived-machine',
     actor,
-    transition: actor === 'harness' ? 'harness-write' : actor,
+    transition: actor === 'harness' ? 'harness-write' : actor === 'binding' ? 'bind' : actor,
     initiator: {
       allowed_roles:
         actor === 'harness'
@@ -157,29 +157,19 @@ function harnessSubject(allowedRoles: readonly string[]) {
 
 export function repositoryIdFor(root: string): string {
   const absolute = resolve(root);
-  if (
-    existsSync(join(absolute, 'packages/cli/src/bin.ts')) &&
-    existsSync(join(absolute, 'law/constitution.md'))
-  ) {
-    return 'devai-self';
-  }
   return basename(absolute).replaceAll(/[^A-Za-z0-9._-]/gu, '-') || 'adopter-repository';
 }
 
 export function authorityBindings(root: string, packageVersion: string) {
-  const selfConstitution = join(resolve(root), 'law/constitution.md');
   const pinnedConstitution = join(resolve(root), '.devai/pin/constitution.md');
-  const constitutionPath = existsSync(selfConstitution) ? selfConstitution : pinnedConstitution;
-  if (!existsSync(constitutionPath)) {
-    throw new Error(
-      `authority policy: Constitution not found at ${selfConstitution} or ${pinnedConstitution}`,
-    );
+  if (!existsSync(pinnedConstitution)) {
+    throw new Error(`authority policy: bound Constitution not found at ${pinnedConstitution}`);
   }
-  const constitutionText = readFileSync(constitutionPath, 'utf8');
+  const constitutionText = readFileSync(pinnedConstitution, 'utf8');
   const constitutionVersion = parseConstitutionVersion(constitutionText);
   if (constitutionVersion === null) {
     throw new Error(
-      `authority policy: Constitution version marker is missing in ${constitutionPath}`,
+      `authority policy: Constitution version marker is missing in ${pinnedConstitution}`,
     );
   }
   return {
@@ -388,13 +378,13 @@ export function buildTrustedAuthoritySources(
       rationale: 'Article 6 verb-attributed machine proof transition.',
     }),
     rule({
-      id: 'core-upgrade-config',
+      id: 'core-binding-config',
       origin: 'immutable-core',
       precedence: 900,
-      actionIds: groups.upgrade,
+      actionIds: groups.binding,
       selector: fsSelector(repositoryId, '.devai/config/**'),
-      subjects: [machineSubject('upgrade')],
-      rationale: 'Article 6 derived upgrade transition for F5 configuration.',
+      subjects: [machineSubject('binding')],
+      rationale: 'Article 6 derived binding transition for package configuration.',
     }),
     rule({
       id: 'core-architect-post-merge-host-adapter',
@@ -408,12 +398,12 @@ export function buildTrustedAuthoritySources(
     }),
     ...['.devai/state', '.devai/state/init-introspection.json'].map((path, index) =>
       rule({
-        id: `core-upgrade-init-introspection-${String(index + 1)}`,
+        id: `core-binding-init-introspection-${String(index + 1)}`,
         origin: 'immutable-core',
         precedence: 900,
         actionIds: ['init apply harness'],
         selector: fsSelector(repositoryId, path),
-        subjects: [machineSubject('upgrade')],
+        subjects: [machineSubject('binding')],
         rationale:
           'Article 6 verb-attributed state output for the exact introspecting F5 bootstrap action.',
       }),
@@ -428,13 +418,13 @@ export function buildTrustedAuthoritySources(
       '.gitignore',
     ].map((path, index) =>
       rule({
-        id: `core-upgrade-bootstrap-${String(index + 1)}`,
+        id: `core-binding-bootstrap-${String(index + 1)}`,
         origin: 'immutable-core',
         precedence: 900,
-        actionIds: groups.upgrade,
+        actionIds: groups.binding,
         selector: fsSelector(repositoryId, path),
-        subjects: [machineSubject('upgrade')],
-        rationale: 'Article 6 derived upgrade transition for the exact F5 bootstrap surface.',
+        subjects: [machineSubject('binding')],
+        rationale: 'Article 6 derived binding transition for the exact bootstrap surface.',
       }),
     ),
   ]);
@@ -530,24 +520,24 @@ export function buildTrustedAuthoritySources(
       rationale: 'DEVAI-self Engineer workflow implementation authority.',
     }),
     rule({
-      id: 'self-upgrade-init-harness-ci-root',
+      id: 'self-binding-init-harness-ci-root',
       origin: 'additive-extension',
       precedence: 500,
       actionIds: ['init apply harness'],
       selector: fsSelector(repositoryId, '.github'),
-      subjects: [machineSubject('upgrade')],
+      subjects: [machineSubject('binding')],
       rationale:
-        'DEVAI-self derived upgrade authority for the canonical init harness CI scaffold root.',
+        'Derived binding authority for the canonical init harness CI scaffold root.',
     }),
     rule({
-      id: 'self-upgrade-init-harness-ci',
+      id: 'self-binding-init-harness-ci',
       origin: 'additive-extension',
       precedence: 500,
       actionIds: ['init apply harness'],
       selector: fsSelector(repositoryId, '.github/**'),
-      subjects: [machineSubject('upgrade')],
+      subjects: [machineSubject('binding')],
       rationale:
-        'DEVAI-self derived upgrade authority for canonical init harness CI scaffold outputs.',
+        'Derived binding authority for canonical init harness CI scaffold outputs.',
     }),
     ...[
       '.git/hooks',
@@ -634,7 +624,7 @@ export function buildTrustedAuthoritySources(
     rules: coreRules,
   };
   const extensionDocument = {
-    extension_id: 'devai-self-authority',
+    extension_id: 'devai-adopter-authority',
     extension_version: POLICY_VERSION,
     rules: additiveRules,
   };
@@ -647,7 +637,7 @@ export function buildTrustedAuthoritySources(
   };
   const additiveExtensions = [
     {
-      extension_id: 'devai-self-authority',
+      extension_id: 'devai-adopter-authority',
       extension_version: POLICY_VERSION,
       source_document: extensionDocument,
       canonical_source_bytes: canonicalBytes(extensionDocument),
@@ -668,7 +658,7 @@ export function buildTrustedAuthoritySources(
     },
     additive_extensions: [
       {
-        extension_id: 'devai-self-authority',
+        extension_id: 'devai-adopter-authority',
         extension_version: POLICY_VERSION,
         digest_sha256: sha256Bytes(canonicalBytes(extensionDocument)),
       },

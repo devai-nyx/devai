@@ -18,7 +18,6 @@ export interface SensePresetPolicy {
   readonly implicit_persistence: 'forbidden';
   readonly presets: readonly SensePreset[];
   readonly exclusion_reasons: Readonly<Record<string, string>>;
-  readonly migration: Readonly<Record<string, string>>;
 }
 
 const HERE = dirname(fileURLToPath(import.meta.url));

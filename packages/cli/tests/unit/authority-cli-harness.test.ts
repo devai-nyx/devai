@@ -177,7 +177,7 @@ describe('authority CLI harness branch matrix', () => {
     const readResult = await invoke(target, ['catalog', 'actions']);
     expect(readResult.exit_code, JSON.stringify(readResult)).toBe(0);
     expect(
-      (await invoke(target, ['init', 'upgrade', '--as-role', 'architect', '--write', '--dry-run']))
+      (await invoke(target, ['init', 'bind', '--as-role', 'architect', '--write', '--dry-run']))
         .exit_code,
     ).toBe(0);
     expect(

@@ -4,10 +4,10 @@
   "source_authority": "F1-architect",
   "materialization": {
     "target": ".devai/config/subprocess-effects.json",
-    "allowed_verbs": ["devai init upgrade"],
+    "allowed_verbs": ["devai init bind"],
     "authority_and_consent_required": true,
     "byte_identity_required": true,
-    "adopter_upgrade_path_required": true,
+    "adopter_binding_path_required": true,
     "direct_writes_forbidden": true
   },
   "templates": [

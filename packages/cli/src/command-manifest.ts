@@ -66,8 +66,8 @@ export interface AuthorityActionContract {
     | Readonly<{ kind: 'human'; allowed_roles: readonly HumanRole[] }>
     | Readonly<{
         kind: 'derived-machine';
-        actor: 'harness' | 'upgrade' | 'release';
-        transition: 'harness-write' | 'upgrade' | 'release';
+        actor: 'harness' | 'binding' | 'release';
+        transition: 'harness-write' | 'bind' | 'release';
         initiator:
           'none' | Readonly<{ allowed_roles: readonly HumanRole[]; preserve_in_context: true }>;
       }>;

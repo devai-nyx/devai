@@ -1,5 +1,4 @@
 export const AUTHORITY_CONSTITUTION_PATH = 'law/constitution.md' as const;
-export const AUTHORITY_POLICY_SOURCE_PATH = 'law/policy/authority-policy.json' as const;
 export const AUTHORITY_POLICY_MATERIALIZED_PATH = '.devai/config/authority-policy.json' as const;
 
 export const STATIC_AUTHORITY_PREFIXES = [
@@ -10,8 +9,8 @@ export const STATIC_AUTHORITY_PREFIXES = [
   { prefix: 'work/audit/', authority: ['auditor'] },
   { prefix: 'docs/', authority: ['architect'] },
   { prefix: 'record/', authority: ['machine'] },
-  { prefix: '.devai/pin/', authority: ['upgrade'] },
-  { prefix: '.devai/config/', authority: ['upgrade'] },
+  { prefix: '.devai/pin/', authority: ['binding'] },
+  { prefix: '.devai/config/', authority: ['binding'] },
   { prefix: '.devai/state/', authority: ['executing-verb'] },
   { prefix: 'packages/', authority: ['engineer'] },
   { prefix: 'tests/', authority: ['inspector'] },

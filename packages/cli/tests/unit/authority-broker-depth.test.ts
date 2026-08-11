@@ -26,7 +26,7 @@ afterAll(() => {
 
 type Role = 'owner' | 'architect' | 'inspector' | 'engineer' | 'auditor';
 
-function broker(name: string, role: Role, argv: readonly string[], bootstrapPolicy = false) {
+function broker(name: string, role: Role, argv: readonly string[], bootstrapPolicy = true) {
   const entry = entries.find((candidate) => candidate.name === name);
   if (entry === undefined) throw new Error(`missing action ${name}`);
   return createAuthorityHostBroker({
@@ -305,9 +305,9 @@ describe('authority broker production boundary depth', () => {
       ['check', 'inspector', checkTranslationArgv, 'sandbox-exec', ['-p', '(version 1)', 'node']],
       ['task start', 'engineer', taskStartArgv(), 'git', ['push', 'origin', 'HEAD']],
       [
-        'init upgrade',
+        'init bind',
         'architect',
-        [process.execPath, 'devai', 'init', 'upgrade', '--as-role', 'architect', '--write'],
+        [process.execPath, 'devai', 'init', 'bind', '--as-role', 'architect', '--write'],
         'git',
         ['fetch', 'upstream remote!', 'branch/name'],
       ],

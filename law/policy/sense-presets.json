@@ -146,13 +146,6 @@
     "runtime_probe_auth": "Auth charters may issue credentialed mutating HTTP requests and net capability derives remote-write.",
     "runtime_probe_data": "Data charters may execute write SQL and net capability derives remote-write."
   },
-  "migration": {
-    "tier1": "baseline",
-    "tier2": "structural",
-    "tier3": "governed",
-    "all": "governed",
-    "old_sweep": "sweep"
-  },
   "output": {
     "member_result": "one-action-bound-sensor-reading",
     "aggregate": "total-result-with-explicit-executed-and-excluded-populations",

@@ -81,16 +81,16 @@ export const ACTION_EFFECT_CONTRACTS = [
     capabilities: ['fs:workspace'],
   },
   {
+    action_id: 'init bind',
+    public_action_id: 'init bind',
+    effect: 'local-write',
+    capabilities: ['fs:f5-config'],
+  },
+  {
     action_id: 'init plan',
     public_action_id: 'init plan',
     effect: 'read',
     capabilities: [],
-  },
-  {
-    action_id: 'init upgrade',
-    public_action_id: 'init upgrade',
-    effect: 'local-write',
-    capabilities: ['fs:f5-config'],
   },
   {
     action_id: 'release check',

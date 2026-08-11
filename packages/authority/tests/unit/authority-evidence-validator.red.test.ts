@@ -231,14 +231,14 @@ describe('R19 audit-only authority evidence', () => {
             issuer,
             actionDocument('local-write', {
               kind: 'derived-machine',
-              actor: 'upgrade',
-              transition: 'upgrade',
+              actor: 'binding',
+              transition: 'bind',
               initiator: { allowed_roles: ['architect'], preserve_in_context: true },
             }),
           ) as { actionContracts: unknown }
         ).actionContracts,
         verifiedOrigin: { kind: 'direct-cli', invocation_id: 'invocation-1' },
-        trusted_adapter_id: 'upgrade-authority',
+        trusted_adapter_id: 'binding-authority',
         receiptStore: issuer,
         canonicalSha256,
       },

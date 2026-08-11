@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 /**
  * D-118: the running CLI's own package version, resolved once and
- * cached. Shared by `bin.ts` (cac's `--version`), `init`/`upgrade`
+ * cached. Shared by `bin.ts` (cac's `--version`) and initialization
  * (machine-managed `devai_version` stamping — never hand-edited),
  * and `doctor`'s `devai-version-match` check.
  */

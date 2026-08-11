@@ -136,28 +136,18 @@ export function aggregateSensorRunResults(
   };
 }
 
-/** Compatibility seam retained for callers that inspect the pre-B3 routing plan. */
-export function planSensorChild(
-  command: readonly string[],
-  executable: string,
-  entries: readonly RegistryEntry[],
-  version: string,
-): { readonly argv: readonly string[]; readonly runnable: boolean } {
-  const routed = routeArgv([process.execPath, executable, ...command], entries, version);
-  if (routed.kind !== 'dispatch') throw new Error('SENSE_RUN_CHILD_ROUTE_INVALID');
-  const internalName = routed.argv[2];
-  const entry = entries.find((candidate) => candidate.internal_name === internalName);
-  if (entry === undefined) return { argv: [], runnable: false };
-  return { argv: [...entry.path, ...routed.argv.slice(3)], runnable: entry.effects === 'read' };
-}
-
 export function routeSensorChildArgv(
   command: readonly string[],
   executable: string,
   entries: readonly RegistryEntry[],
   version: string,
 ): readonly string[] {
-  return planSensorChild(command, executable, entries, version).argv;
+  const routed = routeArgv([process.execPath, executable, ...command], entries, version);
+  if (routed.kind !== 'dispatch') throw new Error('SENSE_RUN_CHILD_ROUTE_INVALID');
+  const internalName = routed.argv[2];
+  const entry = entries.find((candidate) => candidate.internal_name === internalName);
+  if (entry === undefined) throw new Error('SENSE_RUN_CHILD_ACTION_UNKNOWN');
+  return [...entry.path, ...routed.argv.slice(3)];
 }
 
 function readingExitCode(status: StructuredStatus): 0 | 1 | 2 {

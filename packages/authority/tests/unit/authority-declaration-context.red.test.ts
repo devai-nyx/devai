@@ -207,7 +207,7 @@ describe('R19 authority declaration resolution', () => {
           action_id: 'test mutate',
           invocation_id: 'invocation-mutate',
           dry_run: false,
-          declaration: { as_role: 'engineer', [field]: 'upgrade' },
+          declaration: { as_role: 'engineer', [field]: 'binding' },
           consent: CONSENT,
         },
         declarationDependencies(issuer),
@@ -232,7 +232,7 @@ describe('R19 authority declaration resolution', () => {
     expectFailure(result, 'usage-error', 'AUTHORITY_DECLARATION_FIELD_INVALID');
   });
 
-  it.each(['harness', 'bootstrap', 'upgrade', 'release'])(
+  it.each(['harness', 'bootstrap', 'binding', 'release'])(
     'refuses caller-selected machine actor %s as a human role',
     async (actor) => {
       const api = await runtimeApi();
@@ -445,20 +445,20 @@ describe('R19 trusted machine-context derivation', () => {
   function machineAction(): unknown {
     return actionDocument('local-write', {
       kind: 'derived-machine',
-      actor: 'upgrade',
-      transition: 'upgrade',
+      actor: 'binding',
+      transition: 'bind',
       initiator: { allowed_roles: ['architect'], preserve_in_context: true },
     });
   }
 
   async function directDeclaration() {
     const api = await runtimeApi();
-    const issuer = createIssuer(api, { invocation_id: 'invocation-upgrade' });
+    const issuer = createIssuer(api, { invocation_id: 'invocation-binding' });
     const deps = declarationDependencies(issuer, machineAction());
     const declaration = api.resolveAuthorityDeclaration(
       {
         action_id: 'test mutate',
-        invocation_id: 'invocation-upgrade',
+        invocation_id: 'invocation-binding',
         dry_run: false,
         declaration: { as_role: 'architect' },
         consent: CONSENT,
@@ -478,14 +478,14 @@ describe('R19 trusted machine-context derivation', () => {
     const result = api.deriveMachineAuthorityContext(
       {
         action_id: 'test mutate',
-        invocation_id: 'invocation-upgrade',
+        invocation_id: 'invocation-binding',
         declaration_receipt: declaration.declaration_receipt,
         consent: CONSENT,
       },
       {
         actionContracts,
-        verifiedOrigin: { kind: 'direct-cli', invocation_id: 'invocation-upgrade' },
-        trusted_adapter_id: 'upgrade-authority',
+        verifiedOrigin: { kind: 'direct-cli', invocation_id: 'invocation-binding' },
+        trusted_adapter_id: 'binding-authority',
         receiptStore: issuer,
         canonicalSha256: (await import('./authority-runtime-testkit.js')).canonicalSha256,
       },
@@ -502,14 +502,14 @@ describe('R19 trusted machine-context derivation', () => {
     const result = api.deriveMachineAuthorityContext(
       {
         action_id: 'test mutate',
-        invocation_id: 'invocation-upgrade',
+        invocation_id: 'invocation-binding',
         declaration_receipt: declaration.declaration_receipt,
         consent: CONSENT,
       },
       {
         actionContracts,
         verifiedOrigin: { kind: 'interactive-session', session_id: SESSION_ID },
-        trusted_adapter_id: 'upgrade-authority',
+        trusted_adapter_id: 'binding-authority',
         receiptStore: issuer,
         canonicalSha256: (await import('./authority-runtime-testkit.js')).canonicalSha256,
       },
@@ -521,14 +521,14 @@ describe('R19 trusted machine-context derivation', () => {
     const first = await directDeclaration();
     const deps = {
       actionContracts: first.actionContracts,
-      verifiedOrigin: { kind: 'direct-cli', invocation_id: 'invocation-upgrade' },
-      trusted_adapter_id: 'upgrade-authority',
+      verifiedOrigin: { kind: 'direct-cli', invocation_id: 'invocation-binding' },
+      trusted_adapter_id: 'binding-authority',
       receiptStore: first.issuer,
       canonicalSha256: (await import('./authority-runtime-testkit.js')).canonicalSha256,
     };
     const input = {
       action_id: 'test mutate',
-      invocation_id: 'invocation-upgrade',
+      invocation_id: 'invocation-binding',
       declaration_receipt: first.declaration.declaration_receipt,
       consent: CONSENT,
     };
@@ -548,7 +548,7 @@ describe('R19 trusted machine-context derivation', () => {
   it.each([
     [
       'action',
-      { action_id: 'different action', invocation_id: 'invocation-upgrade', consent: CONSENT },
+      { action_id: 'different action', invocation_id: 'invocation-binding', consent: CONSENT },
     ],
     [
       'invocation',
@@ -558,7 +558,7 @@ describe('R19 trusted machine-context derivation', () => {
       'consent',
       {
         action_id: 'test mutate',
-        invocation_id: 'invocation-upgrade',
+        invocation_id: 'invocation-binding',
         consent: { ...CONSENT, experimental: true },
       },
     ],
@@ -571,8 +571,8 @@ describe('R19 trusted machine-context derivation', () => {
       },
       {
         actionContracts: first.actionContracts,
-        verifiedOrigin: { kind: 'direct-cli', invocation_id: 'invocation-upgrade' },
-        trusted_adapter_id: 'upgrade-authority',
+        verifiedOrigin: { kind: 'direct-cli', invocation_id: 'invocation-binding' },
+        trusted_adapter_id: 'binding-authority',
         receiptStore: first.issuer,
         canonicalSha256: (await import('./authority-runtime-testkit.js')).canonicalSha256,
       },

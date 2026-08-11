@@ -48,7 +48,7 @@ function envelope(text: string): ActionEnvelope {
 function materializeAuthorityPolicy(): void {
   const materialized = run([
     'init',
-    'upgrade',
+    'bind',
     '--target',
     tempDir,
     '--as-role',
@@ -59,7 +59,7 @@ function materializeAuthorityPolicy(): void {
   ]);
   expect(materialized.status, materialized.stderr).toBe(0);
   expect(envelope(materialized.stdout)).toMatchObject({
-    action_id: 'init upgrade',
+    action_id: 'init bind',
     ok: true,
   });
   expect(existsSync(join(tempDir, '.devai/config/authority-policy.json'))).toBe(true);

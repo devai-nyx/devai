@@ -120,6 +120,11 @@ describe('sense run readiness aggregation', () => {
     expect(() => resolveSenseSelection({ kind: 'unknown_kind' })).toThrow(
       'SENSE_KIND_UNKNOWN:unknown_kind',
     );
+    for (const name of ['tier1', 'tier2', 'tier3', 'all', 'old_sweep']) {
+      expect(() => resolveSenseSelection({ preset: name })).toThrow(
+        `SENSE_PRESET_UNKNOWN:${name}`,
+      );
+    }
   });
 
   it('enforces resolved read, local, harness, and independently consented remote effects', () => {

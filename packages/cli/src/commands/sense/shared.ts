@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from '@devai-nyx/authority';
 import { join } from 'node:path';
-import { resolveSensorParams } from '#core-compat';
+import { resolveSensorParams } from '@devai-nyx/skills';
 import type { SensorReading } from '@devai-nyx/sensors';
 import { EXIT_PASS, EXIT_USAGE } from '@devai-nyx/utils';
 
@@ -127,8 +127,6 @@ export function persistSensorReading(reading: SensorReading, repoRoot: string): 
 export interface FinishSenseOptions {
   readonly repoRoot: string;
   readonly human?: boolean;
-  /** Compatibility-only input; D-139 makes observations non-recording. */
-  readonly emitReading?: boolean;
 }
 
 export function finishSenseCommand(reading: SensorReading, opts: FinishSenseOptions): void {

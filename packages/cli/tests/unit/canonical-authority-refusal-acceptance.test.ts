@@ -57,7 +57,7 @@ describe('canonical production authority refusal acceptance', () => {
         const result =
           entry.effects === 'read'
             ? refusal(entry, ['--as-role', 'owner'], format)
-            : refusal(entry, [], format);
+            : refusal(entry, entry.name === 'init bind' ? ['--write'] : [], format);
         expectCode(
           result,
           entry.effects === 'read'
@@ -74,7 +74,12 @@ describe('canonical production authority refusal acceptance', () => {
         const role = allowedRoles(entry)[0];
         if (role === undefined)
           throw new Error(`write action has no initiating role: ${entry.name}`);
-        expectCode(refusal(entry, ['--as-role', role], format), 'AUTHORITY_WRITE_CONSENT_REQUIRED');
+        if (entry.name !== 'init bind') {
+          expectCode(
+            refusal(entry, ['--as-role', role], format),
+            'AUTHORITY_WRITE_CONSENT_REQUIRED',
+          );
+        }
         if (entry.effects === 'remote-write') {
           expectCode(
             refusal(entry, ['--as-role', role, '--write'], format),

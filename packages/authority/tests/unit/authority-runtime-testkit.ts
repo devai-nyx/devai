@@ -267,13 +267,13 @@ export function makePolicyPlant(
     resolved_digest_sha256: canonicalSha256(resolvedRules),
     materialized_at: options.materializedAt ?? NOW,
     materialization: {
-      action_id: 'adopt upgrade',
+      action_id: 'init bind',
       invocation_id: 'invocation-materialize',
       machine_principal: {
         kind: 'machine',
-        actor: 'upgrade',
-        transition: 'upgrade',
-        trusted_adapter_id: 'upgrade-authority',
+        actor: 'binding',
+        transition: 'bind',
+        trusted_adapter_id: 'binding-authority',
         context_digest_sha256: 'd'.repeat(64),
       },
       initiated_by: { kind: 'human', role: 'architect', declaration_source: 'cli-flag' },

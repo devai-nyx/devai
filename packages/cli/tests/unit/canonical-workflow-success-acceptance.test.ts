@@ -12,8 +12,8 @@ import {
   initApplyArchitect,
   initApplyHarness,
   initApplyOwner,
+  initBind,
   initPlan,
-  initUpgrade,
 } from '../../src/commands/init/index.js';
 import { executeInventorySlice } from '../../src/commands/sense/inventory.js';
 
@@ -94,7 +94,7 @@ describe('canonical workflow success acceptance', () => {
       [initApplyArchitect, ['init-apply-architect', '--target', TARGET, '--tier', 'tier1']],
       [initApplyHarness, ['init-apply-harness', '--target', TARGET, '--tier', 'tier1']],
       [initPlan, ['init-plan', '--target', TARGET, '--tier', 'tier1', '--introspect']],
-      [initUpgrade, ['init-upgrade', '--target', TARGET, '--from', '0.4.0', '--to', '0.5.0']],
+      [initBind, ['init-bind', '--target', TARGET]],
     ] as const;
 
     for (const [definition, argv] of cases) {

@@ -137,12 +137,7 @@ export function resolveSenseSelection(
     const presetName = selection.preset;
     const preset = sensePreset(presetName);
     if (preset === undefined) {
-      const replacement = SENSE_PRESET_POLICY.migration[presetName];
-      throw new Error(
-        replacement === undefined
-          ? `SENSE_PRESET_UNKNOWN:${presetName}`
-          : `SENSE_PRESET_RETIRED:${presetName}:${replacement}`,
-      );
+      throw new Error(`SENSE_PRESET_UNKNOWN:${presetName}`);
     }
     selectionType = 'preset';
     selectionValue = preset.name;

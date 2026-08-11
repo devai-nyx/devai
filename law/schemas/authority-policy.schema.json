@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/authority-policy.schema.json",
   "title": "Materialized Authority Policy",
-  "description": "Version- and digest-bound resolved authority policy written only by the trusted upgrade transition. This is a materialized F5 product, never a hand-authored source policy.",
+  "description": "Version- and digest-bound resolved authority policy written only by the trusted binding transition.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -121,7 +121,7 @@
       ],
       "properties": {
         "action_id": {
-          "const": "init upgrade"
+          "const": "init bind"
         },
         "invocation_id": {
           "type": "string",
@@ -143,10 +143,10 @@
               "const": "machine"
             },
             "actor": {
-              "const": "upgrade"
+              "const": "binding"
             },
             "transition": {
-              "const": "upgrade"
+              "const": "bind"
             },
             "trusted_adapter_id": {
               "type": "string",
@@ -384,11 +384,11 @@
           "const": "derived-machine"
         },
         "actor": {
-          "enum": ["harness", "upgrade", "release"],
+          "enum": ["harness", "binding", "release"],
           "description": "bootstrap is a non-authorizing planner/orchestrator identity and is forbidden from policy allow subjects."
         },
         "transition": {
-          "enum": ["harness-write", "upgrade", "release"]
+          "enum": ["harness-write", "bind", "release"]
         },
         "initiator": {
           "oneOf": [
@@ -431,10 +431,10 @@
         {
           "properties": {
             "actor": {
-              "const": "upgrade"
+              "const": "binding"
             },
             "transition": {
-              "const": "upgrade"
+              "const": "bind"
             },
             "initiator": {
               "type": "object",
@@ -705,7 +705,7 @@
         "mode": "cli-only"
       },
       "materialization": {
-        "action_id": "init upgrade",
+        "action_id": "init bind",
         "consent": {
           "write": true
         },
@@ -716,10 +716,10 @@
         },
         "invocation_id": "cli-82807-ee100589-8c88-4bd6-92f7-8e64436ecbc6",
         "machine_principal": {
-          "actor": "upgrade",
+          "actor": "binding",
           "context_digest_sha256": "307a0dd590681d4447d231450ff24ed3f8c7caf98186393068dd7b02383f91a5",
           "kind": "machine",
-          "transition": "upgrade",
+          "transition": "bind",
           "trusted_adapter_id": "devai-cli-authority"
         },
         "materialization_digest_sha256": "3d4bf9df60890fe05459d4af6dce79a386fa17596e1cc08a9094c11b9f4d84a2"
