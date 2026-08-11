@@ -120,7 +120,7 @@ export function readCiEconomyProfile(repoRoot: string): CiEconomyProfile {
 }
 
 const VERIFIER_REPOSITORY = /repository:\s*devai-nyx\/devai-verifier/u;
-const VERIFIER_PIN = /ref:\s*d85b6874e46fc371a000e736c22f1913a5878c5e/u;
+const VERIFIER_PIN = /ref:\s*1478596a236a29e373d5aed02c696cdb1ea5a064/u;
 const VERIFIER_INVOCATION = /node\s+\.devai-verifier\/src\/cli\.js/u;
 
 /**

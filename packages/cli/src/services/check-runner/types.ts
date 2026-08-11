@@ -30,6 +30,7 @@ export interface TaskDescriptor {
     profileId: string;
     mode: 'affected' | 'fixed';
     requiredNodes: readonly string[];
+    eligibleNodes?: readonly string[];
   }>[];
 }
 

@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           repository: devai-nyx/devai-verifier
-          ref: d85b6874e46fc371a000e736c22f1913a5878c5e
+          ref: 1478596a236a29e373d5aed02c696cdb1ea5a064
           path: .devai-verifier
           fetch-depth: 1
           persist-credentials: false

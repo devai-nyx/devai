@@ -203,6 +203,42 @@ function validateDescriptor(value: unknown): TaskDescriptor {
       throw new Error(`CHECK_RUNNER_DESCRIPTOR: ${task.nodeId} has an unknown dependency`);
     }
   }
+  for (const profile of descriptor.profiles) {
+    if (
+      typeof profile.profileId !== 'string' ||
+      (profile.mode !== 'affected' && profile.mode !== 'fixed') ||
+      !Array.isArray(profile.requiredNodes) ||
+      (profile.mode === 'affected' && !Array.isArray(profile.eligibleNodes)) ||
+      (profile.mode === 'fixed' && profile.eligibleNodes !== undefined)
+    ) {
+      throw new Error(
+        `CHECK_RUNNER_DESCRIPTOR: malformed profile ${profile.profileId ?? '<unknown>'}`,
+      );
+    }
+    const requiredNodes = profile.requiredNodes as readonly string[];
+    const eligible = new Set<string>((profile.eligibleNodes ?? []) as readonly string[]);
+    for (const nodeId of [...requiredNodes, ...eligible]) {
+      if (!ids.has(nodeId)) {
+        throw new Error(`CHECK_RUNNER_DESCRIPTOR: profile ${profile.profileId} names unknown node`);
+      }
+    }
+    if (
+      profile.mode === 'affected' &&
+      (requiredNodes.some((nodeId) => !eligible.has(nodeId)) ||
+        (descriptor.fallbackNodeId !== null && !eligible.has(descriptor.fallbackNodeId)) ||
+        descriptor.tasks.some(
+          (task) =>
+            eligible.has(task.nodeId) &&
+            (task.dependencies as readonly string[]).some(
+              (dependency) => !eligible.has(dependency),
+            ),
+        ))
+    ) {
+      throw new Error(
+        `CHECK_RUNNER_DESCRIPTOR: affected profile ${profile.profileId} is not closed`,
+      );
+    }
+  }
   topologicalTasks(descriptor);
   return descriptor;
 }
@@ -381,6 +417,7 @@ function selectedNodeIds(
     if (profile === undefined) throw new Error(`CHECK_RUNNER_PROFILE: unknown target ${target}`);
     profile.requiredNodes.forEach((nodeId) => selected.add(nodeId));
     if (profile.mode === 'affected') {
+      const eligible = new Set(profile.eligibleNodes ?? []);
       for (const path of changes) {
         if (
           descriptor.dynamicFallbackSelectors.some((selector) => selectorMatches(selector, path))
@@ -391,6 +428,7 @@ function selectedNodeIds(
         }
         const matches = descriptor.tasks.filter(
           (task) =>
+            eligible.has(task.nodeId) &&
             task.nodeId !== descriptor.fallbackNodeId &&
             task.inputSelectors.some((selector) => selectorMatches(selector, path)),
         );
@@ -416,7 +454,9 @@ function selectedNodeIds(
     if (nodeId === undefined) continue;
     selected.add(nodeId);
     for (const dependent of dependents.get(nodeId) ?? []) {
-      if (!impacted.has(dependent)) {
+      const profile = descriptor.profiles.find((entry) => entry.profileId === target);
+      const eligible = profile?.mode === 'affected' ? new Set(profile.eligibleNodes ?? []) : null;
+      if ((eligible === null || eligible.has(dependent)) && !impacted.has(dependent)) {
         impacted.add(dependent);
         downstream.push(dependent);
       }

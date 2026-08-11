@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "descriptorVersion": "v1rc-survivor-1",
+  "descriptorVersion": "v1rc-survivor-2",
   "repositoryId": "devai-nyx/devai",
   "fallbackNodeId": "test:local-full",
   "dynamicFallbackSelectors": [],
@@ -325,7 +325,26 @@
     }
   ],
   "profiles": [
-    { "profileId": "affected", "mode": "affected", "requiredNodes": ["generate"] },
+    {
+      "profileId": "affected",
+      "mode": "affected",
+      "requiredNodes": ["generate"],
+      "eligibleNodes": [
+        "generate",
+        "test:authority",
+        "test:cli",
+        "test:effects",
+        "test:evidence",
+        "test:loop",
+        "test:sensors",
+        "test:skills",
+        "test:spec",
+        "test:utils",
+        "test:root",
+        "test:local-full",
+        "build"
+      ]
+    },
     {
       "profileId": "rc",
       "mode": "fixed",

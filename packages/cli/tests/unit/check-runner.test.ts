@@ -132,7 +132,12 @@ function descriptor() {
       },
     ],
     profiles: [
-      { profileId: 'affected', mode: 'affected', requiredNodes: ['generate'] },
+      {
+        profileId: 'affected',
+        mode: 'affected',
+        requiredNodes: ['generate'],
+        eligibleNodes: ['generate', 'test:unit', 'test:local-full'],
+      },
       { profileId: 'rc', mode: 'fixed', requiredNodes: ['test:rc'] },
     ],
   } as const;
@@ -219,6 +224,7 @@ describe('content-addressed check runner', () => {
     const affected = plan(state.root, 'affected', state.base);
     expect(affected.changedPaths).toEqual([path]);
     expect(affected.tasks.map((task) => task.nodeId)).toContain('test:unit');
+    expect(affected.tasks.map((task) => task.nodeId)).not.toContain('test:rc');
     expect(
       affected.tasks.find((task) => task.nodeId === 'test:unit')?.matchedChangedPaths,
     ).toContain(path);
