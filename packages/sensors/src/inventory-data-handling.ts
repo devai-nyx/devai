@@ -173,7 +173,7 @@ export function senseInventoryDataHandling(
     findings.push({
       severity: 'warning',
       code: 'DATA_HANDLING_REQUIRES_DATA_MODEL',
-      message: `Data-model body not found at ${dataModelPath}. Run 'devai sense inventory data model' first.`,
+      message: `Data-model body not found at ${dataModelPath}. Run 'devai sense run inventory_data_model' first.`,
     });
   } else {
     try {

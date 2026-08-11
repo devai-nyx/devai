@@ -6,16 +6,15 @@ status: active
 date: 2026-07-26
 authority: Architect
 sensor_kind: decision_citation_resolution
-emitter: packages/cli/src/commands/sense/governance-ledger.ts
+emitter: packages/loop/src/governance-ledger/index.ts
 standing: diagnostic
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Decision Citation Resolution
 
-This note binds the successor-local design standing for `decision_citation_resolution`. Its canonical emitter
-is `packages/cli/src/commands/sense/governance-ledger.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `decision_citation_resolution`. Its canonical emitter
+is `packages/loop/src/governance-ledger/index.ts`.
 
 Diagnostic-only; no cell binding.
 

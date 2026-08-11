@@ -197,7 +197,7 @@
       "acceptance_criteria": [
         {
           "id": "AC-001",
-          "statement": "After step 5, `devai spec validate all` exits 0 and `devai spec rtd bundle` produces a manifest whose readiness.ok is true."
+          "statement": "After step 5, `devai check --suite standard --as-role inspector --write` exits 0 and `devai evidence record --kind rtd --as-role inspector --write` produces a manifest whose readiness.ok is true."
         }
       ],
       "related_invariants": [],

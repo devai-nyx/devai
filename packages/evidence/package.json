@@ -24,7 +24,7 @@
   "scripts": {
     "build": "tsc -b",
     "clean": "tsc -b --clean",
-    "test": "vitest run tests"
+    "test": "pnpm --dir ../.. run test:evidence"
   },
   "dependencies": {
     "@devai-nyx/authority": "workspace:*",
@@ -34,12 +34,10 @@
   "devDependencies": {
     "vitest": "^4.0.18"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/devai-nyx/devai.git",
     "directory": "packages/evidence"
-  }
+  },
+  "private": true
 }

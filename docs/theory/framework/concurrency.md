@@ -49,7 +49,7 @@ Downstream branches do **not** rebase on every upstream commit. Checkpoint caden
 
 All agent work occurs in dedicated worktrees under `.devai/worktrees/<task-id>`. The repository root checkout is **reserved for human use**; agents do not operate in the root.
 
-**The active non-adopted agent worktree count is capped by F5 policy.** The current runtime default is three (`WORKTREE_CAP` in `packages/core/src/loop/worktrees.ts`; D-52). Harness-owned worktrees (the persistent inventory worktree, human-adopted review worktrees for escalated branches, and the dedicated soft-gate evaluator worktree) are tracked separately and do not count against the cap. Documentation must point to the policy source rather than freeze a second numeric authority.
+**The active agent worktree count is capped by F5 policy.** Harness-owned worktrees are tracked separately and do not count against the cap. Consult the active runtime policy instead of freezing a second numeric authority in documentation.
 
 A worktree is provisioned with:
 
@@ -68,7 +68,3 @@ The single-branch rule simplifies the merge graph: a task knows what it's rebasi
 - [Constitution Articles 24-28](../../reference/law.md) — the binding text.
 - [Loop](./loop.md) — how concurrency fits the cycle/iteration model.
 - [Roles → cross-role coordination](../../roles) — worked examples of triplet flow.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/concurrency.md (classification CURRENT).

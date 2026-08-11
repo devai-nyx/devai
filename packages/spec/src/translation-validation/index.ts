@@ -9,6 +9,9 @@ import { validators } from '@devai-nyx/schemas';
 export type TranslationStrategy =
   'regression' | 'feature-overlay' | 'behavioral-equivalence' | 'structural' | 'semantic-review';
 
+const RECIPE_NAME_PATTERN = /^devai-(?:assess|plan|fix|docs|scaffold|verify|round)$/u;
+const RECIPE_VARIANT_PATTERN = /^[a-z][a-z0-9-]*$/u;
+
 export interface StateChange {
   readonly path: string;
   readonly operation: 'create' | 'append' | 'retire';
@@ -43,7 +46,8 @@ export interface MutationIntent {
   readonly id: string;
   readonly trust: 'untrusted-intent';
   readonly task_id: string;
-  readonly skill_id: string;
+  readonly recipe_name: string;
+  readonly recipe_variant: string;
   readonly stage: TranslationWitnessClaim['stage'];
   readonly base_sha: string;
   readonly test_overlay_sha?: string;
@@ -131,10 +135,18 @@ function mutationRefs(repoRoot: string): string {
   });
 }
 
-function runtimeAttributedProofPath(skillId: string, path: string): boolean {
+function recipeRunDirectory(recipeName: string, recipeVariant: string): string {
+  return `record/proofs/work/recipe-runs/${recipeName}/${recipeVariant}`;
+}
+
+function runtimeAttributedProofPath(
+  recipeName: string,
+  recipeVariant: string,
+  path: string,
+): boolean {
   return (
     path === 'record/proofs/work/llm-usage.jsonl' ||
-    path.startsWith(`record/proofs/work/skill-runs/${skillId}/`)
+    path.startsWith(`${recipeRunDirectory(recipeName, recipeVariant)}/`)
   );
 }
 
@@ -314,7 +326,9 @@ export async function recordMutationCandidate(input: {
     throw new Error('MUTATION_UNEXPECTED_GIT_STATE');
   }
   const changed = mutationPaths(repoRoot);
-  const runtimeState = changed.filter((path) => runtimeAttributedProofPath(intent.skill_id, path));
+  const runtimeState = changed.filter((path) =>
+    runtimeAttributedProofPath(intent.recipe_name, intent.recipe_variant, path),
+  );
   const taskPaths = changed.filter((path) => !runtimeState.includes(path));
   if (taskPaths.length === 0) {
     throw new Error(`MUTATION_NO_OP: ${JSON.stringify(runResult)}`);
@@ -356,7 +370,8 @@ export async function recordMutationCandidate(input: {
     error: 'MUTATION_CANDIDATE_REF_FAILED',
   });
   const witness = createTranslationWitness({
-    skill_id: intent.skill_id,
+    recipe_name: intent.recipe_name,
+    recipe_variant: intent.recipe_variant,
     authority_role: intent.authority_role,
     emitted_at: input.emitted_at,
     claim: {
@@ -397,13 +412,15 @@ export function recordMutationEvidenceCommit(input: {
   readonly intent_id: string;
   readonly candidate_sha: string;
   readonly timestamp: string;
-  readonly skill_id: string;
+  readonly recipe_name: string;
+  readonly recipe_variant: string;
   readonly witness: Readonly<Record<string, unknown>>;
   readonly state_paths: readonly string[];
 }): MutationEvidenceRecord {
   const repoRoot = resolve(input.repo_root);
   const intentId = requireId(input.intent_id, /^MI-[a-f0-9]{16}$/u, 'mutation_intent_id');
-  const skillId = requireId(input.skill_id, /^SKILL-[A-Za-z0-9._-]+$/u, 'skill_id');
+  const recipeName = requireId(input.recipe_name, RECIPE_NAME_PATTERN, 'recipe name');
+  const recipeVariant = requireId(input.recipe_variant, RECIPE_VARIANT_PATTERN, 'recipe variant');
   if (!validators.translationWitness(input.witness)) {
     throw new Error('MUTATION_EVIDENCE_WITNESS_INVALID');
   }
@@ -424,13 +441,13 @@ export function recordMutationEvidenceCommit(input: {
   }
   const witnessPath = `record/proofs/compliance/translation-validation/witnesses/${witnessId}.json`;
   const taskPath = `.devai/state/tasks/${taskId}.json`;
-  const skillPrefix = `record/proofs/work/skill-runs/${skillId}/`;
+  const recipePrefix = `${recipeRunDirectory(recipeName, recipeVariant)}/`;
   const agentRunPattern = /^record\/proofs\/work\/agent-runs\/AR-[A-Za-z0-9-]+\.json$/u;
   for (const path of statePaths) {
     if (
       (!path.startsWith('.devai/state/') && !path.startsWith('record/proofs/')) ||
       path.split('/').includes('..') ||
-      (!runtimeAttributedProofPath(skillId, path) &&
+      (!runtimeAttributedProofPath(recipeName, recipeVariant, path) &&
         path !== witnessPath &&
         path !== taskPath &&
         !agentRunPattern.test(path))
@@ -458,9 +475,9 @@ export function recordMutationEvidenceCommit(input: {
   if (JSON.stringify(standaloneWitness) !== JSON.stringify(input.witness)) {
     throw new Error('MUTATION_EVIDENCE_WITNESS_MISMATCH');
   }
-  const skillStatePaths = statePaths.filter((path) => path.startsWith(skillPrefix));
-  const skillRecords = skillStatePaths
-    .filter((path) => path.startsWith(skillPrefix) && path.endsWith('.json'))
+  const recipeStatePaths = statePaths.filter((path) => path.startsWith(recipePrefix));
+  const recipeRecords = recipeStatePaths
+    .filter((path) => path.startsWith(recipePrefix) && path.endsWith('.json'))
     .map((path) => ({
       path,
       record: JSON.parse(readFileSync(resolve(repoRoot, path), 'utf8')) as unknown,
@@ -476,16 +493,18 @@ export function recordMutationEvidenceCommit(input: {
         (embedded as Readonly<Record<string, unknown>>)['id'] === witnessId
       );
     });
-  if (skillRecords.length !== 1) throw new Error('MUTATION_EVIDENCE_SKILL_RECORD_NOT_UNIQUE');
-  if (skillStatePaths.length !== 1) throw new Error('MUTATION_EVIDENCE_SKILL_STATE_NOT_EXACT');
-  const skillRecord = skillRecords[0]?.record as {
+  if (recipeRecords.length !== 1) throw new Error('MUTATION_EVIDENCE_RECIPE_RECORD_NOT_UNIQUE');
+  if (recipeStatePaths.length !== 1) throw new Error('MUTATION_EVIDENCE_RECIPE_STATE_NOT_EXACT');
+  const recipeRecord = recipeRecords[0]?.record as {
     readonly status?: unknown;
     readonly evidence?: { readonly translation_witness?: unknown };
   };
-  if (skillRecord.status !== 'pass' && skillRecord.status !== 'review') {
-    throw new Error('MUTATION_EVIDENCE_SKILL_RECORD_NOT_ELIGIBLE');
+  if (recipeRecord.status !== 'pass' && recipeRecord.status !== 'review') {
+    throw new Error('MUTATION_EVIDENCE_RECIPE_RECORD_NOT_ELIGIBLE');
   }
-  if (JSON.stringify(skillRecord.evidence?.translation_witness) !== JSON.stringify(input.witness)) {
+  if (
+    JSON.stringify(recipeRecord.evidence?.translation_witness) !== JSON.stringify(input.witness)
+  ) {
     throw new Error('MUTATION_EVIDENCE_WITNESS_MISMATCH');
   }
   const agentRunPaths = statePaths.filter((path) => agentRunPattern.test(path));
@@ -505,9 +524,9 @@ export function recordMutationEvidenceCommit(input: {
   );
   if (
     basename(agentRunPath, '.json') !== typedAgentRun.run_id ||
-    typedAgentRun.caller.kind !== 'skill' ||
-    typedAgentRun.caller.name !== skillId ||
-    !normalizedWritten.includes(skillRecords[0]?.path as string) ||
+    typedAgentRun.caller.kind !== 'recipe' ||
+    typedAgentRun.caller.name !== recipeName ||
+    !normalizedWritten.includes(recipeRecords[0]?.path as string) ||
     !normalizedWritten.includes(witnessPath)
   ) {
     throw new Error('MUTATION_EVIDENCE_AGENT_RUN_MISMATCH');
@@ -556,7 +575,8 @@ export function recordMutationEvidenceCommit(input: {
 }
 
 export function createTranslationWitness(input: {
-  readonly skill_id: string;
+  readonly recipe_name: string;
+  readonly recipe_variant: string;
   readonly authority_role: MutationAuthorityRole;
   readonly emitted_at: string;
   readonly claim: TranslationWitnessClaim;
@@ -564,7 +584,8 @@ export function createTranslationWitness(input: {
   const id = createHash('sha256')
     .update(
       JSON.stringify({
-        skill_id: input.skill_id,
+        recipe_name: input.recipe_name,
+        recipe_variant: input.recipe_variant,
         emitted_at: input.emitted_at,
         task_id: input.claim.task_id,
         base_sha: input.claim.base_sha,
@@ -578,7 +599,8 @@ export function createTranslationWitness(input: {
     id: `TW-${id}`,
     trust: 'untrusted-claim',
     task_id: input.claim.task_id,
-    skill_id: input.skill_id,
+    recipe_name: input.recipe_name,
+    recipe_variant: input.recipe_variant,
     stage: input.claim.stage,
     base_sha: input.claim.base_sha,
     candidate_sha: input.claim.candidate_sha,
@@ -902,19 +924,6 @@ export function validateInvariantStrategies(invariants: readonly InvariantLike[]
   };
 }
 
-export function deriveMutatingLlmSkillIds(
-  skills: readonly Readonly<{
-    id: string;
-    llm_backed: boolean;
-    host_mutation_policy: string;
-  }>[],
-): readonly string[] {
-  return skills
-    .filter((skill) => skill.llm_backed && skill.host_mutation_policy === 'write_requires_flag')
-    .map((skill) => skill.id)
-    .sort();
-}
-
 function requireId(value: string, pattern: RegExp, label: string): string {
   if (!pattern.test(value)) throw new Error(`${label.toUpperCase()}_INVALID`);
   return value;
@@ -924,25 +933,27 @@ export function buildExpectedDiffManifest(input: {
   readonly validation_id: string;
   readonly witness_id: string;
   readonly lease_id: string;
-  readonly skill_id: string;
-  readonly skill_record_path: string;
+  readonly recipe_name: string;
+  readonly recipe_variant: string;
+  readonly recipe_record_path: string;
 }): readonly StateChange[] {
   const validationId = requireId(input.validation_id, /^VR-[a-f0-9]{16}$/u, 'validation id');
   const witnessId = requireId(input.witness_id, /^TW-[a-f0-9]{16}$/u, 'witness id');
   const leaseId = requireId(input.lease_id, /^TVL-[a-f0-9]{16}$/u, 'lease id');
-  const skillId = requireId(input.skill_id, /^SKILL-[a-z][a-z0-9-]*$/u, 'skill id');
-  const prefix = `record/proofs/work/skill-runs/${skillId}/`;
-  if (!input.skill_record_path.startsWith(prefix)) {
-    throw new Error('SKILL_RECORD_PATH_INVALID');
+  const recipeName = requireId(input.recipe_name, RECIPE_NAME_PATTERN, 'recipe name');
+  const recipeVariant = requireId(input.recipe_variant, RECIPE_VARIANT_PATTERN, 'recipe variant');
+  const prefix = `${recipeRunDirectory(recipeName, recipeVariant)}/`;
+  if (!input.recipe_record_path.startsWith(prefix)) {
+    throw new Error('RECIPE_RECORD_PATH_INVALID');
   }
-  const filename = input.skill_record_path.slice(prefix.length);
+  const filename = input.recipe_record_path.slice(prefix.length);
   if (
     !/^[a-zA-Z0-9][a-zA-Z0-9._-]*\.json$/u.test(filename) ||
     filename.includes('..') ||
     filename.includes('/') ||
     filename.includes('\\')
   ) {
-    throw new Error('SKILL_RECORD_PATH_INVALID');
+    throw new Error('RECIPE_RECORD_PATH_INVALID');
   }
   return [
     {
@@ -970,21 +981,33 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function embeddedTranslationWitness(value: unknown, skillId: string): unknown {
-  if (!isRecord(value) || value['skill_id'] !== skillId) return undefined;
+function embeddedTranslationWitness(
+  value: unknown,
+  recipeName: string,
+  recipeVariant: string,
+): unknown {
+  if (
+    !isRecord(value) ||
+    value['recipe_name'] !== recipeName ||
+    value['recipe_variant'] !== recipeVariant
+  ) {
+    return undefined;
+  }
   if (value['status'] !== 'pass' && value['status'] !== 'review') return undefined;
   const evidence = value['evidence'];
   return isRecord(evidence) ? evidence['translation_witness'] : undefined;
 }
 
-export function resolveSkillRecordPath(input: {
+export function resolveRecipeRecordPath(input: {
   readonly repo_root: string;
-  readonly skill_id: string;
+  readonly recipe_name: string;
+  readonly recipe_variant: string;
   readonly witness_id: string;
 }): string {
-  const skillId = requireId(input.skill_id, /^SKILL-[a-z][a-z0-9-]*$/u, 'skill id');
+  const recipeName = requireId(input.recipe_name, RECIPE_NAME_PATTERN, 'recipe name');
+  const recipeVariant = requireId(input.recipe_variant, RECIPE_VARIANT_PATTERN, 'recipe variant');
   const witnessId = requireId(input.witness_id, /^TW-[a-f0-9]{16}$/u, 'witness id');
-  const relativeDirectory = `record/proofs/work/skill-runs/${skillId}`;
+  const relativeDirectory = recipeRunDirectory(recipeName, recipeVariant);
   const directory = resolve(input.repo_root, relativeDirectory);
   let names: string[];
   try {
@@ -993,7 +1016,7 @@ export function resolveSkillRecordPath(input: {
       .map((entry) => entry.name)
       .sort();
   } catch {
-    throw new Error('SKILL_RECORD_NOT_FOUND');
+    throw new Error('RECIPE_RECORD_NOT_FOUND');
   }
   const matches: string[] = [];
   for (const name of names) {
@@ -1007,11 +1030,12 @@ export function resolveSkillRecordPath(input: {
     }
     try {
       const record = JSON.parse(readFileSync(resolve(directory, name), 'utf8')) as unknown;
-      const witness = embeddedTranslationWitness(record, skillId);
+      const witness = embeddedTranslationWitness(record, recipeName, recipeVariant);
       if (
         isRecord(witness) &&
         witness['id'] === witnessId &&
-        witness['skill_id'] === skillId &&
+        witness['recipe_name'] === recipeName &&
+        witness['recipe_variant'] === recipeVariant &&
         validators.translationWitness(witness)
       ) {
         matches.push(`${relativeDirectory}/${name}`);
@@ -1020,8 +1044,8 @@ export function resolveSkillRecordPath(input: {
       // Invalid or unreadable records are not eligible matches.
     }
   }
-  if (matches.length === 0) throw new Error('SKILL_RECORD_NOT_FOUND');
-  if (matches.length !== 1) throw new Error('SKILL_RECORD_NOT_UNIQUE');
+  if (matches.length === 0) throw new Error('RECIPE_RECORD_NOT_FOUND');
+  if (matches.length !== 1) throw new Error('RECIPE_RECORD_NOT_UNIQUE');
   return matches[0] as string;
 }
 

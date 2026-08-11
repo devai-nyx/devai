@@ -3,10 +3,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 /**
- * Phase-10 Batch 10.B — `inv-override` in-source annotation scanner.
- *
- * Absorbs the LAW-00.OVERRIDE.1 mechanism from the stech-law
- * predecessor draft (D-38). The annotation format:
+ * `inv-override` in-source annotation scanner. The annotation format:
  *
  *   // inv-override: INV-XX-NNN
  *   // reason: <one sentence>

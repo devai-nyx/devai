@@ -6,8 +6,8 @@ import { mergeProcessCovs } from '@bcoe/v8-coverage';
 import type { Profiler } from 'node:inspector';
 import type { CoverageProviderModule, ReportContext } from 'vitest/node';
 
-const subprocessCoverageDirectory = resolve('scratch/coverage/t1-t6-child-v8');
-const subprocessCoverageEvidenceDirectory = resolve('scratch/coverage/t1-t3/subprocess-v8');
+const subprocessCoverageDirectory = resolve('scratch/coverage/rc-child-v8');
+const subprocessCoverageEvidenceDirectory = resolve('scratch/coverage/rc/subprocess-v8');
 
 interface ProcessCoverage {
   readonly result: Array<Profiler.ScriptCoverage & { startOffset?: number }>;
@@ -176,8 +176,8 @@ export async function retainSubprocessCoverageInputs(
 }
 
 /**
- * Vitest's worker profiler does not observe CLI processes spawned by the T2-T6
- * suites. NODE_V8_COVERAGE records those exact executions. This provider folds
+ * Vitest's worker profiler does not observe spawned CLI processes.
+ * NODE_V8_COVERAGE records those exact executions. This provider folds
  * the resulting V8 process records into the same source-mapped coverage map so
  * the merged gate measures every lane it runs, rather than only parent workers.
  */

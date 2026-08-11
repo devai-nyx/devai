@@ -28,7 +28,3 @@ None at present (signals are universal GitHub Actions idioms).
 
 - **Workflow-level optimisation choices.** `runs-on: ubuntu-22.04` vs `ubuntu-latest`, action SHA pinning depth.
 - **Step-naming conventions.** Subjective.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/harness_idiomaticity.md (classification CURRENT).

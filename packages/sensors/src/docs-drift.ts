@@ -265,7 +265,7 @@ export function senseDocsDrift(opts: DocsDriftOptions): SensorReading {
         severity: 'error',
         code: 'DOCS_DRIFT_SECURITY_HARDCODED_LINE',
         message:
-          'SECURITY.md hardcodes a supported version line ("target the current N.M.x"); keep the sentence version-free (R18, D-133).',
+          'SECURITY.md hardcodes a supported version line ("target the current N.M.x"); keep the sentence version-free.',
         file: 'SECURITY.md',
       });
     }

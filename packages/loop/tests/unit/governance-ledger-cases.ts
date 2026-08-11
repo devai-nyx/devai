@@ -290,32 +290,21 @@ describe('governance record parsing and integrity', () => {
     );
   });
 
-  it('treats superseded and tombstoned records as terminal', () => {
-    for (const terminal of ['superseded', 'tombstoned']) {
-      const root = fixtureRoot();
-      const path = writeRecord(
-        root,
-        'ADR-001.md',
-        recordSource({
-          status: terminal,
-          ...(terminal === 'superseded' && { supersededBy: 'ADR-002' }),
-        }),
-      );
-      initGit(root);
-      commitAll(root, terminal);
-      writeFileSync(
-        path,
-        recordSource({
-          status: terminal === 'superseded' ? 'tombstoned' : 'active',
-          ...(terminal === 'superseded' && { supersededBy: 'ADR-002' }),
-        }),
-      );
-      commitAll(root, 'illegal-terminal-transition');
+  it('treats superseded records as terminal', () => {
+    const root = fixtureRoot();
+    const path = writeRecord(
+      root,
+      'ADR-001.md',
+      recordSource({ status: 'superseded', supersededBy: 'ADR-002' }),
+    );
+    initGit(root);
+    commitAll(root, 'supersede');
+    writeFileSync(path, recordSource({ status: 'active', supersededBy: 'ADR-002' }));
+    commitAll(root, 'illegal-terminal-transition');
 
-      expect(decisionRecordIntegrity({ repoRoot: root }).findings).toContainEqual(
-        expect.objectContaining({ code: 'DECISION_LOCKED_BODY_MUTATED' }),
-      );
-    }
+    expect(decisionRecordIntegrity({ repoRoot: root }).findings).toContainEqual(
+      expect.objectContaining({ code: 'DECISION_LOCKED_BODY_MUTATED' }),
+    );
   });
 
   it('permits one active-to-superseded scalar replacement transition', () => {
@@ -417,7 +406,7 @@ describe('citation and archive integrity', () => {
     const root = fixtureRoot();
     expect(archiveImmutability({ repoRoot: root })).toEqual({ ok: true, findings: [] });
 
-    const archive = join(root, 'law/adr/predecessor');
+    const archive = join(root, 'law/adr/archive');
     mkdirSync(archive, { recursive: true });
     expect(archiveImmutability({ repoRoot: root }).findings[0]?.code).toBe(
       'ARCHIVE_MANIFEST_MISSING',
@@ -430,7 +419,7 @@ describe('citation and archive integrity', () => {
 
   it('reports malformed entries, missing files, hash mismatches, and undeclared files', () => {
     const root = fixtureRoot();
-    const archive = join(root, 'law/adr/predecessor');
+    const archive = join(root, 'law/adr/archive');
     write(join(archive, 'present.md'), 'present\n');
     write(join(archive, 'extra.md'), 'extra\n');
     write(
@@ -457,7 +446,7 @@ describe('citation and archive integrity', () => {
 
   it('accepts a completely pinned archive', () => {
     const root = fixtureRoot();
-    const archive = join(root, 'law/adr/predecessor');
+    const archive = join(root, 'law/adr/archive');
     const content = 'frozen\n';
     write(join(archive, 'frozen.md'), content);
     write(

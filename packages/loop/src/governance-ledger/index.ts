@@ -32,7 +32,7 @@ interface ArchiveManifest {
 const DECISION_ID = /\b(?:DII-[0-9]+|ADR-[A-Za-z0-9-]+)\b/gu;
 const DEFAULT_RECORDS_DIR = 'law/adr';
 const DEFAULT_ROUNDS_DIR = 'work/rounds';
-const DEFAULT_ARCHIVE_DIR = 'law/adr/predecessor';
+const DEFAULT_ARCHIVE_DIR = 'law/adr/archive';
 
 function scalar(value: string): unknown {
   const trimmed = value.trim();
@@ -255,11 +255,10 @@ function sealedTransitionAllowed(
     if (afterStatus === 'superseded') {
       return beforeReplacement === null && afterReplacement !== null;
     }
-    if (afterStatus === 'tombstoned') return afterReplacement === beforeReplacement;
     return false;
   }
   return (
-    ['superseded', 'tombstoned'].includes(beforeStatus) &&
+    beforeStatus === 'superseded' &&
     afterStatus === beforeStatus &&
     afterReplacement === beforeReplacement
   );
@@ -297,14 +296,14 @@ function sealedHistoryFindings(
       const candidate = parseRecordSource(entry.path, source);
       if (
         validators.recordMeta(candidate.frontmatter) &&
-        ['active', 'superseded', 'tombstoned'].includes(String(candidate.frontmatter['status']))
+        ['active', 'superseded'].includes(String(candidate.frontmatter['status']))
       ) {
         sealed = candidate;
         sealIndex = index;
         break;
       }
     } catch {
-      // Legacy ADR revisions before the schema-bound migration are not sealing commits.
+      // A schema-invalid revision cannot establish the sealing boundary.
     }
   }
   if (sealed === undefined || sealIndex < 0) return [];
@@ -344,7 +343,7 @@ function sealedHistoryFindings(
     }
     if (
       laterIndex < laterHistory.length - 1 &&
-      ['superseded', 'tombstoned'].includes(String(later.frontmatter['status']))
+      String(later.frontmatter['status']) === 'superseded'
     ) {
       priorTerminalStates.push(
         `${String(later.frontmatter['status'])}:${replacementId(later) ?? ''}`,
@@ -364,7 +363,7 @@ function sealedHistoryFindings(
     const restoredThroughTerminalTransition =
       String(originalSeal.frontmatter['status']) === 'active' &&
       priorTerminalStates.every((state) => state === finalTerminalState) &&
-      ['superseded', 'tombstoned'].includes(String(sealed.frontmatter['status'])) &&
+      String(sealed.frontmatter['status']) === 'superseded' &&
       bytesAndStableFieldsRestored &&
       sealedTransitionAllowed(originalSeal, sealed);
     if (!fullyRestored && !restoredThroughTerminalTransition) {
@@ -471,10 +470,9 @@ export function decisionRecordIntegrity(options: {
         typeof other?.frontmatter['superseded_by'] === 'string'
           ? [other.frontmatter['superseded_by']]
           : [];
-      // Draft successor ADRs may cite frozen predecessor source filenames in
-      // `supersedes`. Reverse symmetry applies only within the live successor
-      // record population; external provenance is resolved by the archive
-      // manifest and citation checks.
+      // Draft ADRs may cite archived source filenames in `supersedes`.
+      // Reverse symmetry applies only within the live record population;
+      // external provenance is resolved by archive citation checks.
       if (
         (other === undefined && /^ADR-[0-9]{3}$/u.test(target)) ||
         (other !== undefined && !reverse.includes(id))
@@ -545,7 +543,7 @@ export function decisionCitationResolution(options: {
       (!strictRoots &&
         (path.startsWith(recordsDir) ||
           rel.startsWith('law/register/') ||
-          rel.startsWith('law/adr/predecessor/') ||
+          rel.startsWith('law/adr/archive/') ||
           rel.startsWith('docs/site/versioned_docs/') ||
           rel.startsWith('docs/adopters/') ||
           rel.startsWith(['work', 'rounds', ''].join('/')) ||

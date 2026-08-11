@@ -23,7 +23,9 @@ export function classifyAuthorityPath(repoRoot: string, target: string): Authori
   if (!path) return 'fs:workspace';
   if (path[0] === '.devai') {
     if (path[1] === 'state') return 'fs:f5-state';
-    if (path[1] === 'pin' || path[1] === 'config') return 'fs:f5-config';
+    if (path[1] === 'pin' || path[1] === 'config' || path[1] === 'constitution.md') {
+      return 'fs:f5-config';
+    }
   }
   if (path[0] === 'record' && path[1] === 'derived' && path[2] === 'inventory') {
     return 'fs:f4-inventory';

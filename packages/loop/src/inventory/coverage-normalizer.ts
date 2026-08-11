@@ -27,7 +27,7 @@ export interface NormalizeCoverageOptions {
  * Normalize a `coverage-final.json` (the Istanbul / Jest / Vitest output
  * format) into a flat summary. If the file is missing, returns
  * `{ missing: true }` so callers can surface that explicitly without
- * erroring — Phase-3 self-application doesn't run with coverage by default.
+ * erroring when a repository does not run coverage by default.
  */
 export function normalizeCoverage(opts: NormalizeCoverageOptions): CoverageNormalizationResult {
   if (!existsSync(opts.coveragePath)) {

@@ -27,7 +27,6 @@ interface Options {
   readonly repo?: string;
   readonly out?: string;
   readonly repoRoot?: string;
-  readonly chain?: boolean;
   readonly human?: boolean;
   readonly timestamp?: string;
 }
@@ -101,7 +100,7 @@ function runChild(cmd: string, repoRoot: string): RunResult {
 export const recordRun = defineCommand({
   name: 'record run',
   description:
-    'Run a test command, capture stdout/stderr + exit code, and emit a test-result.schema.json record under .devai/state/test-results/. Example: `devai evidence test record --tier unit --scope @my/pkg --cmd "pnpm --filter @my/pkg test:unit" --chain`.',
+    'Run a test command, capture stdout/stderr + exit code, and emit a test-result.schema.json record under .devai/state/test-results/. Example: `devai evidence test record --tier unit --scope @my/pkg --cmd "pnpm --filter @my/pkg test:unit"`.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
@@ -118,7 +117,6 @@ export const recordRun = defineCommand({
         `Output file path (default: ${DEFAULT_OUT_DIR}/<scope-or-repo>/<tier>.json)`,
       )
       .option('--repo-root <path>', 'Repo root (default: cwd)')
-      .option('--chain', 'Also append a corresponding entry to record/proofs/chain.json')
       .option('--timestamp <iso>', 'Override timestamp (default: now)')
       .option('--human', 'Human-readable banner; otherwise emits the record JSON to stdout')
       .action(async (options: Options) => {
@@ -132,11 +130,6 @@ export const recordRun = defineCommand({
           if (options.cmd === undefined || options.cmd.length === 0) {
             process.stderr.write('devai evidence test record: --cmd is required\n');
             process.exit(EXIT_USAGE);
-          }
-          if (options.chain === true) {
-            throw new Error(
-              'LEGACY_EVIDENCE_WRITER_RETIRED: omit --chain and use a governed round-bound proof epoch',
-            );
           }
           const repoRoot = resolve(options.repoRoot ?? process.cwd());
           const repoSlug = (options.repo ?? repoRoot.split('/').pop() ?? 'unknown')

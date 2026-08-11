@@ -4,7 +4,7 @@ import { join } from 'node:path';
 /**
  * List all `*.json` files directly under `dir` whose basename matches the
  * given prefix (e.g., 'INV-', 'JNY-', 'GE-'). Returns absolute paths.
- * Returns `[]` if `dir` does not exist — Phase-2 self-application case
+ * Returns `[]` if `dir` does not exist, supporting repositories without
  * where the F1 skeleton is in place but no entries have been authored yet.
  */
 export function listSpecFiles(dir: string, prefix: string): string[] {

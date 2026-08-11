@@ -1,80 +1,283 @@
 #!/usr/bin/env node
 
-import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { parseDocument, isMap } from 'yaml';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { parseDocument } from 'yaml';
 
-const workflowDir = join(process.cwd(), '.github', 'workflows');
-const files = readdirSync(workflowDir)
-  .filter((name) => /\.ya?ml$/u.test(name))
-  .sort();
-const findings = [];
+export const LEDGER_WORKFLOW_FILE = 'devai-ledger-verify.yml';
+export const VERIFIER_REPOSITORY = 'devai-nyx/devai-verifier';
+export const VERIFIER_COMMIT = '2c6e5acaade7aae65d23f86fc7f6fdf7e56d945c';
+export const LEDGER_ENVIRONMENT = 'devai-ledger-verification';
+export const CHECKOUT_COMMIT = '3d3c42e5aac5ba805825da76410c181273ba90b1';
+export const SETUP_NODE_COMMIT = '820762786026740c76f36085b0efc47a31fe5020';
+export const CANDIDATE_SHA_EXPRESSION = '${{ github.event.pull_request.head.sha || github.sha }}';
 
-function visit(value, path, file) {
-  if (Array.isArray(value)) {
-    value.forEach((item, index) => visit(item, `${path}[${String(index)}]`, file));
-    return;
-  }
-  if (value === null || typeof value !== 'object') return;
+const OLD_WORKFLOW_MARKERS = [
+  'cold-sentinel',
+  'round-gates',
+  'reusable-evidence-gate',
+  'devai-gates',
+];
+const PRODUCT_EXECUTION = [
+  /\bpnpm\b/u,
+  /\bnpm\s+(?:run|test|exec)\b/u,
+  /\byarn\b/u,
+  /\bbun\s+(?:run|test)\b/u,
+  /\bvitest\b/u,
+  /\bjest\b/u,
+  /\bpytest\b/u,
+  /\bcoverage\b/iu,
+  /\btsc\b/u,
+  /\beslint\b/u,
+  /\bprettier\b/u,
+  /\b(?:make|gradle|mvn)\s+(?:build|test|check)\b/iu,
+];
 
-  for (const [key, child] of Object.entries(value)) {
-    const childPath = path.length === 0 ? key : `${path}.${key}`;
-    if (key === 'paths' || key === 'paths-ignore') {
-      findings.push(`${file}: ${childPath} may silently skip a required gate`);
-    }
-    visit(child, childPath, file);
-  }
+function object(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value) ? value : {};
 }
 
-for (const file of files) {
-  const source = readFileSync(join(workflowDir, file), 'utf8');
-  for (const match of source.matchAll(/^\s*(?:-\s*)?uses:\s*([^\s#]+)(.*)$/gmu)) {
-    const target = match[1] ?? '';
-    const suffix = match[2] ?? '';
-    if (target.startsWith('./.github/workflows/')) continue;
-    if (!/@[0-9a-f]{40}$/u.test(target)) {
-      findings.push(`${file}: ${target} must use an immutable 40-hex SHA`);
-    } else if (!/#\s*v[0-9]/u.test(suffix)) {
-      findings.push(`${file}: ${target} must carry a readable version comment`);
+function workflowFiles(root) {
+  const directory = join(root, '.github/workflows');
+  if (!existsSync(directory)) return [];
+  return readdirSync(directory)
+    .filter((name) => /\.ya?ml$/u.test(name))
+    .sort();
+}
+
+function finding(code, file, detail) {
+  return { code, file, detail };
+}
+
+export function checkWorkflowTree(root = process.cwd()) {
+  const findings = [];
+  const files = workflowFiles(root);
+  if (files.length !== 1 || files[0] !== LEDGER_WORKFLOW_FILE) {
+    findings.push(
+      finding(
+        'CI_WORKFLOW_SET_INVALID',
+        '.github/workflows',
+        `expected exactly ${LEDGER_WORKFLOW_FILE}; found ${files.join(', ') || 'none'}`,
+      ),
+    );
+  }
+  for (const file of files) {
+    const path = join(root, '.github/workflows', file);
+    const source = readFileSync(path, 'utf8');
+    checkWorkflow(file, source, findings);
+  }
+  return { ok: findings.length === 0, files, findings };
+}
+
+function checkWorkflow(file, source, findings) {
+  for (const marker of OLD_WORKFLOW_MARKERS) {
+    if (file.includes(marker) || source.includes(marker)) {
+      findings.push(finding('CI_OBSOLETE_WORKFLOW_PRESENT', file, marker));
     }
   }
+
   const document = parseDocument(source, { uniqueKeys: true });
   if (document.errors.length > 0) {
-    for (const error of document.errors) findings.push(`${file}: ${error.message}`);
-    continue;
+    for (const error of document.errors) {
+      findings.push(finding('CI_WORKFLOW_YAML_INVALID', file, error.message));
+    }
+    return;
   }
-  if (!isMap(document.contents)) {
-    findings.push(`${file}: workflow root must be a mapping`);
-    continue;
-  }
-  const workflow = document.toJS();
-  if (typeof workflow.name !== 'string' || workflow.name.length === 0) {
-    findings.push(`${file}: missing workflow name`);
-  }
-  if (workflow.on === undefined || workflow.on === null) findings.push(`${file}: missing triggers`);
-  if (workflow.jobs === undefined || workflow.jobs === null) findings.push(`${file}: missing jobs`);
-  visit(workflow, '', file);
-  if (file === 'ci.yml' && workflow.jobs !== undefined && workflow.jobs !== null) {
-    const jobs = Object.values(workflow.jobs);
-    const commands = jobs.flatMap((job) =>
-      Array.isArray(job.steps)
-        ? job.steps.flatMap((step) => (typeof step.run === 'string' ? [step.run] : []))
-        : [],
+  const workflow = object(document.toJS());
+
+  const triggers = object(workflow.on);
+  const triggerNames = Object.keys(triggers).sort();
+  const expectedTriggers = ['pull_request_target', 'push', 'workflow_dispatch'];
+  if (
+    triggerNames.length !== expectedTriggers.length ||
+    triggerNames.some((name, index) => name !== expectedTriggers[index])
+  ) {
+    findings.push(
+      finding(
+        'CI_WORKFLOW_TRUST_BOUNDARY_INVALID',
+        file,
+        'workflow must use trusted-base pull_request_target, push, and workflow_dispatch only',
+      ),
     );
-    if (!commands.includes('pnpm run ci:governance')) {
-      findings.push('ci.yml: required pnpm run ci:governance command is missing');
+  }
+
+  const permissions = object(workflow.permissions);
+  if (Object.keys(permissions).length !== 1 || permissions.contents !== 'read') {
+    findings.push(
+      finding('CI_WORKFLOW_PERMISSIONS_INVALID', file, 'only contents: read is permitted'),
+    );
+  }
+  if (object(workflow.env).CANDIDATE_SHA !== CANDIDATE_SHA_EXPRESSION) {
+    findings.push(
+      finding(
+        'CI_CANDIDATE_SHA_UNBOUND',
+        file,
+        'CANDIDATE_SHA must select pull-request head SHA or github.sha exactly',
+      ),
+    );
+  }
+
+  const jobs = object(workflow.jobs);
+  if (Object.keys(jobs).length !== 1 || jobs['verify-ledger'] === undefined) {
+    findings.push(
+      finding('CI_LEDGER_JOB_SET_INVALID', file, 'exactly one verify-ledger job is required'),
+    );
+  }
+  const job = object(jobs['verify-ledger']);
+  if (job.environment !== LEDGER_ENVIRONMENT) {
+    findings.push(
+      finding(
+        'CI_LEDGER_ENVIRONMENT_MISSING',
+        file,
+        `verify-ledger must use protected environment ${LEDGER_ENVIRONMENT}`,
+      ),
+    );
+  }
+  const steps = Array.isArray(job.steps) ? job.steps.map(object) : [];
+  if (steps.length === 0) {
+    findings.push(finding('CI_LEDGER_STEPS_MISSING', file, 'verify-ledger has no steps'));
+    return;
+  }
+
+  for (const [index, step] of steps.entries()) {
+    const location = `jobs.verify-ledger.steps[${String(index)}]`;
+    const uses = typeof step.uses === 'string' ? step.uses : '';
+    if (uses.startsWith('./')) {
+      findings.push(
+        finding('CI_CANDIDATE_LOCAL_VERIFIER_FORBIDDEN', file, `${location} uses ${uses}`),
+      );
+    } else if (uses !== '' && !/@[0-9a-f]{40}$/u.test(uses)) {
+      findings.push(finding('CI_ACTION_REFERENCE_MUTABLE', file, `${location} uses ${uses}`));
     }
-    if (!jobs.some((job) => job.uses === './.github/workflows/round-gates.yml')) {
-      findings.push('ci.yml: required automatic round-gates workflow call is missing');
+    if (
+      (uses.startsWith('actions/checkout@') && uses !== `actions/checkout@${CHECKOUT_COMMIT}`) ||
+      (uses.startsWith('actions/setup-node@') && uses !== `actions/setup-node@${SETUP_NODE_COMMIT}`)
+    ) {
+      findings.push(finding('CI_ACTION_PIN_MISMATCH', file, `${location} uses ${uses}`));
+    }
+    const run = typeof step.run === 'string' ? step.run : '';
+    if (PRODUCT_EXECUTION.some((pattern) => pattern.test(run))) {
+      findings.push(
+        finding('CI_PRODUCT_EXECUTION_FORBIDDEN', file, `${location} runs product tooling`),
+      );
+    }
+    if (
+      /(?:scripts|packages|candidate)\/[A-Za-z0-9_./-]*(?:verify|verifier)/iu.test(run) ||
+      (/\bnode\s+[^\n]*(?:verify|verifier)/iu.test(run) &&
+        !run.includes('node .devai-verifier/src/cli.js'))
+    ) {
+      findings.push(
+        finding('CI_CANDIDATE_LOCAL_VERIFIER_FORBIDDEN', file, `${location} invokes local code`),
+      );
+    }
+  }
+
+  const checkouts = steps.filter((step) =>
+    typeof step.uses === 'string' ? step.uses.startsWith('actions/checkout@') : false,
+  );
+  const candidateCheckout = checkouts.find((step) => object(step.with).path === 'candidate');
+  if (
+    candidateCheckout === undefined ||
+    object(candidateCheckout.with).ref !== '${{ env.CANDIDATE_SHA }}' ||
+    object(candidateCheckout.with).repository !== undefined ||
+    object(candidateCheckout.with)['persist-credentials'] !== false
+  ) {
+    findings.push(
+      finding('CI_CANDIDATE_CHECKOUT_UNBOUND', file, 'candidate checkout must use exact SHA'),
+    );
+  }
+  const verifierCheckout = checkouts.find(
+    (step) => object(step.with).repository === VERIFIER_REPOSITORY,
+  );
+  if (verifierCheckout === undefined) {
+    findings.push(
+      finding('CI_VERIFIER_CHECKOUT_MISSING', file, `missing ${VERIFIER_REPOSITORY} checkout`),
+    );
+  } else {
+    const withValues = object(verifierCheckout.with);
+    if (withValues.ref !== VERIFIER_COMMIT) {
+      findings.push(
+        finding(
+          /^[0-9a-f]{40}$/u.test(String(withValues.ref ?? ''))
+            ? 'CI_VERIFIER_PIN_MISMATCH'
+            : 'CI_VERIFIER_REF_MUTABLE',
+          file,
+          `verifier ref must be ${VERIFIER_COMMIT}`,
+        ),
+      );
+    }
+    if (withValues.path !== '.devai-verifier' || withValues['persist-credentials'] !== false) {
+      findings.push(
+        finding(
+          'CI_VERIFIER_CHECKOUT_INVALID',
+          file,
+          'verifier must use isolated credential-free path',
+        ),
+      );
+    }
+  }
+
+  const serialized = JSON.stringify(workflow);
+  const externalInputs = [
+    'secrets.DEVAI_LEDGER_ENVELOPE_B64',
+    'secrets.DEVAI_LEDGER_RESULTS_TGZ_B64',
+    'secrets.DEVAI_LEDGER_TASK_POLICY_B64',
+    'secrets.DEVAI_LEDGER_TRUST_STORE_B64',
+    'vars.DEVAI_LEDGER_POLICY_DIGEST',
+  ];
+  for (const input of externalInputs) {
+    if (!serialized.includes(input)) {
+      findings.push(finding('CI_EXTERNAL_CONTROL_INPUT_MISSING', file, input));
+    }
+  }
+  if (
+    /(?:record\/|\.devai\/state|candidate\/)[^"'\s]*(?:receipt|result|policy|trust|ledger)/iu.test(
+      serialized,
+    )
+  ) {
+    findings.push(
+      finding(
+        'CI_CANDIDATE_CONTROL_INPUT_FORBIDDEN',
+        file,
+        'verification authority must not come from candidate files',
+      ),
+    );
+  }
+
+  const verifierRun = steps
+    .map((step) => (typeof step.run === 'string' ? step.run : ''))
+    .find((run) => run.includes('node .devai-verifier/src/cli.js'));
+  if (verifierRun === undefined) {
+    findings.push(
+      finding('CI_VERIFIER_INVOCATION_MISSING', file, 'pinned verifier CLI is not invoked'),
+    );
+  } else {
+    for (const binding of [
+      '--repository "${{ github.repository }}"',
+      '--commit "$CANDIDATE_SHA"',
+      '--tree "${{ steps.candidate.outputs.tree }}"',
+      '--policy-digest "$POLICY_DIGEST"',
+    ]) {
+      if (!verifierRun.includes(binding)) {
+        findings.push(finding('CI_VERIFIER_BINDING_MISSING', file, binding));
+      }
     }
   }
 }
 
-if (files.length === 0) findings.push('no workflow files found');
-
-if (findings.length > 0) {
-  process.stderr.write(`workflow lint: FAIL\n${findings.map((f) => `- ${f}`).join('\n')}\n`);
-  process.exit(1);
+function printResult(result) {
+  if (result.ok) {
+    process.stdout.write('workflow contract: PASS\n');
+    return;
+  }
+  for (const item of result.findings) {
+    process.stderr.write(`${item.code}: ${item.file}: ${item.detail}\n`);
+  }
+  process.exitCode = 1;
 }
 
-process.stdout.write(`workflow lint: PASS (${String(files.length)} workflow files)\n`);
+const invokedPath = process.argv[1] === undefined ? '' : resolve(process.argv[1]);
+if (invokedPath === fileURLToPath(import.meta.url)) {
+  printResult(checkWorkflowTree(process.cwd()));
+}

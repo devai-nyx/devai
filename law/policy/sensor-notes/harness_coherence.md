@@ -9,13 +9,12 @@ sensor_kind: harness_coherence
 emitter: packages/sensors/src/harness-coherence.ts
 standing: cell
 tiers: [TIER3, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Harness Coherence
 
-This note binds the successor-local design standing for `harness_coherence`. Its canonical emitter
-is `packages/sensors/src/harness-coherence.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `harness_coherence`. Its canonical emitter
+is `packages/sensors/src/harness-coherence.ts`.
 
 Bound cells: F5×T3.
 

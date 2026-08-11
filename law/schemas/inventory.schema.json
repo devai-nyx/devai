@@ -30,7 +30,7 @@
     },
     "modules": {
       "type": "array",
-      "description": "Modules in the repo. Pre-22.G this was an array of MOD-* ids (strings); Phase 22.G (D-A-17) widens items to also accept an object form carrying {id, file} so computeReverseAdherence can read per-surface file paths without a second pass through the module-extractor. Back-compat: the string form is still accepted.",
+      "description": "Modules in the repository. Items accept either stable MOD-* ids or objects carrying {id, file}, allowing reverse-adherence analysis to read per-surface file paths without another extraction pass.",
       "items": {
         "oneOf": [
           {
@@ -79,11 +79,11 @@
           },
           "id": {
             "type": "string",
-            "description": "Phase 22.G (D-A-17): stable per-route id used by computeReverseAdherence. Format: `ROUTE-<sha256_hex_8>` derived from (method, path, module)."
+            "description": "Stable per-route id used by reverse-adherence analysis. Format: `ROUTE-<sha256_hex_8>` derived from method, path, and module."
           },
           "file": {
             "type": "string",
-            "description": "Phase 22.G (D-A-17): source file the route declaration was extracted from. Used by computeReverseAdherence to match against trace.invariants[*].code_areas globs."
+            "description": "Source file containing the route declaration, used to match trace.invariants[*].code_areas globs."
           }
         }
       }
@@ -135,11 +135,11 @@
           },
           "id": {
             "type": "string",
-            "description": "Phase 22.G (D-A-17): stable per-component id used by computeReverseAdherence. Format: `COMP-<sha256_hex_8>` derived from (kind, name, module)."
+            "description": "Stable per-component id used by reverse-adherence analysis. Format: `COMP-<sha256_hex_8>` derived from kind, name, and module."
           },
           "file": {
             "type": "string",
-            "description": "Phase 22.G (D-A-17): source file the component declaration was extracted from. Equal to `path` when `path` is the component's source file (most cases); kept as a separate field so adherence-reverse can read it via the same shape as the other surface kinds."
+            "description": "Source file containing the component declaration. It normally equals `path` and remains separate so every surface kind exposes the same file-bearing shape."
           }
         }
       }
@@ -178,7 +178,7 @@
     },
     "dependency_graph": {
       "type": "array",
-      "description": "Phase 22.G (D-A-17): per-node dependency-graph surfaces. Each entry carries an id + file so computeReverseAdherence can read this slice with the same shape as routes/modules/components. The full edge list is recoverable only via a fresh extractDependencies() pass; this array is the surface-pass that adherence-reverse needs.",
+      "description": "Per-node dependency-graph surfaces. Each entry carries an id and file so reverse-adherence analysis can read this slice with the same shape as routes, modules, and components. The full edge list requires a fresh dependency extraction; this array provides the surface view.",
       "items": {
         "type": "object",
         "additionalProperties": false,
@@ -205,7 +205,7 @@
         "type": "string",
         "pattern": "^[a-f0-9]{64}$"
       },
-      "description": "SHA-256 hashes of all governance artifacts, for drift detection. Per F5 self-application (Article 36)."
+      "description": "SHA-256 hashes of the configured repository contracts for F5 drift detection (Article 36)."
     }
   },
   "schema_version": "1.0.0",

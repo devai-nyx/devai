@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import { cac } from 'cac';
-import { getSkill } from '#core-compat';
 import { routeArgv } from './command-router.js';
 import {
   attachRuntimeContracts,
   getFullRegistry,
+  type CommandDefinition,
+  type RegistryEntry,
   validateActionSurface,
 } from './define-command.js';
 import {
@@ -20,203 +21,7 @@ import {
   publicActionForArgv,
   runCliStage,
 } from './action-output.js';
-import { actionsList } from './commands/actions-list.js';
-import { blueprintDiff, blueprintPlan, blueprintValidate } from './commands/blueprint/index.js';
-import { rgrEmit, rgrList, rgrResolve, rgrShow } from './commands/rgr/index.js';
-import {
-  releaseGate,
-  releaseList,
-  releasePostdeployVerify,
-  releaseRuntimeDrift,
-} from './commands/release/index.js';
-import {
-  senseRuntimeApi,
-  senseRuntimeAuth,
-  senseRuntimeData,
-} from './commands/sense/runtime-probe.js';
-import { rtdBundle } from './commands/rtd/index.js';
-import {
-  docsCli,
-  docsDecisionsRender,
-  docsLinks,
-  docsPublish,
-  docsRenderMermaid,
-  docsRoundsRender,
-  docsSynthesize,
-  docsSynthesizeAll,
-} from './commands/docs/index.js';
-import { roundArchive, roundDeclare, roundScaffold, roundStatus } from './commands/round/index.js';
-import { decisionClose } from './commands/decision/index.js';
-import { phaseClose, phaseLedger } from './commands/phase/index.js';
-import { renderMatrix } from './commands/render/index.js';
-import { recordRun } from './commands/record/index.js';
-import { coverageAggregate } from './commands/coverage/index.js';
-import { mutationRun, mutationVerify } from './commands/mutation/index.js';
-import { doctor } from './commands/doctor.js';
-import {
-  initApplyArchitect,
-  initApplyF5,
-  initApplyOwner,
-  initPlan,
-  upgrade,
-} from './commands/init/index.js';
-import { ciScaffold } from './commands/ci/index.js';
-import { hooksInstall } from './commands/hooks/index.js';
-import { skillList, skillRun } from './commands/skill/index.js';
-import { statePrune } from './commands/state/index.js';
-import { workSessionEnd, workSessionStart } from './commands/work/session.js';
-import {
-  evidenceActionsVerify,
-  evidenceChainHead,
-  evidenceCollectLocal,
-  evidenceEmit,
-  evidenceRedact,
-  evidenceVerify,
-  evidenceVerifyLocal,
-} from './commands/evidence/index.js';
-import {
-  invAdherenceReverse,
-  invComponents,
-  invContracts,
-  invCoverage,
-  invDependencies,
-  invGlossary,
-  invModules,
-  invRegen,
-  invRoutes,
-  invSchemas,
-  invSuggest,
-  invTests,
-} from './commands/inv/index.js';
-import {
-  dbDrop,
-  dbProvision,
-  dbRebuildTemplate,
-  dbStartShared,
-  dbStatus,
-  dbStopShared,
-  lockAcquire,
-  lockList,
-  lockReap,
-  lockRelease,
-  taskComplete,
-  taskEscalate,
-  taskList,
-  taskPauseRgr,
-  taskResumeRgr,
-  taskSpawn,
-  worktreeAdopt,
-  worktreeCreate,
-  worktreeDestroy,
-  worktreeList,
-  worktreeReap,
-} from './commands/loop/index.js';
-import {
-  promptsCompose,
-  promptsDiff,
-  promptsFreeze,
-  scoreAssess,
-  scoreBacklogRefresh,
-  scoreCompute,
-  scoreView,
-  triageClassify,
-  triageDispatch,
-  triageTieBreak,
-} from './commands/phase6/index.js';
-import {
-  checkAdrs,
-  checkActionEffectsCmd,
-  checkCiEconomyCmd,
-  checkDocsGovernanceCmd,
-  checkDependenciesCmd,
-  checkForbiddenActions,
-  checkGlobGuardsCmd,
-  checkOverrides,
-  checkPrComplianceCmd,
-  checkPromptOverlaysCmd,
-  checkSensorIntegrityCmd,
-  registerCheckSchemas,
-} from './commands/check/index.js';
-import { governAuditorPostMergeCmd } from './commands/govern/post-merge-auditor.js';
-import { llmProbe } from './commands/llm/index.js';
-import { packGraduateInvariants, packResolve } from './commands/pack/index.js';
-import {
-  backlogAdd,
-  backlogCompact,
-  backlogComplete,
-  backlogList,
-  backlogNext,
-  loopRun,
-} from './commands/loop-run/index.js';
-import {
-  senseBuildCmd,
-  senseInventoryApiCmd,
-  senseInventoryCoverageCmd,
-  senseInventoryDataHandlingCmd,
-  senseInventoryDataModelCmd,
-  senseInventoryDepGraphCmd,
-  senseInventoryRbacCmd,
-  senseInventoryRoutesCmd,
-  senseJudgeCmd,
-  senseLintCmd,
-  senseMigrateCheckCmd,
-  senseReadingsRebuildCmd,
-  senseReadingsRecordCmd,
-  senseHarnessCoherenceCmd,
-  senseDocsDriftCmd,
-  senseArchiveImmutabilityCmd,
-  senseDecisionCitationResolutionCmd,
-  senseDecisionRecordIntegrityCmd,
-  senseSiteDriftCmd,
-  senseHarnessCoverageCmd,
-  senseHarnessDepthCmd,
-  senseHarnessGreenMainCmd,
-  senseHarnessIdiomaticityCmd,
-  senseHarnessInvariantAlignmentCmd,
-  senseHarnessPerformanceCmd,
-  senseHarnessRobustnessCmd,
-  senseHarnessSecurityCmd,
-  senseInventoryAdherenceCmd,
-  senseInventoryPerformanceCmd,
-  senseInventoryDeterminismCmd,
-  sensePerfTestCmd,
-  senseSecurityScanCmd,
-  sensePlantCoherenceCmd,
-  sensePlantCoverageCmd,
-  sensePlantDepthCmd,
-  senseSpecAlignmentCmd,
-  senseSpecDepthCmd,
-  senseSpecPerformanceTargetsCmd,
-  senseSpecRobustnessTargetsCmd,
-  senseSpecSecurityCoverageCmd,
-  senseSpecFreshnessCmd,
-  senseSpecIdiomaticityCmd,
-  senseTestCmd,
-  senseTestCoherenceCmd,
-  senseTestCoverageDepthCmd,
-  senseTestIdiomaticityCmd,
-  senseTestPerformanceCoverageCmd,
-  senseTestRobustnessCoverageCmd,
-  senseTestSecurityCoverageCmd,
-  senseTestInvariantAlignmentCmd,
-  senseTestWeakeningCmd,
-  senseTraceResolveCmd,
-  senseTypeCheckCmd,
-  senseRunSetCmd,
-  senseRoundRecordIntegrityCmd,
-} from './commands/sense/index.js';
-import {
-  specValidateActionCoverage,
-  specValidateAll,
-  specValidateGlossary,
-  specValidateInvariants,
-  specValidateInvariantStrategies,
-  specValidateJourneys,
-  specValidateSchema,
-  specValidateTrace,
-  specValidateTestTrace,
-} from './commands/spec/index.js';
-import { verifyTranslation } from './commands/verify/index.js';
+import { ACTION_REGISTRY } from './generated/action-registry.js';
 
 const pkgVersion = resolveCliVersion();
 
@@ -224,201 +29,216 @@ const cli = cac('devai');
 cli.version(pkgVersion);
 cli.help();
 
-actionsList.register(cli);
-blueprintValidate.register(cli);
-blueprintDiff.register(cli);
-blueprintPlan.register(cli);
-doctor.register(cli);
-initPlan.register(cli);
-initApplyOwner.register(cli);
-initApplyArchitect.register(cli);
-initApplyF5.register(cli);
-ciScaffold.register(cli);
-hooksInstall.register(cli);
-skillList.register(cli);
-skillRun.register(cli);
-upgrade.register(cli);
-evidenceChainHead.register(cli);
-evidenceActionsVerify.register(cli);
-evidenceCollectLocal.register(cli);
-evidenceEmit.register(cli);
-evidenceRedact.register(cli);
-evidenceVerify.register(cli);
-evidenceVerifyLocal.register(cli);
-invAdherenceReverse.register(cli);
-invComponents.register(cli);
-invContracts.register(cli);
-invCoverage.register(cli);
-invDependencies.register(cli);
-invGlossary.register(cli);
-invModules.register(cli);
-invRegen.register(cli);
-invRoutes.register(cli);
-invSchemas.register(cli);
-invSuggest.register(cli);
-invTests.register(cli);
-dbDrop.register(cli);
-dbProvision.register(cli);
-dbRebuildTemplate.register(cli);
-dbStartShared.register(cli);
-dbStopShared.register(cli);
-dbStatus.register(cli);
-lockAcquire.register(cli);
-lockList.register(cli);
-lockReap.register(cli);
-lockRelease.register(cli);
-senseBuildCmd.register(cli);
-senseInventoryApiCmd.register(cli);
-senseInventoryCoverageCmd.register(cli);
-senseInventoryDataHandlingCmd.register(cli);
-senseInventoryDataModelCmd.register(cli);
-senseInventoryDepGraphCmd.register(cli);
-senseInventoryRbacCmd.register(cli);
-senseInventoryRoutesCmd.register(cli);
-senseJudgeCmd.register(cli);
-senseReadingsRebuildCmd.register(cli);
-senseReadingsRecordCmd.register(cli);
-senseLintCmd.register(cli);
-senseSpecDepthCmd.register(cli);
-senseSpecIdiomaticityCmd.register(cli);
-senseSpecFreshnessCmd.register(cli);
-senseSpecAlignmentCmd.register(cli);
-senseSpecSecurityCoverageCmd.register(cli);
-senseSpecPerformanceTargetsCmd.register(cli);
-senseSpecRobustnessTargetsCmd.register(cli);
-sensePlantCoverageCmd.register(cli);
-sensePlantDepthCmd.register(cli);
-sensePlantCoherenceCmd.register(cli);
-senseTestCoverageDepthCmd.register(cli);
-senseTestCoherenceCmd.register(cli);
-senseTestIdiomaticityCmd.register(cli);
-senseTestSecurityCoverageCmd.register(cli);
-senseTestPerformanceCoverageCmd.register(cli);
-senseTestRobustnessCoverageCmd.register(cli);
-senseTestInvariantAlignmentCmd.register(cli);
-senseInventoryAdherenceCmd.register(cli);
-senseInventoryPerformanceCmd.register(cli);
-senseSecurityScanCmd.register(cli);
-sensePerfTestCmd.register(cli);
-senseInventoryDeterminismCmd.register(cli);
-senseHarnessSecurityCmd.register(cli);
-senseHarnessGreenMainCmd.register(cli);
-senseHarnessCoverageCmd.register(cli);
-senseHarnessDepthCmd.register(cli);
-senseHarnessCoherenceCmd.register(cli);
-senseDocsDriftCmd.register(cli);
-senseArchiveImmutabilityCmd.register(cli);
-senseDecisionCitationResolutionCmd.register(cli);
-senseDecisionRecordIntegrityCmd.register(cli);
-senseSiteDriftCmd.register(cli);
-senseHarnessInvariantAlignmentCmd.register(cli);
-senseHarnessIdiomaticityCmd.register(cli);
-senseHarnessPerformanceCmd.register(cli);
-senseHarnessRobustnessCmd.register(cli);
-senseMigrateCheckCmd.register(cli);
-senseTestCmd.register(cli);
-senseTestWeakeningCmd.register(cli);
-senseTraceResolveCmd.register(cli);
-senseTypeCheckCmd.register(cli);
-senseRunSetCmd.register(cli);
-senseRoundRecordIntegrityCmd.register(cli);
-checkAdrs.register(cli);
-checkActionEffectsCmd.register(cli);
-checkCiEconomyCmd.register(cli);
-checkDocsGovernanceCmd.register(cli);
-checkDependenciesCmd.register(cli);
-checkForbiddenActions.register(cli);
-checkGlobGuardsCmd.register(cli);
-checkOverrides.register(cli);
-checkPrComplianceCmd.register(cli);
-checkPromptOverlaysCmd.register(cli);
-checkSensorIntegrityCmd.register(cli);
-registerCheckSchemas(cli);
-governAuditorPostMergeCmd.register(cli);
-llmProbe.register(cli);
-packGraduateInvariants.register(cli);
-packResolve.register(cli);
-loopRun.register(cli);
-backlogAdd.register(cli);
-backlogList.register(cli);
-backlogNext.register(cli);
-backlogComplete.register(cli);
-backlogCompact.register(cli);
-specValidateActionCoverage.register(cli);
-specValidateAll.register(cli);
-specValidateGlossary.register(cli);
-specValidateInvariants.register(cli);
-specValidateInvariantStrategies.register(cli);
-specValidateJourneys.register(cli);
-specValidateSchema.register(cli);
-specValidateTrace.register(cli);
-specValidateTestTrace.register(cli);
-statePrune.register(cli);
-workSessionStart.register(cli);
-workSessionEnd.register(cli);
-taskComplete.register(cli);
-taskEscalate.register(cli);
-taskList.register(cli);
-taskPauseRgr.register(cli);
-taskResumeRgr.register(cli);
-taskSpawn.register(cli);
-worktreeAdopt.register(cli);
-worktreeCreate.register(cli);
-worktreeDestroy.register(cli);
-worktreeList.register(cli);
-worktreeReap.register(cli);
-promptsCompose.register(cli);
-promptsDiff.register(cli);
-promptsFreeze.register(cli);
-scoreAssess.register(cli);
-scoreBacklogRefresh.register(cli);
-scoreCompute.register(cli);
-scoreView.register(cli);
-triageClassify.register(cli);
-triageDispatch.register(cli);
-triageTieBreak.register(cli);
-rgrEmit.register(cli);
-rgrList.register(cli);
-rgrShow.register(cli);
-rgrResolve.register(cli);
-releaseGate.register(cli);
-releaseList.register(cli);
-releasePostdeployVerify.register(cli);
-releaseRuntimeDrift.register(cli);
-senseRuntimeApi.register(cli);
-senseRuntimeAuth.register(cli);
-senseRuntimeData.register(cli);
-rtdBundle.register(cli);
-docsCli.register(cli);
-docsDecisionsRender.register(cli);
-docsLinks.register(cli);
-docsPublish.register(cli);
-docsRenderMermaid.register(cli);
-docsRoundsRender.register(cli);
-docsSynthesize.register(cli);
-docsSynthesizeAll.register(cli);
-decisionClose.register(cli);
-phaseClose.register(cli);
-phaseLedger.register(cli);
-renderMatrix.register(cli);
-recordRun.register(cli);
-coverageAggregate.register(cli);
-roundScaffold.register(cli);
-roundDeclare.register(cli);
-roundStatus.register(cli);
-roundArchive.register(cli);
-mutationRun.register(cli);
-mutationVerify.register(cli);
-verifyTranslation.register(cli);
+const DOMAIN_ORDER = [
+  'catalog',
+  'check',
+  'doctor',
+  'evidence',
+  'init',
+  'release',
+  'round',
+  'sense',
+  'task',
+] as const;
+type CommandDomain = (typeof DOMAIN_ORDER)[number];
 
-const registry = getFullRegistry();
-const machineAction = publicActionForArgv(process.argv, registry);
-const initialized = runCliStage(machineAction, 'initialization', () => {
-  attachRuntimeContracts(cli.commands);
-  attachAuthorityCommandBoundaries(cli.commands, registry);
-  attachActionOutputBoundaries(cli.commands, registry);
-});
-if (initialized.ok) {
+function publicText(value: string): string {
+  return value
+    .replaceAll(process.cwd(), '<repo-root>')
+    .replaceAll('--execute', '--write')
+    .replaceAll('--apply', '--write')
+    .replaceAll('--human', '--format human');
+}
+
+function canonicalRegistry(): readonly RegistryEntry[] {
+  return ACTION_REGISTRY.map(
+    (entry) =>
+      ({
+        name: entry.action_id,
+        handler: entry.handler,
+        internal_name: entry.handler.replaceAll(' ', '-'),
+        path: entry.path,
+        status: entry.status,
+        description: publicText(entry.description),
+        authority: entry.authority ?? 'mesh_controller',
+        lifecycle: entry.status === 'preview' ? 'experimental' : 'supported',
+        lifecycle_reason:
+          entry.status === 'preview'
+            ? 'Preview action; contract may change before v1.0.'
+            : 'Stable action.',
+        promotion_criteria: [],
+        visibility: entry.status === 'internal' ? 'maintainer' : 'standard',
+        tier: entry.status === 'internal' ? 'plumbing' : 'porcelain',
+        profiles: entry.profiles,
+        effects: entry.effect,
+        authority_contract_version: entry.authority_contract_version,
+        authority_contract: entry.authority_contract,
+        output_contract: entry.output_contract,
+        error_contract: entry.error_contract,
+      }) as RegistryEntry,
+  );
+}
+
+function invocationActionForArgv(
+  argv: readonly string[],
+  entries: readonly RegistryEntry[],
+): RegistryEntry | undefined {
+  const words = argv.slice(2).filter((value) => !value.startsWith('-'));
+  return entries
+    .filter((entry) => entry.path.every((part, index) => words[index] === part))
+    .sort((left, right) => right.path.length - left.path.length)[0];
+}
+
+function needsRuntimeMetadata(argv: readonly string[]): boolean {
+  const args = argv.slice(2);
+  const format = args.lastIndexOf('--format');
+  return (
+    args.length === 0 ||
+    args.some((value) => ['--help', '-h', '--all'].includes(value)) ||
+    (format >= 0 && args[format + 1] === 'human')
+  );
+}
+
+async function commandsFor(domain: CommandDomain): Promise<readonly CommandDefinition[]> {
+  switch (domain) {
+    case 'catalog': {
+      const { actionsList } = await import('./commands/actions-list.js');
+      return [actionsList];
+    }
+    case 'check': {
+      const { checkCmd } = await import('./commands/check/facade.js');
+      return [checkCmd];
+    }
+    case 'doctor': {
+      const { doctor } = await import('./commands/doctor.js');
+      return [doctor];
+    }
+    case 'evidence': {
+      const { evidenceCollect, evidenceRecord, evidenceRedact, evidenceRender, evidenceVerify } =
+        await import('./commands/evidence/facade.js');
+      return [evidenceCollect, evidenceRecord, evidenceRedact, evidenceRender, evidenceVerify];
+    }
+    case 'init': {
+      const { initApplyArchitect, initApplyHarness, initApplyOwner, initBind, initPlan } =
+        await import('./commands/init/index.js');
+      return [initApplyArchitect, initApplyHarness, initApplyOwner, initBind, initPlan];
+    }
+    case 'release': {
+      const { releaseCheck, releaseDrift, releaseStatus, releaseVerify } =
+        await import('./commands/release/facade.js');
+      return [releaseCheck, releaseDrift, releaseStatus, releaseVerify];
+    }
+    case 'round': {
+      const {
+        roundAssess,
+        roundClose,
+        roundGapCreate,
+        roundGapList,
+        roundGapResolve,
+        roundGapShow,
+        roundPlan,
+        roundRun,
+        roundSeal,
+        roundStatus,
+      } = await import('./commands/round/workflow.js');
+      return [
+        roundAssess,
+        roundClose,
+        roundGapCreate,
+        roundGapList,
+        roundGapResolve,
+        roundGapShow,
+        roundPlan,
+        roundRun,
+        roundSeal,
+        roundStatus,
+      ];
+    }
+    case 'sense': {
+      const [{ senseInventoryCmd }, { senseMigrateCmd }, { senseRecordCmd }, { senseRunSetCmd }] =
+        await Promise.all([
+          import('./commands/sense/inventory.js'),
+          import('./commands/sense/migrate.js'),
+          import('./commands/sense/record.js'),
+          import('./commands/sense/run-set.js'),
+        ]);
+      return [senseInventoryCmd, senseMigrateCmd, senseRecordCmd, senseRunSetCmd];
+    }
+    case 'task': {
+      const {
+        taskEscalate,
+        taskFinish,
+        taskPause,
+        taskQueueAdd,
+        taskQueueComplete,
+        taskQueueList,
+        taskQueueNext,
+        taskResume,
+        taskStart,
+        taskStatus,
+      } = await import('./commands/task/index.js');
+      return [
+        taskEscalate,
+        taskFinish,
+        taskPause,
+        taskQueueAdd,
+        taskQueueComplete,
+        taskQueueList,
+        taskQueueNext,
+        taskResume,
+        taskStart,
+        taskStatus,
+      ];
+    }
+  }
+}
+
+async function registerDomains(domains: readonly CommandDomain[]): Promise<void> {
+  const groups = await Promise.all(domains.map(commandsFor));
+  for (const command of groups.flat()) command.register(cli);
+}
+
+function renderRouteOutput(
+  machineAction: RegistryEntry | undefined,
+  route: Extract<ReturnType<typeof routeArgv>, { readonly kind: 'output' }>,
+): void {
+  if (
+    route.bypassActionOutput === true ||
+    !emitPreDispatchActionResult(machineAction, {
+      exit: route.exitCode,
+      stdout: route.exitCode === 0 ? route.text : '',
+      stderr: route.exitCode === 0 ? '' : route.text,
+    })
+  ) {
+    const stream = route.exitCode === 0 ? process.stdout : process.stderr;
+    stream.write(route.text);
+    process.exitCode = route.exitCode;
+  }
+}
+
+function preserveHumanOutputBeforeExplicitExit(): void {
+  const args = process.argv.slice(2);
+  const format = args.lastIndexOf('--format');
+  if (args.includes('--json') || (format >= 0 && args[format + 1] === 'json')) return;
+  type BlockingStream = NodeJS.WriteStream & {
+    readonly _handle?: { readonly setBlocking?: (value: boolean) => void };
+  };
+  for (const stream of [process.stdout, process.stderr] as readonly BlockingStream[]) {
+    stream._handle?.setBlocking?.(true);
+  }
+}
+
+async function main(): Promise<void> {
+  const fullRegistry = needsRuntimeMetadata(process.argv);
+  if (fullRegistry) await registerDomains(DOMAIN_ORDER);
+  const registry = fullRegistry
+    ? (() => {
+        attachRuntimeContracts(cli.commands);
+        return getFullRegistry();
+      })()
+    : canonicalRegistry();
+  const invocationAction = invocationActionForArgv(process.argv, registry);
+  const machineAction = publicActionForArgv(process.argv, registry);
   const validated = runCliStage(machineAction, 'registry-validation', () => {
     validateActionSurface(registry);
     validateLiveAuthorityActionRegistry(registry);
@@ -429,47 +249,77 @@ if (initialized.ok) {
       )
     : undefined;
   const route = routed?.ok === true ? routed.value : undefined;
-  if (route === undefined) {
-    // The stage boundary already emitted the sole structured failure.
-  } else if (route.kind === 'output') {
+  if (route === undefined) return;
+  if (route.kind === 'output') {
+    renderRouteOutput(machineAction, route);
+    return;
+  }
+
+  if (!fullRegistry && invocationAction !== undefined) {
+    const domain = invocationAction.path[0];
+    if (DOMAIN_ORDER.includes(domain as CommandDomain)) {
+      try {
+        await registerDomains([domain as CommandDomain]);
+      } catch (error) {
+        runCliStage(machineAction, 'initialization', () => {
+          throw error;
+        });
+        return;
+      }
+    }
+  }
+  const handlerRegistry = fullRegistry ? registry : getFullRegistry();
+  const initialized = runCliStage(machineAction, 'initialization', () => {
+    attachAuthorityCommandBoundaries(cli.commands, handlerRegistry);
+    attachActionOutputBoundaries(cli.commands, handlerRegistry);
+  });
+  if (!initialized.ok) return;
+
+  const authorized = runCliStage(machineAction, 'authorization', () =>
+    authorizeCliArgv(process.argv, registry),
+  );
+  const authorityResult = authorized.ok ? authorized.value : undefined;
+  if (!authorized.ok) return;
+  if (authorityResult !== undefined) {
     if (
       !emitPreDispatchActionResult(machineAction, {
-        exit: route.exitCode,
-        stdout: route.exitCode === 0 ? route.text : '',
-        stderr: route.exitCode === 0 ? '' : route.text,
+        exit: authorityResult.exit_code,
+        stdout: authorityResult.stdout,
+        stderr: authorityResult.stderr,
       })
     ) {
-      const stream = route.exitCode === 0 ? process.stdout : process.stderr;
-      stream.write(route.text);
-      process.exitCode = route.exitCode;
+      const stream = authorityResult.stdout.length > 0 ? process.stdout : process.stderr;
+      stream.write(
+        authorityResult.stdout.length > 0 ? authorityResult.stdout : authorityResult.stderr,
+      );
+      process.exitCode = authorityResult.exit_code;
     }
-  } else {
-    const authorized = runCliStage(machineAction, 'authorization', () =>
-      authorizeCliArgv(
-        process.argv,
-        registry,
-        (skillId) => getSkill(skillId)?.manifest.authority_role,
-      ),
-    );
-    const authorityResult = authorized.ok ? authorized.value : undefined;
-    if (!authorized.ok) {
-      // The stage boundary already emitted the sole structured failure.
-    } else if (authorityResult !== undefined) {
-      if (
-        !emitPreDispatchActionResult(machineAction, {
-          exit: authorityResult.exit_code,
-          stdout: authorityResult.stdout,
-          stderr: authorityResult.stderr,
-        })
-      ) {
-        const stream = authorityResult.stdout.length > 0 ? process.stdout : process.stderr;
-        stream.write(
-          authorityResult.stdout.length > 0 ? authorityResult.stdout : authorityResult.stderr,
-        );
-        process.exitCode = authorityResult.exit_code;
-      }
-    } else {
-      runCliStage(machineAction, 'handler-dispatch', () => cli.parse(route.argv));
+    return;
+  }
+  const args = process.argv.slice(2);
+  const format = args.lastIndexOf('--format');
+  const human = !args.includes('--json') && !(format >= 0 && args[format + 1] === 'json');
+  if (human) {
+    preserveHumanOutputBeforeExplicitExit();
+    runCliStage(machineAction, 'handler-dispatch', () => cli.parse(route.argv));
+    return;
+  }
+  const dispatched = runCliStage(machineAction, 'handler-dispatch', () => {
+    cli.parse(route.argv, { run: false });
+    return cli.runMatchedCommand() as unknown;
+  });
+  const pending = dispatched.ok
+    ? (dispatched.value as PromiseLike<unknown> | undefined)
+    : undefined;
+  if (pending !== undefined && typeof pending.then === 'function') {
+    try {
+      await pending;
+    } catch (error) {
+      runCliStage(machineAction, 'handler-dispatch', () => {
+        throw error;
+      });
     }
   }
 }
+
+await main();

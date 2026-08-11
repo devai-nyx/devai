@@ -4,7 +4,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const REAL_BIN = resolve(HERE, '../../dist/bin.js');
+const REAL_BIN = resolve(HERE, '../../dist/runtime/index/bin.js');
 const args = process.argv.slice(2);
 const input = readFileSync(0);
 const roles = ['architect', 'inspector', 'engineer', 'owner', 'auditor'];

@@ -1,13 +1,12 @@
 // Invariants: INV-DEVAI-001, INV-DEVAI-015, INV-DEVAI-017
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
 import type { CAC } from 'cac';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { withAuthorityHostTestScope } from '../../../authority/tests/unit/authority-host-test-scope.js';
-import { detectPosture, doctor } from '../../src/commands/doctor.js';
+import { doctor } from '../../src/commands/doctor.js';
 
-const ROOT = resolve(import.meta.dirname, '../../../..');
 const originalExit = process.exit;
 const originalExitCode = process.exitCode;
 const originalStdout = process.stdout.write;
@@ -22,9 +21,6 @@ class ExitSignal extends Error {
 interface DoctorInvocation {
   readonly repoRoot: string;
   readonly chain?: string;
-  readonly self?: boolean;
-  readonly adopter?: boolean;
-  readonly auto?: boolean;
   readonly human?: boolean;
   readonly skip?: string;
 }
@@ -84,9 +80,8 @@ async function run(options: DoctorInvocation): Promise<{
   }
 }
 
-describe('doctor posture and report depth', () => {
+describe('adopter doctor report depth', () => {
   const adopter = mkdtempSync(join(tmpdir(), 'devai-doctor-adopter-'));
-  const selfShape = mkdtempSync(join(tmpdir(), 'devai-doctor-self-'));
 
   beforeAll(() => {
     for (const path of [
@@ -105,47 +100,28 @@ describe('doctor posture and report depth', () => {
       join(adopter, '.devai/config/project.json'),
       `${JSON.stringify({ schemaVersion: '1.0.0', adoption_profile: 'tier1' }, null, 2)}\n`,
     );
-    mkdirSync(join(selfShape, 'packages/cli/src'), { recursive: true });
-    mkdirSync(join(selfShape, 'examples/redox-pack-fixture'), { recursive: true });
-    writeFileSync(join(selfShape, 'packages/cli/src/bin.ts'), 'export {};\n');
   });
 
   afterAll(() => {
     rmSync(adopter, { recursive: true, force: true });
-    rmSync(selfShape, { recursive: true, force: true });
   });
 
-  it('detects self and adopter repositories from their actual filesystem shape', () => {
-    expect(detectPosture(selfShape)).toBe('self');
-    expect(detectPosture(adopter)).toBe('adopter');
-  });
-
-  it('runs the complete self posture and emits a structured failing health report', async () => {
-    const result = await run({ repoRoot: ROOT, self: true, skip: 'docs-governance' });
+  it('runs adopter checks and renders the declared profile for humans', async () => {
+    const result = await run({ repoRoot: adopter, human: true });
     expect(result.exit).toBe(2);
     expect(result.stderr).toBe('');
-    const report = JSON.parse(result.stdout) as {
-      posture: string;
-      posture_source: string;
-      checks: Array<{ name: string }>;
-    };
-    expect(report).toMatchObject({ posture: 'self', posture_source: 'flag' });
-    expect(report.checks.length).toBeGreaterThanOrEqual(12);
-    expect(report.checks.map((check) => check.name)).toContain('authority-enforcement');
-  });
-
-  it('runs the adopter posture and renders its advisory health report for humans', async () => {
-    const result = await run({ repoRoot: adopter, auto: true, human: true });
-    expect(result.exit).toBe(2);
-    expect(result.stderr).toBe('');
-    expect(result.stdout).toContain('devai doctor [posture=adopter (auto), profile=tier3]: FAIL');
+    expect(result.stdout).toContain('devai doctor [profile=tier3]: FAIL');
     expect(result.stdout).toContain('f1-paths-present');
   });
 
-  it('rejects conflicting posture flags before running checks', async () => {
-    const result = await run({ repoRoot: ROOT, self: true, adopter: true });
-    expect(result.exit).toBe(2);
-    expect(result.stdout).toBe('');
-    expect(result.stderr).toContain('--self, --adopter, and --auto are mutually exclusive');
+  it('does not run DEVAI source-only checks', async () => {
+    const result = await run({ repoRoot: adopter, skip: 'docs-governance' });
+    expect(result.stderr).toBe('');
+    const report = JSON.parse(result.stdout) as { checks: Array<{ name: string }> };
+    const names = report.checks.map((check) => check.name);
+    expect(names).not.toContain('workspace-layout');
+    expect(names).not.toContain('schemas-loadable');
+    expect(names).not.toContain('test-trace');
+    expect(names).toContain('authority-enforcement');
   });
 });

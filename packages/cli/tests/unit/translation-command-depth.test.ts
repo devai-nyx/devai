@@ -46,7 +46,8 @@ beforeAll(() => {
     id: 'TW-0123456789abcdef',
     trust: 'untrusted-claim',
     task_id: 'TASK-9001',
-    skill_id: 'SKILL-translation-depth',
+    recipe_name: 'devai-fix',
+    recipe_variant: 'test',
     stage: 'invariants-tests-to-code',
     base_sha: candidate,
     candidate_sha: candidate,
@@ -58,7 +59,7 @@ beforeAll(() => {
         criteria: [
           {
             claim: 'The action-effects structure remains deterministic.',
-            demonstrated_by: [{ kind: 'structural', validator: 'policy check action effects' }],
+            demonstrated_by: [{ kind: 'structural', validator: 'check --only action-effects' }],
           },
         ],
       },
@@ -74,8 +75,9 @@ beforeAll(() => {
   };
   writeJson('scratch/translation-depth-witness.json', witness);
   writeJson('.devai/state/tasks/TASK-9001.json', {
-    schemaVersion: '1.0.0',
+    schemaVersion: '2.0.0',
     id: 'TASK-9001',
+    round_id: 'R-0007',
     status: 'in_progress',
     discipline: 'engineer',
     title: 'Exercise translation validation depth',
@@ -84,13 +86,27 @@ beforeAll(() => {
     created_at: '2026-07-27T00:00:00.000Z',
     db_isolation: 'database',
     iteration_count: 0,
+    executor: {
+      kind: 'agent',
+      runtime: 'codex-cli',
+      model: 'model-primary',
+      effort: 'high',
+      selection: { mode: 'exact', registry_id: 'primary' },
+      recipe_name: 'devai-fix',
+      recipe_variant: 'test',
+      prompt_composition_id: 'PC-0123456789abcdef',
+      max_iterations: 1,
+      capabilities: ['fs:workspace'],
+    },
     intent_diff: { planned_files: ['packages/cli/src/**'] },
   });
-  writeJson('record/proofs/work/skill-runs/SKILL-translation-depth/2026-07-27T00-00-00-000Z.json', {
-    skill_id: 'SKILL-translation-depth',
+  writeJson('record/proofs/work/recipe-runs/devai-fix/test/2026-07-27T00-00-00-000Z.json', {
+    recipe_name: 'devai-fix',
+    recipe_variant: 'test',
     status: 'pass',
     evidence: { translation_witness: witness },
   });
+  writeJson('record/proofs/chain.json', { head: null, records: [] });
 
   const command: CommandCapture = {
     option(): CommandCapture {
@@ -129,15 +145,22 @@ async function run(options: Options): Promise<{ stdout: string; stderr: string; 
 }
 
 describe('translation command production depth', () => {
-  it('executes the structural path through isolation failure and refuses the retired evidence writer', async () => {
+  it('records a report-only structural result when isolation infrastructure fails', async () => {
     const result = await run({
       witness: 'scratch/translation-depth-witness.json',
       repoRoot: repository,
       databaseUrl: 'postgres://127.0.0.1:1/postgres?connect_timeout=1',
     });
-    expect(result.stderr).toContain('LEGACY_EVIDENCE_WRITER_RETIRED');
+    expect(result.stderr).toBe('');
     expect(result.exit).toBe(2);
-    expect(result.stdout).toBe('');
+    const report = JSON.parse(result.stdout) as {
+      verdict: string;
+      report_only: boolean;
+      evidence_chain_refs: string[];
+    };
+    expect(report.verdict).toBe('FAIL');
+    expect(report.report_only).toBe(true);
+    expect(report.evidence_chain_refs).toEqual([expect.stringMatching(/^EV-[a-f0-9]{16}$/u)]);
   });
 
   it('fails closed at database, path, witness, and task authority preconditions', async () => {
@@ -167,8 +190,9 @@ describe('translation command production depth', () => {
     ).toContain('TRANSLATION_WITNESS_INVALID');
 
     writeJson('.devai/state/tasks/TASK-9001.json', {
-      schemaVersion: '1.0.0',
+      schemaVersion: '2.0.0',
       id: 'TASK-9001',
+      round_id: 'R-0007',
       status: 'in_progress',
       discipline: 'inspector',
       title: 'Wrong authority',
@@ -177,6 +201,18 @@ describe('translation command production depth', () => {
       created_at: '2026-07-27T00:00:00.000Z',
       db_isolation: 'database',
       iteration_count: 0,
+      executor: {
+        kind: 'agent',
+        runtime: 'codex-cli',
+        model: 'model-primary',
+        effort: 'high',
+        selection: { mode: 'exact', registry_id: 'primary' },
+        recipe_name: 'devai-fix',
+        recipe_variant: 'test',
+        prompt_composition_id: 'PC-0123456789abcdef',
+        max_iterations: 1,
+        capabilities: ['fs:workspace'],
+      },
       intent_diff: { planned_files: ['packages/cli/src/**'] },
     });
     expect(

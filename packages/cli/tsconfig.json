@@ -3,6 +3,9 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
+    "paths": {
+      "#runtime-core": ["./src/runtime-core.ts"]
+    },
     "types": ["node"]
   },
   "include": ["src/**/*"],

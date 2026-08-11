@@ -25,7 +25,7 @@ import { basename, dirname, extname, join, relative } from 'node:path';
  * don't have it on PATH get a clean skip signal rather than an
  * error.
  *
- * SKILL-write-erd produces a markdown file with one ```mermaid
+ * The `devai-docs/erd` recipe produces a markdown file with one ```mermaid
  * block; `devai docs render mermaid` is the standalone CLI verb
  * that picks up those blocks and writes PNGs to docs/diagrams/.
  */

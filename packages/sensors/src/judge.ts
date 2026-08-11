@@ -69,7 +69,7 @@ interface JudgeStructuredResponse {
 const VALID_VERDICTS = new Set(['pass', 'review', 'fail', 'unknown']);
 
 /**
- * Soft-gate LLM evaluator. Phase-9 / Batch 9.C: real LLM-backed
+ * Soft-gate LLM evaluator with an LLM-backed
  * implementation. The caller supplies an `LlmClient` instance (mock
  * in tests, Anthropic/Codex in production) and the rubric body; the
  * judge instructs the model to emit a structured verdict, parses it,
@@ -77,9 +77,8 @@ const VALID_VERDICTS = new Set(['pass', 'review', 'fail', 'unknown']);
  *
  * Determinism: false (LLM is stochastic). Cost telemetry: recorded
  * via the LlmClient telemetry wrapper. The sensor's `version` field
- * encodes the family + model (e.g. `claude:claude-3-5-sonnet-latest`)
- * so the Article-23 ladder can identify which family produced the
- * verdict.
+ * records the exact host-reported runtime identity so consumers can
+ * identify which provider execution produced the verdict.
  */
 export async function senseJudge(
   opts: JudgeOptions,

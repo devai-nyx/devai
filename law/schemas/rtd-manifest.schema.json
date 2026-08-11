@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/rtd-manifest.schema.json",
   "title": "RTD Manifest",
-  "description": "Hash-stamped aggregate view over the canonical spec contract slices (invariants, trace, journeys, glossary, tombstones, ADRs, forbidden-actions). Produced by `devai spec rtd bundle` (Phase 12.A / D-41). Distributed `spec validate-*` surfaces remain unchanged; this is an additive bundle for ADR citation, law-pack adoption, and external audit.",
+  "description": "Hash-stamped aggregate view over canonical specification slices. Produced through `devai evidence record --kind rtd` for citation and independent audit.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -34,7 +34,7 @@
     "components": {
       "type": "object",
       "additionalProperties": false,
-      "description": "One entry per aggregated contract slice. `hash` is a SHA-256 over the canonicalized JSON of the slice. `ok` reflects whether the slice's distributed validator (spec validate-X) passed. Counts are convenience numerics, never authoritative.",
+      "description": "One entry per aggregated contract slice. `hash` is a SHA-256 over canonical JSON and `ok` reflects the slice validator. Counts are convenience numerics, never authoritative.",
       "properties": {
         "invariants": {
           "$ref": "#/$defs/componentEntry"
@@ -46,9 +46,6 @@
           "$ref": "#/$defs/componentEntry"
         },
         "glossary": {
-          "$ref": "#/$defs/componentEntry"
-        },
-        "tombstones": {
           "$ref": "#/$defs/componentEntry"
         },
         "adrs": {
@@ -95,10 +92,6 @@
       "type": "string",
       "pattern": "^[a-f0-9]{64}$",
       "description": "SHA-256 of the canonicalized manifest record minus this field. The single citable handle: `RTM-NNNN sha256:<manifest_hash>`."
-    },
-    "hash_algo_version": {
-      "enum": ["1.0", "2.0"],
-      "description": "Algorithm version under which `manifest_hash` was computed (Phase 16.G). rtd-manifest has always used deep-sort canonicalisation, which is now formalised as '2.0'. Pre-Phase-16.G records lack this field; readers default to '2.0' for rtd-manifest specifically (the algorithm has been deep-sort throughout this schema's life). New writes always set '2.0' explicitly."
     }
   },
   "$defs": {

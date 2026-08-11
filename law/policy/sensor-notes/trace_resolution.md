@@ -9,13 +9,12 @@ sensor_kind: trace_resolution
 emitter: packages/sensors/src/trace-resolve.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Trace Resolution
 
-This note binds the successor-local design standing for `trace_resolution`. Its canonical emitter
-is `packages/sensors/src/trace-resolve.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `trace_resolution`. Its canonical emitter
+is `packages/sensors/src/trace-resolve.ts`.
 
 Bound cells: F1×T3.
 

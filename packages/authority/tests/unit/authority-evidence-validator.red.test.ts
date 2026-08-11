@@ -45,7 +45,7 @@ describe('R19 audit-only authority evidence', () => {
     expect(value.evidence.canonical_bytes).toBeInstanceOf(Uint8Array);
     expect(value.evidence.view).toMatchObject({
       timestamp: NOW,
-      repository_id: 'devai-self',
+      repository_id: 'example-repository',
       issuer_audit: {
         issuer_id: 'test-authority-issuer',
         capability_material_present: false,
@@ -231,14 +231,14 @@ describe('R19 audit-only authority evidence', () => {
             issuer,
             actionDocument('local-write', {
               kind: 'derived-machine',
-              actor: 'upgrade',
-              transition: 'upgrade',
+              actor: 'binding',
+              transition: 'bind',
               initiator: { allowed_roles: ['architect'], preserve_in_context: true },
             }),
           ) as { actionContracts: unknown }
         ).actionContracts,
         verifiedOrigin: { kind: 'direct-cli', invocation_id: 'invocation-1' },
-        trusted_adapter_id: 'upgrade-authority',
+        trusted_adapter_id: 'binding-authority',
         receiptStore: issuer,
         canonicalSha256,
       },

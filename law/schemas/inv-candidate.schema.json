@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/inv-candidate.schema.json",
-  "$comment": "DEVAI-native (Phase 17.E): proposed-invariant record emitted by `devai inventory suggest --from-inventory`. The bridge between inventory sensor outputs and the Architect-authored INV-CLIENT-* catalog.",
+  "$comment": "Internal proposed-invariant record derived from inventory observations for Architect review.",
   "title": "Invariant Candidate",
-  "description": "A proposed-invariant record emitted by `devai inventory suggest --from-inventory` (Phase 17.E). The bridge between inventory sensor outputs (Phase 17.C) and the Architect-authored INV-CLIENT-* catalog. Each candidate is anchored to a concrete surface artifact (endpoint / route / column / edge), categorized, scored for confidence, and includes a suggested invariant skeleton the Architect can review, edit, and graduate. Per D-57 (brownfield-adoption substrate).",
+  "description": "A proposed-invariant record derived from inventory observations. Each candidate is anchored to a concrete surface artifact, categorized, confidence-scored, and includes a skeleton for Architect review.",
   "type": "object",
   "additionalProperties": false,
   "required": [

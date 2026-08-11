@@ -1,6 +1,6 @@
 import { resolve } from 'node:path';
 import type { CAC } from 'cac';
-import { renderDecisionRecords, renderRoundRecords } from '#core-compat';
+import { renderDecisionRecords, renderRoundRecords } from '#runtime-core';
 import { writeGovernanceProjectionSync } from '@devai-nyx/authority';
 import { EXIT_PASS, EXIT_USAGE } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';

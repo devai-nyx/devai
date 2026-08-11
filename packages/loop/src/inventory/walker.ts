@@ -1,4 +1,5 @@
-import { lstatSync, readdirSync } from 'node:fs';
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const DEFAULT_IGNORE = new Set([
@@ -31,6 +32,48 @@ export interface WalkOptions {
   readonly ignoreDirs?: ReadonlySet<string>;
 }
 
+interface InventoryReadSnapshot {
+  readonly walks: Map<string, readonly string[]>;
+  readonly sources: Map<string, string>;
+  readonly values: Map<string, unknown>;
+}
+
+const inventoryReadSnapshot = new AsyncLocalStorage<InventoryReadSnapshot>();
+
+/**
+ * Share filesystem discovery and source bytes only for one inventory invocation.
+ * The store is discarded when the operation settles, so no later invocation can
+ * substitute cached repository state.
+ */
+export function withInventoryReadSnapshot<T>(operation: () => T): T {
+  if (inventoryReadSnapshot.getStore() !== undefined) return operation();
+  return inventoryReadSnapshot.run(
+    { walks: new Map(), sources: new Map(), values: new Map() },
+    operation,
+  );
+}
+
+/** Reuse a derived value only inside the active inventory invocation. */
+export function inventorySnapshotValue<T>(key: string, load: () => T): T {
+  const snapshot = inventoryReadSnapshot.getStore();
+  if (snapshot === undefined) return load();
+  if (snapshot.values.has(key)) return snapshot.values.get(key) as T;
+  const value = load();
+  snapshot.values.set(key, value);
+  return value;
+}
+
+/** Read source bytes through the active invocation snapshot, if one exists. */
+export function readInventorySource(path: string): string {
+  const snapshot = inventoryReadSnapshot.getStore();
+  if (snapshot === undefined) return readFileSync(path, 'utf8');
+  const cached = snapshot.sources.get(path);
+  if (cached !== undefined) return cached;
+  const source = readFileSync(path, 'utf8');
+  snapshot.sources.set(path, source);
+  return source;
+}
+
 /**
  * Recursively walk a directory, returning paths to files matching the given
  * extensions. Sorted output for determinism. Skips a default ignore list
@@ -43,9 +86,15 @@ export interface WalkOptions {
 export function walkFiles(root: string, opts: WalkOptions = {}): string[] {
   const ignore = opts.ignoreDirs ?? DEFAULT_IGNORE;
   const exts = opts.extensions;
+  const snapshot = inventoryReadSnapshot.getStore();
+  const key = `${root}\0${[...(exts ?? [])].sort().join('\0')}\0${[...ignore].sort().join('\0')}`;
+  const cached = snapshot?.walks.get(key);
+  if (cached !== undefined) return [...cached];
   const results: string[] = [];
   walk(root, ignore, exts, results);
-  return results.sort();
+  results.sort();
+  snapshot?.walks.set(key, results);
+  return [...results];
 }
 
 /** Exposed so CLI callers can compose the effective ignore set without duplicating the default list. */

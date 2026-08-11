@@ -1,9 +1,5 @@
 import { createHash } from 'node:crypto';
-import {
-  canonicalSha256,
-  DEFAULT_CANONICAL_HASH_ALGO_VERSION,
-  nextCounterId,
-} from '@devai-nyx/utils';
+import { canonicalSha256, nextCounterId } from '@devai-nyx/utils';
 import {
   existsSync,
   mkdirSync,
@@ -26,7 +22,7 @@ import { validateGlossary } from '../spec/glossary-validator.js';
  *
  * Produces a hash-stamped aggregate view over the canonical
  * contract slices: invariants, trace, journeys, glossary,
- * tombstones, ADRs, forbidden-actions. The distributed
+ * ADRs, forbidden-actions. The distributed
  * `spec validate-*` surface stays unchanged — this is an
  * additive bundle view, not a replacement.
  *
@@ -54,7 +50,6 @@ export interface RtdManifest {
     readonly trace?: RtdManifestComponentEntry;
     readonly journeys?: RtdManifestComponentEntry;
     readonly glossary?: RtdManifestComponentEntry;
-    readonly tombstones?: RtdManifestComponentEntry;
     readonly adrs?: RtdManifestComponentEntry;
     readonly forbidden_actions?: RtdManifestComponentEntry;
   };
@@ -74,7 +69,6 @@ export interface RtdManifest {
    * always emit '2.0'; pre-Phase-16.G records lack the field and
    * are treated as already deep-sort on read.
    */
-  readonly hash_algo_version?: '1.0' | '2.0';
 }
 
 const MANIFESTS_DIR_REL = 'record/proofs/compliance/rtd-manifests';
@@ -249,17 +243,6 @@ function summarizeGlossary(
   };
 }
 
-function summarizeTombstones(invariantsDir: string): RtdManifestComponentEntry | null {
-  const path = join(invariantsDir, 'tombstones.json');
-  const rec = readJson<{ tombstones?: Array<{ id?: string }> }>(path);
-  if (rec === null) return null;
-  return {
-    count: rec.tombstones?.length ?? 0,
-    hash: hashCanonical(rec),
-    ok: true,
-  };
-}
-
 function summarizeAdrs(adrDir: string): RtdManifestComponentEntry | null {
   if (!existsSync(adrDir)) return null;
   let files: string[];
@@ -328,7 +311,6 @@ export function buildRtdManifest(opts: BuildRtdManifestOptions): RtdManifest {
     trace?: RtdManifestComponentEntry;
     journeys?: RtdManifestComponentEntry;
     glossary?: RtdManifestComponentEntry;
-    tombstones?: RtdManifestComponentEntry;
     adrs?: RtdManifestComponentEntry;
     forbidden_actions?: RtdManifestComponentEntry;
   } = {};
@@ -375,12 +357,6 @@ export function buildRtdManifest(opts: BuildRtdManifestOptions): RtdManifest {
     });
   }
 
-  const tomb = summarizeTombstones(invariantsDir);
-  if (tomb !== null) {
-    components.tombstones = tomb;
-    subVerdicts.push({ component: 'tombstones', ok: tomb.ok });
-  }
-
   const adrs = summarizeAdrs(adrDir);
   if (adrs !== null) {
     components.adrs = adrs;
@@ -406,7 +382,6 @@ export function buildRtdManifest(opts: BuildRtdManifestOptions): RtdManifest {
     integration_head: opts.integrationHead ?? gatherGitContext(repoRoot).head_sha ?? '0'.repeat(40),
     components,
     readiness: { ok: overallOk, sub_verdicts: subVerdicts },
-    hash_algo_version: DEFAULT_CANONICAL_HASH_ALGO_VERSION,
   };
   const manifest_hash = hashCanonical(draft);
   const manifest: RtdManifest = { ...draft, manifest_hash };

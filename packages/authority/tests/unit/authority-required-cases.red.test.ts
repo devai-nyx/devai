@@ -91,10 +91,10 @@ describe('R19 materialization total precedence inventory', () => {
     api: Awaited<ReturnType<typeof runtimeApi>>,
     issuer = createIssuer(api, { invocation_id: 'invocation-materialize' }),
   ) {
-    const action = actionDocumentWithId('adopt upgrade', 'local-write', {
+    const action = actionDocumentWithId('init bind', 'local-write', {
       kind: 'derived-machine',
-      actor: 'upgrade',
-      transition: 'upgrade',
+      actor: 'binding',
+      transition: 'bind',
       initiator: { allowed_roles: ['architect'], preserve_in_context: true },
     });
     const declaration = declarationDependencies(issuer, action);
@@ -102,7 +102,7 @@ describe('R19 materialization total precedence inventory', () => {
     const authorization = expectSuccess(
       api.authorizePolicyMaterialization(
         {
-          action_id: 'adopt upgrade',
+          action_id: 'init bind',
           invocation_id: 'invocation-materialize',
           target_operation: 'create',
           declaration: { as_role: 'architect' },
@@ -114,7 +114,7 @@ describe('R19 materialization total precedence inventory', () => {
           derivation: {
             actionContracts: declaration.actionContracts,
             verifiedOrigin: { kind: 'direct-cli', invocation_id: 'invocation-materialize' },
-            trusted_adapter_id: 'upgrade-authority',
+            trusted_adapter_id: 'binding-authority',
             canonicalSha256,
           },
         },
@@ -167,7 +167,7 @@ describe('R19 materialization total precedence inventory', () => {
 
   function materializationInput(authorization: unknown, overrides: Record<string, unknown> = {}) {
     return {
-      repository_id: 'devai-self',
+      repository_id: 'example-repository',
       enforcement: { mode: 'binding' },
       host_enforcement: { mode: 'cli-only' },
       authorization,
@@ -259,19 +259,19 @@ describe('R19 materialization total precedence inventory', () => {
       scenario === 'extension-invalid'
         ? [
             {
-              ...extensionArtifact('devai-self-authority', '1.0.0', [engineerRule]),
+              ...extensionArtifact('example-authority', '1.0.0', [engineerRule]),
               canonical_source_bytes: canonicalBytes({ tampered: true }),
             },
           ]
         : scenario === 'duplicate-extension'
           ? [
-              extensionArtifact('devai-self-authority', '1.0.0', [engineerRule]),
-              extensionArtifact('devai-self-authority', '1.0.1', [inspectorRule]),
+              extensionArtifact('example-authority', '1.0.0', [engineerRule]),
+              extensionArtifact('example-authority', '1.0.1', [inspectorRule]),
             ]
           : scenario === 'duplicate-rule'
-            ? [extensionArtifact('devai-self-authority', '1.0.0', duplicateRules)]
+            ? [extensionArtifact('example-authority', '1.0.0', duplicateRules)]
             : scenario === 'non-additive'
-              ? [extensionArtifact('devai-self-authority', '1.0.0', [nonAdditiveRule])]
+              ? [extensionArtifact('example-authority', '1.0.0', [nonAdditiveRule])]
               : [
                   extensionArtifact(
                     baseExtension.extension_id,
@@ -306,7 +306,7 @@ describe('R19 materialization total precedence inventory', () => {
             },
     });
     const input = materializationInput(authorization, {
-      repository_id: scenario === 'caller-binding' ? 'other-repository' : 'devai-self',
+      repository_id: scenario === 'caller-binding' ? 'other-repository' : 'example-repository',
       enforcement:
         scenario === 'shadow-invalid' ? { mode: 'shadow', shadow: {} } : { mode: 'binding' },
     });
@@ -1253,11 +1253,11 @@ describe('R19 evidence total-order matrix', () => {
     context_digest_sha256: '3'.repeat(64),
     initiated_by: 'none',
   };
-  const upgradeWithEngineerInitiator = {
+  const bindingWithEngineerInitiator = {
     kind: 'derived-machine',
-    actor: 'upgrade',
-    transition: 'upgrade',
-    trusted_adapter_id: 'upgrade-authority',
+    actor: 'binding',
+    transition: 'bind',
+    trusted_adapter_id: 'binding-authority',
     context_digest_sha256: '4'.repeat(64),
     initiated_by: { role: 'engineer', declaration_source: 'cli-flag' },
   };
@@ -1340,7 +1340,7 @@ describe('R19 evidence total-order matrix', () => {
     [
       'initiator semantics precede readiness',
       evidenceDocument({
-        principal: upgradeWithEngineerInitiator,
+        principal: bindingWithEngineerInitiator,
         dry_run: true,
         readiness: readinessDefect,
       }),
@@ -1349,11 +1349,11 @@ describe('R19 evidence total-order matrix', () => {
         'local-write',
         {
           kind: 'derived-machine',
-          actor: 'upgrade',
-          transition: 'upgrade',
+          actor: 'binding',
+          transition: 'bind',
           initiator: { allowed_roles: ['architect'], preserve_in_context: true },
         },
-        { kind: 'exact-plan', planner_id: 'test-upgrade', target_kinds: ['fs'] },
+        { kind: 'exact-plan', planner_id: 'test-bind', target_kinds: ['fs'] },
       ),
       'AUTHORITY_EVIDENCE_INITIATOR_INVALID',
     ],

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/evidence.schema.json",
   "title": "Evidence Manifest",
-  "description": "Hash-chained audit-trail envelope. Each record references the manifest_hash of its predecessor, forming a tamper-evident chain. Per Constitution Article 36 (DEVAI applies to itself).",
+  "description": "Hash-chained evidence envelope. Each record references the prior manifest_hash, forming a tamper-evident chain.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -151,7 +151,7 @@
     "authority": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Backward-compatible link to a separately validated authority-evidence.schema.json record. Optional for historical records; presence alone is audit linkage, never an authorization capability or proof that enforcement occurred.",
+      "description": "Optional link to a separately validated authority-evidence.schema.json record. Presence alone is audit linkage, never an authorization capability or proof that enforcement occurred.",
       "required": [
         "contract_version",
         "record_kind",

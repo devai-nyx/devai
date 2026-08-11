@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/local-evidence-manifest.schema.json",
   "title": "DEVAI CI Evidence Manifest",
-  "description": "Manifest claiming that the heavy CI tiers ran against an exact committed value. Absent origin or origin=local preserves the D-117 local-evidence contract; origin=actions-run carries provisional GitHub Actions evidence under D-146 and ADR-005. Local evidence is consumed by `devai evidence local verify`; Actions evidence is consumed by `devai evidence actions verify`. Verification binds both variants through sourceHash and the declared policy/jobs. A claimed-but-invalid manifest hard-fails the gate (never-silently-open).",
+  "description": "Manifest claiming that expensive checks ran against an exact committed value. Local and GitHub Actions producers are both bound through sourceHash and their declared policy and jobs. A claimed-but-invalid manifest fails closed when consumed by `devai evidence verify`.",
   "type": "object",
   "additionalProperties": false,
   "allOf": [
@@ -45,7 +45,7 @@
     },
     "origin": {
       "enum": ["local", "actions-run"],
-      "description": "Evidence producer. Omission is the backward-compatible local form."
+      "description": "Evidence producer. Omission selects the local producer."
     },
     "actionsRun": {
       "type": "object",
@@ -366,10 +366,10 @@
       "tools": {},
       "platforms": [],
       "jobs": {
-        "inventory-spec-self-application": {
+        "inventory-spec-validation": {
           "result": "success",
           "metadata": {
-            "job": "inventory-spec-self-application",
+            "job": "inventory-spec-validation",
             "platform": "linux/amd64"
           },
           "artifactChecksum": {

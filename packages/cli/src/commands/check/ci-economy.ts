@@ -5,7 +5,7 @@ import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 
 /**
- * CI-economy round — `devai policy check ci economy`.
+ * CI-economy check behind the canonical `check` facade.
  *
  * Enforces ADR-CI-ECONOMY's mechanical rules against a repo's
  * `.github/workflows/`. Mechanical rules (hard unless noted):
@@ -16,12 +16,10 @@ import { defineCommand } from '../../define-command.js';
  *   2. ci-economy.no-macos-on-pr — no macOS runner reference in any
  *      pull_request-triggered workflow (Decision 5.1; macOS bills 10×).
  *   3. ci-economy.no-triple-trigger — no workflow triggered by all three
- *      of pull_request + push + schedule (Decision 5.4 / Decision 4:
- *      audits are separate schedule-only workflows).
- *   4. ci-economy.evidence-gate-wired — at least one workflow wires the
- *      evidence substrate: a `uses:` of the reusable evidence gate, an
- *      `evidence-gate` job, a local-evidence verifier invocation, or an
- *      evidence-chain verification step (Decisions 1–2, 7). Severity is
+ *      of pull_request + push + schedule. The single remote verifier has
+ *      no scheduled product-validation lane.
+ *   4. ci-economy.evidence-gate-wired — at least one workflow invokes the
+ *      independently pinned DEVAI ledger verifier. Severity is
  *      profile-conditioned (Decision 8 as amended by D-116): hard under
  *      the default `full` CI-economy profile; ADVISORY when the target
  *      repo's `.devai/config/project.json` declares
@@ -121,13 +119,9 @@ export function readCiEconomyProfile(repoRoot: string): CiEconomyProfile {
   }
 }
 
-const EVIDENCE_MARKERS: readonly RegExp[] = [
-  /reusable-evidence-gate/,
-  /verify-local-evidence/,
-  /evidence-chain/,
-  /evidence[ -]verify/,
-  /^\s+evidence-gate:\s*$/m,
-];
+const VERIFIER_REPOSITORY = /repository:\s*devai-nyx\/devai-verifier/u;
+const VERIFIER_PIN = /ref:\s*2c6e5acaade7aae65d23f86fc7f6fdf7e56d945c/u;
+const VERIFIER_INVOCATION = /node\s+\.devai-verifier\/src\/cli\.js/u;
 
 /**
  * Extract the trigger set from a workflow file. Handles the three
@@ -190,7 +184,8 @@ function collectFacts(dir: string, file: string): WorkflowFacts {
     hasPathFilters: /^\s+paths(-ignore)?:/m.test(text),
     referencesMacos: /\bmacos-/i.test(text) || /runs-on:.*macos/i.test(text),
     hasPostgresService: /image:\s*['"]?postgres/.test(text),
-    hasEvidenceMarker: EVIDENCE_MARKERS.some((re) => re.test(text)),
+    hasEvidenceMarker:
+      VERIFIER_REPOSITORY.test(text) && VERIFIER_PIN.test(text) && VERIFIER_INVOCATION.test(text),
   };
 }
 
@@ -257,7 +252,7 @@ export function checkCiEconomy(opts: CheckCiEconomyOptions): CiEconomyReport {
           severity: 'fail',
           message: `${String(macosOnPr.length)} pull_request-triggered workflow(s) reference macOS runners (10× Linux pricing)`,
           remediation:
-            'Move macOS legs behind workflow_dispatch, release events, or the weekly audit (ADR-CI-ECONOMY Decision 5.1).',
+            'The remote ledger verifier must use the Linux runner; product validation remains local.',
           locations: macosOnPr.map((f) => f.file),
         },
   );
@@ -278,7 +273,7 @@ export function checkCiEconomy(opts: CheckCiEconomyOptions): CiEconomyReport {
           severity: 'fail',
           message: `${String(tripleTrigger.length)} workflow(s) run the same content on pull_request + push + schedule`,
           remediation:
-            'Keep pull_request + push; move the scheduled run into a dedicated (weekly) audit workflow (ADR-CI-ECONOMY Decisions 4, 5.4).',
+            'Keep the single pull_request + push ledger-verification workflow and remove scheduled product validation.',
           locations: tripleTrigger.map((f) => f.file),
         },
   );
@@ -294,29 +289,29 @@ export function checkCiEconomy(opts: CheckCiEconomyOptions): CiEconomyReport {
       severity: 'pass',
       message:
         profile === 'gate-staged'
-          ? 'evidence substrate is wired into at least one workflow — gate-staged declaration is obsolete; graduate ci_economy.profile to "full" in .devai/config/project.json'
+          ? 'evidence substrate is wired into at least one workflow — the gate-staged declaration is no longer needed; set ci_economy.profile to "full" in .devai/config/project.json'
           : 'evidence substrate is wired into at least one workflow',
     });
   } else {
     const notWiredMessage =
       files.length === 0
         ? `no workflow files found under ${opts.workflowsDir ?? DEFAULT_WORKFLOWS_DIR}`
-        : 'no workflow wires the evidence substrate (reusable evidence gate, evidence-gate job, local-evidence verifier, or evidence-chain verification)';
+        : 'no workflow invokes the pinned independent DEVAI ledger verifier';
     findings.push(
       profile === 'gate-staged'
         ? {
             ruleId: 'ci-economy.evidence-gate-wired',
             severity: 'warn',
-            message: `${notWiredMessage} — ADVISORY, not FAIL: ci_economy.profile = "gate-staged" declared in .devai/config/project.json (ADR-CI-ECONOMY Decision 8 as amended by D-116)`,
+            message: `${notWiredMessage} — ADVISORY, not FAIL: ci_economy.profile = "gate-staged" declared in .devai/config/project.json`,
             remediation:
-              'Staging, not exemption: wire the gate (`uses: devai-nyx/devai/.github/workflows/reusable-evidence-gate.yml@main` or an evidence-chain verification step), then graduate ci_economy.profile to "full" (docs/adopters/ci-economy.md step 2).',
+              'Wire the pinned devai-nyx/devai-verifier checkout and CLI invocation, then graduate ci_economy.profile to "full".',
           }
         : {
             ruleId: 'ci-economy.evidence-gate-wired',
             severity: 'fail',
             message: notWiredMessage,
             remediation:
-              'Add `uses: devai-nyx/devai/.github/workflows/reusable-evidence-gate.yml@main` or an evidence-chain verification step (ADR-CI-ECONOMY Decisions 1–2, 7; adoption steps in docs/adopters/ci-economy.md). Incremental adopters that have not yet wired the gate may declare ci_economy.profile: "gate-staged" in .devai/config/project.json to downgrade this rule to advisory (D-116).',
+              'Add the single ledger-verification workflow with devai-nyx/devai-verifier pinned to its approved immutable commit. Incremental adopters may declare ci_economy.profile: "gate-staged" until that verifier is wired.',
           },
     );
   }
@@ -347,7 +342,7 @@ export function checkCiEconomy(opts: CheckCiEconomyOptions): CiEconomyReport {
       severity: 'warn',
       message: `${String(dailyCrons.length)} workflow(s) carry a cron firing daily or more often`,
       remediation:
-        'Advisory: scheduled workflows run at most weekly, and must exit green when preconditions are absent (ADR-CI-ECONOMY Decision 5.4).',
+        'The RC CI contract has no scheduled lane; remove the cron unless it is independently authorized.',
       locations: dailyCrons.map((f) => f.file),
     });
   }
@@ -360,21 +355,8 @@ export function checkCiEconomy(opts: CheckCiEconomyOptions): CiEconomyReport {
       severity: 'warn',
       message: `${String(macosElsewhere.length)} non-PR workflow(s) reference macOS runners (10× Linux pricing)`,
       remediation:
-        'Advisory: confirm each macOS leg buys platform signal worth 10× — prefer workflow_dispatch or the weekly audit.',
+        'The remote ledger verifier is platform-neutral and must stay on the Linux runner.',
       locations: macosElsewhere.map((f) => f.file),
-    });
-  }
-
-  // ── Advisory — ci-economy.scheduled-audit ────────────────────────────
-  const hasSchedule = facts.some((f) => f.triggers.has('schedule'));
-  if (!hasSchedule && files.length > 0) {
-    findings.push({
-      ruleId: 'ci-economy.scheduled-audit',
-      severity: 'warn',
-      message:
-        'no scheduled workflow found — the evidence short-circuit requires a weekly full remote audit',
-      remediation:
-        'Advisory: add a weekly schedule + workflow_dispatch audit workflow that re-runs the heavy tiers ignoring evidence mode (ADR-CI-ECONOMY Decision 4).',
     });
   }
 
@@ -408,7 +390,7 @@ export function checkCiEconomy(opts: CheckCiEconomyOptions): CiEconomyReport {
 export const checkCiEconomyCmd = defineCommand({
   name: 'check ci-economy',
   description:
-    'Validate .github/workflows/ against ADR-CI-ECONOMY: cancel-in-progress concurrency on PR workflows, no macOS on pull_request, no pull_request+push+schedule triple triggers, evidence gate wired. Rules 1-3 always hard-fail; rule 4 (evidence-gate-wired) is hard under the default "full" CI-economy profile and downgrades to advisory (still reported) when the target repo declares ci_economy.profile: "gate-staged" in .devai/config/project.json (D-116). Judgment rules (path filters, cron cadence, macOS cost, scheduled audit, DB isolation) are advisory.',
+    'Validate .github/workflows/ against the cheap remote ledger-verification contract: cancel-in-progress concurrency on PR workflows, no macOS on pull_request, no pull_request+push+schedule triple triggers, and an independently pinned verifier. Rules 1-3 always hard-fail; rule 4 is hard under the default "full" profile and advisory under an explicit "gate-staged" profile. Path-filter, cron, macOS-cost, and DB-isolation findings remain advisory.',
   authority: 'policy_firewall',
   register(cli: CAC): void {
     cli

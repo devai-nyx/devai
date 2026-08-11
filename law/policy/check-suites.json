@@ -1,0 +1,308 @@
+{
+  "$schema": "../schemas/check-suites.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "check-suites",
+  "status": "active",
+  "authority": "Architect",
+  "ordering": "members-execute-in-declared-order-without-coalescing",
+  "unknown_behavior": "error-never-pass",
+  "prerequisites": [
+    "clean-or-explicitly-described-worktree",
+    "frozen-install-complete",
+    "pnpm-run-devai-prepare"
+  ],
+  "suites": [
+    {
+      "name": "quick",
+      "members": ["ledger-local"],
+      "excluded": []
+    },
+    {
+      "name": "standard",
+      "members": ["ledger-local"],
+      "excluded": []
+    },
+    {
+      "name": "full",
+      "members": ["ledger-rc"],
+      "excluded": []
+    },
+    {
+      "name": "release",
+      "members": ["ledger-rc"],
+      "excluded": []
+    }
+  ],
+  "member_definitions": [
+    {
+      "id": "ledger-local",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "content-addressed-local-task-ledger"
+      },
+      "effect": "local-write",
+      "cost": "medium",
+      "output": "action-envelope-plus-local-task-ledger-report"
+    },
+    {
+      "id": "ledger-rc",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "content-addressed-rc-task-ledger"
+      },
+      "effect": "local-write",
+      "cost": "high",
+      "output": "action-envelope-plus-rc-task-ledger-report"
+    },
+    {
+      "id": "build",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "build"]
+      },
+      "effect": "local-write",
+      "cost": "medium",
+      "output": "action-envelope-plus-build-reading"
+    },
+    {
+      "id": "lint",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "lint"]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-lint-reading"
+    },
+    {
+      "id": "type-check",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "typecheck"]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-type-check-reading"
+    },
+    {
+      "id": "unit-test",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "test:local"]
+      },
+      "effect": "harness-write",
+      "cost": "medium",
+      "output": "action-envelope-plus-test-report"
+    },
+    {
+      "id": "schema-config-load",
+      "binding": {
+        "kind": "action",
+        "argv": [
+          "node",
+          "packages/cli/dist/runtime/index/bin.js",
+          "check",
+          "--only",
+          "schemas",
+          "--repo-root",
+          ".",
+          "--format",
+          "json"
+        ]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-schema-canon-report"
+    },
+    {
+      "id": "invariant-validation",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "complete-invariant-schema-and-reference-population"
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-population-report"
+    },
+    {
+      "id": "journey-validation",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "complete-journey-schema-and-reference-population"
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-population-report"
+    },
+    {
+      "id": "glossary-validation",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "complete-glossary-schema-and-reference-population"
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-population-report"
+    },
+    {
+      "id": "trace-validation",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "trace-validation"
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-trace-report"
+    },
+    {
+      "id": "test-trace-validation",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "test-trace-validation"
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-test-report"
+    },
+    {
+      "id": "strategy-validation",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "complete-test-strategy-population"
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-strategy-report"
+    },
+    {
+      "id": "action-coverage",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "action-coverage"
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-test-report"
+    },
+    {
+      "id": "full-tests",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "test:local"]
+      },
+      "effect": "harness-write",
+      "cost": "high",
+      "output": "action-envelope-plus-complete-test-report"
+    },
+    {
+      "id": "inventory-integrity",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "complete-inventory-population-and-determinism"
+      },
+      "effect": "read",
+      "cost": "medium",
+      "output": "action-envelope-plus-inventory-report"
+    },
+    {
+      "id": "mutation",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "mutation-policy-and-required-scenarios"
+      },
+      "effect": "harness-write",
+      "cost": "high",
+      "output": "action-envelope-plus-mutation-report"
+    },
+    {
+      "id": "security-performance",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "security-and-performance-population"
+      },
+      "effect": "read",
+      "cost": "high",
+      "output": "action-envelope-plus-security-performance-report"
+    },
+    {
+      "id": "harness-integrity",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "test:containment:rc"]
+      },
+      "effect": "harness-write",
+      "cost": "high",
+      "output": "action-envelope-plus-containment-report"
+    },
+    {
+      "id": "coverage",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "test:coverage:rc"]
+      },
+      "effect": "harness-write",
+      "cost": "high",
+      "output": "action-envelope-plus-complete-coverage-report"
+    },
+    {
+      "id": "evidence-integrity",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "evidence-chain-and-complete-current-population"
+      },
+      "effect": "read",
+      "cost": "medium",
+      "output": "action-envelope-plus-evidence-report"
+    },
+    {
+      "id": "release-scorecard",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "release-eligibility-scorecard"
+      },
+      "effect": "read",
+      "cost": "medium",
+      "output": "action-envelope-plus-nonpublication-release-report"
+    },
+    {
+      "id": "dependency-security",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "dependency-and-security-readiness"
+      },
+      "effect": "read",
+      "cost": "medium",
+      "output": "action-envelope-plus-dependency-security-report"
+    },
+    {
+      "id": "provenance-readiness",
+      "binding": {
+        "kind": "runtime-gate",
+        "gate_id": "artifact-and-source-provenance-readiness"
+      },
+      "effect": "read",
+      "cost": "medium",
+      "output": "action-envelope-plus-provenance-report"
+    },
+    {
+      "id": "changeset-version",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "ci:changesets"]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-changeset-version-report"
+    },
+    {
+      "id": "workflow-reference",
+      "binding": {
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "ci:workflows"]
+      },
+      "effect": "read",
+      "cost": "low",
+      "output": "action-envelope-plus-workflow-reference-report"
+    }
+  ]
+}

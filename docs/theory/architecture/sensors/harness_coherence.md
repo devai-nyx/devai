@@ -28,7 +28,3 @@ Across all workflows, detect inconsistencies:
 
 - **Node-version pinning per workflow.** Requires deeper `with:` parsing — defer.
 - **Reusable workflow extraction recommendations.** That's idiomaticity (F5×T5).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/harness_coherence.md (classification CURRENT).

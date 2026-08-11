@@ -8,7 +8,7 @@ slug: /framework
 
 > §3 is the framework reference — the contract DEVAI offers to an adopter. Reading it tells you what you are getting and what is expected of you. The [Constitution](../reference/law.md) is the index; everything else here is commentary that orients you to the Constitution's binding text.
 >
-> §3 is deliberately separated from [§7 Meta](../dev), which describes DEVAI's _self-application_ (DEVAI applied to its own development per [Article 36](../reference/law.md)). The split is binding per [ADR-DOCS-IA Decision 2](../../law/adr/README.md): an adopter reading "the framework requires X" should never have to disambiguate "X is a property of the framework you are adopting" from "X is what DEVAI happens to do in its own client-of-itself repo."
+> §3 is deliberately separated from the [developer guide](../dev), which describes how human maintainers work on the DEVAI source repository. Maintainer procedures do not silently add requirements to the adopter contract.
 
 ## What's here
 
@@ -25,7 +25,7 @@ slug: /framework
 | [Invariants](./framework/invariants.md)         | The atomic spec unit; trace; per-invariant change policy.                                                                                                    |
 | [Test policy](./framework/test-policy.md) (W09) | Six test suites, journeys, DB tests, mutation scenarios, weakening, quarantine, coverage, per-batch verification.                                            |
 | Contracts                                       | API/data contracts under `docs/reference/contracts/`.                                                                                                        |
-| Schemas                                         | The schema roster is derived from `law/policy/population-registry.json` and guarded by the schema liveness checks; no prose count is authoritative.          |
+| Schemas                                         | The schema roster is explicit in `packages/schemas/src/roster.ts` and guarded by schema liveness checks; no prose count is authoritative.                    |
 | Glossary                                        | Canonical vocabulary under `law/glossary/`; cite by term.                                                                                                    |
 | Product                                         | Owner-authored journeys and use-cases under `product/`.                                                                                                      |
 
@@ -40,8 +40,4 @@ Pick by purpose:
 
 ## Adopter contract anchor
 
-Every page in §3 describes a property of DEVAI that holds for _every_ adopter that runs the framework. If a property is DEVAI-specific (e.g., "DEVAI's self-scorecard shows 35 PASS / 2 FAIL"), it lives in §7 Meta, not here.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/index.md (classification STALE).
+Every page in §3 describes a property of DEVAI that holds for _every_ adopter that runs the framework. Source-maintenance procedures live in the developer guide and are not adopter requirements.

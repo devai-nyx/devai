@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/forbidden-actions.schema.json",
   "title": "Forbidden Actions Registry",
-  "description": "Canonical list of actions an automated agent MUST NOT perform without explicit per-action human authorisation. Absorbs LAW-12.FORBID.1 from the stech-law predecessor draft (D-38). The default registry ships with DEVAI at .devai/config/forbidden-actions.json; clients may extend (never relax) it.",
+  "description": "Canonical list of actions an automated agent MUST NOT perform without explicit per-action human authorisation. The default registry ships at .devai/config/forbidden-actions.json; adopters may extend but never relax it.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "actions"],
@@ -12,7 +12,7 @@
     },
     "waivers": {
       "type": "array",
-      "description": "D-123 (item 6): explicit, reasoned exceptions for canonical entries this repo intentionally does not carry. A canonical id absent from `actions` AND absent from `waivers` is reported by `devai policy check forbidden actions`'s coverage check as an unwaived gap — extend the registry, never silently drop protections it ships with.",
+      "description": "Explicit, reasoned exceptions for canonical protections this repository intentionally does not carry. A canonical id absent from both `actions` and `waivers` is an unwaived gap; extend the registry rather than silently dropping shipped protections.",
       "items": {
         "type": "object",
         "additionalProperties": false,

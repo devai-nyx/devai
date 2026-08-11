@@ -2,7 +2,7 @@
   "name": "@devai-nyx/schemas",
   "version": "1.0.0",
   "type": "module",
-  "description": "DEVAI-II schema roster, lazy validators, meta-gate, and canon linter.",
+  "description": "DEVAI schema roster, lazy validators, meta-gate, and canonical linter.",
   "license": "Apache-2.0",
   "author": "Antonio Augusto Russo <aarusso@nyxk.com.br>",
   "engines": {
@@ -23,19 +23,16 @@
   ],
   "scripts": {
     "build": "tsc -b && node scripts/copy-law.mjs",
-    "clean": "tsc -b --clean",
-    "test": "vitest run tests"
+    "clean": "tsc -b --clean"
   },
   "dependencies": {
     "ajv": "^8.17.0",
     "ajv-formats": "^3.0.0"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/devai-nyx/devai.git",
     "directory": "packages/schemas"
-  }
+  },
+  "private": true
 }

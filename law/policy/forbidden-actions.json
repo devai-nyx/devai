@@ -82,13 +82,13 @@
     },
     {
       "id": "FORBID-DELETE-AUTHORITY-DOCS",
-      "action": "Deleting successor law, product intent, governed rounds/audits, or machine proofs outside the owning authority path",
+      "action": "Deleting law, product intent, runtime audit output, or machine proofs outside the owning authority path",
       "rationale": "Authority violation",
       "severity": "critical",
       "detect_patterns": [
-        "\\b(?:git\\s+rm|rm)\\s+[^\\n]*(?:law|product|work/(?:rounds|audit)|record)/"
+        "\\b(?:git\\s+rm|rm)\\s+[^\\n]*(?:law|product|record|\\.devai/local/rounds)/"
       ],
-      "safer_alternative": "Architect amendment via ADR + tombstone"
+      "safer_alternative": "Use the owning role and explicit action authority"
     },
     {
       "id": "FORBID-EXTERNAL-MESSAGES",
@@ -100,13 +100,13 @@
     },
     {
       "id": "FORBID-CI-WITHOUT-ADR",
-      "action": "Modifying CI/CD pipelines without ADR",
+      "action": "Modifying CI/CD pipelines without explicit review",
       "rationale": "Gate weakening",
       "severity": "high",
       "detect_patterns": [
         "(?:\\.github/workflows/|scripts/(?:run-ci-stages|check-workflows)\\.mjs)"
       ],
-      "safer_alternative": "Draft an ADR explaining the gate change first"
+      "safer_alternative": "Record the gate change rationale and obtain explicit review"
     },
     {
       "id": "FORBID-SECRETS-PROD",
@@ -134,13 +134,13 @@
     },
     {
       "id": "FORBID-MUTATE-INVARIANTS",
-      "action": "Modifying successor law or committed policy materializations without Architect authority",
+      "action": "Modifying law or committed policy materializations without Architect authority",
       "rationale": "Constitutional change",
       "severity": "critical",
       "detect_patterns": [
-        "\\b(?:git\\s+(?:add|rm)|rm)\\s+[^\\n]*(?:law/|product/|work/(?:rounds|audit)/|record/|\\.devai/config/)"
+        "\\b(?:git\\s+(?:add|rm)|rm)\\s+[^\\n]*(?:law/|product/|record/|\\.devai/(?:config|local/rounds)/)"
       ],
-      "safer_alternative": "Architect amendment via ADR + DESIGN-DECISIONS entry"
+      "safer_alternative": "Use Architect authority and record the current rationale"
     }
   ]
 }

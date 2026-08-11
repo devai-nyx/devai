@@ -10,53 +10,14 @@ import { join } from 'node:path';
 import { provisionTask, dropTask } from './db.js';
 import { acquireLocks, releaseLocks } from './locks.js';
 import { createWorktree, destroyWorktree } from './worktrees.js';
+import {
+  classifyTaskRecord,
+  type TaskRecord,
+  type TaskRecordClassification,
+  type TaskStatus,
+} from './task-contract.js';
 
-export type TaskStatus =
-  | 'queued'
-  | 'ready'
-  | 'lock_denied'
-  | 'in_progress'
-  | 'checkpoint'
-  | 'pre_merge'
-  | 'merging'
-  | 'completed'
-  | 'awaiting_human_review'
-  | 'experimental_blocked'
-  | 'escalated'
-  | 'rgr_pending'
-  | 'cancelled';
-
-export type TaskDiscipline = 'owner' | 'architect' | 'inspector' | 'engineer' | 'auditor';
-export type TaskSubstrate = 'F1' | 'F2' | 'F3' | 'F4' | 'F5';
-
-/**
- * Schema-conformant Task record per task.schema.json
- * (additionalProperties: false). Note: there is no `paused_rgr_id`
- * field — the RGR pause is encoded in `tags` as `rgr_pause:<RGR-id>`,
- * a convention this module owns end-to-end.
- */
-export interface TaskRecord {
-  schemaVersion: '1.0.0';
-  id: string; // TASK-[0-9]{4,}
-  status: TaskStatus;
-  discipline: TaskDiscipline;
-  title: string;
-  description?: string;
-  lifecycle?: 'supported' | 'experimental';
-  acceptance_commands?: string[][];
-  target_modules: string[]; // each ^MOD-
-  target_substrates: TaskSubstrate[]; // minItems 1
-  created_at: string;
-  db_isolation: 'database' | 'cluster';
-  iteration_count: number;
-  spawned_at?: string | null;
-  completed_at?: string | null;
-  branch?: string | null;
-  worktree_id?: string | null; // ^WT- when set
-  prompt_composition_id?: string | null;
-  priority?: number;
-  tags?: string[];
-}
+export * from './task-contract.js';
 
 const RGR_PAUSE_TAG_PREFIX = 'rgr_pause:';
 
@@ -83,11 +44,29 @@ function clearPausedRgrId(task: TaskRecord): TaskRecord {
   return { ...task, tags };
 }
 
+export type SpawnTaskInput = Omit<
+  TaskRecord,
+  'schemaVersion' | 'status' | 'created_at' | 'iteration_count' | 'round_id' | 'executor'
+> & {
+  /** Untrusted callers may omit this field; spawnTask refuses them at runtime. */
+  readonly round_id?: unknown;
+  /** Untrusted callers may omit this field; spawnTask refuses them at runtime. */
+  readonly executor?: unknown;
+  /** Preserve an already queued task's immutable creation time when starting it. */
+  readonly created_at?: string;
+  /** Preserve retry state when a queued task re-enters resource acquisition. */
+  readonly iteration_count?: number;
+  readonly status?: TaskStatus;
+};
+
+type ValidatedSpawnTaskInput = SpawnTaskInput & {
+  readonly round_id: string;
+  readonly executor: TaskRecord['executor'];
+};
+
 export interface SpawnTaskOptions {
   readonly repoRoot: string;
-  readonly task: Omit<TaskRecord, 'schemaVersion' | 'status' | 'created_at' | 'iteration_count'> & {
-    status?: TaskStatus;
-  };
+  readonly task: SpawnTaskInput;
   /**
    * If true, create a git worktree for the task after locks acquire.
    * The worktree id is `WT-<task-id>` and the branch defaults to the
@@ -120,25 +99,43 @@ export function saveTask(repoRoot: string, task: TaskRecord): void {
   writeFileSync(taskPath(repoRoot, task.id), JSON.stringify(validated, null, 2) + '\n');
 }
 
-export function loadTask(repoRoot: string, id: string): TaskRecord {
+export function readTaskRecord(repoRoot: string, id: string): TaskRecordClassification {
   const path = taskPath(repoRoot, id);
   if (!existsSync(path)) throw new Error(`task ${id} not found at ${path}`);
-  return parsers.task.parseJson<TaskRecord>(readFileSync(path, 'utf8'));
+  let value: unknown;
+  try {
+    value = JSON.parse(readFileSync(path, 'utf8')) as unknown;
+  } catch {
+    return { kind: 'invalid', executable: false, code: 'TASK_RECORD_INVALID' };
+  }
+  const classification = classifyTaskRecord(value);
+  if (classification.kind !== 'current') return classification;
+  const parsed = parsers.task.safeParse<TaskRecord>(classification.record);
+  return parsed.ok
+    ? { kind: 'current', executable: true, record: parsed.value }
+    : { kind: 'invalid', executable: false, code: 'TASK_RECORD_INVALID' };
+}
+
+export function loadTask(repoRoot: string, id: string): TaskRecord {
+  const classification = readTaskRecord(repoRoot, id);
+  if (classification.kind === 'current') return classification.record;
+  throw new Error(classification.code);
+}
+
+/** List every stored record classification without making unsupported data executable. */
+export function listTaskRecords(repoRoot: string): readonly TaskRecordClassification[] {
+  const dir = tasksDir(repoRoot);
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((name) => name.endsWith('.json'))
+    .sort()
+    .map((name) => readTaskRecord(repoRoot, name.slice(0, -'.json'.length)));
 }
 
 export function listTasks(repoRoot: string): readonly TaskRecord[] {
-  const dir = tasksDir(repoRoot);
-  if (!existsSync(dir)) return [];
-  const records: TaskRecord[] = [];
-  for (const name of readdirSync(dir)) {
-    if (!name.endsWith('.json')) continue;
-    try {
-      records.push(parsers.task.parseJson<TaskRecord>(readFileSync(join(dir, name), 'utf8')));
-    } catch {
-      // skip
-    }
-  }
-  return records.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  return listTaskRecords(repoRoot).flatMap((classification) =>
+    classification.kind === 'current' ? [classification.record] : [],
+  );
 }
 
 export interface SpawnResult {
@@ -162,26 +159,48 @@ export interface SpawnResult {
  * taken are reversed (worktree destroyed, locks released). A failed
  * spawn never leaves the substrate half-initialized.
  *
- * Backward-compatible: with `withWorktree:false` and `withDb:false`
- * (the defaults), behavior is exactly the previous MVP — acquire locks
- * + persist record.
+ * With `withWorktree:false` and `withDb:false` (the defaults), the task is
+ * validated, locked, and persisted without provisioning extra resources.
  */
 export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
+  if (typeof opts.task.round_id !== 'string' || opts.task.round_id.length === 0) {
+    throw new Error('TASK_ROUND_ID_REQUIRED');
+  }
+  if (
+    opts.task.executor === null ||
+    typeof opts.task.executor !== 'object' ||
+    Array.isArray(opts.task.executor)
+  ) {
+    throw new Error('TASK_EXECUTOR_REQUIRED');
+  }
+  const requested = opts.task as ValidatedSpawnTaskInput;
+  const createdAt = requested.created_at ?? new Date().toISOString();
+  const preflight: TaskRecord = {
+    schemaVersion: '2.0.0',
+    ...requested,
+    status: requested.status ?? 'queued',
+    iteration_count: requested.iteration_count ?? 0,
+    created_at: createdAt,
+  };
+  parsers.task.parse(preflight);
+
   const locksDir = join(opts.repoRoot, '.devai/state/locks');
   const lockResult = acquireLocks({
     locksDir,
-    taskId: opts.task.id,
-    targets: opts.task.target_modules.map((m) => `F2:${m}`),
+    taskId: requested.id,
+    targets: requested.target_modules.map((module) => `F2:${module}`),
   });
 
   // Lock-denied: never attempt worktree/DB; persist the record and return.
   if (lockResult.denied.length > 0) {
+    // Acquisition is all-or-nothing: release any keys claimed before the conflict.
+    releaseLocks({ locksDir, taskId: requested.id });
     const task: TaskRecord = {
-      schemaVersion: '1.0.0',
-      ...opts.task,
+      schemaVersion: '2.0.0',
+      ...requested,
       status: 'lock_denied',
-      iteration_count: 0,
-      created_at: new Date().toISOString(),
+      iteration_count: requested.iteration_count ?? 0,
+      created_at: createdAt,
     };
     saveTask(opts.repoRoot, task);
     return {
@@ -196,27 +215,27 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
   // Locks acquired. Attempt worktree (if requested), then DB (if requested).
   let worktreePath: string | null = null;
   let database: string | null = null;
-  const worktreeId = `WT-${opts.task.id}`;
+  const worktreeId = `WT-${requested.id}`;
 
   if (opts.withWorktree === true) {
     try {
       const wt = createWorktree({
         repoRoot: opts.repoRoot,
         id: worktreeId,
-        branch: opts.task.id,
+        branch: requested.id,
         baseRef: opts.baseRef ?? 'HEAD',
-        taskId: opts.task.id,
+        taskId: requested.id,
       });
       worktreePath = wt.path;
     } catch (err) {
       // Rollback: release locks; no worktree to destroy.
-      releaseLocks({ locksDir, taskId: opts.task.id });
+      releaseLocks({ locksDir, taskId: requested.id });
       const task: TaskRecord = {
-        schemaVersion: '1.0.0',
-        ...opts.task,
+        schemaVersion: '2.0.0',
+        ...requested,
         status: 'cancelled',
-        iteration_count: 0,
-        created_at: new Date().toISOString(),
+        iteration_count: requested.iteration_count ?? 0,
+        created_at: createdAt,
       };
       saveTask(opts.repoRoot, task);
       return {
@@ -234,18 +253,18 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
       // Rollback worktree + locks.
       if (opts.withWorktree === true) {
         try {
-          destroyWorktree({ repoRoot: opts.repoRoot, id: worktreeId });
+          destroyWorktree({ repoRoot: opts.repoRoot, id: worktreeId, deleteBranch: true });
         } catch {
           // best-effort
         }
       }
-      releaseLocks({ locksDir, taskId: opts.task.id });
+      releaseLocks({ locksDir, taskId: requested.id });
       const task: TaskRecord = {
-        schemaVersion: '1.0.0',
-        ...opts.task,
+        schemaVersion: '2.0.0',
+        ...requested,
         status: 'cancelled',
-        iteration_count: 0,
-        created_at: new Date().toISOString(),
+        iteration_count: requested.iteration_count ?? 0,
+        created_at: createdAt,
       };
       saveTask(opts.repoRoot, task);
       return {
@@ -256,22 +275,22 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
         rollback_reason: 'DB provisioning requested but databaseUrl is undefined',
       };
     }
-    const dbRes = provisionTask({ databaseUrl: opts.databaseUrl, taskId: opts.task.id });
+    const dbRes = provisionTask({ databaseUrl: opts.databaseUrl, taskId: requested.id });
     if (!dbRes.ok) {
       if (opts.withWorktree === true) {
         try {
-          destroyWorktree({ repoRoot: opts.repoRoot, id: worktreeId });
+          destroyWorktree({ repoRoot: opts.repoRoot, id: worktreeId, deleteBranch: true });
         } catch {
           // best-effort
         }
       }
-      releaseLocks({ locksDir, taskId: opts.task.id });
+      releaseLocks({ locksDir, taskId: requested.id });
       const task: TaskRecord = {
-        schemaVersion: '1.0.0',
-        ...opts.task,
+        schemaVersion: '2.0.0',
+        ...requested,
         status: 'cancelled',
-        iteration_count: 0,
-        created_at: new Date().toISOString(),
+        iteration_count: requested.iteration_count ?? 0,
+        created_at: createdAt,
       };
       saveTask(opts.repoRoot, task);
       return {
@@ -288,14 +307,15 @@ export function spawnTask(opts: SpawnTaskOptions): SpawnResult {
   // All steps succeeded — record final state.
   const composed = opts.withWorktree === true || opts.withDb === true;
   const task: TaskRecord = {
-    schemaVersion: '1.0.0',
-    ...opts.task,
+    schemaVersion: '2.0.0',
+    ...requested,
     // If we composed a full environment, the task is in_progress (ready
     // to run). Otherwise it's just 'ready' awaiting environment.
     status: composed ? 'in_progress' : 'ready',
-    iteration_count: 0,
-    created_at: new Date().toISOString(),
-    ...(worktreePath !== null && { worktree_id: worktreeId, branch: opts.task.id }),
+    iteration_count: requested.iteration_count ?? 0,
+    created_at: createdAt,
+    ...(composed && { spawned_at: new Date().toISOString() }),
+    ...(worktreePath !== null && { worktree_id: worktreeId, branch: requested.id }),
   };
   saveTask(opts.repoRoot, task);
   return {
@@ -331,7 +351,11 @@ export interface TransitionOptions {
 
 export function completeTask(opts: TransitionOptions): TaskRecord {
   const task = loadTask(opts.repoRoot, opts.taskId);
-  const updated: TaskRecord = { ...task, status: 'completed' };
+  const updated: TaskRecord = {
+    ...task,
+    status: 'completed',
+    completed_at: new Date().toISOString(),
+  };
   saveTask(opts.repoRoot, updated);
   if (opts.destroyWorktree === true && typeof task.worktree_id === 'string') {
     try {

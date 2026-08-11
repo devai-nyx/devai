@@ -1,4 +1,4 @@
-import { mkdirSync, symlinkSync, writeFileSync } from '@devai-nyx/authority';
+import { mkdirSync, writeFileSync } from '@devai-nyx/authority';
 import { getValidator } from '@devai-nyx/schemas';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -11,14 +11,6 @@ export interface BootstrapPlanEntry {
   /** File content (newly created) or null when action is skip-exists. */
   readonly content: string | null;
   readonly bytes: number;
-  /**
-   * When set, the executor creates a symbolic link at `path`
-   * pointing at this target (relative to the link's directory)
-   * instead of writing `content` as a regular file. Phase 21.D
-   * (closes D-A-11) — the `.devai/constitution.md` entry uses
-   * this for the DEVAI-self-development case.
-   */
-  readonly symlink_target?: string;
 }
 
 export interface BootstrapPlan {
@@ -136,6 +128,7 @@ export function validateCanonicalPolicyContent(file: BootstrapPolicyFile, bytes:
 
 function canonicalPolicyContent(file: (typeof POLICY_FILES)[number]): string {
   const candidates = [
+    join(PACKAGE_ROOT, 'law/policy', file),
     join(PACKAGE_ROOT, 'dist/law/policy', file),
     join(PACKAGE_ROOT, '../../law/policy', file),
   ];
@@ -148,9 +141,10 @@ function canonicalPolicyContent(file: (typeof POLICY_FILES)[number]): string {
 }
 
 /**
- * Compute a bootstrap plan for a target directory. Phase-7 MVP:
+ * Compute a bootstrap plan for an adopter target:
  *
- *   .devai/constitution.md (self pointer or adopter pin pointer)
+ *   .devai/constitution.md (pointer to the vendored constitution)
+ *   .devai/pin/constitution.md (canonical vendored constitution)
  *   record/proofs/chain.json (empty genesis)
  *   .devai/{pin,config,state}/
  *   law/, product/, work/, record/, and scratch/ according to profile
@@ -161,7 +155,7 @@ function canonicalPolicyContent(file: (typeof POLICY_FILES)[number]): string {
 export function buildBootstrapPlan(opts: {
   readonly targetRoot: string;
   readonly version?: string;
-  /** Adoption profile (D-112) written into project.json when provided. */
+  /** Adoption profile written into project.json when provided. */
   readonly profile?: 'tier1' | 'tier2' | 'tier3';
 }): BootstrapPlan {
   const version = opts.version ?? DEFAULT_VERSION;
@@ -173,56 +167,34 @@ export function buildBootstrapPlan(opts: {
   const emptyChain = JSON.stringify({ head: null, records: [] }, null, 2) + '\n';
   const canonicalGitignore = 'scratch/\n';
 
-  // D-119: constitution binding is planned before project.json so
-  // its pin (when resolved) can be folded into the config seed.
-  // Shape depends on whether the target looks like DEVAI itself or
-  // an adopter:
-  //   - self: target has `law/constitution.md` → symlink
-  //     `.devai/constitution.md → ../law/constitution.md`; no pin
-  //     (DEVAI is the source, not a
-  //     binding to it).
-  //   - adopter: vendors `.devai/pin/constitution.md` from
-  //     whatever canonical text resolves (bundled dist copy →
-  //     workspace checkout → sibling checkout), a `.devai/
-  //     constitution.md` stub pointing at it, and a
-  //     `{version, sha256}` pin. When nothing resolves, degrades to
-  //     an unresolved-pointer text and no pin so `devai doctor`
-  //     surfaces the gap precisely via `constitution-binding`.
+  // Plan constitution binding first so its resolved pin can be included in
+  // project.json. Every target is an adopter, including a target that already
+  // has law/constitution.md.
   const constitutionBinding = buildConstitutionBindingPlan(opts.targetRoot, version);
 
-  // Phase-10 Batch 10.J: project-config substrate (LAW-00.SCOPE.4
-  // absorbed). Default project_type is 'runtime-host' per the
-  // predecessor draft; clients override on adoption. The
-  // `adopted_at` timestamp is omitted from the bootstrap seed (a
-  // client sets it on first commit) so two consecutive `init`
-  // invocations produce byte-identical project.json output.
+  // The deterministic seed omits timestamps so repeated plans produce
+  // byte-identical project.json output.
   const projectConfig =
     JSON.stringify(
       {
         schemaVersion: '1.0.0',
         project_type: 'runtime-host',
-        // R19/D-135: the supported bootstrap starts in the only posture
-        // DEVAI can guarantee without a verified host adapter. Adopters may
-        // move to host-integrated only through an attested adapter config.
+        // Bootstrap starts in the posture DEVAI can guarantee without a
+        // verified host adapter.
         authority_enforcement: { mode: 'cli-only' },
-        // D-112: profile is only written when declared; absent means
-        // tier3 (full loop) so the seed stays byte-identical for
-        // adopters that don't opt into a lower tier.
+        // An omitted profile uses the schema default.
         ...(opts.profile !== undefined && { profile: opts.profile }),
-        // D-119: only written when the constitution binding resolved a
-        // pin (adopter case with a reachable canonical text). Self and
-        // unresolved-adopter cases omit the field, matching pre-D-119
-        // byte-identical output.
-        ...(constitutionBinding.pin !== undefined && { constitution: constitutionBinding.pin }),
+        constitution: constitutionBinding.pin,
         devai_version: version,
       },
       null,
       2,
     ) + '\n';
 
-  type PlanItem =
-    | { readonly path: string; readonly content: string; readonly symlink_target?: undefined }
-    | { readonly path: string; readonly content: string; readonly symlink_target: string };
+  interface PlanItem {
+    readonly path: string;
+    readonly content: string;
+  }
 
   const plan: PlanItem[] = [
     { path: '.gitignore', content: canonicalGitignore },
@@ -234,7 +206,7 @@ export function buildBootstrapPlan(opts: {
     })),
     { path: '.devai/config/project.json', content: projectConfig },
     constitutionBinding.pointerFile,
-    ...(constitutionBinding.rootFile !== undefined ? [constitutionBinding.rootFile] : []),
+    constitutionBinding.rootFile,
   ];
 
   const profile = opts.profile ?? 'tier3';
@@ -259,7 +231,7 @@ export function buildBootstrapPlan(opts: {
   for (const [dir, authority] of f1Dirs) {
     plan.push({
       path: `${dir}/README.md`,
-      content: `# ${dir.split('/').pop() ?? ''}\n\n**Authority:** ${authority} (Constitution Article 6).\n\nContent deferred to later phases. Generated by \`devai init\` v${version}.\n`,
+      content: `# ${dir.split('/').pop() ?? ''}\n\n**Authority:** ${authority} (Constitution Article 6).\n\nContent is intentionally empty until authored. Generated by DEVAI v${version}.\n`,
     });
   }
 
@@ -277,7 +249,6 @@ export function buildBootstrapPlan(opts: {
         action: 'skip-exists',
         content: item.content,
         bytes: Buffer.byteLength(item.content, 'utf8'),
-        ...(item.symlink_target !== undefined && { symlink_target: item.symlink_target }),
       });
       skip++;
     } else {
@@ -286,7 +257,6 @@ export function buildBootstrapPlan(opts: {
         action: 'create',
         content: item.content,
         bytes: Buffer.byteLength(item.content, 'utf8'),
-        ...(item.symlink_target !== undefined && { symlink_target: item.symlink_target }),
       });
       create++;
     }
@@ -321,7 +291,7 @@ export interface ExecuteResult {
  * Paths that must never be overwritten with template content once they
  * contain real data. These hold the framework's own provenance and ID
  * counters; clobbering them silently destroys the hash chain and breaks
- * `devai evidence chain verify`.
+ * `devai evidence verify --scope chain`.
  */
 const PRESERVE_WHEN_POPULATED: ReadonlySet<string> = new Set([
   'record/proofs/chain.json',
@@ -369,7 +339,6 @@ export function executeBootstrapPlan(
   for (const entry of plan.entries) {
     const abs = join(plan.target_root, entry.path);
     const dir = dirname(abs);
-    const isSymlinkEntry = entry.symlink_target !== undefined;
     if (entry.action === 'skip-exists') {
       if (opts.force === true && entry.content !== null) {
         // Provenance-critical files (Article 32): refuse to overwrite
@@ -381,45 +350,18 @@ export function executeBootstrapPlan(
           continue;
         }
         mkdirSync(dir, { recursive: true });
-        if (isSymlinkEntry) {
-          // Skip overwrite for an existing symlink/file when --force
-          // is requested: rebuilding a symlink under --force would
-          // require removing the existing file first, which is a
-          // destructive operation that should be explicit.
+        const next =
+          entry.path === '.gitignore'
+            ? mergeGitignore(readFileSync(abs, 'utf8'), entry.content)
+            : entry.content;
+        if (entry.path === '.gitignore' && next === readFileSync(abs, 'utf8')) {
           skipped.push(entry.path);
         } else {
-          const next =
-            entry.path === '.gitignore'
-              ? mergeGitignore(readFileSync(abs, 'utf8'), entry.content)
-              : entry.content;
-          if (entry.path === '.gitignore' && next === readFileSync(abs, 'utf8')) {
-            skipped.push(entry.path);
-          } else {
-            writeFileSync(abs, next);
-            overwritten.push(entry.path);
-          }
+          writeFileSync(abs, next);
+          overwritten.push(entry.path);
         }
       } else {
         skipped.push(entry.path);
-      }
-      continue;
-    }
-    if (entry.symlink_target !== undefined) {
-      mkdirSync(dir, { recursive: true });
-      try {
-        symlinkSync(entry.symlink_target, abs);
-        created.push(entry.path);
-      } catch (err) {
-        // Best-effort: if the OS rejects symlink creation (e.g.,
-        // adopter on Windows without developer-mode), fall back to
-        // writing the equivalent pointer file body so doctor's
-        // pointer-file shape still validates.
-        const fallback =
-          entry.content !== null && entry.content.length > 0
-            ? entry.content
-            : `# See ${entry.symlink_target}\n\nFallback pointer (symlinkSync failed: ${err instanceof Error ? err.message : String(err)}).\n`;
-        writeFileSync(abs, fallback);
-        created.push(entry.path);
       }
       continue;
     }
@@ -437,74 +379,5 @@ export function executeBootstrapPlan(
   };
 }
 
-export interface UpgradePlan {
-  readonly from_version: string;
-  readonly to_version: string;
-  readonly target_root: string;
-  readonly entries: BootstrapPlanEntry[];
-  readonly notes: readonly string[];
-}
-
-/**
- * Compute an upgrade plan. Phase-7 MVP: compares current target tree
- * against a fresh bootstrap plan; entries that exist but differ in
- * content become 'overwrite' candidates. Entries that don't exist
- * become 'create'. No automatic apply — caller passes the plan back
- * to executeBootstrapPlan with --force.
- */
-export function buildUpgradePlan(opts: {
-  readonly targetRoot: string;
-  readonly fromVersion: string;
-  readonly toVersion: string;
-}): UpgradePlan {
-  const fresh = buildBootstrapPlan({ targetRoot: opts.targetRoot, version: opts.toVersion });
-  const entries: BootstrapPlanEntry[] = [];
-  const notes: string[] = [];
-
-  for (const entry of fresh.entries) {
-    const abs = join(opts.targetRoot, entry.path);
-    // Upgrade planning never proposes template replacement for canonical
-    // provenance state. Runtime commands own these bytes after bootstrap,
-    // even while counters remain at their zero-valued genesis.
-    if (PRESERVE_WHEN_POPULATED.has(entry.path) && existsSync(abs)) continue;
-    if (!existsSync(abs)) {
-      entries.push(entry);
-      continue;
-    }
-    const current = readFileSync(abs, 'utf8');
-    const fresher = entry.content ?? '';
-    if (entry.path === '.gitignore' && mergeGitignore(current, fresher) === current) continue;
-    if (current === fresher) continue;
-    if (entry.action === 'skip-exists') {
-      // Re-promote to 'overwrite' (with the fresh content).
-      // Rebuild content from a fresh, non-skip plan.
-      const fakePlan = buildBootstrapPlan({ targetRoot: '/nonexistent', version: opts.toVersion });
-      const freshEntry = fakePlan.entries.find((e) => e.path === entry.path);
-      if (freshEntry !== undefined) {
-        const content =
-          entry.path === '.gitignore' && freshEntry.content !== null
-            ? mergeGitignore(current, freshEntry.content)
-            : freshEntry.content;
-        entries.push({
-          path: entry.path,
-          action: 'overwrite',
-          content,
-          bytes: Buffer.byteLength(content ?? '', 'utf8'),
-        });
-        notes.push(`${entry.path}: content differs from ${opts.toVersion} template`);
-      }
-    }
-  }
-
-  return {
-    from_version: opts.fromVersion,
-    to_version: opts.toVersion,
-    target_root: opts.targetRoot,
-    entries,
-    notes,
-  };
-}
-
-// Phase 11.D: re-export the introspector so @devai-nyx/skills consumers
-// can call introspectRepo() through the same surface.
+// Keep the introspector available through the package bootstrap surface.
 export * from './introspect.js';

@@ -6,13 +6,9 @@ import {
 } from './sensor-reading.js';
 
 /**
- * Inventory sensor: test coverage depth (F3 × T2). Phase 26.F
- * (closes D-77 sub-batch 26.F). Translates a normalized coverage
- * summary into a PASS/REVIEW/FAIL verdict using configurable
- * thresholds. Wraps the existing `normalizeCoverage` helper in
- * the dissolved predecessor core package (the CLI verb at `commands/sense/test-coverage-depth.ts`
- * does the loading; the sensor itself is pure with respect to the
- * summary input, mirroring 26.C's pattern).
+ * Inventory sensor: test coverage depth (F3 × T2). Translates a normalized
+ * coverage summary into a PASS/REVIEW/FAIL verdict using configurable
+ * thresholds. The sensor is pure with respect to its summary input.
  *
  * Status semantics (defaults):
  *   - PASS: lines_pct ≥ 80.

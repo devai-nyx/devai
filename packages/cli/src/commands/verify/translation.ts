@@ -11,9 +11,9 @@ import {
   evaluateTranslationFrames,
   provisionValidationDatabase,
   recoverValidationLeases,
-  resolveSkillRecordPath,
+  resolveRecipeRecordPath,
   runLinuxIsolated,
-} from '#core-compat';
+} from '#runtime-core';
 import {
   existsSync,
   lstatSync,
@@ -30,7 +30,7 @@ import { senseTestWeakening } from '@devai-nyx/sensors';
 import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 
-interface Options {
+export interface TranslationValidationOptions {
   readonly witness: string;
   readonly repoRoot?: string;
   readonly databaseUrl?: string;
@@ -46,7 +46,8 @@ interface TestRef {
 interface TranslationWitness {
   readonly id: string;
   readonly task_id: string;
-  readonly skill_id: string;
+  readonly recipe_name: string;
+  readonly recipe_variant: string;
   readonly base_sha: string;
   readonly candidate_sha: string;
   readonly test_overlay_sha?: string;
@@ -530,7 +531,9 @@ function writeJson(path: string, value: unknown): void {
   writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`);
 }
 
-async function executeValidation(options: Options): Promise<Record<string, unknown>> {
+export async function executeTranslationValidation(
+  options: TranslationValidationOptions,
+): Promise<Record<string, unknown>> {
   const startedAt = new Date().toISOString();
   const repoRoot = resolve(options.repoRoot ?? '.');
   if (options.databaseUrl === undefined || options.databaseUrl.length === 0) {
@@ -582,16 +585,17 @@ async function executeValidation(options: Options): Promise<Record<string, unkno
     trace,
     refs,
   });
-  const skillRecordPath = resolveSkillRecordPath({
+  const recipeRecordPath = resolveRecipeRecordPath({
     repo_root: repoRoot,
-    skill_id: witness.skill_id,
+    recipe_name: witness.recipe_name,
+    recipe_variant: witness.recipe_variant,
     witness_id: witness.id,
   });
-  const skillRecord = json(resolve(repoRoot, skillRecordPath)) as {
+  const recipeRecord = json(resolve(repoRoot, recipeRecordPath)) as {
     readonly evidence?: { readonly translation_witness?: unknown };
   };
-  if (!isDeepStrictEqual(skillRecord.evidence?.translation_witness, rawWitness)) {
-    throw new Error('TRANSLATION_SKILL_RECORD_WITNESS_MISMATCH');
+  if (!isDeepStrictEqual(recipeRecord.evidence?.translation_witness, rawWitness)) {
+    throw new Error('TRANSLATION_RECIPE_RECORD_WITNESS_MISMATCH');
   }
   requireGit(repoRoot, ['cat-file', '-e', `${witness.base_sha}^{commit}`], 'BASE_OBJECT_INVALID');
   requireGit(
@@ -728,7 +732,7 @@ async function executeValidation(options: Options): Promise<Record<string, unkno
   });
   const lifecycleEvents: StateChange[] = [
     { path: relative(repoRoot, leasePath), operation: 'create' },
-    { path: skillRecordPath, operation: 'append' },
+    { path: recipeRecordPath, operation: 'append' },
   ];
 
   let databaseCreated = false;
@@ -859,8 +863,9 @@ async function executeValidation(options: Options): Promise<Record<string, unkno
       validation_id: validationId,
       witness_id: witness.id,
       lease_id: leaseId,
-      skill_id: witness.skill_id,
-      skill_record_path: skillRecordPath,
+      recipe_name: witness.recipe_name,
+      recipe_variant: witness.recipe_variant,
+      recipe_record_path: recipeRecordPath,
     }),
     ...recovery.recovered.map((recoveredLeaseId) => ({
       path: `.devai/state/translation-validation/leases/${recoveredLeaseId}.json`,
@@ -1009,7 +1014,8 @@ async function executeValidation(options: Options): Promise<Record<string, unkno
     id: validationId,
     witness_id: witness.id,
     task_id: witness.task_id,
-    skill_id: witness.skill_id,
+    recipe_name: witness.recipe_name,
+    recipe_variant: witness.recipe_variant,
     base_sha: witness.base_sha,
     candidate_sha: witness.candidate_sha,
     ...(witness.test_overlay_sha === undefined
@@ -1075,7 +1081,7 @@ export const verifyTranslation = defineCommand({
   description: 'Independently validate an untrusted translation witness (report-only)',
   authority: 'sensor',
   lifecycle: 'experimental',
-  lifecycle_reason: 'R28 report-only completion evidence foundation.',
+  lifecycle_reason: 'Report-only validation that cannot promote readiness.',
   promotion_criteria: [],
   register(cli: CAC): void {
     cli
@@ -1084,9 +1090,9 @@ export const verifyTranslation = defineCommand({
       .option('--repo-root <path>', 'Repository root (default: current directory)')
       .option('--database-url <url>', 'Postgres administrative URL for per-validation isolation')
       .option('--human', 'Emit a human-readable summary instead of JSON')
-      .action(async (options: Options) => {
+      .action(async (options: TranslationValidationOptions) => {
         try {
-          const result = await executeValidation(options);
+          const result = await executeTranslationValidation(options);
           if (options.human === true) {
             process.stdout.write(
               `verify translation: ${String(result['verdict'])} (report-only; readiness ineligible)\n`,

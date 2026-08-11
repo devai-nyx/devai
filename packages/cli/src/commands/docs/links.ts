@@ -13,7 +13,7 @@ interface Options {
   readonly human?: boolean;
 }
 
-interface BrokenLink {
+export interface BrokenLink {
   readonly source: string;
   readonly target: string;
   readonly resolved: string | null;
@@ -55,7 +55,7 @@ const SKIP_PATH_SUFFIXES = [
   'docs/site/versioned_sidebars',
   // R30: byte-frozen pre-v1 monoliths retain links relative to their
   // original root location. Their bytes are governed by archive-immutability.
-  'law/adr/predecessor',
+  'law/adr/archive',
 ];
 
 function walk(dir: string, repoRoot: string, found: string[]): void {
@@ -87,7 +87,7 @@ function walk(dir: string, repoRoot: string, found: string[]): void {
 
 const MD_LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
 
-function audit(repoRoot: string, scanDir: string): BrokenLink[] {
+export function auditDocumentationLinks(repoRoot: string, scanDir: string): BrokenLink[] {
   const broken: BrokenLink[] = [];
   const files: string[] = [];
   walk(scanDir, repoRoot, files);
@@ -150,7 +150,7 @@ function audit(repoRoot: string, scanDir: string): BrokenLink[] {
 export const docsLinks = defineCommand({
   name: 'docs links',
   description:
-    'Audit markdown cross-references across docs/** plus root-level markdown (README.md, CONTRIBUTING.md, ...). Reports broken file links (in-page anchors are not checked). Phase 13.C; root-level scan per D-131.',
+    'Audit markdown cross-references across docs/** plus root-level markdown (README.md, CONTRIBUTING.md, ...). Reports broken file links; in-page anchors are not checked.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
@@ -165,7 +165,7 @@ export const docsLinks = defineCommand({
           process.stderr.write(`devai docs links: ${scanDir} not found\n`);
           process.exit(EXIT_FAIL);
         }
-        const broken = audit(repoRoot, scanDir);
+        const broken = auditDocumentationLinks(repoRoot, scanDir);
         if (options.human === true) {
           if (broken.length === 0) {
             process.stdout.write(`docs links: OK (${scanDir})\n`);

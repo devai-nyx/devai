@@ -1,10 +1,10 @@
 import { createHash } from 'node:crypto';
 import { computeMutationEnvelopeDigest, type MutationEnvelope } from '../../src/index.js';
-import { canonicalJsonV2 } from '@devai-nyx/utils';
+import { canonicalJson } from '@devai-nyx/utils';
 
 export const NOW = '2026-07-15T12:00:00.000Z';
 export const LATER = '2026-07-15T13:00:00.000Z';
-export const REPOSITORY_ID = 'devai-self';
+export const REPOSITORY_ID = 'example-repository';
 export const PACKAGE_BINDING = { name: '@devai-nyx/cli', version: '0.6.0' } as const;
 export const CONSTITUTION_BINDING = {
   version: '0.5.0',
@@ -52,7 +52,7 @@ export async function runtimeApi(): Promise<RuntimeApi> {
 }
 
 export function canonicalBytes(value: unknown): Uint8Array {
-  return new TextEncoder().encode(canonicalJsonV2(value));
+  return new TextEncoder().encode(canonicalJson(value));
 }
 
 export function sha256Bytes(bytes: Uint8Array): string {
@@ -66,14 +66,14 @@ export function canonicalSha256(value: unknown): string {
 export function expectFailure(result: unknown, category: Failure['category'], code: string): void {
   const failure = result as Failure;
   if (failure.ok !== false || failure.category !== category || failure.code !== code) {
-    throw new Error(`expected ${category}/${code}, received ${canonicalJsonV2(result)}`);
+    throw new Error(`expected ${category}/${code}, received ${canonicalJson(result)}`);
   }
 }
 
 export function expectSuccess<T = unknown>(result: unknown): T {
   const success = result as Success<T>;
   if (success.ok !== true) {
-    throw new Error(`expected success, received ${canonicalJsonV2(result)}`);
+    throw new Error(`expected success, received ${canonicalJson(result)}`);
   }
   return success.value;
 }
@@ -238,7 +238,7 @@ export function makePolicyPlant(
     rules: coreRules,
   };
   const extensionDocument = {
-    extension_id: 'devai-self-authority',
+    extension_id: 'example-authority',
     extension_version: '1.0.0',
     rules: additiveRules,
   };
@@ -259,7 +259,7 @@ export function makePolicyPlant(
     },
     additive_extensions: [
       {
-        extension_id: 'devai-self-authority',
+        extension_id: 'example-authority',
         extension_version: '1.0.0',
         digest_sha256: sha256Bytes(extensionBytes),
       },
@@ -267,13 +267,13 @@ export function makePolicyPlant(
     resolved_digest_sha256: canonicalSha256(resolvedRules),
     materialized_at: options.materializedAt ?? NOW,
     materialization: {
-      action_id: 'adopt upgrade',
+      action_id: 'init bind',
       invocation_id: 'invocation-materialize',
       machine_principal: {
         kind: 'machine',
-        actor: 'upgrade',
-        transition: 'upgrade',
-        trusted_adapter_id: 'upgrade-authority',
+        actor: 'binding',
+        transition: 'bind',
+        trusted_adapter_id: 'binding-authority',
         context_digest_sha256: 'd'.repeat(64),
       },
       initiated_by: { kind: 'human', role: 'architect', declaration_source: 'cli-flag' },
@@ -293,7 +293,7 @@ export function makePolicyPlant(
   };
   const additiveExtensions = [
     {
-      extension_id: 'devai-self-authority',
+      extension_id: 'example-authority',
       extension_version: '1.0.0',
       source_document: extensionDocument,
       canonical_source_bytes: extensionBytes,
@@ -475,7 +475,7 @@ export function evidenceBindings(overrides: Record<string, unknown> = {}): unkno
       },
       additive_extensions: [
         {
-          extension_id: 'devai-self-authority',
+          extension_id: 'example-authority',
           extension_version: '1.0.0',
           digest_sha256: 'd'.repeat(64),
         },

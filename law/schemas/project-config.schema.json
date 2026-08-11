@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/project-config.schema.json",
   "title": "DEVAI Project Config",
-  "description": "Per-repo declaration of project type + opt-in toggles. Absorbs the LAW-00.SCOPE.4 project_type concept from the stech-law predecessor draft (D-38), reshaped as a DEVAI-native config. Lives at .devai/config/project.json.",
+  "description": "Per-repository DEVAI project declaration at .devai/config/project.json.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "project_type"],
@@ -12,7 +12,7 @@
     },
     "project_type": {
       "enum": ["runtime-host", "platform-package", "docs-archive", "framework"],
-      "description": "runtime-host: business app running production traffic. platform-package: library consumed by other projects. docs-archive: documentation / reverse-engineering archive (no runtime). framework: DEVAI itself + sibling tooling repos (no client substrate)."
+      "description": "runtime-host is a deployed application; platform-package is a consumed library; docs-archive has no runtime; framework is supporting tooling without a client substrate."
     },
     "name": {
       "type": "string",
@@ -20,7 +20,7 @@
     },
     "profile": {
       "enum": ["tier1", "tier2", "tier3"],
-      "description": "Adoption profile. tier1: deterministic gates + evidence. tier2: adds invariants, trace, weakening checks, and sensors. tier3: full human-supervised governance including soft gate, triage, and coupled work; autonomous execution remains separately experimental. Absent means tier3 for backward compatibility."
+      "description": "Adoption profile. tier1 provides deterministic gates and evidence; tier2 adds specification and sensor contracts; tier3 adds the complete human-supervised workflow. When absent, the strict tier3 posture applies."
     },
     "adopted_at": {
       "type": "string",
@@ -30,17 +30,13 @@
     "devai_version": {
       "type": "string",
       "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[A-Za-z0-9.-]+)?$",
-      "description": "Machine-managed (D-118): stamped by `devai init` / `devai adopt upgrade` from the running CLI's own package version; never hand-edited. `devai doctor` compares it against the installed @devai-nyx/cli version (devai-version-match check: binding at tier3, advisory below). Canonical consumption is versioned GitHub Packages; sibling-checkout linking is a dev-only convenience and leaves this field meaningless."
-    },
-    "devai_consumption": {
-      "enum": ["npm-package", "sibling-checkout"],
-      "description": "D-122 (item 2b): an explicit declaration of how this repo consumes the devai CLI, so sibling-checkout linking stops being a silent default. Absent means `npm-package` is assumed (the canonical model, D-118). `devai doctor`'s `devai-consumption-declared` check (adopter posture; binding at tier3, advisory below) compares this against the running CLI's actual resolved provenance (`devai-version-match` check's `info.provenance`) and fails on mismatch — most commonly an undeclared sibling-checkout consumer. Declare `sibling-checkout` only for the same-portfolio C-4-style reference-adopter pattern; it is a dev convenience, not a second canonical path."
+      "description": "Machine-managed package version stamped during initialization. `devai doctor` compares it with the installed @devai-nyx/cli version."
     },
     "constitution": {
       "type": "object",
       "additionalProperties": false,
       "required": ["version"],
-      "description": "Constitution binding pin (D-119). The canonical binding shape is a vendored copy of CONSTITUTION.md at the adopter repo root plus a `.devai/constitution.md` stub pointing at it; this pin records which constitution text the repo is bound to. `devai doctor` verifies sha256 against the vendored copy (constitution-binding check: binding at tier3, advisory below); `devai adopt upgrade --constitution` refreshes copy + pin and appends a constitution.updated evidence record. Pointer-only binding (no vendored copy) is a dev-only convenience.",
+      "description": "Constitution binding pin for the vendored `.devai/pin/constitution.md` copy. `devai doctor` verifies the digest; `devai init bind --constitution --write` refreshes the copy and pin.",
       "properties": {
         "version": {
           "type": "string",
@@ -178,7 +174,7 @@
       "properties": {
         "profile": {
           "enum": ["full", "gate-staged"],
-          "description": "Enforcement profile for `devai policy check ci economy` rule 4 (ci-economy.evidence-gate-wired). full (default when absent): all four mechanical rules are hard. gate-staged: rule 4 downgrades to ADVISORY — still evaluated and reported on every run, never silently dropped — for repos on the incremental-adoption path that have not yet wired the evidence gate; rules 1-3 stay hard. gate-staged is a visible staging declaration, not an exemption: graduating to full is expected once the gate is wired (adopter guide step 2)."
+          "description": "Enforcement profile for `devai check --only ci-economy`. full makes every rule binding. gate-staged keeps the evidence-gate rule visible but advisory while the other rules remain binding."
         },
         "local_evidence": {
           "type": "object",

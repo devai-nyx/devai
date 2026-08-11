@@ -31,7 +31,3 @@ Error-path tests are typically more common than security/perf because they fall 
 
 - **Chaos engineering depth.** Production fault-injection isn't measured here.
 - **Retry-policy verification.** Adjacent but separate.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/test_robustness_coverage.md (classification CURRENT).

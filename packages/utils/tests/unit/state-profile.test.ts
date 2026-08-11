@@ -3,12 +3,7 @@ import { mkdirSync, mkdtempSync, rmSync, symlinkSync, utimesSync, writeFileSync 
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import {
-  isAdoptionProfile,
-  profileAtLeast,
-  readProfile,
-  upgradeChecklist,
-} from '../../src/profile/index.js';
+import { isAdoptionProfile, profileAtLeast, readProfile } from '../../src/profile/index.js';
 import { pruneState } from '../../src/state/index.js';
 
 const roots: string[] = [];
@@ -88,7 +83,7 @@ describe('state pruning', () => {
 });
 
 describe('adoption profiles', () => {
-  it('defaults malformed or absent declarations to the strongest compatibility floor', () => {
+  it('defaults malformed or absent declarations to the strongest floor', () => {
     const repo = root();
     expect(readProfile(repo)).toBe('tier3');
     put(repo, '.devai/config/project.json', '{');
@@ -103,15 +98,9 @@ describe('adoption profiles', () => {
     expect(isAdoptionProfile(null)).toBe(false);
   });
 
-  it('orders floors and returns cumulative upward-only checklists', () => {
+  it('orders assurance floors', () => {
     expect(profileAtLeast('tier3', 'tier1')).toBe(true);
     expect(profileAtLeast('tier2', 'tier2')).toBe(true);
     expect(profileAtLeast('tier1', 'tier2')).toBe(false);
-    expect(upgradeChecklist('tier3', 'tier1')).toEqual([]);
-    expect(upgradeChecklist('tier2', 'tier2')).toEqual([]);
-    expect(upgradeChecklist('tier1', 'tier2')).toHaveLength(5);
-    expect(upgradeChecklist('tier2', 'tier3')).toHaveLength(4);
-    expect(upgradeChecklist('tier1', 'tier3')).toHaveLength(9);
-    expect(upgradeChecklist('tier1', 'tier3')[0]?.step).toContain('invariants');
   });
 });

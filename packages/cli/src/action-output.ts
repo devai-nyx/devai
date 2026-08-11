@@ -66,7 +66,7 @@ function errorFrom(text: string, exit: number): CliError {
       return (parsed as { error: CliError }).error;
     }
   } catch {
-    // Prose and malformed legacy output are normalized below.
+    // Unstructured service output is normalized below.
   }
   const normalized = normalizeExit(exit);
   const message = trimmed.replace(/^devai(?: [^:]+)?:\s*/u, '') || 'action failed';
@@ -76,7 +76,6 @@ function errorFrom(text: string, exit: number): CliError {
     exit: normalized,
     message,
     remediation: 'Correct the invocation or satisfy the reported precondition, then retry.',
-    refs: { record: 'DII-215' },
   });
 }
 
@@ -195,24 +194,21 @@ function restoreAndEmit(
   process.stdout.write = originalStdout;
   process.stderr.write = originalStderr;
   process.exit = originalExit;
-  if (exit === 0 && stdout.length > 0) {
+  if (exit === 0 && stderr.length === 0) {
     originalStdout.call(process.stdout, renderActionSuccess(entry, stdout));
     process.exitCode = 0;
     return;
   }
   const effectiveExit = exit === 0 ? 7 : normalizeExit(exit);
-  originalStderr.call(
-    process.stderr,
-    renderActionFailure(
-      entry,
-      stderr.length > 0
+  const diagnostic =
+    exit === 0 && stdout.length > 0 && stderr.length > 0
+      ? `action wrote to both success and error channels; stdout=${JSON.stringify(stdout.trim())}; stderr=${JSON.stringify(stderr.trim())}`
+      : stderr.length > 0
         ? stderr
         : stdout.length > 0
           ? stdout
-          : 'action failed without a diagnostic',
-      effectiveExit,
-    ),
-  );
+          : 'action failed without a diagnostic';
+  originalStderr.call(process.stderr, renderActionFailure(entry, diagnostic, effectiveExit));
   process.exitCode = effectiveExit;
 }
 

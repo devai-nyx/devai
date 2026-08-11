@@ -1,11 +1,11 @@
 import { join } from 'node:path';
 import type { CAC } from 'cac';
-import { evaluateGlobGuards, type GlobGuardResult } from '#core-compat';
+import { evaluateGlobGuards, type GlobGuardResult } from '#runtime-core';
 import { EXIT_FAIL, EXIT_PASS } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 
 /**
- * `devai policy check glob guards` (D-124, governance-roadmap item 7): every
+ * Glob-guard validation behind the canonical `check` facade: every
  * guard in `.devai/config/glob-guards.json` must still match at least
  * its declared `min_matches`. Unlike `check forbidden-actions`
  * (D-123, item 6), there is no legacy caller to stay backward

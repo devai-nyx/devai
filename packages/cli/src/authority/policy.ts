@@ -87,133 +87,6 @@ function dbSelector() {
   };
 }
 
-function policySubjects(entry: RegistryEntry): JsonRecord[] {
-  const subject = entry.authority_contract.subject;
-  if (subject.kind === 'human') return [{ kind: 'human', roles: [...subject.allowed_roles] }];
-  if (subject.kind === 'derived-machine') {
-    const initiator =
-      subject.initiator === 'none'
-        ? 'none'
-        : {
-            allowed_roles: [...subject.initiator.allowed_roles],
-            preserve_in_context: true,
-          };
-    return [
-      {
-        kind: 'derived-machine',
-        actor: subject.actor,
-        transition: subject.transition,
-        initiator,
-      },
-    ];
-  }
-  return [];
-}
-
-function entriesForKind(entries: readonly RegistryEntry[], kind: string): RegistryEntry[] {
-  return entries.filter(
-    (entry) =>
-      entry.effects !== 'read' &&
-      entry.authority_contract.planner.kind !== 'none' &&
-      entry.authority_contract.planner.target_kinds.includes(kind as never),
-  );
-}
-
-function perActionRules(
-  entries: readonly RegistryEntry[],
-  kind: string,
-  selectorFor: (entry: RegistryEntry) => readonly JsonRecord[],
-): Array<ReturnType<typeof rule>> {
-  return entriesForKind(entries, kind).flatMap((entry) =>
-    selectorFor(entry).map((selector, index) =>
-      rule({
-        id: `self-${kind}-${entry.name.replaceAll(' ', '-')}-${String(index + 1)}`,
-        origin: 'additive-extension',
-        precedence: 500,
-        actionIds: [entry.name],
-        selector,
-        subjects: policySubjects(entry),
-        consent:
-          kind === 'remote' && selector.publication === true
-            ? { ...entry.authority_contract.consent, allow_publish: true }
-            : (entry.authority_contract.consent as JsonRecord),
-        rationale: `DEVAI-self typed ${kind} authority for ${entry.name}.`,
-      }),
-    ),
-  );
-}
-
-function remoteSelectors(entry: RegistryEntry): readonly JsonRecord[] {
-  if (entry.name === 'docs publish') {
-    return [
-      {
-        kind: 'remote',
-        system_id: 'github-pages',
-        endpoint_ids: ['publish-docs'],
-        operation_ids: ['publish'],
-        publication: true,
-      },
-    ];
-  }
-  if (entry.name === 'agent skill run') {
-    return [
-      {
-        kind: 'remote',
-        system_id: 'local-llm',
-        endpoint_ids: ['claude', 'codex'],
-        operation_ids: ['invoke'],
-        publication: false,
-      },
-      {
-        kind: 'remote',
-        system_id: 'git-origin',
-        endpoint_ids: ['current-branch'],
-        operation_ids: ['push'],
-        publication: true,
-      },
-      {
-        kind: 'remote',
-        system_id: 'github',
-        endpoint_ids: ['pull-requests'],
-        operation_ids: ['create'],
-        publication: true,
-      },
-      {
-        kind: 'remote',
-        system_id: 'local-validation',
-        endpoint_ids: [
-          'feedback-lint',
-          'feedback-typecheck',
-          'feedback-unit-test',
-          'feedback-acceptance',
-        ],
-        operation_ids: ['invoke'],
-        publication: false,
-      },
-    ];
-  }
-  if (entry.name === 'evidence test record') {
-    return [
-      {
-        kind: 'remote',
-        system_id: 'local-command',
-        endpoint_ids: ['test-runner'],
-        operation_ids: ['invoke'],
-        publication: false,
-      },
-    ];
-  }
-  return [
-    {
-      kind: 'remote',
-      system_id: 'local-llm',
-      endpoint_ids: ['claude', 'codex'],
-      operation_ids: ['invoke'],
-      publication: false,
-    },
-  ];
-}
-
 function rule(input: {
   id: string;
   origin: 'immutable-core' | 'additive-extension';
@@ -248,21 +121,21 @@ function subjectGroups(entries: readonly RegistryEntry[]) {
     owner: humanActions(entries, 'owner'),
     architect: humanActions(entries, 'architect'),
     inspector: humanActions(entries, 'inspector'),
-    engineer: humanActions(entries, 'engineer'),
+    engineer: ['round run', 'task finish', 'task start'].filter((actionId) =>
+      entries.some((entry) => entry.name === actionId),
+    ),
     auditor: humanActions(entries, 'auditor'),
-    harness: [
-      ...new Set([...machineActions(entries, 'harness'), 'init record', 'skill record']),
-    ].sort(),
-    upgrade: machineActions(entries, 'upgrade'),
+    harness: machineActions(entries, 'harness'),
+    binding: machineActions(entries, 'binding'),
     release: machineActions(entries, 'release'),
   };
 }
 
-function machineSubject(actor: 'harness' | 'upgrade' | 'release') {
+function machineSubject(actor: 'harness' | 'binding' | 'release') {
   return {
     kind: 'derived-machine',
     actor,
-    transition: actor === 'harness' ? 'harness-write' : actor,
+    transition: actor === 'harness' ? 'harness-write' : actor === 'binding' ? 'bind' : actor,
     initiator: {
       allowed_roles:
         actor === 'harness'
@@ -273,31 +146,36 @@ function machineSubject(actor: 'harness' | 'upgrade' | 'release') {
   };
 }
 
+function harnessSubject(allowedRoles: readonly string[]) {
+  return {
+    kind: 'derived-machine',
+    actor: 'harness',
+    transition: 'harness-write',
+    initiator: { allowed_roles: [...allowedRoles], preserve_in_context: true },
+  };
+}
+
 export function repositoryIdFor(root: string): string {
   const absolute = resolve(root);
-  if (
-    existsSync(join(absolute, 'packages/cli/src/bin.ts')) &&
-    existsSync(join(absolute, 'law/constitution.md'))
-  ) {
-    return 'devai-self';
-  }
   return basename(absolute).replaceAll(/[^A-Za-z0-9._-]/gu, '-') || 'adopter-repository';
 }
 
-export function authorityBindings(root: string, packageVersion: string) {
-  const selfConstitution = join(resolve(root), 'law/constitution.md');
+export function authorityBindings(
+  root: string,
+  packageVersion: string,
+  installedConstitutionText?: string,
+) {
   const pinnedConstitution = join(resolve(root), '.devai/pin/constitution.md');
-  const constitutionPath = existsSync(selfConstitution) ? selfConstitution : pinnedConstitution;
-  if (!existsSync(constitutionPath)) {
-    throw new Error(
-      `authority policy: Constitution not found at ${selfConstitution} or ${pinnedConstitution}`,
-    );
+  const constitutionText = existsSync(pinnedConstitution)
+    ? readFileSync(pinnedConstitution, 'utf8')
+    : installedConstitutionText;
+  if (constitutionText === undefined) {
+    throw new Error(`authority policy: bound Constitution not found at ${pinnedConstitution}`);
   }
-  const constitutionText = readFileSync(constitutionPath, 'utf8');
   const constitutionVersion = parseConstitutionVersion(constitutionText);
   if (constitutionVersion === null) {
     throw new Error(
-      `authority policy: Constitution version marker is missing in ${constitutionPath}`,
+      `authority policy: Constitution version marker is missing in ${pinnedConstitution}`,
     );
   }
   return {
@@ -314,8 +192,9 @@ export function buildTrustedAuthoritySources(
   entries: readonly RegistryEntry[],
   root: string,
   packageVersion: string,
+  installedConstitutionText?: string,
 ) {
-  const bindings = authorityBindings(root, packageVersion);
+  const bindings = authorityBindings(root, packageVersion, installedConstitutionText);
   const repositoryId = bindings.repository_id;
   const groups = subjectGroups(entries);
   const human = (role: string) => [{ kind: 'human', roles: [role] }];
@@ -375,7 +254,7 @@ export function buildTrustedAuthoritySources(
       subjects: human('architect'),
       rationale: 'Article 6 Architect reference authority.',
     }),
-    ...['law', 'law/**', 'work/rounds', 'work/rounds/**'].map((path, index) =>
+    ...['law', 'law/**'].map((path, index) =>
       rule({
         id: `core-architect-governance-${String(index + 1)}`,
         origin: 'immutable-core',
@@ -383,18 +262,7 @@ export function buildTrustedAuthoritySources(
         actionIds: groups.architect,
         selector: fsSelector(repositoryId, path),
         subjects: human('architect'),
-        rationale: 'Article 6 Architect successor law and governed-round authority.',
-      }),
-    ),
-    ...['work/audit', 'work/audit/**'].map((path, index) =>
-      rule({
-        id: `core-auditor-governed-observation-${String(index + 1)}`,
-        origin: 'immutable-core',
-        precedence: 750,
-        actionIds: groups.auditor,
-        selector: fsSelector(repositoryId, path),
-        subjects: human('auditor'),
-        rationale: 'Article 6 Auditor governed observation authority.',
+        rationale: 'Article 6 Architect law authority.',
       }),
     ),
     rule({
@@ -481,15 +349,6 @@ export function buildTrustedAuthoritySources(
       rationale: 'Article 6 verb-attributed harness state directory transition.',
     }),
     rule({
-      id: 'core-harness-state-prune-coverage',
-      origin: 'immutable-core',
-      precedence: 900,
-      actionIds: ['work state prune'],
-      selector: fsSelector(repositoryId, 'coverage/**'),
-      subjects: [machineSubject('harness')],
-      rationale: 'Article 6 verb-attributed pruning of the declared disposable coverage root.',
-    }),
-    rule({
       id: 'core-harness-worktrees',
       origin: 'immutable-core',
       precedence: 900,
@@ -526,19 +385,19 @@ export function buildTrustedAuthoritySources(
       rationale: 'Article 6 verb-attributed machine proof transition.',
     }),
     rule({
-      id: 'core-upgrade-config',
+      id: 'core-binding-config',
       origin: 'immutable-core',
       precedence: 900,
-      actionIds: groups.upgrade,
+      actionIds: groups.binding,
       selector: fsSelector(repositoryId, '.devai/config/**'),
-      subjects: [machineSubject('upgrade')],
-      rationale: 'Article 6 derived upgrade transition for F5 configuration.',
+      subjects: [machineSubject('binding')],
+      rationale: 'Article 6 derived binding transition for package configuration.',
     }),
     rule({
       id: 'core-architect-post-merge-host-adapter',
       origin: 'immutable-core',
       precedence: 900,
-      actionIds: ['adopt hooks install'],
+      actionIds: ['init apply architect'],
       selector: fsSelector(repositoryId, '.devai/config/post-merge-host-adapter.json'),
       subjects: human('architect'),
       rationale:
@@ -546,40 +405,14 @@ export function buildTrustedAuthoritySources(
     }),
     ...['.devai/state', '.devai/state/init-introspection.json'].map((path, index) =>
       rule({
-        id: `core-upgrade-init-introspection-${String(index + 1)}`,
+        id: `core-binding-init-introspection-${String(index + 1)}`,
         origin: 'immutable-core',
         precedence: 900,
-        actionIds: ['init apply-f5'],
+        actionIds: ['init apply harness'],
         selector: fsSelector(repositoryId, path),
-        subjects: [machineSubject('upgrade')],
+        subjects: [machineSubject('binding')],
         rationale:
           'Article 6 verb-attributed state output for the exact introspecting F5 bootstrap action.',
-      }),
-    ),
-    ...[
-      '.devai/worktrees',
-      '.devai/worktrees/**',
-      'docs/site/build',
-      'docs/site/build/**',
-      'docs/site/_site',
-      'docs/site/_site/**',
-      // Verb-attributed publish bookkeeping (Article 6 F5 state): the gate-4
-      // baseline `docs publish` persists after a successful gh-pages push,
-      // plus the state directory itself for repos that predate it. Absent
-      // from this surface, the persist was denied at the policy layer and
-      // the stale baseline forced --force on every later publish.
-      '.devai/state',
-      '.devai/state/docs-publish-baseline.txt',
-    ].map((path, index) =>
-      rule({
-        id: `core-release-runtime-${String(index + 1)}`,
-        origin: 'immutable-core',
-        precedence: 900,
-        actionIds: groups.release,
-        selector: fsSelector(repositoryId, path),
-        subjects: [machineSubject('release')],
-        consent: { write: true, allow_publish: true, experimental: false },
-        rationale: 'Article 6 Architect-initiated release transition runtime surface.',
       }),
     ),
     ...[
@@ -588,17 +421,16 @@ export function buildTrustedAuthoritySources(
       '.devai/constitution.md',
       '.devai/pin',
       '.devai/pin/constitution.md',
-      '.devai/pin/versions.json',
       '.gitignore',
     ].map((path, index) =>
       rule({
-        id: `core-upgrade-bootstrap-${String(index + 1)}`,
+        id: `core-binding-bootstrap-${String(index + 1)}`,
         origin: 'immutable-core',
         precedence: 900,
-        actionIds: groups.upgrade,
+        actionIds: groups.binding,
         selector: fsSelector(repositoryId, path),
-        subjects: [machineSubject('upgrade')],
-        rationale: 'Article 6 derived upgrade transition for the exact F5 bootstrap surface.',
+        subjects: [machineSubject('binding')],
+        rationale: 'Article 6 derived binding transition for the exact bootstrap surface.',
       }),
     ),
   ]);
@@ -621,36 +453,115 @@ export function buildTrustedAuthoritySources(
     '.changeset/**',
   ];
   const additiveRules = defined([
-    ...perActionRules(entries, 'git-ref', () => [gitSelector(repositoryId)]),
-    ...perActionRules(entries, 'db', () => [dbSelector()]),
-    ...perActionRules(entries, 'remote', remoteSelectors),
     rule({
-      id: 'self-engineer-packages',
+      id: 'adopter-git-ref-work-task-spawn-1',
       origin: 'additive-extension',
       precedence: 500,
-      actionIds: [...new Set([...groups.engineer, 'experimental loop run'])].sort(),
+      actionIds: ['round run', 'task start'],
+      selector: gitSelector(repositoryId),
+      subjects: [harnessSubject(['engineer'])],
+      rationale: 'Adopter typed git-ref authority for work task spawn.',
+    }),
+    rule({
+      id: 'adopter-git-ref-work-task-complete-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['task finish'],
+      selector: gitSelector(repositoryId),
+      subjects: [harnessSubject(['engineer'])],
+      rationale: 'Adopter typed git-ref authority for work task complete.',
+    }),
+    rule({
+      id: 'adopter-git-ref-verify-translation-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['check'],
+      selector: gitSelector(repositoryId),
+      subjects: [harnessSubject(['inspector'])],
+      rationale: 'Adopter typed git-ref authority for verify translation.',
+    }),
+    rule({
+      id: 'adopter-db-work-task-spawn-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['task start'],
+      selector: dbSelector(),
+      subjects: [harnessSubject(['engineer'])],
+      rationale: 'Adopter typed db authority for work task spawn.',
+    }),
+    rule({
+      id: 'adopter-db-verify-translation-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['check'],
+      selector: dbSelector(),
+      subjects: [harnessSubject(['inspector'])],
+      rationale: 'Adopter typed db authority for verify translation.',
+    }),
+    rule({
+      id: 'adopter-engineer-packages',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: groups.engineer,
       selector: fsSelector(repositoryId, 'packages/**'),
       subjects: [...human('engineer'), machineSubject('harness')],
-      rationale: 'DEVAI-self Engineer implementation authority.',
+      rationale: 'Adopter Engineer implementation authority.',
     }),
     rule({
-      id: 'self-engineer-scripts',
+      id: 'adopter-engineer-scripts',
       origin: 'additive-extension',
       precedence: 500,
-      actionIds: [...new Set([...groups.engineer, 'experimental loop run'])].sort(),
+      actionIds: groups.engineer,
       selector: fsSelector(repositoryId, 'scripts/**'),
       subjects: [...human('engineer'), machineSubject('harness')],
-      rationale: 'DEVAI-self Engineer tooling authority.',
+      rationale: 'Adopter Engineer tooling authority.',
     }),
     rule({
-      id: 'self-engineer-workflows',
+      id: 'adopter-engineer-workflows',
       origin: 'additive-extension',
       precedence: 500,
-      actionIds: [...new Set([...groups.engineer, 'experimental loop run'])].sort(),
+      actionIds: groups.engineer,
       selector: fsSelector(repositoryId, '.github/**'),
       subjects: [...human('engineer'), machineSubject('harness')],
-      rationale: 'DEVAI-self Engineer workflow implementation authority.',
+      rationale: 'Adopter Engineer workflow implementation authority.',
     }),
+    rule({
+      id: 'adopter-binding-init-harness-ci-root',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['init apply harness'],
+      selector: fsSelector(repositoryId, '.github'),
+      subjects: [machineSubject('binding')],
+      rationale: 'Derived binding authority for the canonical init harness CI scaffold root.',
+    }),
+    rule({
+      id: 'adopter-binding-init-harness-ci',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['init apply harness'],
+      selector: fsSelector(repositoryId, '.github/**'),
+      subjects: [machineSubject('binding')],
+      rationale: 'Derived binding authority for canonical init harness CI scaffold outputs.',
+    }),
+    ...[
+      '.agents',
+      '.agents/skills',
+      '.agents/skills/**',
+      '.claude',
+      '.claude/skills',
+      '.claude/skills/**',
+    ].map((path, index) =>
+      rule({
+        id: `adopter-binding-init-harness-skills-${String(index + 1)}`,
+        origin: 'additive-extension',
+        precedence: 500,
+        actionIds: ['init apply harness'],
+        selector: fsSelector(repositoryId, path),
+        subjects: [machineSubject('binding')],
+        rationale:
+          'Derived binding authority for the canonical Codex and Claude recipe adapter roots.',
+      }),
+    ),
     ...[
       '.git/hooks',
       '.git/hooks/**',
@@ -662,38 +573,72 @@ export function buildTrustedAuthoritySources(
       '.devai/config/post-merge-host-adapter.json',
     ].map((path, index) =>
       rule({
-        id: `self-architect-hooks-${String(index + 1)}`,
+        id: `adopter-architect-hooks-${String(index + 1)}`,
         origin: 'additive-extension',
         precedence: 500,
-        actionIds: ['adopt hooks install'],
+        actionIds: ['init apply architect'],
         selector: fsSelector(repositoryId, path),
         subjects: human('architect'),
         rationale:
-          'DEVAI-self Architect authority for the exact local hook and host-adapter installation action.',
+          'Adopter Architect authority for the exact local hook and host-adapter installation action.',
       }),
     ),
     ...rootEngineerPaths.map((path, index) =>
       rule({
-        id: `self-engineer-root-${String(index + 1)}`,
+        id: `adopter-engineer-root-${String(index + 1)}`,
         origin: 'additive-extension',
         precedence: 500,
-        actionIds: [...new Set([...groups.engineer, 'experimental loop run'])].sort(),
+        actionIds: groups.engineer,
         selector: fsSelector(repositoryId, path),
         subjects: [...human('engineer'), machineSubject('harness')],
-        rationale: 'DEVAI-self Engineer root tooling authority.',
+        rationale: 'Adopter Engineer root tooling authority.',
       }),
     ),
     ...rootArchitectPaths.map((path, index) =>
       rule({
-        id: `self-architect-root-${String(index + 1)}`,
+        id: `adopter-architect-root-${String(index + 1)}`,
         origin: 'additive-extension',
         precedence: 650,
         actionIds: groups.architect,
         selector: fsSelector(repositoryId, path),
         subjects: human('architect'),
-        rationale: 'DEVAI-self Architect governance authority.',
+        rationale: 'Adopter source Architect authority.',
       }),
     ),
+    rule({
+      id: 'adopter-db-sense-migrate-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['sense migrate'],
+      selector: dbSelector(),
+      subjects: human('engineer'),
+      rationale: 'Typed database authority for sense migrate.',
+    }),
+    rule({
+      id: 'adopter-remote-sense-run-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['sense run'],
+      selector: {
+        kind: 'remote',
+        system_id: 'sensor-runtime',
+        endpoint_ids: ['selected-kind'],
+        operation_ids: ['invoke'],
+        publication: true,
+      },
+      subjects: [machineSubject('harness')],
+      consent: { write: true, allow_publish: true, experimental: false },
+      rationale: 'Typed remote authority for sense run.',
+    }),
+    rule({
+      id: 'adopter-db-task-finish-1',
+      origin: 'additive-extension',
+      precedence: 500,
+      actionIds: ['task finish'],
+      selector: dbSelector(),
+      subjects: [harnessSubject(['engineer'])],
+      rationale: 'Typed database authority for task finish.',
+    }),
   ]);
 
   const sourceDocument = {
@@ -702,7 +647,7 @@ export function buildTrustedAuthoritySources(
     rules: coreRules,
   };
   const extensionDocument = {
-    extension_id: 'devai-self-authority',
+    extension_id: 'devai-adopter-authority',
     extension_version: POLICY_VERSION,
     rules: additiveRules,
   };
@@ -715,7 +660,7 @@ export function buildTrustedAuthoritySources(
   };
   const additiveExtensions = [
     {
-      extension_id: 'devai-self-authority',
+      extension_id: 'devai-adopter-authority',
       extension_version: POLICY_VERSION,
       source_document: extensionDocument,
       canonical_source_bytes: canonicalBytes(extensionDocument),
@@ -736,7 +681,7 @@ export function buildTrustedAuthoritySources(
     },
     additive_extensions: [
       {
-        extension_id: 'devai-self-authority',
+        extension_id: 'devai-adopter-authority',
         extension_version: POLICY_VERSION,
         digest_sha256: sha256Bytes(canonicalBytes(extensionDocument)),
       },

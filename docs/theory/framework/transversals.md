@@ -50,7 +50,3 @@ The [scorecard](./scorecard.md) page covers the threshold defaults, the soft-gat
 - [Constitution Article 5](../../reference/law.md) — the transversal enumeration.
 - [Aspect grid](./aspect-grid.md) — generated cell × sensor mapping.
 - [Scorecard](./scorecard.md) — verdict semantics + thresholds.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/transversals.md (classification CURRENT).

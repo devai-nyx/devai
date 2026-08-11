@@ -10,7 +10,8 @@
     "id",
     "trust",
     "task_id",
-    "skill_id",
+    "recipe_name",
+    "recipe_variant",
     "stage",
     "base_sha",
     "submitted_at",
@@ -35,9 +36,20 @@
       "type": "string",
       "pattern": "^TASK-[0-9]{4,}$"
     },
-    "skill_id": {
+    "recipe_name": {
+      "enum": [
+        "devai-assess",
+        "devai-plan",
+        "devai-fix",
+        "devai-docs",
+        "devai-scaffold",
+        "devai-verify",
+        "devai-round"
+      ]
+    },
+    "recipe_variant": {
       "type": "string",
-      "pattern": "^SKILL-[a-z][a-z0-9-]*$"
+      "pattern": "^[a-z][a-z0-9-]*$"
     },
     "stage": {
       "enum": [
@@ -336,7 +348,8 @@
       "id": "MI-0123456789abcdef",
       "trust": "untrusted-intent",
       "task_id": "TASK-0028",
-      "skill_id": "SKILL-feedback-iteration",
+      "recipe_name": "devai-fix",
+      "recipe_variant": "test",
       "stage": "invariants-tests-to-code",
       "base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "submitted_at": "2026-07-21T12:01:00.000Z",

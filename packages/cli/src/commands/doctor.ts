@@ -1,71 +1,27 @@
 import { spawnSync } from '@devai-nyx/authority';
-import {
-  existsSync,
-  lstatSync,
-  readdirSync,
-  readFileSync,
-  readlinkSync,
-  statSync,
-} from '@devai-nyx/authority';
+import { existsSync, lstatSync, readFileSync, readlinkSync, statSync } from '@devai-nyx/authority';
 import { dirname, join, resolve } from 'node:path';
 import type { CAC } from 'cac';
 import { validators } from '@devai-nyx/schemas';
+import { verifyConstitutionBinding } from '@devai-nyx/skills';
+import { verifyChain } from '@devai-nyx/evidence';
 import {
   readProfile,
   profileAtLeast,
-  validateTestTrace,
-  verifyConstitutionBinding,
+  EXIT_FAIL,
+  EXIT_PASS,
+  EXIT_USAGE,
   type AdoptionProfile,
-} from '#core-compat';
-import { verifyChain } from '#core-compat';
-import { EXIT_FAIL, EXIT_PASS, EXIT_USAGE } from '@devai-nyx/utils';
+} from '@devai-nyx/utils';
 import { defineCommand, getFullRegistry } from '../define-command.js';
 import { buildTrustedAuthoritySources, canonicalSha256 } from '../authority/policy.js';
 import { checkDocsGovernance } from './check/docs-governance.js';
 import { resolveCliProvenance, resolveCliVersion } from '../version.js';
 
-/**
- * Phase 21.B (D-A-9): `devai doctor` is split into `--self`,
- * `--adopter`, and `--auto` postures. The DEVAI-self-development
- * checks (workspace layout, full F1 substrate, schemas-loadable)
- * are not meaningful against an adopter repo and were producing
- * by-design false-positives — several self-only checks failed against any
- * reasonable adopter pre-21.B. The split moves those out of the
- * adopter posture; each check declares the postures it applies to,
- * and `--auto` (the default) sniffs whether the repo-root has the
- * DEVAI monorepo shape to pick a posture automatically.
- *
- * Backward compatibility: existing `devai doctor` (no flag)
- * invocations from inside the DEVAI workspace continue to run all
- * self checks; adopter invocations now produce useful signal.
- */
-
 const DEFAULT_REPO_ROOT = '.';
 const DEFAULT_CHAIN_RELATIVE = 'record/proofs/chain.json';
 
-/**
- * Self-posture F1 paths — DEVAI's own substrate roots plus
- * `law/schemas/`, which DEVAI ships and adopters consume from the
- * sibling DEVAI checkout (not their own tree).
- */
-const F1_PATHS_SELF = [
-  'product',
-  'law/invariants',
-  'law/schemas',
-  'law/adr',
-  'docs/dev/operations',
-  'docs/dev/security',
-  'law/glossary',
-  'law/schemas',
-] as const;
-
-/**
- * Adopter-posture F1 paths — the substrate roots `init --execute`
- * seeds for adopters (see `buildBootstrapPlan` in
- * `@devai-nyx/skills` bootstrap service). Excludes `law/schemas/`
- * since adopters consume schemas from the sibling DEVAI checkout.
- */
-const F1_PATHS_ADOPTER = [
+const F1_PATHS = [
   'product',
   'law/invariants',
   'law/schemas',
@@ -79,21 +35,15 @@ const READING_ORDER_SOURCES = [
   'README.md',
   'law/constitution.md',
   'law/adr',
-  'work/rounds',
   'law/schemas',
 ] as const;
 const FIVE_ROLES = ['Owner', 'Architect', 'Inspector', 'Engineer', 'Auditor'] as const;
 
-export type Posture = 'self' | 'adopter';
-type PostureFlag = Posture | 'auto';
-
 interface DoctorOptions {
   readonly repoRoot?: string;
   readonly chain?: string;
-  readonly self?: boolean;
-  readonly adopter?: boolean;
-  readonly auto?: boolean;
   readonly human?: boolean;
+  readonly probe?: string;
   /** Comma-separated list of checks to skip, e.g. "docs-governance". */
   readonly skip?: string;
 }
@@ -109,43 +59,9 @@ interface CheckResult {
 
 interface Report {
   readonly ok: boolean;
-  readonly posture: Posture;
-  readonly posture_source: 'flag' | 'auto';
   /** Declared adoption profile (D-112); absent project.json key resolves to tier3. */
   readonly profile: AdoptionProfile;
   readonly checks: readonly CheckResult[];
-}
-
-/**
- * Sniff a `repoRoot` for the DEVAI workspace shape. The signature is
- * `packages/cli/src/bin.ts` + at least one `examples/redox-pack-*`
- * directory directly under the root. Either of those alone is
- * insufficient — a sibling adopter that vendors `examples/` would
- * false-positive on the second; a partial DEVAI clone might lack
- * one. Requiring both keeps the detection conservative: we only
- * pick `self` when the evidence is unambiguous.
- *
- * This is more robust than `findDevaiPacksRoot()` (which walks up
- * looking for *a* DEVAI checkout — it would return a path whether
- * the cwd is the workspace itself or a sibling adopter).
- */
-export function detectPosture(repoRoot: string): Posture {
-  const binPath = join(repoRoot, 'packages/cli/src/bin.ts');
-  if (!existsSync(binPath)) return 'adopter';
-  const examplesDir = join(repoRoot, 'examples');
-  if (!existsSync(examplesDir)) return 'adopter';
-  let hasRedoxPack = false;
-  try {
-    for (const name of readdirSync(examplesDir)) {
-      if (name.startsWith('redox-pack-')) {
-        hasRedoxPack = true;
-        break;
-      }
-    }
-  } catch {
-    return 'adopter';
-  }
-  return hasRedoxPack ? 'self' : 'adopter';
 }
 
 /**
@@ -191,8 +107,8 @@ function applyPathOverride(
   return override !== undefined ? `docs/${override}` : canonicalPath;
 }
 
-function checkF1Paths(repoRoot: string, posture: Posture): CheckResult {
-  const expected = posture === 'self' ? F1_PATHS_SELF : F1_PATHS_ADOPTER;
+function checkF1Paths(repoRoot: string): CheckResult {
+  const expected = F1_PATHS;
   const overrides = readPathOverrides(repoRoot);
   const resolvedPaths: string[] = [];
   const missing: string[] = [];
@@ -205,79 +121,12 @@ function checkF1Paths(repoRoot: string, posture: Posture): CheckResult {
     name: 'f1-paths-present',
     ok: missing.length === 0,
     info: {
-      posture,
       paths: resolvedPaths,
       missing,
       ...(Object.keys(overrides).length > 0 && { path_overrides: overrides }),
     },
     ...(missing.length > 0 && { errors: missing.map((p) => `missing F1 path: ${p}`) }),
   };
-}
-
-function checkSchemasLoadable(repoRoot: string): CheckResult {
-  const dir = join(repoRoot, 'law/schemas');
-  if (!existsSync(dir)) {
-    return {
-      name: 'schemas-loadable',
-      ok: false,
-      errors: [`schemas directory missing: ${dir}`],
-    };
-  }
-  const files = readdirSync(dir).filter((f) => f.endsWith('.schema.json'));
-  const errors: string[] = [];
-  for (const f of files) {
-    try {
-      JSON.parse(readFileSync(join(dir, f), 'utf8'));
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      errors.push(`${f}: ${msg}`);
-    }
-  }
-  return {
-    name: 'schemas-loadable',
-    ok: errors.length === 0,
-    info: { count: files.length },
-    ...(errors.length > 0 && { errors }),
-  };
-}
-
-async function checkRoundArtifactUniqueness(repoRoot: string): Promise<CheckResult> {
-  const script = join(repoRoot, 'scripts/check-round-artifact-uniqueness.mjs');
-  if (!existsSync(script)) {
-    return {
-      name: 'round-artifact-uniqueness',
-      ok: false,
-      errors: [`missing: ${script}`],
-    };
-  }
-  try {
-    // The repository-owned gate is a plain ESM script rather than a typed package module.
-    // @ts-expect-error -- imported from the checked repository root at runtime.
-    const module = (await import('../../../../scripts/check-round-artifact-uniqueness.mjs')) as {
-      report: {
-        ok?: boolean;
-        findings?: Array<{ code?: string; message?: string }>;
-      };
-    };
-    const report = module.report;
-    const errors = (report.findings ?? []).map(
-      (finding) => `[${finding.code ?? 'UNKNOWN'}] ${finding.message ?? 'unspecified finding'}`,
-    );
-    return {
-      name: 'round-artifact-uniqueness',
-      ok: report.ok === true,
-      info: { finding_count: errors.length },
-      ...(errors.length > 0 && { errors }),
-    };
-  } catch (error) {
-    return {
-      name: 'round-artifact-uniqueness',
-      ok: false,
-      errors: [
-        `round artifact uniqueness gate returned invalid output: ${error instanceof Error ? error.message : String(error)}`,
-      ],
-    };
-  }
 }
 
 function checkEvidenceChain(chainPath: string): CheckResult {
@@ -302,29 +151,7 @@ function checkEvidenceChain(chainPath: string): CheckResult {
   }
 }
 
-/**
- * Phase 21.D (closes D-A-10): the constitution-pointer check now
- * accepts three valid shapes:
- *
- *   1. Symlink resolving to `<repoRoot>/law/constitution.md` — the
- *      existing self-development case (back-compat).
- *   2. Symlink to a sibling or vendored `constitution.md`. The resolved path
- *      must end with `constitution.md` and the file must exist. Covers
- *      adopters who manually link to a known sibling DEVAI
- *      checkout.
- *   3. Plain file matching `^# See <path>` on the first line. The
- *      `<path>` is resolved relative to the pointer file's
- *      directory (or treated as absolute when it starts with `/`),
- *      must point at a file named constitution.md, and that file
- *      must exist. This is the shape `init --execute` writes for
- *      adopters when `findDevaiPacksRoot()` resolves a sibling
- *      DEVAI checkout — Phase 21.D's primary adopter-onboarding
- *      output.
- *
- * The named return shapes (`shape: 'symlink-self' | 'symlink-sibling' | 'pointer-file'`)
- * surface in the `info` block so adopter-side tooling can
- * disambiguate.
- */
+/** Verify that the adopter Constitution pointer resolves to installed contract text. */
 function checkConstitutionSymlink(repoRoot: string): CheckResult {
   const linkPath = join(repoRoot, '.devai/constitution.md');
   if (!existsSync(linkPath)) {
@@ -338,40 +165,21 @@ function checkConstitutionSymlink(repoRoot: string): CheckResult {
   if (stat.isSymbolicLink()) {
     const target = readlinkSync(linkPath);
     const resolved = resolve(linkPath, '..', target);
-    const selfConst = resolve(repoRoot, 'law/constitution.md');
-    // Shape 1: symlink to <repoRoot>/law/constitution.md (self).
-    if (resolved === selfConst) {
-      if (!existsSync(selfConst)) {
-        return {
-          name: 'constitution-symlink',
-          ok: false,
-          errors: [`symlink target ${selfConst} does not exist`],
-        };
-      }
-      return {
-        name: 'constitution-symlink',
-        ok: true,
-        info: { shape: 'symlink-self', target, resolved },
-      };
-    }
-    // Shape 2: pointer to a vendored or sibling constitution.
     if (resolved.endsWith('/constitution.md') && existsSync(resolved)) {
       return {
         name: 'constitution-symlink',
         ok: true,
-        info: { shape: 'symlink-sibling', target, resolved },
+        info: { shape: 'symlink', target, resolved },
       };
     }
     return {
       name: 'constitution-symlink',
       ok: false,
       info: { shape: 'symlink-invalid', target, resolved },
-      errors: [
-        `symlink ${linkPath} points to ${resolved}; expected either <repoRoot>/law/constitution.md or a pinned constitution.md`,
-      ],
+      errors: [`symlink ${linkPath} points to ${resolved}; expected an installed constitution.md`],
     };
   }
-  // Shape 3: plain file pointer (`# See <path>`).
+  // Plain file pointer (`# See <path>`).
   let body: string;
   try {
     body = readFileSync(linkPath, 'utf8');
@@ -431,16 +239,7 @@ function checkConstitutionSymlink(repoRoot: string): CheckResult {
   };
 }
 
-/**
- * D-118: `devai_version` in `.devai/config/project.json` is
- * machine-managed (stamped by `init`/`upgrade` from the running
- * CLI's own version) — this check compares the pin against the
- * actually-installed `@devai-nyx/cli` and reports drift. Canonical
- * consumption is versioned GitHub Packages (D-118); a repo consuming
- * via a sibling-checkout dev convenience will drift here whenever
- * the checkout advances without a re-stamp, which is expected and
- * informational rather than a defect in that mode.
- */
+/** Compare the adopter's version pin with the installed CLI package. */
 function checkDevaiVersionMatch(repoRoot: string): CheckResult {
   const configPath = join(repoRoot, '.devai/config/project.json');
   if (!existsSync(configPath)) {
@@ -458,14 +257,8 @@ function checkDevaiVersionMatch(repoRoot: string): CheckResult {
     };
   }
   const running = resolveCliVersion();
-  // D-122 (item 2a): "which devai am I running" is always answerable —
-  // provenance names the resolution mode and, for a sibling-checkout,
-  // the exact commit, regardless of whether the version pin matches.
   const provenance = resolveCliProvenance();
-  const provenanceInfo = {
-    source: provenance.source,
-    ...(provenance.gitSha !== undefined && { git_sha: provenance.gitSha }),
-  };
+  const provenanceInfo = { source: provenance.source };
   if (pinned === undefined) {
     return {
       name: 'devai-version-match',
@@ -481,7 +274,7 @@ function checkDevaiVersionMatch(repoRoot: string): CheckResult {
     info: { pinned, running, provenance: provenanceInfo },
     ...(!ok && {
       errors: [
-        `project.json devai_version (${pinned}) does not match the installed @devai-nyx/cli (${running}); re-run \`devai init\` or \`devai adopt upgrade\` to re-stamp`,
+        `project.json devai_version (${pinned}) does not match the installed @devai-nyx/cli (${running}); re-run \`devai init bind --as-role architect --write\` to re-bind`,
       ],
     }),
   };
@@ -542,7 +335,7 @@ function checkAuthorityEnforcement(repoRoot: string): CheckResult {
       },
       ...(!ok && {
         errors: [
-          'authority posture is missing, stale, non-binding, or inconsistent; re-materialize with `devai adopt upgrade --as-role architect --write`',
+          'authority posture is missing, stale, non-binding, or inconsistent; re-materialize with `devai init bind --as-role architect --write`',
         ],
       }),
     };
@@ -556,58 +349,16 @@ function checkAuthorityEnforcement(repoRoot: string): CheckResult {
 }
 
 /**
- * D-122 (item 2b): sibling-checkout consumption stops being a silent
- * default. Compares the repo's declared `devai_consumption` against
- * the running CLI's actual resolution mode (`resolveCliProvenance`).
- * Absence is assumed `npm-package` (the canonical model, D-118) — a
- * repo actually running via an undeclared sibling-checkout link
- * fails here even if `devai-version-match` happens to pass. Adopter
- * posture only: DEVAI's own repo doesn't "consume" itself.
- */
-function checkDevaiConsumption(repoRoot: string): CheckResult {
-  const configPath = join(repoRoot, '.devai/config/project.json');
-  let declared: string | undefined;
-  if (existsSync(configPath)) {
-    try {
-      const parsed = JSON.parse(readFileSync(configPath, 'utf8')) as { devai_consumption?: string };
-      declared = parsed.devai_consumption;
-    } catch {
-      // malformed config surfaces via other checks; treat as undeclared here
-    }
-  }
-  const provenance = resolveCliProvenance();
-  const assumed = declared ?? 'npm-package';
-  const ok = assumed === provenance.source;
-  return {
-    name: 'devai-consumption-declared',
-    ok,
-    info: {
-      declared: declared ?? null,
-      actual: provenance.source,
-      ...(provenance.gitSha !== undefined && { git_sha: provenance.gitSha }),
-    },
-    ...(!ok && {
-      errors: [
-        declared === undefined
-          ? `running via a sibling-checkout (${provenance.gitSha ?? 'unknown SHA'}) but project.json declares no devai_consumption (absence assumes npm-package); declare "devai_consumption": "sibling-checkout" if this is intentional (dev-only convenience, D-118), or install @devai-nyx/cli as a real dependency`
-          : `project.json declares devai_consumption "${declared}" but the running CLI actually resolved as "${provenance.source}"`,
-      ],
-    }),
-  };
-}
-
-/**
  * D-119: verifies the canonical constitution-binding shape — a
  * vendored `.devai/pin/constitution.md` plus a {version, sha256} pin
- * in project.json that matches it. Adopter-posture only: DEVAI
- * itself is the source of the constitution, not a binding to it.
+ * in project.json that matches it.
  */
 function checkConstitutionBinding(repoRoot: string): CheckResult {
   const status = verifyConstitutionBinding(repoRoot);
   const upstreamNote =
     status.upstreamAhead === true
       ? [
-          `pinned version ${status.pin?.version ?? '?'} lags upstream ${status.upstreamVersion ?? '?'} (informational; run \`devai adopt upgrade --constitution\` to refresh)`,
+          `pinned version ${status.pin?.version ?? '?'} differs from installed ${status.upstreamVersion ?? '?'} (run \`devai init bind --constitution --as-role architect --write\` to bind the installed contract)`,
         ]
       : [];
   return {
@@ -667,35 +418,6 @@ function checkAgentsClaudeSync(repoRoot: string): CheckResult {
   };
 }
 
-function checkWorkspaceLayout(repoRoot: string): CheckResult {
-  const expected = [
-    'package.json',
-    'pnpm-workspace.yaml',
-    'tsconfig.base.json',
-    'tsconfig.json',
-    'packages/cli',
-    'packages/authority',
-    'packages/evidence',
-    'packages/loop',
-    'packages/skills',
-    'packages/spec',
-    'packages/schemas',
-    'packages/sensors',
-    'packages/utils',
-  ];
-  const missing: string[] = [];
-  for (const path of expected) {
-    const full = join(repoRoot, path);
-    if (!existsSync(full)) missing.push(path);
-  }
-  return {
-    name: 'workspace-layout',
-    ok: missing.length === 0,
-    info: { expected, missing },
-    ...(missing.length > 0 && { errors: missing.map((p) => `missing: ${p}`) }),
-  };
-}
-
 function checkChainPathWritableDir(chainPath: string): CheckResult {
   try {
     const dir = chainPath.substring(0, chainPath.lastIndexOf('/'));
@@ -715,7 +437,7 @@ function checkChainPathWritableDir(chainPath: string): CheckResult {
 }
 
 /**
- * Phase 20.C (D-A-6): surface availability of the optional CLI-bridge
+ * Surface availability of the optional CLI bridge
  * LLM backends (`claude-cli`, `codex-cli`). Always informational — an
  * adopter who uses `claude` (the SDK family with an API key) or `mock`
  * is unaffected; the check reports which bridges are wired so an
@@ -786,7 +508,7 @@ function checkDocsGovernanceDoctor(repoRoot: string, skip: boolean): CheckResult
     return {
       name: 'docs-governance',
       ok: true,
-      info: { skipped: true, reason: '--skip docs-governance flag set (pre-conversion adopter)' },
+      info: { skipped: true, reason: '--skip docs-governance flag set' },
     };
   }
   try {
@@ -817,37 +539,8 @@ function checkDocsGovernanceDoctor(repoRoot: string, skip: boolean): CheckResult
   }
 }
 
-function checkTestTrace(repoRoot: string): CheckResult {
-  const result = validateTestTrace({ repoRoot });
-  return {
-    name: 'test-trace',
-    ok: result.ok,
-    info: {
-      referenced: result.referenced_test_files,
-      discovered: result.discovered_test_files,
-      supported: result.supported_test_files,
-      experimental: result.experimental_test_files,
-    },
-    ...(result.errors.length > 0 && {
-      errors: result.errors.map((error) => `${error.file}: ${error.message}`),
-    }),
-  };
-}
-
-/**
- * Each check is registered with the postures it applies to. The
- * adopter posture deliberately drops `workspace-layout` and
- * `schemas-loadable` (both check for DEVAI's own monorepo shape)
- * and runs an adopter-flavoured `f1-paths-present` that checks the
- * substrate roots `init --execute` seeds (minus `law/schemas/`).
- *
- * `constitution-symlink` runs in the adopter posture too; it will
- * pass against adopters once Phase 21.D's init+doctor pair lands
- * (today it requires the existing self-development symlink shape).
- */
 interface CheckSpec {
   readonly name: string;
-  readonly postures: ReadonlySet<Posture>;
   /**
    * D-112: lowest adoption profile at which this check is binding.
    * Below it the check still runs but is reported advisory and
@@ -857,107 +550,59 @@ interface CheckSpec {
   readonly run: (
     repoRoot: string,
     chainPath: string,
-    posture: Posture,
     skipDocsGovernance?: boolean,
   ) => CheckResult | Promise<CheckResult>;
 }
 
 const CHECK_SPECS: readonly CheckSpec[] = [
   {
-    name: 'workspace-layout',
-    postures: new Set<Posture>(['self']),
-    run: (repoRoot) => checkWorkspaceLayout(repoRoot),
-  },
-  {
     name: 'f1-paths-present',
-    postures: new Set<Posture>(['self', 'adopter']),
-    run: (repoRoot, _chainPath, posture) => checkF1Paths(repoRoot, posture),
-  },
-  {
-    name: 'schemas-loadable',
-    postures: new Set<Posture>(['self']),
-    run: (repoRoot) => checkSchemasLoadable(repoRoot),
-  },
-  {
-    name: 'round-artifact-uniqueness',
-    postures: new Set<Posture>(['self']),
-    run: (repoRoot) => checkRoundArtifactUniqueness(repoRoot),
-  },
-  {
-    name: 'test-trace',
-    postures: new Set<Posture>(['self']),
-    run: (repoRoot) => checkTestTrace(repoRoot),
+    run: (repoRoot) => checkF1Paths(repoRoot),
   },
   {
     name: 'constitution-symlink',
-    postures: new Set<Posture>(['self', 'adopter']),
     run: (repoRoot) => checkConstitutionSymlink(repoRoot),
   },
   {
     name: 'agents-claude-sync',
-    postures: new Set<Posture>(['self', 'adopter']),
     run: (repoRoot) => checkAgentsClaudeSync(repoRoot),
   },
   {
     name: 'chain-dir-writable',
-    postures: new Set<Posture>(['self', 'adopter']),
     run: (_repoRoot, chainPath) => checkChainPathWritableDir(chainPath),
   },
   {
     name: 'evidence-chain-valid',
-    postures: new Set<Posture>(['self', 'adopter']),
     run: (_repoRoot, chainPath) => checkEvidenceChain(chainPath),
   },
   {
     name: 'llm-bridges',
-    postures: new Set<Posture>(['self', 'adopter']),
     minProfile: 'tier3',
     run: () => checkLlmBridges(),
   },
   {
     name: 'docs-governance',
-    postures: new Set<Posture>(['self', 'adopter']),
     minProfile: 'tier3',
-    run: (repoRoot, _chainPath, _posture, skipDocsGovernance) =>
+    run: (repoRoot, _chainPath, skipDocsGovernance) =>
       checkDocsGovernanceDoctor(repoRoot, skipDocsGovernance === true),
   },
   {
     name: 'devai-version-match',
-    postures: new Set<Posture>(['self', 'adopter']),
     minProfile: 'tier3',
     run: (repoRoot) => checkDevaiVersionMatch(repoRoot),
   },
   {
     name: 'authority-enforcement',
-    postures: new Set<Posture>(['self', 'adopter']),
     minProfile: 'tier3',
     run: (repoRoot) => checkAuthorityEnforcement(repoRoot),
   },
   {
     name: 'constitution-binding',
-    postures: new Set<Posture>(['adopter']),
     minProfile: 'tier3',
     run: (repoRoot) => checkConstitutionBinding(repoRoot),
   },
-  {
-    name: 'devai-consumption-declared',
-    postures: new Set<Posture>(['adopter']),
-    minProfile: 'tier3',
-    run: (repoRoot) => checkDevaiConsumption(repoRoot),
-  },
 ];
 
-/**
- * D-122 (item 3b): `constitution-symlink` accepts three shapes
- * (symlink-self, symlink-sibling, pointer-file) and always reports
- * `ok: true` for any of them — it is the legacy/dev-convenience
- * resolvability check (D-119's constitution-binding is the tier3
- * canonical gate; a non-self shape already fails that check at
- * tier3, so the combination is never silently green). This note
- * makes the relationship visible on the symlink check itself,
- * instead of leaving the reader to notice the co-occurring
- * constitution-binding failure on their own.
- */
 function annotatePointerOnlyAtTier3(
   checks: readonly CheckResult[],
   profile: AdoptionProfile,
@@ -966,13 +611,13 @@ function annotatePointerOnlyAtTier3(
   return checks.map((c) => {
     if (c.name !== 'constitution-symlink') return c;
     const shape = (c.info as { shape?: string } | undefined)?.shape;
-    if (shape === undefined || shape === 'symlink-self') return c;
+    if (shape === undefined) return c;
     return {
       ...c,
       info: {
         ...c.info,
         tier3_note:
-          'this shape satisfies pointer resolvability (dev-only convenience, D-118) but not the tier3 binding requirement — see the constitution-binding check for the canonical vendored-copy + pin shape',
+          'pointer resolvability is distinct from the tier3 vendored-copy and digest-pin binding requirement',
       },
     };
   });
@@ -981,15 +626,12 @@ function annotatePointerOnlyAtTier3(
 async function runChecks(
   repoRoot: string,
   chainPath: string,
-  posture: Posture,
-  postureSource: 'flag' | 'auto',
   skipDocsGovernance?: boolean,
 ): Promise<Report> {
   const profile = readProfile(repoRoot);
   const checks: CheckResult[] = [];
   for (const spec of CHECK_SPECS) {
-    if (!spec.postures.has(posture)) continue;
-    const result = await spec.run(repoRoot, chainPath, posture, skipDocsGovernance);
+    const result = await spec.run(repoRoot, chainPath, skipDocsGovernance);
     // D-112: checks above the declared profile still run (floor, not
     // cage) but are reported advisory and never fail the run.
     const advisory = !profileAtLeast(profile, spec.minProfile ?? 'tier1');
@@ -997,15 +639,12 @@ async function runChecks(
   }
   const annotated = annotatePointerOnlyAtTier3(checks, profile);
   const ok = annotated.every((c) => c.ok || c.advisory === true);
-  return { ok, posture, posture_source: postureSource, profile, checks: annotated };
+  return { ok, profile, checks: annotated };
 }
 
 function renderHuman(report: Report): string {
   const lines: string[] = [];
-  const postureSuffix = report.posture_source === 'auto' ? ` (auto)` : '';
-  lines.push(
-    `devai doctor [posture=${report.posture}${postureSuffix}, profile=${report.profile}]: ${report.ok ? 'OK' : 'FAIL'}`,
-  );
+  lines.push(`devai doctor [profile=${report.profile}]: ${report.ok ? 'OK' : 'FAIL'}`);
   for (const c of report.checks) {
     const mark = c.ok ? '✓' : c.advisory === true ? '·' : '✗';
     lines.push(
@@ -1042,60 +681,34 @@ function renderHuman(report: Report): string {
   return lines.join('\n') + '\n';
 }
 
-/**
- * Resolve the posture flags to a concrete posture. At most one of
- * `--self`, `--adopter`, `--auto` may be set; multiple is an
- * EXIT_USAGE error. Default (no flag) is `--auto`.
- */
-function resolvePostureFlag(opts: DoctorOptions): PostureFlag | { error: string } {
-  const set = [opts.self, opts.adopter, opts.auto].filter((v) => v === true).length;
-  if (set > 1) {
-    return {
-      error: 'devai doctor: --self, --adopter, and --auto are mutually exclusive',
-    };
+function runProbe(probe: string, repoRoot: string): Report {
+  if (probe !== 'llm') {
+    process.stderr.write(`devai doctor: --probe must be llm (got '${probe}')\n`);
+    process.exit(EXIT_USAGE);
   }
-  if (opts.self === true) return 'self';
-  if (opts.adopter === true) return 'adopter';
-  return 'auto';
+  const profile = readProfile(repoRoot);
+  const check = checkLlmBridges();
+  return { ok: check.ok, profile, checks: [check] };
 }
 
 export const doctor = defineCommand({
   name: 'doctor',
-  description:
-    'Composite repo health check. Posture: --self (full DEVAI checks), --adopter (subset that applies to adopter repos), --auto (default; sniff repo-root for DEVAI shape).',
+  description: 'Diagnose an adopter repository against its installed DEVAI contracts.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
-      .command(
-        'doctor',
-        'Composite repo health check — postures: --self / --adopter / --auto (Phase 21.B, D-A-9)',
-      )
+      .command('doctor', 'Diagnose an adopter repository against its installed DEVAI contracts')
       .option('--repo-root <path>', `Repo root path (default: ${DEFAULT_REPO_ROOT})`)
       .option('--chain <path>', `Chain path (default: <repo-root>/${DEFAULT_CHAIN_RELATIVE})`)
-      .option('--self', 'Run the full DEVAI-self-development check set.')
-      .option(
-        '--adopter',
-        'Run the adopter subset (workspace-layout + schemas-loadable skipped; f1-paths-present uses the init-seeded substrate roots).',
-      )
-      .option(
-        '--auto',
-        'Default. Sniff repo-root for DEVAI workspace shape; pick --self when both packages/cli/src/bin.ts and examples/redox-pack-* are present, else --adopter.',
-      )
       .option('--human', 'Emit a human-readable summary instead of JSON')
+      .option('--probe <probe>', 'Run one bounded diagnostic probe: llm')
       .option(
         '--skip <checks>',
-        'Comma-separated list of checks to skip (e.g. "docs-governance" for pre-conversion adopters).',
+        'Comma-separated list of checks to skip (for example, "docs-governance").',
       )
       .action(async (options: DoctorOptions) => {
-        const flag = resolvePostureFlag(options);
-        if (typeof flag === 'object' && 'error' in flag) {
-          process.stderr.write(`${flag.error}\n`);
-          process.exit(EXIT_USAGE);
-        }
         const repoRoot = options.repoRoot ?? DEFAULT_REPO_ROOT;
         const chainPath = options.chain ?? join(repoRoot, DEFAULT_CHAIN_RELATIVE);
-        const posture: Posture = flag === 'auto' ? detectPosture(repoRoot) : flag;
-        const postureSource: 'flag' | 'auto' = flag === 'auto' ? 'auto' : 'flag';
         const skipSet = new Set(
           (options.skip ?? '')
             .split(',')
@@ -1103,13 +716,10 @@ export const doctor = defineCommand({
             .filter((s) => s.length > 0),
         );
         const skipDocsGovernance = skipSet.has('docs-governance');
-        const report = await runChecks(
-          repoRoot,
-          chainPath,
-          posture,
-          postureSource,
-          skipDocsGovernance,
-        );
+        const report =
+          options.probe === undefined
+            ? await runChecks(repoRoot, chainPath, skipDocsGovernance)
+            : runProbe(options.probe, repoRoot);
         if (options.human) {
           process.stdout.write(renderHuman(report));
         } else {

@@ -1,7 +1,7 @@
 {
   "name": "@devai-nyx/loop",
   "version": "1.0.0",
-  "description": "DEVAI governed task loop, inventory, scorecard, lifecycle, release, and RGR services.",
+  "description": "DEVAI task loop, inventory, scorecard, lifecycle, release, and gap services.",
   "license": "Apache-2.0",
   "author": "Antonio Augusto Russo <aarusso@nyxk.com.br>",
   "type": "module",
@@ -24,7 +24,7 @@
   "scripts": {
     "build": "tsc -b",
     "clean": "tsc -b --clean",
-    "test": "vitest run tests"
+    "test": "pnpm --dir ../.. run test:loop"
   },
   "dependencies": {
     "@devai-nyx/authority": "workspace:*",
@@ -42,12 +42,10 @@
     "@types/pg": "^8.11.0",
     "vitest": "^4.0.18"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/devai-nyx/devaii.git",
+    "url": "git+https://github.com/devai-nyx/devai.git",
     "directory": "packages/loop"
-  }
+  },
+  "private": true
 }

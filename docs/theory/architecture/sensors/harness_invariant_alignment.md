@@ -25,7 +25,3 @@
 
 - **Non-gate invariants.** Hard-fail / constitutional invariants are out of scope here; they have their own enforcement paths.
 - **Whether the aligned action _succeeded_ in CI.** That's harness performance/robustness territory.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/harness_invariant_alignment.md (classification CURRENT).

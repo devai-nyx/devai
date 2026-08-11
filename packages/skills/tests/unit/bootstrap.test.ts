@@ -1,12 +1,4 @@
-import {
-  lstatSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  readlinkSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { lstatSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, aroundEach, beforeEach, describe, expect, it } from 'vitest';
@@ -129,7 +121,7 @@ describe('executeBootstrapPlan --force preserves provenance', () => {
   });
 });
 
-describe('buildBootstrapPlan: .devai/constitution.md pointer (Phase 21.D, closes D-A-11)', () => {
+describe('buildBootstrapPlan: adopter constitution binding', () => {
   let dir: string;
   beforeEach(() => {
     dir = mkdtempSync(join(tmpdir(), 'devai-bootstrap-const-'));
@@ -138,31 +130,31 @@ describe('buildBootstrapPlan: .devai/constitution.md pointer (Phase 21.D, closes
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it('plans a self-symlink when targetRoot has law/constitution.md', () => {
-    // Simulate the DEVAI-self-development shape.
+  it('vendors the canonical constitution even when the target has law/constitution.md', () => {
     mkdirSync(join(dir, 'law'), { recursive: true });
-    writeFileSync(join(dir, 'law/constitution.md'), '# Constitution\n');
+    writeFileSync(join(dir, 'law/constitution.md'), '# Target-local constitution\n');
     const plan = buildBootstrapPlan({ targetRoot: dir });
-    const entry = plan.entries.find((e) => e.path === '.devai/constitution.md');
-    expect(entry).toBeDefined();
-    expect(entry?.symlink_target).toBe('../law/constitution.md');
+    const pointer = plan.entries.find((entry) => entry.path === '.devai/constitution.md');
+    const vendored = plan.entries.find((entry) => entry.path === '.devai/pin/constitution.md');
+    const project = plan.entries.find((entry) => entry.path === '.devai/config/project.json');
+
+    expect(pointer?.content).toMatch(/^# See pin\/constitution\.md$/m);
+    expect(vendored?.content).toContain('# DEVAI Constitution');
+    expect(vendored?.content).not.toContain('Target-local constitution');
+    expect(project?.content).toContain('"constitution"');
   });
 
-  it('plans a plain-file pointer when targetRoot has no law/constitution.md (adopter case)', () => {
-    // No law/constitution.md at dir; the bootstrap is running from the
-    // DEVAI checkout where findDevaiPacksRoot() resolves to a real
-    // path, so the pointer body cites the resolved sibling
-    // constitution.
+  it('plans the canonical regular-file pointer for an empty target', () => {
     const plan = buildBootstrapPlan({ targetRoot: dir });
     const entry = plan.entries.find((e) => e.path === '.devai/constitution.md');
     expect(entry).toBeDefined();
-    expect(entry?.symlink_target).toBeUndefined();
     expect(entry?.content).toMatch(/^# See pin\/constitution\.md$/m);
+    expect(entry?.content).toContain('devai init bind --constitution --write');
     expect(entry?.content).not.toContain('<unresolved>');
   });
 });
 
-describe('executeBootstrapPlan: writes the constitution pointer (Phase 21.D)', () => {
+describe('executeBootstrapPlan: writes the adopter constitution binding', () => {
   let dir: string;
   beforeEach(() => {
     dir = mkdtempSync(join(tmpdir(), 'devai-bootstrap-const-exec-'));
@@ -171,19 +163,21 @@ describe('executeBootstrapPlan: writes the constitution pointer (Phase 21.D)', (
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it('creates a symlink when the plan declares symlink_target (self case)', () => {
+  it('keeps a target constitution separate and writes a regular pointer', () => {
     mkdirSync(join(dir, 'law'), { recursive: true });
-    writeFileSync(join(dir, 'law/constitution.md'), '# Constitution\n');
+    const targetConstitution = join(dir, 'law/constitution.md');
+    writeFileSync(targetConstitution, '# Target-local constitution\n');
     const plan = buildBootstrapPlan({ targetRoot: dir });
     const result = executeBootstrapPlan(plan, { force: false });
     expect(result.created).toContain('.devai/constitution.md');
-    const linkPath = join(dir, '.devai/constitution.md');
-    const stat = lstatSync(linkPath);
-    expect(stat.isSymbolicLink()).toBe(true);
-    expect(readlinkSync(linkPath)).toBe('../law/constitution.md');
+    expect(result.created).toContain('.devai/pin/constitution.md');
+    const pointerPath = join(dir, '.devai/constitution.md');
+    expect(lstatSync(pointerPath).isSymbolicLink()).toBe(false);
+    expect(readFileSync(pointerPath, 'utf8')).toMatch(/^# See pin\/constitution\.md$/m);
+    expect(readFileSync(targetConstitution, 'utf8')).toBe('# Target-local constitution\n');
   });
 
-  it('creates a plain-file pointer when targetRoot has no law/constitution.md (adopter case)', () => {
+  it('creates a plain-file pointer when the target starts empty', () => {
     const plan = buildBootstrapPlan({ targetRoot: dir });
     const result = executeBootstrapPlan(plan, { force: false });
     expect(result.created).toContain('.devai/constitution.md');

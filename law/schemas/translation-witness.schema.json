@@ -10,7 +10,8 @@
     "id",
     "trust",
     "task_id",
-    "skill_id",
+    "recipe_name",
+    "recipe_variant",
     "stage",
     "base_sha",
     "candidate_sha",
@@ -35,9 +36,20 @@
       "type": "string",
       "pattern": "^TASK-[0-9]{4,}$"
     },
-    "skill_id": {
+    "recipe_name": {
+      "enum": [
+        "devai-assess",
+        "devai-plan",
+        "devai-fix",
+        "devai-docs",
+        "devai-scaffold",
+        "devai-verify",
+        "devai-round"
+      ]
+    },
+    "recipe_variant": {
       "type": "string",
-      "pattern": "^SKILL-[a-z][a-z0-9-]*$"
+      "pattern": "^[a-z][a-z0-9-]*$"
     },
     "stage": {
       "enum": [
@@ -357,7 +369,8 @@
       "id": "TW-0123456789abcdef",
       "trust": "untrusted-claim",
       "task_id": "TASK-0028",
-      "skill_id": "SKILL-feedback-iteration",
+      "recipe_name": "devai-fix",
+      "recipe_variant": "test",
       "stage": "invariants-tests-to-code",
       "base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "candidate_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -374,7 +387,7 @@
                   "kind": "test",
                   "test_ref": {
                     "suite": "unit",
-                    "path": "packages/core/test/example.test.ts",
+                    "path": "packages/example/test/example.test.ts",
                     "names": ["requested behavior"]
                   }
                 }
@@ -387,14 +400,14 @@
         {
           "test_ref": {
             "suite": "unit",
-            "path": "packages/core/test/example.test.ts",
+            "path": "packages/example/test/example.test.ts",
             "names": ["requested behavior"]
           },
           "expected_at_base": "assertion-fail",
           "expected_at_candidate": "pass"
         }
       ],
-      "touched": ["packages/core/src/example.ts"],
+      "touched": ["packages/example/src/example.ts"],
       "frame": {
         "authority_role": "engineer",
         "spec_edits": "none",

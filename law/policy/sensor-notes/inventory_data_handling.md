@@ -9,13 +9,12 @@ sensor_kind: inventory_data_handling
 emitter: packages/sensors/src/inventory-data-handling.ts
 standing: cell
 tiers: [TIER2, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Inventory Data Handling
 
-This note binds the successor-local design standing for `inventory_data_handling`. Its canonical emitter
-is `packages/sensors/src/inventory-data-handling.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `inventory_data_handling`. Its canonical emitter
+is `packages/sensors/src/inventory-data-handling.ts`.
 
 Bound cells: F4×T1, F4×T6.
 

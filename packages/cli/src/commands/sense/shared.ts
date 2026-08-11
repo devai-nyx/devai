@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from '@devai-nyx/authority';
 import { join } from 'node:path';
-import { resolveSensorParams } from '#core-compat';
+import { resolveSensorParams } from '@devai-nyx/skills';
 import type { SensorReading } from '@devai-nyx/sensors';
 import { EXIT_PASS, EXIT_USAGE } from '@devai-nyx/utils';
 
@@ -84,17 +84,17 @@ export function emit(reading: SensorReading, human: boolean): void {
 }
 
 /**
- * Phase 21.E (closes D-A-8): persist a SensorReading to
+ * Persist a SensorReading to
  * `<repoRoot>/.devai/state/sensor-readings/<kind>/<id>.json`. The
  * scorecard machinery (in `@devai-nyx/skills` via
  * `loadReadingsFromDir`) reads from this directory; without
  * persistence, the autonomous loop's scorecard → backlog →
- * SKILL-feedback-iteration chain receives all-UNKNOWN cells and
+ * assessment recipes receive all-UNKNOWN cells and
  * produces no useful work for adopters.
  *
  * Pre-21.E, the sense-* commands built SensorReading records and
  * emitted them to stdout via `emit()` but never persisted them.
- * The C-4 stynx pilot's Phase F discovery was that this gap made
+ * Omitting this record makes
  * the autonomous loop non-functional for adopters even though the
  * substrate wired correctly end-to-end.
  *
@@ -127,8 +127,6 @@ export function persistSensorReading(reading: SensorReading, repoRoot: string): 
 export interface FinishSenseOptions {
   readonly repoRoot: string;
   readonly human?: boolean;
-  /** Compatibility-only input; D-139 makes observations non-recording. */
-  readonly emitReading?: boolean;
 }
 
 export function finishSenseCommand(reading: SensorReading, opts: FinishSenseOptions): void {

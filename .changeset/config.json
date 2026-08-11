@@ -2,21 +2,7 @@
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
   "changelog": "@changesets/cli/changelog",
   "commit": false,
-  "fixed": [
-    [
-      "@devai-nyx/authority",
-      "@devai-nyx/cli",
-      "@devai-nyx/core",
-      "@devai-nyx/effects-check",
-      "@devai-nyx/evidence",
-      "@devai-nyx/loop",
-      "@devai-nyx/schemas",
-      "@devai-nyx/sensors",
-      "@devai-nyx/skills",
-      "@devai-nyx/spec",
-      "@devai-nyx/utils"
-    ]
-  ],
+  "fixed": [["@devai-nyx/cli"]],
   "access": "restricted",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",

@@ -5,12 +5,14 @@ import {
   type AuthorityActionContract,
   type ActionEffect,
   type ActionLifecycle,
+  type ActionStatus,
   type ActionTier,
   type ActionVisibility,
   type AdoptionProfile,
   type ActionOutputContract,
   type ActionErrorContract,
 } from './command-manifest.js';
+import { ACTION_REGISTRY } from './generated/action-registry.js';
 
 /**
  * Authority owner of a CLI action (Phase 11.G, absorbed from the
@@ -29,15 +31,10 @@ export type ActionAuthority =
 
 export interface CommandSpec {
   readonly name: string;
-  readonly previous_name: string;
   readonly path: readonly string[];
+  readonly status: ActionStatus;
   readonly description: string;
   readonly authority: ActionAuthority;
-  readonly lifecycle: ActionLifecycle;
-  readonly lifecycle_reason: string;
-  readonly promotion_criteria: readonly string[];
-  readonly visibility: ActionVisibility;
-  readonly tier: ActionTier;
   readonly profiles: readonly AdoptionProfile[];
   readonly effects: ActionEffect;
   readonly authority_contract_version: '1.0.0';
@@ -51,17 +48,7 @@ export interface CommandSpec {
  */
 export interface CommandDefinition extends Omit<
   CommandSpec,
-  | 'path'
-  | 'previous_name'
-  | 'authority'
-  | 'lifecycle'
-  | 'lifecycle_reason'
-  | 'promotion_criteria'
-  | 'visibility'
-  | 'tier'
-  | 'profiles'
-  | 'effects'
-  | 'authority_contract_version'
+  'path' | 'status' | 'authority' | 'profiles' | 'effects' | 'authority_contract_version'
 > {
   readonly authority?: ActionAuthority;
   readonly lifecycle?: ActionLifecycle;
@@ -78,9 +65,13 @@ export interface CommandDefinition extends Omit<
 
 /** Extended registry entry that carries extended_doc for the docs generator. */
 export interface RegistryEntry extends CommandSpec {
+  readonly handler: string;
   readonly internal_name: string;
-  readonly disposition: 'keep' | 'fold' | 'tombstone';
-  readonly migration: string | null;
+  readonly lifecycle: ActionLifecycle;
+  readonly lifecycle_reason: string;
+  readonly promotion_criteria: readonly string[];
+  readonly visibility: ActionVisibility;
+  readonly tier: ActionTier;
   readonly authority_contract: AuthorityActionContract;
   readonly output_contract: ActionOutputContract;
   readonly error_contract: ActionErrorContract;
@@ -93,7 +84,18 @@ export interface RegistryEntry extends CommandSpec {
 const registry: RegistryEntry[] = [];
 
 function publicRegistry(): RegistryEntry[] {
-  return registry.filter((entry) => entry.disposition === 'keep');
+  const definitions = registry;
+  const byBinding = new Map<string, RegistryEntry>();
+  for (const entry of definitions) {
+    if (byBinding.has(entry.handler)) {
+      throw new Error(`ACTION_HANDLER_DUPLICATE: ${entry.name}`);
+    }
+    byBinding.set(entry.handler, entry);
+  }
+  return ACTION_REGISTRY.flatMap((entry) => {
+    const definition = byBinding.get(entry.handler);
+    return definition === undefined ? [] : [definition];
+  });
 }
 
 function publicText(value: string): string {
@@ -105,6 +107,8 @@ function publicText(value: string): string {
 }
 
 export function defineCommand(definition: CommandDefinition): CommandDefinition {
+  const current = ACTION_REGISTRY.find((entry) => entry.handler === definition.name);
+  if (current === undefined) return definition;
   const canonical = registryActionFor(definition.name);
   const metadata = metadataFor(
     definition.name,
@@ -115,10 +119,9 @@ export function defineCommand(definition: CommandDefinition): CommandDefinition 
   );
   const entry: RegistryEntry = {
     name: metadata.path.join(' '),
-    previous_name: definition.name,
+    handler: definition.name,
     internal_name: definition.name.replaceAll(' ', '-'),
-    disposition: canonical.disposition,
-    migration: canonical.migration,
+    status: canonical.status,
     ...metadata,
     description: publicText(canonical.description),
     authority: canonical.authority ?? definition.authority ?? 'mesh_controller',
@@ -131,25 +134,20 @@ export function defineCommand(definition: CommandDefinition): CommandDefinition 
 }
 
 export function getActionsList(opts: { authority?: ActionAuthority } = {}): readonly CommandSpec[] {
-  let all: RegistryEntry[] = publicRegistry();
-  if (opts.authority !== undefined) all = all.filter((c) => c.authority === opts.authority);
-  // Strip extended_doc: it is not part of the public CommandSpec surface and
-  // the action catalog schema (action-catalog.schema.json) disallows it.
-  return all.map(
-    ({
-      extended_doc: _omit,
-      internal_name: _internal,
-      runtime_args: _args,
-      runtime_options: _options,
-      runtime_supports_human: _human,
-      authority_contract: _authorityContract,
-      output_contract: _outputContract,
-      error_contract: _errorContract,
-      disposition: _disposition,
-      migration: _migration,
-      ...spec
-    }) => spec,
-  );
+  const all =
+    opts.authority === undefined
+      ? ACTION_REGISTRY
+      : ACTION_REGISTRY.filter((entry) => entry.authority === opts.authority);
+  return all.map((entry) => ({
+    name: entry.action_id,
+    path: entry.path,
+    status: entry.status,
+    profiles: entry.profiles,
+    effects: entry.effect,
+    authority: entry.authority ?? 'mesh_controller',
+    description: publicText(entry.description),
+    authority_contract_version: entry.authority_contract_version,
+  }));
 }
 
 /**
@@ -163,8 +161,11 @@ export function getFullRegistry(): readonly RegistryEntry[] {
 
 /** Mechanical W05.e surface guard over the post-collapse public catalog. */
 export function validateActionSurface(entries: readonly RegistryEntry[]): void {
-  if (entries.length === 0) {
-    throw new Error('ACTION_COUNT_GUARD: expected a nonempty canonical population');
+  const canonical = ACTION_REGISTRY;
+  if (entries.length !== canonical.length) {
+    throw new Error(
+      `ACTION_COUNT_GUARD: expected ${String(canonical.length)} canonical handlers, received ${String(entries.length)}`,
+    );
   }
   const paths = entries.map((entry) => entry.path.join(' '));
   if (new Set(paths).size !== paths.length) {
@@ -172,6 +173,18 @@ export function validateActionSurface(entries: readonly RegistryEntry[]): void {
   }
   if (entries.some((entry) => entry.tier !== 'porcelain' && entry.tier !== 'plumbing')) {
     throw new Error('ACTION_TIER_MISSING');
+  }
+  const mismatch = canonical.findIndex(
+    (expected, index) =>
+      entries[index]?.name !== expected.action_id ||
+      entries[index]?.handler !== expected.handler ||
+      entries[index]?.internal_name !== expected.handler.replaceAll(' ', '-') ||
+      entries[index]?.path.join('\0') !== expected.path.join('\0'),
+  );
+  if (mismatch >= 0) {
+    throw new Error(
+      `ACTION_HANDLER_ORDER_DRIFT: expected ${canonical[mismatch]?.action_id ?? '<none>'}, received ${entries[mismatch]?.name ?? '<none>'}`,
+    );
   }
 }
 
@@ -182,22 +195,23 @@ export function attachRuntimeContracts(
     readonly options: readonly { readonly rawName: string; readonly description: string }[];
   }[],
 ): void {
+  const expectedHandlers = publicRegistry().map((entry) => entry.internal_name);
+  const registeredHandlers = commands.map((command) => command.name);
+  if (JSON.stringify(registeredHandlers) !== JSON.stringify(expectedHandlers)) {
+    const mismatch = registeredHandlers.findIndex(
+      (handler, index) => handler !== expectedHandlers[index],
+    );
+    throw new Error(
+      `ACTION_REGISTRATION_ORDER_DRIFT: expected ${expectedHandlers[mismatch] ?? '<none>'}, received ${registeredHandlers[mismatch] ?? '<none>'}`,
+    );
+  }
   for (const entry of registry) {
     const command = commands.find((candidate) => candidate.name === entry.internal_name);
     if (command === undefined) throw new Error(`ACTION_HANDLER_MISSING: ${entry.name}`);
     entry.runtime_args = command.rawName.slice(command.name.length).trim();
     entry.runtime_supports_human = command.options.some((option) => option.rawName === '--human');
     const options = command.options
-      .filter((option) => !['--human', '--execute', '--apply'].includes(option.rawName))
-      // D-139 supersedes implicit observation persistence. Keep the old CAC
-      // spelling as a harmless compatibility input, but do not advertise a
-      // switch whose behavior is now the unconditional default.
-      .filter((option) => option.rawName !== '--no-emit-reading')
-      .filter(
-        (option) =>
-          entry.previous_name !== 'inv contracts' ||
-          !['--regen', '--regen-config <path>'].includes(option.rawName),
-      )
+      .filter((option) => !['--human', '--execute', '--apply', '--write'].includes(option.rawName))
       .map((option) => ({
         flags: option.rawName,
         description: publicText(option.description),
@@ -215,7 +229,7 @@ export function attachRuntimeContracts(
     }
     if (entry.effects === 'remote-write') {
       options.push({
-        flags: '--allow-publish',
+        flags: '--publish',
         description: 'Authorize remote publication in addition to --write.',
       });
     }

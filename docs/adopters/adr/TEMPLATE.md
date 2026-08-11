@@ -10,7 +10,7 @@ tags: [<scope-tag>, <area-tag>]
 # ADR-<SCOPE>-<NNNN> — <Title>
 
 **Authority:** Architect.
-**Related:** `../path/to/related-contract.md`, `../path/to/predecessor-adr.md` (replace with real link targets).
+**Related:** `../path/to/related-contract.md`, `../path/to/related-adr.md` (replace with real link targets).
 
 ## Status
 
@@ -24,7 +24,7 @@ When rejected, replace with:
 Rejected YYYY-MM-DD. Reason: <one paragraph>.
 
 When superseded, replace with:
-Superseded by `ADR-<SCOPE>-<NNNN>` (link to the successor file) YYYY-MM-DD.
+Superseded by `ADR-<SCOPE>-<NNNN>` (link to the current file) YYYY-MM-DD.
 -->
 
 ## Context
@@ -75,10 +75,6 @@ empty section is not.
 <!--
 - Contracts: `../path/to/contract.md`
 - Invariants: `INV-<DOMAIN>-<NNN>` (in `law/invariants/`)
-- Predecessors / superseded by: links here
+- Related / replaced by: links here
 - External: issues, RFCs, papers
 -->
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/adr/TEMPLATE.md (classification CURRENT).

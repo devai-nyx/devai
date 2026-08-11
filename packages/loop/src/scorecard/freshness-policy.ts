@@ -7,11 +7,7 @@ interface ThresholdPolicy {
   };
 }
 
-/**
- * Resolve DII-103's Architect-owned stale-failure boundary. Missing policy is
- * tolerated for pre-R-0002 adopters; a present but malformed value fails
- * closed instead of silently reverting to caller-selected behavior.
- */
+/** Resolve the configured stale-failure boundary and reject malformed policy. */
 export function loadScorecardFailureMaxAgeMs(repoRoot: string): number | undefined {
   const canonicalPath = join(repoRoot, 'law/policy/thresholds.json');
   const materializedPath = join(repoRoot, '.devai/config/thresholds.json');

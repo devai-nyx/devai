@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/phase-closure.schema.json",
   "title": "PhaseClosure",
-  "description": "Machine-recorded closure of a phase or round (D-110, governance-roadmap item 4). Replaces the hand-narrated portion of closing D-entries: gate posture, batch list, validation criteria, and the no-deletion flag become data; derived properties (consecutive-streak counters, scope trends) are computed from the ledger by `devai govern phase ledger`, never stored as prose. The closing D-entry shrinks to a human judgment plus a pointer to this record. Written by `devai govern phase close` to record/proofs/compliance/closures/PC-NNNN.json (tracked, append-only by convention: a recorded closure is never edited; corrections append a new record with `supersedes`).",
+  "description": "Append-only machine closure record including decision bindings, delivered units, gate posture, validation criteria, and source-repository disposition. Corrections append a new record linked through `supersedes`.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -24,26 +24,26 @@
     "id": {
       "type": "string",
       "pattern": "^PC-[0-9]{4}$",
-      "description": "Sequential closure id. Assigned by `devai govern phase close` as max(existing) + 1."
+      "description": "Sequential closure id allocated as max(existing) + 1."
     },
     "round_id": {
       "type": "string",
       "minLength": 1,
-      "description": "Human identifier of the closed unit, e.g. 'phase-39', 'round-14', 'drift-remediation'."
+      "description": "Human identifier of the closed work unit."
     },
     "title": {
       "type": "string",
-      "description": "One-line headline of what the phase/round shipped."
+      "description": "One-line headline of what the closed work unit delivered."
     },
     "declaring_decision": {
       "type": "string",
       "pattern": "^(?:D-[0-9]+|DII-[0-9]+)$",
-      "description": "The D-entry that declared the phase/round."
+      "description": "Decision record that declared the work unit."
     },
     "closing_decision": {
       "type": "string",
       "pattern": "^(?:D-[0-9]+|DII-[0-9]+)$",
-      "description": "The D-entry that records the closing judgment."
+      "description": "Decision record containing the closing judgment."
     },
     "batches": {
       "type": "array",
@@ -67,7 +67,7 @@
           "commit": {
             "type": "string",
             "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$",
-            "description": "Commit SHA the batch landed as. Optional for batches folded into the closing commit."
+            "description": "Commit SHA containing the delivered unit. Optional when delivery is part of the closing commit."
           },
           "headline": {
             "type": "string",
@@ -95,7 +95,7 @@
     },
     "gates": {
       "type": "object",
-      "description": "Gate-sweep results at close, keyed by gate name (e.g. lint, typecheck, unit, integration, contract, docs-links, docs-governance, spec-validate-all).",
+      "description": "Gate results at close, keyed by check name.",
       "minProperties": 1,
       "propertyNames": {
         "type": "string",
@@ -112,14 +112,14 @@
           },
           "detail": {
             "type": "string",
-            "description": "Free-form evidence, e.g. '704 passed / 1 skipped'."
+            "description": "Free-form evidence, for example 'all selected checks passed'."
           }
         }
       }
     },
     "source_repo_deleted": {
       "type": "boolean",
-      "description": "Whether the phase/round deleted an absorbed source repo. The consecutive no-deletion streak is computed from this field by `devai govern phase ledger` — never hand-narrated."
+      "description": "Whether the closed work deleted a source repository."
     },
     "validation_criteria": {
       "type": "array",
@@ -154,11 +154,11 @@
     "merged_as": {
       "type": "string",
       "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$",
-      "description": "The integration-branch commit the closed round actually shipped as (merge commit or branch tip on main). Historical records remain schema-valid without this field, but every new successor record emitted by `devai govern phase close` requires it."
+      "description": "The integration commit that contains the closed work unit. Current closure writes require this field."
     },
     "release_disposition": {
-      "enum": ["published", "changeset-pending", "none-preratification", "none-needed", "missing"],
-      "description": "Whether the round's package changes have a release path: 'published' (release cut), 'changeset-pending' (changeset recorded, publish pending), 'none-preratification' (package-visible changes intentionally withheld until ratification), 'none-needed' (no package-visible changes), or 'missing' (package changes shipped with no changeset — a recorded defect, never a silent one). Historical records remain schema-valid without this field, but every new successor record emitted by `devai govern phase close` requires it."
+      "enum": ["published", "changeset-pending", "none-needed", "missing"],
+      "description": "Whether package changes have a release path: published, changeset-pending, none-needed, or missing."
     },
     "evidence": {
       "type": "object",
@@ -185,25 +185,25 @@
       "schemaVersion": "1.0.0",
       "id": "PC-0001",
       "closed_at": "2026-06-10T03:30:00.000Z",
-      "round_id": "drift-remediation",
-      "declaring_decision": "D-108",
-      "closing_decision": "D-109",
+      "round_id": "maintenance",
+      "declaring_decision": "D-1",
+      "closing_decision": "D-2",
       "batches": [
         {
-          "id": "DR.A",
+          "id": "B1",
           "roles": ["Architect"],
-          "headline": "Constitution 0.2.0 -> 0.3.0 (Articles 1, 23, 27); BUILD-PLAN history frozen to archive; README/CLAUDE refresh; docs_drift schema enum; D-108"
+          "headline": "Updated the declared contract and its validation evidence."
         }
       ],
       "gates": {
-        "sense-docs-drift": {
+        "check": {
           "status": "pass"
         }
       },
       "source_repo_deleted": false,
       "validation_criteria": [
         {
-          "criterion": "four CI-equivalent gates green",
+          "criterion": "declared checks pass",
           "verdict": "pass"
         }
       ]

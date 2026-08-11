@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/action-registry.schema.json",
-  "title": "Governed action registry",
-  "description": "Canonical never-reminted identity, disposition, lifecycle, effects, and authority source for every public or historical action route.",
+  "title": "DEVAI action catalog",
+  "description": "Canonical current-state source for every executable DEVAI action.",
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -10,10 +10,7 @@
     "$schema",
     "schemaVersion",
     "id",
-    "status",
     "authority",
-    "base_sha",
-    "identity_rule",
     "ordering",
     "generated_views",
     "counts",
@@ -29,18 +26,8 @@
     "id": {
       "const": "action-registry"
     },
-    "status": {
-      "const": "active"
-    },
     "authority": {
       "const": "Architect"
-    },
-    "base_sha": {
-      "type": "string",
-      "pattern": "^[0-9a-f]{40}$"
-    },
-    "identity_rule": {
-      "const": "public-path-never-reminted"
     },
     "ordering": {
       "const": "utf8-bytes"
@@ -57,17 +44,21 @@
     "counts": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["keep", "fold", "tombstone"],
+      "required": ["stable", "preview", "internal", "total"],
       "properties": {
-        "keep": {
+        "stable": {
           "type": "integer",
           "minimum": 0
         },
-        "fold": {
+        "preview": {
           "type": "integer",
           "minimum": 0
         },
-        "tombstone": {
+        "internal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total": {
           "type": "integer",
           "minimum": 0
         }
@@ -81,20 +72,13 @@
         "additionalProperties": false,
         "required": [
           "action_id",
-          "internal_binding",
+          "handler",
           "path",
-          "disposition",
-          "lifecycle",
-          "lifecycle_reason",
-          "migration",
-          "never_remint",
-          "visibility",
-          "tier",
+          "status",
           "profiles",
           "effect",
           "authority",
           "description",
-          "promotion_criteria",
           "output_contract",
           "error_contract",
           "authority_contract_version",
@@ -105,10 +89,6 @@
             "type": "string",
             "pattern": "^[a-z0-9][a-z0-9_-]*( [a-z0-9][a-z0-9_-]*)*$"
           },
-          "internal_binding": {
-            "type": "string",
-            "minLength": 1
-          },
           "path": {
             "type": "array",
             "minItems": 1,
@@ -116,29 +96,6 @@
               "type": "string",
               "pattern": "^[a-z0-9][a-z0-9_-]*$"
             }
-          },
-          "disposition": {
-            "enum": ["keep", "fold", "tombstone"]
-          },
-          "lifecycle": {
-            "enum": ["supported", "experimental", "retired"]
-          },
-          "lifecycle_reason": {
-            "type": "string",
-            "minLength": 1
-          },
-          "migration": {
-            "type": ["string", "null"],
-            "minLength": 1
-          },
-          "never_remint": {
-            "const": true
-          },
-          "visibility": {
-            "enum": ["common", "standard", "advanced", "maintainer"]
-          },
-          "tier": {
-            "enum": ["porcelain", "plumbing"]
           },
           "profiles": {
             "type": "array",
@@ -149,7 +106,8 @@
             }
           },
           "effect": {
-            "enum": ["read", "harness-write", "local-write", "remote-write"]
+            "enum": ["read", "harness-write", "local-write", "remote-write"],
+            "description": "Conservative action-level ceiling. Parameterized actions resolve a narrower registered member contract before authority and consent checks; the ceiling itself never authorizes an effect."
           },
           "authority": {
             "type": ["string", "null"],
@@ -168,14 +126,6 @@
             "type": "string",
             "minLength": 1
           },
-          "promotion_criteria": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string",
-              "minLength": 1
-            }
-          },
           "output_contract": {
             "$ref": "#/$defs/outputContract"
           },
@@ -187,63 +137,46 @@
           },
           "authority_contract": {
             "$ref": "#/$defs/authorityContract"
+          },
+          "status": {
+            "enum": ["stable", "preview", "internal"]
+          },
+          "handler": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]*( [a-z0-9][a-z0-9_-]*)*$"
           }
         },
         "allOf": [
           {
-            "if": {
-              "properties": {
-                "disposition": {
-                  "const": "keep"
+            "properties": {
+              "path": {
+                "prefixItems": [
+                  {
+                    "enum": [
+                      "init",
+                      "doctor",
+                      "check",
+                      "sense",
+                      "round",
+                      "evidence",
+                      "release",
+                      "task",
+                      "catalog"
+                    ]
+                  }
+                ]
+              },
+              "output_contract": {
+                "properties": {
+                  "mode": {
+                    "const": "action-envelope"
+                  }
                 }
               },
-              "required": ["disposition"]
-            },
-            "then": {
-              "properties": {
-                "migration": {
-                  "type": "null"
-                },
-                "lifecycle": {
-                  "enum": ["supported", "experimental"]
-                },
-                "output_contract": {
-                  "properties": {
-                    "mode": {
-                      "const": "action-envelope"
-                    }
-                  }
-                },
-                "error_contract": {
-                  "properties": {
-                    "mode": {
-                      "const": "structured-error-envelope"
-                    }
-                  }
-                }
-              }
-            },
-            "else": {
-              "properties": {
-                "migration": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "lifecycle": {
-                  "const": "retired"
-                },
-                "output_contract": {
-                  "properties": {
-                    "mode": {
-                      "const": "router-only"
-                    }
-                  }
-                },
-                "error_contract": {
-                  "properties": {
-                    "mode": {
-                      "const": "router-only"
-                    }
+              "error_contract": {
+                "properties": {
+                  "mode": {
+                    "const": "structured-error-envelope"
                   }
                 }
               }
@@ -263,7 +196,7 @@
           "const": "1.0.0"
         },
         "mode": {
-          "enum": ["action-envelope", "router-only"]
+          "enum": ["action-envelope"]
         },
         "envelope_schema": {
           "type": ["string", "null"],
@@ -322,7 +255,7 @@
           "const": "1.0.0"
         },
         "mode": {
-          "enum": ["structured-error-envelope", "router-only"]
+          "enum": ["structured-error-envelope"]
         },
         "envelope_schema": {
           "type": ["string", "null"],
@@ -382,6 +315,7 @@
         "schemaVersion",
         "action_id",
         "effect",
+        "capabilities",
         "subject",
         "consent",
         "planner",
@@ -429,7 +363,7 @@
               }
             ]
           },
-          "description": "Declared per-domain effect upper bound. Optional only for the R24 W01 compatibility window; the live consistency gate introduced red-first in W02 and completed in W03 rejects a catalogued action without this field. fs:unknown-write and db:unclassified are shadow-only migration values that R25 must eliminate."
+          "description": "Required per-domain effect upper bound for the catalogued action. Conservative fs:unknown-write and db:unclassified inference results must be covered by an explicit declaration before execution binding."
         },
         "subject": {
           "oneOf": [
@@ -470,11 +404,11 @@
                   "const": "derived-machine"
                 },
                 "actor": {
-                  "enum": ["harness", "upgrade", "release"],
+                  "enum": ["harness", "binding", "release"],
                   "description": "bootstrap is intentionally absent: it may plan/orchestrate but has no mutation authority."
                 },
                 "transition": {
-                  "enum": ["harness-write", "upgrade", "release"]
+                  "enum": ["harness-write", "bind", "release"]
                 },
                 "initiator": {
                   "oneOf": [
@@ -517,10 +451,10 @@
                 {
                   "properties": {
                     "actor": {
-                      "const": "upgrade"
+                      "const": "binding"
                     },
                     "transition": {
-                      "const": "upgrade"
+                      "const": "bind"
                     },
                     "initiator": {
                       "type": "object",
@@ -562,10 +496,12 @@
           "required": ["write", "allow_publish", "experimental"],
           "properties": {
             "write": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Satisfied only by explicit --write consent for the resolved invocation."
             },
             "allow_publish": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Internal publication-consent bit satisfied only by explicit --publish; independent of and never implied by --write."
             },
             "experimental": {
               "type": "boolean"
@@ -833,81 +769,5 @@
       ]
     }
   },
-  "examples": [
-    {
-      "$schema": "../schemas/action-registry.schema.json",
-      "schemaVersion": "1.0.0",
-      "id": "action-registry",
-      "status": "active",
-      "authority": "Architect",
-      "base_sha": "b60b4c52bff1779da84f48edc63cbf34652ab18e",
-      "identity_rule": "public-path-never-reminted",
-      "ordering": "utf8-bytes",
-      "generated_views": [
-        "packages/cli/src/generated/action-registry.ts",
-        "packages/effects-check/src/generated/action-catalog.ts",
-        "packages/sensors/src/generated/action-kinds.ts"
-      ],
-      "counts": {
-        "keep": 1,
-        "fold": 0,
-        "tombstone": 0
-      },
-      "entries": [
-        {
-          "action_id": "adopt ci scaffold",
-          "internal_binding": "ci scaffold",
-          "path": ["adopt", "ci", "scaffold"],
-          "disposition": "keep",
-          "lifecycle": "supported",
-          "lifecycle_reason": "Supported mesh_controller action in the 0.5 command contract.",
-          "migration": null,
-          "never_remint": true,
-          "visibility": "standard",
-          "tier": "plumbing",
-          "profiles": ["tier1", "tier2", "tier3"],
-          "effect": "local-write",
-          "authority": "mesh_controller",
-          "description": "Generate a starter .github/workflows/devai-gates.yml that calls the canonical reusable-evidence-gate.yml. Plan-only unless --write; refuses to overwrite unless --force (D-123, item 5).",
-          "promotion_criteria": [],
-          "authority_contract_version": "1.0.0",
-          "authority_contract": {
-            "schemaVersion": "1.0.0",
-            "action_id": "adopt ci scaffold",
-            "effect": "local-write",
-            "capabilities": ["fs:workspace"],
-            "subject": {
-              "kind": "human",
-              "allowed_roles": ["engineer"]
-            },
-            "consent": {
-              "write": true,
-              "allow_publish": false,
-              "experimental": false
-            },
-            "planner": {
-              "kind": "bounded-batches",
-              "planner_id": "ci-scaffold-bounded-plan",
-              "target_kinds": ["fs"],
-              "bounds": {
-                "max_batches": 128,
-                "max_targets_per_batch": 64,
-                "max_total_targets": 8192
-              },
-              "recovery": "preserve-and-report"
-            },
-            "boundary": {
-              "kind": "mutation-adapters",
-              "adapter_ids": ["fs-authority-boundary"],
-              "final_reverification": true
-            },
-            "readiness": {
-              "requires_binding": true,
-              "independent_acceptance_required": true
-            }
-          }
-        }
-      ]
-    }
-  ]
+  "examples": [{}]
 }

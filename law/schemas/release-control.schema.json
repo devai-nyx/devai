@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/release-control.schema.json",
   "title": "Release Control",
-  "description": "Output record for the `devai release gate`, `devai release postdeploy verify`, and `devai release runtime drift` commands (Phase 11.B / D-39). Records a deploy-gate decision and the inputs that drove it; persisted under .devai/state/releases/REL-<id>.json so the audit trail can be replayed.",
+  "description": "Output record for `devai release check`, `devai release verify`, and `devai release drift`. It records the release decision and its inputs under .devai/state/releases/REL-<id>.json.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "id", "kind", "decided_at", "verdict", "inputs"],
@@ -66,7 +66,7 @@
         "artifact_chain_head": {
           "type": "string",
           "pattern": "^[a-f0-9]{64}$",
-          "description": "Claimed chain head baked into the artifact (set by `release postdeploy-verify`)."
+          "description": "Claimed chain head baked into the artifact and checked by release verification."
         }
       }
     },
@@ -93,7 +93,7 @@
     },
     "rollback_recommended": {
       "type": "boolean",
-      "description": "Set by postdeploy-verify / runtime-drift when the deployed runtime diverges from the artifact-of-record."
+      "description": "Set by release verification or drift inspection when the deployed runtime diverges from the artifact of record."
     },
     "drift_observations": {
       "type": "array",

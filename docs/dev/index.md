@@ -1,33 +1,34 @@
 ---
-title: Contributor guide
+title: Developer guide
 ---
 
-# Contributor guide
+# Developer guide
 
-Contributor material is organized as runbooks. Concepts stay in
-[theory](../theory/), adopter how-to stays in [adopters](../adopters/), and
-normative rules stay in [law](../../law/).
+Human maintainers choose DEVAI's scope, review changes, and authorize releases. Work in a
+dedicated branch or worktree, preserve unrelated changes, and run the smallest trustworthy
+checks affected by the change.
 
-## Test tiers
+## Test lanes
 
-| Tier | Name        | Home                         | Batch gate                              |
-| ---- | ----------- | ---------------------------- | --------------------------------------- |
-| T0   | Static      | lint and type configuration  | every batch                             |
-| T1   | Unit        | `packages/*/tests/unit/`     | every batch                             |
-| T2   | Contract    | `packages/*/tests/contract/` | every batch; hard gate                  |
-| T3   | Integration | `tests/integration/`         | every batch                             |
-| T4   | Regression  | `tests/regression/`          | pre-close; hard gate                    |
-| T5   | Smoke / E2E | `tests/e2e/`                 | pre-close and release                   |
-| T6   | Containment | `tests/containment/`         | pre-close and every experimental change |
+| Lane                               | Purpose                                                                  | Normal trigger                     |
+| ---------------------------------- | ------------------------------------------------------------------------ | ---------------------------------- |
+| affected                           | matching leaf and dependent closure from an exact base-to-candidate diff | every change                       |
+| local                              | complete cheap deterministic closure with PASS cache reuse               | before integration                 |
+| RC coverage                        | complete Vitest population once, floors 70/60/70/70                      | release-candidate gate only        |
+| DB / E2E / performance diagnostics | focused slices already included in RC coverage                           | investigation or focused iteration |
+| containment diagnostic             | focused operation, recipe, path, symlink, and write-scope slice          | containment changes                |
 
-Every batch runs the checks applicable to the paths it changes and reads their
-output before commit. Round close expands to the full tier sweep. A check that
-cannot run is a blocker or a recorded backlog item, never a silent skip.
+PASS-only cache reuse is allowed when the task key and dependency closure are unchanged.
+Unknown changes widen to the full local closure. Clean affected and RC runs may emit an unsigned
+candidate receipt; signing and trust material remain outside the candidate repository. Remote CI
+validates the signed export and required-node closure without rerunning product tests, and it does
+not claim to prove local execution.
 
 ## Runbooks
 
-- [Development process](process.md)
-- [Contributing](contributing.md)
-- [Round workflow](round-workflow/)
-- [Operations](operations/)
-- [Security](security/)
+- [Testing](operations/testing.md)
+- [Worktrees](operations/worktree-runbook.md)
+- [Database isolation](operations/db-isolation.md)
+- [Evidence](operations/local-evidence-runbook.md)
+- [Incident response](operations/incident-playbook.md)
+- [Security](security/README.md)

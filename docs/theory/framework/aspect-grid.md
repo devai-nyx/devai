@@ -16,10 +16,6 @@ sidebar_position: 4
 > The result is therefore a repository-local sensor-mapping projection, not a
 > current readiness verdict. Unmapped cells render `UNKNOWN`; mapped cells
 > link to their sensor design notes; the two structural cells render N/A. A
-> self-scorecard is a separate, exact-subject observation projection and is
-> current only when its own subject, render, freshness, and deployment
-> provenance support that claim.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/aspect-grid.md (classification CURRENT).
+> scorecard is a separate, exact-subject observation projection and is current
+> only when its own subject, render, freshness, and deployment provenance
+> support that claim.

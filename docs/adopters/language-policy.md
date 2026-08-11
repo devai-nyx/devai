@@ -37,7 +37,3 @@ A: Yes. Quoted references (statute text, screen labels, user prompts that ship i
 
 - Authority: [CONVENTIONS.md](./CONVENTIONS.md) §3.
 - Docs layout: [`docs-layout.md`](./docs-layout.md).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/language-policy.md (classification CURRENT).

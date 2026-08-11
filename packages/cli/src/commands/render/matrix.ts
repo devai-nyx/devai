@@ -187,7 +187,7 @@ function readAllResults(dir: string): TestResult[] {
         try {
           const parsed = JSON.parse(readFileSync(full, 'utf8')) as TestResult;
           // Accept only well-shaped records; silently skip the rest.
-          // The matrix is a reporter, not a validator — `inv contracts`
+          // The matrix is a reporter; canonical checks own validation.
           // is the validating gate.
           if (
             typeof parsed.id === 'string' &&

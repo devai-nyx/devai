@@ -15,16 +15,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BIN = join(
-  HERE,
-  '..',
-  '..',
-  'packages',
-  'cli',
-  'tests',
-  'fixtures',
-  'authorized-cli-test-driver.mjs',
-);
+const BIN = join(HERE, '..', '..', 'packages', 'cli', 'dist', 'runtime', 'index', 'bin.js');
 
 const skipIfNotBuilt = existsSync(BIN) ? it : it.skip;
 const CLI_TIMEOUT_MS = 30_000;
@@ -35,6 +26,47 @@ function run(args: readonly string[]): { status: number | null; stdout: string; 
     env: subprocessCoverageEnvironment(),
   });
   return { status: result.status, stdout: result.stdout, stderr: result.stderr };
+}
+
+interface ActionEnvelope {
+  readonly action_id: string;
+  readonly ok: boolean;
+  readonly result?: { readonly value: unknown };
+  readonly error?: {
+    readonly code: string;
+    readonly class: string;
+    readonly exit: number;
+    readonly message: string;
+    readonly remediation?: string;
+  };
+}
+
+function envelope(text: string): ActionEnvelope {
+  return JSON.parse(text) as ActionEnvelope;
+}
+
+function materializeAuthorityPolicy(): void {
+  const materialized = run([
+    'init',
+    'bind',
+    '--target',
+    tempDir,
+    '--as-role',
+    'architect',
+    '--write',
+    '--format',
+    'json',
+  ]);
+  expect(materialized.status, materialized.stderr).toBe(0);
+  expect(envelope(materialized.stdout)).toMatchObject({
+    action_id: 'init bind',
+    ok: true,
+  });
+  expect(existsSync(join(tempDir, '.devai/config/authority-policy.json'))).toBe(true);
+}
+
+function applyHooks(extra: readonly string[] = []): ReturnType<typeof run> {
+  return run(['init', 'apply', 'architect', '--target', tempDir, '--include', 'hooks', ...extra]);
 }
 
 function initializeGitRepository(): void {
@@ -74,15 +106,24 @@ afterEach(() => {
   rmSync(tempDir, { recursive: true, force: true });
 });
 
-describe('devai adopt hooks install (D-123, item 5)', () => {
+describe('devai init apply architect --include hooks', () => {
   skipIfNotBuilt(
-    'plan-only mode reports the target without writing anything',
+    'refuses missing write consent without writing the target',
     () => {
-      const r = run(['adopt', 'hooks', 'install', '--repo-root', tempDir]);
-      expect(r.status).toBe(0);
-      const out = JSON.parse(r.stdout) as { action: string; path: string };
-      expect(out.action).toBe('create');
-      expect(existsSync(out.path)).toBe(false);
+      const hookPath = join(tempDir, '.git/hooks/pre-push');
+      const r = applyHooks(['--as-role', 'architect', '--format', 'json']);
+      expect(r.status).toBe(2);
+      expect(r.stdout).toBe('');
+      expect(envelope(r.stderr)).toMatchObject({
+        action_id: 'init apply architect',
+        ok: false,
+        error: {
+          class: 'routing-authority',
+          exit: 2,
+          message: expect.stringContaining('local mutation requires --write'),
+        },
+      });
+      expect(existsSync(hookPath)).toBe(false);
     },
     CLI_TIMEOUT_MS,
   );
@@ -90,13 +131,25 @@ describe('devai adopt hooks install (D-123, item 5)', () => {
   skipIfNotBuilt(
     '--write writes an executable pre-push hook using .git/hooks when no husky dir exists',
     () => {
-      const r = run(['adopt', 'hooks', 'install', '--repo-root', tempDir, '--write']);
-      expect(r.status).toBe(0);
+      materializeAuthorityPolicy();
+      const r = applyHooks([
+        '--hook',
+        'pre-push',
+        '--as-role',
+        'architect',
+        '--write',
+        '--format',
+        'json',
+      ]);
+      expect(r.status, r.stderr).toBe(0);
+      expect(envelope(r.stdout)).toMatchObject({
+        action_id: 'init apply architect',
+        ok: true,
+        result: { value: { included: [{ component: 'hooks', result: { executed: true } }] } },
+      });
       const hookPath = join(tempDir, '.git/hooks/pre-push');
       expect(existsSync(hookPath)).toBe(true);
-      expect(readFileSync(hookPath, 'utf8')).toContain(
-        'devai policy check forbidden actions --strict',
-      );
+      expect(readFileSync(hookPath, 'utf8')).toContain('devai check --only forbidden-actions');
       expect(statSync(hookPath).mode & 0o777).toBe(0o755);
     },
     CLI_TIMEOUT_MS,
@@ -105,18 +158,25 @@ describe('devai adopt hooks install (D-123, item 5)', () => {
   skipIfNotBuilt(
     'prefers .husky/<hook> over .git/hooks when a .husky dir is present',
     () => {
+      materializeAuthorityPolicy();
       mkdirSync(join(tempDir, '.husky'), { recursive: true });
-      const r = run([
-        'adopt',
-        'hooks',
-        'install',
-        '--repo-root',
-        tempDir,
+      const r = applyHooks([
         '--hook',
         'pre-commit',
+        '--as-role',
+        'architect',
         '--write',
+        '--format',
+        'json',
       ]);
-      expect(r.status).toBe(0);
+      expect(r.status, r.stderr).toBe(0);
+      expect(envelope(r.stdout)).toMatchObject({
+        action_id: 'init apply architect',
+        ok: true,
+        result: {
+          value: { included: [{ component: 'hooks', plan: { manager: 'husky' } }] },
+        },
+      });
       expect(existsSync(join(tempDir, '.husky/pre-commit'))).toBe(true);
       expect(existsSync(join(tempDir, '.git/hooks/pre-commit'))).toBe(false);
     },
@@ -124,15 +184,19 @@ describe('devai adopt hooks install (D-123, item 5)', () => {
   );
 
   skipIfNotBuilt(
-    'accepts a non-mutating post-merge installation plan',
+    'refuses a post-merge apply without write consent and leaves adapter state absent',
     () => {
-      const r = run(['adopt', 'hooks', 'install', '--repo-root', tempDir, '--hook', 'post-merge']);
-      expect(r.status).toBe(0);
-      const out = JSON.parse(r.stdout) as { hook: string; path: string; command: string };
-      expect(out.hook).toBe('post-merge');
-      expect(out.path).toBe(join(tempDir, '.git/hooks/post-merge'));
-      expect(out.command).toContain('devai govern auditor post-merge --host-receipt');
-      expect(existsSync(out.path)).toBe(false);
+      const hookPath = join(tempDir, '.git/hooks/post-merge');
+      const r = applyHooks(['--hook', 'post-merge', '--as-role', 'architect', '--format', 'json']);
+      expect(r.status).toBe(2);
+      expect(envelope(r.stderr)).toMatchObject({
+        action_id: 'init apply architect',
+        ok: false,
+        error: { message: expect.stringContaining('local mutation requires --write') },
+      });
+      expect(existsSync(hookPath)).toBe(false);
+      expect(existsSync(join(tempDir, '.git/devai'))).toBe(false);
+      expect(existsSync(join(tempDir, '.devai/config/post-merge-host-adapter.json'))).toBe(false);
     },
     CLI_TIMEOUT_MS,
   );
@@ -146,49 +210,47 @@ describe('devai adopt hooks install (D-123, item 5)', () => {
         join(tempDir, 'law', 'constitution.md'),
         readFileSync(join(HERE, '..', '..', 'law', 'constitution.md'), 'utf8'),
       );
-      const materialized = run([
-        'adopt',
-        'upgrade',
-        '--target',
-        tempDir,
-        '--as-role',
-        'architect',
-        '--write',
-      ]);
-      expect(materialized.status, materialized.stderr).toBe(0);
+      materializeAuthorityPolicy();
 
-      const engineer = run([
-        'adopt',
-        'hooks',
-        'install',
-        '--repo-root',
-        tempDir,
+      const engineer = applyHooks([
         '--hook',
         'post-merge',
         '--as-role',
         'engineer',
         '--write',
+        '--format',
+        'json',
       ]);
       expect(engineer.status).not.toBe(0);
-      expect(`${engineer.stdout}\n${engineer.stderr}`).toContain('authority human role denied');
+      expect(envelope(engineer.stderr)).toMatchObject({
+        action_id: 'init apply architect',
+        ok: false,
+        error: { code: 'AUTHORITY_HUMAN_ROLE_DENIED' },
+      });
       expect(existsSync(join(tempDir, '.git/hooks/post-merge'))).toBe(false);
 
-      const architect = run([
-        'adopt',
-        'hooks',
-        'install',
-        '--repo-root',
-        tempDir,
+      const architect = applyHooks([
         '--hook',
         'post-merge',
         '--as-role',
         'architect',
         '--write',
+        '--format',
+        'json',
       ]);
       expect(architect.status, architect.stderr).toBe(0);
+      expect(envelope(architect.stdout)).toMatchObject({
+        action_id: 'init apply architect',
+        ok: true,
+        result: {
+          value: { included: [{ component: 'hooks', plan: { hook: 'post-merge' } }] },
+        },
+      });
       const hookPath = join(tempDir, '.git/hooks/post-merge');
       expect(existsSync(hookPath)).toBe(true);
-      expect(readFileSync(hookPath, 'utf8')).toContain('devai govern auditor post-merge');
+      expect(readFileSync(hookPath, 'utf8')).toContain(
+        'devai round close --post-merge-receipt --host-receipt',
+      );
       expect(existsSync(join(tempDir, '.devai/config/post-merge-host-adapter.json'))).toBe(true);
     },
     CLI_TIMEOUT_MS,
@@ -197,11 +259,21 @@ describe('devai adopt hooks install (D-123, item 5)', () => {
   skipIfNotBuilt(
     '--format human output names the manager, hook, and command',
     () => {
-      const r = run(['adopt', 'hooks', 'install', '--repo-root', tempDir, '--format', 'human']);
-      expect(r.status).toBe(0);
-      expect(r.stdout).toContain('would create');
+      materializeAuthorityPolicy();
+      const r = applyHooks([
+        '--hook',
+        'pre-push',
+        '--as-role',
+        'architect',
+        '--write',
+        '--format',
+        'human',
+      ]);
+      expect(r.status, r.stderr).toBe(0);
+      expect(r.stdout).toContain('init apply architect');
+      expect(r.stdout).toContain('git');
       expect(r.stdout).toContain('pre-push');
-      expect(r.stdout).toContain('devai policy check forbidden actions --strict');
+      expect(r.stdout).toContain('devai check --only forbidden-actions');
     },
     CLI_TIMEOUT_MS,
   );

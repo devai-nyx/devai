@@ -1,8 +1,19 @@
 // Invariants: INV-DEVAI-019
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { readOnlyDevaiChild } from '../../src/authority/sense-run-child.js';
-import { invocationIsNonMutating } from '../../src/command-router.js';
+import { routeArgv } from '../../src/command-router.js';
+import type { RegistryEntry } from '../../src/define-command.js';
+import { resolveSenseSelection } from '../../src/commands/sense/facade.js';
+import { ACTION_REGISTRY } from '../../src/generated/action-registry.js';
 import * as runSet from '../../src/commands/sense/run-set.js';
+
+const mocks = vi.hoisted(() => ({
+  sensorAdapter: vi.fn(),
+}));
+
+vi.mock('../../src/commands/sense/adapters.js', () => ({
+  sensorAdapter: mocks.sensorAdapter,
+}));
 
 type Child = {
   readonly command: string;
@@ -33,129 +44,164 @@ function aggregate(children: readonly Child[]): Aggregate {
   return fn(children);
 }
 
+const canonicalSenseRun = ACTION_REGISTRY.find((entry) => entry.action_id === 'sense run');
+if (canonicalSenseRun === undefined) throw new Error('SENSE_RUN_REGISTRY_ENTRY_MISSING');
+
+const senseRunEntry = {
+  name: canonicalSenseRun.action_id,
+  handler: canonicalSenseRun.handler,
+  internal_name: canonicalSenseRun.handler.replaceAll(' ', '-'),
+  path: canonicalSenseRun.path,
+  status: canonicalSenseRun.status,
+  lifecycle: canonicalSenseRun.status === 'preview' ? 'experimental' : 'supported',
+  lifecycle_reason:
+    canonicalSenseRun.status === 'preview'
+      ? 'Preview action; contract may change before v1.0.'
+      : 'Stable action.',
+  promotion_criteria: [],
+  visibility: canonicalSenseRun.status === 'internal' ? 'maintainer' : 'standard',
+  tier: canonicalSenseRun.status === 'internal' ? 'plumbing' : 'porcelain',
+  profiles: canonicalSenseRun.profiles,
+  effects: canonicalSenseRun.effect,
+  authority: canonicalSenseRun.authority ?? 'mesh_controller',
+  description: canonicalSenseRun.description,
+  authority_contract_version: canonicalSenseRun.authority_contract_version,
+  authority_contract: canonicalSenseRun.authority_contract,
+  output_contract: canonicalSenseRun.output_contract,
+  error_contract: canonicalSenseRun.error_contract,
+} satisfies RegistryEntry;
+
+function routeSense(args: readonly string[]) {
+  return routeArgv(['node', '/cli.js', 'sense', 'run', ...args], [senseRunEntry], '1.0.0');
+}
+
 describe('sense run readiness aggregation', () => {
-  it('KR-R5-028 projects every registered single sensor to a read boundary', () => {
-    const classify = invocationIsNonMutating as (
-      internalName: string,
-      args: readonly string[],
-      entries: readonly unknown[],
-    ) => boolean;
-    const entries = [
-      {
-        internal_name: 'sense-decision-record-integrity',
-        path: ['sense', 'decision', 'record-integrity'],
-        effects: 'read',
-        previous_name: 'sense decision-record-integrity',
-      },
-      {
-        internal_name: 'sense-readings-rebuild',
-        path: ['sense', 'readings', 'rebuild'],
-        effects: 'local-write',
-        previous_name: 'sense readings rebuild',
-      },
-    ];
-    const argv = (kind: string, ...extra: string[]) => [
-      '/usr/bin/node',
-      '/repo/packages/cli/dist/bin.js',
-      'sense',
-      'run',
-      kind,
-      '--repo-root',
-      '/repo',
-      ...extra,
-    ];
+  it('resolves exact kind and preset effects with per-member consent before execution', () => {
+    for (const [kind, effect, write, publish] of [
+      ['type_check', 'read', false, false],
+      ['unit_test', 'harness-write', true, false],
+      ['build', 'local-write', true, false],
+      ['inventory_regeneration', 'harness-write', true, false],
+      ['llm_judge', 'remote-write', true, true],
+    ] as const) {
+      expect(resolveSenseSelection({ kind }).members).toEqual([
+        expect.objectContaining({ kind, effect, consent: { write, publish } }),
+      ]);
+    }
 
-    expect(classify('sense-run', argv('decision_record_integrity'), entries)).toBe(true);
-    expect(classify('sense-run', argv('decision_record_integrity', '--write'), entries)).toBe(
-      false,
-    );
-    expect(classify('sense-run', argv('inventory_regeneration'), entries)).toBe(true);
-    expect(classify('sense-run', argv('unknown_kind'), entries)).toBe(false);
-    expect(
-      classify(
-        'sense-run',
-        ['/usr/bin/node', '/cli.js', 'sense', 'run', '--set', 'sweep'],
-        entries,
-      ),
-    ).toBe(false);
-  });
-
-  it('plans non-read registry children as honest blockers instead of spawning them', () => {
-    const plan = (
-      runSet as unknown as {
-        planSensorChild?: (
-          command: readonly string[],
-          executable: string,
-          entries: readonly unknown[],
-          version: string,
-        ) => { readonly argv: readonly string[]; readonly runnable: boolean };
-      }
-    ).planSensorChild;
-    expect(plan, 'run-set must expose deterministic child planning').toBeTypeOf('function');
-    if (plan === undefined) throw new Error('planSensorChild is not implemented');
-    const entries = [
-      {
-        internal_name: 'sense-type-check',
-        path: ['sense', 'type', 'check'],
-        effects: 'read',
-        previous_name: 'sense type check',
-      },
-      {
-        internal_name: 'sense-readings-rebuild',
-        path: ['sense', 'readings', 'rebuild'],
-        effects: 'local-write',
-        previous_name: 'sense readings rebuild',
-      },
-    ];
-
-    expect(
-      plan(['sense', 'run', 'type_check', '--repo-root', '/repo'], '/cli.js', entries, '1.0.0'),
-    ).toEqual({ argv: ['sense', 'type', 'check', '--repo-root', '/repo'], runnable: true });
-    expect(
-      plan(
-        ['sense', 'run', 'inventory_regeneration', '--repo-root', '/repo'],
-        '/cli.js',
-        entries,
-        '1.0.0',
-      ),
-    ).toEqual({
-      argv: ['sense', 'readings', 'rebuild', '--repo-root', '/repo'],
-      runnable: false,
+    const baseline = resolveSenseSelection({ preset: 'baseline' });
+    expect(baseline).toMatchObject({
+      selection: { type: 'preset', value: 'baseline' },
+      aggregate_effect: 'local-write',
+      generic_ceiling: 'remote-write',
+      implicit_persistence: false,
     });
     expect(
-      plan(
-        ['sense', 'run', 'test_weakening_review', '--repo-root', '/repo'],
-        '/cli.js',
-        entries,
-        '1.0.0',
-      ),
-    ).toEqual({ argv: [], runnable: false });
+      baseline.members.map(({ kind, effect, consent }) => ({ kind, effect, consent })),
+    ).toEqual([
+      { kind: 'build', effect: 'local-write', consent: { write: true, publish: false } },
+      { kind: 'lint', effect: 'read', consent: { write: false, publish: false } },
+      { kind: 'type_check', effect: 'read', consent: { write: false, publish: false } },
+      { kind: 'unit_test', effect: 'harness-write', consent: { write: true, publish: false } },
+    ]);
+
+    expect(() => resolveSenseSelection({ preset: 'sweep' })).toThrow('SENSE_ROUND_REQUIRED');
+    const sweep = resolveSenseSelection({ preset: 'sweep' }, { roundId: 'R-0007' });
+    expect(sweep.members.every((member) => member.effect === 'read')).toBe(true);
+    expect(sweep.members.every((member) => !member.consent.write && !member.consent.publish)).toBe(
+      true,
+    );
+    expect(sweep.excluded).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ kind: 'inventory_regeneration', effect: 'harness-write' }),
+        expect.objectContaining({ kind: 'llm_judge', effect: 'remote-write' }),
+      ]),
+    );
+    expect(() => resolveSenseSelection({ kind: 'unknown_kind' })).toThrow(
+      'SENSE_KIND_UNKNOWN:unknown_kind',
+    );
+    for (const name of ['tier1', 'tier2', 'tier3', 'all', 'old_sweep']) {
+      expect(() => resolveSenseSelection({ preset: name })).toThrow(`SENSE_PRESET_UNKNOWN:${name}`);
+    }
   });
 
-  it('routes a registry-derived public sensor child to its internal binding', () => {
-    const route = (
-      runSet as unknown as {
-        routeSensorChildArgv?: (
-          command: readonly string[],
-          executable: string,
-          entries: readonly unknown[],
-          version: string,
-        ) => readonly string[];
-      }
-    ).routeSensorChildArgv;
-    expect(route, 'run-set must route child aliases before spawning').toBeTypeOf('function');
-    if (route === undefined) throw new Error('routeSensorChildArgv is not implemented');
-    const entries = [
+  it('enforces resolved read, local, harness, and independently consented remote effects', () => {
+    expect(routeSense(['type_check'])).toMatchObject({
+      kind: 'dispatch',
+      argv: ['node', '/cli.js', 'sense-run', 'type_check'],
+    });
+
+    for (const kind of ['unit_test', 'build', 'inventory_regeneration']) {
+      expect(routeSense([kind])).toMatchObject({
+        kind: 'output',
+        exitCode: 2,
+        text: expect.stringContaining('local mutation requires --write'),
+      });
+      expect(routeSense([kind, '--write'])).toMatchObject({
+        kind: 'dispatch',
+        argv: ['node', '/cli.js', 'sense-run', kind],
+      });
+    }
+
+    expect(routeSense(['llm_judge'])).toMatchObject({
+      kind: 'output',
+      exitCode: 2,
+      text: expect.stringContaining('remote mutation requires --write --publish'),
+    });
+    expect(routeSense(['llm_judge', '--write'])).toMatchObject({ kind: 'output', exitCode: 2 });
+    expect(routeSense(['llm_judge', '--publish'])).toMatchObject({ kind: 'output', exitCode: 2 });
+    expect(routeSense(['llm_judge', '--write', '--publish'])).toMatchObject({
+      kind: 'dispatch',
+      argv: ['node', '/cli.js', 'sense-run', 'llm_judge'],
+    });
+  });
+
+  it('plans and executes direct in-process adapters without child-route aliases', async () => {
+    const adapter = vi.fn(async () => ({
+      sensor: { kind: 'decision_record_integrity' },
+      status: 'pass',
+    }));
+    mocks.sensorAdapter.mockReset();
+    mocks.sensorAdapter.mockReturnValue(adapter);
+    const resolved = resolveSenseSelection({ kind: 'decision_record_integrity' });
+
+    await expect(
+      runSet.executeResolvedSenseSelection(resolved, {
+        repoRoot: '/repo',
+        inputs: { fixture: true },
+      }),
+    ).resolves.toEqual([
       {
-        internal_name: 'sense-type-check',
-        path: ['sense', 'type', 'check'],
-        effects: 'read',
-        previous_name: 'sense type check',
+        command: 'devai sense run decision_record_integrity',
+        processStatus: 0,
+        stdout: JSON.stringify({
+          sensor: { kind: 'decision_record_integrity' },
+          status: 'pass',
+        }),
+        stderr: '',
+        na: false,
       },
-    ];
+    ]);
+    expect(mocks.sensorAdapter).toHaveBeenCalledOnce();
+    expect(mocks.sensorAdapter).toHaveBeenCalledWith('decision_record_integrity');
+    expect(adapter).toHaveBeenCalledWith({ repoRoot: '/repo', inputs: { fixture: true } });
+
+    expect(routeSense(['decision_record_integrity', '--repo-root', '/repo'])).toMatchObject({
+      kind: 'dispatch',
+      argv: ['node', '/cli.js', 'sense-run', 'decision_record_integrity', '--repo-root', '/repo'],
+    });
     expect(
-      route(['sense', 'run', 'type_check', '--repo-root', '/repo'], '/cli.js', entries, '1.0.0'),
-    ).toEqual(['sense', 'type', 'check', '--repo-root', '/repo']);
+      routeArgv(
+        ['node', '/cli.js', 'sense', 'decision', 'record', 'integrity'],
+        [senseRunEntry],
+        '1.0.0',
+      ),
+    ).toMatchObject({ kind: 'output', exitCode: 2 });
+    expect(routeSense(['unknown_kind'])).toMatchObject({
+      kind: 'output',
+      exitCode: 2,
+      text: expect.stringContaining('Run devai sense run --help.'),
+    });
   });
 
   it('admits only an exact read-only public sensor child under the aggregate scope', () => {

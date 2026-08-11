@@ -17,7 +17,7 @@ import { buildSensorReading, type SensorReading, type SensorStatus } from './sen
  *                  as "METHOD path" when the api-map endpoint has no
  *                  explicit id)
  *   - useCases[]:  empty in 17.C4 (LLM-assisted use-case inference is
- *                  deferred to 17.F SKILL-write-use-cases or a later
+ *                  deferred to a documentation recipe or a later
  *                  sub-batch); seeded as []
  *   - links[]:     empty for the same reason — a Triad requires a
  *                  use-case to bind to. Path-shaped matches between
@@ -60,15 +60,12 @@ export interface InventoryCoverageOptions {
   readonly persistBody?: boolean;
   readonly now?: string;
   /**
-   * Closes D-A-37 — pack-tuneable framework selector for the routes-body
-   * resolver. When `routesPath` is absent, the sensor looks for
-   * `routes-${framework}.json` first, then globs `routes-*.json`, then
-   * falls back to `routes-react.json` for back-compat. Pack-tune key is
-   * `extractor_params.inventory_routes.framework` (same as sense-routes).
+   * Framework selector for the routes body. When `routesPath` is absent,
+   * the sensor resolves `routes-${framework}.json` exactly.
    */
   readonly framework?: string;
   /**
-   * Phase 22.H (closes D-A-18): directory under repoRoot to walk
+   * Directory under repoRoot to walk
    * for use-case files (default `product/use-cases`). Each
    * `*.json` file under this directory is parsed as a UseCases
    * record (per `use-cases.schema.json`) and its steps' `refs`
@@ -129,7 +126,7 @@ function pathPattern(p: string): RegExp {
 }
 
 /**
- * Phase 22.H (closes D-A-18): walk a use-cases directory and
+ * Walk a use-cases directory and
  * return the parsed records. Files that fail JSON parsing or
  * use-cases-schema validation are skipped with a finding (not
  * a hard fail — an adopter's authoring may be in progress).
@@ -214,7 +211,7 @@ type SynthesizedLink = {
 };
 
 /**
- * Phase 22.H (closes D-A-18) + Phase 23.C (closes D-A-20): from a
+ * From a
  * list of UseCases, synthesize `coverage-matrix.links[]` triads.
  * Walks every step in `mainFlow` + `alternateFlows.steps`. Three
  * cardinalities are emitted, each tagged with `linkKind`:
@@ -235,7 +232,7 @@ type SynthesizedLink = {
  * endpoints. Many of those step refs only declared endpoints and were
  * silently ignored. Post-23.C, single-axis steps produce links and
  * the violation count drops proportionally. The measured historical
- * counts remain in the predecessor's Phase 23.C record.
+ * prior counts are not part of the runtime result.
  *
  * De-duplication: the same (linkKind, routeId, endpointId, useCaseId)
  * 4-tuple may appear in multiple steps; the synthesizer emits each
@@ -316,52 +313,42 @@ function countInferredMatches(
   return n;
 }
 
-/**
- * D-A-37 — resolve the routes-inventory body path with framework awareness.
- * Mirrors `sense-routes`'s body-write logic (it writes `routes-${framework}.json`).
- *
- * Resolution order:
- *   1. explicit override (caller passed `routesPath`)
- *   2. framework hint (caller passed `framework` → `routes-${framework}.json`)
- *   3. glob `routes-*.json` in `inventory_routes/` — pick the first existing
- *      (covers adopters with no pack-tune whose `sense-routes` already wrote
- *      `routes-angular.json` or similar)
- *   4. hardcoded `routes-react.json` — back-compat for DEVAI's self-tests +
- *      any React-based adopter without pack-tune
- */
+type RoutesPathResolution =
+  | { readonly kind: 'resolved'; readonly path: string }
+  | { readonly kind: 'missing'; readonly directory: string }
+  | {
+      readonly kind: 'ambiguous';
+      readonly directory: string;
+      readonly candidates: readonly string[];
+    };
+
+/** Resolve exactly one current routes-inventory body without guessing a framework. */
 function resolveRoutesPath(
   repoRoot: string,
   explicit: string | undefined,
   framework: string | undefined,
-): string {
-  if (explicit !== undefined) return explicit;
+): RoutesPathResolution {
+  if (explicit !== undefined) return { kind: 'resolved', path: explicit };
   const dir = join(repoRoot, 'record/proofs/sensors/inventory_routes');
   if (framework !== undefined) {
-    return join(dir, `routes-${framework}.json`);
+    return { kind: 'resolved', path: join(dir, `routes-${framework}.json`) };
   }
   if (existsSync(dir)) {
     try {
-      const candidates = readdirSync(dir).filter((n) => /^routes-[^.]+\.json$/.test(n));
+      const candidates = readdirSync(dir)
+        .filter((name) => /^routes-[^.]+\.json$/.test(name))
+        .sort();
       if (candidates.length === 1) {
-        return join(dir, candidates[0] as string);
+        return { kind: 'resolved', path: join(dir, candidates[0] as string) };
       }
-      // Multiple bodies present (mixed-framework adopter, or test pollution).
-      // Prefer routes-react.json if present for back-compat with DEVAI's
-      // self-tests; otherwise pick alphabetically for determinism. Adopters
-      // with stable multi-framework setups should pin via --routes-path or
-      // extractor_params.inventory_routes.framework.
       if (candidates.length > 1) {
-        if (candidates.includes('routes-react.json')) {
-          return join(dir, 'routes-react.json');
-        }
-        candidates.sort();
-        return join(dir, candidates[0] as string);
+        return { kind: 'ambiguous', directory: dir, candidates };
       }
     } catch {
-      // fall through to hardcoded back-compat
+      return { kind: 'missing', directory: dir };
     }
   }
-  return join(dir, 'routes-react.json');
+  return { kind: 'missing', directory: dir };
 }
 
 export function senseInventoryCoverage(opts: InventoryCoverageOptions): InventoryCoverageResult {
@@ -369,7 +356,7 @@ export function senseInventoryCoverage(opts: InventoryCoverageOptions): Inventor
   const generatedAt = opts.now ?? new Date().toISOString();
   const apiMapPath =
     opts.apiMapPath ?? join(opts.repoRoot, 'record/proofs/sensors/inventory_api/api-map.json');
-  const routesPath = resolveRoutesPath(opts.repoRoot, opts.routesPath, opts.framework);
+  const routesResolution = resolveRoutesPath(opts.repoRoot, opts.routesPath, opts.framework);
 
   const findings: Array<{
     readonly severity: 'info' | 'warning' | 'error' | 'critical';
@@ -386,7 +373,7 @@ export function senseInventoryCoverage(opts: InventoryCoverageOptions): Inventor
     findings.push({
       severity: 'warning',
       code: 'COVERAGE_REQUIRES_API_MAP',
-      message: `api-map body not found at ${apiMapPath}. Run 'devai sense inventory api' first.`,
+      message: `api-map body not found at ${apiMapPath}. Run 'devai sense run inventory_api' first.`,
     });
   } else {
     try {
@@ -401,23 +388,40 @@ export function senseInventoryCoverage(opts: InventoryCoverageOptions): Inventor
     }
   }
 
-  if (!existsSync(routesPath)) {
+  if (routesResolution.kind === 'ambiguous') {
+    if (status === 'pass') status = 'review';
+    findings.push({
+      severity: 'warning',
+      code: 'COVERAGE_ROUTES_AMBIGUOUS',
+      message: `Multiple routes-inventory bodies found under ${routesResolution.directory}: ${routesResolution.candidates.join(', ')}. Select one with routesPath or framework after running 'devai sense run inventory_routes'.`,
+    });
+  } else if (routesResolution.kind === 'missing') {
     if (status === 'pass') status = 'review';
     findings.push({
       severity: 'warning',
       code: 'COVERAGE_REQUIRES_ROUTES',
-      message: `routes-inventory body not found at ${routesPath}. Run 'devai sense inventory routes' first.`,
+      message: `No routes-inventory body found under ${routesResolution.directory}. Run 'devai sense run inventory_routes' first.`,
     });
   } else {
-    try {
-      routesInventory = JSON.parse(readFileSync(routesPath, 'utf8')) as RoutesInventoryShape;
-    } catch (err) {
-      status = 'error';
+    const routesPath = routesResolution.path;
+    if (!existsSync(routesPath)) {
+      if (status === 'pass') status = 'review';
       findings.push({
-        severity: 'critical',
-        code: 'COVERAGE_ROUTES_INVALID',
-        message: err instanceof Error ? err.message : String(err),
+        severity: 'warning',
+        code: 'COVERAGE_REQUIRES_ROUTES',
+        message: `routes-inventory body not found at ${routesPath}. Run 'devai sense run inventory_routes' first.`,
       });
+    } else {
+      try {
+        routesInventory = JSON.parse(readFileSync(routesPath, 'utf8')) as RoutesInventoryShape;
+      } catch (err) {
+        status = 'error';
+        findings.push({
+          severity: 'critical',
+          code: 'COVERAGE_ROUTES_INVALID',
+          message: err instanceof Error ? err.message : String(err),
+        });
+      }
     }
   }
 
@@ -428,7 +432,7 @@ export function senseInventoryCoverage(opts: InventoryCoverageOptions): Inventor
       ? countInferredMatches(routesInventory.routes, apiMap.endpoints)
       : 0;
 
-  // Phase 22.H (closes D-A-18): walk `product/use-cases/`
+  // Walk `product/use-cases/`.
   // (or pack-configured dir) for authored use-cases and
   // synthesize triads into the matrix's links[].
   const useCasesDir = opts.useCasesDir ?? join(opts.repoRoot, 'product/use-cases');
@@ -499,7 +503,7 @@ export function senseInventoryCoverage(opts: InventoryCoverageOptions): Inventor
       findings.push({
         severity: 'warning',
         code: 'COVERAGE_NO_USE_CASES',
-        message: `Coverage matrix assembled with ${String(routeIds.length)} routes and ${String(endpointIds.length)} endpoints, but no use-cases authored under ${useCasesDir}. Author use-cases (manual or via 17.F SKILL-write-use-cases) to populate triads.`,
+        message: `Coverage matrix assembled with ${String(routeIds.length)} routes and ${String(endpointIds.length)} endpoints, but no use-cases authored under ${useCasesDir}. Author use-cases manually or through a bounded documentation recipe to populate triads.`,
       });
     } else if (unmappedRoutes.length > 0 || unmappedEndpoints.length > 0) {
       status = 'review';

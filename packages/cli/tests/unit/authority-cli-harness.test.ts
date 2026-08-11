@@ -8,11 +8,12 @@ const ROOT = resolve(import.meta.dirname, '../../../..');
 const registry = JSON.parse(
   readFileSync(resolve(ROOT, 'law/policy/action-registry.json'), 'utf8'),
 ) as {
-  entries: Array<{ action_id: string; authority_contract: Record<string, unknown> }>;
+  entries: Array<{
+    action_id: string;
+    authority_contract: Record<string, unknown>;
+  }>;
 };
-const contracts = registry.entries
-  .filter((entry) => entry.action_id !== 'init apply-owner')
-  .map((entry) => entry.authority_contract);
+const contracts = registry.entries.map((entry) => entry.authority_contract);
 
 function harness(
   overrides: Record<string, unknown> = {},
@@ -50,10 +51,11 @@ describe('authority CLI harness branch matrix', () => {
       [['unknown', 'action'], 7, 'AUTHORITY_ACTION_CONTRACT_NOT_FOUND'],
       [['init', 'record'], 2, 'AUTHORITY_INTERNAL_ACTION_NOT_ROUTABLE'],
       [['catalog', 'actions', '--as-role', 'architect'], 2, 'AUTHORITY_DECLARATION_NOT_APPLICABLE'],
-      [['docs', 'publish'], 2, 'AUTHORITY_PUBLISH_CONSENT_REQUIRED'],
       [
         [
-          'docs',
+          'round',
+          'plan',
+          '--documents',
           'cli',
           '--as-role',
           'architect',
@@ -63,16 +65,39 @@ describe('authority CLI harness branch matrix', () => {
         2,
         'AUTHORITY_DECLARATION_CONFLICT',
       ],
-      [['docs', 'cli'], 2, 'AUTHORITY_DECLARATION_MISSING'],
-      [['docs', 'cli', '--as-role', 'intruder'], 7, 'AUTHORITY_DECLARATION_INVALID'],
-      [['docs', 'cli', '--authority-session', 'bad'], 7, 'AUTHORITY_SESSION_ID_INVALID'],
+      [['round', 'plan', '--documents', 'cli'], 2, 'AUTHORITY_DECLARATION_MISSING'],
       [
-        ['docs', 'cli', '--authority-session', 'AUTH-SESSION-1234567890ABCDEF'],
+        ['round', 'plan', '--documents', 'cli', '--as-role', 'intruder'],
+        7,
+        'AUTHORITY_DECLARATION_INVALID',
+      ],
+      [
+        ['round', 'plan', '--documents', 'cli', '--authority-session', 'bad'],
+        7,
+        'AUTHORITY_SESSION_ID_INVALID',
+      ],
+      [
+        [
+          'round',
+          'plan',
+          '--documents',
+          'cli',
+          '--authority-session',
+          'AUTH-SESSION-1234567890ABCDEF',
+        ],
         2,
         'AUTHORITY_SESSION_NOT_FOUND',
       ],
-      [['docs', 'cli', '--as-role', 'architect'], 2, 'AUTHORITY_WRITE_CONSENT_REQUIRED'],
-      [['docs', 'cli', '--as-role', 'engineer', '--write'], 2, 'AUTHORITY_HUMAN_ROLE_DENIED'],
+      [
+        ['round', 'plan', '--documents', 'cli', '--as-role', 'architect'],
+        2,
+        'AUTHORITY_WRITE_CONSENT_REQUIRED',
+      ],
+      [
+        ['round', 'plan', '--documents', 'cli', '--as-role', 'engineer', '--write'],
+        2,
+        'AUTHORITY_HUMAN_ROLE_DENIED',
+      ],
     ];
     for (const [argv, exit, expectedCode] of cases) {
       const result = await invoke(target, argv);
@@ -84,12 +109,32 @@ describe('authority CLI harness branch matrix', () => {
   it('covers host integration and runtime-handoff refusals', async () => {
     const unavailable = harness({ host_authority: { mode: 'host-integrated', adapter: {} } });
     expect(
-      code(await invoke(unavailable, ['docs', 'cli', '--as-role', 'architect', '--write'])),
+      code(
+        await invoke(unavailable, [
+          'round',
+          'plan',
+          '--documents',
+          'cli',
+          '--as-role',
+          'architect',
+          '--write',
+        ]),
+      ),
     ).toBe('AUTHORITY_HOST_ADAPTER_UNAVAILABLE');
 
     const unknownReceipt = harness({ intercept_runtime_handoff: () => ({}) });
     expect(
-      code(await invoke(unknownReceipt, ['docs', 'cli', '--as-role', 'architect', '--write'])),
+      code(
+        await invoke(unknownReceipt, [
+          'round',
+          'plan',
+          '--documents',
+          'cli',
+          '--as-role',
+          'architect',
+          '--write',
+        ]),
+      ),
     ).toBe('AUTHORITY_CONTEXT_RECEIPT_UNKNOWN');
 
     const policyMismatch = harness({
@@ -99,7 +144,17 @@ describe('authority CLI harness branch matrix', () => {
       }),
     });
     expect(
-      code(await invoke(policyMismatch, ['docs', 'cli', '--as-role', 'architect', '--write'])),
+      code(
+        await invoke(policyMismatch, [
+          'round',
+          'plan',
+          '--documents',
+          'cli',
+          '--as-role',
+          'architect',
+          '--write',
+        ]),
+      ),
     ).toBe('AUTHORITY_POLICY_BINDING_MISMATCH');
   });
 
@@ -122,13 +177,15 @@ describe('authority CLI harness branch matrix', () => {
     const readResult = await invoke(target, ['catalog', 'actions']);
     expect(readResult.exit_code, JSON.stringify(readResult)).toBe(0);
     expect(
-      (await invoke(target, ['adopt', 'upgrade', '--as-role', 'architect', '--write', '--dry-run']))
+      (await invoke(target, ['init', 'bind', '--as-role', 'architect', '--write', '--dry-run']))
         .exit_code,
     ).toBe(0);
     expect(
       (
         await invoke(target, [
-          'docs',
+          'round',
+          'plan',
+          '--documents',
           'cli',
           '--authority-session',
           'AUTH-SESSION-1234567890ABCDEF',

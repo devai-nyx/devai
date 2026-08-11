@@ -18,7 +18,7 @@ export function authorizePolicyMaterialization(input: unknown, deps: unknown) {
   if (!isRecord(input) || !isRecord(deps))
     return failure('refused', 'AUTHORITY_MATERIALIZATION_ACTION_INVALID');
   if (
-    input.action_id !== 'adopt upgrade' ||
+    input.action_id !== 'init bind' ||
     !['create', 'update'].includes(input.target_operation)
   ) {
     return failure('refused', 'AUTHORITY_MATERIALIZATION_ACTION_INVALID');
@@ -101,7 +101,7 @@ export function materializeAuthorityPolicy(input: unknown, deps: unknown) {
   record.used = true;
   if (
     state.closed ||
-    record.action_id !== 'adopt upgrade' ||
+    record.action_id !== 'init bind' ||
     record.principal.role !== 'architect' ||
     record.consent.write !== true ||
     !equal(record.package, deps.package_binding) ||
@@ -179,12 +179,12 @@ export function materializeAuthorityPolicy(input: unknown, deps: unknown) {
   }));
   const context = state.contexts.get(record.context_receipt)?.context as AnyRecord;
   const materialization = {
-    action_id: 'adopt upgrade',
+    action_id: 'init bind',
     invocation_id: record.invocation_id,
     machine_principal: {
       kind: 'machine',
-      actor: 'upgrade',
-      transition: 'upgrade',
+      actor: 'binding',
+      transition: 'bind',
       trusted_adapter_id: context?.principal?.derivation?.trusted_adapter_id,
       context_digest_sha256: context?.principal?.derivation?.context_digest_sha256,
     },

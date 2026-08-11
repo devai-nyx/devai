@@ -1,7 +1,6 @@
 # Contracts — authoring rules
 
-**Authority:** Architect, issued cross-repo via DEVAI R1. See [CONVENTIONS.md](../CONVENTIONS.md) for the broader cross-repo canon.
-**Adopted from:** STYNX's working `docs/reference/contracts/` (`auth-hosted-actions.md`, `audit-events-api.md`, `flow-api.md`).
+**Authority:** Architect. See [CONVENTIONS.md](../CONVENTIONS.md) for the adopter documentation conventions.
 
 ## What a contract is
 
@@ -43,11 +42,11 @@ Pick the one that matches the wire format; do not author two transports for the 
 
 ## Stability levels
 
-| Level          | Compatibility commitment   | What can change                                                         |
-| -------------- | -------------------------- | ----------------------------------------------------------------------- |
-| `experimental` | none                       | any shape change permitted; readers MUST pin a version.                 |
-| `stable`       | semver-style additive only | add fields, add enum values; never remove or rename.                    |
-| `deprecated`   | scheduled for removal      | no changes; consumers migrate to the successor (named in the contract). |
+| Level          | Compatibility commitment   | What can change                                         |
+| -------------- | -------------------------- | ------------------------------------------------------- |
+| `experimental` | none                       | any shape change permitted; readers MUST pin a version. |
+| `stable`       | semver-style additive only | add fields, add enum values; never remove or rename.    |
+| `deprecated`   | scheduled for removal      | no changes; consumers migrate to the named replacement. |
 
 ## Breaking changes require a new contract version + ADR
 
@@ -62,7 +61,7 @@ To ship a breaking change:
 
 1. Open an ADR per [`../../meta/adr/README.md`](../../../law/adr/README.md) recording the _why_.
 2. Ship a new contract file `<name>-v2.md` + `<name>-v2.schema.json`. Old version stays.
-3. Mark the old contract `deprecated` and link to the successor.
+3. Mark the old contract `deprecated` and link to the replacement.
 4. Bump consumers in a deliberate sequence.
 5. Eventually delete the old contract — but only after all consumers have migrated.
 
@@ -93,7 +92,7 @@ Every `docs/reference/contracts/README.md` lists its contracts in an index. Samp
 
 | Contract     | Transport   | Stability    | Producer            |
 |--------------|-------------|--------------|---------------------|
-| test-result  | JSON Schema | experimental | `devai evidence test record`  |
+| test-result  | JSON Schema | experimental | `devai evidence record --kind test` |
 | thresholds   | JSON Schema | stable       | adopter-owned       |
 | audit-events | OpenAPI     | stable       | platform-audit      |
 ```
@@ -104,8 +103,4 @@ Every `docs/reference/contracts/README.md` lists its contracts in an index. Samp
 - ADR template (breaking changes): [`../../meta/adr/README.md`](../../../law/adr/README.md).
 - Docs layout: [`../docs-layout.md`](../docs-layout.md).
 - Database DDL conventions: [`../database-layout.md`](../database-layout.md).
-- DEVAI's R1 cross-repo contracts: [`../../docs/reference/contracts/`](../../reference/contracts) (test-result, thresholds, evidence-chain, inventory).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/adopters/contracts/README.md (classification CURRENT).
+- DEVAI's current contracts: [`../../docs/reference/contracts/`](../../reference/contracts).

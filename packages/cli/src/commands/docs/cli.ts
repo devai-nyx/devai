@@ -133,12 +133,7 @@ function renderIndex(actions: readonly ActionEntry[]): string {
   lines.push('');
   lines.push('## See also');
   lines.push('');
-  lines.push(
-    '- [`../../adopters/user-guide.md`](../../adopters/user-guide.md) — narrative introduction.',
-  );
-  lines.push(
-    '- [`../../adopters/adoption.md`](../../adopters/adoption.md) — adopting DEVAI in a fresh client repo.',
-  );
+  lines.push('- [`../recipes/README.md`](../recipes/README.md) — canonical host recipe surface.');
   lines.push('- [`../../roles/`](../../roles/) — which role is allowed to invoke which actions.');
   lines.push('- `devai catalog actions --format human` — live enumeration from the registry.');
   lines.push('');
@@ -166,9 +161,7 @@ function renderNounPage(noun: string, actions: readonly ActionEntry[]): string {
       lines.push(`**Authority:** ${AUTHORITY_LABEL[a.authority]}.`);
       lines.push('');
     }
-    lines.push(
-      `**Lifecycle:** ${a.lifecycle}. **Visibility:** ${a.visibility}. **Effects:** ${a.effects}.`,
-    );
+    lines.push(`**Status:** ${a.status}. **Effects:** ${a.effects}.`);
     lines.push('');
     lines.push(`**Profiles:** ${a.profiles.join(', ')}.`);
     lines.push('');
@@ -187,9 +180,7 @@ function renderNounPage(noun: string, actions: readonly ActionEntry[]): string {
         lines.push(`**Authority:** ${AUTHORITY_LABEL[a.authority]}.`);
         lines.push('');
       }
-      lines.push(
-        `**Lifecycle:** ${a.lifecycle}. **Visibility:** ${a.visibility}. **Effects:** ${a.effects}.`,
-      );
+      lines.push(`**Status:** ${a.status}. **Effects:** ${a.effects}.`);
       lines.push('');
       lines.push(`**Profiles:** ${a.profiles.join(', ')}.`);
       lines.push('');

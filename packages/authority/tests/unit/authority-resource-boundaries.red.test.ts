@@ -4,7 +4,7 @@ import {
   dbTarget,
   expectBoundaryFailure,
   gitTarget,
-  publishTarget,
+  remoteTarget,
 } from './authority-boundary-testkit.js';
 import { REPOSITORY_ID, fsTarget } from './authority-runtime-testkit.js';
 
@@ -138,18 +138,18 @@ describe('R19 database resource classification', () => {
 });
 
 describe('R19 remote resource classification', () => {
-  it('uses semantic system/endpoint/operation IDs and publication posture', async () => {
+  it('uses semantic system/endpoint/operation IDs and remote-write posture', async () => {
     const api = await boundaryApi();
-    expect(api.classifyAuthorityResource(publishTarget)).toMatchObject({
+    expect(api.classifyAuthorityResource(remoteTarget)).toMatchObject({
       ok: true,
-      value: { target: publishTarget, adapter_id: 'remote-authority-boundary' },
+      value: { target: remoteTarget, adapter_id: 'remote-authority-boundary' },
     });
   });
 
   it.each([
-    ['credential URL', { ...publishTarget, endpoint_id: 'https://token@github.com/org/repo' }],
-    ['generic operation', { ...publishTarget, operation: 'publish' }],
-    ['missing operation_id', { ...publishTarget, operation_id: undefined }],
+    ['credential URL', { ...remoteTarget, endpoint_id: 'https://token@example.invalid/api' }],
+    ['generic operation', { ...remoteTarget, operation: 'invoke' }],
+    ['missing operation_id', { ...remoteTarget, operation_id: undefined }],
   ])('rejects %s', async (_name, target) => {
     const api = await boundaryApi();
     expectBoundaryFailure(
@@ -162,7 +162,7 @@ describe('R19 remote resource classification', () => {
   it('requires independent allow-publish consent before classification succeeds', async () => {
     const api = await boundaryApi();
     expectBoundaryFailure(
-      api.classifyAuthorityResource(publishTarget, {
+      api.classifyAuthorityResource(remoteTarget, {
         consent: { write: true, allow_publish: false, experimental: false },
       }),
       'refused',

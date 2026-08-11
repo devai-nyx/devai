@@ -167,7 +167,7 @@ export function collectLocalEvidence(inputs: CollectInputs): CollectResult {
   const policy: LocalEvidencePolicy | null = resolveLocalEvidencePolicy(inputs.repoRoot);
   if (policy === null) {
     throw new Error(
-      'no local-evidence policy declared: set ci_economy.local_evidence.required_jobs in .devai/config/project.json (D-117)',
+      'no local-evidence policy declared: set ci_economy.local_evidence.required_jobs in .devai/config/project.json',
     );
   }
 

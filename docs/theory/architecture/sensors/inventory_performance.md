@@ -2,7 +2,7 @@
 
 ## Property semantics
 
-**T7 Performance and Efficiency** (Constitution Article 5) for F4 (Inventory): "how long do inventory walks take?" Concretely: the per-kind execution time of `sense-inventory-*` runs, aggregated from persisted SensorReading `duration_ms` fields. The last unreachable cell from D-77's carry-forward register (Phase 26-28 substrate-expansion trilogy residual).
+**T7 Performance and Efficiency** (Constitution Article 5) for F4 (Inventory): "how long do inventory walks take?" Concretely: the per-kind execution time of inventory readings, aggregated from persisted SensorReading `duration_ms` fields.
 
 ## Operational definition
 
@@ -35,7 +35,3 @@ If no inventory SRs exist (adopter hasn't run sense-inventory-* yet): `status='r
 - **Per-sensor wall-clock budgets.** Per-kind p95 is exposed in `metrics` but doesn't drive PASS/REVIEW/FAIL on its own; only the overall p95 does.
 - **Memory/CPU profiling.** Wall-clock only.
 - **Trend analysis over time.** Single-snapshot only.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/inventory_performance.md (classification CURRENT).

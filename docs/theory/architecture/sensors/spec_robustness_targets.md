@@ -26,7 +26,3 @@ The metrics field reports both counts plus a derived `targets_total`.
 ## Out of scope
 
 - **Whether the error contracts are actually enforced.** That's F3×T8, covered by 27.L `test_robustness_coverage`.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/spec_robustness_targets.md (classification CURRENT).

@@ -1,7 +1,8 @@
 import type { ActionAuthority } from './define-command.js';
-import { ACTION_REGISTRY_BY_BINDING } from './generated/action-registry.js';
+import { ACTION_REGISTRY_BY_HANDLER } from './generated/action-registry.js';
 
-export type ActionLifecycle = 'supported' | 'experimental' | 'retired';
+export type ActionStatus = 'stable' | 'preview' | 'internal';
+export type ActionLifecycle = 'supported' | 'experimental';
 export type ActionTier = 'porcelain' | 'plumbing';
 export type ActionVisibility = 'common' | 'standard' | 'advanced' | 'maintainer';
 export type ActionEffect = 'read' | 'harness-write' | 'local-write' | 'remote-write';
@@ -65,8 +66,8 @@ export interface AuthorityActionContract {
     | Readonly<{ kind: 'human'; allowed_roles: readonly HumanRole[] }>
     | Readonly<{
         kind: 'derived-machine';
-        actor: 'harness' | 'upgrade' | 'release';
-        transition: 'harness-write' | 'upgrade' | 'release';
+        actor: 'harness' | 'binding' | 'release';
+        transition: 'harness-write' | 'bind' | 'release';
         initiator:
           'none' | Readonly<{ allowed_roles: readonly HumanRole[]; preserve_in_context: true }>;
       }>;
@@ -109,20 +110,13 @@ export interface AuthorityActionContract {
 
 export interface RegistryActionRecord {
   readonly action_id: string;
-  readonly internal_binding: string;
+  readonly handler: string;
   readonly path: readonly string[];
-  readonly disposition: 'keep' | 'fold' | 'tombstone';
-  readonly lifecycle: ActionLifecycle;
-  readonly lifecycle_reason: string;
-  readonly migration: string | null;
-  readonly never_remint: true;
-  readonly visibility: ActionVisibility;
-  readonly tier: ActionTier;
+  readonly status: ActionStatus;
   readonly profiles: readonly AdoptionProfile[];
   readonly effect: ActionEffect;
   readonly authority: ActionAuthority | null;
   readonly description: string;
-  readonly promotion_criteria: readonly string[];
   readonly output_contract: ActionOutputContract;
   readonly error_contract: ActionErrorContract;
   readonly authority_contract_version: '1.0.0';
@@ -134,9 +128,8 @@ export function deriveActionEffectFromCapabilities(
   if (capabilities.some((capability) => capability.startsWith('net:'))) {
     return 'remote-write';
   }
-  // R24 shadow subprocess capabilities are evidence annotations. Their
-  // registry effect is checked independently; R25 binds that effect at the
-  // runtime seam. They do not alter the pre-existing public scalar in R24.
+  // Subprocess capabilities are evidence annotations. The registry effect is
+  // checked independently and bound at the runtime seam.
   if (
     capabilities.some((capability) =>
       [
@@ -176,13 +169,7 @@ export function validateDeclaredCapabilityConsistency(
     if (capabilities === undefined) {
       throw new Error(`${entry.name}: EFFECT_CAPABILITIES_MISSING`);
     }
-    // Compatibility boundary: state prune historically uses harness-write
-    // consent while pruning both F5 state and generated workspace coverage.
-    // Its domain set remains explicit and binding; changing the public scalar
-    // requires a separate Owner consent decision.
-    const derived = entry.name.endsWith('state prune')
-      ? 'harness-write'
-      : deriveActionEffectFromCapabilities(capabilities);
+    const derived = deriveActionEffectFromCapabilities(capabilities);
     if (entry.authority_contract.action_id !== entry.name || derived !== entry.effects) {
       throw new Error(`${entry.name}: EFFECT_CAPABILITIES_CATALOG_MISMATCH`);
     }
@@ -190,7 +177,7 @@ export function validateDeclaredCapabilityConsistency(
 }
 
 export function registryActionFor(name: string): RegistryActionRecord {
-  const entry = ACTION_REGISTRY_BY_BINDING.get(name);
+  const entry = ACTION_REGISTRY_BY_HANDLER.get(name);
   if (entry === undefined) {
     throw new Error("action '" + name + "' is absent from law/policy/action-registry.json");
   }
@@ -205,21 +192,23 @@ export function metadataFor(
   _declaredPromotion?: readonly string[],
 ): CommandMetadata {
   const entry = registryActionFor(name);
-  if (entry.disposition === 'keep') {
-    if (entry.authority !== authority) {
-      throw new Error("action '" + name + "' authority differs from the canonical registry");
-    }
-    if (declaredLifecycle !== undefined && entry.lifecycle !== declaredLifecycle) {
-      throw new Error("action '" + name + "' lifecycle differs from the canonical registry");
-    }
+  if (entry.authority !== authority) {
+    throw new Error("action '" + name + "' authority differs from the canonical registry");
+  }
+  const lifecycle = entry.status === 'preview' ? 'experimental' : 'supported';
+  if (declaredLifecycle !== undefined && lifecycle !== declaredLifecycle) {
+    throw new Error("action '" + name + "' status differs from the canonical registry");
   }
   return {
     path: entry.path,
-    lifecycle: entry.lifecycle,
-    lifecycle_reason: entry.lifecycle_reason,
-    promotion_criteria: entry.promotion_criteria,
-    visibility: entry.visibility,
-    tier: entry.tier,
+    lifecycle,
+    lifecycle_reason:
+      entry.status === 'preview'
+        ? 'Preview action; contract may change before v1.0.'
+        : 'Stable action.',
+    promotion_criteria: [],
+    visibility: entry.status === 'internal' ? 'maintainer' : 'standard',
+    tier: entry.status === 'internal' ? 'plumbing' : 'porcelain',
     profiles: entry.profiles,
     effects: entry.effect,
     output_contract: entry.output_contract,

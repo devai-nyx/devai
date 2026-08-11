@@ -10,7 +10,7 @@
 export const HUMAN_ROLES = ['owner', 'architect', 'inspector', 'engineer', 'auditor'] as const;
 export type HumanRole = (typeof HUMAN_ROLES)[number];
 
-export const MACHINE_ACTORS = ['harness', 'bootstrap', 'upgrade', 'release'] as const;
+export const MACHINE_ACTORS = ['harness', 'bootstrap', 'binding', 'release'] as const;
 export type MachineActor = (typeof MACHINE_ACTORS)[number];
 
 export type ActionEffect = 'read' | 'harness-write' | 'local-write' | 'remote-write';
@@ -73,7 +73,7 @@ export interface MachinePrincipal {
   readonly actor: MachineActor;
   readonly derivation: {
     readonly action_id: string;
-    readonly transition: 'harness-write' | 'bootstrap' | 'upgrade' | 'release';
+    readonly transition: 'harness-write' | 'bootstrap' | 'bind' | 'release';
     readonly origin: TrustedInvocationOrigin;
     readonly trusted_adapter_id: string;
     readonly invocation_id: string;

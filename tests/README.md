@@ -1,28 +1,29 @@
-# DEVAI-II test tiers
+# Test profiles
 
-The test tier is determined by its directory. Run each lane from the repository
-root:
+Tests have one primary local node, selected by package or by the root
+contract/integration boundary. The task graph is declared in
+`test-tasks.json`; the content-addressed runner executes only
+invalidated nodes.
 
-| Tier           | Home                         | Local command                                                    |
-| -------------- | ---------------------------- | ---------------------------------------------------------------- |
-| T1 unit        | `packages/*/tests/unit/`     | `pnpm vitest run --config tests/config/t1.unit.config.ts`        |
-| T2 contract    | `packages/*/tests/contract/` | `pnpm vitest run --config tests/config/t2.contract.config.ts`    |
-| T3 integration | `tests/integration/`         | `pnpm vitest run --config tests/config/t3.integration.config.ts` |
-| T4 regression  | `tests/regression/`          | `pnpm vitest run --config tests/config/t4.regression.config.ts`  |
-| T5 smoke / E2E | `tests/e2e/`                 | `pnpm vitest run --config tests/config/t5.e2e.config.ts`         |
-| T6 containment | `tests/containment/`         | `pnpm vitest run --config tests/config/t6.containment.config.ts` |
+`pnpm test` is the simple full-local fallback. Package-scoped commands such
+as `pnpm run test:cli` are the leaf commands used by the affected profile.
+None of them prepares or builds the workspace implicitly.
 
-Database-backed T3 cases are opt-in with `DEVAI_DB_TESTS=1`; the default T3 command
-still runs their connection-failure and input-validation contracts. Override the
-target with `DEVAI_DB_URL`.
+The RC profile prepares and builds once, then executes one coverage node over
+the complete RC population: package, contract, integration, PostgreSQL, E2E,
+performance, soak, and containment tests. Every test is collected once by
+`test:coverage:rc`; the narrower `test:db:rc`, `test:e2e:rc`,
+`test:performance:rc`, and `test:containment:rc` commands are diagnostic slices,
+not additional RC-profile work.
 
-Merged T1+T3 coverage is computed with:
+The affected profile is explicitly allowlisted to generation, build, and cheap
+local test nodes. Matching an RC-only input never pulls coverage, database,
+E2E, performance, or containment work into an affected run.
 
-```sh
-pnpm vitest run --config tests/config/t1-t3.coverage.config.ts
-```
+The coverage node reads the four unchanged floors from
+`law/policy/thresholds.json`: statements 70, branches 60, functions 70, and
+lines 70. Coverage is an RC gate, not a routine local command.
 
-The coverage config reads all four thresholds from
-`law/policy/thresholds.json`. T2 and T4–T6 never enter the coverage arithmetic.
-Bootstrap defects that cannot be corrected by Inspector-owned tests are pinned in
-`tests/KNOWN-RED-P5.md`.
+The narrower `test:db:rc`, `test:e2e:rc`, `test:performance:rc`, and
+`test:containment:rc` scripts remain available for focused diagnosis. They are
+not independent ledger nodes and do not add duplicate work to the RC receipt.

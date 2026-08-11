@@ -31,7 +31,3 @@ Aggregate across all workflows:
 
 - **Step quality.** A 100-step workflow isn't necessarily good.
 - **Workflow-level dependency graphs** (`needs:` chains).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/harness_depth.md (classification CURRENT).

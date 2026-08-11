@@ -9,13 +9,12 @@ sensor_kind: spec_performance_targets
 emitter: packages/sensors/src/spec-performance-targets.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Spec Performance Targets
 
-This note binds the successor-local design standing for `spec_performance_targets`. Its canonical emitter
-is `packages/sensors/src/spec-performance-targets.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `spec_performance_targets`. Its canonical emitter
+is `packages/sensors/src/spec-performance-targets.ts`.
 
 Bound cells: F1×T7.
 

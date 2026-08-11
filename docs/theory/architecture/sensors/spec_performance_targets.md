@@ -28,7 +28,3 @@ The metrics field reports both counts plus a derived `targets_total = perf_invar
 
 - **Whether the perf targets are actually measured.** That's F3×T7, covered by 27.K `test_performance_coverage`.
 - **Whether targets are realistic.** No oracle.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/spec_performance_targets.md (classification CURRENT).

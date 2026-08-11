@@ -3,10 +3,8 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
- * Phase-10 Batch 10.H — forbidden-action runtime gate.
- *
- * Absorbs LAW-12.FORBID.1 from the stech-law predecessor draft (D-38).
- * The canonical registry lives at law/policy/forbidden-actions.json;
+ * Forbidden-action runtime gate. The canonical registry lives at
+ * law/policy/forbidden-actions.json;
  * adopters receive its materialized copy under .devai/config/. The gate scans recent git
  * activity for matches against `detect_patterns` and reports findings.
  *
@@ -122,13 +120,13 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
   {
     id: 'FORBID-DELETE-AUTHORITY-DOCS',
     action:
-      'Deleting successor law, product intent, governed rounds/audits, or machine proofs outside the owning authority path',
+      'Deleting law, product intent, runtime audit output, or machine proofs outside the owning authority path',
     rationale: 'Authority violation',
     severity: 'critical',
     detect_patterns: [
-      '\\b(?:git\\s+rm|rm)\\s+[^\\n]*(?:law|product|work/(?:rounds|audit)|record)/',
+      '\\b(?:git\\s+rm|rm)\\s+[^\\n]*(?:law|product|record|\\.devai/local/rounds)/',
     ],
-    safer_alternative: 'Architect amendment via ADR + tombstone',
+    safer_alternative: 'Use the owning role and explicit action authority',
   },
   {
     id: 'FORBID-EXTERNAL-MESSAGES',
@@ -140,11 +138,11 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
   },
   {
     id: 'FORBID-CI-WITHOUT-ADR',
-    action: 'Modifying CI/CD pipelines without ADR',
+    action: 'Modifying CI/CD pipelines without explicit review',
     rationale: 'Gate weakening',
     severity: 'high',
     detect_patterns: ['(?:\\.github/workflows/|scripts/(?:run-ci-stages|check-workflows)\\.mjs)'],
-    safer_alternative: 'Draft an ADR explaining the gate change first',
+    safer_alternative: 'Record the gate change rationale and obtain explicit review',
   },
   {
     id: 'FORBID-SECRETS-PROD',
@@ -172,14 +170,13 @@ export const CANONICAL_FORBIDDEN_ACTIONS: readonly ForbiddenActionEntry[] = [
   },
   {
     id: 'FORBID-MUTATE-INVARIANTS',
-    action:
-      'Modifying successor law or committed policy materializations without Architect authority',
+    action: 'Modifying law or committed policy materializations without Architect authority',
     rationale: 'Constitutional change',
     severity: 'critical',
     detect_patterns: [
-      '\\b(?:git\\s+(?:add|rm)|rm)\\s+[^\\n]*(?:law/|product/|work/(?:rounds|audit)/|record/|\\.devai/config/)',
+      '\\b(?:git\\s+(?:add|rm)|rm)\\s+[^\\n]*(?:law/|product/|record/|\\.devai/(?:config|local/rounds)/)',
     ],
-    safer_alternative: 'Architect amendment via ADR + law/register/DECISIONS.md entry',
+    safer_alternative: 'Use Architect authority and record the current rationale',
   },
 ] as const;
 

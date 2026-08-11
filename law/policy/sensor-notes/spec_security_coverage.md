@@ -9,13 +9,12 @@ sensor_kind: spec_security_coverage
 emitter: packages/sensors/src/spec-security-coverage.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Spec Security Coverage
 
-This note binds the successor-local design standing for `spec_security_coverage`. Its canonical emitter
-is `packages/sensors/src/spec-security-coverage.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `spec_security_coverage`. Its canonical emitter
+is `packages/sensors/src/spec-security-coverage.ts`.
 
 Bound cells: F1×T6.
 

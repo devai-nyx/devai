@@ -33,7 +33,3 @@ These thresholds are deliberately permissive — most adopters have far fewer se
 
 - **Quality of security tests.** This sensor counts presence, not whether the tests actually catch a CVE pattern.
 - **Authorization model correctness.** That's a code-side concern.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/test_security_coverage.md (classification CURRENT).

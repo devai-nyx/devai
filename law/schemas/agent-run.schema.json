@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/agent-run.schema.json",
   "title": "Agent Run Evidence",
-  "description": "Per-invocation evidence record for an automated agent action (skill run, sense run, etc.). Absorbs LAW-12.EVIDENCE.1 from the stech-law predecessor draft (D-38). Persisted under .devai/state/agent-runs/<run-id>.json; participates in the evidence hash chain via prev_hash + manifest_hash.",
+  "description": "Per-invocation evidence record for an automated recipe, sensor, loop, CLI, or subagent action. Persisted under .devai/state/agent-runs/<run-id>.json and linked through prev_hash plus manifest_hash.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -41,7 +41,7 @@
       "required": ["kind", "name"],
       "properties": {
         "kind": {
-          "enum": ["skill", "sense", "loop", "cli", "subagent"]
+          "enum": ["recipe", "sense", "loop", "cli", "subagent"]
         },
         "name": {
           "type": "string",
@@ -157,10 +157,6 @@
     "manifest_hash": {
       "type": "string",
       "pattern": "^[a-f0-9]{64}$"
-    },
-    "hash_algo_version": {
-      "enum": ["1.0", "2.0"],
-      "description": "Algorithm version under which `manifest_hash` was computed (Phase 16.G). '1.0' = shallow-sort (legacy, pre-Phase-16.G writes). '2.0' = deep-sort recursive canonicalisation (current default for new writes). Absent means '1.0' for backward-compatible read. Verifiers dispatch by this field per-record."
     }
   },
   "schema_version": "1.0.0",
@@ -171,8 +167,8 @@
       "started_at": "2026-05-17T23:37:20.487Z",
       "ended_at": "2026-05-17T23:37:20.508Z",
       "caller": {
-        "kind": "skill",
-        "name": "SKILL-compute-scorecard"
+        "kind": "recipe",
+        "name": "devai-assess"
       },
       "files_read": [],
       "files_written": [],

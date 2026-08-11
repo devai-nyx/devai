@@ -13,7 +13,7 @@ below is **human-authorized**. An explicitly enabled experimental controller may
 automate the bounded subset called out per section; experimental automation is
 non-promoting, must preserve recoverable work, and never merges, publishes, or
 destroys anything (Articles 1–3, 15–26). The exact Constitution version is
-machine-bound on the [status page](../../start/status.md), so this mechanism page
+machine-bound to explicit evidence, so this mechanism page
 does not freeze a second version claim.
 
 ## Loop entry: triage (Article 15)
@@ -100,7 +100,3 @@ Human resolution paths: adopt the escalated branch in a human-owned worktree (no
 - [Constitution Part V — Articles 15-23](../../reference/law.md) — the loop's binding text.
 - [Scorecard](./scorecard.md) — gates + thresholds + tie-breaker ladder.
 - [Concurrency](./concurrency.md) — coupled triplets, locks, checkpoints.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/loop.md (classification CURRENT).

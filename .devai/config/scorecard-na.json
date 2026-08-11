@@ -3,7 +3,7 @@
   "cells": [
     {
       "cell": "F1:T1",
-      "reason": "Contract validation has no live emitter at the frozen predecessor pin; contract_validation remains archived, so DII-104 requires an explicit N/A instead of scheduled-reachability fiction.",
+      "reason": "Contract validation has no live emitter, so contract_validation is explicitly N/A rather than presented as reachable.",
       "constitution_anchor": "Article 5"
     }
   ]

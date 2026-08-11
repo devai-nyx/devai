@@ -1,8 +1,5 @@
 /**
- * Phase-10 Batch 10.C — `Inv-Compliance:` PR trailer parser + gate.
- *
- * Absorbs the LAW-00.READING.2 + LAW-12.CITE.1 mechanism from the
- * stech-law predecessor draft (D-38). Every PR that materially
+ * `Inv-Compliance:` PR trailer parser and gate. Every PR that materially
  * implements an invariant cites the rule IDs in a trailer:
  *
  *     Inv-Compliance: INV-DEVAI-002, INV-AUTH-001

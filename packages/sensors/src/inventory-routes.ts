@@ -8,11 +8,8 @@ import { buildSensorReading, type SensorReading, type SensorStatus } from './sen
 import { DEFAULT_IGNORE_DIRS, parseSource, walkTsxJsx } from './inventory-walker.js';
 
 /**
- * Phase 20.E: resolve a list of scan dirs (singular `scan_dir` plus
- * `scan_dir_alternates` from the pack) to absolute paths, drop the
- * ones that don't exist, dedupe. Falls back to `repoRoot` when the
- * input list is empty so callers that supplied neither get the
- * Phase 17.C2 walk-the-repo behaviour. Returns at least one entry.
+ * Resolve configured scan directories to unique existing absolute paths.
+ * An empty list scans `repoRoot`.
  */
 function uniqueExistingDirs(raw: readonly string[], repoRoot: string): string[] {
   if (raw.length === 0) return [repoRoot];
@@ -104,16 +101,9 @@ export interface RoutesInventoryBody {
 
 export interface InventoryRoutesOptions {
   readonly repoRoot: string;
-  readonly scanDir?: string;
   /**
-   * Phase 20.E (D-A-3-area pack-widening): walk multiple subdirs
-   * and merge results. Used when a pack declares
-   * `extractor_params.inventory_routes.scan_dir_alternates` to
-   * cover repos that ship multiple parallel app layouts (e.g.
-   * `apps/web` + `apps/reference-web` + `reference/web`). When set,
-   * the walker iterates each dir and dedupes by route id; absent
-   * dirs are silently skipped. `scanDir` (singular) is retained
-   * for back-compat and, if supplied alongside, is prepended.
+   * Source directories to walk and merge. Absent directories are skipped;
+   * an absent list scans `repoRoot`.
    */
   readonly scanDirs?: readonly string[];
   readonly ignoreDirs?: ReadonlySet<string>;
@@ -122,10 +112,8 @@ export interface InventoryRoutesOptions {
   readonly persistBody?: boolean;
   readonly now?: string;
   /**
-   * Frontend framework. Defaults to `react` for back-compat with
-   * Phase 17.C2 adopters. Pack-tuneable via
-   * `extractor_params.inventory_routes.framework`.
-   * Phase 20.D (closes D-A-2).
+   * Frontend framework. The current default is `react`; packs can select it
+   * through `extractor_params.inventory_routes.framework`.
    */
   readonly framework?: RoutesFramework;
 }
@@ -476,13 +464,7 @@ function sortRoutes(routes: readonly RoutesInventoryRoute[]): RoutesInventoryRou
 export function senseInventoryRoutes(opts: InventoryRoutesOptions): InventoryRoutesResult {
   const t0 = Date.now();
   const ignoreDirs = opts.ignoreDirs ?? DEFAULT_IGNORE_DIRS;
-  // Phase 20.E: union of `scanDir` (singular) + `scanDirs` (alternates).
-  // Non-existent dirs are silently skipped; an absent list falls back
-  // to the repo root (matches Phase 17.C2 behaviour).
-  const scanDirs = uniqueExistingDirs(
-    opts.scanDir !== undefined ? [opts.scanDir, ...(opts.scanDirs ?? [])] : (opts.scanDirs ?? []),
-    opts.repoRoot,
-  );
+  const scanDirs = uniqueExistingDirs(opts.scanDirs ?? [], opts.repoRoot);
   const generatedAt = opts.now ?? new Date().toISOString();
   const framework: RoutesFramework = opts.framework ?? 'react';
 

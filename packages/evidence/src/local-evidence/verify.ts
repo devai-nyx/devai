@@ -299,7 +299,7 @@ export function verifyLocalEvidence(inputs: VerifyLocalInputs): VerifyLocalResul
   if (inputs.mode === 'strict') {
     if (policy === null) {
       fail(
-        'no local-evidence policy declared: set ci_economy.local_evidence.required_jobs in .devai/config/project.json (D-117)',
+        'no local-evidence policy declared: set ci_economy.local_evidence.required_jobs in .devai/config/project.json',
       );
     }
     validateManifest(inputs, policy, manifestPath, {

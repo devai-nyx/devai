@@ -1,59 +1,21 @@
-/**
- * Prompt-overlay authority firewall (Phase 12.B, D-42).
- *
- * Inspects skill manifests for authority-inversion: a coding-agent
- * with write/act tier MUST NOT name successor authority-owned static
- * prefixes outside its declared role.
- * Findings feed the existing unified firewall-verdict schema.
- */
-
 import { minimatch } from 'minimatch';
+import type { LoadedRecipe, RecipeManifest } from '../recipes/types.js';
 
-import type { SkillManifest } from '../skills/index.js';
-
-// Derive these from SkillManifest so the source of truth stays in
-// the skills module. If SkillManifest reshapes, these track.
-export type AgentClass = NonNullable<SkillManifest['agent_class']>;
-export type PermissionTier = NonNullable<SkillManifest['permission_tier']>;
-
-/**
- * Glob patterns reserved to Architect authority. Any coding-agent /
- * ops-agent at write+ tier naming these in allowed_write_scopes is
- * an authority inversion.
- */
-const ARCHITECT_RESERVED = [
-  'law/constitution.md',
-  'law/register/DECISIONS.md',
-  'law/register/',
-  'law/adr/',
-  'law/schemas/',
-  'law/invariants/',
-  'law/trace.json',
-  'law/policy/',
-  'work/rounds/',
-  'docs/',
-];
-
-const OWNER_RESERVED = ['product/'];
-
-const AUDITOR_RESERVED = ['work/audit/'];
-
-const JOINT_RESERVED = ['law/glossary/'];
-
-// Tests are Inspector-authored. coding-agent may write packages/*/src/**;
-// ops-agent at act tier may not rewrite tests. The actual check sits in
-// the OPS_AGENT_WRITES_TESTS branch below (test-path heuristic).
+const STATIC_AUTHORITY_PATHS = [
+  'law/**',
+  'product/**',
+  '.devai/config/**',
+  '.devai/pin/**',
+  '.devai/local/rounds/**',
+  'record/**',
+] as const;
 
 export interface PromptFirewallFinding {
-  readonly code:
-    | 'PROMPT_OVERLAY_AUTHORITY_INVERSION'
-    | 'READ_TIER_WITH_WRITE_SCOPES'
-    | 'OPS_AGENT_WRITES_TESTS'
-    | 'JOINT_RESERVED_WITHOUT_REVIEW_AGENT';
-  readonly severity: 'warning' | 'error' | 'critical';
-  readonly skill_id: string;
+  readonly code: 'RECIPE_READ_VARIANT_WRITES' | 'RECIPE_STATIC_AUTHORITY_WRITE';
+  readonly severity: 'error' | 'critical';
+  readonly recipe: string;
+  readonly variant: string;
   readonly offending_scope: string;
-  readonly reserved_to: 'architect' | 'owner' | 'inspector' | 'auditor' | 'architect+owner';
   readonly message: string;
 }
 
@@ -63,254 +25,62 @@ export interface PromptFirewallVerdict {
   readonly findings: readonly PromptFirewallFinding[];
 }
 
-// The validator accepts the readonly subset of SkillManifest it needs.
-// SkillManifest carries many fields (kind, authority_role, evidence_files,
-// risk_level, etc.) the firewall has no opinion on; Pick keeps the
-// dependency narrow and the function callable with partial test fixtures
-// (e.g. the unit tests pass synthetic shapes lacking host_mutation_policy).
-type SkillManifestShape = Pick<
-  Partial<SkillManifest>,
-  | 'agent_class'
-  | 'permission_tier'
-  | 'host_mutation_policy'
-  | 'allowed_write_scopes'
-  | 'family'
-  | 'auto_fix_capable'
-  | 'authority_role'
-  | 'deterministic'
-  | 'llm_backed'
-> & { readonly id: string };
+type RecipeInput = RecipeManifest | LoadedRecipe;
 
-/**
- * Determine whether a scope glob overlaps with a reserved prefix.
- *
- * Semantics (R12 W2, per `law/adr/ADR-FIREWALL-OVERLAPS-GLOB-AWARE.md`):
- * a scope glob `S` overlaps a reserved prefix `R` iff at least one path
- * is both matched by `S` and located under `R`. Formally:
- * `match(S) ∩ paths_under(R) ≠ ∅`.
- *
- * Implementation: a literal/substring fast path preserves the existing
- * forward-containment + identity branches (cheap, covers most cases),
- * followed by a glob-aware path-set-intersection check using
- * `minimatch` against a small set of representative probe paths
- * synthesised under the reserved prefix. If any probe is matched by
- * the scope glob, the path sets intersect.
- *
- * Probes cover the patterns the framework's manifests actually use:
- * `<reserved>file.md`, `<reserved>sub/file.md`, `<reserved>a/b/c.json`,
- * `<reserved>a/b/c.ts`, `<reserved>a/b/c.tsx`, `<reserved>a/b/c.json`,
- * `<reserved>schema.json`, `<reserved>a.yaml`. Reserved prefixes that
- * are bare-file (no trailing `/`, e.g. `law/constitution.md`) are probed
- * via the file path itself.
- *
- * Sub-path exemption: paths containing `/draft/` under a reserved
- * prefix are *sandboxed staging surfaces*. A review-agent may
- * write `law/draft/**` without inverting authority,
- * because draft surfaces by convention never merge to the
- * authority-bearing path without explicit Architect review. The
- * exemption is checked in the calling code, not here.
- */
-function overlaps(scope: string, reserved: string): boolean {
-  // Fast paths — preserve existing exact-match + forward-containment
-  // semantics. These are O(1) substring checks and cover the bulk of
-  // honest manifests.
-  if (scope === reserved) return true;
-  if (scope.startsWith(reserved)) return true;
-
-  // Probe paths under the reserved prefix. If reserved ends in `/`,
-  // treat it as a directory and synthesise sample files inside it.
-  // Otherwise treat it as a single-file reserved entry (e.g.
-  // `law/constitution.md`) and probe that exact path.
-  const probes: readonly string[] = reserved.endsWith('/')
-    ? [
-        `${reserved}file.md`,
-        `${reserved}sub/file.md`,
-        `${reserved}a/b/c.md`,
-        `${reserved}a/b/c.json`,
-        `${reserved}a/b/c.ts`,
-        `${reserved}a/b/c.tsx`,
-        `${reserved}a/b/c.yaml`,
-        `${reserved}schema.json`,
-        `${reserved}index.ts`,
-      ]
-    : [reserved];
-
-  // dot:true so `.devai/...` style paths still match `**`; nobrace
-  // is left default so `{a,b}` brace-alternation is honoured (a
-  // common pattern in the framework's manifests).
-  for (const probe of probes) {
-    if (minimatch(probe, scope, { dot: true })) return true;
-  }
-  return false;
+function manifestOf(input: RecipeInput): RecipeManifest {
+  return 'manifest' in input ? input.manifest : input;
 }
 
-/**
- * Evidence-only scopes (`.devai/state/**` and subdirs) are not
- * host mutations — they are governed audit/replay artifacts.
- * `permission_tier: read` skills may declare these without
- * inverting authority, as long as `host_mutation_policy` is
- * `evidence_only`.
- */
-function isEvidenceOnlyScope(scope: string): boolean {
+function intersectsStaticAuthority(scope: string): boolean {
+  const probes = [
+    'law/policy/action-registry.json',
+    'product/specification.md',
+    '.devai/config/project.json',
+    '.devai/local/rounds/R-1000/plan.json',
+    '.devai/local/rounds/R-1000/audit/report.json',
+    'record/proofs/evidence.json',
+  ];
   return (
-    scope.startsWith('.devai/state/') ||
-    scope.startsWith('record/proofs/work/skill-runs/') ||
-    scope.startsWith('record/proofs/work/rgr/')
+    probes.some((probe) => minimatch(probe, scope, { dot: true })) ||
+    STATIC_AUTHORITY_PATHS.some((reserved) => scope === reserved)
   );
 }
 
-function isArchitectDocumentWriter(m: SkillManifestShape, scope: string): boolean {
-  return (
-    m.authority_role === 'architect' &&
-    m.agent_class === 'review-agent' &&
-    m.permission_tier === 'write' &&
-    m.host_mutation_policy === 'write_requires_flag' &&
-    scope.startsWith('docs/') &&
-    !scope.endsWith('/') &&
-    !/[*?{}]/u.test(scope)
-  );
-}
-
-/**
- * Sandbox/draft scopes under reserved prefixes are exempt from
- * the authority-inversion check when the agent_class is
- * review-agent. The convention: `<reserved>/draft/**` is a
- * staging surface, never directly authority-bearing.
- */
-function isDraftSubpath(scope: string): boolean {
-  return /\/draft(\/|$)/.test(scope);
-}
-
-/**
- * Agent-callable autofix never grants authority over Architect- or Owner-owned
- * surfaces. Diagnose-only fix skills may inspect those paths with read authority;
- * mutation requires the owning human role and governed ceremony.
- */
-export interface CheckPromptOverlaysOptions {
-  readonly manifests: readonly SkillManifestShape[];
-}
-
-export function checkPromptOverlays(opts: CheckPromptOverlaysOptions): PromptFirewallVerdict {
+export function checkPromptOverlays(options: {
+  readonly manifests: readonly RecipeInput[];
+}): PromptFirewallVerdict {
   const findings: PromptFirewallFinding[] = [];
-  for (const m of opts.manifests) {
-    const scopes = m.allowed_write_scopes ?? [];
-    const tier = m.permission_tier;
-    const cls = m.agent_class;
-
-    // Rule 1: read tier MUST have empty allowed_write_scopes, EXCEPT
-    // for evidence-only scopes (`.devai/state/**`) when host_mutation_policy
-    // says evidence_only. Read skills emit governed audit/replay records
-    // to their own state dir; that's not a host mutation.
-    if (tier === 'read' && scopes.length > 0) {
-      for (const s of scopes) {
-        if (isEvidenceOnlyScope(s) && m.host_mutation_policy === 'evidence_only') continue;
-        findings.push({
-          code: 'READ_TIER_WITH_WRITE_SCOPES',
-          severity: 'error',
-          skill_id: m.id,
-          offending_scope: s,
-          reserved_to: 'architect',
-          message: `skill '${m.id}' permission_tier=read but allowed_write_scopes contains '${s}'`,
-        });
-      }
-    }
-
-    // Rule 2: write/act tier MUST NOT name Architect-reserved paths,
-    // EXCEPT review-agent draft subpaths (e.g. law/draft/**).
-    // Drafts are staging surfaces and never merge to authority-bearing
-    // paths without explicit Architect review.
-    if (tier === 'write' || tier === 'act') {
-      for (const s of scopes) {
-        const exemptByDraft = cls === 'review-agent' && isDraftSubpath(s);
-        const architectDocumentWriter = isArchitectDocumentWriter(m, s);
-        for (const reserved of ARCHITECT_RESERVED) {
-          if (overlaps(s, reserved)) {
-            if (exemptByDraft || architectDocumentWriter) break;
-            findings.push({
-              code: 'PROMPT_OVERLAY_AUTHORITY_INVERSION',
-              severity: 'critical',
-              skill_id: m.id,
-              offending_scope: s,
-              reserved_to: 'architect',
-              message: `skill '${m.id}' (agent_class=${cls ?? '?'}, tier=${tier}) names Architect-reserved path '${reserved}' via scope '${s}'`,
-            });
-            break; // one finding per scope-vs-reserved-set match
-          }
-        }
-        for (const reserved of OWNER_RESERVED) {
-          if (overlaps(s, reserved)) {
-            if (exemptByDraft) break;
-            findings.push({
-              code: 'PROMPT_OVERLAY_AUTHORITY_INVERSION',
-              severity: 'critical',
-              skill_id: m.id,
-              offending_scope: s,
-              reserved_to: 'owner',
-              message: `skill '${m.id}' (agent_class=${cls ?? '?'}, tier=${tier}) names Owner-reserved path '${reserved}' via scope '${s}'`,
-            });
-            break;
-          }
-        }
-        const auditorBoundDeterministicSkill =
-          m.authority_role === 'auditor' && m.deterministic === true && m.llm_backed === false;
-        for (const reserved of AUDITOR_RESERVED) {
-          if (overlaps(s, reserved)) {
-            if (!auditorBoundDeterministicSkill) {
-              findings.push({
-                code: 'PROMPT_OVERLAY_AUTHORITY_INVERSION',
-                severity: 'critical',
-                skill_id: m.id,
-                offending_scope: s,
-                reserved_to: 'auditor',
-                message: `skill '${m.id}' (agent_class=${cls ?? '?'}, tier=${tier}) names Auditor-reserved path '${reserved}' via scope '${s}'`,
-              });
-              break;
-            }
-          }
-        }
-        for (const reserved of JOINT_RESERVED) {
-          if (overlaps(s, reserved) && cls !== 'review-agent') {
-            findings.push({
-              code: 'JOINT_RESERVED_WITHOUT_REVIEW_AGENT',
-              severity: 'warning',
-              skill_id: m.id,
-              offending_scope: s,
-              reserved_to: 'architect+owner',
-              message: `skill '${m.id}' touches joint-reserved path '${reserved}' but agent_class is '${cls ?? 'unset'}', not 'review-agent'`,
-            });
-            break;
-          }
-        }
-      }
-    }
-
-    // Rule 3: ops-agent at act tier MUST NOT write tests.
-    if (cls === 'ops-agent' && tier === 'act') {
-      for (const s of scopes) {
-        if (
-          s.startsWith('test/') ||
-          s.startsWith('tests/') ||
-          s.includes('/test/') ||
-          s.includes('__tests__') ||
-          /\*\*\/test\b/.test(s)
-        ) {
+  for (const input of options.manifests) {
+    const manifest = manifestOf(input);
+    for (const [variantName, variant] of Object.entries(manifest.variants)) {
+      const scopes = variant.write_policy.mode === 'none' ? [] : variant.write_policy.scopes;
+      if (variant.effect === 'read' && scopes.length > 0) {
+        for (const scope of scopes) {
           findings.push({
-            code: 'OPS_AGENT_WRITES_TESTS',
+            code: 'RECIPE_READ_VARIANT_WRITES',
             severity: 'error',
-            skill_id: m.id,
-            offending_scope: s,
-            reserved_to: 'inspector',
-            message: `skill '${m.id}' is ops-agent/act and names test path '${s}' (Inspector authority)`,
+            recipe: manifest.name,
+            variant: variantName,
+            offending_scope: scope,
+            message: `read variant '${manifest.name}/${variantName}' declares '${scope}'`,
           });
         }
       }
+      for (const scope of scopes.filter(intersectsStaticAuthority)) {
+        findings.push({
+          code: 'RECIPE_STATIC_AUTHORITY_WRITE',
+          severity: 'critical',
+          recipe: manifest.name,
+          variant: variantName,
+          offending_scope: scope,
+          message: `recipe variant '${manifest.name}/${variantName}' crosses static authority at '${scope}'`,
+        });
+      }
     }
   }
-
-  const ok = findings.every((f) => f.severity === 'warning');
-  return {
-    ok,
-    manifests_checked: opts.manifests.length,
-    findings,
-  };
+  return Object.freeze({
+    ok: findings.length === 0,
+    manifests_checked: options.manifests.length,
+    findings: Object.freeze(findings),
+  });
 }

@@ -33,7 +33,7 @@ export interface IntrospectDatabaseOptions {
  * determinism: (db_schema, kind, name).
  *
  * Does not throw on connection failure — instead returns an empty array
- * and lets the caller decide whether to surface that. (Phase-3 self-app
+ * and lets the caller decide whether to surface that. A repository
  * runs without a database; the CLI's --no-db default short-circuits before
  * we get here, so any call to this helper is opting into a real DB.)
  */

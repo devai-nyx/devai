@@ -34,10 +34,24 @@ function root(): string {
   return path;
 }
 
+function routineExecutor(): TaskRecord['executor'] {
+  return {
+    kind: 'routine',
+    argv: ['pnpm', 'test'],
+    cwd: '.',
+    inputs: [],
+    outputs: [],
+    effects: ['read'],
+    timeout_ms: 1_000,
+    authority_checks: ['discipline'],
+  };
+}
+
 function task(id: string): TaskRecord {
   return {
-    schemaVersion: '1.0.0',
+    schemaVersion: '2.0.0',
     id,
+    round_id: 'R-0007',
     status: 'queued',
     discipline: 'inspector',
     title: `Test ${id}`,
@@ -46,6 +60,7 @@ function task(id: string): TaskRecord {
     created_at: '2026-07-24T12:00:00.000Z',
     db_isolation: 'database',
     iteration_count: 0,
+    executor: routineExecutor(),
   };
 }
 
@@ -62,16 +77,21 @@ describe('backlog persistence', () => {
     expect(updateBacklogStatus(repo, 'TASK-4040', 'completed')).toBeNull();
 
     mkdirSync(dirname(backlogPath(repo)), { recursive: true });
-    writeFileSync(backlogPath(repo), '{bad json}\n\n');
+    writeFileSync(
+      backlogPath(repo),
+      '{bad json}\n' + `${JSON.stringify({ id: 'TASK-0008', title: 'Unbound', priority: 99 })}\n`,
+    );
     await withAuthorityHostTestScope(async () => {
       const low = appendBacklog(repo, {
         id: 'TASK-0009',
+        round_id: 'R-0007',
         title: 'Low',
         priority: 1,
         created_at: '2026-07-24T12:01:00.000Z',
       });
       expect(low).toMatchObject({ id: 'TASK-0009', status: 'queued' });
       const high = appendBacklog(repo, {
+        round_id: 'R-0007',
         title: 'High',
         priority: 9,
         created_at: '2026-07-24T12:00:00.000Z',
@@ -105,12 +125,14 @@ describe('backlog persistence', () => {
     const repo = root();
     await withAuthorityHostTestScope(async () => {
       appendBacklog(repo, {
+        round_id: 'R-0007',
         title: 'Later',
         priority: 5,
         status: 'in_progress',
         created_at: '2026-07-24T13:00:00.000Z',
       });
       appendBacklog(repo, {
+        round_id: 'R-0007',
         title: 'Earlier',
         priority: 5,
         created_at: '2026-07-24T12:00:00.000Z',
@@ -149,11 +171,13 @@ describe('task record persistence', () => {
         repoRoot: repo,
         task: {
           id: 'TASK-0001',
+          round_id: 'R-0007',
           discipline: 'engineer',
           title: 'Spawn fixture',
           target_modules: [],
           target_substrates: ['F2'],
           db_isolation: 'database',
+          executor: routineExecutor(),
         },
       });
       expect(spawned).toMatchObject({
@@ -201,11 +225,13 @@ describe('task record persistence', () => {
         repoRoot: repo,
         task: {
           id: 'TASK-0011',
+          round_id: 'R-0007',
           discipline: 'engineer',
           title: 'Lock holder',
           target_modules: ['MOD-SHARED'],
           target_substrates: ['F2'],
           db_isolation: 'database',
+          executor: routineExecutor(),
         },
       });
       expect(first.task.status).toBe('ready');
@@ -214,11 +240,13 @@ describe('task record persistence', () => {
         repoRoot: repo,
         task: {
           id: 'TASK-0012',
+          round_id: 'R-0007',
           discipline: 'inspector',
           title: 'Lock contender',
           target_modules: ['MOD-SHARED'],
           target_substrates: ['F3'],
           db_isolation: 'database',
+          executor: routineExecutor(),
         },
       });
       expect(second.task.status).toBe('lock_denied');

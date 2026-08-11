@@ -9,13 +9,12 @@ sensor_kind: build
 emitter: packages/sensors/src/build.ts
 standing: cell
 tiers: [BASELINE, SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Build
 
-This note binds the successor-local design standing for `build`. Its canonical emitter
-is `packages/sensors/src/build.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `build`. Its canonical emitter
+is `packages/sensors/src/build.ts`.
 
 Bound cells: F2×T9.
 

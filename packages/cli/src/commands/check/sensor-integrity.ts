@@ -1,10 +1,10 @@
 import type { CAC } from 'cac';
-import { detectRelabeledSensors, loadReadingsFromDir, type RelabelGroup } from '#core-compat';
+import { detectRelabeledSensors, loadReadingsFromDir, type RelabelGroup } from '#runtime-core';
 import { EXIT_PASS, EXIT_REVIEW } from '@devai-nyx/utils';
 import { defineCommand } from '../../define-command.js';
 
 /**
- * `devai policy check sensor integrity` (D-120): flag SensorReadings that
+ * Sensor-integrity validation behind the canonical `check` facade: flag readings that
  * share a `command_hash` across distinct `sensor.kind` values — one
  * command's exit code relabeled as several independent measurements.
  * The audit that motivated this check found a scorecard where 12 of

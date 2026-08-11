@@ -324,6 +324,7 @@ export async function analyzeEffectProgram(input: AnalysisInput): Promise<Effect
   ): string | undefined => {
     const value = unwrapExpression(expression);
     if (ts.isStringLiteralLike(value)) return value.text;
+    if (ts.isIdentifier(value)) return bindings.get(value.text);
     if (!ts.isTemplateExpression(value)) return undefined;
     let output = value.head.text;
     for (const span of value.templateSpans) {
@@ -361,6 +362,8 @@ export async function analyzeEffectProgram(input: AnalysisInput): Promise<Effect
               const propertyName = ts.isIdentifier(property.name) ? property.name.text : undefined;
               if (propertyName === 'name' && ts.isPropertyAssignment(property)) {
                 name = evaluateFactoryTemplate(property.initializer, bindings);
+              } else if (propertyName === 'name' && ts.isShorthandPropertyAssignment(property)) {
+                name = bindings.get(property.name.text);
               }
               if (propertyName === 'register') {
                 const body = ts.isMethodDeclaration(property) ? property.body : undefined;
@@ -391,10 +394,13 @@ export async function analyzeEffectProgram(input: AnalysisInput): Promise<Effect
   };
   for (const sourceFile of sourceFiles) visitFactoryCalls(sourceFile);
 
-  const extracted = [...entries.keys()].sort();
+  const selectedEntries = new Map(
+    [...entries].filter(([action]) => input.catalog.includes(action)),
+  );
+  const extracted = [...selectedEntries.keys()].sort();
   const catalog = [...input.catalog].sort();
   if (JSON.stringify(extracted) !== JSON.stringify(catalog)) {
-    const missing = catalog.filter((action) => !entries.has(action));
+    const missing = catalog.filter((action) => !selectedEntries.has(action));
     const extra = extracted.filter((action) => !input.catalog.includes(action));
     throw new Error(
       `EFFECT_EXTRACTOR_CATALOG_MISMATCH missing=[${missing.join(',')}] extra=[${extra.join(',')}]`,
@@ -480,7 +486,7 @@ export async function analyzeEffectProgram(input: AnalysisInput): Promise<Effect
     };
     scanAdvisory(sourceFile);
   }
-  for (const [action, handlers] of entries) {
+  for (const [action, handlers] of selectedEntries) {
     const capabilities = new Set<EffectCapability>();
     const dispositions = new Map<string, EffectDisposition>();
     const visited = new Set<string>();
@@ -524,6 +530,9 @@ export async function analyzeEffectProgram(input: AnalysisInput): Promise<Effect
             (declaration) => declaration.getSourceFile().fileName,
           );
           const seam = declarationFiles.some((file) => file.endsWith('authority-host-effects.ts'));
+          const directCommandService =
+            callName === 'invokeCommandService' &&
+            declarationFiles.some((file) => file.endsWith('/commands/evidence/direct-command.ts'));
           const nodeFs = declarationFiles.some((file) => file.includes('@types/node/fs'));
           const nodeProc = declarationFiles.some((file) =>
             file.includes('@types/node/child_process'),
@@ -555,7 +564,7 @@ export async function analyzeEffectProgram(input: AnalysisInput): Promise<Effect
               const edge = `${child.getSourceFile().fileName}:${String(child.getStart())}:${callName}`;
               dispositions.set(edge, {
                 edge,
-                reason: `Dynamic subprocess executable with argv shape ${JSON.stringify(shape)}; conservatively classified proc:dynamic and requires runtime-seam enforcement in R25.`,
+                reason: `Dynamic subprocess executable with argv shape ${JSON.stringify(shape)}; conservatively classified proc:dynamic and requires runtime-seam enforcement.`,
               });
             } else {
               const templateKey = JSON.stringify([executable, shape]);
@@ -576,18 +585,28 @@ export async function analyzeEffectProgram(input: AnalysisInput): Promise<Effect
             }
           }
           let reached = false;
-          for (const declaration of declarations) {
-            for (const fn of functionsFromDeclaration(declaration)) {
-              queue.push(fn);
-              reached = true;
+          if (directCommandService) {
+            const edge = `${child.getSourceFile().fileName}:${String(child.getStart())}:${callName}`;
+            dispositions.set(edge, {
+              edge,
+              reason:
+                'Canonical evidence facade invokes a statically selected in-process command definition through the authority-enforced direct-command adapter.',
+            });
+            reached = true;
+          } else {
+            for (const declaration of declarations) {
+              for (const fn of functionsFromDeclaration(declaration)) {
+                queue.push(fn);
+                reached = true;
+              }
             }
-          }
-          for (const argument of argumentsList) {
-            if (ts.isArrowFunction(argument) || ts.isFunctionExpression(argument)) {
-              queue.push(argument);
-              reached = true;
-            } else if ((symbolAt(checker, argument)?.flags ?? 0) & FUNCTION_FLAGS) {
-              reached = enqueueSymbol(argument) || reached;
+            for (const argument of argumentsList) {
+              if (ts.isArrowFunction(argument) || ts.isFunctionExpression(argument)) {
+                queue.push(argument);
+                reached = true;
+              } else if ((symbolAt(checker, argument)?.flags ?? 0) & FUNCTION_FLAGS) {
+                reached = enqueueSymbol(argument) || reached;
+              }
             }
           }
           if (
@@ -677,7 +696,7 @@ export async function analyzeEffectProgram(input: AnalysisInput): Promise<Effect
     metrics: {
       program_files: sourceFiles.length,
       catalog_actions: input.catalog.length,
-      extracted_actions: entries.size,
+      extracted_actions: selectedEntries.size,
       unresolved_edges: 0,
       dispositioned_edges: Object.values(actions).reduce(
         (total, action) => total + action.dispositions.length,

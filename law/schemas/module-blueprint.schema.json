@@ -3,7 +3,7 @@
   "$id": "https://devai.nyxk.com.br/schemas/module-blueprint.schema.json",
   "$comment": "CODEX-BusinessModuleSpec: absorbed from /Users/aarusso/Development/tools/codex/doit/MACHINE_SPEC.md#businessmodulespec-yaml-definition in Phase 18.B (D-59). DEVAI-native restructuring: canonical schemaVersion semver, BP-<DOMAIN>-NNN id pattern, additionalProperties:false at every level, pii/retention enums tightened from codex's prose to discrete values that meet INV-INVENTORY-002 at the spec layer.",
   "title": "Module Blueprint",
-  "description": "Owner-authored vertical-slice intent. The greenfield-generation counterpart of inventory bodies (which describe what exists) and journeys (which describe what an actor wants to do). Consumed by SKILL-scaffold-* (deterministic generators, Phase 18.F) and SKILL-plan-blueprint (optional LLM curator). INV-BLUEPRINT-001 through -003 + INV-SCAFFOLD-001 are the substrate's invariants. Per Constitution Article 6 (Owner authority over product/); per D-59.",
+  "description": "Owner-authored vertical-slice intent consumed by deterministic scaffold operations and the devai-plan module recipe.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "id", "module", "database"],

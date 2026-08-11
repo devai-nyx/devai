@@ -11,14 +11,8 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /**
- * D-123 (item 5): local pre-push/pre-commit feedback wiring.
- *
- * Formalizes a pattern already present by hand in stynx and sgp
- * (husky-managed hooks running lint-staged) by giving adopters a
- * `devai adopt hooks install` verb that adds a devai check invocation to
- * the same hook file. Idempotent via a marker block: re-running never
- * duplicates the line, and existing hook content (lint-staged, etc.)
- * is preserved untouched.
+ * Local feedback wiring installed by `devai init apply architect --include hooks`.
+ * Repeated installation is idempotent, and existing hook content is preserved.
  */
 
 export type HookName = 'pre-commit' | 'pre-push' | 'post-merge';
@@ -101,7 +95,7 @@ function validatePostMergeAdapterInputs(plan: HooksInstallPlan): void {
 function postMergeCommand(targetRoot: string): string {
   const issuer = join(targetRoot, '.git/devai/issue-post-merge-receipt.cjs');
   const receipt = join(targetRoot, '.git/devai/post-merge-receipt.json');
-  return `node ${JSON.stringify(issuer)}\ndevai govern auditor post-merge --host-receipt ${JSON.stringify(receipt)}`;
+  return `node ${JSON.stringify(issuer)}\ndevai round close --post-merge-receipt --host-receipt ${JSON.stringify(receipt)}`;
 }
 
 function headAt(root: string): string {
@@ -222,7 +216,7 @@ export function buildHooksInstallPlan(opts: HooksInstallOptions): HooksInstallPl
     opts.command ??
     (hook === 'post-merge'
       ? postMergeCommand(resolve(opts.targetRoot))
-      : 'devai policy check forbidden actions --strict');
+      : 'devai check --only forbidden-actions --strict');
   const { path, manager } = resolveHookPath(opts.targetRoot, hook);
   const newBlock = block(command);
 

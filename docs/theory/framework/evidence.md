@@ -5,72 +5,55 @@ sidebar_position: 8
 
 # Evidence
 
-> Every sensor reading, scorecard cell, agent run, decision, and merge produces an evidence record. Records are written to a hash-chained append-only log at `record/proofs/chain.json`. [Article 38](../../reference/law.md) (JSON canon) binds the format; the chain is the framework's audit substrate.
+DEVAI records governed results through one append-only, tamper-evident boundary. Each record binds
+its payload, the prior chain state, and the context required to interpret the claim. Evidence is
+valid only for those exact inputs; it is not a general certificate that later changes inherit.
 
-## The evidence chain
+## Current operations
 
-Each event becomes one record. A record carries:
+- `devai evidence collect` imports one declared source into harness state.
+- `devai evidence record` appends one schema-valid governed record.
+- `devai evidence verify` checks a declared evidence scope and can inspect the current chain head.
+- `devai evidence render` produces a view from canonical records.
+- `devai evidence redact` applies an attributable redaction policy, re-links downstream records,
+  and logs the redaction event.
 
-- `prev_hash` — the hash of the immediately prior record.
-- `event_type` — one of `sensor-reading`, `scorecard-cell`, `agent-run`, `decision`, `merge`, `escalation`, `rgr-emission`, `rgr-resolution`.
-- `payload` — type-specific JSON; for sensor readings, the full `SensorReading` shape (Article 32); for scorecard cells, the verdict + threshold + measurement.
-- `timestamp` — UTC ISO 8601.
-- `actor` — discipline + agent ID + role.
-- `hash` — the record's own hash, computed over canonical JSON serialisation.
-
-The chain's hash linkage means any retroactive modification surfaces immediately at the modified record's next downstream record. Tampering is detectable; the rolling head hash is the chain's published-state anchor.
-
-## What gets evidenced
-
-| Event type       | Source                                                | Triggered by                            |
-| ---------------- | ----------------------------------------------------- | --------------------------------------- |
-| `sensor-reading` | Any `sense-*` invocation                              | Per Cycle A / B / C run                 |
-| `scorecard-cell` | `score-compute` per cell                              | Cycle C; on-demand by Auditor or human  |
-| `agent-run`      | Any controller invocation                             | Task spawn → task close                 |
-| `decision`       | `triage classify`, `triage tie-break`, RGR resolution | Per classification / break / resolution |
-| `merge`          | Integration-branch merge                              | Per task merge                          |
-| `escalation`     | Iteration cap exhaustion                              | Per Article 21 escalation               |
-| `rgr-emission`   | RGR emission                                          | Per emitting task                       |
-| `rgr-resolution` | Spec update merged that closes an RGR                 | Per resolved RGR                        |
-
-The list is **closed** — adding a new event type requires a contract change. The closed list is what makes the chain queryable by sensors, auditors, and clients without per-payload-type special-casing.
+Every write requires the action's declared role and explicit `--write` consent. Adopters must not
+edit `record/proofs/chain.json` directly.
 
 ## Verification
 
-`devai evidence chain verify` walks the chain from genesis to head, recomputing each record's hash and the chain linkage. The verb returns the head hash on success and the first divergence point on failure.
+```bash
+devai evidence verify --scope local --repo-root . --format json
+devai evidence verify --scope chain --show-head --repo-root . --format json
+```
 
-`devai evidence chain head` prints the current head hash. The head hash is the published-state anchor — adopters who want to assert "the framework at SHA X had evidence head Y" record this pairing in their release manifests.
+Verification recomputes record digests and linkage. A malformed record, unknown schema, digest
+divergence, or broken prior link fails the claim. A valid chain proves integrity of the recorded
+material; it does not prove that an untrusted actor actually ran the command described by a
+payload.
 
-## Redaction
+## Recording and redaction
 
-`devai evidence redact` is the **only** authorised mutation operation on the chain. Redaction removes a specific record's payload (replacing with `{"redacted": true, "reason": "<text>", "actor": "<who>"}`), bumps the record's hash, and re-walks downstream records to re-link. The chain stays continuous; the audit trail of _what was redacted, by whom, with what rationale_ is itself an evidence record.
+```bash
+devai evidence record --kind generic --round R-1000 --input ./result.json \
+  --as-role auditor --write --format json
 
-Redaction targets are: PII that was accidentally captured in a sensor reading; credential leaks in agent run logs; legal compliance requirements. Redaction is **never** used to "fix" framework defects; defects are corrected via normal Engineer / Inspector flow with the original evidence preserved.
+devai evidence redact 1 --round R-1000 --kind generic --field secret \
+  --reason "credential exposed" --as-role auditor --write --format json
+```
 
-## Storage
+Redaction is for sensitive payload content or legal compliance. It is not a way to turn a failed
+result into a pass. The redaction itself remains attributable and visible in the chain.
 
-The chain lives at `record/proofs/chain.json` as a JSON array. For large chains, rotation is supported per pack config — rotated segments are themselves hash-linked to the live chain. Adopters should not write to `record/proofs/` directly; all writes go through the `devai evidence` CLI verbs.
+## Freshness
 
-## Sensor adapter uniformity (Article 32)
-
-Every executable sensor emits its output through a normalised `SensorReading` schema:
-
-- `status` (one of `pass`, `review`, `fail`, `unknown`).
-- `evidence_path` (where the raw output lives).
-- `timestamp`.
-- `command` (the verb invoked).
-- `command_hash` (hash of the invoked command + args + relevant env).
-- `failure_mode` (when status ≠ pass).
-- `findings` (optional structured array; sensor-specific).
-
-Scorecard composition is polymorphic over sensor types via this contract — the framework treats every sensor's output identically at the scorecard layer.
+Test and check receipts are content-addressed. Reuse requires an exact match for the task policy,
+inputs, relevant environment, toolchain, and clean Git tree. Missing, stale, malformed, unknown,
+failed, aborted, killed, or timed-out results are not reusable.
 
 ## See also
 
-- [Constitution Articles 32, 38](../../reference/law.md) — sensor adapter uniformity, JSON canon.
-- [Persistence design note](../architecture/persistence.md) — operational detail on chain storage + rotation.
-- [Security](../../dev/security) — threat model, audit requirements, secret-handling.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/evidence.md (classification CURRENT).
+- [Evidence operations](../../dev/operations/evidence-chain-runbook.md)
+- [Local evidence](../../dev/operations/local-evidence-runbook.md)
+- [Test result contract](../../reference/contracts/test-result.md)

@@ -1,7 +1,11 @@
 // Invariants: INV-DEVAI-001, INV-DEVAI-015, INV-DEVAI-017, INV-DEVAI-020
 import type { AuthorityHostEffectRequest } from '@devai-nyx/authority';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createAuthorityHostBroker } from '../../src/authority/broker.js';
+import { routeArgv } from '../../src/command-router.js';
 import { getFullRegistry, type RegistryEntry } from '../../src/define-command.js';
 import { resolveCliVersion } from '../../src/version.js';
 
@@ -26,7 +30,7 @@ afterAll(() => {
 
 type Role = 'owner' | 'architect' | 'inspector' | 'engineer' | 'auditor';
 
-function broker(name: string, role: Role, argv: readonly string[], bootstrapPolicy = false) {
+function broker(name: string, role: Role, argv: readonly string[], bootstrapPolicy = true) {
   const entry = entries.find((candidate) => candidate.name === name);
   if (entry === undefined) throw new Error(`missing action ${name}`);
   return createAuthorityHostBroker({
@@ -41,6 +45,44 @@ function broker(name: string, role: Role, argv: readonly string[], bootstrapPoli
   });
 }
 
+const TASK_INVOCATION = {
+  id: 'TASK-7001',
+  round_id: 'R-0007',
+} as const;
+
+function roundRunArgv(role: Role = 'engineer'): readonly string[] {
+  return [
+    process.execPath,
+    'devai',
+    'round',
+    'run',
+    '--round',
+    TASK_INVOCATION.round_id,
+    '--task',
+    TASK_INVOCATION.id,
+    '--as-role',
+    role,
+    '--write',
+  ];
+}
+
+function taskStartArgv(options: { readonly withDb?: boolean } = {}): readonly string[] {
+  return [
+    process.execPath,
+    'devai',
+    'task',
+    'start',
+    '--round',
+    TASK_INVOCATION.round_id,
+    '--task',
+    TASK_INVOCATION.id,
+    ...(options.withDb === true ? ['--with-db'] : []),
+    '--as-role',
+    'engineer',
+    '--write',
+  ];
+}
+
 function effect(
   symbol: string,
   args: readonly unknown[],
@@ -50,15 +92,134 @@ function effect(
 }
 
 describe('authority broker production boundary depth', () => {
+  it('bootstraps only the exact installed-Constitution binding in an unbound adopter', () => {
+    const root = mkdtempSync(join(tmpdir(), 'devai-init-bind-bootstrap-'));
+    const entry = entries.find((candidate) => candidate.name === 'init bind');
+    if (entry === undefined) throw new Error('missing action init bind');
+    const create = (argv: readonly string[]) =>
+      createAuthorityHostBroker({
+        entry,
+        entries,
+        argv,
+        role: 'architect',
+        declaration: { as_role: 'architect' },
+        repository_root: root,
+        package_version: resolveCliVersion(),
+        bootstrap_policy: true,
+      });
+
+    try {
+      const exact = create([
+        process.execPath,
+        'devai',
+        'init',
+        'bind',
+        '--constitution',
+        '--as-role',
+        'architect',
+        '--write',
+      ]);
+      try {
+        expect(
+          exact.scope.apply_effect(
+            effect('writeFileSync', [join(root, '.devai/config/project.json'), '{}\n']),
+            () => 'allowed',
+          ),
+        ).toBe('allowed');
+        expect(() =>
+          exact.scope.apply_effect(
+            effect('writeFileSync', [join(root, '.devai/config/other.json'), '{}\n']),
+            () => 'forbidden',
+          ),
+        ).toThrow('AUTHORITY_BOOTSTRAP_TARGET_FORBIDDEN');
+        expect(() =>
+          exact.scope.apply_effect(
+            effect('rmSync', [join(root, '.devai/config/project.json')]),
+            () => 'forbidden',
+          ),
+        ).toThrow('AUTHORITY_BOOTSTRAP_TARGET_FORBIDDEN');
+      } finally {
+        exact.dispose();
+      }
+
+      expect(() =>
+        create([
+          process.execPath,
+          'devai',
+          'init',
+          'bind',
+          '--constitution',
+          '--operational-law',
+          '--as-role',
+          'architect',
+          '--write',
+        ]),
+      ).toThrow('bound Constitution not found');
+      expect(
+        routeArgv(
+          [
+            process.execPath,
+            'devai',
+            'init',
+            'bind',
+            '--constitution',
+            '--operational-law',
+            '--write',
+            '--format',
+            'json',
+          ],
+          entries,
+          resolveCliVersion(),
+        ),
+      ).toMatchObject({ kind: 'output', exitCode: 2 });
+      expect(() =>
+        create([process.execPath, 'devai', 'init', 'bind', '--as-role', 'architect', '--write']),
+      ).toThrow('bound Constitution not found');
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it('bounds host recipe installation to the two canonical skills roots', () => {
+    const host = broker(
+      'init apply harness',
+      'architect',
+      [
+        process.execPath,
+        'devai',
+        'init',
+        'apply',
+        'harness',
+        '--include',
+        'skills',
+        '--as-role',
+        'architect',
+        '--write',
+      ],
+      true,
+    );
+    try {
+      for (const target of [
+        join(ROOT, '.agents/skills/devai-assess/SKILL.md'),
+        join(ROOT, '.claude/skills/devai-assess/devai.recipe.json'),
+      ]) {
+        expect(
+          host.scope.apply_effect(effect('writeFileSync', [target, 'adapter\n']), () => 'allowed'),
+        ).toBe('allowed');
+      }
+      expect(() =>
+        host.scope.apply_effect(
+          effect('writeFileSync', [join(ROOT, '.claude/settings.json'), '{}\n']),
+          () => 'forbidden',
+        ),
+      ).toThrow('UNCLASSIFIED_RESOURCE');
+    } finally {
+      host.dispose();
+    }
+  });
+
   it('authorizes bounded filesystem effects and tracks descriptor lifecycles', () => {
-    const host = broker('work state prune', 'engineer', [
-      'work',
-      'state',
-      'prune',
-      '--as-role',
-      'engineer',
-      '--write',
-    ]);
+    const host = broker('round run', 'engineer', roundRunArgv());
     try {
       let applied = 0;
       expect(
@@ -89,11 +250,11 @@ describe('authority broker production boundary depth', () => {
     }
   });
 
-  it('commits exact-plan effects as one unit and rejects conflicting targets', () => {
+  it('applies bounded-batch effects immediately and refuses unadapted processes', () => {
     const host = broker(
-      'init apply-owner',
+      'init apply owner',
       'owner',
-      ['init', 'apply-owner', '--as-role', 'owner', '--write'],
+      [process.execPath, 'devai', 'init', 'apply', 'owner', '--as-role', 'owner', '--write'],
       true,
     );
     try {
@@ -104,9 +265,8 @@ describe('authority broker production boundary depth', () => {
       host.scope.apply_effect(effect('writeFileSync', ['product/broker-b.json', '{}\n']), () => {
         applied += 1;
       });
-      expect(applied).toBe(0);
-      host.commit_exact?.();
       expect(applied).toBe(2);
+      expect(host.commit_exact).toBeUndefined();
       expect(() =>
         host.scope.apply_effect(
           effect('spawnSync', ['git', ['update-ref', 'refs/heads/x', 'HEAD']], 'process'),
@@ -116,32 +276,17 @@ describe('authority broker production boundary depth', () => {
     } finally {
       host.dispose();
     }
-
-    const conflict = broker(
-      'init apply-owner',
-      'owner',
-      ['init', 'apply-owner', '--as-role', 'owner', '--write'],
-      true,
-    );
-    try {
-      conflict.scope.apply_effect(
-        effect('writeFileSync', ['product/conflict.json', '{}\n']),
-        () => undefined,
-      );
-      conflict.scope.apply_effect(effect('rmSync', ['product/conflict.json']), () => undefined);
-      expect(() => conflict.commit_exact?.()).toThrow('AUTHORITY_EXACT_PLAN_TARGET_CONFLICT');
-    } finally {
-      conflict.dispose();
-    }
   });
 
   it('passes read-only processes and refuses unadapted process or read-action mutation', () => {
     const host = broker('sense run', 'auditor', [
+      process.execPath,
+      'devai',
       'sense',
       'run',
+      'lint',
       '--as-role',
       'auditor',
-      '--write',
     ]);
     try {
       expect(
@@ -167,151 +312,167 @@ describe('authority broker production boundary depth', () => {
     }
   });
 
-  it('fails closed for invalid session, skill-record, and skill write scopes', () => {
-    const session = broker('work session start', 'auditor', [
-      'work',
-      'session',
-      'start',
-      '--ttl-minutes',
-      '0',
-      '--as-role',
-      'auditor',
-      '--write',
-    ]);
+  it('keeps task action scopes bounded', () => {
+    expect(
+      routeArgv(
+        [process.execPath, 'devai', 'task', 'start', '--task', TASK_INVOCATION.id],
+        entries,
+        resolveCliVersion(),
+      ),
+    ).toMatchObject({
+      kind: 'output',
+      exitCode: 2,
+      text: expect.stringContaining('"exit":2'),
+    });
+
+    const invocation = broker('round run', 'auditor', roundRunArgv('auditor'));
     try {
-      expect(() => session.session_operation?.()).toThrow('AUTHORITY_SESSION_TTL_INVALID');
-      expect(session.record_init('owner')).toMatchObject({
-        scope: { action_id: 'init record' },
-      });
-      expect(() => session.record_skill('invalid', () => undefined)).toThrow(
-        'AUTHORITY_SKILL_ID_INVALID',
-      );
+      expect(invocation.session_operation).toBeUndefined();
     } finally {
-      session.dispose();
+      invocation.dispose();
     }
 
-    const skill = broker('agent skill run', 'engineer', [
-      'node',
-      'devai',
-      'agent',
-      'skill',
-      'run',
-      'SKILL-fixture',
-      '--as-role',
-      'engineer',
-      '--write',
-    ]);
+    const task = broker('task start', 'engineer', taskStartArgv());
     try {
       expect(() =>
-        skill.scope.apply_effect(
+        task.scope.apply_effect(
           effect('writeFileSync', ['law/forbidden.json', '{}\n']),
           () => undefined,
         ),
-      ).toThrow('AUTHORITY_SKILL_WRITE_SCOPE_DENIED');
+      ).toThrow('AUTHORITY_ACTION_DENIED');
     } finally {
-      skill.dispose();
+      task.dispose();
     }
   });
 
   it('classifies the complete governed process-target matrix without executing host commands', () => {
+    const checkTranslationArgv = [
+      process.execPath,
+      'devai',
+      'check',
+      '--only',
+      'translation',
+      '--as-role',
+      'inspector',
+      '--write',
+    ] as const;
+    const evidenceTestArgv = [
+      process.execPath,
+      'devai',
+      'evidence',
+      'record',
+      '--kind',
+      'test',
+      '--round',
+      'R-0007',
+      '--as-role',
+      'auditor',
+      '--write',
+    ] as const;
+    const roundPlanDiagramsArgv = [
+      process.execPath,
+      'devai',
+      'round',
+      'plan',
+      '--documents',
+      'diagrams',
+      '--as-role',
+      'architect',
+      '--write',
+    ] as const;
     const cases: ReadonlyArray<
       readonly [string, Role, readonly string[], string, readonly string[]]
     > = [
+      ['task start', 'engineer', taskStartArgv(), 'npx', ['eslint', '--format=json', '.']],
+      ['task start', 'engineer', taskStartArgv(), 'npx', ['tsc', '--noEmit']],
+      ['task start', 'engineer', taskStartArgv(), 'pnpm', ['test']],
       [
-        'agent skill run',
+        'task start',
         'engineer',
-        ['node', 'devai', 'agent', 'skill', 'run', 'SKILL-feedback-iteration'],
-        'npx',
-        ['eslint', '--format=json', '.'],
-      ],
-      [
-        'agent skill run',
-        'engineer',
-        ['node', 'devai', 'agent', 'skill', 'run', 'SKILL-feedback-iteration'],
-        'npx',
-        ['tsc', '--noEmit'],
-      ],
-      [
-        'agent skill run',
-        'engineer',
-        ['node', 'devai', 'agent', 'skill', 'run', 'SKILL-feedback-iteration'],
-        'pnpm',
-        ['test'],
-      ],
-      [
-        'agent skill run',
-        'engineer',
-        ['node', 'devai', 'agent', 'skill', 'run', 'SKILL-feedback-iteration'],
+        taskStartArgv(),
         'node',
         ['--test', '--test-name-pattern', 'works', 'packages/cli/tests/a.test.ts'],
       ],
       [
-        'work db provision',
+        'task start',
         'engineer',
-        [],
+        taskStartArgv({ withDb: true }),
         'psql',
         ['postgres://host/db-name', '-c', 'CREATE TABLE x()'],
       ],
       [
-        'work db provision',
+        'task start',
         'engineer',
-        [],
+        taskStartArgv({ withDb: true }),
         'psql',
         ['postgres://host/db-name', '-c', 'INSERT INTO x VALUES (1)'],
       ],
       [
-        'work db provision',
+        'task start',
         'engineer',
-        [],
+        taskStartArgv({ withDb: true }),
         'psql',
         ['postgres://host/db-name', '-c', 'UPDATE x SET a=1'],
       ],
       [
-        'work db provision',
+        'task start',
         'engineer',
-        [],
+        taskStartArgv({ withDb: true }),
         'psql',
         ['postgres://host/db-name', '-c', 'DELETE FROM x'],
       ],
-      ['work db provision', 'engineer', [], 'psql', ['not-a-url', '-c', 'SELECT 1']],
-      ['work db start shared', 'engineer', [], 'docker', ['run', '--name', 'fixture-db']],
-      ['work db start shared', 'engineer', [], 'docker', ['start', 'fixture-db']],
-      ['work db stop shared', 'engineer', [], 'docker', ['stop', 'fixture-db']],
-      ['verify translation', 'inspector', [], 'docker', ['run', '--rm', 'fixture']],
-      ['verify translation', 'inspector', [], 'sandbox-exec', ['-p', '(version 1)', 'node']],
-      ['docs publish', 'engineer', [], 'git', ['push', 'origin', 'gh-pages']],
-      ['agent skill run', 'engineer', [], 'git', ['push', 'origin', 'HEAD']],
-      ['adopt upgrade', 'architect', [], 'git', ['fetch', 'upstream remote!', 'branch/name']],
-      ['docs publish', 'engineer', [], 'git', ['checkout', '--orphan', 'gh-pages']],
-      ['docs publish', 'engineer', [], 'git', ['branch', '-D', 'temporary']],
       [
-        'experimental loop run',
+        'task start',
         'engineer',
-        [],
+        taskStartArgv({ withDb: true }),
+        'psql',
+        ['not-a-url', '-c', 'SELECT 1'],
+      ],
+      [
+        'task start',
+        'engineer',
+        taskStartArgv({ withDb: true }),
+        'docker',
+        ['run', '--name', 'fixture-db'],
+      ],
+      [
+        'task start',
+        'engineer',
+        taskStartArgv({ withDb: true }),
+        'docker',
+        ['start', 'fixture-db'],
+      ],
+      ['task start', 'engineer', taskStartArgv({ withDb: true }), 'docker', ['stop', 'fixture-db']],
+      ['check', 'inspector', checkTranslationArgv, 'docker', ['run', '--rm', 'fixture']],
+      ['check', 'inspector', checkTranslationArgv, 'sandbox-exec', ['-p', '(version 1)', 'node']],
+      ['task start', 'engineer', taskStartArgv(), 'git', ['push', 'origin', 'HEAD']],
+      [
+        'init bind',
+        'architect',
+        [process.execPath, 'devai', 'init', 'bind', '--as-role', 'architect', '--write'],
+        'git',
+        ['fetch', 'upstream remote!', 'branch/name'],
+      ],
+      [
+        'round run',
+        'engineer',
+        roundRunArgv(),
         'git',
         ['worktree', 'add', '-b', 'fixture', '/tmp/wt'],
       ],
-      ['experimental loop run', 'engineer', [], 'git', ['worktree', 'remove', '/tmp/wt']],
-      ['experimental loop run', 'engineer', [], 'git', ['add', 'packages/cli/src/bin.ts']],
-      ['experimental loop run', 'engineer', [], 'git', ['rm', 'packages/cli/src/bin.ts']],
-      ['experimental loop run', 'engineer', [], 'git', ['commit', '-m', 'fixture']],
-      ['experimental loop run', 'engineer', [], 'git', ['mv', 'scratch/a', 'scratch/b']],
-      ['agent skill run', 'engineer', [], 'gh', ['pr', 'create', '--draft']],
-      ['docs publish', 'engineer', [], 'npm', ['--prefix', 'docs/site', 'run', 'build']],
+      ['round run', 'engineer', roundRunArgv(), 'git', ['worktree', 'remove', '/tmp/wt']],
+      ['round run', 'engineer', roundRunArgv(), 'git', ['add', 'packages/cli/src/bin.ts']],
+      ['round run', 'engineer', roundRunArgv(), 'git', ['rm', 'packages/cli/src/bin.ts']],
+      ['round run', 'engineer', roundRunArgv(), 'git', ['commit', '-m', 'fixture']],
+      ['round run', 'engineer', roundRunArgv(), 'git', ['mv', 'scratch/a', 'scratch/b']],
+      ['task start', 'engineer', taskStartArgv(), 'gh', ['pr', 'create', '--draft']],
+      ['evidence record', 'auditor', evidenceTestArgv, 'sh', ['-c', 'pnpm test']],
+      ['round run', 'engineer', roundRunArgv(), 'claude', ['-p', 'fixture']],
+      ['round run', 'engineer', roundRunArgv(), 'codex', ['exec', 'fixture']],
       [
-        'docs publish',
-        'engineer',
-        [],
-        'bundle',
-        ['exec', 'jekyll', 'build', '-s', 'docs/site', '-d', 'docs/site/_site'],
-      ],
-      ['evidence test record', 'auditor', [], 'sh', ['-c', 'pnpm test']],
-      ['experimental loop run', 'engineer', [], 'claude', ['-p', 'fixture']],
-      ['experimental loop run', 'engineer', [], 'codex', ['exec', 'fixture']],
-      [
-        'docs render mermaid',
-        'engineer',
-        [],
+        'round plan',
+        'architect',
+        roundPlanDiagramsArgv,
         'mmdc',
         ['--input', 'a.mmd', '--output', 'scratch/a.svg'],
       ],
@@ -339,34 +500,40 @@ describe('authority broker production boundary depth', () => {
 
   it('admits only exact read-only subprocess shapes for sensor actions', () => {
     const cases: ReadonlyArray<readonly [string, string, readonly string[], boolean]> = [
-      ['sense lint', 'npx', ['eslint', '--format=json', '.'], true],
-      ['sense lint', 'npx', ['eslint', '--fix', '.'], false],
-      ['sense type check', 'npx', ['tsc', '--noEmit'], true],
-      ['sense type check', 'npx', ['tsc', '--noEmit', '-p', 'packages/cli/tsconfig.json'], true],
-      ['sense type check', 'npx', ['tsc', '--noEmit', '-p', '../outside.json'], false],
-      ['sense build', 'pnpm', ['-r', 'build'], true],
-      ['sense test', 'pnpm', ['vitest', 'run'], true],
+      ['lint', 'npx', ['eslint', '--format=json', '.'], true],
+      ['lint', 'npx', ['eslint', '--fix', '.'], false],
+      ['type_check', 'npx', ['tsc', '--noEmit'], true],
+      ['type_check', 'npx', ['tsc', '--noEmit', '-p', 'packages/cli/tsconfig.json'], true],
+      ['type_check', 'npx', ['tsc', '--noEmit', '-p', '../outside.json'], false],
+      ['build', 'pnpm', ['-r', 'build'], true],
+      ['unit_test', 'pnpm', ['vitest', 'run'], true],
       [
-        'sense test',
+        'integration_test',
         'pnpm',
         ['vitest', 'run', '--config', 'tests/config/t4.regression.config.ts'],
         true,
       ],
-      ['sense test', 'pnpm', ['vitest', 'watch'], false],
-      ['sense run', 'true', [], true],
-      ['sense run', 'false', [], true],
-      ['sense run', 'node', ['-e', 'process.exit(1);'], true],
-      ['sense run', 'node', ['--version'], true],
-      ['sense run', 'pnpm', ['audit', '--json'], true],
-      ['sense run', 'npm', ['audit', '--json', '--package-lock-only'], true],
-      ['sense run', 'sh', ['-lc', 'command -v claude'], true],
-      ['sense run', 'sh', ['-lc', 'echo unsafe'], false],
-      ['sense run', 'git', ['rev-parse', 'HEAD'], true],
-      ['sense run', 'docker', ['ps'], true],
-      ['sense run', 'command', ['-v', 'git'], true],
+      ['unit_test', 'pnpm', ['vitest', 'watch'], false],
+      ['runtime_probe_api', 'true', [], true],
+      ['runtime_probe_api', 'false', [], true],
+      ['runtime_probe_api', 'node', ['-e', 'process.exit(1);'], true],
+      ['runtime_probe_api', 'node', ['--version'], true],
+      ['runtime_probe_api', 'pnpm', ['audit', '--json'], true],
+      ['runtime_probe_api', 'npm', ['audit', '--json', '--package-lock-only'], true],
+      ['runtime_probe_api', 'sh', ['-lc', 'command -v claude'], true],
+      ['runtime_probe_api', 'sh', ['-lc', 'echo unsafe'], false],
+      ['runtime_probe_api', 'git', ['rev-parse', 'HEAD'], true],
+      ['runtime_probe_api', 'docker', ['ps'], true],
+      ['runtime_probe_api', 'command', ['-v', 'git'], true],
     ];
-    for (const [name, executable, args, allowed] of cases) {
-      const host = broker(name, 'auditor', []);
+    for (const [kind, executable, args, allowed] of cases) {
+      const host = broker('sense run', 'auditor', [
+        process.execPath,
+        'devai',
+        'sense',
+        'run',
+        kind,
+      ]);
       try {
         const invoke = () =>
           host.scope.apply_effect(effect('spawnSync', [executable, args], 'process'), () => 'ok');
@@ -378,15 +545,8 @@ describe('authority broker production boundary depth', () => {
     }
   });
 
-  it('fails closed for malformed filesystem targets, escapes, descriptors, and session endings', () => {
-    const host = broker('work state prune', 'engineer', [
-      'work',
-      'state',
-      'prune',
-      '--as-role',
-      'engineer',
-      '--write',
-    ]);
+  it('fails closed for malformed filesystem targets, escapes, and descriptors', () => {
+    const host = broker('round run', 'engineer', roundRunArgv());
     try {
       expect(() =>
         host.scope.apply_effect(effect('writeFileSync', [undefined]), () => undefined),
@@ -411,24 +571,6 @@ describe('authority broker production boundary depth', () => {
       );
     } finally {
       host.dispose();
-    }
-
-    const endingEntry = entries.find((entry) => entry.name === 'work session end');
-    if (endingEntry === undefined) throw new Error('missing work session end');
-    const ending = createAuthorityHostBroker({
-      entry: endingEntry,
-      entries,
-      argv: ['work', 'session', 'end'],
-      role: 'auditor',
-      declaration: { authority_session: 'AUTH-SESSION-missing' },
-      repository_root: ROOT,
-      package_version: resolveCliVersion(),
-      bootstrap_policy: false,
-    });
-    try {
-      expect(() => ending.session_operation?.()).toThrow('AUTHORITY_SESSION_NOT_FOUND');
-    } finally {
-      ending.dispose();
     }
   });
 });

@@ -9,13 +9,12 @@ sensor_kind: perf_test
 emitter: packages/sensors/src/perf-test.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Perf Test
 
-This note binds the successor-local design standing for `perf_test`. Its canonical emitter
-is `packages/sensors/src/perf-test.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `perf_test`. Its canonical emitter
+is `packages/sensors/src/perf-test.ts`.
 
 Bound cells: F2×T7.
 

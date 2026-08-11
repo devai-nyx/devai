@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/scorecard-na-config.schema.json",
   "title": "Scorecard N/A Override Config",
-  "description": "Per-repo override file declaring which F×T scorecard cells are degenerate for THIS repo's substrate (Phase 34, D-91). Lives at `.devai/config/scorecard-na.json` (optional; absence is a no-op). Extends Article 5 (degenerate cells) from a global structural claim to a per-repo substrate-shape claim. Each listed cell is forced to verdict 'N/A' as an overlay AFTER global DEGENERATE_CELLS and BEFORE reading-driven verdicts — so a stray SR cannot silently flip an N/A carve-out. Each cell MUST carry a `reason` so the carve-out is justified in writing.",
+  "description": "Optional per-repository override at `.devai/config/scorecard-na.json` declaring which F×T scorecard cells are structurally inapplicable. Each listed cell is forced to verdict 'N/A' after global structural exclusions and before reading-driven verdicts, and MUST carry a written reason.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "cells"],

@@ -2,12 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/common-defs.schema.json",
   "title": "Common definitions",
-  "description": "Single-source vocabulary for the DEVAI-II contract layer. Every schema $refs these; restating them inline is a check-schemas violation.",
+  "description": "Single-source vocabulary for DEVAI contracts. Schemas reference these definitions instead of restating them inline.",
   "schema_version": "1.0.0",
   "$defs": {
     "execution_status_core": {
       "enum": ["pass", "review", "fail"],
-      "$comment": "RESOLVED 2026-07-23 (wireframe regeneration, measured; names aligned in R-0001/P1): not one enum in two casings but two vocabularies \u2014 lowercase = EXECUTION STATUS families (machine outcomes; contexts extend with skipped/killed/error/crash/unknown), uppercase = JUDGMENT VERDICT families (scorecard tier; contexts extend with N/A/UNKNOWN/UNCOVERED/RGR/ESCALATED). Per-context extensions are legitimate and stay inline; only exact bare-tri-state restatements violate the canon (check-schemas rule). The two roster restatements (validation-result) are rewired."
+      "$comment": "Lowercase values are execution-status outcomes; uppercase values are judgment verdicts. Context-specific extensions remain local to their consuming schemas."
     },
     "verdict_core": {
       "enum": ["PASS", "REVIEW", "FAIL"],
@@ -100,7 +100,7 @@
       ]
     },
     "record_status": {
-      "enum": ["draft", "active", "superseded", "tombstoned", "closed"]
+      "enum": ["draft", "active", "superseded", "closed"]
     },
     "inv_lifecycle": {
       "enum": ["supported", "experimental"]

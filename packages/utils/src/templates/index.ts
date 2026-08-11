@@ -1,6 +1,6 @@
 /**
  * Phase 18.C: deterministic template engine for the scaffolder family
- * (Phase 18.F). Consumed by every SKILL-scaffold-* skill; renders
+ * Consumed by deterministic scaffold operations; renders
  * token-bearing template files into concrete output by substituting
  * a fixed token set + evaluating simple conditional blocks.
  *

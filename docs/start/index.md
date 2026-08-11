@@ -6,55 +6,33 @@ slug: /
 
 # DEVAI
 
-> **A human-supervised governance and control harness for AI-assisted software
-> development on a declared stack.** DEVAI treats software development as a
-> discrete-time control system: documents are the reference signal, code is the
-> plant under control, tests are sensors, humans or explicitly operated agents
-> actuate, and DEVAI constrains that actuation through authority, gates, and
-> auditable evidence.
+DEVAI is a human-supervised control harness for AI-assisted software development.
+It measures a declared repository, runs bounded operations, and records evidence
+without taking release authority away from its maintainers.
 
-## Who is this site for?
+## Choose an entry point
 
-Pick the entry point that matches what you came here to do.
+| Goal                                        | Start here                                         |
+| ------------------------------------------- | -------------------------------------------------- |
+| Understand the model and authority boundary | [What is DEVAI?](./what-is-devai.md)               |
+| Adopt DEVAI in a repository                 | [Install and adopt](../adopters/install.md)        |
+| Look up a current CLI action                | [CLI reference](../reference/cli/)                 |
+| Use a host-invoked recipe                   | [Recipe reference](../reference/recipes/README.md) |
+| Contribute or operate this codebase         | [Developer guide](../dev/)                         |
 
-| You want to…                                                                                          | Start at                                                                                        |
-| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| **Understand the theory** — why DEVAI uses control-theoretic vocabulary literally, not metaphorically | [§2 Theory](../theory) — the metaphor map plus the unified theory document                      |
-| **Adopt DEVAI in your repo** — install, declare a role, run the introspection, get a green scorecard  | [§5 Adopters](../adopters) — install → first introspection → packs → operations                 |
-| **Operate as a role-holder** (Owner / Architect / Inspector / Engineer / Auditor)                     | [§4 Roles](../roles) — authority chain, per-role walkthroughs, coupled-triplet coordination     |
-| **Reference a verb, skill, schema, or sensor**                                                        | [§6 Reference](../reference) — auto-generated CLI / skills / schemas, plus scripts and examples |
-| **Contribute to DEVAI itself, or audit its self-application**                                         | [§7 Meta](../dev) — Article-36 surface: self-scorecard, test matrix, dev process, build plan    |
+## Current product surface
 
-## Status
+The release candidate ships one publishable package, `@devai-nyx/cli`, with 41
+catalogued actions, 59 sensors, and 7 recipes. Seven public workflow domains cover
+adoption, diagnosis, validation, observation, work execution, evidence, and release
+inspection. The action catalog includes stable, preview, and internal status for every action.
 
-The current constitutional, package, authority, and lifecycle posture is
-recorded on the [status page](./status.md). Live action and skill inventories come
-from `devai catalog actions` and `devai agent skill list`; schemas and tests are
-queried from their registries rather than frozen as prose counts.
+Start read-only:
 
-DEVAI applies itself per Article 36. The
-[self-scorecard](./status.md) is current only when its displayed
-subject, render, and deployment provenance passes the exact-SHA freshness
-contract; missing or stale evidence remains visibly non-promoting.
+```bash
+devai init plan --target . --tier tier1 --format json
+devai doctor --repo-root . --format json
+devai catalog actions --format json
+```
 
-## What this is
-
-DEVAI provides rails on which multiple agents can write code, tests, and documentation concurrently against a shared codebase, while preserving the semantic intent of human authority and producing auditable evidence of every change.
-
-The control-theoretic framing is not metaphorical. It governs how authority is allocated, how concurrency is mediated, how failures are routed, and how convergence is gated. See [§2 Theory](../theory) for the metaphor map and the long-form treatment.
-
-## What this is not
-
-- A replacement for build, lint, test, or CI tooling. DEVAI wraps and coordinates these; it does not reimplement them.
-- A code generator that turns prose into working software. DEVAI orchestrates feedback between specs, tests, and code; it does not bypass the need for any of them.
-- A universal stack abstraction. NestJS + Angular + Postgres remains the primary
-  reference stack; each adopter declares one stack, and additional stacks use
-  explicit adapter packs with conservative capability claims.
-
-## Reading order
-
-A curated walk-through, in suggested order, lives at [Reading order](./reading-order.md). For the impatient: install via the [adopter guide](../adopters/install.md), declare your [role](../adopters/role-declaration.md), preview with `devai init plan`, then run [`devai init apply-f5 --introspect --as-role architect --write`](../adopters/first-introspection.md) against your repo.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/start/index.md (classification CURRENT).
+Apply only a reviewed plan, with the exact role and consent required by that action.

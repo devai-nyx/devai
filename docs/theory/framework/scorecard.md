@@ -59,7 +59,7 @@ Selected defaults:
 - **Coverage** (T1): ≥80% for PASS, ≥50% for REVIEW (per-substrate).
 - **Test weakening** (Article 30): 20% max assertion-decrease ratio per file; absolute floor of 1 assertion; split-not-weaken exempt.
 - **Mutation kill-rate**: configurable per pack; default 75% PASS / 50% REVIEW.
-- **Test coverage depth** (F3 × T2): see [test policy](./test-policy.md) for the Phase 33 IO-shape heuristic.
+- **Test coverage depth** (F3 × T2): see [test policy](./test-policy.md) for the current content-addressed coverage policy.
 
 ## Tie-breaker ladder (Article 23)
 
@@ -89,8 +89,3 @@ A merge requires Cycle B clean; the post-merge Cycle C runs after.
 - [Constitution Articles 17 + 18 + 23](../../reference/law.md) — gates and tie-breakers.
 - [Loop](./loop.md) — the three cycles in operational detail.
 - [Aspect grid](./aspect-grid.md) — the cell-by-cell sensor mapping.
-- [Self-scorecard](../../start/status.md) — DEVAI's own scorecard at last sweep.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/scorecard.md (classification CURRENT).

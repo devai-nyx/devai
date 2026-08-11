@@ -43,7 +43,7 @@ const DEFAULT_SCAN_DIRS: readonly string[] = ['packages', 'apps', 'reference', '
 
 /**
  * Wrap `tsc --noEmit` and emit a SensorReading with per-error
- * findings. Phase 23.D refactor: `strategy === 'per-package'` runs
+ * findings. `strategy === 'per-package'` runs
  * the compiler against every per-package tsconfig discovered under
  * the configured scan dirs and emits a SensorReading per project
  * plus an aggregate; `strategy === 'root'` preserves pre-23.D
@@ -53,7 +53,7 @@ const DEFAULT_SCAN_DIRS: readonly string[] = ['packages', 'apps', 'reference', '
  * a root tsconfig that omits `jest` from `types[]`, the L0
  * correctness signal false-positives on every `*.spec.ts` file
  * (TS2304/TS2593 against `describe`, `expect`, etc.) — stynx T1
- * `44b4c05` filed this as D-A-21.
+ * This keeps package findings attributable to their source package.
  */
 export function senseTypeCheck(opts: TypeCheckOptions): TypeCheckResult {
   const strategy: TypecheckStrategy = opts.strategy ?? 'root';

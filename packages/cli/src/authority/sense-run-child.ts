@@ -24,6 +24,7 @@ export function readOnlyDevaiChild(
       [
         '--write',
         '--allow-publish',
+        '--publish',
         '--execute',
         '--apply',
         '--as-role',
@@ -42,7 +43,7 @@ export function readOnlyDevaiChild(
     .sort((left, right) => right.path.length - left.path.length)[0];
   if (action?.effects !== 'read') return false;
   const tail = childArgs.slice(action.path.length);
-  if (action.previous_name === 'sense test') {
+  if (action.handler === 'sense test') {
     return (
       tail.length === 3 &&
       ['unit', 'integration', 'regression', 'e2e', 'all'].includes(tail[0] ?? '') &&

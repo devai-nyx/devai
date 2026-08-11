@@ -1,5 +1,5 @@
 /**
- * Phase 18.E: blueprint module — load, validate, diff, plan.
+ * Blueprint module: load, validate, diff, and plan.
  *
  * Public API:
  *   loadBlueprint(path)              — parse + AJV-validate
@@ -7,7 +7,7 @@
  *   diffBlueprintAgainstInventory()  — compare to brownfield inventory
  *   planScaffoldFromBlueprint()      — emit a deterministic scaffold plan
  *
- * Per D-59 (Phase 18 framing); per the INV-BLUEPRINT-* invariants
+ * Per the INV-BLUEPRINT-* invariants,
  * landed in 18.D.
  */
 
@@ -169,7 +169,7 @@ export interface ValidationResult {
 }
 
 /**
- * Check a blueprint against the Phase-18 BLUEPRINT-domain invariants.
+ * Check a blueprint against the BLUEPRINT-domain invariants.
  * Schema validation is upstream (loadBlueprint); this function checks
  * invariants that go beyond JSON-Schema reach (cross-field consistency).
  */
@@ -246,14 +246,14 @@ export function validateBlueprint(bp: Blueprint): ValidationResult {
 
 // ---------------------------------------------------------------------
 // Canonical-JSON sha256 of a blueprint (for INV-SCAFFOLD-001).
-// Uses canonicalJsonV2 (Phase 16.G default) so the trio
+// Uses the current canonical form so the trio
 // blueprint_id + blueprint_version + blueprint_sha256 is reproducible.
 // ---------------------------------------------------------------------
 
-import { canonicalJsonV2 } from '@devai-nyx/utils';
+import { canonicalJson } from '@devai-nyx/utils';
 
 export function blueprintSha256(bp: Blueprint): string {
-  const canonical = canonicalJsonV2(bp as unknown as Record<string, unknown>);
+  const canonical = canonicalJson(bp as unknown as Record<string, unknown>);
   return createHash('sha256').update(canonical, 'utf8').digest('hex');
 }
 
@@ -426,7 +426,7 @@ export function diffBlueprintAgainstInventory(opts: BlueprintDiffOptions): Bluep
 // ---------------------------------------------------------------------
 
 export interface ScaffoldPlanTask {
-  readonly skill_id: string;
+  readonly operation_id: string;
   readonly target_paths: readonly string[];
   readonly templates: readonly string[];
 }
@@ -440,8 +440,8 @@ export interface ScaffoldPlanResult {
 }
 
 /**
- * Emit a scaffold plan: per-skill target paths + template ids that
- * SKILL-scaffold-* would consume. No file writes; pure data. The plan
+ * Emit a scaffold plan: per-operation target paths and template ids.
+ * No file writes; pure data. The plan
  * is deterministic for a given (blueprint, version) pair — its sha
  * lines up with the scaffold-evidence's blueprint_sha256.
  */
@@ -451,12 +451,12 @@ export function planScaffoldFromBlueprint(bp: Blueprint): ScaffoldPlanResult {
   const moduleSlug = `${ns}-${moduleKebab}`;
   const tasks: ScaffoldPlanTask[] = [
     {
-      skill_id: 'SKILL-scaffold-db',
+      operation_id: 'scaffold.db',
       target_paths: [`domain/${moduleSlug}/db/migration.sql`, `domain/${moduleSlug}/db/seed.sql`],
       templates: ['db.migration', 'db.seed'],
     },
     {
-      skill_id: 'SKILL-scaffold-api',
+      operation_id: 'scaffold.api',
       target_paths: [
         `domain/${moduleSlug}/api/src/${moduleSlug}/${moduleSlug}.module.ts`,
         ...bp.database.entities.flatMap((e) => [
@@ -475,7 +475,7 @@ export function planScaffoldFromBlueprint(bp: Blueprint): ScaffoldPlanResult {
       ],
     },
     {
-      skill_id: 'SKILL-scaffold-ui',
+      operation_id: 'scaffold.ui',
       target_paths: [
         `domain/${moduleSlug}/web/src/app/${moduleSlug}/${moduleSlug}.module.ts`,
         ...bp.database.entities.flatMap((e) => [
@@ -487,7 +487,7 @@ export function planScaffoldFromBlueprint(bp: Blueprint): ScaffoldPlanResult {
       templates: ['ui.module', 'ui.list-component', 'ui.detail-component', 'ui.service'],
     },
     {
-      skill_id: 'SKILL-scaffold-tests',
+      operation_id: 'scaffold.tests',
       target_paths: bp.database.entities.flatMap((e) => [
         `domain/${moduleSlug}/api/test/${toKebabSimple(e.name)}.controller.spec.ts`,
         `domain/${moduleSlug}/api/test/${toKebabSimple(e.name)}.service.spec.ts`,
@@ -495,7 +495,7 @@ export function planScaffoldFromBlueprint(bp: Blueprint): ScaffoldPlanResult {
       templates: ['tests.controller-spec', 'tests.service-spec'],
     },
     {
-      skill_id: 'SKILL-scaffold-docs',
+      operation_id: 'scaffold.docs',
       target_paths: [
         `domain/${moduleSlug}/docs/README.md`,
         `domain/${moduleSlug}/docs/ADR-0001.md`,
@@ -503,7 +503,7 @@ export function planScaffoldFromBlueprint(bp: Blueprint): ScaffoldPlanResult {
       templates: ['docs.readme', 'docs.adr'],
     },
     {
-      skill_id: 'SKILL-scaffold-ci',
+      operation_id: 'scaffold.ci',
       target_paths: [`.github/workflows/module-${moduleSlug}.yml`],
       templates: ['ci.workflow'],
     },

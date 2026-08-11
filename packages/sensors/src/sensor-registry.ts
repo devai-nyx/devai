@@ -4,6 +4,13 @@ import { fileURLToPath } from 'node:url';
 import { validators } from '@devai-nyx/schemas';
 
 export type SensorRegistryTier = 'BASELINE' | 'TIER2' | 'TIER3' | 'SWEEP';
+export type SensorEffect = 'read' | 'harness-write' | 'local-write' | 'remote-write';
+
+export interface SensorEffectBasis {
+  readonly capabilities: readonly string[];
+  readonly source_paths: readonly string[];
+  readonly rationale: string;
+}
 
 export interface SensorCell {
   readonly substrate: string;
@@ -20,33 +27,23 @@ export interface SensorRegistryEntry {
   readonly id: string;
   readonly title: string;
   readonly type: 'sensor-registry-entry';
-  readonly status: 'draft';
+  readonly status: 'active';
   readonly date: string;
   readonly authority: 'Architect';
-  readonly supersedes: readonly string[];
-  readonly superseded_by: string | null;
-  readonly provenance: readonly string[];
   readonly kind: string;
   readonly emitter_module: string;
+  readonly effect: SensorEffect;
+  readonly effect_basis?: SensorEffectBasis;
   readonly cells?: readonly SensorCell[];
   readonly diagnostic?: true;
   readonly tiers: readonly SensorRegistryTier[];
   readonly design_note: SensorDesignNote;
 }
 
-export interface ArchivedSensorKind {
-  readonly kind: string;
-  readonly reason: 'no-emitter-at-attested-pin';
-  readonly provenance: string;
-  readonly replacement: string | null;
-}
-
 export interface SensorRegistry {
   readonly schemaVersion: '1.0.0';
   readonly id: 'sensor-registry';
-  readonly attested_predecessor_pin: string;
   readonly entries: readonly SensorRegistryEntry[];
-  readonly archived_kinds: readonly ArchivedSensorKind[];
 }
 
 export type SensorKind = SensorRegistryEntry['kind'];
@@ -60,6 +57,8 @@ export interface SensorDescriptor {
   readonly readingKinds: readonly SensorKind[];
   readonly lifecycle: 'supported';
   readonly emitterModule: string;
+  readonly effect: SensorEffect;
+  readonly capabilities: readonly string[];
   readonly cells: readonly SensorCell[];
   readonly diagnostic: boolean;
   readonly tiers: readonly SensorRegistryTier[];
@@ -119,19 +118,10 @@ export const SENSOR_READING_KINDS: readonly SensorKind[] = Object.freeze(
   SENSOR_REGISTRY.entries.map((entry) => entry.kind),
 );
 
-export const ARCHIVED_SENSOR_KINDS: readonly ArchivedSensorKind[] = Object.freeze([
-  ...SENSOR_REGISTRY.archived_kinds,
-]);
-
 const liveKindSet = new Set<SensorKind>(SENSOR_READING_KINDS);
-const archivedKindSet = new Set(ARCHIVED_SENSOR_KINDS.map((entry) => entry.kind));
 
 export function isSensorKind(value: unknown): value is SensorKind {
   return typeof value === 'string' && liveKindSet.has(value);
-}
-
-export function isArchivedSensorKind(value: unknown): value is string {
-  return typeof value === 'string' && archivedKindSet.has(value);
 }
 
 export const SENSOR_ENTRIES_BY_KIND: Readonly<Record<SensorKind, SensorRegistryEntry>> =
@@ -172,6 +162,8 @@ export const SENSOR_DESCRIPTORS: readonly SensorDescriptor[] = Object.freeze(
     readingKinds: Object.freeze([entry.kind]),
     lifecycle: 'supported' as const,
     emitterModule: entry.emitter_module,
+    effect: entry.effect,
+    capabilities: Object.freeze([...(entry.effect_basis?.capabilities ?? [])]),
     cells: Object.freeze([...(entry.cells ?? [])]),
     diagnostic: entry.diagnostic === true,
     tiers: Object.freeze([...entry.tiers]),
@@ -201,7 +193,7 @@ export function renderSensorRegistryMarkdown(): string {
     '',
     '**Generated from `law/policy/sensor-registry.json`. Do not hand-edit.**',
     '',
-    `Live kinds: **${String(SENSOR_DESCRIPTORS.length)}**. Archived compatibility kinds: **${String(ARCHIVED_SENSOR_KINDS.length)}**.`,
+    `Live kinds: **${String(SENSOR_DESCRIPTORS.length)}**.`,
     '',
     '| Kind | Runner | Emitter | Cells | Tiers | Standing |',
     '|---|---|---|---|---|---|',
@@ -214,10 +206,6 @@ export function renderSensorRegistryMarkdown(): string {
     lines.push(
       `| \`${descriptor.kind}\` | \`${descriptor.command}\` | \`${descriptor.emitterModule}\` | ${cells} | ${descriptor.tiers.join(', ')} | ${descriptor.diagnostic ? 'diagnostic' : 'scorecard'} |`,
     );
-  }
-  lines.push('', '## Archived compatibility kinds', '');
-  for (const disposition of ARCHIVED_SENSOR_KINDS) {
-    lines.push(`- \`${disposition.kind}\`: ${disposition.reason}`);
   }
   lines.push('');
   return lines.join('\n');

@@ -53,7 +53,7 @@ export function expectBoundaryFailure(
 
 export const gitTarget = {
   kind: 'git-ref',
-  id: 'git-ref:devai-self:refs/heads/main',
+  id: 'git-ref:example-repository:refs/heads/main',
   repository_id: REPOSITORY_ID,
   ref: 'refs/heads/main',
   operation: 'update',
@@ -69,12 +69,12 @@ export const dbTarget = {
   operation: 'ddl',
 } as const;
 
-export const publishTarget = {
+export const remoteTarget = {
   kind: 'remote',
-  id: 'remote:github-pages:publish-docs',
-  system_id: 'github-pages',
-  endpoint_id: 'publish-docs',
-  operation_id: 'publish',
+  id: 'remote:sensor-runtime:invoke',
+  system_id: 'sensor-runtime',
+  endpoint_id: 'observations',
+  operation_id: 'invoke',
   publication: true,
 } as const;
 

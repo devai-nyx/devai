@@ -2,25 +2,11 @@
   "schemaVersion": "1.0.0",
   "guards": [
     {
-      "id": "INVARIANTS_DIR",
-      "pattern": "law/invariants/INV-*.json",
-      "min_matches": 34,
-      "description": "Successor invariant validation and trace resolution must never silently run over an empty canonical law population.",
-      "source": "packages/spec/src/spec/invariant-validator.ts"
-    },
-    {
       "id": "SCHEMAS_DIR",
       "pattern": "law/schemas/*.schema.json",
-      "min_matches": 54,
-      "description": "Schema type generation and package staging must retain the complete successor canonical schema roster.",
-      "source": "packages/schemas/scripts/gen-types.mjs"
-    },
-    {
-      "id": "ADR_DIR",
-      "pattern": "law/adr/ADR-*.md",
-      "min_matches": 12,
-      "description": "The gapless successor ADR roster must remain non-empty and complete while publication pages stay separately backlogged under BL-019.",
-      "source": "packages/spec/src/adr/index.ts"
+      "min_matches": 35,
+      "description": "Schema type generation and package staging must retain the complete current schema roster.",
+      "source": "packages/schemas/src/roster.ts"
     }
   ]
 }

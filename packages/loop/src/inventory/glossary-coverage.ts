@@ -1,7 +1,6 @@
-import { readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { listSpecFiles } from '@devai-nyx/spec';
-import { walkFiles } from './walker.js';
+import { readInventorySource, walkFiles } from './walker.js';
 
 export interface TermCoverage {
   readonly id: string;
@@ -18,9 +17,7 @@ export interface GlossaryCoverageResult {
 export interface GlossaryCoverageOptions {
   readonly repoRoot: string;
   readonly glossaryDir?: string;
-  /** Single search directory (legacy single-value form). */
-  readonly searchDir?: string;
-  /** One or more search directories. Union with `searchDir` if both supplied. */
+  /** One or more search directories. */
   readonly searchDirs?: readonly string[];
   readonly ignoreDirs?: ReadonlySet<string>;
 }
@@ -33,25 +30,24 @@ interface GlossaryRecord {
 
 /**
  * For each glossary entry, count how many source files mention its term
- * (case-insensitive substring match across .ts and .md). Phase-3 minimum:
+ * (case-insensitive substring match across .ts and .md):
  * returns the coverage map so downstream scoring can flag terms that have
  * zero usage (potentially dead concepts).
  *
- * Default search directory is `<repoRoot>/packages/`. Override with
- * `searchDir` (single) or `searchDirs` (multiple, unioned). When neither
- * is supplied the default applies; when either is, the default is replaced.
+ * Default search directory is `<repoRoot>/packages/`. When `searchDirs` is
+ * supplied it replaces the default.
  */
 export function glossaryCoverage(opts: GlossaryCoverageOptions): GlossaryCoverageResult {
   const glossaryDir = opts.glossaryDir ?? join(opts.repoRoot, 'law/glossary');
-  const searchDirs: string[] = [];
-  if (opts.searchDir !== undefined) searchDirs.push(opts.searchDir);
-  if (opts.searchDirs !== undefined) searchDirs.push(...opts.searchDirs);
-  if (searchDirs.length === 0) searchDirs.push(join(opts.repoRoot, 'packages'));
+  const searchDirs =
+    opts.searchDirs === undefined || opts.searchDirs.length === 0
+      ? [join(opts.repoRoot, 'packages')]
+      : [...opts.searchDirs];
 
   const entries: GlossaryRecord[] = [];
   for (const file of listSpecFiles(glossaryDir, 'GE-')) {
     try {
-      const parsed = JSON.parse(readFileSync(file, 'utf8')) as GlossaryRecord;
+      const parsed = JSON.parse(readInventorySource(file)) as GlossaryRecord;
       entries.push(parsed);
     } catch {
       // Skip malformed glossary files; spec validate-glossary catches them.
@@ -74,7 +70,7 @@ export function glossaryCoverage(opts: GlossaryCoverageOptions): GlossaryCoverag
     for (const file of sources) {
       let text;
       try {
-        text = readFileSync(file, 'utf8').toLowerCase();
+        text = readInventorySource(file).toLowerCase();
       } catch {
         continue;
       }

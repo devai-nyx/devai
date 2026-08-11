@@ -1,10 +1,12 @@
-import { readFileSync } from 'node:fs';
 import ts from 'typescript';
+import { inventorySnapshotValue, readInventorySource } from './walker.js';
 
 /** Parse a TS source file into a SourceFile AST node. */
 export function parseSourceFile(path: string): ts.SourceFile {
-  const text = readFileSync(path, 'utf8');
-  return ts.createSourceFile(path, text, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
+  return inventorySnapshotValue(`ts-ast:${path}`, () => {
+    const text = readInventorySource(path);
+    return ts.createSourceFile(path, text, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
+  });
 }
 
 /**

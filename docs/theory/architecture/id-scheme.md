@@ -1,7 +1,6 @@
 # ID scheme
 
 **Authority:** Architect (Constitution Article 6, F1).
-**Forensic anchor:** [D-32](../../../law/adr/README.md) — "Hybrid ID scheme (locked)."
 
 ## Rule
 
@@ -46,12 +45,8 @@ The hybrid scheme matches each entity to its primary reader:
 
 ## When to revisit
 
-A successor D-entry would be needed if:
+Revisit the scheme if:
 
 - The collision-resistance assumptions for content-hash IDs degrade (e.g., a hash truncation change that increases collision probability for the entity volumes DEVAI now handles).
 - Sequential allocation under parallel agent execution becomes a real bottleneck (it has not, since the per-domain partitioning keeps contention low).
-- A new entity kind doesn't fit any of the three shapes. The fallback is to pick the closest shape and document the choice in a successor entry, not invent a fourth shape.
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/id-scheme.md (classification CURRENT).
+- A new entity kind does not fit any of the three shapes. Document the choice before adding a fourth shape.

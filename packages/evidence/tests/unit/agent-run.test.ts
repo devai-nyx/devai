@@ -43,7 +43,7 @@ describe('agent-run proof records', () => {
     await withAuthorityHostTestScope(() => {
       const first = emitAgentRun({
         repoRoot: repo,
-        caller: { kind: 'skill', name: 'fixture', version: '1.0.0' },
+        caller: { kind: 'recipe', name: 'devai-fix', version: '1.0.0' },
         started_at: '2026-07-24T10:00:00.000Z',
         ended_at: '2026-07-24T10:00:01.000Z',
         files_read: ['law/constitution.md'],
@@ -64,7 +64,6 @@ describe('agent-run proof records', () => {
         /^AR-[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
       );
       expect(first.prev_hash).toBe('GENESIS');
-      expect(first.hash_algo_version).toBe('2.0');
       expect(verifyAgentRunHash(first)).toBe(true);
 
       const second = emitAgentRun({

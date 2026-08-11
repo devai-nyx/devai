@@ -56,16 +56,13 @@ alone are advisory for those unrestricted surfaces.
 3. **Explicit evidence.** Read-only observations do not silently write state.
    Role-declared, consented recording actions persist readings and append the
    hash chain when durable evidence is required.
-4. **Scorecard-driven progress.** A 5×9 aspect grid (substrates × transversals) gives a single, audit-able view of where the framework's regulation is succeeding and where it's failing.
-5. **Self-application.** [Article 36](../reference/law.md) requires DEVAI to apply itself to its own development. The [self-scorecard](./status.md) is the framework's accountability surface; if DEVAI cannot run on itself, it has not earned the right to run on anything else.
+4. **Observable progress.** The 59 registered sensors provide bounded readings whose
+   meaning, inputs, and freshness remain explicit.
+5. **Human ownership.** Maintainers decide DEVAI's changes and releases; the framework does not govern its own development.
 
 ## Where to go next
 
 - For the architectural argument in long form: synthesis paper (under §2 Theory).
 - For the formal control-theoretic treatment: control-engineering paper (under §2 Theory).
-- For the adopter walk-through: [`devai init plan` and role-separated apply commands](../adopters/adoption.md).
+- Start with `devai init plan`, then use the explicit role-separated apply actions shown by the plan.
 - For the per-role view: [Roles](../roles).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/start/what-is-devai.md (classification CURRENT).

@@ -77,7 +77,7 @@ function processIsAllowed(
   if (
     executable === process.execPath &&
     typeof args[0] === 'string' &&
-    args[0].endsWith('/packages/cli/dist/bin.js') &&
+    args[0].endsWith('/packages/cli/dist/runtime/index/bin.js') &&
     (args[1] === 'spec-validate-action-coverage' ||
       (args[1] === 'spec' && args[2] === 'validate-all'))
   ) {

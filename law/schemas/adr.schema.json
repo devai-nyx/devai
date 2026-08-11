@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/adr.schema.json",
   "title": "Architecture Decision Record",
-  "description": "Frontmatter schema for live successor ADR markdown under law/adr/. The markdown body carries the mandatory Status, Context, Decision, Consequences, Alternatives Considered, and Affected Rules sections enforced by the production ADR validator.",
+  "description": "Frontmatter schema for live ADR markdown under law/adr/. The markdown body carries the mandatory Status, Context, Decision, Consequences, Alternatives Considered, and Affected Rules sections enforced by the production ADR validator.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -32,7 +32,7 @@
     },
     "status": {
       "$ref": "common-defs.schema.json#/$defs/record_status",
-      "description": "DII-106 lifecycle: draft is non-binding; active is accepted and binding; superseded names a replacement; tombstoned records rejection or retirement."
+      "description": "Current lifecycle: draft is non-binding; active is accepted and binding; superseded names a replacement."
     },
     "date": {
       "type": "string",
@@ -53,7 +53,7 @@
     "superseded_by": {
       "type": ["string", "null"],
       "minLength": 1,
-      "description": "DII-120 lifecycle link: null until one active-to-superseded transition appends the non-empty replacement id; superseded and tombstoned records are terminal."
+      "description": "Null until one active-to-superseded transition appends the non-empty replacement id; superseded records are terminal."
     },
     "provenance": {
       "type": "array",
@@ -95,7 +95,7 @@
       "authority": "Architect",
       "supersedes": ["ADR-003-runtime-authority-enforcement.md"],
       "superseded_by": null,
-      "provenance": ["frozen predecessor disposition map"],
+      "provenance": ["source disposition map"],
       "affected_rules": []
     }
   ]

@@ -9,13 +9,12 @@ sensor_kind: test_coherence
 emitter: packages/sensors/src/test-coherence.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Test Coherence
 
-This note binds the successor-local design standing for `test_coherence`. Its canonical emitter
-is `packages/sensors/src/test-coherence.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `test_coherence`. Its canonical emitter
+is `packages/sensors/src/test-coherence.ts`.
 
 Bound cells: F3×T3.
 

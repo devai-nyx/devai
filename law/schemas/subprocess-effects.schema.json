@@ -24,7 +24,7 @@
         "allowed_verbs",
         "authority_and_consent_required",
         "byte_identity_required",
-        "adopter_upgrade_path_required",
+        "adopter_binding_path_required",
         "direct_writes_forbidden"
       ],
       "properties": {
@@ -32,7 +32,7 @@
           "const": ".devai/config/subprocess-effects.json"
         },
         "allowed_verbs": {
-          "const": ["devai adopt upgrade"]
+          "const": ["devai init bind"]
         },
         "authority_and_consent_required": {
           "const": true
@@ -40,7 +40,7 @@
         "byte_identity_required": {
           "const": true
         },
-        "adopter_upgrade_path_required": {
+        "adopter_binding_path_required": {
           "const": true
         },
         "direct_writes_forbidden": {
@@ -135,10 +135,10 @@
       "source_authority": "F1-architect",
       "materialization": {
         "target": ".devai/config/subprocess-effects.json",
-        "allowed_verbs": ["devai adopt upgrade"],
+        "allowed_verbs": ["devai init bind"],
         "authority_and_consent_required": true,
         "byte_identity_required": true,
-        "adopter_upgrade_path_required": true,
+        "adopter_binding_path_required": true,
         "direct_writes_forbidden": true
       },
       "templates": []

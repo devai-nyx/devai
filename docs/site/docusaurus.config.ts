@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'DEVAI',
-  tagline: 'Human-supervised governance and control for AI-assisted development.',
+  tagline: 'Human-supervised control for AI-assisted development.',
   url: 'https://devai-nyx.github.io',
   baseUrl: '/devai/',
   organizationName: 'devai-nyx',
@@ -29,7 +29,7 @@ const config: Config = {
       items: [
         { type: 'docSidebar', sidebarId: 'docsSidebar', position: 'left', label: 'Docs' },
         { to: '/docs/adopters', label: 'Adopters', position: 'left' },
-        { to: '/docs/reference/history', label: 'History', position: 'left' },
+        { to: '/docs/reference', label: 'Reference', position: 'left' },
       ],
     },
     prism: { theme: prismThemes.github, darkTheme: prismThemes.dracula },

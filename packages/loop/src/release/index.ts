@@ -497,19 +497,13 @@ export function listReleases(repoRoot: string): readonly ReleaseRecord[] {
 /**
  * Compute a deterministic content hash over a release record for
  * external log / audit-trail purposes. SHA-256 over the
- * canonical-JSON form (v2.0 deep-sort, the current default).
+ * current canonical-JSON form.
  *
  * **Not persisted on the release-control.schema.json record
  * itself.** Unlike `agent-run` / `rtd-manifest`, release records
  * carry no stored `manifest_hash` field, so there is no
- * historical-record compatibility concern: callers compute the
- * hash on demand and MUST treat each call as authoritative for the
- * live record at call time. There is therefore no
- * `hash_algo_version` dispatch here; new callers always get v2.0.
- * If a future change introduces a stored hash on the
- * release-control schema, mirror the agent-run pattern (add
- * `hash_algo_version` to the schema + version-aware verification
- * helper).
+ * callers compute the hash on demand and MUST treat each call as
+ * authoritative for the live record at call time.
  */
 export function releaseContentHash(record: ReleaseRecord): string {
   return canonicalSha256(record);

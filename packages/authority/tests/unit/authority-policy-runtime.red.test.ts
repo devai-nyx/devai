@@ -207,10 +207,10 @@ describe('R19 authority policy loading', () => {
 describe('R19 policy materialization authorization and purity', () => {
   function materializationFixture(api: Awaited<ReturnType<typeof runtimeApi>>) {
     const issuer = createIssuer(api, { invocation_id: 'invocation-materialize' });
-    const action = actionDocumentWithId('adopt upgrade', 'local-write', {
+    const action = actionDocumentWithId('init bind', 'local-write', {
       kind: 'derived-machine',
-      actor: 'upgrade',
-      transition: 'upgrade',
+      actor: 'binding',
+      transition: 'bind',
       initiator: { allowed_roles: ['architect'], preserve_in_context: true },
     });
     const declaration = declarationDependencies(issuer, action);
@@ -223,7 +223,7 @@ describe('R19 policy materialization authorization and purity', () => {
         derivation: {
           actionContracts: declaration.actionContracts,
           verifiedOrigin: { kind: 'direct-cli', invocation_id: 'invocation-materialize' },
-          trusted_adapter_id: 'upgrade-authority',
+          trusted_adapter_id: 'binding-authority',
           canonicalSha256,
         },
       },
@@ -240,7 +240,7 @@ describe('R19 policy materialization authorization and purity', () => {
       const fixture = materializationFixture(api);
       const result = api.authorizePolicyMaterialization(
         {
-          action_id: 'adopt upgrade',
+          action_id: 'init bind',
           invocation_id: 'invocation-materialize',
           target_operation: 'create',
           declaration,
@@ -257,7 +257,7 @@ describe('R19 policy materialization authorization and purity', () => {
     const fixture = materializationFixture(api);
     const result = api.authorizePolicyMaterialization(
       {
-        action_id: 'adopt upgrade',
+        action_id: 'init bind',
         invocation_id: 'invocation-materialize',
         target_operation: 'create',
         declaration: { as_role: 'architect' },
@@ -271,10 +271,10 @@ describe('R19 policy materialization authorization and purity', () => {
   it('refuses derivation contract drift that would substitute the initiating Architect', async () => {
     const api = await runtimeApi();
     const fixture = materializationFixture(api);
-    const ownerOnly = actionDocumentWithId('adopt upgrade', 'local-write', {
+    const ownerOnly = actionDocumentWithId('init bind', 'local-write', {
       kind: 'derived-machine',
-      actor: 'upgrade',
-      transition: 'upgrade',
+      actor: 'binding',
+      transition: 'bind',
       initiator: { allowed_roles: ['owner'], preserve_in_context: true },
     });
     const ownerRegistry = (
@@ -282,7 +282,7 @@ describe('R19 policy materialization authorization and purity', () => {
     ).actionContracts;
     const result = api.authorizePolicyMaterialization(
       {
-        action_id: 'adopt upgrade',
+        action_id: 'init bind',
         invocation_id: 'invocation-materialize',
         target_operation: 'create',
         declaration: { as_role: 'architect' },
@@ -305,7 +305,7 @@ describe('R19 policy materialization authorization and purity', () => {
     const authorization = expectSuccess(
       api.authorizePolicyMaterialization(
         {
-          action_id: 'adopt upgrade',
+          action_id: 'init bind',
           invocation_id: 'invocation-materialize',
           target_operation: 'create',
           declaration: { as_role: 'architect' },
@@ -361,7 +361,7 @@ describe('R19 policy materialization authorization and purity', () => {
     const authorization = expectSuccess(
       api.authorizePolicyMaterialization(
         {
-          action_id: 'adopt upgrade',
+          action_id: 'init bind',
           invocation_id: 'invocation-materialize',
           target_operation: 'create',
           declaration: { as_role: 'architect' },
@@ -413,7 +413,7 @@ describe('R19 policy materialization authorization and purity', () => {
     const authorization = expectSuccess(
       api.authorizePolicyMaterialization(
         {
-          action_id: 'adopt upgrade',
+          action_id: 'init bind',
           invocation_id: 'invocation-materialize',
           target_operation: 'create',
           declaration: { as_role: 'architect' },

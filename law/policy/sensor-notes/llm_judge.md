@@ -9,13 +9,12 @@ sensor_kind: llm_judge
 emitter: packages/sensors/src/judge.ts
 standing: cell
 tiers: [SWEEP]
-provenance: [session-draft R-0004 B2, DII-162]
 ---
 
 # Llm Judge
 
-This note binds the successor-local design standing for `llm_judge`. Its canonical emitter
-is `packages/sensors/src/judge.ts`; R-0004 does not change its measured runtime semantics.
+This note defines `llm_judge`. Its canonical emitter
+is `packages/sensors/src/judge.ts`.
 
 Bound cells: F1×T3.
 

@@ -3,18 +3,13 @@ import { basename, join } from 'node:path';
 import { validators } from '@devai-nyx/schemas';
 
 /**
- * Phase-10 Batch 10.F — ADR validator.
- *
  * Validates ADR markdown files under law/adr/:
  *  1. Front-matter (YAML between two `---` lines at file head) parses
  *     and conforms to adr.schema.json.
- *  2. Filename matches the successor record id pattern: ADR-NNN-slug.md.
+ *  2. Filename matches the record id pattern: ADR-NNN-slug.md.
  *  3. Body contains the mandatory sections (Status, Context, Decision,
  *     Consequences, Alternatives Considered, Affected Rules).
  *  4. Sequential numbering across the directory (no gaps).
- *
- * Absorbs the LAW-14.ADR.* shape from the stech-law predecessor draft
- * (D-38).
  */
 
 export interface AdrValidationError {
@@ -29,7 +24,7 @@ export interface AdrValidationResult {
   readonly errors: readonly AdrValidationError[];
   readonly adrs: ReadonlyArray<{
     readonly file: string;
-    /** Compatibility output key; sourced from successor frontmatter `id`. */
+    /** Stable output key sourced from frontmatter `id`. */
     readonly adr_id: string;
     readonly title: string;
     readonly status: string;
@@ -207,8 +202,7 @@ export function validateAdrs(opts: ValidateAdrsOptions): AdrValidationResult {
   }
 
   // Sequential numbering: when N ADRs exist, they should be
-  // ADR-001..ADR-NNN with no gaps. Tombstoned ids are tracked
-  // separately at a later phase; for now, a gap is a finding.
+  // ADR-001..ADR-NNN with no gaps.
   const numbers = adrs
     .map((a) => a.n)
     .filter((n) => n > 0)

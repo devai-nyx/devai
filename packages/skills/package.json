@@ -1,7 +1,7 @@
 {
   "name": "@devai-nyx/skills",
   "version": "1.0.0",
-  "description": "DEVAI skills, LLM clients, prompt firewall, bootstrap, and post-merge services.",
+  "description": "Private DEVAI recipe, operation, model-bridge, bootstrap, and post-merge services.",
   "license": "Apache-2.0",
   "author": "Antonio Augusto Russo <aarusso@nyxk.com.br>",
   "type": "module",
@@ -25,12 +25,12 @@
   "files": [
     "dist",
     "src",
-    "prompts"
+    "resources"
   ],
   "scripts": {
-    "build": "tsc -b && node scripts/copy-constitution.mjs && node scripts/copy-policy.mjs && node scripts/copy-prompts.mjs",
+    "build": "tsc -b && node scripts/copy-constitution.mjs && node scripts/copy-policy.mjs",
     "clean": "tsc -b --clean",
-    "test": "vitest run tests"
+    "test": "pnpm --dir ../.. run test:skills"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",
@@ -47,12 +47,10 @@
     "typescript": "^5.6.0",
     "vitest": "^4.0.18"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/devai-nyx/devaii.git",
+    "url": "git+https://github.com/devai-nyx/devai.git",
     "directory": "packages/skills"
-  }
+  },
+  "private": true
 }

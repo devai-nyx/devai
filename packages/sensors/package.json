@@ -15,6 +15,21 @@
       "types": "./dist/index.d.ts",
       "development": "./src/index.ts",
       "default": "./dist/index.js"
+    },
+    "./inventory-slices": {
+      "types": "./dist/inventory-slices.d.ts",
+      "development": "./src/inventory-slices.ts",
+      "default": "./dist/inventory-slices.js"
+    },
+    "./presets": {
+      "types": "./dist/sense-presets.d.ts",
+      "development": "./src/sense-presets.ts",
+      "default": "./dist/sense-presets.js"
+    },
+    "./registry": {
+      "types": "./dist/sensor-registry.d.ts",
+      "development": "./src/sensor-registry.ts",
+      "default": "./dist/sensor-registry.js"
     }
   },
   "files": [
@@ -24,7 +39,12 @@
   "scripts": {
     "build": "tsc -b && node scripts/copy-law.mjs",
     "clean": "tsc -b --clean",
-    "test": "vitest run tests"
+    "test": "pnpm --dir ../.. run test:sensors"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devai-nyx/devai.git",
+    "directory": "packages/sensors"
   },
   "dependencies": {
     "@devai-nyx/authority": "workspace:*",
@@ -38,12 +58,5 @@
     "@types/pg": "^8.11.0",
     "vitest": "^4.0.18"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/devai-nyx/devaii.git",
-    "directory": "packages/sensors"
-  }
+  "private": true
 }

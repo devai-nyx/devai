@@ -1,34 +1,24 @@
 ---
 id: CONSTITUTION
-title: DEVAI-II Constitution 1.0.0
+title: DEVAI Constitution 1.0.0
 type: constitution
 status: active
 date: 2026-07-25
 authority: Architect
 supersedes: null
 superseded_by: null
-provenance: R-0003 durable REV provenance + R-0001 reviewed deltas + R-0003 crosswalk + DII-150 founding ceremony + DII-152 correction
 ---
 
-# DEVAI-II Constitution — 1.0.0
-
-**Source: predecessor's live 0.8.0 text.**
-
-**RATIFIED FOUNDING LAW — Articles 1–40 transpose that doctrine with only the reviewed
-1.0.0 deltas identified in the founding annex. Articles
-41–42 are successor additions. The predecessor's amendment history (0.1.0–0.8.0)
-remains frozen in the archived predecessor; this Constitution's own amendment history
-begins at 1.0.0 with the genesis attestation.**
+# DEVAI Constitution — 1.0.0
 
 ## Status and scope
 
 **Version:** 1.0.0
-**Status:** ratified (active lifecycle)
-**Ratified:** 2026-07-25T22:08:05Z
+**Status:** active
 
 This is the immutable axiom set for DEVAI. Every other artifact in the framework — contracts, charters, skills, bootstrap layout, scorecard — derives from these axioms and may not contradict them.
 
-The constitution is part of substrate F5 (Harness). It is upgraded only via the DEVAI release process and version-bumped per change. Client repositories inherit the constitution at bootstrap time and pin to a specific version; constitutional upgrade in a client is an explicit `devai upgrade` operation, never an implicit one.
+The constitution is part of substrate F5 (Harness). It changes only through the DEVAI release process and is versioned per change. Adopter repositories pin an installed copy explicitly with `devai init bind --constitution --write`; binding is never implicit.
 
 The constitution states what must always be true. It does not state how mechanisms are implemented; those are in skills, charters, and contracts.
 
@@ -40,7 +30,7 @@ The constitution states what must always be true. It does not state how mechanis
 
 DEVAI is a multi-loop, multi-dimensional control and governance harness for human-directed, AI-assisted software development on a declared stack. The primary stack is NestJS, Angular, Postgres; additional stacks are supported through stack-adapter packs carried as F5 policy artifacts. Each adopter repository declares exactly one resolved stack; the framework's mechanisms assume a declared stack per repository, not stack universality. Its supported production purpose is to keep human- or externally-agent-actuated development within declared authority, specification, safety, and evidence limits. Autonomous controllers may exist only as explicitly enabled experimental F5 policy and do not inherit production-readiness claims from the supported harness.
 
-DEVAI is a grounded framework, not a product: it has no hosted offering, no SaaS surface, and no end-user product UI; its scope includes brownfield reverse-documentation of existing repositories. It ships as an embedded package inside the adopter repository — never as an external control plane. [1.0.0: absorbs ex-D-51/D-57 and ex-D-4 per the absorption manifest.]
+DEVAI is a grounded framework, not a hosted offering or external control plane. Its scope includes brownfield reverse-documentation of existing repositories, and it operates from the adopter repository.
 
 ### Article 2. Control-theoretic frame
 
@@ -97,11 +87,10 @@ Authority is decided by a fixed path prefix of at most two segments — a table 
 
 - `law/` — Architect (F1-law: constitution, register, ADRs, schemas, invariants, trace, policy sources; `law/glossary/` joint with Owner).
 - `product/` — Owner (F1-business: journeys, use-cases, stories, rules, mandates).
-- `work/rounds/` — Architect (F1-intent: round plans, amended by dated appendix, never rewritten).
-- `work/audit/` — Auditor (F1-observation: the role's only writable tree; carries no authority over the reference signal).
+- `.devai/local/rounds/` — role-bounded runtime round state; each role writes only its declared task or audit output through an authorized action.
 - `docs/` — Architect (published human documentation).
 - `record/` — machine only: `record/derived/` (F4) is written only by the regeneration subsystem; `record/proofs/` is appended only by executing verbs, hash-linked, attributed to the verb and committed by the session that produced it. A human edit under `record/` is an authority violation regardless of role.
-- `.devai/pin/` and `.devai/config/` — modified only via `devai upgrade`, materialized byte-identical from `law/policy/` sources; a checker never writes its own inputs.
+- `.devai/pin/` and `.devai/config/` — modified only through registered `init apply` or `init bind` actions, materialized from canonical package or policy sources; a checker never writes its own inputs.
 - `.devai/state/` — mutable head state written by executing verbs; never hand-edited.
 - `packages/` and root workspace configuration — Engineer (F2).
 - `tests/` and `packages/*/tests/` — Inspector (F3).
@@ -109,7 +98,7 @@ Authority is decided by a fixed path prefix of at most two segments — a table 
 - Root prose files (`README.md`, `CLAUDE.md`, `AGENTS.md`) — Architect.
 - Host-tool configuration directories (`.changeset/`, `.claude/`, and peers) — path fixed by the toolchain; contents classified by this table per content class (agent permission policy is F5-host under Architect authority; runtime directories are scratch-class).
 
-Clients may extend the path mapping for client-specific disciplines. Extensions are additive; the core mapping is immutable at a given constitution version. [1.0.0: enumeration rewritten to the successor layout per the absorption manifest; resolves the predecessor's F4 enumeration drift.]
+Clients may extend the path mapping for client-specific disciplines. Extensions are additive; the core mapping is immutable at a given constitution version.
 
 ---
 
@@ -123,7 +112,7 @@ A human user of DEVAI declares one of five roles at session start. The declarati
 - **Architect.** Engineering authority. Authors and modifies engineering specifications, invariants, trace, and ADRs under F1 Architect-authority paths.
 - **Inspector.** Sensor authority. Authors and modifies tests under F3 paths.
 - **Engineer.** Plant authority. Authors and modifies code under F2 paths.
-- **Auditor.** Observer authority. Read-only on all substrates. Produces reports, scorecards, backlogs, and status assessments, written only to the designated Auditor observation path (Article 6: `work/audit/`); runtime-recorded F5 state produced by verbs it executes is attributed to those verbs (Article 6, F5 state paths). Outside those designated outputs, the Auditor role makes no commits that modify F1, F2, F3, or F5. Observation output carries no authority over the reference signal: an Auditor report may recommend, never ratify.
+- **Auditor.** Observer authority. Read-only on all substrates. Produces reports and status assessments only in the active round's designated `.devai/local/rounds/*/audit/` path; runtime-recorded F5 state produced by verbs it executes is attributed to those verbs. Observation output carries no authority over the reference signal: an Auditor report may recommend, never ratify.
 
 ### Article 8. Agent disciplines
 
@@ -137,11 +126,11 @@ The authority chain is:
 
 **Human > Constitution > Architect/Owner > Contracts > Engineer**
 
-Closer-to-code documents lose against higher-level documents when they contradict. A function-level docstring that contradicts an architecture ADR loses; an ADR that contradicts the constitution loses; the constitution loses only to the human Architect operating outside any session (via `devai upgrade`).
+Closer-to-code documents lose against higher-level documents when they contradict. A function-level docstring that contradicts an architecture ADR loses; an ADR that contradicts the constitution loses. Constitution changes require an explicit Architect-authored release change and a new version.
 
 This rule prevents the canonical failure mode of agents rewriting high-level documents to match code they have written.
 
-Weakening any fail-closed authority property requires a new explicit register decision; where the change touches Articles 6 through 10, it requires constitutional amendment. No policy artifact, extension, or operational convenience may accomplish either implicitly. [1.0.0: absorbs the ex-D-136 change-control clause, sole-carried in the predecessor.]
+Weakening any fail-closed authority property requires an explicit decision; where the change touches Articles 6 through 10, it requires constitutional amendment. No policy artifact, extension, or operational convenience may accomplish either implicitly.
 
 ### Article 10. Authority separation in a single loop iteration
 
@@ -391,13 +380,13 @@ This invariant gives the controller a single queue to regulate.
 
 ---
 
-## Part IX — Self-application and harness governance
+## Part IX — Repository substrate and harness contracts
 
-### Article 36. DEVAI applies to itself
+### Article 36. DEVAI evaluates the configured repository substrate
 
-The F5 substrate is scored by the same scorecard machinery that scores F1 through F4. The constitution, contracts, charters, skills, and prompt registry are subject to coherence, alignment, and discipline measurement.
+The configured repository's F5 substrate is scored by the same scorecard machinery that scores F1 through F4. Its bound constitution, contracts, charters, recipes, and prompt inputs are subject to coherence, alignment, and discipline measurement.
 
-Drift between the framework version installed in a client and the upstream DEVAI release is itself a scorable property of F5.
+Drift between the installed DEVAI package and the repository's explicit binding is itself a scorable property of F5.
 
 ### Article 37. Prompt composition is governed
 
@@ -415,65 +404,16 @@ When uncertainty remains after available checks, the framework records explicit 
 
 ---
 
-## Part X — Amendments and succession
+## Part X — Change and evidence
 
-### Article 40. Amendment process
+### Article 40. Constitution changes
 
-Amendments to this constitution are made only via the DEVAI release process. A client repository pins to a specific constitution version and adopts amendments by explicit `devai upgrade` action.
-
-The constitution's history is preserved indefinitely. Every amendment records: the article changed, the prior text, the new text, the rationale, and the version bump.
-
-Clients may not amend the constitution locally. Client-specific rules go into policy artifacts under F5, not into the constitution.
+Adopters bind a specific constitution version through `devai init bind --constitution --write`. Client-specific rules belong in policy artifacts rather than local edits to the constitution.
 
 ---
 
-### Article 41. Succession
-
-Succession is the replacement of this constitution and its substrate by a successor framework in a new substrate. Succession is not amendment: Article 40 changes articles within a continuing constitution; succession ends this constitution's active life and founds another. Neither process may be used to accomplish the other — an amendment may not transfer the corpus to a new substrate, and a succession may not be declared to evade the amendment process.
-
-Only the Owner may declare succession. A declaration while any round is open, or by any other role, or by any automated process, is void. The declaration is recorded verbatim in a terminal decision of the predecessor's decision log, authored by a declared Architect session; that terminal decision is the predecessor's final substantive record.
-
-Succession transfers law and only law. Decisions, invariants, schemas, and doctrine cross to the successor solely through an absorption manifest: an audited, hash-bound classification of the predecessor's corpus, produced under Auditor observation before the declaration and cited by the terminal decision. Content absent from the manifest does not transfer; importing it is a new successor decision, never an inheritance.
-
-Evidence standing does not transfer. Verdicts, readiness, gate authorizations, promotions, soak maturities, and every other evidence-earned standing are void in the successor unless the genesis attestation names them, each marked either as attested history — citable, never load-bearing — or as void pending re-establishment under the successor's own law. The successor opens with zero readiness-bearing standing and earns its own.
-
-The genesis attestation is the single crossing point between predecessor and successor. It is a schema-valid record binding the predecessor's final tree identity, evidence-chain head, terminal decision, and manifest hashes. It carries data, never authority: nothing the predecessor wrote binds the successor until a successor act of ratification adopts it. The attestation is immutable once ratified; correcting it requires a new successor decision, never an edit.
-
-The predecessor is frozen, complete and unaltered, and is preserved as the successor's archive. It is not edited, trimmed, reformatted, or destroyed; its errors and errata are preserved as recorded. Its identifiers are retired with it and are never re-minted in any successor.
-
-A succession makes no claim. Neither the terminal decision nor the genesis attestation establishes completion, readiness, autonomy, or product standing for either framework.
-
-Every successor constitution ratified under this article must itself contain an article materially equivalent to this one. A succession into a constitution lacking such an article is invalid.
-
----
-
-## Founding annex — application crosswalk
-
-The six annex dispositions are now applied in the article text above. Three textual
-insertions carry bracketed `[1.0.0: …]` provenance notes at their application sites;
-the path rewrites and placement disposition are recorded by the source crosswalk and
-DII-152 rather than by claiming an inline marker. Status:
-
-1. **Article 6 rewrite → APPLIED.** Static-prefix table per the Part VII layout; F4 enumeration drift resolved (`record/derived/`); host-tool contents row added; mutator source gate (delta 3) embedded in the enforcement paragraph.
-2. **Change-control clause → APPLIED** to Article 9 (ex-D-136 sole-carried).
-3. **Zero-exemption mutator gate → APPLIED** in Article 6; full precision remains ADR-001 delta A1.1.
-4. **Universal uncheckable-evidence rule → APPLIED via new Article 42 (Part XI — Evidence)**, which also closes a defect this application discovered: the live predecessor text had NO evidence article — the manifest's "Articles 32–33 cover D-24" verification was wrong, and the corpus's "Article-32 chain" citations are a numbering fossil. Article 42 also constitutionalizes error-is-never-a-verdict and FAIL-persistence (CTX-05/07 candidates, promoted).
-5. **PROMOTE-residue absorption → APPLIED to Article 1** (framework-not-product ex-D-51/57; embedded-package ex-D-4). Verified already covered: D-12 coupled triplets = Article 24 (read and confirmed); D-146/D-164 evidence-promotion contract deliberately stays ADR-tier (ADR-003 successor).
-6. **Altitude sweep → APPLIED in R-0001/P1.** The sweep findings and policy-routing
-   backlog are recorded in `work/rounds/R-0001/law-altitude-sweep.md`. Article 42 remains
-   in Part XI: it is a constitutional evidence doctrine, while relocation would create
-   needless anchor churn without changing meaning.
-
-The complete article-by-article source disposition is recorded in
-`work/rounds/R-0003/constitution-source-crosswalk.md`. DII-150 ratified this text and
-the bound genesis attestation without changing the reviewed doctrine.
-
-## Part XI — Evidence
-
-### Article 42. Evidence
+### Article 41. Evidence
 
 Evidence is hash-chained and append-only. Every claim the framework makes about work — verdicts, closures, readings, runs — resolves to records bound into the chain by content hash with exact identity: exact tree, exact inputs, exact outcomes. Records are written by executing verbs, attributed to the verb, and never edited; correction is a new appended record, never a change.
 
 Judge-only or otherwise independently uncheckable evidence never establishes readiness. An error is never a verdict: a crash, timeout, missing input, or infrastructure failure is a failure to observe, and a failure to observe never manufactures a PASS, a FAIL, or a readiness claim. A recorded FAIL is superseded only by a newer observation of the same kind, never by absence from a computation subset.
-
-[1.0.0 placement note: retained as Article 42 in Part XI by R-0001/P1 because the live predecessor text had no evidence article — the manifest's "Articles 32–33 cover D-24" verification was wrong (those are sensor uniformity and the Auditor), and the corpus's "Article-32 chain" citations are a numbering fossil from an earlier constitution version. Retention preserves existing article anchors without changing the doctrine.]

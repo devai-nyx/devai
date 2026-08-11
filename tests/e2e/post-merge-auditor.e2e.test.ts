@@ -17,8 +17,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = join(HERE, '..', '..', 'packages', 'cli');
-const DRIVER = join(PKG_ROOT, 'tests', 'fixtures', 'authorized-cli-test-driver.mjs');
-const REAL_BIN = join(PKG_ROOT, 'dist', 'bin.js');
+const REAL_BIN = join(PKG_ROOT, 'dist', 'runtime', 'index', 'bin.js');
 const CONSTITUTION = join(PKG_ROOT, '..', '..', 'law', 'constitution.md');
 const skipIfNotBuilt = existsSync(REAL_BIN) ? it : it.skip;
 const gitEnv: NodeJS.ProcessEnv = {
@@ -43,9 +42,39 @@ function commitFile(name: string, content: string): void {
 }
 
 function materializeAuthorityPolicy(): void {
+  const constitution = spawnSync(
+    'node',
+    [
+      REAL_BIN,
+      'init',
+      'bind',
+      '--constitution',
+      '--target',
+      repo,
+      '--as-role',
+      'architect',
+      '--write',
+      '--format',
+      'json',
+    ],
+    { cwd: repo, env: gitEnv, encoding: 'utf8' },
+  );
+  expect(constitution.status, constitution.stderr).toBe(0);
+
   const result = spawnSync(
     'node',
-    [REAL_BIN, 'adopt', 'upgrade', '--target', repo, '--as-role', 'architect', '--write'],
+    [
+      REAL_BIN,
+      'init',
+      'bind',
+      '--target',
+      repo,
+      '--as-role',
+      'architect',
+      '--write',
+      '--format',
+      'json',
+    ],
     { cwd: repo, env: gitEnv, encoding: 'utf8' },
   );
   expect(result.status, result.stderr).toBe(0);
@@ -56,17 +85,21 @@ function install() {
   return spawnSync(
     'node',
     [
-      DRIVER,
-      'adopt',
-      'hooks',
-      'install',
-      '--repo-root',
+      REAL_BIN,
+      'init',
+      'apply',
+      'architect',
+      '--target',
       repo,
+      '--include',
+      'hooks',
       '--hook',
       'post-merge',
       '--as-role',
       'architect',
       '--write',
+      '--format',
+      'json',
     ],
     { cwd: repo, env: gitEnv, encoding: 'utf8' },
   );
@@ -114,11 +147,15 @@ describe('Article 34 post-merge Auditor composite', () => {
   skipIfNotBuilt(
     'refuses a missing host receipt before creating state or a worktree',
     () => {
-      const result = spawnSync('node', [REAL_BIN, 'govern', 'auditor', 'post-merge'], {
-        cwd: repo,
-        env: gitEnv,
-        encoding: 'utf8',
-      });
+      const result = spawnSync(
+        'node',
+        [REAL_BIN, 'round', 'close', '--post-merge-receipt', '--repo-root', repo],
+        {
+          cwd: repo,
+          env: gitEnv,
+          encoding: 'utf8',
+        },
+      );
 
       expect(result.status).not.toBe(0);
       expect(result.stderr).toMatch(/host receipt missing/i);
@@ -131,6 +168,7 @@ describe('Article 34 post-merge Auditor composite', () => {
   skipIfNotBuilt(
     'refuses a forged host receipt before creating state or a worktree',
     () => {
+      materializeAuthorityPolicy();
       const forged = join(repo, 'forged-host-receipt.json');
       writeFileSync(
         forged,
@@ -144,7 +182,16 @@ describe('Article 34 post-merge Auditor composite', () => {
       );
       const result = spawnSync(
         'node',
-        [REAL_BIN, 'govern', 'auditor', 'post-merge', '--host-receipt', forged],
+        [
+          REAL_BIN,
+          'round',
+          'close',
+          '--post-merge-receipt',
+          '--host-receipt',
+          forged,
+          '--repo-root',
+          repo,
+        ],
         { cwd: repo, env: gitEnv, encoding: 'utf8' },
       );
 
@@ -163,7 +210,7 @@ describe('Article 34 post-merge Auditor composite', () => {
       const installed = install();
       expect(installed.status, installed.stderr).toBe(0);
       expect(existsSync(join(repo, '.git/hooks/post-merge'))).toBe(true);
-      expect(git(['add', '.devai/config']).status).toBe(0);
+      expect(git(['add', '.devai/config', '.devai/pin', '.devai/constitution.md']).status).toBe(0);
       expect(git(['commit', '-m', 'test: authority and host adapter']).status).toBe(0);
 
       for (const [branch, file] of [
@@ -203,7 +250,7 @@ describe('Article 34 post-merge Auditor composite', () => {
     () => {
       materializeAuthorityPolicy();
       expect(install().status).toBe(0);
-      expect(git(['add', '.devai/config']).status).toBe(0);
+      expect(git(['add', '.devai/config', '.devai/pin', '.devai/constitution.md']).status).toBe(0);
       expect(git(['commit', '-m', 'test: authority and host adapter']).status).toBe(0);
       expect(git(['checkout', '-b', 'feature-lock']).status).toBe(0);
       commitFile('lock.txt', 'lock fixture\n');
@@ -250,7 +297,7 @@ describe('Article 34 post-merge Auditor composite', () => {
     () => {
       materializeAuthorityPolicy();
       expect(install().status).toBe(0);
-      expect(git(['add', '.devai/config']).status).toBe(0);
+      expect(git(['add', '.devai/config', '.devai/pin', '.devai/constitution.md']).status).toBe(0);
       expect(git(['commit', '-m', 'test: authority and host adapter']).status).toBe(0);
       expect(git(['checkout', '-b', 'feature-failure']).status).toBe(0);
       commitFile('failure.txt', 'failure fixture\n');
@@ -264,7 +311,21 @@ describe('Article 34 post-merge Auditor composite', () => {
 
       expect(after).not.toBe(before);
       expect(git(['merge-base', '--is-ancestor', before, after]).status).toBe(0);
-      expect(`${merged.stdout}${merged.stderr}`).toMatch(/post-merge.*fail/i);
+      const injectedFailure = `${merged.stdout}\n${merged.stderr}`
+        .split(/\r?\n/u)
+        .map((line) => {
+          try {
+            return JSON.parse(line) as Record<string, unknown>;
+          } catch {
+            return null;
+          }
+        })
+        .find((entry) => entry?.['code'] === 'POST_MERGE_OBSERVATION_INJECTED_FAILURE');
+      expect(injectedFailure).toMatchObject({
+        code: 'POST_MERGE_OBSERVATION_INJECTED_FAILURE',
+        operation: 'close-post-merge',
+        exit: 2,
+      });
       const failed = join(repo, '.git/devai/post-merge-observations', after, 'status.json');
       expect(JSON.parse(readFileSync(failed, 'utf8'))).toMatchObject({ status: 'error' });
     },
@@ -276,7 +337,7 @@ describe('Article 34 post-merge Auditor composite', () => {
     () => {
       materializeAuthorityPolicy();
       expect(install().status).toBe(0);
-      expect(git(['add', '.devai/config']).status).toBe(0);
+      expect(git(['add', '.devai/config', '.devai/pin', '.devai/constitution.md']).status).toBe(0);
       expect(git(['commit', '-m', 'test: authority and host adapter']).status).toBe(0);
       expect(git(['checkout', '-b', 'feature-retry']).status).toBe(0);
       commitFile('retry.txt', 'retry fixture\n');

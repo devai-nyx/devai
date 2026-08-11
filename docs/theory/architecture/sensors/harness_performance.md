@@ -8,7 +8,7 @@
 
 Call `gh run list --branch <branch> --json conclusion,createdAt,updatedAt --limit <N>`. For each `conclusion === 'success'` run, compute `duration_ms = updatedAt - createdAt`. Aggregate: median + p95 across all successes.
 
-Graceful degradation: when `gh` is not on PATH or auth missing, emit `status: 'unknown'` with reason — same contract as Phase 26.K's harness_green_main.
+Graceful degradation: when `gh` is not on PATH or authentication is missing, emit `status: 'unknown'` with a reason.
 
 ## PASS / REVIEW / FAIL boundaries
 
@@ -27,7 +27,3 @@ Graceful degradation: when `gh` is not on PATH or auth missing, emit `status: 'u
 
 - **Per-job duration.** Aggregate workflow duration only.
 - **Resource consumption** (runner minutes, costs).
-
----
-
-> Provenance: migrated from devai@d76cd12d2241a1a28a32a0fe629c6531da7fe74d path docs/framework/arch/sensors/harness_performance.md (classification CURRENT).
