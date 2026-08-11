@@ -5,6 +5,7 @@ import { join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   buildCiScaffoldPlan,
+  LEDGER_ENVIRONMENT,
   ledgerVerificationWorkflow,
   VERIFIER_COMMIT,
 } from '../../src/services/ci-scaffold/index.js';
@@ -50,6 +51,16 @@ describe('live ledger-verification workflow', () => {
   });
 
   it.each([
+    {
+      name: 'candidate-controlled pull-request workflow',
+      mutate: (source: string) => source.replace('pull_request_target:', 'pull_request:'),
+      diagnostic: 'CI_WORKFLOW_TRUST_BOUNDARY_INVALID',
+    },
+    {
+      name: 'missing protected environment',
+      mutate: (source: string) => source.replace(`    environment: ${LEDGER_ENVIRONMENT}\n`, ''),
+      diagnostic: 'CI_LEDGER_ENVIRONMENT_MISSING',
+    },
     {
       name: 'mutable verifier ref',
       mutate: (source: string) => source.replace(VERIFIER_COMMIT, 'main'),

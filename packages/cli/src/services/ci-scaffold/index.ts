@@ -15,6 +15,7 @@ export interface CiScaffoldPlan {
 export const LEDGER_WORKFLOW_FILE = 'devai-ledger-verify.yml';
 export const VERIFIER_REPOSITORY = 'devai-nyx/devai-verifier';
 export const VERIFIER_COMMIT = '2c6e5acaade7aae65d23f86fc7f6fdf7e56d945c';
+export const LEDGER_ENVIRONMENT = 'devai-ledger-verification';
 export const CHECKOUT_COMMIT = '11d5960a326750d5838078e36cf38b85af677262';
 export const SETUP_NODE_COMMIT = '49933ea5288caeca8642d1e84afbd3f7d6820020';
 
@@ -25,14 +26,15 @@ export function ledgerVerificationWorkflow(): string {
   return `name: DEVAI ledger verification
 
 on:
-  pull_request: {}
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches: [main]
   workflow_dispatch: {}
 
 concurrency:
   group: devai-ledger-verify-\${{ github.event.pull_request.head.sha || github.sha }}
-  cancel-in-progress: \${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: \${{ github.event_name == 'pull_request_target' }}
 
 permissions:
   contents: read
@@ -44,6 +46,7 @@ jobs:
   verify-ledger:
     name: Verify externally attested local ledger
     runs-on: ubuntu-latest
+    environment: ${LEDGER_ENVIRONMENT}
     timeout-minutes: 5
     steps:
       - name: Check out exact candidate

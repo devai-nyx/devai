@@ -8,6 +8,7 @@ import { parseDocument } from 'yaml';
 export const LEDGER_WORKFLOW_FILE = 'devai-ledger-verify.yml';
 export const VERIFIER_REPOSITORY = 'devai-nyx/devai-verifier';
 export const VERIFIER_COMMIT = '2c6e5acaade7aae65d23f86fc7f6fdf7e56d945c';
+export const LEDGER_ENVIRONMENT = 'devai-ledger-verification';
 export const CANDIDATE_SHA_EXPRESSION = '${{ github.event.pull_request.head.sha || github.sha }}';
 
 const OLD_WORKFLOW_MARKERS = [
@@ -83,6 +84,22 @@ function checkWorkflow(file, source, findings) {
   }
   const workflow = object(document.toJS());
 
+  const triggers = object(workflow.on);
+  const triggerNames = Object.keys(triggers).sort();
+  const expectedTriggers = ['pull_request_target', 'push', 'workflow_dispatch'];
+  if (
+    triggerNames.length !== expectedTriggers.length ||
+    triggerNames.some((name, index) => name !== expectedTriggers[index])
+  ) {
+    findings.push(
+      finding(
+        'CI_WORKFLOW_TRUST_BOUNDARY_INVALID',
+        file,
+        'workflow must use trusted-base pull_request_target, push, and workflow_dispatch only',
+      ),
+    );
+  }
+
   const permissions = object(workflow.permissions);
   if (Object.keys(permissions).length !== 1 || permissions.contents !== 'read') {
     findings.push(
@@ -106,6 +123,15 @@ function checkWorkflow(file, source, findings) {
     );
   }
   const job = object(jobs['verify-ledger']);
+  if (job.environment !== LEDGER_ENVIRONMENT) {
+    findings.push(
+      finding(
+        'CI_LEDGER_ENVIRONMENT_MISSING',
+        file,
+        `verify-ledger must use protected environment ${LEDGER_ENVIRONMENT}`,
+      ),
+    );
+  }
   const steps = Array.isArray(job.steps) ? job.steps.map(object) : [];
   if (steps.length === 0) {
     findings.push(finding('CI_LEDGER_STEPS_MISSING', file, 'verify-ledger has no steps'));

@@ -1,14 +1,15 @@
 name: DEVAI ledger verification
 
 on:
-  pull_request: {}
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches: [main]
   workflow_dispatch: {}
 
 concurrency:
   group: devai-ledger-verify-${{ github.event.pull_request.head.sha || github.sha }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request_target' }}
 
 permissions:
   contents: read
@@ -20,6 +21,7 @@ jobs:
   verify-ledger:
     name: Verify externally attested local ledger
     runs-on: ubuntu-latest
+    environment: devai-ledger-verification
     timeout-minutes: 5
     steps:
       - name: Check out exact candidate
