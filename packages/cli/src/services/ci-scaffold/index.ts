@@ -16,8 +16,8 @@ export const LEDGER_WORKFLOW_FILE = 'devai-ledger-verify.yml';
 export const VERIFIER_REPOSITORY = 'devai-nyx/devai-verifier';
 export const VERIFIER_COMMIT = '2c6e5acaade7aae65d23f86fc7f6fdf7e56d945c';
 export const LEDGER_ENVIRONMENT = 'devai-ledger-verification';
-export const CHECKOUT_COMMIT = '11d5960a326750d5838078e36cf38b85af677262';
-export const SETUP_NODE_COMMIT = '49933ea5288caeca8642d1e84afbd3f7d6820020';
+export const CHECKOUT_COMMIT = '3d3c42e5aac5ba805825da76410c181273ba90b1';
+export const SETUP_NODE_COMMIT = '820762786026740c76f36085b0efc47a31fe5020';
 
 const DEFAULT_OUTPUT_RELATIVE = `.github/workflows/${LEDGER_WORKFLOW_FILE}`;
 
@@ -50,7 +50,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Check out exact candidate
-        uses: actions/checkout@${CHECKOUT_COMMIT} # v4
+        uses: actions/checkout@${CHECKOUT_COMMIT} # v7.0.1
         with:
           ref: \${{ env.CANDIDATE_SHA }}
           path: candidate
@@ -58,7 +58,7 @@ jobs:
           persist-credentials: false
 
       - name: Check out pinned independent verifier
-        uses: actions/checkout@${CHECKOUT_COMMIT} # v4
+        uses: actions/checkout@${CHECKOUT_COMMIT} # v7.0.1
         with:
           repository: ${VERIFIER_REPOSITORY}
           ref: ${VERIFIER_COMMIT}
@@ -67,7 +67,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up verifier runtime
-        uses: actions/setup-node@${SETUP_NODE_COMMIT} # v4
+        uses: actions/setup-node@${SETUP_NODE_COMMIT} # v7.0.0
         with:
           node-version: 24
 

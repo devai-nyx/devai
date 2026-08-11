@@ -5,8 +5,10 @@ import { join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   buildCiScaffoldPlan,
+  CHECKOUT_COMMIT,
   LEDGER_ENVIRONMENT,
   ledgerVerificationWorkflow,
+  SETUP_NODE_COMMIT,
   VERIFIER_COMMIT,
 } from '../../src/services/ci-scaffold/index.js';
 import { checkCiEconomy } from '../../src/commands/check/ci-economy.js';
@@ -51,6 +53,16 @@ describe('live ledger-verification workflow', () => {
   });
 
   it.each([
+    {
+      name: 'older immutable checkout action',
+      mutate: (source: string) => source.replaceAll(CHECKOUT_COMMIT, 'a'.repeat(40)),
+      diagnostic: 'CI_ACTION_PIN_MISMATCH',
+    },
+    {
+      name: 'older immutable setup-node action',
+      mutate: (source: string) => source.replace(SETUP_NODE_COMMIT, 'b'.repeat(40)),
+      diagnostic: 'CI_ACTION_PIN_MISMATCH',
+    },
     {
       name: 'candidate-controlled pull-request workflow',
       mutate: (source: string) => source.replace('pull_request_target:', 'pull_request:'),

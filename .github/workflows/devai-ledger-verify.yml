@@ -25,7 +25,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Check out exact candidate
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ env.CANDIDATE_SHA }}
           path: candidate
@@ -33,7 +33,7 @@ jobs:
           persist-credentials: false
 
       - name: Check out pinned independent verifier
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: devai-nyx/devai-verifier
           ref: 2c6e5acaade7aae65d23f86fc7f6fdf7e56d945c
@@ -42,7 +42,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up verifier runtime
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
 

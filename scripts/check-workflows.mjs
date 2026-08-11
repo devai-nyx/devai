@@ -9,6 +9,8 @@ export const LEDGER_WORKFLOW_FILE = 'devai-ledger-verify.yml';
 export const VERIFIER_REPOSITORY = 'devai-nyx/devai-verifier';
 export const VERIFIER_COMMIT = '2c6e5acaade7aae65d23f86fc7f6fdf7e56d945c';
 export const LEDGER_ENVIRONMENT = 'devai-ledger-verification';
+export const CHECKOUT_COMMIT = '3d3c42e5aac5ba805825da76410c181273ba90b1';
+export const SETUP_NODE_COMMIT = '820762786026740c76f36085b0efc47a31fe5020';
 export const CANDIDATE_SHA_EXPRESSION = '${{ github.event.pull_request.head.sha || github.sha }}';
 
 const OLD_WORKFLOW_MARKERS = [
@@ -147,6 +149,12 @@ function checkWorkflow(file, source, findings) {
       );
     } else if (uses !== '' && !/@[0-9a-f]{40}$/u.test(uses)) {
       findings.push(finding('CI_ACTION_REFERENCE_MUTABLE', file, `${location} uses ${uses}`));
+    }
+    if (
+      (uses.startsWith('actions/checkout@') && uses !== `actions/checkout@${CHECKOUT_COMMIT}`) ||
+      (uses.startsWith('actions/setup-node@') && uses !== `actions/setup-node@${SETUP_NODE_COMMIT}`)
+    ) {
+      findings.push(finding('CI_ACTION_PIN_MISMATCH', file, `${location} uses ${uses}`));
     }
     const run = typeof step.run === 'string' ? step.run : '';
     if (PRODUCT_EXECUTION.some((pattern) => pattern.test(run))) {
