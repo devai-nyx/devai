@@ -7,7 +7,7 @@ import { parseDocument } from 'yaml';
 
 export const LEDGER_WORKFLOW_FILE = 'devai-ledger-verify.yml';
 export const VERIFIER_REPOSITORY = 'devai-nyx/devai-verifier';
-export const VERIFIER_COMMIT = '1478596a236a29e373d5aed02c696cdb1ea5a064';
+export const VERIFIER_COMMIT = '2c6e5acaade7aae65d23f86fc7f6fdf7e56d945c';
 export const CANDIDATE_SHA_EXPRESSION = '${{ github.event.pull_request.head.sha || github.sha }}';
 
 const OLD_WORKFLOW_MARKERS = [
