@@ -3,7 +3,6 @@
   "schemaVersion": "1.0.0",
   "id": "action-registry",
   "authority": "Architect",
-  "base_sha": "9b435e5ca479a837baffe2b597c8ba582fec08f4",
   "ordering": "utf8-bytes",
   "generated_views": [
     "packages/cli/src/generated/action-registry.ts",
