@@ -677,8 +677,8 @@ export const evidenceVerify = defineCommand({
     cli
       .command('evidence-verify', 'Verify one declared evidence scope')
       .option('--scope <scope>', 'local | chain (required)')
-      .option('--show-head', 'Include the compatibility chain head (chain scope only)')
-      .option('--chain <path>', `Compatibility chain path (default: ${DEFAULT_CHAIN_PATH})`)
+      .option('--show-head', 'Include the evidence chain head (chain scope only)')
+      .option('--chain <path>', `Evidence chain path (default: ${DEFAULT_CHAIN_PATH})`)
       .option('--repo-root <path>', 'Repository root (default: cwd)')
       .option('--mode <mode>', 'Local mode: auto | strict | gate')
       .option('--manifest <path>', 'Local evidence manifest override')
