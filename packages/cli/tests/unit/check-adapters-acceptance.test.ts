@@ -7,7 +7,7 @@ import { join, resolve } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
 import { withAuthorityHostTestScope } from '../../../skills/tests/unit/authority-host-test-scope.js';
 import { executeCheckMember } from '../../src/commands/check/adapters.js';
-import type { ResolvedCheckMember } from '../../src/commands/check/contracts.js';
+import { resolveCheckPlan, type ResolvedCheckMember } from '../../src/commands/check/contracts.js';
 
 const ROOT = resolve(import.meta.dirname, '../../../..');
 const FIXTURE_ROOT = mkdtempSync(join(tmpdir(), 'devai-r0007-check-acceptance-'));
@@ -35,6 +35,19 @@ afterAll(() => {
 });
 
 describe('canonical check adapter acceptance', () => {
+  it('routes every suite through exactly one content-addressed ledger service', () => {
+    for (const suite of ['quick', 'standard'] as const) {
+      expect(resolveCheckPlan(ROOT, { suite }).members.map((entry) => entry.service_id)).toEqual([
+        'ledger-local',
+      ]);
+    }
+    for (const suite of ['full', 'release'] as const) {
+      expect(resolveCheckPlan(ROOT, { suite }).members.map((entry) => entry.service_id)).toEqual([
+        'ledger-rc',
+      ]);
+    }
+  });
+
   it('binds trace validation to the current runtime instead of a detached package script', () => {
     const policy = JSON.parse(readFileSync(join(ROOT, 'law/policy/check-suites.json'), 'utf8')) as {
       member_definitions: Array<{ id: string; binding: unknown }>;

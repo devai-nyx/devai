@@ -189,9 +189,22 @@ function validateDescriptor(value: unknown): TaskDescriptor {
       !Array.isArray(task.inputSelectors) ||
       task.inputSelectors.length === 0 ||
       !Array.isArray(task.toolchainKeys) ||
-      !Array.isArray(task.allowlistedEnv)
+      !Array.isArray(task.allowlistedEnv) ||
+      task.outputContract === null ||
+      typeof task.outputContract !== 'object' ||
+      Array.isArray(task.outputContract)
     ) {
       throw new Error(`CHECK_RUNNER_DESCRIPTOR: malformed task ${task.nodeId ?? '<unknown>'}`);
+    }
+    const outputPaths = task.outputContract.paths;
+    if (
+      outputPaths !== undefined &&
+      (!Array.isArray(outputPaths) ||
+        outputPaths.length === 0 ||
+        outputPaths.some((path) => typeof path !== 'string' || normalizePath(path) !== path) ||
+        new Set(outputPaths).size !== outputPaths.length)
+    ) {
+      throw new Error(`CHECK_RUNNER_DESCRIPTOR: malformed output paths for ${task.nodeId}`);
     }
     ids.add(task.nodeId);
   }
@@ -456,7 +469,12 @@ function selectedNodeIds(
     for (const dependent of dependents.get(nodeId) ?? []) {
       const profile = descriptor.profiles.find((entry) => entry.profileId === target);
       const eligible = profile?.mode === 'affected' ? new Set(profile.eligibleNodes ?? []) : null;
-      if ((eligible === null || eligible.has(dependent)) && !impacted.has(dependent)) {
+      const aggregateFallback = dependent === descriptor.fallbackNodeId;
+      if (
+        !aggregateFallback &&
+        (eligible === null || eligible.has(dependent)) &&
+        !impacted.has(dependent)
+      ) {
         impacted.add(dependent);
         downstream.push(dependent);
       }
@@ -508,6 +526,7 @@ export function buildTaskPlan(options: PolicyBuildOptions): TaskPlan {
   >();
   const ordered = topologicalTasks(descriptor);
   for (const task of ordered) {
+    if (!selected.has(task.nodeId)) continue;
     const selectedToolchain: Record<string, string> = {};
     for (const key of [...task.toolchainKeys].sort()) {
       const value = toolchain[key];

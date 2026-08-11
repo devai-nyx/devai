@@ -1,8 +1,16 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { mkdirSync, writeFileSync } from '@devai-nyx/authority';
+import { chmodSync, mkdirSync, writeFileSync } from '@devai-nyx/authority';
 import { canonicalBytes, sha256Hex } from './canonical.js';
-import type { CandidateReceipt, PlannedTask, TaskOutcome, TaskResult } from './types.js';
+import type {
+  CandidateReceipt,
+  PlannedTask,
+  TaskExecutionResult,
+  TaskOutcome,
+  TaskResult,
+} from './types.js';
+
+const MAX_DIAGNOSTIC_STREAM_BYTES = 8 * 1024;
 
 interface NodeIndex {
   readonly schemaVersion: '1.0.0';
@@ -65,8 +73,8 @@ function outputFilesMatch(
   task: Pick<PlannedTask, 'outputContract'>,
   result: TaskResult,
 ): boolean {
-  if (task.outputContract.kind !== 'tracked-files') return true;
   const paths = task.outputContract.paths;
+  if (paths === undefined) return true;
   if (!Array.isArray(paths) || paths.some((path) => typeof path !== 'string')) return false;
   for (const path of paths as string[]) {
     const expected = result.outputDigests[path];
@@ -78,6 +86,11 @@ function outputFilesMatch(
     }
   }
   return true;
+}
+
+function boundedTail(value: string): string {
+  const bytes = Buffer.from(value, 'utf8');
+  return bytes.subarray(Math.max(0, bytes.length - MAX_DIAGNOSTIC_STREAM_BYTES)).toString('utf8');
 }
 
 export class CheckCache {
@@ -133,7 +146,9 @@ export class CheckCache {
     ) {
       return { cacheState: 'stale', reason: 'cached-result-invalid' };
     }
-    if (JSON.stringify(result.dependencyResultDigests) !== JSON.stringify(dependencyResultDigests)) {
+    if (
+      JSON.stringify(result.dependencyResultDigests) !== JSON.stringify(dependencyResultDigests)
+    ) {
       return { cacheState: 'stale', reason: 'dependency-result-changed' };
     }
     if (!outputFilesMatch(this.#repoRoot, task, result)) {
@@ -173,6 +188,37 @@ export class CheckCache {
     const path = join(this.#root, 'nodes', `${safeNodeId(nodeId)}.json`);
     mkdirSync(dirname(path), { recursive: true });
     writeFileSync(path, canonicalBytes(index));
+  }
+
+  writeFailureDiagnostic(
+    task: Pick<PlannedTask, 'nodeId' | 'taskKey'>,
+    outcome: Exclude<TaskOutcome, 'PASS'>,
+    finishedAt: string,
+    reason: string,
+    execution: TaskExecutionResult,
+  ): string {
+    const diagnostic = {
+      schemaVersion: '1.0.0',
+      nodeId: task.nodeId,
+      taskKey: task.taskKey,
+      outcome,
+      finishedAt,
+      reason,
+      exitCode: execution.status,
+      signal: execution.signal,
+      errorCode: execution.errorCode ?? null,
+      stdoutTail: boundedTail(execution.stdout),
+      stderrTail: boundedTail(execution.stderr),
+    };
+    const path = join(
+      this.#root,
+      'diagnostics',
+      `${safeNodeId(task.nodeId)}-${sha256Hex(diagnostic)}.json`,
+    );
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, canonicalBytes(diagnostic), { mode: 0o600 });
+    chmodSync(path, 0o600);
+    return path;
   }
 
   writeReceipt(receipt: CandidateReceipt): Readonly<{ digest: string; path: string }> {

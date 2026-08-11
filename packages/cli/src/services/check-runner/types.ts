@@ -106,6 +106,7 @@ export interface ExecutedTask {
   readonly resultDigest?: string;
   readonly exitCode?: number;
   readonly signal?: string;
+  readonly diagnosticPath?: string;
 }
 
 export interface CheckRunnerReport {

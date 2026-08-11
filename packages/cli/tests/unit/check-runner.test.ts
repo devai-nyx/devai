@@ -1,5 +1,13 @@
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  mkdtempSync,
+  mkdirSync,
+  readFileSync,
+  realpathSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -220,6 +228,18 @@ describe('content-addressed check runner', () => {
     for (const nodeId of ['test:cli', 'test:skills', 'test:root']) {
       expect(actual.tasks.find((task) => task.nodeId === nodeId)?.dependencies).toContain('build');
     }
+    expect(actual.tasks.find((task) => task.nodeId === 'test:schemas')).toMatchObject({
+      argv: ['pnpm', 'run', 'test:schemas'],
+    });
+    expect(actual.tasks.find((task) => task.nodeId === 'test:local-full')?.dependencies).toContain(
+      'test:schemas',
+    );
+    expect(actual.tasks.find((task) => task.nodeId === 'build')?.outputContract).toMatchObject({
+      paths: ['scratch/coverage/rc-reachable-sources.json'],
+    });
+    expect(actual.tasks.find((task) => task.nodeId === 'test:coverage:rc')?.dependencies).toEqual([
+      'build',
+    ]);
   });
 
   it.each([
@@ -238,6 +258,7 @@ describe('content-addressed check runner', () => {
     expect(
       affected.tasks.find((task) => task.nodeId === 'test:unit')?.matchedChangedPaths,
     ).toContain(path);
+    expect(affected.tasks.map((task) => task.nodeId)).not.toContain('test:local-full');
   });
 
   it('accounts for both sides of renames and for deleted paths', () => {
@@ -263,11 +284,13 @@ describe('content-addressed check runner', () => {
     commit(dynamic.root, 'scripts/dynamic/load.mjs', 'export {};\n');
     const dynamicPlan = plan(dynamic.root, 'affected', dynamic.base);
     expect(dynamicPlan.tasks.map((task) => task.nodeId)).toContain('test:local-full');
+    expect(dynamicPlan.tasks.map((task) => task.nodeId)).toContain('test:unit');
 
     const unknown = repository();
     commit(unknown.root, 'notes/new.txt', 'unknown\n');
     const unknownPlan = plan(unknown.root, 'affected', unknown.base);
     expect(unknownPlan.tasks.map((task) => task.nodeId)).toContain('test:local-full');
+    expect(unknownPlan.tasks.map((task) => task.nodeId)).toContain('test:unit');
   });
 
   it('propagates dependency-key invalidation without commit identity in reusable keys', () => {
@@ -293,6 +316,20 @@ describe('content-addressed check runner', () => {
       initialUnit?.taskKey,
     );
     expect(restored.repository.commit).not.toBe(initial.repository.commit);
+  });
+
+  it('does not require release-candidate toolchains for the cheap local closure', () => {
+    const state = repository();
+    const declared = JSON.parse(readFileSync(join(state.root, 'test-tasks.json'), 'utf8')) as {
+      tasks: Array<{ nodeId: string; toolchainKeys: string[] }>;
+    };
+    const rcTask = declared.tasks.find((task) => task.nodeId === 'test:rc');
+    if (rcTask === undefined) throw new Error('test fixture is missing test:rc');
+    rcTask.toolchainKeys = ['rc-only-toolchain'];
+    writeFileSync(join(state.root, 'test-tasks.json'), `${JSON.stringify(declared, null, 2)}\n`);
+
+    expect(() => run(state.root)).not.toThrow();
+    expect(() => plan(state.root, 'rc')).toThrow(/CHECK_RUNNER_TOOLCHAIN_MISSING/u);
   });
 
   it('preserves absent allowlisted environment and binds it distinctly from explicit empty', () => {
@@ -405,6 +442,60 @@ describe('content-addressed check runner', () => {
     });
   });
 
+  it('binds declared generated artifacts for non-file-specific output contracts', () => {
+    const state = repository();
+    const declared = JSON.parse(readFileSync(join(state.root, 'test-tasks.json'), 'utf8')) as {
+      tasks: Array<{ nodeId: string; outputContract: Record<string, unknown> }>;
+    };
+    const generate = declared.tasks.find((task) => task.nodeId === 'generate');
+    if (generate === undefined) throw new Error('test fixture is missing generate');
+    generate.outputContract = {
+      kind: 'workspace-build',
+      requiredResult: 'pass',
+      paths: ['generated.txt'],
+    };
+    writeFileSync(join(state.root, 'test-tasks.json'), `${JSON.stringify(declared, null, 2)}\n`);
+
+    const first = run(state.root);
+    expect(first.execution?.every((task) => task.outcome === 'PASS')).toBe(true);
+    file(state.root, 'generated.txt', 'changed outside the build result\n');
+    const status = run(state.root, { operation: 'status' });
+    expect(status.plan.tasks.find((task) => task.nodeId === 'generate')).toMatchObject({
+      cacheState: 'stale',
+      reason: 'output-digest-changed',
+    });
+  });
+
+  it('persists bounded private failure diagnostics without adding content to the report', () => {
+    const state = repository();
+    const marker = 'private-diagnostic-marker';
+    const failed: TaskExecutionResult = {
+      status: 9,
+      signal: null,
+      stdout: `stdout-${marker}-${'x'.repeat(20_000)}`,
+      stderr: `stderr-${marker}-${'y'.repeat(20_000)}`,
+    };
+    const report = run(state.root, { executeTask: () => failed });
+    const diagnosticPath = report.execution?.[0]?.diagnosticPath;
+
+    expect(report.execution?.[0]).toMatchObject({
+      outcome: 'FAIL',
+      reason: 'process-exit-9',
+      exitCode: 9,
+    });
+    expect(diagnosticPath).toBeDefined();
+    expect(statSync(diagnosticPath ?? '').mode & 0o777).toBe(0o600);
+    const diagnosticBytes = readFileSync(diagnosticPath ?? '');
+    const diagnostic = JSON.parse(diagnosticBytes.toString('utf8')) as {
+      stdoutTail: string;
+      stderrTail: string;
+    };
+    expect(Buffer.byteLength(diagnostic.stdoutTail)).toBeLessThanOrEqual(8 * 1024);
+    expect(Buffer.byteLength(diagnostic.stderrTail)).toBeLessThanOrEqual(8 * 1024);
+    expect(JSON.stringify(report)).not.toContain(marker);
+    expect(report.receipt).toBeUndefined();
+  });
+
   it.each([
     ['FAIL', { status: 1, signal: null, stdout: '', stderr: 'failed' }],
     [
@@ -495,6 +586,18 @@ describe('content-addressed check runner', () => {
       matchDeclaredCheckTaskProcess(
         state.root,
         invocation,
+        request(
+          'node',
+          ['-e', "process.stdout.write('local test dependency closure complete\\n')"],
+          state.root,
+          false,
+        ),
+      ),
+    ).toMatchObject({ nodeId: 'test:local-full', cwd: realpathSync(state.root) });
+    expect(
+      matchDeclaredCheckTaskProcess(
+        state.root,
+        ['node', 'devai', 'check', '--suite', 'quick', '--write'],
         request(
           'node',
           ['-e', "process.stdout.write('local test dependency closure complete\\n')"],

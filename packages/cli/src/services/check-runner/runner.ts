@@ -10,6 +10,7 @@ import type {
   CheckRunnerReport,
   ExecutedTask,
   PlannedTask,
+  TaskDescriptorNode,
   TaskExecutionResult,
   TaskOutcome,
   TaskResult,
@@ -114,11 +115,10 @@ function outputDigests(
     stdout: sha256Hex(Buffer.from(execution.stdout, 'utf8')),
     stderr: sha256Hex(Buffer.from(execution.stderr, 'utf8')),
   };
-  if (task.outputContract.kind === 'tracked-files') {
-    const paths = task.outputContract.paths;
-    if (!Array.isArray(paths) || paths.some((path) => typeof path !== 'string')) {
+  const paths = task.outputContract.paths;
+  if (paths !== undefined) {
+    if (!Array.isArray(paths) || paths.some((path) => typeof path !== 'string'))
       throw new Error(`CHECK_RUNNER_OUTPUT_CONTRACT: ${task.nodeId} has malformed paths`);
-    }
     for (const path of paths as string[]) {
       try {
         digests[path] = sha256Hex(readFileSync(join(repoRoot, path)));
@@ -172,21 +172,37 @@ function planWithCache(
   });
 }
 
-function requiredToolchainKeys(options: CheckRunnerOptions): readonly string[] {
+function requiredTaskNodes(options: CheckRunnerOptions): readonly TaskDescriptorNode[] {
   const descriptor = readTaskDescriptor(
     resolve(options.descriptorPath ?? join(options.repoRoot, 'test-tasks.json')),
   );
-  // The independent verifier derives keys for the complete descriptor before
-  // projecting a profile. Resolve the same complete map even for a small local
-  // closure so selected keys remain byte-for-byte compatible.
-  return descriptor.tasks.flatMap((task) => task.toolchainKeys);
+  if (options.target === 'affected') {
+    const profile = descriptor.profiles.find((entry) => entry.profileId === 'affected');
+    const eligible = new Set(profile?.eligibleNodes ?? []);
+    return descriptor.tasks.filter((task) => eligible.has(task.nodeId));
+  }
+  const roots =
+    options.target === 'local'
+      ? [descriptor.fallbackNodeId]
+      : (descriptor.profiles.find((entry) => entry.profileId === 'rc')?.requiredNodes ?? []);
+  const byId = new Map(descriptor.tasks.map((task) => [task.nodeId, task]));
+  const selected = new Set<string>();
+  const pending = roots.filter((nodeId): nodeId is string => nodeId !== null);
+  for (let index = 0; index < pending.length; index += 1) {
+    const nodeId = pending[index];
+    if (nodeId === undefined || selected.has(nodeId)) continue;
+    selected.add(nodeId);
+    pending.push(...(byId.get(nodeId)?.dependencies ?? []));
+  }
+  return descriptor.tasks.filter((task) => selected.has(task.nodeId));
+}
+
+function requiredToolchainKeys(options: CheckRunnerOptions): readonly string[] {
+  return requiredTaskNodes(options).flatMap((task) => task.toolchainKeys);
 }
 
 function requiredEnvironmentKeys(options: CheckRunnerOptions): readonly string[] {
-  const descriptor = readTaskDescriptor(
-    resolve(options.descriptorPath ?? join(options.repoRoot, 'test-tasks.json')),
-  );
-  return descriptor.tasks.flatMap((task) => task.allowlistedEnv);
+  return requiredTaskNodes(options).flatMap((task) => task.allowlistedEnv);
 }
 
 export function runCheckTasks(options: CheckRunnerOptions): CheckRunnerReport {
@@ -264,16 +280,30 @@ export function runCheckTasks(options: CheckRunnerOptions): CheckRunnerReport {
     const finishedAt = now();
     const outcome = executionOutcome(result);
     if (outcome !== 'PASS') {
+      const reason =
+        result.errorCode !== undefined
+          ? `process-${result.errorCode}`
+          : result.signal !== null
+            ? `process-signal-${result.signal}`
+            : `process-exit-${String(result.status)}`;
+      const diagnosticPath = cache.writeFailureDiagnostic(
+        task,
+        outcome,
+        finishedAt,
+        reason,
+        result,
+      );
       cache.writeAttempt(task.nodeId, task.taskKey, outcome, finishedAt);
       execution.push({
         nodeId: task.nodeId,
         taskKey: task.taskKey,
         disposition: 'executed',
         outcome,
-        reason: cached.reason,
+        reason,
         durationMs,
         ...(result.status !== null && { exitCode: result.status }),
         ...(result.signal !== null && { signal: result.signal }),
+        diagnosticPath,
       });
       continue;
     }
@@ -292,14 +322,17 @@ export function runCheckTasks(options: CheckRunnerOptions): CheckRunnerReport {
         finishedAt,
       };
     } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
+      const diagnosticPath = cache.writeFailureDiagnostic(task, 'FAIL', finishedAt, reason, result);
       cache.writeAttempt(task.nodeId, task.taskKey, 'FAIL', finishedAt);
       execution.push({
         nodeId: task.nodeId,
         taskKey: task.taskKey,
         disposition: 'executed',
         outcome: 'FAIL',
-        reason: error instanceof Error ? error.message : String(error),
+        reason,
         durationMs,
+        diagnosticPath,
       });
       continue;
     }

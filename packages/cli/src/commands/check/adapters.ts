@@ -46,6 +46,7 @@ import { auditDocumentationLinks } from '../docs/links.js';
 import { checkMutationReport } from '../mutation/report-check.js';
 import { executeTranslationValidation } from '../verify/translation.js';
 import { runActionCoverageCheck } from '../spec/validate-action-coverage.js';
+import { runCheckTasks } from '../../services/check-runner/index.js';
 import { checkActionEffects } from './action-effects.js';
 import { checkCiEconomy } from './ci-economy.js';
 import { checkDependencies } from './dependencies.js';
@@ -561,6 +562,19 @@ async function directService(
 ): Promise<RawExecution> {
   const repoRoot = resolve(options.repoRoot);
   switch (member.service_id) {
+    case 'ledger-local':
+    case 'ledger-rc': {
+      const report = runCheckTasks({
+        repoRoot,
+        target: member.service_id === 'ledger-local' ? 'local' : 'rc',
+        operation: 'run',
+      });
+      return {
+        status: report.exitCode === 0 ? 'pass' : 'fail',
+        value: report,
+        exit_code: report.exitCode,
+      };
+    }
     case 'build':
       return fromValue(senseBuild({ cwd: repoRoot }));
     case 'lint':

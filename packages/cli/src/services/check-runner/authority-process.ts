@@ -19,9 +19,18 @@ export function matchDeclaredCheckTaskProcess(
   request: AuthorityHostEffectRequest,
 ): DeclaredCheckTaskProcess | undefined {
   if (request.kind !== 'process' || request.symbol !== 'spawnSync') return undefined;
-  if (!invocationArgv.includes('--run')) return undefined;
   const targets = ['--affected', '--local', '--rc'].filter((flag) => invocationArgv.includes(flag));
-  if (targets.length !== 1) return undefined;
+  const suiteIndex = invocationArgv.indexOf('--suite');
+  const suite = suiteIndex < 0 ? undefined : invocationArgv[suiteIndex + 1];
+  const onlyIndex = invocationArgv.indexOf('--only');
+  const only = onlyIndex < 0 ? undefined : invocationArgv[onlyIndex + 1];
+  const suiteRun =
+    only === undefined &&
+    targets.length === 0 &&
+    (suite === undefined || ['quick', 'standard', 'full', 'release'].includes(suite));
+  const ledgerOnlyRun = ['ledger-local', 'ledger-rc'].includes(only ?? '');
+  const explicitTaskRun = invocationArgv.includes('--run') && targets.length === 1;
+  if (!explicitTaskRun && !suiteRun && !ledgerOnlyRun) return undefined;
   const executable = request.arguments[0];
   const argv = request.arguments[1];
   const rawOptions = request.arguments[2];

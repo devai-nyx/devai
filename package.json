@@ -25,6 +25,7 @@
     "test:evidence": "vitest run --config tests/config/local.config.ts packages/evidence/tests",
     "test:loop": "vitest run --config tests/config/local.config.ts packages/loop/tests",
     "test:sensors": "vitest run --config tests/config/local.config.ts packages/sensors/tests",
+    "test:schemas": "vitest run --config tests/config/local.config.ts packages/schemas/tests",
     "test:skills": "vitest run --config tests/config/local.config.ts packages/skills/tests",
     "test:spec": "vitest run --config tests/config/local.config.ts packages/spec/tests",
     "test:utils": "vitest run --config tests/config/local.config.ts packages/utils/tests",
