@@ -1081,7 +1081,7 @@ export const verifyTranslation = defineCommand({
   description: 'Independently validate an untrusted translation witness (report-only)',
   authority: 'sensor',
   lifecycle: 'experimental',
-  lifecycle_reason: 'R28 report-only completion evidence foundation.',
+  lifecycle_reason: 'Report-only validation that cannot promote readiness.',
   promotion_criteria: [],
   register(cli: CAC): void {
     cli

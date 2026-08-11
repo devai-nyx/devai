@@ -38,9 +38,8 @@ function commandAction(definition: CommandDefinition): CommandAction {
 /**
  * Invoke an existing in-process command implementation as a service adapter.
  *
- * This deliberately does not spawn the CLI or route through a retired public
- * spelling. Output is captured so the canonical evidence writer can bind the
- * produced record to its proof epoch before exposing a single result.
+ * This deliberately does not spawn the CLI. Output is captured so the evidence
+ * writer can bind the produced record to its proof epoch before exposing one result.
  */
 export async function invokeCommandService(
   definition: CommandDefinition,

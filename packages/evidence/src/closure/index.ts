@@ -246,18 +246,14 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
   if (record.supersedes !== undefined && !existing.some((r) => r.id === record.supersedes)) {
     throw new Error(`phase close: supersedes ${record.supersedes} does not exist`);
   }
-  // DII-124: the successor ledger restarted at PC-0001, so the predecessor-era
-  // PC-0007 cutoff cannot protect successor records. Keep the fields optional
-  // in the schema for immutable historical records, but require them on every
-  // newly emitted successor closure.
   if (record.merged_as === undefined) {
     throw new Error(
-      'phase close: merged_as is required for every successor closure — run the ceremony at/after the merge that ships the round (DII-124)',
+      'phase close: merged_as is required — close only after the commit that ships the round exists',
     );
   }
   if (record.release_disposition === undefined) {
     throw new Error(
-      'phase close: release_disposition is required for every successor closure (published | changeset-pending | none-preratification | none-needed | missing)',
+      'phase close: release_disposition is required (published | changeset-pending | none-needed | missing)',
     );
   }
   requireGitCommit(repoRoot, record.merged_as, 'merged_as');
