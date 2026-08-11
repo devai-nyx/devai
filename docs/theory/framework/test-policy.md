@@ -26,8 +26,11 @@ Any changed input, dependency, command, toolchain, allowed environment value, or
 invalidates the affected closure. Unknown paths widen through the declared fallback. FAIL,
 timeout, killed, aborted, malformed, incomplete, or unknown results are never reusable.
 
-Dirty-tree runs may help local iteration, but they cannot produce a candidate receipt. Candidate
-attestation requires the exact clean Git tree before and after execution.
+Known paths select matching leaf tasks and their dependent closure. `--local` selects the complete
+cheap closure directly and reuses unchanged PASS nodes from the ignored cache. Dirty-tree runs may
+help local iteration, but they cannot produce a candidate receipt. The local profile is always
+non-attestable; a clean affected or RC run may emit an unsigned receipt only when the exact Git
+tree is unchanged before and after execution.
 
 ## Release-candidate gate
 
@@ -36,17 +39,19 @@ devai check --rc --task-plan --repo-root . --format json
 devai check --rc --run --repo-root . --as-role inspector --write --format json
 ```
 
-The RC profile executes the complete required closure once. Its coverage task includes the full
-eligible Vitest population and enforces floors of 70% statements, 60% branches, 70% functions,
-and 70% lines. Database, end-to-end, performance, and containment lanes are declared separately
-so they do not accidentally duplicate the coverage population. Real-provider execution remains
-explicit opt-in.
+The RC profile executes generation, build, and one coverage task. That task includes the complete
+Vitest population exactly once and enforces floors of 70% statements, 60% branches, 70% functions,
+and 70% lines. Database, end-to-end, performance, and containment scripts are diagnostic slices
+of that population, not additional required RC gates. Real-provider execution remains explicit
+opt-in.
 
 ## Receipt-only remote CI
 
-Remote CI verifies a canonical signed receipt against an independently pinned verifier, the exact
-repository/commit/tree, the approved task-policy digest, signer allowlist and revocation state,
-and the complete required-node closure. It does not rerun routine product tests.
+An exporter outside the candidate first verifies the clean local receipt and result set, then
+signs the canonical receipt with protected trust material. Remote CI verifies that export against
+an independently pinned verifier, the exact repository/commit/tree, the approved task-policy
+digest, signer allowlist and revocation state, and the complete required-node closure. It does not
+rerun product tests.
 
 A trusted signature proves receipt integrity and signer identity. It does not prove that the
 signer actually executed the described command; execution trust remains an explicit operational

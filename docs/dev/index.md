@@ -10,17 +10,19 @@ checks affected by the change.
 
 ## Test lanes
 
-| Lane                   | Purpose                                                              | Normal trigger                  |
-| ---------------------- | -------------------------------------------------------------------- | ------------------------------- |
-| affected               | content-addressed closure changed by an exact base-to-candidate diff | every change                    |
-| local                  | complete cheap deterministic closure                                 | before integration              |
-| coverage               | eligible tests once, floors 70/60/70/70                              | RC gate only                    |
-| DB / E2E / performance | environment-dependent proof                                          | RC gate only                    |
-| containment            | current operation, recipe, path, symlink, and write-scope boundaries | RC gate and containment changes |
+| Lane                               | Purpose                                                                  | Normal trigger                     |
+| ---------------------------------- | ------------------------------------------------------------------------ | ---------------------------------- |
+| affected                           | matching leaf and dependent closure from an exact base-to-candidate diff | every change                       |
+| local                              | complete cheap deterministic closure with PASS cache reuse               | before integration                 |
+| RC coverage                        | complete Vitest population once, floors 70/60/70/70                      | release-candidate gate only        |
+| DB / E2E / performance diagnostics | focused slices already included in RC coverage                           | investigation or focused iteration |
+| containment diagnostic             | focused operation, recipe, path, symlink, and write-scope slice          | containment changes                |
 
 PASS-only cache reuse is allowed when the task key and dependency closure are unchanged.
-Candidate receipts require a clean exact tree. Remote CI validates the signed receipt and
-required-node closure; it does not claim to prove local execution.
+Unknown changes widen to the full local closure. Clean affected and RC runs may emit an unsigned
+candidate receipt; signing and trust material remain outside the candidate repository. Remote CI
+validates the signed export and required-node closure without rerunning product tests, and it does
+not claim to prove local execution.
 
 ## Runbooks
 

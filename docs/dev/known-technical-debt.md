@@ -16,10 +16,3 @@ The independently pinned verifier proves receipt integrity, signer identity, can
 policy binding, and required-node completeness. It cannot prove local execution. Stronger proof
 would require a separately designed trusted-execution or remote-execution substrate. Until then,
 documentation and UI must preserve the honest trusted-signer boundary.
-
-## Generated reference convergence
-
-Three generated CLI category pages still depend on runtime semantic updates:
-`model-runtime.md`, `sense-presets.md`, and `round-task-executors.md`. Their generated interiors
-must be refreshed from canonical sources after those runtime changes land; manual prose repair is
-not a substitute.

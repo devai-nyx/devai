@@ -43,6 +43,6 @@ choice into technical policy.
 
 ## See also
 
-- [Roles](./README.md)
+- [Roles](./index.md)
 - [Cross-role coordination](./cross-role-coordination.md)
 - [Action catalog](../reference/cli/index.md)

@@ -21,12 +21,12 @@ population.
 - **Stable ID:** quick
 - **User-facing label:** Quick
 - **Purpose:** Run the canonical `quick` acceptance population in declared order without coalescing members.
-- **Population or projection:** `build`, `lint`, `type-check`, `unit-test`, `schema-config-load`. Excluded: Not applicable: the canonical source declares no values.
+- **Population or projection:** `ledger-local`. Excluded: Not applicable: the canonical source declares no values.
 - **Prerequisites:** `clean-or-explicitly-described-worktree`, `frozen-install-complete`, `pnpm-run-devai-prepare`; a repository-bound authority host-process adapter is required for subprocess-bound members.
-- **Required external tools:** `pnpm`, `node`; the live authority host-process adapter for governed subprocess execution.
+- **Required external tools:** `registered-runtime-gate`; the live authority host-process adapter for governed subprocess execution.
 - **Accepted inputs:** `--suite quick`, `--repo-root <path>`, `--as-role <inspector>` or a live `--authority-session <id>`, `--write`, output-format options, and member-specific inputs only when the selected binding declares them.
 - **Defaults:** `standard` remains the command default; this suite requires explicit selection.
-- **Output contract:** One result per member plus a total aggregate; member shapes are `action-envelope-plus-build-reading`, `action-envelope-plus-lint-reading`, `action-envelope-plus-type-check-reading`, `action-envelope-plus-test-report`, `action-envelope-plus-schema-canon-report`.
+- **Output contract:** One result per member plus a total aggregate; member shapes are `action-envelope-plus-local-task-ledger-report`.
 - **Verdict semantics:** `pass` requires every required member to pass; unknown members or outcomes are errors and never pass.
 - **Declared effect:** `local-write` aggregate ceiling derived from member effects. The action-level ceiling is `local-write` and does not grant authority.
 - **Consent flags:** `--write` is required; `--publish` is not implied.
@@ -45,12 +45,12 @@ population.
 - **Stable ID:** standard
 - **User-facing label:** Standard
 - **Purpose:** Run the canonical `standard` acceptance population in declared order without coalescing members.
-- **Population or projection:** `build`, `lint`, `type-check`, `unit-test`, `schema-config-load`, `invariant-validation`, `journey-validation`, `glossary-validation`, `trace-validation`, `test-trace-validation`, `strategy-validation`, `action-coverage`. Excluded: Not applicable: the canonical source declares no values.
+- **Population or projection:** `ledger-local`. Excluded: Not applicable: the canonical source declares no values.
 - **Prerequisites:** `clean-or-explicitly-described-worktree`, `frozen-install-complete`, `pnpm-run-devai-prepare`; a repository-bound authority host-process adapter is required for subprocess-bound members.
-- **Required external tools:** `pnpm`, `node`, `registered-runtime-gate`; the live authority host-process adapter for governed subprocess execution.
+- **Required external tools:** `registered-runtime-gate`; the live authority host-process adapter for governed subprocess execution.
 - **Accepted inputs:** `--suite standard`, `--repo-root <path>`, `--as-role <inspector>` or a live `--authority-session <id>`, `--write`, output-format options, and member-specific inputs only when the selected binding declares them.
 - **Defaults:** `standard` is selected when `--suite` and `--only` are omitted.
-- **Output contract:** One result per member plus a total aggregate; member shapes are `action-envelope-plus-build-reading`, `action-envelope-plus-lint-reading`, `action-envelope-plus-type-check-reading`, `action-envelope-plus-test-report`, `action-envelope-plus-schema-canon-report`, `action-envelope-plus-population-report`, `action-envelope-plus-trace-report`, `action-envelope-plus-strategy-report`.
+- **Output contract:** One result per member plus a total aggregate; member shapes are `action-envelope-plus-local-task-ledger-report`.
 - **Verdict semantics:** `pass` requires every required member to pass; unknown members or outcomes are errors and never pass.
 - **Declared effect:** `local-write` aggregate ceiling derived from member effects. The action-level ceiling is `local-write` and does not grant authority.
 - **Consent flags:** `--write` is required; `--publish` is not implied.
@@ -69,12 +69,12 @@ population.
 - **Stable ID:** full
 - **User-facing label:** Full
 - **Purpose:** Run the canonical `full` acceptance population in declared order without coalescing members.
-- **Population or projection:** `build`, `lint`, `type-check`, `unit-test`, `schema-config-load`, `invariant-validation`, `journey-validation`, `glossary-validation`, `trace-validation`, `test-trace-validation`, `strategy-validation`, `action-coverage`, `full-tests`, `inventory-integrity`, `mutation`, `security-performance`, `harness-integrity`, `coverage`. Excluded: Not applicable: the canonical source declares no values.
+- **Population or projection:** `ledger-rc`. Excluded: Not applicable: the canonical source declares no values.
 - **Prerequisites:** `clean-or-explicitly-described-worktree`, `frozen-install-complete`, `pnpm-run-devai-prepare`; a repository-bound authority host-process adapter is required for subprocess-bound members.
-- **Required external tools:** `pnpm`, `node`, `registered-runtime-gate`; the live authority host-process adapter for governed subprocess execution.
+- **Required external tools:** `registered-runtime-gate`; the live authority host-process adapter for governed subprocess execution.
 - **Accepted inputs:** `--suite full`, `--repo-root <path>`, `--as-role <inspector>` or a live `--authority-session <id>`, `--write`, output-format options, and member-specific inputs only when the selected binding declares them.
 - **Defaults:** `standard` remains the command default; this suite requires explicit selection.
-- **Output contract:** One result per member plus a total aggregate; member shapes are `action-envelope-plus-build-reading`, `action-envelope-plus-lint-reading`, `action-envelope-plus-type-check-reading`, `action-envelope-plus-test-report`, `action-envelope-plus-schema-canon-report`, `action-envelope-plus-population-report`, `action-envelope-plus-trace-report`, `action-envelope-plus-strategy-report`, `action-envelope-plus-complete-test-report`, `action-envelope-plus-inventory-report`, `action-envelope-plus-mutation-report`, `action-envelope-plus-security-performance-report`, `action-envelope-plus-containment-report`, `action-envelope-plus-complete-coverage-report`.
+- **Output contract:** One result per member plus a total aggregate; member shapes are `action-envelope-plus-rc-task-ledger-report`.
 - **Verdict semantics:** `pass` requires every required member to pass; unknown members or outcomes are errors and never pass.
 - **Declared effect:** `local-write` aggregate ceiling derived from member effects. The action-level ceiling is `local-write` and does not grant authority.
 - **Consent flags:** `--write` is required; `--publish` is not implied.
@@ -93,12 +93,12 @@ population.
 - **Stable ID:** release
 - **User-facing label:** Release
 - **Purpose:** Run the canonical `release` acceptance population in declared order without coalescing members.
-- **Population or projection:** `build`, `lint`, `type-check`, `unit-test`, `schema-config-load`, `invariant-validation`, `journey-validation`, `glossary-validation`, `trace-validation`, `test-trace-validation`, `strategy-validation`, `action-coverage`, `full-tests`, `inventory-integrity`, `mutation`, `security-performance`, `harness-integrity`, `coverage`, `evidence-integrity`, `release-scorecard`, `dependency-security`, `provenance-readiness`, `changeset-version`, `workflow-reference`. Excluded: Not applicable: the canonical source declares no values.
+- **Population or projection:** `ledger-rc`. Excluded: Not applicable: the canonical source declares no values.
 - **Prerequisites:** `clean-or-explicitly-described-worktree`, `frozen-install-complete`, `pnpm-run-devai-prepare`; a repository-bound authority host-process adapter is required for subprocess-bound members.
-- **Required external tools:** `pnpm`, `node`, `registered-runtime-gate`; the live authority host-process adapter for governed subprocess execution.
+- **Required external tools:** `registered-runtime-gate`; the live authority host-process adapter for governed subprocess execution.
 - **Accepted inputs:** `--suite release`, `--repo-root <path>`, `--as-role <inspector>` or a live `--authority-session <id>`, `--write`, output-format options, and member-specific inputs only when the selected binding declares them.
 - **Defaults:** `standard` remains the command default; this suite requires explicit selection.
-- **Output contract:** One result per member plus a total aggregate; member shapes are `action-envelope-plus-build-reading`, `action-envelope-plus-lint-reading`, `action-envelope-plus-type-check-reading`, `action-envelope-plus-test-report`, `action-envelope-plus-schema-canon-report`, `action-envelope-plus-population-report`, `action-envelope-plus-trace-report`, `action-envelope-plus-strategy-report`, `action-envelope-plus-complete-test-report`, `action-envelope-plus-inventory-report`, `action-envelope-plus-mutation-report`, `action-envelope-plus-security-performance-report`, `action-envelope-plus-containment-report`, `action-envelope-plus-complete-coverage-report`, `action-envelope-plus-evidence-report`, `action-envelope-plus-nonpublication-release-report`, `action-envelope-plus-dependency-security-report`, `action-envelope-plus-provenance-report`, `action-envelope-plus-changeset-version-report`, `action-envelope-plus-workflow-reference-report`.
+- **Output contract:** One result per member plus a total aggregate; member shapes are `action-envelope-plus-rc-task-ledger-report`.
 - **Verdict semantics:** `pass` requires every required member to pass; unknown members or outcomes are errors and never pass.
 - **Declared effect:** `local-write` aggregate ceiling derived from member effects. The action-level ceiling is `local-write` and does not grant authority.
 - **Consent flags:** `--write` is required; `--publish` is not implied.

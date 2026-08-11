@@ -62,7 +62,7 @@ documentation while acting in this role.
 
 ## See also
 
-- [Roles](./README.md)
+- [Roles](./index.md)
 - [Cross-role coordination](./cross-role-coordination.md)
 - [Testing operations](../dev/operations/testing.md)
 - [Authority enforcement](../dev/security/authority-enforcement.md)
