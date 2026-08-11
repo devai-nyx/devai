@@ -71,7 +71,7 @@
       "type": "string"
     },
     "status": {
-      "enum": ["draft", "active", "deprecated", "retired"]
+      "enum": ["draft", "active"]
     },
     "verification": {
       "type": "object",

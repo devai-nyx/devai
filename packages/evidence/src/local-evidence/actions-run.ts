@@ -10,7 +10,7 @@ export const ACTIONS_REUSABLE_JOBS = [
   'supported-e2e',
   'experimental-containment',
   'gate-invariant-verb-smoke',
-  'inventory-spec-self-application',
+  'inventory-spec-validation',
 ] as const;
 
 export const ACTIONS_FRESHNESS_JOBS = [

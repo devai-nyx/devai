@@ -366,10 +366,10 @@
       "tools": {},
       "platforms": [],
       "jobs": {
-        "inventory-spec-self-application": {
+        "inventory-spec-validation": {
           "result": "success",
           "metadata": {
-            "job": "inventory-spec-self-application",
+            "job": "inventory-spec-validation",
             "platform": "linux/amd64"
           },
           "artifactChecksum": {

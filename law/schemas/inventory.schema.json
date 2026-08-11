@@ -205,7 +205,7 @@
         "type": "string",
         "pattern": "^[a-f0-9]{64}$"
       },
-      "description": "SHA-256 hashes of all governance artifacts, for drift detection. Per F5 self-application (Article 36)."
+      "description": "SHA-256 hashes of the configured repository contracts for F5 drift detection (Article 36)."
     }
   },
   "schema_version": "1.0.0",
