@@ -7,7 +7,8 @@ export default function Home(): React.JSX.Element {
     <Layout title="DEVAI" description="DEVAI documentation">
       <main className="container margin-vert--xl">
         <h1>DEVAI</h1>
-        <p>Human-supervised governance and control for AI-assisted development.</p>
+        <p>Human-supervised control for AI-assisted development.</p>
+        <p>One CLI package. 41 actions. 59 sensors. 7 bounded recipes.</p>
         <Link className="button button--primary" to="/docs/">
           Read the documentation
         </Link>

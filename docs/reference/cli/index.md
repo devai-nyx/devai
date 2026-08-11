@@ -1,6 +1,7 @@
 # CLI overview
 
-DEVAI presents exactly seven workflow domains. Choose the domain from the outcome you need;
+DEVAI presents 41 actions: 20 stable public actions, 10 preview round actions, and 11
+internal plumbing actions. Seven workflow domains organize the public surface. Choose the domain from the outcome you need;
 then choose one leaf action, suite, preset, kind, slice, tier, round, or task selection inside
 that domain. The hidden `task` and `catalog` surfaces are plumbing, not additional workflows.
 
@@ -9,15 +10,15 @@ does not by itself establish release, deployment, or readiness.
 
 ## Choose a workflow
 
-| If you need to...                                                         | Choose     | Start with                                                                            |
-| ------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------- |
-| plan or apply adoption and upgrades                                       | `init`     | `devai init plan --target . --tier tier1 --format json`                               |
-| diagnose the repository's declared posture                                | `doctor`   | `devai doctor --repo-root . --format json`                                            |
-| validate a governed rule population                                       | `check`    | `devai check --only cli-reference --repo-root . --format json`                        |
-| observe the repository or runtime                                         | `sense`    | `devai sense run --preset sweep --round R-1000 --repo-root . --dry-run --format json` |
-| plan, inspect, run, or close governed work                                | `round`    | `devai round status --round R-1000 --repo-root . --format json`                       |
-| collect, record, render, redact, or verify evidence                       | `evidence` | `devai evidence verify --scope chain --show-head --repo-root . --format json`         |
-| inspect release control or enter a separately authorized release ceremony | `release`  | `devai release status --repo-root . --format json`                                    |
+| If you need to...                                                         | Choose     | Start with                                                                    |
+| ------------------------------------------------------------------------- | ---------- | ----------------------------------------------------------------------------- |
+| plan, apply, or bind adoption                                             | `init`     | `devai init plan --target . --tier tier1 --format json`                       |
+| diagnose the repository's declared posture                                | `doctor`   | `devai doctor --repo-root . --format json`                                    |
+| validate a governed rule population                                       | `check`    | `devai check --only cli-reference --repo-root . --format json`                |
+| observe the repository or runtime                                         | `sense`    | `devai sense run type_check --repo-root . --dry-run --format json`            |
+| plan, inspect, run, or close governed work                                | `round`    | `devai round status --round R-1000 --repo-root . --format json`               |
+| collect, record, render, redact, or verify evidence                       | `evidence` | `devai evidence verify --scope chain --show-head --repo-root . --format json` |
+| inspect release control or enter a separately authorized release ceremony | `release`  | `devai release status --repo-root . --format json`                            |
 
 The examples above use only the current grammar. They are read-only or dry-run selections;
 replace the example identifiers with identifiers that exist in the target repository.
@@ -58,24 +59,24 @@ other. Preview or inspect whenever the leaf offers `--dry-run`, plan output, sta
 
 ## Workflow descriptors
 
-### `init` — Adoption and upgrades
+### `init` — Adoption and binding
 
-- **Stable identifier and label:** `init`; “Adoption and upgrades.”
+- **Stable identifier and label:** `init`; “Adoption and binding.”
 - **Purpose and exact projection:** plan the segmented adoption projection, apply a role-owned
-  segment, or plan/apply an upgrade. Its exact leaves are the registry projection defined above
+  segment, or bind the selected adoption. Its exact leaves are the registry projection defined above
   with `W = init`.
 - **Prerequisites, tools, inputs, and defaults:** a target repository is required; `--target`
   defaults to the current directory. A tier may be selected explicitly. `init plan` needs no write
-  authority; an apply needs the role that owns the projected paths. The plan-only tier branch of
-  `init upgrade` currently retains that action's Architect/`--write` pre-dispatch ceiling. Selected
-  includes such as hooks or CI can require their host tools.
+  authority; an apply needs the role that owns the projected paths. Binding follows the exact
+  contract shown by `devai init bind --help`. Selected includes such as hooks or CI can require
+  their host tools.
 - **Output and verdict:** plans report the exact projected operations; applies report bounded
   writes through the shared action envelope. Schema, target, authority, or write failures refuse
   the operation; planning is not an apply verdict.
 - **Effect, consent, and cost:** effect and cost are leaf-dependent. `init plan` is read-only;
-  applying or entering `init upgrade` requires `--write` and the permitted role. Domain-level cost
+  applying or binding follows the selected leaf's declared consent and role. Domain-level cost
   is N/A because the chosen target and segment determine it.
-- **Use / do not use:** use for adoption and governed upgrades. Do not use it to run checks,
+- **Use / do not use:** use for adoption planning, application, and binding. Do not use it to run checks,
   sensors, rounds, or a release ceremony.
 - **Example:** `devai init plan --target . --tier tier1 --format json`.
 - **Canonical source and related workflow:** [action registry](../../../law/policy/action-registry.json);
@@ -132,7 +133,7 @@ other. Preview or inspect whenever the leaf offers `--dry-run`, plan output, sta
   `--preset`; some selections require a round or structured input. A slice selection is separate.
   Each generated descriptor names the external tools it can invoke.
 - **Output and verdict:** sensor execution and readiness are reported separately; preset output
-  includes executed and excluded populations. Unknown or retired kinds, malformed inputs, tool
+  includes executed and excluded populations. Unknown kinds, malformed inputs, tool
   failures, killed sensors, and incomplete results remain explicit. Running a preset never
   implicitly persists a reading.
 - **Effect, consent, and cost:** the selected kind population resolves effect and consent before
@@ -140,7 +141,7 @@ other. Preview or inspect whenever the leaf offers `--dry-run`, plan output, sta
   authority contract. Cost is selected-kind or selected-preset data, not a domain value.
 - **Use / do not use:** use to observe or inventory. Do not use a reading as a check verdict, and
   do not assume that producing a reading makes an intrinsically write-capable probe read-only.
-- **Example:** `devai sense run --preset sweep --round R-1000 --repo-root . --dry-run --format json`.
+- **Example:** `devai sense run type_check --repo-root . --dry-run --format json`.
 - **Canonical source and related workflow:** [sensor registry](../../../law/policy/sensor-registry.json),
   [sense presets](./sense-presets.md), [sensor kinds](./sensor-kinds.md); use `evidence` for explicit
   persistence and verification.
@@ -227,14 +228,14 @@ authorized.
 3. Diagnose the resulting declaration and binding posture:
 
    ```sh
-   devai doctor --adopter --repo-root . --format json
+   devai doctor --repo-root . --format json
    ```
 
-4. Resolve observation before execution, then run the selected preset only with its resolved
-   authority and consent:
+4. Resolve observation before execution, then run one exact registered kind with its resolved
+   authority and consent. An unknown preset or kind remains UNKNOWN; it is never substituted:
 
    ```sh
-   devai sense run --preset baseline --repo-root . --dry-run --as-role inspector --write --format json
+   devai sense run type_check --repo-root . --dry-run --format json
    ```
 
 5. Run the check suite required by the current gate. This example declares the Inspector and
@@ -248,7 +249,7 @@ authorized.
    Do not add a role declaration or write consent. The checklist does not complete the climb:
 
    ```sh
-   devai init upgrade --target . --tier tier2 --format json
+   devai init bind --help
    ```
 
 7. Operate governed work through its round, first reading state and then deliberately running

@@ -56,7 +56,8 @@ alone are advisory for those unrestricted surfaces.
 3. **Explicit evidence.** Read-only observations do not silently write state.
    Role-declared, consented recording actions persist readings and append the
    hash chain when durable evidence is required.
-4. **Scorecard-driven progress.** A 5×9 aspect grid (substrates × transversals) gives a single, audit-able view of where the framework's regulation is succeeding and where it's failing.
+4. **Observable progress.** The 59 registered sensors provide bounded readings whose
+   meaning, inputs, and freshness remain explicit.
 5. **Human ownership.** Maintainers decide DEVAI's changes and releases; the framework does not govern its own development.
 
 ## Where to go next

@@ -1,14 +1,38 @@
-# DEVAI successor
+# DEVAI
 
-R-0001 completed the clean successor bootstrap. The predecessor completed R-Ω and is
-frozen at
-[`devai-nyx/devai-original`](https://github.com/devai-nyx/devai-original). Predecessor
-law and history remain evidence inputs; predecessor readiness standing did not transfer.
+DEVAI is a human-supervised control harness for AI-assisted software development.
+It combines declared roles, bounded effects, repository sensors, validation, and
+attributable evidence without replacing a project's build, test, or CI tools.
 
-The successor is not yet ratified, released, deployed, or ready. OM-002 authorizes the
-repository-scoped R-0002–R-0010 completion campaign behind explicit gates. Start with
-`work/rounds/README.md`; the next executable prompt is
-`work/rounds/R-0002/prompts/00-orchestrator.md`.
+The v1.0 release-candidate product is one publishable package,
+`@devai-nyx/cli`. Its current machine catalog contains **41 actions**, **59
+sensors**, and **7 host-invoked recipes**. The ordinary public CLI is organized
+into seven workflow domains: `init`, `doctor`, `check`, `sense`, `round`,
+`evidence`, and `release`. `task` and `catalog` are internal plumbing exposed by
+`--all` for maintainers and automation.
 
-The repository layout is `law/`, `product/`, `work/`, `docs/`, `record/`, `packages/`,
-`tests/`, `scratch/`, and hidden `.devai/`.
+```bash
+pnpm exec devai --help
+pnpm exec devai catalog actions --format json
+pnpm exec devai init plan --target . --tier tier1 --format json
+pnpm exec devai doctor --repo-root . --format json
+```
+
+Mutating actions require their declared role and explicit consent. Read the plan
+or dry-run output before granting `--write`; remote effects additionally require
+their separately declared publication consent.
+
+Tests use a content-addressed task DAG. During development, run affected nodes and
+reuse fresh PASS results for unchanged inputs. Full coverage and the expensive
+lanes are release-candidate gates. A signed candidate receipt binds a clean Git
+tree and task-policy digest to trusted local attestations; it does **not** prove
+that the signer actually executed the tasks. Remote CI validates that binding and
+the required-node closure cheaply.
+
+- [Start here](docs/start/index.md)
+- [Adopter guide](docs/adopters/install.md)
+- [CLI reference](docs/reference/cli/index.md)
+- [Developer operations](docs/dev/index.md)
+
+Human maintainers choose scope, review changes, and authorize releases. No command
+or evidence record substitutes for that decision.

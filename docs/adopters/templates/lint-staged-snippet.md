@@ -1,6 +1,8 @@
 # lint-staged + prettierignore snippets
 
-Phase 20.E (closes D-A-5 from the C-4 stynx pilot retro). Drop these into your adopter repo's lint-staged + prettier configs so neither tool ever rewrites `record/proofs/**`. Rewriting a hash-chained evidence record breaks the Article-32 chain — the next `devai chain verify` flags the file as tampered.
+Use these snippets in an adopter's lint-staged and Prettier configuration so neither
+tool rewrites `record/proofs/**`. Reformatting a hash-chained record breaks its digest;
+`devai evidence verify --scope chain` then reports the mismatch.
 
 ## `.prettierignore`
 

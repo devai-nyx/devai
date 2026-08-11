@@ -98,4 +98,4 @@ After bootstrap, a long-lived database applies any `migrations/` whose prefix is
 
 - Authority: [CONVENTIONS.md](./CONVENTIONS.md) §2.
 - Docs layout: [`docs-layout.md`](./docs-layout.md).
-- DEVAI's per-worktree database conventions (framework-internal, not adopter-facing): see [`../meta/ops/db-isolation.md`](../dev/operations/db-isolation.md) once Phase 5 lands.
+- DEVAI's current database-isolation guidance: see [`../dev/operations/db-isolation.md`](../dev/operations/db-isolation.md).

@@ -54,7 +54,7 @@ Review that output, then apply only the role-owned segments you intend to create
 After application, read the declared posture:
 
 ```sh
-devai doctor --adopter --repo-root . --format json
+devai doctor --repo-root . --format json
 ```
 
 Do not infer the effective tier from which commands happen to be installed or from a previous
@@ -84,12 +84,11 @@ Climbing is explicit and monotonic:
    write consent:
 
    ```sh
-   devai init upgrade --target . --tier tier2 --format json
+   devai init bind --help
    ```
 
-2. Read every emitted step. Tier-checklist mode does not apply a mutation. Each step names an
-   artifact, control, or observation that must be established before the target floor can honestly
-   bind.
+2. Read the binding contract and provide only its exact required inputs. Help does not apply a
+   mutation or bind a tier.
 3. Complete changes through their owning roles and paths. The checklist does not widen a session's
    authority and does not execute those changes.
 4. Update the repository's tier declaration through the authorized configuration transition.

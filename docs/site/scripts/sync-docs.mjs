@@ -15,10 +15,6 @@ const views = [
   ['docs/adopters', 'adopters'],
   ['docs/dev', 'dev'],
   ['docs/reference', 'reference'],
-  ['law', 'governance'],
-  ['product', 'product'],
-  ['work/rounds', 'process'],
-  ['record/proofs', 'history'],
 ];
 const publishMap = new Map();
 
@@ -75,9 +71,3 @@ for (const [source, target] of views) {
 for (const [source, target] of views) {
   await copyMarkdownTree(join(repoRoot, source), join(output, target));
 }
-const historySource = join(repoRoot, 'docs/reference/history.md');
-const historyTarget = join(output, 'history/index.md');
-await fs.writeFile(
-  historyTarget,
-  rewritePublishedLinks(await fs.readFile(historySource, 'utf8'), historySource, historyTarget),
-);

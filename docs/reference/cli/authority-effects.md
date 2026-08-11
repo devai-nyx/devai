@@ -311,7 +311,7 @@ That distinction matters for parameterized facades:
 Inspect a parameterized population without running it:
 
 ```sh
-devai sense run --preset sweep --round R-1000 --repo-root . --dry-run --format json
+devai sense run type_check --repo-root . --dry-run --format json
 ```
 
 ## Consent flags
@@ -379,9 +379,11 @@ Authorization means only that the bounded attempt was allowed.
 
 ## Executor authority is forbidden
 
-An executor says how to attempt a task. Its model capabilities may help select an eligible roster
-entry, but they do not widen the task discipline, target paths, effects, or consent. Requested and
-resolved execution evidence records the selection; it does not grant authority retroactively.
+An executor says how to attempt a task. The host selects a provider and exact model; DEVAI owns no
+fixed roster, alias, preferred/default model, or policy fallback. Missing or unavailable selection
+fails closed without substitution. The selected model does not widen task discipline, target
+paths, effects, or consent. Execution evidence records the exact host selection; it does not grant
+authority retroactively.
 
 See [rounds, tasks, and executors](./round-task-executors.md#authority-stays-with-discipline) and
 the generated [model/runtime reference](./model-runtime.md).

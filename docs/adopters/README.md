@@ -1,8 +1,11 @@
 # Adopters
 
-Use `devai init plan` before any bootstrap mutation. Apply only the explicit
-role-separated actions emitted by that plan. The supported CLI is documented under
-[`docs/reference/cli.md`](../reference/cli.md), and host-assisted work uses the seven
-bounded [recipes](../reference/recipes/README.md).
+Install the single `@devai-nyx/cli` package at an exact release-candidate version.
+Preview adoption with `devai init plan`, review every projected operation, and then
+apply only the role-owned segment you authorize. Use `doctor`, `check`, and `sense`
+to inspect the resulting repository.
 
-DEVAI does not publish source, packages, releases, or deployments.
+- [Install and adopt](install.md)
+- [Stack-pack inventory](pack-resolution.md)
+- [CLI reference](../reference/cli/index.md)
+- [Recipe reference](../reference/recipes/README.md)

@@ -1,7 +1,6 @@
 # ADR template & authoring rules
 
-**Authority:** Architect, issued cross-repo via DEVAI R1. See [CONVENTIONS.md](../CONVENTIONS.md) §5 for the identifier convention.
-**Adopted from:** STYNX's working `law/adr/` conventions (the only adopter with a non-stub ADR practice at R1 time).
+**Authority:** Architect. See [CONVENTIONS.md](../CONVENTIONS.md) §5 for the identifier convention.
 
 ## What an ADR is
 
@@ -19,8 +18,6 @@ ADRs live at `law/adr/` in each adopting repo. One ADR per decision.
 
 Filename: `ADR-<SCOPE>-<NNNN>-<lowercase-kebab-slug>.md`. e.g. `ADR-FE-CONTRACTS-0001-frontend-completeness-contract-pins.md`.
 
-Pre-DEVAI repos may also have `ADR-NNN` (no scope, 3-digit) for early decisions; treat those as grandfathered. New ADRs MUST follow the scoped form.
-
 ## Required sections
 
 Every ADR contains, in order:
@@ -33,7 +30,7 @@ Every ADR contains, in order:
 6. **Decision** — the choice, stated affirmatively. "We will X" / "X is the canonical form". One paragraph if possible.
 7. **Consequences** — what falls out: invariants that emerge, future work that gets unblocked, downsides, debt accepted.
 8. **Alternatives considered** — what else was on the table and why it lost.
-9. **References** — links to invariants, contracts, predecessor decisions.
+9. **References** — links to relevant invariants, contracts, and decisions.
 
 Use [`TEMPLATE.md`](./TEMPLATE.md) verbatim as the starting point.
 

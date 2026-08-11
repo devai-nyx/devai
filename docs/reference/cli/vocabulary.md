@@ -33,11 +33,9 @@ and may exclude kinds whose intrinsic effects exceed its boundary. Running one d
 persist readings.
 
 Use a preset for a repeatable observation population. Use a positional kind when only one sensor
-is needed. See the generated [sense-preset reference](./sense-presets.md).
-
-```sh
-devai sense run --preset sweep --round R-1000 --repo-root . --dry-run --format json
-```
+is needed. Exact preset IDs come only from the candidate's generated
+[sense-preset reference](./sense-presets.md). An unknown ID yields UNKNOWN and is not mapped to an
+older or preferred preset.
 
 ### Kind
 
@@ -54,9 +52,9 @@ devai sense run type_check --repo-root . --dry-run --format json
 
 ### Slice
 
-A **slice** is a named deterministic projection of repository inventory selected by `devai sense
-inventory --slice <name>`. It answers “which structural view should be rendered?” A slice is not a
-sensor preset and does not declare an adoption floor.
+A **slice** is a named deterministic projection of repository inventory selected with the
+`--slice <name>` option on `devai sense inventory`. It answers “which structural view should be
+rendered?” A slice is not a sensor preset and does not declare an adoption floor.
 
 Use a slice when the desired output is an inventory body rather than a sensor verdict. See the
 generated [inventory-slice reference](./inventory-slices.md).
