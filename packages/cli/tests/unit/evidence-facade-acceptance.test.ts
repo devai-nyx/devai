@@ -273,6 +273,80 @@ describe('evidence record and errata acceptance', () => {
     );
   });
 
+  it('records a validated mutation result and its governed proof', async () => {
+    const repo = root();
+    put(
+      repo,
+      'law/schemas/mutation-scenario.schema.json',
+      readFileSync(join(ROOT, 'law/schemas/mutation-scenario.schema.json'), 'utf8'),
+    );
+    put(
+      repo,
+      'scenarios/current.json',
+      JSON.stringify({
+        schema_version: '1.0.0',
+        id: 'current-contract',
+        kind: 'mutation',
+        target: { file: 'src/current.ts', symbol: 'currentContract' },
+        mutations: [{ type: 'string-replace', find: 'true', replace: 'false' }],
+        expectations: [{ assertion: 'tests-detect', specs: ['tests/current.test.ts'] }],
+      }),
+    );
+    put(
+      repo,
+      'reports/current.json',
+      JSON.stringify([{ id: 'current-contract', status: 'Killed', duration_ms: 12 }]),
+    );
+
+    const result = await invoke(evidenceRecord, [
+      'evidence-record',
+      '--kind',
+      'mutation',
+      '--round',
+      'R-1000',
+      '--repo-root',
+      repo,
+      '--run',
+      '--scenarios',
+      'scenarios/current.json',
+      '--external',
+      'reports/current.json',
+      '--out',
+      '.devai/state/mutation/current.json',
+    ]);
+
+    expect(result).toMatchObject({ exit: 0, stderr: '' });
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      kind: 'mutation',
+      round_id: 'R-1000',
+      result: {
+        ok: true,
+        scenarios_loaded: 1,
+        killed: 1,
+        survived: 0,
+        mutation_score: 100,
+      },
+    });
+    expect(
+      JSON.parse(readFileSync(join(repo, '.devai/state/mutation/current.json'), 'utf8')),
+    ).toMatchObject({
+      mutation_score: 100,
+      killed: 1,
+      survived: 0,
+      scenarios: [{ id: 'current-contract', status: 'Killed', ok: true }],
+    });
+    expect(
+      JSON.parse(
+        readFileSync(join(repo, 'record/proofs/work/mutation/R-1000.jsonl'), 'utf8').trim(),
+      ),
+    ).toMatchObject({
+      line_type: 'record',
+      kind: 'mutation',
+      sequence: 1,
+      payload: { service_exit_code: 0, result: { mutation_score: 100 } },
+    });
+  });
+
   it('appends forward-only field and pattern redactions and rejects invalid targets', async () => {
     const repo = root();
     for (const payload of ['{"secret":"first"}', '{"secret":"second"}']) {
