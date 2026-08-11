@@ -7,11 +7,7 @@ import {
   writeFileSync,
 } from '@devai-nyx/authority';
 import { join } from 'node:path';
-import {
-  canonicalSha256,
-  DEFAULT_CANONICAL_HASH_ALGO_VERSION,
-  type CanonicalHashAlgoVersion,
-} from '@devai-nyx/utils';
+import { canonicalSha256 } from '@devai-nyx/utils';
 
 /**
  * Phase-10 Batch 10.I — agent-run evidence emitter.
@@ -66,13 +62,6 @@ export interface AgentRunRecord {
   readonly outcome?: AgentRunOutcome;
   readonly prev_hash: string | null;
   readonly manifest_hash: string;
-  /**
-   * Canonical-JSON algorithm version under which `manifest_hash`
-   * was computed (Phase 16.G). New writes always set '2.0'.
-   * Records written before Phase 16.G lack the field; readers
-   * default to '1.0' (shallow-sort).
-   */
-  readonly hash_algo_version?: CanonicalHashAlgoVersion;
 }
 
 /**
@@ -137,37 +126,16 @@ export function readLastAgentRunHash(repoRoot: string): string | null {
   }
 }
 
-/**
- * Compute the manifest hash for an agent-run draft. The `version`
- * parameter controls which canonical-JSON algorithm runs:
- *   - omit / pass undefined: use the current default (v2.0,
- *     deep-sort). Always the right choice for new writes.
- *   - pass '1.0' explicitly: legacy shallow-sort path used by the
- *     verifier when reading a pre-Phase-16.G record (which lacks
- *     the `hash_algo_version` field).
- *
- * Phase 16.G: was inlined as
- * `JSON.stringify(record, Object.keys(record).sort())`. Routes
- * through the shared `canonical-json` module now so this and the
- * legacy form are explicitly versioned.
- */
-function computeManifestHash(
-  record: Omit<AgentRunRecord, 'manifest_hash'>,
-  version: CanonicalHashAlgoVersion = DEFAULT_CANONICAL_HASH_ALGO_VERSION,
-): string {
-  return canonicalSha256(record, version);
+/** Compute the manifest hash with the current canonical-JSON algorithm. */
+function computeManifestHash(record: Omit<AgentRunRecord, 'manifest_hash'>): string {
+  return canonicalSha256(record);
 }
 
-/**
- * Verify a persisted agent-run record's manifest_hash. Dispatches
- * by the record's `hash_algo_version` field; defaults to '1.0' for
- * backward-compatible reads of records written before Phase 16.G.
- */
+/** Verify a persisted agent-run record's manifest_hash. */
 export function verifyAgentRunHash(record: AgentRunRecord): boolean {
-  const declared = record.hash_algo_version ?? '1.0';
   const { manifest_hash: _stored, ...draft } = record;
   void _stored;
-  const recomputed = canonicalSha256(draft, declared);
+  const recomputed = canonicalSha256(draft);
   return recomputed === record.manifest_hash;
 }
 
@@ -206,7 +174,6 @@ export function emitAgentRun(opts: EmitAgentRunOptions): AgentRunRecord {
     compliance: opts.compliance,
     ...(opts.outcome !== undefined && { outcome: opts.outcome }),
     prev_hash,
-    hash_algo_version: DEFAULT_CANONICAL_HASH_ALGO_VERSION,
   };
   const manifest_hash = computeManifestHash(draft);
   const record: AgentRunRecord = { ...draft, manifest_hash };

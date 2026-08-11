@@ -1,7 +1,6 @@
 import { createHash } from 'node:crypto';
 import {
   canonicalSha256,
-  DEFAULT_CANONICAL_HASH_ALGO_VERSION,
   nextCounterId,
 } from '@devai-nyx/utils';
 import {
@@ -74,7 +73,6 @@ export interface RtdManifest {
    * always emit '2.0'; pre-Phase-16.G records lack the field and
    * are treated as already deep-sort on read.
    */
-  readonly hash_algo_version?: '1.0' | '2.0';
 }
 
 const MANIFESTS_DIR_REL = 'record/proofs/compliance/rtd-manifests';
@@ -406,7 +404,6 @@ export function buildRtdManifest(opts: BuildRtdManifestOptions): RtdManifest {
     integration_head: opts.integrationHead ?? gatherGitContext(repoRoot).head_sha ?? '0'.repeat(40),
     components,
     readiness: { ok: overallOk, sub_verdicts: subVerdicts },
-    hash_algo_version: DEFAULT_CANONICAL_HASH_ALGO_VERSION,
   };
   const manifest_hash = hashCanonical(draft);
   const manifest: RtdManifest = { ...draft, manifest_hash };

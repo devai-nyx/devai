@@ -157,8 +157,8 @@
       "description": "The integration-branch commit the closed round actually shipped as (merge commit or branch tip on main). Historical records remain schema-valid without this field, but every new successor record emitted by `devai govern phase close` requires it."
     },
     "release_disposition": {
-      "enum": ["published", "changeset-pending", "none-preratification", "none-needed", "missing"],
-      "description": "Whether the round's package changes have a release path: 'published' (release cut), 'changeset-pending' (changeset recorded, publish pending), 'none-preratification' (package-visible changes intentionally withheld until ratification), 'none-needed' (no package-visible changes), or 'missing' (package changes shipped with no changeset — a recorded defect, never a silent one). Historical records remain schema-valid without this field, but every new successor record emitted by `devai govern phase close` requires it."
+      "enum": ["published", "changeset-pending", "none-needed", "missing"],
+      "description": "Whether package changes have a release path: published, changeset-pending, none-needed, or missing."
     },
     "evidence": {
       "type": "object",

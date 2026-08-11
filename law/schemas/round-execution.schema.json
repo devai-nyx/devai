@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://devai.nyxk.com.br/schemas/round-execution.schema.json",
   "title": "Round execution policy",
-  "description": "Schema for the Architect-owned round/task containment, selection, ordering, role, resource, lifecycle, failure, rollback, current migration, output, and public vocabulary policy.",
+  "description": "Schema for the round/task containment, selection, ordering, role, resource, lifecycle, failure, rollback, output, and public vocabulary policy.",
   "schema_version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -20,7 +20,6 @@
     "lifecycle",
     "failure",
     "rollback",
-    "legacy_migration",
     "outputs",
     "vocabularies"
   ],
@@ -110,9 +109,6 @@
     "rollback": {
       "$ref": "#/$defs/section"
     },
-    "legacy_migration": {
-      "$ref": "#/$defs/section"
-    },
     "outputs": {
       "$ref": "#/$defs/section"
     },
@@ -194,14 +190,11 @@
             },
             {
               "const": "experimental"
-            },
-            {
-              "const": "retired"
             }
           ],
           "items": false,
-          "minItems": 3,
-          "maxItems": 3
+          "minItems": 2,
+          "maxItems": 2
         }
       }
     }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "descriptorVersion": "v1rc-survivor-1",
-  "repositoryId": "devai-nyx/devaii",
+  "repositoryId": "devai-nyx/devai",
   "fallbackNodeId": "test:local-full",
   "dynamicFallbackSelectors": [],
   "tasks": [

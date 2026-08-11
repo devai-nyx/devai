@@ -1,6 +1,6 @@
 {
   "name": "@devai-nyx/cli",
-  "version": "1.0.0",
+  "version": "1.0.0-rc.1",
   "description": "DEVAI registry-derived governed command-line surface.",
   "license": "Apache-2.0",
   "author": "Antonio Augusto Russo <aarusso@nyxk.com.br>",
@@ -52,7 +52,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/devai-nyx/devaii.git",
+    "url": "git+https://github.com/devai-nyx/devai.git",
     "directory": "packages/cli"
   }
 }

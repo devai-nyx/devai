@@ -10,23 +10,14 @@ export type {
   ValidateAgentOptions,
   ValidatedAgentExecutor,
 } from './agent-executor.js';
-export {
-  AGENT_ROUTING_POLICIES_PATH,
-  loadAgentRoutingPolicies,
-  resolveAgentExecutor,
-  validateAgentRoutingPolicies,
-} from './agent-routing.js';
+export { resolveAgentExecutor } from './agent-routing.js';
 export type {
   AgentExecutorRequest as AgentRoutingRequest,
   AgentResolution,
   AgentResolvedExecutor,
-  AgentRoutingPolicy,
-  AgentRoutingPolicyRegistry,
   AgentSelection as AgentRoutingSelection,
   AgentSelectionEvidence,
-  LoadAgentRoutingPoliciesOptions,
   ResolveAgentExecutorOptions,
-  SimpleAgentRegistryEntry,
 } from './agent-routing.js';
 export * from './backlog.js';
 export { validateCompositeExecutor } from './composite-executor.js';
@@ -75,8 +66,6 @@ export {
 export type {
   AgentClass as ModelAgentClass,
   LoadModelRuntimeRegistryOptions,
-  ModelIdentifierKind,
-  ModelRuntimeEntry,
   ModelRuntimeRegistry,
   RegistryCandidateReader,
   RuntimeRegistryEntry,

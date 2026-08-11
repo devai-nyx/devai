@@ -184,7 +184,7 @@ describe('round lifecycle filesystem behavior', () => {
         validation_criteria: [{ criterion: 'fixture', verdict: 'pass', evidence: 'unit' }],
         closed_at: '2026-07-26T00:00:00.000Z',
         merged_as: 'b'.repeat(40),
-        release_disposition: 'none-preratification',
+        release_disposition: 'none-needed',
       });
       write(repo, 'record/derived/indexes/rounds.md', 'PC-0001\n');
 

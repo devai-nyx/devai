@@ -172,7 +172,6 @@ function usageRefusal(
     exit: EXIT_USAGE,
     message,
     remediation,
-    refs: { record: 'DII-215' },
     context,
   });
   return {
@@ -219,7 +218,6 @@ export function routeArgv(
         exit: 2,
         message: `Sensor kind '${kind}' is not registered.`,
         remediation: 'Run devai sense run --list.',
-        refs: { record: 'DII-103' },
         context: { kind },
       });
       return { kind: 'output', text: renderCliError(error, wantsJson(args)), exitCode: 2 };

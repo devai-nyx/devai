@@ -64,7 +64,6 @@ describe('agent-run proof records', () => {
         /^AR-[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
       );
       expect(first.prev_hash).toBe('GENESIS');
-      expect(first.hash_algo_version).toBe('2.0');
       expect(verifyAgentRunHash(first)).toBe(true);
 
       const second = emitAgentRun({

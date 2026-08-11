@@ -169,17 +169,12 @@
         {
           "path": "law/policy/round-execution.json",
           "pointer": "#",
-          "projection": "round containment, scheduling, resource, recovery, and legacy-refusal semantics"
+          "projection": "round containment, scheduling, resource, and recovery semantics"
         },
         {
           "path": "law/schemas/task.schema.json",
           "pointer": "#/properties/executor",
           "projection": "closed executor-kind branches and immutable requested contract"
-        },
-        {
-          "path": "law/policy/agent-routing-policies.json",
-          "pointer": "#",
-          "projection": "named/versioned routing and explicit fallback policy"
         },
         {
           "path": "law/schemas/task-execution-evidence.schema.json",
@@ -217,16 +212,16 @@
     {
       "page_id": "model-runtime",
       "planned_path": "docs/reference/cli/model-runtime.md",
-      "title": "Model and runtime roster",
-      "purpose": "Render vendors, families, adapters, exact provider models or governed aliases, efforts, capabilities, availability, replacement metadata, and selection eligibility without promising an unrostered combination.",
+      "title": "Model runtime bridges",
+      "purpose": "Render provider/runtime bridges, supported adapter efforts and capabilities, and the requirement for host-selected exact model identity.",
       "content_mode": "generated-reference",
       "mutable_population_mode": "generated-from-canonical-source",
-      "category_ids": ["runtimes", "rostered-models", "supported-efforts"],
+      "category_ids": ["runtimes", "supported-efforts"],
       "source_refs": [
         {
           "path": "law/policy/model-runtime-registry.json",
           "pointer": "#",
-          "projection": "runtimes and rostered models with supported efforts and availability metadata"
+          "projection": "runtime bridges with supported efforts and availability metadata"
         }
       ]
     }
@@ -314,13 +309,8 @@
       "source_refs": [
         {
           "path": "law/schemas/task.schema.json",
-          "pointer": "#/$defs/agentSelection/properties/mode/enum",
+          "pointer": "#/$defs/agentSelection/properties/mode/const",
           "projection": "selection-mode strings in schema order"
-        },
-        {
-          "path": "law/policy/agent-routing-policies.json",
-          "pointer": "#",
-          "projection": "mode-specific selection and fallback semantics"
         }
       ],
       "population_contract": "source-derived-exact-ordered-bijection-no-copied-list",
@@ -453,28 +443,13 @@
       "rendering": "generated-reference"
     },
     {
-      "category_id": "rostered-models",
-      "page_id": "model-runtime",
-      "canonical_source": "law/policy/model-runtime-registry.json",
-      "source_refs": [
-        {
-          "path": "law/policy/model-runtime-registry.json",
-          "pointer": "#/models",
-          "projection": "model stable identifiers in registry order"
-        }
-      ],
-      "population_contract": "source-derived-exact-ordered-bijection-no-copied-list",
-      "ordering": "utf8-bytes-after-deduplication",
-      "rendering": "generated-reference"
-    },
-    {
       "category_id": "supported-efforts",
       "page_id": "model-runtime",
       "canonical_source": "law/policy/model-runtime-registry.json",
       "source_refs": [
         {
           "path": "law/policy/model-runtime-registry.json",
-          "pointer": "#/models/*/supported_efforts",
+          "pointer": "#/runtimes/*/efforts",
           "projection": "flatten supported efforts, deduplicate, and order by UTF-8 bytes"
         }
       ],

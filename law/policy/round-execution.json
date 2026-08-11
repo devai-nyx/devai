@@ -133,7 +133,7 @@
     "composite_stop_policy": "requested-closed-value",
     "timeout": "fail-current-executor-and-apply-declared-human-timeout-behavior",
     "agent_retry": "bounded-by-task-max-iterations",
-    "selection_fallback": "only-requested-preferred-list-or-named-versioned-policy",
+    "selection_fallback": "forbidden-exact-host-selection-only",
     "implicit_fallback": "forbidden",
     "unknown_or_malformed_output": "error-never-pass",
     "partial_output": "retain-as-diagnostic-only",
@@ -149,29 +149,6 @@
     "compensation": "explicit-registered-authorized-action-only",
     "retain_failure_evidence": true,
     "rollback_failure": "escalate-and-preserve-state"
-  },
-  "legacy_migration": {
-    "legacy_schema_versions": ["1.0.0"],
-    "classification": "historical-non-executable",
-    "execution_error": "TASK_LEGACY_MAPPING_REQUIRED",
-    "inference_sources_forbidden": [
-      "model_tier",
-      "tags",
-      "prompts",
-      "worktrees",
-      "prior-runs",
-      "branch-name"
-    ],
-    "explicit_mapping_required": [
-      "legacy-task-id",
-      "legacy-record-digest-sha256",
-      "target-round-id",
-      "complete-executor-contract",
-      "mapping-authority-reference",
-      "mapped-at"
-    ],
-    "result": "new-schema-2-record-with-original-preserved",
-    "in_place_rewrite": "forbidden"
   },
   "outputs": {
     "task_execution_schema": "law/schemas/task-execution-evidence.schema.json",

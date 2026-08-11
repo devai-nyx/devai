@@ -2,6 +2,7 @@
 
 import {
   chmodSync,
+  copyFileSync,
   cpSync,
   existsSync,
   mkdirSync,
@@ -21,6 +22,93 @@ const distRoot = join(packageRoot, 'dist');
 const temporaryRoot = mkdtempSync(join(tmpdir(), 'devai-cli-assembly-'));
 const bundlePath = join(temporaryRoot, 'bin.js');
 const scaffoldModule = join(repositoryRoot, 'packages/skills/dist/operations/scaffold/index.js');
+
+const schemaRoots = [
+  'action-registry.schema.json',
+  'action-result.schema.json',
+  'actions-list-output.schema.json',
+  'authority-policy.schema.json',
+  'authority-session.schema.json',
+  'check-suites.schema.json',
+  'common-defs.schema.json',
+  'error.schema.json',
+  'evidence.schema.json',
+  'forbidden-actions.schema.json',
+  'glob-guards.schema.json',
+  'invariant.schema.json',
+  'inventory.schema.json',
+  'local-evidence-manifest.schema.json',
+  'meta.schema.json',
+  'model-runtime-registry.schema.json',
+  'mutation-scenario.schema.json',
+  'phase-closure.schema.json',
+  'proof-epoch.schema.json',
+  'record-meta.schema.json',
+  'release-control.schema.json',
+  'repo-introspection.schema.json',
+  'round-execution.schema.json',
+  'runtime-charter.schema.json',
+  'scorecard-na-config.schema.json',
+  'scorecard.schema.json',
+  'sense-presets.schema.json',
+  'sensor-reading.schema.json',
+  'sensor-registry.schema.json',
+  'subprocess-effects.schema.json',
+  'task-execution-evidence.schema.json',
+  'task.schema.json',
+  'trace.schema.json',
+  'translation-witness.schema.json',
+  'validation-result.schema.json',
+];
+
+const policyFiles = [
+  'action-registry.json',
+  'check-suites.json',
+  'domains.json',
+  'forbidden-actions.json',
+  'glob-guards.json',
+  'model-runtime-registry.json',
+  'mutation-strength.json',
+  'round-execution.json',
+  'scorecard-na.json',
+  'sense-presets.json',
+  'sensor-registry.json',
+  'subprocess-effects.json',
+  'thresholds.json',
+];
+
+function schemaClosure(roots) {
+  const sourceRoot = join(repositoryRoot, 'law/schemas');
+  const pending = [...roots];
+  const selected = new Set();
+  const referencedSchemas = (value) => {
+    if (Array.isArray(value)) return value.flatMap(referencedSchemas);
+    if (value === null || typeof value !== 'object') return [];
+    return Object.entries(value).flatMap(([key, child]) => {
+      if (key === '$ref' && typeof child === 'string') {
+        const match = /^([^#]+\.schema\.json)(?:#.*)?$/u.exec(child);
+        return match?.[1] === undefined ? [] : [match[1]];
+      }
+      return referencedSchemas(child);
+    });
+  };
+  while (pending.length > 0) {
+    const name = pending.pop();
+    if (selected.has(name)) continue;
+    const source = join(sourceRoot, name);
+    if (!existsSync(source)) throw new Error(`PACKAGE_SCHEMA_MISSING:${name}`);
+    selected.add(name);
+    const document = JSON.parse(readFileSync(source, 'utf8'));
+    const refs = referencedSchemas(document);
+    for (const ref of refs) if (!selected.has(ref)) pending.push(ref);
+  }
+  return [...selected].sort();
+}
+
+function copyFiles(sourceRoot, targetRoot, names) {
+  mkdirSync(targetRoot, { recursive: true });
+  for (const name of names) copyFileSync(join(sourceRoot, name), join(targetRoot, name));
+}
 
 const workspacePackage = /^@devai-nyx\//u;
 const external = (id) =>
@@ -89,18 +177,19 @@ try {
     JSON.stringify({ type: 'module', version: manifest.version }, null, 2) + '\n',
   );
 
-  cpSync(join(repositoryRoot, 'law/schemas'), join(runtimeIndex, 'schemas'), {
-    recursive: true,
-  });
-  for (const name of ['sensor-registry.json', 'round-execution.json', 'sense-presets.json']) {
-    cpSync(join(repositoryRoot, 'law/policy', name), join(runtimeIndex, name));
-  }
+  const packagedSchemas = schemaClosure(schemaRoots);
+  copyFiles(join(repositoryRoot, 'law/schemas'), join(runtimeIndex, 'schemas'), packagedSchemas);
+  copyFiles(
+    join(repositoryRoot, 'law/policy'),
+    runtimeIndex,
+    ['sensor-registry.json', 'round-execution.json', 'sense-presets.json'],
+  );
 
   mkdirSync(join(distRoot, 'law'), { recursive: true });
   cpSync(join(repositoryRoot, 'law/constitution.md'), join(distRoot, 'law/constitution.md'));
   mkdirSync(join(runtimeRoot, 'law'), { recursive: true });
   cpSync(join(repositoryRoot, 'law/constitution.md'), join(runtimeRoot, 'law/constitution.md'));
-  cpSync(join(repositoryRoot, 'law/policy'), join(distRoot, 'law/policy'), { recursive: true });
+  copyFiles(join(repositoryRoot, 'law/policy'), join(distRoot, 'law/policy'), policyFiles);
   cpSync(join(repositoryRoot, 'packages/skills/resources'), join(distRoot, 'resources'), {
     recursive: true,
   });

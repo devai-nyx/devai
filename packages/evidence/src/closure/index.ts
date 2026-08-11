@@ -58,7 +58,7 @@ export interface PhaseClosureDraft {
   // records; the successor production verb requires both on every new closure.
   readonly merged_as?: string;
   readonly release_disposition?:
-    'published' | 'changeset-pending' | 'none-preratification' | 'none-needed' | 'missing';
+    'published' | 'changeset-pending' | 'none-needed' | 'missing';
   readonly notes?: string;
 }
 
@@ -246,9 +246,10 @@ export function closePhase(repoRoot: string, draft: PhaseClosureDraft): ClosePha
   if (record.supersedes !== undefined && !existing.some((r) => r.id === record.supersedes)) {
     throw new Error(`phase close: supersedes ${record.supersedes} does not exist`);
   }
+  // Every emitted closure must bind the merge that contains it.
   if (record.merged_as === undefined) {
     throw new Error(
-      'phase close: merged_as is required — close only after the commit that ships the round exists',
+      'phase close: merged_as is required — close only at or after the merge that ships the round',
     );
   }
   if (record.release_disposition === undefined) {

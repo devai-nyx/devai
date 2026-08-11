@@ -17,6 +17,11 @@ const BUNDLED_SCHEMAS_DIR = join(HERE, 'schemas');
 const SCHEMAS_DIR = existsSync(BUNDLED_SCHEMAS_DIR)
   ? BUNDLED_SCHEMAS_DIR
   : join(HERE, '..', '..', '..', 'law', 'schemas');
+const AVAILABLE_SCHEMA_NAMES = existsSync(BUNDLED_SCHEMAS_DIR)
+  ? (ROSTER as readonly SchemaName[])
+  : (readdirSync(SCHEMAS_DIR)
+      .filter((name) => name.endsWith('.schema.json'))
+      .sort() as SchemaName[]);
 const SENSOR_REGISTRY_PATH = join(
   existsSync(join(HERE, 'sensor-registry.json')) ? HERE : join(SCHEMAS_DIR, '..', 'policy'),
   'sensor-registry.json',
@@ -74,7 +79,7 @@ const compiled = new Map<SchemaName, ReturnType<typeof ajv.compile>>();
 export function getValidator(name: SchemaName) {
   let v = compiled.get(name);
   if (!v) {
-    if (!(ROSTER as readonly string[]).includes(name))
+    if (!(AVAILABLE_SCHEMA_NAMES as readonly string[]).includes(name))
       throw new Error(`unregistered schema: ${name}`);
     ensureCommon();
     ensureSchemaReferences(name);
@@ -100,8 +105,29 @@ type CamelCase<Name extends string> = Name extends `${infer Head}-${infer Tail}`
   ? `${Head}${Capitalize<CamelCase<Tail>>}`
   : Name;
 export type ValidatorKey = CamelCase<StripSchemaSuffix<SchemaName>>;
+type SourceCompilationValidatorKey =
+  | ValidatorKey
+  | 'adr'
+  | 'agentRun'
+  | 'apiMap'
+  | 'assessment'
+  | 'coverageMatrix'
+  | 'dataModelInventory'
+  | 'depGraph'
+  | 'glossaryEntry'
+  | 'invCandidate'
+  | 'journey'
+  | 'moduleBlueprint'
+  | 'mutationIntent'
+  | 'phaseClosure'
+  | 'rbacInventory'
+  | 'rgr'
+  | 'routesInventory'
+  | 'rtdManifest'
+  | 'testWeakeningConfig'
+  | 'useCases';
 export type ValidatorRegistry = {
-  readonly [Key in ValidatorKey]: ValidateFunction;
+  readonly [Key in SourceCompilationValidatorKey]: ValidateFunction;
 };
 
 function lazyValidator(name: SchemaName): ValidateFunction {
@@ -119,7 +145,7 @@ function lazyValidator(name: SchemaName): ValidateFunction {
  * cannot become callable without joining the governed roster first.
  */
 export const validators = Object.freeze(
-  Object.fromEntries(ROSTER.map((name) => [validatorKey(name), lazyValidator(name)])),
+  Object.fromEntries(AVAILABLE_SCHEMA_NAMES.map((name) => [validatorKey(name), lazyValidator(name)])),
 ) as ValidatorRegistry;
 
 export interface SchemaIssue {
@@ -222,7 +248,7 @@ export const parsers = Object.freeze(
     ]),
   ),
 ) as {
-  readonly [Key in ValidatorKey]: SchemaParser;
+  readonly [Key in SourceCompilationValidatorKey]: SchemaParser;
 };
 
 export function listSchemaFiles(): string[] {
@@ -240,7 +266,6 @@ export function metaGate(): MetaGateReport {
   const meta = getValidator('meta.schema.json');
   const report: MetaGateReport = { compliant: [], noncompliant: [] };
   for (const name of ROSTER) {
-    if (name === 'meta.schema.json' ? false : false) continue;
     if (meta(loadSchema(name))) report.compliant.push(name);
     else
       report.noncompliant.push({

@@ -125,7 +125,7 @@
       "id": "unit-test",
       "binding": {
         "kind": "package-script",
-        "argv": ["pnpm", "run", "test:t1"]
+        "argv": ["pnpm", "run", "test:local"]
       },
       "effect": "harness-write",
       "cost": "medium",
@@ -138,8 +138,8 @@
         "argv": [
           "node",
           "packages/cli/dist/runtime/index/bin.js",
-          "policy",
           "check",
+          "--only",
           "schemas",
           "--repo-root",
           ".",
@@ -194,8 +194,8 @@
     {
       "id": "test-trace-validation",
       "binding": {
-        "kind": "test-file",
-        "argv": ["pnpm", "vitest", "run", "packages/spec/tests/unit/test-trace-validator.test.ts"]
+        "kind": "runtime-gate",
+        "gate_id": "test-trace-validation"
       },
       "effect": "read",
       "cost": "low",
@@ -214,13 +214,8 @@
     {
       "id": "action-coverage",
       "binding": {
-        "kind": "test-file",
-        "argv": [
-          "pnpm",
-          "vitest",
-          "run",
-          "packages/cli/tests/contract/action-coverage.contract.test.ts"
-        ]
+        "kind": "runtime-gate",
+        "gate_id": "action-coverage"
       },
       "effect": "read",
       "cost": "low",
@@ -229,8 +224,8 @@
     {
       "id": "full-tests",
       "binding": {
-        "kind": "literal-argv",
-        "argv": ["pnpm", "vitest", "run"]
+        "kind": "package-script",
+        "argv": ["pnpm", "run", "test:local"]
       },
       "effect": "harness-write",
       "cost": "high",
@@ -270,7 +265,7 @@
       "id": "harness-integrity",
       "binding": {
         "kind": "package-script",
-        "argv": ["pnpm", "run", "test:t6"]
+        "argv": ["pnpm", "run", "test:containment:rc"]
       },
       "effect": "harness-write",
       "cost": "high",
@@ -280,7 +275,7 @@
       "id": "coverage",
       "binding": {
         "kind": "package-script",
-        "argv": ["pnpm", "run", "test:coverage:t1-t3"]
+        "argv": ["pnpm", "run", "test:coverage:rc"]
       },
       "effect": "harness-write",
       "cost": "high",

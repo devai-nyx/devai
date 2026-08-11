@@ -66,14 +66,12 @@ export type ResolvedTaskExecutor =
   | ResolvedCompositeExecutor;
 
 export interface SelectionEvidence {
-  readonly mode: 'exact' | 'preferred' | 'policy' | 'not-applicable';
+  readonly mode: 'exact' | 'not-applicable';
   readonly considered_registry_ids: readonly string[];
   readonly selected_registry_id: string | null;
   readonly rejection_codes: readonly string[];
   readonly fallback: boolean;
   readonly fallback_reason: string | null;
-  readonly policy_id?: string | null;
-  readonly policy_version?: string | null;
 }
 
 export interface PromptEvidence {
@@ -271,10 +269,7 @@ function validateAgentSelection(task: TaskRecordBinding, evidence: TaskExecution
         evidence.selection.considered_registry_ids.length === 1 &&
         evidence.selection.considered_registry_ids[0] === registryId &&
         !evidence.selection.fallback &&
-        evidence.selection.fallback_reason === null &&
-        (evidence.selection.policy_id === undefined || evidence.selection.policy_id === null) &&
-        (evidence.selection.policy_version === undefined ||
-          evidence.selection.policy_version === null),
+        evidence.selection.fallback_reason === null,
       'TASK_EXECUTION_EVIDENCE_EXACT_SUBSTITUTION',
       'exact selection must resolve only the exact requested registry identity',
     );
@@ -287,49 +282,11 @@ function validateAgentSelection(task: TaskRecordBinding, evidence: TaskExecution
     );
   }
 
-  if (requested['mode'] === 'preferred') {
-    const allowlist = requested['registry_ids'];
-    if (!Array.isArray(allowlist)) {
-      throw new TaskExecutionEvidenceError(
-        'TASK_EXECUTION_EVIDENCE_IMPLICIT_FALLBACK',
-        'preferred selection has no explicit ordered allowlist',
-      );
-    }
-    requireSemantic(
-      allowlist.length > 0 &&
-        evidence.selection.considered_registry_ids.every((id, index) => allowlist[index] === id) &&
-        evidence.selection.considered_registry_ids.at(-1) === resolved.registry_id,
-      'TASK_EXECUTION_EVIDENCE_IMPLICIT_FALLBACK',
-      'preferred selection must record an ordered prefix of its explicit allowlist',
-    );
-    const fallback = allowlist[0] !== resolved.registry_id;
-    requireSemantic(
-      evidence.selection.fallback === fallback &&
-        (fallback
-          ? typeof evidence.selection.fallback_reason === 'string' &&
-            evidence.selection.fallback_reason.length > 0
-          : evidence.selection.fallback_reason === null) &&
-        (evidence.selection.policy_id === undefined || evidence.selection.policy_id === null) &&
-        (evidence.selection.policy_version === undefined ||
-          evidence.selection.policy_version === null),
-      'TASK_EXECUTION_EVIDENCE_FALLBACK_MISMATCH',
-      'fallback decision and reason do not match the preferred selection result',
-    );
-  }
-
-  if (requested['mode'] === 'policy') {
-    requireSemantic(
-      evidence.selection.policy_id === requested['policy_id'] &&
-        evidence.selection.policy_version === requested['policy_version'] &&
-        evidence.selection.considered_registry_ids.at(-1) === resolved.registry_id &&
-        (evidence.selection.fallback
-          ? typeof evidence.selection.fallback_reason === 'string' &&
-            evidence.selection.fallback_reason.length > 0
-          : evidence.selection.fallback_reason === null),
-      'TASK_EXECUTION_EVIDENCE_ROUTING_POLICY_MISMATCH',
-      'policy selection must preserve the exact requested policy id and version',
-    );
-  }
+  requireSemantic(
+    requested['mode'] === 'exact',
+    'TASK_EXECUTION_EVIDENCE_SELECTION_MISMATCH',
+    'agent execution requires exact host selection',
+  );
 }
 
 function validateExecutionSemantics(
@@ -417,10 +374,7 @@ function validateExecutionSemantics(
       evidence.selection.selected_registry_id === null &&
       evidence.selection.rejection_codes.length === 0 &&
       !evidence.selection.fallback &&
-      evidence.selection.fallback_reason === null &&
-      (evidence.selection.policy_id === undefined || evidence.selection.policy_id === null) &&
-      (evidence.selection.policy_version === undefined ||
-        evidence.selection.policy_version === null),
+      evidence.selection.fallback_reason === null,
     'TASK_EXECUTION_EVIDENCE_SELECTION_NOT_APPLICABLE',
     'non-agent evidence cannot record model selection or fallback',
   );

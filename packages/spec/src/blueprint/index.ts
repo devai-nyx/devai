@@ -246,14 +246,14 @@ export function validateBlueprint(bp: Blueprint): ValidationResult {
 
 // ---------------------------------------------------------------------
 // Canonical-JSON sha256 of a blueprint (for INV-SCAFFOLD-001).
-// Uses canonicalJsonV2 (Phase 16.G default) so the trio
+// Uses the current canonical form so the trio
 // blueprint_id + blueprint_version + blueprint_sha256 is reproducible.
 // ---------------------------------------------------------------------
 
-import { canonicalJsonV2 } from '@devai-nyx/utils';
+import { canonicalJson } from '@devai-nyx/utils';
 
 export function blueprintSha256(bp: Blueprint): string {
-  const canonical = canonicalJsonV2(bp as unknown as Record<string, unknown>);
+  const canonical = canonicalJson(bp as unknown as Record<string, unknown>);
   return createHash('sha256').update(canonical, 'utf8').digest('hex');
 }
 

@@ -33,14 +33,7 @@ export type RoutineTaskExecutor = RoutineTaskExecutorBase &
     | { readonly argv: readonly string[]; readonly action_id?: never }
   );
 
-export type AgentSelection =
-  | { readonly mode: 'exact'; readonly registry_id: string }
-  | { readonly mode: 'preferred'; readonly registry_ids: readonly string[] }
-  | {
-      readonly mode: 'policy';
-      readonly policy_id: string;
-      readonly policy_version: string;
-    };
+export type AgentSelection = { readonly mode: 'exact'; readonly registry_id: string };
 
 export interface AgentTaskExecutor {
   readonly kind: 'agent';
@@ -90,7 +83,7 @@ export interface TaskIterationRecord {
   readonly evidence_refs?: readonly string[];
 }
 
-/** The immutable schema-2 task request persisted by the governed task loop. */
+/** The immutable task request persisted by the task loop. */
 export interface TaskRecord {
   readonly schemaVersion: '2.0.0';
   readonly id: string;
@@ -134,28 +127,8 @@ export interface TaskRecord {
   readonly tags?: readonly string[];
 }
 
-/**
- * Historical input is deliberately weakly typed. It may be inspected and
- * preserved, but it cannot enter any schema-2 execution transition.
- */
-export interface LegacyTaskRecord {
-  readonly schemaVersion: '1.0.0';
-  readonly id?: unknown;
-  readonly status?: unknown;
-  readonly discipline?: unknown;
-  readonly title?: unknown;
-  readonly tags?: unknown;
-  readonly [key: string]: unknown;
-}
-
 export type TaskRecordClassification =
   | { readonly kind: 'current'; readonly executable: true; readonly record: TaskRecord }
-  | {
-      readonly kind: 'legacy';
-      readonly executable: false;
-      readonly code: 'TASK_LEGACY_MAPPING_REQUIRED';
-      readonly record: LegacyTaskRecord;
-    }
   | {
       readonly kind: 'invalid';
       readonly executable: false;
@@ -173,21 +146,13 @@ function objectRecord(value: unknown): Readonly<Record<string, unknown>> | null 
 }
 
 /**
- * Classify without enriching or rewriting the caller's value. Full schema-2
+ * Classify without enriching or rewriting the caller's value. Full schema
  * validation remains the persistence boundary's responsibility.
  */
 export function classifyTaskRecord(value: unknown): TaskRecordClassification {
   const record = objectRecord(value);
   if (record === null) return { kind: 'invalid', executable: false, code: 'TASK_RECORD_INVALID' };
 
-  if (record['schemaVersion'] === '1.0.0') {
-    return {
-      kind: 'legacy',
-      executable: false,
-      code: 'TASK_LEGACY_MAPPING_REQUIRED',
-      record: value as LegacyTaskRecord,
-    };
-  }
   if (record['schemaVersion'] !== '2.0.0') {
     return {
       kind: 'invalid',

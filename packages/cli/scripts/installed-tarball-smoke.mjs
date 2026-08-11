@@ -50,7 +50,7 @@ try {
   const installedPackage = join(projectRoot, 'node_modules/@devai-nyx/cli');
 
   const version = run(binary, ['--version']).trim();
-  if (!version.startsWith('devai/1.0.0 ')) {
+  if (!version.startsWith('devai/1.0.0-rc.1 ')) {
     throw new Error(`INSTALLED_VERSION_INVALID:${version}`);
   }
   const help = run(binary, ['--help']);

@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { computeMutationEnvelopeDigest, type MutationEnvelope } from '@devai-nyx/authority';
-import { canonicalJsonV2 } from '@devai-nyx/utils';
+import { canonicalJson } from '@devai-nyx/utils';
 
 export const NOW = '2026-07-15T12:00:00.000Z';
 export const LATER = '2026-07-15T13:00:00.000Z';
@@ -52,7 +52,7 @@ export async function runtimeApi(): Promise<RuntimeApi> {
 }
 
 export function canonicalBytes(value: unknown): Uint8Array {
-  return new TextEncoder().encode(canonicalJsonV2(value));
+  return new TextEncoder().encode(canonicalJson(value));
 }
 
 export function sha256Bytes(bytes: Uint8Array): string {
@@ -66,14 +66,14 @@ export function canonicalSha256(value: unknown): string {
 export function expectFailure(result: unknown, category: Failure['category'], code: string): void {
   const failure = result as Failure;
   if (failure.ok !== false || failure.category !== category || failure.code !== code) {
-    throw new Error(`expected ${category}/${code}, received ${canonicalJsonV2(result)}`);
+    throw new Error(`expected ${category}/${code}, received ${canonicalJson(result)}`);
   }
 }
 
 export function expectSuccess<T = unknown>(result: unknown): T {
   const success = result as Success<T>;
   if (success.ok !== true) {
-    throw new Error(`expected success, received ${canonicalJsonV2(result)}`);
+    throw new Error(`expected success, received ${canonicalJson(result)}`);
   }
   return success.value;
 }

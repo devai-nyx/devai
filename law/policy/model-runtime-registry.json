@@ -4,12 +4,6 @@
   "id": "model-runtime-registry",
   "status": "active",
   "authority": "Architect",
-  "availability_semantics": {
-    "registry_value": "available means eligible for attempted resolution, not proved reachable on this host",
-    "host_preflight_required": true,
-    "unavailable_behavior": "fail-or-consider-next-explicitly-authorized-entry",
-    "authority_from_capability": "forbidden"
-  },
   "runtimes": [
     {
       "id": "anthropic-api",
@@ -19,9 +13,11 @@
       "adapter_module": "packages/skills/src/llm/anthropic-client.ts",
       "transport": "provider-api",
       "credential_binding": "ANTHROPIC_API_KEY",
+      "efforts": ["default"],
       "capabilities": ["text-generation", "structured-output-best-effort"],
+      "eligible_agent_classes": ["coding-agent", "review-agent", "ops-agent"],
       "available": true,
-      "availability_basis": "rostered adapter; credential and provider reachability are mandatory runtime preflights"
+      "availability_basis": "adapter is present; credentials, provider reachability, exact model identity, and effort support require host preflight"
     },
     {
       "id": "openai-api",
@@ -31,9 +27,11 @@
       "adapter_module": "packages/skills/src/llm/codex-client.ts",
       "transport": "provider-api",
       "credential_binding": "OPENAI_API_KEY",
+      "efforts": ["default", "low", "medium", "high", "xhigh", "max", "ultra"],
       "capabilities": ["text-generation", "structured-output"],
+      "eligible_agent_classes": ["coding-agent", "review-agent", "ops-agent"],
       "available": true,
-      "availability_basis": "rostered adapter; credential and provider reachability are mandatory runtime preflights"
+      "availability_basis": "adapter is present; credentials, provider reachability, exact model identity, and effort support require host preflight"
     },
     {
       "id": "claude-cli",
@@ -44,9 +42,11 @@
       "transport": "host-cli",
       "executable": "claude",
       "credential_binding": "host-cli-session",
-      "capabilities": ["text-generation", "structured-output-best-effort"],
+      "efforts": ["default", "low", "medium", "high"],
+      "capabilities": ["text-generation", "structured-output-best-effort", "repository-context"],
+      "eligible_agent_classes": ["coding-agent", "review-agent", "ops-agent"],
       "available": true,
-      "availability_basis": "rostered adapter; executable, login, and reported model identity are mandatory runtime preflights"
+      "availability_basis": "adapter is present; executable, login, exact model identity, and effort support require host preflight"
     },
     {
       "id": "codex-cli",
@@ -57,106 +57,11 @@
       "transport": "host-cli",
       "executable": "codex",
       "credential_binding": "host-cli-session",
-      "capabilities": ["text-generation", "structured-output"],
-      "available": true,
-      "availability_basis": "rostered adapter; executable, login, and reported model identity are mandatory runtime preflights"
-    }
-  ],
-  "models": [
-    {
-      "id": "anthropic-api:claude-3-5-sonnet-latest",
-      "runtime_id": "anthropic-api",
-      "vendor": "Anthropic",
-      "family": "claude",
-      "adapter_id": "anthropic-sdk-adapter",
-      "provider_identifier": "claude-3-5-sonnet-latest",
-      "identifier_kind": "exact",
-      "supported_efforts": ["default"],
-      "capabilities": ["text-generation", "structured-output-best-effort"],
-      "eligible_agent_classes": ["coding-agent", "review-agent", "ops-agent"],
-      "available": true,
-      "availability_basis": "exact current adapter default; provider acceptance is rechecked before invocation",
-      "replacement": {
-        "state": "none",
-        "model_id": null,
-        "reason": null
-      }
-    },
-    {
-      "id": "openai-api:gpt-4o-latest",
-      "runtime_id": "openai-api",
-      "vendor": "OpenAI",
-      "family": "codex",
-      "adapter_id": "openai-sdk-adapter",
-      "provider_identifier": "gpt-4o-latest",
-      "identifier_kind": "exact",
-      "supported_efforts": ["default"],
-      "capabilities": ["text-generation", "structured-output"],
-      "eligible_agent_classes": ["coding-agent", "review-agent", "ops-agent"],
-      "available": true,
-      "availability_basis": "exact current adapter default; provider acceptance is rechecked before invocation",
-      "replacement": {
-        "state": "none",
-        "model_id": null,
-        "reason": null
-      }
-    },
-    {
-      "id": "claude-cli:claude-sonnet-4-6",
-      "runtime_id": "claude-cli",
-      "vendor": "Anthropic",
-      "family": "claude",
-      "adapter_id": "claude-cli-adapter",
-      "provider_identifier": "claude-sonnet-4-6",
-      "identifier_kind": "exact",
-      "supported_efforts": ["default"],
-      "capabilities": ["text-generation", "structured-output-best-effort", "repository-context"],
-      "eligible_agent_classes": ["coding-agent", "review-agent", "ops-agent"],
-      "available": true,
-      "availability_basis": "exact current CLI-adapter default; host identity is rechecked before invocation",
-      "replacement": {
-        "state": "none",
-        "model_id": null,
-        "reason": null
-      }
-    },
-    {
-      "id": "claude-cli:claude-opus-5",
-      "runtime_id": "claude-cli",
-      "vendor": "Anthropic",
-      "family": "claude",
-      "adapter_id": "claude-cli-adapter",
-      "provider_identifier": "claude-opus-5",
-      "identifier_kind": "exact",
-      "supported_efforts": ["default"],
-      "capabilities": ["text-generation", "structured-output-best-effort", "repository-context"],
-      "eligible_agent_classes": ["coding-agent", "review-agent", "ops-agent"],
-      "available": true,
-      "availability_basis": "exact host selector; host identity and availability remain mandatory preflights",
-      "replacement": {
-        "state": "none",
-        "model_id": null,
-        "reason": null
-      }
-    },
-    {
-      "id": "codex-cli:gpt-5.6-sol",
-      "runtime_id": "codex-cli",
-      "vendor": "OpenAI",
-      "family": "codex",
-      "adapter_id": "codex-cli-adapter",
-      "provider_identifier": "gpt-5.6-sol",
-      "identifier_kind": "exact",
-      "supported_efforts": ["low", "medium", "high", "xhigh", "max", "ultra"],
+      "efforts": ["low", "medium", "high", "xhigh", "max", "ultra"],
       "capabilities": ["text-generation", "structured-output", "repository-context"],
       "eligible_agent_classes": ["coding-agent", "review-agent", "ops-agent"],
       "available": true,
-      "availability_basis": "exact configured model; host identity is rechecked before invocation",
-      "replacement": {
-        "state": "none",
-        "model_id": null,
-        "reason": null
-      }
+      "availability_basis": "adapter is present; executable, login, exact model identity, and effort support require host preflight"
     }
   ]
 }

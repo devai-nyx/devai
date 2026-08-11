@@ -1,5 +1,5 @@
 {
-  "name": "devaii",
+  "name": "devai",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -34,8 +34,7 @@
     "test:e2e:rc": "vitest run --config tests/config/rc.e2e.config.ts",
     "test:performance:rc": "vitest run --config tests/config/rc.performance.config.ts",
     "test:containment:rc": "vitest run --config tests/config/rc.containment.config.ts",
-    "trace:check": "node scripts/generate-trace.mjs . --check",
-    "repository-reference:check": "node scripts/generate-repository-reference-triage.mjs . --check --target work/rounds/R-0002/repository-reference-triage.json"
+    "trace:check": "node scripts/generate-trace.mjs . --check"
   },
   "devDependencies": {
     "@bcoe/v8-coverage": "1.0.2",

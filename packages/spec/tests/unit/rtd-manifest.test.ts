@@ -35,7 +35,6 @@ describe('RTD manifest', () => {
       schemaVersion: '1.0.0',
       id: 'RTM-0001',
       integration_head: 'a'.repeat(40),
-      hash_algo_version: '2.0',
       readiness: { sub_verdicts: expect.any(Array) },
     });
     expect(first.readiness.sub_verdicts.map((entry) => entry.component)).toContain(

@@ -76,7 +76,6 @@ function errorFrom(text: string, exit: number): CliError {
     exit: normalized,
     message,
     remediation: 'Correct the invocation or satisfy the reported precondition, then retry.',
-    refs: { record: 'DII-215' },
   });
 }
 

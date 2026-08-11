@@ -487,7 +487,7 @@ export const roundStatus = defineCommand({
   },
 });
 
-/** Canonical R-0007 round handlers for central registration. */
+/** Current round handlers for central registration. */
 export const roundWorkflowCommands = [
   roundAssess,
   roundClose,

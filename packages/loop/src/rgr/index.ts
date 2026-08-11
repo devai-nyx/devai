@@ -220,18 +220,13 @@ export function resolveRgr(opts: ResolveRgrOptions): RgrRecord {
 /**
  * Compute a deterministic content hash over an RGR record for
  * external log / audit-trail purposes. SHA-256 over the
- * canonical-JSON form (v2.0 deep-sort, the current default).
+ * current canonical-JSON form.
  *
  * **Not persisted on the rgr.schema.json record itself.** Unlike
  * `agent-run` / `rtd-manifest`, rgr records carry no stored
- * `manifest_hash` field, so there is no historical-record
- * compatibility concern: callers compute the hash on demand and
+ * `manifest_hash` field. Callers compute the hash on demand and
  * MUST treat each call as authoritative for the live record at
- * call time. There is therefore no `hash_algo_version` dispatch
- * here; new callers always get v2.0. If a future change introduces
- * a stored hash on the rgr schema, mirror the agent-run pattern
- * (add `hash_algo_version` to the schema + version-aware
- * verification helper).
+ * call time.
  */
 export function rgrContentHash(record: RgrRecord): string {
   return canonicalSha256(record);

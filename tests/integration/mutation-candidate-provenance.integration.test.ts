@@ -220,7 +220,6 @@ function writeAttributionState(
     outcome: { status: 'pass' },
     prev_hash: 'GENESIS',
     manifest_hash: 'a'.repeat(64),
-    hash_algo_version: '2.0',
   });
   return paths;
 }

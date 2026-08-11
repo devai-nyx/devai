@@ -167,19 +167,10 @@ function categoryPopulation(repoRoot: string, categoryId: string): readonly stri
           },
         ),
       );
-    case 'rostered-models':
-      return uniqueSorted(
-        records(modelRuntime()['models'], 'CHECK_DESCRIPTOR_MODELS_INVALID').map((entry, index) => {
-          if (typeof entry['id'] !== 'string') {
-            throw new Error(`CHECK_DESCRIPTOR_MODELS_INVALID:${String(index)}`);
-          }
-          return entry['id'];
-        }),
-      );
     case 'supported-efforts':
       return uniqueSorted(
-        records(modelRuntime()['models'], 'CHECK_DESCRIPTOR_EFFORTS_INVALID').flatMap((entry) =>
-          strings(entry['supported_efforts'], 'CHECK_DESCRIPTOR_EFFORTS_INVALID'),
+        records(modelRuntime()['runtimes'], 'CHECK_DESCRIPTOR_EFFORTS_INVALID').flatMap((entry) =>
+          strings(entry['efforts'], 'CHECK_DESCRIPTOR_EFFORTS_INVALID'),
         ),
       );
     default:

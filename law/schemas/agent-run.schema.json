@@ -157,10 +157,6 @@
     "manifest_hash": {
       "type": "string",
       "pattern": "^[a-f0-9]{64}$"
-    },
-    "hash_algo_version": {
-      "enum": ["1.0", "2.0"],
-      "description": "Algorithm version under which `manifest_hash` was computed (Phase 16.G). '1.0' = shallow-sort (legacy, pre-Phase-16.G writes). '2.0' = deep-sort recursive canonicalisation (current default for new writes). Absent means '1.0' for backward-compatible read. Verifiers dispatch by this field per-record."
     }
   },
   "schema_version": "1.0.0",

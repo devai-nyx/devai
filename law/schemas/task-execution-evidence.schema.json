@@ -377,7 +377,7 @@
       ],
       "properties": {
         "mode": {
-          "enum": ["exact", "preferred", "policy", "not-applicable"]
+          "enum": ["exact", "not-applicable"]
         },
         "considered_registry_ids": {
           "type": "array",
@@ -401,12 +401,6 @@
           "type": "boolean"
         },
         "fallback_reason": {
-          "type": ["string", "null"]
-        },
-        "policy_id": {
-          "type": ["string", "null"]
-        },
-        "policy_version": {
           "type": ["string", "null"]
         }
       }
