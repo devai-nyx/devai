@@ -17,11 +17,32 @@ const definitions = [
     ['devai', 'check', '--suite', 'quick'],
   ],
   [
-    'scorecard.compute',
-    'Compute the scorecard from existing readings.',
+    'sense.inventory',
+    'Inspect one deterministic repository inventory slice.',
     'read',
     'host-command',
-    ['devai', 'check', '--only', 'release-scorecard'],
+    ['devai', 'sense', 'inventory'],
+  ],
+  [
+    'init.plan',
+    'Build the exact non-authorizing initialization plan.',
+    'read',
+    'host-command',
+    ['devai', 'init', 'plan'],
+  ],
+  [
+    'round.assess',
+    'Assess one explicit local round without mutation.',
+    'read',
+    'host-command',
+    ['devai', 'round', 'assess'],
+  ],
+  [
+    'evidence.verify',
+    'Verify existing local evidence without mutation.',
+    'read',
+    'host-command',
+    ['devai', 'evidence', 'verify'],
   ],
   [
     'check.lint',
@@ -44,19 +65,18 @@ const definitions = [
     'host-command',
     ['pnpm', 'test'],
   ],
-  [
-    'check.mutation',
-    'Run the configured mutation check.',
-    'read',
-    'host-command',
-    ['pnpm', 'test:mutation'],
-  ],
   ['scaffold.db', 'Render database scaffold outputs.', 'local-write', 'host-scaffolder'],
   ['scaffold.api', 'Render API scaffold outputs.', 'local-write', 'host-scaffolder'],
   ['scaffold.ui', 'Render UI scaffold outputs.', 'local-write', 'host-scaffolder'],
   ['scaffold.tests', 'Render test scaffold outputs.', 'local-write', 'host-scaffolder'],
   ['scaffold.docs', 'Render documentation scaffold outputs.', 'local-write', 'host-scaffolder'],
   ['scaffold.ci', 'Render module CI scaffold outputs.', 'local-write', 'host-scaffolder'],
+  [
+    'scaffold.tests-from-docs',
+    'Materialize reviewed test candidates derived from explicit documentation.',
+    'local-write',
+    'host-materializer',
+  ],
   [
     'check.typecheck',
     'Repair type errors within explicit files.',
@@ -72,32 +92,22 @@ const definitions = [
     ['pnpm', 'test:coverage'],
   ],
   [
-    'check.mutation-repair',
-    'Repair a focused surviving mutant.',
-    'local-write',
-    'host-command',
-    ['pnpm', 'test:mutation'],
+    'round.plan.preview',
+    'Record an explicit local preview plan in runtime state.',
+    'runtime-write',
+    'host-materializer',
   ],
   [
-    'check.action-coverage',
-    'Check action coverage deterministically.',
-    'read',
-    'host-command',
-    ['devai', 'check', '--only', 'action-coverage'],
+    'round.run.preview',
+    'Record results of separately authorized local child operations.',
+    'runtime-write',
+    'host-materializer',
   ],
   [
-    'check.docs-links',
-    'Check documentation links deterministically.',
-    'read',
-    'host-command',
-    ['devai', 'check', '--only', 'docs-links'],
-  ],
-  [
-    'check.forbidden-actions',
-    'Check forbidden actions deterministically.',
-    'read',
-    'host-command',
-    ['devai', 'check', '--only', 'forbidden-actions'],
+    'round.close.preview',
+    'Record a close summary after supplied local completion verification.',
+    'runtime-write',
+    'host-materializer',
   ],
 ] as const satisfies readonly (readonly [
   OperationDefinition['id'],
@@ -169,7 +179,7 @@ export async function runOperation(
   if (paths.some((path) => !pathAllowed(path, scopes))) {
     throw new Error('OPERATION_WRITE_PATH_OUT_OF_SCOPE');
   }
-  if (definition.effect === 'local-write' && paths.length === 0)
+  if (definition.effect !== 'read' && paths.length === 0)
     throw new Error('OPERATION_EXPLICIT_WRITE_PATHS_REQUIRED');
   return host.execute({ ...invocation, definition, variant_contract: variant });
 }

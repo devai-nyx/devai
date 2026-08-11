@@ -5,6 +5,8 @@ description: Generate one bounded artifact family from explicit structured input
 
 # DEVAI scaffold
 
+Before acting, read the adjacent `devai.recipe.json` and `devai.operations.json`. Select only a declared variant, obey its exact effect and write policy, and invoke only the descriptor's exact operation behavior.
+
 Use this recipe for deterministic, template-based generation.
 
 1. Select exactly one declared variant.

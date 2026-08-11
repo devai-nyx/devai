@@ -98,6 +98,32 @@ try {
     throw new Error(`INSTALLED_CATALOG_INVALID:${String(actions?.length)}`);
   }
 
+  const installArgs = [
+    'init',
+    'apply',
+    'harness',
+    '--include',
+    'skills',
+    '--target',
+    projectRoot,
+    '--as-role',
+    'architect',
+    '--write',
+    '--format',
+    'json',
+  ];
+  const installedOnce = JSON.parse(run(binary, installArgs));
+  const installedTwice = JSON.parse(run(binary, installArgs));
+  const firstSkills = installedOnce?.result?.value?.included?.find(
+    (entry) => entry.component === 'skills',
+  )?.result;
+  const secondSkills = installedTwice?.result?.value?.included?.find(
+    (entry) => entry.component === 'skills',
+  )?.result;
+  if (firstSkills?.written?.length !== 49 || secondSkills?.unchanged?.length !== 49) {
+    throw new Error('INSTALLED_RECIPE_ADAPTER_IDEMPOTENCE_INVALID');
+  }
+
   const representatives = [
     ['catalog', 'actions'],
     ['check'],
@@ -125,9 +151,8 @@ try {
     throw new Error('INSTALLED_WORKSPACE_PROTOCOL');
   }
 
-  const recipes = filesUnder(join(installedPackage, 'dist/resources/recipes')).filter((path) =>
-    path.endsWith('/SKILL.md'),
-  );
+  const recipeRoot = join(installedPackage, 'dist/resources/recipes');
+  const recipes = filesUnder(recipeRoot).filter((path) => path.endsWith('/SKILL.md'));
   const templates = filesUnder(
     join(installedPackage, 'dist/resources/operations/scaffold/templates'),
   );
@@ -141,6 +166,49 @@ try {
     'dist/runtime/law/constitution.md',
   ];
   if (recipes.length !== 7) throw new Error(`INSTALLED_RECIPE_COUNT_INVALID:${recipes.length}`);
+  for (const skillPath of recipes) {
+    const name = skillPath.split('/').at(-2);
+    if (typeof name !== 'string') throw new Error('INSTALLED_RECIPE_NAME_MISSING');
+    const sourceBase = join(recipeRoot, name);
+    const codexBase = join(projectRoot, '.agents/skills', name);
+    const claudeBase = join(projectRoot, '.claude/skills', name);
+    for (const targetBase of [codexBase, claudeBase]) {
+      for (const file of ['SKILL.md', 'devai.recipe.json', 'devai.operations.json']) {
+        if (!existsSync(join(targetBase, file))) {
+          throw new Error(`INSTALLED_RECIPE_ADAPTER_ASSET_MISSING:${name}:${file}`);
+        }
+      }
+      if (readFileSync(join(targetBase, 'SKILL.md'), 'utf8') !== readFileSync(skillPath, 'utf8')) {
+        throw new Error(`INSTALLED_RECIPE_SKILL_PARITY_INVALID:${name}`);
+      }
+      if (
+        readFileSync(join(targetBase, 'devai.recipe.json'), 'utf8') !==
+        readFileSync(join(sourceBase, 'devai.recipe.json'), 'utf8')
+      ) {
+        throw new Error(`INSTALLED_RECIPE_MANIFEST_PARITY_INVALID:${name}`);
+      }
+    }
+    if (
+      readFileSync(join(codexBase, 'devai.operations.json'), 'utf8') !==
+      readFileSync(join(claudeBase, 'devai.operations.json'), 'utf8')
+    ) {
+      throw new Error(`INSTALLED_RECIPE_OPERATION_PARITY_INVALID:${name}`);
+    }
+    const manifest = JSON.parse(readFileSync(join(sourceBase, 'devai.recipe.json'), 'utf8'));
+    const descriptor = JSON.parse(readFileSync(join(codexBase, 'devai.operations.json'), 'utf8'));
+    const referenced = [
+      ...new Set(Object.values(manifest.variants).flatMap((variant) => variant.operations)),
+    ].sort();
+    const described = descriptor.operations.map((operation) => operation.id).sort();
+    if (JSON.stringify(referenced) !== JSON.stringify(described)) {
+      throw new Error(`INSTALLED_RECIPE_OPERATION_CENSUS_INVALID:${name}`);
+    }
+    const metadata = readFileSync(join(codexBase, 'agents/openai.yaml'), 'utf8');
+    const expectedImplicit = manifest.status === 'preview' ? 'false' : 'true';
+    if (!metadata.includes(`allow_implicit_invocation: ${expectedImplicit}`)) {
+      throw new Error(`INSTALLED_RECIPE_INVOCATION_POLICY_INVALID:${name}`);
+    }
+  }
   if (templates.length !== 19) {
     throw new Error(`INSTALLED_TEMPLATE_COUNT_INVALID:${templates.length}`);
   }

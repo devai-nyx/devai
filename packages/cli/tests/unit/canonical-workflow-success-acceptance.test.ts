@@ -2,7 +2,7 @@
 // Inspector acceptance: canonical read and local-write facades complete through
 // their real service seams while all mutations remain inside a temporary repo.
 import { createRequire } from 'node:module';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import type { CAC } from '../../node_modules/cac/dist/index.d.ts';
@@ -104,4 +104,32 @@ describe('canonical workflow success acceptance', () => {
       expect(result.stderr, argv.join(' ')).toBe('');
     }
   }, 120_000);
+
+  it('installs both host recipe adapters idempotently through init apply harness', async () => {
+    const argv = ['init-apply-harness', '--target', TARGET, '--include', 'skills'] as const;
+    const first = await invoke(initApplyHarness, argv);
+    const second = await invoke(initApplyHarness, argv);
+    expect(first.exit, first.stderr).toBe(0);
+    expect(second.exit, second.stderr).toBe(0);
+    for (const name of [
+      'devai-assess',
+      'devai-plan',
+      'devai-fix',
+      'devai-docs',
+      'devai-scaffold',
+      'devai-verify',
+      'devai-round',
+    ]) {
+      for (const hostRoot of ['.agents/skills', '.claude/skills']) {
+        const base = join(TARGET, hostRoot, name);
+        expect(existsSync(join(base, 'SKILL.md'))).toBe(true);
+        expect(existsSync(join(base, 'devai.recipe.json'))).toBe(true);
+        expect(existsSync(join(base, 'devai.operations.json'))).toBe(true);
+      }
+      expect(
+        readFileSync(join(TARGET, '.agents/skills', name, 'devai.operations.json'), 'utf8'),
+      ).toBe(readFileSync(join(TARGET, '.claude/skills', name, 'devai.operations.json'), 'utf8'));
+    }
+    expect(second.stdout).toContain('"written":[]');
+  });
 });

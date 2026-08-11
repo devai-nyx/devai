@@ -544,6 +544,25 @@ export function buildTrustedAuthoritySources(
       rationale: 'Derived binding authority for canonical init harness CI scaffold outputs.',
     }),
     ...[
+      '.agents',
+      '.agents/skills',
+      '.agents/skills/**',
+      '.claude',
+      '.claude/skills',
+      '.claude/skills/**',
+    ].map((path, index) =>
+      rule({
+        id: `adopter-binding-init-harness-skills-${String(index + 1)}`,
+        origin: 'additive-extension',
+        precedence: 500,
+        actionIds: ['init apply harness'],
+        selector: fsSelector(repositoryId, path),
+        subjects: [machineSubject('binding')],
+        rationale:
+          'Derived binding authority for the canonical Codex and Claude recipe adapter roots.',
+      }),
+    ),
+    ...[
       '.git/hooks',
       '.git/hooks/**',
       '.git/devai',

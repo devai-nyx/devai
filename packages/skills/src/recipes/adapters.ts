@@ -1,6 +1,7 @@
 import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve, sep } from 'node:path';
 import { mkdirSync, writeFileSync } from '@devai-nyx/authority';
+import { listOperations } from '../operations/catalog.js';
 import { loadRecipes } from './loader.js';
 import type { LoadedRecipe } from './types.js';
 
@@ -49,10 +50,23 @@ export function buildRecipeAdapterPlan(
     const root = host === 'codex' ? '.agents/skills' : '.claude/skills';
     for (const recipe of recipes) {
       const base = `${root}/${recipe.manifest.name}`;
-      const manifest = `${JSON.stringify(recipe.manifest, null, 2)}\n`;
+      const manifest = readFileSync(join(recipe.resource_dir, 'devai.recipe.json'), 'utf8');
+      const referenced = new Set(
+        Object.values(recipe.manifest.variants).flatMap((variant) => variant.operations),
+      );
+      const operations = `${JSON.stringify(
+        {
+          schemaVersion: '1',
+          recipe: recipe.manifest.name,
+          operations: listOperations().filter((operation) => referenced.has(operation.id)),
+        },
+        null,
+        2,
+      )}\n`;
       files.push(
         { host, path: `${base}/SKILL.md`, content: recipe.skill_markdown },
         { host, path: `${base}/devai.recipe.json`, content: manifest },
+        { host, path: `${base}/devai.operations.json`, content: operations },
       );
       if (host === 'codex') {
         files.push({
@@ -78,6 +92,9 @@ function assertSafeInstallPath(repoRoot: string, relativePath: string): string {
     if (existsSync(cursor) && lstatSync(cursor).isSymbolicLink()) {
       throw new Error(`RECIPE_INSTALL_SYMLINK_REFUSED: ${relativePath}`);
     }
+  }
+  if (existsSync(target) && lstatSync(target).isSymbolicLink()) {
+    throw new Error(`RECIPE_INSTALL_SYMLINK_REFUSED: ${relativePath}`);
   }
   return target;
 }

@@ -7,6 +7,7 @@ import {
   buildConstitutionBindingPlan,
   executeBootstrapPlan,
   introspectRepo,
+  installRecipeAdapters,
   resolveCanonicalConstitution,
   verifyConstitutionBinding,
 } from '@devai-nyx/skills';
@@ -44,7 +45,7 @@ interface InitOptions {
 }
 
 type InitSegment = 'owner' | 'architect' | 'harness';
-type InitInclude = 'ci' | 'hooks';
+type InitInclude = 'ci' | 'hooks' | 'skills';
 
 function validateInitTier(options: InitOptions): void {
   if (options.tier !== undefined && !isAdoptionProfile(options.tier)) {
@@ -129,7 +130,8 @@ function requestedIncludes(options: InitOptions, segment: InitSegment): readonly
     .split(',')
     .map((value) => value.trim())
     .filter((value) => value.length > 0);
-  const allowed = segment === 'architect' ? ['hooks'] : segment === 'harness' ? ['ci'] : [];
+  const allowed =
+    segment === 'architect' ? ['hooks'] : segment === 'harness' ? ['ci', 'skills'] : [];
   const invalid = includes.find((value) => !allowed.includes(value));
   if (
     includes.length === 0 ||
@@ -159,6 +161,14 @@ function executeIncludedComponents(
       });
       const result = executeCiScaffoldPlan(plan, { force });
       return { component, plan, result };
+    }
+    if (component === 'skills') {
+      const result = installRecipeAdapters({ repoRoot: targetRoot });
+      return {
+        component,
+        plan: { hosts: ['codex', 'claude'], recipes: 7 },
+        result,
+      };
     }
     const plan = buildHooksInstallPlan({
       targetRoot,
@@ -230,7 +240,7 @@ function initApplyDefinition(segment: InitSegment) {
           );
       } else if (segment === 'harness') {
         command
-          .option('--include <component>', 'Also install the CI component: ci')
+          .option('--include <component>', 'Also install components: ci | skills')
           .option(
             '--output <path>',
             'CI output path (default: <target>/.github/workflows/devai-ledger-verify.yml)',
@@ -272,6 +282,9 @@ function initApplyDefinition(segment: InitSegment) {
             return `hooks install: ${String(componentPlan['action'])} ${String(componentPlan['path'])} (${String(componentPlan['manager'])}, ${String(componentPlan['hook'])} → \`${String(componentPlan['command'])}\`)`;
           }
           const componentResult = entry['result'] as Record<string, unknown>;
+          if (component === 'skills') {
+            return `skills install: ${String((componentResult['written'] as readonly string[]).length)} written, ${String((componentResult['unchanged'] as readonly string[]).length)} unchanged`;
+          }
           return `ci scaffold: ${componentResult['written'] === true ? 'wrote' : 'skipped'} ${String(componentPlan['path'])}`;
         });
         emit(

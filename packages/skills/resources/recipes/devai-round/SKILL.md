@@ -5,6 +5,8 @@ description: Preview a local round workflow with explicit phases and runtime-sta
 
 # DEVAI round preview
 
+Before acting, read the adjacent `devai.recipe.json` and `devai.operations.json`. Select only a declared variant, obey its exact effect and write policy, and invoke only the descriptor's exact operation behavior.
+
 Use this preview recipe only when the user explicitly requests it.
 
 1. Select one declared phase: `assess`, `plan`, `run`, or `close`.

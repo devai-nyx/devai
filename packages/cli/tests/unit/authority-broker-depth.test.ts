@@ -180,6 +180,44 @@ describe('authority broker production boundary depth', () => {
     }
   });
 
+  it('bounds host recipe installation to the two canonical skills roots', () => {
+    const host = broker(
+      'init apply harness',
+      'architect',
+      [
+        process.execPath,
+        'devai',
+        'init',
+        'apply',
+        'harness',
+        '--include',
+        'skills',
+        '--as-role',
+        'architect',
+        '--write',
+      ],
+      true,
+    );
+    try {
+      for (const target of [
+        join(ROOT, '.agents/skills/devai-assess/SKILL.md'),
+        join(ROOT, '.claude/skills/devai-assess/devai.recipe.json'),
+      ]) {
+        expect(
+          host.scope.apply_effect(effect('writeFileSync', [target, 'adapter\n']), () => 'allowed'),
+        ).toBe('allowed');
+      }
+      expect(() =>
+        host.scope.apply_effect(
+          effect('writeFileSync', [join(ROOT, '.claude/settings.json'), '{}\n']),
+          () => 'forbidden',
+        ),
+      ).toThrow('UNCLASSIFIED_RESOURCE');
+    } finally {
+      host.dispose();
+    }
+  });
+
   it('authorizes bounded filesystem effects and tracks descriptor lifecycles', () => {
     const host = broker('round run', 'engineer', roundRunArgv());
     try {

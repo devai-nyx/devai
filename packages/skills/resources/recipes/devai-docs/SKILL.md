@@ -5,6 +5,8 @@ description: Create one evidence-grounded developer document at the selected var
 
 # DEVAI docs
 
+Before acting, read the adjacent `devai.recipe.json` and `devai.operations.json`. Select only a declared variant, obey its exact effect and write policy, and invoke only the descriptor's exact operation behavior.
+
 Use this recipe to create exactly one developer document from repository evidence.
 
 1. Select one declared document variant.

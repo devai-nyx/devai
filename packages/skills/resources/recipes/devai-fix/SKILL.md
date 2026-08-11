@@ -5,6 +5,8 @@ description: Repair one failing engineering concern with explicit file bounds an
 
 # DEVAI fix
 
+Before acting, read the adjacent `devai.recipe.json` and `devai.operations.json`. Select only a declared variant, obey its exact effect and write policy, and invoke only the descriptor's exact operation behavior.
+
 Use this recipe only after a concrete failing concern is known.
 
 1. Select exactly one declared variant: `lint`, `typecheck`, `build`, `test`, or `coverage`.

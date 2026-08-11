@@ -2,23 +2,25 @@ import type { RecipeEffect, RecipeName, RecipeVariant } from '../recipes/types.j
 
 export const OPERATION_IDS = [
   'check.inspect',
-  'scorecard.compute',
+  'sense.inventory',
+  'init.plan',
+  'round.assess',
+  'evidence.verify',
   'check.lint',
   'check.build',
   'check.test',
-  'check.mutation',
   'scaffold.db',
   'scaffold.api',
   'scaffold.ui',
   'scaffold.tests',
   'scaffold.docs',
   'scaffold.ci',
+  'scaffold.tests-from-docs',
   'check.typecheck',
   'check.coverage',
-  'check.mutation-repair',
-  'check.action-coverage',
-  'check.docs-links',
-  'check.forbidden-actions',
+  'round.plan.preview',
+  'round.run.preview',
+  'round.close.preview',
 ] as const;
 
 export type OperationId = (typeof OPERATION_IDS)[number];
@@ -27,7 +29,7 @@ export interface OperationDefinition {
   readonly id: OperationId;
   readonly description: string;
   readonly effect: RecipeEffect;
-  readonly execution: 'host-command' | 'host-scaffolder';
+  readonly execution: 'host-command' | 'host-scaffolder' | 'host-materializer';
   readonly argv?: readonly string[];
 }
 

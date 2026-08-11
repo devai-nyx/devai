@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import Ajv2020 from 'ajv/dist/2020.js';
 import { describe, expect, it } from 'vitest';
+import { listOperations, OPERATION_IDS } from '../../src/operations/index.js';
 import { loadRecipes } from '../../src/recipes/loader.js';
 import { RECIPE_NAMES } from '../../src/recipes/types.js';
 import { validateRecipeManifest } from '../../src/recipes/validate.js';
@@ -16,6 +17,22 @@ describe('v1 RC recipe catalog', () => {
     expect(recipes.find((recipe) => recipe.manifest.status === 'preview')?.manifest.name).toBe(
       'devai-round',
     );
+  });
+
+  it('keeps manifest operation IDs in exact bijection with the typed catalog', () => {
+    const manifestIds = [
+      ...new Set(
+        loadRecipes().flatMap((recipe) =>
+          Object.values(recipe.manifest.variants).flatMap((variant) => variant.operations),
+        ),
+      ),
+    ].sort();
+    expect(manifestIds).toEqual([...OPERATION_IDS].sort());
+    expect(
+      listOperations()
+        .map((operation) => operation.id)
+        .sort(),
+    ).toEqual(manifestIds);
   });
 
   it('validates every canonical manifest against the self-contained recipe schema', () => {

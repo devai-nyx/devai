@@ -13,8 +13,8 @@ describe('v1 RC recipe adapters', () => {
     const codex = plan.files.filter((file) => file.host === 'codex');
     const claude = plan.files.filter((file) => file.host === 'claude');
 
-    expect(codex).toHaveLength(21);
-    expect(claude).toHaveLength(14);
+    expect(codex).toHaveLength(28);
+    expect(claude).toHaveLength(21);
     for (const name of [
       'devai-assess',
       'devai-plan',
@@ -30,8 +30,28 @@ describe('v1 RC recipe adapters', () => {
       const claudeManifest = claude.find((file) =>
         file.path.endsWith(`/${name}/devai.recipe.json`),
       );
+      const codexOperations = codex.find((file) =>
+        file.path.endsWith(`/${name}/devai.operations.json`),
+      );
+      const claudeOperations = claude.find((file) =>
+        file.path.endsWith(`/${name}/devai.operations.json`),
+      );
       expect(codexSkill?.content).toBe(claudeSkill?.content);
       expect(codexManifest?.content).toBe(claudeManifest?.content);
+      expect(codexOperations?.content).toBe(claudeOperations?.content);
+      const manifest = JSON.parse(codexManifest?.content ?? '{}') as {
+        variants?: Record<string, { operations: string[] }>;
+      };
+      const descriptor = JSON.parse(codexOperations?.content ?? '{}') as {
+        operations?: { id: string }[];
+      };
+      const referenced = [
+        ...new Set(Object.values(manifest.variants ?? {}).flatMap((variant) => variant.operations)),
+      ].sort();
+      expect(descriptor.operations?.map((operation) => operation.id).sort()).toEqual(referenced);
+      expect(codexSkill?.content).toContain(
+        'read the adjacent `devai.recipe.json` and `devai.operations.json`',
+      );
     }
   });
 
@@ -54,10 +74,10 @@ describe('v1 RC recipe adapters', () => {
     const first = installRecipeAdapters({ repoRoot: repo });
     const second = installRecipeAdapters({ repoRoot: repo });
 
-    expect(first.written).toHaveLength(35);
+    expect(first.written).toHaveLength(49);
     expect(first.unchanged).toHaveLength(0);
     expect(second.written).toHaveLength(0);
-    expect(second.unchanged).toHaveLength(35);
+    expect(second.unchanged).toHaveLength(49);
     expect(readFileSync(join(repo, '.agents/skills/devai-assess/SKILL.md'), 'utf8')).toBe(
       readFileSync(join(repo, '.claude/skills/devai-assess/SKILL.md'), 'utf8'),
     );
@@ -84,5 +104,19 @@ describe('v1 RC recipe adapters', () => {
     expect(() => installRecipeAdapters({ repoRoot: repo })).toThrow(
       /RECIPE_INSTALL_SYMLINK_REFUSED/u,
     );
+  });
+
+  it('refuses a symlink at an exact adapter file target', () => {
+    const repo = mkdtempSync(join(tmpdir(), 'devai-recipes-file-link-'));
+    const outside = join(mkdtempSync(join(tmpdir(), 'devai-recipes-file-outside-')), 'SKILL.md');
+    writeFileSync(outside, 'outside\n');
+    const target = join(repo, '.agents/skills/devai-assess/SKILL.md');
+    mkdirSync(dirname(target), { recursive: true });
+    symlinkSync(outside, target);
+
+    expect(() => installRecipeAdapters({ repoRoot: repo })).toThrow(
+      /RECIPE_INSTALL_SYMLINK_REFUSED/u,
+    );
+    expect(readFileSync(outside, 'utf8')).toBe('outside\n');
   });
 });

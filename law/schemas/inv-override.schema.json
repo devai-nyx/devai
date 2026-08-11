@@ -78,7 +78,7 @@
       "schemaVersion": "1.0.0",
       "id": "OVR-9da3c05a4300318b",
       "invariant_id": "INV-DEVAI-005",
-      "file": "packages/cli/test/skill-fix-overrides-r11.integration.test.ts",
+      "file": "packages/cli/tests/unit/check-adapters-acceptance.test.ts",
       "line": 73,
       "reason": "temporary exception for sample widget while refactor lands",
       "ticket": "ENG-1234",

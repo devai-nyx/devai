@@ -5,6 +5,8 @@ description: Turn repository evidence and user intent into a bounded implementat
 
 # DEVAI plan
 
+Before acting, read the adjacent `devai.recipe.json` and `devai.operations.json`. Select only a declared variant, obey its exact effect and write policy, and invoke only the descriptor's exact operation behavior.
+
 Use this recipe to produce a practical plan before implementation.
 
 1. Select exactly one declared variant: `change`, `init`, or `module`.
