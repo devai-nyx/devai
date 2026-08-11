@@ -71,8 +71,6 @@ export type {
   RuntimeRegistryEntry,
   RuntimeTransport,
 } from './model-runtime.js';
-export * from './pg-locks.js';
-export * from './prompts.js';
 export { executeRoutineExecutor, validateRoutineExecutor } from './routine-executor.js';
 export type {
   ExecuteRoutineOptions,

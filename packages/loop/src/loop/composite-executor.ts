@@ -19,12 +19,6 @@ export interface CompositeParent {
 export interface CompositeChild {
   readonly id: string;
   readonly round_id: string;
-  /**
-   * Compatibility form for callers that supply the explicit graph alongside
-   * the child records. A canonical parent executor remains authoritative when
-   * present.
-   */
-  readonly dependencies?: readonly string[];
 }
 
 export interface CompositeValidationOptions {
@@ -71,18 +65,10 @@ function duplicate(values: readonly string[]): string | null {
   return null;
 }
 
-function dependencyRows(
-  parent: CompositeParent,
-  children: readonly CompositeChild[],
-): readonly CompositeDependency[] | null {
-  if (parent.executor !== undefined) {
-    return Array.isArray(parent.executor.dependencies) ? parent.executor.dependencies : null;
-  }
-  if (children.some((child) => !Array.isArray(child.dependencies))) return null;
-  return children.map((child) => ({
-    task_id: child.id,
-    depends_on: [...(child.dependencies ?? [])],
-  }));
+function dependencyRows(parent: CompositeParent): readonly CompositeDependency[] | null {
+  return parent.executor !== undefined && Array.isArray(parent.executor.dependencies)
+    ? parent.executor.dependencies
+    : null;
 }
 
 /**
@@ -92,12 +78,11 @@ function dependencyRows(
 export function validateCompositeExecutor(
   options: CompositeValidationOptions,
 ): CompositeValidationResult {
-  if (options.parent.executor !== undefined && options.parent.executor.kind !== 'composite') {
+  if (options.parent.executor === undefined || options.parent.executor.kind !== 'composite') {
     return { ok: false, code: 'TASK_COMPOSITE_EXECUTOR_REQUIRED' };
   }
 
-  const declaredIds =
-    options.parent.executor?.child_task_ids ?? options.children.map(({ id }) => id);
+  const declaredIds = options.parent.executor.child_task_ids;
   if (declaredIds.length === 0) {
     return { ok: false, code: 'TASK_COMPOSITE_CHILD_REQUIRED' };
   }
@@ -127,7 +112,7 @@ export function validateCompositeExecutor(
     return { ok: false, code: 'TASK_COMPOSITE_CROSS_ROUND' };
   }
 
-  const rows = dependencyRows(options.parent, options.children);
+  const rows = dependencyRows(options.parent);
   if (rows === null) {
     return { ok: false, code: 'TASK_COMPOSITE_DEPENDENCIES_REQUIRED' };
   }

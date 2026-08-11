@@ -1045,7 +1045,7 @@ export const ACTION_REGISTRY = [
     profiles: ['tier1', 'tier2', 'tier3'],
     effect: 'read',
     authority: 'mesh_controller',
-    description: 'Compute or render the active round assessment and governed triage views.',
+    description: 'Summarize tasks and open gaps for one active round.',
     output_contract: {
       schemaVersion: '1.0.0',
       mode: 'action-envelope',

@@ -77,16 +77,21 @@ describe('backlog persistence', () => {
     expect(updateBacklogStatus(repo, 'TASK-4040', 'completed')).toBeNull();
 
     mkdirSync(dirname(backlogPath(repo)), { recursive: true });
-    writeFileSync(backlogPath(repo), '{bad json}\n\n');
+    writeFileSync(
+      backlogPath(repo),
+      '{bad json}\n' + `${JSON.stringify({ id: 'TASK-0008', title: 'Unbound', priority: 99 })}\n`,
+    );
     await withAuthorityHostTestScope(async () => {
       const low = appendBacklog(repo, {
         id: 'TASK-0009',
+        round_id: 'R-0007',
         title: 'Low',
         priority: 1,
         created_at: '2026-07-24T12:01:00.000Z',
       });
       expect(low).toMatchObject({ id: 'TASK-0009', status: 'queued' });
       const high = appendBacklog(repo, {
+        round_id: 'R-0007',
         title: 'High',
         priority: 9,
         created_at: '2026-07-24T12:00:00.000Z',
@@ -120,12 +125,14 @@ describe('backlog persistence', () => {
     const repo = root();
     await withAuthorityHostTestScope(async () => {
       appendBacklog(repo, {
+        round_id: 'R-0007',
         title: 'Later',
         priority: 5,
         status: 'in_progress',
         created_at: '2026-07-24T13:00:00.000Z',
       });
       appendBacklog(repo, {
+        round_id: 'R-0007',
         title: 'Earlier',
         priority: 5,
         created_at: '2026-07-24T12:00:00.000Z',

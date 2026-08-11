@@ -184,8 +184,8 @@
     {
       "id": "trace-validation",
       "binding": {
-        "kind": "package-script",
-        "argv": ["pnpm", "run", "trace:check"]
+        "kind": "runtime-gate",
+        "gate_id": "trace-validation"
       },
       "effect": "read",
       "cost": "low",

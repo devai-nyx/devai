@@ -187,7 +187,7 @@ describe('canonical facade population acceptance', () => {
           await runWithAuthorityHostEffects(scope, () => cli.runMatchedCommand());
         } catch (error) {
           if (error instanceof Error && error.name === 'CACError') {
-            process.exitCode = 64;
+            process.exitCode = 2;
             stderr = error.message;
           } else if (!(error instanceof Error) || !error.message.startsWith('TEST_PROCESS_EXIT:')) {
             throw error;
@@ -196,9 +196,9 @@ describe('canonical facade population acceptance', () => {
         await new Promise<void>((done) => setImmediate(done));
         const exit = typeof process.exitCode === 'number' ? process.exitCode : 0;
         expect(
-          [2, 64],
+          exit,
           `${definition.name}: exit=${String(exit)} stdout=${stdout} stderr=${stderr}`,
-        ).toContain(exit);
+        ).toBe(2);
         expect(
           stdout.length + stderr.length,
           `${definition.name}: refusal was silent`,

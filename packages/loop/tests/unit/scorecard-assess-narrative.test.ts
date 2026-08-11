@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import './round-lifecycle-cases.js';
-import './scorecard-view-mode-cases.js';
 import { assessScorecard, computeScorecard } from '../../src/loop/scorecard.js';
 import type { SensorReading } from '@devai-nyx/sensors';
 

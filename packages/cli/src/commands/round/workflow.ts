@@ -1,5 +1,6 @@
 import type { CAC } from 'cac';
 import { readFileSync } from '@devai-nyx/authority';
+import { EXIT_USAGE } from '@devai-nyx/utils';
 import { resolve } from 'node:path';
 import { runPostMergeAuditor } from '@devai-nyx/skills/post-merge-auditor';
 import {
@@ -42,7 +43,7 @@ function asArray(value: string | string[] | undefined): string[] {
 }
 
 function requiredRound(options: RoundOptions): string {
-  if (options.round === undefined) throw new TaskServiceError('TASK_ROUND_REQUIRED', 64);
+  if (options.round === undefined) throw new TaskServiceError('TASK_ROUND_REQUIRED', EXIT_USAGE);
   return options.round;
 }
 
@@ -72,15 +73,11 @@ function withRoundOptions(command: ReturnType<CAC['command']>): ReturnType<CAC['
 
 export const roundAssess = defineCommand({
   name: 'round assess',
-  description: 'Compute or render the active round assessment and governed triage views.',
+  description: 'Summarize tasks and open gaps for one active round.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
-    withRoundOptions(cli.command('round-assess', 'Assess one active governed round'))
-      .option('--view <kind>', 'Assessment projection: json, narrative, or grid')
-      .option('--compute', 'Recompute the active task/gap assessment')
-      .option('--refresh-backlog', 'Report the round-bound queue population')
-      .option('--triage <operation>', 'Triage projection: classify, dispatch, or tie-break')
-      .action((options: RoundOptions) => {
+    withRoundOptions(cli.command('round-assess', 'Assess one active governed round')).action(
+      (options: RoundOptions) => {
         try {
           const round = requireActiveTaskRound({
             repoRoot: root(options),
@@ -104,7 +101,8 @@ export const roundAssess = defineCommand({
         } catch (error) {
           failure('assess', error);
         }
-      });
+      },
+    );
   },
 });
 
@@ -131,7 +129,7 @@ export const roundClose = defineCommand({
           if (options.postMergeReceipt === true) {
             if (options.hostReceipt === undefined) {
               process.stderr.write('HOST_RECEIPT_MISSING\n');
-              process.exitCode = 64;
+              process.exitCode = EXIT_USAGE;
               return;
             }
             try {
@@ -153,7 +151,7 @@ export const roundClose = defineCommand({
               round: requiredRound(options),
             });
             if (options.input === undefined)
-              throw new TaskServiceError('ROUND_CLOSE_INPUT_REQUIRED', 64);
+              throw new TaskServiceError('ROUND_CLOSE_INPUT_REQUIRED', EXIT_USAGE);
             const draft = JSON.parse(readFileSync(options.input, 'utf8')) as PhaseClosureDraft;
             if (draft.round_id !== round) throw new TaskServiceError('TASK_ROUND_MISMATCH');
             const result = closePhase(root(options), draft);
@@ -194,7 +192,7 @@ export const roundGapCreate = defineCommand({
             options.summary === undefined ||
             options.ambiguity === undefined
           ) {
-            throw new TaskServiceError('ROUND_GAP_INPUT_REQUIRED', 64);
+            throw new TaskServiceError('ROUND_GAP_INPUT_REQUIRED', EXIT_USAGE);
           }
           roundTaskStatus({ repoRoot: root(options), round, taskId: options.task });
           const record = emitRgr({
@@ -287,7 +285,7 @@ export const roundGapResolve = defineCommand({
             if (!gaps.some((gap) => gap.id === gapId))
               throw new TaskServiceError('ROUND_GAP_NOT_FOUND');
             if (options.resolver === undefined)
-              throw new TaskServiceError('ROUND_GAP_RESOLVER_REQUIRED', 64);
+              throw new TaskServiceError('ROUND_GAP_RESOLVER_REQUIRED', EXIT_USAGE);
             const record = resolveRgr({
               repoRoot: root(options),
               rgrId: gapId,

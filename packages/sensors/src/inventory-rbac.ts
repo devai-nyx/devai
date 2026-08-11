@@ -157,7 +157,7 @@ export function senseInventoryRbac(opts: InventoryRbacOptions): InventoryRbacRes
     findings.push({
       severity: 'info',
       code: 'RBAC_REQUIRES_DATA_MODEL',
-      message: `Data-model body not found at ${dataModelPath}. Run 'devai sense inventory data model' first; nothing measured.`,
+      message: `Data-model body not found at ${dataModelPath}. Run 'devai sense run inventory_data_model' first; nothing measured.`,
     });
   } else {
     try {

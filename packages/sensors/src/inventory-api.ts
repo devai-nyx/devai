@@ -55,14 +55,9 @@ const PARAM_DECORATORS: Record<string, ParamLoc> = {
 
 export interface InventoryApiOptions {
   readonly repoRoot: string;
-  readonly scanDir?: string;
   /**
-   * Phase 20.E: walk multiple subdirs and merge results. Used when
-   * a pack declares `extractor_params.inventory_api.scan_dir_alternates`
-   * to cover repos with multiple parallel app layouts (e.g.
-   * `apps/api` + `apps/reference-api` + `reference/api`).
-   * Non-existent dirs are silently skipped. Falls back to `repoRoot`
-   * when both `scanDir` and `scanDirs` are absent.
+   * Source directories to walk and merge. Non-existent directories are
+   * skipped; an absent list scans `repoRoot`.
    */
   readonly scanDirs?: readonly string[];
   readonly ignoreDirs?: ReadonlySet<string>;
@@ -87,11 +82,7 @@ export interface InventoryApiOptions {
   readonly publicMarkerDecorators?: readonly string[];
 }
 
-/**
- * Resolve singular `scan_dir` + plural `scan_dir_alternates` to a
- * deduped list of existing absolute paths. Falls back to repoRoot.
- * Supports pack-configured scan areas.
- */
+/** Resolve configured scan directories to unique existing absolute paths. */
 function uniqueExistingApiDirs(raw: readonly string[], repoRoot: string): string[] {
   if (raw.length === 0) return [repoRoot];
   const seen = new Set<string>();
@@ -316,11 +307,7 @@ function sortEndpoints(endpoints: readonly ApiMapEndpoint[]): ApiMapEndpoint[] {
 export function senseInventoryApi(opts: InventoryApiOptions): InventoryApiResult {
   const t0 = Date.now();
   const ignoreDirs = opts.ignoreDirs ?? DEFAULT_IGNORE_DIRS;
-  // Phase 20.E: union of `scanDir` (singular) + `scanDirs` (alternates).
-  const scanDirs = uniqueExistingApiDirs(
-    opts.scanDir !== undefined ? [opts.scanDir, ...(opts.scanDirs ?? [])] : (opts.scanDirs ?? []),
-    opts.repoRoot,
-  );
+  const scanDirs = uniqueExistingApiDirs(opts.scanDirs ?? [], opts.repoRoot);
   const generatedAt = opts.now ?? new Date().toISOString();
 
   const findings: Array<{

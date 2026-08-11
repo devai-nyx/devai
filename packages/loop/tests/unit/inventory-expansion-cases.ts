@@ -287,7 +287,6 @@ describe('inventory extraction expansion', () => {
 
     const result = glossaryCoverage({
       repoRoot: root,
-      searchDir: join(root, 'src'),
       searchDirs: [join(root, 'src'), join(root, 'docs')],
     });
     expect(result.entries_count).toBe(2);

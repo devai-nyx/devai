@@ -246,8 +246,7 @@ describe('source inventory sensors', () => {
     const root = buildFixture();
     const result = senseInventoryApi({
       repoRoot: root,
-      scanDir: 'apps/api',
-      scanDirs: ['apps/api', 'missing'],
+      scanDirs: ['apps/api', 'apps/api', 'missing'],
       persistBody: false,
       publicMarkerDecorators: ['Public'],
       stack: { backend: 'nestjs', frontend: 'react', db: 'postgres' },
@@ -302,8 +301,7 @@ describe('source inventory sensors', () => {
     const root = buildFixture();
     const result = senseInventoryRoutes({
       repoRoot: root,
-      scanDir: 'apps/web',
-      scanDirs: ['apps/web', 'missing'],
+      scanDirs: ['apps/web', 'apps/web', 'missing'],
       persistBody: false,
       framework: 'react',
       now: NOW,
@@ -329,7 +327,7 @@ describe('source inventory sensors', () => {
     const root = buildFixture();
     const result = senseInventoryRoutes({
       repoRoot: root,
-      scanDir: 'apps/angular',
+      scanDirs: ['apps/angular'],
       framework: 'angular',
       persistBody: false,
       now: NOW,
@@ -427,7 +425,7 @@ describe('data and coverage inventory sensors', () => {
     });
     const api = senseInventoryApi({
       repoRoot: root,
-      scanDir: 'apps/api',
+      scanDirs: ['apps/api'],
       publicMarkerDecorators: ['Public'],
       persistBody: false,
       now: NOW,
@@ -505,13 +503,13 @@ describe('data and coverage inventory sensors', () => {
     const root = buildFixture();
     const api = senseInventoryApi({
       repoRoot: root,
-      scanDir: 'apps/api',
+      scanDirs: ['apps/api'],
       persistBody: false,
       now: NOW,
     });
     const routes = senseInventoryRoutes({
       repoRoot: root,
-      scanDir: 'apps/web',
+      scanDirs: ['apps/web'],
       framework: 'react',
       persistBody: false,
       now: NOW,
@@ -581,10 +579,72 @@ describe('data and coverage inventory sensors', () => {
     );
   });
 
+  it('auto-resolves exactly one routes body and reviews ambiguous bodies without guessing', () => {
+    const root = fixtureRoot();
+    write(
+      root,
+      'record/proofs/sensors/inventory_api/api-map.json',
+      JSON.stringify({ endpoints: [] }),
+    );
+    write(
+      root,
+      'record/proofs/sensors/inventory_routes/routes-angular.json',
+      JSON.stringify({
+        framework: 'angular',
+        routes: [{ id: 'route-angular', path: '/angular' }],
+      }),
+    );
+
+    const exactOne = senseInventoryCoverage({
+      repoRoot: root,
+      persistBody: false,
+      now: NOW,
+    });
+    expect((exactOne.body as { routes: string[] }).routes).toEqual(['route-angular']);
+    expect(exactOne.reading.findings?.map((finding) => finding.code)).not.toContain(
+      'COVERAGE_ROUTES_AMBIGUOUS',
+    );
+
+    write(
+      root,
+      'record/proofs/sensors/inventory_routes/routes-react.json',
+      JSON.stringify({
+        framework: 'react',
+        routes: [{ id: 'route-react', path: '/react' }],
+      }),
+    );
+    const ambiguous = senseInventoryCoverage({
+      repoRoot: root,
+      persistBody: false,
+      now: NOW,
+    });
+    expect(ambiguous.reading.status).toBe('review');
+    expect((ambiguous.body as { routes: string[] }).routes).toEqual([]);
+    expect(ambiguous.reading.findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'COVERAGE_ROUTES_AMBIGUOUS',
+          message: expect.stringContaining('routes-angular.json, routes-react.json'),
+        }),
+      ]),
+    );
+  });
+
   it('reports absent and invalid coverage inputs without emitting a body file', () => {
     const root = fixtureRoot();
     const absent = senseInventoryCoverage({ repoRoot: root, persistBody: false, now: NOW });
     expect(absent.reading.status).toBe('review');
+    expect(absent.reading.findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'COVERAGE_REQUIRES_ROUTES',
+          message: expect.stringContaining('devai sense run inventory_routes'),
+        }),
+      ]),
+    );
+    expect(absent.reading.findings?.map((finding) => finding.message).join('\n')).not.toContain(
+      'routes-react.json',
+    );
 
     const badApi = write(root, 'api.json', '{bad');
     const badRoutes = write(root, 'routes.json', '{bad');

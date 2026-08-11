@@ -279,7 +279,7 @@
       "items": {
         "type": "string"
       },
-      "description": "Absorption/supersession provenance per the record meta-structure (\u00a75.1)."
+      "description": "Origin and replacement provenance for this invariant."
     },
     "supersedes": {
       "type": ["array", "null"],

@@ -215,7 +215,7 @@
       "argv_shape": ["-p", "<dynamic>", "<dynamic>"],
       "capabilities": ["proc:sandbox-exec"],
       "effect": "read",
-      "reason": "R28 best-effort macOS validation runs a registry-derived test command with network and candidate-worktree writes denied; witness prose never supplies the executable or sandbox profile.",
+      "reason": "macOS validation runs a registry-derived test command with network and candidate-worktree writes denied; witness prose never supplies the executable or sandbox profile.",
       "owner": "architect"
     },
     {

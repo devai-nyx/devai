@@ -16,6 +16,7 @@ import {
   evidenceRender,
   evidenceVerify,
 } from '../../src/commands/evidence/facade.js';
+import { mutationRun } from '../../src/commands/mutation/run.js';
 
 const { cac } = createRequire(import.meta.url)('../../node_modules/cac/index-compat.js') as {
   cac: (name?: string) => CAC;
@@ -117,7 +118,7 @@ describe('evidence collect acceptance', () => {
     ] as const;
     for (const argv of cases) {
       const result = await invoke(evidenceCollect, argv);
-      expect([2, 64], `${argv.join(' ')}: ${result.stderr}`).toContain(result.exit);
+      expect(result.exit, `${argv.join(' ')}: ${result.stderr}`).toBe(2);
       expect(result.stdout.length + result.stderr.length).toBeGreaterThan(0);
     }
   });
@@ -157,6 +158,12 @@ describe('evidence collect acceptance', () => {
 });
 
 describe('evidence record and errata acceptance', () => {
+  it('reports mutation usage through the public evidence action', async () => {
+    const result = await invoke(mutationRun, ['mutation-run']);
+    expect(result.exit).toBe(2);
+    expect(result.stderr).toContain('devai evidence record --kind mutation');
+  });
+
   it('appends generic payload and input records with both receipt formats', async () => {
     const repo = root();
     put(repo, 'payload.json', '{"source":"input","secret":"second"}\n');
@@ -251,7 +258,7 @@ describe('evidence record and errata acceptance', () => {
     ] as const;
     for (const argv of cases) {
       const result = await invoke(evidenceRecord, argv);
-      expect([2, 64], `${argv.join(' ')}: ${result.stderr}`).toContain(result.exit);
+      expect(result.exit, `${argv.join(' ')}: ${result.stderr}`).toBe(2);
     }
 
     const coverage = await invoke(evidenceRecord, [
@@ -407,8 +414,7 @@ describe('evidence record and errata acceptance', () => {
         repo,
       ],
     ] as const;
-    for (const argv of usageCases)
-      expect([2, 64]).toContain((await invoke(evidenceRedact, argv)).exit);
+    for (const argv of usageCases) expect((await invoke(evidenceRedact, argv)).exit).toBe(2);
 
     const field = await invoke(evidenceRedact, [
       'evidence-redact',

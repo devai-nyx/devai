@@ -4,7 +4,6 @@ import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   RoundLifecycleError,
-  archiveGovernedRound,
   closeGovernedRound,
   declareGovernedRound,
   governedRoundStatus,
@@ -216,13 +215,10 @@ describe('round lifecycle filesystem behavior', () => {
         }),
       ).toThrow('ROUND_RECORD_SERIALIZATION_UNSUPPORTED');
 
-      expect(() => archiveGovernedRound({ repoRoot: repo, round: 4 })).toThrow(
+      expect(() => closeGovernedRound({ repoRoot: repo, round: 4 })).toThrow(
         'ROUND_ARCHIVE_SOURCE_MISSING',
       );
-      expect(() => archiveGovernedRound({ repoRoot: repo, round: 3 })).toThrow(
-        'ROUND_ARCHIVE_RECORD_MISSING',
-      );
-      expect(() => archiveGovernedRound({ repoRoot: repo, round: 3 })).toThrow(
+      expect(() => closeGovernedRound({ repoRoot: repo, round: 3 })).toThrow(
         'ROUND_ARCHIVE_RECORD_MISSING',
       );
     });

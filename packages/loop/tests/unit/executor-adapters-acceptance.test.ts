@@ -475,7 +475,7 @@ describe('composite executor acceptance', () => {
         parent: { id: 'TASK-8199', round_id: 'R-0007' },
         children: [CHILDREN[0] as CompositeChild, CHILDREN[0] as CompositeChild],
       }).code,
-    ).toBe('TASK_COMPOSITE_DUPLICATE_CHILD');
+    ).toBe('TASK_COMPOSITE_EXECUTOR_REQUIRED');
     expect(
       validateCompositeExecutor({
         parent,

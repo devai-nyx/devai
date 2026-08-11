@@ -304,7 +304,7 @@ function sealedHistoryFindings(
         break;
       }
     } catch {
-      // Legacy ADR revisions before the schema-bound migration are not sealing commits.
+      // A schema-invalid revision cannot establish the sealing boundary.
     }
   }
   if (sealed === undefined || sealIndex < 0) return [];

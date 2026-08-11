@@ -166,12 +166,12 @@ export function authorityBindings(
   installedConstitutionText?: string,
 ) {
   const pinnedConstitution = join(resolve(root), '.devai/pin/constitution.md');
-  if (!existsSync(pinnedConstitution) && installedConstitutionText === undefined) {
-    throw new Error(`authority policy: bound Constitution not found at ${pinnedConstitution}`);
-  }
   const constitutionText = existsSync(pinnedConstitution)
     ? readFileSync(pinnedConstitution, 'utf8')
-    : installedConstitutionText!;
+    : installedConstitutionText;
+  if (constitutionText === undefined) {
+    throw new Error(`authority policy: bound Constitution not found at ${pinnedConstitution}`);
+  }
   const constitutionVersion = parseConstitutionVersion(constitutionText);
   if (constitutionVersion === null) {
     throw new Error(

@@ -17,9 +17,9 @@ import { defineCommand } from '../../define-command.js';
 import { isActionOutputExit } from '../../action-output.js';
 
 /**
- * D-A-44 — `devai sense mutation run`.
+ * Runtime behind `devai evidence record --kind mutation --run`.
  *
- * Producer for `.devai/state/mutation/current.json`. Loads mutation
+ * Produces `.devai/state/mutation/current.json`. Loads mutation
  * scenarios (one JSON file per scenario) validated against
  * `law/schemas/mutation-scenario.schema.json`. For each scenario, the
  * runner either:
@@ -59,6 +59,8 @@ import { isActionOutputExit } from '../../action-output.js';
  * report shape; the mutate-and-test loop is supplied through the adopter's
  * explicit `--mutator` adapter.
  */
+
+const MUTATION_ACTION = 'devai evidence record --kind mutation';
 
 // ============================================================================
 // Public types — exported for adopter mutator adapters and tests.
@@ -633,12 +635,12 @@ export const mutationRun = defineCommand({
         try {
           const repoRoot = resolve(options.repoRoot ?? process.cwd());
           if (options.scenarios === undefined || options.scenarios.length === 0) {
-            process.stderr.write('devai sense mutation run: --scenarios is required\n');
+            process.stderr.write(`${MUTATION_ACTION}: --scenarios is required\n`);
             process.exit(EXIT_USAGE);
           }
           if (options.mutator !== undefined && options.external !== undefined) {
             process.stderr.write(
-              'devai sense mutation run: --mutator and --external are mutually exclusive\n',
+              `${MUTATION_ACTION}: --mutator and --external are mutually exclusive\n`,
             );
             process.exit(EXIT_USAGE);
           }
@@ -648,7 +650,7 @@ export const mutationRun = defineCommand({
             validator = getScenarioValidator(repoRoot);
           } catch (err) {
             process.stderr.write(
-              `devai sense mutation run: ${err instanceof Error ? err.message : String(err)}\n`,
+              `${MUTATION_ACTION}: ${err instanceof Error ? err.message : String(err)}\n`,
             );
             process.exit(EXIT_CONFIG);
             return;
@@ -671,14 +673,14 @@ export const mutationRun = defineCommand({
               statSync(expandedAbs).isFile();
           } catch (err) {
             process.stderr.write(
-              `devai sense mutation run: ${err instanceof Error ? err.message : String(err)}\n`,
+              `${MUTATION_ACTION}: ${err instanceof Error ? err.message : String(err)}\n`,
             );
             process.exit(EXIT_USAGE);
             return;
           }
           if (scenarioFiles.length === 0) {
             process.stderr.write(
-              `devai sense mutation run: no scenario files matched ${options.scenarios}\n`,
+              `${MUTATION_ACTION}: no scenario files matched ${options.scenarios}\n`,
             );
             process.exit(EXIT_USAGE);
           }
@@ -690,7 +692,7 @@ export const mutationRun = defineCommand({
           );
           if (loadErrors.length > 0) {
             for (const e of loadErrors) {
-              process.stderr.write(`devai sense mutation run: ${e.file}: ${e.error}\n`);
+              process.stderr.write(`${MUTATION_ACTION}: ${e.file}: ${e.error}\n`);
             }
             process.exit(EXIT_USAGE);
           }
@@ -740,10 +742,8 @@ export const mutationRun = defineCommand({
               }
             }
           } else {
-            // No runner configured. Per ADR Decision 3 the built-in
-            // `string-replace`/`regex-replace` runner is deferred (the
-            // adopter mutator slot is the recommended path for v1.0.0).
-            // Emit Survived for every scenario, mark error.
+            // No runner configured. The public mutation evidence action accepts an adopter
+            // mutator or external report; without either, every loaded scenario survives.
             for (const { scenario } of loaded) {
               reports.push({
                 id: scenario.id,
@@ -762,7 +762,7 @@ export const mutationRun = defineCommand({
 
           if (options.human === true) {
             process.stdout.write(
-              `devai sense mutation run: ${String(loaded.length)} scenario(s) loaded; ` +
+              `${MUTATION_ACTION}: ${String(loaded.length)} scenario(s) loaded; ` +
                 `${String(current.killed)} killed, ${String(current.survived)} survived, ` +
                 `${String(current.metrics.timeout)} timeout, ` +
                 `${String(current.metrics.runtimeErrors)} runtime-error. ` +
@@ -786,7 +786,7 @@ export const mutationRun = defineCommand({
         } catch (err) {
           if (isActionOutputExit(err)) throw err;
           const msg = err instanceof Error ? err.message : String(err);
-          process.stderr.write(`devai sense mutation run: ${msg}\n`);
+          process.stderr.write(`${MUTATION_ACTION}: ${msg}\n`);
           process.exit(EXIT_FAIL);
         }
       });

@@ -692,14 +692,14 @@
       "additive_extensions": [],
       "constitution": {
         "digest_sha256": "6459c2ff660bfa36841307a488a26121cf7627ca61f14eb31bbd23d667eaaca3",
-        "version": "0.6.0"
+        "version": "1.0.0"
       },
       "enforcement": {
         "mode": "binding"
       },
       "framework_package": {
         "name": "@devai-nyx/cli",
-        "version": "0.7.0"
+        "version": "1.0.0"
       },
       "host_enforcement": {
         "mode": "cli-only"
@@ -726,7 +726,7 @@
       },
       "materialized_at": "2026-07-22T15:39:08.398Z",
       "policy_id": "devai-authority",
-      "policy_version": "0.7.0",
+      "policy_version": "1.0.0",
       "repository_id": "example-repository",
       "resolved_digest_sha256": "f9cd53741be54eb361441db85f8f30b3693695dc89e270823b89612b267ec1fc",
       "rules": [

@@ -275,6 +275,18 @@ describe('authority broker production boundary depth', () => {
   });
 
   it('keeps task action scopes bounded', () => {
+    expect(
+      routeArgv(
+        [process.execPath, 'devai', 'task', 'start', '--task', TASK_INVOCATION.id],
+        entries,
+        resolveCliVersion(),
+      ),
+    ).toMatchObject({
+      kind: 'output',
+      exitCode: 2,
+      text: expect.stringContaining('"exit":2'),
+    });
+
     const invocation = broker('round run', 'auditor', roundRunArgv('auditor'));
     try {
       expect(invocation.session_operation).toBeUndefined();

@@ -409,11 +409,11 @@
                   "const": "derived-machine"
                 },
                 "actor": {
-                  "enum": ["harness", "upgrade", "release"],
+                  "enum": ["harness", "binding", "release"],
                   "description": "bootstrap is intentionally absent: it may plan/orchestrate but has no mutation authority."
                 },
                 "transition": {
-                  "enum": ["harness-write", "upgrade", "release"]
+                  "enum": ["harness-write", "bind", "release"]
                 },
                 "initiator": {
                   "oneOf": [
@@ -456,10 +456,10 @@
                 {
                   "properties": {
                     "actor": {
-                      "const": "upgrade"
+                      "const": "binding"
                     },
                     "transition": {
-                      "const": "upgrade"
+                      "const": "bind"
                     },
                     "initiator": {
                       "type": "object",

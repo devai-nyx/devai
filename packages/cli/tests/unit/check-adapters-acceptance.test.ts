@@ -1,7 +1,7 @@
 // Invariants: INV-DEVAI-001, INV-DEVAI-015, INV-DEVAI-017, INV-DEVAI-020
 // Inspector acceptance: the canonical check facade must keep migrated check
 // services executable, total, and fail-closed without recursing into test floors.
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
@@ -35,6 +35,17 @@ afterAll(() => {
 });
 
 describe('canonical check adapter acceptance', () => {
+  it('binds trace validation to the current runtime instead of a detached package script', () => {
+    const policy = JSON.parse(readFileSync(join(ROOT, 'law/policy/check-suites.json'), 'utf8')) as {
+      member_definitions: Array<{ id: string; binding: unknown }>;
+    };
+    expect(policy.member_definitions.find((entry) => entry.id === 'trace-validation')).toEqual(
+      expect.objectContaining({
+        binding: { kind: 'runtime-gate', gate_id: 'trace-validation' },
+      }),
+    );
+  });
+
   it('executes every non-recursive read-safe check service as a total structured result', async () => {
     const prBody = join(FIXTURE_ROOT, 'pr-body.md');
     writeFileSync(prBody, '## Verification\n\n- Inspector acceptance\n', 'utf8');

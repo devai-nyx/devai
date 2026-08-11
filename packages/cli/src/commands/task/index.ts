@@ -1,4 +1,5 @@
 import type { CAC } from 'cac';
+import { EXIT_USAGE } from '@devai-nyx/utils';
 import {
   addRoundQueueEntry,
   completeRoundQueueEntry,
@@ -12,7 +13,6 @@ import {
   roundTaskResourceStatus,
   startRoundTask,
   TaskServiceError,
-  TASK_USAGE_EXIT,
 } from '#runtime-core';
 import { defineCommand } from '../../define-command.js';
 
@@ -46,7 +46,7 @@ function taskFailure(command: string, error: unknown): void {
 
 function requiredTask(options: TaskOptions): string {
   if (options.task === undefined || options.task.length === 0) {
-    throw new TaskServiceError('TASK_ID_REQUIRED', TASK_USAGE_EXIT);
+    throw new TaskServiceError('TASK_ID_REQUIRED', EXIT_USAGE);
   }
   return options.task;
 }
@@ -75,9 +75,10 @@ export const taskQueueAdd = defineCommand({
       .action(
         (options: CommonOptions & { title?: string; priority?: number; description?: string }) => {
           try {
-            if (options.round === undefined) throw new TaskServiceError('TASK_ROUND_REQUIRED', 64);
+            if (options.round === undefined)
+              throw new TaskServiceError('TASK_ROUND_REQUIRED', EXIT_USAGE);
             if (options.title === undefined)
-              throw new TaskServiceError('TASK_QUEUE_TITLE_REQUIRED', 64);
+              throw new TaskServiceError('TASK_QUEUE_TITLE_REQUIRED', EXIT_USAGE);
             const entry = addRoundQueueEntry({
               repoRoot: repoRoot(options),
               round: options.round,
@@ -103,7 +104,8 @@ export const taskQueueComplete = defineCommand({
       .option('--task <task_id>', 'Queue task identity')
       .action((options: TaskOptions) => {
         try {
-          if (options.round === undefined) throw new TaskServiceError('TASK_ROUND_REQUIRED', 64);
+          if (options.round === undefined)
+            throw new TaskServiceError('TASK_ROUND_REQUIRED', EXIT_USAGE);
           const entry = completeRoundQueueEntry({
             repoRoot: repoRoot(options),
             round: options.round,
@@ -125,7 +127,8 @@ export const taskQueueList = defineCommand({
     registerRoundOption(cli.command('task-queue-list', 'List active-round queue items')).action(
       (options: CommonOptions) => {
         try {
-          if (options.round === undefined) throw new TaskServiceError('TASK_ROUND_REQUIRED', 64);
+          if (options.round === undefined)
+            throw new TaskServiceError('TASK_ROUND_REQUIRED', EXIT_USAGE);
           const entries = listRoundQueue({ repoRoot: repoRoot(options), round: options.round });
           emit(
             { round_id: options.round, count: entries.length, entries },
@@ -148,7 +151,8 @@ export const taskQueueNext = defineCommand({
     registerRoundOption(cli.command('task-queue-next', 'Read the next queue item')).action(
       (options: CommonOptions) => {
         try {
-          if (options.round === undefined) throw new TaskServiceError('TASK_ROUND_REQUIRED', 64);
+          if (options.round === undefined)
+            throw new TaskServiceError('TASK_ROUND_REQUIRED', EXIT_USAGE);
           const next = nextRoundQueueEntry({ repoRoot: repoRoot(options), round: options.round });
           emit(
             { round_id: options.round, next },
@@ -177,7 +181,8 @@ export const taskStart = defineCommand({
       .action(
         (options: TaskOptions & { withWorktree?: boolean; withDb?: boolean; baseRef?: string }) => {
           try {
-            if (options.round === undefined) throw new TaskServiceError('TASK_ROUND_REQUIRED', 64);
+            if (options.round === undefined)
+              throw new TaskServiceError('TASK_ROUND_REQUIRED', EXIT_USAGE);
             const result = startRoundTask({
               repoRoot: repoRoot(options),
               round: options.round,
@@ -219,12 +224,13 @@ function transitionCommand(
         .option('--completed-by-role <role>', 'Authenticated human completion role')
         .action((options: TaskOptions) => {
           try {
-            if (options.round === undefined) throw new TaskServiceError('TASK_ROUND_REQUIRED', 64);
+            if (options.round === undefined)
+              throw new TaskServiceError('TASK_ROUND_REQUIRED', EXIT_USAGE);
             if (options.dropDb === true && options.databaseUrl === undefined) {
-              throw new TaskServiceError('TASK_DATABASE_URL_REQUIRED', 64);
+              throw new TaskServiceError('TASK_DATABASE_URL_REQUIRED', EXIT_USAGE);
             }
             if (options.databaseUrl !== undefined && options.dropDb !== true) {
-              throw new TaskServiceError('TASK_DROP_DB_CONSENT_REQUIRED', 64);
+              throw new TaskServiceError('TASK_DROP_DB_CONSENT_REQUIRED', EXIT_USAGE);
             }
             const task = transition({
               repoRoot: repoRoot(options),
@@ -270,8 +276,10 @@ export const taskPause = defineCommand({
       .option('--gap <gap_id>', 'Governed gap identity')
       .action((options: TaskOptions) => {
         try {
-          if (options.round === undefined) throw new TaskServiceError('TASK_ROUND_REQUIRED', 64);
-          if (options.gap === undefined) throw new TaskServiceError('TASK_GAP_REQUIRED', 64);
+          if (options.round === undefined)
+            throw new TaskServiceError('TASK_ROUND_REQUIRED', EXIT_USAGE);
+          if (options.gap === undefined)
+            throw new TaskServiceError('TASK_GAP_REQUIRED', EXIT_USAGE);
           const task = pauseRoundTask({
             repoRoot: repoRoot(options),
             round: options.round,
@@ -296,8 +304,10 @@ export const taskResume = defineCommand({
       .option('--gap <gap_id>', 'Governed gap identity')
       .action((options: TaskOptions) => {
         try {
-          if (options.round === undefined) throw new TaskServiceError('TASK_ROUND_REQUIRED', 64);
-          if (options.gap === undefined) throw new TaskServiceError('TASK_GAP_REQUIRED', 64);
+          if (options.round === undefined)
+            throw new TaskServiceError('TASK_ROUND_REQUIRED', EXIT_USAGE);
+          if (options.gap === undefined)
+            throw new TaskServiceError('TASK_GAP_REQUIRED', EXIT_USAGE);
           const task = resumeRoundTask({
             repoRoot: repoRoot(options),
             round: options.round,
@@ -324,7 +334,8 @@ export const taskStatus = defineCommand({
       .option('--database-url <url>', 'Postgres URL for task database enumeration')
       .action((options: TaskOptions & { resources?: string }) => {
         try {
-          if (options.round === undefined) throw new TaskServiceError('TASK_ROUND_REQUIRED', 64);
+          if (options.round === undefined)
+            throw new TaskServiceError('TASK_ROUND_REQUIRED', EXIT_USAGE);
           const common = {
             repoRoot: repoRoot(options),
             round: options.round,
@@ -345,7 +356,7 @@ export const taskStatus = defineCommand({
                     }),
                   })
                 : (() => {
-                    throw new TaskServiceError('TASK_RESOURCE_KIND_INVALID', 64);
+                    throw new TaskServiceError('TASK_RESOURCE_KIND_INVALID', EXIT_USAGE);
                   })();
           emit(
             status,

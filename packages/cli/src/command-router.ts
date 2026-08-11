@@ -1,9 +1,10 @@
 import type { RegistryEntry } from './define-command.js';
 import { isSensorKind } from '@devai-nyx/sensors/registry';
+import { EXIT_USAGE } from '@devai-nyx/utils';
 import { cliError, renderCliError } from './cli-error.js';
 import { resolveInvocationEntry } from './authority/sense-selection.js';
 
-export const EXIT_USAGE = 2;
+export { EXIT_USAGE };
 
 function wantsJson(args: readonly string[]): boolean {
   const format = args.lastIndexOf('--format');
@@ -217,7 +218,7 @@ export function routeArgv(
         class: 'routing-authority',
         exit: 2,
         message: `Sensor kind '${kind}' is not registered.`,
-        remediation: 'Run devai sense run --list.',
+        remediation: 'Run devai sense run --help.',
         context: { kind },
       });
       return { kind: 'output', text: renderCliError(error, wantsJson(args)), exitCode: 2 };
@@ -284,9 +285,9 @@ export function routeArgv(
         text: `${JSON.stringify({
           code: 'TASK_ROUND_REQUIRED',
           operation: exact.name.slice('task '.length),
-          exit: 64,
+          exit: EXIT_USAGE,
         })}\n`,
-        exitCode: 64,
+        exitCode: EXIT_USAGE,
         bypassActionOutput: true,
       };
     }

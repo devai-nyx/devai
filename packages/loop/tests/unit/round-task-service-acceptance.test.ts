@@ -20,6 +20,7 @@ import {
   roundTaskResourceStatus,
   roundTaskStatus,
   startRoundTask,
+  TaskServiceError,
 } from '../../src/loop/task-services.js';
 import { loadTask, saveTask, type TaskRecord } from '../../src/loop/tasks.js';
 
@@ -90,6 +91,12 @@ describe('round task service acceptance', () => {
       expect(errorCode(() => requireActiveTaskRound({ repoRoot: root }))).toBe(
         'TASK_ROUND_REQUIRED',
       );
+      try {
+        requireActiveTaskRound({ repoRoot: root });
+      } catch (error) {
+        expect(error).toBeInstanceOf(TaskServiceError);
+        expect(error).toMatchObject({ code: 'TASK_ROUND_REQUIRED', exitCode: 2 });
+      }
       expect(errorCode(() => requireActiveTaskRound({ repoRoot: root, round: 'R-9999' }))).toBe(
         'TASK_ROUND_INACTIVE',
       );

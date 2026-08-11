@@ -7,19 +7,13 @@ import {
 } from '@devai-nyx/authority';
 import { dirname, join } from 'node:path';
 
-/**
- * Phase-9 Batch 9.D — backlog mechanics (MVP). Per Article 35, the
- * backlog is the only work queue. The MVP stores entries as one JSON
- * line per task in .devai/state/backlog.jsonl, sorted by priority
- * descending at read time. Deterministic compilation and task queue
- * operations both append.
- */
+/** Append-only round task queue stored as JSON lines and sorted by priority. */
 
 export interface BacklogEntry {
   /** Task id assigned at append time. */
   readonly id: string;
-  /** Owning governed round for schema-2 queue entries. Legacy entries may omit it. */
-  readonly round_id?: string;
+  /** Owning governed round. */
+  readonly round_id: string;
   readonly title: string;
   readonly priority: number;
   readonly discipline?: 'owner' | 'architect' | 'inspector' | 'engineer' | 'auditor';
@@ -61,6 +55,7 @@ export function readBacklog(repoRoot: string): BacklogEntry[] {
   for (const line of lines) {
     try {
       const entry = JSON.parse(line) as BacklogEntry;
+      if (!/^R-[0-9]{4}$/u.test(entry.round_id)) continue;
       latest.set(entry.id, entry);
     } catch {
       // skip malformed line
@@ -78,7 +73,7 @@ export function readBacklog(repoRoot: string): BacklogEntry[] {
  */
 export function appendBacklog(
   repoRoot: string,
-  partial: Partial<BacklogEntry> & Pick<BacklogEntry, 'title' | 'priority'>,
+  partial: Partial<BacklogEntry> & Pick<BacklogEntry, 'round_id' | 'title' | 'priority'>,
 ): BacklogEntry {
   const path = backlogPath(repoRoot);
   mkdirSync(dirname(path), { recursive: true });
@@ -95,7 +90,7 @@ export function appendBacklog(
   const id = partial.id ?? `TASK-${String(nextN).padStart(4, '0')}`;
   const entry: BacklogEntry = {
     id,
-    ...(partial.round_id !== undefined && { round_id: partial.round_id }),
+    round_id: partial.round_id,
     title: partial.title,
     priority: partial.priority,
     status: partial.status ?? 'queued',

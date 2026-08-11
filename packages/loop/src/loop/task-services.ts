@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from '@devai-nyx/authority';
+import { EXIT_USAGE } from '@devai-nyx/utils';
 import { join, resolve } from 'node:path';
 import { clusterStatus } from './db.js';
 import { completeHumanTask, type HumanExecutorRole } from './human-executor.js';
@@ -28,8 +29,6 @@ import {
 import { listWorktrees } from './worktrees.js';
 import { normalizeRoundId } from '../round-lifecycle/index.js';
 
-export const TASK_USAGE_EXIT = 64;
-
 export class TaskServiceError extends Error {
   constructor(
     readonly code: string,
@@ -46,7 +45,7 @@ function fail(code: string, exitCode = 2): never {
 
 function requestedRound(round: string | undefined): string {
   if (round === undefined || round.trim().length === 0) {
-    fail('TASK_ROUND_REQUIRED', TASK_USAGE_EXIT);
+    fail('TASK_ROUND_REQUIRED', EXIT_USAGE);
   }
   return normalizeRoundId(round);
 }
@@ -85,7 +84,8 @@ function roundBoundTask(options: {
     task_round_id: task.round_id,
     active_round_ids: [roundId],
   });
-  if (!validation.ok) fail(validation.code, validation.code === 'TASK_ROUND_REQUIRED' ? 64 : 2);
+  if (!validation.ok)
+    fail(validation.code, validation.code === 'TASK_ROUND_REQUIRED' ? EXIT_USAGE : 2);
   return { roundId, task };
 }
 
@@ -102,7 +102,7 @@ export interface AddRoundQueueEntryOptions {
 
 export function addRoundQueueEntry(options: AddRoundQueueEntryOptions): BacklogEntry {
   const roundId = requireActiveTaskRound(options);
-  if (options.title.trim().length === 0) fail('TASK_QUEUE_TITLE_REQUIRED', TASK_USAGE_EXIT);
+  if (options.title.trim().length === 0) fail('TASK_QUEUE_TITLE_REQUIRED', EXIT_USAGE);
   return appendBacklog(options.repoRoot, {
     round_id: roundId,
     title: options.title,

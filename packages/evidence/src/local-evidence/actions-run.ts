@@ -116,8 +116,6 @@ export interface VerifyActionsRunEvidenceInputs {
     readonly source: 'base-parent';
     readonly reason: string;
   };
-  /** @deprecated A caller boolean cannot establish first-parent authority. */
-  readonly gateAuthorized?: boolean;
   readonly manifest: unknown | null;
   readonly current: CurrentActionsCheckout;
 }

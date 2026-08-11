@@ -315,9 +315,6 @@ export function closeGovernedRound(options: {
   };
 }
 
-/** @deprecated The public action name remains compatible; the implementation closes in place. */
-export const archiveGovernedRound = closeGovernedRound;
-
 export function scaffoldDecisionRecord(options: {
   readonly repoRoot: string;
   readonly title?: string;

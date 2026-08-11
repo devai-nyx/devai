@@ -121,9 +121,7 @@ describe('sense run readiness aggregation', () => {
       'SENSE_KIND_UNKNOWN:unknown_kind',
     );
     for (const name of ['tier1', 'tier2', 'tier3', 'all', 'old_sweep']) {
-      expect(() => resolveSenseSelection({ preset: name })).toThrow(
-        `SENSE_PRESET_UNKNOWN:${name}`,
-      );
+      expect(() => resolveSenseSelection({ preset: name })).toThrow(`SENSE_PRESET_UNKNOWN:${name}`);
     }
   });
 
@@ -158,7 +156,7 @@ describe('sense run readiness aggregation', () => {
     });
   });
 
-  it('plans and executes direct in-process adapters without reviving retired child routes', async () => {
+  it('plans and executes direct in-process adapters without child-route aliases', async () => {
     const adapter = vi.fn(async () => ({
       sensor: { kind: 'decision_record_integrity' },
       status: 'pass',
@@ -199,7 +197,11 @@ describe('sense run readiness aggregation', () => {
         '1.0.0',
       ),
     ).toMatchObject({ kind: 'output', exitCode: 2 });
-    expect(routeSense(['unknown_kind'])).toMatchObject({ kind: 'output', exitCode: 2 });
+    expect(routeSense(['unknown_kind'])).toMatchObject({
+      kind: 'output',
+      exitCode: 2,
+      text: expect.stringContaining('Run devai sense run --help.'),
+    });
   });
 
   it('admits only an exact read-only public sensor child under the aggregate scope', () => {
