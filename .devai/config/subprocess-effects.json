@@ -4,10 +4,10 @@
   "source_authority": "F1-architect",
   "materialization": {
     "target": ".devai/config/subprocess-effects.json",
-    "allowed_verbs": ["devai init upgrade"],
+    "allowed_verbs": ["devai init bind"],
     "authority_and_consent_required": true,
     "byte_identity_required": true,
-    "adopter_upgrade_path_required": true,
+    "adopter_binding_path_required": true,
     "direct_writes_forbidden": true
   },
   "templates": [
@@ -104,7 +104,7 @@
     {
       "template_id": "git-merge-base-ancestor",
       "executable": "git",
-      "argv_shape": ["merge-base", "--is-ancestor", "<dynamic>", "HEAD"],
+      "argv_shape": ["merge-base", "--is-ancestor", "<dynamic>", "<dynamic>"],
       "capabilities": ["proc:git-read"],
       "effect": "read",
       "reason": "Round skill checks ancestry without mutation.",
@@ -215,7 +215,7 @@
       "argv_shape": ["-p", "<dynamic>", "<dynamic>"],
       "capabilities": ["proc:sandbox-exec"],
       "effect": "read",
-      "reason": "R28 best-effort macOS validation runs a registry-derived test command with network and candidate-worktree writes denied; witness prose never supplies the executable or sandbox profile.",
+      "reason": "macOS validation runs a registry-derived test command with network and candidate-worktree writes denied; witness prose never supplies the executable or sandbox profile.",
       "owner": "architect"
     },
     {

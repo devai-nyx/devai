@@ -54,7 +54,7 @@ If a single change touches three orthogonal decisions, ship three ADRs. If one d
 
 `law/adr/` in the adopting repo. Per the docs-layout canon ([`../docs-layout.md`](../docs-layout.md)), this is short-form only: not `docs/theory/architecture/decisions/`, not `decisions/`.
 
-DEVAI itself uses the same `law/adr/` record family for both `D-NNN` governance decisions and `ADR-NNN` architecture decisions. Its [canonical index](../../../law/adr/README.md) links every record; adopters may use the scoped ADR convention above without maintaining a separate root log.
+Maintain one current index at `law/adr/README.md`. Adopters may use the scoped ADR convention above without maintaining a separate root decision log.
 
 ## Worked example — index entry
 
