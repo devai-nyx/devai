@@ -380,13 +380,13 @@ This invariant gives the controller a single queue to regulate.
 
 ---
 
-## Part IX — Self-application and harness governance
+## Part IX — Repository substrate and harness contracts
 
-### Article 36. DEVAI applies to itself
+### Article 36. DEVAI evaluates the configured repository substrate
 
-The F5 substrate is scored by the same scorecard machinery that scores F1 through F4. The constitution, contracts, charters, skills, and prompt registry are subject to coherence, alignment, and discipline measurement.
+The configured repository's F5 substrate is scored by the same scorecard machinery that scores F1 through F4. Its bound constitution, contracts, charters, recipes, and prompt inputs are subject to coherence, alignment, and discipline measurement.
 
-Drift between the framework version installed in a client and the upstream DEVAI release is itself a scorable property of F5.
+Drift between the installed DEVAI package and the repository's explicit binding is itself a scorable property of F5.
 
 ### Article 37. Prompt composition is governed
 
