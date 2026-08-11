@@ -514,11 +514,9 @@ export function buildTaskPlan(options: PolicyBuildOptions): TaskPlan {
       if (value === undefined) throw new Error(`CHECK_RUNNER_TOOLCHAIN_MISSING: ${key}`);
       selectedToolchain[key] = value;
     }
-    const selectedEnvironment: Record<string, string> = {};
+    const selectedEnvironment: Record<string, string | null> = {};
     for (const key of [...task.allowlistedEnv].sort()) {
-      const value = environment[key];
-      if (value === undefined) throw new Error(`CHECK_RUNNER_ENVIRONMENT_MISSING: ${key}`);
-      selectedEnvironment[key] = value;
+      selectedEnvironment[key] = environment[key] ?? null;
     }
     const inputs = entries.filter((entry) =>
       task.inputSelectors.some((selector) => selectorMatches(selector, entry.path)),

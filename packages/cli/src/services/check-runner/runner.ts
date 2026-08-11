@@ -32,7 +32,8 @@ function packageVersion(repoRoot: string, packageName: string): string {
     const value = JSON.parse(
       readFileSync(join(repoRoot, 'node_modules', packageName, 'package.json'), 'utf8'),
     ) as { version?: unknown };
-    if (typeof value.version !== 'string' || value.version === '') throw new Error('version missing');
+    if (typeof value.version !== 'string' || value.version === '')
+      throw new Error('version missing');
     return `${packageName}@${value.version}`;
   } catch (error) {
     throw new Error(
@@ -97,7 +98,8 @@ function defaultExecute(
 }
 
 function executionOutcome(result: TaskExecutionResult): TaskOutcome {
-  if (result.status === 0 && result.errorCode === undefined && result.signal === null) return 'PASS';
+  if (result.status === 0 && result.errorCode === undefined && result.signal === null)
+    return 'PASS';
   if (result.errorCode === 'ETIMEDOUT') return 'TIMEOUT';
   if (result.signal !== null) return 'KILLED';
   return 'FAIL';
@@ -134,7 +136,9 @@ function planWithCache(
   toolchain: Readonly<Record<string, string>>,
   environment: Readonly<Record<string, string>>,
 ) {
-  const descriptorPath = resolve(options.descriptorPath ?? join(options.repoRoot, 'test-tasks.json'));
+  const descriptorPath = resolve(
+    options.descriptorPath ?? join(options.repoRoot, 'test-tasks.json'),
+  );
   const descriptor = readTaskDescriptor(descriptorPath);
   const reusableDigests = new Map<string, string>();
   return buildTaskPlan({
@@ -194,7 +198,10 @@ export function runCheckTasks(options: CheckRunnerOptions): CheckRunnerReport {
     options.toolchain ?? resolveRunnerToolchain(options.repoRoot, requiredToolchainKeys(options));
   const environment: Record<string, string> = { ...(options.environment ?? {}) };
   for (const key of requiredEnvironmentKeys(options)) {
-    if (environment[key] === undefined) environment[key] = process.env[key] ?? '';
+    const inheritedValue = process.env[key];
+    if (environment[key] === undefined && inheritedValue !== undefined) {
+      environment[key] = inheritedValue;
+    }
   }
   const plan = planWithCache(options, cache, toolchain, environment);
   if (options.operation !== 'run') {
@@ -335,7 +342,8 @@ export function runCheckTasks(options: CheckRunnerOptions): CheckRunnerReport {
       createdAt: now(),
       tasks: plan.tasks.map((task) => {
         const resultDigest = resultDigests.get(task.nodeId);
-        if (resultDigest === undefined) throw new Error('CHECK_RUNNER_INTERNAL: missing task result');
+        if (resultDigest === undefined)
+          throw new Error('CHECK_RUNNER_INTERNAL: missing task result');
         return { nodeId: task.nodeId, taskKey: task.taskKey, resultDigest };
       }),
     };

@@ -295,6 +295,72 @@ describe('content-addressed check runner', () => {
     expect(restored.repository.commit).not.toBe(initial.repository.commit);
   });
 
+  it('preserves absent allowlisted environment and binds it distinctly from explicit empty', () => {
+    const state = repository();
+    const environmentKey = 'DEVAI_CHECK_RUNNER_OPTIONAL_FIXTURE';
+    const declared = JSON.parse(readFileSync(join(state.root, 'test-tasks.json'), 'utf8')) as {
+      tasks: Array<{
+        nodeId: string;
+        argv: string[];
+        allowlistedEnv: string[];
+      }>;
+    };
+    const rcTask = declared.tasks.find((task) => task.nodeId === 'test:rc');
+    if (rcTask === undefined) throw new Error('test fixture is missing test:rc');
+    rcTask.allowlistedEnv = [environmentKey];
+    rcTask.argv = [
+      'node',
+      '-e',
+      `process.exit(process.env.${environmentKey} === undefined ? 0 : 7)`,
+    ];
+    writeFileSync(join(state.root, 'test-tasks.json'), `${JSON.stringify(declared, null, 2)}\n`);
+
+    const previousValue = process.env[environmentKey];
+    delete process.env[environmentKey];
+    try {
+      const absent = withRunnerScope(() =>
+        runCheckTasks({
+          repoRoot: state.root,
+          target: 'rc',
+          operation: 'run',
+          cacheRoot: join(state.root, '.devai/state/absent-cache'),
+          toolchain: TOOLCHAIN,
+          environment: {},
+          now: () => '2026-08-10T00:00:00.000Z',
+        }),
+      );
+      const explicitEmpty = withRunnerScope(() =>
+        runCheckTasks({
+          repoRoot: state.root,
+          target: 'rc',
+          operation: 'run',
+          cacheRoot: join(state.root, '.devai/state/empty-cache'),
+          toolchain: TOOLCHAIN,
+          environment: { [environmentKey]: '' },
+          now: () => '2026-08-10T00:00:00.000Z',
+        }),
+      );
+      const absentTask = absent.plan.tasks.find((task) => task.nodeId === 'test:rc');
+      const emptyTask = explicitEmpty.plan.tasks.find((task) => task.nodeId === 'test:rc');
+
+      expect(absent.exitCode).toBe(0);
+      expect(absent.execution?.find((task) => task.nodeId === 'test:rc')).toMatchObject({
+        outcome: 'PASS',
+        exitCode: 0,
+      });
+      expect(explicitEmpty.exitCode).toBe(1);
+      expect(explicitEmpty.execution?.find((task) => task.nodeId === 'test:rc')).toMatchObject({
+        outcome: 'FAIL',
+        exitCode: 7,
+      });
+      expect(absentTask?.taskKey).not.toBe(emptyTask?.taskKey);
+      expect(absentTask?.inputDigest).not.toBe(emptyTask?.inputDigest);
+    } finally {
+      if (previousValue === undefined) delete process.env[environmentKey];
+      else process.env[environmentKey] = previousValue;
+    }
+  });
+
   it('reuses PASS only, binds output digests, and detects changed durable output', () => {
     const state = repository();
     const first = run(state.root);
