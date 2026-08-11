@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   createAuthorityDecisionIssuer,
   runWithAuthorityHostEffects,
@@ -212,6 +213,15 @@ afterEach(() => {
 });
 
 describe('content-addressed check runner', () => {
+  it('builds the runtime before every local lane that executes built artifacts', () => {
+    const actual = readTaskDescriptor(
+      fileURLToPath(new URL('../../../../test-tasks.json', import.meta.url)),
+    );
+    for (const nodeId of ['test:cli', 'test:skills', 'test:root']) {
+      expect(actual.tasks.find((task) => task.nodeId === nodeId)?.dependencies).toContain('build');
+    }
+  });
+
   it.each([
     ['source', 'src/app.ts', 'export const value = 2;\n'],
     ['test', 'tests/app.test.ts', 'test(newValue);\n'],

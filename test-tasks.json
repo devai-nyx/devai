@@ -45,7 +45,7 @@
     },
     {
       "nodeId": "test:cli",
-      "dependencies": ["generate"],
+      "dependencies": ["build"],
       "argv": ["pnpm", "run", "test:cli"],
       "cwd": ".",
       "runner": "vitest-v1",
@@ -125,7 +125,7 @@
     },
     {
       "nodeId": "test:skills",
-      "dependencies": ["generate"],
+      "dependencies": ["build"],
       "argv": ["pnpm", "run", "test:skills"],
       "cwd": ".",
       "runner": "vitest-v1",
@@ -171,7 +171,7 @@
     },
     {
       "nodeId": "test:root",
-      "dependencies": ["generate"],
+      "dependencies": ["build"],
       "argv": ["pnpm", "run", "test:root"],
       "cwd": ".",
       "runner": "vitest-v1",
