@@ -4,7 +4,7 @@ import type { RegistryActionRecord } from '../command-manifest.js';
 export const ACTION_REGISTRY = [
   {
     action_id: 'catalog actions',
-    handler: 'actions list',
+    handler: 'catalog actions',
     path: ['catalog', 'actions'],
     status: 'internal',
     profiles: ['tier1', 'tier2', 'tier3'],

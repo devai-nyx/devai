@@ -19,7 +19,7 @@ import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js
  */
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BIN = join(HERE, '..', '..', 'packages', 'cli', 'dist', 'bin.js');
+const BIN = join(HERE, '..', '..', 'packages', 'cli', 'dist', 'runtime', 'index', 'bin.js');
 const actionIds = ACTION_REGISTRY.map((entry) => entry.action_id);
 
 function run(args: readonly string[]): { status: number | null; stdout: string; stderr: string } {
@@ -62,6 +62,26 @@ describe('CLI binary smoke', () => {
     expect(parsed).toHaveLength(41);
     expect(parsed.map((action) => action.name)).toEqual(actionIds);
     expect(parsed.every((a) => typeof a.name === 'string')).toBe(true);
+  });
+
+  it('`catalog actions` renders its human view and rejects unknown authorities', () => {
+    const human = run(['catalog', 'actions', '--format', 'human']);
+    expect(human.status).toBe(0);
+    expect(human.stderr).toBe('');
+    expect(human.stdout).toContain('COMMAND');
+    expect(human.stdout).toContain('catalog actions');
+
+    const invalid = run([
+      'catalog',
+      'actions',
+      '--authority',
+      'not-an-authority',
+      '--format',
+      'json',
+    ]);
+    expect(invalid.status).toBe(2);
+    expect(invalid.stdout).toBe('');
+    expect(invalid.stderr).toContain("unknown --authority 'not-an-authority'");
   });
 
   it('the canonical recipe census produces exactly seven unique recipes', () => {

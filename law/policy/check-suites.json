@@ -137,7 +137,7 @@
         "kind": "action",
         "argv": [
           "node",
-          "packages/cli/dist/bin.js",
+          "packages/cli/dist/runtime/index/bin.js",
           "policy",
           "check",
           "schemas",

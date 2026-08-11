@@ -50,12 +50,30 @@ try {
     },
     treeshake: true,
   });
-  await bundle.write({
+  const output = await bundle.write({
     file: bundlePath,
     format: 'esm',
     codeSplitting: false,
     sourcemap: false,
   });
+  const reachableSources = output.output
+    .flatMap((item) => (item.type === 'chunk' ? item.moduleIds : []))
+    .filter((id) => id.startsWith(repositoryRoot))
+    .map((id) => {
+      const sourceBase = id.replace('/dist/', '/src/').replace(/\.js$/u, '');
+      const source = ['.ts', '.tsx', '.js', '.mjs', '.cjs']
+        .map((extension) => sourceBase + extension)
+        .find((candidate) => existsSync(candidate));
+      if (source === undefined) throw new Error(`PACKAGE_SOURCE_MAPPING_MISSING:${id}`);
+      return source.slice(repositoryRoot.length + 1);
+    })
+    .sort();
+  const coverageManifest = join(repositoryRoot, 'scratch/coverage/rc-reachable-sources.json');
+  mkdirSync(dirname(coverageManifest), { recursive: true });
+  writeFileSync(
+    coverageManifest,
+    JSON.stringify({ schemaVersion: '1.0.0', sources: reachableSources }, null, 2) + '\n',
+  );
   await bundle.close();
 
   rmSync(distRoot, { recursive: true, force: true });

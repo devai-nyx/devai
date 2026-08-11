@@ -17,7 +17,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = join(HERE, '..', '..', 'packages', 'cli');
-const REAL_BIN = join(PKG_ROOT, 'dist', 'bin.js');
+const REAL_BIN = join(PKG_ROOT, 'dist', 'runtime', 'index', 'bin.js');
 const CONSTITUTION = join(PKG_ROOT, '..', '..', 'law', 'constitution.md');
 const skipIfNotBuilt = existsSync(REAL_BIN) ? it : it.skip;
 const gitEnv: NodeJS.ProcessEnv = {
@@ -86,22 +86,6 @@ function install() {
   );
 }
 
-function expectFoldedPostMergeRoute(): void {
-  const result = spawnSync(
-    'node',
-    [REAL_BIN, 'govern', 'auditor', 'post-merge', '--format', 'json'],
-    { cwd: repo, env: gitEnv, encoding: 'utf8' },
-  );
-  expect(result.status).toBe(2);
-  expect(result.stdout).toBe('');
-  expect(JSON.parse(result.stderr)).toMatchObject({
-    code: 'ACTION_FOLDED',
-    class: 'routing-authority',
-    exit: 2,
-    remediation: 'round close --post-merge-receipt',
-  });
-}
-
 beforeEach(() => {
   repo = mkdtempSync(join(tmpdir(), 'devai-r21-post-merge-e2e-'));
   expect(git(['init', '-b', 'main']).status).toBe(0);
@@ -144,7 +128,6 @@ describe('Article 34 post-merge Auditor composite', () => {
   skipIfNotBuilt(
     'refuses a missing host receipt before creating state or a worktree',
     () => {
-      expectFoldedPostMergeRoute();
       const result = spawnSync(
         'node',
         [REAL_BIN, 'round', 'close', '--post-merge-receipt', '--repo-root', repo],

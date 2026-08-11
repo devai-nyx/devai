@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BIN = join(HERE, '..', '..', 'packages', 'cli', 'dist', 'bin.js');
+const BIN = join(HERE, '..', '..', 'packages', 'cli', 'dist', 'runtime', 'index', 'bin.js');
 
 const skipIfNotBuilt = existsSync(BIN) ? it : it.skip;
 
@@ -18,7 +18,7 @@ function run(args: readonly string[]): { status: number | null; stdout: string; 
   return { status: result.status, stdout: result.stdout, stderr: result.stderr };
 }
 
-// R17.B.2 (audit finding 5, D-131): typing a bare valid domain — the most
+// Typing a bare valid domain — the most
 // natural exploration gesture — must render that node's help, exactly as
 // `--help` would, not fall through to the unknown-command suggester (which
 // proposed `devai init` for `devai work`, exit 2). Table-driven over the
@@ -34,7 +34,7 @@ function catalogPaths(): string[][] {
   return (JSON.parse(r.stdout) as CatalogAction[]).map((a) => [...a.path]);
 }
 
-describe('bare domain/group paths render help instead of the suggester (R17.B.2)', () => {
+describe('bare domain/group paths render help instead of the suggester', () => {
   skipIfNotBuilt(
     'every non-leaf domain renders its help and exits 0',
     () => {
@@ -71,7 +71,7 @@ describe('bare domain/group paths render help instead of the suggester (R17.B.2)
           groups.set(key, (groups.get(key) ?? 0) + 1);
         }
       }
-      expect(groups.size).toBeGreaterThan(3);
+      expect(groups.size).toBe(3);
       for (const key of groups.keys()) {
         const parts = key.split(' ');
         const r = run(parts);

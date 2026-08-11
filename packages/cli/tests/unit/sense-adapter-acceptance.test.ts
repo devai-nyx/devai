@@ -73,8 +73,8 @@ describe('sense adapter acceptance', () => {
   }, 120_000);
 
   it('rejects missing or malformed adapter-specific inputs before remote or DB execution', async () => {
-    await expect(sensorAdapter('llm_judge')({ repoRoot: ROOT })).rejects.toThrow(
-      'SENSE_INPUT_REQUIRED:aspect',
+    expect(() => sensorAdapter('llm_judge')({ repoRoot: ROOT })).toThrow(
+      'SENSE_MODEL_PROVIDER_REQUIRED',
     );
     await expect(sensorAdapter('runtime_probe_api')({ repoRoot: ROOT })).rejects.toThrow(
       'SENSE_INPUT_REQUIRED:charterPath',

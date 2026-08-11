@@ -10,7 +10,7 @@ import { join, resolve } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 const ROOT = resolve(import.meta.dirname, '../..');
-const CLI = resolve(ROOT, 'packages/cli/dist/bin.js');
+const CLI = resolve(ROOT, 'packages/cli/dist/runtime/index/bin.js');
 const ADMIN_URL =
   process.env['DEVAI_DB_URL'] ??
   `postgresql://${process.env['USER'] ?? 'postgres'}@127.0.0.1:5432/postgres`;

@@ -104,7 +104,7 @@
     {
       "template_id": "git-merge-base-ancestor",
       "executable": "git",
-      "argv_shape": ["merge-base", "--is-ancestor", "<dynamic>", "HEAD"],
+      "argv_shape": ["merge-base", "--is-ancestor", "<dynamic>", "<dynamic>"],
       "capabilities": ["proc:git-read"],
       "effect": "read",
       "reason": "Round skill checks ancestry without mutation.",

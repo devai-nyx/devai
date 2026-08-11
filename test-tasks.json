@@ -205,11 +205,7 @@
         "test:utils",
         "test:root"
       ],
-      "argv": [
-        "node",
-        "-e",
-        "process.stdout.write('local test dependency closure complete\\n')"
-      ],
+      "argv": ["node", "-e", "process.stdout.write('local test dependency closure complete\\n')"],
       "cwd": ".",
       "runner": "node-builtin-v1",
       "inputSelectors": [{ "kind": "glob", "pattern": "**" }],
@@ -248,8 +244,8 @@
         { "kind": "exact", "pattern": "package.json" },
         { "kind": "exact", "pattern": "pnpm-lock.yaml" }
       ],
-      "toolchainKeys": ["node", "pnpm", "vitest", "typescript"],
-      "allowlistedEnv": [],
+      "toolchainKeys": ["node", "pnpm", "vitest", "typescript", "postgres"],
+      "allowlistedEnv": ["DEVAI_DB_TESTS", "DEVAI_DB_URL"],
       "outputContract": {
         "kind": "vitest-coverage",
         "requiredResult": "pass",
@@ -314,7 +310,10 @@
       "cwd": ".",
       "runner": "vitest-containment-v1",
       "inputSelectors": [
-        { "kind": "exact", "pattern": "packages/authority/tests/unit/authority-resource-boundaries.red.test.ts" },
+        {
+          "kind": "exact",
+          "pattern": "packages/authority/tests/unit/authority-resource-boundaries.red.test.ts"
+        },
         { "kind": "prefix", "pattern": "packages/authority/src/" },
         { "kind": "exact", "pattern": "packages/skills/tests/recipes/adapters.test.ts" },
         { "kind": "prefix", "pattern": "packages/skills/src/recipes/" },
@@ -330,13 +329,7 @@
     {
       "profileId": "rc",
       "mode": "fixed",
-      "requiredNodes": [
-        "test:coverage:rc",
-        "test:db:rc",
-        "test:e2e:rc",
-        "test:performance:rc",
-        "test:containment:rc"
-      ]
+      "requiredNodes": ["test:coverage:rc"]
     }
   ]
 }

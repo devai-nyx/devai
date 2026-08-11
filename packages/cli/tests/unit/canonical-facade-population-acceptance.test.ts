@@ -76,7 +76,7 @@ const FACADES: readonly FacadeDefinition[] = [
 ] as const;
 
 const REFUSAL_ARGS: Readonly<Record<string, readonly string[]>> = {
-  'actions list': ['--authority', 'invalid-authority'],
+  'catalog actions': ['--authority', 'invalid-authority'],
   check: ['--only', 'not-a-check-service'],
   doctor: ['--probe', 'not-a-probe'],
   'evidence collect': ['--source', 'not-a-source'],

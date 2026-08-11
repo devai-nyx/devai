@@ -93,7 +93,7 @@ DEVAI is a governance framework, not a SaaS product. Several scorecard cells des
     },
     {
       "cell": "F4:T1",
-      "reason": "DEVAI's actual product surface is the CLI verb catalog (actions-list), not NestJS controllers. ...",
+      "reason": "DEVAI's actual product surface is the CLI verb catalog (`catalog actions`), not NestJS controllers. ...",
       "constitution_anchor": "Article 5; Article 36 (self-application)"
     },
     {

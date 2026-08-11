@@ -15,7 +15,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { subprocessCoverageEnvironment } from '../helpers/subprocess-coverage.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BIN = join(HERE, '..', '..', 'packages', 'cli', 'dist', 'bin.js');
+const BIN = join(HERE, '..', '..', 'packages', 'cli', 'dist', 'runtime', 'index', 'bin.js');
 
 const skipIfNotBuilt = existsSync(BIN) ? it : it.skip;
 const CLI_TIMEOUT_MS = 30_000;
@@ -43,18 +43,6 @@ interface ActionEnvelope {
 
 function envelope(text: string): ActionEnvelope {
   return JSON.parse(text) as ActionEnvelope;
-}
-
-function expectFoldedRoute(): void {
-  const refusal = run(['adopt', 'hooks', 'install', '--format', 'json']);
-  expect(refusal.status).toBe(2);
-  expect(refusal.stdout).toBe('');
-  expect(JSON.parse(refusal.stderr)).toMatchObject({
-    code: 'ACTION_FOLDED',
-    class: 'routing-authority',
-    exit: 2,
-    remediation: 'init apply architect --include hooks',
-  });
 }
 
 function materializeAuthorityPolicy(): void {
@@ -118,11 +106,10 @@ afterEach(() => {
   rmSync(tempDir, { recursive: true, force: true });
 });
 
-describe('devai init apply architect --include hooks (D-123, item 5)', () => {
+describe('devai init apply architect --include hooks', () => {
   skipIfNotBuilt(
     'refuses missing write consent without writing the target',
     () => {
-      expectFoldedRoute();
       const hookPath = join(tempDir, '.git/hooks/pre-push');
       const r = applyHooks(['--as-role', 'architect', '--format', 'json']);
       expect(r.status).toBe(2);

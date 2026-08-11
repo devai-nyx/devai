@@ -136,6 +136,7 @@ export function validateCanonicalPolicyContent(file: BootstrapPolicyFile, bytes:
 
 function canonicalPolicyContent(file: (typeof POLICY_FILES)[number]): string {
   const candidates = [
+    join(PACKAGE_ROOT, 'law/policy', file),
     join(PACKAGE_ROOT, 'dist/law/policy', file),
     join(PACKAGE_ROOT, '../../law/policy', file),
   ];

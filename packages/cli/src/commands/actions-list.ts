@@ -16,12 +16,12 @@ const KNOWN_AUTHORITIES: readonly ActionAuthority[] = [
 ];
 
 export const actionsList = defineCommand({
-  name: 'actions list',
+  name: 'catalog actions',
   description: 'List registered DEVAI actions as JSON.',
   authority: 'mesh_controller',
   register(cli: CAC): void {
     cli
-      .command('actions-list', 'List registered DEVAI actions as JSON')
+      .command('catalog-actions', 'List registered DEVAI actions as JSON')
       .option(
         '--authority <name>',
         `Filter by action authority. One of: ${KNOWN_AUTHORITIES.join(', ')}`,
