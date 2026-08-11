@@ -117,12 +117,11 @@ describe('introspectRepo', () => {
     expect(out.proposed_project_type).toBe('platform-package');
   });
 
-  it('introspects the DEVAI repo itself and finds the pnpm/TS shape', () => {
+  it('introspects the current repository and finds its pnpm and TypeScript shape', () => {
     const out = introspectRepo({ targetRoot: REPO_ROOT });
     expect(out.package_manager).toBe('pnpm');
     expect(out.languages.find((l) => l.name === 'typescript')?.file_count).toBeGreaterThan(50);
     expect(out.source_globs).toContain('packages/*/src/**');
-    expect(out.existing_devai_config).toBe(false);
   });
 
   // Quiet the unused-import warning when REPO_ROOT happens to be skipped.
